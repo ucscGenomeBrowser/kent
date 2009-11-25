@@ -4766,7 +4766,7 @@ cat  << 'EOF' > template
 # maxHeightPixels 100:40:11
 # #wiggle phastCons6way
 # yLineOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 # summary multiz6waySummary
 # speciesGroups mammal vertebrate
 # sGroup_mammal hg17 mm6 monDom1

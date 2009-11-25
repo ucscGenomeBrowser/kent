@@ -2574,7 +2574,7 @@ rm $TMP/$root.pp
 #color 0,10,100
 #maxHeightPixels 40
 #type wig 0.0 1.0
-#autoScaleDefault off
+#autoScale off
 
     # step 3:  predictions of conserved elements
     # (could do these at the same time as step 2, but we want to use

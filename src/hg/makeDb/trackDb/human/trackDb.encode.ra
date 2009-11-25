@@ -3536,7 +3536,7 @@ wiggle binCons_encode
 spanList 1
 yLineOnOff Off
 pairwise encode_tba 15
-autoScaleDefault Off
+autoScale Off
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp baboon marmoset galago
 sGroup_placental rat mouse cow dog armadillo 
@@ -3616,7 +3616,7 @@ maxHeightPixels 128:16:16
 visibility hide
 minLimit 0
 maxLimit 16
-autoScaleDefault Off
+autoScale Off
 type wig 0.0 100.0
 dataVersion ENCODE June 2005 Freeze
 
@@ -3655,7 +3655,7 @@ chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 viewLimits 0:16
 minLimit 0
 maxLimit 100
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 64:32:16
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze

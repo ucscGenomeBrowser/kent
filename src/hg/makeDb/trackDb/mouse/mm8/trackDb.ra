@@ -68,7 +68,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz17wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz17waySummary
 speciesCodonDefault mm8

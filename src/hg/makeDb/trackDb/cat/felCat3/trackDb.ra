@@ -109,7 +109,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz4wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz4waySummary
 speciesCodonDefault felCat3

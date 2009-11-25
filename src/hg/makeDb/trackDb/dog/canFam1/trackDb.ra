@@ -26,7 +26,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle mzHg17Mm5_phast2_wig
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise chm
 speciesOrder hg17 mm5
 

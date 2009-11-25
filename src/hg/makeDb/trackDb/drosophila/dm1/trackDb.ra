@@ -138,7 +138,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons8way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise 041109
 speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1
 
@@ -162,7 +162,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastConsPaper
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise myp2a
 speciesOrder droYak1 dp2 anoGam1
 

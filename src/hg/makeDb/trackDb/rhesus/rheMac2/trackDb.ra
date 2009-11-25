@@ -69,7 +69,7 @@ maxHeightPixels 100:40:11
 pairwiseHeight 12
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 #summary multiz6waySummary
 #frames multiz6wayFrames
 #irows on
@@ -93,7 +93,7 @@ wiggle phastCons5way
 pairwiseHeight 12
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 summary multiz5waySummary
 frames multiz5wayFrames
 #irows on
@@ -218,7 +218,7 @@ longLabel $Organism Sequencing Quality Scores
 group map
 priority 23.6
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 windowingFunction Mean

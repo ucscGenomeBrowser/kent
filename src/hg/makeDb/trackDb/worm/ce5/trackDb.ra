@@ -34,7 +34,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz6wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz6waySummary
 speciesOrder caeRem3 cb3 caePb2 caeJap1 priPac1

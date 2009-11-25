@@ -48,7 +48,7 @@ priority 23.11
 visibility full
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -63,7 +63,7 @@ priority 23.13
 visibility hide
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -112,7 +112,7 @@ priority 23.21
 visibility full
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -128,7 +128,7 @@ msaTable vax003BMsa
 visibility hide
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -177,7 +177,7 @@ priority 24.11
 visibility full
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -192,7 +192,7 @@ priority 24.13
 visibility hide
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean

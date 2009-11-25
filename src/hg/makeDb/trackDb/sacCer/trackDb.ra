@@ -88,7 +88,7 @@ longLabel Per base Probability of Nucleasome Occupancy E. Segal et al.
 group regulation
 priority 100
 visibility full
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -130,7 +130,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise pwMaf
 speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
 
@@ -154,7 +154,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastConsPaper
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise pwMaf
 speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
 

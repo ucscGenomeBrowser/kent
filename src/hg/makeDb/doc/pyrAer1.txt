@@ -79,7 +79,7 @@ longLabel GC Percent in 20 base windows
 group map
 priority 1.7
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF

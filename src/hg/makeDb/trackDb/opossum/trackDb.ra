@@ -65,7 +65,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons5
 spanList 1
 yLinOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise netBlastz
 speciesOrder hg17 mm5 galGal2 danRer2
 treeImage phylo/monDom1_5way.gif

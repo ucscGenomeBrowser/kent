@@ -75,7 +75,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons5way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 summary multiz5waySummary
 speciesGroups vertebrate mammal
 sGroup_mammal hg18 mm7 

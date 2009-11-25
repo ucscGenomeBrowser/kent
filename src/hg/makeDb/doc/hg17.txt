@@ -6711,7 +6711,7 @@ EOF
 # maxHeightPixels 100:40:11
 # wiggle phastCons
 # yLineOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 # pairwise netBlastz
 # speciesOrder chimp mouse rat dog chicken fugu zebrafish
 

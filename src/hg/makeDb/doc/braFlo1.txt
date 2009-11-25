@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.18 2008/10/17 01:06:30 markd Exp $"
+#       "$Id: braFlo1.txt,v 1.19 2009/11/25 21:48:38 hiram Exp $"
 #
 
 ##########################################################################
@@ -1290,7 +1290,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	maxHeightPixels 100:40:11
     #	wiggle phastCons5way
     #	spanList 1
-    #	autoScaleDefault Off
+    #	autoScale Off
     #	windowingFunction mean
     #	pairwiseHeight 12
     #	yLineOnOff Off

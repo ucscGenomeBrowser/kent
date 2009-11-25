@@ -22,7 +22,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz7wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 summary multiz7waySummary
 speciesGroups vertebrate
 sGroup_vertebrate hg18 mm8 rn4 galGal2 xenTro2 danRer3
@@ -66,7 +66,7 @@ longLabel Pile Ups of Opossum chains to Hg18
 group x
 priority 23.5
 visibility hide
-autoScaleDefault On
+autoScale On
 maxHeightPixels 128:64:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -83,7 +83,7 @@ longLabel Pile Ups of Opossum chains to Hg17
 group x
 priority 24.5
 visibility hide
-autoScaleDefault On
+autoScale On
 maxHeightPixels 128:64:16
 graphTypeDefault Bar
 gridDefault OFF

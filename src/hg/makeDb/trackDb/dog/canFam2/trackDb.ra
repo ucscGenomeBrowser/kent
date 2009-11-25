@@ -94,7 +94,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons4way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz4waySummary
 speciesOrder hg17 mm6 rn3

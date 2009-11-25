@@ -323,7 +323,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons15way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz15waySummary
 frames multiz15wayFrames
@@ -352,7 +352,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons12way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 summary multiz12waySummary
 speciesOrder droSim1 droYak1 droEre1 droAna2 dp3 droVir2 droMoj2 droGri1 anoGam1 apiMel2 triCas1
 
@@ -376,7 +376,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons9way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 summary multiz9waySummary
 speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel2
 
@@ -400,7 +400,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons8way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise 050201
 speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1
 
@@ -681,7 +681,7 @@ spanList 1
 yLineOnOff Off
 # frames multizFrames
 # irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multizMetazoanSummary
 speciesOrder hg18 ci2 ce3

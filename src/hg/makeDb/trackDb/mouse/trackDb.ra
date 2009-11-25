@@ -434,7 +434,7 @@ longLabel ESPERR Regulatory Potential (7 species)
 group regulation
 priority 91
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF

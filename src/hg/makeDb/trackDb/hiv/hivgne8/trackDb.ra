@@ -36,7 +36,7 @@ priority 24
 visibility full
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -51,7 +51,7 @@ priority 25
 visibility hide
 color 12,12,120
 maxHeightPixels 100:40:10
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean

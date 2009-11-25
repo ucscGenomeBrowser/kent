@@ -66,7 +66,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz9wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 summary multiz9waySummary
 speciesGroups vertebrate
 speciesCodonDefault monDom5

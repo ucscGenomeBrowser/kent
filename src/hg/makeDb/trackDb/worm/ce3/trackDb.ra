@@ -76,7 +76,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons3
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 speciesCodonDefault ce3
 summary multiz3waySummary
 speciesGroups worm

@@ -57,7 +57,7 @@ type wigMaf 0.0 1.0
 # wiggle phastCons5
 # spanList 1
 # yLinOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 #pairwise fakePairwise
 irows on
 speciesTree ((tenrec,elephant),(armadillo,((bosTau1, canFam1),((rabbit,(rn3,mm6)),(rheMac1,(panTro1,hg17)panHg4))mmHg4)canHg4));
@@ -76,7 +76,7 @@ type wigMaf 0.0 1.0
 # wiggle phastCons5
 # spanList 1
 # yLinOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 pairwise fakePairwise
 speciesOrder mmHg4 panHg4 hg17 panTro1 rheMac1 rabbit mm6 rn3 canFam1 bosTau1 armadillo elephant tenrec
 
@@ -91,7 +91,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons5
 spanList 1
 yLinOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise netBlastz
 speciesOrder eutGli1 eutPri1 hg17 
 

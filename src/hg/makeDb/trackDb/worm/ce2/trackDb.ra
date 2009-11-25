@@ -162,7 +162,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise pwMaf
 speciesOrder cb1
 
@@ -186,7 +186,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastConsPaper
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise netMaf
 speciesOrder cb1
 

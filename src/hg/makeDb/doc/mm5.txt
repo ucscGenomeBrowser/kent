@@ -4667,7 +4667,7 @@ cat > multiz5way/loadMaf.csh << 'EOF'
 # maxHeightPixels 100:40:11
 # wiggle phastCons
 # yLineOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 # pairwise netBlastz
 # speciesOrder rat human dog chicken
 

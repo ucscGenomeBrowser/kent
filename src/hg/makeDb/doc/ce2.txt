@@ -2191,7 +2191,7 @@ chmod 664 *.maf
 #   maxHeightPixels 100:40:11
 #   wiggle phastCons
 #   yLineOnOff Off
-#   autoScaleDefault Off
+#   autoScale Off
 #   pairwise pwMaf
 #   speciesOrder c_briggsae
 

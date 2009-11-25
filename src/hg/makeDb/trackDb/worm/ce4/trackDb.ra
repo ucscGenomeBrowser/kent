@@ -176,7 +176,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz5wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz5waySummary
 speciesOrder caePb1 caeRem2 cb3 priPac1
@@ -199,7 +199,7 @@ speciesCodonDefault ce4
 # yLineOnOff Off
 # frames multiz4wayFrames
 # irows on
-# autoScaleDefault Off
+# autoScale Off
 # windowingFunction mean
 # summary multiz4waySummary
 # speciesOrder caePb1 caeRem2 cb3
@@ -290,7 +290,7 @@ spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
 viewLimits 1:100
-autoScaleDefault Off
+autoScale Off
 compositeTrack on
 
 	track monoNucleosomesSense
@@ -318,7 +318,7 @@ spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
 viewLimits 1:100
-autoScaleDefault Off
+autoScale Off
 compositeTrack on
 
 	track nucleosomeControlSenseCoverage

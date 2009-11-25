@@ -79,7 +79,7 @@ pairwiseHeight 12
 yLineOnOff Off
 # frames multiz6wayFrames
 # irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz6waySummary
 speciesOrder caeRem3 cb3 caePb2 caeJap1 priPac1
@@ -137,7 +137,7 @@ spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
 viewLimits 1:100
-autoScaleDefault Off
+autoScale Off
 compositeTrack on
 origAssembly ce4
 
@@ -166,7 +166,7 @@ spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
 viewLimits 1:100
-autoScaleDefault Off
+autoScale Off
 compositeTrack on
 origAssembly ce4
 

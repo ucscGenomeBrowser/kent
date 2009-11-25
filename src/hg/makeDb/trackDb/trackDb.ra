@@ -1813,7 +1813,7 @@ longLabel $Organism Sequencing Quality Scores
 group map
 priority 23.6
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 windowingFunction Mean
@@ -1829,7 +1829,7 @@ longLabel GC Percent in 5-Base Windows
 group map
 priority 23.5
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF

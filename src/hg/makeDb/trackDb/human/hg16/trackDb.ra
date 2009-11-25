@@ -434,7 +434,7 @@ maxHeightPixels 100:40:11
 wiggle multizMm3Rn3Pt0PhastCons
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise hmrg
 speciesOrder pt0 mm3 rn3
 
@@ -596,7 +596,7 @@ wiggle chr7_phyloHMMcons_CFTR
 spanList 1
 yLineOnOff Off
 pairwise CFTR 20
-autoScaleDefault Off
+autoScale Off
 treeImage phylo/cftr25.gif
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp orangutan baboon macaque vervet lemur 
@@ -1155,7 +1155,7 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 spanList 1
-autoScaleDefault Off
+autoScale Off
 
 track phyloHMMcons_HMR
 shortLabel PhyloHMMcons HMR
@@ -1167,7 +1167,7 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 spanList 1
-autoScaleDefault Off
+autoScale Off
 
 track phastCons
 shortLabel phastCons 
@@ -1178,7 +1178,7 @@ visibility hide
 color 0,10,100
 maxHeightPixels 40
 type wig 0.0 1.0
-autoScaleDefault off
+autoScale off
 spanList 1
 
 track phastConsElements
@@ -1223,7 +1223,7 @@ maxHeightPixels 100:40:11
 wiggle multizMm3Rn3GalGal2_phyloHMM_wig
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise hmrg 
 speciesOrder mm3 rn3 galGal2
 
@@ -1239,7 +1239,7 @@ maxHeightPixels 100:40:11
 wiggle mzPt1Mm3Rn3Gg2_pHMM_wig
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise hmrg
 speciesOrder panTro1 mm3 rn3 galGal2
 treeImage phylo/hg16_5way.gif
@@ -1289,7 +1289,7 @@ chromosomes chr7,
 color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
-autoScaleDefault Off
+autoScale Off
 spanList 1
 
 track leptinHuman90
@@ -1308,7 +1308,7 @@ group expression
 priority 0
 visibility hide
 chromosomes chr7,chr11,
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128
 color 0,128,255
 altColor 255,128,0
@@ -1321,7 +1321,7 @@ group expression
 priority 0
 visibility hide
 chromosomes chr7,chr11,
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128
 color 0,128,255
 altColor 255,128,0
@@ -1333,7 +1333,7 @@ longLabel Chimp (Nov. 2003/panTro1) Single Nucleotide Mutation Rate %, 10Kb Bins
 group compGeno
 priority 207
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128
 color 0,128,255
 altColor 255,128,0
@@ -1345,7 +1345,7 @@ longLabel 3-Way Regulatory Potential - Human, Mouse (Feb. 2003/mm3), Rat (June 2
 group regulation
 priority 200
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -1361,7 +1361,7 @@ longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (Oct. 2003/mm4)
 group regulation
 priority 200
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -1490,7 +1490,7 @@ color 175,150,128
 altColor 255,128,0
 chromosomes chr7,
 type wig 0.0 1.0
-autoScaleDefault Off
+autoScale Off
 
 track gc5Base
 shortLabel GC Percent
@@ -1498,7 +1498,7 @@ longLabel Percentage GC in 5-Base Windows
 group map
 priority 23.5
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -1515,7 +1515,7 @@ longLabel GC Percent in 5 Bases Smoothed to 20,000-Base Windows
 group map
 priority 23.6
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -1532,7 +1532,7 @@ longLabel GC Percent in 5 Bases Smoothed to 100,000-Base Windows
 group map
 priority 23.7
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF

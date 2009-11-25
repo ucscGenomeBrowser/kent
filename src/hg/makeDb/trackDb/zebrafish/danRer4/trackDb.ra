@@ -88,7 +88,7 @@ wiggle phastCons7way
 pairwiseHeight 12
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz7waySummary
 frames multiz7wayFrames

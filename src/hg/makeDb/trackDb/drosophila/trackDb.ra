@@ -733,7 +733,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle mzDy1Dp2Ag1_phast_wig
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise myp2a
 speciesOrder droYak1 dp2 anoGam1
 

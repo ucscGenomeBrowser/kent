@@ -88,7 +88,7 @@ hgLoadBed sulSol1 phastConsElements sulSol-elements.bed
  # maxHeightPixels 100:40:11
  # wiggle phastCons
  # yLineOnOff Off
- # autoScaleDefault Off
+ # autoScale Off
  # pairwise pwMaf
  # speciesOrder sulTok1 sulAci1
 cd ~/kent/src/hg/makeDb/trackDb/archae/sulSol1

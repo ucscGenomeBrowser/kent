@@ -719,7 +719,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 viewLimits 0:5
 minLimit 0
 maxLimit 6
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 100:20:10
 type bedGraph 4
 
@@ -734,7 +734,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 viewLimits 0:0.25
 minLimit 0
 maxLimit 0.25
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 100:20:10
 type bedGraph 4
 
@@ -805,7 +805,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 viewLimits 0:5
 minLimit 0
 maxLimit 6
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 100:20:10
 type bedGraph 4
 
@@ -869,7 +869,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 viewLimits 0:5
 minLimit 0
 maxLimit 7
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 100:20:10
 type bedGraph 4
 
@@ -1144,7 +1144,7 @@ group varRep
 visibility hide
 priority 144.55
 viewLimits 0:16
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 64:32:16
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
 type bedGraph 4
@@ -1209,7 +1209,7 @@ visibility hide
 viewLimits -2.5:3
 minLimit -4
 maxLimit 5
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:64:11
 priority 144.65
 type bedGraph 4
@@ -1417,7 +1417,7 @@ longLabel Affy. SK-N-AS Transcript Abundance
 group expression
 priority 0
 visibility hide
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 maxHeightPixels 128:36:16
@@ -1434,7 +1434,7 @@ longLabel Affymetrix Transcriptome Project Phase 2
 compositeTrack on smart
 visibility hide
 viewLimits 0:150
-autoScaleDefault Off
+autoScale Off
 group expression
 priority 0
 maxHeightPixels 100:30:10
@@ -1449,7 +1449,7 @@ release beta
     compositeTrack on smart
     visibility hide
     viewLimits 0:150
-    autoScaleDefault Off
+    autoScale Off
     group expression
     priority 0
     maxHeightPixels 100:30:10
@@ -1464,7 +1464,7 @@ longLabel A375 Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1496,7 +1496,7 @@ longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1528,7 +1528,7 @@ longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1560,7 +1560,7 @@ longLabel HepG2 Nuclear polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1592,7 +1592,7 @@ longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1624,7 +1624,7 @@ longLabel HepG2 Nuclear polyA-, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1656,7 +1656,7 @@ longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1688,7 +1688,7 @@ longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1720,7 +1720,7 @@ longLabel PC3 Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1752,7 +1752,7 @@ longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 graphTypeDefault Bar
@@ -1785,7 +1785,7 @@ longLabel U87 Cytosolic polyA+, Affy Transcriptome
 group expression
 centerLabelsDense on
 priority 0
-autoScaleDefault Off
+autoScale Off
 color 175,150,128
 altColor 255,128,0
 maxHeightPixels 128:36:16
@@ -1838,7 +1838,7 @@ longLabel ESPERR Regulatory Potential (7 Species)
 group regulation
 priority 200
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -2304,7 +2304,7 @@ type bedGraph 4
 viewLimits 0:16
 minLimit 0
 maxLimit 100
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 64:32:16
 origAssembly hg16
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr20,chr21,chr22,chrX

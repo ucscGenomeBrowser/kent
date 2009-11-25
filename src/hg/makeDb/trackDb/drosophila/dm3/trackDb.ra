@@ -117,7 +117,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons15way
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz15waySummary
 frames multiz15wayFrames

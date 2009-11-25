@@ -198,7 +198,7 @@
     # maxHeightPixels 100:40:11
     # wiggle phastCons
     # yLineOnOff Off
-    # autoScaleDefault Off
+    # autoScale Off
     # pairwise pwMaf
     # speciesOrder therAcid1 picrTorr1 ferrAcid1
     cvs add trackDb.ra

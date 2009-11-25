@@ -93,7 +93,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons10
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz10waySummary
 #pairwise netBlastz

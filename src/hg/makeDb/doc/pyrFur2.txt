@@ -352,7 +352,7 @@ hgLoadBed -sqlTable=easyGene.sql pyrFur2 easyGene easyGene.bed
     # maxHeightPixels 100:40:11
     # wiggle phastCons
     # yLineOnOff Off
-    # autoScaleDefault Off
+    # autoScale Off
     # pairwise pwMaf
     # speciesOrder pyrAby1 pyrHor1 therKoda1
     cvs commit -m "New multiz track" trackDb.ra

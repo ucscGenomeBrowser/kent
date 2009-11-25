@@ -6,7 +6,7 @@ priority 25
 visibility dense
 type wig 0.0 2.0
 maxHeightPixels 128:64:11
-autoScaleDefault Off
+autoScale Off
 
 track present
 shortLabel Presentness
@@ -106,7 +106,7 @@ type wigMaf 0.0 1.0
 # wiggle phastCons5
 # spanList 1
 # yLinOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 #pairwise fakePairwise
 irows on
 speciesTree ((echTel1,loxAfr1)afrothere,(dasNov1,((bosTau2, canFam2)laurasia,((oryCun1,(rn4,mm8)rodent)glire,(rheMac2,(panTro2,hg17)ape)primate)euArc)borEut13)nonAfro)eutherian;
@@ -128,7 +128,7 @@ type wigMaf 0.0 1.0
 # wiggle phastCons5
 # spanList 1
 # yLinOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 #pairwise fakePairwise
 irows on
 speciesTree ((echTel1,loxAfr1)afrothere,(dasNov1,((bosTau2, canFam2)laurasia,((oryCun1,(rn4,mm8)rodent)glire,(rheMac2,(panTro2,hg18)ape)primate)euArc)borEut13)nonAfro)eutherian;
@@ -158,7 +158,7 @@ type wigMaf 0.0 1.0
 # wiggle phastCons5
 # spanList 1
 # yLinOnOff Off
-# autoScaleDefault Off
+# autoScale Off
 pairwise fakePairwise
 speciesOrder mmHg4 panHg4 hg17 panTro1 rheMac1 rabbit mm6 rn3 canFam1 bosTau1 armadillo elephant tenrec
 
@@ -173,7 +173,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons5
 spanList 1
 yLinOnOff Off
-autoScaleDefault Off
+autoScale Off
 pairwise netBlastz
 speciesOrder eutGli1 eutPri1 hg17 
 

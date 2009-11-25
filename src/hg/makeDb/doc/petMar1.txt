@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.22 2009/09/20 17:16:46 markd Exp $"
+#       "$Id: petMar1.txt,v 1.23 2009/11/25 21:48:41 hiram Exp $"
 #
 
 ##########################################################################
@@ -1550,7 +1550,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	maxHeightPixels 100:40:11
     #	wiggle phastCons6way
     #	spanList 1
-    #	autoScaleDefault Off
+    #	autoScale Off
     #	windowingFunction mean
     #	pairwiseHeight 12
     #	yLineOnOff Off

@@ -2910,7 +2910,7 @@ maxLimit 15.55
 viewLimits 2:6.33
 maxHeightPixels 128:16:16
 type bedGraph 5
-autoScaleDefault Off
+autoScale Off
 smoothingWindow 2
 dataVersion ENCODE June 2006
 
@@ -3442,7 +3442,7 @@ priority 70.2
 type wig 0.0 1.0
 spanList 1
 maxHeightPixels 100:25:11
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze, June 2007
@@ -3462,7 +3462,7 @@ dataVersion ENCODE Oct 2005 Freeze, June 2007
     viewLimits 0:1
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     smoothingWindow 3
     color 120,80,120
@@ -3569,7 +3569,7 @@ visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
 windowingFunction mean
-autoScaleDefault Off
+autoScale Off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 
@@ -3580,7 +3580,7 @@ dataVersion ENCODE Oct 2005 Freeze
     type wig 0.0 1.0
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     color 170,100,50
     priority 1
@@ -3593,7 +3593,7 @@ dataVersion ENCODE Oct 2005 Freeze
     viewLimits 0:1
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     smoothingWindow 3
     color 120,80,120
@@ -3683,7 +3683,7 @@ visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
 windowingFunction mean
-autoScaleDefault Off
+autoScale Off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 
@@ -3694,7 +3694,7 @@ dataVersion ENCODE Oct 2005 Freeze
     type wig 0.0 1.0
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     color 170,100,50
     priority 1
@@ -3707,7 +3707,7 @@ dataVersion ENCODE Oct 2005 Freeze
     viewLimits 0:1
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     smoothingWindow 3
     color 120,80,120

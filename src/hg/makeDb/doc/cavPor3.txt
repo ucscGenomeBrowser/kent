@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.20 2009/09/20 17:16:42 markd Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.21 2009/11/25 21:48:38 hiram Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -3304,7 +3304,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	maxHeightPixels 100:40:11
     #	wiggle phastCons5way
     #	spanList 1
-    #	autoScaleDefault Off
+    #	autoScale Off
     #	windowingFunction mean
     #	pairwiseHeight 12
     #	yLineOnOff Off

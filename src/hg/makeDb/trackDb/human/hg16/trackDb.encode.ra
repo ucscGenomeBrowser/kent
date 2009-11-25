@@ -1513,7 +1513,7 @@ visibility hide
 maxHeightPixels 128:16:16
 type wig 0.0 3.0
 spanList 250
-autoScaleDefault Off
+autoScale Off
 smoothingWindow 2
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
@@ -1578,7 +1578,7 @@ visibility hide
 type bedGraph 4
 minLimit 0
 maxLimit 3
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:16:16
 dataVersion ENCODE June 2005 Freeze
 
@@ -1745,7 +1745,7 @@ priority 71.0
 visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
@@ -1757,7 +1757,7 @@ dataVersion ENCODE June 2005 Freeze
     type wig 0.0 1.0
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     color 170,100,50
     priority 1
@@ -1776,7 +1776,7 @@ dataVersion ENCODE June 2005 Freeze
     type wig 0.0 3.0
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     color 120,80,120
     priority 3
@@ -1875,7 +1875,7 @@ visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
 windowingFunction mean
-autoScaleDefault Off
+autoScale Off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
 
@@ -1886,7 +1886,7 @@ dataVersion ENCODE June 2005 Freeze
     type wig 0.0 1.0
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     color 170,100,50
     priority 1
@@ -1905,7 +1905,7 @@ dataVersion ENCODE June 2005 Freeze
     type wig 0.0 3.0
     noInherit on
     maxHeightPixels 100:25:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
 # smoothingWindow 3
     color 120,80,120

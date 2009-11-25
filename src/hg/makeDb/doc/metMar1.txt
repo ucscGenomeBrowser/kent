@@ -97,7 +97,7 @@
     # maxHeightPixels 100:40:11
     # wiggle phastCons
     # yLineOnOff Off
-    # autoScaleDefault Off
+    # autoScale Off
     # pairwise pwMaf
     # speciesOrder methJann1 methTher1 methKand1
     cvs add trackDb.ra

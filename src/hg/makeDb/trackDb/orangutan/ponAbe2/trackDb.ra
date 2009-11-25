@@ -30,7 +30,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons8way
 spanList 1
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 pairwiseHeight 12
 yLineOnOff Off

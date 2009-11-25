@@ -158,7 +158,7 @@
     # maxHeightPixels 100:40:11
     # wiggle phastCons
     # yLineOnOff Off
-    # autoScaleDefault Off
+    # autoScale Off
     # pairwise pwMaf
     # speciesOrder pyrAby1 pyrHor1 pyrFur2
     cvs add trackDb.ra

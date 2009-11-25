@@ -1018,7 +1018,7 @@ longLabel GC Percent in 5 base windows
 group map
 priority 23.5
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -1111,7 +1111,7 @@ longLabel Quality Scores
 group map
 priority 23.6
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF

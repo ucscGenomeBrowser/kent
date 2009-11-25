@@ -248,7 +248,7 @@ maxLimit 15.55
 viewLimits 2:6.33
 maxHeightPixels 128:16:16
 type bedGraph 5
-autoScaleDefault Off
+autoScale Off
 smoothingWindow 2
 dataVersion ENCODE June 2006
 origAssembly hg17

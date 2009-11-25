@@ -882,7 +882,7 @@ cat > downloads.csh << 'EOF'
 #pairwiseHeight 12
 #spanList 1
 #yLineOnOff Off
-#autoScaleDefault Off
+#autoScale Off
 #summary multiz5waySummary
 #frames multiz5wayFrames
 #irows on

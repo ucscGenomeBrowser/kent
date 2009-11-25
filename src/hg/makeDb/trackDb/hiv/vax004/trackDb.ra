@@ -41,7 +41,7 @@ group compGeno
 priority 23.5
 visibility full
 color 12,12,120
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
@@ -55,7 +55,7 @@ group compGeno
 priority 26.5
 visibility hide
 color 12,12,120
-autoScaleDefault Off
+autoScale Off
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean

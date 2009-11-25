@@ -330,7 +330,7 @@ hgLoadMaf -warn metAce1 metMaz1_pwMaf -pathPrefix=/gbdb/metAce1/pwMaf/metMaz1_pw
  # maxHeightPixels 100:40:11
  # wiggle phastCons
  # yLineOnOff Off
- # autoScaleDefault Off
+ # autoScale Off
  # pairwise pwMaf
  # speciesOrder metBak0 metMaz1
 cd ~/kent/src/hg/makeDb/trackDb/archae/metAce1
@@ -388,7 +388,7 @@ hgLoadMaf -warn metAce1 metBur0_pwMaf -pathPrefix=/gbdb/metAce1/pwMaf/metBur0_pw
  # maxHeightPixels 100:40:11
  # wiggle phastCons
  # yLineOnOff Off
- # autoScaleDefault Off
+ # autoScale Off
  # pairwise pwMaf
  # speciesOrder metMaz1 metBak0 metBur0
 
@@ -455,7 +455,7 @@ nice /cluster/bin/phast/phastCons metAce4way.ss Ma1Mz1Mbk0Mbr0.mod --gc 0.4186 \
     # maxHeightPixels 100:40:11
     # wiggle phastCons
     # yLineOnOff Off
-    # autoScaleDefault Off
+    # autoScale Off
     # pairwise pwMaf
     # speciesOrder metMaz1 metBak0 metBur0
     cvs commit -m "New multiz track" trackDb.ra

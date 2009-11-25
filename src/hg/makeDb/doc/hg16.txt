@@ -5546,7 +5546,7 @@ o - Load genomic dupes
 #color 175,150,128
 #altColor 255,128,0
 #type wig 0.0 1.0
-#autoScaleDefault Off
+#autoScale Off
 
     # adapt HTML for details page, if necessary (e.g., copy an existing
     # phyloHMMcons*.html page to phyloHMMcons_CFTR.html, edit to
@@ -5759,7 +5759,7 @@ EOF
 #color 175,150,128
 #altColor 255,128,0
 #type wig 0.0 1.0
-#autoScaleDefault Off
+#autoScale Off
 
     # cleanup (only when you're pretty sure you're done!)
     rm -r chr*.ss WINDOWS wiggle.tab para.results batch*
@@ -10502,7 +10502,7 @@ rm $TMP/$root.pp
 #color 0,10,100
 #maxHeightPixels 40
 #type wig 0.0 1.0
-#autoScaleDefault off
+#autoScale off
 
 #track phastConsElements
 #shortLabel phastConsElements

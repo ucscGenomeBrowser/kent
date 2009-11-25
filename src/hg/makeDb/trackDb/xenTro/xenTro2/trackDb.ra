@@ -49,7 +49,7 @@ wiggle phastCons7way
 pairwiseHeight 12
 spanList 1
 yLineOnOff Off
-autoScaleDefault Off
+autoScale Off
 summary multiz7waySummary
 frames multiz7wayFrames
 irows on

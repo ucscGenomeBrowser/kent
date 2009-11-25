@@ -34,7 +34,7 @@ compositeTrack on
 longLabel Basewise Conservation by PhyloP for 28-Species Multiz Align.
 spanList 1
 maxHeightPixels 100:40:11
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 group compGeno
 priority 103.4
@@ -63,7 +63,7 @@ compositeTrack on
 longLabel PhastCons Conservation: Species with high-quality assemblies
 spanList 1
 maxHeightPixels 100:40:11
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 group compGeno
 priority 103.5
@@ -93,7 +93,7 @@ frames multiz28wayFrames
 wiggle phastCons28wayPlacMammal Mammal Placental_Mammal phastCons28way Vertebrate Vertebrate
 spanList 1
 maxHeightPixels 100:40:11
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 group compGeno
 priority 103.3
@@ -151,7 +151,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz17wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz17waySummary
 speciesGroups mammal vertebrate
@@ -187,7 +187,7 @@ spanList 1
 yLineOnOff Off
 frames multiz6wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz6waySummary
 speciesGroups mammal
@@ -408,7 +408,7 @@ priority 144.492
 visibility hide
 type bigWig 0 90.6690141023
 #viewLimits 0 90 -- ignored for bigWig!
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:32:11
 
 track hapmapRecombRate
@@ -420,7 +420,7 @@ visibility hide
 type bedGraph 4
 minLimit 0
 maxLimit 90.6690141023
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:32:11
 
 track tajdSnp
@@ -465,7 +465,7 @@ visibility hide
 viewLimits -2.5:3
 minLimit -4
 maxLimit 5
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:64:11
 priority 144.65
 type bedGraph 4
@@ -1502,7 +1502,7 @@ longLabel Pile Ups of Opossum chains to Hg18
 group x
 priority 23.5
 visibility hide
-autoScaleDefault Off
+autoScale Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -1833,7 +1833,7 @@ shortLabel Affy Tx lRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
 group expression
 viewLimits 0:150
-autoScaleDefault Off
+autoScale Off
 priority 300
 origAssembly hg17
 maxHeightPixels 100:30:10
@@ -1941,7 +1941,7 @@ shortLabel Affy Tx sRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group expression
 viewLimits 0:150
-autoScaleDefault Off
+autoScale Off
 priority 300
 origAssembly hg17
 maxHeightPixels 100:30:10
@@ -2587,7 +2587,7 @@ spanList 1
 yLineOnOff Off
 # frames multizFrames
 # irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multizMetazoanSummary
 speciesOrder ci2 dm2 ce3
@@ -2960,7 +2960,7 @@ spanList 1
 yLineOnOff Off
 frames mammothMafFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multizPrimateSummary
 #speciesDefaultOff
@@ -3099,7 +3099,7 @@ spanList 1
 yLineOnOff Off
 frames multizPrimateFrames
 # irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multizPrimateSummary
 speciesGroups mammal
@@ -3145,7 +3145,7 @@ priority 300
 visibility hide
 color 0,0,127
 maxHeightPixels 100:40:11
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 smoothingWindow 2
 type wig -6.602 5.678
@@ -3300,7 +3300,7 @@ chromosomes chr1
     spanList 1
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 11
@@ -3316,7 +3316,7 @@ chromosomes chr1
     spanList 1
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 12
@@ -3332,7 +3332,7 @@ chromosomes chr1
     spanList 1
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 13
@@ -3348,7 +3348,7 @@ chromosomes chr1
     spanList 1
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 14
@@ -3364,7 +3364,7 @@ chromosomes chr1
     spanList 1
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 15
@@ -3380,7 +3380,7 @@ chromosomes chr1
     spanList 1
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 16
@@ -3428,7 +3428,7 @@ chromosomes chr1
     viewLimits 0:10520
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 31
@@ -3443,7 +3443,7 @@ chromosomes chr1
     viewLimits 0:10520
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 32
@@ -3458,7 +3458,7 @@ chromosomes chr1
     viewLimits 0:10520
     minLimit 0
     maxLimit 10520
-    autoScaleDefault On
+    autoScale On
     maxHeightPixels 128:40:11
     configurable on
     priority 33
@@ -3488,7 +3488,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me1)
     type wig 1 121
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3505,7 +3505,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me2)
     type wig 1 57
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3522,7 +3522,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me3)
     type wig 1 153
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3539,7 +3539,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me1)
     type wig 1 78
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3556,7 +3556,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me2)
     type wig 1 99
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3573,7 +3573,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me3)
     type wig 1 114
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3590,7 +3590,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me1)
     type wig 1 106
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3607,7 +3607,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me2)
     type wig 1 119
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3624,7 +3624,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me3)
     type wig 1 86
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3651,7 +3651,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me3)
     type wig 1 132
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3668,7 +3668,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me1)
     type wig 1 89
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3685,7 +3685,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me2)
     type wig 1 115
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3702,7 +3702,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me3)
     type wig 1 179
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3719,7 +3719,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me1)
     type wig 1 101
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3736,7 +3736,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me2)
     type wig 1 102
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3753,7 +3753,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me1)
     type wig 1 154
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3770,7 +3770,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me3)
     type wig 1 196
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3787,7 +3787,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4R3me2)
     type wig 1 156
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3804,7 +3804,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2BK5me1)
     type wig 1 122
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3821,7 +3821,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2AZ)
     type wig 1 65
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3838,7 +3838,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. PolII)
     type wig 1 319
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -3855,7 +3855,7 @@ type bed 3
     longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. CTCF)
     type wig 1 152
     maxHeightPixels 100:40:11
-    autoScaleDefault Off
+    autoScale Off
     windowingFunction mean
     group compGeno
     color 0, 10, 100
@@ -4045,7 +4045,7 @@ longLabel Clade-specific Relative Conservation by PhyloP (44 Species)
 type wig -10 4
 spanList 1
 maxHeightPixels 100:32:16
-autoScaleDefault off
+autoScale off
 windowingFunction mean
 group compGeno
 priority 103.292

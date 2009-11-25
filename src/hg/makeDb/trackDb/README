@@ -136,7 +136,7 @@ The format of the type fields:
    type line includes data value range for conservation wiggle,
          as for wig track
    standard wig track settings may be included (e.g.
-        maxHeightPixels, yLineOnOff, autoScaleDefault).  These
+        maxHeightPixels, yLineOnOff, autoScale).  These
         apply to both conservation and pairwise wiggles
    Settings in the trackDb.ra record:
       wiggle - contains table names of conservation wiggles

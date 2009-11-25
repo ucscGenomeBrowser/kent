@@ -34,7 +34,7 @@ pairwiseHeight 12
 yLineOnOff Off
 frames multiz5wayFrames
 irows on
-autoScaleDefault Off
+autoScale Off
 windowingFunction mean
 summary multiz5waySummary
 speciesCodonDefault fr2
