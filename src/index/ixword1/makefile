@@ -1,8 +1,8 @@
-include ../../inc/common.mk
+include ../../inc/common.mk 
 
 
 O = ixword1.o 
 
 ixword1: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a $L
 	mv ${AOUT} ${BINDIR}/ixword1
