@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.30 2009/11/23 23:04:22 angie Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.31 2009/11/25 18:34:47 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -116,7 +116,7 @@ if(isNameAtCompositeLevel(tdb,name))
  *	or MIN_LIMIT / MAX_LIMIT trackDb settings for bedGraph
  *	User requested limits are defined in the cart
  *	Default opening display limits are optionally defined with the
- *		defaultViewLimits or viewLimits declaration from trackDb
+ *		viewLimits declaration from trackDb
  *****************************************************************************/
 void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
 			     double *retMin, double *retMax, double *retAbsMin, double *retAbsMax,
@@ -157,8 +157,8 @@ else
 correctOrder(absMin, absMax);
 
 // Determine current minY,maxY.
-// Precedence:  1. cart;  2. defaultViewLimits;  3. viewLimits;
-//              4. absolute [which may need to default to #2 or #3!]
+// Precedence:  1. cart;  2. viewLimits;
+//              3. absolute [which may need to default to #2 or #3!]
 boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
 char *cartMinStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MIN_Y);
 char *cartMaxStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MAX_Y);
@@ -175,13 +175,11 @@ if (cartMinStr && cartMaxStr)
     }
 
 // Get trackDb defaults, and resolve missing wiggle data range if necessary.
-char *defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, NULL);
-if (defaultViewLimits == NULL)
-    defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, NULL);
-if (defaultViewLimits != NULL)
+char *viewLimits = trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, NULL);
+if (viewLimits != NULL)
     {
     double viewLimitMin = 0.0, viewLimitMax = 0.0;
-    parseColonRange(defaultViewLimits, &viewLimitMin, &viewLimitMax);
+    parseColonRange(viewLimits, &viewLimitMin, &viewLimitMax);
     *retMin = viewLimitMin;
     *retMax = viewLimitMax;
     if (missingAbsMax)
@@ -688,8 +686,7 @@ freeMem(tdbDefault);
  *		default to 0 and 1000 if not present
  *	User requested limits are defined in the cart
  *	Default opening display limits are optionally defined with the
- *		defaultViewLimits declaration from trackDb
- *		or viewLimits from custom tracks
+ *		viewLimits declaration from trackDb or custom tracks
  *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
 void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,

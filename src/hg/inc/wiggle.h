@@ -249,7 +249,6 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 
 /*	cart and trackDb strings	*/
 #define VIEWLIMITS "viewLimits"
-#define DEFAULTVIEWLIMITS "defaultViewLimits"
 #define VIEWLIMITSMAX "viewLimitsMax"
 #define MIN_Y "minY"
 #define MAX_Y "maxY"
