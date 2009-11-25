@@ -9,9 +9,11 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.47 2009/08/05 23:27:09 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.48 2009/11/25 20:52:35 markd Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
+
+static char *paraHubHost = "localhost";  // hub host
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -53,6 +55,9 @@ errAbort(
   "   parasol list batches  - List batches one per line.\n"
   "   parasol list sick  - List nodes considered sick by all running batches, one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
+  "options:\n"
+  "   -host=hostname - connect to a paraHub process on a remote host instead\n"
+  "                    localhost.\n"
   , version
   );
 }
@@ -60,7 +65,7 @@ errAbort(
 boolean commandHubExt(char *command, struct paraMessage *pm, struct paraMultiMessage *pmm)
 /* Send a command to hub. */
 {
-pmInitFromName(pm, "localhost", paraHubPort);
+pmInitFromName(pm, paraHubHost, paraHubPort);
 
 if (pmm)
     {
@@ -507,6 +512,7 @@ userName = cloneString(getUser());
 optionHashSome(&argc, argv, TRUE);
 if (argc < 2)
     usage();
+paraHubHost = optionVal("host", paraHubHost);
 parasol(argv[1], argc-2, argv+2);
 return 0;
 }
