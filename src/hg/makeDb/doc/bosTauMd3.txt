@@ -1,6 +1,6 @@
 # Bos Taurus -- University of Maryland UMD Release 3.0 (Aug 25 2009)
 #
-#	"$Id: bosTauMd3.txt,v 1.2 2009/11/25 00:29:11 galt Exp $"
+#	"$Id: bosTauMd3.txt,v 1.3 2009/11/25 22:30:52 galt Exp $"
 #
 # creating minimal build in order make liftover files between MD3 and Btau4
 ###########################################################################
@@ -147,8 +147,27 @@ cp -p chrom.sizes /hive/data/staging/data/bosTauMd3
     time nice +19 doSameSpeciesLiftOver.pl -verbose=2 \
 	-bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
 	 bosTauMd3 bosTau4 >& do.log
-    # it actually ran out of space on /scratch/tmp
+    # it actually ran out of space on /scratch/tmp (used over 16GB temporarily)
     # and I moved the temp dir somewhere else and
-    # finished the net step.  I did not do the load or cleanup steps.
+    # finished the net step.  Then I did the load and cleanup steps.
+
+
+###################################################
+
+#Add a row for bosTauMd3 to hgcentraltest.dbDb with active=0:
+
+hgsql hgcentraltest
+
+INSERT INTO dbDb
+    (name, description, nibPath, organism,
+     defaultPos, active, orderKey, genome, scientificName,
+     htmlPath, hgNearOk, hgPbOk, sourceName, taxId)
+VALUES
+    ("bosTauMd3", "Aug. 2009", "/gbdb/bosTauMd3", "Cow",
+     "chr1:2-3", 0, 235, "Cow", "Bos taurus",
+     "/gbdb/bosTauMd3/html/description.html", 0, 0, "UMD3",
+    9913);
+
+#The /gbdb/ stuff does not have to exist, those are just placeholders.
 
 
