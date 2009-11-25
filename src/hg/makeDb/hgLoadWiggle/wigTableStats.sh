@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#	$Id: wigTableStats.sh,v 1.2 2009/11/25 18:01:46 hiram Exp $
+#	$Id: wigTableStats.sh,v 1.3 2009/11/25 19:10:44 hiram Exp $
 
 DB=$1
 T=$2
@@ -10,11 +10,13 @@ if [ "x${DB}y" = "xy" -o "x${T}y" = "xy" ]; then
     echo
     echo "usage: wigTableStats.sh <db> <table>"
     echo "expected table is a wiggle table"
-    echo "output is a summary of min, max, average, count, sumData, stdDev"
+    echo "output is a summary of min, max, average, count, sumData, stdDev, viewLimits"
+    echo "the recommended viewLimits are: mean +- 5*stdDev limited by min,max"
+    echo "you will want to round those numbers to reasonable nearby values."
     exit 255
 fi
 
-echo -e "# db.table\tmin max mean count sumData stdDev"
+echo -e "# db.table\tmin max mean count sumData stdDev viewLimits"
 
 echo -e -n "${DB}.${T}\t"
 
