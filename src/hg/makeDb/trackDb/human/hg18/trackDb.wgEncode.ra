@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.686 2009/11/25 21:15:22 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.687 2009/11/25 22:25:48 ann Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3852,7 +3852,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqBaseOverlapSignalPanislets
     release alpha
     subTrack wgEncodeChromatinMap off
-    shortLabel PanIslets FAIRE BO
+    shortLabel PanIsle FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in PanIslets cells)
     subGroups view=SIGBO EXP=FAIRE cellType=PANI
     type wig 0.00 314.00
@@ -3862,7 +3862,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqPeaksPanislets
     release alpha
     subTrack wgEncodeChromatinMap off
-    shortLabel PanIslets FAIRE Pk
+    shortLabel PanIsle FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in PanIslets cells)
     subGroups view=Peaks EXP=FAIRE cellType=PANI
     type narrowPeak
@@ -3871,7 +3871,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqSignalPanislets
     release alpha
     subTrack wgEncodeChromatinMap off
-    shortLabel PanIslets FAIRE FD
+    shortLabel PanIsle FAIRE FD
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in PanIslets cells)
     subGroups view=SIG EXP=FAIRE cellType=PANI
     type wig 0.00 17.56
