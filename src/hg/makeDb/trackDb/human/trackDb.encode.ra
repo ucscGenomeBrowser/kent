@@ -965,6 +965,7 @@ chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
 visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
+viewLimits 0:11
 minLimit 0
 maxLimit 10.536
 autoScale Off
@@ -2663,6 +2664,7 @@ autoScale Off
 maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 16
+viewLimits 0:14
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
@@ -2762,6 +2764,7 @@ autoScale Off
 maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 16
+viewLimits 0:12
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
