@@ -18,12 +18,19 @@ struct raField
 struct raRecord
 /* A single RA record. */
     {
-    struct raRecord *next;	/* Next in list. */
+    struct raRecord *next;	/* Next in master (non-hierarchical) list. */
+    struct raRecord *parent;	/* Parent if any. */
+    struct raRecord *children;	/* Children - youngest to oldest. */
+    struct raRecord *olderSibling;	/* Parent to older sibling if any. */
     char *key;			/* First word of value of key field. */
     struct raField *fieldList;	/* List of fields. */
     struct raFilePos *posList;	/* Position of file. */
     char *db;			/* Database if any. */
     boolean override;		/* Override is in key. */
+    struct slPair *settingsByView;  /* Parsed out settingsByView field if any. */
+    struct hash *subGroups;	/* Parsed out subGroup field if any. */
+    char *view;			/* View out of the subGroups if it exists. */
+    struct hash *viewHash;	/* Hash of view subgroupN if any. */
     };
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx);

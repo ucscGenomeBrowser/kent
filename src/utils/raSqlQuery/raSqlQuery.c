@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.22 2009/11/22 05:58:13 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.23 2009/11/25 07:16:03 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -364,12 +364,9 @@ return hash;
 
 
 static struct raRecord *findParent(struct raRecord *rec, 
-	char *parentFieldName, char *noInheritFieldName, struct hash *hash)
+	char *parentFieldName, struct hash *hash)
 /* Find parent field if possible. */
 {
-struct raField *noInheritField = raRecordField(rec, noInheritFieldName);
-if (noInheritField != NULL)
-    return NULL;
 struct raField *parentField = raRecordField(rec, parentFieldName);
 if (parentField == NULL)
     return NULL;
@@ -399,12 +396,71 @@ for (rec = list; rec != NULL; rec = rec->next)
 	hashAdd(hash, rec->key, rec);
     }
 
+/* Scan through linking up parents. */
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    struct raRecord *parent = findParent(rec, parentField, hash);
+    if (parent != NULL)
+	{
+	rec->parent = parent;
+	rec->olderSibling = parent->children;
+	parent->children = rec;
+	}
+    }
+
 /* Scan through doing inheritance. */
 for (rec = list; rec != NULL; rec = rec->next)
     {
+    /* First inherit from view. */
+    char *viewName = rec->view;
+    if (viewName != NULL)
+        {
+	struct slPair *view;
+	if (rec->parent == NULL)
+	     {
+	     verbose(2, "%s has view %s but no parent\n", rec->key, viewName);
+	     continue;
+	     }
+	for (view = rec->parent->settingsByView; view != NULL; view = view->next)
+	    {
+	    if (sameString(view->name, viewName))
+		break;
+	    else 
+	        {
+		if (rec->parent->viewHash != NULL)
+		    {
+		    char *alias = hashFindVal(rec->parent->viewHash, viewName);
+		    if (alias != NULL)
+			if (sameString(view->name, alias))
+			    break;
+		    }
+		}
+	    }
+	if (view != NULL)
+	    {
+	    struct slPair *setting;
+	    for (setting = view->val; setting != NULL; setting = setting->next)
+	        {
+		struct raField *oldField = raRecordField(rec, setting->name);
+		if (oldField == NULL)
+		    {
+		    struct raField *newField;
+		    lmAllocVar(lm, newField);
+		    newField->name = lmCloneString(lm, setting->name);
+		    newField->val = lmCloneString(lm, setting->val);
+		    slAddTail(&rec->fieldList, newField);
+		    }
+		}
+	    }
+	else 
+	    {
+	    verbose(2, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+	    }
+	}
+
+    /* Then inherit from parents. */
     struct raRecord *parent;
-    for (parent = findParent(rec, parentField, noInheritField, hash); parent != NULL;
-    	parent = findParent(parent, parentField, noInheritField, hash) )
+    for (parent = rec->parent; parent != NULL; parent = parent->parent)
 	{
 	mergeParentRecord(rec, parent, lm);
 	}

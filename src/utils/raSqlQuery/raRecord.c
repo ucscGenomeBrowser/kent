@@ -1,9 +1,11 @@
 #include "common.h"
 #include "localmem.h"
+#include "hash.h"
 #include "linefile.h"
+#include "obscure.h"
 #include "raRecord.h"
 
-static char const rcsid[] = "$Id: raRecord.c,v 1.7 2009/11/22 03:38:59 kent Exp $";
+static char const rcsid[] = "$Id: raRecord.c,v 1.8 2009/11/25 07:16:03 kent Exp $";
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new raFilePos record. */
@@ -62,6 +64,55 @@ else
     return lmCloneStringZ(lm, startFirstWord, endFirstWord - startFirstWord);
 }
     
+struct slPair *trackDbParseCompositeSettingsByView(char *input)
+/* Parse something that looks like:
+ * wigView:windowingFunction=mean+whiskers,viewLimits=0:1000 bedView:minScore=200  
+ * Into
+ *    slPair "wigView", 
+ * 	 { slPair "windowingFunction", "mean+whiskers" }
+ *	 { slPair "viewLimits", "0:1000" }
+ *    slPair "bedView",
+ * 	 { slPair "minScore", "200" } */
+{
+char *inBuf = cloneString(input);
+struct slPair *viewList = NULL, *view;
+char *words[32];
+int cnt,ix;
+cnt = chopLine(inBuf, words);
+for(ix=0;ix<cnt;ix++)
+    {
+    char *viewName = words[ix];
+    char *settings = strchr(viewName, ':');
+    struct slPair *el, *list = NULL;
+    if (settings == NULL)
+        errAbort("Missing colon in settingsByView on %s", viewName);
+    *settings++ = 0;
+    char *words[32];
+    int cnt,ix;
+    cnt = chopByChar(settings,',',words,ArraySize(settings));
+    for (ix=0; ix<cnt; ix++)
+        {
+	char *name = words[ix];
+	char *val = strchr(name, '=');
+	if (val == NULL)
+	    errAbort("Missing equals in settingsByView on %s", name);
+	*val++ = 0;
+	AllocVar(el);
+	el->name = cloneString(name);
+	el->val = cloneString(val);
+	slAddHead(&list,el);
+	}
+    slReverse(&list);
+    AllocVar(view);
+    view->name = cloneString(viewName);
+    view->val = list;
+    slAddHead(&viewList, view);
+    }
+slReverse(&viewList);
+freeMem(inBuf);
+return viewList;
+}
+
 struct raRecord *raRecordReadOne(struct lineFile *lf, char *key, struct lm *lm)
 /* Read next record from file. Returns NULL at end of file. */
 {
@@ -69,6 +120,10 @@ struct raField *field, *fieldList = NULL;
 char *line;
 char *keyVal = NULL;
 boolean override = FALSE;
+struct slPair *settingsByView = NULL;
+struct hash *subGroups = NULL;
+char *view = NULL;
+struct hash *viewHash = NULL;
 
 /* Skip over blank initial lines. */
 for (;;)
@@ -100,6 +155,27 @@ for (;;)
 	if (endsWith(field->val, "override") && !sameString("override", field->val))
 	    override = TRUE;
 	}
+    else if (sameString(field->name, "settingsByView"))
+        {
+	settingsByView = trackDbParseCompositeSettingsByView(field->val);
+	}
+    else if (sameString(field->name, "subGroups"))
+        {
+	subGroups = hashVarLine(field->val, lf->lineIx);
+	view = hashFindVal(subGroups, "view");
+	}
+    else if (startsWith("subGroup", field->name) && isdigit(field->name[8]))
+        {
+	if (startsWithWord("view", field->val))
+	    {
+	    char *buf = cloneString(field->val);
+	    char *line = buf;
+	    nextWord(&line);	/* Skip over view. */
+	    nextWord(&line);	/* Skip over view name. */
+	    viewHash = hashThisEqThatLine(line, lf->lineIx, FALSE);
+	    freeMem(buf);
+	    }
+	}
     slAddHead(&fieldList, field);
     }
 
@@ -111,6 +187,10 @@ lmAllocVar(lm, record);
 record->fieldList = fieldList;
 record->key = keyVal;
 record->override = override;
+record->settingsByView = settingsByView;
+record->subGroups = subGroups;
+record->viewHash = viewHash;
+record->view = view;
 return record;
 }
 
