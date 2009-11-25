@@ -1,6 +1,6 @@
 # Bos Taurus -- University of Maryland UMD Release 3.0 (Aug 25 2009)
 #
-#	"$Id: bosTauMd3.txt,v 1.1 2009/11/21 01:25:40 galt Exp $"
+#	"$Id: bosTauMd3.txt,v 1.2 2009/11/25 00:29:11 galt Exp $"
 #
 # creating minimal build in order make liftover files between MD3 and Btau4
 ###########################################################################
@@ -139,4 +139,16 @@ cp -p chrom.sizes /hive/data/staging/data/bosTauMd3
 
 # ask admin to sync this directory: /hive/data/staging/data/bosTauMd3/
 #	to the kluster nodes /scratch/data/bosTauMd3/
+
+#############################################################################
+# LIFTOVER TO bosTau4 (DONE - 2009-11-23 - Galt )
+    mkdir /hive/data/genomes/bosTauMd3/bed/blat.bosTau4.2009-11-23
+    cd /hive/data/genomes/bosTauMd3/bed/blat.bosTau4.2009-11-23
+    time nice +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	 bosTauMd3 bosTau4 >& do.log
+    # it actually ran out of space on /scratch/tmp
+    # and I moved the temp dir somewhere else and
+    # finished the net step.  I did not do the load or cleanup steps.
+
 
