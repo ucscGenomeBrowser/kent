@@ -30,7 +30,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	venter1 \
 	panTro1 panTro2 \
 	gorGor1 gorGor2 \
-	ponAbe1 ponAbe2 \
+	ponAbe2 \
 	rheMac2 \
 	papHam1 \
 	macEug1 \
@@ -39,7 +39,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	canFam1 canFam2 canFamPoodle1 \
 	felCat3 \
 	mm6 mm7 mm8 mm9 \
-	rn3 rn4 rn5 \
+	rn3 rn4 \
 	speTri1 cavPor3 \
 	oryCun1 oryCun2 \
 	bosTau2 bosTau3 bosTau4 \
@@ -122,6 +122,15 @@ checkbeta:
 	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
 beta: checkbeta clean strict
+
+listDbs:
+	@echo "# databases listed in trackDb/makefile DBS variable, with table counts"
+	@for D in ${DBS}; do \
+	    C=`hgsql -N -e "show tables;" $${D} 2> /dev/null | wc -l`; \
+	    if [ "$${C}" -gt 0 ]; then \
+		echo -e "$${D}\t$${C}"; \
+	    fi \
+	done
 
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:
