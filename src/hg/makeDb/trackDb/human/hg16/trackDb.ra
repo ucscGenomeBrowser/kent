@@ -1351,7 +1351,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.01
+viewLimits 0.0:0.01
 type wig -0.0983 0.210
 spanList 5
 
@@ -1367,7 +1367,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.01
+viewLimits 0.0:0.01
 type wig -0.0732 0.153
 spanList 5
 
@@ -1505,7 +1505,7 @@ gridDefault OFF
 windowingFunction Mean
 color 0,0,0
 altColor 128,128,128
-defaultViewLimits 30:70
+viewLimits 30:70
 type wig 0 100 
 spanList 5,1000
 
@@ -1522,7 +1522,7 @@ gridDefault OFF
 windowingFunction Mean
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 30:70
+viewLimits 30:70
 type wig 0 100 
 spanList 5
 
@@ -1539,7 +1539,7 @@ gridDefault OFF
 windowingFunction Mean
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 30:70
+viewLimits 30:70
 type wig 0 100 
 spanList 5
 

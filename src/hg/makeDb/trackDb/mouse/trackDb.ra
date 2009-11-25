@@ -440,7 +440,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.10
+viewLimits 0.0:0.10
 windowingFunction mean
 spanList 1
 type wig -1.0 1.0

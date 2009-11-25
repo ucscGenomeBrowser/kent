@@ -462,7 +462,7 @@ shortLabel Tajima's D
 longLabel Tajima's D (from Human May 2004 assembly)
 group varRep
 visibility hide
-defaultViewLimits -2.5:3
+viewLimits -2.5:3
 minLimit -4
 maxLimit 5
 autoScaleDefault Off
@@ -1509,7 +1509,7 @@ gridDefault OFF
 windowingFunction Maximum
 color 0,0,0
 altColor 128,128,128
-defaultViewLimits 0:4000
+viewLimits 0:4000
 spanList 1
 type wig 0 10310
 
@@ -1832,7 +1832,7 @@ compositeTrack on
 shortLabel Affy Tx lRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
 group expression
-defaultViewLimits 0:150
+viewLimits 0:150
 autoScaleDefault Off
 priority 300
 origAssembly hg17
@@ -1940,7 +1940,7 @@ superTrack affyTxnPhase3Super dense
 shortLabel Affy Tx sRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group expression
-defaultViewLimits 0:150
+viewLimits 0:150
 autoScaleDefault Off
 priority 300
 origAssembly hg17
@@ -3295,7 +3295,7 @@ chromosomes chr1
     longLabel Density graph, activated nucleosome forward strand
     subGroups FAC=NUC STRAND=FWD ACT=ACTV view=SIG
     type wig 0 10520
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     spanList 1
     minLimit 0
     maxLimit 10520
@@ -3311,7 +3311,7 @@ chromosomes chr1
     longLabel Density graph, activated nucleosome reverse strand
     subGroups FAC=NUC STRAND=RWD ACT=ACTV view=SIG
     type wig 0 10520
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     spanList 1
     minLimit 0
     maxLimit 10520
@@ -3327,7 +3327,7 @@ chromosomes chr1
     longLabel Density graph, resting nucleosome forward strand
     subGroups FAC=NUC STRAND=FWD ACT=REST view=SIG
     type wig 0 10520
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     spanList 1
     minLimit 0
     maxLimit 10520
@@ -3343,7 +3343,7 @@ chromosomes chr1
     longLabel Density graph, resting nucleosome reverse strand
     subGroups FAC=NUC STRAND=RWD ACT=REST view=SIG
     type wig 0 10520
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     spanList 1
     minLimit 0
     maxLimit 10520
@@ -3359,7 +3359,7 @@ chromosomes chr1
     longLabel Density graph, resting histone H3 forward strand
     subGroups FAC=H3 STRAND=FWD ACT=REST view=SIG
     type wig 0 10520
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     spanList 1
     minLimit 0
     maxLimit 10520
@@ -3375,7 +3375,7 @@ chromosomes chr1
     longLabel Density graph, resting histone H3 reverse strand
     subGroups FAC=H3 STRAND=RWD ACT=REST view=SIG
     type wig 0 10520
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     spanList 1
     minLimit 0
     maxLimit 10520
@@ -3424,7 +3424,7 @@ chromosomes chr1
     longLabel Density graph, activated Unphosphorylated Pol II
     subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=SIG
     type bedGraph 4
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     minLimit 0
     maxLimit 10520
     autoScaleDefault On
@@ -3439,7 +3439,7 @@ chromosomes chr1
     longLabel Density graph, resting Unphosphorylated Pol II
     subGroups FAC=POL2U STRAND=DBL ACT=REST view=SIG
     type bedGraph 4
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     minLimit 0
     maxLimit 10520
     autoScaleDefault On
@@ -3454,7 +3454,7 @@ chromosomes chr1
     longLabel Density graph, activated Ser5 Phosphorylated Pol II
     subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=SIG
     type bedGraph 4
-    defaultViewLimits 0:10520
+    viewLimits 0:10520
     minLimit 0
     maxLimit 10520
     autoScaleDefault On
@@ -3475,7 +3475,7 @@ dimensions dimensionX=METH dimensionY=AB
 sortOrder AB=+ METH=+ view=+
 dragAndDrop subTracks
 settingsByView Signal:viewLimitsMax=0:319
-#settingsByView Signal:defaultViewLimits=.2:1.6,viewLimits=0:319
+#settingsByView Signal:viewLimits=.2:1.6,viewLimits=0:319
 visibility hide
 priority 0
 type bed 3
@@ -4145,7 +4145,7 @@ group x
 priority 4.11
 visibility hide
 type wig 1 11161
-defaultViewLimits 1:50
+viewLimits 1:50
 maxHeightPixels 128:32:16
 autoScale off
 chromosomes chr22

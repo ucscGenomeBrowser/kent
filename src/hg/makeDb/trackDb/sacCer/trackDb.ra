@@ -95,7 +95,7 @@ gridDefault OFF
 windowingFunction Mean
 color 0,0,0
 altColor 128,128,128
-defaultViewLimits 0:1
+viewLimits 0:1
 spanList 1
 type wig 0 100 
 

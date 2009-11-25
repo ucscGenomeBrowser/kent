@@ -1336,7 +1336,7 @@ group encodeTxLevels
 visibility hide
 origAssembly hg17
 chromosomes chr21,chr22
-defaultViewLimits 0:5000
+viewLimits 0:5000
 maxHeightPixels 100:30:10
 autoScale Off
 type wig 0 62385
@@ -3652,7 +3652,7 @@ priority 80.9
 visibility hide
 type bedGraph 4
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-defaultViewLimits 0:16
+viewLimits 0:16
 minLimit 0
 maxLimit 100
 autoScaleDefault Off

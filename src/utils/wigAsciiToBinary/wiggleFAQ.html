@@ -35,7 +35,7 @@ autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
-defaultViewLimits 0.0:0.01
+viewLimits 0.0:0.01
 color 0,128,255
 altColor 255,128,0
 type wig -0.0732 0.153
@@ -45,9 +45,9 @@ line.
 You want overall limits for all chromosomes, this will properly
 limit the data view limits available to users on the trackUI page.
 
-The option defaultViewLimits can specify an initial viewing window
+The option viewLimits can specify an initial viewing window
 on the data within the range specified on the "type wig" line.
-The format is "defaultViewLimits &lt;lower&gt;:&lt;upper&gt;"
+The format is "viewLimits &lt;lower&gt;:&lt;upper&gt;"
 
 Auto scaling is on by default, use the "autoScaleDefault Off" trackDb entry
 to turn that off by default.
@@ -70,7 +70,7 @@ You can turn them on with "gridDefault ON"
 <TR><TH ALIGN=LEFT> maxHeightPixels </TH><TD> &lt;max:default:min&gt; default &lt;128:128:11&gt;</TD></TR>
 <TR><TH ALIGN=LEFT> graphTypeDefault </TH><TD> [Bar|Points] default Bar</TD></TR>
 <TR><TH ALIGN=LEFT> gridDefault </TH><TD> [ON|OFF] default OFF (draws y=0.0 line when ON)</TD></TR>
-<TR><TH ALIGN=LEFT> defaultViewLimits </TH><TD> &lt;lower:upper&gt; default from the type wig line</TD></TR>
+<TR><TH ALIGN=LEFT> viewLimits </TH><TD> &lt;lower:upper&gt; default from the type wig line</TD></TR>
 <TR><TH ALIGN=LEFT> yLineMark </TH><TD> &lt;value&gt; default is 0.0</TD></TR>
 <TR><TH ALIGN=LEFT> yLineOnOff </TH><TD> [ON|OFF] default OFF</TD></TR>
 <TR><TH ALIGN=LEFT> windowingFunction </TH><TD> [Maximum|Mean|Minimum] default Maximum</TD></TR>

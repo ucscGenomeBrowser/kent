@@ -260,7 +260,7 @@ visibility hide
 type wig 0 1
 maxHeightPixels 100:48:11
 windowingFunction mean
-defaultViewLimits 0:1
+viewLimits 0:1
 autoScale On
 color 128,0,128
 spanList 1
@@ -274,7 +274,7 @@ visibility hide
 type wig -11.93 8.76
 maxHeightPixels 100:48:11
 windowingFunction mean
-defaultViewLimits -5:5
+viewLimits -5:5
 autoScale On
 color 255,0,128
 spanList 1
@@ -289,7 +289,7 @@ type wig 1 19137
 spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
-defaultViewLimits 1:100
+viewLimits 1:100
 autoScaleDefault Off
 compositeTrack on
 
@@ -317,7 +317,7 @@ type wig 1 5544
 spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
-defaultViewLimits 1:100
+viewLimits 1:100
 autoScaleDefault Off
 compositeTrack on
 

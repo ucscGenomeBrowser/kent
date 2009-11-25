@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.682 2009/11/25 16:29:26 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.683 2009/11/25 18:29:40 hiram Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3926,7 +3926,7 @@ wgEncode 1
     shortLabel Rosetta Uniq 35
     longLabel Mapability - Rosetta Uniqueness 35-mer Alignment (BWA/MAQ, unique alignment=37)
     subGroups view=RUNIQ win=w35
-    #defaultViewLimits 0:37
+    #viewLimits 0:37
     #minLimit 0
     #maxLimit 37
     color 100,50,150

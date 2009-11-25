@@ -716,7 +716,7 @@ group varRep
 priority 102.01
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
-defaultViewLimits 0:5
+viewLimits 0:5
 minLimit 0
 maxLimit 6
 autoScaleDefault Off
@@ -731,7 +731,7 @@ group varRep
 priority 102.02
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
-defaultViewLimits 0:0.25
+viewLimits 0:0.25
 minLimit 0
 maxLimit 0.25
 autoScaleDefault Off
@@ -802,7 +802,7 @@ group varRep
 priority 102.03
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
-defaultViewLimits 0:5
+viewLimits 0:5
 minLimit 0
 maxLimit 6
 autoScaleDefault Off
@@ -866,7 +866,7 @@ group varRep
 priority 102.04
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
-defaultViewLimits 0:5
+viewLimits 0:5
 minLimit 0
 maxLimit 7
 autoScaleDefault Off
@@ -1143,7 +1143,7 @@ longLabel Hotspots of Linkage Disequilibrium in the HapMap
 group varRep
 visibility hide
 priority 144.55
-defaultViewLimits 0:16
+viewLimits 0:16
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
@@ -1206,7 +1206,7 @@ shortLabel Tajima's D
 longLabel Tajima's D
 group varRep
 visibility hide
-defaultViewLimits -2.5:3
+viewLimits -2.5:3
 minLimit -4
 maxLimit 5
 autoScaleDefault Off
@@ -1424,7 +1424,7 @@ maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-defaultViewLimits 0:150
+viewLimits 0:150
 type wig 0 4396.07
 wigColorBy affyTransfrags
 
@@ -1433,7 +1433,7 @@ shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
 compositeTrack on smart
 visibility hide
-defaultViewLimits 0:150
+viewLimits 0:150
 autoScaleDefault Off
 group expression
 priority 0
@@ -1448,7 +1448,7 @@ release beta
     longLabel Affymetrix Transcriptome Project Phase 2
     compositeTrack on smart
     visibility hide
-    defaultViewLimits 0:150
+    viewLimits 0:150
     autoScaleDefault Off
     group expression
     priority 0
@@ -1844,7 +1844,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.10
+viewLimits 0.0:0.10
 windowingFunction mean
 spanList 1
 type wig 0.0 1.0
@@ -2301,7 +2301,7 @@ group varRep
 priority 145.5
 visibility hide
 type bedGraph 4
-defaultViewLimits 0:16
+viewLimits 0:16
 minLimit 0
 maxLimit 100
 autoScaleDefault Off

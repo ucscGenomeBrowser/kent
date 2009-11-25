@@ -224,7 +224,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.05
+viewLimits 0.0:0.05
 spanList 1
 type wig 0.0 1.0
 
@@ -240,7 +240,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.01
+viewLimits 0.0:0.01
 type wig -0.413 0.68
 spanList 1
 
@@ -256,7 +256,7 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-defaultViewLimits 0.0:0.01
+viewLimits 0.0:0.01
 type wig -0.285 0.53
 spanList 1
 
@@ -355,7 +355,7 @@ superTrack affyTxnPhase3Super dense
 compositeTrack on
 shortLabel Affy Tx lRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
-defaultViewLimits 0:150
+viewLimits 0:150
 autoScaleDefault Off
 group expression
 priority 0
@@ -462,7 +462,7 @@ superTrack affyTxnPhase3Super dense
 shortLabel Affy Tx sRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group expression
-defaultViewLimits 0:150
+viewLimits 0:150
 autoScaleDefault Off
 priority 0
 maxHeightPixels 100:30:10
@@ -2478,7 +2478,7 @@ gridDefault OFF
 windowingFunction Maximum
 color 0,0,0
 altColor 128,128,128
-defaultViewLimits 0:10000
+viewLimits 0:10000
 spanList 1
 type wig 0 12231
 
