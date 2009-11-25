@@ -15,7 +15,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.21 2009/11/16 11:01:22 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.22 2009/11/25 07:17:25 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -107,67 +107,8 @@ fprintf(f, "summary %d:%d-%d min=%f, max=%f, sum=%f, sumSquares=%f, validCount=%
      sum->sumSquares, sum->validCount, sum->sumData/sum->validCount);
 }
 
-static int bwgSectionWriteUnc(struct bwgSection *section, FILE *f)
-/* Write out compressed section to file, filling in section->fileOffset. */
-{
-UBYTE type = section->type;
-UBYTE reserved8 = 0;
-
-section->fileOffset = ftell(f);
-writeOne(f, section->chromId);
-writeOne(f, section->start);
-writeOne(f, section->end);
-writeOne(f, section->itemStep);
-writeOne(f, section->itemSpan);
-writeOne(f, type);
-writeOne(f, reserved8);
-writeOne(f, section->itemCount);
-
-int i;
-switch (section->type)
-    {
-    case bwgTypeBedGraph:
-	{
-	struct bwgBedGraphItem *item = section->items.bedGraphList;
-	for (item = section->items.bedGraphList; item != NULL; item = item->next)
-	    {
-	    writeOne(f, item->start);
-	    writeOne(f, item->end);
-	    writeOne(f, item->val);
-	    }
-	break;
-	}
-    case bwgTypeVariableStep:
-	{
-	struct bwgVariableStepPacked *items = section->items.variableStepPacked;
-	for (i=0; i<section->itemCount; ++i)
-	    {
-	    writeOne(f, items->start);
-	    writeOne(f, items->val);
-	    items += 1;
-	    }
-	break;
-	}
-    case bwgTypeFixedStep:
-	{
-	struct bwgFixedStepPacked *items = section->items.fixedStepPacked;
-	for (i=0; i<section->itemCount; ++i)
-	    {
-	    writeOne(f, items->val);
-	    items += 1;
-	    }
-	break;
-	}
-    default:
-        internalErr();
-	break;
-    }
-return 0;
-}
-
-static int bwgSectionWriteComp(struct bwgSection *section, FILE *f)
-/* Write out compressed section to file, filling in section->fileOffset. 
- * Returns uncompressed size. */
+static int bwgSectionWrite(struct bwgSection *section, boolean doCompress, FILE *f)
+/* Write out section to file, filling in section->fileOffset. */
 {
 UBYTE type = section->type;
 UBYTE reserved8 = 0;
@@ -246,21 +187,16 @@ switch (section->type)
     }
 assert(bufSize == (bufPt - buf) );
 
-size_t maxCompSize = zCompBufSize(bufSize);
-char compBuf[maxCompSize];
-int compSize = zCompress(buf, bufSize, compBuf, maxCompSize);
-mustWrite(f, compBuf, compSize);
-return bufSize;
-}
-
-
-static int bwgSectionWrite(struct bwgSection *section, boolean doCompress, FILE *f)
-/* Write out section to file, filling in section->fileOffset. */
-{
 if (doCompress)
-    return bwgSectionWriteComp(section, f);
+    {
+    size_t maxCompSize = zCompBufSize(bufSize);
+    char compBuf[maxCompSize];
+    int compSize = zCompress(buf, bufSize, compBuf, maxCompSize);
+    mustWrite(f, compBuf, compSize);
+    }
 else
-    return bwgSectionWriteUnc(section, f);
+    mustWrite(f, buf, bufSize);
+return bufSize;
 }
 
 
