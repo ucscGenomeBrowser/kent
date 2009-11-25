@@ -301,7 +301,7 @@ longLabel Outdated HapMap SNPs (rel22, Phase II genotypes)
 group varRep
 priority 144.49
 visibility hide
-type bed 6 + 
+type bed 6 +
 exonArrows off
 
     track hapmapSnpsCEUPhaseII
@@ -1581,7 +1581,7 @@ allButtonPair on
     subTrack fantomCageGraphTop
     shortLabel Fantom 4 + CAGE
     longLabel  Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 2
     minLimit 0
     maxLimit 1000
@@ -1591,9 +1591,9 @@ allButtonPair on
 
     track FantomCageReversePowerLawGraph
     subTrack fantomCageGraphTop
-    shortLabel Fantom 4 - CAGE 
+    shortLabel Fantom 4 - CAGE
     longLabel  Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 3
     minLimit 0
     maxLimit 1000
@@ -1605,7 +1605,7 @@ allButtonPair on
     subTrack fantomCageGraphTop
     shortLabel Fantom (+) CAGE
     longLabel Fantom/Riken CAGE Reads Forward
-    subGroups view=BED	
+    subGroups view=BED
     priority 7
     configurable on
     useScore 1
@@ -1615,9 +1615,9 @@ allButtonPair on
 
     track FantomCageBedReverse
     subTrack fantomCageGraphTop
-    shortLabel Fantom (-) CAGE 
+    shortLabel Fantom (-) CAGE
     longLabel Fantom/Riken CAGE Reads Reverse
-    subGroups view=BED	
+    subGroups view=BED
     priority 8
     configurable on
     useScore 1
@@ -1725,10 +1725,10 @@ type bed 3
     color 50,150,50
     priority 3
 
-track eioJcviNAS 
+track eioJcviNAS
 compositeTrack on
 shortLabel EIO/JCVI NAS
-longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites 
+longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites
 group regulation
 visibility hide
 priority 0
@@ -1743,7 +1743,7 @@ type bed 3 .
 
     track eioJcviNASPos
     subTrack eioJcviNAS
-    shortLabel EIO/JCVI CD34+ NAS 
+    shortLabel EIO/JCVI CD34+ NAS
     longLabel CD34+ cells Nuclease Accessible sites
     priority 1
     color 100,30,150
@@ -1980,88 +1980,88 @@ group expression
 priority 0
 visibility hide
 type genePred
-	
+
     track burgeRnaSeqGemMapperAlignBrain
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Brain
-    longLabel Burge Lab RNA-seq 32mer Reads from Brain  
+    longLabel Burge Lab RNA-seq 32mer Reads from Brain
     color 12,12,120
     priority 1
-    
+
     track burgeRnaSeqGemMapperAlignLiver
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Liver
-    longLabel Burge Lab RNA-seq 32mer Reads from Liver  
+    longLabel Burge Lab RNA-seq 32mer Reads from Liver
     color 12,12,120
     priority 2
-    
+
     track burgeRnaSeqGemMapperAlignHeart
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Heart
-    longLabel Burge Lab RNA-seq 32mer Reads from Heart  
+    longLabel Burge Lab RNA-seq 32mer Reads from Heart
     color 12,12,120
     priority 3
 
     track burgeRnaSeqGemMapperAlignSkelMuscle
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Muscle
-    longLabel Burge Lab RNA-seq 32mer Reads from Skeletal Muscle  
+    longLabel Burge Lab RNA-seq 32mer Reads from Skeletal Muscle
     color 12,12,120
     priority 4
 
     track burgeRnaSeqGemMapperAlignColon
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Colon
-    longLabel Burge Lab RNA-seq 32mer Reads from Colon  
+    longLabel Burge Lab RNA-seq 32mer Reads from Colon
     color 12,12,120
     priority 5
 
     track burgeRnaSeqGemMapperAlignAdipose
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Adipose
-    longLabel Burge Lab RNA-seq 32mer Reads from Adipose  
+    longLabel Burge Lab RNA-seq 32mer Reads from Adipose
     color 12,12,120
     priority 6
 
     track burgeRnaSeqGemMapperAlignTestes
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Testes
-    longLabel Burge Lab RNA-seq 32mer Reads from Testes  
+    longLabel Burge Lab RNA-seq 32mer Reads from Testes
     color 12,12,120
     priority 7
 
     track burgeRnaSeqGemMapperAlignLymphNode
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Lymph Node
-    longLabel Burge Lab RNA-seq 32mer Reads from Lymph Node  
+    longLabel Burge Lab RNA-seq 32mer Reads from Lymph Node
     color 12,12,120
     priority 8
 
     track burgeRnaSeqGemMapperAlignBreast
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Breast
-    longLabel Burge Lab RNA-seq 32mer Reads from Breast 
+    longLabel Burge Lab RNA-seq 32mer Reads from Breast
     color 12,12,120
     priority 9
-    
+
     track burgeRnaSeqGemMapperAlignBT474
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq BT474
-    longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line  
+    longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line
     color 12,12,120
     priority 10
 
     track burgeRnaSeqGemMapperAlignHME
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq HME
-    longLabel Burge Lab RNA-seq 32mer Reads from HME (Human Mammary Epithelial) Cell Line 
+    longLabel Burge Lab RNA-seq 32mer Reads from HME (Human Mammary Epithelial) Cell Line
     color 12,12,120
     priority 11
 
     track burgeRnaSeqGemMapperAlignMCF7
     subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq MCF7
-    longLabel Burge Lab RNA-seq 32mer Reads from MCF-7 Breast Adenocarcinoma Cell Line 
+    longLabel Burge Lab RNA-seq 32mer Reads from MCF-7 Breast Adenocarcinoma Cell Line
     color 12,12,120
     priority 12
 
@@ -3475,8 +3475,8 @@ subGroup3 METH Methylation m1=me1 m2=me2 m3=me3 NA=N/A
 dimensions dimensionX=METH dimensionY=AB
 sortOrder AB=+ METH=+ view=+
 dragAndDrop subTracks
-settingsByView Signal:viewLimitsMax=0:319
-#settingsByView Signal:viewLimits=.2:1.6,viewLimits=0:319
+settingsByView SIG:viewLimitsMax=0:319
+#settingsByView SIG:viewLimits=.2:1.6,viewLimits=0:319
 visibility hide
 priority 0
 type bed 3
@@ -3869,7 +3869,7 @@ track cons44way
 compositeTrack on
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (44 Species)
-subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
 subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
 dragAndDrop subTracks
 dimensions dimensionX=clade
@@ -3884,7 +3884,7 @@ track multiz44way
 subTrack cons44way on
 shortLabel Multiz Align
 longLabel Multiz Alignments of 44 Vertebrates
-subGroups view=align clade=vert 
+subGroups view=align clade=vert
 noInherit on
 irows on
 summary multiz44waySummary
@@ -4083,9 +4083,9 @@ track ensembl31wayGerp
 compositeTrack on
 shortLabel GERP Conserved
 longLabel GERP Conservation for Ensembl PECAN Alignments (31 Mammal Species)
-subGroup1 view Views scores=Basewise_Conservation elements=Conserved_Elements 
+subGroup1 view Views scores=Basewise_Conservation elements=Conserved_Elements
 visibilityViewDefaults scores=full elements=dense
-#settingsByView elements:pValueFilter=0.0,pValueFilterLimits=0:100,scoreFilter=0,scoreFilterLimits=0:99,minScore=0,maxScore=99 scores:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean 
+#settingsByView elements:pValueFilter=0.0,pValueFilterLimits=0:100,scoreFilter=0,scoreFilterLimits=0:99,minScore=0,maxScore=99 scores:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
 useScore 1
 type bed 4
 group compGeno
@@ -4174,7 +4174,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Level 1 Forward
     longLabel  Level 1 Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 2
     minLimit 0
     maxLimit 1
@@ -4186,7 +4186,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Level 1 Reverse
     longLabel  Level 1 Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 3
     minLimit 0
     maxLimit 1
@@ -4198,7 +4198,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Level 2 Forward
     longLabel  Level 2 Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 4
     minLimit 0
     maxLimit 10
@@ -4210,7 +4210,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Level 2 Reverse
     longLabel  Level 2 Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 5
     minLimit 0
     maxLimit 10
@@ -4222,7 +4222,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Level 3 Forward
     longLabel  Level 3 Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 6
     minLimit 0
     maxLimit 50
@@ -4234,7 +4234,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Level 3 Reverse
     longLabel  Level 3 Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
+    subGroups view=SIG
     priority 7
     minLimit 0
     maxLimit 50
@@ -4244,9 +4244,9 @@ allButtonPair on
 
     track FantomCageReadForward
     subTrack fantom4CageGraphTop
-    shortLabel Fantom (+) CAGE 
+    shortLabel Fantom (+) CAGE
     longLabel Fantom/Riken CAGE Reads Forward
-    subGroups view=BED	
+    subGroups view=BED
     priority 8
     configurable on
     useScore 1
@@ -4258,7 +4258,7 @@ allButtonPair on
     subTrack fantom4CageGraphTop
     shortLabel Fantom (-) CAGE
     longLabel Fantom/Riken CAGE Reads Reverse
-    subGroups view=BED	
+    subGroups view=BED
     priority 9
     configurable on
     useScore 1
