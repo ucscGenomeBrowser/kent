@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.683 2009/11/25 18:29:40 hiram Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.684 2009/11/25 20:07:51 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2933,6 +2933,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=2HEPG2
     type wig 0.00 177.00
     viewLimits 0:25
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=763 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2V2
@@ -2942,6 +2943,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=DNase cellType=2HEPG2
     type narrowPeak
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHepg2V2 fileName=wgEncodeDukeDNaseSeqPeaksHepg2V2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHepg2V2
@@ -2952,6 +2954,7 @@ wgEncode 1
     subGroups view=SIG EXP=DNase cellType=2HEPG2
     type wig 0.00 2.57
     viewLimits 0:0.15
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqSignalHepg2V2.wig.gz
 
 # submission 277 (versioned by 556)
@@ -2998,6 +3001,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=2HEPG2
     type wig 0.00 1773.00
     viewLimts 4:20
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=765 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-02 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHepg2V2
@@ -3007,6 +3011,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=FAIRE cellType=2HEPG2
     type narrowPeak
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2V2 fileName=wgEncodeUncFAIREseqPeaksHepg2V2.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalHepg2V2
@@ -3017,6 +3022,7 @@ wgEncode 1
     subGroups view=SIG EXP=FAIRE cellType=2HEPG2
     type wig 0.00 0.27
     viewLimits 0.0005:0.04
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2V2 fileName=wgEncodeUncFAIREseqSignalHepg2V2.wig.gz
 
 # submission 286 (versioned by 557)
@@ -3063,6 +3069,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=2HEPG2
     type wig 0.00 555.00
     viewLimits 0:100
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2CtcfV2
@@ -3072,6 +3079,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HepG2 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=2HEPG2
     type narrowPeak
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2CtcfV2
@@ -3082,6 +3090,7 @@ wgEncode 1
     subGroups view=SIG EXP=IP-CTCF cellType=2HEPG2
     type wig 0.00 8.20
     viewLimits 0:0.4
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqSignalHepg2CtcfV2.wig.gz
 
 # submission 283 (versioned by 555)
@@ -3128,6 +3137,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-cMyc cellType=2HEPG2
     type wig 0.00 513.00
     viewLimits 0:20
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2CmycV2
@@ -3137,6 +3147,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HepG2 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=2HEPG2
     type narrowPeak
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CmycV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CmycV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2CmycV2
@@ -3147,6 +3158,7 @@ wgEncode 1
     subGroups view=SIG EXP=IP-cMyc cellType=2HEPG2
     type wig 0.00 1.75
     viewLimits 0:0.08
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqSignalHepg2CmycV2.wig.gz
 
 # submission 284 (versioned by 593)
@@ -3193,6 +3205,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-pol2 cellType=2HEPG2
     type wig 0.00 1276.00
     viewLimits 0:100
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=773 dateResubmitted=2009-11-07 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Pol2
@@ -3202,6 +3215,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HepG2 cells)
     subGroups view=Peaks EXP=IP-pol2 cellType=2HEPG2
     type narrowPeak
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=589 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2Pol2 fileName=wgEncodeUtaChIPseqPeaksHepg2Pol2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2Pol2
@@ -3212,6 +3226,7 @@ wgEncode 1
     subGroups view=SIG EXP=IP-pol2 cellType=2HEPG2
     type wig 0.00 4.10
     viewLimits 0:0.4
+    color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=589 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Pol2 fileName=wgEncodeUtaChIPseqSignalHepg2Pol2.wig.gz
 
 # submission 274
@@ -3732,6 +3747,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=2NHEK
     type wig 0.00 550.00
     viewLimits 0:25
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalNhek fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalNhek.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksNhek
@@ -3741,6 +3757,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in NHEK cells)
     subGroups view=Peaks EXP=DNase cellType=2NHEK
     type narrowPeak
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=594 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksNhek fileName=wgEncodeDukeDNaseSeqPeaksNhek.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalNhek
@@ -3751,6 +3768,7 @@ wgEncode 1
     subGroups view=SIG EXP=DNase cellType=2NHEK
     type wig 0.00 2.85
     viewLimits 0:0.15
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Sep 2009 Freeze" subId=594 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeChromatinMap fileName=wgEncodeDukeDNaseSeqSignalNhek.wig.gz
 
 # submission 630
@@ -3762,6 +3780,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=2NHEK
     type wig 0.00 1184.00
     viewLimits 4:20
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalNhek fileName=wgEncodeUncFAIREseqBaseOverlapSignalNhek.wig.gz
 
     track wgEncodeUncFAIREseqPeaksNhek
@@ -3771,6 +3790,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in NHEK cells)
     subGroups view=Peaks EXP=FAIRE cellType=2NHEK
     type narrowPeak
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=630 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksNhek fileName=wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalNhek
@@ -3781,6 +3801,7 @@ wgEncode 1
     subGroups view=SIG EXP=FAIRE cellType=2NHEK
     type wig 0.00 0.32
     viewLimits 0.0005:0.04
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Sep 2009 Freeze" subId=630 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalNhek fileName=wgEncodeUncFAIREseqSignalNhek.wig.gz
 
 # submission 624
@@ -3792,6 +3813,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=2NHEK
     type wig 0.00 1792.00
     viewLimits 0:100
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=NHEK antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksNhekCtcf
@@ -3801,6 +3823,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in NHEK cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=2NHEK
     type narrowPeak
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=NHEK antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=624 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksNhekCtcf fileName=wgEncodeUtaChIPseqPeaksNhekCtcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalNhekCtcf
@@ -3811,6 +3834,7 @@ wgEncode 1
     subGroups view=SIG EXP=IP-CTCF cellType=2NHEK
     type wig 0.00 15.67
     viewLimits 0:0.4
+    color 179,0,134
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=NHEK antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Sep 2009 Freeze" subId=624 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalNhekCtcf fileName=wgEncodeUtaChIPseqSignalNhekCtcf.wig.gz
 
 # submission 658
