@@ -7,7 +7,7 @@
 #include "hmmstats.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: findToFixBedGraphViewLimits.c,v 1.1 2009/11/22 23:21:12 kent Exp $";
+static char const rcsid[] = "$Id: findToFixBedGraphViewLimits.c,v 1.2 2009/11/25 09:24:59 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -100,9 +100,9 @@ while ((list = raNextRecordAsSlPairList(lf)) != NULL)
     double std = calcStdFromSums(sumData, sumSquares, n);
     verbose(1, "    min=%g max=%g mean=%g std=%g\n",  minLimit, maxLimit, mean, std);
 
-    double viewMax = mean + 5*std;
+    double viewMax = mean + 6*std;
     if (viewMax > maxLimit) viewMax = maxLimit;
-    double viewMin = mean - 5*std;
+    double viewMin = mean - 6*std;
     if (viewMin < minLimit) viewMin = minLimit;
 
     /* Output original table plus new minLimit/maxLimit. */
