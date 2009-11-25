@@ -115,6 +115,12 @@ struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
 
+struct hash *hashThisEqThatLine(char *line, int lineIx, boolean firstStartsWIthLetter);
+/* Return a symbol table from a line of form:
+ *   1-this1=val1 2-this='quoted val2' var3="another val" 
+ * If firstStartsWithLetter is true, then the left side of the equals must start with
+ * and equals. */
+
 struct hash *hashWordsInFile(char *fileName, int hashSize);
 /* Create a hash of space delimited words in file. 
  * hashSize is as in hashNew() - pass 0 for default. */

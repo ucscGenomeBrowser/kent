@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.50 2009/11/24 03:58:25 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.51 2009/11/25 07:16:38 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -409,9 +409,11 @@ out[newSize-1] = quoteChar;
 return out;
 }
 
-struct hash *hashVarLine(char *line, int lineIx)
+struct hash *hashThisEqThatLine(char *line, int lineIx, boolean firstStartsWithLetter)
 /* Return a symbol table from a line of form:
- *   var1=val1 var2='quoted val2' var3="another val" */
+ *   1-this1=val1 2-this='quoted val2' var3="another val" 
+ * If firstStartsWithLetter is true, then the left side of the equals must start with
+ * and equals. */
 {
 char *dupe = cloneString(line);
 char *s = dupe, c;
@@ -425,7 +427,7 @@ for (;;)
 
     if ((c = *var) == 0)
         break;
-    if (!isalpha(c))
+    if (firstStartsWithLetter && !isalpha(c))
 	errAbort("line %d of custom input: variable needs to start with letter '%s'", lineIx, var);
     val = strchr(var, '=');
     if (val == NULL)
@@ -448,6 +450,13 @@ for (;;)
     }
 freez(&dupe);
 return hash;
+}
+
+struct hash *hashVarLine(char *line, int lineIx)
+/* Return a symbol table from a line of form:
+ *   var1=val1 var2='quoted val2' var3="another val" */
+{
+return hashThisEqThatLine(line, lineIx, TRUE);
 }
 
 struct slName *stringToSlNames(char *string)
