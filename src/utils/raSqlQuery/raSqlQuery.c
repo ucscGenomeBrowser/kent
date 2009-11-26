@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.23 2009/11/25 07:16:03 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.24 2009/11/26 00:39:06 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -239,6 +239,10 @@ if (doMerge)
 		        {
 			oldRecord->fieldList = record->fieldList;
 			oldRecord->posList = record->posList;
+			oldRecord->settingsByView = record->settingsByView;
+			oldRecord->subGroups = record->subGroups;
+			oldRecord->view = record->view;
+			oldRecord->viewHash = record->viewHash;
 			}
 		    else
 			mergeRecords(oldRecord, record, keyField, lm);
@@ -454,7 +458,7 @@ for (rec = list; rec != NULL; rec = rec->next)
 	    }
 	else 
 	    {
-	    verbose(2, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+	    verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
 	    }
 	}
 
