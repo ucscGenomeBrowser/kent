@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.143 2009/11/25 21:17:41 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.144 2009/11/26 01:33:32 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -986,6 +986,28 @@ orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 lab Myers
 targetLink GeneCard GC14P075058|http://www.genecards.org/cgi-bin/carddisp.pl?gene=BATF
 
+term BCL11A
+tag BCL11A
+type Antibody
+antibodyDescription Mouse monoclonal [18B12DE6] to Ctip1. Raised against a cocktail of BCL11A fusion proteins. Reacts with human and mouse. Tested for ICC/IF, IHC-P, IP, WB
+targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. Functions as a myeloid and B-cell proto-oncogene. May play important roles in leukemogenesis and hematopoiesis. An essential factor in lymphopoiesis, is required for B-cell formation in fetal liver. May function as a modulator of the transcriptional repression activity of ARP1 (By similarity)
+vendorName Abcam
+vendorId ab19489
+orderUrl http://www.abcam.com/Ctip1-antibody-18B12DE6-ab19489.html
+lab Myers
+targetLink GeneCard GC02M060589|http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
+
+term BCL3
+tag BCL3
+type Antibody
+antibodyDescription Bcl-3(C-14) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Bcl-3 of human origin. Recommended for detection of Bcl-3 of m, r and h origin by WB, IP, IF and ELISA.
+targetDescription This gene is a proto-oncogene candidate. It is identified by its translocation into the immunoglobulin alpha-locus in some cases of B-cell leukemia. The protein encoded by this gene contains seven ankyrin repeats, which are most closely related to those found in I kappa B proteins. This protein functions as a transcriptional co-activator that activates through its association with NF-kappa B homodimers. The expression of this gene can be induced by NF-kappa B, which forms a part of the autoregulatory loop that controls the nuclear residence of p50 NF-kappa B. (Provided by RefSeq).
+vendorName Santa Cruz Biotech
+vendorId sc-185
+orderUrl http://www.scbt.com/datasheet-185-bcl-3-c-14-antibody.html
+lab Myers
+targetLink GeneCard GC19P049943|http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
+
 term BDP1
 tag BDP1
 type Antibody
@@ -996,6 +1018,17 @@ vendorId 2663
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
 targetLink GeneCard GC05P070787|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P070787
+
+term BHLHE40
+tag BHLHE40
+type Antibody
+antibodyDescription Dec-1(S-8) is a mouse monoclonal IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of m and h origin by WB, IP and ELISA.
+targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
+vendorName Santa Cruz Biotech
+vendorId sc-101023
+orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
+lab Myers
+targetLink GeneCard GC19M047286|http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
 
 term BRF1
 tag BRF1
