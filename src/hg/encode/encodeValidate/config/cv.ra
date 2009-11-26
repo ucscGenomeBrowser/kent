@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.144 2009/11/26 01:33:32 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.145 2009/11/26 02:10:12 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -148,7 +148,7 @@ lineage embryonic stem cells
 karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
-color 0,107,27 
+color 0,107,27
 tier 2
 protocol H1_ES_protocol.pdf
 
@@ -1154,6 +1154,17 @@ orderUrl http://www.scbt.com/product.php?datasheet=110
 lab Farnham
 targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1&search=Egr-1
 
+term FOSL2
+tag FOSL2
+type Antibody
+antibodyDescription Fra-2(Q-20) is an affinity purified rabbit polyclonal raised against the N-terminus of Fra-2 of human origin. Recommended for detection of Fra-2 of m, r, h and chicken origin by WB, IP, IF, IHC(P) and ELISA.
+targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation.
+vendorName Santa Cruz Biotech
+vendorId sc-604
+orderUrl http://www.scbt.com/datasheet-604-fra-2-q-20-antibody.html
+lab Myers
+targetLink GeneCard GC02P028527|http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
+
 term FOXP2
 tag FOXP2
 type Antibody
@@ -1520,6 +1531,17 @@ vendorId sc-21754
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 lab Snyder
 
+term POU2F2
+tag POU2F2
+type Antibody
+antibodyDescription Oct-2(C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Recommended for detection of Oct-2 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA.
+targetDescription Transcription factor that specifically binds to the octamer motif (5'-ATTTGCAT-3'). Regulates transcription in a number of tissues in addition to activating immunoglobulin gene expression. Modulates transcription transactivation by NR3C1, AR and PGR. Isoform 5 activates the U2 small nuclear RNA (snRNA) promoter.
+vendorName Santa Cruz Biotech
+vendorId sc-233
+orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
+lab Myers
+targetLink GeneCard GC19M047286|http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
+
 term Rad21
 tag Rad21
 type Antibody
@@ -1541,6 +1563,17 @@ vendorId 1900
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
 targetLink GeneCard GC10M079405|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10M079405
+
+term RXRA
+tag RXRA
+type Antibody
+antibodyDescription RXRa(D-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the N-terminus of RXR? of human origin. Recommended for detection of RXR? of m, r and h origin by WB, IP, IF, IHC(P) and ELISA.
+targetDescription Retinoid X receptors (RXRs) and retinoic acid receptors (RARs), are nuclear receptors that mediate the biological effects of retinoids by their involvement in retinoic acid-mediated gene activation. These receptors exert their action by binding, as homodimers or heterodimers, to specific sequences in the promoters of target genes and regulating their transcription. The protein encoded by this gene is a member of the steroid and thyroid hormone receptor superfamily of transcriptional regulators.
+vendorName Santa Cruz Biotech
+vendorId sc-553
+orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
+lab Myers
+targetLink GeneCard  GC09P136358|http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
 
 term SETDB1
 tag SETDB1
@@ -1584,6 +1617,17 @@ vendorId sc-55706
 orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 lab Myers
 targetLink GeneCard GC19M050959|http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
+
+term SP1
+tag SP1
+type Antibody
+antibodyDescription Sp1(E-3) is a mouse monoclonal antibody raised against amino acids 121-345 mapping near the N-terminus of Sp1 of human origin. Recommended for detection of Sp1 of m, r and h origin by WB, IP, IF and ELISA.
+targetDescription SP1 is a transcription factor that binds to GC box promoters elements and selectively activates mRNA synthesis from genes that contain functional recognition sites. It can interact with G/C-rich motifs from the serotonin receptor promoter.
+vendorName Santa Cruz Biotech
+vendorId sc-17824
+orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
+lab Myers
+targetLink GeneCard   GC12P052060|http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 
 term SREBP1A
 tag SREBP1A
@@ -1683,6 +1727,17 @@ vendorId sc-357
 orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
 targetLink GeneCard GC15P054998|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
+
+term TCF3
+tag TCF3
+type Antibody
+antibodyDescription E2A.E12(V-18) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG.
+targetDescription Heterodimers between TCF3 and tissue-specific basic helix-loop-helix (bHLH) proteins play major roles in determining tissue-specific cell fate during embryogenesis, like muscle or early B-cell differentiation. Dimers bind DNA on E-box motifs: 5'-CANNTG-3'. Binds to the kappa-E2 site in the kappa immunoglobulin gene enhancer.
+vendorName Santa Cruz Biotech
+vendorId sc-349
+orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
+lab Myers
+targetLink GeneCard GC19M001560|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 
 term TCF4
 tag TCF4
