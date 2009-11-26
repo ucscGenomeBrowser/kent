@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.11 2009/10/08 06:38:26 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.12 2009/11/26 00:29:11 angie Exp $";
 
 #include "bamFile.h"
 
@@ -158,34 +158,30 @@ if (isCustomTrack(tdb->tableName))
 else
     fileName = bamFileNameFromTable(database, tdb->tableName, seqNameForBam);
 bamFetch(fileName, posForBam, oneBam, &btd);
-if (isPaired && hashNumEntries(pairHash) > 0)
+if (isPaired)
     {
-    char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "1000");
+    char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "20000");
     int pairSearchRange = atoi(setting);
-    struct hashEl *hel;
-    struct hashCookie cookie = hashFirst(pairHash);
-    while ((hel = hashNext(&cookie)) != NULL)
+    if (pairSearchRange > 0 && hashNumEntries(pairHash) > 0)
 	{
+	// Repeat the search for item in a larger window:
 	struct hash *newPairHash = hashNew(0);
-	btd.itemName = hel->name;
 	btd.pairHash = newPairHash;
 	safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam,
-	      winStart-pairSearchRange, winEnd+pairSearchRange);
+	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
 	bamFetch(fileName, posForBam, oneBam, &btd);
-	if (hashNumEntries(newPairHash) > 0)
-	    {
-	    struct hashCookie cookie2 = hashFirst(pairHash);
-	    while ((hel = hashNext(&cookie2)) != NULL)
-		{
-		bam1_t *bam = hel->val;
-		const bam1_core_t *core = &bam->core;
-		if (core->flag & BAM_FPROPER_PAIR)
-		    printf("<B>Note: </B>unable to find paired end "
-			   "for %s within +-%d of viewing window<BR>\n",
-			   hel->name, pairSearchRange);
-		singleBamDetails(bam);
-		}
-	    }
+	}
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(btd.pairHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+	{
+	bam1_t *bam = hel->val;
+	const bam1_core_t *core = &bam->core;
+	if (! (core->flag & BAM_FMUNMAP))
+	    printf("<B>Note: </B>unable to find paired end for %s "
+		   "within +-%d bases of viewing window %s<BR>\n",
+		   item, pairSearchRange, addCommasToPos(database, cartString(cart, "position")));
+	singleBamDetails(bam);
 	}
     }
 }
