@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.201 2009/11/30 19:34:05 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.202 2009/11/30 23:13:40 kate Exp $
 
 use warnings;
 use strict;
@@ -62,7 +62,8 @@ use vars qw/
 our $submitPath;        # full path of data submission directory
 our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
-our %terms;             # controlled vocabulary
+our %terms;             # controlled vocabulary, indexed by type and term
+our %tags;              # controlled vocabulary, indexed by tag
 our $quickCount=100;
 our $quickOpt = "";     # option to pass to validateFiles prog
 our $time0 = time;
@@ -72,7 +73,7 @@ our $maxBedRows=80_000_000; # number of rows to allow in a bed-type file
 our %tableNamesUsed;
 our ($grants, $fields, $daf);
 our $SORT_BUF = " -S 5G ";
-our $assembly = "hg18";
+our $assembly = NULL;
 
 sub usage {
     print STDERR <<END;
@@ -646,7 +647,7 @@ sub validateGene {
     }
     # XXXX Add support for $opt_quick
     my $err = system (
-        "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
+        "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt $assembly testTable stdin >$outFile 2>&1");
     if ($err) {
         print STDERR  "File \'$file\' failed GFF validation\n";
         open(ERR, "$outPath/$outFile") || die "ERROR: Can't open GFF validation file \'$outPath/$outFile\': $!\n";
@@ -662,7 +663,7 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    # validate chroms, chromSize, etc. Assume hg18 like elsewhere
+    # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","tagAlign",$assembly);
     my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=tagAlign $file"]);
     if(my $err = $safe->exec()) {
@@ -677,9 +678,9 @@ sub validatePairedTagAlign
 # This is like tag align but with two additional sequence fields appended; seq1 and seq2
 {
     my ($path, $file, $type) = @_;
-    # validate chroms, chromSize, etc. Assume hg18 like elsewhere
+    # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","pairedTagAlign",$assembly);
-    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList $quickOpt -chromDb=hg18 -type=pairedTagAlign $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList $quickOpt -chromDb=$assembly -type=pairedTagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -707,7 +708,7 @@ sub validateNarrowPeak
 sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
-    # validate chroms, chromSize, etc. Assume hg18 like elsewhere
+    # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","broadPeak",$assembly);
     my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
@@ -1057,13 +1058,22 @@ sub printCompositeTdbSettings {
         my $sortOrder = "sortOrder ";
         my $dimensions = "dimensions";
         my $controlledVocab = "controlledVocabulary encode/cv.ra";
+        my %tags = ();
         if (defined($daf->{variables})) {
             my @variables = @{$daf->{variableArray}};
             for my $variable (@variables) {
                 $grpNo++;
                 my $groupVar = $variable;
-	            $groupVar = "factor" if $variable eq "antibody";
-                $groupVar = "cellType" if $variable eq "cell";
+                my $cvTypeVar = $variable;
+                # special names for cell and antibody
+                if ($variable eq "cell") {
+                    $groupVar = "cellType";
+                    $cvTypeVar = "Cell Line";
+                }
+                if ($variable eq "antibody") {
+                    $groupVar = "factor";
+                    $cvTypeVar = "Antibody";
+                }
                 if($grpNo < 5) {
                     $dimensions .= " dimension" . chr(86 + $grpNo) . "=" . $groupVar;
                 }
@@ -1075,8 +1085,13 @@ sub printCompositeTdbSettings {
                     my @pairs = split(';', $key);
                     for my $pair (@pairs) {
                         my ($var, $term) = split('=', $pair);
-                        if($var eq $variable) {
-                            $setting = "$setting $term=$term";
+                        my $tag = $terms{$cvTypeVar}->{$term}->{'tag'};
+                        if ($var eq $variable) {
+                            if (!defined($tags{$tag})) {
+                                # suppress dups, requested by Brian
+                                $setting = "$setting $tag=$term";
+                                $tags{$tag} = $term;
+                            }
                         }
                     }
                 }
@@ -1213,8 +1228,7 @@ my $submitDir = $ARGV[1];
 $ENV{TMPDIR} = $Encode::tempDir;
 
 if($opt_validateFile && $opt_fileType) {
-    # kludgy, but we need chromInfo populated to validate files, so we assume we are using hg18
-    my $db = HgDb->new(DB => 'hg18');
+    my $db = HgDb->new(DB => $assembly);
     $db->getChromInfo(\%chromInfo);
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
         die "Invalid file: " . join(", ", @errors) . "\n";
@@ -1692,7 +1706,6 @@ foreach my $ddfLine (@ddfLines) {
         $longLabel .= " Replicate $replicate";
     }
     my $subGroups = "view=$view";
-    my $additional = "";
     my $pushQDescription = "";
     my $species;
     my $tier1 = 0;
@@ -1757,14 +1770,21 @@ foreach my $ddfLine (@ddfLines) {
         if($longSuffix) {
             $longLabel .= " ($longSuffix)";
         }
-    	# make the "subGroups" and "additional" fields from all variables
+    	# make the "subGroups" setting from all variables
 	   for my $var (sort keys %hash) {
             # The var name is over-ridden for antibody and cell, for historical reasons
             my $groupVar = $var;
-	    $groupVar = "factor" if $var eq "antibody";
-	    $groupVar = "cellType" if $var eq "cell";
-            $subGroups .= " $groupVar=$hash{$var}";
-            $additional = "    $var $hash{$var}\n" . $additional;
+            my $cvTypeVar = $groupVar;
+            # handle inconsistent naming for antibody & cell type
+	    if ($var eq "antibody") {
+                $groupVar = "factor";
+                $cvTypeVar = "Antibody";
+            }
+	    if ($var eq "cell") {
+                $groupVar = "cellType";
+                $cvTypeVar = "Cell Line";
+            }
+            $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
     }
     #if($Encode::dafVersion gt "1.0") {
@@ -1918,7 +1938,6 @@ foreach my $ddfLine (@ddfLines) {
         # print TRACK_RA sprintf("    dateSubmitted %04d-%02d-%02d\n", 1900 + $year, $mon + 1, $mday);
         # print TRACK_RA sprintf("    dateUnrestricted %04d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
         # print TRACK_RA sprintf("    dataVersion %s\n", $Encode::dataVersion);
-        # print TRACK_RA $additional;
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
         }
