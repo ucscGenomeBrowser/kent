@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.32 2009/11/25 18:44:41 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.33 2009/11/30 17:55:07 kent Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -510,7 +510,7 @@ freeMem(graphType);
 return(ret);
 }	/*	enum wiggleGraphOptEnum wigFetchGraphTypeWithCart()	*/
 
-/******	windowingFunction - Maximum by default **************************/
+/******	windowingFunction - Whiskers by default **************************/
 enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
