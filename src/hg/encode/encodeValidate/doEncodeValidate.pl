@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.200 2009/10/09 23:10:39 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.201 2009/11/30 19:34:05 larrym Exp $
 
 use warnings;
 use strict;
@@ -88,6 +88,8 @@ options:
     -allowReloads       Allow reloads of existing tables
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
+    -database=assembly  Use an assembly other than the default ($assembly); necessary only
+                        when using -validateFile
     -fileType=type	used only with validateFile option; e.g. narrowPeak
     -justFileDb         Just generate the fileDb.ra file which contains all metadata
     -metaDataOnly       Process DAF/DDF and just update the projects.metadata field;
@@ -1102,8 +1104,8 @@ sub validationSettings {
     if($opt_metaDataOnly) {
         return 0;
     }
-    if($daf->{validationSettings}) {
-        my @set = split('\;', $daf->{validationSettings});
+    if($daf->{validationSettings} || $opt_validateFile) {
+        my @set = $opt_validateFile ? () : split('\;', $daf->{validationSettings});
         if($type eq "validateFiles") {
             my $paramList = "";
             for my $setting (@set) {
@@ -1183,6 +1185,7 @@ my $ok = GetOptions("allowReloads",
                     "validateFile",
                     "sendEmail",
                     "verbose=i",
+                    "database=s" => \$assembly
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
