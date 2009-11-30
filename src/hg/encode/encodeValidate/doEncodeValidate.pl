@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.202 2009/11/30 23:13:40 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.203 2009/11/30 23:31:02 larrym Exp $
 
 use warnings;
 use strict;
@@ -73,7 +73,7 @@ our $maxBedRows=80_000_000; # number of rows to allow in a bed-type file
 our %tableNamesUsed;
 our ($grants, $fields, $daf);
 our $SORT_BUF = " -S 5G ";
-our $assembly = NULL;
+our $assembly;
 
 sub usage {
     print STDERR <<END;
@@ -89,8 +89,7 @@ options:
     -allowReloads       Allow reloads of existing tables
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
-    -database=assembly  Use an assembly other than the default ($assembly); necessary only
-                        when using -validateFile
+    -database=assembly  Specify an assembly; necessary only when using -validateFile
     -fileType=type	used only with validateFile option; e.g. narrowPeak
     -justFileDb         Just generate the fileDb.ra file which contains all metadata
     -metaDataOnly       Process DAF/DDF and just update the projects.metadata field;
@@ -1227,7 +1226,13 @@ my $submitDir = $ARGV[1];
 
 $ENV{TMPDIR} = $Encode::tempDir;
 
-if($opt_validateFile && $opt_fileType) {
+if($opt_validateFile) {
+    if(!$opt_fileType) {
+        die "Error: -fileType argument is required when using -validateFile\n";
+    }
+    if(!$assembly) {
+        die "Error: -database argument is required when using -validateFile\n";
+    }
     my $db = HgDb->new(DB => $assembly);
     $db->getChromInfo(\%chromInfo);
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
