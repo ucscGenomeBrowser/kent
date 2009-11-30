@@ -628,17 +628,14 @@ Composite Track "ClosestToHome" paradigm
 ----------------------------------------
 With a composite track with or without multi-view, there are many settings that
 could be at the subtrack, view or composite level.  In order to establish rules
-of which setting should take precedence, the ClosestToHome paradign and API was
-inveneted.  This appies both to trackDb settings and cart settings (which are the
-choices made by a user).  The ClosestToHome paradigm is that subtracks settings
-supercede view level setting which supercede composite level settings.  For
-instance, if the setting is "useScore" (to color items), this could be set at the
-subtrack level for only one subtrack, or at the view level (in settingsByView)
+of which setting should take precedence, the ClosestToHome paradigm and API 
+was invented.  This appies both to trackDb settings and cart settings (which 
+are the choices made by a user).  The ClosestToHome paradigm is that subtracks 
+settings supercede view level setting which supercede composite level settings. For instance, if the setting is "useScore" (to color items), this could be set at the subtrack level for only one subtrack, or at the view level (in settingsByView)
 for all subtracks belonging to that view, or at the composite level so that all
-subtracks are affected.  Thus, putting "noInherit on" at the composite level says
-that all subtracks will have their 'type' specified at the subtrack level.  And
-"configurable on" at the composite level means all subtracks will be individually
-configurable by the user.
+subtracks are affected.  Thus, putting "noInherit on" at the composite level 
+says that all subtracks will have their 'type' specified at the subtrack level.  And "configurable on" at the composite level means all subtracks will be 
+individually configurable by the user.
 NOTE: The "ClosestToHome" APIs must be specifically called in the code, so not
 all  settings are yet supported.  In some cases (such as visibility), it is
 desirable to have separate functionality depending upon the level (composite
