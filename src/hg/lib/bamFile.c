@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.15 2009/11/20 17:51:56 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.16 2009/11/30 23:46:52 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -139,6 +139,22 @@ if (udcFuseRoot != NULL && afterProtocol != NULL)
 return cloneString(fileOrUrl);
 }
 
+static char *getSamDir()
+/* Return the name of a trash dir for samtools to run in (it creates files in current dir)
+ * and make sure the directory exists. */
+{
+static char *samDir = NULL;
+char *dirName = "samtools";
+if (samDir == NULL)
+    {
+    mkdirTrashDirectory(dirName);
+    size_t len = strlen(trashDir()) + 1 + strlen(dirName) + 1;
+    samDir = needMem(len);
+    safef(samDir, len, "%s/%s", trashDir(), dirName);
+    }
+return samDir;
+}
+
 boolean bamFileExists(char *fileOrUrl)
 /* Return TRUE if we can successfully open the bam file and its index file. */
 {
@@ -147,7 +163,13 @@ samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh != NULL)
     {
     // When file is an URL, this caches the index file in addition to validating:
+    // Since samtools's url-handling code saves the .bai file to the current directory,
+    // chdir to a trash directory before calling bam_index_load, then chdir back.
+    char *runDir = getCurrentDir();
+    char *samDir = getSamDir();
+    setCurrentDir(samDir);
     bam_index_t *idx = bam_index_load(bamFileName);
+    setCurrentDir(runDir);
     samclose(fh);
     if (idx == NULL)
 	{
@@ -177,7 +199,13 @@ if (ret != 0)
     // If the bam file does not cover the current chromosome, OK
     return;
 
+// Since samtools' url-handling code saves the .bai file to the current directory,
+// chdir to a trash directory before calling bam_index_load, then chdir back.
+char *runDir = getCurrentDir();
+char *samDir = getSamDir();
+setCurrentDir(samDir);
 bam_index_t *idx = bam_index_load(bamFileName);
+setCurrentDir(runDir);
 if (idx == NULL)
     errAbort("bam_index_load(%s) failed.", bamFileName);
 ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
