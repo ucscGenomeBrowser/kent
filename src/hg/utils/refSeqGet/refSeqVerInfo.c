@@ -137,10 +137,11 @@ struct hash *refSeqVerInfoFromFile(struct sqlConnection *conn, char *accList)
 struct hash *refSeqVerInfoTbl = hashNew(18);
 struct lineFile *lf = lineFileOpen(accList, TRUE); 
 int errCnt = 0;
-char **row;
-while (lineFileNextReal(lf, row))
+char *line;
+while (lineFileNextReal(lf, &line))
     {
-    if (fromFileAdd(refSeqVerInfoTbl, refSeqVerInfoNewFile(row[0]), conn) == refSeqVerInfoError)
+    char *acc = trimSpaces(line);
+    if (fromFileAdd(refSeqVerInfoTbl, refSeqVerInfoNewFile(acc), conn) == refSeqVerInfoError)
         errCnt++;
     }
 lineFileClose(&lf);
