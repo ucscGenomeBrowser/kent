@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.71 2009/09/25 16:57:31 hiram Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72 2009/11/30 17:58:11 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -698,6 +698,8 @@ if(cType == cfgNone && warnIfNecessary)
 return cType;
 }
 
+
+ 
 char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name)
 /* Get a trackDb setting at the view level for a multiview composite.
    returns a string that must be freed */
@@ -707,7 +709,7 @@ char *settingsByView = cloneString(trackDbSetting(parentTdb,"settingsByView"));
 if(settingsByView != NULL)
     {
     char *settingForAView = NULL;
-    char *words[8];
+    char *words[32];
     int cnt,ix;
     // parse settingsByView "Signal:viewLimits=5:500,viewLimitsMax=0:20910 ..."
     cnt = chopLine(cloneString(settingsByView), words);
