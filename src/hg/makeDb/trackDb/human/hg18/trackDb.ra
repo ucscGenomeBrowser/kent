@@ -4123,9 +4123,10 @@ priority 110
     minScore 0
     maxScore 99
 
-track bamNA12878
-shortLabel NA12878 Slx BAM
-longLabel 1000Genomes NA12878 chr22 Solexa aligned reads
+track oneKGHighCovSeq
+compositeTrack on
+shortLabel 1kG High-Cov Seq
+longLabel 1000 Genomes High-Coverage Individuals Sequence Reads
 group x
 priority 4.1
 visibility hide
@@ -4136,8 +4137,18 @@ baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
-chromosomes chr21,chr22
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY
 maxWindowToDraw 200000
+
+    track bamNA12878
+    subTrack oneKGHighCovSeq on
+    shortLabel NA12878 Slx BAM
+    longLabel 1000Genomes NA12878 Solexa aligned reads
+
+    track bamNA12891
+    subTrack oneKGHighCovSeq on
+    shortLabel NA12891 Slx BAM
+    longLabel 1000Genomes NA12891 Solexa aligned reads
 
 track NA12878Slx
 shortLabel NA12878 depth
@@ -4150,6 +4161,15 @@ viewLimits 1:50
 maxHeightPixels 128:32:16
 autoScale off
 chromosomes chr22
+
+track phasedGenotypesNA12878
+shortLabel Phased NA12878
+longLabel 1000Genomes NA12878 SNPs (Dec. 08) phased by Tim Reddy at Stanford
+group x
+priority 4.12
+visibility hide
+type bed 4
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
 
 track fantom4CageGraphTop
 compositeTrack on
