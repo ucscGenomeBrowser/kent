@@ -442,7 +442,7 @@ void chainColorDropDown(char *var, char *curVal);
 
 /*	Wiggle track Windowing combining function option	*/
 enum wiggleWindowingEnum {
-   wiggleWindowWhiskers = 0,
+   wiggleWindowingWhiskers = 0,
    wiggleWindowingMax = 1,
    wiggleWindowingMean = 2,
    wiggleWindowingMin = 3,

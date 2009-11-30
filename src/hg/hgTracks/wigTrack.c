@@ -17,7 +17,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.96 2009/11/17 22:41:59 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.97 2009/11/30 17:59:07 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -588,7 +588,7 @@ for (i = 0; i < preDrawSize; ++i)
 		    dataValue = preDraw[i].max;
 		break;
 	case (wiggleWindowingMean):
-	case (wiggleWindowWhiskers):
+	case (wiggleWindowingWhiskers):
 		dataValue =
 		    preDraw[i].sumData / preDraw[i].count;
 		break;
@@ -738,7 +738,7 @@ static Color * makeColorArray(struct preDrawElement *preDraw, int width,
 /*	allocate and fill in a coloring array based on another track */
 {
 char *colorTrack = wigCart->colorTrack;
-boolean whiskers = (wigCart->windowingFunction == wiggleWindowWhiskers);
+boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers);
 int x1;
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 
@@ -798,7 +798,7 @@ Color mediumColor = MG_BLACK;	// Will be overriden
 Color lightColor = MG_BLACK;	// Will be overriden
 Color clipColor = MG_MAGENTA;
 enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
-boolean whiskers = (wigCart->windowingFunction == wiggleWindowWhiskers);
+boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers);
 
 /* Return gray shade corresponding to a number from 50 - 100 */
 

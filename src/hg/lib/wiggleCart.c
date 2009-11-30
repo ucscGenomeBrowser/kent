@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.33 2009/11/30 17:55:07 kent Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.34 2009/11/30 17:57:11 kent Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -452,12 +452,14 @@ freeMem(horizontalGrid);
 return(ret);
 }	/*	enum wiggleGridOptEnum wigFetchHorizontalGridWithCart()	*/
 
-/******	autoScale - on by default ***************************************/
+/******	autoScale - off by default ***************************************/
 enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
-char *Default = wiggleScaleEnumToString(wiggleScaleAuto);
-char *notDefault = wiggleScaleEnumToString(wiggleScaleManual);
+char *autoString = wiggleScaleEnumToString(wiggleScaleAuto);
+char *manualString = wiggleScaleEnumToString(wiggleScaleManual);
+char *Default = manualString;
+char *notDefault = autoString;
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *autoScale = NULL;
 enum wiggleScaleOptEnum ret;
@@ -470,9 +472,9 @@ if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
     /*	It may be the autoScale=on/off situation from custom tracks */
     char * tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, AUTOSCALE, "NONE");
     if (sameWord(tdbDefault,"on"))
-	autoScale = cloneString(Default);
+	autoScale = cloneString(autoString);
     else if (sameWord(tdbDefault,"off"))
-	autoScale = cloneString(notDefault);
+	autoScale = cloneString(manualString);
     else
 	autoScale = wigCheckBinaryOption(tdb,Default,notDefault,
 	    AUTOSCALEDEFAULT, AUTOSCALE);
@@ -514,7 +516,7 @@ return(ret);
 enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
-char *Default = wiggleWindowingEnumToString(wiggleWindowingMax);
+char *Default = wiggleWindowingEnumToString(wiggleWindowingWhiskers);
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *windowingFunction = NULL;
 enum wiggleWindowingEnum ret;
