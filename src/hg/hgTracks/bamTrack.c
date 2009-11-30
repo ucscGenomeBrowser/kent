@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.17 2009/11/26 00:35:38 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.18 2009/11/30 19:26:51 angie Exp $";
 
 struct bamTrackData
     {
@@ -325,36 +325,36 @@ if (ret == 0)
 return ret;
 }
 
+static char *cartOrTdbClosest(struct trackDb *tdb, char *var, char *defaultVal)
+/* Combine cart and tdb closest-to-home search */
+// (shouldn't there already be a lib routine to do this?)
+{
+char *tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, var, defaultVal);
+boolean compositeLevel = isNameAtCompositeLevel(tdb, var);
+return cartUsualStringClosestToHome(cart, tdb, compositeLevel, var, tdbDefault);
+}
+
 void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
 {
 char *seqNameForBam = chromName;
-char *stripPrefix = trackDbSetting(tg->tdb, "stripPrefix");
+char *stripPrefix = trackDbSettingClosestToHome(tg->tdb, "stripPrefix");
 if (stripPrefix && startsWith(stripPrefix, chromName))
     seqNameForBam = chromName + strlen(stripPrefix);
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd);
 
 struct hash *pairHash = isPaired ? hashNew(18) : NULL;
-char cartVarName[1024];
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_MIN_ALI_QUAL, tg->tdb->tableName);
-int minAliQual = cartUsualInt(cart, cartVarName,
-	       atoi(trackDbSettingOrDefault(tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)));
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_MODE, tg->tdb->tableName);
-char *colorMode = cartUsualString(cart, cartVarName,
-		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_GRAY_MODE, tg->tdb->tableName);
-char *grayMode = cartUsualString(cart, cartVarName,
-		         trackDbSettingOrDefault(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_TAG, tg->tdb->tableName);
-char *userTag = cartUsualString(cart, cartVarName,
-		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
+int minAliQual = atoi(cartOrTdbClosest(tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT));
+char *colorMode = cartOrTdbClosest(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+char *grayMode = cartOrTdbClosest(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
+char *userTag = cartOrTdbClosest(tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 struct bamTrackData btd = {tg, pairHash, NULL, minAliQual, colorMode, grayMode, userTag};
 char *fileName;
 if (tg->customPt)
     {
-    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    fileName = trackDbSettingClosestToHome(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
 	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->mapName);
     }
@@ -363,7 +363,7 @@ else
 bamFetch(fileName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
 if (isPaired)
     {
-    char *setting = trackDbSettingOrDefault(tg->tdb, "pairSearchRange", "20000");
+    char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
     int pairSearchRange = atoi(setting);
     if (pairSearchRange > 0 && hashNumEntries(pairHash) > 0)
 	{
@@ -426,7 +426,7 @@ int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 int w = x2-x1;
 int midY = y + (heightPer>>1);
-char *exonArrowsDense = trackDbSetting(tg->tdb, "exonArrowsDense");
+char *exonArrowsDense = trackDbSettingClosestToHome(tg->tdb, "exonArrowsDense");
 boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
 				   !sameWord(exonArrowsDense, "off"));
 boolean exonArrows = (tg->exonArrows &&
@@ -435,13 +435,8 @@ struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 struct psl *psl = NULL;
-char cartVarName[1024];
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_MODE, tg->tdb->tableName);
-char *colorMode = cartUsualString(cart, cartVarName,
-		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_GRAY_MODE, tg->tdb->tableName);
-char *grayMode = cartUsualString(cart, cartVarName,
-		         trackDbSettingOrDefault(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
+char *colorMode = cartOrTdbClosest(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+char *grayMode = cartOrTdbClosest(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
 		     sameString(grayMode, BAM_GRAY_MODE_BASE_QUAL));
 if (vis != tvDense)
@@ -503,7 +498,7 @@ if (indelShowDoubleInsert)
     {
     int intronGap = 0;
     if (vis != tvDense)
-	intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
+	intronGap = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronGap", "0"));
     lfDrawSpecialGaps(lf, intronGap, TRUE, 0, tg, hvg, xOff, y, scale, color, color, vis);
     }
 if (vis != tvDense)
@@ -549,24 +544,20 @@ void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
 track->canPack = TRUE;
-char varName[1024];
-safef(varName, sizeof(varName), "%s_" BAM_PAIR_ENDS_BY_NAME, track->mapName);
-boolean isPaired = cartUsualBoolean(cart, varName,
-				    (trackDbSetting(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
-safef(varName, sizeof(varName), "%s_" BAM_COLOR_MODE, track->tdb->tableName);
-char *colorMode = cartUsualString(cart, varName,
-		      trackDbSettingOrDefault(track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
-safef(varName, sizeof(varName), "%s_" BAM_COLOR_TAG, track->tdb->tableName);
-char *userTag = cartUsualString(cart, varName,
-			trackDbSettingOrDefault(track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
+boolean compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_PAIR_ENDS_BY_NAME);
+boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
+			 BAM_PAIR_ENDS_BY_NAME,
+			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
+char *colorMode = cartOrTdbClosest(track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+char *userTag = cartOrTdbClosest(track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
     {
     if (! (isalpha(userTag[0]) && isalnum(userTag[1]) && userTag[2] == '\0'))
 	{
 	warn("%s: BAM tag '%s' is not valid -- must be a letter followed by a letter or number.",
 	     track->tdb->shortLabel, htmlEncode(userTag));
-	safef(varName, sizeof(varName), "%s_" BAM_COLOR_TAG, track->tdb->tableName);
-	cartRemove(cart, varName);
+	compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_COLOR_TAG);
+	cartRemoveVariableClosestToHome(cart, track->tdb, compositeLevel, BAM_COLOR_TAG);
 	}
     }
 
