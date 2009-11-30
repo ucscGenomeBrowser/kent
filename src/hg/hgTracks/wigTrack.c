@@ -17,7 +17,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.97 2009/11/30 17:59:07 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.98 2009/11/30 23:01:32 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -798,7 +798,8 @@ Color mediumColor = MG_BLACK;	// Will be overriden
 Color lightColor = MG_BLACK;	// Will be overriden
 Color clipColor = MG_MAGENTA;
 enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
-boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers);
+boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
+			&& width < winEnd-winStart);
 
 /* Return gray shade corresponding to a number from 50 - 100 */
 
