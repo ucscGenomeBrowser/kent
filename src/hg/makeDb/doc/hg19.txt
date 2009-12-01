@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.63 2009/11/21 06:02:16 hiram Exp $";
+#	"$Id: hg19.txt,v 1.64 2009/12/01 05:36:23 hiram Exp $";
 
 #############################################################################
 
@@ -391,7 +391,7 @@ hg19.serverGenome = /hive/data/genomes/hg19/hg19.2bit
 hg19.clusterGenome = /scratch/data/hg19/hg19.2bit
 hg19.ooc = /scratch/data/hg19/11.ooc
 hg19.lift = /hive/data/genomes/hg19/jkStuff/hg19.unBridged.lift
-# hg19.hapRegions = /hive/data/genomes/hg19/bed/haplotypePos/haplotypePos.psl
+hg19.hapRegions = /hive/data/genomes/hg19/jkStuff/hg19.haplotypes.psl
 hg19.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 hg19.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
 hg19.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
@@ -404,12 +404,11 @@ hg19.refseq.mrna.xeno.loadDesc = yes
 hg19.mgc = yes
 hg19.orfeome = yes
 hg19.downloadDir = hg19
-# hg19.ccds.ncbiBuild = 36.3
-# hg19.upstreamGeneTbl = refGene
-# hg19.upstreamMaf = multiz28way
-# /hive/data/genomes/hg19/bed/multiz28way/species.lst multiz44way
-# /hive/data/genomes/hg19/bed/multiz44way/species.list
+hg19.ccds.ncbiBuild = 37.1
+hg19.upstreamGeneTbl = refGene
+hg19.upstreamMaf = multiz46way /hive/data/genomes/hg19/bed/multiz46way/species.list
 hg19.genbank.mrna.blatTargetDb = yes
+hg19.perChromTables = no
 
     cvs ci -m "Added hg19." etc/genbank.conf
     # update /cluster/data/genbank/:
@@ -6311,9 +6310,16 @@ end
     time gzip downloads/chr*.wigFix
     #	real    47m11.017s
 
+    wigTableStats.sh hg19 phyloP46wayAll
+# db.table      min max mean count sumData
+# hg19.phyloP46wayAll     -14.08 6.424 0.0896064 2845303719 2.54957e+08
+#	stdDev viewLimits
+#	0.833186 viewLimits=-4.07632:4.25553
+    #	that range is: 14.08+6.424 = 20.504
+
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	-hBinSize=0.020504 -hBinCount=1000 -hMinVal=-14.08 -verbose=2 \
 	    -db=hg19 phyloP46wayAll > histogram.data 2>&1
     #	real    8m15.623s
 
@@ -6325,13 +6331,14 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP46wayAll track"
-set xlabel " phyloP46wayAll score"
+set title " Human Hg19 Histogram phyloP46way track, all 46 vertebrates"
+set xlabel " phyloP46way score, all 46 vertebrates"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.02]
+set yrange [0:0.04]
+set xrange [-2:2]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
@@ -6388,9 +6395,16 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time gzip downloads/chr*.wigFix
     #	real    32m11.461s
 
+    wigTableStats.sh hg19 phyloP46wayPrimates
+# db.table      min max mean count
+# hg19.phyloP46wayPrimates        -9.065 0.655 0.0448196 2845303719
+#	sumData stdDev viewLimits
+#	1.27525e+08 0.600051 viewLimits=-2.95544:0.655
+    #	that range is: 9.065+0.655 = 9.720
+
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	-hBinSize=0.00972 -hBinCount=1000 -hMinVal=-9.065 -verbose=2 \
 	    -db=hg19 phyloP46wayPrimates > histogram.data 2>&1
     #	real    8m15.623s
 
@@ -6408,7 +6422,8 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.02]
+set yrange [0:0.03]
+set xrange [-2:0.655]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
@@ -6467,9 +6482,16 @@ rY.phyloP46way.placental.wigFix.gz
     time gzip downloads/chr*.wigFix
     #	real    46m55.550s
 
+    wigTableStatus.sh hg19 phyloP46wayPlacental
+# db.table      min max mean count sumData stdDev viewLimits
+# hg19.phyloP46wayPlacental -13.796 2.941 0.0359345 2845303719 1.02245e+08
+#	stdDev viewLimits
+#	0.779426 viewLimits=-3.86119:2.941
+    #	that range is: 13.796+2.941 = 16.737
+
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	-hBinSize=0.016737 -hBinCount=1000 -hMinVal=-13.796 -verbose=2 \
 	    -db=hg19 phyloP46wayPlacental > histogram.data 2>&1
     #	real    8m15.623s
 
@@ -6487,7 +6509,8 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.02]
+set yrange [0:0.03]
+set xrange [-2.5:2.5]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
