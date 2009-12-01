@@ -1319,3 +1319,123 @@ select id,name,status from projects where status not in ("displayed","released",
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 619 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 668 reviewing
 select id,name,status from projects where status not in ("displayed","released","revoked","superseded","reviewing"); | 46 |
+
+2009-11-30 Missing GM12878 Rep2 tagAligns!
+==========================================
+Downloads dir has only one (V2) subId=332
+sub 332 regenerated Raw from already submitted tagAligns, so there should be no V2
+sub 332 was the old fashion Rel2
+downloadsDir/release1 has all original which should be the ones!
+ln
+ln release1/wgEncodeBroadChipSeqAlignmentsRep2Gm12878*.tagAlign.gz .
+### NO THIS is not so:
+zcat wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1V2.tagAlign.gz | wl          13632898
+zcat release1/wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1.tagAlign.gz | wl   13632898
+zcat wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1V2.tagAlign.gz | head
+chr1    31659966        31660013        GAATGAGATCAGCATAGACAGCACAGAGAGGCAAGAGAGCCTCTCGC 1000    +
+zcat release1/wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1.tagAlign.gz | head
+chr1    31659966        31660014        GAATGAGATCAGCATAGACAGCACAGAGAGGCAAGAGAGCCTCTCGC 1000    +
+### There is an off by one error.  Therefore all V2s are valid.  
+I must remove the ones I just linkined in from release1 and then reload the missing ones!
+
+ls *Rep2Gm12878*.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign.gz
+
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.gz
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign.gz
+
+What is missing exactly?
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz
+
+cd {pip}/332
+edit DAF/DDF
+tar -cpzf BroadResubmitTagAlignRep2s.tgz rawSigBroad.DAF rawSigBroad.DDF
+# submitted to 800
+ll *Rep2Gm12878*.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 198204132 Nov 30 15:31 wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 235330617 Nov 30 15:02 wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 207339598 Nov 30 15:15 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 225546215 Nov 30 15:13 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 295145342 Nov 30 15:22 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 290389709 Nov 30 15:34 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 197423654 Nov 30 15:08 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 203798428 Nov 30 15:10 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 219338761 Nov 30 15:37 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 268390362 Nov 30 15:39 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz
+ll *Rep2Huvec*.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 215910513 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 255146612 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcfV2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 322322114 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27acV2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 387746099 Nov 30 15:19 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 377600984 Nov 30 15:29 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 381183723 Nov 30 15:06 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 313456944 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2V2.tagAlign.gz
+-rw-rw-r-- 1 qateam protein 363716703 Nov 30 15:25 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 248141307 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 281337854 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1V2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 298025445 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1V2.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 356263922 May 15  2009 wgEncodeBroadChipSeqAlignmentsRep2HuvecPol2bV2.tagAlign.gz
+
+zcat wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz | head
+chr1    84721172        84721223        TGGTTGTCAATGGTCTTGGGTACAGGCTTTGGTGGAGCCTAAGTAAAAGAG     1000    -
+zcat release1/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign.gz | head
+chr1    84721172        84721224        TGGTTGTCAATGGTCTTGGGTACAGGCTTTGGTGGAGCCTAAGTAAAAGAG     1000    -
+# Off by one has been corrected!
+encodeDownloadsPage.pl index.html 
+cp index.html release2/
+cd release2/
+
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz   .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz   .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz   .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz    .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz    .
+# update broadChipSeq.notes.txt in docs
+# update pushq entry
+# inform Anshul
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 800 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 800 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 800 reviewing
+# give this submission id back to Broad:
+update projects set user_id = 34 where id = 800;
+
