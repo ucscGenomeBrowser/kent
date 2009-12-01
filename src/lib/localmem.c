@@ -11,7 +11,7 @@
 #include "common.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: localmem.c,v 1.11 2009/11/20 20:26:27 kent Exp $";
+static char const rcsid[] = "$Id: localmem.c,v 1.12 2009/12/01 23:10:44 kent Exp $";
 
 struct lm
     {
@@ -119,6 +119,20 @@ if (string == NULL)
 else
     return lmCloneStringZ(lm, string, strlen(string));
 }
+
+char *lmCloneFirstWord(struct lm *lm, char *line)
+/* Clone first word in line */
+{
+char *startFirstWord = skipLeadingSpaces(line);
+if (startFirstWord == NULL)
+    return NULL;
+char *endFirstWord = skipToSpaces(startFirstWord);
+if (endFirstWord == NULL)
+    return lmCloneString(lm, startFirstWord);
+else
+    return lmCloneStringZ(lm, startFirstWord, endFirstWord - startFirstWord);
+}
+    
 
 struct slName *lmSlName(struct lm *lm, char *name)
 /* Return slName in memory. */

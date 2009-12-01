@@ -25,6 +25,9 @@ char *lmCloneString(struct lm *lm, char *string);
 char*lmCloneStringZ(struct lm *lm, char *string, int size);
 /* Return local mem copy of string of given size, adding null terminator. */
 
+char *lmCloneFirstWord(struct lm *lm, char *line);
+/* Clone first word in line */
+
 struct slName *lmSlName(struct lm *lm, char *name);
 /* Return slName in memory. */
 
