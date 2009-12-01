@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.691 2009/12/01 05:36:23 kent Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.692 2009/12/01 16:27:44 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4130,7 +4130,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
-    viewLimits 86:2.47198e+08 
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in prostate whole cell)
@@ -4140,7 +4139,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
-    viewLimits 10:2.47198e+08 
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in prostate whole cell)
@@ -4150,7 +4148,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
-    viewLimits 21:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 cytosol)
@@ -4160,7 +4157,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
-    viewLimits 1:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 cytosol)
@@ -4170,7 +4166,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
-    viewLimits 16:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 nucleus)
@@ -4180,7 +4175,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
-    viewLimits 8:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 nucleus)
@@ -4190,7 +4184,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
-    viewLimits 0:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+ +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 cytosol)
@@ -4200,7 +4193,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562CytosolLongpolya fileName=wgEncodeRikenCagePlusClustersK562CytosolLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
-    viewLimits 20:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+ -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 cytosol)
@@ -4210,7 +4202,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
-    viewLimits 1:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+ +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 nucleus)
@@ -4220,7 +4211,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleusLongpolya fileName=wgEncodeRikenCagePlusClustersK562NucleusLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
-    viewLimits 31:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+ -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 nucleus)
@@ -4262,7 +4252,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
-    viewLimits 7:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 polysome)
@@ -4272,7 +4261,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya
-    viewLimits 0:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 polysome)
@@ -4282,7 +4270,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
-    viewLimits 7:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 nucleolus)
@@ -4292,7 +4279,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleolusTotal fileName=wgEncodeRikenCagePlusClustersK562NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleolusTotal
-    viewLimits 2:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleolus)
@@ -4302,7 +4288,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleolusTotal fileName=wgEncodeRikenCageMinusClustersK562NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
-    viewLimits 1:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 nucleoplasm)
@@ -4312,7 +4297,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCagePlusClustersK562NucleoplasmTotal.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
-    viewLimits 2:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleoplasm)
@@ -4322,7 +4306,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562ChromatinTotal
-    viewLimits 7:2.472e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 chromatin)
@@ -4332,7 +4315,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562ChromatinTotal fileName=wgEncodeRikenCagePlusClustersK562ChromatinTotal.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562ChromatinTotal
-    viewLimits 2:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 chromatin)
@@ -4406,7 +4388,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562ChromatinTotal fileName=wgEncodeRikenCageAlignmentsK562ChromatinTotal.tagAlign.gz
 
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
-    viewLimits 34:2.47185e+08 
     subTrack wgEncodeRikenCage
     shortLabel GM128 cyto pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 cytosol)
@@ -4416,7 +4397,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
-    viewLimits 94:2.47198e+08 
     subTrack wgEncodeRikenCage
     shortLabel GM128 cyto pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in GM12878 cytosol)
@@ -4426,7 +4406,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
-    viewLimits 13:2.47185e+08 
     subTrack wgEncodeRikenCage
     shortLabel GM128 nucl pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 nucleus)
@@ -4436,7 +4415,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
-    viewLimits 374:2.47197e+08 
     subTrack wgEncodeRikenCage
     shortLabel GM128 nucl pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in GM12878 nucleus)
@@ -8131,7 +8109,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeUwDGF off
     shortLabel SK-N-SH_RA Sig
-    longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in SK-N-SH_RA cells)
+    longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (SK-N-SH_RA cells)
     subGroups view=Signal cellType=SK-N-SH_RA
     type bedGraph 4
     #viewLimitsMax 1:42739
@@ -10757,7 +10735,7 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
+subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
 subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 HAE2F1=HA-E2F1 JUND=JunD MAX=Max NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
@@ -11531,6 +11509,27 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=Pol2 treatment=IFNg6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=359 dateSubmitted=2009-06-09 dateUnrestricted=2010-03-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Ifng6hPol2 fileName=wgEncodeYaleChIPseqSignalK562Ifng6hPol2.bedGraph4.gz
 
+# submission 669
+    track wgEncodeYaleChIPseqPeaksK562Pol3
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Pol3 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol3 in K562 cells)
+    subGroups view=Peaks factor=POL3 cellType=t1K562
+    type narrowPeak
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Pol3 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=669 dateSubmitted=2009-11-12 dateUnrestricted=2010-08-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Pol3 fileName=wgEncodeYaleChIPseqPeaksK562Pol3.narrowPeak.gz
+
+    track wgEncodeYaleChIPseqSignalK562Pol3
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Pol3 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol3 in K562 cells)
+    subGroups view=Signal factor=POL3 cellType=t1K562
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Pol3 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=669 dateSubmitted=2009-11-12 dateUnrestricted=2010-08-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Pol3 fileName=wgEncodeYaleChIPseqSignalK562Pol3.bedGraph4.gz
+
     track wgEncodeYaleChIPseqPeaksK562Rad21
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 Pk
@@ -12034,6 +12033,25 @@ wgEncode 1
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=335 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bInput fileName=wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
+
+# submission 757
+    track wgEncodeYaleChIPseqPeaksMcf7Hae2f1
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel MCF-7 HA-E2F1 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in MCF-7 cells)
+    subGroups view=Peaks factor=HAE2F1 cellType=t3MCF7
+    type narrowPeak
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=MCF-7 antibody=HA-E2F1 view=Peaks labVersion="MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=757 dateSubmitted=2009-10-28 dateUnrestricted=2010-07-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksMcf7Hae2f1 fileName=wgEncodeYaleChIPseqPeaksMcf7Hae2f1.narrowPeak.gz
+
+    track wgEncodeYaleChIPseqSignalMcf7Hae2f1
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel MCF-7 HA-E2F1 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in MCF-7 cells)
+    subGroups view=Signal factor=HAE2F1 cellType=t3MCF7
+    type bedGraph 4
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=MCF-7 antibody=HA-E2F1 view=Signal labVersion="MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=757 dateSubmitted=2009-10-28 dateUnrestricted=2010-07-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalMcf7Hae2f1 fileName=wgEncodeYaleChIPseqSignalMcf7Hae2f1.bedGraph4.gz
 
     track wgEncodeYaleChIPseqPeaksNb4Pol2V2
     subTrack wgEncodeYaleChIPseq off
@@ -14582,7 +14600,7 @@ compositeTrack on
 shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
-subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 GM12891=GM12891 GM12892=GM12892  H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HFL11W=HFL11W HFL24W=HFL24W K562=K562
+subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HFL11W=HFL11W HFL24W=HFL24W K562=K562
 subGroup2 replicate Replicate 1=1 2=2
 dimensions dimensionX=replicate dimensionY=cellType
 sortOrder cellType=+ replicate=+
@@ -14595,44 +14613,6 @@ nextItemButton on
 itemRgb on
 wgEncode 1
 
-# unreleased tracks
-    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892
-    release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq off
-    shortLabel GM12892 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12892 cells)
-    subGroups cellType=GM12892 replicate=1
-    type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12892 view=Regions replicate=1 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=796 dateSubmitted=2009-11-30 dateUnrestricted=2010-08-29 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892.bed9.gz
-
-    track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892
-    release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq off
-    shortLabel GM12892 2
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12892 cells)
-    subGroups cellType=GM12892 replicate=2
-    type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12892 view=Regions replicate=2 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=796 dateSubmitted=2009-11-30 dateUnrestricted=2010-08-29 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892.bed9.gz
-
-    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891
-    release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq off
-    shortLabel GM12891 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12891 cells)
-    subGroups cellType=GM12891  replicate=1
-    type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12891 view=Regions replicate=1 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=794 dateSubmitted=2009-11-25 dateUnrestricted=2010-08-25 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891.bed9.gz
-
-    track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891
-    release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq off
-    shortLabel GM12891 2
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12891 cells)
-    subGroups cellType=GM12891 replicate=2
-    type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12891 view=Regions replicate=2 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=794 dateSubmitted=2009-11-25 dateUnrestricted=2010-08-25 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891.bed9.gz
-
-# end unreleased tracks
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
     subTrack wgEncodeHudsonalphaMethylSeq off
     shortLabel HCT-116 1
@@ -15227,7 +15207,6 @@ dragAndDrop subTracks
 visibilityViewDefaults 1-PlusRawSignal=dense 2-MinusRawSignal=dense 3-AllRawSignal=hide 4-Alignments=hide 5-SplitAlign=hide
 settingsByView 1-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimits=0:200 2-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimits=0:200 3-AllRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimits=0:200
 priority 0
-denseCoverage 0
 type bed 3
 noInherit on
 wgEncode 1
