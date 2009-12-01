@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.50 2009/11/06 05:35:11 kate Exp $
+# $Id: Encode.pm,v 1.51 2009/12/01 19:59:52 kate Exp $
 
 package Encode;
 
@@ -226,8 +226,8 @@ sub getFields
 
 sub validateAssembly {
     my ($val) = @_;
-    if($val ne 'hg18') {
-        return "Assembly '$val' is invalid (must be 'hg18')";
+    if($val ne 'hg18' && $val ne 'mm9') {
+        return "Assembly '$val' is invalid (must be 'hg18 or mm9')";
     } else {
         return ();
     }
