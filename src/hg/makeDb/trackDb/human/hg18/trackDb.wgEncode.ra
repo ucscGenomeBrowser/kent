@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.690 2009/12/01 00:14:01 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.691 2009/12/01 05:36:23 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15227,6 +15227,7 @@ dragAndDrop subTracks
 visibilityViewDefaults 1-PlusRawSignal=dense 2-MinusRawSignal=dense 3-AllRawSignal=hide 4-Alignments=hide 5-SplitAlign=hide
 settingsByView 1-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimits=0:200 2-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimits=0:200 3-AllRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimits=0:200
 priority 0
+denseCoverage 0
 type bed 3
 noInherit on
 wgEncode 1

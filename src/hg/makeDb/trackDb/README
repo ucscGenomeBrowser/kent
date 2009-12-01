@@ -248,6 +248,12 @@ The format of the type fields:
     substituting "bigBed" for "bed" in the type line, the same as the "type bed"
     explained above.
 
+    bigBed-specific optional field:
+        denseCoverage maxVal
+    In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal 
+    corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
+    will be calculated from the data itself.
+
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other than
     substituting "bigWig" for "wig" in the type line, the same as the "type wig"
