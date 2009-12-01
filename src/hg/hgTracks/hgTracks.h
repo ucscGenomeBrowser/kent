@@ -602,6 +602,25 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb *tdb,
+	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
+/* Convert bed to a linkedFeature, destroying bed in the process. */
+
+struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct track *track,
+	char *chrom, int start, int end, struct lm *lm);
+/* Return list of intervals in range. */
+
+void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track,
+	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
+	int fieldCount, struct linkedFeatures **pLfList);
+/* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
+ * them to linkedFeatures, and add to head of list. */
+
+void bigBedDrawDense(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color);
+/* Draw dense mode bigBed. */
+
 void adjustBedScoreGrayLevel(struct trackDb *tdb, struct bed *bed, int scoreMin, int scoreMax);
 /* For each distinct trackName passed in, check cart for trackName.minGrayLevel; if
  * that is different from the gray level implied by scoreMin's place in [0..scoreMax],
@@ -801,8 +820,11 @@ void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 void bigWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
-
 /* Make track group for wig - wiggle tracks. */
+
+void bigBedMethods(struct track *track, struct trackDb *tdb, 
+                                int wordCount, char *words[]);
+/* Set up bigBed methods. */
 
 void chromGraphMethods(struct track *tg);
 /* Fill in chromGraph methods for built in track. */
@@ -1087,6 +1109,9 @@ void parseSs(char *ss, char **retPsl, char **retFa);
 
 boolean ssFilesExist(char *ss);
 /* Return TRUE if both files in ss exist. */
+
+int maximumTrackItems(struct track *tg);
+/* Return the maximum number of items allowed in track. */
 
 int maximumTrackHeight(struct track *tg);
 /* Return the maximum track height allowed in pixels. */

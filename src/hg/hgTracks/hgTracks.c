@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1608 2009/11/19 18:05:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1609 2009/12/01 05:49:35 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1697,8 +1697,15 @@ for (track = trackList; track != NULL; track = track->next)
                 if(subtrack->visibility != vis)
                     {
                     subtrack->visibility = vis;
-                    subtrack->limitedVis = tvMin(track->visibility,subtrack->visibility);
-                    subtrack->limitedVisSet = (subtrack->limitedVis != tvHide && subtrack->visibility != subtrack->limitedVis);
+		    if (subtrack->limitedVisSet)
+		        {
+			subtrack->limitedVis = tvMin(vis, subtrack->limitedVis);
+			}
+		    else
+			{
+			subtrack->limitedVis = tvMin(vis,subtrack->visibility);
+			subtrack->limitedVisSet = (subtrack->limitedVis != tvHide && subtrack->visibility != subtrack->limitedVis);
+			}
                     }
                 }
             }

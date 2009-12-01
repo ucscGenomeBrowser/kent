@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.113 2009/11/17 20:47:49 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.114 2009/12/01 05:49:36 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -320,14 +320,17 @@ int tgFixedItemHeight(struct track *tg, void *item)
 return tg->lineHeight;
 }
 
+int maximumTrackItems(struct track *tg)
+/* Return the maximum number of items allowed in track. */
+{
+return trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+}
+
 int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
-int maxItems = maxItemsInFullTrack;
-char *maxItemsString = trackDbSetting(tg->tdb, "maxItems");
-if (maxItemsString != NULL)
-    maxItems = sqlUnsigned(maxItemsString);
-return maxItems * tl.fontHeight; //tg->lineHeight; ?
+int maxItems = maximumTrackItems(tg);
+return maxItems * tl.fontHeight; 
 }
 
 static int maxItemsToOverflow(struct track *tg)
@@ -3051,10 +3054,15 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-if (vis == tvDense && tg->colorShades)
-    slSort(&tg->items, cmpLfWhiteToBlack);
-genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
+if (vis == tvDense && tg->isBigBed)
+    bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
+else
+    {
+    if (vis == tvDense && tg->colorShades)
+	slSort(&tg->items, cmpLfWhiteToBlack);
+    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+	    font, color, vis);
+    }
 }
 
 void incRange(UBYTE *start, int size)
@@ -8922,10 +8930,9 @@ if (!tg->limitedVisSet)
     if (trackIsCompositeWithSubtracks(tg))  //TODO: Change when tracks->subtracks are always set for composite
 	{
 	struct track *subtrack;
-    int subCnt = subtrackCount(tg->subtracks);
-    maxHeight = maxHeight * max(subCnt,1);
-	for (subtrack = tg->subtracks;  subtrack != NULL;
-	     subtrack = subtrack->next)
+	int subCnt = subtrackCount(tg->subtracks);
+	maxHeight = maxHeight * max(subCnt,1);
+	for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
 	    limitVisibility(subtrack);
 	}
     while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
@@ -10591,7 +10598,7 @@ if (sameWord(type, "bed"))
     }
 else if (sameWord(type, "bigBed"))
     {
-    complexBedMethods(track, tdb, TRUE, wordCount, words);
+    bigBedMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bedGraph"))
     {

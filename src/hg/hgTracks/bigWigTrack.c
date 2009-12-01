@@ -6,15 +6,12 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
-// #include "wiggle.h"
-// #include "scoredRef.h"
-// #include "customTrack.h"
 #include "localmem.h"
 #include "wigCommon.h"
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.7 2009/11/10 05:48:17 kent Exp $";
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.8 2009/12/01 05:49:35 kent Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,

@@ -12,31 +12,6 @@
 
 #define SEQ_DELIM '~'
 
-char *bbiNameFromTable(struct sqlConnection *conn, char *table)
-/* Return file name from little table. */
-{
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", table);
-char *fileName = sqlQuickString(conn, query);
-if (fileName == NULL)
-    errAbort("Missing fileName in %s table", table);
-return fileName;
-}
-
-struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct track *track,
-	char *chrom, int start, int end, struct lm *lm)
-/* Return list of intervals in range. */
-{
-struct bbiFile *bbi = track->bbiFile;
-if (bbi == NULL)
-    {
-    char *fileName = bbiNameFromTable(conn, track->mapName);
-    bbi = track->bbiFile = bigBedFileOpen(fileName);
-    }
-struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-return result;
-}
-
 struct bed *bedLoadPairedTagAlign(char **row)
 /* Load first six fields of bed. 
  * Add ~seq1~seq2 to end of name
@@ -198,29 +173,6 @@ if (useItemRgb)
     }
 bedFree(pBed);
 return lf;
-}
-
-void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track,
-	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
-	int fieldCount, struct linkedFeatures **pLfList)
-/* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
- * them to linkedFeatures, and add to head of list. */
-{
-struct lm *lm = lmInit(0);
-struct trackDb *tdb = track->tdb;
-struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, track, chrom, start, end, lm);
-char *bedRow[32];
-char startBuf[16], endBuf[16];
-
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct bed *bed = bedLoadN(bedRow, fieldCount);
-    struct linkedFeatures *lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
-    	scoreMin, scoreMax, useItemRgb);
-    slAddHead(pLfList, lf);
-    }
-lmCleanup(&lm);
 }
 
 void loadBed9(struct track *tg)
@@ -607,8 +559,11 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 
-genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
+if (vis == tvDense && tg->isBigBed)
+    bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
+else
+    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+	    font, color, vis);
 }
 
 char *bedName(struct track *tg, void *item)
