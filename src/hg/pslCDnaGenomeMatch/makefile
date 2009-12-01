@@ -4,8 +4,8 @@ L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-
 M = pslCDnaGenomeMatch.o  
+DB=hg18
 
 O = pslMismatch.o misMatch.o 
 pslCDnaGenomeMatch: $M $(MYLIBS)
@@ -18,29 +18,27 @@ misMatch: $O $(MYLIBS)
 lib:
 	cd ../../lib && ${MAKE}
 
-testNew: test14 test15 test16 test1 test5
-%:	input/%.psl
-	${MKDIR} output2
-	misMatch -verbose=4 -bedOut=output2/$@.bed input/$@.psl S1.hg18.len /cluster/data/hg18/bed/pseudo/est.2bit /cluster/data/hg18/nib output2/$@.psl -score=output2/$@.tab  > $@.2.log 
-	diff expected/$@.psl output2/$@.psl 
-#diff expected/$@.tab output2/$@.tab 
-	rm -f $@.2.log
-
-test: testDA9 test14 test15 test16 mrna1 mrna5 testBQ mrna13b mrna13c mrna12a pass1733 mrnaDrop
+test: test14 test15 test16 mrna1 mrna5 mrna13b mrna13c rest1 testDA9 pass1733 mrnaDrop 
 t%:	input/t%.psl
 	${MKDIR} output
-	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl S1.hg18.len /cluster/data/hg18/bed/pseudo/est.2bit /cluster/data/hg18/nib output/$@.psl -score=output/$@.tab -minDiff=5  > $@.log 
+	DB=hg18
+	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl /hive/users/baertsch/retro/${DB}/S1.len /hive/users/baertsch/retro/${DB}/est.2bit /hive/data/genomes/${DB}/nib output/$@.psl -score=output/$@.tab -minDiff=5  > $@.log 
 	diff expected/$@.psl output/$@.psl 
 	rm -f $@.log
+r%:	input/r%.psl
+	${MKDIR} output
+	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl /hive/users/baertsch/retro/mm9/S1.len /hive/users/baertsch/retro/mm9/est.2bit /hive/data/genomes/mm9/nib output/$@.psl -score=output/$@.tab -minDiff=3 -notAlignPenalty=3 > $@.log 
+	diff expected/$@.psl output/$@.psl 
+#rm -f $@.log
 m%:	input/m%.psl
 	${MKDIR} output
-	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl S1.hg18.len /cluster/data/hg18/bed/pseudo/mrnaNoversion.2bit /cluster/data/hg18/nib output/$@.psl -score=output/$@.tab -minDiff=5  > $@.log 
+	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl /hive/users/baertsch/retro/${DB}/S1.len /hive/data/genomes/${DB}/bed/mrnaBlastz/mrnaNoversion.2bit /hive/data/genomes/${DB}/nib output/$@.psl -score=output/$@.tab -notAlignPenalty=8 -minDiff=3  > $@.log 
 	diff expected/$@.psl output/$@.psl 
 #	diff expected/$@.tab output/$@.tab 
 	rm -f $@.log
 p%:	input/p%.psl
 	${MKDIR} output
-	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl S1.hg18.len /cluster/data/hg18/bed/pseudo/mrnaNoversion.2bit /cluster/data/hg18/nib output/$@.psl -score=output/$@.tab -minDiff=5  -passthru > $@.log 
+	pslCDnaGenomeMatch -verbose=4 -bedOut=output/$@.bed input/$@.psl /hive/users/baertsch/retro/${DB}/S1.len /hive/data/genomes/${DB}/bed/mrnaBlastz/mrnaNoversion.2bit /hive/data/genomes/${DB}/nib output/$@.psl -score=output/$@.tab -minDiff=5  -passthru > $@.log 
 	diff expected/$@.psl output/$@.psl 
 	rm -f $@.log
 clean:
