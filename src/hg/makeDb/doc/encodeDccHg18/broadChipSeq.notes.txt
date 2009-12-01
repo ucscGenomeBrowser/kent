@@ -320,7 +320,7 @@ B) Eliminated tables (not replaced):
    wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
    (20 tables)
 
-B') Eliminated files (not replaced): 
+B') Eliminated files (not replaced):
 /gbdb/hg18/wib/wgEncodeBroadChipSeqRawSignalRep1Gm12878Control.wib
 /gbdb/hg18/wib/wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf.wib
 /gbdb/hg18/wib/wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac.wib
@@ -393,7 +393,9 @@ C') Replaced Files:
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz
+  wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign.gz
+  wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign
   wgEncodeBroadChipSeqAlignmentsRep2HuvecControl.tagAlign.gz
@@ -482,7 +484,9 @@ D') Versioned files (what is being replaced in parens):
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.)
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign)
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.        (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1.tagAlign)
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3.tagAlign)
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.)
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecControl.tagAlign.gz)
