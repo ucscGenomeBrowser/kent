@@ -620,3 +620,14 @@ Replacing:
 #submission 695 replacing 526
 # submission 722 replacing 613
 ### Could be needing downloads dir update
+
+2009-11-19 Clean up of downloads.
+=================================
+# No rep2 peaks so...
+cd {downloadsDir}
+mv *PeaksRep2*.gz peakReps/
+encodeDownloadsPage.pl index.html
+cp index.html release1/
+cd release1/
+ll *PeaksRep2*.gz  
+rm *PeaksRep2*.gz  
