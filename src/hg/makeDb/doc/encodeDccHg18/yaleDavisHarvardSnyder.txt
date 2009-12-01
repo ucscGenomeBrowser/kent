@@ -3161,3 +3161,309 @@ K562b/YY1
 K562b/ZNF263 * fixed
 HepG2b/TR4
 
+2009-11-24 Finally the corrected tagAligns
+==========================================
+Several problems were fixed by hand editing DAF/DDFs
+1) Mike Wilson submitted DDFs with multiple lines per dataset!
+2) The DAF matchFirst had to change from 32 to 30.
+3) Several types such as Jun instead of c-Jun
+4) He include PolyA RNA which is a no no.
+To solve this I create an rna subdir for 634, then move the data files and create a daf/ddf.
+Then
+tar -cpzf YDH_RnaSeq_tagAlign_update.tgz *  
+submitted as 788
+Notice that 276 is marked as released but it is only displayed
+update projects set status = 'displayed' where id = 276;
+
+# submission id's that must be finished up:
+select id,name,status,user_id from projects where name like "Y%" and status != "released";
++-----+-------------------------+-----------+---------+
+| id  | name                    | status    | user_id |
++-----+-------------------------+-----------+---------+
+| 276 | YHD_K562_PolyA_RNA      | displayed |       6 | 
+| 539 | YDH_GM12878_ds_cDNA     | displayed |       6 | 
+| 540 | YDH_K562_IFNa30m_cDNA   | displayed |       6 | 
+| 541 | YDH_K562_IFNa6h_cDNA    | displayed |       6 | 
+| 542 | YDH_K562_IFNg30m_cDNA   | displayed |       6 | 
+| 543 | YDH_K562_IFNg6h_cDNA    | displayed |       6 | 
+| 633 | YDH_tagAlign_update_v3  | loaded    |       6 | 
+| 634 | YDH_tagAlign_update     | loaded    |       6 | 
+| 669 | YDH_K562_Pol3           | loaded    |       6 | 
+| 739 | YDH_HeLa-S3_E2F6        | displayed |       6 | 
+| 757 | YDH_MCF-7_HA-E2F1       | loaded    |       6 | 
+| 787 | YDH_tagAlign_update2    | loaded    |       6 | 
+| 788 | YDH_tagAlign_update_RNA | loaded    |       6 | 
++-----+-------------------------+-----------+---------+
+13 rows in set (0.01 sec)
+
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2009-12-01
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/633/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/634/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/669/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/757/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/787/out/fileDb.ra | grep parentTable >> tmp.txt
+e tmp.txt
+
+# remove old from dir after confirming all are linked to release1/ or release2/:
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cfos.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cfos.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Gm12878Cfos.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm12878Jund.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm12878Jund.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm12878Max.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm12878Max.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol3.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol3.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hct116Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hct116Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hct116Tcf4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hct116Tcf4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hek293Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hek293Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Hek293Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Cfos.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Cfos.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Largefragment.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Largefragment.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Max.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Max.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Mnase.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Mnase.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Helas3Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hepg2Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hepg2Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Hepg2Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hepg2Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hepg2Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Hepg2Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp1a.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp1a.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp1a.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Bdp1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Bdp1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3K562Bdp1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Brf1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Brf1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3K562Brf1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Cjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Cjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562InputV2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562InputV2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Jund.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Jund.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Max.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Max.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Nfe2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Nfe2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Rad21.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Rad21.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Rpc155.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Rpc155.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Sirt6.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Sirt6.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Xrcc4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Xrcc4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bGata2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bGata2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bTr4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bTr4.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bYy1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bYy1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Suz12.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Suz12.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Yy1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Yy1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsGm12878Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsHct116Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsHek293Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsHepg2bInput.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsNt2d1Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3ifngStat1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3ifngStat1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifng30Cjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifng30Cjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCjun.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Cmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Cmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCmyc.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsK562Ifna30Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsK562Ifna6hInput.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsK562Ifng30Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsK562Ifng6hInput.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hPol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hPol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hPol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hPol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat2.tagAlign.gz
+
+grep -v wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cfos\.tagAlign\.gz   fileDb.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cfos\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep3Gm12878Cfos\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Gm12878Jund\.tagAlign\.gz                > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2Gm12878Jund\.tagAlign\.gz     tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1Gm12878Max\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Gm12878Max\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2\.tagAlign\.gz                  > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2\.tagAlign\.gz     tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol3\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol3\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hct116Pol2\.tagAlign\.gz                 > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2Hct116Pol2\.tagAlign\.gz      tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hct116Tcf4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Hct116Tcf4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hek293Pol2\.tagAlign\.gz                   > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2Hek293Pol2\.tagAlign\.gz      tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep3Hek293Pol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Cfos\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Cfos\.tagAlign\.gz                   > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Cmyc\.tagAlign\.gz      tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Cmyc\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Largefragment\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Largefragment\.tagAlign\.gz > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Max\.tagAlign\.gz       tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Max\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Mnase\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Mnase\.tagAlign\.gz                  > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg\.tagAlign\.gz  tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3Pol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3Pol2\.tagAlign\.gz               > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep3Helas3Pol2\.tagAlign\.gz      tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hepg2Input\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Hepg2Input\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep3Hepg2Input\.tagAlign\.gz                   > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1Hepg2Pol2\.tagAlign\.gz       tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2Hepg2Pol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep3Hepg2Pol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp1a\.tagAlign\.gz                   > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp1a\.tagAlign\.gz    tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp1a\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp2\.tagAlign\.gz               > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp2\.tagAlign\.gz     tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Bdp1\.tagAlign\.gz                       > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Bdp1\.tagAlign\.gz        tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep3K562Bdp1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Brf1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Brf1\.tagAlign\.gz                         > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep3K562Brf1\.tagAlign\.gz        tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Cjun\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Cjun\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562InputV2\.tagAlign\.gz                      > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562InputV2\.tagAlign\.gz     tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Jund\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Jund\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Max\.tagAlign\.gz                          > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Max\.tagAlign\.gz         tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Nfe2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Nfe2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Pol2\.tagAlign\.gz                         > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Pol2\.tagAlign\.gz        tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Rad21\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Rad21\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Rpc155\.tagAlign\.gz                     > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Rpc155\.tagAlign\.gz      tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Sirt6\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Sirt6\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Xrcc4\.tagAlign\.gz                      > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Xrcc4\.tagAlign\.gz       tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6\.tagAlign\.gz                      > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6\.tagAlign\.gz       tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bGata2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bGata2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1\.tagAlign\.gz                  > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1\.tagAlign\.gz     tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bTr4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bTr4\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bYy1\.tagAlign\.gz                         > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bYy1\.tagAlign\.gz        tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Suz12\.tagAlign\.gz                 > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Suz12\.tagAlign\.gz      tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Yy1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Yy1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsGm12878Input\.tagAlign\.gz                         > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsHct116Input\.tagAlign\.gz         tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsHek293Input\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsHepg2bInput\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsNt2d1Input\.tagAlign\.gz                             > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1Helas3ifngStat1\.tagAlign\.gz tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2Helas3ifngStat1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCjun\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCjun\.tagAlign\.gz      > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifng30Cjun\.tagAlign\.gz  tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifng30Cjun\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCjun\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCjun\.tagAlign\.gz       > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Cmyc\.tagAlign\.gz  tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Cmyc\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCmyc\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCmyc\.tagAlign\.gz       > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCmyc\.tagAlign\.gz  tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCmyc\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsK562Ifna30Input\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsK562Ifna6hInput\.tagAlign\.gz             > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsK562Ifng30Input\.tagAlign\.gz     tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsK562Ifng6hInput\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Pol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Pol2\.tagAlign\.gz          > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hPol2\.tagAlign\.gz  tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hPol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hPol2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hPol2\.tagAlign\.gz       > tmpB.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat1\.tagAlign\.gz tmpB.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat1\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat1\.tagAlign\.gz    > tmpA.ra
+grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat2\.tagAlign\.gz tmpA.ra | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat2\.tagAlign\.gz | grep -v wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat2\.tagAlign\.gz    > tmpB.ra
+
+# edit tmp.txt to get all the proper metadata (big job)
+wl tmpB.ra  276 tmpB.ra
+wl tmpA.ra 280 tmpA.ra
+wl fileDb.ra 407 fileDb.ra
+cat tmp.txt >> tmpB.ra 
+mv tmpB.ra fileDb.ra
+wl fileDb.ra 414 fileDb.ra
+
+# edit preamble.html and 
+encodeDownloadsPage.pl index.html
+
+# awkward name changes (all others are simple V2 (or V3) suffixes):
+wgEncodeYaleChIPseqAlignmentsRep1Gm12878Inputv2.tagAlign.gz     <  wgEncodeYaleChIPseqAlignmentsGm12878Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1Hct116Inputv2.tagAlign.gz      <  wgEncodeYaleChIPseqAlignmentsHct116Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1Hek293Inputv2.tagAlign.gz      <  wgEncodeYaleChIPseqAlignmentsHek293Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputv2.tagAlign.gz      <  wgEncodeYaleChIPseqAlignmentsHepg2bInput.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Inputv2.tagAlign.gz       <  wgEncodeYaleChIPseqAlignmentsNt2d1Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Inputv2.tagAlign.gz       <  ???
+wgEncodeYaleChIPseqAlignmentsRep1K562InputIfna30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsK562Ifna30Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562InputIfna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsK562Ifna6hInput.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562InputIfng30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsK562Ifng30Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562InputIfng6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsK562Ifng6hInput.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1Helas3Stat1IfngV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep1Helas3ifngStat1.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2Helas3Stat1IfngV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2Helas3ifngStat1.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562CjunIfna6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562CjunIfna6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562CjunIfng30V2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifng30Cjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562CjunIfng30V2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifng30Cjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562CjunIfng6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562CjunIfng6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562CmycIfna30V2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Cmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562CmycIfna30V2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Cmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562CmycIfna6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562CmycIfna6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562CmycIfng6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562CmycIfng6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Pol2Ifna30V2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Pol2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Pol2Ifna30V2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Pol2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Pol2Ifna6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hPol2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Pol2Ifna6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hPol2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Pol2Ifng6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hPol2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Pol2Ifng6hV2.tagAlign.gz   <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hPol2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Stat1Ifna30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat1.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Stat1Ifna30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat1.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Stat1Ifna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat1.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Stat1Ifna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat1.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Stat2Ifna30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Stat2Ifna30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Stat2Ifna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562Stat2Ifna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat2.tagAlign.gz
+
+# These tagAligns were not corrected:
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=c-Fos fragLength=200 view=Alignments replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=68 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep1K562Cfos fileName=wgEncodeYaleChIPseqAlignmentsRep1K562Cfos.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=c-Fos fragLength=200 view=Alignments replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=68 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep2K562Cfos fileName=wgEncodeYaleChIPseqAlignmentsRep2K562Cfos.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=c-Fos fragLength=200 view=Alignments replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=68 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep3K562Cfos fileName=wgEncodeYaleChIPseqAlignmentsRep3K562Cfos.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=c-Myc fragLength=200 view=Alignments replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=69 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep1K562Cmyc fileName=wgEncodeYaleChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=c-Myc fragLength=200 view=Alignments replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=69 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep2K562Cmyc fileName=wgEncodeYaleChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=GATA-1 fragLength=200 view=Alignments replicate=1 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=227 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep1K562bGata1 fileName=wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=GATA-1 fragLength=200 view=Alignments replicate=2 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=227 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep2K562bGata1 fileName=wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=NB4 antibody=Input fragLength=200 view=Alignments dataVersion="ENCODE Nov 2008 Freeze" subId=107 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalNb4Input fileName=wgEncodeYaleChIPseqAlignmentsNb4Input.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=NB4 antibody=Input fragLength=200 view=Alignments dataVersion="ENCODE Nov 2008 Freeze" subId=19 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalNb4Input fileName=wgEncodeYaleChIPseqAlignmentsNb4Input.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=NB4 antibody=Pol2 fragLength=200 view=Alignments replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=18 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2 fileName=wgEncodeYaleChIPseqAlignmentsRep1Nb4Pol2.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=NB4 antibody=Pol2 fragLength=200 view=Alignments replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=18 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2 fileName=wgEncodeYaleChIPseqAlignmentsRep2Nb4Pol2.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=NB4 antibody=Pol2 fragLength=200 view=Alignments replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=18 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2 fileName=wgEncodeYaleChIPseqAlignmentsRep3Nb4Pol2.tagAlign.gz
+    metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=RnaSeqPolya cell=K562 fragLength=200 view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya parentTable=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 633 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 634 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 669 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 757 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 787 displayed
+
+## Now RnaPolyA
+cd ../wgEncodeYaleRNAseq/
+mv ../wgEncodeYaleRnaSeqPolya/wgEncodeYaleRnaSeqPolyaAlignmentsK562V2.tagAlign.gz .cp fileDb.ra fileDb.ra.2009-12-01
+# Bad dir!
+rm -rf ../wgEncodeYaleRnaSeqPolya
+
+cp fileDb.ra fileDb.ra.2009-12-01
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/788/out/fileDb.ra | grep parentTable > tmp.txt
+e tmp.txt
+# actually one line is just moved to fileDb.ra and old version removed.
+
+# Since no public release yet, then this will be renamed as a replacement, not V2
+mkdir old
+mv wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz old
+mv wgEncodeYaleRnaSeqPolyaAlignmentsK562V2.tagAlign.gz wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz
+
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 788 displayed
+
+### Some chrom overruns:
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Pol3 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374660 | 135374860 | 135374737 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalMcf7Hae2f1 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374719 | 135374805 | 135374737 | 
+delete from wgEncodeYaleChIPseqSignalK562Pol3 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalMcf7Hae2f1 where chrom = "chr10" and chromEnd > 135374737;
