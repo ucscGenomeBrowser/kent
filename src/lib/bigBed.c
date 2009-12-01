@@ -667,10 +667,6 @@ for (block = blockList; block != NULL; )
 
 	while (blockPt < blockEnd)
 	    {
-	    ++itemCount;
-	    if (maxItems > 0 && itemCount > maxItems)
-		break;
-
 	    /* Read next record into local variables. */
 	    bits32 chr = memReadBits32(&blockPt, isSwapped);	// Read and discard chromId
 	    bits32 s = memReadBits32(&blockPt, isSwapped);
@@ -687,6 +683,10 @@ for (block = blockList; block != NULL; )
 	    /* If we're actually in range then copy it into a new  element and add to list. */
 	    if (chr == chromId && rangeIntersection(s, e, start, end) > 0)
 		{
+		++itemCount;
+		if (maxItems > 0 && itemCount > maxItems)
+		    break;
+
 		lmAllocVar(lm, el);
 		el->start = s;
 		el->end = e;
