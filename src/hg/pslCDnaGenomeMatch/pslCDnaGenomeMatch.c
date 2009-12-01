@@ -19,7 +19,6 @@
 #include "dystring.h"
 #include "pseudoGeneLink.h"
 #include "verbose.h"
-//#include "twoBit.h"
 #include "nibTwo.h"
 #include "bed.h"
 #include "snp125.h"
@@ -29,7 +28,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 #define NOTALIGNEDFACTOR 8 /* unaligned bases divided by this factor reduce score */
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.27 2009/12/01 06:46:18 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.28 2009/12/01 06:53:14 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -61,7 +60,6 @@ char *scoreOut = NULL;
 char *snpFile = NULL; /* snp tab file (browser format)*/
 int histogram[256][256];       /* histogram of counts for suff statistics, index is a,c,g,t,-,. */
 float  histoNorm[256][256]; /* normalized histogram for suff statistics, index is a,c,g,t,-,. */
-//static int lociMap[MAXLOCI];
 
 /* command line */
 static struct optionSpec optionSpecs[] = {
@@ -275,22 +273,6 @@ void addLoci(struct loci **lociList, struct psl *psl)
 struct loci *loci = NULL;
 bool found = FALSE;
 
-//for (loci = *lociList ; loci != NULL ; loci = loci->next)
-//    {
-//    if (sameString(psl->tName, loci->chrom) && 
-//            psl->tStart == loci->chromStart && psl->tEnd == loci->chromEnd)
-//        errAbort("loci already added %s:%d-%d loci %d-%d\n",
-//                psl->tName, psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd);
-//    if (sameString(psl->tName, loci->chrom) && 
-//            positiveRangeIntersection(psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd))
-//        {
-//        loci->chromStart = min(loci->chromStart, psl->tStart);
-//        loci->chromEnd = max(loci->chromEnd, psl->tEnd);
-//        verbose(4, "already added %s:%d-%d loci %d-%d\n",
-//                psl->tName, psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd);
-//        found = TRUE;
-//        }
-//    }
 if (!found)
     {
     AllocVar(loci);
@@ -330,7 +312,6 @@ int getLoci(struct loci *lociList, char *chrom, int chromStart)
 struct loci *loci = NULL;
 for (loci = lociList ; loci != NULL ; loci = loci->next)
     if (sameString(chrom, loci->chrom)  && chromStart == loci->chromStart )
-            //&& positiveRangeIntersection(chromStart, chromStart+1, loci->chromStart, loci->chromEnd))
         return loci->index;
 return -1;
 }
@@ -647,13 +628,6 @@ for (mme = mm ; mme != NULL ; mme = mme->next)
     mrnaMisMatch->loci[i] = mme->loci;
     assert(mrnaMisMatch->loci[i] != NOVALUE);
     prevLoc = mme->mrnaLoc;
-    /*
-    if (slCount(mm) == seqCount)
-    if (slCount(mm) < seqCount)
-        {
-        verbose(5,"1\n");
-        }
-        */
     }
 slReverse(&misMatchList);
 return misMatchList;
@@ -693,21 +667,15 @@ int indel = 0;             /* count of gaps in mrna alignment */
 int maxScore = -99999;       /* max scoring alignment for this mrna */
 int nextBestScore = -99999;       /* 2nd best scoring alignment for this mrna */
 int maxHits = 0;       /* number of alignments with max score */
-//int maxIndex = -1;      /* index in loci list of best aligment */
 int qNameCount = 0;     /* count of filtered psls for this qName */
-//int i = 0;
-//int prevLoc = misMatchList->mrnaLoc;
 if (misMatchList == NULL) 
     return FALSE;
-//AllocArray(matchCount,seqCount);
 AllocArray(missCount,seqCount);
 AllocArray(goodCount,seqCount);
 AllocArray(gapCount,seqCount);
 AllocArray(neither,seqCount);
 AllocArray(snpCount,seqCount);
 mrnaMm = tabulateMisMatches(misMatchList, seqCount, lociList);
-//if (sameString(name, "AB032253")  || sameString(name, "AB001451"))
-//    printf("seq count = %d\n",seqCount);
 for (mrnaMisMatch = mrnaMm ; mrnaMisMatch != NULL ; 
         mrnaMisMatch = mrnaMisMatch->next)
     {
@@ -806,7 +774,6 @@ mrnaMisMatchFreeList(&mrnaMm);
 for (l = lociList ; l != NULL; l=l->next)
     {
     int z = l->index;
-    //bool posOk = getLociPosition(lociList, l->index, &chrom, &chromStart, &chromEnd, &psl);
     psl = l->psl;
     int notAligned = psl->qSize-goodCount[z]-missCount[z]-indel-(psl->match);
     if (notAligned < 0) notAligned = 0;
@@ -829,7 +796,6 @@ for (l = lociList ; l != NULL; l=l->next)
     if (maxScore == score)
         {
         maxHits ++;
-        //        nextBestScore = score;
         verbose(3,"%s score %d == maxScore %d next %d maxHits %d\n",
                 name, score, maxScore, nextBestScore, maxHits);
         }
@@ -966,9 +932,6 @@ for (i = 0 ; i < 256 ; i++)
 
 int getHistogram(char a, char b)
 {
-//if (a == 'N')
-//    return(histogram[(unsigned int)'a'][(unsigned int)b] + histogram[(unsigned int)'c'][(unsigned int)b] + histogram[(unsigned int)'g'][(unsigned int)b] + histogram[(unsigned int)'t'][(unsigned int)b] );
-//else
     return(histogram[(unsigned int)a][(unsigned int)b]);
 }
 
@@ -1085,23 +1048,6 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     freeDnaSeq(&tSeq);
     freeDnaSeq(&qSeq);
     }
-/*
-for (i = 0 ; i < 256 ; i++)
-    for (j = 0 ; j < 256 ; j++)
-        sum += histogram[i][j] ;
-    fprintf(outFile, "%5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %s  ",
-            getHistogram('a','a')/sum, getHistogram('a','c')/sum, getHistogram('a','g')/sum, getHistogram('a','t')/sum, 
-            getHistogram('c','a')/sum, getHistogram('c','c')/sum, getHistogram('c','g')/sum, getHistogram('c','t')/sum, 
-            getHistogram('g','a')/sum, getHistogram('g','c')/sum, getHistogram('g','g')/sum, getHistogram('g','t')/sum, 
-            getHistogram('t','a')/sum, getHistogram('t','c')/sum, getHistogram('t','g')/sum, getHistogram('t','t')/sum , psl->qName
-           );
-    fprintf(outFile,"Transitions %5.4f Transversions %5.4f Matches %5.4f\n",
-            (getHistogram('a','g')+ getHistogram('g','a')+ getHistogram('c','t')+ getHistogram('t','c'))/sum, 
-            (getHistogram('a','c')+ getHistogram('a','t')+ getHistogram('c','a')+ getHistogram('c','g')+ 
-             getHistogram('g','c')+ getHistogram('g','t')+ getHistogram('t','a')+ getHistogram('t','g'))/sum, 
-            (getHistogram('a','a')+ getHistogram('c','c')+ getHistogram('g','g')+ getHistogram('t','t'))/sum
-           );
-           */
 }
 
 void addOtherAlignments( struct alignment *alignList, struct hash *speciesHash, char *name, char *nibDir, char *mrnaPath)
@@ -1134,7 +1080,6 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
     struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
     int tStart = psl->tStart;
     int tEnd   = psl->tEnd;
-    //int misMatchCount = 0;
     char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
     int index = getLoci(lociList, psl->tName, psl->tStart);
 
@@ -1196,14 +1141,6 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
                     else
                         verbose(5,"MISMATCH\n");
                     }
-        /*        else if (i < 0)
-                    {
-                    mm->chrom = cloneString(psl->tName);
-                    mm->chromStart = -1;
-                    mm->genomeBase = '-';
-                    mm->strand = genomeStrand;
-                    verbose(2, "negative index %s %s mrnaLoc %d qs %d \n",psl->qName, psl->tName, mm->mrnaLoc , qs);
-                    }*/
                 /* if we are outside the block, assume an indel */
                 else if (mm->mrnaLoc >= qs && mm->mrnaLoc < qe)
                     {
@@ -1212,12 +1149,6 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
                             psl->qName, psl->tName, 
                             psl->tStart, mm->mrnaLoc, i, qs, qe , psl->strand, mm->loci, blockIx);
                     }
-//                else 
-//                    {
-//                    verbose(5,"   fM() nop %s chr %s t %s:%d mrnaLoc %d i %d not in %d-%d %s loci %d <> %d BLK %d\n",
-//                            psl->qName, mm->chrom, psl->tName, 
-//                            psl->tStart, mm->mrnaLoc, i, qs, qe, psl->strand, mm->loci, index, blockIx);
-//                    }
                 }
             }
         /*
@@ -1251,8 +1182,6 @@ int transitionCount = 0;
 int transversionCount = 0;
 char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
 int matchCount = 0;
-//if (genomeStrand == '-')
-//    reverseIntRange(&tStart, &tEnd, psl->tSize);
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
@@ -1569,7 +1498,6 @@ verbosity = optionInt("verbose", verbosity);
 verboseSetLogFile("stdout");
 verboseSetLevel(verbosity);
 ss = axtScoreSchemeDefault();
-//mrnaHash = readPslToBinKeeper(argv[2], argv[1]);
 twoBitFile = twoBitOpen(argv[3]);
 outFile = fopen(argv[5],"w");
 
