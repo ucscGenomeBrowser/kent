@@ -572,3 +572,134 @@ encodeDownloadsPage.pl index.html
 ### NOTE: this old submission was released a long time ago!
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 204 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 204 released
+
+2009-11-03 Get some new submissions loaded
+==========================================
+# edit trackDb to add 774, 776 and 780.  768 is fastq only
+make alpha DBS=hg18
+
+cd {downloadsDir}
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/774/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/776/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/780/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/768/out/fileDb.ra | grep parentTable >> tmp.txt
+e tmp.txt
+# problem: no fastq metadata in 768.  Are the files there? NO!!!
+mv out/ oldOut/
+mv HA_GR.ddf to oldOut/
+# edit the fastq's *.ddf to remove duplicate controls.
+ll SL516.* SL517.*
+-rw-rw-r-- 1 qateam protein 698138031 Oct 17 22:25 SL516.fastq.gz
+-rw-rw-r-- 1 qateam protein 708073019 Oct 17 22:25 SL517.fastq.gz
+ll *Gm12878Control.fastq.gz
+-rw-rw-r-- 1 qateam protein 556803234 Jul  6 15:06 wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Control.fastq.gz
+-rw-rw-r-- 1 qateam protein 920696125 Jul  6 15:13 wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Control.fastq.gz
+# Not the same!
+[hgwdev:tdreszer 768> ll SL518.* SL519.*
+-rw-rw-r-- 1 qateam protein         0 Oct 17 22:19 SL518.fastq.gz
+-rw-rw-r-- 1 qateam protein 544022201 Oct 17 22:23 SL519.fastq.gz
+[hgwdev:tdreszer wgEncodeHudsonalphaChipSeq> ll *K562Control.fastq.gz
+-rw-rw-r-- 1 qateam protein 1311405003 Jul  6 13:56 wgEncodeHudsonalphaChipSeqRawDataRep1K562Control.fastq.gz
+-rw-rw-r-- 1 qateam protein  985839568 Jul  6 14:56 wgEncodeHudsonalphaChipSeqRawDataRep2K562Control.fastq.gz
+# Not the same AND empty 518 which is K562/Control/1
+-rw-rw-r--   1 qateam   protein           0 Oct 17 22:19 SL518.fastq.gz
+-rw-rw-r--   1 qateam   protein           0 Oct 17 22:26 SL646.fastq.gz
+-rw-rw-r--   1 qateam   protein           0 Oct 17 22:32 SL673.fastq.gz
+# Three are empty
+
+### Plus Rami screwed up 774 since 774 and 768 were run simultaneously and loaded the same data.
+# So will have to reload 774.
+
+# But first continue with this:
+# edit tmp.txt to for resubmit of 2 HepG2 controls
+grep -v wgEncodeHudsonalphaChipSeqRawSignalRep.Hepg2Control fileDb.ra > fileDb2.ra
+mv fileDb2.ra fileDb.ra
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html 
+
+## Deal with evidence that old fastQs for GM12878 and K562 controls are the Pcr2x version
+ls *Gm12878Control*.fastq.gz
+wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Control.fastq.gz
+wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Control.fastq.gz
+
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Control.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Control.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlPcr2x.fastq.gz
+# edit fileDb.ra for this change
+encodeDownloadsPage.pl index.html
+
+
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Gabp.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878GabpPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Gabp.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878GabpPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Nrsf.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878NrsfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Nrsf.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878NrsfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol2.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol2Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol2.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol2Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Srf.fastq.gz       wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878SrfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Srf.fastq.gz       wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878SrfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Gabp.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep1K562GabpPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Gabp.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep2K562GabpPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Nrsf.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep1K562NrsfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Nrsf.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep2K562NrsfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Srf.fastq.gz          wgEncodeHudsonalphaChipSeqRawDataRep1K562SrfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz          wgEncodeHudsonalphaChipSeqRawDataRep2K562SrfPcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sin3ak20.fastq.gz  wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sin3ak20Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Sin3ak20.fastq.gz  wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Sin3ak20Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Sin3ak20.fastq.gz     wgEncodeHudsonalphaChipSeqRawDataRep1K562Sin3ak20Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Sin3ak20.fastq.gz     wgEncodeHudsonalphaChipSeqRawDataRep2K562Sin3ak20Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Egr1.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Egr1Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Egr1.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep1K562Egr1Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Egr1.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep2K562Egr1Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Usf1.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Usf1Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Usf1.fastq.gz      wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Usf1Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Usf1.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep1K562Usf1Pcr2x.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Usf1.fastq.gz         wgEncodeHudsonalphaChipSeqRawDataRep2K562Usf1Pcr2x.fastq.gz
+
+grep PCR2x fileDb.ra | grep fastq > fileDb.ra.pcr.fasta 
+ grep -v PCR2x fileDb.ra > fileDb.ra.npcr
+grep PCR2x fileDb.ra > fileDb.ra.pcr
+grep -v fastq fileDb.ra.pcr >> fileDb.ra.npcr 
+cat fileDb.ra.pcr2x >> fileDb.ra.npcr 
+wl fileDb.ra      147 fileDb.ra
+wl fileDb.ra.npcr 147 fileDb.ra.npcr
+mv fileDb.ra.npcr fileDb.ra 
+rm fileDb.ra.pcr.fasta
+rm fileDb.ra.pcr
+
+## After editing the daf/ddf a few times, all the fastq's (except the three empties) finally loaded.
+# Also, reload of 774 was successful, so I can be confident that erroroneous  and conflicting 768 simultaneous with correct 774 did not leave a mess.
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/768/out/fileDb.ra | grep parentTable > tmp.txt
+# edit txt.tmp.  Looks fine.
+cat tmp.txt >> fileDb.ra
+[hgwdev:tdreszer wgEncodeHudsonalphaChipSeq> encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 774 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 776 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 780 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 768 displayed
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/768/out/fileDb.ra | grep parentTable > tmp.txt
+# edit txt.tmp.  Looks fine.
+
+2009-12-01 Catching up with some submissions
+============================================
+| 419 | HudsonAlpha_HepG2_Jul-09_FASTQ                     | validate failed |  Rami needs to correct these fastq's
+| 781 | HudsonAlpha_ChIP-seq_HeLa_GABPa-Nov09              | validate failed |  Rami needs to correct (numerous start and end overruns for chrM, HeLa cell?)
+| 782 | HudsonAlpha_ChIP-seq_HeLa_TAFIIp250-Nov09          | validate failed |  Rami needs to correct (numerous start and end overruns for chrM, HeLa cell?)
+| 783 | HudsonAlpha_ChIP-seq_GM12878_Bcl11a-Nov09          | loaded          | 
+| 795 | HAIB_Chipseq_p300_GM12878-Nov09                    | validate failed | Rami needs to correct (numerous off by 1 tagAlign errors)
+| 798 | HudsonAlpha_Chipseq_ZBTB33_GM12878-Nov09           | loaded          | 
+
+Add 783,798 to trackDb.wgEncode.ra ci and make alpha DBS=hg18
+cd {gold}/wgEncodeHudsonalphaChipSeq/
+cp fileDb.ra fileDb.ra.2009-12-01
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/783/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/798/out/fileDb.ra | grep parentTable >> tmp.txt
+e tmp.txt
+# No changes
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+# all looks well.
