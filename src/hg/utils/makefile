@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.17 2009/11/23 02:56:19 markd Exp $
+# 	$Id: makefile,v 1.18 2009/12/01 19:55:17 markd Exp $
 
 include ../../inc/common.mk
 
@@ -27,7 +27,8 @@ DIRS = \
 	gff3ToGenePred \
 	automation \
 	refreshNamedSessionCustomTracks \
-	refSeqGet
+	refSeqGet \
+	wigBedToStep
 
 TEST_DIRS = \
 	gff3ToGenePred \
