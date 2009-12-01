@@ -2,6 +2,27 @@
 #include "common.h"
 #include "obscure.h"
 
+static void rangeIncludingZero(double start, double end, double *retStart, double *retEnd)
+/* If start == end, then make range go from zero to the start/end value. */
+{
+if (start < 0.0)
+    {
+    *retStart = start;
+    *retEnd = 0;
+    }
+else if (start > 0.0)
+    {
+    *retStart = 0;
+    *retEnd = end;
+    }
+else
+    {
+    *retStart = 0;
+    *retEnd = 1;
+    }
+return;
+}
+
 void rangeRoundUp(double start, double end, double *retStart, double *retEnd)
 /* Round start and end so that they cover a slightly bigger range, but with more round
  * numbers.  For instance 0.23:9.89 becomes 0:10 */
@@ -13,22 +34,8 @@ if (size < 0)
 /* Flat ranges get moved to include zero for scale. */
 if (size == 0.0)
     {
-    if (start < 0.0)
-        {
-	*retStart = start;
-	*retEnd = 0;
-	}
-    else if (start > 0.0)
-        {
-	*retStart = 0;
-	*retEnd = end;
-	}
-    else
-        {
-	*retStart = 0;
-	*retEnd = 1;
-	}
-    return;
+    rangeIncludingZero(start, end, &start, &end);
+    size = end - start;
     }
 
 /* Figure out "increment", which will be 1, 2, 5, or 10, or a multiple of 10 of these 
@@ -71,16 +78,25 @@ void rangeFromMinMaxMeanStd(double minVal, double maxVal, double mean, double st
 double start,end;
 if (isnan(std))
     {
+    /* Handle a case that occurred in version 1 bigWigs and bigBeds due to fault in
+     * sumSquares calculation. */
     start = mean-5;
     end = mean+5;
+    if (start < minVal) start = minVal;
+    if (end > maxVal) end = maxVal;
+    }
+else if (std == 0)
+    {
+    start = end = mean;
+    rangeIncludingZero(start, end, &start, &end);
     }
 else
     {
     start = mean - 5*std;
     end = mean + 5*std;
+    if (start < minVal) start = minVal;
+    if (end > maxVal) end = maxVal;
     }
-if (start < minVal) start = minVal;
-if (end > maxVal) end = maxVal;
 *retStart = start;
 *retEnd = end;
 }
