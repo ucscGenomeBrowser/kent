@@ -63,3 +63,25 @@ int endInIncrements = ceil(end/increment);
 *retEnd = endInIncrements * increment;
 }
 
+void rangeFromMinMaxMeanStd(double minVal, double maxVal, double mean, double std,
+	double *retStart, double *retEnd)
+/* Given some basic statistical properties, set a range that will be good on a wide
+ * range of biological data. */
+{
+double start,end;
+if (isnan(std))
+    {
+    start = mean-5;
+    end = mean+5;
+    }
+else
+    {
+    start = mean - 5*std;
+    end = mean + 5*std;
+    }
+if (start < minVal) start = minVal;
+if (end > maxVal) end = maxVal;
+*retStart = start;
+*retEnd = end;
+}
+

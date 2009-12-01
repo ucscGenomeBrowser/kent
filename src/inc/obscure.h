@@ -158,4 +158,9 @@ void rangeRoundUp(double start, double end, double *retStart, double *retEnd);
 /* Round start and end so that they cover a slightly bigger range, but with more round
  * numbers.  For instance 0.23:9.89 becomes 0:10 */
 
+void rangeFromMinMaxMeanStd(double minVal, double maxVal, double mean, double std,
+	double *retStart, double *retEnd);
+/* Given some basic statistical properties, set a range that will be good on a wide
+ * range of biological data. */
+
 #endif /* OBSCURE_H */
