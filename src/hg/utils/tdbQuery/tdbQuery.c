@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.6 2009/12/02 21:01:16 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.7 2009/12/02 21:02:32 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -49,9 +49,9 @@ errAbort(
 "Check that trackDb is internally consistent.  Prints diagnostic output to stderr and aborts if \n"
 "there's problems.\n"
 "   -strict\n"
-"Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist."
+"Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist.\n"
 "   -alpha\n"
-"Do checking on release alpha (and not release beta) tracks\n"
+"Do checking on release alpha (and not release beta) tracks"
 );
 }
 
