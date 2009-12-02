@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.153 2009/09/04 00:14:26 braney Exp $
+# 	$Id: makefile,v 1.154 2009/12/02 18:31:40 holmes Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -10,6 +10,10 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab phyloGif hgCustom hgPal \
 	makeDb/hgCgiData js
+	
+ifdef LOWELAB
+    BROWSER_BINS += archaeStuff/tooltip
+endif
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
 
