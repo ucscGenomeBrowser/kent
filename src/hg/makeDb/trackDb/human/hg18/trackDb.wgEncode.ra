@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.694 2009/12/02 05:31:19 kent Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.695 2009/12/02 18:20:02 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11512,7 +11512,7 @@ wgEncode 1
     subGroups view=Peaks factor=POL3 cellType=t1K562
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Pol3 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=669 dateSubmitted=2009-11-12 dateUnrestricted=2010-08-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Pol3 fileName=wgEncodeYaleChIPseqPeaksK562Pol3.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Pol3 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=669 dateSubmitted=2009-11-12 dateUnrestricted=2010-08-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Pol3 fileName=wgEncodeYaleChIPseqPeaksK562Pol3.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalK562Pol3
     release alpha
@@ -11522,7 +11522,7 @@ wgEncode 1
     subGroups view=Signal factor=POL3 cellType=t1K562
     type bedGraph 4
     color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Pol3 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=669 dateSubmitted=2009-11-12 dateUnrestricted=2010-08-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Pol3 fileName=wgEncodeYaleChIPseqSignalK562Pol3.bedGraph4.gz
+    metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Pol3 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=669 dateSubmitted=2009-11-12 dateUnrestricted=2010-08-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Pol3 fileName=wgEncodeYaleChIPseqSignalK562Pol3.bedGraph4.gz
 
     track wgEncodeYaleChIPseqPeaksK562Rad21
     subTrack wgEncodeYaleChIPseq
@@ -12036,7 +12036,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in MCF-7 cells)
     subGroups view=Peaks factor=HAE2F1 cellType=t3MCF7
     type narrowPeak
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=MCF-7 antibody=HA-E2F1 view=Peaks labVersion="MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=757 dateSubmitted=2009-10-28 dateUnrestricted=2010-07-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksMcf7Hae2f1 fileName=wgEncodeYaleChIPseqPeaksMcf7Hae2f1.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=MCF-7 antibody=HA-E2F1 view=Peaks labVersion="MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=757 dateSubmitted=2009-10-28 dateUnrestricted=2010-07-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksMcf7Hae2f1 fileName=wgEncodeYaleChIPseqPeaksMcf7Hae2f1.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalMcf7Hae2f1
     release alpha
@@ -12045,7 +12045,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in MCF-7 cells)
     subGroups view=Signal factor=HAE2F1 cellType=t3MCF7
     type bedGraph 4
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=MCF-7 antibody=HA-E2F1 view=Signal labVersion="MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=757 dateSubmitted=2009-10-28 dateUnrestricted=2010-07-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalMcf7Hae2f1 fileName=wgEncodeYaleChIPseqSignalMcf7Hae2f1.bedGraph4.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=MCF-7 antibody=HA-E2F1 view=Signal labVersion="MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=757 dateSubmitted=2009-10-28 dateUnrestricted=2010-07-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalMcf7Hae2f1 fileName=wgEncodeYaleChIPseqSignalMcf7Hae2f1.bedGraph4.gz
 
     track wgEncodeYaleChIPseqPeaksNb4Pol2V2
     subTrack wgEncodeYaleChIPseq off
