@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.4 2009/12/02 20:14:18 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.5 2009/12/02 20:50:17 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -70,7 +70,7 @@ void recordLocationReport(struct tdbRecord *rec, FILE *out)
 {
 struct tdbFilePos *pos;
 for (pos = rec->posList; pos != NULL; pos = pos->next)
-    fprintf(out, "track %s ending line %d of %s\n", rec->key, pos->lineIx, pos->fileName);
+    fprintf(out, "in track %s stanza ending line %d of %s\n", rec->key, pos->lineIx, pos->fileName);
 }
 
 void recordWarn(struct tdbRecord *rec, char *format, ...)
@@ -360,7 +360,7 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     {
     char *fileName = fileLevel->name;
     struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
-    uglyf("Read %d records starting from %s\n", slCount(fileRecords), fileName);
+    verbose(2, "Read %d records starting from %s\n", slCount(fileRecords), fileName);
     struct tdbRecord *record, *nextRecord;
     for (record = fileRecords; record != NULL; record = nextRecord)
 	{
@@ -565,12 +565,10 @@ else
 }
 
 static void rqlStatementOutput(struct rqlStatement *rql, struct tdbRecord *tdb, 
-	char *addFileField, char *addDbField, FILE *out)
+	char *addFileField, FILE *out)
 /* Output fields  from tdb to file.  If addFileField is non-null add a new
  * field with this name at end of output. */
 {
-if (addDbField)
-    fprintf(out, "%s %s\n", addDbField, tdb->db);
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
     {
@@ -586,16 +584,6 @@ for (field = fieldList; field != NULL; field = field->next)
 	if (match)
 	    fprintf(out, "%s %s\n", r->name, r->val);
 	}
-    }
-if (addFileField != NULL)
-    {
-    fprintf(out, "%s", addFileField);
-    struct tdbFilePos *fp;
-    for (fp = tdb->posList; fp != NULL; fp = fp->next)
-	{
-	fprintf(out, " %s %d", fp->fileName, fp->lineIx);
-	}
-    fprintf(out, "\n");
     }
 fprintf(out, "\n");
 }
@@ -621,27 +609,48 @@ for (t = rql->tableList; t != NULL; t = t->next)
 	    refAdd(&dbOrderList, db);
 	}
     }
-uglyf("%d databases in from clause\n", slCount(dbOrderList));
+verbose(2, "%d databases in from clause\n", slCount(dbOrderList));
 
 /* Loop through each database. */
 int matchCount = 0;
+struct dyString *fileString = dyStringNew(0);  /* Buffer for file field. */
 for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     {
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
+    char *db = p->db;
     struct hash *recordHash = hashNew(0);
     struct tdbRecord *recordList = tdbsForDbPath(p, lm, recordHash);
 
-    uglyf("Composed %d records from %s\n", slCount(recordList), p->db);
+    verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "subTrack", "noInherit", clAlpha, lm);
     recordList = filterOnRelease(recordList, clAlpha);
-    uglyf("After filterOnRelease %d records\n", slCount(recordList));
+    verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
     checkDupeKeys(recordList, FALSE);
 
     struct tdbRecord *record;
     boolean doSelect = sameString(rql->command, "select");
     for (record = recordList; record != NULL; record = record->next)
 	{
+	/* Add "db" field, making sure it doesn't already exist. */
+	struct tdbField *dbField = tdbRecordField(record, "db");
+	if (dbField != NULL)
+	    recordAbort(record, "using reserved field 'db'");
+	dbField = tdbFieldNew("db", db, lm);
+	slAddHead(&record->fieldList, dbField);
+
+	/* Add "filePos" field, making sure it doesn't already exist. */
+	struct tdbField *fileField = tdbRecordField(record, "filePos");
+	if (fileField != NULL)
+	    recordAbort(record, "using reserved field 'filePos'");
+	struct tdbFilePos *fp;
+	dyStringClear(fileString);
+	for (fp = record->posList; fp != NULL; fp = fp->next)
+	    dyStringPrintf(fileString, " %s %d", fp->fileName, fp->lineIx);
+	fileField = tdbFieldNew("filePos", fileString->string, lm);
+	slAddTail(&record->fieldList, fileField);
+
+
 	if (rqlStatementMatch(rql, record))
 	    {
 	    if (!clStrict || (record->key && hTableOrSplitExists(p->db, record->key)))
@@ -649,7 +658,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 		matchCount += 1;
 		if (doSelect)
 		    {
-		    rqlStatementOutput(rql, record, "file", "db", stdout);
+		    rqlStatementOutput(rql, record, "file", stdout);
 		    }
 		}
 	    }
@@ -657,6 +666,8 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     lmCleanup(&lm);
     hashFree(&recordHash);
     }
+dyStringFree(&fileString);
+
 if (sameString(rql->command, "count"))
     printf("%d\n", matchCount);
 
