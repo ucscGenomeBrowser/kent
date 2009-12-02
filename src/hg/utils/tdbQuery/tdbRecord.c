@@ -6,7 +6,7 @@
 #include "ra.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.1 2009/12/02 01:29:58 kent Exp $";
+static char const rcsid[] = "$Id: tdbRecord.c,v 1.2 2009/12/02 21:01:19 kent Exp $";
 
 struct tdbFilePos *tdbFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new tdbFilePos record. */
@@ -93,8 +93,7 @@ return viewList;
 struct tdbRecord *tdbRecordReadOne(struct lineFile *lf, char *key, struct lm *lm)
 /* Read next record from file. Returns NULL at end of file. */
 {
-struct tdbField *field, *fieldList = NULL;
-char *line;
+struct tdbField *fieldList = NULL;
 char *keyVal = NULL;
 boolean override = FALSE;
 struct slPair *settingsByView = NULL;

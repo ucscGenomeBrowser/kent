@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.5 2009/12/02 20:50:17 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.6 2009/12/02 21:01:16 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -288,7 +288,7 @@ while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
 		    field->name, lf->lineIx, lf->fileName);
 	       }
 	    char *relPath = field->val;
-	    char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+	    char dir[PATH_LEN];
 	    splitPath(lf->fileName, dir, NULL, NULL);
 	    char includeName[PATH_LEN];
 	    safef(includeName, sizeof(includeName), "%s%s", dir, relPath);
