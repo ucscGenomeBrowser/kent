@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.698 2009/12/02 23:26:23 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.699 2009/12/02 23:37:04 hiram Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3903,7 +3903,7 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 noInherit on
-settingsByView ALN:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16 DUNIQ:configurable=on,viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16 RUNIQ:viewLimits=0:37,minLimit=0,maxLimit=37,gridDefault=on,yLineOnOff=on,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16 UUNIQ:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16
+settingsByView ALN:viewLimits=0:1,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 DUNIQ:configurable=on,viewLimits=0:1,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 RUNIQ:viewLimits=0:37,minLimit=0,maxLimit=37,gridDefault=on,yLineOnOff=on,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 UUNIQ:viewLimits=0:1,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
 wgEncode 1
 
     track wgEncodeBroadMapabilityAlign36mer
