@@ -129,17 +129,6 @@ spectrum on
 type netAlign cb1 chainCb1
 otherDb cb1
 
-track axtNetCb1
-shortLabel Briggsae Aligns
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
-group compGeno
-priority 127
-visibility hide
-color 100,50,0
-altColor 128,120,100
-type axt cb1
-otherDb cb1
-
 track blastzBestCb1
 shortLabel Cb1 Best
 longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
