@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.696 2009/12/02 18:58:42 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.697 2009/12/02 22:36:50 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15707,6 +15707,11 @@ noInherit on
     shortLabel GM12 cyto AL
     color 153,38,0
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in GM12878 cytosol)
     subGroups view=4-Alignments cellType=GM12878 localization=20-cytosol
     type bigBed 6
@@ -15728,6 +15733,11 @@ noInherit on
     shortLabel GM12 nucl AL
     color 153,38,0
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in GM12878 nucleus)
     subGroups view=4-Alignments cellType=GM12878 localization=30-nucleus
     type bigBed 6
@@ -15749,6 +15759,11 @@ noInherit on
     shortLabel K562 chrm AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 chromatin)
     subGroups view=4-Alignments cellType=K562 localization=50-chromatin
     type bigBed 6
@@ -15770,6 +15785,11 @@ noInherit on
     shortLabel K562 cyto AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 localization=20-cytosol
     type bigBed 6
@@ -15792,6 +15812,11 @@ noInherit on
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 nucleus)
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     subGroups view=4-Alignments cellType=K562 localization=30-nucleus
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort.tagAlign.gz
@@ -15812,6 +15837,11 @@ noInherit on
     shortLabel K562 nlos AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 nucleolus)
     subGroups view=4-Alignments cellType=K562 localization=60-nucleolus
     type bigBed 6
@@ -15833,6 +15863,11 @@ noInherit on
     shortLabel K562 nplm AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 nucleoplasm)
     subGroups view=4-Alignments cellType=K562 localization=40-nucleoplasm
     type bigBed 6
@@ -15853,6 +15888,11 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom AL
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     color 46,0,184
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 polysome)
     subGroups view=4-Alignments cellType=K562 localization=10-polysome
@@ -15875,6 +15915,11 @@ noInherit on
     shortLabel pros cell AL
     color 0,102,136
     colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorTickColor lighterShade
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     longLabel ENCODE CSHL RNA-Seq Tags (short RNA in prostate cell)
     subGroups view=4-Alignments cellType=prostate localization=0-cell
     type bigBed 6
