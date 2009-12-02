@@ -4,6 +4,26 @@ visibility hide
 track gap override
 visibility hide
 
+track ucscRetroAli
+shortLabel Retroposed Genes 1.0
+longLabel Retroposed Genes, Including Pseudogenes November 2009 [ucscRetroAli]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+retroMrnaInfo ucscRetroInfo
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
 shortLabel $Organism mRNAs
