@@ -2908,7 +2908,6 @@ maxHeightPixels 128:16:16
 minLimit -13.40
 maxLimit 15.55
 viewLimits 2:6.33
-maxHeightPixels 128:16:16
 type bedGraph 5
 autoScale Off
 smoothingWindow 2
