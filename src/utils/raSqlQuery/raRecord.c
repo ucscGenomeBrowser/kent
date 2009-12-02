@@ -5,7 +5,7 @@
 #include "obscure.h"
 #include "raRecord.h"
 
-static char const rcsid[] = "$Id: raRecord.c,v 1.8 2009/11/25 07:16:03 kent Exp $";
+static char const rcsid[] = "$Id: raRecord.c,v 1.9 2009/12/02 19:11:54 kent Exp $";
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new raFilePos record. */
@@ -51,19 +51,6 @@ trimSpaces(line);
 return raFieldNew(word, line, lm);
 }
 
-char *lmCloneFirstWord(struct lm *lm, char *line)
-/* Clone first word in line */
-{
-char *startFirstWord = skipLeadingSpaces(line);
-if (startFirstWord == NULL)
-    return NULL;
-char *endFirstWord = skipToSpaces(startFirstWord);
-if (endFirstWord == NULL)
-    return lmCloneString(lm, startFirstWord);
-else
-    return lmCloneStringZ(lm, startFirstWord, endFirstWord - startFirstWord);
-}
-    
 struct slPair *trackDbParseCompositeSettingsByView(char *input)
 /* Parse something that looks like:
  * wigView:windowingFunction=mean+whiskers,viewLimits=0:1000 bedView:minScore=200  

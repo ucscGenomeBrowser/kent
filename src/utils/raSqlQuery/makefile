@@ -5,7 +5,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = raSqlQuery
-O = raSqlQuery.o rqlParse.o rqlEval.o raRecord.o
+O = raSqlQuery.o raRecord.o
 
 raSqlQuery: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L

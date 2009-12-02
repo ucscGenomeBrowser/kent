@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.24 2009/11/26 00:39:06 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.25 2009/12/02 19:11:54 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -280,6 +280,17 @@ else
     }
 }
 
+static char *lookupField(void *record, char *key)
+/* Lookup a field in a raRecord. */
+{
+struct raRecord *ra = record;
+struct raField *field = raRecordField(ra, key);
+if (field == NULL)
+    return NULL;
+else
+    return field->val;
+}
+
 boolean rqlStatementMatch(struct rqlStatement *rql, struct raRecord *ra)
 /* Return TRUE if where clause and tableList in statement evaluates true for ra. */
 {
@@ -309,7 +320,7 @@ if (whereClause == NULL)
     return TRUE;
 else
     {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, ra);
+    struct rqlEval res = rqlEvalOnRecord(whereClause, ra, lookupField);
     res = rqlEvalCoerceToBoolean(res);
     return res.val.b;
     }
