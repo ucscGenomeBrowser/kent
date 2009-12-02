@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.14 2009/11/17 21:12:56 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.15 2009/12/02 21:19:45 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1082,6 +1082,8 @@ void imageMapDraw(struct mapSet *map,char *name)
 //warn("Drawing map_%s %s",name,(map == NULL?"map is NULL":map->items == NULL?"map->items is NULL":"Should draw!"));
 if(map == NULL || map->items == NULL)
     return;
+
+slReverse(&(map->items)); // These must be reversed so that they are printed in the same order as created!
 
 hPrintf("  <MAP name='map_%s'>\n", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
