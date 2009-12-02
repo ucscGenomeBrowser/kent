@@ -6,10 +6,12 @@
 #include "localmem.h"
 #include "obscure.h"
 #include "portable.h"
+#include "errabort.h"
 #include "tdbRecord.h"
+#include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.3 2009/12/02 06:47:27 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.4 2009/12/02 20:14:18 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -62,6 +64,35 @@ static struct optionSpec options[] = {
    {"alpha", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+void recordLocationReport(struct tdbRecord *rec, FILE *out)
+/* Write out where record ends. */
+{
+struct tdbFilePos *pos;
+for (pos = rec->posList; pos != NULL; pos = pos->next)
+    fprintf(out, "track %s ending line %d of %s\n", rec->key, pos->lineIx, pos->fileName);
+}
+
+void recordWarn(struct tdbRecord *rec, char *format, ...)
+/* Issue a warning message. */
+{
+va_list args;
+va_start(args, format);
+vaWarn(format, args);
+va_end(args);
+recordLocationReport(rec, stderr);
+}
+
+void recordAbort(struct tdbRecord *rec, char *format, ...)
+/* Issue a warning message. */
+{
+va_list args;
+va_start(args, format);
+vaWarn(format, args);
+va_end(args);
+recordLocationReport(rec, stderr);
+noWarnAbort();
+}
 
 struct dbPath
 /* A database directory and path. */
@@ -147,8 +178,10 @@ for (p=list; p != NULL; p = p->next)
 return p;
 }
 
-boolean filterOnRelease(struct tdbRecord *record, boolean alpha, struct lineFile *lf)
-/* Look for a release tag, and return FALSE if it doesn't match alpha status. */
+boolean recordMatchesRelease(struct tdbRecord *record, boolean alpha)
+/* Return TRUE if record is compatible with release.  Pass alpha TRUE for
+ * alpha release, else will do beta release.  Records with no release
+ * tag are compatible with either release. */
 {
 struct tdbField *releaseField = tdbRecordField(record, "release");
 if (releaseField == NULL)
@@ -160,10 +193,26 @@ else if (sameString(release, "beta"))
     return !alpha;
 else
     {
-    errAbort("Unrecognized release value %s in stanza ending %d of %s", 
-    	release, lf->lineIx, lf->fileName);
+    recordAbort(record, "Unrecognized release value %s", release);
     return FALSE;
     }
+}
+
+struct tdbRecord *filterOnRelease(struct tdbRecord *list, boolean alpha)
+/* Return release-filtered version of list. */
+{
+struct tdbRecord *newList = NULL;
+struct tdbRecord *record, *next;
+for (record = list; record != NULL; record = next)
+    {
+    next = record->next;
+    if (recordMatchesRelease(record, alpha))
+        {
+	slAddHead(&newList, record);
+	}
+    }
+slReverse(&newList);
+return newList;
 }
 
 static void checkDupeFields(struct tdbRecord *record, struct lineFile *lf)
@@ -181,7 +230,7 @@ for (field = record->fieldList; field != NULL; field = field->next)
 hashFree(&uniqHash);
 }
 
-static void checkDupeKeys(struct tdbRecord *recordList)
+static void checkDupeKeys(struct tdbRecord *recordList, boolean ignoreIfRelease)
 /* Make sure that there are no duplicate records (with keys) */
 {
 struct tdbRecord *record;
@@ -195,13 +244,22 @@ for (record = recordList; record != NULL; record = record->next)
 	    {
 	    struct tdbFilePos *oldPos = oldRecord->posList;
 	    struct tdbFilePos *newPos = record->posList;
-	    if (sameString(oldPos->fileName, newPos->fileName))
-		errAbort("Duplicate tracks %s ending lines %d and %d of %s",
-		    oldRecord->key, oldPos->lineIx, newPos->lineIx, oldPos->fileName);
-	    else
-		errAbort("Duplicate tracks %s ending lines %d of %s and %d of %s",
-		    oldRecord->key, oldPos->lineIx, oldPos->fileName, 
-		    newPos->lineIx, newPos->fileName);
+	    boolean doAbort = TRUE;
+	    if (ignoreIfRelease)
+	        {
+		if (tdbRecordField(record, "release"))
+		    doAbort = FALSE;
+		}
+	    if (doAbort)
+		{
+		if (sameString(oldPos->fileName, newPos->fileName))
+		    errAbort("Duplicate tracks %s ending lines %d and %d of %s",
+			oldRecord->key, oldPos->lineIx, newPos->lineIx, oldPos->fileName);
+		else
+		    errAbort("Duplicate tracks %s ending lines %d of %s and %d of %s",
+			oldRecord->key, oldPos->lineIx, oldPos->fileName, 
+			newPos->lineIx, newPos->fileName);
+		}
 	    }
 	hashAdd(uniqHash, record->key, record);
 	}
@@ -215,6 +273,7 @@ static void recurseThroughIncludes(char *fileName, struct lm *lm,
 {
 struct tdbRecord *record;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *lmFileName = lmCloneString(lm, fileName);
 while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
     {
     struct tdbField *firstField = record->fieldList;
@@ -246,11 +305,8 @@ while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
 	checkDupeFields(record, lf);
 	if (record->key != NULL)
 	    {
-	    if (filterOnRelease(record, clAlpha, lf))
-		{
-		record->posList = tdbFilePosNew(lm, fileName, lf->lineIx);
-		slAddHead(pRecordList, record);
-		}
+	    record->posList = tdbFilePosNew(lm, lmFileName, lf->lineIx);
+	    slAddHead(pRecordList, record);
 	    }
 	}
     }
@@ -266,7 +322,7 @@ recurseThroughIncludes(fileName, lm, circularHash, &recordList);
 hashAdd(circularHash, fileName, NULL);
 hashFree(&circularHash);
 slReverse(&recordList);
-checkDupeKeys(recordList);
+checkDupeKeys(recordList, TRUE);
 return recordList;
 }
 
@@ -293,6 +349,258 @@ for (field = record->fieldList; field != NULL; field = field->next)
 old->posList = slCat(old->posList, record->posList);
 }
 
+struct tdbRecord *tdbsForDbPath(struct dbPath *p, struct lm *lm, struct hash *recordHash)
+/* Assemble recordList for given database.  This looks at the root/organism/assembly
+ * levels.  It returns a list, and fills in a hash (which should be passed in empty)
+ * of the records keyed by record->key. */
+{
+struct slName *fileLevelList = dbPathToFiles(p), *fileLevel;
+struct tdbRecord *recordList = NULL;
+for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
+    {
+    char *fileName = fileLevel->name;
+    struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
+    uglyf("Read %d records starting from %s\n", slCount(fileRecords), fileName);
+    struct tdbRecord *record, *nextRecord;
+    for (record = fileRecords; record != NULL; record = nextRecord)
+	{
+	nextRecord = record->next;
+	char *key = record->key;
+	struct tdbRecord *oldRecord = hashFindVal(recordHash, key);
+	if (oldRecord != NULL)
+	    {
+	    if (!record->override)
+		{
+		oldRecord->fieldList = record->fieldList;
+		oldRecord->posList = record->posList;
+		oldRecord->settingsByView = record->settingsByView;
+		oldRecord->subGroups = record->subGroups;
+		oldRecord->view = record->view;
+		oldRecord->viewHash = record->viewHash;
+		}
+	    else
+		mergeRecords(oldRecord, record, key, lm);
+	    }
+	else
+	    {
+	    hashAdd(recordHash, record->key, record);
+	    slAddHead(&recordList, record);
+	    }
+	}
+    }
+slReverse(&recordList);
+
+return recordList;
+}
+
+static struct tdbRecord *findParent(struct tdbRecord *rec, 
+	char *parentFieldName, struct hash *hash, boolean alpha)
+/* Find parent field if possible.  This is a bit complicated by wanting to
+ * match parents and children from the same release if possible.  Our
+ * strategy is to just ignore records from the wrond release. */
+{
+struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
+if (parentField == NULL)
+    return NULL;
+if (!recordMatchesRelease(rec, alpha))
+    return NULL;
+char *parentLine = parentField->val;
+int len = strlen(parentLine);
+char buf[len+1];
+strcpy(buf, parentLine);
+char *parentName = firstWordInLine(buf);
+struct hashEl *hel;
+boolean gotParentSomeRelease = FALSE;
+for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
+    {
+    gotParentSomeRelease = TRUE;
+    struct tdbRecord *parent = hel->val;
+    if (recordMatchesRelease(parent, alpha))
+	return parent;
+    }
+
+/* If we haven't matched so far, it could be that the release tag is set in the parent
+ * but not in us, and the parent is not our release parent.  In this case we go ahead
+ * and return the out-of-release parent, so we can inherit the out-of-release release
+ * tag, so we get filtered out! */
+struct tdbField *releaseField = tdbRecordField(rec, "release");
+if (gotParentSomeRelease && releaseField == NULL)
+     {
+     struct tdbRecord *parent = hashFindVal(hash, parentName);
+     assert(parent != NULL);
+     return parent;
+     }
+recordWarn(rec, "%s is a subTrack of %s, but %s doesn't exist", rec->key,
+    parentField->val, parentField->val);
+return NULL;
+}
+
+static void mergeParentRecord(struct tdbRecord *record, struct tdbRecord *parent, 
+	struct lm *lm)
+/* Merge in parent record.  This only updates fields that are in parent but not record. */
+{
+struct tdbField *parentField;
+for (parentField= parent->fieldList; parentField!= NULL; parentField= parentField->next)
+    {
+    struct tdbField *oldField = tdbRecordField(record, parentField->name);
+    if (oldField == NULL)
+        {
+	struct tdbField *newField;
+	lmAllocVar(lm, newField);
+	newField->name = parentField->name;
+	newField->val = parentField->val;
+	slAddTail(&record->fieldList, newField);
+	}
+    }
+}
+
+static void inheritFromParents(struct tdbRecord *list, char *parentField, char *noInheritField,
+	boolean alpha, struct lm *lm)
+/* Go through list.  If an element has a parent field, then fill in non-existent fields from
+ * parent and from view with settings defined in parent. */
+{
+/* Build up hash of records indexed by key field. */
+struct hash *hash = hashNew(0);
+struct tdbRecord *rec;
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    if (rec->key != NULL)
+	hashAdd(hash, rec->key, rec);
+    }
+
+/* Scan through linking up parents. */
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    struct tdbRecord *parent = findParent(rec, parentField, hash, alpha);
+    if (parent != NULL)
+	{
+	rec->parent = parent;
+	rec->olderSibling = parent->children;
+	parent->children = rec;
+	}
+    }
+
+/* Scan through doing inheritance. */
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    /* First inherit from view. */
+    char *viewName = rec->view;
+    if (viewName != NULL)
+        {
+	struct slPair *view;
+	if (rec->parent == NULL)
+	     {
+	     verbose(2, "%s has view %s but no parent\n", rec->key, viewName);
+	     continue;
+	     }
+	for (view = rec->parent->settingsByView; view != NULL; view = view->next)
+	    {
+	    if (sameString(view->name, viewName))
+		break;
+	    else 
+	        {
+		if (rec->parent->viewHash != NULL)
+		    {
+		    char *alias = hashFindVal(rec->parent->viewHash, viewName);
+		    if (alias != NULL)
+			if (sameString(view->name, alias))
+			    break;
+		    }
+		}
+	    }
+	if (view != NULL)
+	    {
+	    struct slPair *setting;
+	    for (setting = view->val; setting != NULL; setting = setting->next)
+	        {
+		struct tdbField *oldField = tdbRecordField(rec, setting->name);
+		if (oldField == NULL)
+		    {
+		    struct tdbField *newField;
+		    lmAllocVar(lm, newField);
+		    newField->name = lmCloneString(lm, setting->name);
+		    newField->val = lmCloneString(lm, setting->val);
+		    slAddTail(&rec->fieldList, newField);
+		    }
+		}
+	    }
+	else 
+	    {
+	    verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+	    }
+	}
+
+    /* Then inherit from parents. */
+    struct tdbRecord *parent;
+    for (parent = rec->parent; parent != NULL; parent = parent->parent)
+	{
+	mergeParentRecord(rec, parent, lm);
+	}
+    }
+}
+
+static char *lookupField(void *record, char *key)
+/* Lookup a field in a tdbRecord. */
+{
+struct tdbRecord *tdb = record;
+struct tdbField *field = tdbRecordField(tdb, key);
+if (field == NULL)
+    return NULL;
+else
+    return field->val;
+}
+
+static boolean rqlStatementMatch(struct rqlStatement *rql, struct tdbRecord *tdb)
+/* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
+{
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, tdb, lookupField);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+static void rqlStatementOutput(struct rqlStatement *rql, struct tdbRecord *tdb, 
+	char *addFileField, char *addDbField, FILE *out)
+/* Output fields  from tdb to file.  If addFileField is non-null add a new
+ * field with this name at end of output. */
+{
+if (addDbField)
+    fprintf(out, "%s %s\n", addDbField, tdb->db);
+struct slName *fieldList = rql->fieldList, *field;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    struct tdbField *r;
+    boolean doWild = anyWild(field->name);
+    for (r = tdb->fieldList; r != NULL; r = r->next)
+        {
+	boolean match;
+	if (doWild)
+	    match = wildMatch(field->name, r->name);
+	else
+	    match = (strcmp(field->name, r->name) == 0);
+	if (match)
+	    fprintf(out, "%s %s\n", r->name, r->val);
+	}
+    }
+if (addFileField != NULL)
+    {
+    fprintf(out, "%s", addFileField);
+    struct tdbFilePos *fp;
+    for (fp = tdb->posList; fp != NULL; fp = fp->next)
+	{
+	fprintf(out, " %s %d", fp->fileName, fp->lineIx);
+	}
+    fprintf(out, "\n");
+    }
+fprintf(out, "\n");
+}
+
+
 void tdbQuery(char *sql)
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
 {
@@ -316,53 +624,41 @@ for (t = rql->tableList; t != NULL; t = t->next)
 uglyf("%d databases in from clause\n", slCount(dbOrderList));
 
 /* Loop through each database. */
+int matchCount = 0;
 for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     {
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
-    struct slName *fileLevelList = dbPathToFiles(p), *fileLevel;
-
-    /* Assemble recordList and record hash from the root/organism/assembly levels */
     struct hash *recordHash = hashNew(0);
-    struct tdbRecord *recordList = NULL;
-    for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
-        {
-	char *fileName = fileLevel->name;
-	struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
-	uglyf("Read %d records starting from %s\n", slCount(fileRecords), fileName);
-	struct tdbRecord *record, *nextRecord;
-	for (record = fileRecords; record != NULL; record = nextRecord)
+    struct tdbRecord *recordList = tdbsForDbPath(p, lm, recordHash);
+
+    uglyf("Composed %d records from %s\n", slCount(recordList), p->db);
+    inheritFromParents(recordList, "subTrack", "noInherit", clAlpha, lm);
+    recordList = filterOnRelease(recordList, clAlpha);
+    uglyf("After filterOnRelease %d records\n", slCount(recordList));
+    checkDupeKeys(recordList, FALSE);
+
+    struct tdbRecord *record;
+    boolean doSelect = sameString(rql->command, "select");
+    for (record = recordList; record != NULL; record = record->next)
+	{
+	if (rqlStatementMatch(rql, record))
 	    {
-	    nextRecord = record->next;
-	    char *key = record->key;
-	    struct tdbRecord *oldRecord = hashFindVal(recordHash, key);
-	    if (oldRecord != NULL)
-	        {
-		if (!record->override)
-		    {
-		    oldRecord->fieldList = record->fieldList;
-		    oldRecord->posList = record->posList;
-		    oldRecord->settingsByView = record->settingsByView;
-		    oldRecord->subGroups = record->subGroups;
-		    oldRecord->view = record->view;
-		    oldRecord->viewHash = record->viewHash;
-		    }
-		else
-		    mergeRecords(oldRecord, record, key, lm);
-		}
-	    else
+	    if (!clStrict || (record->key && hTableOrSplitExists(p->db, record->key)))
 		{
-		hashAdd(recordHash, record->key, record);
-		slAddHead(&recordList, record);
+		matchCount += 1;
+		if (doSelect)
+		    {
+		    rqlStatementOutput(rql, record, "file", "db", stdout);
+		    }
 		}
 	    }
 	}
-    slReverse(&recordList);
-    uglyf("Composed %d records from %s\n", slCount(recordList), p->db);
-
-
     lmCleanup(&lm);
+    hashFree(&recordHash);
     }
+if (sameString(rql->command, "count"))
+    printf("%d\n", matchCount);
 
 rqlStatementFree(&rql);
 }
