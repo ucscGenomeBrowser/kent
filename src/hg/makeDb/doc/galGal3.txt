@@ -2620,7 +2620,8 @@ galGal3.upstreamGeneTbl = refGene
 galGal3.upstreamMaf = multiz7way /hive/data/genomes/galGal3/bed/multiz7way/species.lst
 
 ############################################################################
-# QUALITY TRACK (DONE - 2008-11-24 - Hiram)
+# QUALITY TRACK (REDONE 12/2/09 angie)
+# originally done 2008-11-24 - Hiram)
     cd /hive/data/genomes/galGal3
     # create an agp file
 for C in `cut -f1 chrom.sizes | grep -v random | sed -e "s/chr//" | sort`
@@ -2628,7 +2629,7 @@ do
     cat $C/chr${C}.agp
 done > galGal3.agp
 
-for C in `cut -f1 chrom.sizes | grep -v random | sed -e "s/chr//" | sort`
+for C in `cut -f1 chrom.sizes | grep random | sed -e "s/chr//; s/_random//" | sort`
 do
     F=$C/chr${C}_random.agp
     if [ -s $F ]; then
@@ -2644,6 +2645,7 @@ done >> galGal3.agp
     cd /hive/data/genomes/galGal3/bed/qual
     qacToWig -fixed ../../downloads/scaffolds.qac stdout \
         | wigEncode stdin qual.wig qual.wib
+#Converted stdin, upper limit 99.00, lower limit 0.00
     ln -s `pwd`/qual.wib /gbdb/galGal3/wib
     hgLoadWiggle -pathPrefix=/gbdb/galGal3/wib galGal3 quality qual.wig
 
