@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.28 2009/12/02 01:28:29 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.29 2009/12/02 19:10:38 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -146,7 +146,7 @@ if (eqPtr != NULL)
     for (s=arg; s < eqPtr; ++s)
         {
 	c = *s;
-	if (c != '_' && !isalnum(c))
+	if (c != '_' && c != '-' && !isalnum(c))
 	    return FALSE;
 	}
     }
