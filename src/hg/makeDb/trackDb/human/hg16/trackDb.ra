@@ -432,7 +432,6 @@ type wigMaf 0.0 1.0
 spanList 1
 maxHeightPixels 100:40:11
 wiggle multizMm3Rn3Pt0PhastCons
-spanList 1
 yLineOnOff Off
 autoScale Off
 pairwise hmrg
