@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.27 2009/09/23 18:42:28 angie Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.28 2009/12/02 01:28:29 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -137,12 +137,19 @@ if (!((eqPtr != NULL) || (arg[0] == '-')))
 if (arg[0] == '-' && (arg[1] == 0 || isspace(arg[1])))
     return FALSE;
 
-/* It's nice to be able to use url's in the command line, but they
- * may have = in them... */
-if (startsWith("http://", arg)
- || startsWith("https://", arg)
- || startsWith("ftp://", arg))
-    return FALSE;
+/* We treat this=that as an option only if the '=' happens before any non-alphanumeric
+ * characters.  This lets us have URLs and SQL statements in the command line even though
+ * they can have equals in them. */
+if (eqPtr != NULL)
+    {
+    char *s, c;
+    for (s=arg; s < eqPtr; ++s)
+        {
+	c = *s;
+	if (c != '_' && !isalnum(c))
+	    return FALSE;
+	}
+    }
 
 name = arg;
 if (name[0] == '-')
