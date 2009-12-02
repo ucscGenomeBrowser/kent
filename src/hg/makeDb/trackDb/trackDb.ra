@@ -1744,7 +1744,6 @@ visibility hide
 type genePred
 
 track loweProbes
-track loweProbes
 shortLabel Lowe's Probes
 longLabel Candidate Oligos for Stanford Microarray
 group x

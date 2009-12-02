@@ -2518,7 +2518,6 @@ dataVersion ENCODE Oct 2005 Freeze
     subGroups factor=mactd time=0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Signal
-    color 225,0,0
     color 0,0,200
     priority 14
 
@@ -2870,7 +2869,6 @@ dataVersion ENCODE June 2005 Freeze
 track encodeStanfordChip
 superTrack encodeStanfordChipSuper dense
 compositeTrack on
-visibility full
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
 group encodeChip
@@ -3103,7 +3101,6 @@ track encodeUtexChip
 superTrack encodeUtexChipSuper dense
 compositeTrack on
 shortLabel UT-Austin ChIP
-dataVersion ENCODE Oct 2005 Freeze
 longLabel University of Texas, Austin ChIP-chip
 group encodeChip
 priority 60
@@ -4147,8 +4144,6 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyRnaHl60SitesHr32IntronsDistal
     subTrack encodeNoncodingTransFrags
-    shortLabel encodeAffyRnaHl60SitesHr32
-    longLabel Introns Distal encodeAffyRnaHl60SitesHr32
     shortLabel Affy In Dst HL60 32h
     longLabel Affy Intronic Distal Hl60 32hr Transfrags
     subGroups region=intronicDistal celltype=hl60 source=affy

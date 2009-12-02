@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.693 2009/12/01 22:32:08 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.694 2009/12/02 05:31:19 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -1172,7 +1172,6 @@ dataVersion ENCODE Feb 2009 Freeze
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HUVEC)
     subGroups view=Signal factor=H3K04me3 cellType=HUVEC
     type wig 0.00 9954.75
-    color 224,75,0
     spanList first
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K4me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=162 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k4me3 fileName=wgEncodeBroadChipSeqSignalHuvecH3k4me3.wig.gz
@@ -1213,7 +1212,6 @@ dataVersion ENCODE Feb 2009 Freeze
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, HUVEC)
     subGroups view=Signal factor=H3K09me1 cellType=HUVEC
     type wig 0.00 6743.75
-    color 224,75,0
     spanList first
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K9me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=169 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k9me1 fileName=wgEncodeBroadChipSeqSignalHuvecH3k9me1.wig.gz
@@ -1367,7 +1365,6 @@ dataVersion ENCODE Feb 2009 Freeze
     type wig 0.00 8682.25
     color 46,0,184
     spanList 1
-    color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K4me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=152 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k4me1 fileName=wgEncodeBroadChipSeqSignalK562H3k4me1.wig.gz
 
 # submission 151
@@ -1790,7 +1787,6 @@ dataVersion ENCODE Feb 2009 Freeze
     type wig 0.00 13497.25
     color 179,0,134
     spanList first
-    color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekControl fileName=wgEncodeBroadChipSeqSignalNhekControl.wig.gz
 
 # submission 577
@@ -3904,7 +3900,6 @@ visibilityViewDefaults ALN=hide EXR=hide DUNIQ=full RUNIQ=hide UUNIQ=full
 allButtonPair on
 sortOrder view=+ win=+
 dragAndDrop subTracks
-noInherit on
 priority 0
 type bed 3
 noInherit on
@@ -4435,7 +4430,6 @@ wgEncode 1
     #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    color 153,38,0
     colorByStrand 153,38,0 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya.tagAlign.gz
     color 189,0,157

@@ -732,7 +732,6 @@ origAssembly hg17
 track encodeStanfordChip
 superTrack encodeStanfordChipSuper dense
 compositeTrack on
-visibility full
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
 group encodeChip

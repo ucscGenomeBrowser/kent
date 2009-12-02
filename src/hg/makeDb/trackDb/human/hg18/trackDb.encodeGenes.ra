@@ -33,7 +33,6 @@ origAssembly hg17
 # supertrack for EGASP
         track encodeEgaspSuper
         superTrack on
-        group encodeGenes
         shortLabel EGASP 
         longLabel ENCODE Gene Prediction Workshop (EGASP) 
         group encodeGenes
