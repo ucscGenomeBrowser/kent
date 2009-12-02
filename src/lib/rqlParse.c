@@ -8,7 +8,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.1 2009/12/02 19:09:52 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.2 2009/12/02 19:14:12 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -641,3 +641,29 @@ if (rql->whereClause)
 fprintf(f, "\n");
 }
 
+static void rqlParseFreeRecursive(struct rqlParse *p)
+/* Depth-first recursive free. */
+{
+struct rqlParse *child, *next;
+for (child = p->children; child != NULL; child = next)
+    {
+    next = child->next;
+    rqlParseFreeRecursive(child);
+    }
+freeMem(p);
+}
+
+void rqlStatementFree(struct rqlStatement **pRql)
+/* Free up an rql statement. */
+{
+struct rqlStatement *rql = *pRql;
+if (rql != NULL)
+    {
+    freeMem(rql->command);
+    slFreeList(&rql->fieldList);
+    slFreeList(&rql->tableList);
+    if (rql->whereClause !=NULL)
+	rqlParseFreeRecursive(rql->whereClause);
+    freez(pRql);
+    }
+}
