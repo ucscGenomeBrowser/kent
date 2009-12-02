@@ -1765,17 +1765,6 @@ type bed 6 +
 
 track mouseOrtho
 shortLabel Mouse Ortholog
-longLabel Mouse Orthology Using Fgenesh++ Gene Predictions (top 4 reciprocal best)
-group x
-priority 156
-visibility hide
-spectrum on
-color 0,100,0
-altColor 255,240,200
-type bed 5 +
-
-track mouseOrtho
-shortLabel Mouse Ortholog
 longLabel Mouse Orthology Using Fgenesh++ Gene Predictions
 group x
 priority 157
@@ -2090,6 +2079,7 @@ spectrum on
 html chainNet
 
     track chainFr2
+    release alpha
     subTrack chainNetFr2
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2097,6 +2087,7 @@ html chainNet
     type chain fr2
 
     track netFr2
+    release alpha
     subTrack chainNetFr2
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2386,6 +2377,7 @@ chainLinearGap medium
 html chainNet
 
     track chainOryLat2
+    release alpha
     subTrack chainNetOryLat2
     subGroups view=chain
     shortLabel $o_Organism Chain 
@@ -2394,6 +2386,7 @@ html chainNet
     otherDb oryLat2
 
     track netOryLat2
+    release alpha
     subTrack chainNetOryLat2
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2480,6 +2473,7 @@ html chainNet
 release alpha
 
     track chainGasAcu1
+    release alpha
     subTrack chainNetGasAcu1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2487,6 +2481,7 @@ release alpha
     type chain gasAcu1
 
     track netGasAcu1
+    release alpha
     subTrack chainNetGasAcu1
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2643,6 +2638,7 @@ html chainNet
 release alpha
 
     track chainGalGal3
+    release alpha
     subTrack chainNetGalGal3
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2650,6 +2646,7 @@ release alpha
     type chain galGal3
 
     track netGalGal3
+    release alpha
     subTrack chainNetGalGal3
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2657,6 +2654,7 @@ release alpha
     type netAlign galGal3 chainGalGal3
 
 track chainGalGal3
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2671,6 +2669,7 @@ type chain galGal3
 otherDb galGal3
 
 track netGalGal3
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -2763,6 +2762,7 @@ html chainNet
 release alpha
 
     track chainOrnAna1
+    release alpha
     subTrack chainNetOrnAna1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2770,6 +2770,7 @@ release alpha
     type chain ornAna1
 
     track netOrnAna1
+    release alpha
     subTrack chainNetOrnAna1
     subGroups view=net
     shortLabel $o_Organism Net
@@ -3097,6 +3098,7 @@ html chainNet
 release alpha
 
     track chainMm9
+    release alpha
     subTrack chainNetMm9
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -3104,6 +3106,7 @@ release alpha
     type chain mm9
 
     track netMm9
+    release alpha
     subTrack chainNetMm9
     subGroups view=net
     shortLabel $o_Organism Net
@@ -3111,6 +3114,7 @@ release alpha
     type netAlign mm9 chainMm9
 
 track chainMm9
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3125,6 +3129,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3417,6 +3422,7 @@ html chainNet
 release alpha
 
     track chainCanFam2
+    release alpha
     subTrack chainNetCanFam2
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -3424,6 +3430,7 @@ release alpha
     type chain canFam2
 
     track netCanFam2
+    release alpha
     subTrack chainNetCanFam2
     subGroups view=net
     shortLabel $o_Organism Net
@@ -3431,6 +3438,7 @@ release alpha
     type netAlign canFam2 chainCanFam2
 
 track chainCanFam2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3549,6 +3557,7 @@ type netAlign felCat3 chainFelCat3
 otherDb felCat3
 
 track netCanFam2
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

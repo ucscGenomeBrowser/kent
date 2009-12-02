@@ -1899,15 +1899,6 @@ altColor 255,220,100
 spectrum on
 type bed 6 .
 
-track HInvGeneMrna
-shortLabel H-Inv
-longLabel H-Invitational Genes mRNA Alignments
-group rna
-priority 67.5
-visibility hide
-color 0,100,100
-type psl .
-
 track pHMM_5_WayTop1
 shortLabel 1% Conserved
 longLabel Top 1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
