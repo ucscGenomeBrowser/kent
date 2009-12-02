@@ -9,7 +9,7 @@
 #include "tdbRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.1 2009/12/02 01:29:58 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.2 2009/12/02 05:28:46 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -143,44 +143,69 @@ for (p=list; p != NULL; p = p->next)
 return p;
 }
 
-struct tdbRecord *readStartingFromFile(char *fileName, struct lm *lm)
-/* Read in records from file and any files included from it. */
+static void checkDupeFields(struct tdbRecord *record, struct lineFile *lf)
+/* Make sure that each field in record is unique. */
 {
-struct tdbRecord *recordList = NULL, *record;
-struct lineFile *lfStack = NULL, *lf;
-struct hash *circularHash = hashNew(0);
-hashAdd(circularHash, fileName, NULL);
-lf = lineFileOpen(fileName, TRUE);
-uglyf("readStartingFrom %s %p\n", fileName, lm);
-while (lf != NULL)
+struct hash *uniqHash = hashNew(0);
+struct tdbField *field;
+for (field = record->fieldList; field != NULL; field = field->next)
     {
-    while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
-        {
-	struct tdbField *firstField = record->fieldList;
-	if (sameString(firstField->name, "include"))
+    if (hashLookup(uniqHash, field->name))
+        errAbort("Duplicate tag %s in record ending line %d of %s", field->name,
+		lf->lineIx, lf->fileName);
+    hashAdd(uniqHash, field->name, NULL);
+    }
+hashFree(&uniqHash);
+}
+
+static void recurseThroughIncludes(char *fileName, struct lm *lm, 
+	struct hash *circularHash,  struct tdbRecord **pRecordList)
+/* Recurse through include files. */
+{
+struct tdbRecord *record;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
+    {
+    struct tdbField *firstField = record->fieldList;
+    if (sameString(firstField->name, "include"))
+	{
+	struct tdbField *field;
+	for (field = firstField; field != NULL; field = field->next)
 	    {
-	    char *includeName = firstField->val;
+	    if (!sameString(field->name, "include"))
+	       {
+	       errAbort("Non-include tag %s in an include stanza ending line %d of %s", 
+		    field->name, lf->lineIx, lf->fileName);
+	       }
+	    char *relPath = field->val;
+	    char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+	    splitPath(lf->fileName, dir, NULL, NULL);
+	    char includeName[PATH_LEN];
+	    safef(includeName, sizeof(includeName), "%s%s", dir, relPath);
 	    if (hashLookup(circularHash, includeName))
-	        {
+		{
 		errAbort("Including file %s in an infinite loop line %d of %s", 
 			includeName, lf->lineIx, lf->fileName);
 		}
-	    slAddHead(&lfStack, lf);
-	    uglyf("opening include %s\n", includeName);
-	    lf = lineFileOpen(includeName, TRUE);
-	    hashAdd(circularHash, includeName, NULL);
-	    }
-	else
-	    {
-	    slAddHead(&recordList, record);
+	    recurseThroughIncludes(includeName, lm, circularHash, pRecordList);
 	    }
 	}
-   uglyf("done with %s\n", lf->fileName);
-   lineFileClose(&lf);
-   lf = lfStack;
-   if (lfStack != NULL)
-       lfStack = lfStack->next;
+    else
+	{
+	checkDupeFields(record, lf);
+	slAddHead(pRecordList, record);
+	}
     }
+lineFileClose(&lf);
+}
+
+struct tdbRecord *readStartingFromFile(char *fileName, struct lm *lm)
+/* Read in records from file and any files included from it. */
+{
+struct tdbRecord *recordList = NULL;
+struct hash *circularHash = hashNew(0);
+recurseThroughIncludes(fileName, lm, circularHash, &recordList);
+hashAdd(circularHash, fileName, NULL);
 hashFree(&circularHash);
 slReverse(&recordList);
 return recordList;
@@ -212,18 +237,21 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     {
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
-    struct slName *fileLevelList = dbPathToFiles(p);
-
-    char *fileName = fileLevelList->name;	/* Loop soon */
-    struct tdbRecord *recordList = readStartingFromFile(fileName, lm);
-    uglyf("Read %d records starting from %s\n", slCount(recordList), fileName);
+    struct slName *fileLevelList = dbPathToFiles(p), *fileLevel;
     struct hash *recordHash = hashNew(0);
-    struct tdbRecord *record;
-    for (record = recordList; record != NULL; record = record->next)
+    for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
         {
-	if (record->key != NULL)
-	    hashAdd(recordHash, record->key, record);
+	char *fileName = fileLevel->name;
+	struct tdbRecord *recordList = readStartingFromFile(fileName, lm);
+	uglyf("Read %d records starting from %s\n", slCount(recordList), fileName);
+	struct tdbRecord *record;
+	for (record = recordList; record != NULL; record = record->next)
+	    {
+	    if (record->key != NULL)
+		hashAdd(recordHash, record->key, record);
+	    }
 	}
+
     lmCleanup(&lm);
     }
 
