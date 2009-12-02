@@ -4,7 +4,7 @@
 # automatic way.
 
 #Retrogenes based on cDNA alignments that are expressed or processed pseudogenes.
-CREATE TABLE retroMrnaInfo (
+CREATE TABLE retroMrnaInfoXX (
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold col1
     chromStart int unsigned not null,	# pseudogene alignment start position col2
     chromEnd int unsigned not null,	# pseudogene alignment end position col3
