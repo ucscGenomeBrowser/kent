@@ -8,7 +8,7 @@
 #include "tdbRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.1 2009/12/02 01:29:57 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.2 2009/12/02 06:47:27 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -663,10 +663,8 @@ if (rql != NULL)
     freeMem(rql->command);
     slFreeList(&rql->fieldList);
     slFreeList(&rql->tableList);
-    uglyf("About to free %d elements in whereClause\n", slCount(rql->whereClause));
     if (rql->whereClause !=NULL)
 	rqlParseFreeRecursive(rql->whereClause);
-    uglyf("done freeing\n");
     freez(pRql);
     }
 }

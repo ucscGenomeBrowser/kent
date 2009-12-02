@@ -9,12 +9,13 @@
 #include "tdbRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.2 2009/12/02 05:28:46 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.3 2009/12/02 06:47:27 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
 static boolean clStrict = FALSE;	/* If set only return tracks with actual tables. */
+static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
 
 void usage()
 /* Explain usage and exit. */
@@ -47,6 +48,8 @@ errAbort(
 "there's problems.\n"
 "   -strict\n"
 "Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist."
+"   -alpha\n"
+"Do checking on release alpha (and not release beta) tracks\n"
 );
 }
 
@@ -56,6 +59,7 @@ static struct optionSpec options[] = {
    {"file", OPTION_STRING},
    {"check", OPTION_BOOLEAN},
    {"strict", OPTION_BOOLEAN},
+   {"alpha", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -143,6 +147,25 @@ for (p=list; p != NULL; p = p->next)
 return p;
 }
 
+boolean filterOnRelease(struct tdbRecord *record, boolean alpha, struct lineFile *lf)
+/* Look for a release tag, and return FALSE if it doesn't match alpha status. */
+{
+struct tdbField *releaseField = tdbRecordField(record, "release");
+if (releaseField == NULL)
+    return TRUE;
+char *release = releaseField->val;
+if (sameString(release, "alpha"))
+    return alpha;
+else if (sameString(release, "beta"))
+    return !alpha;
+else
+    {
+    errAbort("Unrecognized release value %s in stanza ending %d of %s", 
+    	release, lf->lineIx, lf->fileName);
+    return FALSE;
+    }
+}
+
 static void checkDupeFields(struct tdbRecord *record, struct lineFile *lf)
 /* Make sure that each field in record is unique. */
 {
@@ -154,6 +177,34 @@ for (field = record->fieldList; field != NULL; field = field->next)
         errAbort("Duplicate tag %s in record ending line %d of %s", field->name,
 		lf->lineIx, lf->fileName);
     hashAdd(uniqHash, field->name, NULL);
+    }
+hashFree(&uniqHash);
+}
+
+static void checkDupeKeys(struct tdbRecord *recordList)
+/* Make sure that there are no duplicate records (with keys) */
+{
+struct tdbRecord *record;
+struct hash *uniqHash = hashNew(0);
+for (record = recordList; record != NULL; record = record->next)
+    {
+    if (record->key != NULL)
+	{
+	struct tdbRecord *oldRecord = hashFindVal(uniqHash, record->key);
+	if (oldRecord != NULL)
+	    {
+	    struct tdbFilePos *oldPos = oldRecord->posList;
+	    struct tdbFilePos *newPos = record->posList;
+	    if (sameString(oldPos->fileName, newPos->fileName))
+		errAbort("Duplicate tracks %s ending lines %d and %d of %s",
+		    oldRecord->key, oldPos->lineIx, newPos->lineIx, oldPos->fileName);
+	    else
+		errAbort("Duplicate tracks %s ending lines %d of %s and %d of %s",
+		    oldRecord->key, oldPos->lineIx, oldPos->fileName, 
+		    newPos->lineIx, newPos->fileName);
+	    }
+	hashAdd(uniqHash, record->key, record);
+	}
     }
 hashFree(&uniqHash);
 }
@@ -193,7 +244,14 @@ while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
     else
 	{
 	checkDupeFields(record, lf);
-	slAddHead(pRecordList, record);
+	if (record->key != NULL)
+	    {
+	    if (filterOnRelease(record, clAlpha, lf))
+		{
+		record->posList = tdbFilePosNew(lm, fileName, lf->lineIx);
+		slAddHead(pRecordList, record);
+		}
+	    }
 	}
     }
 lineFileClose(&lf);
@@ -208,7 +266,31 @@ recurseThroughIncludes(fileName, lm, circularHash, &recordList);
 hashAdd(circularHash, fileName, NULL);
 hashFree(&circularHash);
 slReverse(&recordList);
+checkDupeKeys(recordList);
 return recordList;
+}
+
+static void mergeRecords(struct tdbRecord *old, struct tdbRecord *record, char *key, struct lm *lm)
+/* Merge record into old,  updating any old fields with new record values. */
+{
+struct tdbField *field;
+for (field = record->fieldList; field != NULL; field = field->next)
+    {
+    if (!sameString(field->name, key))
+	{
+	struct tdbField *oldField = tdbRecordField(old, field->name);
+	if (oldField != NULL)
+	    oldField->val = field->val;
+	else
+	    {
+	    lmAllocVar(lm, oldField);
+	    oldField->name = field->name;
+	    oldField->val = field->val;
+	    slAddTail(&old->fieldList, oldField);
+	    }
+	}
+    }
+old->posList = slCat(old->posList, record->posList);
 }
 
 void tdbQuery(char *sql)
@@ -233,24 +315,51 @@ for (t = rql->tableList; t != NULL; t = t->next)
     }
 uglyf("%d databases in from clause\n", slCount(dbOrderList));
 
+/* Loop through each database. */
 for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     {
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
     struct slName *fileLevelList = dbPathToFiles(p), *fileLevel;
+
+    /* Assemble recordList and record hash from the root/organism/assembly levels */
     struct hash *recordHash = hashNew(0);
+    struct tdbRecord *recordList = NULL;
     for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
         {
 	char *fileName = fileLevel->name;
-	struct tdbRecord *recordList = readStartingFromFile(fileName, lm);
-	uglyf("Read %d records starting from %s\n", slCount(recordList), fileName);
-	struct tdbRecord *record;
-	for (record = recordList; record != NULL; record = record->next)
+	struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
+	uglyf("Read %d records starting from %s\n", slCount(fileRecords), fileName);
+	struct tdbRecord *record, *nextRecord;
+	for (record = fileRecords; record != NULL; record = nextRecord)
 	    {
-	    if (record->key != NULL)
+	    nextRecord = record->next;
+	    char *key = record->key;
+	    struct tdbRecord *oldRecord = hashFindVal(recordHash, key);
+	    if (oldRecord != NULL)
+	        {
+		if (!record->override)
+		    {
+		    oldRecord->fieldList = record->fieldList;
+		    oldRecord->posList = record->posList;
+		    oldRecord->settingsByView = record->settingsByView;
+		    oldRecord->subGroups = record->subGroups;
+		    oldRecord->view = record->view;
+		    oldRecord->viewHash = record->viewHash;
+		    }
+		else
+		    mergeRecords(oldRecord, record, key, lm);
+		}
+	    else
+		{
 		hashAdd(recordHash, record->key, record);
+		slAddHead(&recordList, record);
+		}
 	    }
 	}
+    slReverse(&recordList);
+    uglyf("Composed %d records from %s\n", slCount(recordList), p->db);
+
 
     lmCleanup(&lm);
     }
@@ -268,6 +377,7 @@ clRoot = optionVal("root", clRoot);
 clFile = optionVal("file", clFile);
 clCheck = optionExists("check");
 clStrict = optionExists("strict");
+clAlpha = optionExists("alpha");
 tdbQuery(argv[1]);
 return 0;
 }
