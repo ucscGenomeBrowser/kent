@@ -281,8 +281,8 @@ E) New tables:
    wgEncodeUwChIPSeqPeaksWerirb1Ctcf
    wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf
    wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
-   wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf 
-   count: 263 
+   wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf
+   count: 263
 
 E') New files:
     current location on alpha:
@@ -499,7 +499,6 @@ E') New files:
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf.broadPeak.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksGm06990Ctcf.narrowPeak.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksGm12801Ctcf.narrowPeak.gz
-   /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksGm12878Ctcf.narrowPeak.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksGm12878H3k4me3.narrowPeak.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksHek293Ctcf.narrowPeak.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksHelas3Ctcf.narrowPeak.gz
@@ -767,7 +766,7 @@ E') New files:
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3.wig.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3.wig.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wig.gz
-     count: 479
+     count: 478
 
 new wibs (hgwdev and alpha):
    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3.wib
@@ -877,5 +876,5 @@ new wibs (hgwdev and alpha):
    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3.wib
    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3.wib
    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wib
-   
+
      count: 107
