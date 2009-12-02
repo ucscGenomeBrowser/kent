@@ -39,7 +39,7 @@ struct pushQ
     char initdate[11];	/* Initial Submission Date */
     char lastdate[11];	/* Last QA Date */
     unsigned bounces;	/* Bounce-count (num times bounced back to developer) */
-    char lockUser[9];	/* User who has locked record, or empty string */
+    char lockUser[17];	/* User who has locked record, or empty string */
     char lockDateTime[17];	/* When user placed lock, or empty string */
     char *releaseLog;	/* Release Log entry */
     char *featureBits;	/* Feature Bits results */
