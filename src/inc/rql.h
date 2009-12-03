@@ -14,23 +14,21 @@ enum rqlOp
     rqlOpUnknown,	/* Should not occur */
     rqlOpLiteral,        /* Literal string or number. */
     rqlOpSymbol,	/* A symbol name. */
-    rqlOpEq,	/* An equals comparison */
-    rqlOpNe,	/* A not equals comparison */
 
     /* Type casts. */
     rqlOpStringToBoolean,	
     rqlOpIntToBoolean,
     rqlOpDoubleToBoolean,
     rqlOpStringToInt,
-    rqlOpStringToDouble,
+    rqlOpDoubleToInt,
     rqlOpBooleanToInt,
+    rqlOpStringToDouble,
     rqlOpBooleanToDouble,
     rqlOpIntToDouble,
 
-    rqlOpUnaryMinusInt,
-    rqlOpUnaryMinusDouble,
-
     /* Comparisons. */
+    rqlOpEq,	/* An equals comparison */
+    rqlOpNe,	/* A not equals comparison */
     rqlOpGt,  /* Greater than comparison. */
     rqlOpLt,  /* Less than comparison. */
     rqlOpGe,  /* Greater than or equals comparison. */
@@ -41,6 +39,14 @@ enum rqlOp
     rqlOpAnd,     /* An and */
     rqlOpOr,      /* An or */
     rqlOpNot,	  /* A unary not. */
+
+    /* Leading minus. */
+    rqlOpUnaryMinusInt,
+    rqlOpUnaryMinusDouble,
+
+    /* Fancy ops to fetch sub-parts. */
+    rqlOpArrayIx,	/* An array with an index. */
+    rqlOpSubDot,	/* A field.subfield selection. */
     };
 
 char *rqlOpToString(enum rqlOp op);

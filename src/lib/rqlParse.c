@@ -8,7 +8,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.4 2009/12/03 18:19:28 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.5 2009/12/03 19:26:04 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -19,14 +19,6 @@ switch (op)
 	return "rqlOpLiteral";
     case rqlOpSymbol:
 	return "rqlOpSymbol";
-    case rqlOpEq:
-	return "rqlOpEq";
-    case rqlOpNe:
-	return "rqlOpNe";
-    case rqlOpAnd:
-	return "rqlOpAnd";
-    case rqlOpOr:
-	return "rqlOpOr";
     
     case rqlOpStringToBoolean:
         return "rqlOpStringToBoolean";
@@ -36,20 +28,21 @@ switch (op)
         return "rqlOpDoubleToBoolean";
     case rqlOpStringToInt:
         return "rqlOpStringToInt";
-    case rqlOpStringToDouble:
-        return "rqlOpStringToDouble";
+    case rqlOpDoubleToInt:
+        return "rqlOpDoubleToInt";
     case rqlOpBooleanToInt:
         return "rqlOpBooleanToInt";
+    case rqlOpStringToDouble:
+        return "rqlOpStringToDouble";
     case rqlOpBooleanToDouble:
         return "rqlOpBooleanToDouble";
     case rqlOpIntToDouble:
         return "rqlOpIntToDouble";
 
-    case rqlOpUnaryMinusInt:
-        return "rqlOpUnaryMinusInt";
-    case rqlOpUnaryMinusDouble:
-        return "rqlOpUnaryMinusDouble";
-
+    case rqlOpEq:
+	return "rqlOpEq";
+    case rqlOpNe:
+	return "rqlOpNe";
     case rqlOpGt:
         return "rqlOpGt";
     case rqlOpLt:
@@ -61,8 +54,22 @@ switch (op)
     case rqlOpLike:
 	return "rqlOpLike";
 
+    case rqlOpAnd:
+	return "rqlOpAnd";
+    case rqlOpOr:
+	return "rqlOpOr";
     case rqlOpNot:
         return "rqlOpNot";
+
+    case rqlOpUnaryMinusInt:
+        return "rqlOpUnaryMinusInt";
+    case rqlOpUnaryMinusDouble:
+        return "rqlOpUnaryMinusDouble";
+
+    case rqlOpArrayIx:
+        return "rqlOpArrayIx";
+    case rqlOpSubDot:
+        return "rqlSubDot";
 
     default:
 	return "rqlOpUnknown";
@@ -217,6 +224,8 @@ switch (oldType)
         return rqlOpStringToInt;
     case rqlTypeBoolean:
         return rqlOpBooleanToInt;
+    case rqlTypeDouble:
+        return rqlOpDoubleToInt;
     default:
         internalErr();
 	return rqlOpUnknown;
@@ -271,13 +280,49 @@ else
     }
 }
 
+static struct rqlParse *rqlParsePartSelect(struct tokenizer *tkz)
+/* Handle the . in this.that or the [] in this[6] */
+{
+struct rqlParse *collection = rqlParseAtom(tkz);
+struct rqlParse *p = collection;
+char *tok = tokenizerNext(tkz);
+if (tok == NULL)
+    tokenizerReuse(tkz);
+else if (tok[0] == '[')
+    {
+    // struct rqlParse *index = rqlParseExpression(tkz);
+    struct rqlParse *index = rqlParseAtom(tkz);
+    index = rqlParseCoerce(index, rqlTypeInt);
+    skipOverRequired(tkz, "]");
+    AllocVar(p);
+    p->op = rqlOpArrayIx;
+    p->type = rqlTypeString;
+    p->children = collection;
+    collection->next = index;
+    }
+else if (tok[0] == '.')
+    {
+    struct rqlParse *field = rqlParseExpression(tkz);
+    field = rqlParseCoerce(field, rqlTypeString);
+    AllocVar(p);
+    p->op = rqlOpSubDot;
+    p->type = rqlTypeString;
+    p->children = collection;
+    collection->next = field;
+    }
+else
+    tokenizerReuse(tkz);
+return p;
+}
+
+
 static struct rqlParse *rqlParseUnaryMinus(struct tokenizer *tkz)
 /* Return unary minus sort of parse tree if there's a leading '-' */
 {
 char *tok = tokenizerMustHaveNext(tkz);
 if (tok[0] == '-')
     {
-    struct rqlParse *c = rqlParseAtom(tkz);
+    struct rqlParse *c = rqlParsePartSelect(tkz);
     struct rqlParse *p;
     AllocVar(p);
     if (c->type == rqlTypeInt)
@@ -297,7 +342,7 @@ if (tok[0] == '-')
 else
     {
     tokenizerReuse(tkz);
-    return rqlParseAtom(tkz);
+    return rqlParsePartSelect(tkz);
     }
 }
 
@@ -428,9 +473,8 @@ else
 static struct rqlParse *rqlParseAnd(struct tokenizer *tkz)
 /* Parse out and or or. */
 {
-struct rqlParse *l = rqlParseCoerce(rqlParseNot(tkz), rqlTypeBoolean);
+struct rqlParse *p = rqlParseNot(tkz);
 struct rqlParse *parent = NULL;
-struct rqlParse *p = l;
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
@@ -443,6 +487,7 @@ for (;;)
         {
 	if (parent == NULL)
 	    {
+	    p = rqlParseCoerce(p, rqlTypeBoolean);
 	    AllocVar(parent);
 	    parent->op = rqlOpAnd;
 	    parent->type = rqlTypeBoolean;
@@ -458,9 +503,8 @@ for (;;)
 static struct rqlParse *rqlParseOr(struct tokenizer *tkz)
 /* Parse out and or or. */
 {
-struct rqlParse *l = rqlParseCoerce(rqlParseAnd(tkz), rqlTypeBoolean);
+struct rqlParse *p = rqlParseAnd(tkz);
 struct rqlParse *parent = NULL;
-struct rqlParse *p = l;
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
@@ -473,6 +517,7 @@ for (;;)
         {
 	if (parent == NULL)
 	    {
+	    p = rqlParseCoerce(p, rqlTypeBoolean);
 	    AllocVar(parent);
 	    parent->op = rqlOpOr;
 	    parent->type = rqlTypeBoolean;
