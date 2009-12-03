@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.114 2009/03/20 01:50:47 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.115 2009/12/03 00:28:29 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1018,6 +1018,11 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway&cb=%s>Gateway</A>\n",n
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp target=\"_blank\">Help</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLog target=\"_blank\">Release Log</A>\n");
 //printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLogPush target=\"_blank\">Publish RL</A>\n");
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityA>A</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityB>B</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityC>C</A>\n",newRandState);
+//printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityD>D</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityL>L</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
 //printf("&nbsp;newRandState=%s\n",newRandState);
 //printf("&nbsp;oldRandState=%s\n",oldRandState);
@@ -1068,7 +1073,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     /* Major-priority section header */
     if (ki->priority[0] != lastP) 
 	{
-    lastP = ki->priority[0];
+	lastP = ki->priority[0];
 	safef(comment,sizeof(comment),"%s","");
 	switch (ki->priority[0])
 	    {
@@ -1087,7 +1092,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	    
 	    }
 	printf("<tr>");
-	printf("<td><h1>%s</h1></td><td><b>%s</b></td>\n", ki->priority, comment);
+	printf("<td><h1>%s<A name=\"priority%s\"></h1></td><td><b>%s</b></td>\n", ki->priority, ki->priority, comment);
 	printf("</tr>");
     
     }
