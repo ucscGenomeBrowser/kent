@@ -6,11 +6,11 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "hash.h"
-#include "obscure.h"
+#include "rql.h"
 
 char *simplifyPathToDir(char *path);
 
-static char const rcsid[] = "$Id: freen.c,v 1.94 2009/11/24 00:59:18 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.95 2009/12/03 06:03:50 kent Exp $";
 
 void usage()
 {
@@ -83,13 +83,12 @@ int endInIncrements = ceil(end/increment);
 *retEnd = endInIncrements * increment;
 }
 
-void freen(char *a, char *b)
+void freen(char *a)
 /* Test some hair-brained thing. */
 {
-double x = atof(a), y = atof(b);
-double nx, ny;
-rangeRoundUp(x, y, &nx, &ny);
-printf("old %g:%g  new %g:%g\n", x, y, nx, ny);
+struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(a));
+struct rqlStatement *rql = rqlStatementParse(lf);
+rqlStatementDump(rql, stdout);
 }
 
 int main(int argc, char *argv[])
@@ -97,8 +96,8 @@ int main(int argc, char *argv[])
 {
 // optionInit(&argc, argv, options);
 
-if (argc != 3)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }
