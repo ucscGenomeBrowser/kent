@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.9 2009/12/03 08:59:33 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.10 2009/12/03 10:21:39 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -760,6 +760,20 @@ for (field = fieldList; field != NULL; field = field->next)
 fprintf(out, "\n");
 }
 
+static boolean tableExistsInSelfOrOffspring(char *db, struct tdbRecord *record)
+/* Return TRUE if table corresponding to track exists in database db.  If a parent
+ * track look for tables in kids too. */
+{
+if ( hTableOrSplitExists(db, record->key))
+    return TRUE;
+struct tdbRecord *child;
+for (child = record->children; child != NULL; child = child->next)
+    {
+    if (tableExistsInSelfOrOffspring(db, child))
+        return TRUE;
+    }
+return FALSE;
+}
 
 void tdbQuery(char *sql)
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
@@ -827,9 +841,10 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 
 	if (rqlStatementMatch(rql, record))
 	    {
-	    if (!clStrict || (record->key && hTableOrSplitExists(p->db, record->key)))
+	    if (!clStrict || tableExistsInSelfOrOffspring(p->db, record))
 		{
 		matchCount += 1;
+// TODO - add limit clause processing here.
 		if (doSelect)
 		    {
 		    rqlStatementOutput(rql, record, "file", stdout);
