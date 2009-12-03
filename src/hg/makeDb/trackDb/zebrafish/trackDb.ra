@@ -705,10 +705,6 @@ xrefTable affyToHg16Orthologs
 xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
 searchPriority 20
 
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose
-
 searchTable ucscRetroMrnaInfo1
 searchType bed
 searchMethod prefix

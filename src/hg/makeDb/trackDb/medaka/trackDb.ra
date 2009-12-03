@@ -146,7 +146,3 @@ shortCircuit 1
 termRegex contig[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose

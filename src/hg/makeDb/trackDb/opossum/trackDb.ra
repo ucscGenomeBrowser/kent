@@ -426,17 +426,6 @@ type netAlign
     type netAlign canFam2 chainCanFam2
     otherDb canFam2
 
-track horseChainNet override
-chainMinScore 5000
-chainLinearGap loose
-priority 225
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose
-priority 255
-
-
 track netCalJac1 override
 priority 230.1
 

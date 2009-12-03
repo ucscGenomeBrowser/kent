@@ -125,10 +125,6 @@ spectrum on
 type netAlign rn4 chainRn4
 otherDb rn4
 
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose
-
 track chainHg18 override
 priority 120.1
  

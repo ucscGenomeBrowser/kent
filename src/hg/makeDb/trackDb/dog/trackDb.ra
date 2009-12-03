@@ -226,12 +226,6 @@ spectrum on
 type netAlign felCat3 chainFelCat3
 otherDb felCat3
 
-track horseChainNet override
-priority 253
-
-track humanChainNet override
-priority 210
-
 track chainHg18 override
 priority 210
 

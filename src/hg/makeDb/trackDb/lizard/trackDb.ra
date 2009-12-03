@@ -14,7 +14,3 @@ otherOrg hg18
 
 track chainNetHg19 override
 priority 250.3
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose

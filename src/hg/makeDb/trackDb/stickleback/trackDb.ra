@@ -220,7 +220,3 @@ otherDb oryLat1
 
 track chainNetHg19 override
 priority 274.3
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose

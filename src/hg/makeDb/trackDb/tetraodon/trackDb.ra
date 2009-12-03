@@ -436,7 +436,3 @@ searchType genePred
 shortcircuit 1
 termRegex EG3THT[0-9]+
 searchPriority 50
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose

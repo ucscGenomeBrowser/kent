@@ -1278,9 +1278,3 @@ expStep 0.5
 url http://biogps.gnf.org/?query=$$
 urlLabel BioGPS:
 groupings gnfMouseAtlas3Groups
-
-track horseChainNet override
-priority 264
-
-track humanChainNet override
-priority 279

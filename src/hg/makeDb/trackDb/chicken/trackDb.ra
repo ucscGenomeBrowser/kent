@@ -87,11 +87,3 @@ searchType bed
 shortCircuit 1
 termRegex snp\.[0-9]+\.[0-9]+\.[0-9]+\.[IDS]\.[1-3]
 searchPriority 20
-
-track horseChainNet override
-priority 195
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose
-priority 250

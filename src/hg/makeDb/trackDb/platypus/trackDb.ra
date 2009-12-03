@@ -12,11 +12,6 @@ spectrum on
 type chain calJac1
 otherDb calJac1
 
-track horseChainNet override
-chainMinScore 5000
-chainLinearGap loose
-priority 225
-
 track chainHg18 override
 priority 250.1
 shortLabel $o_db Chain
@@ -29,8 +24,3 @@ otherDb hg18
 
 track chainNetHg19 override
 priority 250.3
-
-track humanChainNet override
-chainMinScore 5000
-chainLinearGap loose
-priority 250
