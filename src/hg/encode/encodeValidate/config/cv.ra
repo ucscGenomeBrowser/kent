@@ -1,10 +1,11 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.147 2009/12/03 22:13:22 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.148 2009/12/03 22:19:50 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
 type Cell Line
+organism Human
 description lymphoblastoid
 vendorName Coriell
 vendorId GM12878
@@ -20,6 +21,7 @@ protocol GM12878_protocol.pdf
 term K562
 tag K562
 type Cell Line
+organism Human
 description leukemia
 vendorName ATCC
 vendorId CCL-243
@@ -35,6 +37,7 @@ protocol K562_protocol.pdf
 term K562b
 tag K562b
 type Cell Line
+organism Human
 description leukemia (UCDavis alternate)
 vendorName ATCC
 vendorId CCL-243
@@ -50,6 +53,7 @@ protocol K562_protocol.pdf
 term HepG2
 tag HepG2
 type Cell Line
+organism Human
 description liver carcinoma
 vendorName ATCC
 vendorId HB-8065
@@ -65,6 +69,7 @@ protocol HepG2_protocol.pdf
 term HepG2b
 tag HepG2b
 type Cell Line
+organism Human
 description liver carcinoma (UCDavis alternate)
 vendorName ATCC
 vendorId HB-8065
@@ -80,6 +85,7 @@ protocol HepG2_protocol.pdf
 term HeLa-S3
 tag HeLaS3
 type Cell Line
+organism Human
 description cervical carcinoma
 vendorName ATCC
 vendorId CCL-2.2
@@ -96,6 +102,7 @@ term HeLa-S3_IFNg
 tag HeLaS3IFNg
 description cervical carcinoma (Interferon gamma treatment)
 type Cell Line
+organism Human
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
 vendorName ATCC
 vendorId CCL-2.2
@@ -110,6 +117,7 @@ protocol HeLa-S3_protocol.pdf
 term HUVEC
 tag HUVEC
 type Cell Line
+organism Human
 description Human Umbilical Vein Endothelial Cell
 vendorName Lonza
 vendorId CC-2517
@@ -125,6 +133,7 @@ protocol HUVEC_protocol.pdf
 term NHEK
 tag NHEK
 type Cell Line
+organism Human
 description Normal Human Epidermal Keratinocyte
 vendorName Lonza
 vendorId CC-2501
@@ -140,6 +149,7 @@ protocol Keratinocyte_protocol.pdf
 term H1-hESC
 tag H1hESC
 type Cell Line
+organism Human
 description Human Embryonic Stem Cells
 vendorName Cellular Dynamics
 vendorId
@@ -156,6 +166,7 @@ protocol H1_ES_protocol.pdf
 term A549
 tag A549
 type Cell Line
+organism Human
 description epithelial cell line derived from a lung carcinoma tissue
 vendorName ATCC
 vendorId CCl-185
@@ -170,6 +181,7 @@ protocol A549_protocol.pdf
 term astrocytes
 tag astrocytes
 type Cell Line
+organism Human
 description Normal human astrocytes
 vendorName Lonza
 vendorId CC-2565
@@ -184,6 +196,7 @@ protocol Astrocytes_Crawford_protocol.pdf
 term BE2_C
 tag BE2C
 type Cell Line
+organism Human
 description Human neuroblastoma
 vendorName ATCC
 vendorId CRL-2268
@@ -196,6 +209,7 @@ protocol BE2-C_Myers_protocol.pdf
 term BG02ES
 tag BG02ES
 type Cell Line
+organism Human
 description H9 Conditioned Medium
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
@@ -208,6 +222,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term BG02ES-EBD
 tag BG02ESEBD
 type Cell Line
+organism Human
 description BG02 EmbryoidBody-Derived
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
@@ -220,6 +235,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term BJ
 tag BJ
 type Cell Line
+organism Human
 description skin fibroblast
 vendorName ATCC
 vendorId CRL-2522
@@ -234,6 +250,7 @@ protocol BJ-tert_Stam_protocol.pdf
 term Caco-2
 tag Caco2
 type Cell Line
+organism Human
 description colorectal adenocarcinoma
 vendorName ATCC
 vendorId HTB-37
@@ -248,6 +265,7 @@ protocol Stam_15_protocols.pdf
 term D54
 tag D54
 type Cell Line
+organism Human
 description (aka H54) Glioblastoma
 vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0000527
@@ -258,6 +276,7 @@ protocol D54_Crawford_protocol.pdf
 term D721
 tag D721
 type Cell Line
+organism Human
 description Medulloblastoma
 vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0001359
@@ -268,6 +287,7 @@ protocol D721_Crawford_protocol.pdf
 term fibroblast
 tag fibroblast
 type Cell Line
+organism Human
 description Normal child fibroblast; donor sex: female
 vendorName Coriell
 vendorId AG08470
@@ -282,6 +302,7 @@ protocol fibroblast_Crawford_protocol.pdf
 term GM06990
 tag GM06990
 type Cell Line
+organism Human
 description lymphoblastoid (CEPH)
 vendorName Coriell
 vendorId GM06990
@@ -296,6 +317,7 @@ protocol Stam_15_protocols.pdf
 term GM12801
 tag GM12801
 type Cell Line
+organism Human
 description B-Lymphocyte (CEPH)
 vendorName Coriell
 vendorId GM12801
@@ -310,6 +332,7 @@ protocol GM12801_Stam_protocol.pdf
 term GM12891
 tag GM12891
 type Cell Line
+organism Human
 description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1463, Epstein-Barr Virus, Male
 vendorName Coriell
@@ -323,6 +346,7 @@ protocol GM12891_Crawford_protocol.pdf
 term GM12892
 tag GM12892
 type Cell Line
+organism Human
 description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1463, Epstein-Barr Virus, Female
 vendorName Coriell
@@ -336,6 +360,7 @@ protocol GM12892_Crawford_protocol.pdf
 term GM18507
 tag GM18507
 type Cell Line
+organism Human
 description lymphoblastoid
 vendorName Coriell
 vendorId GM18507
@@ -350,6 +375,7 @@ protocol GM18507_protocol.pdf
 term GM19238
 tag GM19238
 type Cell Line
+organism Human
 description B-Lymphocyte
 karyotype YORUBA, Epstein-Barr Virus, Female
 vendorName Coriell
@@ -363,6 +389,7 @@ protocol GM19238_Crawford_protocol.pdf
 term GM19239
 tag GM19239
 type Cell Line
+organism Human
 description B-Lymphocyte
 karyotype YORUBA, Epstein-Barr Virus, Male
 vendorName Coriell
@@ -376,6 +403,7 @@ protocol GM19239_Crawford_protocol.pdf
 term GM19240
 tag GM19240
 type Cell Line
+organism Human
 description B-Lymphocyte
 karyotype YORUBA, Epstein-Barr Virus, Female
 vendorName Coriell
@@ -389,6 +417,7 @@ protocol GM19240_Crawford_protocol.pdf
 term H9ES
 tag H9ES
 type Cell Line
+organism Human
 description H9 human ES cells
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -401,6 +430,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term H9ES-E
 tag H9ESE
 type Cell Line
+organism Human
 description H9 Endoderm
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -413,6 +443,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term H9ES-AFP+
 tag H9ESAFPPlus
 type Cell Line
+organism Human
 description H9 AFP+ human ESCells-derived
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -425,6 +456,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term H9ES-AFP-
 tag H9ESAFPMinus
 type Cell Line
+organism Human
 description H9 AFP- human ESCells-derived
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -437,6 +469,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term H9ES-EB
 tag H9ESEB
 type Cell Line
+organism Human
 description H9 Embryoid Bodies
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -449,6 +482,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term H9ES-EBD
 tag H9ESEBD
 type Cell Line
+organism Human
 description H9 EmbryoidBody-Derived
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -461,6 +495,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term H9ES-CM
 tag H9ESCM
 type Cell Line
+organism Human
 description H9 Conditioned Medium
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -473,6 +508,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term HAL
 tag HAL
 type Cell Line
+organism Human
 description Human Adult Liver
 tier 3
 lineage Genomic DNA purified from surgically excised adult human liver was purchased from Asterand, Inc. (Detroit, MI).
@@ -485,6 +521,7 @@ protocol HAL_Myers_protocol.pdf
 term HCT-116
 tag HCT116
 type Cell Line
+organism Human
 description colorectal carcinoma
 vendorName ATCC
 vendorId CCL-247
@@ -499,6 +536,7 @@ protocol HCT-116_protocol.pdf
 term HEK293
 tag HEK293
 type Cell Line
+organism Human
 description embryonic kidney
 vendorName ATCC
 vendorId CRL-1573
@@ -513,6 +551,7 @@ protocol Stam_15_protocols.pdf
 term HEK293(b)
 tag HEK293b
 type Cell Line
+organism Human
 description embryonic kidney (alternate protocol)
 vendorName ATCC
 vendorId CRL-1573
@@ -527,6 +566,7 @@ protocol HEK293b_Snyder_protocol.pdf
 term HFL11W
 tag HFL11W
 type Cell Line
+organism Human
 description Human Fetal Liver 11 weeks
 tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
@@ -536,6 +576,7 @@ protocol HFL11W_and_HFL24W_Myers_protocols.pdf
 term HFL24W
 tag HFL24W
 type Cell Line
+organism Human
 description Human Fetal Liver 24 weeks
 tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
@@ -545,6 +586,7 @@ protocol HFL11W_and_HFL24W_Myers_protocols.pdf
 term HGF
 tag HGF
 type Cell Line
+organism Human
 description Human gingaval fibroblast
 vendorName ScienCell
 vendorId 2620
@@ -559,6 +601,7 @@ protocol HGF_Stam_protocol.pdf
 term HL-60
 tag HL60
 type Cell Line
+organism Human
 description Human promyelocytic leukemia cells
 vendorName ATCC
 vendorId CCL-240
@@ -573,6 +616,7 @@ protocol HL-60_Stam_protocol.pdf
 term HMEC
 tag HMEC
 type Cell Line
+organism Human
 description Human Mammary Epithelial Cells
 vendorName Lonza
 vendorId CC-3150
@@ -587,6 +631,7 @@ protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.p
 term HRCEpiC
 tag HRCEpiC
 type Cell Line
+organism Human
 description Human renal cortical epithelial cells
 vendorName ScienCell
 vendorId #4110
@@ -601,6 +646,7 @@ protocol HRCEpiC_Stam_protocol.pdf
 term HRE
 tag HRE
 type Cell Line
+organism Human
 description Human renal epithelial cells
 vendorName Lonza
 vendorId CC-2556
@@ -615,6 +661,7 @@ protocol HRE_Stam_protocol.pdf
 term HTB-11
 tag HTB11
 type Cell Line
+organism Human
 description Human neuroblastoma
 vendorName ATCC
 vendorId HTB-11
@@ -628,6 +675,7 @@ protocol HTB-11_Myers_protocol.pdf
 term Jurkat
 tag Jurkat
 type Cell Line
+organism Human
 description T lymphoblastoid cell line derived from an acute T cell leukemia
 vendorName ATCC
 vendorId TIB-152
@@ -642,6 +690,7 @@ protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 term LNCaP
 tag LNCaP
 type Cell Line
+organism Human
 description prostate adenocarcinoma
 vendorName ATCC
 vendorId CRL-1740
@@ -657,6 +706,7 @@ protocol Crawford:LNCaP_Crawford_protocol.pdf Farnham:LNCaP_protocol.pdf Stam:LN
 term MCF-7
 tag MCF7
 type Cell Line
+organism Human
 description mammary gland, adenocarcinoma
 vendorName ATCC
 vendorId HTB-22
@@ -671,6 +721,7 @@ protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf
 term NB4
 tag NB4
 type Cell Line
+organism Human
 description acute promyelocytic leukemia cell line
 vendorName Refer to protocol documents for differing sources
 #Stam:DSMZ DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/
@@ -687,6 +738,7 @@ protocol Snyder:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
 term NHLF
 tag NHLF
 type Cell Line
+organism Human
 description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
@@ -701,6 +753,7 @@ protocol NHLF_Bernstein_protocol.pdf
 term NT2-D1
 tag NT2D1
 type Cell Line
+organism Human
 description malignant pluripotent embryonal carcinoma (Ntera2)
 vendorName ATCC
 vendorId CRL-1973
@@ -715,6 +768,7 @@ protocol NT2-D1_protocol.pdf
 term osteoblast
 tag osteoblast
 type Cell Line
+organism Human
 description Normal human osteoblasts (NHOst)
 vendorName Lonza
 vendorId CC-2538
@@ -729,6 +783,7 @@ protocol Osteoblast_Crawford_protocol.pdf
 term ovcar-3
 tag ovcar3
 type Cell Line
+organism Human
 description ovarian adenocarcinoma
 vendorName ATCC
 vendorId HTB-161
@@ -743,6 +798,7 @@ protocol Stam_15_protocols.pdf
 term PANC-1
 tag PANC1
 type Cell Line
+organism Human
 description pancreatic carcinoma
 vendorName ATCC
 vendorId CRL-1469
@@ -757,6 +813,7 @@ protocol Myers:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
 term PanIslets
 tag PanIslets
 type Cell Line
+organism Human
 description human pancreatic islets
 vendorName Refer to protocol documents for differing sources
 vendorId
@@ -769,6 +826,7 @@ protocol Crawford:PanIslets_Crawford_protocol.pdf Lieb:PanIslets_Lieb_protocol.p
 term PFSK-1
 tag PFSK1
 type Cell Line
+organism Human
 description neuroectodermal cell line derived from a human cerebral brain tumor
 vendorName ATCC
 vendorId CRL-2060
@@ -783,6 +841,7 @@ protocol PFSK-1_protocol.pdf
 term pHTE
 tag pHTE
 type Cell Line
+organism Human
 description Primary Human Tracheal Epithelial Cells
 vendorName Dr. Cal Cotton at Case Western Reserve University
 vendorId
@@ -796,6 +855,7 @@ protocol pHTE_Crawford_protocol.pdf
 term progeria
 tag progeria
 type Cell Line
+organism Human
 description HGPS (HGADFN167, progeria research foundation)
 vendorName Progeria Research Foundation
 vendorId
@@ -810,6 +870,7 @@ protocol progeria_Crawford_protocol.pdf
 term prostate
 tag prostate
 type Cell Line
+organism Human
 description prostate tissue purchased for Gingeras project
 vendorName ATCC
 vendorId
@@ -823,6 +884,7 @@ tier 3
 term SAEC
 tag SAEC
 type Cell Line
+organism Human
 description Small airway epithelial cells
 vendorName Lonza
 vendorId CC-2547
@@ -837,6 +899,7 @@ protocol SAEC_Stam_protocol.pdf
 term SK-N-MC
 tag SKNMC
 type Cell Line
+organism Human
 description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor
 vendorName ATCC
 vendorId HTB-10
@@ -852,6 +915,7 @@ protocol SK-N-MC_protocol.pdf
 term SK-N-SH_RA
 tag SKNSHRA
 type Cell Line
+organism Human
 description neuroblastoma cell line differentiated w/ retinoic acid
 vendorName ATCC
 vendorId HTB-11
@@ -866,6 +930,7 @@ protocol Stam_15_protocols.pdf
 term SKMC
 tag SKMC
 type Cell Line
+organism Human
 description Human skeletal muscle cells
 vendorName Lonza
 vendorId CC-2561
@@ -880,6 +945,7 @@ protocol SkMC_Stam_protocol.pdf
 term Th1
 tag Th1
 type Cell Line
+organism Human
 description primary human Th1 T cells
 vendorName
 vendorId None (primary pheresis of single normal subject)
@@ -894,6 +960,7 @@ protocol Stam_15_protocols.pdf
 term Th2
 tag Th2
 type Cell Line
+organism Human
 description Primary human Th2 T cells
 vendorName
 vendorId None (primary pheresis of single normal subject)
@@ -908,6 +975,7 @@ protocol Th2_Stam_protocol.pdf
 term U87
 tag U87
 type Cell Line
+organism Human
 description human glioblastoma; astrocytoma
 vendorName ATCC
 vendorId HTB-14
@@ -921,6 +989,7 @@ protocol U-87_Myers_protocol.pdf
 term WERI-Rb-1
 tag WERIRb1
 type Cell Line
+organism Human
 description retinoblastoma
 vendorName ATCC
 vendorId HTB-169
