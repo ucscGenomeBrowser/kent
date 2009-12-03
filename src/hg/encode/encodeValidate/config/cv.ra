@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.145 2009/11/26 02:10:12 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.146 2009/12/03 17:54:13 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2066,7 +2066,7 @@ termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:001
 term total
 tag total
 type rnaExtract
-description Total RNA extract
+description Total RNA extract (longer than 200 nt)
 
 term short
 tag short
