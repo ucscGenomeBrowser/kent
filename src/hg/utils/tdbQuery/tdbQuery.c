@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.10 2009/12/03 10:21:39 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.11 2009/12/03 18:03:09 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -844,11 +844,12 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 	    if (!clStrict || tableExistsInSelfOrOffspring(p->db, record))
 		{
 		matchCount += 1;
-// TODO - add limit clause processing here.
 		if (doSelect)
 		    {
 		    rqlStatementOutput(rql, record, "file", stdout);
 		    }
+		if (rql->limit >= 0 && matchCount >= rql->limit)
+		    break;
 		}
 	    }
 	}
