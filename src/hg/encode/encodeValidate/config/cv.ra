@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.148 2009/12/03 22:19:50 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.149 2009/12/03 23:37:26 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -178,8 +178,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol A549_protocol.pdf
 
-term astrocytes
-tag astrocytes
+term Astrocy
+tag Astrocy
 type Cell Line
 organism Human
 description Normal human astrocytes
@@ -262,8 +262,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Stam_15_protocols.pdf
 
-term D54
-tag D54
+term Medullo
+tag Medullo
 type Cell Line
 organism Human
 description (aka H54) Glioblastoma
@@ -273,8 +273,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol D54_Crawford_protocol.pdf
 
-term D721
-tag D721
+term Gliobla
+tag Gliobla
 type Cell Line
 organism Human
 description Medulloblastoma
@@ -284,8 +284,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol D721_Crawford_protocol.pdf
 
-term fibroblast
-tag fibroblast
+term Fibrobl
+tag Fibrobl
 type Cell Line
 organism Human
 description Normal child fibroblast; donor sex: female
@@ -765,8 +765,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol NT2-D1_protocol.pdf
 
-term osteoblast
-tag osteoblast
+term Osteobl
+tag Osteobl
 type Cell Line
 organism Human
 description Normal human osteoblasts (NHOst)
@@ -852,8 +852,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol pHTE_Crawford_protocol.pdf
 
-term progeria
-tag progeria
+term ProgFib
+tag ProgFib
 type Cell Line
 organism Human
 description HGPS (HGADFN167, progeria research foundation)
@@ -1274,8 +1274,8 @@ antibodyDescription Mouse monoclonal, GABPa(G-1), IgG1
 vendorName Santa Cruz Biotech
 vendorId sc-28312
 orderUrl http://www.scbt.com/product.php?datasheet=28312
-targetId 
-targetUrl 
+targetId
+targetUrl
 lab Myers / Wold
 lots F1804
 
