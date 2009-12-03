@@ -28,6 +28,10 @@ char*lmCloneStringZ(struct lm *lm, char *string, int size);
 char *lmCloneFirstWord(struct lm *lm, char *line);
 /* Clone first word in line */
 
+char *lmCloneSomeWord(struct lm *lm, char *line, int wordIx);
+/* Return a clone of the given space-delimited word within line.  Returns NULL if
+ * not that many words in line. */
+
 struct slName *lmSlName(struct lm *lm, char *name);
 /* Return slName in memory. */
 
