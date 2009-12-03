@@ -11,10 +11,9 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.12 2009/12/03 20:06:06 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.13 2009/12/03 20:28:58 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
-static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
 static boolean clStrict = FALSE;	/* If set only return tracks with actual tables. */
 static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
@@ -41,10 +40,8 @@ errAbort(
 "prints all fields that end in 'Label' from the mm9 trackDb.\n"
 "OPTIONS:\n"
 "   -root=/path/to/trackDb/root/dir\n"
-"Sets the root directory of the trackDb.ra directory hierarchy to be given path.\n"
-"   -file=someFile.ra\n"
-"The file option  makes the system use the given .ra file instead of the trackDb.ra directory \n"
-"hierarchy\n"
+"Sets the root directory of the trackDb.ra directory hierarchy to be given path. By default\n"
+"this is ~/kent/src/hg/makeDb/trackDb.\n"
 "   -check\n"
 "Check that trackDb is internally consistent.  Prints diagnostic output to stderr and aborts if \n"
 "there's problems.\n"
@@ -58,7 +55,6 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"root", OPTION_STRING},
-   {"file", OPTION_STRING},
    {"check", OPTION_BOOLEAN},
    {"strict", OPTION_BOOLEAN},
    {"alpha", OPTION_BOOLEAN},
@@ -872,7 +868,6 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 clRoot = optionVal("root", clRoot);
-clFile = optionVal("file", clFile);
 clCheck = optionExists("check");
 clStrict = optionExists("strict");
 clAlpha = optionExists("alpha");

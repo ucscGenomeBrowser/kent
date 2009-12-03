@@ -1,0 +1,12 @@
+This file describes tdbQuery, in particular the RQL language, in more detail than the
+usage statement you get from running tdbQuery with no parameters.
+
+The trackDb system stores the track settings for the UCSC Genome Browser.  It consists of .ra
+files in three levels of directories - root, organism, and assembly.  The assembly level corresponds
+to a particular "genome database" like hg19, currently the latest human.  Records at the lower
+levels override and extend records at higher levels.  In addition to the inheritance 
+implied by the directory hierarchy, there is also inheritance defined by the "subTrack" field
+in a record, which if it exists specifies the parent track.   A third type of inheritance
+also exists, the "view" level.   The trackDb system is explained in more detail in the
+README file in the trackDb root directory.
+
