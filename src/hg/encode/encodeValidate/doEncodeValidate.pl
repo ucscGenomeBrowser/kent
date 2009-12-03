@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.203 2009/11/30 23:31:02 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.204 2009/12/03 17:59:34 braney Exp $
 
 use warnings;
 use strict;
@@ -178,6 +178,7 @@ our %validators = (
     species => \&validateSpecies,
     fragLength => \&validateNoValidation,
     treatment => \&validateNoValidation,
+    restrictionEnzyme => \&validateNoValidation,
     );
 
 # standard validators (required or optional for all projects)
