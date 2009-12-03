@@ -84,7 +84,8 @@ struct rqlStatement
     char *command;	/* Generally the first word in the statement. */
     struct slName *fieldList;	/* List of fields if any. */
     struct slName *tableList;	/* List of tables if any. */
-    struct rqlParse *whereClause;	/* Where clause if any - tokenized. */
+    struct rqlParse *whereClause;	/* Where clause if any - in parse tree. */
+    int limit;		/* If >= 0 then limits # of records returned. */
     };
 
 void rqlValDump(union rqlVal val, enum rqlType type, FILE *f);

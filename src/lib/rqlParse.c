@@ -8,7 +8,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.2 2009/12/02 19:14:12 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.3 2009/12/03 18:00:21 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -606,14 +606,36 @@ if (from != NULL)
     else
         tokenizerReuse(tkz);
     }
+
+/* Parse where clause. */
 char *where = tokenizerNext(tkz);
 if (where != NULL)
     {
     if (!sameString(where, "where"))
-        errAbort("Unknown clause '%s' line %d of %s", where, lf->lineIx, lf->fileName);
-    rql->whereClause = rqlParseExpression(tkz);
+	{
+        tokenizerReuse(tkz);
+	}
+    else
+        {
+	rql->whereClause = rqlParseExpression(tkz);
+	}
     }
 
+/* Parse limit clause. */
+char *limit = tokenizerNext(tkz);
+rql->limit = -1;	
+if (limit != NULL)
+    {
+    if (!sameString(limit, "limit"))
+        errAbort("Unknown clause '%s' line %d of %s", limit, lf->lineIx, lf->fileName);
+    char *count = tokenizerMustHaveNext(tkz);
+    if (!isdigit(count[0]))
+       errAbort("Expecting number after limit, got %s line %d of %s", 
+       	count, lf->lineIx, lf->fileName);
+    rql->limit = atoi(count);
+    }
+
+/* Check that are at end of statement. */
 char *extra = tokenizerNext(tkz);
 if (extra != NULL)
     errAbort("Extra stuff starting with '%s' past end of statement line %d of %s", 
@@ -624,7 +646,7 @@ return rql;
 void rqlStatementDump(struct rqlStatement *rql, FILE *f)
 /* Print out statement to file. */
 {
-fprintf(f, "%s", rql->command);
+fprintf(f, "%s:", rql->command);
 if (rql->fieldList)
     {
     fprintf(f, " ");
@@ -633,12 +655,23 @@ if (rql->fieldList)
     for (field = field->next; field != NULL; field = field->next)
         fprintf(f, ",%s", field->name);
     }
+fprintf(f, "\n");
+if (rql->tableList)
+    {
+    fprintf(f, "from: ");
+    struct slName *table = rql->tableList;
+    fprintf(f, "%s", table->name);
+    for (table = table->next; table != NULL; table = table->next)
+        fprintf(f, ",%s", table->name);
+    fprintf(f, "\n");
+    }
 if (rql->whereClause)
     {
     fprintf(f, " where:\n");
     rqlParseDump(rql->whereClause, 0, f);
     }
-fprintf(f, "\n");
+if (rql->limit >= 0)
+    fprintf(f, "limit: %d\n", rql->limit);
 }
 
 static void rqlParseFreeRecursive(struct rqlParse *p)
