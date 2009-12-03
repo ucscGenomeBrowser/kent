@@ -436,3 +436,4 @@ searchType genePred
 shortcircuit 1
 termRegex EG3THT[0-9]+
 searchPriority 50
+

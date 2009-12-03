@@ -2598,6 +2598,7 @@ speciesOrder ci2 dm2 ce3
 # speciesCodonDefault hg18
 
 track jkTestChipData
+shortLabel Factor/Source
 longLabel Test of Unified Factor/Source Type Display
 group x
 priority 1110
