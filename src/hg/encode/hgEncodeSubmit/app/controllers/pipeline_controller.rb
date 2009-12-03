@@ -78,6 +78,9 @@ class PipelineController < ApplicationController
           end
         end
     end 
+    @dafText = getDafText(@project)
+    @ddfText = getDdfText(@project)
+
     if @project.run_stat and @project.run_stat == "waiting"
       job = QueuedJob.find(:first, :conditions => ["project_id = ?", @project.id])
       if job
@@ -110,6 +113,16 @@ class PipelineController < ApplicationController
   def upload_status
     @project = Project.find(params[:id])
     @errText = getUploadErrText(@project)
+  end
+
+  def show_daf
+    @project = Project.find(params[:id])
+    @dafText = getDafText(@project)
+  end
+
+  def show_ddf
+    @project = Project.find(params[:id])
+    @ddfText = getDdfText(@project)
   end
 
   def db_load

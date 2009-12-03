@@ -701,8 +701,43 @@ private
     return getErrText(project, "unload_error")
   end
 
+  def getNewestFileByExtensionIgnoringCase(project_id, ext)
+    # return the body of the newest file with the given extension
+    newest = ""
+    newestDate = nil
+    projectDir = path_to_project_dir(project_id)
+    if File.exists?(projectDir)
+      Dir.entries(projectDir).each { 
+        |f| 
+        if f.ends_with?("." + ext.downcase) or
+           f.ends_with?("." + ext.upcase)
+          ftime = File.mtime(path_to_file(project_id, f))
+	  if newest == "" or (ftime > newestDate)
+	    newest = f
+            newestDate = ftime
+	  end
+        end
+      }
+    end
+    unless newest == ""
+      theFile = path_to_file(project_id, newest)
+      return File.open(theFile, "rb") { |f| f.read }
+    else
+      return ""
+    end
+  rescue
+    return ""
+  end
+
+  def getDafText(project)
+    return getNewestFileByExtensionIgnoringCase(project.id, "daf")
+  end
+
+  def getDdfText(project)
+    return getNewestFileByExtensionIgnoringCase(project.id, "ddf")
+  end
+
   def queue_job(project_id, source)
-    # TODO create a function for this
     job = QueuedJob.new
     job.project_id = project_id
     job.queued_at = Time.now.utc

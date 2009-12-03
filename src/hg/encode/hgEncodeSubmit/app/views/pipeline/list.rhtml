@@ -6,6 +6,7 @@
  <table id="projects" cellpadding=1 cellspacing=3>
  <tr> 
  <td align="left"><b><%= sort_link('id', 'ID', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
+ <td align="left"><b><%= sort_link('db', 'DB', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
  <td align="left"><b><%= sort_link('name', 'Name', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
  <td align="left"><b><%= sort_link('Status', nil, {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
  <% if !defined? @user %>
@@ -17,6 +18,7 @@
  <% @projects.each do |c| %>
   <tr>
   <td align="right"><%= link_to c.id, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
+  <td><%= c.db -%></td><td>&nbsp;</td>
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
   <td> 
   <%= 

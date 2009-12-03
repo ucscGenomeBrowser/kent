@@ -107,6 +107,18 @@ end
     <%= ' ] ' -%> </td>
   <% end %>
 
+  <% if @dafText != "" %>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'DAF', {:action => 'show_daf', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
+  <% end %>
+
+  <% if @ddfText != "" %>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'DDF', {:action => 'show_ddf', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
+  <% end %>
+
   </tr>
 <% end %>
 
