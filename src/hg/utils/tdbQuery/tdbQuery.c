@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.8 2009/12/03 04:42:28 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.9 2009/12/03 08:59:33 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -65,7 +65,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-#define glParentField "subTrack"
+#define glKeyField "track"	 /* The field that has the record ID */
+#define glParentField "subTrack" /* The field that points to the parent. */
 
 void recordLocationReport(struct tdbRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -332,7 +333,7 @@ static void recurseThroughIncludes(char *fileName, struct lm *lm,
 struct tdbRecord *record;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *lmFileName = lmCloneString(lm, fileName);
-while ((record = tdbRecordReadOne(lf, "track", lm)) != NULL)
+while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
     {
     struct tdbField *firstField = record->fieldList;
     if (sameString(firstField->name, "include"))
@@ -404,6 +405,70 @@ for (field = record->fieldList; field != NULL; field = field->next)
 	}
     }
 old->posList = slCat(old->posList, record->posList);
+}
+
+static void overrideFieldFromFile(struct tdbRecord *recordList, 
+	char *raFile, char *fieldName, struct lm *lm)
+/* Look for raFile in assembly and organism directories in that order.  Use the first
+ * file that you find to override the given field inside of recordList. */
+{
+/* Build up hash of recordList. */
+struct hash *hash = hashNew(0);
+struct tdbRecord *record;
+for (record = recordList; record != NULL; record = record->next)
+    hashAdd(hash, record->key, record);
+
+struct lineFile *lf = lineFileOpen(raFile, TRUE);
+while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
+    {
+    struct tdbRecord *oldRecord = hashFindVal(hash, record->key);
+    if (oldRecord == NULL)
+        {
+	continue;
+	}
+    if (slCount(record->fieldList) != 2)
+        {
+	errAbort("Expecting just two fields, track and %s, got %d in record ending line %d of %s",
+		fieldName, slCount(record->fieldList), lf->lineIx, lf->fileName);
+	}
+    struct tdbField *field = tdbRecordField(record, fieldName);
+    if (field == NULL)
+        {
+	errAbort("Missing %s tag in record ending line %d of %s", fieldName,
+		lf->lineIx, lf->fileName);
+	}
+    mergeRecords(oldRecord, record, glKeyField, lm);
+    }
+lineFileClose(&lf);
+hashFree(&hash);
+}
+
+static void overrideFieldFromFileOnPath(struct tdbRecord *recordList, struct dbPath *p,
+	char *raFile, char *field, struct lm *lm)
+/* Look for raFile in assembly and organism directories in that order.  Use the first
+ * file that you find to override the given field inside of recordList. */
+{
+/* Find raFile. */
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s/%s", p->dir, raFile);
+if (!fileExists(path))
+    {
+    char orgDir[PATH_LEN];
+    splitPath(p->dir, orgDir, NULL, NULL);
+    safef(path, sizeof(path), "%s%s", orgDir, raFile);
+    if (!fileExists(path))
+        return;		/* Nothing to do. */
+    }
+
+overrideFieldFromFile(recordList, path, field, lm);
+}
+
+static void overridePrioritiesAndVisibilities(struct tdbRecord *recordList, struct dbPath *p,
+	struct lm *lm)
+/* Look for visibility.ra and priority.ra files and layer them onto recordList. */
+{
+overrideFieldFromFileOnPath(recordList, p, "visibility.ra", "visibility", lm);
+overrideFieldFromFileOnPath(recordList, p, "priority.ra", "priority", lm);
 }
 
 static int parentChildFileDistance(struct tdbRecord *parent, struct tdbRecord *child)
@@ -545,7 +610,7 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
 		oldRecord->viewHash = record->viewHash;
 		}
 	    else
-		mergeRecords(oldRecord, record, key, lm);
+		mergeRecords(oldRecord, record, glKeyField, lm);
 	    }
 	else
 	    {
@@ -734,6 +799,8 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     recordList = filterOnRelease(recordList, clAlpha);
     verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
     checkDupeKeys(recordList, FALSE);
+
+    overridePrioritiesAndVisibilities(recordList, p, lm);
 
     struct tdbRecord *record;
     boolean doSelect = sameString(rql->command, "select");

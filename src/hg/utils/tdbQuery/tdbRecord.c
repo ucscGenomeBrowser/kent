@@ -6,7 +6,7 @@
 #include "ra.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.2 2009/12/02 21:01:19 kent Exp $";
+static char const rcsid[] = "$Id: tdbRecord.c,v 1.3 2009/12/03 08:59:33 kent Exp $";
 
 struct tdbFilePos *tdbFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new tdbFilePos record. */
@@ -112,7 +112,10 @@ while (raNextTagVal(lf, &tag, &val))
 	{
 	keyVal = lmCloneFirstWord(lm, field->val);
 	if (endsWith(field->val, "override") && !sameString("override", field->val))
+	    {
 	    override = TRUE;
+	    field->val = lmCloneString(lm, keyVal);
+	    }
 	}
     else if (sameString(field->name, "settingsByView"))
         {
