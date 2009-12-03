@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.18 2009/12/01 19:55:17 markd Exp $
+# 	$Id: makefile,v 1.19 2009/12/03 21:39:51 kent Exp $
 
 include ../../inc/common.mk
 
@@ -28,6 +28,7 @@ DIRS = \
 	automation \
 	refreshNamedSessionCustomTracks \
 	refSeqGet \
+	tdbQuery \
 	wigBedToStep
 
 TEST_DIRS = \
