@@ -17,7 +17,8 @@ enum rqlOp
     rqlOpEq,	/* An equals comparison */
     rqlOpNe,	/* A not equals comparison */
 
-    rqlOpStringToBoolean,
+    /* Type casts. */
+    rqlOpStringToBoolean,	
     rqlOpIntToBoolean,
     rqlOpDoubleToBoolean,
     rqlOpStringToInt,
@@ -26,14 +27,17 @@ enum rqlOp
     rqlOpBooleanToDouble,
     rqlOpIntToDouble,
 
+    rqlOpUnaryMinusInt,
     rqlOpUnaryMinusDouble,
 
+    /* Comparisons. */
     rqlOpGt,  /* Greater than comparison. */
     rqlOpLt,  /* Less than comparison. */
     rqlOpGe,  /* Greater than or equals comparison. */
     rqlOpLe,  /* Less than or equals comparison. */
     rqlOpLike, /* SQL wildcard compare. */
 
+    /* Logic ops. */
     rqlOpAnd,     /* An and */
     rqlOpOr,      /* An or */
     rqlOpNot,	  /* A unary not. */

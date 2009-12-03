@@ -8,7 +8,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.3 2009/12/03 18:00:21 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.4 2009/12/03 18:19:28 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -45,6 +45,8 @@ switch (op)
     case rqlOpIntToDouble:
         return "rqlOpIntToDouble";
 
+    case rqlOpUnaryMinusInt:
+        return "rqlOpUnaryMinusInt";
     case rqlOpUnaryMinusDouble:
         return "rqlOpUnaryMinusDouble";
 
@@ -276,11 +278,19 @@ char *tok = tokenizerMustHaveNext(tkz);
 if (tok[0] == '-')
     {
     struct rqlParse *c = rqlParseAtom(tkz);
-    c = rqlParseCoerce(c, rqlTypeDouble);
     struct rqlParse *p;
     AllocVar(p);
-    p->op = rqlOpUnaryMinusDouble;
-    p->type = rqlTypeDouble;
+    if (c->type == rqlTypeInt)
+        {
+	p->op = rqlOpUnaryMinusInt;
+	p->type = rqlTypeInt;
+	}
+    else
+	{
+	c = rqlParseCoerce(c, rqlTypeDouble);
+	p->op = rqlOpUnaryMinusDouble;
+	p->type = rqlTypeDouble;
+	}
     p->children = c;
     return p;
     }

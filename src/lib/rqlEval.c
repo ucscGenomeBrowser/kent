@@ -9,7 +9,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlEval.c,v 1.1 2009/12/02 19:09:53 kent Exp $";
+static char const rcsid[] = "$Id: rqlEval.c,v 1.2 2009/12/03 18:19:28 kent Exp $";
 
 struct rqlEval rqlEvalCoerceToBoolean(struct rqlEval r)
 /* Return TRUE if it's a nonempty string or a non-zero number. */
@@ -272,9 +272,13 @@ switch (p->op)
 	res.val.x = res.val.b;
 	break;
 
+    /* Arithmetical negation. */
+    case rqlOpUnaryMinusInt:
+        res = rqlEvalOnRecord(p->children, record, lookup);
+	res.val.i = -res.val.i;
+	break;
     case rqlOpUnaryMinusDouble:
         res = rqlEvalOnRecord(p->children, record, lookup);
-	res.type = rqlTypeDouble;
 	res.val.x = -res.val.x;
 	break;
 
