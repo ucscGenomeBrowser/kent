@@ -14,7 +14,6 @@ group map
 priority 15
 visibility pack
 color 12,100,200
-indelQueryInsert on
 maxItems 2000
 type psl
 baseColorDefault diffCodons

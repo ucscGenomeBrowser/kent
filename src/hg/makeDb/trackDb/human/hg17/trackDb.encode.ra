@@ -3141,7 +3141,7 @@ dataVersion ENCODE Oct2005 Freeze
     color 180,50,120
     priority 10
 
-    track encodeRegulomeAmplEvenK562
+    track encodeRegulomeAmplOddK562
     subTrack encodeRegulomeAmplicon
     shortLabel K562 (Odd)
     longLabel K562 Amplicon (Odd)

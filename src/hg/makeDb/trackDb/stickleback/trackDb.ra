@@ -55,6 +55,8 @@ altColor 255,240,200
 spectrum on
 type chain hg18
 otherDb hg18
+otherOrg hg18
+
 
 track netHg18
 shortLabel $o_Organism Net
@@ -65,6 +67,8 @@ visibility dense
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
+otherOrg hg18
+
 
 track chainGalGal3
 shortLabel $o_Organism Chain
@@ -213,16 +217,6 @@ otherDb oryLat1
 # 
 # track netAnoCar1
 # priority 275.6
-
-track chainHg18 override
-shortLabel $o_db Chain
-priority 274.1
-otherOrg hg18
-
-track netHg18 override
-shortLabel $o_db Net
-priority 274.2
-otherOrg hg18
 
 track chainNetHg19 override
 priority 274.3

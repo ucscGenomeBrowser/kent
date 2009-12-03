@@ -622,7 +622,6 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
-release beta
 
 track consElements
 release alpha
@@ -635,7 +634,6 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
-release alpha
 
     track phastConsElements17way
     release alpha
@@ -658,8 +656,8 @@ release alpha
     longLabel PhastCons Placental Mammal Conserved Elements (5.2%, len=14,cov=.2, rho=2.8)
     priority 3
 
-release alpha
 track multiz8way
+release alpha
 shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno

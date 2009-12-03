@@ -70,7 +70,7 @@ loadDbTracks() {
     local db="$1"
     local dbpath=$(ls -1 -d */$db)
     local org=$(echo $dbpath | sed -e 's/\/.*//')
-    local topts='' fopts=''
+    local topts='' fopts='' qopts=''
     if [ -f $dbpath/visibility.ra ] ; then
         topts="$topts -visibility=$dbpath/visibility.ra"
     elif [ -f $org/visibility.ra ] ; then
@@ -87,6 +87,7 @@ loadDbTracks() {
     if [ -n "$strict" ] ; then
         topts="$topts -strict"
         fopts="$fopts -strict"
+        qopts="$qopts -strict"
     fi
     if [ -n "$settings" ] ; then
         topts="$topts -settings"
@@ -103,6 +104,11 @@ loadDbTracks() {
     local cmd="hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
     echo $cmd
     eval $cmd
+
+    cmd="tdbQuery $qopts 'select count(*) from $db'"
+    echo $cmd
+    eval $cmd
+
     cmd="hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
     echo $cmd
     eval $cmd

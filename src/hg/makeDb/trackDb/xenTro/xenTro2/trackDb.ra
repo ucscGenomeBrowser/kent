@@ -177,6 +177,7 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 type chain hg18
 otherDb hg18
 
+
 track netHg18
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -209,14 +210,6 @@ visibility hide
 spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
-
-track chainHg18 override
-shortLabel $o_db Chain
-priority 125.1
-
-track netHg18 override
-shortLabel $o_db Net  
-priority 125.2
 
 track chainNetHg19 override
 priority 125.3
