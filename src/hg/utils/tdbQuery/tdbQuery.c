@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.7 2009/12/02 21:02:32 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.8 2009/12/03 04:42:28 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -64,6 +64,8 @@ static struct optionSpec options[] = {
    {"alpha", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+#define glParentField "subTrack"
 
 void recordLocationReport(struct tdbRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -230,38 +232,94 @@ for (field = record->fieldList; field != NULL; field = field->next)
 hashFree(&uniqHash);
 }
 
-static void checkDupeKeys(struct tdbRecord *recordList, boolean ignoreIfRelease)
+static struct tdbField *findFieldInSelfOrParents(struct tdbRecord *record, char *fieldName)
+/* Find field if it exists in self or ancestors. */
+{
+struct tdbRecord *p;
+for (p = record; p != NULL; p = p->parent)
+    {
+    struct tdbField *field = tdbRecordField(p, fieldName);
+    if (field != NULL)
+        return field;
+    }
+return NULL;
+}
+
+static char *findFieldValInSelfOrParents(struct tdbRecord *record, char *fieldName)
+/* Find value of given field if it exists in self or ancestors.  Return NULL if
+ * field does not exist. */
+{
+struct tdbField *field = findFieldInSelfOrParents(record, fieldName);
+return (field != NULL ? field->val : NULL);
+}
+
+static void checkDupeKeys(struct tdbRecord *recordList, boolean checkRelease)
 /* Make sure that there are no duplicate records (with keys) */
 {
 struct tdbRecord *record;
 struct hash *uniqHash = hashNew(0);
 for (record = recordList; record != NULL; record = record->next)
     {
-    if (record->key != NULL)
+    char *key = record->key;
+    if (key != NULL)
 	{
-	struct tdbRecord *oldRecord = hashFindVal(uniqHash, record->key);
-	if (oldRecord != NULL)
+	struct hashEl *hel;
+	for (hel = hashLookup(uniqHash, key); hel != NULL; hel = hashLookupNext(hel))
 	    {
+	    struct tdbRecord *oldRecord = hel->val;
 	    struct tdbFilePos *oldPos = oldRecord->posList;
 	    struct tdbFilePos *newPos = record->posList;
 	    boolean doAbort = TRUE;
-	    if (ignoreIfRelease)
-	        {
-		if (tdbRecordField(record, "release"))
-		    doAbort = FALSE;
+	    if (checkRelease)
+		{
+		doAbort = FALSE;
+		char *oldRelease = findFieldValInSelfOrParents(oldRecord, "release");
+		char *newRelease = findFieldValInSelfOrParents(record, "release");
+		if (oldRelease == NULL || newRelease == NULL)
+		    doAbort = TRUE;
+		else
+		    {
+		    if (sameString(oldRelease, newRelease))
+		       doAbort = TRUE;
+		    }
 		}
 	    if (doAbort)
 		{
-		if (sameString(oldPos->fileName, newPos->fileName))
-		    errAbort("Duplicate tracks %s ending lines %d and %d of %s",
-			oldRecord->key, oldPos->lineIx, newPos->lineIx, oldPos->fileName);
+		char *oldRelease = NULL;
+		struct tdbField *oldField = tdbRecordField(oldRecord, "release");
+		if (oldField) oldRelease = oldField->val;
+		char *newRelease = NULL;
+		struct tdbField *newField = tdbRecordField(record, "release");
+		if (newField) newRelease = newField->val;
+		if (newRelease == NULL && oldRelease != NULL)
+		    {
+		    errAbort("Have release tag for track %s at line %d of %s, but not "
+		    	     "at line %d of %s", 
+			     key, oldPos->lineIx, oldPos->fileName,
+			     newPos->lineIx, newPos->fileName);
+		    }
+		else if (oldRelease == NULL && newRelease != NULL)
+		    {
+		    errAbort("Have release tag for track %s at line %d of %s, but not "
+		    	     "at line %d of %s", 
+			     key, newPos->lineIx, newPos->fileName,
+			     oldPos->lineIx, oldPos->fileName);
+		    }
 		else
-		    errAbort("Duplicate tracks %s ending lines %d of %s and %d of %s",
-			oldRecord->key, oldPos->lineIx, oldPos->fileName, 
-			newPos->lineIx, newPos->fileName);
+		    {
+		    if (sameString(oldPos->fileName, newPos->fileName))
+			{
+			errAbort("Duplicate tracks %s ending lines %d and %d of %s",
+			    key, oldPos->lineIx, newPos->lineIx, oldPos->fileName);
+			}
+		    else
+			errAbort("Duplicate tracks %s ending lines %d of %s and %d of %s",
+			    key, oldPos->lineIx, oldPos->fileName, 
+			    newPos->lineIx, newPos->fileName);
+		    }
 		}
 	    }
-	hashAdd(uniqHash, record->key, record);
+	hashAdd(uniqHash, key, record);
 	}
     }
 hashFree(&uniqHash);
@@ -322,7 +380,6 @@ recurseThroughIncludes(fileName, lm, circularHash, &recordList);
 hashAdd(circularHash, fileName, NULL);
 hashFree(&circularHash);
 slReverse(&recordList);
-checkDupeKeys(recordList, TRUE);
 return recordList;
 }
 
@@ -349,7 +406,114 @@ for (field = record->fieldList; field != NULL; field = field->next)
 old->posList = slCat(old->posList, record->posList);
 }
 
-struct tdbRecord *tdbsForDbPath(struct dbPath *p, struct lm *lm, struct hash *recordHash)
+static int parentChildFileDistance(struct tdbRecord *parent, struct tdbRecord *child)
+/* Return distance of two records.  If they're in different files the
+ * distance gets pretty big.  Would be flaky on records split across
+ * different files, hence the ad-hoc in the name.  Not worth implementing
+ * somthing that handles this though with the hope that the parent/child
+ * relationship will become indentation rather than ID based. */
+{
+struct tdbFilePos *parentFp = parent->posList, *childFp = child->posList;
+if (!sameString(parentFp->fileName, childFp->fileName))
+    return BIGNUM/2;
+int distance = childFp->lineIx - parentFp->lineIx;
+if (distance < 0)
+    return BIGNUM/4 - distance;
+return distance;
+}
+
+static struct tdbRecord *findParent(struct tdbRecord *rec, 
+	char *parentFieldName, struct hash *hash, boolean alpha)
+/* Find parent record if possible.  This is a bit complicated by wanting to
+ * match parents and children from the same release if possible.  Our
+ * strategy is to just ignore records from the wrond release. */
+{
+struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
+if (parentField == NULL)
+    return NULL;
+#ifdef OLD
+if (!recordMatchesRelease(rec, alpha))
+    return NULL;
+#endif /* OLD */
+char *parentLine = parentField->val;
+int len = strlen(parentLine);
+char buf[len+1];
+strcpy(buf, parentLine);
+char *parentName = firstWordInLine(buf);
+struct hashEl *hel;
+boolean gotParentSomeRelease = FALSE;
+struct tdbRecord *closestParent = NULL;
+int closestDistance = BIGNUM;
+for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
+    {
+    gotParentSomeRelease = TRUE;
+    struct tdbRecord *parent = hel->val;
+#ifdef OLD
+    if (recordMatchesRelease(parent, alpha))
+#endif /* OLD */
+	{
+	int distance = parentChildFileDistance(parent, rec);
+	if (distance < closestDistance)
+	    {
+	    closestParent = parent;
+	    closestDistance = distance;
+	    }
+	}
+    }
+if (closestParent != NULL)
+    return closestParent;
+
+/* If we haven't matched so far, it could be that the release tag is set in the parent
+ * but not in us, and the parent is not our release parent.  In this case we go ahead
+ * and return the out-of-release parent, so we can inherit the out-of-release release
+ * tag, so we get filtered out! */
+struct tdbField *releaseField = tdbRecordField(rec, "release");
+if (gotParentSomeRelease && releaseField == NULL)
+     {
+     struct tdbRecord *parent = hashFindVal(hash, parentName);
+     assert(parent != NULL);
+     return parent;
+     }
+recordWarn(rec, "%s is a subTrack of %s, but %s doesn't exist", rec->key,
+    parentField->val, parentField->val);
+return NULL;
+}
+
+static void linkUpParents(struct tdbRecord *list, char *parentField, boolean alpha)
+/* Link up records according to parent/child relationships. */
+{
+/* Zero out children, parent, and older sibling fields, since going to recalculate
+ * them and need lists to start out empty. */
+struct tdbRecord *rec;
+for (rec = list; rec != NULL; rec = rec->next)
+    rec->parent = rec->olderSibling = rec->children = NULL;
+
+/* Build up hash of records indexed by key field. */
+struct hash *hash = hashNew(0);
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    if (rec->key != NULL)
+	hashAdd(hash, rec->key, rec);
+    }
+
+/* Scan through linking up parents. */
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    struct tdbRecord *parent = findParent(rec, parentField, hash, alpha);
+    if (parent != NULL)
+	{
+	rec->parent = parent;
+	rec->olderSibling = parent->children;
+	parent->children = rec;
+	}
+    }
+
+hashFree(&hash);
+}
+
+
+struct tdbRecord *tdbsForDbPath(struct dbPath *p, struct lm *lm, struct hash *recordHash,
+	char *parentField, boolean alpha)
 /* Assemble recordList for given database.  This looks at the root/organism/assembly
  * levels.  It returns a list, and fills in a hash (which should be passed in empty)
  * of the records keyed by record->key. */
@@ -361,6 +525,8 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     char *fileName = fileLevel->name;
     struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
     verbose(2, "Read %d records starting from %s\n", slCount(fileRecords), fileName);
+    linkUpParents(fileRecords, parentField, alpha);
+    checkDupeKeys(fileRecords, TRUE);
     struct tdbRecord *record, *nextRecord;
     for (record = fileRecords; record != NULL; record = nextRecord)
 	{
@@ -393,48 +559,6 @@ slReverse(&recordList);
 return recordList;
 }
 
-static struct tdbRecord *findParent(struct tdbRecord *rec, 
-	char *parentFieldName, struct hash *hash, boolean alpha)
-/* Find parent field if possible.  This is a bit complicated by wanting to
- * match parents and children from the same release if possible.  Our
- * strategy is to just ignore records from the wrond release. */
-{
-struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
-if (parentField == NULL)
-    return NULL;
-if (!recordMatchesRelease(rec, alpha))
-    return NULL;
-char *parentLine = parentField->val;
-int len = strlen(parentLine);
-char buf[len+1];
-strcpy(buf, parentLine);
-char *parentName = firstWordInLine(buf);
-struct hashEl *hel;
-boolean gotParentSomeRelease = FALSE;
-for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
-    {
-    gotParentSomeRelease = TRUE;
-    struct tdbRecord *parent = hel->val;
-    if (recordMatchesRelease(parent, alpha))
-	return parent;
-    }
-
-/* If we haven't matched so far, it could be that the release tag is set in the parent
- * but not in us, and the parent is not our release parent.  In this case we go ahead
- * and return the out-of-release parent, so we can inherit the out-of-release release
- * tag, so we get filtered out! */
-struct tdbField *releaseField = tdbRecordField(rec, "release");
-if (gotParentSomeRelease && releaseField == NULL)
-     {
-     struct tdbRecord *parent = hashFindVal(hash, parentName);
-     assert(parent != NULL);
-     return parent;
-     }
-recordWarn(rec, "%s is a subTrack of %s, but %s doesn't exist", rec->key,
-    parentField->val, parentField->val);
-return NULL;
-}
-
 static void mergeParentRecord(struct tdbRecord *record, struct tdbRecord *parent, 
 	struct lm *lm)
 /* Merge in parent record.  This only updates fields that are in parent but not record. */
@@ -454,33 +578,16 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
     }
 }
 
+
 static void inheritFromParents(struct tdbRecord *list, char *parentField, char *noInheritField,
 	boolean alpha, struct lm *lm)
 /* Go through list.  If an element has a parent field, then fill in non-existent fields from
  * parent and from view with settings defined in parent. */
 {
-/* Build up hash of records indexed by key field. */
-struct hash *hash = hashNew(0);
-struct tdbRecord *rec;
-for (rec = list; rec != NULL; rec = rec->next)
-    {
-    if (rec->key != NULL)
-	hashAdd(hash, rec->key, rec);
-    }
-
-/* Scan through linking up parents. */
-for (rec = list; rec != NULL; rec = rec->next)
-    {
-    struct tdbRecord *parent = findParent(rec, parentField, hash, alpha);
-    if (parent != NULL)
-	{
-	rec->parent = parent;
-	rec->olderSibling = parent->children;
-	parent->children = rec;
-	}
-    }
+linkUpParents(list, parentField, alpha);
 
 /* Scan through doing inheritance. */
+struct tdbRecord *rec;
 for (rec = list; rec != NULL; rec = rec->next)
     {
     /* First inherit from view. */
@@ -620,7 +727,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     struct dbPath *p = dbOrder->val;
     char *db = p->db;
     struct hash *recordHash = hashNew(0);
-    struct tdbRecord *recordList = tdbsForDbPath(p, lm, recordHash);
+    struct tdbRecord *recordList = tdbsForDbPath(p, lm, recordHash, "subTrack", clAlpha);
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "subTrack", "noInherit", clAlpha, lm);
