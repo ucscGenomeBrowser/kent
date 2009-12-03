@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.27 2009/10/01 03:58:18 angie Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.28 2009/12/03 22:11:44 kate Exp $";
 
 static char *cv_file()
 {
@@ -108,7 +108,7 @@ if (sameString(type,"Antibody"))
     char *u = hashFindVal(ra, "orderUrl");
     printf("  <TD>");
     if (u)
-        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+        printf("<A TARGET=_BLANK HREF=%s>", u);
     printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
     if (u)
         printf("</A>");
@@ -120,24 +120,15 @@ if (sameString(type,"Antibody"))
     s = hashFindVal(ra, "lots");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
 
-    s = hashFindVal(ra, "targetLink");
-    if(s)
-        {
-        printf("  <TD>");
-        u = strchr(s, '|');
-        if (u)
-            {
-            *u++ = 0;
-            printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
-            }
-        puts(s);
-        if (u)
-            printf("</A>");
-        puts("</TD>\n");
-        }
-    else
-        printf("  <TD>&nbsp;</TD>\n");
-
+    t = hashFindVal(ra, "targetId");
+    u = hashFindVal(ra, "targetUrl");
+    printf("  <TD>");
+    if (u)
+        printf("<A TARGET=_BLANK HREF=%s>", u);
+    printf("%s", t ? t : "&nbsp;");
+    if (u)
+        printf("</A>");
+    puts("</TD>");
 
     puts("</TR>");
     }
@@ -155,7 +146,7 @@ else if (sameString(type,"ripAntibody"))
     char *u = hashFindVal(ra, "orderUrl");
     printf("  <TD>");
     if (u)
-        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+        printf("<A TARGET=_BLANK HREF=%s>", u);
     printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
     if (u)
         printf("</A>");
@@ -169,7 +160,7 @@ else if (sameString(type,"ripTgtProtein"))
     puts("<TR>");
     s = hashFindVal(ra, "url");
     if (s)
-	printf("  <TD><A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=\"%s\">%s</A></TD>\n", s, term);
+	printf("  <TD><A TARGET=_BLANK HREF=\"%s\">%s</A></TD>\n", s, term);
     else
 	printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "alternativeSymbols");
@@ -189,7 +180,7 @@ else if (sameString(type,"localization"))
     u = hashFindVal(ra, "termUrl");
     printf("  <TD>");
     if (u)
-        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+        printf("<A TARGET=_BLANK HREF=%s>", u);
     printf("%s", s ? s : "&nbsp;");
     if (u)
         printf("</A>");
@@ -269,7 +260,7 @@ else if (sameString(type,"Cell Line"))
             safef(protocolUrl, sizeof(protocolUrl), "%s%s", PROTOCOL_DIR, fileName);
             safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
             if (fileExists(protocolFile))
-                printf(" <A STYLE=\"text-decoration:none\"HREF=%s TARGET=_BLANK>%s</A>\n", protocolUrl,title);
+                printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", protocolUrl,title);
             }
         freeMem(protocolSetting);
         }
@@ -278,7 +269,7 @@ else if (sameString(type,"Cell Line"))
         safef(protocolUrl, sizeof(protocolUrl), "%s%s_protocol.pdf", PROTOCOL_DIR, term);
         safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
         if (fileExists(protocolFile))
-            printf(" <A STYLE=\"text-decoration:none\"HREF=%s TARGET=_BLANK>%s</A>\n", protocolUrl,PROTOCOL_TITLE);
+            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", protocolUrl,PROTOCOL_TITLE);
         }
     printf("  &nbsp;</TD>\n");
 
@@ -287,7 +278,7 @@ else if (sameString(type,"Cell Line"))
     char *u = hashFindVal(ra, "orderUrl");
     printf("  <TD>");
     if (u)
-        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+        printf("<A TARGET=_BLANK HREF=%s>", u);
     printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
     if (u)
         printf("</A>");
@@ -297,7 +288,7 @@ else if (sameString(type,"Cell Line"))
     u = hashFindVal(ra, "termUrl");
     printf("  <TD>");
     if (u)
-        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+        printf("<A TARGET=_BLANK HREF=%s>", u);
     printf("%s", s ? s : "&nbsp;");
     if (u)
         printf("</A>");
@@ -423,6 +414,7 @@ cgiSpoof(&argc, argv);
 char *bgColor = cgiOptionalString("bgcolor");
 if (bgColor)
     htmlSetBgColor(strtol(bgColor, 0, 16));
+htmlSetStyle(htmlStyleUndecoratedLink);
 htmShell("ENCODE Controlled Vocabulary", doMiddle, "get");
 return 0;
 }
