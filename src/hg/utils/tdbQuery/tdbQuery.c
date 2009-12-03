@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.11 2009/12/03 18:03:09 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.12 2009/12/03 20:06:06 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static char *clFile = NULL;		/* a .ra file to use instead of trackDb system. */
@@ -722,7 +722,8 @@ else
     return field->val;
 }
 
-static boolean rqlStatementMatch(struct rqlStatement *rql, struct tdbRecord *tdb)
+static boolean rqlStatementMatch(struct rqlStatement *rql, struct tdbRecord *tdb,
+	struct lm *lm)
 /* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
 {
 struct rqlParse *whereClause = rql->whereClause;
@@ -730,7 +731,7 @@ if (whereClause == NULL)
     return TRUE;
 else
     {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, tdb, lookupField);
+    struct rqlEval res = rqlEvalOnRecord(whereClause, tdb, lookupField, lm);
     res = rqlEvalCoerceToBoolean(res);
     return res.val.b;
     }
@@ -839,7 +840,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 	slAddTail(&record->fieldList, fileField);
 
 
-	if (rqlStatementMatch(rql, record))
+	if (rqlStatementMatch(rql, record, lm))
 	    {
 	    if (!clStrict || tableExistsInSelfOrOffspring(p->db, record))
 		{

@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.25 2009/12/02 19:11:54 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.26 2009/12/03 20:05:39 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -291,7 +291,7 @@ else
     return field->val;
 }
 
-boolean rqlStatementMatch(struct rqlStatement *rql, struct raRecord *ra)
+boolean rqlStatementMatch(struct rqlStatement *rql, struct raRecord *ra, struct lm *lm)
 /* Return TRUE if where clause and tableList in statement evaluates true for ra. */
 {
 if (rql->tableList != NULL)
@@ -320,7 +320,7 @@ if (whereClause == NULL)
     return TRUE;
 else
     {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, ra, lookupField);
+    struct rqlEval res = rqlEvalOnRecord(whereClause, ra, lookupField, lm);
     res = rqlEvalCoerceToBoolean(res);
     return res.val.b;
     }
@@ -517,7 +517,7 @@ int matchCount = 0;
 boolean doSelect = sameString(rql->command, "select");
 for (ra = raList; ra != NULL; ra = ra->next)
     {
-    if (rqlStatementMatch(rql, ra))
+    if (rqlStatementMatch(rql, ra, lm))
         {
 	if (!clStrict || (ra->key && hTableOrSplitExists(db, ra->key)))
 	    {

@@ -46,7 +46,6 @@ enum rqlOp
 
     /* Fancy ops to fetch sub-parts. */
     rqlOpArrayIx,	/* An array with an index. */
-    rqlOpSubDot,	/* A field.subfield selection. */
     };
 
 char *rqlOpToString(enum rqlOp op);
@@ -119,8 +118,9 @@ void rqlStatementDump(struct rqlStatement *rql, FILE *f);
 typedef char* (*RqlEvalLookup)(void *record, char *key);
 /* Callback for rqlEvalOnRecord to lookup a variable value. */
 
-struct rqlEval rqlEvalOnRecord(struct rqlParse *p, void *record, RqlEvalLookup lookup);
-/* Evaluate self on ra. */
+struct rqlEval rqlEvalOnRecord(struct rqlParse *p, void *record, RqlEvalLookup lookup,
+	struct lm *lm);
+/* Evaluate parse tree on record, using lm for memory for string operations. */
 
 struct rqlEval rqlEvalCoerceToBoolean(struct rqlEval r);
 /* Return TRUE if it's a nonempty string or a non-zero number. */

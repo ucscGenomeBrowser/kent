@@ -8,7 +8,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.5 2009/12/03 19:26:04 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.6 2009/12/03 20:05:24 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -68,8 +68,6 @@ switch (op)
 
     case rqlOpArrayIx:
         return "rqlOpArrayIx";
-    case rqlOpSubDot:
-        return "rqlSubDot";
 
     default:
 	return "rqlOpUnknown";
@@ -280,8 +278,8 @@ else
     }
 }
 
-static struct rqlParse *rqlParsePartSelect(struct tokenizer *tkz)
-/* Handle the . in this.that or the [] in this[6] */
+static struct rqlParse *rqlParseIndex(struct tokenizer *tkz)
+/* Handle the [] in this[6] */
 {
 struct rqlParse *collection = rqlParseAtom(tkz);
 struct rqlParse *p = collection;
@@ -300,16 +298,6 @@ else if (tok[0] == '[')
     p->children = collection;
     collection->next = index;
     }
-else if (tok[0] == '.')
-    {
-    struct rqlParse *field = rqlParseExpression(tkz);
-    field = rqlParseCoerce(field, rqlTypeString);
-    AllocVar(p);
-    p->op = rqlOpSubDot;
-    p->type = rqlTypeString;
-    p->children = collection;
-    collection->next = field;
-    }
 else
     tokenizerReuse(tkz);
 return p;
@@ -322,7 +310,7 @@ static struct rqlParse *rqlParseUnaryMinus(struct tokenizer *tkz)
 char *tok = tokenizerMustHaveNext(tkz);
 if (tok[0] == '-')
     {
-    struct rqlParse *c = rqlParsePartSelect(tkz);
+    struct rqlParse *c = rqlParseIndex(tkz);
     struct rqlParse *p;
     AllocVar(p);
     if (c->type == rqlTypeInt)
@@ -342,7 +330,7 @@ if (tok[0] == '-')
 else
     {
     tokenizerReuse(tkz);
-    return rqlParsePartSelect(tkz);
+    return rqlParseIndex(tkz);
     }
 }
 
