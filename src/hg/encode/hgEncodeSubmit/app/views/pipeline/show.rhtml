@@ -29,12 +29,19 @@ end
   <td><%= distance_of_time_in_words_to_now(@project.created_at)+" ago" -%></td>
 </tr>
 
-<tr><td>Status: </td><td><%= @project.status -%></td>
-<td>&nbsp;</td>
+<tr>
+<td>DB: </td><td><%= @project.db -%></td><td>&nbsp;&nbsp;&nbsp;</td>
 <td>Updated: </td><td><%= @project.updated_at.strftime("%Y-%m-%d %H:%M"); -%></td>
   <td>&nbsp;&nbsp;</td>
   <td><%= distance_of_time_in_words_to_now(@project.updated_at)+" ago" -%></td>
-<tr><td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>Status: </td><td><%= @project.status -%></td>
+</tr>
+
+<tr>
+  <td>&nbsp;</td>
 </tr>
 
 <% if advancedView %>
