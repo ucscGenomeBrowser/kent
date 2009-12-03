@@ -13,7 +13,7 @@ class PipelineController < ApplicationController
 
   before_filter :login_required
   before_filter :check_user_is_owner, :except => 
-        [:new, :create, :list, :show_user, :show, 
+        [:new, :create, :list, :show_active, :show_user, :show, 
         :valid_status, :load_status, :unload_status, :upload_status ]
   
   layout 'main'
@@ -30,6 +30,29 @@ class PipelineController < ApplicationController
     else
       @projects = Project.find(:all, :order => 'updated_at DESC')
     end
+  end
+  
+  def show_active
+    sort_init 'updated_at', {:default_order => 'desc'}
+    sort_update
+    #@autoRefresh = true
+    active_conditions = [
+      "status != 'reviewing'  and " +
+      "status != 'displayed'  and " +
+      "status != 'superseded' and " +
+      "status != 'approved'   and " +
+      "status != 'revoked'    and " +
+      "status != 'released'"
+    ]
+    @sort_key = params[:sort_key]
+    if @sort_key == "pi" || @sort_key == "login"
+      @proje= Project.find(:all, :include => :user, :order => sort_clause, :conditions => active_conditions)
+    elsif @sort_key
+      @projects = Project.find(:all, :order => sort_clause, :conditions => active_conditions)
+    else
+      @projects = Project.find(:all, :order => 'updated_at DESC', :conditions => active_conditions)
+    end
+    render :action => 'list'    
   end
   
   def show_user

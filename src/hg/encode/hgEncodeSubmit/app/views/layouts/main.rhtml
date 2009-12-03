@@ -60,14 +60,25 @@ if (navigator.appName=="Netscape") {
             link_to 'All Submissions', :controller => 'pipeline', :action => 'list' 
         end
     -%> 
+
     <%= ' | ' -%>
     <%= 
-        if params[:controller] == 'pipeline' && params[:action] == 'show_user' && !params[:submitter]
-	    "My Submissions"
+        if params[:controller] == 'pipeline' && params[:action] == 'show_active' && !params[:submitter]
+	    "Active Submissions"
         else 
-            link_to 'My Submissions', :controller => 'pipeline', :action => 'show_user' 
+            link_to 'Active Submissions', :controller => 'pipeline', :action => 'show_active' 
         end
-    -%> 
+    -%>
+
+    <%= ' | ' -%>
+    <%=
+        if params[:controller] == 'pipeline' && params[:action] == 'show_user' && !params[:submitter]
+            "My Submissions"
+        else
+            link_to 'My Submissions', :controller => 'pipeline', :action => 'show_user'
+        end
+    -%>
+ 
     </td>
     <td align="right">
     <%= link_to ' Log Out', :controller => 'account', :action => 'logout' %> 
