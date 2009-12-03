@@ -1,14 +1,28 @@
 This file describes tdbQuery, in particular the RQL language, in more detail than the
 usage statement you get from running tdbQuery with no parameters.
 
-The trackDb system stores the track settings for the UCSC Genome Browser.  It consists of .ra
-files in three levels of directories - root, organism, and assembly.  The assembly level corresponds
-to a particular "genome database" like hg19, currently the latest human.  Records at the lower
-levels override and extend records at higher levels.  In addition to the inheritance 
-implied by the directory hierarchy, there is also inheritance defined by the "subTrack" field
-in a record, which if it exists specifies the parent track.   A third type of inheritance
-also exists, the "view" level.   The trackDb system is explained in more detail in the
-README file in the trackDb root directory.
+The trackDb system stores the track settings for the UCSC Genome Browser in a collection of
+.ra files.  The .ra files have a fairly simple syntax.  Each field in a record takes up a line.
+Records are separated by blank lines.  The first word in a field line is the field name, and
+the rest of the line is the field value.   Here's an example of a .ra file with two records:
+    track littleFeatures
+    type bed 6 +
+    shortLabel Little Features
+    longLabel A bunch of little features with strand and score information
+
+    track myGenes
+    type genePred
+    shortLabel Plank Genes
+    longLabel Output of the latest gene predictor from Max Plank
+The output of tdbQuery is also in .ra format.
+
+The trackDb .ra files exist in three levels of directories - root, organism, and assembly.  The 
+assembly level corresponds to a particular "genome database" like hg19, currently the latest 
+human.  Records at the lower levels override and extend records at higher levels.  In addition 
+to the inheritance implied by the directory hierarchy, there is also inheritance defined by the 
+"subTrack" field in a record, which if it exists specifies the parent track.   A third type of 
+inheritance also exists, the "view" level.   The trackDb system is explained in more detail 
+in the README file in the trackDb root directory at kent/src/hg/makeDb/trackDb.
 
 TdbQuery is a convenient way to see what's in this system, which has grown to the point where
 it is difficult to scan by eye.  It procedes in three steps.  First it parses the relevant
