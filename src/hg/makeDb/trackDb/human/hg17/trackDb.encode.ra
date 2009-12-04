@@ -1303,7 +1303,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me1 in GM06990 cells)
     subGroups celltype=gm factor=h3k4me1
     color 43,109,51
-    dataversion Dec 2006
+    dataVersion Dec 2006
     priority 7
 
     track encodeUcsdLiPcrIMR90H3K4me1
@@ -1583,11 +1583,11 @@ dataVersion Dec 2006, March 2007, May 2007
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (CTCF in GM06990 cells)
     subGroups celltype=gm factor=ctcf
     color 43,109,51
-    dataversion Mar 2007
+    dataVersion Mar 2007
     priority 1
 
     track encodeUcsdLiNgHeLaCTCF
-    dataversion Mar 2007
+    dataVersion Mar 2007
     shortLabel LI CTCF HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (CTCF in HeLa cells)
     subTrack encodeUcsdLiNgChip
@@ -1668,7 +1668,7 @@ dataVersion Dec 2006, March 2007, May 2007
     subTrack encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k4me3
     color 43,109,51
-    dataversion Mar 2007
+    dataVersion Mar 2007
     priority 11
 
     track encodeUcsdLiNgK562H3K4me3
@@ -1698,7 +1698,7 @@ dataVersion Dec 2006, March 2007, May 2007
     priority 14
 
     track encodeUcsdLiNgHeLaH3K9Ac
-    dataversion Mar 2007
+    dataVersion Mar 2007
     shortLabel LI H3K9Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K9Ac in HeLa cells)
     subTrack encodeUcsdLiNgChip
@@ -1720,11 +1720,11 @@ dataVersion Dec 2006, March 2007, May 2007
     subTrack encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k18ac
     color 43,109,51
-    dataversion Mar 2007
+    dataVersion Mar 2007
     priority 17
 
     track encodeUcsdLiNgHeLaH3K18Ac
-    dataversion Mar 2007
+    dataVersion Mar 2007
     shortLabel LI H3K18Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K18Ac in HeLa cells)
     subTrack encodeUcsdLiNgChip
@@ -1746,11 +1746,11 @@ dataVersion Dec 2006, March 2007, May 2007
     subTrack encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k27ac
     color 43,109,51
-    dataversion Mar 2007
+    dataVersion Mar 2007
     priority 20
 
     track encodeUcsdLiNgHeLaH3K27Ac
-    dataversion Mar 2007
+    dataVersion Mar 2007
     shortLabel LI H3K27Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K27Ac in HeLa cells)
     subTrack encodeUcsdLiNgChip
@@ -1767,7 +1767,7 @@ dataVersion Dec 2006, March 2007, May 2007
     priority 22
 
     track encodeUcsdLiNgHeLaH3K27me3
-    dataversion Mar 2007
+    dataVersion Mar 2007
     shortLabel LI H3K27me3 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K27me3 in HeLa cells)
     subTrack encodeUcsdLiNgChip
@@ -1795,7 +1795,7 @@ dataVersion Dec 2006, March 2007, May 2007
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (RNA Polymerase II in GM06990 cells)
     subTrack encodeUcsdLiNgChip
     subGroups celltype=gm factor=pol2
-    dataversion Mar 2007
+    dataVersion Mar 2007
     color 43,109,51
     priority 26
 
@@ -1808,7 +1808,7 @@ dataVersion Dec 2006, March 2007, May 2007
     priority 27
 
     track encodeUcsdLiNgGM06990TAFII
-    dataversion Mar 2007
+    dataVersion Mar 2007
     shortLabel LI TAF1 GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (TAF1 in GM06990 cells)
     subTrack encodeUcsdLiNgChip
