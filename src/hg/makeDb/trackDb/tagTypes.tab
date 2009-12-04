@@ -1,0 +1,270 @@
+# tagType - A list of all tags allowed in a trackDb.ra file and what type stanzas they are
+# allowed in.  If you add a new tag to the system you'll need to add it here to get
+# tdbQuery -check to not complain about it.  While you're at it, be sure to add it to
+# the trackDb/README file too.
+#
+# The format of this file is simple.  The first word in a line is the tag name.  The
+# subsequent words are types it is allowed in.  Wildcards are allowed in the types.
+# This file was generate initially with src/hg/oneShot/makeTrackDbTypeTags and then
+# edited lightly by hand.
+
+accession *
+allButtonPair *
+altColor *
+autoScale *
+autoTranslate genePred
+baseColorDefault *
+baseColorTickColor bed
+baseColorUseCds bed psl genePred
+baseColorUseSequence *
+bedFilter bed
+blastRef psl
+boxedCfg *
+canPack *
+cdsDrawDefault psl bed genePred
+cdsDrawOptions psl
+cdsEvidence genePred
+cell bed bedGraph
+chainColor chain
+chainLinearGap netAlign chain bed
+chainMinScore netAlign chain bed
+chainNormScoreAvailable netAlign bed chain
+chimpDb bed
+chimpMacaqueOrthoTable bed
+chimpOrangMacOrthoTable bed
+chip expRatio bed
+chromosomes *
+codingAnnoLabel_snp130CodingDbSnp bed
+codingAnnotations bed
+color *
+colorByStrand bigBed bed
+colorChromDefault psl
+compareGenomeLinks bed
+compositeTrack *
+configurable *
+controlledVocabulary *
+dataVersion *
+dateSubmitted bedGraph bed
+dateUnrestricted bed
+defaultGeneTracks bed
+defaultLinkedTables genePred
+dimensionZchecked *
+dimensions *
+directUrl *
+dividers wig bed
+dragAndDrop *
+endFudge bed
+ensArchive genePred
+exonArrows genePred bed
+exonArrowsDense bed
+expDrawExons expRatio
+expProbeTable expRatio
+expScale bed expRatio
+expStep bed expRatio
+expTable bed expRatio
+filterBy genePred bed
+filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
+frames wigMaf
+gClass_Artifact bed genePred
+gClass_Ensembl_RNA genePred
+gClass_Ensembl_coding genePred
+gClass_Ensembl_pseudogene genePred
+gClass_Havana_TEC genePred
+gClass_Havana_coding genePred
+gClass_Havana_non_coding genePred
+gClass_Havana_nonsense genePred
+gClass_Havana_polyA genePred
+gClass_Havana_processed_pseudogene genePred
+gClass_Havana_pseudogene genePred
+gClass_Havana_unprocessed_pseudogene genePred
+gClass_Known bed genePred
+gClass_Novel_CDS bed genePred
+gClass_Novel_Transcript bed genePred
+gClass_Novel_transcript genePred
+gClass_Novel_transcript_gencode_conf genePred
+gClass_Polymorphic bed genePred
+gClass_Processed_pseudogene bed genePred
+gClass_Pseudogene_fragment genePred
+gClass_Putative bed genePred
+gClass_Putative_gencode_conf genePred
+gClass_TEC bed genePred
+gClass_Undefined genePred
+gClass_Unprocessed_pseudogene bed genePred
+gClass_Validated_coding genePred
+gClass_Validated_processed genePred
+gClass_Validated_processed_pseudogene genePred
+gClass_Validated_pseudogene genePred
+gClass_Validated_unprocessed_pseudogene genePred
+gClass_main genePred
+gClass_putative genePred
+gainColor bed
+geneClasses bed genePred
+graphType bed5FloatScore bedGraph
+graphTypeDefault wig
+gridDefault bedGraph wig
+group *
+groupings expRatio
+hapmapPhase bed
+hgGene genePred
+hgsid bed genePred
+html *
+idInUrlSql altGraphX
+idXref genePred
+indelDoubleInsert psl
+indelPolyA psl
+indelQueryInsert psl
+informant genePred
+interTable encodeFiveC
+interTableKind encodeFiveC
+intronGap psl
+irows wigMaf
+itemAttrTbl genePred
+itemBigImagePath bed
+itemClassTbl bed genePred
+itemFirstCharCase wigMafProt wigMaf
+itemImagePath bed
+itemRgb bedGraph bed
+linesAt chromGraph
+longLabel *
+longlabel genePred
+lossColor bed
+macaqueDb bed
+mafDot wigMaf
+mafDotDefault wigMaf
+mafTrack bed
+mapDispatcher expRatio
+matrix netAlign bed chain
+matrixHeader netAlign bed chain
+maxHeightPixels *
+maxItems wigMafProt wigMaf psl
+maxLimit *
+maxScore broadPeak
+maxWindowToDraw bam rmsk bed
+metadata *
+mgiUrl bed
+mgiUrlLabel bed
+minGrayLevel broadPeak
+minLimit *
+minMax chromGraph
+minScore broadPeak narrowPeak
+msaTable wig wigMafProt wigMaf
+ncbiAccXref bed
+nextItemButton *
+noInherit *
+noScoreFilter bedGraph bed
+notNCBI bed
+ococci bed
+oldToNew genePred
+onlyVisibility wigMafProt wigMaf bed
+orangDb bed
+origAssembly *
+otherDb *
+otherDbTable bed
+otherOrg netAlign chain
+pValueFilter narrowPeak broadPeak
+pValueFilterLimits narrowPeak broadPeak
+pairEndsByName bam
+pairedEndUrlFormat bed
+pairwise wigMaf
+pairwiseHeight wigMaf
+patDb expRatio
+patKey expRatio
+patTable expRatio
+pred psl
+priority *
+private bed
+pslSequence psl
+pslTable bed
+qValueFilter narrowPeak
+qValueFilterLimits narrowPeak
+release *
+retroMrnaInfo psl
+sGroup_Chimp wigMaf
+sGroup_Glires wigMaf
+sGroup_Human wigMaf
+sGroup_Placental_Mammal wigMaf
+sGroup_Primate wigMaf
+sGroup_Primates wigMaf
+sGroup_Vertebrate wigMaf
+sGroup_bird wigMaf
+sGroup_fish wigMaf
+sGroup_hiv wigMafProt wigMaf
+sGroup_mammal wigMaf
+sGroup_placental wigMaf
+sGroup_primate wigMaf
+sGroup_vertebrate wigMaf
+sGroup_worm wigMaf
+scoreFilter broadPeak narrowPeak bed
+scoreFilterByRange bigBed bed
+scoreFilterLimits broadPeak narrowPeak bed
+scoreFilterMax bed
+scoreMax bed
+scoreMin broadPeak narrowPeak bed
+searchMethod bed
+searchType bed
+selectSubject psl
+seqTable bed
+settingsByView *
+shortLabel *
+showCdsAllScales psl
+showCdsMaxZoom psl
+showDiffBasesAllScales *
+showDiffBasesMaxZoom *
+showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
+signalFilter narrowPeak
+signalFilterLimits narrowPeak
+smoothingWindow wig bed5FloatScore bedGraph
+snpSeq bed
+snpSeqFile bed
+sortOrder *
+sourceTable factorSource
+spanList *
+speciesCodonDefault wigMafProt wigMaf
+speciesDefaultOff wigMaf
+speciesGroups wigMafProt wigMaf
+speciesOrder bed maf wigMaf
+speciesTarget wigMaf
+speciesTree wigMaf
+speciesUseFile wigMafProt wigMaf
+spectrum *
+stripPrefix bam
+subGroup1 *
+subGroup2 *
+subGroup3 *
+subGroup4 *
+subGroup5 *
+subGroup6 wig bed
+subGroups *
+subTrack *
+subgroups bed
+summary wigMaf
+superTrack *
+symbolTable bed genePred
+thickDrawItem bed
+track *
+transMapGene psl
+transMapInfo psl
+transMapSrc psl
+transMapTypeDesc psl
+transformFunc bedGraph
+treeImage wigMaf
+txInfo genePred
+type *
+url *
+url2 bed genePred
+url2Label bed genePred
+urlLabel *
+urlName genePred psl
+useScore *
+viewLimits *
+viewLimitsMax bedGraph wig
+viewLimts wig
+visibility *
+visibilityViewDefaults *
+wgEncode *
+wigColorBy wig
+wiggle wigMaf
+windowingFunction *
+yLinOnOff wigMaf
+yLineMark *
+yLineOnOff *
