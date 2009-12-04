@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1609 2009/12/01 05:49:35 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1610 2009/12/04 17:02:25 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -5057,6 +5057,9 @@ if(dragZooming)
     jsIncludeFile("utils.js", NULL);
     }
 jsIncludeFile("hgTracks.js", NULL);
+#ifdef LOWELAB
+jsIncludeFile("lowetooltip.js", NULL);
+#endif
 
 if (cartVarExists(cart, "chromInfoPage"))
     {
