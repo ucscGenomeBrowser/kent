@@ -93,3 +93,37 @@ void paraDaemonize(char *progName)
 logDaemonize(progName);
 }
 
+long long paraParseRam(char *ram)
+/* Parse RAM expression like 2000000, 2t, 2g, 2m, 2k
+ * Returns long long number of bytes, or -1 for error
+ * The value of input variable ram may be modified. */
+{
+long long result = -1, factor = 1;
+int len = strlen(ram);
+int i;
+char saveC = ' ';
+if (len == 0)
+    return result;
+if (ram[len-1] == 't')
+    factor = (long long)1024 * 1024 * 1024 * 1024;
+else if (ram[len-1] == 'g')
+    factor = 1024 * 1024 * 1024;
+else if (ram[len-1] == 'm')
+    factor = 1024 * 1024;
+else if (ram[len-1] == 'k')
+    factor = 1024;
+if (factor != 1)
+    {
+    --len;
+    saveC = ram[len];
+    ram[len] = 0;
+    }
+for (i=0; i<len; ++i)
+    if (!isdigit(ram[i]))
+	return result;
+result = factor * sqlLongLong(ram);
+if (factor != 1)
+    ram[len] = saveC;
+return result;
+}
+

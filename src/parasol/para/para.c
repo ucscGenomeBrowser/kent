@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.106 2008/09/03 21:13:03 markd Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.107 2009/12/04 23:50:23 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -292,40 +292,6 @@ else
 }
 
 
-long long parseRam(char *ram)
-/* Parse RAM expression like 2000000, 2t, 2g, 2m, 2k
- * Returns long long number of bytes, or -1 for error
- * The value of input variable ram may be modified. */
-{
-long long result = -1, factor = 1;
-int len = strlen(ram);
-int i;
-char saveC = ' ';
-if (len == 0)
-    return result;
-if (ram[len-1] == 't')
-    factor = (long long)1024 * 1024 * 1024 * 1024;
-else if (ram[len-1] == 'g')
-    factor = 1024 * 1024 * 1024;
-else if (ram[len-1] == 'm')
-    factor = 1024 * 1024;
-else if (ram[len-1] == 'k')
-    factor = 1024;
-if (factor != 1)
-    {
-    --len;
-    saveC = ram[len];
-    ram[len] = 0;
-    }
-for (i=0; i<len; ++i)
-    if (!isdigit(ram[i]))
-	return result;
-result = factor * sqlLongLong(ram);
-if (factor != 1)
-    ram[len] = saveC;
-return result;
-}
-
 char *useWhats[] = {"cpu", "ram"};
 
 void parseUsage(struct job* job, struct lineFile *lf)
@@ -370,7 +336,7 @@ for (;;)
 	    }
 	if (sameString(parts[1], "ram"))
 	    {
-    	    job->ramUsed = parseRam(parts[2]);
+    	    job->ramUsed = paraParseRam(parts[2]);
 	    if (job->ramUsed == -1)
 		errAbort("Invalid RAM expression '%s' in 'use' clause line %d of %s", 
 		    parts[2], lf->lineIx, lf->fileName);
@@ -2171,7 +2137,7 @@ if (optionExists("eta"))
 cpuUsage = optionFloat("cpu", cpuUsage);
 if (cpuUsage < 0)
     usage();
-ramUsage = parseRam(optionVal("ram","0"));
+ramUsage = paraParseRam(optionVal("ram","0"));
 if (ramUsage == -1)
     usage();
 batchDir = determineCwdOptDir("batch");

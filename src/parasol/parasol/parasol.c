@@ -9,11 +9,13 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.48 2009/11/25 20:52:35 markd Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.49 2009/12/04 23:50:23 markd Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
 static char *paraHubHost = "localhost";  // hub host
+static float cpuUsage = 0;
+static long long ramUsage = 0;
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -42,7 +44,13 @@ errAbort(
   "   parasol check dead - Check machines marked dead ASAP, some have been fixed.\n"
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
-  "         options: -out=out -in=in -dir=dir -results=file -verbose\n"
+  "         options:\n"
+  "            -out=out -in=in -dir=dir -results=file -verbose\n"
+  "            -cpu=N  Number of CPUs used by the jobs, default 1.\n"
+  "            -ram=N  Number of bytes of RAM used by the jobs.\n"
+  "             Default is RAM on node divided by number of cpus on node.\n"
+  "             Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
+  "             e.g. 4g = 4 Gigabytes.\n"
   "   parasol [options] clear sick  - Clear sick stats on a batch.\n"
   "         options: -results=file\n"
   "   parasol remove job id  - Remove job of given ID.\n"
@@ -176,9 +184,16 @@ getcwd(curDir, sizeof(curDir));
 safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
 char *dir = optionVal("dir", curDir);
 char *results = optionVal("results", defaultResults);
-dyStringPrintf(dy, "addJob %s %s %s %s %s", userName, dir, in, out, results);
+dyStringPrintf(dy, "addJob2 %s %s %s %s %s %f %lld",
+               userName, dir, in, out, results, cpuUsage, ramUsage);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
+if (dy->stringSize > rudpMaxSize)
+    errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
+             "Please either shorten the current directory or the command line\n"
+             "possibly by making a shell script that encapsulates a long command.\n"
+             ,  dy->stringSize, (int)rudpMaxSize, dy->string);
+
 jobIdString = hubCommandGetReciept(dy->string);
 dyStringFree(&dy);
 if (sameString(jobIdString, "0"))
@@ -513,6 +528,12 @@ optionHashSome(&argc, argv, TRUE);
 if (argc < 2)
     usage();
 paraHubHost = optionVal("host", paraHubHost);
+cpuUsage = optionFloat("cpu", cpuUsage);
+if (cpuUsage < 0)
+    usage();
+ramUsage = paraParseRam(optionVal("ram","0"));
+if (ramUsage == -1)
+    usage();
 parasol(argv[1], argc-2, argv+2);
 return 0;
 }

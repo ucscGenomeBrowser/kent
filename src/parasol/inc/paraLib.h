@@ -62,6 +62,11 @@ void paraDaemonize(char *progName);
  * starting logging based on the -logFacility and -log command line options .
  * if -debug is supplied , don't fork. */
 
+long long paraParseRam(char *ram);
+/* Parse RAM expression like 2000000, 2t, 2g, 2m, 2k
+ * Returns long long number of bytes, or -1 for error
+ * The value of input variable ram may be modified. */
+
 
 #define NORMAL_PRIORITY 10   /* 1 is highest priority */
 #define MAX_PRIORITY 10000   /* 10000 is the lowest priority */
