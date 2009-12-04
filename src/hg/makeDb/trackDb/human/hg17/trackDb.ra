@@ -2451,18 +2451,6 @@ spectrum on
 type netAlign mm7 chainMm7noLSR
 otherDb mm7
 
-track blastMm6KG
-shortLabel Mouse Proteins
-longLabel Mouse(mm6) Proteins Mapped by Chained tBLASTn
-group x
-priority 30
-visibility hide
-colorChromDefault off
-type psl protein
-pred mm6.blastKGPep03
-blastRef mm6.blastKGRef03
-chromosome 13
-
 track monDom4PileUp
 shortLabel monDom4 Pile Ups
 longLabel Pile Ups of Opossum chains to Hg17
