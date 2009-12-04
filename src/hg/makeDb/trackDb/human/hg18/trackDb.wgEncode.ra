@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.700 2009/12/03 23:23:24 ann Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.701 2009/12/04 19:01:11 ann Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3666,7 +3666,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=594 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksNhek fileName=wgEncodeDukeDNaseSeqPeaksNhek.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalNhek
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel NHEK DNase FD
     longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in NHEK cells)
