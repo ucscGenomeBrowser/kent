@@ -2317,7 +2317,7 @@ type wig
     longLabel log2 (r_pd) divergence from chimp
     subGroups specRec=ch
     color 200,100,0
-    altcolor 0,0,250
+    altColor 0,0,250
     priority 1
 
     track divChimpFet
@@ -2346,7 +2346,7 @@ type wig
     longLabel dbSNP129 log2 (r_pd) divergence from chimp
     subGroups specRec=ch
     color 200,100,0
-    altcolor 0,0,250
+    altColor 0,0,250
     priority 7
 
     track divChimpFet129
@@ -2375,7 +2375,7 @@ type wig
     longLabel 8 Personal Genomes log2 (r_pd) divergence from chimp
     subGroups specRec=ch
     color 200,100,0
-    altcolor 0,0,250
+    altColor 0,0,250
     priority 10
 
     track divChimpFetPg8
@@ -2404,7 +2404,7 @@ type wig
     longLabel 8+ Personal Genomes log2 (r_pd) divergence from chimp
     subGroups specRec=ch
     color 200,100,0
-    altcolor 0,0,250
+    altColor 0,0,250
     priority 13
 
     track divChimpFetPg8plus
@@ -2433,7 +2433,7 @@ type wig
     longLabel 8+ Personal Genomes log2 (r_pd) divergence from orangutan
     subGroups specRec=or
     color 200,100,0
-    altcolor 0,0,250
+    altColor 0,0,250
     priority 16
 
     track divOrangFetPg8plus
