@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.702 2009/12/04 21:25:54 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.703 2009/12/04 21:35:39 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2949,7 +2949,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SIGBO EXP=FAIRE cellType=2HEPG2
     type wig 0.00 1773.00
-    viewLimts 4:20
+    viewLimits 4:20
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=765 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-02 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
 
