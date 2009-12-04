@@ -813,16 +813,6 @@ priority 150
 visibility hide
 type genePred
 
-track borkPseudo
-shortLabel Bork Pseudo
-longLabel Bork Pseudogene Predictions 
-group x
-priority 150
-visibility hide
-type genePred
-blurb This is the bork blurb.
-otherDb rn3
-
 track loweProbes
 shortLabel Lowe's Probes
 longLabel Candidate Oligos for Stanford Microarray
