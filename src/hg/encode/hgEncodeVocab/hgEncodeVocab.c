@@ -17,11 +17,21 @@
  *    type=TypeName  : Type to display
  *    tier=N         : If type="Cell Line" then this is the tier to display
  *    bgcolor=RRGGBB : Change background color (hex digits)
+ *    organism=Human|Mouse : If type="Cell Line", then set 'Mouse' to override default Human
+ *    term=a         : Display row for a single term
+ *    TODO: terms=a,b,c    : Display rows for listed terms.  Must use with 'type'.
+ *    tag=a          : Display row for a single term, using tag as identifier
+ *    TODO:  tags=a,b,c    : Display rows for listed terms, using tags as identifiers.  Must use with 'type'.
  */
 
-//#define HANDLE_IMPLICIT_CONTROL
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.29 2009/12/04 01:31:44 kate Exp $";
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.28 2009/12/03 22:11:44 kate Exp $";
+//options that apply to all vocab types
+
+static char *termOpt = NULL;
+static char *tagOpt = NULL;
+static char *typeOpt = NULL;
+static char *organismOpt = "Human"; // default, uses naming convention from dbDb table
 
 static char *cv_file()
 {
@@ -67,32 +77,30 @@ else if (sameString(type,"Cell Line"))
     {
     puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
     }
-#ifdef HANDLE_IMPLICIT_CONTROL
-else if (sameWord(type,"control") || sameWord(type,"input"))
-    {
-    puts("  <TH>Term</TH><TH>Description</TH></TR><TR>");
-    printf("  <Td>%s</Td><Td>This data represents a control being compared with the other tracks in the set.</Td>\n",type);
-    }
-#endif//def HANDLE_IMPLICIT_CONTROL
 else
     puts("  <TH>Term</TH><TH>Description</TH>");
 }
 
 void doTypeRow(struct hash *ra, char *type, int *total)
 {
-char *s, *u;
+char *term;
+char *s, *t, *u;
 
-// Skip all rows that do not match term
-char *term = cgiOptionalString("term");
-if(term)
+// Skip all rows that do not match term or tag if specified
+char *optVal = termOpt;
+char *optType = "term";
+if (tagOpt)
     {
-    (void)stripChar(term,'\"');
-    if(differentWord(term,hashMustFindVal(ra,"term")))
+    optVal = tagOpt;
+    optType = "tag";
+    }
+if (optVal)
+    {
+    (void)stripChar(optVal,'\"');
+    if (differentWord(optVal, hashMustFindVal(ra, optType)))
         return;
     }
-else
-    term = hashMustFindVal(ra,"term");
-
+term = (char *)hashMustFindVal(ra, "term");
 if (sameString(type,"Antibody"))
     {
     ++(*total);
@@ -104,8 +112,8 @@ if (sameString(type,"Antibody"))
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
 
     s = hashFindVal(ra, "vendorName");
-    char *t = hashFindVal(ra, "vendorId");
-    char *u = hashFindVal(ra, "orderUrl");
+    t = hashFindVal(ra, "vendorId");
+    u = hashFindVal(ra, "orderUrl");
     printf("  <TD>");
     if (u)
         printf("<A TARGET=_BLANK HREF=%s>", u);
@@ -142,8 +150,8 @@ else if (sameString(type,"ripAntibody"))
     s = hashFindVal(ra, "targetDescription");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "vendorName");
-    char *t = hashFindVal(ra, "vendorId");
-    char *u = hashFindVal(ra, "orderUrl");
+    t = hashFindVal(ra, "vendorId");
+    u = hashFindVal(ra, "orderUrl");
     printf("  <TD>");
     if (u)
         printf("<A TARGET=_BLANK HREF=%s>", u);
@@ -191,6 +199,9 @@ else if (sameString(type,"localization"))
 else if (sameString(type,"Cell Line"))
     {
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
+    s = hashFindVal(ra, "organism");
+    if (s && differentString(s, organismOpt))
+        return;
     if (cgiOptionalInt("tier",0))
         {
         if (hashFindVal(ra,"tier") == NULL)
@@ -274,8 +285,8 @@ else if (sameString(type,"Cell Line"))
     printf("  &nbsp;</TD>\n");
 
     s = hashFindVal(ra, "vendorName");
-    char *t = hashFindVal(ra, "vendorId");
-    char *u = hashFindVal(ra, "orderUrl");
+    t = hashFindVal(ra, "vendorId");
+    u = hashFindVal(ra, "orderUrl");
     printf("  <TD>");
     if (u)
         printf("<A TARGET=_BLANK HREF=%s>", u);
@@ -335,36 +346,33 @@ static char *findType(struct hash *cvHash)
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
 struct hash *ra;
-char *type = cgiOptionalString("type");
+char *type = typeOpt;
 
-if(type==NULL)    // If not type, but term, then search for first term and use it's type
+if (type == NULL)    // If not type, but term (or tag), then search for match and use its type
     {
-    char *term = cgiOptionalString("term");
-    if(term==NULL)
-        errAbort("Error: Required 'term' or 'type' argument not found\n");
-    (void)stripChar(term,'\"');
-#ifdef HANDLE_IMPLICIT_CONTROL
-    if(sameWord(term,"control") || sameWord(term,"input"))
+    char *optType = "tag";
+    char *optVal = tagOpt;
+    if (optVal == NULL)
         {
-        type = term;
+        optVal = termOpt;
+        if (optVal == NULL)
+            errAbort("Error: Required 'term', 'tag', or 'type' optument not found\n");
+        optType = "term";
         }
-    else
-#endif//def HANDLE_IMPLICIT_CONTROL
+    (void)stripChar(optVal,'\"');
+    while ((hEl = hashNext(&hc)) != NULL)
         {
-        while ((hEl = hashNext(&hc)) != NULL)
+        ra = (struct hash *)hEl->val;
+        char *val = hashMustFindVal(ra, optType);
+        if (sameWord(val, optVal))
             {
-            ra = (struct hash *)hEl->val;
-            char *cmpTerm = hashFindVal(ra, "term");
-            if (cmpTerm == NULL || differentWord(cmpTerm, term))
-                continue;
-            type = hashFindVal(ra, "type");
+            type = hashMustFindVal(ra, "type");
             break;
             }
-        //hc = hashFirst(cvHash);
         }
     }
-if(type==NULL)    // Still not type? abort
-    errAbort("Error: Required 'type' or 'term' argument not found\n");
+if (type == NULL)    // Still not type? abort
+    errAbort("Error: Required 'type', 'tag', or 'term' argument not found\n");
 return normalizeType(type);
 }
 
@@ -383,24 +391,18 @@ puts("<TR style=\"background:#D9E4F8\">");
 type = findType(cvHash);
 doTypeHeader(type);
 puts("</TR>");
-
-#ifdef HANDLE_IMPLICIT_CONTROL
-if(differentWord(type,"control") && differentWord(type,"input"))
-#endif//def HANDLE_IMPLICIT_CONTROL
+while ((hEl = hashNext(&hc)) != NULL)
     {
-    while ((hEl = hashNext(&hc)) != NULL)
-        {
-        ra = (struct hash *)hEl->val;
-        if (differentString(hashMustFindVal(ra, "type"), type))
-            continue;
-        slAddTail(&termList, ra);
-        }
-    slSort(&termList, termCmp);
-    while((ra = slPopHead(&termList)) != NULL)
-        {
-        // TODO: Add check for unknown tags in cv.ra
-        doTypeRow(ra, type, &total);
-        }
+    ra = (struct hash *)hEl->val;
+    if (differentString(hashMustFindVal(ra, "type"), type))
+        continue;
+    slAddTail(&termList, ra);
+    }
+slSort(&termList, termCmp);
+while((ra = slPopHead(&termList)) != NULL)
+    {
+    // TODO: Add check for unknown tags in cv.ra
+    doTypeRow(ra, type, &total);
     }
 puts("</TABLE><BR>");
 if(total > 1)
@@ -411,6 +413,10 @@ int main(int argc, char *argv[])
 /* Process command line */
 {
 cgiSpoof(&argc, argv);
+termOpt = cgiOptionalString("term");
+tagOpt = cgiOptionalString("tag");
+typeOpt = cgiOptionalString("type");
+organismOpt = cgiUsualString("organism", organismOpt);
 char *bgColor = cgiOptionalString("bgcolor");
 if (bgColor)
     htmlSetBgColor(strtol(bgColor, 0, 16));
