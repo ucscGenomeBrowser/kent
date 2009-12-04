@@ -70,7 +70,7 @@ loadDbTracks() {
     local db="$1"
     local dbpath=$(ls -1 -d */$db)
     local org=$(echo $dbpath | sed -e 's/\/.*//')
-    local topts='' fopts='' qopts=''
+    local topts='' fopts='' qopts='-check'
     if [ -f $dbpath/visibility.ra ] ; then
         topts="$topts -visibility=$dbpath/visibility.ra"
     elif [ -f $org/visibility.ra ] ; then
