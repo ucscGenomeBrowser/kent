@@ -11,7 +11,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.13 2009/12/03 20:28:58 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.14 2009/12/04 22:15:16 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -93,6 +93,73 @@ recordLocationReport(rec, stderr);
 noWarnAbort();
 }
 
+struct hash *readTagTypeHash(char *fileName)
+/* Set up tagTypeHash and other stuff needed for checking. */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    struct slName *typeList = NULL;
+    char *tag = nextWord(&line);
+    char *word;
+    while ((word = nextWord(&line)) != NULL)
+	slNameAddHead(&typeList, word);
+    hashAdd(hash, tag, typeList);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+static boolean matchAnyWild(struct slName *wildList, char *s)
+/* Return TRUE if s matches any wildcard in list. */
+{
+struct slName *wild;
+for (wild = wildList; wild != NULL; wild = wild->next)
+    {
+    if (wildMatch(wild->name, s))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static void doChecks(struct tdbRecord *recordList, struct lm *lm)
+/* Do additional checks. */
+{
+/* Do checks that tags are all legitimate and with correct types. */
+char tagTypeFile[PATH_LEN];
+safef(tagTypeFile, sizeof(tagTypeFile), "%s/%s", clRoot, "tagTypes.tab");
+uglyf("tagTypeFile %s, clRoot %s\n", tagTypeFile, clRoot);
+struct hash *tagTypeHash = readTagTypeHash(tagTypeFile);
+struct tdbRecord *record;
+for (record = recordList; record != NULL; record = record->next)
+    {
+    struct tdbField *typeField = tdbRecordField(record, "type");
+    char *fullType = (typeField != NULL ? typeField->val : record->key);
+    char *type = lmCloneFirstWord(lm, fullType);
+    struct tdbField *field;
+    for (field = record->fieldList; field != NULL; field = field->next)
+        {
+	struct slName *typeList = hashFindVal(tagTypeHash, field->name);
+	if (typeList == NULL)
+	    {
+	    recordAbort(record, 
+	    	"Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
+		"The tag is", 
+	    	field->name, tagTypeFile, field->name);
+	    }
+	if (!matchAnyWild(typeList, type))
+	    {
+	    recordAbort(record, 
+	    	"Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
+		"in %s if this is not a mistake.  The tag is", 
+	    	field->name, type, tagTypeFile);
+	    }
+	}
+    }
+}
+
 struct dbPath
 /* A database directory and path. */
     {
@@ -101,10 +168,9 @@ struct dbPath
     char *dir;
     };
 
-static struct dbPath *getDbPathList(char *rootDir)
+static struct dbPath *getDbPathList(char *root)
 /* Get list of all "database" directories with any trackDb.ra files two under us. */
 {
-char *root = simplifyPathToDir(rootDir);
 struct dbPath *pathList = NULL, *path;
 struct fileInfo *org, *orgList = listDirX(root, "*", TRUE);
 for (org = orgList; org != NULL; org = org->next)
@@ -134,7 +200,6 @@ for (org = orgList; org != NULL; org = org->next)
     }
 slFreeList(&orgList);
 slReverse(&pathList);
-freez(&root);
 return pathList;
 }
 
@@ -813,6 +878,9 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 
     overridePrioritiesAndVisibilities(recordList, p, lm);
 
+    if (clCheck)
+        doChecks(recordList, lm);
+
     struct tdbRecord *record;
     boolean doSelect = sameString(rql->command, "select");
     for (record = recordList; record != NULL; record = record->next)
@@ -867,7 +935,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-clRoot = optionVal("root", clRoot);
+clRoot = simplifyPathToDir(optionVal("root", clRoot));
 clCheck = optionExists("check");
 clStrict = optionExists("strict");
 clAlpha = optionExists("alpha");
