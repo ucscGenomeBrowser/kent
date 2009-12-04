@@ -46,7 +46,7 @@ shortLabel X. laevis mRNAs
 longLabel Xenopus Laevis mRNAs Mapped with Blatz
 group rna
 priority 58
-visibililty pack
+visibility pack
 spectrum on
 type psl xeno
 
@@ -55,7 +55,7 @@ shortLabel Old Laevis mRNAs
 longLabel Old Xenopus Laevis mRNAs Mapped with Blatz
 group rna
 priority 59
-visibililty pack
+visibility pack
 spectrum on
 type psl xeno
 
