@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.55 2009/08/09 07:29:28 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.56 2009/12/04 23:56:58 hiram Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -722,6 +722,7 @@ for (i=0; i<tableCount; ++i)
 	}
     else
 	{
+	if (NULL == conn) conn = hAllocConn(database);
 	if (sqlTableExists(conn, t))
 	    continue;
 	}
@@ -802,7 +803,8 @@ if (chromSizes != NULL)
 else
     chromInfoList = fbCreateChromInfoList(clChrom, database);
 
-conn = hAllocConn(database);
+if (!countGaps)
+    conn = hAllocConn(database);
 checkInputExists(conn, database, chromInfoList, tableCount, tables);
 
 if (!faIndependent)
