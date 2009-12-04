@@ -3,25 +3,30 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "ra.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: trackDbPatch.c,v 1.2 2009/11/23 07:39:46 kent Exp $";
+static char const rcsid[] = "$Id: trackDbPatch.c,v 1.3 2009/12/04 00:41:00 kent Exp $";
 
 char *clPatchDir = NULL;
 char *clKey = "track";
 boolean clFirstFile = FALSE;
+boolean clMultiFile = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "trackDbPatch - Patch files in trackDb with a specification .ra file that has db, track, and file fields that say where to apply the patch, and other fields that are patched in.\n"
+  "trackDbPatch - Patch files in trackDb with a specification .ra file that has db, track, \n"
+  "and filePos fields that say where to apply the patch, and other fields that are patched in.\n"
+  "The filePos field contains a file name and a line number. Currently the line number is ignored\n"
   "usage:\n"
   "   trackDbPatch patches.ra backupDir\n"
   "options:\n"
   "   -test=patchDir - rather than doing patches in place, write patched output to this dir\n"
   "   -key=tagName - use tagName as key.  Default '%s'\n"
+  "   -multiFile - allow multiple files in filePos tag\n"
   "   -firstFile - when a patch can go to multiple files apply it to first rather than last file\n"
   , clKey
   );
@@ -30,13 +35,14 @@ errAbort(
 static struct optionSpec options[] = {
    {"test", OPTION_STRING},
    {"key", OPTION_STRING},
+   {"multiFile", OPTION_BOOLEAN},
    {"firstFile", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 
-/* Program first reads in patchs to list of raPatches.  Then it creates a list of filePatches so that it can do all patches
- * in one pile at once. */
+/* Program first reads in patchs to list of raPatches.  Then it creates a list of filePatches 
+ * so that it can do all patches in one pile at once. */
 
 struct raPatch
 /* A patch record. */
@@ -55,6 +61,10 @@ struct fileToPatch
     char *fileName;		/* Name of file. */
     struct slRef *patchList;	/* References to raPatches associated with file.  */
     };
+
+int glPatchFieldModifyCount = 0;
+int glPatchFieldAddCount = 0;
+int glPatchRecordCount = 0;
 
 struct fileToPatch *groupPatchesByFiles(struct raPatch *patchList, boolean firstFile)
 /* Make fileToPatch list that covers all files in patchList. If lastFile is set will apply patch to first (as 
@@ -130,9 +140,19 @@ for (tag = tagList; tag != NULL; tag = next)
 	patch->track = tag->val;
 	freez(&tag);
 	}
-    else if (sameString(tag->name, "file"))
+    else if (sameString(tag->name, "filePos"))
         {
 	patch->fileList = makeFileList(tag->val);
+	int fileCount = slCount(patch->fileList);
+	if (fileCount != 1)
+	    {
+	    if (fileCount == 0)
+	        errAbort("Empty filePos tag near line %d of %s", lf->lineIx, lf->fileName);
+	    else if (!clMultiFile)
+	        errAbort("Multiple files in filePos near line %d of %s. "
+			"Use -multiFile option if this is not a mistake.", 
+			lf->lineIx, lf->fileName);
+	    }
 	freeMem(tag->val);
 	freez(&tag);
 	}
@@ -200,7 +220,6 @@ if (dir[0] != 0)
     char *simplePath = simplifyPathToDir(dir);
     if (simplePath[0] != 0)
 	{
-	uglyf("makeDirsOnPath(%s)\n", simplePath);
 	makeDirsOnPath(simplePath);
 	}
     freeMem(simplePath);
@@ -257,7 +276,7 @@ for (ref = patchRefList; ref != NULL; ref = ref->next)
     hashAdd(patchHash, key, patch);
     freeMem(key);
     }
-uglyf("%d patches in hash, %d in list\n", patchHash->elCount, slCount(patchRefList));
+verbose(2, "%d patches in hash, %d in list\n", patchHash->elCount, slCount(patchRefList));
 
 /* Open input and output files. */
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -290,7 +309,8 @@ for (;;)
     /* If have patch apply it, otherwise just copy. */
     if (patch)
         {
-	uglyf("Got patch %s with %d tags starting %s %s\n", patch->track, slCount(patch->tagList), patch->tagList->name, (char *)patch->tagList->val);
+	++glPatchRecordCount;
+	verbose(3, "Got patch %s with %d tags starting %s %s\n", patch->track, slCount(patch->tagList), patch->tagList->name, (char *)patch->tagList->val);
 	int indent = 0;
 	struct hash *appliedHash = hashNew(0);
 	for (line = stanza; line != NULL; line = line->next)
@@ -309,7 +329,8 @@ for (;;)
 			copyLine = FALSE;
 			spaceOut(f, indent);
 			fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
-			uglyf("Applying patch '%s' to modify %s'\n", (char*)tagPatch->val, tagStart);
+			verbose(2, "Applying patch '%s' to modify %s'\n", (char*)tagPatch->val, tagStart);
+			++glPatchFieldModifyCount;
 			hashAdd(appliedHash, tagPatch->name, NULL);
 			break;
 			}
@@ -326,7 +347,8 @@ for (;;)
 	    if (!hashLookup(appliedHash, tagPatch->name))
 	        {
 		spaceOut(f, indent);
-		uglyf("Applying patch to %s adding %s %s\n", patch->track, tagPatch->name, (char*)tagPatch->val);
+		++glPatchFieldAddCount;
+		verbose(2, "Applying patch to %s adding %s %s\n", patch->track, tagPatch->name, (char*)tagPatch->val);
 		fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
 		hashAdd(appliedHash, tagPatch->name, NULL);
 		}
@@ -373,7 +395,6 @@ for (file = fileList; file != NULL; file = file->next)
     char *relName = skipTrackDbPathPrefix(file->fileName);
     if (relName == NULL)
          relName = file->fileName;
-    uglyf("full rel %s %s\n", file->fileName, relName);
 
     /* Create file names for backup file and temp file. */
     char backupPath[PATH_LEN], patchPath[PATH_LEN];
@@ -395,6 +416,7 @@ for (file = fileList; file != NULL; file = file->next)
 	{
         makeDirForFile(patchPath);
 	mustRename(tempPath, patchPath);
+	copyFile(file->fileName, backupPath);
 	}
     else
     /* If not testing then move original to backup and temp to original location. */
@@ -403,6 +425,8 @@ for (file = fileList; file != NULL; file = file->next)
 	mustRename(tempPath, file->fileName);
 	}
     }
+verbose(1, "Modified %d records.  Modified %d fields, added %d fields\n",
+	glPatchRecordCount, glPatchFieldModifyCount, glPatchFieldAddCount);
 
 lineFileClose(&lf);
 }
@@ -416,8 +440,7 @@ if (argc != 3)
 clKey = optionVal("key", clKey);
 clPatchDir = optionVal("test", clPatchDir);
 clFirstFile = optionExists("firstFile");
-if (!clPatchDir)
-    errAbort("Must specify test option currently");
+clMultiFile = optionExists("multiFile");
 trackDbPatch(argv[1], argv[2]);
 return 0;
 }
