@@ -1,4 +1,5 @@
-/* rqlParse - parse restricted sql-like query language.  Produce rqlParse tree.  */
+/* rqlParse - parse restricted sql-like query language.  Produce rqlParse tree.  See rqlEval.c
+ * for the rqlParse interpreter. */
 
 #include "common.h"
 #include "linefile.h"
@@ -8,7 +9,7 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.6 2009/12/03 20:05:24 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.7 2009/12/05 03:51:27 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -279,7 +280,10 @@ else
 }
 
 static struct rqlParse *rqlParseIndex(struct tokenizer *tkz)
-/* Handle the [] in this[6] */
+/* Handle the [] in this[6].  Convert it into tree:
+*         rqlOpArrayIx
+*            rqlParseAtom
+*            rqlParseAtom */
 {
 struct rqlParse *collection = rqlParseAtom(tkz);
 struct rqlParse *p = collection;
@@ -563,6 +567,17 @@ if (buf->stringSize == 0)
 return buf->string;
 }
 
+
+void rqlParseVarsUsed(struct rqlParse *p, struct slName **pVarList)
+/* Put variables used by self and children onto varList. */
+{
+if (p->op == rqlOpSymbol)
+    slNameStore(pVarList, p->val.s);
+struct rqlParse *child;
+for (child = p->children; child != NULL; child = child->next)
+    rqlParseVarsUsed(child, pVarList);
+}
+
 struct rqlStatement *rqlStatementParse(struct lineFile *lf)
 /* Parse an RQL statement out of text */
 {
@@ -661,6 +676,7 @@ if (where != NULL)
     else
         {
 	rql->whereClause = rqlParseExpression(tkz);
+	rqlParseVarsUsed(rql->whereClause, &rql->whereVarList);
 	}
     }
 
@@ -740,6 +756,8 @@ if (rql != NULL)
     slFreeList(&rql->tableList);
     if (rql->whereClause !=NULL)
 	rqlParseFreeRecursive(rql->whereClause);
+    slFreeList(&rql->whereVarList);
     freez(pRql);
     }
 }
+
