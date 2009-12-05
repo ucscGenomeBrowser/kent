@@ -12,12 +12,13 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.15 2009/12/05 02:32:49 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.16 2009/12/05 02:45:48 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
 static boolean clStrict = FALSE;	/* If set only return tracks with actual tables. */
 static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
+static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 
 void usage()
 /* Explain usage and exit. */
@@ -49,7 +50,9 @@ errAbort(
 "   -strict\n"
 "Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist.\n"
 "   -alpha\n"
-"Do checking on release alpha (and not release beta) tracks"
+"Do checking on release alpha (and not release beta) tracks\n"
+"   -noBlank\n"
+"Don't print out blank lines separating records"
 );
 }
 
@@ -59,6 +62,7 @@ static struct optionSpec options[] = {
    {"check", OPTION_BOOLEAN},
    {"strict", OPTION_BOOLEAN},
    {"alpha", OPTION_BOOLEAN},
+   {"noBlank", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -838,7 +842,8 @@ for (field = fieldList; field != NULL; field = field->next)
 	    fprintf(out, "%s %s\n", r->name, r->val);
 	}
     }
-fprintf(out, "\n");
+if (!clNoBlank)
+    fprintf(out, "\n");
 }
 
 
@@ -977,6 +982,7 @@ clRoot = simplifyPathToDir(optionVal("root", clRoot));
 clCheck = optionExists("check");
 clStrict = optionExists("strict");
 clAlpha = optionExists("alpha");
+clNoBlank = optionExists("noBlank");
 tdbQuery(argv[1]);
 return 0;
 }
