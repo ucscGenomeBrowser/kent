@@ -12,7 +12,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.16 2009/12/05 02:45:48 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.17 2009/12/05 03:52:19 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -129,13 +129,26 @@ for (wild = wildList; wild != NULL; wild = wild->next)
 return FALSE;
 }
 
-static void doChecks(struct tdbRecord *recordList, struct lm *lm)
+static void doChecks(struct tdbRecord *recordList, struct rqlStatement *rql, struct lm *lm)
 /* Do additional checks. */
 {
 /* Do checks that tags are all legitimate and with correct types. */
 char tagTypeFile[PATH_LEN];
 safef(tagTypeFile, sizeof(tagTypeFile), "%s/%s", clRoot, "tagTypes.tab");
 struct hash *tagTypeHash = readTagTypeHash(tagTypeFile);
+struct slName *field;
+for (field = rql->fieldList; field != NULL; field = field->next)
+    {
+    if (!hashLookup(tagTypeHash, field->name))
+        errAbort("Field %s in query doesn't exist in %s.", field->name, tagTypeFile);
+    }
+struct slName *var;
+for (var = rql->whereVarList; var != NULL; var = var->next)
+    {
+    if (!hashLookup(tagTypeHash, var->name))
+        errAbort("Tag %s doesn't exist. Maybe you meant '%s'?\nMaybe %s is hosed?.", 
+		var->name, var->name, tagTypeFile);
+    }
 struct tdbRecord *record;
 for (record = recordList; record != NULL; record = record->next)
     {
@@ -922,7 +935,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     overridePrioritiesAndVisibilities(recordList, p, lm);
 
     if (clCheck)
-        doChecks(recordList, lm);
+        doChecks(recordList, rql, lm);
 
     struct tdbRecord *record;
     boolean doSelect = sameString(rql->command, "select");
