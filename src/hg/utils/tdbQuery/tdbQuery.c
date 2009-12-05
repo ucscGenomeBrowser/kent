@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "dystring.h"
 #include "obscure.h"
 #include "portable.h"
 #include "errabort.h"
@@ -11,7 +12,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.14 2009/12/04 22:15:16 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.15 2009/12/05 02:32:49 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -130,7 +131,6 @@ static void doChecks(struct tdbRecord *recordList, struct lm *lm)
 /* Do checks that tags are all legitimate and with correct types. */
 char tagTypeFile[PATH_LEN];
 safef(tagTypeFile, sizeof(tagTypeFile), "%s/%s", clRoot, "tagTypes.tab");
-uglyf("tagTypeFile %s, clRoot %s\n", tagTypeFile, clRoot);
 struct hash *tagTypeHash = readTagTypeHash(tagTypeFile);
 struct tdbRecord *record;
 for (record = recordList; record != NULL; record = record->next)
@@ -173,6 +173,21 @@ static struct dbPath *getDbPathList(char *root)
 {
 struct dbPath *pathList = NULL, *path;
 struct fileInfo *org, *orgList = listDirX(root, "*", TRUE);
+
+/* If in strict mode avoid looking up databases that aren't in mysql. */
+struct hash *dbStrictHash = NULL;
+if (clStrict)
+    {
+    struct sqlConnection *conn = sqlConnect("mysql");
+    struct slName *db, *dbList = sqlGetAllDatabase(conn);
+    dbStrictHash = hashNew(0);
+    for (db = dbList; db != NULL; db = db->next)
+        hashAdd(dbStrictHash, db->name, NULL);
+    sqlDisconnect(&conn);
+    slFreeList(&dbList);
+    }
+
+
 for (org = orgList; org != NULL; org = org->next)
     {
     if (org->isDir)
@@ -186,12 +201,16 @@ for (org = orgList; org != NULL; org = org->next)
 		safef(trackDbPath, sizeof(trackDbPath), "%s/trackDb.ra", db->name);
 		if (fileExists(trackDbPath))
 		    {
-		    AllocVar(path);
-		    path->dir = cloneString(db->name);
 		    char *s = strrchr(db->name, '/');
 		    assert(s != NULL);
-		    path->db = cloneString(s+1);
-		    slAddHead(&pathList, path);
+		    char *fileOnly = s+1;
+		    if (dbStrictHash == NULL || hashLookup(dbStrictHash, fileOnly) != NULL)
+			{
+			AllocVar(path);
+			path->db = cloneString(fileOnly);
+			path->dir = cloneString(db->name);
+			slAddHead(&pathList, path);
+			}
 		    }
 		}
 	    }
@@ -822,16 +841,33 @@ for (field = fieldList; field != NULL; field = field->next)
 fprintf(out, "\n");
 }
 
-static boolean tableExistsInSelfOrOffspring(char *db, struct tdbRecord *record)
+
+static boolean tableExistsInSelfOrOffspring(char *db, struct tdbRecord *record, 
+	int level, struct slRef *parent)
 /* Return TRUE if table corresponding to track exists in database db.  If a parent
  * track look for tables in kids too. */
 {
 if ( hTableOrSplitExists(db, record->key))
     return TRUE;
 struct tdbRecord *child;
-for (child = record->children; child != NULL; child = child->next)
+if (level > 5)
     {
-    if (tableExistsInSelfOrOffspring(db, child))
+    struct slRef *ancestor;
+    struct dyString *err = dyStringNew(0);
+    dyStringPrintf(err, "Heirarchy too deep from %s", record->key);
+    for (ancestor=parent; ancestor != NULL; ancestor = ancestor->next)
+        {
+	struct tdbRecord *a = ancestor->val;
+	dyStringPrintf(err, " to %s", a->key);
+	}
+    recordAbort(record, "%s", err->string);
+    }
+struct slRef me;
+me.next = parent;
+me.val = record;
+for (child = record->children; child != NULL; child = child->olderSibling)
+    {
+    if (tableExistsInSelfOrOffspring(db, child, level+1, &me))
         return TRUE;
     }
 return FALSE;
@@ -869,11 +905,13 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     char *db = p->db;
     struct hash *recordHash = hashNew(0);
     struct tdbRecord *recordList = tdbsForDbPath(p, lm, recordHash, "subTrack", clAlpha);
+         
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "subTrack", "noInherit", clAlpha, lm);
     recordList = filterOnRelease(recordList, clAlpha);
     verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
+    linkUpParents(recordList, "subTrack", clAlpha);
     checkDupeKeys(recordList, FALSE);
 
     overridePrioritiesAndVisibilities(recordList, p, lm);
@@ -906,7 +944,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 
 	if (rqlStatementMatch(rql, record, lm))
 	    {
-	    if (!clStrict || tableExistsInSelfOrOffspring(p->db, record))
+	    if (!clStrict || tableExistsInSelfOrOffspring(p->db, record, 1, NULL))
 		{
 		matchCount += 1;
 		if (doSelect)
