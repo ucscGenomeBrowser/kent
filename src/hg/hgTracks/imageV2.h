@@ -6,6 +6,7 @@
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
 //        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
 #define IMAGEv2_UI
+//#define CONTEXT_MENU
 //#define IMAGEv2_DRAG_REORDER
 //#define IMAGEv2_DRAG_SCROLL
 //#define IMAGEv2_DRAG_SCROLL_SZ 3
@@ -79,6 +80,7 @@ struct mapItem // IMAGEv2: single map item in an image map.
     int topLeftY;             // in pixels relative to image
     int bottomRightX;         // in pixels relative to image
     int bottomRightY;         // in pixels relative to image
+    char *id;                 // id; used by js right-click code to figure out what to do with a map item (usually mapName)
     };
 struct mapSet // IMAGEv2: full map for image OR partial map for slice
     {
@@ -94,13 +96,13 @@ struct mapSet *mapSetUpdate(struct mapSet *map,char *name,struct image *img,char
 /* Updates an existing map (aka mapSet) */
 struct mapItem *mapSetItemFind(struct mapSet *map,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
 /* Find a single mapItem based upon coordinates (within a pixel) */
-struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Update an already existing mapItem */
-struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Add a single mapItem to a growing mapSet */
-struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Update or add a single mapItem */
-struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Finds or adds the map item */
 void mapItemFree(struct mapItem **pItem);
 /* frees all memory assocated with a single mapItem */
@@ -218,7 +220,7 @@ struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceTy
 /* Updates the slice or adds it */
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type);
 /* Gets the map assocated with a specific slice belonging to the imgTrack */
-int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Will add a map item it an imgTrack's appropriate slice's map
    Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
    returns count of map items added, which could be 0, 1 or more than one if item spans slices
@@ -299,7 +301,7 @@ void imageBoxDraw(struct imgBox *imgBox);
 #define imgBoxTrackUpdateOrAdd(a,b,c,d,e,f)       (f?NULL:NULL)
 #define imgTrackSliceUpdateOrAdd(a,b,c,d,e,f,g,h) NULL
 #define sliceMapFindOrStart(a,b,c)                NULL
-#define imgTrackAddMapItem(a,b,c,d,e,f,g)
+#define imgTrackAddMapItem(a,b,c,d,e,f,g,h)
 #define imageBoxDraw(a)
 #define imgBoxFree(a)
 #define IMG_ANYORDER  0

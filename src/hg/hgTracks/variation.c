@@ -4,7 +4,7 @@
 #include "variation.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.145 2009/11/11 20:41:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.146 2009/12/05 01:29:01 larrym Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1280,7 +1280,7 @@ if(theImgBox && curImgTrack)
         if(xOff < insideX && xOff+insideWidth > insideX)
             warn("mapTrackBackground(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->mapName,xOff, yOff, xOff+insideWidth, yOff+tg->height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
+    imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height, tg->mapName);
     }
 else
     {

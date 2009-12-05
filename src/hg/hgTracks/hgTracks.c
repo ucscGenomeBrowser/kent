@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1610 2009/12/04 17:02:25 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1611 2009/12/05 01:29:00 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -96,6 +96,8 @@ boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
+boolean trackImgOnly = FALSE;           /* caller wants the image and map for just the given track */
+boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when requesting just one track) */
 
 /* Structure returned from findGenomePos.
  * We use this to to expand any tracks to full
@@ -280,7 +282,7 @@ return x;
 
 
 static void mapBoxTrackUi(struct hvGfx *hvg, int x, int y, int width,
-			  int height, char *name, char *shortLabel)
+			  int height, char *name, char *shortLabel, char *id)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 x = hvGfxAdjXW(hvg, x, width);
@@ -293,7 +295,7 @@ if(theImgBox && curImgTrack)
         hgTrackUiName(), cartSessionVarName(),cartSessionId(cart), encodedName);
     char title[128];
     safef(title,sizeof(title),"%s controls", shortLabel);
-    imgTrackAddMapItem(curImgTrack,link,title,x, y, x+width, y+height);
+    imgTrackAddMapItem(curImgTrack,link,title,x, y, x+width, y+height, id);
     }
 else
     {
@@ -319,7 +321,7 @@ if(theImgBox && curImgTrack)
     char link[512];
     safef(link,sizeof(link),"%s?complement_%s=%d&%s",
         hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, NULL);
     }
 else
     {
@@ -525,6 +527,10 @@ ideoTrack = chromIdeoTrack(*pTrackList);
 /* If no ideogram don't draw. */
 if(ideoTrack == NULL)
     doIdeo = FALSE;
+else if(trackImgOnly && !ideogramToo)
+    {
+    doIdeo = FALSE;
+    }
 else
     {
     ideogramAvail = TRUE;
@@ -1779,7 +1785,7 @@ if (withLeftLabels && psOutput == NULL)
             }
         drawGrayButtonBox(hvg, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxTrackUi(hvg, trackTabX, y, trackTabWidth, height,
-		      RULER_TRACK_NAME, RULER_TRACK_LABEL);
+		      RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
         y += height + 1;
         }
     for (track = trackList; track != NULL; track = track->next)
@@ -1816,7 +1822,7 @@ if (withLeftLabels && psOutput == NULL)
                     curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
                     }
                 mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h,
-			      track->mapName, track->shortLabel);
+			      track->mapName, track->shortLabel, track->mapName);
             }
 	    }
 	}
@@ -2502,10 +2508,17 @@ void loadFromTrackDb(struct track **pTrackList)
 struct trackDb *tdb, *tdbList = NULL;
 struct track *track;
 TrackHandler handler;
-tdbList = hTrackDb(database, chromName);
+char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
+if(trackNameFilter == NULL)
+    tdbList = hTrackDb(database, chromName);
+else
+    tdbList = hTrackDbForTrack(database, trackNameFilter);
 tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
+    if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->tableName))
+        // suppress loading & display of all tracks except for the one passed in via trackNameFilter
+        continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     if (slCount(tdb->subtracks) != 0) {
@@ -3924,6 +3937,22 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
+#ifdef CONTEXT_MENU
+
+static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
+{
+// add entry for given track to the trackDbJson string
+if(count)
+    dyStringAppend(trackDbJson, "\n,");
+dyStringPrintf(trackDbJson, "\t%s: {", track->mapName);
+if(track->tdb->parent != NULL)
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->tableName);
+dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+               track->shortLabel, track->longLabel, track->canPack, track->limitedVis);
+}
+
+#endif
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -3938,6 +3967,11 @@ boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
+#ifdef CONTEXT_MENU
+struct dyString *trackDbJson = newDyString(1000);
+int trackDbJsonCount = 0;
+dyStringAppend(trackDbJson, "<script>var trackDbJson = {\n");
+#endif
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4035,8 +4069,26 @@ for (track = trackList; track != NULL; track = track->next)
 	    thisTime = clock1000();
 	    track->loadTime = thisTime - lastTime;
 	    }
-	}
+#ifdef CONTEXT_MENU
+        trackJson(trackDbJson, track, trackDbJsonCount++);
+        if (trackIsCompositeWithSubtracks(track))
+            {
+            struct track *subtrack;
+            for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+                {
+                // isSubtrackVisible is causing a problem in panTro2
+                if (isSubtrackVisible(subtrack))
+                    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
+                }
+            }
+#endif
+        }
     }
+
+#ifdef CONTEXT_MENU
+dyStringAppend(trackDbJson, "}\n</script>\n");
+hPrintf(dyStringContents(trackDbJson));
+#endif
 
 /* Generate two lists of hidden variables for track group visibility.  Kludgy,
    but required b/c we have two different navigation forms on this page, but
@@ -4194,6 +4246,11 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 fflush(stdout);
+
+if(trackImgOnly)
+    // bail out b/c we are done
+    return;
+
 if (!hideControls)
     {
     struct controlGrid *cg = NULL;
@@ -5050,6 +5107,16 @@ dragZooming = advancedJavascriptFeaturesEnabled(cart);
 
 /* Do main display. */
 
+if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
+    {
+    trackImgOnly = TRUE;
+    ideogramToo = cartUsualBoolean(cart, "hgt.ideogramToo", FALSE);
+    hideControls = TRUE;
+    withNextItemArrows = FALSE;
+    withNextExonArrows = FALSE;
+    hgFindMatches = NULL;     // XXXX necessary ???
+    }
+
 jsIncludeFile("jquery.js", NULL);
 if(dragZooming)
     {
@@ -5059,6 +5126,18 @@ if(dragZooming)
 jsIncludeFile("hgTracks.js", NULL);
 #ifdef LOWELAB
 jsIncludeFile("lowetooltip.js", NULL);
+#endif
+
+#ifdef CONTEXT_MENU
+jsIncludeFile("jquery-ui.js", NULL);
+jsIncludeFile("jquery.contextmenu.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+
+hPrintf("<div style='height: 400px; width: 400px;' id='hgTrackUiDialog' style='display: none'></div>");
+hPrintf("<link href='../style/jquery.contextmenu.css' rel='stylesheet' type='text/css' />\n");
+hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+// XXXX stole this and '.hidden' from bioInt.css - needs work
+hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong>Alert:  </strong><span id='warningText'></span> (click to hide)</p></div>\n");
 #endif
 
 if (cartVarExists(cart, "chromInfoPage"))
@@ -5154,6 +5233,9 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
                         "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
                         "hgt.collapseGroups", "hgt.expandGroups",
                         "hgt.jump", "hgt.refresh",
+#ifdef CONTEXT_MENU
+                        "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
+#endif
 			NULL };
 
 int main(int argc, char *argv[])

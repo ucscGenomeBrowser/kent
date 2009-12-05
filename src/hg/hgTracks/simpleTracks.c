@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.114 2009/12/01 05:49:36 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.115 2009/12/05 01:29:01 larrym Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -554,6 +554,11 @@ void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
  * Add extra string to the URL if it's not NULL */
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
+struct dyString *id = dyStringNew(0);
+if(toggleGroup)
+    {
+    dyStringPrintf(id, " id='%s'", toggleGroup->mapName);
+    }
 x = hvGfxAdjXW(hvg, x, width);
 
 if (extra != NULL)
@@ -575,7 +580,7 @@ if(theImgBox && curImgTrack)
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, toggleGroup != NULL ? toggleGroup->mapName : NULL);
     }
 else
     {
@@ -585,9 +590,10 @@ else
     hPrintf("&%s\"", ui->string);
     if (message != NULL)
         mapStatusMessage("%s", message);
-    hPrintf(">\n");
+    hPrintf("%s>\n", dyStringContents(id));
     }
 freeDyString(&ui);
+freeDyString(&id);
 }
 
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -616,11 +622,11 @@ mapBoxReinvoke(hvg, x, y, width, height, NULL, newChrom, newStart, newEnd,
 
 }
 
-
 char *hgcNameAndSettings()
 /* Return path to hgc with variables to store UI settings. */
 {
 static struct dyString *dy = NULL;
+
 if (dy == NULL)
     {
     dy = newDyString(128);
@@ -635,10 +641,12 @@ void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int 
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
+struct dyString *id = dyStringNew(0);
 if (x < 0) x = 0;
 x = hvGfxAdjXW(hvg, x, width);
 int xEnd = x+width;
 int yEnd = y+height;
+dyStringPrintf(id, " id='%s'", track);
 
 if (x < xEnd)
     {
@@ -666,7 +674,7 @@ if (x < xEnd)
             if(x < insideX && xEnd > insideX)
                 warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, xEnd, yEnd, link);
         #endif//def IMAGEv2_SHORT_MAPITEMS
-        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
+        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
     else
         {
@@ -689,12 +697,13 @@ if (x < xEnd)
             hPrintf("&%s", extra);
         hPrintf("\" ");
         if (statusLine != NULL)
-        mapStatusMessage("%s", statusLine);
-        hPrintf(">\n");
+            mapStatusMessage("%s", statusLine);
+        hPrintf("%s>\n", dyStringContents(id));
         }
     freeMem(encodedItem);
     freeMem(encodedTrack);
     }
+freeDyString(&id);
 }
 
 void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height,
