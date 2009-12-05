@@ -94,6 +94,7 @@ struct rqlStatement
     struct slName *fieldList;	/* List of fields if any. */
     struct slName *tableList;	/* List of tables if any. */
     struct rqlParse *whereClause;	/* Where clause if any - in parse tree. */
+    struct slName *whereVarList;	/* List of variables used in where clause. */
     int limit;		/* If >= 0 then limits # of records returned. */
     };
 
