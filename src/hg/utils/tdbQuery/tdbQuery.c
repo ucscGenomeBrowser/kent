@@ -12,7 +12,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.17 2009/12/05 03:52:19 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.18 2009/12/05 19:30:24 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -68,6 +68,9 @@ static struct optionSpec options[] = {
 
 #define glKeyField "track"	 /* The field that has the record ID */
 #define glParentField "subTrack" /* The field that points to the parent. */
+
+struct hash *glTagTypes = NULL;	/* Hash of tagTypes file keyed by tag. */
+char glTagTypeFile[PATH_LEN];
 
 void recordLocationReport(struct tdbRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -129,26 +132,29 @@ for (wild = wildList; wild != NULL; wild = wild->next)
 return FALSE;
 }
 
-static void doChecks(struct tdbRecord *recordList, struct rqlStatement *rql, struct lm *lm)
-/* Do additional checks. */
+static void doRqlChecks(struct rqlStatement *rql)
+/* Do additional checks on rql statement. */
 {
 /* Do checks that tags are all legitimate and with correct types. */
-char tagTypeFile[PATH_LEN];
-safef(tagTypeFile, sizeof(tagTypeFile), "%s/%s", clRoot, "tagTypes.tab");
-struct hash *tagTypeHash = readTagTypeHash(tagTypeFile);
 struct slName *field;
 for (field = rql->fieldList; field != NULL; field = field->next)
     {
-    if (!hashLookup(tagTypeHash, field->name))
-        errAbort("Field %s in query doesn't exist in %s.", field->name, tagTypeFile);
+    if (!anyWild(field->name))
+	if (!hashLookup(glTagTypes, field->name))
+	    errAbort("Field %s in query doesn't exist in %s.", field->name, glTagTypeFile);
     }
 struct slName *var;
 for (var = rql->whereVarList; var != NULL; var = var->next)
     {
-    if (!hashLookup(tagTypeHash, var->name))
+    if (!hashLookup(glTagTypes, var->name))
         errAbort("Tag %s doesn't exist. Maybe you meant '%s'?\nMaybe %s is hosed?.", 
-		var->name, var->name, tagTypeFile);
+		var->name, var->name, glTagTypeFile);
     }
+}
+
+static void doRecordChecks(struct tdbRecord *recordList, struct lm *lm)
+/* Do additional checks on records. */
+{
 struct tdbRecord *record;
 for (record = recordList; record != NULL; record = record->next)
     {
@@ -158,20 +164,20 @@ for (record = recordList; record != NULL; record = record->next)
     struct tdbField *field;
     for (field = record->fieldList; field != NULL; field = field->next)
         {
-	struct slName *typeList = hashFindVal(tagTypeHash, field->name);
+	struct slName *typeList = hashFindVal(glTagTypes, field->name);
 	if (typeList == NULL)
 	    {
 	    recordAbort(record, 
 	    	"Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
 		"The tag is", 
-	    	field->name, tagTypeFile, field->name);
+	    	field->name, glTagTypeFile, field->name);
 	    }
 	if (!matchAnyWild(typeList, type))
 	    {
 	    recordAbort(record, 
 	    	"Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
 		"in %s if this is not a mistake.  The tag is", 
-	    	field->name, type, tagTypeFile);
+	    	field->name, type, glTagTypeFile);
 	    }
 	}
     }
@@ -894,10 +900,15 @@ return FALSE;
 void tdbQuery(char *sql)
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
 {
+/* Load in hash of legitimate tags. */
+safef(glTagTypeFile, sizeof(glTagTypeFile), "%s/%s", clRoot, "tagTypes.tab");
+glTagTypes = readTagTypeHash(glTagTypeFile);
+
 /* Parse out sql statement. */
 struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(sql));
 struct rqlStatement *rql = rqlStatementParse(lf);
 lineFileClose(&lf);
+doRqlChecks(rql);
 
 /* Figure out list of databases to work on. */
 struct slRef *dbOrderList = NULL, *dbOrder;
@@ -935,7 +946,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     overridePrioritiesAndVisibilities(recordList, p, lm);
 
     if (clCheck)
-        doChecks(recordList, rql, lm);
+        doRecordChecks(recordList, lm);
 
     struct tdbRecord *record;
     boolean doSelect = sameString(rql->command, "select");
