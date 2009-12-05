@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.704 2009/12/05 01:37:52 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.705 2009/12/05 18:20:25 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16391,10 +16391,46 @@ wgEncode 1
 
 #new, not in pushQ yet
 
-    track wgEncodeGisPetAlignmentsHuvecCytosolLongpolya
+    track wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HUVEC cytosol longPolyA
+    shortLabel HeS3 cyto AL1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HeLa-S3 cytosol)
+    subGroups view=2-Alignments cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
+    type bigBed 6
+    color 0,119,158
+    colorByStrand 46,0,184 238,85,34
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HeS3 cyto +S1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HeLa-S3 cytosol)
+    subGroups view=0-PlusRawSignal cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 0,119,158
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya fileName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HeS3 cyto -S1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HeLa-S3 cytosol)
+    subGroups view=1-MinusRawSignal cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 0,119,158
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya fileName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetAlignmentsRep1HuvecCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HUVE cyto AL1
     longLabel ENCODE GIS PET Alignments (longPolyA in HUVEC cytosol)
     subGroups view=2-Alignments cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
     type bigBed 6
@@ -16408,10 +16444,10 @@ wgEncode 1
     showDiffBasesMaxZoom 10000.0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya fileName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya.pairedTagAlign.gz
 
-    track wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
+    track wgEncodeGisPetPlusRawSignalRep1HuvecCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HUVEC cytosol longPolyA PlusRaw
+    shortLabel HUVE cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in HUVEC cytosol)
     subGroups view=0-PlusRawSignal cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16419,10 +16455,10 @@ wgEncode 1
     color 224,75,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya fileName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya.wig.gz
 
-    track wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
+    track wgEncodeGisPetMinusRawSignalRep1HuvecCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HUVEC cytosol longPolyA MinusRaw
+    shortLabel HUVE cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in HUVEC cytosol)
     subGroups view=1-MinusRawSignal cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16430,10 +16466,10 @@ wgEncode 1
     color 224,75,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya fileName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya.wig.gz
 
-    track wgEncodeGisPetAlignmentsHelas3NucleusLongpolya
+    track wgEncodeGisPetAlignmentsRep1Helas3NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HeLa-S3 nucleus longPolyA
+    shortLabel HeS3 nucl AL1
     longLabel ENCODE GIS PET Alignments (longPolyA in HeLa-S3 nucleus)
     subGroups view=2-Alignments cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
     type bigBed 6
@@ -16446,20 +16482,20 @@ wgEncode 1
     showDiffBasesMaxZoom 10000.0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHelas3NucleusLongpolya fileName=wgEncodeGisPetAlignmentsHelas3NucleusLongpolya.pairedTagAlign.gz
 
-    track wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
+    track wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HeLa-S3 nucleus longPolyA PlusRaw
+    shortLabel HeS3 nucl +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in HeLa-S3 nucleus)
     subGroups view=0-PlusRawSignal cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
     color 0,119,158
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya fileName=wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya.wig.gz
 
-    track wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya
+    track wgEncodeGisPetMinusRawSignalRep1Helas3NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HeLa-S3 nucleus longPolyA MinusRaw
+    shortLabel HeS3 nucl -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in HeLa-S3 nucleus)
     subGroups view=1-MinusRawSignal cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
