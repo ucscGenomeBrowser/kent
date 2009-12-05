@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.56 2009/12/04 23:56:58 hiram Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.57 2009/12/05 00:00:22 hiram Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -78,7 +78,8 @@ errAbort(
   "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
-  "   -chromSize=sizefile       Read chrom sizes from file instead of database.\n"
+  "   -chromSize=sizefile       Read chrom sizes from file instead of database. \n"
+  "                             (chromInfo three column format)\n"
   "   -or               Or tables together instead of anding them\n"
   "   -not              Output negation of resulting bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
