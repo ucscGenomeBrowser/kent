@@ -33,7 +33,7 @@ pi      Myers
 grant   Myers
 project HudsonAlpha
 
-lab	NHGRI-Elnitski
+lab	NHGRI
 pi      Elnitski
 grant   Elnitski
 project NHGRI-Elnitski
@@ -63,7 +63,7 @@ pi      Dekker
 grant   Dekker
 project 5C
 
-lab	UmassHA
+lab	UMassHA
 pi      Weng
 grant   Weng
 project UMass-Weng
@@ -88,8 +88,40 @@ pi      Snyder
 grant   Snyder
 project Yale
 
+lab	Harvard
+pi      Weissman
+grant   Snyder
+project Yale
+
+lab	UCD
+pi      Farnham
+grant   Snyder
+project Yale
+
 lab	Affy
 pi	Gingeras
 grant	Gingeras
 project	Transcriptome
+
+# Mouse and ARRA grants
+
+lab	Caltech
+pi	Wold
+grant	Hardison
+project	PSU
+
+lab	UNC
+pi	Giddings
+grant	Giddings
+project	UNC
+
+lab	UChicago
+pi	White
+grant	White
+project	UChicago
+
+lab	LICR
+pi	Ren
+grant	Ren
+project	LICR
 

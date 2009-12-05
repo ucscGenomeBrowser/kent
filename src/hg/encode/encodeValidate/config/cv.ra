@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.149 2009/12/03 23:37:26 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.150 2009/12/05 00:20:46 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1000,6 +1000,13 @@ termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178&termName=retinoblastoma%20cell
 tier 3
 protocol WERI-Rb-1_Stam_protocol.pdf
+
+term MEL
+tag MEL
+type Cell Line
+organism Mouse
+description leukemia (K562 analog)
+color 153,38,0
 
 # Gene types
 term Known
