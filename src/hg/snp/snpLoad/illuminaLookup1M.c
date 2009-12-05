@@ -1,4 +1,4 @@
-/* illuminaLookup1M - generate data for Illumina 1M SNP arrays track. */
+/* illuminaLookup1M - generate data for Illumina 1M and other SNP arrays track. */
 /* use UCSC snpXXX if dbSNP ID is found */
 /* use Illumina data if not found */
 /* This program is adopted from Heather's illuminaLookup2.c, with substantial simplyfication */
@@ -7,8 +7,9 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup1M.c,v 1.1 2008/08/01 23:14:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: illuminaLookup1M.c,v 1.2 2009/12/05 00:22:49 fanhsu Exp $";
 
+char *snpDb = NULL;
 struct snpSubset 
     {
     char *chrom;
@@ -35,7 +36,7 @@ struct hash *storeSnps(char *tableName)
 {
 struct hash *ret = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(snpDb);
 struct sqlResult *sr;
 char **row;
 struct snpSubset *subsetElement = NULL;
@@ -69,7 +70,7 @@ void processSnps(struct hash *snpHash, char *illuminaTable)
 /* report and skip if SNP missing, class != single, locType != exact */
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(snpDb);
 struct sqlResult *sr;
 char **row;
 struct hashEl *hel = NULL;
@@ -123,7 +124,6 @@ carefulClose(&output);
 int main(int argc, char *argv[])
 /* load SNPs into hash */
 {
-char *snpDb = NULL;
 char *illuminaTableName = NULL;
 char *snpTableName = NULL;
 
@@ -133,16 +133,15 @@ if (argc != 4)
     usage();
 
 snpDb = argv[1];
+
 illuminaTableName = argv[2];
 snpTableName = argv[3];
 
 /* process args */
-hSetDb(snpDb);
-if (!hTableExists(illuminaTableName))
+if (!hTableExists(snpDb, illuminaTableName))
     errAbort("no %s table in %s\n", illuminaTableName, snpDb);
-if (!hTableExists(snpTableName))
+if (!hTableExists(snpDb, snpTableName))
     errAbort("no %s table in %s\n", snpTableName, snpDb);
-
 snpHash = storeSnps(snpTableName);
 processSnps(snpHash, illuminaTableName);
 
