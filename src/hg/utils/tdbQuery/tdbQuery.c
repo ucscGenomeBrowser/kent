@@ -12,7 +12,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.18 2009/12/05 19:30:24 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.19 2009/12/05 22:47:39 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -149,37 +149,6 @@ for (var = rql->whereVarList; var != NULL; var = var->next)
     if (!hashLookup(glTagTypes, var->name))
         errAbort("Tag %s doesn't exist. Maybe you meant '%s'?\nMaybe %s is hosed?.", 
 		var->name, var->name, glTagTypeFile);
-    }
-}
-
-static void doRecordChecks(struct tdbRecord *recordList, struct lm *lm)
-/* Do additional checks on records. */
-{
-struct tdbRecord *record;
-for (record = recordList; record != NULL; record = record->next)
-    {
-    struct tdbField *typeField = tdbRecordField(record, "type");
-    char *fullType = (typeField != NULL ? typeField->val : record->key);
-    char *type = lmCloneFirstWord(lm, fullType);
-    struct tdbField *field;
-    for (field = record->fieldList; field != NULL; field = field->next)
-        {
-	struct slName *typeList = hashFindVal(glTagTypes, field->name);
-	if (typeList == NULL)
-	    {
-	    recordAbort(record, 
-	    	"Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
-		"The tag is", 
-	    	field->name, glTagTypeFile, field->name);
-	    }
-	if (!matchAnyWild(typeList, type))
-	    {
-	    recordAbort(record, 
-	    	"Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
-		"in %s if this is not a mistake.  The tag is", 
-	    	field->name, type, glTagTypeFile);
-	    }
-	}
     }
 }
 
@@ -578,7 +547,7 @@ static int parentChildFileDistance(struct tdbRecord *parent, struct tdbRecord *c
 /* Return distance of two records.  If they're in different files the
  * distance gets pretty big.  Would be flaky on records split across
  * different files, hence the ad-hoc in the name.  Not worth implementing
- * somthing that handles this though with the hope that the parent/child
+ * something that handles this though with the hope that the parent/child
  * relationship will become indentation rather than ID based. */
 {
 struct tdbFilePos *parentFp = parent->posList, *childFp = child->posList;
@@ -599,10 +568,6 @@ static struct tdbRecord *findParent(struct tdbRecord *rec,
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
 if (parentField == NULL)
     return NULL;
-#ifdef OLD
-if (!recordMatchesRelease(rec, alpha))
-    return NULL;
-#endif /* OLD */
 char *parentLine = parentField->val;
 int len = strlen(parentLine);
 char buf[len+1];
@@ -616,16 +581,11 @@ for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
     {
     gotParentSomeRelease = TRUE;
     struct tdbRecord *parent = hel->val;
-#ifdef OLD
-    if (recordMatchesRelease(parent, alpha))
-#endif /* OLD */
+    int distance = parentChildFileDistance(parent, rec);
+    if (distance < closestDistance)
 	{
-	int distance = parentChildFileDistance(parent, rec);
-	if (distance < closestDistance)
-	    {
-	    closestParent = parent;
-	    closestDistance = distance;
-	    }
+	closestParent = parent;
+	closestDistance = distance;
 	}
     }
 if (closestParent != NULL)
@@ -680,12 +640,12 @@ hashFree(&hash);
 }
 
 
-struct tdbRecord *tdbsForDbPath(struct dbPath *p, struct lm *lm, struct hash *recordHash,
+struct tdbRecord *tdbsForDbPath(struct dbPath *p, struct lm *lm, 
 	char *parentField, boolean alpha)
 /* Assemble recordList for given database.  This looks at the root/organism/assembly
- * levels.  It returns a list, and fills in a hash (which should be passed in empty)
- * of the records keyed by record->key. */
+ * levels.  It returns a list of records. */
 {
+struct hash *recordHash = hashNew(0);
 struct slName *fileLevelList = dbPathToFiles(p), *fileLevel;
 struct tdbRecord *recordList = NULL;
 for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
@@ -722,8 +682,8 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
 	    }
 	}
     }
+hashFree(&recordHash);
 slReverse(&recordList);
-
 return recordList;
 }
 
@@ -897,6 +857,114 @@ for (child = record->children; child != NULL; child = child->olderSibling)
 return FALSE;
 }
 
+static struct tdbRecord *closestParentInFile(struct slRef *allParentRefs, 
+	struct tdbFilePos *childPos)
+/* Find parent that comes closest to (but before) childPos. */
+{
+struct slRef *parentRef;
+struct tdbRecord *closestParent = NULL;
+int closestDistance = BIGNUM;
+for (parentRef = allParentRefs; parentRef != NULL; parentRef = parentRef->next)
+    {
+    struct tdbRecord *parent = parentRef->val;
+    struct tdbFilePos *pos;
+    for (pos = parent->posList; pos != NULL; pos = pos->next)
+        {
+	if (sameString(pos->fileName, childPos->fileName))
+	    {
+	    int distance = childPos->lineIx - pos->lineIx;
+	    if (distance > 0)
+	        {
+		if (distance < closestDistance)
+		    {
+		    closestDistance = distance;
+		    closestParent = parent;
+		    }
+		}
+	    }
+	}
+    }
+return closestParent;
+}
+
+static void checkChildUnderNearestParent(struct slRef *allParentRefs,
+	struct tdbRecord *parent, struct tdbRecord *child)
+/* Make sure that parent record occurs before child, and that indeed it is the
+ * closest parent before the child. */
+{
+/* We do the check for each file the child is in */
+struct tdbFilePos *childFp, *parentFp;
+for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
+    {
+    /* Find parentFp that is in this file if any. */
+    for (parentFp = parent->posList; parentFp != NULL; parentFp = parentFp->next)
+        {
+	if (sameString(parentFp->fileName, childFp->fileName))
+	    {
+	    if (parentFp->lineIx > childFp->lineIx)
+	        errAbort("Child before parent in %s\n"
+		         "Child (%s) at line %d, parent (%s) at line %d",
+			 childFp->fileName, child->key, childFp->lineIx, 
+			 parent->key, parentFp->lineIx);
+	    struct tdbRecord *closestParent = closestParentInFile(allParentRefs, childFp);
+	    assert(closestParent != NULL);
+	    if (closestParent != parent)
+	        errAbort("%s comes between parent (%s) and child (%s) in %s\n"
+		         "Parent at line %d, child at line %d.",
+			 closestParent->key, parent->key, child->key, childFp->fileName,
+			 parentFp->lineIx, childFp->lineIx);
+	    }
+	}
+    }
+}
+
+static void doRecordChecks(struct tdbRecord *recordList, struct lm *lm)
+/* Do additional checks on records. */
+{
+/* Check fields against tagType.tag. */
+struct tdbRecord *record;
+for (record = recordList; record != NULL; record = record->next)
+    {
+    struct tdbField *typeField = tdbRecordField(record, "type");
+    char *fullType = (typeField != NULL ? typeField->val : record->key);
+    char *type = lmCloneFirstWord(lm, fullType);
+    struct tdbField *field;
+    for (field = record->fieldList; field != NULL; field = field->next)
+        {
+	struct slName *typeList = hashFindVal(glTagTypes, field->name);
+	if (typeList == NULL)
+	    {
+	    recordAbort(record, 
+	    	"Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
+		"The tag is", 
+	    	field->name, glTagTypeFile, field->name);
+	    }
+	if (!matchAnyWild(typeList, type))
+	    {
+	    recordAbort(record, 
+	    	"Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
+		"in %s if this is not a mistake.  The tag is", 
+	    	field->name, type, glTagTypeFile);
+	    }
+	}
+    }
+
+/* Create parent list, which we'll use for various child/parent checks. */
+struct slRef *parentRefList = NULL;
+for (record = recordList; record != NULL; record = record->next)
+    {
+    if (record->children != NULL)
+        refAdd(&parentRefList, record);
+    }
+
+/* Additional child/parent checks. */
+for (record = recordList; record != NULL; record = record->next)
+    {
+    if (record->parent != NULL)
+        checkChildUnderNearestParent(parentRefList, record->parent, record);
+    }
+}
+
 void tdbQuery(char *sql)
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
 {
@@ -932,8 +1000,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
     char *db = p->db;
-    struct hash *recordHash = hashNew(0);
-    struct tdbRecord *recordList = tdbsForDbPath(p, lm, recordHash, "subTrack", clAlpha);
+    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "subTrack", clAlpha);
          
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
@@ -986,7 +1053,6 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 	    }
 	}
     lmCleanup(&lm);
-    hashFree(&recordHash);
     }
 dyStringFree(&fileString);
 
