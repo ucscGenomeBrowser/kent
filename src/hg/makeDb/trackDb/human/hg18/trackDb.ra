@@ -516,6 +516,14 @@ priority 500.01
 visibility hide
 type bed 4 +
 
+    track pgYoruban2
+    subTrack pgSnpHgwdev
+    shortLabel YRI '8507, SOLiD
+    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
+    group varRep
+    priority 4
+    color 128,0,128
+
 track pgSnp
 compositeTrack on
 shortLabel Genome Variants
@@ -540,14 +548,6 @@ type bed 4 +
     group varRep
     priority 2
     color 153,0,0
-
-    track pgYoruban2
-    subTrack pgSnpHgwdev
-    shortLabel YRI '8507, SOLiD
-    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
-    group varRep
-    priority 4
-    color 128,0,128
 
     track pgYoruban3
     subTrack pgSnp

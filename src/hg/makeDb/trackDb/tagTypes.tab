@@ -46,6 +46,7 @@ controlledVocabulary *
 dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
+db *
 defaultGeneTracks bed
 defaultLinkedTables genePred
 dimensionZchecked *
@@ -62,6 +63,7 @@ expProbeTable expRatio
 expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
+filePos *
 filterBy genePred bed
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 frames wigMaf
