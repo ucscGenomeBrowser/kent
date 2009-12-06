@@ -4,17 +4,24 @@
 #include "linefile.h"
 #include "obscure.h"
 #include "ra.h"
+#include "dystring.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.3 2009/12/03 08:59:33 kent Exp $";
+static char const rcsid[] = "$Id: tdbRecord.c,v 1.4 2009/12/06 20:11:22 kent Exp $";
 
-struct tdbFilePos *tdbFilePosNew(struct lm *lm, char *fileName, int lineIx)
+static struct tdbFilePos *tdbFilePosNew(struct lm *lm, 
+    char *fileName, 		/* File name. */
+    int startLineIx,		/* File start line. */
+    int endLineIx,		/* File end line. */
+    char *text)			/* Text of stanza. */
 /* Create new tdbFilePos record. */
 {
 struct tdbFilePos *fp;
 lmAllocVar(lm, fp);
-fp->fileName = fileName;
-fp->lineIx = lineIx;
+fp->fileName = lmCloneString(lm, fileName);
+fp->startLineIx = startLineIx;
+fp->endLineIx = endLineIx;
+fp->text = lmCloneString(lm, text);
 return fp;
 }
 
@@ -100,12 +107,14 @@ struct slPair *settingsByView = NULL;
 struct hash *subGroups = NULL;
 char *view = NULL;
 struct hash *viewHash = NULL;
+int startLineIx = lf->lineIx;
+struct dyString *dy = dyStringNew(0);
 
-if (!raSkipLeadingEmptyLines(lf))
+if (!raSkipLeadingEmptyLines(lf,dy))
     return NULL;
 
 char *tag, *val;
-while (raNextTagVal(lf, &tag, &val))
+while (raNextTagVal(lf, &tag, &val,dy))
     {
     struct tdbField *field = tdbFieldNew(tag, val, lm);
     if (sameString(field->name, key))
@@ -144,6 +153,7 @@ while (raNextTagVal(lf, &tag, &val))
 if (fieldList == NULL)
     return NULL;
 slReverse(&fieldList);
+
 struct tdbRecord *record;
 lmAllocVar(lm, record);
 record->fieldList = fieldList;
@@ -153,6 +163,8 @@ record->settingsByView = settingsByView;
 record->subGroups = subGroups;
 record->viewHash = viewHash;
 record->view = view;
+record->posList = tdbFilePosNew(lm, lf->fileName, startLineIx, lf->lineIx, dy->string);
+dyStringFree(&dy);
 return record;
 }
 

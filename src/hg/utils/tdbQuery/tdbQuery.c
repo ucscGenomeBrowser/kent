@@ -12,7 +12,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.19 2009/12/05 22:47:39 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.20 2009/12/06 20:11:21 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -77,7 +77,7 @@ void recordLocationReport(struct tdbRecord *rec, FILE *out)
 {
 struct tdbFilePos *pos;
 for (pos = rec->posList; pos != NULL; pos = pos->next)
-    fprintf(out, "in track %s stanza ending line %d of %s\n", rec->key, pos->lineIx, pos->fileName);
+    fprintf(out, "in track %s stanza starting line %d of %s\n", rec->key, pos->startLineIx, pos->fileName);
 }
 
 void recordWarn(struct tdbRecord *rec, char *format, ...)
@@ -298,7 +298,7 @@ struct tdbField *field;
 for (field = record->fieldList; field != NULL; field = field->next)
     {
     if (hashLookup(uniqHash, field->name))
-        errAbort("Duplicate tag %s in record ending line %d of %s", field->name,
+        errAbort("Duplicate tag %s in record starting line %d of %s", field->name,
 		lf->lineIx, lf->fileName);
     hashAdd(uniqHash, field->name, NULL);
     }
@@ -368,27 +368,27 @@ for (record = recordList; record != NULL; record = record->next)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
 		    	     "at line %d of %s", 
-			     key, oldPos->lineIx, oldPos->fileName,
-			     newPos->lineIx, newPos->fileName);
+			     key, oldPos->startLineIx, oldPos->fileName,
+			     newPos->startLineIx, newPos->fileName);
 		    }
 		else if (oldRelease == NULL && newRelease != NULL)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
 		    	     "at line %d of %s", 
-			     key, newPos->lineIx, newPos->fileName,
-			     oldPos->lineIx, oldPos->fileName);
+			     key, newPos->startLineIx, newPos->fileName,
+			     oldPos->startLineIx, oldPos->fileName);
 		    }
 		else
 		    {
 		    if (sameString(oldPos->fileName, newPos->fileName))
 			{
-			errAbort("Duplicate tracks %s ending lines %d and %d of %s",
-			    key, oldPos->lineIx, newPos->lineIx, oldPos->fileName);
+			errAbort("Duplicate tracks %s starting lines %d and %d of %s",
+			    key, oldPos->startLineIx, newPos->startLineIx, oldPos->fileName);
 			}
 		    else
-			errAbort("Duplicate tracks %s ending lines %d of %s and %d of %s",
-			    key, oldPos->lineIx, oldPos->fileName, 
-			    newPos->lineIx, newPos->fileName);
+			errAbort("Duplicate tracks %s starting lines %d of %s and %d of %s",
+			    key, oldPos->startLineIx, oldPos->fileName, 
+			    newPos->startLineIx, newPos->fileName);
 		    }
 		}
 	    }
@@ -404,7 +404,6 @@ static void recurseThroughIncludes(char *fileName, struct lm *lm,
 {
 struct tdbRecord *record;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *lmFileName = lmCloneString(lm, fileName);
 while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
     {
     struct tdbField *firstField = record->fieldList;
@@ -415,8 +414,8 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
 	    {
 	    if (!sameString(field->name, "include"))
 	       {
-	       errAbort("Non-include tag %s in an include stanza ending line %d of %s", 
-		    field->name, lf->lineIx, lf->fileName);
+	       errAbort("Non-include tag %s in an include stanza starting line %d of %s", 
+		    field->name, tdbRecordLineIx(record), lf->fileName);
 	       }
 	    char *relPath = field->val;
 	    char dir[PATH_LEN];
@@ -426,7 +425,7 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
 	    if (hashLookup(circularHash, includeName))
 		{
 		errAbort("Including file %s in an infinite loop line %d of %s", 
-			includeName, lf->lineIx, lf->fileName);
+			includeName, tdbRecordLineIx(record), lf->fileName);
 		}
 	    recurseThroughIncludes(includeName, lm, circularHash, pRecordList);
 	    }
@@ -436,7 +435,6 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
 	checkDupeFields(record, lf);
 	if (record->key != NULL)
 	    {
-	    record->posList = tdbFilePosNew(lm, lmFileName, lf->lineIx);
 	    slAddHead(pRecordList, record);
 	    }
 	}
@@ -500,14 +498,14 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
 	}
     if (slCount(record->fieldList) != 2)
         {
-	errAbort("Expecting just two fields, track and %s, got %d in record ending line %d of %s",
-		fieldName, slCount(record->fieldList), lf->lineIx, lf->fileName);
+	errAbort("Expecting just two fields, track and %s, got %d in record starting line %d of %s",
+		fieldName, slCount(record->fieldList), tdbRecordLineIx(record), lf->fileName);
 	}
     struct tdbField *field = tdbRecordField(record, fieldName);
     if (field == NULL)
         {
-	errAbort("Missing %s tag in record ending line %d of %s", fieldName,
-		lf->lineIx, lf->fileName);
+	errAbort("Missing %s tag in record starting line %d of %s", fieldName,
+		tdbRecordLineIx(record), lf->fileName);
 	}
     mergeRecords(oldRecord, record, glKeyField, lm);
     }
@@ -553,7 +551,7 @@ static int parentChildFileDistance(struct tdbRecord *parent, struct tdbRecord *c
 struct tdbFilePos *parentFp = parent->posList, *childFp = child->posList;
 if (!sameString(parentFp->fileName, childFp->fileName))
     return BIGNUM/2;
-int distance = childFp->lineIx - parentFp->lineIx;
+int distance = childFp->startLineIx - parentFp->startLineIx;
 if (distance < 0)
     return BIGNUM/4 - distance;
 return distance;
@@ -872,7 +870,7 @@ for (parentRef = allParentRefs; parentRef != NULL; parentRef = parentRef->next)
         {
 	if (sameString(pos->fileName, childPos->fileName))
 	    {
-	    int distance = childPos->lineIx - pos->lineIx;
+	    int distance = childPos->startLineIx - pos->startLineIx;
 	    if (distance > 0)
 	        {
 		if (distance < closestDistance)
@@ -901,18 +899,18 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
         {
 	if (sameString(parentFp->fileName, childFp->fileName))
 	    {
-	    if (parentFp->lineIx > childFp->lineIx)
+	    if (parentFp->startLineIx > childFp->startLineIx)
 	        errAbort("Child before parent in %s\n"
 		         "Child (%s) at line %d, parent (%s) at line %d",
-			 childFp->fileName, child->key, childFp->lineIx, 
-			 parent->key, parentFp->lineIx);
+			 childFp->fileName, child->key, childFp->startLineIx, 
+			 parent->key, parentFp->startLineIx);
 	    struct tdbRecord *closestParent = closestParentInFile(allParentRefs, childFp);
 	    assert(closestParent != NULL);
 	    if (closestParent != parent)
 	        errAbort("%s comes between parent (%s) and child (%s) in %s\n"
 		         "Parent at line %d, child at line %d.",
 			 closestParent->key, parent->key, child->key, childFp->fileName,
-			 parentFp->lineIx, childFp->lineIx);
+			 parentFp->startLineIx, childFp->startLineIx);
 	    }
 	}
     }
@@ -1033,7 +1031,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 	struct tdbFilePos *fp;
 	dyStringClear(fileString);
 	for (fp = record->posList; fp != NULL; fp = fp->next)
-	    dyStringPrintf(fileString, " %s %d", fp->fileName, fp->lineIx);
+	    dyStringPrintf(fileString, " %s %d", fp->fileName, fp->startLineIx);
 	fileField = tdbFieldNew("filePos", fileString->string, lm);
 	slAddTail(&record->fieldList, fileField);
 
