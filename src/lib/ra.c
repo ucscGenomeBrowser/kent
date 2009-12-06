@@ -10,53 +10,74 @@
 #include "linefile.h"
 #include "hash.h"
 #include "localmem.h"
+#include "dystring.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.14 2009/11/23 07:33:44 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.15 2009/12/06 20:09:36 kent Exp $";
 
-boolean raSkipLeadingEmptyLines(struct lineFile *lf)
-/* Skip leading empty lines and comments.  Returns FALSE at end of file. */
+boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy)
+/* Skip leading empty lines and comments.  Returns FALSE at end of file. 
+ * Together with raNextTagVal you can construct your own raNextRecord.... 
+ * If dy parameter is non-null, then the text parsed gets placed into dy. */
 {
 char *line;
 /* Skip leading empty lines and comments. */
+if (dy)
+    dyStringClear(dy);
 for (;;)
    {
    if (!lineFileNext(lf, &line, NULL))
        return FALSE;
-   line = skipLeadingSpaces(line);
-   if (line[0] != 0 )
+   char *tag = skipLeadingSpaces(line);
+   if (tag[0] != 0 )
        {
-       if (line[0] == '#')
+       if (tag[0] == '#')
+	   {
+	   if (dy)
+	       dyStringAppend(dy, line);
            continue;
+	   }
        else 
            break;
+       }
+   else
+       {
+       if (dy)
+	   dyStringAppend(dy, line);
        }
    }
 lineFileReuse(lf);
 return TRUE;
 }
 
-boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal)
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString *dy)
 /* Read next line.  Return FALSE at end of file or blank line.  Otherwise
- * fill in *retTag and *retVal and return TRUE */
+ * fill in *retTag and *retVal and return TRUE.
+ * If dy parameter is non-null, then the text parsed gets appended to dy. */
 {
 char *line;
 for (;;)
     {
     if (!lineFileNext(lf, &line, NULL))
        return FALSE;
-    line = skipLeadingSpaces(line);
-    if (line[0] == 0)
-       return FALSE;;
-    if (line[0] == '#')
+    char *tag = skipLeadingSpaces(line);
+    if (tag[0] == 0)
+       return FALSE;
+    if (tag[0] == '#')
        {
-       if (startsWith("#EOF", line))
+       if (startsWith("#EOF", tag))
 	   return FALSE;
        else
+	   {
+	    if (dy)
+	       dyStringAppend(dy, line);
 	   continue;
+	   }
        }
     break;
     }
+if (dy)
+   dyStringAppend(dy, line);
 *retTag = nextWord(&line);
 *retVal = trimSpaces(line);
 return TRUE;
@@ -72,9 +93,9 @@ struct hash *raNextRecord(struct lineFile *lf)
 struct hash *hash = NULL;
 char *key, *val;
 
-if (!raSkipLeadingEmptyLines(lf))
+if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
-while (raNextTagVal(lf, &key, &val))
+while (raNextTagVal(lf, &key, &val, NULL))
     {
     if (hash == NULL)
 	hash = newHash(7);
@@ -90,9 +111,9 @@ struct slPair *raNextRecordAsSlPairList(struct lineFile *lf)
 {
 struct slPair *list = NULL;
 char *key, *val;
-if (!raSkipLeadingEmptyLines(lf))
+if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
-while (raNextTagVal(lf, &key, &val))
+while (raNextTagVal(lf, &key, &val, NULL))
     slPairAdd(&list, key, cloneString(val));
 slReverse(&list);
 return list;

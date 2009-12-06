@@ -19,13 +19,15 @@ struct slPair *raNextRecordAsSlPairList(struct lineFile *lf);
 /* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order. 
  * Do a slPairFreeValsAndList on result when done. */
 
-boolean raSkipLeadingEmptyLines(struct lineFile *lf);
+boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy);
 /* Skip leading empty lines and comments.  Returns FALSE at end of file. 
- * Together with raNextTagVal you can construct your own raNextRecord.... */
+ * Together with raNextTagVal you can construct your own raNextRecord.... 
+ * If dy parameter is non-null, then the text parsed gets placed into dy. */
 
-boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal);
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy);
 /* Read next line.  Return FALSE at end of file or blank line.  Otherwise
- * fill in *retTag and *retVal and return TRUE */
+ * fill in *retTag and *retVal and return TRUE.
+ * If dy parameter is non-null, then the text parsed gets appended to dy. */
 
 struct hash *raFromString(char *string);
 /* Return hash of key/value pairs from string.
