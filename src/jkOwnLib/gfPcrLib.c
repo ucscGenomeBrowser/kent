@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.11 2009/09/23 18:42:27 angie Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.12 2009/12/07 18:24:00 galt Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -265,9 +265,18 @@ fprintf(f, "0\t%d\t", size);	/* qStart, qEnd */
 fprintf(f, "%s\t%d\t", out->seqName, out->seqSize);
 fprintf(f, "%d\t%d\t", out->fPos, out->rPos);
 fprintf(f, "2\t");
-fprintf(f, "%d,%d,\t", fPrimerSize, rPrimerSize);
-fprintf(f, "%d,%d,\t", 0,size - rPrimerSize);
-fprintf(f, "%d,%d,\n", out->fPos, out->rPos - rPrimerSize);
+if (out->strand == '+')
+    {
+    fprintf(f, "%d,%d,\t", fPrimerSize, rPrimerSize);
+    fprintf(f, "%d,%d,\t", 0,size - rPrimerSize);
+    fprintf(f, "%d,%d,\n", out->fPos, out->rPos - rPrimerSize);
+    }
+else
+    {
+    fprintf(f, "%d,%d,\t", rPrimerSize, fPrimerSize);
+    fprintf(f, "%d,%d,\t", 0,size - fPrimerSize);
+    fprintf(f, "%d,%d,\n", out->fPos, out->rPos - fPrimerSize);
+    }
 }
 
 typedef void (*outFunction)(struct gfPcrOutput *out, FILE *f, char *url) ;
