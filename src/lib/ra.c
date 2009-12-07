@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.15 2009/12/06 20:09:36 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.16 2009/12/07 02:37:21 kent Exp $";
 
 boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy)
 /* Skip leading empty lines and comments.  Returns FALSE at end of file. 
@@ -34,7 +34,10 @@ for (;;)
        if (tag[0] == '#')
 	   {
 	   if (dy)
+	       {
 	       dyStringAppend(dy, line);
+	       dyStringAppendC(dy, '\n');
+	       }
            continue;
 	   }
        else 
@@ -43,7 +46,10 @@ for (;;)
    else
        {
        if (dy)
+	   {
 	   dyStringAppend(dy, line);
+	   dyStringAppendC(dy, '\n');
+	   }
        }
    }
 lineFileReuse(lf);
@@ -60,24 +66,27 @@ for (;;)
     {
     if (!lineFileNext(lf, &line, NULL))
        return FALSE;
+   if (dy)
+       {
+       dyStringAppend(dy, line);
+       dyStringAppendC(dy, '\n');
+       }
     char *tag = skipLeadingSpaces(line);
     if (tag[0] == 0)
+       {
        return FALSE;
+       }
     if (tag[0] == '#')
        {
        if (startsWith("#EOF", tag))
 	   return FALSE;
        else
 	   {
-	    if (dy)
-	       dyStringAppend(dy, line);
 	   continue;
 	   }
        }
     break;
     }
-if (dy)
-   dyStringAppend(dy, line);
 *retTag = nextWord(&line);
 *retVal = trimSpaces(line);
 return TRUE;
