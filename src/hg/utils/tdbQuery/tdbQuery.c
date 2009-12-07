@@ -13,7 +13,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.23 2009/12/07 17:44:25 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.24 2009/12/07 17:46:29 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -1068,7 +1068,7 @@ struct slName *hashPair(char *raFile, char *keyField, char *valField, struct has
 /* Read two fields out of a ra file.  For records that have both fields put them into
  * a hash with the logical keys and values, which is returned.  Return list of keys in order. */
 {
-struct slName *list = NULL, *el;
+struct slName *list = NULL;
 struct hash *hash = hashNew(0), *commentHash = hashNew(0);
 struct lineFile *lf = lineFileMayOpen(raFile, TRUE);
 struct dyString *dy = dyStringNew(0);
