@@ -177,6 +177,7 @@ noInherit on
 configurable on
 subGroup1 view Views Counts=Tag_Counts Map=Mappability Print=Footprints
 visibilityViewDefaults Counts=full Map=dense Print=pack ALN=hide
+dragAndDrop subTracks
 
      track uwFootprintsTagCounts
      subTrack uwFootprints
