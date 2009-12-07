@@ -14,7 +14,7 @@ altColor *
 autoScale *
 autoTranslate genePred
 baseColorDefault *
-baseColorTickColor bed
+baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred
 baseColorUseSequence *
 bedFilter bed
@@ -25,6 +25,7 @@ cdsDrawDefault psl bed genePred
 cdsDrawOptions psl
 cdsEvidence genePred
 cell bed bedGraph
+centerLabelsDense *
 chainColor chain
 chainLinearGap netAlign chain bed
 chainMinScore netAlign chain bed
@@ -67,10 +68,14 @@ filePos *
 filterBy genePred bed
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 frames wigMaf
+gClass_2way_consensus_pseudogene genePred
 gClass_Artifact bed genePred
 gClass_Ensembl_RNA genePred
 gClass_Ensembl_coding genePred
+gClass_Ensembl_non_coding genePred
+gClass_Ensembl_processed_pseudogene genePred
 gClass_Ensembl_pseudogene genePred
+gClass_Ensembl_unprocessed_pseudogene genePred
 gClass_Havana_TEC genePred
 gClass_Havana_coding genePred
 gClass_Havana_non_coding genePred
@@ -110,7 +115,7 @@ hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
 html *
-idInUrlSql altGraphX
+idInUrlSql altGraphX genePred
 idXref genePred
 indelDoubleInsert psl
 indelPolyA psl
@@ -177,8 +182,8 @@ priority *
 private bed
 pslSequence psl
 pslTable bed
-qValueFilter narrowPeak
-qValueFilterLimits narrowPeak
+qValueFilter narrowPeak broadPeak
+qValueFilterLimits narrowPeak broadPeak
 release *
 retroMrnaInfo psl
 sGroup_Chimp wigMaf
