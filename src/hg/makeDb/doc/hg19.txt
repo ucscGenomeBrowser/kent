@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.65 2009/12/02 19:43:20 fanhsu Exp $";
+#	"$Id: hg19.txt,v 1.66 2009/12/07 17:42:13 hiram Exp $";
 
 #############################################################################
 
@@ -5774,6 +5774,12 @@ ulimit -v $sizeG
 	phastCons46way phastCons46way.wig
     #	real    1m45.381s
 
+    wigTableStats.sh hg19 phastCons46way
+# db.table      min max mean count sumData
+# hg19.phastCons46way     0 1 0.103653 2845303719 2.94924e+08
+#	stdDev viewLimits
+#	0.230184 viewLimits=0:1
+
     #  Create histogram to get an overview of all the data
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
@@ -5924,6 +5930,12 @@ ulimit -v $sizeG
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
 	phastCons46wayPrimates phastCons46wayPrimates.wig
 
+    wigTableStats.sh hg19 phastCons46wayPrimates
+# db.table      min max mean count sumData
+hg19.phastCons46wayPrimates     0 1 0.128883 2845303719 3.66712e+08
+#	stdDev viewLimits
+#	0.214067 viewLimits=0:1
+
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
@@ -6068,8 +6080,11 @@ ulimit -v $sizeG
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
 	phastCons46wayPlacental phastCons46wayPlacental.wig
 
-    #	Instead, temporary load into a table so we can do the histogram
-    hgLoadWiggle hg19 pc46 phastCons46wayPlacental.wig
+    wigTableStats.sh hg19 phastCons46wayPlacental
+# db.table      min max mean count sumData
+hg19.phastCons46wayPlacental    0 1 0.0885757 2845303719 2.52025e+08
+#	stdDev viewLimits
+#	0.210242 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
@@ -7539,6 +7554,28 @@ done | sort -k1,1 -k2,2n > multiz46wayFrames.bed
 # frames multiz46wayFrames
 # irows on
     #	appears to work OK
+
+#############################################################################
+## create upstream refGene maf files
+    cd /hive/data/genomes/hg19/bed/multiz46way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits hg19 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags hg19 multiz46way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/hg19/bed/multiz46way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+    cd /usr/local/apache/htdocs/goldenPath/hg19/multiz46way/maf
+    ln -s /hive/data/genomes/hg19/bed/multiz46way/downloads/maf/up*.gz .
+    md5sum up*.gz >> md5sum.txt
+
 
 #############################################################################
 # AFFY U133AB (Done - 2009-09-30 - Jim)
