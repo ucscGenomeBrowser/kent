@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.706 2009/12/07 16:12:07 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.707 2009/12/07 19:34:20 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -226,8 +226,8 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
-#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100,signalValueFilter0.0,signalValueLimits=0:45000 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,minLimit=-1,maxLimit=473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,minLimit=1,maxLimit=21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100,signalValueFilter0.0,signalValueLimits=0:45000 Signal:viewLimits=1:20,minLimit=-1,maxLimit=473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,minLimit=1,maxLimit=21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 dataVersion ENCODE Feb 2009 Freeze
 
 # submission 148
@@ -1969,8 +1969,7 @@ visibilityViewDefaults Peaks=pack SIG=full SIGBO=full
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 SIG:viewLimits=0:0.4,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SIGBO:viewLimits=0:100,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16
-#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,signalValueFilter=0.0,signalValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 SIG:viewLimits=0:0.4,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SIGBO:viewLimits=0:100,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 SIG:viewLimits=0:0.4,minLimit=0,maxLimit=29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SIGBO:viewLimits=0:100,minLimit=0,maxLimit=8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16
 useScore 0
 priority 0
 type bed 3
@@ -3949,7 +3948,7 @@ dragAndDrop subTracks
 visibilityViewDefaults 1-PlusClusters=full 3-MinusClusters=full 2-PlusRawSignal=hide 4-MinusRawSignal=hide 5-Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView 1-PlusClusters:maxHeightPixels=100:24:16,viewLimitsMax=.005:25183,viewLimits=0:30,autoScale=off,windowingFunction=mean 2-PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 3-MinusClusters:maxHeightPixels=100:24:16,viewLimitsMax=.005:25183,viewLimits=0:30,windowingFunction=mean,autoScale=off 4-MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
+settingsByView 1-PlusClusters:maxHeightPixels=100:24:16,minLimit=.005,maxLimit=25183,viewLimits=0:30,autoScale=off,windowingFunction=mean 2-PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 3-MinusClusters:maxHeightPixels=100:24:16,minLimit=.005,maxLimit=25183,viewLimits=0:30,windowingFunction=mean,autoScale=off 4-MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
 priority 0
 type bed 3
 wgEncode 1
@@ -4662,7 +4661,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pValueFilterLimits=0:100 zRawSig:viewLimits=1:10,viewLimitsMax=-1:16000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
+settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pValueFilterLimits=0:100 zRawSig:viewLimits=1:10,minLimit=-1:maxLimit=16000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
 
 #submission 517
     track wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
@@ -7890,7 +7889,7 @@ controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
 #visibilityViewDefaults  Footprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
 visibilityViewDefaults  Hotspots=pack Peaks=dense Signal=full RawSignal=hide
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,viewLimitsMax=1:118408,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum RawSignal:viewLimits=1:250,viewLimitsMax=1.00:751561.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,minLimit=1,maxLimit=118408,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum RawSignal:viewLimits=1:250,minLimit=1,maxLimit=751561.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
 priority 0
 type bed 3
 wgEncode 1
@@ -7934,7 +7933,6 @@ wgEncode 1
     longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in HepG2 cells)
     subGroups view=Signal cellType=HepG2
     type bedGraph 4
-    #viewLimitsMax 1:118408
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalHepg2 fileName=wgEncodeUwDGFSignalHepg2.bedGraph4.gz
 
 #    track wgEncodeUwDGFFootprintsHepg2
@@ -7982,7 +7980,6 @@ wgEncode 1
     longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (SK-N-SH_RA cells)
     subGroups view=Signal cellType=SK-N-SH_RA
     type bedGraph 4
-    #viewLimitsMax 1:42739
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalSknshra fileName=wgEncodeUwDGFSignalSknshra.bedGraph4.gz
 
 #    track wgEncodeUwDGFFootprintsSknshra
@@ -8029,7 +8026,6 @@ wgEncode 1
     longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in Th1 cells)
     subGroups view=Signal cellType=Th1
     type bedGraph 4
-    #viewLimitsMax 1:66388
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=Th1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=637 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalTh1 fileName=wgEncodeUwDGFSignalTh1.bedGraph4.gz
 
 #    track wgEncodeUwDGFFootprintsTh1
@@ -8061,8 +8057,8 @@ dragAndDrop subTracks
 visibilityViewDefaults aPeaks=pack cHot=pack zRawSig=full
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
-#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
+settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:100,minLimit=1,maxLimit=127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
+#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:100,minLimit=1,maxLimit=127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3 +
 wgEncode 1
@@ -10523,10 +10519,11 @@ dragAndDrop subTracks
 #visibilityViewDefaults Signal=full zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell
 #noInherit on
-#settingsByView Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+#settingsByView Signal:viewLimits=0:78,minLimit=0,maxLimit=20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,minLimit=0,maxLimit=65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 type bedGraph 4
 viewLimits 0:78
-viewLimitsMax 0:20910
+minLimit 0
+maxLimit 20910
 autoScale off
 windowingFunction mean
 maxHeightPixels 100:32:16
@@ -10614,7 +10611,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=pack+ Signal=full
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:signalFilter=0,signalFilterLimits=0:18241,pValueFilter=0,pValueFilterLimits=0:300,qValueFilter=0,qValueFilterLimits=0:300 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
+settingsByView Peaks:signalFilter=0,signalFilterLimits=0:18241,pValueFilter=0,pValueFilterLimits=0:300,qValueFilter=0,qValueFilterLimits=0:300 Signal:viewLimits=0:78,minLimit=0,maxLimit=20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
 dataVersion through the ENCODE Sep 2009 Freeze
 wgEncode 1
 
@@ -12016,7 +12013,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=pack+ RawSignal=full
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 zRaw:viewLimitsMax=1:47957.00,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 zRaw:minLimit=1,maxLimit=47957.00,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 type bed 3
 priority 0
 nextItemButton on
@@ -15582,7 +15579,7 @@ sortOrder cellType=+ localization=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults  1-Transfrags=dense 2-PlusRawSignal=dense 3-MinusRawSignal=dense 4-Alignments=dense
-settingsByView 1-Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 2-PlusRawSignal:viewLimits=0:500,viewLimitsMax=0:5059134,autoScale=on,transformFunc=NONE,windowingFunction=mean,maxHeightPixels=100:24:16 3-MinusRawSignal:viewLimits=0:500,viewLimitsMax=0:4876484,autoScale=on,transformFunc=NONE,windowingFunction=mean,maxHeightPixels=100:24:16
+settingsByView 1-Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 2-PlusRawSignal:viewLimits=0:500,minLimit=0,maxLimit=5059134,autoScale=on,transformFunc=NONE,windowingFunction=mean,maxHeightPixels=100:24:16 3-MinusRawSignal:viewLimits=0:500,minLimit=0,maxLimit=4876484,autoScale=on,transformFunc=NONE,windowingFunction=mean,maxHeightPixels=100:24:16
 priority 0
 type bed 3
 wgEncode 1
@@ -16091,7 +16088,7 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 visibilityViewDefaults 1-PlusRawSignal=full 2-MinusRawSignal=full 3-AllRawSignal=hide 4-Alignments=pack
 dimensionZchecked longNonPolyA,longPolyA,total
-settingsByView 1-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,viewLimitsMax=0:898990 2-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,viewLimitsMax=0:3756424 3-AllRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,viewLimitsMax=0:4860029
+settingsByView 1-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,minLimit=0,maxLimit=898990 2-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,minLimit=0,maxLimit=3756424 3-AllRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,minLimit=0,maxLimit=4860029
 priority 0
 type bed 3
 wgEncode 1
@@ -16383,7 +16380,7 @@ sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults 2-Alignments=hide  0-PlusRawSignal=dense 1-MinusRawSignal=dense
-settingsByView 0-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,viewLimits=0:1000 1-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,viewLimits=0:1000
+settingsByView 0-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,minLimit=0,maxLimit=1035636 1-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=NONE,autoScale=on,minLimit=0,maxLimit=2196027
 noInherit on
 priority 0
 type bed 3
