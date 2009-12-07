@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.43 2009/11/11 22:06:42 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.44 2009/12/07 19:17:09 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -180,7 +180,7 @@ function matSubCBsCheck(state)
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
         var classes = matAbcCBclasses('unchecked');
         subCBs = objsFilterByClasses(subCBs,false,classes);  // remove unchecked abcCB classes
-        if(arguments.length == 3) { // Requested dimX&Y: check dim ABC state
+        if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
         } else {//if(arguments.length == 2) { // Requested dim ABC (or only 1 dimension so this code is harmless)
             var matXY = $("input.matCB").not(".abc");  // check X&Y state

@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.250 2009/11/19 01:21:10 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251 2009/12/07 19:16:49 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5277,7 +5277,7 @@ if(slCount(parentTdb->subtracks) <= 1)
 if(dimensionsExist(parentTdb))
     return FALSE;
 
-#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"subtrackCBsSetAll(%s);\" id='btn_%s' src='../images/%s'>"
+#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 printf("<P><B>Select subtracks:</B><P>All:&nbsp;");
