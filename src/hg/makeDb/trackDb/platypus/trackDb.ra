@@ -22,6 +22,13 @@ priority 250.2
 shortLabel $o_db Net  
 otherDb hg18
 
+track chainNetEquCab2 override
+chainMinScore 5000
+chainLinearGap loose
+
+track chainNetMonDom5 override
+priority 260
+
 track chainNetHg19 override
 priority 250.3
 
