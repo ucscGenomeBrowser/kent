@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.150 2009/12/05 00:20:46 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.151 2009/12/07 17:08:29 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -262,28 +262,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Stam_15_protocols.pdf
 
-term Medullo
-tag Medullo
-type Cell Line
-organism Human
-description (aka H54) Glioblastoma
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
-termId BTO:0000527
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
-tier 3
-protocol D54_Crawford_protocol.pdf
-
-term Gliobla
-tag Gliobla
-type Cell Line
-organism Human
-description Medulloblastoma
-vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
-termId BTO:0001359
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
-tier 3
-protocol D721_Crawford_protocol.pdf
-
 term Fibrobl
 tag Fibrobl
 type Cell Line
@@ -298,6 +276,17 @@ termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
 tier 3
 protocol fibroblast_Crawford_protocol.pdf
+
+term Gliobla
+tag Gliobla
+type Cell Line
+organism Human
+description (aka H54) Glioblastoma
+vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+termId BTO:0000527
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
+tier 3
+protocol D54_Crawford_protocol.pdf
 
 term GM06990
 tag GM06990
@@ -717,6 +706,17 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 tier 3
 protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
+
+term Medullo
+tag Medullo
+type Cell Line
+organism Human
+description Medulloblastoma
+vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+termId BTO:0001359
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
+tier 3
+protocol D721_Crawford_protocol.pdf
 
 term NB4
 tag NB4
