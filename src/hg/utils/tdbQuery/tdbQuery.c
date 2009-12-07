@@ -9,10 +9,11 @@
 #include "portable.h"
 #include "errabort.h"
 #include "tdbRecord.h"
+#include "ra.h"
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.21 2009/12/07 02:37:39 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.22 2009/12/07 17:19:13 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -1062,10 +1063,173 @@ if (sameString(rql->command, "count"))
 rqlStatementFree(&rql);
 }
 
+struct slName *hashPair(char *raFile, char *keyField, char *valField, struct hash **retValHash,
+	struct hash **retCommentHash)
+/* Read two fields out of a ra file.  For records that have both fields put them into
+ * a hash with the logical keys and values, which is returned.  Return list of keys in order. */
+{
+struct slName *list = NULL, *el;
+struct hash *hash = hashNew(0), *commentHash = hashNew(0);
+struct lineFile *lf = lineFileMayOpen(raFile, TRUE);
+struct dyString *dy = dyStringNew(0);
+if (lf != NULL)
+    {
+    while (raSkipLeadingEmptyLines(lf, dy))
+	{
+	char *theKey = NULL, *theVal = NULL;
+	char *name, *val;
+	while (raNextTagVal(lf, &name, &val, NULL))
+	    {
+	    if (sameString(name, keyField))
+	       theKey = lmCloneString(hash->lm, val);
+	    else if (sameString(name, valField))
+	       theVal = lmCloneString(hash->lm, val);
+	    }
+	if (theKey && theVal)
+	    {
+	    hashAdd(hash, theKey, theVal);
+	    hashAdd(commentHash, theKey, lmCloneString(hash->lm, dy->string));
+	    slNameAddHead(&list, theKey);
+	    }
+	}
+    lineFileClose(&lf);
+    }
+dyStringFree(&dy);
+*retValHash = hash;
+*retCommentHash = commentHash;
+slReverse(&list);
+return list;
+}
+
+void overrideOrWriteSelf(char *orig, char *name, char *val, 
+	char *tagName, char *keyVal, struct hash *hash, struct lineFile *lf, FILE *f)
+/* Write out name/val pair. */
+{
+if (keyVal == NULL)
+    errAbort("%s tag before track tag line %d of %s", tagName, lf->lineIx, lf->fileName);
+char *newVal = hashFindVal(hash, keyVal);
+if (newVal != NULL)
+    {
+    int leadingSpaces = skipLeadingSpaces(orig) - orig;
+    if (orig[0] == '#')
+        errAbort("Rats, internal comments, can't deal with it.");
+    mustWrite(f, orig, leadingSpaces);
+    fprintf(f, "%s %s\n", name, newVal);
+    hashRemove(hash, keyVal);
+    }
+else
+    fprintf(f, "%s", orig);
+}
+
 void rewriteWithVisAndPriUpdates(char *tIn, char *pIn, char *vIn, char *tOut)
 /* Write tIn to tOut applying modifications in pIn and pOut */
 {
-uglyf("rewriting %s to %s\n", tIn, tOut);
+struct hash *pHash, *pTextHash;
+struct slName *pList = hashPair(pIn, "track", "priority", &pHash, &pTextHash);
+struct hash *vHash, *vTextHash;
+struct slName *vList = hashPair(vIn, "track", "visibility", &vHash, &vTextHash);
+struct lineFile *lf = lineFileOpen(tIn, TRUE);
+FILE *f = mustOpen(tOut, "w");
+struct dyString *dy = dyStringNew(0);
+while (raSkipLeadingEmptyLines(lf, dy))
+    {
+    fprintf(f, "%s", dy->string);
+    dyStringClear(dy);
+    char *keyVal = NULL;
+    char *name, *val;
+    while (raNextTagVal(lf, &name, &val, dy))
+        {
+	if (sameString(glKeyField, name))
+	    {
+	    fprintf(f, "%s", dy->string);
+	    keyVal = cloneString(val);
+	    }
+	else if (sameString("priority", name))
+	    {
+	    overrideOrWriteSelf(dy->string, name, val, "priority", keyVal, pHash, lf, f);
+	    }
+	else if (sameString("visibility", name))
+	    {
+	    overrideOrWriteSelf(dy->string, name, val, "visibility", keyVal, vHash, lf, f);
+	    }
+	else
+	    {
+	    fprintf(f, "%s", dy->string);
+	    }
+	dyStringClear(dy);
+	}
+    fprintf(f, "%s", dy->string);
+    }
+struct slName *p, *v;
+boolean pWroteHead = FALSE;
+for (p = pList; p != NULL; p = p->next)
+    {
+    char *key = p->name;
+    char *pri = hashFindVal(pHash, key);
+    if (pri != NULL)
+        {
+	if (!pWroteHead)
+	    {
+	    fprintf(f, "\n#Overrides from priority.ra\n\n");
+	    pWroteHead = TRUE;
+	    }
+	char *text = hashFindVal(pTextHash, key);
+	fprintf(f, "%s", text);
+	char *vis = hashFindVal(vHash, key);
+	if (vis != NULL)
+	    {
+	    char *vText = hashFindVal(vTextHash, key);
+	    fprintf(f, "%s", vText);
+	    }
+	fprintf(f, "track %s override\n", key);
+	fprintf(f, "priority %s\n", pri);
+	if (vis != NULL)
+	    fprintf(f, "visibility %s\n", vis);
+	fprintf(f, "\n");
+	}
+    }
+boolean vWroteHead = FALSE;
+for (v = vList; v != NULL; v = v->next)
+    {
+    char *key = v->name;
+    char *vis = hashFindVal(vHash, key);
+    if (vis != NULL)
+        {
+	char *text = hashFindVal(vTextHash, key);
+	if (!vWroteHead)
+	    {
+	    fprintf(f, "\n#Overrides from visibility.ra\n\n");
+	    vWroteHead = TRUE;
+	    }
+	fprintf(f, "%s", text);
+	fprintf(f, "track %s override\n", key);
+	fprintf(f, "visibility %s\n", vis);
+	fprintf(f, "\n");
+	}
+    }
+dyStringFree(&dy);
+carefulClose(&f);
+lineFileClose(&lf);
+}
+
+static void rewriteInsideSubdir(char *outDir, char *inDir, char *subDir,
+	char *trackFile, char *visFile, char *priFile)
+/* Do some sort of rewrite on one subdirectory. */
+{
+char tIn[PATH_LEN], vIn[PATH_LEN], pIn[PATH_LEN];
+safef(tIn, sizeof(tIn), "%s/%s", inDir, trackFile);
+safef(vIn, sizeof(vIn), "%s/%s", inDir, visFile);
+safef(pIn, sizeof(pIn), "%s/%s", inDir, priFile);
+if (fileExists(tIn))
+     {
+     if (fileExists(pIn) || fileExists(vIn))
+	 {
+	 char tOut[PATH_LEN];
+	 safef(tOut, sizeof(tOut), "%s/%s", outDir, trackFile);
+	 makeDirsOnPath(outDir);
+	 rewriteWithVisAndPriUpdates(tIn, pIn, vIn, tOut);
+	 }
+     }
 }
 
 void doRewrite(char *outDir, char *inDir, char *trackFile, char *visFile, char *priFile)
@@ -1079,19 +1243,18 @@ for (org = orgList; org != NULL; org = org->next)
 	char inOrgDir[PATH_LEN], outOrgDir[PATH_LEN];
 	safef(inOrgDir, sizeof(inOrgDir), "%s/%s", inDir, org->name);
 	safef(outOrgDir, sizeof(outOrgDir), "%s/%s", outDir, org->name);
-	char tInOrg[PATH_LEN], vInOrg[PATH_LEN], pInOrg[PATH_LEN];
-	safef(tInOrg, sizeof(tInOrg), "%s/%s", inOrgDir, trackFile);
-	safef(vInOrg, sizeof(vInOrg), "%s/%s", inOrgDir, visFile);
-	safef(pInOrg, sizeof(pInOrg), "%s/%s", inOrgDir, priFile);
-	if (fileExists(tInOrg))
-	     {
-	     if (fileExists(pInOrg) || fileExists(vInOrg))
-		 {
-		 char tOutOrg[PATH_LEN];
-		 safef(tOutOrg, sizeof(tOutOrg), "%s/%s", outOrgDir, trackFile);
-		 rewriteWithVisAndPriUpdates(tInOrg, pInOrg, vInOrg, tOutOrg);
-		 }
-	     }
+	rewriteInsideSubdir(outOrgDir, inOrgDir, org->name, trackFile, visFile, priFile);
+	struct fileInfo *db, *dbList = listDirX(inOrgDir, "*", FALSE);
+	for (db = dbList; db != NULL; db = db->next)
+	    {
+	    if (db->isDir)
+	        {
+		char inDbDir[PATH_LEN], outDbDir[PATH_LEN];
+		safef(inDbDir, sizeof(inDbDir), "%s/%s", inOrgDir, db->name);
+		safef(outDbDir, sizeof(outDbDir), "%s/%s", outOrgDir, db->name);
+		rewriteInsideSubdir(outDbDir, inDbDir, db->name, trackFile, visFile, priFile);
+		}
+	    }
 	}
     }
 }
