@@ -1,6 +1,6 @@
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
-# like 'hg18'.
+# like 'hg18'.  See the README file in this directory for a description of the format.
 #
 
 track mapGenethon
