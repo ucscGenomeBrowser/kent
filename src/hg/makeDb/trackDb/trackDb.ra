@@ -1,3 +1,8 @@
+# Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
+# will be layered on.  Organism is something like 'human' and database is something
+# like 'hg18'.
+#
+
 track mapGenethon
 shortLabel STS Markers
 longLabel Various STS Markers

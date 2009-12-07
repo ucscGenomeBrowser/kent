@@ -606,6 +606,3 @@ visibility hide
 track rmsk override
 visibility dense
 
-track netMm7 override
-visibility dense
-
