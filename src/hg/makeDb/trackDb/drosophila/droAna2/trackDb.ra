@@ -32,3 +32,9 @@ indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
 
+
+#Overrides from visibility.ra
+
+track xenoRefGene override
+visibility pack
+

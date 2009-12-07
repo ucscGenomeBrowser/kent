@@ -131,3 +131,17 @@ priority 120.1
 track netHg18 override
 priority 120.2
 
+
+#Overrides from priority.ra
+
+# fugu
+track blatFr1 override
+priority 118
+
+# mouse
+track chainMm9 override
+priority 114
+
+track netMm9 override
+priority 114.1
+

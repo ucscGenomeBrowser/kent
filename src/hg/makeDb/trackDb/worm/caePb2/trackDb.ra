@@ -56,3 +56,9 @@ type psl est
 baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
+
+#Overrides from visibility.ra
+
+track gc5Base override
+visibility full
+

@@ -221,3 +221,18 @@ otherDb oryLat1
 track chainNetHg19 override
 priority 274.3
 
+
+#Overrides from priority.ra
+
+track chainOryLat2 override
+priority 280
+
+track netOryLat2 override
+priority 280.1
+
+track chainAnoCar1 override
+priority 275.5
+
+track netAnoCar1 override
+priority 275.6
+

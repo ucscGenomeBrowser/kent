@@ -721,3 +721,9 @@ chainMinScore 2000
 chainLinearGap medium
 priority 130
 
+
+#Overrides from visibility.ra
+
+track ensGene override
+visibility pack
+

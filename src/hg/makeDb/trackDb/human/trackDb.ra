@@ -2363,7 +2363,7 @@ track chainMonDom4
 shortLabel $o_Organism Chain
 longLabel monDom4 ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 164.1
+priority 190
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2377,7 +2377,7 @@ track netMonDom4
 shortLabel $o_Organism Net
 longLabel monDom4 ($o_date/$o_db) Alignment Net
 group compGeno
-priority 164.2
+priority 190.1
 visibility hide
 spectrum on
 type netAlign monDom4 chainMonDom4
@@ -2387,7 +2387,7 @@ track chainLoxAfr1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 253.1
+priority 197
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2400,7 +2400,7 @@ track netLoxAfr1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 253.2
+priority 197.1
 visibility hide
 spectrum on
 type netAlign loxAfr1 chainLoxAfr1
@@ -3231,4 +3231,225 @@ semiShortCircuit 1
 termRegex ES_[0-9]+_[0-9]+
 searchPriority 30
 
+
+#Overrides from priority.ra
+
+
+# fly
+track chainDm2 override
+priority 109
+
+track netDm2 override
+priority 109.1
+
+# urchin
+track chainStrPur2 override
+priority 110
+
+track netStrPur2 override
+priority 110.1
+
+# ciona
+track chainCi2 override
+priority 117
+
+track netCi2 override
+priority 117.1
+
+# lancelet
+track chainBraFlo1 override
+priority 118
+
+track netBraFlo1 override
+priority 118.1
+
+
+# lamprey
+track chainPetMar1 override
+priority 119
+
+track netPetMar1 override
+priority 119.1
+
+# medaka
+track chainOryLat2 override
+priority 120
+
+track netOryLat2 override
+priority 120.1
+
+track chainOryLat1 override
+priority 120
+
+track netOryLat1 override
+priority 120.1
+
+# stickleback
+track chainGasAcu1 override
+priority 130
+
+track netGasAcu1 override
+priority 130.1
+
+
+# zfish
+track chainDanRer5 override
+priority 168.0
+
+track netDanRer5 override
+priority 168.1
+
+track chainDanRer4 override
+priority 168.2
+
+track netDanRer4 override
+priority 168.3
+
+track chainDanRer3 override
+priority 168.4
+
+track netDanRer3 override
+priority 168.5
+
+# frog
+track chainXenTro2 override
+priority 178.0
+
+track netXenTro2 override
+priority 178.1
+
+track chainXenTro1 override
+priority 178.2
+
+track netXenTro1 override
+priority 178.3
+
+track chainMonDom2 override
+priority 190.2
+
+track netMonDom2 override
+priority 190.3
+
+track chainMonDom1 override
+priority 190.4
+
+track netMonDom1 override
+priority 190.5
+
+# lizard
+track chainAnoCar1 override
+priority 183
+
+track netAnoCar1 override
+priority 183.1
+
+# armadillo
+track chainDasNov1 override
+priority 195
+
+track netDasNov1 override
+priority 195.1
+
+# tenrec
+track chainEchTel1 override
+priority 196
+
+track netEchTel1 override
+priority 196.1
+
+# dog
+track chainCanFam2 override
+priority 228
+
+track netCanFam2 override
+priority 228.1
+
+track chainCanFam1 override
+priority 228.2
+
+track netCanFam1 override
+priority 228.3
+
+# horse
+track chainEquCab2 override
+priority 235
+
+track netEquCab2 override
+priority 235.1
+
+track chainEquCab1 override
+priority 235.2
+
+track netEquCab1 override
+priority 235.3
+
+# cow
+track chainBosTau4 override
+priority 236
+
+track netBosTau4 override
+priority 236.1
+
+track chainBosTau3 override
+priority 236.2
+
+track netBosTau3 override
+priority 236.3
+
+track chainBosTau2 override
+priority 236.4
+
+track netBosTau2 override
+priority 236.5
+
+track chainBosTau1 override
+priority 236.6
+
+track netBosTau1 override
+priority 236.7
+
+
+# rabbit
+track chainOryCun1 override
+priority 257
+
+track netOryCun1 override
+priority 257.1
+
+
+# guinea pig
+track chainCavPor3 override
+priority 258
+
+track netCavPor3 override
+priority 258.1
+
+track chainCavPor2 override
+priority 258.2
+
+track netCavPor2 override
+priority 258.3
+
+# rat
+track chainRn4 override
+priority 260
+
+track netRn4 override
+priority 260.1
+
+track chainRn3 override
+priority 260.2
+
+track netRn3 override
+priority 260.3
+
+# expression and regulation automatically ordered
+track firstEF override
+priority 0
+
+track oreganno override
+priority 0
+
+track cpgIslandExt override
+priority 0
 

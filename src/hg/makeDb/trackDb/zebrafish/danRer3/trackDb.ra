@@ -319,3 +319,9 @@ searchType psl
 xrefTable hg17.blastKGRef02
 xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
 searchPriority 25
+
+#Overrides from priority.ra
+
+track ensGene override
+priority 32.8
+

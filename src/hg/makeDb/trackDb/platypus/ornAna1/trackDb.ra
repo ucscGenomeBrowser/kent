@@ -125,3 +125,24 @@ track netMonDom4 override
 shortLabel $o_db Net
 priority 260.2
 otherDb monDom4
+
+#Overrides from priority.ra
+
+track chainEquCab2 override
+priority 225
+
+track netEquCab2 override
+priority 225.1
+
+track chainPonAbe2 override
+priority 240
+
+track netPonAbe2 override
+priority 240.1
+
+track chainCalJac1 override
+priority 230
+
+track netCalJac1 override
+priority 230.1
+

@@ -282,3 +282,9 @@ searchMethod prefix
 searchType psl
 termRegex [[:alnum:]]*-?[[:alnum:]\._:\-]+
 searchPriority 11
+
+#Overrides from priority.ra
+
+track ensGene override
+priority 32.8
+

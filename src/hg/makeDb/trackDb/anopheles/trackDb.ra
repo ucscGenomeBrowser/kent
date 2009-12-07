@@ -1,3 +1,5 @@
+#Some mosquito-specific stuff.
+
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
@@ -90,3 +92,9 @@ visibility dense
 spectrum on
 type rmsk
 canPack off
+
+#Overrides from visibility.ra
+
+track ensGene override
+visibility dense
+

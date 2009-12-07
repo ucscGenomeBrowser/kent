@@ -222,3 +222,24 @@ visibility hide
 type bed 9
 itemRgb on
 origAssembly ce4
+
+#Overrides from priority.ra
+
+track chainCaePb2 override
+priority 126
+
+track netCaePb2 override
+priority 127
+
+track chainCb3 override
+priority 128
+
+track netCb3 override
+priority 129
+
+track chainCaeRem3 override
+priority 130
+
+track netCaeRem3 override
+priority 131
+

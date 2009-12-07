@@ -68,3 +68,15 @@ group map
 visibility dense
 type bed 3 +
 
+
+#Overrides from visibility.ra
+
+track intronEst override
+visibility pack
+
+track gold override
+visibility dense
+
+track quality override
+visibility dense
+

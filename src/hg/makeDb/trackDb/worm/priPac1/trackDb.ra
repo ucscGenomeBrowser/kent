@@ -63,3 +63,12 @@ type psl est
 baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
+
+#Overrides from priority.ra
+
+track chainCe4 override
+priority 136
+
+track netCe4 override
+priority 136.1
+

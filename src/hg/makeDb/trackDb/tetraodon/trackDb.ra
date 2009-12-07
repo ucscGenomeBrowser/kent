@@ -33,7 +33,7 @@ shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
 priority 57
-visibility hide
+visibility dense
 spectrum on
 intronGap 30
 type psl est
@@ -436,4 +436,14 @@ searchType genePred
 shortcircuit 1
 termRegex EG3THT[0-9]+
 searchPriority 50
+
+
+#Overrides from priority.ra
+
+# medaka
+track chainOryLat2 override
+priority 227
+
+track netOryLat2 override
+priority 227.1
 

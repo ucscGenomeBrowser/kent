@@ -97,5 +97,8 @@ termRegex Contig[0-9a-zA-Z_].*\.[0-9]+\.[a-z]
 searchPriority 50
 
 
+#Overrides from visibility.ra
 
+track xenoRefGene override
+visibility pack
 

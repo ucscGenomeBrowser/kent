@@ -121,3 +121,9 @@ termRegex [[:alnum:]_]+
 dontCheck Amel_[0-9]+\.[[:alnum:]_]+
 searchPriority 50
 
+
+#Overrides from visibility.ra
+
+track ensGene override
+visibility dense
+

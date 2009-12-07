@@ -69,10 +69,12 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chainMinScore 5000
 chainLinearGap loose
 
-# in visibility.ra
-# 
-# track refGene
-# visibility pack
-# 
-# track intronEst
-# visibility hide
+
+#Overrides from visibility.ra
+
+track refGene override
+visibility pack
+
+track intronEst override
+visibility hide
+

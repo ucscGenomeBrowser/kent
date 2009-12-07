@@ -63,7 +63,7 @@ shortLabel D. mel. Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
 group genes
 priority 200
-visibility dense
+visibility pack
 colorChromDefault off
 type psl protein
 pred dm2.blastFBPep01
@@ -111,4 +111,10 @@ searchTable genscan
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+
 searchPriority 50
+
+
+#Overrides from visibility.ra
+
+track xenoRefGene override
+visibility squish
 

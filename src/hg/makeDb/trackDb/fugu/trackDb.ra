@@ -92,7 +92,7 @@ shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
 priority 57
-visibility hide
+visibility dense
 spectrum on
 intronGap 30
 type psl est
@@ -466,4 +466,38 @@ visibility hide
 spectrum on
 type netAlign mm9 chainMm9
 otherDb mm9
+
+
+#Overrides from priority.ra
+
+# medaka
+track chainOryLat2 override
+priority 240
+
+track netOryLat2 override
+priority 240.1
+
+
+#Overrides from visibility.ra
+
+track cpgIsland override
+visibility dense
+
+track gcPercent override
+visibility dense
+
+track simpleRepeat override
+visibility dense
+
+track blatHg15 override
+visibility dense
+
+track rmsk override
+visibility dense
+
+track ensGene override
+visibility dense
+
+track ctgPos override
+visibility dense
 

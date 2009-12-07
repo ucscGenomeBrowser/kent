@@ -138,7 +138,7 @@ track chainHg18
 shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 250
+priority 256
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -170,7 +170,7 @@ track netHg18
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 250.1
+priority 256.1
 visibility dense
 spectrum on
 type netAlign hg18 chainHg18
@@ -194,7 +194,7 @@ track chainHg17
 shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 251
+priority 256.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -226,7 +226,7 @@ track netHg17
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 251.1
+priority 256.3
 visibility hide
 spectrum on
 type netAlign hg17 chainHg17
@@ -273,7 +273,7 @@ track chainMm9
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 279
+priority 280
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -287,7 +287,7 @@ track netMm9
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 279.1
+priority 280.1
 visibility hide
 spectrum on
 type netAlign mm9 chainMm9
@@ -297,7 +297,7 @@ track chainMm8
 shortLabel mm8 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 280
+priority 280.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -311,7 +311,7 @@ track netMm8
 shortLabel mm8 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 280.1
+priority 280.3
 visibility hide
 spectrum on
 type netAlign mm8 chainMm8
@@ -321,7 +321,7 @@ track chainBosTau3
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 229.1
+priority 229.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -335,7 +335,7 @@ track netBosTau3
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 229.2
+priority 229.3
 visibility hide
 spectrum on
 type netAlign bosTau3 chainBosTau3
@@ -492,3 +492,120 @@ searchType psl
 shortCircuit 1
 termRegex [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
+
+#Overrides from priority.ra
+
+
+# frog
+track chainXenTro2 override
+priority 170
+
+track netXenTro2 override
+priority 170.1
+
+track chainXenTro1 override
+priority 170.2
+
+track netXenTro1 override
+priority 170.3
+
+# chicken
+track chainGalGal3 override
+priority 181
+
+track netGalGal3 override
+priority 181.1
+
+track chainGalGal2 override
+priority 181.2
+
+track netGalGal2 override
+priority 181.3
+
+# cow
+track chainBosTau4 override
+priority 229
+
+track netBosTau4 override
+priority 229.1
+
+track chainBosTau2 override
+priority 229.4
+
+track netBosTau2 override
+priority 229.5
+
+# dog
+track chainCanFam2 override
+priority 225
+
+track netCanFam2 override
+priority 225.1
+
+# rhesus 
+track chainRheMac2 override
+priority 240
+
+track netRheMac2 override
+priority 240.1
+
+# marmoset
+track chainCalJac1 override
+priority 257
+
+track netCalJac1 override
+priority 257.1
+
+# guinea pig
+track chainCavPor3 override
+priority 278
+
+track netCavPor3 override
+priority 278.1
+
+track chainCavPor2 override
+priority 278.2
+
+track netCavPor2 override
+priority 278.3
+
+track chainMm7 override
+priority 280.4
+
+track netMm7 override
+priority 280.5
+visibility dense
+
+
+#Overrides from visibility.ra
+
+track genieKnown override
+visibility pack
+
+track refGene override
+visibility pack
+
+track nscanGene override
+visibility dense
+
+track mrna override
+visibility pack
+
+track intronEst override
+visibility dense
+
+track est override
+visibility hide
+
+track rnaCluster override
+visibility hide
+
+track cpgIsland override
+visibility hide
+
+track rmsk override
+visibility dense
+
+track netMm7 override
+visibility dense
+

@@ -4,7 +4,7 @@ shortLabel Assembly
 longLabel Assembly from Fragments
 group map
 priority 10
-visibility hide
+visibility dense
 color 150,100,30
 altColor 230,170,40
 type bed 3 +
@@ -24,5 +24,17 @@ shortLabel Contigs
 longLabel Assembly Contigs
 group map
 priority 10
-visibility hide
+visibility dense
 type ctgPos
+
+#Overrides from visibility.ra
+
+track gc5Base override
+visibility full
+
+track xenoRefGene override
+visibility pack
+
+track intronEst override
+visibility hide
+
