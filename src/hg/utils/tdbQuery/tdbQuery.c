@@ -13,7 +13,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.22 2009/12/07 17:19:13 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.23 2009/12/07 17:44:25 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -1195,16 +1195,20 @@ for (v = vList; v != NULL; v = v->next)
     char *vis = hashFindVal(vHash, key);
     if (vis != NULL)
         {
-	char *text = hashFindVal(vTextHash, key);
-	if (!vWroteHead)
+	char *pri = hashFindVal(pHash, key);
+	if (pri == NULL)  /* Already wrote this above if has both. */
 	    {
-	    fprintf(f, "\n#Overrides from visibility.ra\n\n");
-	    vWroteHead = TRUE;
+	    char *text = hashFindVal(vTextHash, key);
+	    if (!vWroteHead)
+		{
+		fprintf(f, "\n#Overrides from visibility.ra\n\n");
+		vWroteHead = TRUE;
+		}
+	    fprintf(f, "%s", text);
+	    fprintf(f, "track %s override\n", key);
+	    fprintf(f, "visibility %s\n", vis);
+	    fprintf(f, "\n");
 	    }
-	fprintf(f, "%s", text);
-	fprintf(f, "track %s override\n", key);
-	fprintf(f, "visibility %s\n", vis);
-	fprintf(f, "\n");
 	}
     }
 dyStringFree(&dy);
