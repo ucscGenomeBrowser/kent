@@ -12,13 +12,14 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.20 2009/12/06 20:11:21 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.21 2009/12/07 02:37:39 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
 static boolean clStrict = FALSE;	/* If set only return tracks with actual tables. */
 static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
 static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
+static char *clRewrite = NULL;		/* Rewrite to given directory. */
 
 void usage()
 /* Explain usage and exit. */
@@ -63,6 +64,7 @@ static struct optionSpec options[] = {
    {"strict", OPTION_BOOLEAN},
    {"alpha", OPTION_BOOLEAN},
    {"noBlank", OPTION_BOOLEAN},
+   {"rewrite", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -70,7 +72,7 @@ static struct optionSpec options[] = {
 #define glParentField "subTrack" /* The field that points to the parent. */
 
 struct hash *glTagTypes = NULL;	/* Hash of tagTypes file keyed by tag. */
-char glTagTypeFile[PATH_LEN];
+char glTagTypeFile[PATH_LEN];	/* File name of tagTypes.tab including dir. */
 
 void recordLocationReport(struct tdbRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -299,7 +301,7 @@ for (field = record->fieldList; field != NULL; field = field->next)
     {
     if (hashLookup(uniqHash, field->name))
         errAbort("Duplicate tag %s in record starting line %d of %s", field->name,
-		lf->lineIx, lf->fileName);
+		tdbRecordLineIx(record), lf->fileName);
     hashAdd(uniqHash, field->name, NULL);
     }
 hashFree(&uniqHash);
@@ -1060,17 +1062,59 @@ if (sameString(rql->command, "count"))
 rqlStatementFree(&rql);
 }
 
+void rewriteWithVisAndPriUpdates(char *tIn, char *pIn, char *vIn, char *tOut)
+/* Write tIn to tOut applying modifications in pIn and pOut */
+{
+uglyf("rewriting %s to %s\n", tIn, tOut);
+}
+
+void doRewrite(char *outDir, char *inDir, char *trackFile, char *visFile, char *priFile)
+/* Do some sort of rewrite on entire system. */
+{
+struct fileInfo *org, *orgList = listDirX(inDir, "*", FALSE);
+for (org = orgList; org != NULL; org = org->next)
+    {
+    if (org->isDir)
+	{
+	char inOrgDir[PATH_LEN], outOrgDir[PATH_LEN];
+	safef(inOrgDir, sizeof(inOrgDir), "%s/%s", inDir, org->name);
+	safef(outOrgDir, sizeof(outOrgDir), "%s/%s", outDir, org->name);
+	char tInOrg[PATH_LEN], vInOrg[PATH_LEN], pInOrg[PATH_LEN];
+	safef(tInOrg, sizeof(tInOrg), "%s/%s", inOrgDir, trackFile);
+	safef(vInOrg, sizeof(vInOrg), "%s/%s", inOrgDir, visFile);
+	safef(pInOrg, sizeof(pInOrg), "%s/%s", inOrgDir, priFile);
+	if (fileExists(tInOrg))
+	     {
+	     if (fileExists(pInOrg) || fileExists(vInOrg))
+		 {
+		 char tOutOrg[PATH_LEN];
+		 safef(tOutOrg, sizeof(tOutOrg), "%s/%s", outOrgDir, trackFile);
+		 rewriteWithVisAndPriUpdates(tInOrg, pInOrg, vInOrg, tOutOrg);
+		 }
+	     }
+	}
+    }
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
-    usage();
 clRoot = simplifyPathToDir(optionVal("root", clRoot));
 clCheck = optionExists("check");
 clStrict = optionExists("strict");
 clAlpha = optionExists("alpha");
 clNoBlank = optionExists("noBlank");
-tdbQuery(argv[1]);
+clRewrite = optionVal("rewrite", clRewrite);
+if (clRewrite)
+    {
+    doRewrite(clRewrite, clRoot, "trackDb.ra", "visibility.ra", "priority.ra");
+    }
+else
+    {
+    if (argc != 2)
+	usage();
+    tdbQuery(argv[1]);
+    }
 return 0;
 }
