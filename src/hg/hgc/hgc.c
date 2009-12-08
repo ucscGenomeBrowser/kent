@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1581 2009/12/04 22:06:19 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1582 2009/12/08 23:25:59 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22426,6 +22426,8 @@ else if (sameString("snpArrayIllumina300", track) ||
          sameString("snpArrayIllumina550", track) ||
 	 sameString("snpArrayIllumina650", track) ||
 	 (sameString("snpArrayIllumina1M", track) && startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHuman660W_Quad", track) && startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanOmni1_Quad", track) && startsWith("rs", item) ) ||
 	 (sameString("snpArrayIlluminaHumanCytoSNP_12", track) && startsWith("rs", item) ) )
     {
     doSnpArray(tdb, item, "Illumina");
