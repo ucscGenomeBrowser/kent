@@ -1,2 +1,10 @@
 track xenoRefGene override
 visibility pack
+
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
+type ctgPos
