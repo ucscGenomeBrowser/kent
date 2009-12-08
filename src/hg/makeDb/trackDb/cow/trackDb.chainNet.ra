@@ -1,0 +1,25 @@
+#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/08 23:39:35 hiram Exp $";
+
+track chainNetOrnAna1 override
+priority 250.3
+
+track chainNetMonDom5 override
+priority 260.3
+
+track chainNetHg19 override
+visibility dense
+priority 270.3
+
+track chainNetHg18 override
+visibility dense
+priority 270.3
+
+track chainNetMm9 override
+priority 280.3
+
+track chainNetRn4 override
+priority 290.3
+
+track chainNetCanFam2 override
+priority 300.3
+
