@@ -223,6 +223,48 @@ type bed 9
 itemRgb on
 origAssembly ce4
 
+track fireLabCdnaRnaSeq
+compositeTrack on
+shortLabel cDNA RNA Seq
+longLabel cDNA RNA Seq
+group regulation
+priority 100.0
+visibility hide
+dragAndDrop subtracks
+noInherit on
+subGroup1 view Data_Sets exon=Exon rnaseq=RNA_seq
+visibilityViewDefaults exon=pack rnaseq=full
+color 0,0,0
+# sortOrder view=+
+# dimensions dimensionY=view
+type bed 3
+
+	track potentialExonJunction
+	subTrack fireLabCdnaRnaSeq
+	subGroups view=exon
+	shortLabel Exon Junction
+	longLabel Potential exon Junction
+	type bed 12 .
+	altColor 127,157,187
+	color 0,60,120
+	useScore 1
+	visibility pack
+	priority 1
+
+	track cDnaRnaSeq
+	subTrack fireLabCdnaRnaSeq
+	subGroups view=rnaseq
+	shortLabel RNA-Seq
+	longLabel non cDNA RNA-Seq
+	color 200,100,0
+	altColor 0,100,200
+	priority 2
+	type bedGraph 4
+	maxHeightPixels 100:32:10
+	minLimit 0
+	maxLimit 5500
+	viewLimits 0:50
+
 #Overrides from priority.ra
 
 track chainCaePb2 override
@@ -242,4 +284,3 @@ priority 130
 
 track netCaeRem3 override
 priority 131
-
