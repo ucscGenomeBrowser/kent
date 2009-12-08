@@ -2638,7 +2638,9 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
+# release beta until composite chainNetRn4 track becomes the default
 track chainRn4
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2652,7 +2654,9 @@ matrixHeader A, C, G, T
 type chain rn4
 otherDb rn4
 
+# release beta until composite chainNetRn4 track becomes the default
 track netRn4
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -2779,6 +2783,7 @@ type netAlign mm9 chainMm9
 otherDb mm9
 
 track chainMm8
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2793,6 +2798,7 @@ type chain mm8
 otherDb mm8
 
 track netMm8
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3378,6 +3384,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track chainHg18
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3392,6 +3399,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
