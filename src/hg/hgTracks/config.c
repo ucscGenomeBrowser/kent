@@ -444,24 +444,33 @@ configPageSetTrackVis(-2);
 boolean advancedJavascriptFeaturesEnabled(struct cart *cart)
 // Returns TRUE if advanced javascript features are currently enabled
 {
-char *ua = cgiUserAgent();
-boolean defaultVal = TRUE;
-
-// dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
-// This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
-// The AppleWebKit version provided by the browser in user agent doesn't always include the minor version number, so to
-// be overly conservative we default drag-and-drop to off when AppleWebKit major version == 530
-
-if(ua != NULL)
+static boolean alreadyLookedForadvancedJs = FALSE;
+static boolean advancedJsEnabled = FALSE;
+if(!alreadyLookedForadvancedJs)
     {
-    char *needle = "AppleWebKit/";
-    char *ptr = strstr(ua, needle);
-    if(ptr != NULL)
+    char *ua = cgiUserAgent();
+    boolean defaultVal = TRUE;
+
+    // dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
+    // This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
+    // The AppleWebKit version provided by the browser in user agent doesn't always include the minor version number, so to
+    // be overly conservative we default drag-and-drop to off when AppleWebKit major version == 530
+
+    if(ua != NULL)
         {
-        int version = 0;
-        sscanf(ptr + strlen(needle), "%d", &version);
-        defaultVal = (version != 530);
+        char *needle = "AppleWebKit/";
+        char *ptr = strstr(ua, needle);
+        if(ptr != NULL)
+            {
+            int version = 0;
+            sscanf(ptr + strlen(needle), "%d", &version);
+            defaultVal = (version != 530);
+            }
         }
+    advancedJsEnabled = cartUsualBoolean(cart, "enableAdvancedJavascript", defaultVal);
+    alreadyLookedForadvancedJs = TRUE;
     }
-return cartUsualBoolean(cart, "enableAdvancedJavascript", defaultVal);
+//else
+//    warn("already looked up advancedJsEnabled");  // got msg 41 times in one page!
+return advancedJsEnabled;
 }
