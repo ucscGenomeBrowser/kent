@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.16 2009/12/07 02:37:21 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.17 2009/12/08 20:42:50 kent Exp $";
 
 boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy)
 /* Skip leading empty lines and comments.  Returns FALSE at end of file. 
@@ -25,33 +25,21 @@ char *line;
 if (dy)
     dyStringClear(dy);
 for (;;)
-   {
-   if (!lineFileNext(lf, &line, NULL))
+    {
+    if (!lineFileNext(lf, &line, NULL))
        return FALSE;
-   char *tag = skipLeadingSpaces(line);
-   if (tag[0] != 0 )
-       {
-       if (tag[0] == '#')
-	   {
-	   if (dy)
-	       {
-	       dyStringAppend(dy, line);
-	       dyStringAppendC(dy, '\n');
-	       }
-           continue;
-	   }
-       else 
-           break;
-       }
-   else
+    char *tag = skipLeadingSpaces(line);
+    if (tag[0] == 0 || tag[0] == '#')
        {
        if (dy)
 	   {
 	   dyStringAppend(dy, line);
 	   dyStringAppendC(dy, '\n');
 	   }
-       }
-   }
+	}
+    else
+       break;
+    }
 lineFileReuse(lf);
 return TRUE;
 }
@@ -66,15 +54,17 @@ for (;;)
     {
     if (!lineFileNext(lf, &line, NULL))
        return FALSE;
-   if (dy)
-       {
-       dyStringAppend(dy, line);
-       dyStringAppendC(dy, '\n');
-       }
     char *tag = skipLeadingSpaces(line);
     if (tag[0] == 0)
        {
+       if (dy)
+	   lineFileReuse(lf);	/* Just so don't lose leading space in dy. */
        return FALSE;
+       }
+    if (dy)
+       {
+       dyStringAppend(dy, line);
+       dyStringAppendC(dy, '\n');
        }
     if (tag[0] == '#')
        {
