@@ -128,12 +128,6 @@ otherDb monDom4
 
 #Overrides from priority.ra
 
-track chainEquCab2 override
-priority 225
-
-track netEquCab2 override
-priority 225.1
-
 track chainPonAbe2 override
 priority 240
 

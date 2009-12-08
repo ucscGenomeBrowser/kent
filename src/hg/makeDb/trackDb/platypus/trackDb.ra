@@ -1,3 +1,28 @@
+track chainEquCab2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 215
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrixHeader A, C, G, T
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+type chain equCab2
+otherDb equCab2
+release beta
+
+track netEquCab2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 215.1
+visibility hide
+spectrum on
+type netAlign equCab2 chainEquCab2
+otherDb equCab2
+
 track chainCalJac1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -21,10 +46,6 @@ track netHg18 override
 priority 250.2
 shortLabel $o_db Net  
 otherDb hg18
-
-track chainNetEquCab2 override
-chainMinScore 5000
-chainLinearGap loose
 
 track chainNetMonDom5 override
 priority 260
