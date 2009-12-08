@@ -25,94 +25,55 @@
                     TARGET=_blank>genome-announce</A> mailing list.</P>
 
                     <!-- start news -->
-<FONT FACE="courier" SIZE="3"><B>20 Oct. 2009 - Job Opening with UCSC Genome Browser Project</B></FONT>
-                    <P>
+		    <P>
+<FONT FACE="courier" SIZE="3"><B>7 Dec. 2009 - Human Genome Browser default 
+		    changing to hg19</B></FONT>
+		    <P>
+		    In conjunction with the release of the UCSC Genes and
+		    Conservation tracks on the hg19 (GRCh37) human assembly,
+		    we have changed the default human browser on our website 
+		    from hg18 to hg19. In general, if you are currently using 
+		    the hg18 (or older) browser, the 
+		    Genome Browser will continue to display that assembly for 
+		    you when you start it up. However, there are circumstances 
+		    in which the assembly may switch to the newer version (for 
+		    instance, if you reset your browser defaults). If you find 
+		    yourself in a situation where some of your favorite browser 
+		    tracks have "disappeared", you may want to check that 
+		    you're viewing the right assembly.
+		    </P>
+		    <P>
+<FONT FACE="courier" SIZE="3"><B>1 Dec. 2009 - New UCSC Genes and Conservation tracks released on hg19 browser</B></FONT><BR>
+		    <P>
+		    We're happy to announce the release of two of our most 
+		    popular data sets on the hg19/GRCh37 human Genome Browser. 
+		    The <B>UCSC Genes</B> track is a moderately conservative 
+		    set of gene predictions based on data from RefSeq, Genbank, 
+		    CCDS and UniProt. The <B>Conservation</B> track shows 
+		    multiple alignments of 46 vertebrate species and 
+		    measurements of evolutionary conservation using two methods 
+		    (phastCons and phyloP) from the PHAST package for all 
+		    vertebrate species as well as primate and placental mammal 
+		    subsets. For more information about these annotations, read 
+		    the description pages that accompany these tracks.</P>
+		    <P>
+		    <HR>
+<FONT FACE="courier" SIZE="3"><B>20 Oct. 2009 - Job opening with UCSC Genome Browser project</B></FONT>
                     The UCSC Genome Browser project is currently accepting
                     applications for a Biological Database Testing/User Support Technician
                     (Programmer/Analyst I).
-                    We are looking for a talented self-motivated individual who
-                    would like to use their skills in computer science,
-                    biology, and bioinformatics on a fast-paced project
-                    featuring the work of top genomics scientists worldwide.
-                    </P>
-
-                    <P>
-                    For a summary of the position details and qualifications,
-                    see
-                    <A HREF="http://www.cbse.ucsc.edu/jobs/staff#bdtust"
-                    TARGET=_blank>Biological Database Testing/User Support
-                    Technician</A> on the Center for Biomolecular Science and
-                    Engineering (CBSE) website. For detailed job descriptions
-                    and application information,  go to the
-                    <A HREF="http://jobs.ucsc.edu/" TARGET=_blank>UCSC Staff
-                    Employment website</A>, click the &quot;Search                                                             
-                    Postings&quot; link on the sidebar, and type in job 
-                    #0902365 (Testing/User Support Technician).                                                                                       
+		    <A HREF="goldenPath/newsarch.html#102009">Read more</A>.</P>
                     </P>                                                                                                       
                     <HR>                                       
 
-                    <FONT FACE="courier" SIZE="3"><B>9 September 2009 - Changes to the bigBed/bigWig data formats </B></FONT><BR>
-<P>If you have been taking advantage of the new bigBed format (for very large data
-sets), you'll be happy to hear that we have considerably slimmed down the memory
-footprint of the program that converts BED files into bigBed files: bedToBigBed.
-Because it now uses a multi-pass approach, it now takes only 1/4 the amount of
-RAM as the size of the uncompressed BED input file (instead of the 5x RAM it
-needed previously!). Read more 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/bigBed.html">here</A>.
-Pick up the new bedToBigBed executable 
-<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">here</A>.</P>
-
-<P>In conjunction with this change, there is also a change to the way you must
-specify your bigBed or bigWig Custom Track.  When you specify the location of
-your local bigBed/bigWig file (on your web-accessible http, https, or ftp
-server), use this designation: bigDataUrl (instead of the old designation: dataUrl).</P>
-
-e.g.
-<TT>track type=bigBed name="My Big Bed" description="Some Data from My Lab"
-<B>bigDataUrl</B>=http://myorg.edu/mylab/myBigBed.bb</TT>
-
-<P>Additionally, we would like to announce a companion program to the
-previously-announced wigToBigWig program: bedGraphToBigWig. This program
-converts bedGraph files into bigWig files.  The bedGraph format allows display
-of sparse or varying-size data. Read more 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/bigWig.html">here</A>.
-You can download the new bedGraphToBigWig utility 
-<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">here</A>.</P>
-
-<P>The main advantage of the bigBed and bigWig formats is that only the portions of
-the files needed to display a particular region are transferred to UCSC, so for
-large data sets, displaying bigBed/bigWig data is considerably faster than
-regular BED/wig data. The bigBed/bigWig file remains on your web accessible
-server (http, https, or ftp), not on the UCSC server.  Consequently, creating
-your Custom Track is very fast. Only the portion that is needed for the
-chromosomal position you are currently viewing is locally cached at UCSC as a
-"sparse file".</P>
-
-		    <HR>
-                    <FONT FACE="courier" SIZE="3"><B>10 August 2009 - Updated Yeast Genome Browser Released </B></FONT><BR>
-		    We have added the June 2008 release of the yeast genome 
-		    (<em>Saccharomyces cerevisiae</em>) based on sequence from
-		    the <A HREF="http://www.yeastgenome.org/"
-		    TARGET=_blank>Saccharomyces Genome Database</A> (SGD).
-		    <A HREF="goldenPath/newsarch.html#081009">Read more</A>.</P>
-		    </P>
-
-		    <HR>
-		    <FONT FACE="courier" SIZE="3"><B>22 July 2009 - Updated Opossum Genome Browser Released </B></FONT><BR>
-		    We have released an updated opossum (<em>Monodelphis domestica</em>)
-                    genome browser, UCSC version monDom5, corresponding to the
-                    <A HREF="http://www.broad.mit.edu/mammals/opossum/"
-                    TARGET=_blank>Broad Institute's</A> October 2006 assembly.
-		    <A HREF="goldenPath/newsarch.html#072209">Read more</A>.</P>
-		    </P><P>
-
-		    <HR>
-		    <FONT FACE="courier" SIZE="3"><B>7 July 2009 - Engineering Job Opening with UCSC Genome Browser Project </B></FONT>
-                    The UCSC Center for Biomolecular Science and Engineering is 
-		    currently accepting applications for a full-time,
-		    experienced engineer
-		    <A HREF="goldenPath/newsarch.html#070709">Read more</A>.</P>
-		    <P></P>
+                    <FONT FACE="courier" SIZE="3"><B>9 September 2009 - Changes
+ 		    to the bigBed/bigWig data formats:</B></FONT>
+		    If you have been taking advantage of the new bigBed format 
+		    (for very large data sets), you'll be happy to hear that we 
+		    have considerably slimmed down the memory footprint of the 
+		    program that converts BED files into bigBed files: 
+		    bedToBigBed. 
+		    <A HREF="goldenPath/newsarch.html#090909">Read more</A>.</P>
                         </TD><TD WIDTH=15>
                  </TD></TR></TABLE>
             <BR></TD></TR></TABLE>
