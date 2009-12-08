@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: tdbRewriteAddReplaces.c,v 1.1 2009/12/08 23:38:23 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteAddReplaces.c,v 1.2 2009/12/08 23:39:11 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -299,8 +299,6 @@ return closestParent;
 char *findRelease(struct raRecord *record, struct raLevel *level)
 /* Find release tag in self or parent track at this level. */
 {
-boolean uglyOne = sameString(record->key, "encodeAffyChIpHl60PvalBrg1Hr00");
-if (uglyOne) uglyf("findRelease for %s\n", record->key);
 while (record != NULL)
     {
     struct raTag *releaseTag = raRecordFindTag(record, "release");
@@ -318,11 +316,8 @@ return NULL;
 struct raRecord *findRecordAtLevel(struct raLevel *level, char *key, char *release)
 /* Find record of given key and release in level. */
 {
-boolean uglyOne = sameString(key, "encodeAffyChIpHl60PvalBrg1Hr00");
-if (uglyOne) uglyf("findRecordAtLevel %s %s %s\n", level->name, key, release);
 /* Look up key in hash */
 struct hashEl *firstEl = hashLookup(level->trackHash, key);
-if (uglyOne) uglyf("firstEl %p\n", firstEl);
 
 /* Loop through and return any ones that match on both key (implicit in hash find) and
  * in release. */
@@ -346,26 +341,20 @@ return NULL;
 struct raRecord *findRecordInParentFileLevel(struct raLevel *level, struct raRecord *record)
 /* Find record matching release in parent file level.  */
 {
-boolean uglyOne = sameString(record->key, "encodeAffyChIpHl60PvalBrg1Hr00");
-if (uglyOne) uglyf("findRecordInParentFileLevel %s %s\n", level->name, record->key);
 char *release = findRelease(record, level);
-if (uglyOne) uglyf("release for %s in %s is %s\n",  record->key, record->file->name, release);
 struct raRecord *parentRecord = NULL;
 struct raLevel *parent;
 for (parent = level->parent; parent != NULL; parent = parent->parent)
     {
-    if (uglyOne) uglyf("parent %s\n", parent->name);
     if ((parentRecord = findRecordAtLevel(parent, record->key, release)) != NULL)
         break;
     }
-if (uglyOne) uglyf("  parentRecord = %p\n", parentRecord);
 return parentRecord;
 }
 
 void rewriteFile(struct raLevel *level, struct raFile *file, char *outName, struct lm *lm)
 /* Rewrite file to outName, consulting symbols in parent. */
 {
-uglyf("rewriteFile %s\n", outName);
 FILE *f = mustOpen(outName, "w");
 struct raRecord *r;
 for (r = file->recordList; r != NULL; r = r->next)
@@ -374,23 +363,18 @@ for (r = file->recordList; r != NULL; r = r->next)
     struct raTag *t = r->tagList;
     if (sameString(t->name, "track"))
         {
-boolean uglyOne = sameString(r->key, "encodeAffyChIpHl60PvalBrg1Hr00");
-if (uglyOne) uglyf("got you %s\n", r->key);
 	char *tagStart = firstTagInText(t->text);
 	mustWrite(f, t->text, tagStart - t->text);
 	char *dupeVal = cloneString(t->val);
 	char *words[8];
 	int wordCount;
 	wordCount = chopLine(dupeVal, words);
-if (uglyOne) uglyf("wordCount %d\n", wordCount);
 	if (wordCount > 2)
 	    recordAbort(r, "too many words in track line");
 	char *key = words[0];
 	assert(sameString(key, r->key));
 	char *mergeOp = (wordCount > 1 ? words[1] : NULL);
-if (uglyOne) uglyf("mergeOp %s\n", mergeOp);
 	struct raRecord *parentRecord = findRecordInParentFileLevel(level, r);
-if (uglyOne) uglyf("parentRecord %p\n", parentRecord);
 	if (parentRecord != NULL)
 	    {
 	    if (mergeOp == NULL)
