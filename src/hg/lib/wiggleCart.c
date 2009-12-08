@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.34 2009/11/30 17:57:11 kent Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.35 2009/12/08 18:23:59 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -98,15 +98,46 @@ if (isNotEmpty(setting))
     }
 }
 
-static void viewLimitsCompositeOverride(struct trackDb *tdb, char *name,
-					double *retMin, double *retMax)
+static void viewLimitsCompositeOverride(struct trackDb *tdb,char *name,
+                      double *retMin, double *retMax,double *absMin, double *absMax)
 /* If aquiring min/max for composite level wig cfg, look for trackDb.ra "settingsByView" */
 {
 if(isNameAtCompositeLevel(tdb,name))
     {
-    char *setting = trackDbSettingByView(tdb, VIEWLIMITS);
-    parseColonRange(setting, retMin, retMax);
-    freez(&setting);
+    char *setting = NULL;
+    if(absMin != NULL && absMax != NULL)
+        {
+        setting = trackDbSettingByView(tdb,MIN_LIMIT);
+        if(setting != NULL)
+            {
+            if(setting[0] != '\0')
+                *absMin = sqlDouble(setting);
+            freeMem(setting);
+            }
+        setting = trackDbSettingByView(tdb,MAX_LIMIT);
+        if(setting != NULL)
+            {
+            if(setting[0] != '\0')
+                *absMax = sqlDouble(setting);
+            freeMem(setting);
+            }
+        else
+            {
+            setting = trackDbSettingByView(tdb,VIEWLIMITSMAX);  // Legacy
+            if(setting != NULL)
+                {
+                parseColonRange(setting, absMin, absMax);
+                freeMem(setting);
+                }
+            }
+        }
+
+    setting = trackDbSettingByView(tdb, VIEWLIMITS);
+    if(setting != NULL)
+        {
+        parseColonRange(setting, retMin, retMax);
+        freeMem(setting);
+        }
     }
 }
 
@@ -168,7 +199,7 @@ if (cartMinStr && cartMaxStr)
     *retMin = atof(cartMinStr);
     *retMax = atof(cartMaxStr);
     correctOrder(*retMin, *retMax);
-    // If it weren't for the the allowance for missing data range values, 
+    // If it weren't for the the allowance for missing data range values,
     // we could set retAbs* and be done here.
     cartMin = *retMin;
     cartMax = *retMax;
@@ -222,9 +253,10 @@ if (retAbsMin)
     *retAbsMin = absMin;
 if (retAbsMax)
     *retAbsMax = absMax;
-// After the dust settles from tdb's trackDb settings, now see if composite view 
+// After the dust settles from tdb's trackDb settings, now see if composite view
 // settings from tdb's parents override that stuff anyway:
-viewLimitsCompositeOverride(tdb, name, retMin, retMax);
+viewLimitsCompositeOverride(tdb, name, retMin, retMax, retAbsMin, retAbsMax);
+
 // And as the final word after composite override, reset retMin and retMax if from cart:
 if (cartMinStr && cartMaxStr)
     {
