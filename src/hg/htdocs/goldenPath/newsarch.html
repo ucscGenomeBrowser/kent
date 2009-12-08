@@ -36,12 +36,87 @@
 <A NAME="2009"></A>
 
 <HR>
+<A NAME="102009"></A>
+<FONT SIZE=4 COLOR="#006666"><B>20 Oct. 2009 - Job Opening with UCSC Genome Browser Project</B></FONT>
+                    <P>
+                    The UCSC Genome Browser project is currently accepting
+                    applications for a Biological Database Testing/User Support 
+		    Technician (Programmer/Analyst I).
+                    We are looking for a talented self-motivated individual who
+                    would like to use their skills in computer science,
+                    biology, and bioinformatics on a fast-paced project
+                    featuring the work of top genomics scientists worldwide.
+                    </P>
+
+                    <P>
+                    For a summary of the position details and qualifications,
+                    see
+                    <A HREF="http://www.cbse.ucsc.edu/jobs/staff#bdtust"
+                    TARGET=_blank>Biological Database Testing/User Support
+                    Technician</A> on the Center for Biomolecular Science and
+                    Engineering (CBSE) website. For detailed job descriptions
+                    and application information,  go to the
+                    <A HREF="http://jobs.ucsc.edu/" TARGET=_blank>UCSC Staff
+                    Employment website</A>, click the &quot;Search
+                    Postings&quot; link on the sidebar, and type in job 
+                    #0902365 (Testing/User Support Technician).
+                    </P>
+		    <HR>
+
+<A NAME="090909"></A>
+<FONT SIZE=4 COLOR="#006666"><B>9 September 2009 - Changes to the bigBed/bigWig data formats</B></FONT>
+		<P>
+		If you have been taking advantage of the new bigBed format 
+		(for very large data sets), you'll be happy to hear that we 
+		have considerably slimmed down the memory footprint of the 
+		program that converts BED files into bigBed files: bedToBigBed. 
+		Because it now uses a multi-pass approach, it now takes only 
+		1/4 the amount of RAM as the size of the uncompressed BED input 
+		file (instead of the 5x RAM it needed previously!). Read more 
+		<A HREF="help/bigBed.html">here</A>.  
+		Pick up the new bedToBigBed executable 
+		<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">here</A>.</P>
+		<P>
+		In conjunction with this change, there is also a change to the 
+		way you must specify your bigBed or bigWig custom track.  When 
+		you specify the location of your local bigBed/bigWig file (on 
+		your web-accessible http, https, or ftp server), use the 
+		designation &quot;bigDataUrl&quot; instead of the old 
+		&quot;dataUrl&quot;:
+		<BLOCKQUOTE>
+		<TT>track type=bigBed name="My Big Bed" description="Some Data from My Lab"
+		<B>bigDataUrl</B>=http://myorg.edu/mylab/myBigBed.bb</TT>
+		</BLOCKQUOTE>
+		</P>
+		<P>
+		Additionally, we would like to announce a companion program to 
+		the previously-announced wigToBigWig program: bedGraphToBigWig. 
+		This program converts bedGraph files into bigWig files.  The 
+		bedGraph format allows display of sparse or varying-size data. 
+		Read more 
+		<A HREF="help/bigWig.html">here</A>.  
+		You can download the new bedGraphToBigWig utility 
+		<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">here</A>.</P>
+		<P>
+		The main advantage of the bigBed and bigWig formats is that 
+		only the portions of the files needed to display a particular 
+		region are transferred to UCSC, so for large data sets, 
+		displaying bigBed/bigWig data is considerably faster than 
+		regular BED/wig data. The bigBed/bigWig file remains on your 
+		web accessible server (http, https, or ftp), not on the UCSC 
+		server.  Consequently, creating your custom track is very fast. 
+		Only the portion that is needed for the chromosomal position you
+		are currently viewing is locally cached at UCSC as a 
+		&quot;sparse file&quot;.</P>
+		<HR>
+
 <A NAME="081009"></A>
 <FONT SIZE=4 COLOR="#006666"><B>10 August 2009 - Updated Yeast Genome Browser Released </B></FONT>
-		<P>We have added the June 2008 release of the yeast genome
-                   (<em>Saccharomyces cerevisiae</em>) based on sequence from
-                   the <A HREF="http://www.yeastgenome.org/" 
-		   TARGET=_blank>Saccharomyces Genome Database</A> (SGD).
+		    <P>
+		    We have added the June 2008 release of the yeast genome
+                    (<em>Saccharomyces cerevisiae</em>) based on sequence from
+                    the <A HREF="http://www.yeastgenome.org/" 
+		    TARGET=_blank>Saccharomyces Genome Database</A> (SGD).
 		    The sequence, open reading frame (ORF), and gene annotations
                     were downloaded from the site
                     <A HREF="ftp://genome-ftp.stanford.edu/pub/yeast/data_download" 
@@ -59,9 +134,9 @@
 		    </P><P>
                     See the <A HREF="credits.html#yeast_credits">Credits</A>
                     page for details on contributions to this release.
-                    </P><P>
+                    </P>
+		    <HR>
 
-<HR>
 <A NAME="072209"></A>
 <FONT SIZE=4 COLOR="#006666"><B>22 July 2009 - Updated Opossum Genome Browser Released </B></FONT>
                     <P>
@@ -90,7 +165,7 @@
 		    <A HREF="../goldenPath/credits.html#opossum_credits">Credits</A>
 		    page for a detailed list of the organizations and individuals
 		    who contributed to this release.
-		    </P><P>
+		    </P>
 
 <HR>
 <A NAME="070709"></A>
