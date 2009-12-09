@@ -703,3 +703,5 @@ e tmp.txt
 cat tmp.txt >> fileDb.ra
 encodeDownloadsPage.pl index.html
 # all looks well.
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 783 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 798 displayed

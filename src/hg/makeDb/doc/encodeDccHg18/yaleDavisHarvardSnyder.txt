@@ -3419,6 +3419,12 @@ wgEncodeYaleChIPseqAlignmentsRep1K562Stat2Ifna30V2.tagAlign.gz  <  wgEncodeYaleC
 wgEncodeYaleChIPseqAlignmentsRep2K562Stat2Ifna30V2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat2.tagAlign.gz
 wgEncodeYaleChIPseqAlignmentsRep1K562Stat2Ifna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat2.tagAlign.gz
 wgEncodeYaleChIPseqAlignmentsRep2K562Stat2Ifna6hV2.tagAlign.gz  <  wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat2.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1Helas3LargefragmentV2.tagAlign.gz < wgEncodeYaleChIPseqRel2AlignmentsRep1Helas3Largefragment.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2Helas3LargefragmentV2.tagAlign.gz < wgEncodeYaleChIPseqRel2AlignmentsRep2Helas3Largefragment.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562InputV3.tagAlign.gz        <  wgEncodeYaleChIPseqAlignmentsK562Input.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2K562InputV3.tagAlign.gz        <  ???
+wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2.tagAlign.gz       <  wgEncodeYaleChIPseqAlignmentsK562bInput.tagAlign.gz
+
 
 # These tagAligns were not corrected:
     metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=K562 antibody=c-Fos fragLength=200 view=Alignments replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=68 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq parentTable=wgEncodeYaleChIPseqRawSignalRep1K562Cfos fileName=wgEncodeYaleChIPseqAlignmentsRep1K562Cfos.tagAlign.gz
@@ -3467,3 +3473,46 @@ select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalMcf7
 | chr10 |  135374719 | 135374805 | 135374737 | 
 delete from wgEncodeYaleChIPseqSignalK562Pol3 where chrom = "chr10" and chromEnd > 135374737;
 delete from wgEncodeYaleChIPseqSignalMcf7Hae2f1 where chrom = "chr10" and chromEnd > 135374737;
+
+### Some more name mismatch overrides:
+cd {downloadsDir}
+rm wgEncodeYaleChIPseqRel2AlignmentsRep1Helas3Largefragment.tagAlign.gz
+rm wgEncodeYaleChIPseqRel2AlignmentsRep2Helas3Largefragment.tagAlign.gz
+grep -v wgEncodeYaleChIPseqRel2AlignmentsRep1Helas3Largefragment\.tagAlign\.gz fileDb.ra | grep -v wgEncodeYaleChIPseqRel2AlignmentsRep2Helas3Largefragment\.tagAlign\.gz > tmpA.txt
+wl tmpA.txt  412 tmpA.txt
+wl fileDb.ra 414 fileDb.ra
+mv tmpA.txt fileDb.ra
+rm wgEncodeYaleChIPseqAlignmentsK562Input.tagAlign.gz
+grep -v wgEncodeYaleChIPseqAlignmentsK562Input\.tagAlign\.gz fileDb.ra > tmpA.txt
+wl tmpA.txt  410 tmpA.txt
+wl fileDb.ra 412 fileDb.ra
+mv tmpA.txt fileDb.ra
+rm wgEncodeYaleChIPseqAlignmentsK562bInput.tagAlign.gz
+wl tmpA.txt  409 tmpA.txt
+wl fileDb.ra 410 fileDb.ra
+mv tmpA.txt fileDb.ra
+
+### Okay, this is what I believe to be the complete list of uncorrected tagAligns
+wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz              477M  2008-10-31  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz                  571M  2008-10-31  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep1Helas3Nakeddna.tagAlign.gz           291M  2009-02-25  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsRep2Helas3Nakeddna.tagAlign.gz           231M  2009-02-25  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsRep3Helas3Nakeddna.tagAlign.gz           221M  2009-02-25  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsRep1K562Cfos.tagAlign.gz                 115M  2008-11-21  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep2K562Cfos.tagAlign.gz                  95M  2008-11-21  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep3K562Cfos.tagAlign.gz                 123M  2008-11-21  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz                 115M  2008-11-21  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz                 120M  2008-11-21  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz               120M  2009-02-27  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz               235M  2009-02-27  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsNb4Input.tagAlign.gz                     195M  2009-02-25  ENCODE Nov 2008 Freeze
+wgEncodeYaleChIPseqAlignmentsRep1Nb4Pol2.tagAlign.gz                  192M  2008-10-31  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsRep2Nb4Pol2.tagAlign.gz                  117M  2008-10-31  ENCODE Feb 2009 Freeze
+wgEncodeYaleChIPseqAlignmentsRep3Nb4Pol2.tagAlign.gz                   93M  2008-10-31  ENCODE Feb 2009 Freeze
+
+# edit fileDb.ra to mark all in the above list as "uncorrected".  Edit preamble.html to make this explicit.
+encodeDownloadsPage.pl index.html
+
+
+
+

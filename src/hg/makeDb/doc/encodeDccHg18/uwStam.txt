@@ -631,3 +631,9 @@ cp index.html release1/
 cd release1/
 ll *PeaksRep2*.gz  
 rm *PeaksRep2*.gz  
+
+### Richard noticed an error:
+mkdir old
+[hgwdev:tdreszer wgEncodeUwChIPSeq> mv wgEncodeUwChIPSeqPeaksGm12878Ctcf.narrowPeak.gz old
+[hgwdev:tdreszer wgEncodeUwChIPSeq> encodeDownloadsPage.pl index.html 
+[hgwdev:tdreszer wgEncodeUwChIPSeq> cp index.html release1/
