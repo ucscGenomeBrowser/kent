@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.713 2009/12/09 18:44:22 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.714 2009/12/09 18:55:26 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14835,7 +14835,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 BB 2
+    shortLabel GM128 BB AL2
     longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 2 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
@@ -14845,7 +14845,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 BB 2
+    shortLabel K562 BB AL2
     longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 2 (PolyA+ RNA in K562 using BB1)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
@@ -14855,7 +14855,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 BB 2
+    shortLabel GM128 BB SP2
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
@@ -14865,7 +14865,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 blat34 2
+    shortLabel GM128 blat34 SP2
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using blat34)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
@@ -14875,7 +14875,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 BB 2
+    shortLabel K562 BB SP2
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using BB1)
@@ -14885,7 +14885,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 blat34 2
+    shortLabel K562 blat34 SP2
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using blat34)
@@ -14895,7 +14895,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 BB Rw 2
+    shortLabel GM128 BB RW2
     # itemRgb on
     color 153,38,0
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in GM12878 using BB1)
@@ -14907,7 +14907,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 BB Rw 2
+    shortLabel K562 BB RW2
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in K562 using BB1)
@@ -14919,7 +14919,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 bow098 1
+    shortLabel K562 bow098 AL1
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Tags Replicate 1 (PolyA+ RNA in K562 using bow098)
@@ -14929,7 +14929,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 bow098 2
+    shortLabel K562 bow098 AL2
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Tags Replicate 2 (PolyA+ RNA in K562 using bow098)
@@ -14939,7 +14939,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 bow098 1
+    shortLabel K562 bow098 SP1
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using bow098)
@@ -14949,7 +14949,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 bow098 2
+    shortLabel K562 bow098 SP2
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using bow098)
@@ -14959,7 +14959,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 erg3b Rw 1
+    shortLabel K562 erg3b RW1
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in K562 using erng3b)
@@ -14971,7 +14971,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 erg3b Rw 2
+    shortLabel K562 erg3b RW2
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in K562 using erng3b)
     subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 2584.96
@@ -14982,7 +14982,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 BB 1
+    shortLabel K562 BB AL1
     longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 1 (PolyA+ RNA in K562 using BB1)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
@@ -14992,7 +14992,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 BB 1
+    shortLabel K562 BB SP1
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using BB1)
@@ -15002,7 +15002,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 blat34 1
+    shortLabel K562 blat34 SP1
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using blat34)
@@ -15012,7 +15012,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 BB Rw 1
+    shortLabel K562 BB RW1
     # itemRgb on
     color 46,0,184
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in K562 using BB1)
@@ -15024,7 +15024,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 bow098 1
+    shortLabel GM128 bow098 AL1
     # itemRgb on
     color 153,38,0
     longLabel ENCODE Caltech RNA-seq Tags Replicate 1 (PolyA+ RNA in GM12878 using bow098)
@@ -15034,7 +15034,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 bow098 2
+    shortLabel GM128 bow098 AL2
     # itemRgb on
     color 153,38,0
     longLabel ENCODE Caltech RNA-seq Tags Replicate 2 (PolyA+ RNA in GM12878 using bow098)
@@ -15044,7 +15044,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 bow098 1
+    shortLabel GM128 bow098 SP1
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     # itemRgb on
@@ -15054,7 +15054,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 bow098 2
+    shortLabel GM128 bow098 SP2
     # itemRgb on
     color 153,38,0
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using bow098)
@@ -15064,7 +15064,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 erg3b Rw 1
+    shortLabel GM128 erg3b RW1
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in GM12878 using erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 1163.85
@@ -15075,7 +15075,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 erg3b Rw 2
+    shortLabel GM128 erg3b RW2
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in GM12878 using erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 841.06
@@ -15086,7 +15086,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel GM128 BB 1
+    shortLabel GM128 BB AL1
     # itemRgb on
     color 153,38,0
     longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 1 (PolyA+ RNA in GM12878 using BB1)
@@ -15098,7 +15098,7 @@ wgEncode 1
     subTrack wgEncodeCaltechRnaSeq
     # itemRgb on
     color 153,38,0
-    shortLabel GM128 BB 1
+    shortLabel GM128 BB SP1
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
@@ -15106,7 +15106,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel GM128 blat34 1
+    shortLabel GM128 blat34 SP1
     # itemRgb on
     color 153,38,0
     longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using blat34)
@@ -15116,7 +15116,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel GM128 BB Rw 1
+    shortLabel GM128 BB RW1
     longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 2446.53
