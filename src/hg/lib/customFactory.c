@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.111 2009/11/18 00:16:26 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.112 2009/12/09 19:26:12 galt Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1476,7 +1476,20 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigWig");
-track->bbiFile = bigWigFileOpen(bigDataUrl);
+
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    track->bbiFile = bigWigFileOpen(bigDataUrl);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    track->networkErrMsg = cloneString(errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+
 setBbiViewLimits(track);
 return track;
 }
@@ -1510,7 +1523,21 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigBed");
-track->bbiFile = bigBedFileOpen(bigDataUrl);
+
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    track->bbiFile = bigBedFileOpen(bigDataUrl);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    track->networkErrMsg = cloneString(errCatch->message->string);
+    return track;
+    }
+errCatchFree(&errCatch);
+
 setBbiViewLimits(track);
 return track;
 }
@@ -1546,9 +1573,26 @@ if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bam (%s)", track->tdb->shortLabel);
 if (doExtraChecking)
     {
-    if (!bamFileExists(bigDataUrl))
-	errAbort("Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
+    
+    /* protect against temporary network error */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	if (!bamFileExists(bigDataUrl))
+	    {
+	    char errMsg[1024];
+            safef(errMsg, sizeof(errMsg), "Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
 		 track->tdb->shortLabel, bigDataUrl, bigDataUrl);
+	    track->networkErrMsg = cloneString(errMsg);
+	    }
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	track->networkErrMsg = cloneString(errCatch->message->string);
+	}
+    errCatchFree(&errCatch);
+    
     }
 return track;
 }
