@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.205 2009/12/05 00:21:24 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.206 2009/12/09 19:32:59 braney Exp $
 
 use warnings;
 use strict;
@@ -355,6 +355,8 @@ our %formatCheckers = (
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
+    SAM => \&validateSAM,
+    BAM => \&validateBAM,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     );
 
@@ -792,6 +794,40 @@ sub validateCsfasta
     }
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateCsfasta") if $opt_timing;
+    return ();
+}
+
+sub validateSAM
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateSAM") if $opt_timing;
+    HgAutomate::verbose(2, "validateSAM($path,$file,$type)\n");
+    my $paramList = validationSettings("validateFiles","SAM");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=SAM $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateSAM : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateSAM for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateSAM") if $opt_timing;
+    return ();
+}
+
+sub validateBAM
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateBAM") if $opt_timing;
+    HgAutomate::verbose(2, "validateBAM($path,$file,$type)\n");
+    my $paramList = validationSettings("validateFiles","BAM");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateBAM : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateBAM for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateBAM") if $opt_timing;
     return ();
 }
 
