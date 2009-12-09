@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.29 2009/11/10 21:52:08 tdreszer Exp $";
-static char *version = "$Revision: 1.29 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.30 2009/12/09 19:05:28 braney Exp $";
+static char *version = "$Revision: 1.30 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -320,6 +320,8 @@ else if (s[0] != firstChar)
     }
 for ( i = 1; s[i] ; ++i)
     {
+    if (s[i] == ' ')
+	break;
     if (!seqName[(int)s[i]])
 	{
 	warn("Error [file=%s, line=%d]: invalid %s chars in [%s]", file, line, name, s);
