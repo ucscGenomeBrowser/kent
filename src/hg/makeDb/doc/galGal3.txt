@@ -2745,3 +2745,41 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+## caCondor 454 alignments (2009-12-08 markd)
+############################################################################
+      mkdir /hive/data/genomes/galGal3/bed/caCondor454
+
+    # get WUGSC 454 cDNA sequences from the trace archives
+       cd data
+       wget ftp://ftp.ncbi.nih.gov/pub/TraceDB/gymnogyps_californianus/anc.gymnogyps_californianus.001.gz
+       wget ftp://ftp.ncbi.nih.gov/pub/TraceDB/gymnogyps_californianus/fasta.gymnogyps_californianus.001.gz
+       cd ..
+
+       # get trace ids for this project, and then extract fasta
+        CENTER_NAME = WUGSC column $6
+        CENTER_PROJECT = U_FC-MATT_TECHD2 column $7
+        TI column $57
+
+        zcat data/anc.gymnogyps_californianus.001.gz |tawk '$6=="WUGSC" && $7=="U_FC-MATT_TECHD2" {print "gnl|ti|"$57}' >data/wugsc-454-cdna.ids
+        faSomeRecords data/fasta.gymnogyps_californianus.001.gz data/wugsc-454-cdna.ids data/wugsc-454-cdna.fa
+
+     # obtained PASA cDNA clusters for galGal3 from the Brent lab at WUStL
+          http://mblab.wustl.edu/~jeltje/for_Mark/ -> data/pasa-pre-2009-28/
+          bzcat data/pasa-pre-2009-28/chr*.gtf.bz2 | gtfToGenePred stdin data/pasa.gp
+          getRnaPred galGal3 data/pasa.gp all data/pasa.fa -pslOut=data/pasa.psl
+
+     # obtain N-SCAN gene predictiosn
+         getRnaPred galGal3 nscanGene all data/nscan.fa   -pslOut=data/nscan.psl
+
+     # combine to make files for transMap
+        cat data/pasa.fa  data/nscan.fa  >data/nscanPasa.fa
+        cat data/pasa.psl  data/nscan.psl  >data/nscanPasa.psl
+
+     # modify makefiles that were create during mapping experiments for alignments
+     # these run two cluster batches. The first aligns the reads 
+     make >&log&
+     
+     # load tracks
+     hgLoadPsl galGal3 -table=caCondor454 results/nscanPasaUnmappedRealign/combined.psl.gz
+     ln -s /hive/data/genomes/galGal3/bed/caCondor454/data/wugsc-454-cdna.fa  /gbdb/galGal3/caCondor454.fa
+############################################################################
