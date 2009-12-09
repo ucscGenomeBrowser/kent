@@ -6,8 +6,9 @@
 #include "hui.h"
 #include "jsHelper.h"
 #include "imageV2.h"
+#include "hgTracks.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.16 2009/12/05 01:29:01 larrym Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.17 2009/12/09 03:30:22 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -16,7 +17,60 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 //struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 //struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
-//#define IMAGEv2_UI
+#ifdef FLAT_TRACK_LIST
+/////////////////////////
+// FLAT TRACKS
+// A simplistic way of flattening the track list before building the image
+// NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
+/////////////////////////
+void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart)
+// Adds one track into the flatTracks list
+{
+struct flatTracks *flatTrack;
+AllocVar(flatTrack);
+flatTrack->track = track;
+char var[128];  // The whole reason to do this is to reorder tracks/subtracks in the image!
+safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
+flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
+if(flatTrack->order >= IMG_ORDEREND)
+    {
+    cartRemove(cart,var);
+    flatTrack->order = IMG_ANYORDER;
+    }
+static int lastOrder = IMG_ORDEREND; // keep track of the order added and beyond end
+if( flatTrack->order == IMG_ANYORDER)
+    flatTrack->order = ++lastOrder;
+
+slAddHead(flatTracks,flatTrack);
+}
+
+int flatTracksCmp(const void *va, const void *vb)
+// Compare to sort on flatTrack->order
+{
+const struct flatTracks *a = *((struct flatTracks **)va);
+const struct flatTracks *b = *((struct flatTracks **)vb);
+return (a->order - b->order);
+}
+
+void flatTracksSort(struct flatTracks **flatTracks)
+// This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
+{
+if(flatTracks && *flatTracks)
+    slSort(flatTracks, flatTracksCmp);
+}
+
+void flatTracksFree(struct flatTracks **flatTracks)
+// Frees all memory used to support flatTracks (underlying tracks are untouched)
+{
+if(flatTracks && *flatTracks)
+    {
+    struct flatTracks *flatTrack;
+    while((flatTrack = slPopHead(flatTracks)) != NULL)
+        freeMem(flatTrack);
+    }
+}
+#endif//def FLAT_TRACK_LIST
+
 #ifdef IMAGEv2_UI
 /////////////////////////
 // IMAGEv2
@@ -319,12 +373,32 @@ char *sliceTypeToString(enum sliceType type)
 {
 switch(type)
     {
-    case isData:   return "data";
-    case isSide:   return "side";
-    case isCenter: return "center";
-    case isButton: return "button";
+    case stData:   return "data";
+    case stSide:   return "side";
+    case stCenter: return "center";
+    case stButton: return "button";
     default:       return "unknown";
     }
+}
+
+struct imgSlice *sliceAddLink(struct imgSlice *slice,char *link,char *title)
+/* Adds a slice wide link.  The link and map are mutually exclusive */
+{
+if(slice->map != NULL)
+    {
+    warn("sliceAddLink() but slice already has its own map. Being replaced.");
+    mapSetFree(&(slice->map));
+    }
+if(slice->link != NULL)
+    {
+    warn("sliceAddLink() but slice already has a link. Being replaced.");
+    freeMem(slice->link);
+    }
+slice->link = cloneString(link);
+if(slice->title != NULL)  // OK to replace title
+    freeMem(slice->title);
+slice->title = cloneString(title);
+return slice;
 }
 
 struct mapSet *sliceMapStart(struct imgSlice *slice,char *name,char *linkRoot)
@@ -334,6 +408,12 @@ if(slice->parentImg == NULL)
     {
     warn("sliceAddMap() but slice has no image.");
     return NULL;
+    }
+if(slice->link != NULL)
+    {
+    warn("sliceAddMap() but slice already has a link. Being replaced.");
+    freeMem(slice->link);
+    slice->link = NULL;
     }
 if(slice->map != NULL && slice->map != slice->parentImg->map)
     {
@@ -384,13 +464,14 @@ if (slice == NULL)
         warn("slice is NULL");
     return FALSE;
     }
-if (slice->parentImg == NULL)
+if (slice->parentImg == NULL && slice->type != stButton)
     {
     if (verbose)
         warn("slice(%s) has no image",sliceTypeToString(slice->type));
     return FALSE;
     }
-if (slice->width == 0  || slice->width  > slice->parentImg->width)
+if ( slice->width == 0
+||  (slice->parentImg && slice->width  > slice->parentImg->width))
     {
     if (verbose)
         warn("slice(%s) has an invalid width %d (image width %d)",
@@ -405,20 +486,26 @@ if (slice->height == 0) // FIXME: This may be a temporary solution to empty data
     //return FALSE;
     return TRUE; // This may be valid (but is sloppy) when there is no data for the slice.
     }
-if (slice->height > slice->parentImg->height)
+if (slice->parentImg && slice->height > slice->parentImg->height)
     {
     if (verbose)
         warn("slice(%s) has an invalid height %d (image height %d)",
              sliceTypeToString(slice->type),slice->height,slice->parentImg->height);
     return FALSE;
     }
-if (slice->offsetX >= slice->parentImg->width
-||  slice->offsetY >= slice->parentImg->height)
+if ( slice->parentImg
+&&  (slice->offsetX >= slice->parentImg->width
+||   slice->offsetY >= slice->parentImg->height))
     {
     if (verbose)
         warn("slice(%s) has an invalid X:%d or Y:%d offset (image width:%d height:%d)",
              sliceTypeToString(slice->type),slice->offsetX,slice->offsetY,
              slice->parentImg->width,slice->parentImg->height);
+    return FALSE;
+    }
+if (slice->link != NULL && slice->map != NULL)
+    {
+    warn("slice(%s) has both link and map of links",sliceTypeToString(slice->type));
     return FALSE;
     }
 if (slice->map != NULL)
@@ -453,6 +540,7 @@ if(pSlice != NULL && *pSlice != NULL)
     if(map != NULL)
         mapSetFree(&map);
     freeMem(slice->title);
+    freeMem(slice->link);
     freeMem(slice);
     *pSlice = NULL;
     }
@@ -491,7 +579,7 @@ imgTrack->chromEnd   = chromEnd;
 imgTrack->plusStrand = plusStrand;
 imgTrack->showCenterLabel = showCenterLabel;
 imgTrack->vis             = vis;
-static int lastOrder = 900; // keep track of the order these images get added
+static int lastOrder = IMG_ORDEREND; // keep track of the order these images get added
 if(order == IMG_FIXEDPOS)
     {
     imgTrack->reorderable = FALSE;
@@ -519,7 +607,7 @@ return imgTrack;
 }
 
 int imgTrackOrderCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+/* Compare to sort on imgTrack->order */
 {
 const struct imgTrack *a = *((struct imgTrack **)va);
 const struct imgTrack *b = *((struct imgTrack **)vb);
@@ -527,7 +615,7 @@ return (a->order - b->order);
 }
 
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY)
-/* Adds slices to an image track.  Expected are types: isData, isButton, isSide and isCenter */
+/* Adds slices to an image track.  Expected are types: stData, stButton, stSide and stCenter */
 {
 struct imgSlice *slice = sliceCreate(type,img,title,width,height,offsetX,offsetY);
 slAddHead(&(imgTrack->slices),slice);
@@ -535,7 +623,7 @@ return imgTrack->slices;
 }
 
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type)
-/* Gets a specific slice already added to an image track.  Expected are types: isData, isButton, isSide and isCenter */
+/* Gets a specific slice already added to an image track.  Expected are types: stData, stButton, stSide and stCenter */
 {
 struct imgSlice *slice;
 for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
@@ -585,22 +673,35 @@ char *imgFile = NULL;               // name of file that hold the image
 int count = 0;
 for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
     {
-    if(imgFile == NULL)
-        imgFile = slice->parentImg->file;
-    else if(differentString(imgFile,slice->parentImg->file))
+    if(slice->type == stButton) // Buttons don't have maps.  Overlap will be ignored!
+        continue;
+    if(slice->parentImg != NULL)
         {
-        char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
-        warn("imgTrackAddMapItem(%s) called, but not all slice images are the same for this track.",name);
+        if(imgFile == NULL)
+            imgFile = slice->parentImg->file;
+        else if(differentString(imgFile,slice->parentImg->file))
+            {
+            char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+            warn("imgTrackAddMapItem(%s) called, but not all slice images are the same for this track.",name);
+            }
         }
-    if(topLeftX     < (slice->offsetX + slice->width)
-    && bottomRightX >= slice->offsetX
-    && topLeftY     < (slice->offsetY + slice->height)
-    && bottomRightY >= slice->offsetY ) // some overlap
+    if(topLeftX     < (slice->offsetX + slice->width-1)
+    && bottomRightX > (slice->offsetX + 1)
+    && topLeftY     < (slice->offsetY + slice->height-1)
+    && bottomRightY > (slice->offsetY + 1)) // Overlap of a pixel or 2 is tolerated
         {
         struct mapSet *map = sliceGetMap(slice,FALSE);
         if(map!=NULL)
-        {          // NOTE: using find or add gives precedence to first of same coordinate map items added
+            {          // NOTE: using find or add gives precedence to first of same coordinate map items added
             mapSetItemFindOrAdd(map,link,title,max(topLeftX,slice->offsetX),max(topLeftY,slice->offsetY),min(bottomRightX,slice->offsetX + slice->width),min(bottomRightY,slice->offsetY + slice->height), id);
+            count++;
+            }
+        else
+        {  // FIXME: This is assuming that if there is no map then the entire slice should get the link!
+            char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+            warn("imgTrackAddMapItem(%s,%s) mapItem(lx:%d,rx:%d) is overlapping slice:%s(lx:%d,rx:%d)",name,title,topLeftX,bottomRightX,
+                 sliceTypeToString(slice->type),slice->offsetX,(slice->offsetX + slice->width - 1));
+            sliceAddLink(slice,link,title);
             count++;
             }
         }
@@ -655,7 +756,7 @@ if(imgTrack->slices == NULL)
     return FALSE;
     }
 // Can have no more than one of each type of slice
-boolean found[isMaxSliceTypes] = { FALSE,FALSE,FALSE,FALSE};
+boolean found[stMaxSliceTypes] = { FALSE,FALSE,FALSE,FALSE};
 struct imgSlice *slice = imgTrack->slices;
 for(; slice != NULL; slice = slice->next )
     {
@@ -676,7 +777,7 @@ for(; slice != NULL; slice = slice->next )
         }
     }
 // This is not a requirement as the data portion could be empty (height==0) FIXME This still needs to be properly resolved
-//if(!found[isData])
+//if(!found[stData])
 //    {
 //    if (verbose)
 //        warn("imgTrack(%s) has no DATA slice.",name);
@@ -939,6 +1040,7 @@ void imgBoxTracksNormalizeOrder(struct imgBox *imgBox)
 {
 #ifdef IMAGEv2_DRAG_REORDER
 slSort(&(imgBox->imgTracks), imgTrackOrderCmp);
+#ifndef FLAT_TRACK_LIST
 struct imgTrack *imgTrack = NULL;
 int lastOrder = 0;
 for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
@@ -946,6 +1048,7 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
     if(imgTrack->reorderable)
         imgTrack->order = ++lastOrder;
     }
+#endif//ndef FLAT_TRACK_LIST
 #else//ifndef IMAGEv2_DRAG_REORDER
 slReverse(&(imgBox->imgTracks));
 #endif//ndef IMAGEv2_DRAG_REORDER
@@ -1043,8 +1146,8 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
                 warn("imgBox(%s.%s:%d-%d) has bad slice",imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
             return FALSE;
             }
-        // Every slice must point to an image owned by the imgBox
-        if(slIxFromElement(imgBox->images,slice->parentImg) == -1)
+        // Every slice that has an image must point to an image owned by the imgBox
+        if(slice->parentImg && (slIxFromElement(imgBox->images,slice->parentImg) == -1))
             {
             if (verbose)
                 warn("imgBox(%s.%s:%d-%d) has slice(%s) for unknown image (%s)",
@@ -1081,20 +1184,20 @@ if(pImgBox != NULL && *pImgBox != NULL)
 
 /////////////////////// imageV2 UI API
 
-void imageMapDraw(struct mapSet *map,char *name)
+static boolean imageMapDraw(struct mapSet *map,char *name)
 /* writes an image map as HTML */
 {
 //warn("Drawing map_%s %s",name,(map == NULL?"map is NULL":map->items == NULL?"map->items is NULL":"Should draw!"));
 if(map == NULL || map->items == NULL)
-    return;
+    return FALSE;
 
 slReverse(&(map->items)); // These must be reversed so that they are printed in the same order as created!
 
-hPrintf("  <MAP name='map_%s'>\n", name); // map_ prefix is implicit
+hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
@@ -1108,71 +1211,111 @@ for(;item!=NULL;item=item->next)
         hPrintf(" TITLE='%s'", item->title );
     if(item->id != NULL)
         hPrintf(" id='%s'", item->id);
-    hPrintf(">\n" );
+    hPrintf(">" );
     }
-hPrintf("  </MAP>\n");
+hPrintf("</MAP>\n");
+return TRUE;
 }
 
-void sliceAndMapDraw(struct imgBox *imgBox,struct imgSlice *slice,char *name,boolean scrollHandle)
+static void imageDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,struct imgSlice *slice,char *name,int offsetX,int offsetY,boolean useMap)
+/* writes an image as HTML */
+{
+if(slice->parentImg && slice->parentImg->file != NULL)
+    {
+    hPrintf("  <IMG id='img_%s' src='%s' style='position:relative; left:-%dpx; top: -%dpx; border:0;'",
+            name,slice->parentImg->file,offsetX,offsetY);
+
+    if(useMap)
+        hPrintf(" usemap='#map_%s'",name);
+    if(slice->type==stSide)
+        hPrintf(" class='sideLab'");
+    else if(slice->type==stCenter)
+        hPrintf(" class='centerLab'");
+    else if(slice->type==stButton)
+        hPrintf(" class='button'");
+    #ifdef IMAGEv2_DRAG_SCROLL
+    else if(slice->type==stData && imgBox->showPortal)
+        hPrintf(" class='panImg' ondrag='{return false;}'");
+    #endif //def IMAGEv2_DRAG_SCROLL
+    if(slice->title != NULL)
+        hPrintf(" title='%s'",slice->title);           // Adds slice wide title
+    else if(slice->parentImg->title != NULL)
+        hPrintf(" title='%s'",slice->parentImg->title);// Adds image wide title
+    hPrintf(">");
+    }
+else
+    {
+    hPrintf("  <p id='p_%s' style='height:%dpx;",name,slice->height);
+    if(slice->type==stButton)
+        {
+        char *trackName = (imgTrack->name != NULL ?
+                        imgTrack->name :
+                        imgTrack->tdb->parent ?
+                        imgTrack->tdb->parent->tableName:
+                        imgTrack->tdb->tableName );
+        hPrintf(" width:9px; display:none;' class='%s btn btnN btnGrey'></p>",trackName);
+        }
+    else
+        hPrintf("width:%dpx;'></p>",slice->width);
+    }
+}
+
+static void sliceAndMapDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,enum sliceType sliceType,char *name,boolean scrollHandle)
 /* writes a slice of an image and any assocated image map as HTML */
 {
+if(imgBox==NULL || imgTrack==NULL)
+    return;
+struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,sliceType);
 if(slice==NULL || slice->height == 0)
     return;
-// Adjustment for portal
+
+boolean useMap=FALSE;
 int offsetX=slice->offsetX;
 int width=slice->width;
-if(imgBox->showPortal && imgBox->basesPerPixel > 0
-&& (slice->type==isData || slice->type==isCenter))
+if(slice->parentImg)
     {
-    offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
-    width=imgBox->portalWidth;
+    // Adjustment for portal
+    if(imgBox->showPortal && imgBox->basesPerPixel > 0
+    && (sliceType==stData || sliceType==stCenter))
+        {
+        offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
+        width=imgBox->portalWidth;
+        }
+        hPrintf("  <div style='width:%dpx; height:%dpx; overflow:hidden;'",width,slice->height);
+    #ifdef IMAGEv2_DRAG_SCROLL
+    if(imgBox->showPortal && sliceType==stData)
+        hPrintf(" class='panDiv%s'",(scrollHandle?" scroller":""));
+    #endif //def IMAGEv2_DRAG_SCROLL
+    hPrintf(">\n");
     }
-hPrintf(" <div style='width:%dpx; height:%dpx; overflow:hidden;'",width,slice->height);
-#ifdef IMAGEv2_DRAG_SCROLL
-if(imgBox->showPortal && slice->type==isData)
-    {
-    if(scrollHandle)
-        hPrintf(" class='panDiv scroller'");
-    else
-        hPrintf(" class='panDiv'");
-    }
-#endif //def IMAGEv2_DRAG_SCROLL
-hPrintf(">\n");
-
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
 if(map)
-    imageMapDraw(map,name);
+    useMap = imageMapDraw(map,name);
+else if(slice->link != NULL)
+    {
+    hPrintf("  <A HREF='%s'",slice->link);
+    if(slice->title != NULL)
+        hPrintf(" TITLE='Click for %s'", slice->title );
+    hPrintf(">\n" );
+    }
 
-hPrintf("  <IMG id='img_%s' src='%s' style='position:relative; left:-%dpx; top: -%dpx; border:0;'",
-        name,slice->parentImg->file,offsetX,slice->offsetY);
+imageDraw(imgBox,imgTrack,slice,name,offsetX,slice->offsetY,useMap);
+if(slice->link != NULL)
+    hPrintf("</A>\n");
 
-if(map && map->items)
-    hPrintf(" usemap='#map_%s'",name);
-if(slice->type==isSide)
-    hPrintf(" class='sideLab'");
-else if(slice->type==isCenter)
-    hPrintf(" class='centerLab'");
-else if(slice->type==isButton)
-    hPrintf(" class='button'");
-#ifdef IMAGEv2_DRAG_SCROLL
-else if(slice->type==isData && imgBox->showPortal)
-    hPrintf(" class='panImg' ondrag='{return false;}'");
-#endif //def IMAGEv2_DRAG_SCROLL
-//hPrintf(" title='[%s] width:%d  height: %d  offsetX: %d  offsetY: %d'",
-//        sliceTypeToString(slice->type),slice->width,slice->height,slice->offsetX,slice->offsetY);
-if(slice->title != NULL)
-    hPrintf(" title='%s'",slice->title);           // Adds slice wide title
-else if(slice->parentImg->title != NULL)
-    hPrintf(" title='%s'",slice->parentImg->title);// Adds image wide title
-hPrintf("></div>\n");
+if(slice->parentImg)
+    hPrintf("</div>");
 }
 
 void imageBoxDraw(struct imgBox *imgBox)
 /* writes a entire imgBox including all tracksas HTML */
 {
+if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
+    return;
 if(!imgBoxIsComplete(imgBox,TRUE))
     return;
 char name[128];
+int bgOffset = NO_VALUE;
 
 imgBoxTracksNormalizeOrder(imgBox);
 
@@ -1186,6 +1329,15 @@ hPrintf("<style type='text/css'>\n");
 hPrintf(".trDrag {opacity:0.4; padding:1px; background-color:red;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
 hPrintf(".dragHandle {cursor: s-resize;}\n");
 #endif//def IMAGEv2_DRAG_REORDER
+#ifdef FLAT_TRACK_LIST
+hPrintf(".btn  {border-style:outset; background-color:#cccccc; border-color:#dddddd;}\n");
+hPrintf(".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // connect none
+hPrintf(".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
+hPrintf(".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
+hPrintf(".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
+//hPrintf(".btnGrey {background-color:#cccccc; border-color:#dddddd;}\n");
+hPrintf(".btnBlue {background-color:#91B3E6; border-color:#91B3E6;}\n");
+#endif//def FLAT_TRACK_LIST
 hPrintf("div.dragZoom {cursor: text;}\n");
 hPrintf("</style>\n");
 
@@ -1203,13 +1355,13 @@ if(imgBox->showPortal)
     }
 #endif//def IMAGEv2_DRAG_SCROLL
 
-hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'","white");//"#AA0000"); // RED to help find bugs
+hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
 #ifdef IMAGEv2_DRAG_REORDER
 hPrintf(" class='tableWithDragAndDrop'");
 #endif//def IMAGEv2_DRAG_REORDER
-hPrintf(" style='border:1px solid blue;border-collapse:separate'");
-hPrintf(">\n");
+hPrintf(" style='border:1px solid blue;border-collapse:separate;");
+hPrintf("'>\n");
 
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
@@ -1223,30 +1375,46 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // button
         safef(name, sizeof(name), "btn_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable?" class='dragHandle'":""));
-        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isButton), name,FALSE);
-        hPrintf(" </TD>");
+        sliceAndMapDraw(imgBox,imgTrack,stButton,name,FALSE);
+        hPrintf("</TD>\n");
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
-        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide),   name,FALSE);
-        hPrintf(" </TD>");
+        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
+        hPrintf("</TD>\n");
         }
 
     // Main/Data image region
-    hPrintf(" <TD id='td_data_%s' width=%d>\n", trackName, imgBox->width);
+    hPrintf(" <TD id='td_data_%s' width=%d class='tdData'", trackName, imgBox->width);
+    if(imgBox->bgImg)
+        {
+        if(imgBox->showSideLabel && imgBox->plusStrand)
+            {
+            if(bgOffset == NO_VALUE)
+                {
+                struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,stData);
+                if(slice)
+                    bgOffset = (slice->offsetX * -1);  // This works because the ruler has a slice
+                }
+            hPrintf(" style='background-image:url(\"%s\");background-position:%dpx;'",imgBox->bgImg->file,bgOffset);
+            }
+        else
+            hPrintf(" style='background-image:url(\"%s\");'",imgBox->bgImg->file);
+        }
+    hPrintf(">\n");
     hPrintf("  <input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
     // centerLabel
     if(imgTrack->showCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isCenter), name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
         //hPrintf("<BR>\n");
         }
     // data image
     safef(name, sizeof(name), "data_%s", trackName);
-    sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isData), name,(imgTrack->order>0));
-    hPrintf(" </TD>");
+    sliceAndMapDraw(imgBox,imgTrack,stData,name,(imgTrack->order>0));
+    hPrintf("</TD>\n");
 
     if(imgBox->showSideLabel && !imgTrack->plusStrand)
         {
@@ -1254,18 +1422,21 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name, sizeof(name), "side_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n", name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
-        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);
-        hPrintf(" </TD>\n");
+        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
+        hPrintf("</TD>\n");
         // button
         safef(name, sizeof(name), "btn_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable?" class='dragHandle'":""));
-        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isButton), name,FALSE);
-        hPrintf(" </TD>");
+        sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE);
+        hPrintf("</TD>\n");
         }
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
 hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
 }
+
+// Nice to do:
+// 1) For composites in dense (those without a title), replace map items with toggle!  Sould we?
 
 #endif//def IMAGEv2_UI

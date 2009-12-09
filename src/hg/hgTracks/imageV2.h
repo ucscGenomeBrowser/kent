@@ -1,19 +1,35 @@
 /* imageV2 - API for creating the image V2 features. */
 
 // UNCOMMENT IMAGEv2_UI to have the new imgBox (aka imgTbl)
-// also UNCOMMENT IMAGEv2_DRAG_REORDER to allow dragReorder
-//  and/or UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
+// also UNCOMMENT:
+//   IMAGEv2_DRAG_REORDER to allow dragReorder
+//   FLAT_TRACK_LIST to allow reordering of subtracks
+//   CONTEXT_MENU to allow right-click funtionality
+//   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
+#define IMAGEv2_UI
+///#define IMAGEv2_DRAG_REORDER
+
+// UNCOMMENT FLAT_TRACK_LIST to allow reordering of subtracks
+#ifdef IMAGEv2_DRAG_REORDER
+    #define FLAT_TRACK_LIST
+#endif//def IMAGEv2_DRAG_REORDER
+
+// UNCOMMENT CONTEXT_MENU to allow right-click funtionality
+//#define CONTEXT_MENU
+
+//  UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
 //        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
-#define IMAGEv2_UI
-//#define CONTEXT_MENU
-//#define IMAGEv2_DRAG_REORDER
 //#define IMAGEv2_DRAG_SCROLL
 //#define IMAGEv2_DRAG_SCROLL_SZ 3
-
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     //#define IMAGEv2_SHORT_MAPITEMS
 #endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+
+// Support for guidelines as separate bg image (allowing dragScroll to move guidelines through centerLabels)
+#if defined(IMAGEv2_DRAG_REORDER) || defined(IMAGEv2_DRAG_SCROLL)
+    #define IMAGEv2_BG_IMAGE
+#endif// defined(IMAGEv2_DRAG_REORDER) || defined(IMAGEv2_DRAG_SCROLL)
 
 // CURRENT PROBLEMS:
 // o FIXED: some map items span both sideLabel and data!!
@@ -32,6 +48,35 @@ extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge r
 //extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
 //extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
+
+#ifdef FLAT_TRACK_LIST
+/////////////////////////
+// FLAT TRACKS
+// A simplistic way of flattening the track list before building the image
+// NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
+//       These should probably be moved to hgTracks.h
+/////////////////////////
+struct flatTracks // List of tracks in image, flattened to promote subtracks
+    {
+    struct flatTracks *next;   // Next on list.
+    struct track *track;       // Track (the track list is still heirarchical
+    int order;                 // Image order: This keeps track of dragReorder
+    };
+
+void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart);
+/* Adds one track into the flatTracks list */
+int flatTracksCmp(const void *va, const void *vb);
+/* Compare to sort on flatTrack->order */
+void flatTracksSort(struct flatTracks **flatTracks);
+/* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
+void flatTracksFree(struct flatTracks **flatTracks);
+/* Frees all memory used to support flatTracks (underlying tracks are untouched) */
+#else//ifndef FLAT_TRACK_LIST
+#define flatTracksAdd(a,b,c)
+#define flatTracksSort(a)
+#define flatTracksSort(a)
+#endif//def FLAT_TRACK_LIST
+
 
 #ifdef IMAGEv2_UI
 /////////////////////////
@@ -138,16 +183,16 @@ void imgFree(struct image **pImg);
 
 
 /////////////////////// Slices
-enum sliceType // IMAGEv2: currently just the 3
+enum sliceType // IMAGEv2: currently 4
     {
-    isUnknown=0,              // Invalid
-    isData=1,                 // Data or track slice of an image
-    isCenter=2,               // Top or centerLabel slice of an image
-    isButton=3,               // Config button (by separating from side label, could have separate image which is swapped or colored by javascript)
-    isSide=4,                 // Side or leftLabel slice of an image
-    isInvalid=5               // Invalid
+    stUnknown=0,              // Invalid
+    stData=1,                 // Data or track slice of an image
+    stCenter=2,               // Top or centerLabel slice of an image
+    stButton=3,               // Config button (by separating from side label, could have separate image which is swapped or colored by javascript)
+    stSide=4,                 // Side or leftLabel slice of an image
+    stInvalid=5               // Invalid
     };
-#define isMaxSliceTypes isInvalid
+#define stMaxSliceTypes stInvalid
 struct imgSlice // IMAGEv2: the portion of an image that is displayable for one track
     {
     struct imgSlice *next;    // slList
@@ -155,6 +200,7 @@ struct imgSlice // IMAGEv2: the portion of an image that is displayable for one 
     struct image *parentImg;  // the actual image/gif
     char *title;              // slice wide title
     struct mapSet *map;       // A slice specific map.  It contains a subset of the img->map. Coordinates must be img relative NOT slice relative!
+    char *link;               // If a slice has no map, it may have a whole slice link
     int  width;               // in pixels (differs from img->width if img contains sideLabel)
     int  height;              // in pixels (differs from img->height if img contains centerLabel and/or multiple tracks)
     int  offsetX;             // offset from left (when img->width > slice->width)
@@ -167,6 +213,8 @@ struct imgSlice *sliceUpdate(struct imgSlice *slice,enum sliceType type,struct i
 /* updates an already created slice */
 char *sliceTypeToString(enum sliceType type);
 /* Translate enum slice type to string */
+struct imgSlice *sliceAddLink(struct imgSlice *slice,char *link,char *title);
+/* Adds a slice wide link.  The link and map are mutually exclusive */
 struct mapSet *sliceMapStart(struct imgSlice *slice,char *name,char *linkRoot);
 /* Adds a slice specific map to a slice of an image. Map items can then be added to the returned pointer with mapSetItemAdd()*/
 struct mapSet *sliceGetMap(struct imgSlice *slice,boolean sliceSpecific);
@@ -202,6 +250,7 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     };
 #define IMG_ANYORDER  -2
 #define IMG_FIXEDPOS  -1
+#define IMG_ORDEREND  1000
 #define IMG_ORDER_VAR "imgOrd"
 struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
 /* Starts an image track which will contain all image slices needed to render one track
@@ -211,9 +260,9 @@ struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,ch
 int imgTrackOrderCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
-/* Adds slices to an image track.  Expected are types: isData, isButton, isSide and isCenter */
+/* Adds slices to an image track.  Expected are types: stData, stButton, stSide and stCenter */
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type);
-/* Gets a specific slice already added to an image track.  Expected are types: isData, isButton, isSide and isCenter */
+/* Gets a specific slice already added to an image track.  Expected are types: stData, stButton, stSide and stCenter */
 struct imgSlice *imgTrackSliceFindOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Find the slice or adds it */
 struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
@@ -284,13 +333,7 @@ boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose);
 void imgBoxFree(struct imgBox **pImgBox);
 /* frees all memory assocated with an imgBox (including images and imgTracks) */
 
-
-
 /////////////////////// imageV2 UI API
-void imageMapDraw(struct mapSet *map,char *name);
-/* writes an image map as HTML */
-void sliceAndMapDraw(struct imgBox *imgBox,struct imgSlice *slice,char *name,boolean scrollHandle);
-/* writes a slice of an image and any assocated image map as HTML */
 void imageBoxDraw(struct imgBox *imgBox);
 /* writes a entire imgBox including all tracksas HTML */
 
@@ -306,12 +349,12 @@ void imageBoxDraw(struct imgBox *imgBox);
 #define imgBoxFree(a)
 #define IMG_ANYORDER  0
 #define IMG_FIXEDPOS  0
-#define IMG_ORDER_VAR "?"
-#define isData   0
-#define isCenter 2
-#define isSide   3
-#define isButton 4
-#define isMaxSliceTypes 1
+#define IMG_ORDER_VAR "imgOrd"
+#define stData   5
+#define stCenter 5
+#define stSide   5
+#define stButton 5
+#define stMaxSliceTypes 1
 #endif//ndef IMAGEv2_UI
 
 #endif//ndef IMAGEV2_H

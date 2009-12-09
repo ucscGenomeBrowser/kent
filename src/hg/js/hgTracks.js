@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.47 2009/11/23 07:56:56 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.48 2009/12/09 03:31:09 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -330,19 +330,8 @@ function setAllTrackGroupVisibility(newState)
     return false;
 }
 
-function imgTblSetOrder(table)
-{
-// Sets the 'order' value for the image table after a drag reorder
-    $("input[name$='_imgOrd']").each(function (i) {
-        var tr = $(this).parents('tr');
-        if($(this).val() != $(tr).attr('rowIndex')) {
-            //alert('Reordered '+$(this).val() + " to "+$(tr).attr('rowIndex'));
-            $(this).val($(tr).attr('rowIndex'));
-        }
-    });
-}
-
 /////////////////////////////////////////////////////
+// Chrom Drag/Zoom/Expand code
 jQuery.fn.chromDrag = function(){
 this.each(function(){
     // Plan:
@@ -366,7 +355,7 @@ this.each(function(){
         findDimensions();
 
         if(chr.top == -1)
-            alert("chromIdeo(): failed to register "+this.id);
+            warn("chromIdeo(): failed to register "+this.id);
         else {
             hiliteSetup();
 
@@ -415,7 +404,7 @@ this.each(function(){
             var bands;
             var pxUp = e.clientX - img.scrolledLeft;
             var pxY  = e.clientY - img.scrolledTop;
-            //alert("chromIdeo("+chr.name+") selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+" chrom range (bp):"+chr.name+":"+chr.beg+"-"+chr.end);
+            //warn("chromIdeo("+chr.name+") selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+" chrom range (bp):"+chr.name+":"+chr.beg+"-"+chr.end);
             if(isWithin(0,pxY,img.height)) {  // within vertical range or else cancel
                 var selRange = { beg: -1, end: -1, width: -1 };
                 var dontAsk = true;
@@ -448,7 +437,7 @@ this.each(function(){
                         else
                             dontAsk = false;
                     }
-                    //else alert("chromIdeo("+chr.name+") NOT WITHIN HORIZONTAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right);
+                    //else warn("chromIdeo("+chr.name+") NOT WITHIN HORIZONTAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right);
                 }
                 if(mouseHasMoved == false) { // Not else because small drag turns this off
 
@@ -475,7 +464,7 @@ this.each(function(){
                     }
                 }
             }
-            //else alert("chromIdeo("+chr.name+") NOT WITHIN VERTICAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+"\n cytoTop-Bottom:"+chr.top +"-"+chr.bottom);
+            //else warn("chromIdeo("+chr.name+") NOT WITHIN VERTICAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+"\n cytoTop-Bottom:"+chr.top +"-"+chr.bottom);
             hiliteCancel();
             setTimeout('blockUseMap=false;',50);
         }
@@ -658,6 +647,100 @@ this.each(function(){
 });
 }
 /////////////////////////////////////////////////////
+// Drag Reorder Code
+function imgTblSetOrder(table)
+{
+// Sets the 'order' value for the image table after a drag reorder
+    $("input[name$='_imgOrd']").each(function (i) {
+        var tr = $(this).parents('tr');
+        if($(this).val() != $(tr).attr('rowIndex')) {
+            //warn('Reordered '+$(this).val() + " to "+$(tr).attr('rowIndex'));
+            $(this).val($(tr).attr('rowIndex'));
+        }
+    });
+}
+
+function imgTblZipButtons(table)
+{
+// Goes through the image and binds composite track buttons when adjacent
+    var rows = $(table).find('tr');
+    var lastClass="";
+    var lastBtn;
+    var lastMatchesLast=false;
+    var lastBlue=true;
+    var altColors=false;
+    var count=0;
+    var countN=0;
+    for(var ix=0;ix<rows.length;ix++) {    // Need to have buttons in order
+        var btn = $( rows[ix] ).find("p.btn");
+        var classList = $( btn ).attr("class").split(" ");
+        var curMatchesLast=(classList[0] == lastClass);
+        if(lastBtn != undefined) {
+            $( lastBtn ).removeClass('btnN btnU btnL btnD');
+            if(curMatchesLast && lastMatchLast) {
+                $( lastBtn ).addClass('btnL');
+            } else if(lastMatchLast) {
+                $( lastBtn ).addClass('btnU');
+            } else if(curMatchesLast) {
+                $( lastBtn ).addClass('btnD');
+            } else {
+                $( lastBtn ).addClass('btnN');
+                countN++;
+            }
+            count++;
+            if(altColors) {
+                lastBlue = (lastMatchLast == lastBlue); // lastMatch and lastBlue or not lastMatch and notLastBlue
+                if(lastBlue)    // Too  smart by 1/3rd
+                    $( lastBtn ).addClass(    'btnBlue' );
+                else
+                    $( lastBtn ).removeClass( 'btnBlue' );
+            }
+        }
+        lastMatchLast = curMatchesLast;
+        lastClass = classList[0];
+        lastBtn = btn;
+    }
+    if(lastBtn != undefined) {
+        $( lastBtn ).removeClass('btnN btnU btnL btnD');
+        if(lastMatchLast) {
+            $( btn).addClass('btnU');
+        } else {
+            $( lastBtn ).addClass('btnN');
+            countN++;
+        }
+        if(altColors) {
+                lastBlue = (lastMatchLast == lastBlue); // lastMatch and lastBlue or not lastMatch and notLastBlue
+                if(lastBlue)    // Too  smart by 1/3rd
+                    $( lastBtn ).addClass(    'btnBlue' );
+                else
+                    $( lastBtn ).removeClass( 'btnBlue' );
+        }
+        count++;
+    }
+    //warn("Zipped "+count+" buttons "+countN+" are independent.");
+}
+
+function imgTblButtonMouseOver()
+{
+// Highlights a composite set of buttons, regarless of whether tracks are adjacent
+    var classList = $( this ).attr("class").split(" ");
+    var btns = $( "p." + classList[0] )
+    $( btns ).removeClass('btnGrey');
+    $( btns ).addClass('btnBlue');
+}
+
+function imgTblButtonMouseOut()
+{
+// Ends compositre highlighting by mouse over
+    var classList = $( this ).attr("class").split(" ");
+    var btns = $( "p." + classList[0] )
+    $( btns ).removeClass('btnBlue');
+    $( btns ).addClass('btnGrey');
+}
+
+
+/////////////////////////////////////////////////////
+// Drag Scroll code
 jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
 this.each(function(){
 
@@ -732,6 +815,8 @@ this.each(function(){
                     newX = prevX + relativeX;
 
                 $(".panImg").css( {'left': newX.toString() + "px" });
+                $('.tdData').css( {'backgroundPosition': newX.toString() + "px" } );
+                //$('#imgTbl').css( {backgroundPosition:  newX.toString() +"px " + newY.toString() + "px"} )
                 // Now is the time to get left-right, then march through data images to trim horizontal
                 panUpdatePosition(newX);
             }
@@ -837,12 +922,16 @@ this.each(function(){
                         $(side).parent().height( span.bottom - span.top + titlePx);
                         $(side).css( {'top': top.toString() + "px" });
                     }
-                    var btn = $("#img_btn_"+imgId[2]);
+                    var btn = $("#p_btn_"+imgId[2]);
                     if( btn.length > 0) {
-                        $(btn).parent().height( span.bottom - span.top + titlePx);
-                        $(btn).css( {'top': top.toString() + "px" });
+                        $(btn).height( span.bottom - span.top + titlePx);
+                    } else {
+                        btn = $("#img_btn_"+imgId[2]);
+                        if( btn.length > 0) {
+                            $(btn).parent().height( span.bottom - span.top + titlePx);
+                            $(btn).css( {'top': top.toString() + "px" });
+                        }
                     }
-
                 }
             }
         });
@@ -873,39 +962,63 @@ $(document).ready(function()
             if($(thisForm).length > 1)
                 thisForm=$(thisForm)[0];
             if(thisForm != undefined && $(thisForm).length == 1) {
-                //alert("posting form:"+$(thisForm).attr('name'));
+                //warn("posting form:"+$(thisForm).attr('name'));
                 return postTheForm($(thisForm).attr('name'),this.href);
             }
 
             return true;
         });
     }
+    if($('#pdfLink').length == 1) {
+        $('#pdfLink').click(function(i) {
+            var thisForm=$('#TrackForm');
+            if(thisForm != undefined && $(thisForm).length == 1) {
+                //alert("posting form:"+$(thisForm).attr('name'));
+                updateOrMakeNamedVariable($(thisForm),'hgt.psOutput','on');
+                return postTheForm($(thisForm).attr('name'),this.href);
+            }
+            return true;
+        });
+    }
     if($('#imgTbl').length == 1) {
         imageV2   = true;
+        var btns = $("p.btn");
+        if(btns.length > 0) {
+            imgTblZipButtons($('#imgTbl'));
+            $(btns).mouseover( imgTblButtonMouseOver );
+            $(btns).mouseout(  imgTblButtonMouseOut  );
+            $(btns).show();
+        }
         // Make imgTbl allow draw reorder of imgTrack rows
-        if($(".tableWithDragAndDrop").length > 0) {
-            $(".tableWithDragAndDrop").tableDnD({
+        var imgTable = $(".tableWithDragAndDrop");
+        if($(imgTable).length > 0) {
+            $(imgTable).tableDnD({
                 onDragClass: "trDrag",
                 dragHandle: "dragHandle",
                 onDragStart: function(table, row) {
                     $(document).bind('mousemove',blockTheMap);
                 },
-                onDrop: function(table, row) {
-                        if(imgTblSetOrder) { imgTblSetOrder(table); }
-                        $(document).unbind('mousemove',blockTheMap);
-                        setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+                onDrop: function(table, row, dragStartIndex) {
+                    if($(row).attr('rowIndex') != dragStartIndex) {
+                        if(imgTblSetOrder) {
+                            imgTblSetOrder(table);
+                        }
+                        imgTblZipButtons( table );
                     }
-                });
+                    $(document).unbind('mousemove',blockTheMap);
+                    setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+                }
+            });
         }
         if(imgBoxPortal) {
-            //alert("imgBox("+imgBoxChromStart+"-"+imgBoxChromEnd+","+imgBoxWidth+") bases/pix:"+imgBoxBasesPerPixel+"\nportal("+imgBoxPortalStart+"-"+imgBoxPortalEnd+","+imgBoxPortalWidth+") offset:"+imgBoxPortalOffsetX);
+            //warn("imgBox("+imgBoxChromStart+"-"+imgBoxChromEnd+","+imgBoxWidth+") bases/pix:"+imgBoxBasesPerPixel+"\nportal("+imgBoxPortalStart+"-"+imgBoxPortalEnd+","+imgBoxPortalWidth+") offset:"+imgBoxPortalOffsetX);
 
             // Turn on drag scrolling.
             $("div.scroller").panImages(imgBoxPortalOffsetX,imgBoxLeftLabel);
         }
         // Temporary warning while new imageV2 code is being worked through
         if($('#map').children("AREA").length > 0) {
-            alert('Using imageV2, but old map is not empty!');
+            warn('Using imageV2, but old map is not empty!');
         }
     }
     if($('img#chrom').length == 1) {
@@ -919,9 +1032,9 @@ $(document).ready(function()
 //window.onload = function () {
 //    // Requires "Signed Scripts" and "UniversalBrowserRead" http://www.mozilla.org/projects/security/components/signed-scripts.html
 //    if(window.history.next != undefined && window.history.next.length > 10) {
-//	alert("Not at the end of time.");
+//	warn("Not at the end of time.");
 //    } else
-//	alert("At the end of time.");
+//	warn("At the end of time.");
 //}
 
 function rulerModeToggle (ele)
@@ -942,11 +1055,11 @@ function findMapItem(e)
         var pos = $(e.target).position();
         if(e.target.tagName == "IMG") {
             // msie
-            // alert("img: x: " + x + ", y:" + y);
-            // alert("pageX: " + e.pageX + "; offsetLeft: " + pos.left);
+            // warn("img: x: " + x + ", y:" + y);
+            // warn("pageX: " + e.pageX + "; offsetLeft: " + pos.left);
             x = e.pageX - pos.left;
             y = e.pageY - pos.top;
-            // alert("x: " + x + "; y: " + y);
+            // warn("x: " + x + "; y: " + y);
         } else {
             x = e.pageX - trackImg.attr("offsetLeft");
             y = e.pageY - trackImg.attr("offsetTop");
@@ -1241,7 +1354,7 @@ function loadContextMenu(img)
             },
             hideCallback: function() {
                 // this doesn't work
-                alert("hideCallback");
+                warn("hideCallback");
             }
         });
     return;

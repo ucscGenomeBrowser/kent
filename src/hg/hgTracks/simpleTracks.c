@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.115 2009/12/05 01:29:01 larrym Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116 2009/12/09 03:30:22 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -330,7 +330,7 @@ int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
 int maxItems = maximumTrackItems(tg);
-return maxItems * tl.fontHeight; 
+return maxItems * tl.fontHeight;
 }
 
 static int maxItemsToOverflow(struct track *tg)
@@ -576,6 +576,27 @@ if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",hgTracksName(), chrom, start+1, end, ui->string); // NOTE: position may need removing due to portal
+#if defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
+    if(!revCmplDisp && x < insideX)  // Do not toggle on side label!
+        {
+        width -= (insideX+1 - x);
+        if(width <= 1)
+            {
+            freeDyString(&ui);
+            return;
+            }
+        x = insideX+1;
+        }
+    else if(revCmplDisp && (x+width) >= insideWidth)
+        {
+        width -= (x+width) - insideWidth + 1;
+        if(width <= 1)
+            {
+            freeDyString(&ui);
+            return;
+            }
+        }
+#endif// defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
     //#ifdef IMAGEv2_SHORT_MAPITEMS
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
@@ -602,12 +623,12 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
  * program with the current track expanded. */
 {
 char buf[256];
-if(curGroup->tdb->parent != NULL)
-    safef(buf, sizeof(buf),"Toggle the display density of %s and similar subtracks", curGroup->shortLabel);
-else if(curGroup->tdb->subtracks != NULL)
-    safef(buf, sizeof(buf),"Toggle the maximum display mode density for all %s subtracks", curGroup->shortLabel);
+if(tdbIsCompositeChild(curGroup->tdb))
+    safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks", curGroup->shortLabel);
+else if(tdbIsComposite(curGroup->tdb))
+    safef(buf, sizeof(buf),"Click to alter the maximum display mode density for all %s subtracks", curGroup->shortLabel);
 else
-    safef(buf, sizeof(buf),"Toggle the display density of %s", curGroup->shortLabel);
+    safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
 
     mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
 }
@@ -2721,10 +2742,16 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 {
-char *directUrl = trackDbSetting(tg->tdb, "directUrl");
-boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
-mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName,
-                  mapItemName, itemName, directUrl, withHgsid, NULL);
+#ifdef FLAT_TRACK_LIST
+// Don't bother if we are flat, imgV2, dense and a child.
+if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+#endif//def FLAT_TRACK_LIST
+    {
+    char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+    boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName,
+                    mapItemName, itemName, directUrl, withHgsid, NULL);
+    }
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVisibility vis, struct slList *item,

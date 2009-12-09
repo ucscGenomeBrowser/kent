@@ -16,8 +16,9 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 #include "wigCommon.h"
+#include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.98 2009/11/30 23:01:32 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.99 2009/12/09 03:30:23 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -918,7 +919,7 @@ for (x1 = 0; x1 < width; ++x1)
 			{
 			int scaledMeanPlus = scaleHeightToPixels(dataValue+std);
 			int scaledMeanMinus = scaleHeightToPixels(dataValue-std);
-			hvGfxBox(hvg, x1+xOff, scaledMeanPlus, 1, 
+			hvGfxBox(hvg, x1+xOff, scaledMeanPlus, 1,
 				scaledMeanMinus - scaledMeanPlus, mediumColor);
 			}
 		    hvGfxBox(hvg, x1+xOff, scaledMean, 1, 1, drawColor);
@@ -1037,6 +1038,10 @@ if (tg->mapsSelf)
 #endif /* GBROWSE */
 	itemName = cloneString(tg->mapName);
 
+#ifdef FLAT_TRACK_LIST
+    // Don't bother if we are flat, imgV2, dense and a child.
+    if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+#endif//def FLAT_TRACK_LIST
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName,
             itemName, NULL);
     freeMem(itemName);
@@ -1101,7 +1106,7 @@ yLineMark = wigCart->yLineMark;
  *	pixelsPerBase - pixels per base
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
-preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction, 
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
 	wigCart->transformFunc);
 preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
 overallRange = preDrawLimits(preDraw, preDrawZero, width,
