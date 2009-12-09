@@ -1,10 +1,10 @@
-# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.1 $
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.2 $
 
 # Lab and general info
 grant             Myers
 lab               HudsonAlpha
 dataType          ChipSeq
-variables         cell, antibody
+variables         cell, antibody, protocol, antibody
 assembly          hg18
 medianFragmentLength 225
 fragmentLengthRange  150-300
@@ -32,7 +32,7 @@ required         no
 
 view             RawData
 type             fastq
-hasReplicates    yes 
+hasReplicates    yes
 required         no
 
 
