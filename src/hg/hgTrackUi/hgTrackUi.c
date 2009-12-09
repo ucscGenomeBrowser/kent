@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.508 2009/11/30 19:26:50 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509 2009/12/09 21:57:06 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -346,9 +346,10 @@ snp125PrintFilterControls("Class", snp125ClassIncludeStrings,
 snp125PrintFilterControls("Validation", snp125ValidIncludeStrings,
 			  snp125ValidLabels, snp125ValidIncludeCart,
 			  snp125ValidIncludeDefault, snp125ValidLabelsSize);
+int size = (version < 130) ? snp125FuncLabelsSize : (snp125FuncLabelsSize - 1);
 snp125PrintFilterControls("Function", snp125FuncIncludeStrings,
 			  snp125FuncLabels, snp125FuncIncludeCart,
-			  snp125FuncIncludeDefault, snp125FuncLabelsSize);
+			  snp125FuncIncludeDefault, size);
 snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
 			  snp125MolTypeLabels, snp125MolTypeIncludeCart,
 			  snp125MolTypeIncludeDefault, snp125MolTypeLabelsSize);
