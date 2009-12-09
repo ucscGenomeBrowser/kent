@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.710 2009/12/09 18:07:44 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.711 2009/12/09 18:25:17 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14801,7 +14801,7 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=K562 replicate=2 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2K562 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2K562.bed9.gz
 
-# Wold Lab (Caltech) RNA-Seq (wrangler: braney)
+# Wold Lab (Caltech) RNA-seq (wrangler: braney)
 
 track wgEncodeCaltechRnaSeq
 compositeTrack on
@@ -14836,7 +14836,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 BB 2
-    longLabel ENCODE Caltech RNA-Seq Paired Tags Replicate 2 (PolyA+ RNA in GM12878 using BB1)
+    longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 2 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     # itemRgb on
@@ -14846,7 +14846,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 BB 2
-    longLabel ENCODE Caltech RNA-Seq Paired Tags Replicate 2 (PolyA+ RNA in K562 using BB1)
+    longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 2 (PolyA+ RNA in K562 using BB1)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     # itemRgb on
@@ -14856,7 +14856,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 BB 2
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using BB1)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     # itemRgb on
@@ -14866,7 +14866,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 blat34 2
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using blat34)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using blat34)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
     # itemRgb on
@@ -14878,7 +14878,7 @@ wgEncode 1
     shortLabel K562 BB 2
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using BB1)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using BB1)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75.bed12.gz
@@ -14888,7 +14888,7 @@ wgEncode 1
     shortLabel K562 blat34 2
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using blat34)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using blat34)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75.bed12.gz
@@ -14898,7 +14898,7 @@ wgEncode 1
     shortLabel GM128 BB Rw 2
     # itemRgb on
     color 153,38,0
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ RNA in GM12878 using BB1)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 1497.62
     # configurable on
@@ -14910,7 +14910,7 @@ wgEncode 1
     shortLabel K562 BB Rw 2
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ RNA in K562 using BB1)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in K562 using BB1)
     subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 1625.83
     # configurable on
@@ -14922,7 +14922,7 @@ wgEncode 1
     shortLabel K562 bow098 1
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Tags Replicate 1 (PolyA+ RNA in K562 using bow098)
+    longLabel ENCODE Caltech RNA-seq Tags Replicate 1 (PolyA+ RNA in K562 using bow098)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
@@ -14932,7 +14932,7 @@ wgEncode 1
     shortLabel K562 bow098 2
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Tags Replicate 2 (PolyA+ RNA in K562 using bow098)
+    longLabel ENCODE Caltech RNA-seq Tags Replicate 2 (PolyA+ RNA in K562 using bow098)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
@@ -14942,7 +14942,7 @@ wgEncode 1
     shortLabel K562 bow098 1
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using bow098)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using bow098)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
@@ -14952,7 +14952,7 @@ wgEncode 1
     shortLabel K562 bow098 2
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using bow098)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using bow098)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
@@ -14962,7 +14962,7 @@ wgEncode 1
     shortLabel K562 erg3b Rw 1
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ RNA in K562 using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in K562 using erng3b)
     subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 5020.76
     # configurable on
@@ -14972,7 +14972,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 erg3b Rw 2
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ RNA in K562 using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in K562 using erng3b)
     subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 2584.96
     color 46,0,184
@@ -14983,7 +14983,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 BB 1
-    longLabel ENCODE Caltech RNA-Seq Paired Tags Replicate 1 (PolyA+ RNA in K562 using BB1)
+    longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 1 (PolyA+ RNA in K562 using BB1)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     # itemRgb on
@@ -14995,7 +14995,7 @@ wgEncode 1
     shortLabel K562 BB 1
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using BB1)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using BB1)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75.bed12.gz
@@ -15005,7 +15005,7 @@ wgEncode 1
     shortLabel K562 blat34 1
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using blat34)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using blat34)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75.bed12.gz
@@ -15015,7 +15015,7 @@ wgEncode 1
     shortLabel K562 BB Rw 1
     # itemRgb on
     color 46,0,184
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ RNA in K562 using BB1)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in K562 using BB1)
     subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 2716.04
     # configurable on
@@ -15027,7 +15027,7 @@ wgEncode 1
     shortLabel GM128 bow098 1
     # itemRgb on
     color 153,38,0
-    longLabel ENCODE Caltech RNA-Seq Tags Replicate 1 (PolyA+ RNA in GM12878 using bow098)
+    longLabel ENCODE Caltech RNA-seq Tags Replicate 1 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
@@ -15037,7 +15037,7 @@ wgEncode 1
     shortLabel GM128 bow098 2
     # itemRgb on
     color 153,38,0
-    longLabel ENCODE Caltech RNA-Seq Tags Replicate 2 (PolyA+ RNA in GM12878 using bow098)
+    longLabel ENCODE Caltech RNA-seq Tags Replicate 2 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
@@ -15045,7 +15045,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 bow098 1
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using bow098)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     # itemRgb on
     color 153,38,0
@@ -15057,7 +15057,7 @@ wgEncode 1
     shortLabel GM128 bow098 2
     # itemRgb on
     color 153,38,0
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using bow098)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
@@ -15065,7 +15065,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 erg3b Rw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ RNA in GM12878 using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in GM12878 using erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 1163.85
     color 153,38,0
@@ -15076,7 +15076,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 erg3b Rw 2
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ RNA in GM12878 using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (PolyA+ RNA in GM12878 using erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 841.06
     color 153,38,0
@@ -15089,7 +15089,7 @@ wgEncode 1
     shortLabel GM128 BB 1
     # itemRgb on
     color 153,38,0
-    longLabel ENCODE Caltech RNA-Seq Paired Tags Replicate 1 (PolyA+ RNA in GM12878 using BB1)
+    longLabel ENCODE Caltech RNA-seq Paired Tags Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
@@ -15099,7 +15099,7 @@ wgEncode 1
     # itemRgb on
     color 153,38,0
     shortLabel GM128 BB 1
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using BB1)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75.bed12.gz
@@ -15109,7 +15109,7 @@ wgEncode 1
     shortLabel GM128 blat34 1
     # itemRgb on
     color 153,38,0
-    longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using blat34)
+    longLabel ENCODE Caltech RNA-seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using blat34)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
     metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
@@ -15117,7 +15117,7 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 BB Rw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ RNA in GM12878 using BB1)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 2446.53
     color 153,38,0
@@ -15154,7 +15154,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
     shortLabel K562 cyto +S1
     subGroups view=1-PlusRawSignal cellType=K562 rnaExtract=longPolyA rep=1
     type bedGraph 4
@@ -15168,7 +15168,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
     shortLabel K562 cyto -S1
     subGroups view=2-MinusRawSignal cellType=K562 rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15182,7 +15182,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
     shortLabel K562 cyto AS1
     subGroups view=3-AllRawSignal cellType=K562 rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15197,7 +15197,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel K562 cyto AL1
-    longLabel ENCODE GIS RNA-Seq Tags Rep 1 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=1
     type bigBed 6
     colorByStrand 46,0,184 238,85,34
@@ -15213,7 +15213,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel K562 cyto SA1
-    longLabel ENCODE GIS RNA-Seq Split Tags Rep 1 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Split Tags Rep 1 (PolyA+ RNA in K562 cytosol)
     subGroups view=5-SplitAlign cellType=K562 rnaExtract=longPolyA  rep=1
 #    type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
@@ -15230,7 +15230,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
     shortLabel K562 cyto +S2
     subGroups view=1-PlusRawSignal cellType=K562 rnaExtract=longPolyA  rep=2
     type bedGraph 4
@@ -15244,7 +15244,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
     shortLabel K562 cyto -S2
     subGroups view=2-MinusRawSignal cellType=K562 rnaExtract=longPolyA  rep=2
     type bedGraph 4
@@ -15258,7 +15258,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
     shortLabel K562 cyto AS2
     subGroups view=3-AllRawSignal cellType=K562 rnaExtract=longPolyA  rep=2
     type bedGraph 4
@@ -15273,7 +15273,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel K562 cyto AL2
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 2 (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE GIS RNA-seq Tags Replicate 2 (PolyA+ RNA in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=2
     type bigBed 6
     colorByStrand 46,0,184 238,85,34
@@ -15288,7 +15288,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
     shortLabel Gm12878 cyto +S1
     subGroups view=1-PlusRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15302,7 +15302,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
     shortLabel Gm12878 cyto -S1
     subGroups view=2-MinusRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15316,7 +15316,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
     shortLabel Gm12878 cyto AS1
     subGroups view=3-AllRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15331,7 +15331,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel GM12878 cyto AL1
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE GIS RNA-seq Tags Replicate 1 (PolyA+ RNA in GM12878 cytosol)
     subGroups view=4-Alignments cellType=GM12878 rnaExtract=longPolyA  rep=1
     type bigBed 6
     colorByStrand 46,0,184 238,85,34
@@ -15346,7 +15346,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
     shortLabel H1-hESC cyto +S1
     subGroups view=1-PlusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15359,7 +15359,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
     shortLabel H1-hESC cyto -S1
     subGroups view=2-MinusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15372,7 +15372,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
     shortLabel H1-hESC cyto AS1
     subGroups view=3-AllRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=1
     type bedGraph 4
@@ -15386,7 +15386,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel H1-hESC cyto SA1
-    longLabel ENCODE GIS RNA-Seq Split Tags Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-seq Split Tags Rep 1 (PolyA+ RNA in H1-hESC cytosol)
     subGroups view=5-SplitAlign cellType=H1-hESC rnaExtract=longPolyA  rep=1
 #    type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
@@ -15403,7 +15403,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel H1-hESC cyto AL1
-    longLabel ENCODE GIS RNA-Seq Tags Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in H1-hESC cytosol)
     subGroups view=4-Alignments cellType=H1-hESC rnaExtract=longPolyA  rep=1
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15540,7 +15540,7 @@ wgEncode 1
     track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
     subTrack wgEncodeHelicosRnaSeq off
     shortLabel K562cyto pA+ Tag
-    longLabel ENCODE Helicos RNA-Seq Tags (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE Helicos RNA-seq Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=Alignments
     #subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type tagAlign
@@ -15556,7 +15556,7 @@ wgEncode 1
     track wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
     subTrack wgEncodeHelicosRnaSeq
     shortLabel K562cyto pA+ Sig
-    longLabel ENCODE Helicos RNA-Seq Raw Signal (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE Helicos RNA-seq Raw Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=yRawSignal
     #subGroups view=yRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig 1.00 65535.00
@@ -15598,7 +15598,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in GM12878 cytosol)
     subGroups view=4-Alignments cellType=GM12878 localization=20-cytosol
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
@@ -15608,7 +15608,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto TF
     color 153,38,0
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in GM12878 cytosol)
     subGroups view=1-Transfrags cellType=GM12878 localization=20-cytosol
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort.broadPeak.gz
@@ -15624,7 +15624,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in GM12878 nucleus)
     subGroups view=4-Alignments cellType=GM12878 localization=30-nucleus
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
@@ -15634,7 +15634,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel GM12 nucl TF
     color 153,38,0
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in GM12878 nucleus)
     subGroups view=1-Transfrags cellType=GM12878 localization=30-nucleus
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort.broadPeak.gz
@@ -15650,7 +15650,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 chromatin)
     subGroups view=4-Alignments cellType=K562 localization=50-chromatin
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort.tagAlign.gz
@@ -15660,7 +15660,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 chrm TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 chromatin)
     subGroups view=1-Transfrags cellType=K562 localization=50-chromatin
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort.broadPeak.gz
@@ -15676,7 +15676,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 localization=20-cytosol
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort.tagAlign.gz
@@ -15686,7 +15686,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 cytosol)
     subGroups view=1-Transfrags cellType=K562 localization=20-cytosol
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort.broadPeak.gz
@@ -15695,7 +15695,7 @@ noInherit on
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl AL
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 nucleus)
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15712,7 +15712,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 nucleus)
     subGroups view=1-Transfrags cellType=K562 localization=30-nucleus
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort.broadPeak.gz
@@ -15728,7 +15728,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 nucleolus)
     subGroups view=4-Alignments cellType=K562 localization=60-nucleolus
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort.tagAlign.gz
@@ -15738,7 +15738,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nlos TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 nucleolus)
     subGroups view=1-Transfrags cellType=K562 localization=60-nucleolus
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort.broadPeak.gz
@@ -15754,7 +15754,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 nucleoplasm)
     subGroups view=4-Alignments cellType=K562 localization=40-nucleoplasm
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
@@ -15764,7 +15764,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nplm TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 nucleoplasm)
     subGroups view=1-Transfrags cellType=K562 localization=40-nucleoplasm
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort.broadPeak.gz
@@ -15780,7 +15780,7 @@ noInherit on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 polysome)
     subGroups view=4-Alignments cellType=K562 localization=10-polysome
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
@@ -15790,7 +15790,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 polysome)
     subGroups view=1-Transfrags cellType=K562 localization=10-polysome
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort.broadPeak.gz
@@ -15806,7 +15806,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-Seq Tags (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Tags (short RNA in prostate cell)
     subGroups view=4-Alignments cellType=prostate localization=0-cell
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
@@ -15816,7 +15816,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell TF
     color 0,102,136
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in prostate cell)
     subGroups view=1-Transfrags cellType=prostate localization=0-cell
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
@@ -15826,7 +15826,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 cytosol)
     subGroups view=2-PlusRawSignal cellType=K562 localization=20-cytosol
     # type bigWig 0 3557599
     minLimit 0
@@ -15840,7 +15840,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 cytosol)
     subGroups view=3-MinusRawSignal cellType=K562 localization=20-cytosol
     # type bigWig 0 3557416
     minLimit 0
@@ -15854,7 +15854,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 chrm +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 chromatin)
     subGroups view=2-PlusRawSignal cellType=K562 localization=50-chromatin
     # type bigWig 0 5055640
     minLimit 0
@@ -15868,7 +15868,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 chrm -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 chromatin)
     subGroups view=3-MinusRawSignal cellType=K562 localization=50-chromatin
     # type bigWig 0 3376353
     minLimit 0
@@ -15882,7 +15882,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 polysome)
     subGroups view=2-PlusRawSignal cellType=K562 localization=10-polysome
     # type bigWig 0 25082
     minLimit 0
@@ -15896,7 +15896,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 polysome)
     subGroups view=3-MinusRawSignal cellType=K562 localization=10-polysome
     # type bigWig 0 203241
     minLimit 0
@@ -15910,7 +15910,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto +S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in GM12878 cytosol)
     subGroups view=2-PlusRawSignal cellType=GM12878 localization=20-cytosol
     # type bigWig 0 449639
     minLimit 0
@@ -15924,7 +15924,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto -S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in GM12878 cytosol)
     subGroups view=3-MinusRawSignal cellType=GM12878 localization=20-cytosol
     # type bigWig 0 333231
     minLimit 0
@@ -15938,7 +15938,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nplm +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 nucleoplasm)
     subGroups view=2-PlusRawSignal cellType=K562 localization=40-nucleoplasm
     # type bigWig 0 5059134
     minLimit 0
@@ -15952,7 +15952,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nplm -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 nucleoplasm)
     subGroups view=3-MinusRawSignal cellType=K562 localization=40-nucleoplasm
     # type bigWig 0 1595004
     minLimit 0
@@ -15966,7 +15966,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell +S
     color 0,102,136
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in prostate cell)
     subGroups view=2-PlusRawSignal cellType=prostate localization=0-cell
     # type bigWig 0 1611371
     minLimit 0
@@ -15980,7 +15980,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell -S
     color 0,102,136
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in prostate cell)
     subGroups view=3-MinusRawSignal cellType=prostate localization=0-cell
     # type bigWig 0 1611371
     minLimit 0
@@ -15994,7 +15994,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel GM12 nucl +S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in GM12878 nucleus)
     subGroups view=2-PlusRawSignal cellType=GM12878 localization=30-nucleus
     # type bigWig 0 641103
     minLimit 0
@@ -16008,7 +16008,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel GM12 nucl -S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in GM12878 nucleus)
     subGroups view=3-MinusRawSignal cellType=GM12878 localization=30-nucleus
     # type bigWig 0 4876484
     minLimit 0
@@ -16022,7 +16022,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 nucleus)
     subGroups view=2-PlusRawSignal cellType=K562 localization=30-nucleus
     # type bigWig 0 516729
     minLimit 0
@@ -16036,7 +16036,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 nucleus)
     subGroups view=3-MinusRawSignal cellType=K562 localization=30-nucleus
     # type bigWig 0 768499
     minLimit 0
@@ -16050,7 +16050,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nlos +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 nucleolus)
     subGroups view=2-PlusRawSignal cellType=K562 localization=60-nucleolus
     # type bigWig 0 968064
     minLimit 0
@@ -16064,7 +16064,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nlos -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 nucleolus)
     subGroups view=3-MinusRawSignal cellType=K562 localization=60-nucleolus
     # type bigWig 0 1076632
     minLimit 0
@@ -16099,7 +16099,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel GM12 cell to Al1
-    longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (GM12878 whole cell)
     subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
     type bigBed 12
     colorByStrand 46,0,184 238,85,34
@@ -16108,7 +16108,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel GM12 cell to Al2
-    longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Tags Replicate 2 (GM12878 whole cell)
     subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
     type bigBed 12
     colorByStrand 46,0,184 238,85,34
@@ -16117,7 +16117,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel K562 cell to Al1
-    longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (K562 whole cell)
     subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
     type bigBed 12
     colorByStrand 46,0,184 238,85,34
@@ -16126,7 +16126,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel K562 cell to Al2
-    longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Tags Replicate 2 (K562 whole cell)
     subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
     type bigBed 12
     colorByStrand 46,0,184 238,85,34
@@ -16135,7 +16135,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel K562 cyto A+ Al1
-    longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (PolyA+ in K562 cytosol)
+    longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (PolyA+ in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bigBed 12
     colorByStrand 46,0,184 238,85,34
@@ -16144,7 +16144,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel GM12 cell to -S1
-    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Rep 1 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (GM12878 whole cell)
     subGroups view=2-MinusRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type bedGraph 4
     # type bigWig 0 2199965
@@ -16157,7 +16157,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel GM12 cell to -S2
-    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Rep 2 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (GM12878 whole cell)
     subGroups view=2-MinusRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type bedGraph 4
     # type bigWig  0 3756424
@@ -16170,7 +16170,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel K562 cell to -S1
-    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Rep 1 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (K562 whole cell)
     subGroups view=2-MinusRawSignal cellType=K562 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 2180073
@@ -16183,7 +16183,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel K562 cell to -S2
-    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Rep 2 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (K562 whole cell)
     subGroups view=2-MinusRawSignal cellType=K562 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 1769868
@@ -16196,7 +16196,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel K562 cyto A+ -S1
-    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+    longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
     subGroups view=2-MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 318978
@@ -16209,7 +16209,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel GM12 cell to +S1
-    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Rep 1 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (GM12878 whole cell)
     subGroups view=1-PlusRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 580871
@@ -16222,7 +16222,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel GM12 cell to +S2
-    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Rep 2 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (GM12878 whole cell)
     subGroups view=1-PlusRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 898990
@@ -16235,7 +16235,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel K562 cell to +S1
-    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Rep 1 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (K562 whole cell)
     subGroups view=1-PlusRawSignal cellType=K562 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 384266
@@ -16248,7 +16248,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel K562 cell to +S2
-    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Rep 2 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (K562 whole cell)
     subGroups view=1-PlusRawSignal cellType=K562 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 421850
@@ -16261,7 +16261,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
     subTrack wgEncodeCshlLongRnaSeq on
     shortLabel K562 cyto A+ +S1
-    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+    longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
     subGroups view=1-PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 118018
@@ -16274,7 +16274,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel GM12 cell to AS1
-    longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Rep 1 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (GM12878 whole cell)
     subGroups view=3-AllRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 2689207
@@ -16287,7 +16287,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel GM12 cell to AS2
-    longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Rep 2 (GM12878 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 2 (GM12878 whole cell)
     subGroups view=3-AllRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 4860029
@@ -16300,7 +16300,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel K562 cell to AS1
-    longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Rep 1 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (K562 whole cell)
     subGroups view=3-AllRawSignal cellType=K562 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 3032883
@@ -16313,7 +16313,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel K562 cell to AS2
-    longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Rep 2 (K562 whole cell)
+    longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 2 (K562 whole cell)
     subGroups view=3-AllRawSignal cellType=K562 localization=cell rnaExtract=total
     type bedGraph 4
     #type bigWig 0 2411797
@@ -16326,7 +16326,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
     subTrack wgEncodeCshlLongRnaSeq off
     shortLabel K562 cyto A+ AS1
-    longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+    longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (PolyA+ in K562 cytosol)
     subGroups view=3-AllRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 318978
