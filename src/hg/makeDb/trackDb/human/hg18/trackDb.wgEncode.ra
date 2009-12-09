@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.709 2009/12/09 01:03:41 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.710 2009/12/09 18:07:44 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3945,10 +3945,10 @@ dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
 dimensionZchecked longNonPolyA,longPolyA,total
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults 1-PlusClusters=full 3-MinusClusters=full 2-PlusRawSignal=hide 4-MinusRawSignal=hide 5-Alignments=hide
+visibilityViewDefaults 1-PlusClusters=full 3-MinusClusters=full 5-Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView 1-PlusClusters:maxHeightPixels=100:24:16,minLimit=.005,maxLimit=25183,viewLimits=0:30,autoScale=off,windowingFunction=mean 2-PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 3-MinusClusters:maxHeightPixels=100:24:16,minLimit=.005,maxLimit=25183,viewLimits=0:30,windowingFunction=mean,autoScale=off 4-MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
+settingsByView 1-PlusClusters:maxHeightPixels=100:24:16,minLimit=.005,maxLimit=25183,viewLimits=0:30,autoScale=off,windowingFunction=mean 3-MinusClusters:maxHeightPixels=100:24:16,minLimit=.005,maxLimit=25183,viewLimits=0:30,windowingFunction=mean,autoScale=off 
 priority 0
 type bed 3
 wgEncode 1
