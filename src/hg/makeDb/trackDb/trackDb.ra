@@ -2549,6 +2549,7 @@ type netAlign macEug1 chainMacEug1
 otherDb macEug1
 
 track chainMonDom4
+release beta
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2563,6 +2564,7 @@ type chain monDom4
 otherDb monDom4
 
 track netMonDom4
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3247,6 +3249,7 @@ type netAlign panTro1 chainPanTro1
 otherDb panTro1
 
 track chainPanTro2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3260,6 +3263,7 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3292,6 +3296,7 @@ type netAlign gorGor1 chainGorGor1
 otherDb gorGor1
 
 track chainPonAbe2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3306,6 +3311,7 @@ matrixHeader A, C, G, T
 otherDb ponAbe2
 
 track netPonAbe2
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3410,6 +3416,7 @@ type netAlign hg18 chainHg18
 otherDb hg18
 
 track chainRheMac2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3424,6 +3431,7 @@ type chain rheMac2
 otherDb rheMac2
 
 track netRheMac2
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

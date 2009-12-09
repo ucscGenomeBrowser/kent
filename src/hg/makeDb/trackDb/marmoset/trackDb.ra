@@ -1,4 +1,7 @@
+include trackDb.chainNet.ra
+
 track chainMm9
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -12,11 +15,8 @@ spectrum on
 type chain mm9
 otherDb mm9
 
-track chainNetHg19 override
-chainMinScore 5000
-priority 300.0
-
 track chainHg18
+release beta
 shortLabel $o_db Chain
 longLabel $o_db ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -31,12 +31,14 @@ type chain hg18
 otherDb hg18
 
 track netHg18 override
+release beta
 shortLabel $o_db Net  
 longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 290.2
 otherDb hg18
 
 track chainPanTro2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -51,6 +53,7 @@ type chain panTro2
 otherDb panTro2
 
 track chainPonAbe2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
