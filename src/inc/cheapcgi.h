@@ -24,6 +24,10 @@
 #define COLOR_DARKGREEN         "#008800"
 #define COLOR_DARKBLUE          "#000088"
 #define COLOR_LTGREY            "#CCCCCC"
+#define COLOR_YELLOW            "#FFFF00"
+#define COLOR_LTYELLOW          "#FFF380"
+#define COLOR_WHITE             "#FFFFFF"
+#define COLOR_RED               "#AA0000"
 
 void initSigHandlers(boolean dumpStack);
 /* set handler for various terminal signals for logging purposes.
