@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.4 2009/12/06 20:11:22 kent Exp $";
+static char const rcsid[] = "$Id: tdbRecord.c,v 1.5 2009/12/09 10:15:33 kent Exp $";
 
 static struct tdbFilePos *tdbFilePosNew(struct lm *lm, 
     char *fileName, 		/* File name. */
@@ -73,7 +73,7 @@ for(ix=0;ix<cnt;ix++)
     *settings++ = 0;
     char *words[32];
     int cnt,ix;
-    cnt = chopByChar(settings,',',words,ArraySize(settings));
+    cnt = chopByChar(settings,',',words,ArraySize(words));
     for (ix=0; ix<cnt; ix++)
         {
 	char *name = words[ix];
@@ -107,11 +107,11 @@ struct slPair *settingsByView = NULL;
 struct hash *subGroups = NULL;
 char *view = NULL;
 struct hash *viewHash = NULL;
-int startLineIx = lf->lineIx;
 struct dyString *dy = dyStringNew(0);
 
 if (!raSkipLeadingEmptyLines(lf,dy))
     return NULL;
+int startLineIx = lf->lineIx;
 
 char *tag, *val;
 while (raNextTagVal(lf, &tag, &val,dy))
