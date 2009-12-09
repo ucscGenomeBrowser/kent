@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.151 2009/12/07 17:08:29 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.152 2009/12/09 18:03:19 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2350,14 +2350,45 @@ description The reference human genome is currently hg18 - March 2006 (NCBI Buil
 
 term None
 tag None
-description No special treatment applied
+description No special treatment or protocol applies
+type control
+
+
+
+term Betamethasone_100nM
+tag Betamethasone
+description 1h,100nM Betamethasone
 type treatment
 
-#term IFNg
-#description Interferon gamma treatment
-#type treatment
+term DEX_100nM
+tag DEX100nM
+description 1h,100nM DEX
+type treatment
 
+term DEX_50nM
+tag DEX50nM
+description 1h,50nM DEX
+type treatment
 
+term DEX_5nM
+term DEX5nM
+description 1h,5nM DEX
+type treatment
+
+term DEX_500pM
+tag DEX500pM
+description 1h,500pM DEX
+type treatment
+
+term DMSO_0.02pct
+tag DMSO02pct
+description 1h,0.02% DMSO
+type treatment
+
+term EtOH_0.02pct
+tag EtOH02pct
+description 1h,0.02% EtOH
+type treatment
 
 term IFNa30
 tag IFNa30
@@ -2378,6 +2409,26 @@ term IFNg6h
 tag IFNg6h
 description Interferon gamma treatment - 6 hours
 type treatment
+
+#term IFNg
+#description Interferon gamma treatment
+#type treatment
+
+term Prednisolone_100nM
+tag Prednisolone
+description 1h,100nM Prednisolone
+type treatment
+
+term PCR1x
+tag PCR1x
+description 1-cycle of PCR
+type protocol
+
+term PCR2x
+tag PCR2x
+description 2-cycles of PCR
+type protocol
+
 
 term msp
 tag msp
