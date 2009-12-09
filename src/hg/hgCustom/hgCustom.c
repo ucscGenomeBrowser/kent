@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.134 2009/11/09 22:32:18 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.135 2009/12/09 19:28:10 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -437,7 +437,7 @@ if (cartVarExists(cart, hgCtDoRefreshSet))
     setAllUpdate = TRUE;
 
 /* determine which columns to display (avoid empty columns) */
-int updateCt = 0, itemCt = 0, posCt = 0;
+int updateCt = 0, itemCt = 0, posCt = 0, errCt = 0;
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     if (ctDataUrl(ct))
@@ -446,6 +446,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         itemCt++;
     if (ctInitialPosition(ct) || ctFirstItemPos(ct))
         posCt++;
+    if (ct->networkErrMsg)
+	errCt++;
     }
 hTableStart();
 cgiSimpleTableRowStart();
@@ -457,6 +459,8 @@ if (itemCt)
     tableHeaderField("Items", "Count of discrete items in track");
 if (posCt)
     tableHeaderField("Pos"," Go to genome browser at default track position or first item");
+if (errCt)
+    tableHeaderField("Error"," Error in custom track");
 
 boolean showAllButtons = FALSE;
 if (numCts > 3)
@@ -530,24 +534,36 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         else
             puts("<TD>&nbsp;</TD>");
         }
+    if (errCt)
+	{
+	if (ct->networkErrMsg)
+	    {
+	    printf("\n<TD><A href=\"javascript:void(0)\" onClick=\"alert('%s')\">Show</A></TD>\n",
+		javaScriptLiteralEncode(ct->networkErrMsg));
+	    }
+	else
+	    puts("<TD>&nbsp;</TD>");
+	}
     /* Delete checkboxes */
-    printf("</TD><TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
+    printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix, 
             ct->tdb->tableName);
     cgiMakeCheckBox(buf, setAllDelete);
+    puts("</TD>");
 
     /* Update checkboxes */
     if (updateCt)
         {
-        printf("</TD><TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
+        printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
         safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix, 
                 ct->tdb->tableName);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
             cgiMakeCheckBoxWithMsg(buf, setAllUpdate, dataUrl);
         else
             puts("&nbsp;");
+	puts("</TD>");
         }
-    puts("</TD></TR>\n");
+    puts("</TR>\n");
     }
 if (showAllButtons)
     {
@@ -1156,7 +1172,24 @@ else
         ctUpdated = TRUE;
 	}
     if (ctUpdated || ctConfigUpdate(ctFileName))
-        customTracksSaveCart(database, cart, ctList);
+	{
+	customTracksSaveCart(database, cart, ctList);
+
+	/* refresh ctList again to pickup remote resource error state */
+	struct errCatch *catch = errCatchNew();
+	if (errCatchStart(catch))
+	    ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
+					       &replacedCts, NULL, &err);
+	errCatchEnd(catch);
+	if (catch->gotError)
+	    {
+	    addWarning(dsWarn, err);
+	    addWarning(dsWarn, catch->message->string);
+	    ctParseError = TRUE;
+	    }
+	errCatchFree(&catch);
+
+	}
     warn = dyStringCannibalize(&dsWarn);
     if (!initialDb || ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
