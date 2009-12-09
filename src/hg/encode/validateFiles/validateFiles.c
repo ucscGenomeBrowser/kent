@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.30 2009/12/09 19:05:28 braney Exp $";
-static char *version = "$Revision: 1.30 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.31 2009/12/09 19:33:31 braney Exp $";
+static char *version = "$Revision: 1.31 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -65,6 +65,10 @@ errAbort(
   "         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)\n"
   "         csqual    : Colorspace quality (see link below)\n"
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
+  "         SAM       : Sequence Alignment/Map\n"
+  "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
+  "         BAM       : Binary Alignment/Map\n"
+  "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
   "\n"
   "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names\n"
   "                                  and sizes\n"
@@ -1025,6 +1029,20 @@ while (lineFileNext(lf, &seqName, NULL))
 return errs;
 }
 
+int validateSAM(struct lineFile *lf, char *file)
+{
+int errs = 0;
+
+return errs;
+}
+
+int validateBAM(struct lineFile *lf, char *file)
+{
+int errs = 0;
+
+return errs;
+}
+
 void validateFiles(int (*validate)(struct lineFile *lf, char *file), int numFiles, char *files[])
 /* validateFile - validate format of different track input files. */
 {
@@ -1118,6 +1136,8 @@ hashAdd(funcs, "broadPeak",      &validateBroadPeak);
 hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
+hashAdd(funcs, "SAM",            &validateSAM);
+hashAdd(funcs, "BAM",            &validateBAM);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
