@@ -46,6 +46,11 @@ file ddf
 type string
 required no
 
+field protocol
+file ddf
+type string
+required no
+
 field dafVersion
 file dafHeader
 type string
