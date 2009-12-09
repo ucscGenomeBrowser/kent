@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.178 2009/09/28 18:19:31 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.179 2009/12/09 19:27:06 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -344,7 +344,7 @@ struct customTrack *customTrackAddToList(struct customTrack *ctList,
  * and saving the replaced tracks in a list for the caller */
 {
 struct hash *ctHash = hashNew(5);
-struct customTrack *newCtList = NULL, *replacedCts = NULL;
+struct customTrack *newCtList = NULL, *oldCtList = NULL, *replacedCts = NULL;
 struct customTrack *ct = NULL, *nextCt = NULL;
 
 /* determine next sequence number for default tracks */
@@ -362,7 +362,7 @@ for (ct = addCts; ct != NULL; ct = nextCt)
         {
         if (isDefaultTrack(ct) && makeDefaultUnique)
             makeUniqueDefaultTrack(ct);
-        slAddTail(&newCtList, ct);
+        slAddHead(&newCtList, ct);
         hashAdd(ctHash, ct->tdb->tableName, ct);
         }
     }
@@ -373,19 +373,64 @@ for (ct = ctList; ct != NULL; ct = nextCt)
     nextCt = ct->next;
     if ((newCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
         {
-        slAddTail(&replacedCts, ct);
+        slAddHead(&replacedCts, ct);
         }
     else
         {
-        slAddTail(&newCtList, ct);
+        slAddHead(&oldCtList, ct);
         hashAdd(ctHash, ct->tdb->tableName, ct);
         }
     }
+slReverse(&oldCtList);
+slReverse(&replacedCts);
+newCtList = slCat(newCtList, oldCtList);
 hashFree(&ctHash);
 if (retReplacedCts)
     *retReplacedCts = replacedCts;
 return newCtList;
 }
+
+
+
+struct customTrack *customTrackRemoveUnavailableFromList(struct customTrack *ctList)
+/* Remove from list unavailable remote resources.
+ * This must be done after the custom-track bed file has been saved. */
+{
+struct customTrack *newCtList = NULL, *ct = NULL, *nextCt = NULL;
+
+/* Remove from list unavailable remote resources. */
+for (ct = ctList; ct != NULL; ct = nextCt)
+    {
+    nextCt = ct->next;
+    if (!ct->networkErrMsg)
+        {
+        slAddHead(&newCtList, ct);
+        }
+    }
+slReverse(&newCtList);
+return newCtList;
+}
+
+char *customTrackUnavailableErrsFromList(struct customTrack *ctList)
+/* Find network errors of unavailable remote resources from list. */
+{
+struct customTrack *ct = NULL;
+struct dyString *ds = dyStringNew(0);
+char *sep = "";
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    if (ct->networkErrMsg)
+	{
+	dyStringPrintf(ds, "%s%s", sep, ct->networkErrMsg);
+	sep = "<br>\n";
+	}
+    }
+char *result = dyStringCannibalize(&ds);
+if (sameOk(result,""))
+    result = NULL;
+return result;
+}
+
 
 char *customTrackFileVar(char *database)
 /* return CGI var name containing custom track filename for a database */
@@ -732,6 +777,12 @@ if (isNotEmpty(customText))
         else
             err = msg;
         }
+    else
+	{
+	err = customTrackUnavailableErrsFromList(newCts);
+	if (err)
+	    newCts = NULL;  /* do not save the unhappy remote cts*/
+	}
     errCatchFree(&errCatch);
     }
 
@@ -818,6 +869,12 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         }
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
     customTracksSaveCart(genomeDb, cart, ctList);
+
+if (!endsWith(cgiScriptName(),"hgCustom"))
+    {
+    /* filter out cts that are unavailable remote resources */
+    ctList = customTrackRemoveUnavailableFromList(ctList);
+    }
 
 cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);
