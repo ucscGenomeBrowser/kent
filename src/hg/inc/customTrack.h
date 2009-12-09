@@ -55,6 +55,7 @@ struct customTrack
     int offset;			/* Base offset. */
     char *groupName;		/* Group name if any. */
     struct bbiFile *bbiFile;	/* Handle for bigWig/bigBed file. */
+    char *networkErrMsg;        /* Network error message */
     };
 
 /* cart/cgi variables */
