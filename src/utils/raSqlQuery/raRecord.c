@@ -5,7 +5,7 @@
 #include "obscure.h"
 #include "raRecord.h"
 
-static char const rcsid[] = "$Id: raRecord.c,v 1.9 2009/12/02 19:11:54 kent Exp $";
+static char const rcsid[] = "$Id: raRecord.c,v 1.10 2009/12/09 10:14:00 kent Exp $";
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new raFilePos record. */
@@ -76,7 +76,7 @@ for(ix=0;ix<cnt;ix++)
     *settings++ = 0;
     char *words[32];
     int cnt,ix;
-    cnt = chopByChar(settings,',',words,ArraySize(settings));
+    cnt = chopByChar(settings,',',words,ArraySize(words));
     for (ix=0; ix<cnt; ix++)
         {
 	char *name = words[ix];
