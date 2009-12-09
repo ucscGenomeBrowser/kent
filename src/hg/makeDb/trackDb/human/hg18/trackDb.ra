@@ -2272,13 +2272,6 @@ type bed 4 .
     type bed 6 +
     priority 5
 
-    track snpArrayIllumina650
-    subTrack snpArray off
-    shortLabel Illumina 650
-    longLabel Illumina Human Hap 650v3
-    type bed 6 +
-    priority 6
-
     track snpArrayIllumina550
     subTrack snpArray off
     shortLabel Illumina 550
@@ -2299,6 +2292,27 @@ type bed 4 .
     longLabel Illumina Human1M-Duo
     type bed 6 +
     priority 9
+
+    track snpArrayIlluminaHumanCytoSNP_12
+    subTrack snpArray
+    shortLabel Illumina CytoSNP-12
+    longLabel Illumina Human CytoSNP-12
+    type bed 6 +
+    priority 10
+
+    track snpArrayIlluminaHuman660W_Quad
+    subTrack snpArray
+    shortLabel Illumina Human660W-Quad
+    longLabel Illumina Human 660W-Quad
+    type bed 6 +
+    priority 11
+
+    track snpArrayIlluminaHumanOmni1_Quad
+    subTrack snpArray
+    shortLabel Illumina HumanOmni1-Quad
+    longLabel Illumina Human Omni1-Quad
+    type bed 6 +
+    priority 12
 
 track divMKAR
 shortLabel Recent Selection NC
