@@ -177,5 +177,6 @@ tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
+tg->mapsSelf = TRUE;
 }
 
