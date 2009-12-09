@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.113 2009/11/20 19:11:16 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.114 2009/12/09 03:35:50 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -291,6 +291,40 @@ while (hel != NULL)
     hashAdd(oldVars, var, cloneString(hel->val));
     hel = hashLookupNext(hel);
     }
+}
+
+static void cartJustify(struct cart *cart, struct hash *oldVars)
+/* Handles rules for allowing some cart settings to override others. */
+{
+// New priority (position) settings should erase imgOrd settings
+if(oldVars == NULL)
+    return;
+#define POSITION_SUFFIX ".priority"
+#define IMGORD_SUFFIX   "_imgOrd"
+struct hashEl *list = NULL, *el;
+list = hashElListHash(cart->hash);
+//warn("cartJustify() begins");
+for (el = list; el != NULL; el = el->next)
+    {
+    int suffixOffset = strlen(el->name) - strlen(POSITION_SUFFIX);
+    if(suffixOffset>0)
+        {
+        char *suffix = el->name + suffixOffset;
+        if(sameString(suffix,POSITION_SUFFIX))
+            {
+            struct hashEl *old = hashLookup(oldVars, el->name);
+            if(old != NULL && differentString((char *)old->val,(char *)el->val)) // NOTE: It seems NULL is only seen when cart is cleared and this is not important
+                {
+                char *name = cloneString(el->name);
+                safecpy(name+suffixOffset,strlen(POSITION_SUFFIX),IMGORD_SUFFIX); // We know that POSITION_SUFFIX is longer than IMGORD_SUFFIX
+                cartRemove(cart, name); // Removes if found
+                freeMem(name);
+                }
+            }
+        }
+    }
+
+// subtrack settings overridden by more recent view or composite level settings (HOW?)
 }
 
 static void loadCgiOverHash(struct cart *cart, struct hash *oldVars)
@@ -564,6 +598,9 @@ safef(when, sizeof(when), "open %d %d", userId, sessionId);
 cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
+
+// I think this is the place to justify old and new values
+cartJustify(cart, oldVars);
 
 #ifndef GBROWSE
 /* If some CGI other than hgSession been passed hgSession loading instructions,
@@ -1657,6 +1694,78 @@ if(pVariable != NULL)
     }
 return cartSetting;
 }
+
+// NEVER CHECKED IN.
+//#define NORMALIZE_CLOSEST_TO_HOME
+#ifdef NORMALIZE_CLOSEST_TO_HOME
+static void cartPairNormalize(struct cart *cart,struct cart *oldCart,char **lowestVar,char **lowestVal,char *parentVar,char *parentVal)
+/* Removes the lower level variable if it is the same as parent OR if the parent just changed */
+{
+if(parentVal)
+    {
+    if(*lowestVal)
+        {
+        if(sameString(*lowestVal,parentVal)) // same so don't need lowest
+            {
+            cartRemove(cart,*lowestVar);
+            *lowestVal = NULL;
+            }
+        else // Is parent newer?
+            {
+            char *oldVal = hashFindVal(oldCart->hash, parentVar);
+            if(oldVal == NULL || differentString(oldVal,parentVal)) // parent updated
+                {
+                oldVal = hashFindVal(oldCart->hash, *lowestVar);
+                if(oldVal && sameString(oldVal,*lowestVal)) // lowest not updated
+                    {
+                    cartRemove(cart,*lowestVar); // parent newer
+                    *lowestVal = NULL;
+                    }
+                }
+            }
+        }
+    if(*lowestVal == NULL)
+        {
+        *lowestVal = parentVal;
+        //safecpy(*lowestVar, sizeof *lowestVar, parentVar);
+        strcpy(*lowestVar, parentVar); // NOTE: these two must be same size!
+        }
+    }
+}
+
+char *cartNormalizeVariableClosestToHome(struct cart *cart,struct cart *oldCart,struct trackDb *tdb,boolean oneLevel, char *suffix)
+/* returns the ClosestToHome cart variable, but will remove any cart variable
+   most recently superceded */
+{
+char childVar[512];
+safef(childVar, sizeof childVar, "%s.%s", tdb->tableName,suffix);
+char *lowestVar = childVar;
+char *lowestVal = hashFindVal(cart->hash, childVar);
+if(!tdbIsCompositeChild(tdb))
+    return lowestVal;
+char *oldVal = cartOptionalString(oldCart, childVar);
+if(oldVal && differentString(oldVal,lowestVal))
+    return lowestVal; // It is newest and nothing needs to be removed
+
+// Find the closest to home parent
+char parentVar[512];
+char *parentVal = NULL;
+char *stView;
+if(subgroupFind(tdb,"view",&stView))
+    {
+    safef(parentVar,sizeof parentVar,"%s.%s.%s",tdb->parent->tableName,stView,suffix);
+    parentVal = hashFindVal(cart->hash, parentVar);
+    cartPairNormalize(cart,oldCart,&lowestVar,&lowestVal,parentVar,parentVal);
+    }
+if(!oneLevel)
+    {
+    safef(parentVar,sizeof parentVar,"%s.%s",tdb->parent->tableName,suffix);
+    parentVal = hashFindVal(cart->hash, parentVar);
+    cartPairNormalize(cart,oldCart,&lowestVar,&lowestVal,parentVar,parentVal);
+    }
+return lowestVal?lowestVal:parentVal;
+}
+#endif//def NORMALIZE_CLOSEST_TO_HOME
 
 void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
 /* Looks for then removes a cart variable from lowest level on up:
