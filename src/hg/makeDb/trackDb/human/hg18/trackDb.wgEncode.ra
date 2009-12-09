@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.708 2009/12/09 00:26:52 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.709 2009/12/09 01:03:41 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4641,10 +4641,12 @@ wgEncode 1
 
 # U. Washington ChIP-seq (wrangler: Andy, Tim, Tracy, Melissa)
 
+# TODO: fix errors in metadatta (e.g. view=aPeaks)
+
 track wgEncodeUwChIPSeq
 compositeTrack on
 shortLabel UW ChIP-seq
-longLabel ENCODE ChIP-seq by Univ. Washington
+longLabel ENCODE ChIP-seq from Univ. Washington
 group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hotspots zRawSig=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 HEK293=HEK293 HL60=HL-60 HMEC=HMEC HRE=HRE SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
@@ -4848,7 +4850,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in BJ cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=BJ rep=rep1
     type narrowPeak
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=BJ antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=746 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1BjH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1BjH3k36me3.narrowPeak.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=BJ antibody=H3K36me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=746 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1BjH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1BjH3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3
     release alpha
@@ -4877,7 +4879,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in BJ cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=BJ
     #type narrowPeak
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=BJ antibody=H3K36me3 fragLength=350 view=aPeaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=742 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2BjH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2BjH3k36me3.narrowPeak.gz
+    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=BJ antibody=H3K36me3 fragLength=350 view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=742 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2BjH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2BjH3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3
     release alpha
@@ -5333,7 +5335,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in GM06990 cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=GM06990 rep=rep1
     type narrowPeak
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM06990 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=748 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3.narrowPeak.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM06990 antibody=H3K36me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=748 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3
     release alpha
@@ -5362,7 +5364,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #longLabel ENCODE UW ChIP-seq Peaks Replicate 2 (H3K36me3 in GM06990 cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=GM06990
     #type narrowPeak
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM06990 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=744 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2Gm06990H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2Gm06990H3k36me3.narrowPeak.gz
+    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM06990 antibody=H3K36me3 fragLength=350 view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=744 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2Gm06990H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2Gm06990H3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3
     release alpha
@@ -5479,7 +5481,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     subGroups view=zRawSig factor=H3K04me3 cellType=1GM12878 rep=rep1
     type wig 1.00 2568.00
     color 153,38,0
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K4me3 fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=699 dateReubmitted=2009-10-19 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3 fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3.wig.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K4me3 fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=699 dateResubmitted=2009-10-19 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3 fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3.wig.gz
     #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K4me3 fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=302 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3 fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3.wig.gz
 
     track wgEncodeUwChIPSeqPeaksRep1Gm12878H3k4me3
@@ -5616,7 +5618,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     subGroups view=aPeaks factor=H3K36me3 cellType=1GM12878 rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=747 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3.narrowPeak.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K36me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=747 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3
     release alpha
@@ -5647,7 +5649,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #subGroups view=aPeaks factor=H3K36me3 cellType=1GM12878
     #type narrowPeak
     #color 153,38,0
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=743 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2Gm12878H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2Gm12878H3k36me3.narrowPeak.gz
+    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12878 antibody=H3K36me3 fragLength=350 view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=743 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2Gm12878H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2Gm12878H3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3
     release alpha
@@ -6220,7 +6222,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     subGroups view=aPeaks factor=H3K36me3 cellType=2HEPG2 rep=rep1
     type narrowPeak
     color 189,0,157
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3
     release alpha
@@ -6536,7 +6538,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HRE cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=HRE rep=rep1
     type narrowPeak
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HRE antibody=H3K27me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=749 dateResubmitted=2009-10-22 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1HreH3k27me3 fileName=wgEncodeUwChIPSeqPeaksRep1HreH3k27me3.narrowPeak.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HRE antibody=H3K27me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=749 dateResubmitted=2009-10-22 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1HreH3k27me3 fileName=wgEncodeUwChIPSeqPeaksRep1HreH3k27me3.narrowPeak.gz
     #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HRE antibody=H3K27me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=731 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1HreH3k27me3 fileName=wgEncodeUwChIPSeqPeaksRep1HreH3k27me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3
@@ -6879,7 +6881,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #subGroups view=aPeaks factor=H3K36me3 cellType=2HUVEC
     #type narrowPeak
     #color 224,75,0
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=aPeaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=750 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2HuvecH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2HuvecH3k36me3.narrowPeak.gz
+    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=750 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2HuvecH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep2HuvecH3k36me3.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3
     release alpha
@@ -7349,7 +7351,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     subGroups view=zRawSig factor=H3K36me3 cellType=2NHEK rep=rep2
     type wig 1.00 3966.00
     color 179,0,134
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=NHEK antibody=H3K36me3 fragLength=350 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=722 dateResubmitted=2009-10-19 ateSubmitted=2009-09-29 dateUnrestricted=2010-06-29  composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3.wig.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=NHEK antibody=H3K36me3 fragLength=350 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=722 dateResubmitted=2009-10-19 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29  composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3.wig.gz
     #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=NHEK antibody=H3K36me3 fragLength=350 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=613 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3.wig.gz
 
     #track wgEncodeUwChIPSeqPeaksRep2NhekH3k36me3
@@ -7643,7 +7645,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #longLabel ENCODE UW ChIP-seq Peaks Replicate 2 (CTCF in SK-N-SH_RA cells)
     #subGroups view=aPeaks factor=CTCF cellType=SKNSHRA
     #type narrowPeak
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=SK-N-SH_RA antibody=CTCF fragLength=350 view=aPeaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=753 dateSubmitted=2009-10-23 dateUnrestricted=2010-07-22 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2SknshraCtcf fileName=wgEncodeUwChIPSeqPeaksRep2SknshraCtcf.narrowPeak.gz
+    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=SK-N-SH_RA antibody=CTCF fragLength=350 view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=753 dateSubmitted=2009-10-23 dateUnrestricted=2010-07-22 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2SknshraCtcf fileName=wgEncodeUwChIPSeqPeaksRep2SknshraCtcf.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf
     release alpha
@@ -7876,8 +7878,8 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
 track wgEncodeUwDGF
 compositeTrack on
 release alpha
-shortLabel Uw DGF
-longLabel ENCODE Digital DNase Genomic Footprinting by Univ. Washington
+shortLabel UW DNase DGF
+longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting 
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal

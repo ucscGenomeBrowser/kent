@@ -3987,6 +3987,58 @@ priority 100
     altColor 120,40,40
     priority 4
 
+    # PhyloP V2 conservation (chrX-specific tree)
+    track phyloP44wayPrimates_v2
+    subTrack cons44way off
+    subGroups view=phyloP clade=primate
+    shortLabel Primate Cons2
+    longLabel Primate Basewise Conservation by PhyloP V2
+    noInherit on
+    configurable on
+    type wig -7.87 .69
+    maxHeightPixels 100:50:11
+    viewLimits -.3:2
+    autoScale off
+    spanList 1
+    windowingFunction mean
+    color 10,10,70
+    altColor 70,10,10
+    priority 5
+
+    track phyloP44wayPlacental_v2
+    subTrack cons44way on
+    subGroups view=phyloP clade=mammal
+    shortLabel Mammal Cons2
+    longLabel Placental Mammal Basewise Conservation by PhyloP V2
+    noInherit on
+    configurable on
+    type wig -14.12 3.15
+    maxHeightPixels 100:50:11
+    viewLimits -.3:2
+    autoScale off
+    spanList 1
+    windowingFunction mean
+    color 25,25,95
+    altColor 95,25,25
+    priority 6
+
+    track phyloP44way_v2
+    subTrack cons44way off
+    subGroups view=phyloP clade=vert
+    shortLabel Vertebrate Cons2
+    longLabel Vertebrate Basewise Conservation by PhyloP V2
+    noInherit on
+    configurable on
+    type wig -15.11 6.83
+    maxHeightPixels 100:50:11
+    viewLimits -.3:2
+    autoScale off
+    spanList 1
+    windowingFunction mean
+    color 40,40,120
+    altColor 120,40,40
+    priority 8
+
     # phastCons conservation
     track phastCons44wayPrimates
     subTrack cons44way off
@@ -4051,6 +4103,35 @@ windowingFunction mean
 group compGeno
 priority 103.292
 
+    track phyloP44wayPrimatesLs_v2
+    subTrack phyloPConsLs44way
+    shortLabel Primates V2
+    longLabel Primates V2
+    type wig -9.28 3.91
+    maxHeightPixels 100:32:16
+    noInherit on
+    autoScale off
+    windowingFunction mean
+    spanList 1
+    viewLimits -3:3
+    color 10,10,70
+    altColor 70,10,10
+    priority 1
+
+    track phyloP44wayGliresLs_v2
+    subTrack phyloPConsLs44way
+    shortLabel Glires V2
+    longLabel Glires (Rodent, Rabbit and Pika) V2
+    type wig -6.99 5.95
+    maxHeightPixels 100:32:16
+    noInherit on
+    viewLimits -3:3
+    spanList 1
+    windowingFunction mean
+    color 25,25,95
+    altColor 95,25,25
+    priority 2
+
     track phyloP44wayPrimateLs
     subTrack phyloPConsLs44way
     shortLabel Primates
@@ -4064,7 +4145,7 @@ priority 103.292
     viewLimits -3:3
     color 10,10,70
     altColor 70,10,10
-    priority 1
+    priority 3
 
     track phyloP44wayGlireLs
     subTrack phyloPConsLs44way
@@ -4078,7 +4159,7 @@ priority 103.292
     windowingFunction mean
     color 25,25,95
     altColor 95,25,25
-    priority 2
+    priority 4
 
 track ensembl31wayGerp
 compositeTrack on
