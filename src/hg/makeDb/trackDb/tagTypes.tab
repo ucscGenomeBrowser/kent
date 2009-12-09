@@ -50,6 +50,9 @@ dateUnrestricted bed
 db *
 defaultGeneTracks bed
 defaultLinkedTables genePred
+dimensionAchecked *
+dimensionBchecked *
+dimensionCchecked *
 dimensionZchecked *
 dimensions *
 directUrl *
@@ -240,7 +243,7 @@ subGroup2 *
 subGroup3 *
 subGroup4 *
 subGroup5 *
-subGroup6 wig bed
+subGroup6 *
 subGroups *
 subTrack *
 subgroups bed
