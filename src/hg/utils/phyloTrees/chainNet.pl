@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # chainNet.pl - output chainNet.ra definitions in phylogentic order
 
-#	$Id: chainNet.pl,v 1.1 2009/12/09 18:26:55 hiram Exp $
+#	$Id: chainNet.pl,v 1.2 2009/12/09 18:28:01 hiram Exp $
 
 use strict;
 use warnings;
@@ -55,7 +55,7 @@ my @chainTbls;
 my $chainCount = 0;
 my %orderChainNet;
 
-open (FH, "hgsql -e 'show tables;' $db | grep 'chain.*Link'|") or
+open (FH, "hgsql -e 'show tables;' $db | grep -v -i 'self' | grep 'chain.*Link'|") or
 	die "can not run hgsql 'show tables' on $db";
 while (my $tbl = <FH>) {
     chomp $tbl;
