@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.206 2009/12/09 19:32:59 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.207 2009/12/09 19:58:17 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -178,6 +178,7 @@ our %validators = (
     species => \&validateSpecies,
     fragLength => \&validateNoValidation,
     treatment => \&validateNoValidation,
+    protocol => \&validateNoValidation,
     restrictionEnzyme => \&validateNoValidation,
     );
 
@@ -1986,7 +1987,7 @@ foreach my $ddfLine (@ddfLines) {
         # color track by color setting for cell type in cv.ra
         if(defined($ddfLine->{cell})) {
             if(defined($terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'})) {
-                print TRACK_RA sprintf("    color %s\n", 
+                print TRACK_RA sprintf("    color %s\n",
                         $terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'});
             }
         }
@@ -2012,7 +2013,7 @@ if($submitPath =~ /(\d+)$/) {
         my $metadata = join("; ", @tmp);
         HgAutomate::verbose(2, "Updating id '$id'; metdata: '$metadata'; count: 'count'\n");
         $rubyDb->execute("update projects set count = ?, metadata = ?, db = ?, lab = ?, data_type = ?, track = ? where id = ?",
-             $count, $metadata, 
+             $count, $metadata,
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
