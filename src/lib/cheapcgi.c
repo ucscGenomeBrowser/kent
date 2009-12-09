@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.125 2009/10/20 22:50:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.126 2009/12/09 19:24:35 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -632,6 +632,64 @@ if (res == NULL)
     cgiBadVar(varName);
 return res;
 }
+
+char *javaScriptLiteralEncode(char *inString)
+/* Use backslash escaping on newline *
+ * and quote chars, backslash and others. *
+ * Intended that the encoded string will be *
+ * put between quotes at a higher level and *
+ * then interpreted by Javascript. */
+{
+char c;
+int outSize = 0;
+char *outString, *out, *in;
+
+if (inString == NULL)
+    return(cloneString(""));
+
+/* Count up how long it will be */
+in = inString;
+while ((c = *in++) != 0)
+    {
+    if (c == '\'' 
+     || c == '\"' 
+     || c == '&' 
+     || c == '\\' 
+     || c == '\n' 
+     || c == '\r'
+     || c == '\t' 
+     || c == '\b' 
+     || c == '\f'
+	)
+        outSize += 2;
+    else
+        outSize += 1;
+    }
+outString = needMem(outSize+1);
+
+/* Encode string */
+in = inString;
+out = outString;
+while ((c = *in++) != 0)
+    {
+    if (c == '\'' 
+     || c == '\"' 
+     || c == '&' 
+     || c == '\\' 
+     || c == '\n' 
+     || c == '\r'
+     || c == '\t' 
+     || c == '\b' 
+     || c == '\f'
+	)
+        *out++ = '\\';
+    *out++ = c;
+    }
+*out++ = 0;
+return outString;
+
+}
+
 
 void cgiDecode(char *in, char *out, int inLength)
 /* Decode from cgi pluses-for-spaces format to normal.

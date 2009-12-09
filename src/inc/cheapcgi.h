@@ -417,4 +417,11 @@ void cgiResetState();
 void commonCssStyles();
 /* Defines a few common styles to use through CSS */
 
+char *javaScriptLiteralEncode(char *inString);
+/* Use backslash escaping on newline *
+ * and quote chars, backslash and others. *
+ * Intended that the encoded string will be *
+ * put between quotes at a higher level and *
+ * then interpreted by Javascript. */
+
 #endif /* CHEAPCGI_H */
