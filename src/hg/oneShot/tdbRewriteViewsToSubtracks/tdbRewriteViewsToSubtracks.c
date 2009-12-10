@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3 2009/12/10 04:38:10 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3.2.1 2009/12/10 08:31:46 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -492,6 +492,8 @@ char *line = lmCloneString(lm, viewSubGroupTag->val);
 char *viewWord = nextWord(&line);
 assert(sameString(viewWord, "view"));
 char *viewLabelWord = nextWord(&line);
+if (!sameString(viewLabelWord, "Views"))
+    verbose(1, "viewLabelWord for %s is %s\n", complexRecord->key, viewLabelWord);
 struct slPair *viewList = NULL;
 char *thisEqThat;
 while ((thisEqThat = nextWord(&line)) != NULL)
@@ -579,8 +581,17 @@ for (view = viewList; view != NULL; view = view->next)
 	char *vis = hashFindVal(visHash, view->name);
 	if (vis != NULL)
 	    {
-	    fprintf(f, "    visibility %s\n", vis);
+	    int len = strlen(vis);
+	    boolean gotPlus = (lastChar(vis) == '+');
+	    if (gotPlus)
+	        len -= 1;
+	    char visOnly[len+1];
+	    memcpy(visOnly, vis, len);
+	    visOnly[len] = 0;
 	    fprintf(f, "    subTrack %s\n", complexRecord->key);
+	    fprintf(f, "    visibility %s\n", visOnly);
+	    if (gotPlus)
+		fprintf(f, "    viewUi on\n");
 	    }
 	struct slPair *settingList = hashFindVal(settingsHash, view->name);
 	struct slPair *setting;
