@@ -102,6 +102,7 @@ release alpha
 
 # release beta: shortLabel $o_Organism
 track chainHg18 override
+release beta
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 # release alpha: shortLabel $o_db
