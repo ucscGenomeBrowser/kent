@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.35 2009/12/08 18:23:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.36 2009/12/10 19:58:49 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -508,8 +508,15 @@ if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
     else if (sameWord(tdbDefault,"off"))
 	autoScale = cloneString(manualString);
     else
-	autoScale = wigCheckBinaryOption(tdb,Default,notDefault,
-	    AUTOSCALEDEFAULT, AUTOSCALE);
+	{
+	if (isCustomTrack(tdb->tableName))
+	    // backwards defaults for custom tracks, autoScale on
+	    autoScale = wigCheckBinaryOption(tdb,notDefault,Default,
+		AUTOSCALEDEFAULT, AUTOSCALE);
+	else
+	    autoScale = wigCheckBinaryOption(tdb,Default,notDefault,
+		AUTOSCALEDEFAULT, AUTOSCALE);
+	}
     }
 
 if (optString)
