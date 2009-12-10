@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.2 2009/12/10 03:06:25 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3 2009/12/10 04:38:10 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -570,7 +570,10 @@ for (view = viewList; view != NULL; view = view->next)
     safef(viewTrackName, sizeof(viewTrackName), "%sView%s", complexRecord->key, view->name);
     fprintf(f, "\n");	/* Blank line to open view. */
     fprintf(f, "    track %s\n", viewTrackName);
-    fprintf(f, "    shortLabel %s\n", (char*)view->val);
+    char *shortLabel = lmCloneString(lm, view->val);
+    subChar(shortLabel, '_', ' ');
+    fprintf(f, "    shortLabel %s\n", shortLabel);
+    fprintf(f, "    view %s\n", view->name);
     if (visHash != NULL)
         {
 	char *vis = hashFindVal(visHash, view->name);
