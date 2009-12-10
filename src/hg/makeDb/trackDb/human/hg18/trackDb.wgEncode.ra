@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.715 2009/12/09 20:27:00 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.716 2009/12/10 23:11:44 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16971,7 +16971,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1ProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel pros cyto +S1
+    shortLabel pros cell +S1
     longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in prostate cytosol)
     subGroups view=0-PlusRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
@@ -17172,7 +17172,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1ProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel pros cyto -S1
+    shortLabel pros cell -S1
     longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in prostate cytosol)
     subGroups view=1-MinusRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
