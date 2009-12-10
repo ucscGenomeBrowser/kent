@@ -1,6 +1,0 @@
-machine mysqlbeta.cse.ucsc.edu
-server hgwbeta.cse.ucsc.edu
-quick false
-dbSpec all
-table all
-zoomCount 3
