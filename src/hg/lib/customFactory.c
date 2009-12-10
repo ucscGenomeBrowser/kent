@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.112 2009/12/09 19:26:12 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.113 2009/12/10 20:02:23 hiram Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1319,6 +1319,7 @@ if (dbRequested)
     char c;
     int fputcErr = 0;
 
+    unlink(wigAscii);/* stays open, disappears when close or pipe fail */
     while ((c = fgetc(in)) != EOF && fputcErr != EOF)
 	fputcErr = fputc(c, out);
     carefulClose(&in);
@@ -1362,8 +1363,8 @@ else
 	warn("warning: reached data limit for wiggle track '%s' "
 	     "%lld >= 300,000,000<BR>\n", 
 	     track->tdb->shortLabel, options.wibSizeLimit);
+    unlink(wigAscii);/* done with this, remove it */
     }
-unlink(wigAscii);/* done with this, remove it */
 freeMem(track->wigAscii);
 char tdbType[256];
 safef(tdbType, sizeof(tdbType), "wig %g %g", lowerLimit, upperLimit);
