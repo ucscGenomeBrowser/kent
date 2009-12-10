@@ -13,7 +13,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.24 2009/12/07 17:46:29 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.24.2.1 2009/12/10 10:29:35 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -21,6 +21,8 @@ static boolean clStrict = FALSE;	/* If set only return tracks with actual tables
 static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
 static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 static char *clRewrite = NULL;		/* Rewrite to given directory. */
+
+boolean uglyOne;
 
 void usage()
 /* Explain usage and exit. */
@@ -858,28 +860,39 @@ for (child = record->children; child != NULL; child = child->olderSibling)
 return FALSE;
 }
 
-static struct tdbRecord *closestParentInFile(struct slRef *allParentRefs, 
-	struct tdbFilePos *childPos)
-/* Find parent that comes closest to (but before) childPos. */
+static int countAncestors(struct tdbRecord *r)
+/* Return 0 if has no parent, 1 if has a parent, 2 if it has a grandparent, etc. */
 {
-struct slRef *parentRef;
-struct tdbRecord *closestParent = NULL;
+int count = 0;
+struct tdbRecord *p;
+for (p = r->parent; p != NULL; p = p->parent)
+    count += 1;
+return count;
+}
+
+static struct tdbRecord *closestTdbAboveLevel(struct tdbRecord *tdbList, 
+	struct tdbFilePos *childPos, int parentDepth)
+/* Find parent at given depth that comes closest to (but before) childPos. */
+{
+struct tdbRecord *parent, *closestParent = NULL;
 int closestDistance = BIGNUM;
-for (parentRef = allParentRefs; parentRef != NULL; parentRef = parentRef->next)
+for (parent = tdbList; parent != NULL; parent = parent->next)
     {
-    struct tdbRecord *parent = parentRef->val;
-    struct tdbFilePos *pos;
-    for (pos = parent->posList; pos != NULL; pos = pos->next)
-        {
-	if (sameString(pos->fileName, childPos->fileName))
+    if (countAncestors(parent) <= parentDepth)
+	{
+	struct tdbFilePos *pos;
+	for (pos = parent->posList; pos != NULL; pos = pos->next)
 	    {
-	    int distance = childPos->startLineIx - pos->startLineIx;
-	    if (distance > 0)
-	        {
-		if (distance < closestDistance)
+	    if (sameString(pos->fileName, childPos->fileName))
+		{
+		int distance = childPos->startLineIx - pos->startLineIx;
+		if (distance > 0)
 		    {
-		    closestDistance = distance;
-		    closestParent = parent;
+		    if (distance < closestDistance)
+			{
+			closestDistance = distance;
+			closestParent = parent;
+			}
 		    }
 		}
 	    }
@@ -888,11 +901,13 @@ for (parentRef = allParentRefs; parentRef != NULL; parentRef = parentRef->next)
 return closestParent;
 }
 
-static void checkChildUnderNearestParent(struct slRef *allParentRefs,
-	struct tdbRecord *parent, struct tdbRecord *child)
+static void checkChildUnderNearestParent(struct tdbRecord *recordList, struct tdbRecord *child)
 /* Make sure that parent record occurs before child, and that indeed it is the
  * closest parent before the child. */
 {
+struct tdbRecord *parent = child->parent;
+int parentDepth = countAncestors(parent);
+
 /* We do the check for each file the child is in */
 struct tdbFilePos *childFp, *parentFp;
 for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
@@ -907,7 +922,8 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 		         "Child (%s) at line %d, parent (%s) at line %d",
 			 childFp->fileName, child->key, childFp->startLineIx, 
 			 parent->key, parentFp->startLineIx);
-	    struct tdbRecord *closestParent = closestParentInFile(allParentRefs, childFp);
+	    struct tdbRecord *closestParent = closestTdbAboveLevel(recordList, childFp, 
+	    	parentDepth);
 	    assert(closestParent != NULL);
 	    if (closestParent != parent)
 	        errAbort("%s comes between parent (%s) and child (%s) in %s\n"
@@ -950,19 +966,11 @@ for (record = recordList; record != NULL; record = record->next)
 	}
     }
 
-/* Create parent list, which we'll use for various child/parent checks. */
-struct slRef *parentRefList = NULL;
-for (record = recordList; record != NULL; record = record->next)
-    {
-    if (record->children != NULL)
-        refAdd(&parentRefList, record);
-    }
-
 /* Additional child/parent checks. */
 for (record = recordList; record != NULL; record = record->next)
     {
     if (record->parent != NULL)
-        checkChildUnderNearestParent(parentRefList, record->parent, record);
+        checkChildUnderNearestParent(recordList, record);
     }
 }
 
