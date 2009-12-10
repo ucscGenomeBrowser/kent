@@ -2843,11 +2843,38 @@ searchPriority 14
 padding 250
 semiShortCircuit 1
 
+searchName snpArrayIlluminaHuman660W_Quad
+searchTable snpArrayIlluminaHuman660W_Quad
+searchType bed
+searchMethod exact
+termRegex ((rs|SNP|GA|cnvi|VG|[0-9])[0-9]+)
+searchPriority 14
+padding 250
+semiShortCircuit 1
+
 searchName illumina1M
 searchTable snpArrayIllumina1M
 searchType bed
 searchMethod exact
 termRegex ((rs|SNP|GA|cnvi|[0-9])[0-9]+)
+searchPriority 14
+padding 250
+semiShortCircuit 1
+
+searchName snpArrayIlluminaHumanOmni1_Quad
+searchTable snpArrayIlluminaHumanOmni1_Quad
+searchType bed
+searchMethod exact
+termRegex ((rs|SNP|GA|cnvi|VG|[0-9])[0-9]+)
+searchPriority 14
+padding 250
+semiShortCircuit 1
+
+searchName snpArrayIlluminaHumanCytoSNP_12
+searchTable snpArrayIlluminaHumanCytoSNP_12
+searchType bed
+searchMethod exact
+termRegex ((rs|SNP|GA|cnvi|VG|[0-9])[0-9]+)
 searchPriority 14
 padding 250
 semiShortCircuit 1
