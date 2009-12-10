@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.1 2009/12/09 17:38:19 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.2 2009/12/10 03:06:25 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -492,7 +492,7 @@ char *line = lmCloneString(lm, viewSubGroupTag->val);
 char *viewWord = nextWord(&line);
 assert(sameString(viewWord, "view"));
 char *viewLabelWord = nextWord(&line);
-struct slName *viewList = NULL;
+struct slPair *viewList = NULL;
 char *thisEqThat;
 while ((thisEqThat = nextWord(&line)) != NULL)
     {
@@ -501,8 +501,9 @@ while ((thisEqThat = nextWord(&line)) != NULL)
         recordAbort(complexRecord, "expecting this=that got %s in %s tag", 
 		eq, viewSubGroupTag->name);
     *eq = 0;
-    slNameAddTail(&viewList, thisEqThat);
+    slPairAdd(&viewList, thisEqThat, lmCloneString(lm, eq+1));
     }
+slReverse(&viewList);
 
 /* Write self, the parent record.  This is just most but not all tags of the original record,
  * omitting settingsByView and visibilityViewDefaults which will be moved into the view. */
@@ -537,7 +538,7 @@ if (settingsTag != NULL)
 	    recordAbort(complexRecord, "missing colon in settingsByView '%s'", viewName);
 	struct slPair *el, *list = NULL;
 	*settings++ = 0;
-	if (!slNameInListUseCase(viewList, viewName))
+	if (!slPairFind(viewList, viewName))
 	    recordAbort(complexRecord, "View '%s' in settingsByView is not defined in subGroup",
 	    	viewName);
 	char *words[32];
@@ -562,13 +563,14 @@ if (settingsTag != NULL)
     }
 
 /* Go through each view and write it, and then the children who are in that view. */
-struct slName *view;
+struct slPair *view;
 for (view = viewList; view != NULL; view = view->next)
     {
     char viewTrackName[256];
     safef(viewTrackName, sizeof(viewTrackName), "%sView%s", complexRecord->key, view->name);
     fprintf(f, "\n");	/* Blank line to open view. */
-    fprintf(f, "track %s\n", viewTrackName);
+    fprintf(f, "    track %s\n", viewTrackName);
+    fprintf(f, "    shortLabel %s\n", (char*)view->val);
     if (visHash != NULL)
         {
 	char *vis = hashFindVal(visHash, view->name);
