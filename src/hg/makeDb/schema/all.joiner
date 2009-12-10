@@ -2490,6 +2490,11 @@ identifier transMapSrcAlnUcscGenesId
     hgFixed.transMapSrcUcscGenes.id dupeOk chopAfter=-
     $transMapDb.transMapAlnUcscGenes.qName chopAfter=-
 
+identifier transMapSrcAlnMRnaId
+"transMap MRnas alignment to source"
+    hgFixed.transMapSrcMRna.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnMRna.qName chopAfter=-
+
 identifier transMapSrcAlnRefSeqId
 "transMap RefSeqs alignment to source"
     hgFixed.transMapSrcRefSeq.id dupeOk chopAfter=-
