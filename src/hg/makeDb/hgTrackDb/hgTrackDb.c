@@ -13,7 +13,9 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.55 2009/11/25 00:58:02 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.55.4.1 2009/12/10 10:58:18 kent Exp $";
+
+int uglyZero = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -253,7 +255,7 @@ sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
 
-char *subTrackName(char *create, char *tableName)
+char *substituteTrackName(char *create, char *tableName)
 /* Substitute tableName for whatever is between CREATE TABLE  and  first '('
    freez()'s create passed in. */
 {
@@ -266,12 +268,12 @@ front = strstr(create, "TABLE");
 if(front == NULL)
     front = strstr(create, "table");
 if(front == NULL)
-    errAbort("hgTrackDb::subTrackName() - Can't find 'TABLE' in %s", create);
+    errAbort("hgTrackDb::substituteTrackName() - Can't find 'TABLE' in %s", create);
 
 /* try to find first "(" in string */
 rear = strstr(create, "(");
 if(rear == NULL)
-    errAbort("hgTrackDb::subTrackName() - Can't find '(' in %s", create);
+    errAbort("hgTrackDb::substituteTrackName() - Can't find '(' in %s", create);
 
 /* set to NULL character after "TABLE" */
 front += 5;
@@ -452,6 +454,45 @@ while ((hel = hashNext(&cookie)) != NULL)
 
 }
 
+static boolean releasesCompatible(struct trackDb *a, struct trackDb *b)
+/* Return TRUE if either release is NULL, or if they both exist and match. */
+{
+char *aRelease = trackDbSetting(a, "release");
+char *bRelease = trackDbSetting(b, "release");
+return aRelease == NULL || bRelease == NULL || sameString(aRelease, bRelease);
+}
+
+static void linkUpParents(struct trackDb *tdList)
+/* Fill in parent pointers. */
+{
+/* Build up hash of all tracks keyed by name.  */
+struct trackDb *td;
+struct hash *trackHash = hashNew(0);
+for (td = tdList; td != NULL; td = td->next)
+    hashAdd(trackHash, td->tableName, td);
+
+/* Loop through looking for parent tracks whenever see the subTrack tag. 
+ * Try to find parent just in compatible release. */
+for (td = tdList; td != NULL; td = td->next)
+    {
+    char *parentName = trackDbSetting(td, "subTrack");
+    if (parentName != NULL)
+        {
+	struct hashEl *hel;
+	for (hel = hashLookup(trackHash, parentName); hel != NULL; hel = hashLookupNext(hel))
+	    {
+	    struct trackDb *p = hel->val;
+	    if (releasesCompatible(p, td))
+		{
+	        td->parent = p;
+		break;
+		}
+	    }
+	}
+    }
+hashFree(&trackHash);
+}
+
 static void verifySubTracks(struct trackDb **tdList, struct hash *compositeHash)
 {
 /* now verify and prune subtracks */
@@ -505,12 +546,15 @@ struct hash *compositeHash = buildCompositeHash(tdList);
 verifySubTracks(&tdList, compositeHash);
 }
 
+boolean uglyOne;
+
 static void prioritizeContainerItems(struct trackDb *tdbList)
 /* set priorities in containers if they have no priorities already set
    priorities are based upon 'sortOrder' setting or else shortLabel */
 {
 int countOfSortedContainers = 0;
 
+uglyf("prioritizContainerItems on tdbList of %d\n", slCount(tdbList));
 // Walk through tdbs looking for containers
 struct trackDb *tdbContainer;
 for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
@@ -552,6 +596,9 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
                 {
                 verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->tableName);
                 needsSorting = FALSE;
+		uglyOne = TRUE;
+		sortableTdbItemCreate(tdbItem,sortOrder);
+		uglyAbort("All for now");
                 break;
                 }
             }
@@ -604,6 +651,7 @@ if (visibilityRa != NULL)
     trackDbOverrideVisbility(uniqHash, visibilityRa, optionExists("hideFirst"));
 if (priorityRa != NULL)
     trackDbOverridePriority(uniqHash, priorityRa);
+if (uglyZero)
 prioritizeContainerItems(tdList);
 slSort(&tdList, trackDbCmp);
 hashFree(&uniqHash);
@@ -620,7 +668,10 @@ safef(tab, sizeof(tab), "%s.tab", trackDbName);
 
 struct trackDb *tdList = buildTrackDb(org, database, hgRoot,
                                       visibilityRa, priorityRa, strict);
+if (uglyZero)
 checkSubGroups(tdList);
+
+linkUpParents(tdList);
 
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 
@@ -647,7 +698,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
     /* Load in table definition. */
     readInGulp(sqlFile, &create, NULL);
     create = trimSpaces(create);
-    create = subTrackName(create, trackDbName);
+    create = substituteTrackName(create, trackDbName);
     end = create + strlen(create)-1;
     if (*end == ';') *end = 0;
     sqlRemakeTable(conn, trackDbName, create);
