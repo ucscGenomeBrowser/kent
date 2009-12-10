@@ -1,20 +1,3 @@
-track gold
-shortLabel Assembly 
-longLabel Assembly from Fragments 
-group map
-priority 10
-visibility hide
-color 150,100,30
-altColor 230,170,40
-type bed 3 +
-
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
 
 track contigOrient
 shortLabel Contig Orient
@@ -56,27 +39,18 @@ baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 
-track blastHg17KG
+track blastHg17KG override
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-group genes
 priority 30
-visibility pack
-colorChromDefault off
-type psl protein
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 
-track sgpGene
-shortLabel SGP Genes
+track sgpGene override
 longLabel SGP Gene Predictions Using Cow/Mouse Homology
-group genes
-priority 47
-visibility hide
-color 0,90,100
-type genePred sgpPep
 
 track chainHg18
+#replaces record chainHg18 in parent dir missing/extra matrix,matrixHeader
 release beta
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -89,16 +63,9 @@ spectrum on
 type chain hg18
 otherDb hg18
 
-track netHg18
-release beta
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
+track netHg18 override
 priority 157.5
 visibility hide
-spectrum on
-type netAlign hg18 chainHg18
-otherDb hg18
 
 searchTable gold
 searchMethod exact

@@ -1,22 +1,10 @@
 #Some mosquito-specific stuff.
 
-track mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility pack
+track mrna override
 spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
 
 track intronEst
+#replaces record intronEst in parent dir missing/extra maxItems
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
 group rna
@@ -31,6 +19,7 @@ indelDoubleInsert on
 indelQueryInsert on
 
 track est
+#replaces record est in parent dir missing/extra maxItems
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
@@ -43,47 +32,19 @@ baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 
-track xenoMrna
-shortLabel Other mRNAs
-longLabel Non-$Organism mRNAs from GenBank
-group rna
-priority 63
-visibility hide
-spectrum on
-type psl xeno
-baseColorUseCds genbank
-baseColorUseSequence genbank
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-
-track blastDm1FB
+track blastDm1FB override
 shortLabel D. mel. Proteins (dm1)
 longLabel $o_Organism ($o_date/$o_db) Proteins
-group genes
-priority 201
 visibility pack
-colorChromDefault off
-type psl protein
-pred dm1.blastFBPep00
-blastRef dm1.blastFBRef00
-url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 otherDb dm1
 
-track blastDm2FB
+track blastDm2FB override
 shortLabel D. mel. Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
-group genes
-priority 200
-visibility dense
-colorChromDefault off
-type psl protein
-pred dm2.blastFBPep01
-blastRef dm2.blastFBRef01
-url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 otherDb dm2
 
 track rmsk
+#replaces record rmsk in parent dir missing/extra maxWindowToDraw
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep

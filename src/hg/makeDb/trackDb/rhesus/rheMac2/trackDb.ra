@@ -1,11 +1,6 @@
-track ctgPos
+track ctgPos override
 shortLabel Contigs
 longLabel Assembly Contigs
-group map
-priority 9
-visibility hide
-color 150,0,0
-type ctgPos
 
 track exoniphy
 shortLabel Exoniphy
@@ -15,16 +10,6 @@ priority 50.9
 visibility pack
 color 173,17,162
 type genePred
-
-track gold
-shortLabel Assembly
-longLabel Assembly from Fragments
-group map
-priority 10
-visibility hide
-color 150,100,30
-altColor 230,170,40
-type bed 3 +
 
 track refGeneBlatz
 shortLabel Human RefSeq Blatz
@@ -114,6 +99,7 @@ showTopScorers 200
 type bed 5 .
 
 track chainHg18
+#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Chain
 longLabel $o_db ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -128,6 +114,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+#replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Net
 longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
@@ -137,31 +124,20 @@ spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
 
-track chainHg17
+track chainHg17 override
 shortLabel $o_db  Chain
 longLabel $o_db ($o_date/$o_db) Chained Alignments
-group compGeno
 priority 259.3
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
-type chain hg17
-otherDb hg17
 
-track netHg17
-shortLabel $o_db Net
+track netHg17 override
 longLabel $o_db ($o_date/$o_db) Alignment Net
-group compGeno
 priority 259.4
 visibility hide
-spectrum on
-type netAlign hg17 chainHg17
-otherDb hg17
 
 track chainPanTro2
+#replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -176,6 +152,7 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
+#replaces record netPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -185,37 +162,10 @@ spectrum on
 type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
-track xenoRefGene
-shortLabel Other RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
+track xenoRefGene override
 visibility pack
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
 
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
-
-track quality
-shortLabel Quality Scores
-longLabel $Organism Sequencing Quality Scores
-group map
-priority 23.6
-visibility hide
-autoScale Off
-maxHeightPixels 128:36:16
-graphTypeDefault Bar
-windowingFunction Mean
-gridDefault OFF
-color 0,128,255
-altColor 255,128,0
-spanList 1,1024
+track quality override
 type wig 0 60
 
 track chainSelf

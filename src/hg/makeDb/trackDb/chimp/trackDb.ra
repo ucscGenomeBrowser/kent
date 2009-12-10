@@ -1,4 +1,5 @@
 track bacEndPairs
+#replaces record bacEndPairs in parent dir missing/extra color,altColor,exonArrows
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
 group map
@@ -6,31 +7,14 @@ priority 15
 visibility hide
 type bed 6 +
 
-track chainDanRer4
+track chainDanRer4 override
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 159.3
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-type chain danRer4
-otherDb danRer4
 
-track netDanRer4
+track netDanRer4 override
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 159.4
-visibility hide
-spectrum on
-type netAlign danRer4 chainDanRer4
-otherDb danRer4
 
 track chainHg18
+#replaces record chainHg18 in parent dir missing/extra subTrack,subGroups
 release alpha
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -46,6 +30,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+#replaces record netHg18 in parent dir missing/extra subTrack,subGroups
 release alpha
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -57,6 +42,7 @@ type netAlign hg18 chainHg18
 otherDb hg18
 
 track chainRheMac2
+#replaces record chainRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -69,6 +55,7 @@ type chain rheMac2
 otherDb rheMac2
 
 track netRheMac2
+#replaces record netRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -78,63 +65,22 @@ spectrum on
 type netAlign rheMac2 chainRheMac2
 otherDb rheMac2
 
-track chainMm7
+track chainMm7 override
 shortLabel $o_db Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
 priority 144
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain mm7
-otherDb mm7
 
-track netMm7
+track netMm7 override
 shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
 priority 144.1
-visibility hide
-spectrum on
-type netAlign mm7 chainMm7
-otherDb mm7
 
-track chainMm6
-shortLabel $o_db Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
+track chainMm6 override
 priority 144
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain mm6
-otherDb mm6
 
-track netMm6
-shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
+track netMm6 override
 priority 144.1
-visibility hide
-spectrum on
-type netAlign mm6 chainMm6
-otherDb mm6
 
-track chainCalJac1
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 278
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrixHeader A, C, G, T
+track chainCalJac1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-spectrum on
-type chain calJac1
-otherDb calJac1
 
 track chainNetHg19 override
 chainMinScore 5000

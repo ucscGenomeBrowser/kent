@@ -1,12 +1,6 @@
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
 
 track bacEndPairs
+#replaces record bacEndPairs in parent dir missing/extra color,altColor
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
 group map
@@ -49,14 +43,10 @@ spectrum on
 type netAlign canFam2 chainSelf
 otherDb canFam2
 
-track blastHg17KG
+track blastHg17KG override
 shortLabel Hg17 Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-group genes
 priority 51
-visibility pack
-colorChromDefault off
-type psl protein
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 

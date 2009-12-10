@@ -1,12 +1,6 @@
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
 
 track refGene
+#replaces record refGene in parent dir missing/extra baseColorUseCds
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
 group genes
@@ -16,14 +10,8 @@ color 12,12,120
 type genePred refPep refMrna
 idXref refLink mrnaAcc name
 
-track genscan
-shortLabel Genscan Genes
-longLabel Genscan Gene Predictions
-group genes
-priority 50
+track genscan override
 visibility dense
-color 170,100,0
-type genePred genscanPep
 
 track geneMapper
 shortLabel GeneMapper
@@ -35,6 +23,7 @@ color 128,0,0
 type genePred
 
 track intronEst
+#replaces record intronEst in parent dir missing/extra maxItems
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
 group rna
@@ -737,17 +726,8 @@ autoScale Off
 pairwise myp2a
 speciesOrder droYak1 dp2 anoGam1
 
-track phastConsElements
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements
-group compGeno
-priority 105
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track chainDm1
+#replaces record chainDm1 in parent dir missing/extra release
 shortLabel D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1166,16 +1146,10 @@ otherDb droPer1
 
 
 
-track blatFugu
-shortLabel Fugu Blat
+track blatFugu override
 longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
-group compGeno
 priority 113
 visibility dense
-color 0,60,120
-altColor 200,220,255
-spectrum on
-type psl xeno
 colorChromDefault off
 otherDb fr1
 
@@ -1200,28 +1174,12 @@ visibility pack
 color 30,130,210
 type genePred 
 
-track xenoRefGene
-shortLabel Other RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
-track blastDm1FB
-shortLabel D. mel. Proteins
+track blastDm1FB override
 longLabel D. melanogaster Proteins
-group genes
-priority 201
 visibility pack
-colorChromDefault off
-type psl protein
-pred dm1.blastFBPep00
-blastRef dm1.blastFBRef00
-url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
 track rmsk
+#replaces record rmsk in parent dir missing/extra maxWindowToDraw
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep

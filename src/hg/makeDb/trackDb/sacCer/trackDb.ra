@@ -30,36 +30,13 @@ color 30,130,210
 type bed 6 +
 exonArrows on
 
-track mrna
+track mrna override
 shortLabel S. cer. mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility pack
 spectrum on
-type psl .
 intronGap 30
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
 
-track est
+track est override
 shortLabel S. cer. ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
 
 track transRegCode
 shortLabel Regulatory Code 
@@ -134,15 +111,8 @@ autoScale Off
 pairwise pwMaf
 speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
 
-track phastConsElements
-shortLabel Most Conserved
+track phastConsElements override
 longLabel PhastCons Conserved Elements (Seven Species of Saccharomyces)
-group compGeno
-priority 105
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track sevenWayPaper
 shortLabel Conservation (Std.)

@@ -1,34 +1,14 @@
 include trackDb.chainNet.ra
 
-track chainMm9
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
+track chainMm9 override
 priority 232.1
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-spectrum on
-type chain mm9
-otherDb mm9
 
-track chainHg18
-release beta
+track chainHg18 override
 shortLabel $o_db Chain
 longLabel $o_db ($o_date/$o_db) Chained Alignments
-group compGeno
 priority 290.1
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-spectrum on
-type chain hg18
-otherDb hg18
 
 track netHg18 override
 release beta
@@ -37,35 +17,11 @@ longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 290.2
 otherDb hg18
 
-track chainPanTro2
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 240
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrixHeader A, C, G, T
+track chainPanTro2 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-spectrum on
-type chain panTro2
-otherDb panTro2
 
-track chainPonAbe2
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 285
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrixHeader A, C, G, T
+track chainPonAbe2 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-spectrum on
-type chain ponAbe2
-otherDb ponAbe2
 
 #Overrides from priority.ra
 

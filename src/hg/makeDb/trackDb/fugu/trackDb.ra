@@ -1,20 +1,7 @@
-track gold
+track gold override
 shortLabel Scaffolds
 longLabel Assembly Scaffolds
-group map
-priority 10
 visibility pack
-color 150,100,30
-altColor 230,170,40
-type bed 3 +
-
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
 
 track blastHg17KG
 shortLabel Human Proteins
@@ -40,41 +27,17 @@ pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 release alpha
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
-group genes
-priority 40
+track ensGene override
 visibility dense
-color 150,0,0
-type genePred ensPep
 
-track genscan
-shortLabel Genscan Genes
-longLabel Genscan Gene Predictions
-group genes
-priority 50
+track genscan override
 visibility dense
-color 170,100,0
-type genePred genscanPep
 
-track mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility pack
+track mrna override
 spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
 
 track intronEst
+#replaces record intronEst in parent dir missing/extra maxItems
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
 group rna
@@ -89,6 +52,7 @@ indelDoubleInsert on
 indelQueryInsert on
 
 track est
+#replaces record est in parent dir missing/extra maxItems
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
@@ -101,30 +65,13 @@ baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 
-track xenoMrna
-shortLabel Other mRNAs
-longLabel Non-$Organism mRNAs from GenBank
-group rna
-priority 63
+track xenoMrna override
 visibility dense
-spectrum on
-type psl xeno
-baseColorUseCds genbank
-baseColorUseSequence genbank
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
 
-track blatTetra
+track blatTetra override
 shortLabel $o_Organism BLAT
 longLabel $o_Organism ($o_date/$o_db) Translated BLAT Alignments
-group compGeno
 priority 227
-visibility dense
-color 0,60,120
-altColor 200,220,255
-spectrum on
-type psl xeno
 otherDb tetNig1
 
 track blatHg16
@@ -213,31 +160,16 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSTRUP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
-track chainDanRer4
+track chainDanRer4 override
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
 priority 226.5
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-type chain danRer4
-otherDb danRer4
 
-track netDanRer4
+track netDanRer4 override
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
 priority 226.6
-visibility hide
-spectrum on
-type netAlign danRer4 chainDanRer4
-otherDb danRer4
 
 track chainDanRer3
+#replaces record chainDanRer3 in parent dir missing/extra matrixHeader
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -250,15 +182,8 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 type chain danRer3
 otherDb danRer3
                                                                                 
-track netDanRer3
-shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
+track netDanRer3 override
 priority 226.5
-visibility hide
-spectrum on
-type netAlign danRer3 chainDanRer3
-otherDb danRer3
 
 track blastzDanRer2
 shortLabel $o_Organism Blastz
@@ -272,27 +197,14 @@ spectrum on
 type psl xeno danRer2
 otherDb danRer2
 
-track chainDanRer2
+track chainDanRer2 override
 shortLabel $o_db Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
 priority 226.2
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain danRer2
-otherDb danRer2
                                                                                 
-track netDanRer2
+track netDanRer2 override
 shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
 priority 226.3
 visibility dense
-spectrum on
-type netAlign danRer2 chainDanRer2
-otherDb danRer2
 
 track blastzDanRer1
 shortLabel $o_db Blastz
@@ -312,29 +224,11 @@ chainLinearGap medium
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 240
 
-track chainOryLat1
-shortLabel $o_Organism Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
+track chainOryLat1 override
 priority 240
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-spectrum on
-type chain oryLat1
-otherDb oryLat1
 
-track netOryLat1
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
+track netOryLat1 override
 priority 240.1
-visibility hide
-spectrum on
-type netAlign oryLat1 chainOryLat1
-otherDb oryLat1
 
 track chainNetHg19 override
 chainMinScore 5000
@@ -343,6 +237,7 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 150.3
 
 track chainHg18
+#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -357,6 +252,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+#replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -367,6 +263,7 @@ type netAlign hg18 chainHg18
 otherDb hg18
 
 track chainGalGal3
+#replaces record chainGalGal3 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -381,6 +278,7 @@ type chain galGal3
 otherDb galGal3
 
 track netGalGal3
+#replaces record netGalGal3 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -391,6 +289,7 @@ type netAlign galGal3 chainGalGal3
 otherDb galGal3
 
 track chainGasAcu1
+#replaces record chainGasAcu1 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -405,6 +304,7 @@ type chain gasAcu1
 otherDb gasAcu1
 
 track netGasAcu1
+#replaces record netGasAcu1 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -420,31 +320,16 @@ chainLinearGap medium
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 250
 
-track chainTetNig1
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
+track chainTetNig1 override
 priority 250
-visibility hide
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain tetNig1
-otherDb tetNig1
 
-track netTetNig1
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
+track netTetNig1 override
 priority 250.1
-visibility hide
-spectrum on
-type netAlign tetNig1 chainTetNig1
-otherDb tetNig1
 
 track chainMm9
+#replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -459,6 +344,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+#replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

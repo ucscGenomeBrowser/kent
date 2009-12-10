@@ -1,22 +1,7 @@
-# Local declaration so that local gold.html is picked up.
-track gold
-shortLabel Assembly
-longLabel Assembly from Fragments
-group map
-priority 10
-visibility hide
-color 150,100,30
-altColor 230,170,40
-type bed 3 +
 
 # Local declaration so that local gap.html is picked up.
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
+track gap override
 visibility hide
-type bed 3 +
 
 track sangerGene
 shortLabel WormBase Genes
@@ -51,55 +36,8 @@ color 0,0,200
 type genePred
 url http://ws170.wormbase.org/db/gene/gene?name=$$;class=Gene
 
-track chainCaePb1
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 130
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-spectrum on
-type chain caePb1
-otherDb caePb1
-
-track netCaePb1
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 131
-visibility dense
-spectrum on
-type netAlign caePb1 chainCaePb1
-otherDb caePb1
-
-track chainCaeRem2
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 128
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-spectrum on
-type chain caeRem2
-otherDb caeRem2
-
-track netCaeRem2
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 129
-visibility dense
-spectrum on
-type netAlign caeRem2 chainCaeRem2
-otherDb caeRem2
-
 track chainCb3
+#replaces record chainCb3 in parent dir missing/extra subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -114,6 +52,7 @@ type chain cb3
 otherDb cb3
 
 track netCb3
+#replaces record netCb3 in parent dir missing/extra subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -123,29 +62,11 @@ spectrum on
 type netAlign cb3 chainCb3
 otherDb cb3
 
-track chainPriPac1
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
+track chainPriPac1 override
 priority 124
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-spectrum on
-type chain priPac1
-otherDb priPac1
 
-track netPriPac1
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
+track netPriPac1 override
 priority 125
-visibility dense
-spectrum on
-type netAlign priPac1 chainPriPac1
-otherDb priPac1
 
 track chainSelf
 shortLabel Self Chain
