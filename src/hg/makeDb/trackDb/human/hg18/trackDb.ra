@@ -2053,6 +2053,13 @@ type bed 4 .
     type bed 6 +
     priority 5
 
+    track snpArrayIllumina650
+    subTrack snpArray off
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 6
+
     track snpArrayIllumina550
     subTrack snpArray off
     shortLabel Illumina 550
