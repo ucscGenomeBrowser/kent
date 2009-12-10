@@ -13,7 +13,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.24 2009/12/07 17:46:29 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.25 2009/12/10 07:13:56 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -150,8 +150,10 @@ struct slName *var;
 for (var = rql->whereVarList; var != NULL; var = var->next)
     {
     if (!hashLookup(glTagTypes, var->name))
-        errAbort("Tag %s doesn't exist. Maybe you meant '%s'?\nMaybe %s is hosed?.", 
-		var->name, var->name, glTagTypeFile);
+        errAbort(
+	   "Tag %s doesn't exist. Maybe you mispelled a variable or forgot to put quotes around\n"
+	   "a word? Maybe %s is hosed?.", 
+	    var->name, glTagTypeFile);
     }
 }
 
