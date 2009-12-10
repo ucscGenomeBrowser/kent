@@ -9,16 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.16 2009/11/30 23:46:52 angie Exp $";
-
-static boolean ignoreStrand = FALSE;
-
-void bamIgnoreStrand()
-/* Change the behavior of this lib to disregard item strand. 
- * If called, this should be called before any other bam functions. */
-{
-ignoreStrand = TRUE;
-}
+static char const rcsid[] = "$Id: bamFile.c,v 1.17 2009/12/10 15:02:12 angie Exp $";
 
 char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -37,6 +28,16 @@ if (checkSeqName)
 else
     safef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
+if (fileName == NULL && checkSeqName)
+    {
+    if (startsWith("chr", bamSeqName))
+	safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	      table, bamSeqName+strlen("chr"));
+    else
+	safef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
+	      table, bamSeqName);
+    fileName = sqlQuickString(conn, query);
+    }
 if (fileName == NULL)
     {
     if (checkSeqName)
@@ -184,17 +185,33 @@ return FALSE;
 
 void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData)
 /* Open the .bam file, fetch items in the seq:start-end position range,
- * and call callbackFunc on each bam item retrieved from the file plus callbackData. 
- * Note: if sequences in .bam file don't begin with "chr" but cart position does, pass in 
- * cart position + strlen("chr") to match the .bam file sequence names. */
+ * and call callbackFunc on each bam item retrieved from the file plus callbackData.
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. */
 {
 char *bamFileName = samtoolsFileName(fileOrUrl);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh == NULL)
-    errAbort("samopen(%s, \"rb\") returned NULL", bamFileName);
+    {
+    boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
+    struct dyString *urlWarning = dyStringNew(0);
+    if (usingUrl)
+	{
+	char *udcFuseRoot = cfgOption("udcFuse.mountPoint");
+	boolean usingUdc = (udcFuseRoot != NULL && startsWith(udcFuseRoot, bamFileName));
+	if (usingUdc)
+	    dyStringAppend(urlWarning, " (using udcFuse)");
+	dyStringAppend(urlWarning,
+		       ". If you are able to access the URL with your web browser, "
+		       "please try reloading this page.");
+	}
+    warn("failed to open %s%s", fileOrUrl, urlWarning->string);
+    return;
+    }
 
 int chromId, start, end;
 int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
+if (ret != 0 && startsWith("chr", position))
+    ret = bam_parse_region(fh->header, position+strlen("chr"), &chromId, &start, &end);
 if (ret != 0)
     // If the bam file does not cover the current chromosome, OK
     return;
@@ -216,17 +233,17 @@ samclose(fh);
 }
 
 boolean bamIsRc(const bam1_t *bam)
-/* Return TRUE if alignment is on - strand.  If bamIgnoreStrand has been called,
- * then this always returns FALSE. */
+/* Return TRUE if alignment is on - strand. */
 {
 const bam1_core_t *core = &bam->core;
-return (core->flag & BAM_FREVERSE) && !ignoreStrand;
+return (core->flag & BAM_FREVERSE);
 }
 
-char *bamGetQuerySequence(const bam1_t *bam)
+char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand)
 /* Return the nucleotide sequence encoded in bam.  The BAM format 
  * reverse-complements query sequence when the alignment is on the - strand,
- * so here we rev-comp it back to restore the original query sequence. */
+ * so if useStrand is given we rev-comp it back to restore the original query 
+ * sequence. */
 {
 const bam1_core_t *core = &bam->core;
 char *qSeq = needMem(core->l_qseq + 1);
@@ -234,18 +251,18 @@ uint8_t *s = bam1_seq(bam);
 int i;
 for (i = 0; i < core->l_qseq; i++)
     qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
-if (bamIsRc(bam))
+if (useStrand && bamIsRc(bam))
     reverseComplement(qSeq, core->l_qseq);
 return qSeq;
 }
 
-UBYTE *bamGetQueryQuals(const bam1_t *bam)
+UBYTE *bamGetQueryQuals(const bam1_t *bam, boolean useStrand)
 /* Return the base quality scores encoded in bam as an array of ubytes. */
 {
 const bam1_core_t *core = &bam->core;
 int qLen = core->l_qseq;
 UBYTE *arr = needMem(qLen);
-boolean isRc = bamIsRc(bam);
+boolean isRc = useStrand && bamIsRc(bam);
 UBYTE *qualStr = bam1_qual(bam);
 int i;
 for (i = 0;  i < qLen;  i++)
@@ -383,13 +400,14 @@ for (i = 0;  i < core->n_cigar;  i++)
 return tLength;
 }
 
-struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset)
+struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
+			 boolean useStrand)
 /* Convert from bam to ffAli format.  (Adapted from psl.c's pslToFfAli.) */
 {
 struct ffAli *ffList = NULL, *ff;
 const bam1_core_t *core = &bam->core;
-boolean isRc = bamIsRc(bam);
-DNA *needle = (DNA *)bamGetQuerySequence(bam);
+boolean isRc = useStrand && bamIsRc(bam);
+DNA *needle = (DNA *)bamGetQuerySequence(bam, useStrand);
 if (isRc)
     reverseComplement(target->dna, target->size);
 DNA *haystack = target->dna;

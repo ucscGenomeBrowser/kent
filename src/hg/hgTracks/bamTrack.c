@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.18 2009/11/30 19:26:51 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.19 2009/12/10 15:02:12 angie Exp $";
 
 struct bamTrackData
     {
@@ -139,7 +139,7 @@ int length;
 lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
-lf->extra = bamGetQuerySequence(bam);
+lf->extra = bamGetQuerySequence(bam, TRUE);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
     sameString(btd->grayMode, BAM_GRAY_MODE_ALI_QUAL))
     {
@@ -149,7 +149,7 @@ if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
 else if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
 	 sameString(btd->grayMode, BAM_GRAY_MODE_BASE_QUAL))
     {
-    UBYTE *quals = bamGetQueryQuals(bam);
+    UBYTE *quals = bamGetQueryQuals(bam, TRUE);
     lf->components = expandSfQuals(lf->components, quals, lf->orientation, core->l_qseq);
     lf->grayIx = maxShade - 3;
     }
@@ -338,13 +338,6 @@ void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
 {
-char *seqNameForBam = chromName;
-char *stripPrefix = trackDbSettingClosestToHome(tg->tdb, "stripPrefix");
-if (stripPrefix && startsWith(stripPrefix, chromName))
-    seqNameForBam = chromName + strlen(stripPrefix);
-char posForBam[512];
-safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd);
-
 struct hash *pairHash = isPaired ? hashNew(18) : NULL;
 int minAliQual = atoi(cartOrTdbClosest(tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT));
 char *colorMode = cartOrTdbClosest(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
@@ -359,8 +352,8 @@ if (tg->customPt)
 	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->mapName);
     }
 else
-    fileName = bamFileNameFromTable(database, tg->mapName, seqNameForBam);
-bamFetch(fileName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
+    fileName = bamFileNameFromTable(database, tg->mapName, chromName);
+bamFetch(fileName, position, (isPaired ? addBamPaired : addBam), &btd);
 if (isPaired)
     {
     char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -372,7 +365,8 @@ if (isPaired)
 	struct hash *newPairHash = hashNew(12);
 	btd.nameHash = pairHash;
 	btd.pairHash = newPairHash;
-	safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam,
+	char posForBam[512];
+	safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
 	bamFetch(fileName, posForBam, addBamPaired, &btd);
 	}
