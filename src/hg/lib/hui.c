@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.5 2009/12/11 18:01:59 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.6 2009/12/11 20:23:11 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3273,7 +3273,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 subtrack->longLabel);
             }
         else if (hSameTrackDbType(primaryType, subtrack->type))
-            // && hTableExists(db, subtrack->tableName))  REMOVED because using parentTdbAbandonTablelessChildren before we are here
             {
             puts("<TR><TD>");
             cgiMakeCheckBox(htmlIdentifier, checkedCB && enabledCB);
@@ -3286,7 +3285,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         if(trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
             cType = cfgNone;
         membership_t *membership = subgroupMembershipGet(subtrack);
-	if (membership != NULL)
             {
             if(sortOrder == NULL && !useDragAndDrop)
                 {
@@ -3395,8 +3393,6 @@ puts("</TABLE>");
 if(slCount(subtrackRefList) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT id='subCBcount'></font>");
 puts("<P>");
-//if (!preSorted && sortOrder != NULL)  // No longer need to do this since hgTrackDb should sort composites with sortOrder and set priorities
-//    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 if(dependentCfgsNeedBinding)
@@ -5551,7 +5547,7 @@ if(trackDbSetting(tdb, "dragAndDrop") != NULL)
 jsIncludeFile("hui.js",NULL);
 
 puts("<P>");
-if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
+if (countDescendentLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     return;
