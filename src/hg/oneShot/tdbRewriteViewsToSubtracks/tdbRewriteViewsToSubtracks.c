@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3.2.1 2009/12/10 08:31:46 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3.2.2 2009/12/11 23:20:37 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -84,14 +84,6 @@ static void raTagWrite(struct raTag *tag, FILE *f)
 fputs(tag->text, f);
 }
 #endif
-
-int raTagCmp(const void *va, const void *vb)
-/* Compare two raTags. */
-{
-const struct raTag *a = *((struct raTag **)va);
-const struct raTag *b = *((struct raTag **)vb);
-return strcmp(a->name, b->name);
-}
 
 void recordLocationReport(struct raRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -376,17 +368,6 @@ for (generation = level; generation != NULL; generation = generation->parent)
 return NULL;
 }
 
-boolean sameTagInOtherRecord(struct raTag *tag, struct raRecord *r)
-/* Return TRUE if tag exists in record r, and has same value in r. */
-{
-struct raTag *t = raRecordFindTag(r, tag->name);
-if (t == NULL)
-    return FALSE;
-if (!sameString(t->val, tag->val))
-    return FALSE;
-return TRUE;
-}
-
 void raRecordWriteTags(struct raRecord *r, FILE *f)
 /* Write out tags in record to file, including preceding spaces. */
 {
@@ -430,7 +411,10 @@ struct raTag *t;
 for (t = r->tagList; t != NULL; t = t->next)
     raTagWriteIndented(t, f, indent);
 if (r->endComments)
+    {
+    spaceOut(f, indent);
     fputs(r->endComments, f);
+    }
 }
 
 struct raTag *findViewSubGroup(struct raRecord *r)
@@ -462,12 +446,9 @@ for (t = r->tagList; t != NULL; t = t->next)
 	mustWrite(f, t->text, s - t->text);
 	spaceOut(f, 4);
 	fprintf(f, "subTrack %s", viewTrackName);
-	int i;	/* Skip over two words we've already written. */
-	for (i=0; i<2; ++i)
-	    {
-	    s = skipLeadingSpaces(s);
-	    s = skipToSpaces(s);
-	    }
+	/* Skip over subTrack name in original text. */
+	s = skipLeadingSpaces(s);
+	s = skipToSpaces(s);
 	if (s != NULL)
 	     fputs(s, f);
 	else
