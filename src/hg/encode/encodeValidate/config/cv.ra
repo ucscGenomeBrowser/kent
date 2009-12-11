@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.154 2009/12/11 20:38:46 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.155 2009/12/11 21:29:43 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2467,7 +2467,7 @@ type treatment
 
 term IFNa4h
 tag IFNa4h
-description Interferon alpha treatment - 4 hours, 500 U//ml (Crawford)
+description Interferon alpha treatment - 4 hours, 500 U/ml (Crawford)
 type treatment
 
 term IFNa6h
