@@ -1,4 +1,7 @@
-#	"$Id: trackDb.chainNet.ra,v 1.3 2009/12/11 22:22:43 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.4 2009/12/11 23:51:26 hiram Exp $";
+
+track chainNetFelCat3 override
+priority 430.3
 
 track chainNetBosTau4 override
 priority 450.3
