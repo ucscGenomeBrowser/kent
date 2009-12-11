@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.1 2009/12/11 01:57:57 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.2 2009/12/11 17:17:59 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3427,19 +3427,21 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    char *parentName = trackDbSetting(tdb, "subTrack");
-    if (parentName == NULL)
+    char *subtrackSetting = trackDbSetting(tdb, "subTrack");
+    if (subtrackSetting == NULL)
         {
-	parentName = tdb->parentName;
+	subtrackSetting = tdb->parentName;
 	}
-    if (parentName != NULL)
+    if (subtrackSetting != NULL)
         {
+	char *parentName = cloneFirstWord(subtrackSetting);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
 	    {
 	    slAddHead(&parent->subtracks, tdb);
 	    tdb->parent = parent;
 	    }
+	freez(&parentName);
 	}
     else
         {
@@ -3477,9 +3479,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     next = tdb->next;
     if (tdb->subtracks != NULL)
 	{
-	// uglyf("pruning empties from %s %d before ", tdb->tableName, slCount(tdb->subtracks));
 	tdb->subtracks = pruneEmpties(tdb->subtracks, db, chrom, privateHost, level+1);
-	// uglyf("%d after<BR>\n", slCount(tdb->subtracks));
 	}
     if (tdb->subtracks != NULL)
         {

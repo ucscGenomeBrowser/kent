@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.2 2009/12/11 02:49:44 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.3 2009/12/11 17:18:00 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3026,14 +3026,26 @@ for (child = children; child != NULL; child = child->next)
     }
 }
 
+static void rGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *children)
+/* Recursively get children and grandchildren and add ones that are leaves to head of list. */
+{
+struct trackDb *child;
+for (child = children; child != NULL; child = child->next)
+    {
+    if (child->subtracks)
+	rGetRefsToDescendentLeaves(pList, child->subtracks);
+    else
+	refAdd(pList, child);
+    }
+}
+
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
 {
-uglyf("compositeUiSubtracks(primarySubtrack=%s)<BR>\n", primarySubtrack);
 struct trackDb *subtrack;
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
-uglyf("primaryType = %s<BR>\n", primaryType);
 char htmlIdentifier[SMALLBUF];
 struct dyString *dyHtml = newDyString(SMALLBUF);
 char *words[5];
@@ -3048,7 +3060,6 @@ dividers_t *dividers = dividersSettingGet(parentTdb);
 if(dividers)
     lastDivide = needMem(sizeof(char*)*dividers->count);
 hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
-uglyf("dividers=%p<BR>\n", dividers);
 
 enum
 {
@@ -3061,10 +3072,8 @@ int dimMax=dimA;  // This can expand, depending upon ABC dimensions
 members_t* dimensions[27]; // Just pointers, so make a bunch!
 memset((char *)dimensions,0,sizeof(dimensions));
 dimensions_t *dims = dimensionSettingsGet(parentTdb);
-uglyf("dims=%p<BR>\n", dims);
 if(dims != NULL)
     {
-    uglyf("dims->count = %d<BR>\n", dims->count);
     int ix;
     for(ix=0;ix<dims->count;ix++)
         {
@@ -3082,11 +3091,9 @@ if(dims != NULL)
     dimensionsFree(&dims);
     }
 dimensions[dimV]=subgroupMembersGet(parentTdb,"view");
-uglyf("dimV = %d, dimensions[dimV]=%p<BR>\n", dimV, dimensions[dimV]);
 int dimCount=0,di;
 for(di=0;di<dimMax;di++) { if(dimensions[di]) dimCount++; }
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
-uglyf("sortOrder %p<BR>\n", sortOrder);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
@@ -3146,7 +3153,6 @@ if (!primarySubtrack)
         printf("<TD>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%s\"></TD>", sortOrder->htmlId, sortOrder->htmlId,sortOrder->sortOrder); // keeing track of priority
         // Columns in tdb order (unchanging), sort in cart order (changed by user action)
         int sIx=0;
-	uglyf("sortOrder->count=%d<BR>\n", sortOrder->count);
         for(sIx=0;sIx<sortOrder->count;sIx++)
             {
             printf ("<TH id='%s.%s.sortTh' abbr='%c' nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
@@ -3183,30 +3189,21 @@ else
     puts("</TR></THEAD><TBODY>");
     }
 
-uglyf("and now for something completely different.  parentTdb(%s) has %d subtracks<BR>\n", parentTdb->tableName, slCount(parentTdb->subtracks));
 
 struct slRef *subtrackRefList=NULL, *subtrackRef; 
-rGetRefsToDescendents(&subtrackRefList, parentTdb->subtracks);
-uglyf("subtrackRefList has %d items<BR>\n", slCount(subtrackRefList));
-for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
-    {
-    subtrack = subtrackRef->val;
-    uglyf("listing %s<BR>\n", subtrack->tableName);
-    }
+rGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
+slReverse(&subtrackRefList);
 
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
     subtrack = subtrackRef->val;
-    uglyf("considering subtrac %s<BR>\n", subtrack->tableName);
     boolean checkedCB = TRUE;
     boolean enabledCB = TRUE;
     boolean isPrimary = FALSE;
     char *setting;
     int ix;
-
     if ((setting = trackDbSetting(subtrack, "subTrack")) != NULL)
         {
-	uglyf("subTrack %s<BR>\n", setting);
         if (chopLine(cloneString(setting), words) >= 2)
             checkedCB = differentString(words[1], "off");
         }
@@ -3214,7 +3211,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     setting = cartOptionalString(cart, htmlIdentifier);
     if(setting != NULL)
         {
-	uglyf("htmlIdentifier %s<BR>\n", setting);
         int state = atoi(setting);
         checkedCB = (state == 1 || state == -1);  // checked/eanbled:1 unchecked/enabled:0 checked/disabled:-1 unchecked/disabled:-2
         enabledCB = (state >= 0);
@@ -3224,7 +3220,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     if (primarySubtrack)
         {
-	uglyf("WJK 1<BR>\n");
         if (isPrimary)
             {
             puts("<TR><TD>");
@@ -3243,24 +3238,19 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     else
         {
-	uglyf("WJK 2<BR>\n");
         eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
-	uglyf("WJK 2.01 cType=%d<BR>\n", cType);
         if(trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
             cType = cfgNone;
         membership_t *membership = subgroupMembershipGet(subtrack);
-	uglyf("WJK 2.02 membership=%p<BR>\n", membership);
+	if (membership != NULL)
             {
-	    uglyf("WJK 2.03<BR>\n");
             if(sortOrder == NULL && !useDragAndDrop)
                 {
                 if( divisionIfNeeded(lastDivide,dividers,membership) )
                     colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX : COLOR_BG_DEFAULT_IX);
                 }
 
-	    uglyf("WJK 2.04<BR>\n");
             char *id = checkBoxIdMakeForTrack(subtrack,dimensions,dimMax,membership); // view is known tag
-	uglyf("WJK 2.1<BR>\n");
             printf("<TR valign='top' BGCOLOR=\"%s\"",colors[colorIx]);
             if(useDragAndDrop)
                 printf(" class='trDraggable' title='Drag to Reorder'");
@@ -3278,7 +3268,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
             dyStringAppendC(dyHtml,'"');
             cgiMakeCheckBox2BoolWithIdAndJS(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml));
-	uglyf("WJK 2.2<BR>\n");
             if(sortOrder != NULL || useDragAndDrop)
                 {
                 safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->tableName);
@@ -3286,7 +3275,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf("<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%.0f\">", htmlIdentifier, htmlIdentifier, priority); // keeing track of priority
                 }
 
-	uglyf("WJK 2.3<BR>\n");
             if(sortOrder != NULL)
                 {
                 int sIx=0;
@@ -3319,7 +3307,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     printf("%s\n",subtrack->shortLabel);
                 puts ("</TD>");
                 }
-	uglyf("WJK 2.4<BR>\n");
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
@@ -3345,7 +3332,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
-	uglyf("WJK 2.5<BR>\n");
             printf("<TD nowrap>&nbsp;");
             makeSchemaLink(db,subtrack,"schema");
             puts("&nbsp;");
@@ -3358,12 +3344,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             checkBoxIdFree(&id);
             }
         subgroupMembershipFree(&membership);
-	uglyf("WJK 2.6<BR>\n");
         }
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
-uglyf("WJK 3<BR>\n");
 if(slCount(parentTdb->subtracks) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT id='subCBcount'></font>");
 puts("<P>");
@@ -4824,8 +4808,6 @@ return NULL;
 static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struct trackDb *parentTdb)
 /* UI for composite view drop down selections. */
 {
-uglyf("hCompositeDisplayViewDropDowns(db=%s, cart=%p, parentTdb=%s)<BR>\n", db, cart, parentTdb->tableName);
-uglyf("parentTdb=%s of %d kids<BR>\n", parentTdb->tableName, slCount(parentTdb->subtracks));
 int ix;
 struct trackDb *subtrack;
 char objName[SMALLBUF];
@@ -4835,10 +4817,8 @@ char javascript[JBUFSIZE];
 #define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
-uglyf("membersOfView = %p<BR>\n", membersOfView);
 if(membersOfView == NULL)
     return FALSE;
-uglyf("membersOfView->count = %d<BR>\n", membersOfView->count);
 
 char configurable[membersOfView->count];
 memset(configurable,cfgNone,sizeof(configurable));
@@ -4851,11 +4831,9 @@ struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfVi
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     char *viewName = membersOfView->names[ix];
-    uglyf("parentTdb=%s with %d children looking for view %s<BR>\n", parentTdb->tableName, slCount(parentTdb->subtracks), viewName);
     subtrack = rFindSubtrackWithView(parentTdb, viewName);
     if (subtrack != NULL)
 	{
-	uglyf("subtrack %s matches view %s<BR>\n", subtrack->tableName, viewName);
 	matchedSubtracks[ix] = subtrack;
 	configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
 	if(configurable[ix] != cfgNone)
@@ -5344,14 +5322,11 @@ return TRUE;
 static boolean hCompositeUiAllButtons(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: all/none buttons only (as opposed to matrix or lots of buttons */
 {
-uglyf("OK 2.3.1.1 db %s formName %s parentTdb %s<BR>\n", db, formName, parentTdb->tableName);
 if(slCount(parentTdb->subtracks) <= 1)
     return FALSE;
 
-uglyf("OK 2.3.1.2 %d subtracks<BR>\n", slCount(parentTdb->subtracks));
 if(dimensionsExist(parentTdb))
     return FALSE;
-uglyf("OK 2.3.1.3 gotDimensions<BR>\n");
 
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
@@ -5537,46 +5512,36 @@ if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     return;
     }
-uglyf("OK 2<BR>\n");
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
 
 if(primarySubtrack == NULL)
     {
-    uglyf("OK 2.1 primarySubtrack branch<BR>\n");
     if(subgroupingExists(tdb,"view"))
         {
-	uglyf("OK 2.2 view branch<BR>\n");
         hCompositeDisplayViewDropDowns(db, cart,tdb);
         if(subgroupCount(tdb) <= 1)
             viewsOnly = TRUE;
         }
     if(!viewsOnly)
         {
-	uglyf("OK 2.3 viewsOnly branch<BR>\n");
         if(trackDbSettingOn(tdb, "allButtonPair"))
 	    {
-	    uglyf("OK 2.3.1 allButtonPair<BR>\n");
             hCompositeUiAllButtons(db, cart, tdb, formName);
 	    }
         else if (!hasSubgroups || !isMatrix || primarySubtrack)
 	    {
-	    uglyf("OK 2.3.2 !hasSubroups || !isMatrix || primarySubtrack<BR>\n");
             hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
 	    }
         else
 	    {
-	    uglyf("OK 2.3.3 hCompositeUiByMatrix<BR>\n");
             hCompositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }
     }
-uglyf("OK 3<BR>\n");
 
 cartSaveSession(cart);
-uglyf("OK 3.1<BR>\n");
 cgiContinueHiddenVar("g");
-uglyf("OK 3.2 displayAll %d<BR>\n", displayAll);
 
 if(displayAll)
     {
@@ -5587,7 +5552,6 @@ else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
     }
 
-uglyf("OK 4<BR>\n");
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
         if (slCount(tdb->subtracks) > 5)
@@ -5596,7 +5560,6 @@ if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not
         puts("<P>");
         }
     }
-uglyf("OK 5<BR>\n");
 }
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
