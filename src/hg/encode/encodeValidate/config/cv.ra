@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.152 2009/12/09 18:03:19 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.153 2009/12/11 18:33:48 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -96,23 +96,23 @@ termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
 color 0,119,158
 tier 2
-protocol HeLa-S3_protocol.pdf
+protocol HeLa-S3:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 
-term HeLa-S3_IFNg
-tag HeLaS3IFNg
-description cervical carcinoma (Interferon gamma treatment)
-type Cell Line
-organism Human
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-vendorName ATCC
-vendorId CCL-2.2
-lineage ectoderm
-karyotype cancer
-termId BTO:0000568
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
-color 0,119,158
-tier 3
-protocol HeLa-S3_protocol.pdf
+#term HeLa-S3_IFNg
+#tag HeLaS3IFNg
+#description cervical carcinoma (Interferon gamma treatment)
+#type Cell Line
+#organism Human
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
+#vendorName ATCC
+#vendorId CCL-2.2
+#lineage ectoderm
+#karyotype cancer
+#termId BTO:0000568
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+#color 0,119,158
+#tier 3
+#protocol Protocol:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 
 term HUVEC
 tag HUVEC
@@ -261,6 +261,21 @@ termId BTO:0000195
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195&termName=Caco-2%20cell
 tier 3
 protocol Stam_15_protocols.pdf
+
+term Chorion
+tag Chorion
+type Cell Line
+organism Human
+description Chorion and decidua cells isolated from fetal membranes
+vendorName Dr. Amy Murtha at Duke University (Durham, NC).
+#vendorId TIB-152
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
+karyotype unknown
+#termId BTO:0001948
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+tier 3
+protocol Chorion_Crawford_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -676,6 +691,21 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
+term LHSR
+tag LHSR
+type Cell Line
+organism Human
+description Human prostate epithelial cells (PrEC) were infected with amphotropic retroviruses encoding the SV40 large T antigen (L), the telomerase catalytic subunit hTERT (H), the SV40 small T antigen (S) and an oncogenic allele of H-ras (R) to create LHSR cells.
+vendorName Genetically engineered in the lab of William Hahn at the Dana Farber Cancer Institute, Boston, MA.
+#vendorId TIB-152
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+lineage Genetically engineered from Human prostate epithelial cells. Multiple human donors, all of whom are HIV-1, Hepatitis B and Hepatitis C negative.
+karyotype Diploid
+#termId BTO:0001948
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+tier 3
+protocol LHSR_Crawford_protocol.pdf
+
 term LNCaP
 tag LNCaP
 type Cell Line
@@ -941,6 +971,21 @@ termId BTO:0001801 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
 tier 3
 protocol SkMC_Stam_protocol.pdf
+
+term TBEC
+tag TBEC
+type Cell Line
+organism Human
+description Trachea and bronchial epithelial cells
+vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
+#vendorId TIB-152
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells. Donor: 21 y.o. male
+karyotype unknown, presumed normal diploid
+#termId BTO:0001948
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+tier 3
+protocol TBEC_Crawford_protocol.pdf
 
 term Th1
 tag Th1
@@ -2354,82 +2399,109 @@ description No special treatment or protocol applies
 type control
 
 
+### Treatments
+term androgen
+tag androgen
+description 1 nM treatment for 12 hours (Crawford)
+type treatment
 
 term Betamethasone_100nM
 tag Betamethasone
-description 1h,100nM Betamethasone
+description 1h,100nM Betamethasone (Myers)
 type treatment
 
 term DEX_100nM
 tag DEX100nM
-description 1h,100nM DEX
+description 1h,100nM DEX (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50nM
-description 1h,50nM DEX
+description 1h,50nM DEX (Myers)
 type treatment
 
 term DEX_5nM
 term DEX5nM
-description 1h,5nM DEX
+description 1h,5nM DEX (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500pM
-description 1h,500pM DEX
+description 1h,500pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
 tag DMSO02pct
-description 1h,0.02% DMSO
+description 1h,0.02% DMSO (Myers)
+type treatment
+
+term estrogen
+tag estrogen
+description 100 nM treatment for 45 minutes (Crawford)
 type treatment
 
 term EtOH_0.02pct
 tag EtOH02pct
-description 1h,0.02% EtOH
+description 1h,0.02% EtOH (Myers)
 type treatment
 
 term IFNa30
 tag IFNa30
-description Interferon alpha treatment - 30 minutes
+description Interferon alpha treatment - 30 minutes (Snyder)
+type treatment
+
+term IFNa4h
+tag IFNa4h
+description Interferon alpha treatment - 4 hours, 500 pg/ml (Crawford)
 type treatment
 
 term IFNa6h
 tag IFNa6h
-description Interferon alpha treatment - 6 hours
+description Interferon alpha treatment - 6 hours (Snyder)
 type treatment
 
 term IFNg30
 tag IFNg30
-description Interferon gamma treatment - 30 minutes
+description Interferon gamma treatment - 30 minutes (Snyder)
+type treatment
+
+term IFNg4h
+tag IFNg4h
+description Interferon gamma treatment - 4 hours, 5 ng/ml (Crawford)
 type treatment
 
 term IFNg6h
 tag IFNg6h
-description Interferon gamma treatment - 6 hours
+description Interferon gamma treatment - 6 hours (Snyder)
 type treatment
-
-#term IFNg
-#description Interferon gamma treatment
-#type treatment
 
 term Prednisolone_100nM
 tag Prednisolone
-description 1h,100nM Prednisolone
+description 1h,100nM Prednisolone (Myers)
 type treatment
 
 term PCR1x
 tag PCR1x
-description 1-cycle of PCR
+description 1-cycle of PCR (Myers)
 type protocol
 
 term PCR2x
 tag PCR2x
-description 2-cycles of PCR
+description 2-cycles of PCR (Myers)
 type protocol
 
+term TNFa
+tag TNFa
+description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
+type treatment
 
+term vehicle
+tag vehicle
+description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
+type treatment
+
+
+### restrictionEnzyme
 term msp
 tag msp
 description MSP Restriction Enzyme
@@ -2439,11 +2511,6 @@ term hpa
 tag hpa
 description HPA Restriction Enzyme
 type restrictionEnzyme
-
-term TNFa
-tag TNFa
-description human recombinant TNF-alpha from  eBioscience (product number 14-8329-62)
-type treatment
 
 
 
