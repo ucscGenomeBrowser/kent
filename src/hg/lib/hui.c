@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251 2009/12/07 19:16:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.1 2009/12/11 01:57:57 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2041,24 +2041,28 @@ return count;
 char * subgroupSettingByTagOrName(struct trackDb *parentTdb, char *groupNameOrTag)
 /* look for a subGroup by name (ie subGroup1) or tag (ie view) and return an unallocated char* */
 {
-int ix;
-char *setting = NULL;
-if(startsWith("subGroup",groupNameOrTag))
+struct trackDb *ancestor;
+for (ancestor = parentTdb; ancestor != NULL; ancestor = ancestor->parent)
     {
-    setting = trackDbSetting(parentTdb, groupNameOrTag);
-    if(setting != NULL)
-        return setting;
-    }
-for(ix=1;ix<=SUBGROUP_MAX;ix++) // How many do we support?
-    {
-    char subGrp[16];
-    safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
-    setting = trackDbSetting(parentTdb, subGrp);
-    if(setting != NULL)  // Doesn't require consecutive subgroups
-        {
-        if(startsWithWord(groupNameOrTag,setting))
-            return setting;
-        }
+    int ix;
+    char *setting = NULL;
+    if(startsWith("subGroup",groupNameOrTag))
+	{
+	setting = trackDbSetting(ancestor, groupNameOrTag);
+	if(setting != NULL)
+	    return setting;
+	}
+    for(ix=1;ix<=SUBGROUP_MAX;ix++) // How many do we support?
+	{
+	char subGrp[16];
+	safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
+	setting = trackDbSetting(ancestor, subGrp);
+	if(setting != NULL)  // Doesn't require consecutive subgroups
+	    {
+	    if(startsWithWord(groupNameOrTag,setting))
+		return setting;
+	    }
+	}
     }
 return NULL;
 }
@@ -2103,6 +2107,7 @@ for (ix = 2,members->count=0; ix < cnt; ix++)
     }
 return members;
 }
+
 static members_t *subgroupMembersGetByDimension(struct trackDb *parentTdb, char dimension)
 /* Finds the dimension requested and return its associated
  * subgroupMembership, returning the count of members or 0 */
@@ -2346,6 +2351,7 @@ if(sortOrder && *sortOrder)
     freez(sortOrder);
     }
 }
+
 
 sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder)
 // creates a sortable tdb item struct, given a child tdb and its parent's sort table
@@ -4747,9 +4753,30 @@ freeMem(visibility);
 return vis;
 }
 
+struct trackDb *rFindSubtrackWithView(struct trackDb *parentTdb, char *viewName)
+/* Find a descendent with given view. */
+{
+struct trackDb *subtrack;
+for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    char *stView;
+    if(subgroupFind(subtrack,"view",&stView))
+        {
+	if (sameString(stView, viewName))
+	    return subtrack;
+	}
+    struct trackDb *subSub = rFindSubtrackWithView(subtrack, viewName);
+    if (subSub != NULL)
+        return subSub;
+    }
+return NULL;
+}
+
 static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struct trackDb *parentTdb)
 /* UI for composite view drop down selections. */
 {
+uglyf("hCompositeDisplayViewDropDowns(db=%s, cart=%p, parentTdb=%s)<BR>\n", db, cart, parentTdb->tableName);
+uglyf("parentTdb=%s of %d kids<BR>\n", parentTdb->tableName, slCount(parentTdb->subtracks));
 int ix;
 struct trackDb *subtrack;
 char objName[SMALLBUF];
@@ -4759,43 +4786,40 @@ char javascript[JBUFSIZE];
 #define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
+uglyf("membersOfView = %p<BR>\n", membersOfView);
 if(membersOfView == NULL)
     return FALSE;
+uglyf("membersOfView->count = %d<BR>\n", membersOfView->count);
 
 char configurable[membersOfView->count];
 memset(configurable,cfgNone,sizeof(configurable));
 int firstOpened = -1;
 boolean makeCfgRows = FALSE;
 struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
-char *setting = trackDbSetting(parentTdb,"settingsByView");
-boolean blockCfgs = (setting != NULL && (sameWord(setting,"off") || sameWord(setting,"disabled") || sameWord(setting,"false")));
+// char *setting = trackDbSetting(parentTdb,"settingsByView");
+// boolean blockCfgs = (setting != NULL && (sameWord(setting,"off") || sameWord(setting,"disabled") || sameWord(setting,"false")));
 
 for (ix = 0; ix < membersOfView->count; ix++)
     {
-    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        {
-        char *stView;
-        if(!subgroupFind(subtrack,"view",&stView))
-            continue;
-        if(differentString(stView,membersOfView->names[ix]))
-            continue;
-        matchedSubtracks[ix] = subtrack;
-        if(!blockCfgs)
-            {
-            configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
-            if(configurable[ix] != cfgNone)
-                {
-                if(firstOpened == -1)
-                    {
-                    safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
-                    if(cartUsualBoolean(cart,objName,FALSE))
-                        firstOpened = ix;
-                    }
-                makeCfgRows = TRUE;
-                }
-            }
-        break;
-        }
+    char *viewName = membersOfView->names[ix];
+    uglyf("parentTdb=%s with %d children looking for view %s<BR>\n", parentTdb->tableName, slCount(parentTdb->subtracks), viewName);
+    subtrack = rFindSubtrackWithView(parentTdb, viewName);
+    if (subtrack != NULL)
+	{
+	uglyf("subtrack %s matches view %s<BR>\n", subtrack->tableName, viewName);
+	matchedSubtracks[ix] = subtrack;
+	configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
+	if(configurable[ix] != cfgNone)
+	    {
+	    if(firstOpened == -1)
+		{
+		safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
+		if(cartUsualBoolean(cart,objName,FALSE))
+		    firstOpened = ix;
+		}
+	    makeCfgRows = TRUE;
+	    }
+	}
     }
 
 toLowerN(membersOfView->title, 1);
@@ -4804,30 +4828,30 @@ puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     if(matchedSubtracks[ix] != NULL)
-        {
-        printf("<TD>");
-        if(configurable[ix] != cfgNone)
-            {
-            MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,(firstOpened == ix));
-            }
-        else
-            printf("<B>%s</B>\n",membersOfView->values[ix]);
-        puts("</TD>");
+	{
+	printf("<TD>");
+	if(configurable[ix] != cfgNone)
+	    {
+	    MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,(firstOpened == ix));
+	    }
+	else
+	    printf("<B>%s</B>\n",membersOfView->values[ix]);
+	puts("</TD>");
 
-        safef(objName, sizeof(objName), "%s.%s.vis", parentTdb->tableName,membersOfView->names[ix]);
-        enum trackVisibility tv =
-            hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
+	safef(objName, sizeof(objName), "%s.%s.vis", parentTdb->tableName,membersOfView->names[ix]);
+	enum trackVisibility tv =
+	    hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
 
-        safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
+	safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
 
-        printf("<TD>");
-        safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->names[ix]);
-        hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,classes,javascript);
-        puts(" &nbsp; &nbsp; &nbsp;</TD>");
-        // Until the cfg boxes are inserted here, this divorces the relationship
-        //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
-        //    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
-        }
+	printf("<TD>");
+	safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->names[ix]);
+	hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,classes,javascript);
+	puts(" &nbsp; &nbsp; &nbsp;</TD>");
+	// Until the cfg boxes are inserted here, this divorces the relationship
+	//if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
+	//    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
+	}
     }
 // Need to do the same for ENCODE Gencode 'filterBy's
 puts("</TR>");
@@ -4835,26 +4859,26 @@ if(makeCfgRows)
     {
     puts("</TABLE><TABLE>");
     for (ix = 0; ix < membersOfView->count; ix++)
-        {
-        if(matchedSubtracks[ix] != NULL)
-            {
-            printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
-            if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
-            || (firstOpened != -1 && firstOpened != ix))
-                printf(" style=\"display:none\"");
-            printf("><TD width=10>&nbsp;</TD>");
-            int ix2=ix;
-            while(0 < ix2--)
-                printf("<TD width=100>&nbsp;</TD>");
-            printf("<TD colspan=%d>",membersOfView->count+1);
-            safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
-            if(configurable[ix] != cfgNone)
-                {
-                cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
-                cfgLinkToDependentCfgs(parentTdb,objName);
-                }
-            }
-        }
+	{
+	if(matchedSubtracks[ix] != NULL)
+	    {
+	    printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
+	    if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
+	    || (firstOpened != -1 && firstOpened != ix))
+		printf(" style=\"display:none\"");
+	    printf("><TD width=10>&nbsp;</TD>");
+	    int ix2=ix;
+	    while(0 < ix2--)
+		printf("<TD width=100>&nbsp;</TD>");
+	    printf("<TD colspan=%d>",membersOfView->count+1);
+	    safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
+	    if(configurable[ix] != cfgNone)
+		{
+		cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
+		cfgLinkToDependentCfgs(parentTdb,objName);
+		}
+	    }
+	}
     }
 puts("</TABLE><BR>");
 subgroupMembersFree(&membersOfView);
@@ -5449,7 +5473,7 @@ boolean displayAll =
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-(void)parentTdbAbandonTablelessChildren(db,tdb);
+// (void)parentTdbAbandonTablelessChildren(db,tdb);
 
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
@@ -5461,27 +5485,41 @@ if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     return;
     }
+uglyf("OK 2<BR>\n");
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
 
 if(primarySubtrack == NULL)
     {
+    uglyf("OK 2.1 primarySubtrack branch<BR>\n");
     if(subgroupingExists(tdb,"view"))
         {
+	uglyf("OK 2.2 view branch<BR>\n");
         hCompositeDisplayViewDropDowns(db, cart,tdb);
         if(subgroupCount(tdb) <= 1)
             viewsOnly = TRUE;
         }
     if(!viewsOnly)
         {
+	uglyf("OK 2.3 viewsOnly branch<BR>\n");
         if(trackDbSettingOn(tdb, "allButtonPair"))
+	    {
+	    uglyf("OK 2.3.1 allButtonPair<BR>\n");
             hCompositeUiAllButtons(db, cart, tdb, formName);
+	    }
         else if (!hasSubgroups || !isMatrix || primarySubtrack)
+	    {
+	    uglyf("OK 2.3.2 !hasSubroups || !isMatrix || primarySubtrack<BR>\n");
             hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
+	    }
         else
+	    {
+	    uglyf("OK 2.3.3 hCompositeUiByMatrix<BR>\n");
             hCompositeUiByMatrix(db, cart, tdb, formName);
+	    }
         }
     }
+uglyf("OK 3<BR>\n");
 
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
@@ -5491,6 +5529,7 @@ if(displayAll)
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 
+uglyf("OK 4<BR>\n");
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
         if (slCount(tdb->subtracks) > 5)
@@ -5499,6 +5538,7 @@ if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not
         puts("<P>");
         }
     }
+uglyf("OK 5<BR>\n");
 }
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,

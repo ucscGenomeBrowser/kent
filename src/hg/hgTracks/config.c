@@ -305,6 +305,7 @@ withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 /* Get track list and group them. */
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 trackList = getTrackList(&groupList, vis);
+uglyf("trackList has %d items, groupList has %d<BR>\n", slCount(trackList), slCount(groupList));
 
 /* The ideogram for some reason is considered a track.
  * We don't really want to process it as one though, so

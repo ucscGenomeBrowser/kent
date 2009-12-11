@@ -46,8 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1612 2009/12/09 03:30:20 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.1 2009/12/11 01:58:39 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2659,7 +2658,7 @@ else
 void loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
 {
-struct trackDb *tdb, *tdbList = NULL;
+struct trackDb *tdb, *next, *tdbList = NULL;
 struct track *track;
 TrackHandler handler;
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
@@ -2668,14 +2667,16 @@ if(trackNameFilter == NULL)
 else
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 tdbSortPrioritiesFromCart(cart, &tdbList);
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+for (tdb = tdbList; tdb != NULL; tdb = next)
     {
+    next = tdb->next;
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->tableName))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    if (slCount(tdb->subtracks) != 0) {
+    if (slCount(tdb->subtracks) != 0) 
+        {
         tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
         makeCompositeTrack(track, tdb);
         }
@@ -2686,7 +2687,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             handler(track);
         }
     if (cgiVarExists("hgGenomeClick"))
-    makeHgGenomeTrackVisible(track);
+	makeHgGenomeTrackVisible(track);
     if (track->loadItems == NULL)
         warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->tableName);
     else if (track->drawItems == NULL)
@@ -3900,25 +3901,25 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
     if (cgiOptionalString("hideTracks"))
-    {
-    s = cgiOptionalString(track->mapName);
-    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
-            {
-            cartSetString(cart, track->mapName, s);
-            }
-    }
+	{
+	s = cgiOptionalString(track->mapName);
+	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+		{
+		cartSetString(cart, track->mapName, s);
+		}
+	}
     if (s != NULL)
     track->visibility = hTvFromString(s);
     if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
-    {
-    struct trackDb *parent = track->tdb->parent;
-    char *parentShow = NULL;
-    if (parent)
-        parentShow = cartUsualString(cart, parent->tableName,
-                     parent->isShow ? "show" : "hide");
-    if (!parent || sameString(parentShow, "show"))
-        compositeTrackVis(track);
-    }
+	{
+	struct trackDb *parent = track->tdb->parent;
+	char *parentShow = NULL;
+	if (parent)
+	    parentShow = cartUsualString(cart, parent->tableName,
+			 parent->isShow ? "show" : "hide");
+	if (!parent || sameString(parentShow, "show"))
+	    compositeTrackVis(track);
+	}
     }
 if (measureTiming)
     uglyTime("getTrackList");

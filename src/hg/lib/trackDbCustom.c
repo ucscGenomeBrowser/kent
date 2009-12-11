@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72 2009/11/30 17:58:11 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.1 2009/12/11 01:57:58 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -590,7 +590,7 @@ if(tdb->parent)
 freeMem(stInfo);
 }
 
-void trackDbSuperSettings(struct trackDb *tdbList)
+void trackDbSuperMarkup(struct trackDb *tdbList)
 /* Set trackDb from superTrack setting */
 {
 struct trackDb *tdb;
@@ -621,9 +621,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         continue;
     if(!stInfo->isSuper)
         {
-        tdb->parent = hashFindVal(superHash, stInfo->parentName); // TODO: Parent wont contain children: and can't in this list!
+        tdb->parent = hashFindVal(superHash, stInfo->parentName); 
         if (tdb->parent)
+	    {
             trackDbSuperMemberSettings(tdb);
+	    }
         }
     freeMem(stInfo);
     }
@@ -700,6 +702,7 @@ return cType;
 
 
  
+#ifdef OLD
 char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name)
 /* Get a trackDb setting at the view level for a multiview composite.
    returns a string that must be freed */
@@ -739,33 +742,33 @@ if(settingsByView != NULL)
     }
 return trackSetting;
 }
-
-char *trackDbSettingByView(struct trackDb *tdb, char *name)
-/* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
-   returns a string that must be freed */
-{
-char * view;
-if(tdbIsCompositeChild(tdb) && subgroupFind(tdb,"view",&view))
-    {
-    return trackDbCompositeSettingByView(tdb->parent,view,name);
-    }
-return NULL;
-}
-
+#endif /* OLD */
 
 char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name)
 /* Look for a trackDb setting from lowest level on up:
    from subtrack, then composite, then settingsByView, then composite */
 {
-char *trackSetting = trackDbSetting(tdb,name);
-if(trackSetting == NULL && tdbIsCompositeChild(tdb))
+struct trackDb *generation;
+char *trackSetting = NULL;
+for (generation = tdb; generation != NULL; generation = generation->parent)
     {
-    trackSetting = trackDbSettingByView(tdb,name);
-    if(trackSetting == NULL)
-        trackSetting = trackDbSetting(tdb->parent,name);
+    trackSetting = trackDbSetting(generation,name);
+    if (trackSetting != NULL)
+        break;
     }
 return trackSetting;
 }
+
+char *trackDbSettingByView(struct trackDb *tdb, char *name)
+/* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
+   returns a string that must be freed */
+{
+if (tdb->parent == NULL)
+    return NULL;
+return trackDbSettingClosestToHome(tdb->parent, name);
+return NULL;
+}
+
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
 /* Look for a trackDb setting (or default) from lowest level on up:

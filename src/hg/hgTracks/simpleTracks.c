@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116 2009/12/09 03:30:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.1 2009/12/11 01:58:41 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10843,9 +10843,10 @@ boolean smart = FALSE;
 if (!subtrackCt)
     return;
 
+char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
 /* look out for tracks that manage their own subtracks */
 if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
-    rStringIn("smart", trackDbSetting(tdb, "compositeTrack")))
+    (compositeTrack != NULL && rStringIn("smart", compositeTrack)))
         smart = TRUE;
 
 /* setup function handlers for composite track */

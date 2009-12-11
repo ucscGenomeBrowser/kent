@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509 2009/12/09 21:57:06 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509.2.1 2009/12/11 01:58:12 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2486,6 +2486,7 @@ if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
 else if (tdbIsComposite(tdb))
     {
+    uglyf("about to call HCOMPOSITEUI on %s<BR>\n", tdb->tableName);
      hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
 extraUiLinks(database,tdb);
@@ -2523,6 +2524,7 @@ printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 if (tdbIsSuperTrackChild(tdb))
     {
     assert((tdb->parentName));
+    uglyf("superTdb<BR>\n");
     struct trackDb *superTdb = hTrackDbForTrack(database, tdb->parentName);
     if (superTdb)
         {
@@ -2694,7 +2696,9 @@ else if (isCustomTrack(track))
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();
 else
+    {
     tdb = hTrackDbForTrack(database, track);
+    }
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);

@@ -222,7 +222,7 @@ void trackDbSuperMemberSettings(struct trackDb *tdb);
 /* Set fields in trackDb to indicate this is a member of a
  * supertrack. */
 
-void trackDbSuperSettings(struct trackDb *tdbList);
+void trackDbSuperMarkup(struct trackDb *tdbList);
 /* Get info from supertrack setting.  There are 2 forms:
  * Parent:   'supertrack on [show]'
  * Child:    'supertrack <parent> [vis]
@@ -259,9 +259,11 @@ eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */
 
+#ifdef OLD
 char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name);
 /* Get a trackDb setting at the view level for a multiview composite.
    returns a string that must be freed */
+#endif /* OLD */
 
 char *trackDbSettingByView(struct trackDb *tdb, char *name);
 /* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
