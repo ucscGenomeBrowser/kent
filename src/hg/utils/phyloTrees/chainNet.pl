@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # chainNet.pl - output chainNet.ra definitions in phylogentic order
 
-#	$Id: chainNet.pl,v 1.2 2009/12/09 18:28:01 hiram Exp $
+#	$Id: chainNet.pl,v 1.3 2009/12/11 19:26:41 hiram Exp $
 
 use strict;
 use warnings;
@@ -27,48 +27,74 @@ if ($argc != 1) {
     exit 255;
 }
 
+my $initialPrio = 200.3;
 my $db = shift;
-my @orderedList;
 my $dbCount = 0;
 my %priorities;
-my $priority = 200.3;
+my $priority = $initialPrio;
+my $stripName = $db;
+$stripName =~ s/[0-9]+$//;
 
-open (FH, "$reroot $db $dissectTree 2> /dev/null|") or die "can not run rerootTree.pl";
+my $actualTreeName = "notFound";
+
+# given an arbitrary database name, find corresponding database name
+# that is actually in the phylo tree
+open (FH, "grep name $dissectTree | sort -u | sed -e \"s/.*name = '//; s/'.*//;\"|") or die "can not read $dissectTree";
+while (my $name = <FH>) {
+    chomp $name;
+    my $treeName = $name;
+    $name =~ s/[0-9]+$//;
+    if ($name eq $stripName) {
+	$actualTreeName = $treeName;
+	last;
+    }
+}
+
+# verify we found one
+if ($actualTreeName eq "notFound") {
+    printf "ERROR: specified db '$db' is not like one of the databases in the phylo tree\n";
+    printf `grep name $dissectTree | sort -u | sed -e "s/.*name = '//; s/'.*//;" | xargs echo`, "\n";
+    exit 255;
+}
+
+# reroot the tree to that database name
+open (FH, "$reroot $actualTreeName $dissectTree 2> /dev/null|") or die "can not run rerootTree.pl";
 while (my $line = <FH>) {
     chomp $line;
-    $orderedList[$dbCount++] = $line;
     $line =~ s/[0-9]+$//;
-    if (!exists($priorities{$line})) {
-	$priorities{$line} = $priority;
+    if (!exists($priorities{lcfirst($line)})) {
+	$priorities{lcfirst($line)} = $priority;
 	$priority += 10;
     }
 }
 close (FH);
 
-for (my $i = 0; $i < $dbCount; ++$i) {
-    my $stripDb = $orderedList[$i];
-    $stripDb =~ s/[0-9]+$//;
-#    printf "%02d: %03d %s\n", $i, $priorities{$stripDb}, $orderedList[$i];
-}
-
-my @chainTbls;
 my $chainCount = 0;
 my %orderChainNet;
 
-open (FH, "hgsql -e 'show tables;' $db | grep -v -i 'self' | grep 'chain.*Link'|") or
+# fetch all chain tables from the given database and for ones that are
+# in the phylo tree, output their priority
+open (FH, "hgsql -e 'show tables;' $db | grep 'chain.*Link' | egrep -i -v 'self|chainNet' | sed -e 's/^.*_chain/chain/' | sort -u|") or
 	die "can not run hgsql 'show tables' on $db";
 while (my $tbl = <FH>) {
     chomp $tbl;
     $tbl =~ s/^chain//;
     $tbl =~ s/Link$//;
-    $chainTbls[$chainCount++] = $tbl;
-    my $track = "$tbl";
+    my $track = $tbl;
     my $stripDb = $tbl;
     $stripDb =~ s/[0-9]+$//;
-    $orderChainNet{$track} = $priorities{lcfirst($stripDb)};
+    if (defined($stripDb) && length($stripDb) > 0) {
+	if (exists($priorities{lcfirst($stripDb)})) {
+	    my $priority = $priorities{lcfirst($stripDb)};
+	    $orderChainNet{$track} = $priority;
+	} else {
+	    printf STDERR "warning: not in phylo tree: $tbl\n";
+	}
+    }
 }
 close (FH);
 
+# print out the priorities in order by priority, lowest first
 foreach my $track (sort { $orderChainNet{$a} cmp $orderChainNet{$b} }
 	keys %orderChainNet) {
     my $priority = $orderChainNet{$track};
