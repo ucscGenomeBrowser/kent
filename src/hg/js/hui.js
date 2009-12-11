@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.44 2009/12/07 19:17:09 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.45 2009/12/11 22:55:27 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -458,9 +458,9 @@ function compositeCfgUpdateSubtrackCfgs(inp)
             $(list).attr("checked",$(inp).attr("checked"));
     }
     else if(inp.type.indexOf("radio") == 0) {
-        var list = $("radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
+        var list = $("input:radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
         if($(list).length>0)
-            $(list).val(inp.value);
+            $(list).attr("checked",$(inp).attr("checked"));
     }
     else {  // Various types of inputs
         var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
