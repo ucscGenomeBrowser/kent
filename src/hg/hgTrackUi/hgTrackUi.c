@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509 2009/12/09 21:57:06 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.510 2009/12/11 15:14:44 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -346,10 +346,10 @@ snp125PrintFilterControls("Class", snp125ClassIncludeStrings,
 snp125PrintFilterControls("Validation", snp125ValidIncludeStrings,
 			  snp125ValidLabels, snp125ValidIncludeCart,
 			  snp125ValidIncludeDefault, snp125ValidLabelsSize);
-int size = (version < 130) ? snp125FuncLabelsSize : (snp125FuncLabelsSize - 1);
+int funcLabelsSize = (version < 130) ? snp125FuncLabelsSize : (snp125FuncLabelsSize - 1);
 snp125PrintFilterControls("Function", snp125FuncIncludeStrings,
 			  snp125FuncLabels, snp125FuncIncludeCart,
-			  snp125FuncIncludeDefault, size);
+			  snp125FuncIncludeDefault, funcLabelsSize);
 snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
 			  snp125MolTypeLabels, snp125MolTypeIncludeCart,
 			  snp125MolTypeIncludeDefault, snp125MolTypeLabelsSize);
@@ -380,11 +380,10 @@ if (defaultColoring)
     cartSetStringArray(cart, snp125ValidStrings, snp125ValidDefault,
 		       snp125ValidLabelsSize);
     cartSetStringArray(cart, snp125FuncStrings, snp125FuncDefault,
-		       snp125FuncLabelsSize);
+		       funcLabelsSize);
     cartSetStringArray(cart, snp125MolTypeStrings, snp125MolTypeDefault,
 		       snp125MolTypeLabelsSize);
     }
-/* Something in the middle of a function. */
 printf("<A name=\"colorSpec\"><HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
@@ -434,7 +433,7 @@ else if (sameString(snp125ColorSourceCart[0], "Validation"))
 else if (sameString(snp125ColorSourceCart[0], "Function"))
     snp125PrintColorSpec(snp125FuncStrings, snp125FuncLabels,
 			 snp125FuncCart, snp125FuncDefault,
-			 snp125FuncLabelsSize);
+			 funcLabelsSize);
 else if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
     snp125PrintColorSpec(snp125MolTypeStrings, snp125MolTypeLabels,
 			 snp125MolTypeCart, snp125MolTypeDefault,
