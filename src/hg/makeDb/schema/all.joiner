@@ -1367,6 +1367,11 @@ identifier knownToHprdName
     $kgDb.knownToHprd.name dupeOk
     $kgDb.humanHprdP2P.target
 
+identifier pfamDesc
+"pfam description for each accession"
+    $kgDb.pfamDesc.pfamAC
+    $kgDb.knownToPfam.value
+
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $kgDb.knownCanonical.clusterId
