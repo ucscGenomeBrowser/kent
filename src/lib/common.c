@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.140 2009/11/24 15:36:59 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.140.4.1 2009/12/11 17:15:51 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1649,6 +1649,19 @@ if ((e = skipToSpaces(line)) != NULL)
 return line;
 }
 
+char *cloneFirstWord(char *line)
+/* Clone first word in line */
+{
+char *startFirstWord = skipLeadingSpaces(line);
+if (startFirstWord == NULL)
+    return NULL;
+char *endFirstWord = skipToSpaces(startFirstWord);
+if (endFirstWord == NULL)
+    return cloneString(startFirstWord);
+else
+    return cloneStringZ(startFirstWord, endFirstWord - startFirstWord);
+}
+    
 char *lastWordInLine(char *line)
 /* Returns last word in line if any (white space separated).
  * Returns NULL if string is empty.  Removes any terminating white space
