@@ -1,6 +1,9 @@
 # ENCODE tracks
 include trackDb.encode.ra
 
+# chainNet tracks
+include trackDb.chainNet.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)

@@ -2928,35 +2928,9 @@ spectrum on
 type netAlign bosTau3 chainBosTau3
 otherDb bosTau3
 
-# use "release alpha" so that
-# on genome-test, short chain/net short labels show db
+# release beta until composite chainNetBosTau2 track becomes the default
 track chainBosTau2
-shortLabel $o_db Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 220
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain bosTau2
-otherDb bosTau2
-release alpha
-
-track netBosTau2
-shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 220.1
-visibility hide
-spectrum on
-type netAlign bosTau2 chainBosTau2
-otherDb bosTau2
-release alpha
-
-track chainBosTau2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2969,9 +2943,9 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
 type chain bosTau2
 otherDb bosTau2
-release beta
 
 track netBosTau2
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -2980,7 +2954,6 @@ visibility hide
 spectrum on
 type netAlign bosTau2 chainBosTau2
 otherDb bosTau2
-release beta
 
 track chainBosTau1
 shortLabel $o_Organism Chain
