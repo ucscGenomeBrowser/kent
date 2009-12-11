@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.3 2009/12/11 17:18:00 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.4 2009/12/11 17:49:20 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2927,15 +2927,47 @@ struct trackDb *tdb;
 boolean cartPriorities = FALSE;
 for (tdb = *tdbList; tdb != NULL; tdb = tdb->next)
     {
-        safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
-        char *cartHas = cartOptionalString(cart,htmlIdentifier);
-        if(cartHas != NULL)
-            {
-            tdb->priority = atof(cartHas);
-            cartPriorities = TRUE;
-            }
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
+    char *cartHas = cartOptionalString(cart,htmlIdentifier);
+    if(cartHas != NULL)
+	{
+	tdb->priority = atof(cartHas);
+	cartPriorities = TRUE;
+	}
     }
-    slSort(tdbList, trackDbCmp);
+slSort(tdbList, trackDbCmp);
+return cartPriorities;
+}
+
+static int trackDbRefCmp(const void *va, const void *vb)
+/* Do trackDbCmp on list of references as opposed to actual trackDbs. */
+{
+const struct slRef *aRef = *((struct slRef **)va);
+const struct slRef *bRef = *((struct slRef **)vb);
+struct trackDb *a = aRef->val, *b = bRef->val;
+return trackDbCmp(&a, &b);
+}
+
+
+boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefList)
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
+{
+char htmlIdentifier[128];
+struct slRef *tdbRef;
+boolean cartPriorities = FALSE;
+for (tdbRef = *tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    struct trackDb *tdb = tdbRef->val;
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
+    char *cartHas = cartOptionalString(cart,htmlIdentifier);
+    if(cartHas != NULL)
+	{
+	tdb->priority = atof(cartHas);
+	cartPriorities = TRUE;
+	}
+    }
+slSort(tdbRefList, trackDbRefCmp);
 return cartPriorities;
 }
 
@@ -3054,6 +3086,11 @@ char *colors[2]   = { COLOR_BG_DEFAULT,
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
 boolean dependentCfgsNeedBinding = FALSE;
 
+// Get list of leaf subtracks to work with
+struct slRef *subtrackRefList=NULL, *subtrackRef; 
+rGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
+slReverse(&subtrackRefList);
+
 // Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
 char **lastDivide = NULL;
 dividers_t *dividers = dividersSettingGet(parentTdb);
@@ -3124,8 +3161,9 @@ if (!primarySubtrack)
     char javascript[JBUFSIZE];
     boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
     boolean restrictions = FALSE;
-    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
         {
+	subtrack = subtrackRef->val;
         char *date = metadataSettingFind(subtrack,"dateUnrestricted");
         if(date != NULL)
             {
@@ -3179,20 +3217,16 @@ if (!primarySubtrack)
 
 if(sortOrder != NULL || useDragAndDrop)
     {
-    preSorted = tdbSortPrioritiesFromCart(cart, &(parentTdb->subtracks)); // preserves user's prev sort/drags
+    preSorted = tdbRefSortPrioritiesFromCart(cart, &subtrackRefList); // preserves user's prev sort/drags
     puts("</TR></THEAD><TBODY id='sortable_tbody'>");
     }
 else
     {
-    slSort(&(parentTdb->subtracks), trackDbCmp);  // straight from trackDb.ra
+    slSort(&subtrackRefList, trackDbRefCmp);  // straight from trackDb.ra
     preSorted = TRUE;
     puts("</TR></THEAD><TBODY>");
     }
 
-
-struct slRef *subtrackRefList=NULL, *subtrackRef; 
-rGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
-slReverse(&subtrackRefList);
 
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
@@ -3348,7 +3382,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
-if(slCount(parentTdb->subtracks) > 5)
+if(slCount(subtrackRefList) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT id='subCBcount'></font>");
 puts("<P>");
 //if (!preSorted && sortOrder != NULL)  // No longer need to do this since hgTrackDb should sort composites with sortOrder and set priorities
