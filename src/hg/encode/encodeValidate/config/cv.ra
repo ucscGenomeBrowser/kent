@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.153 2009/12/11 18:33:48 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.154 2009/12/11 20:38:46 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -266,16 +266,31 @@ term Chorion
 tag Chorion
 type Cell Line
 organism Human
-description Chorion and decidua cells isolated from fetal membranes
+description Chorion cells (outermost of two fetal membranes)
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 #vendorId TIB-152
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
 lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 karyotype unknown
-#termId BTO:0001948
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+termId BTO:0000252
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252&termName=chorion
 tier 3
-protocol Chorion_Crawford_protocol.pdf
+protocol Chorion_and_decidua_Crawford_protocol.pdf
+
+term Decidua
+tag Decidua
+type Cell Line
+organism Human
+description Decidua cells (part of the mucous membrane lining uterus)
+vendorName Dr. Amy Murtha at Duke University (Durham, NC).
+#vendorId TIB-152
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
+karyotype unknown
+termId BTO:0001360
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
+tier 3
+protocol Chorion_and_decidua_Crawford_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -701,7 +716,7 @@ vendorName Genetically engineered in the lab of William Hahn at the Dana Farber 
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
 lineage Genetically engineered from Human prostate epithelial cells. Multiple human donors, all of whom are HIV-1, Hepatitis B and Hepatitis C negative.
 karyotype Diploid
-#termId BTO:0001948
+#termId BTO:0001389 (non-specific)
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 tier 3
 protocol LHSR_Crawford_protocol.pdf
@@ -982,8 +997,8 @@ vendorName National Disease Research Interchange-provided fresh lung tissue, des
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
 lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells. Donor: 21 y.o. male
 karyotype unknown, presumed normal diploid
-#termId BTO:0001948
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+termId BTO:0001389 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389&termName=tracheal%20epithelium
 tier 3
 protocol TBEC_Crawford_protocol.pdf
 
@@ -2452,7 +2467,7 @@ type treatment
 
 term IFNa4h
 tag IFNa4h
-description Interferon alpha treatment - 4 hours, 500 pg/ml (Crawford)
+description Interferon alpha treatment - 4 hours, 500 U//ml (Crawford)
 type treatment
 
 term IFNa6h
