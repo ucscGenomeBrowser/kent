@@ -1372,6 +1372,17 @@ identifier pfamDesc
     $kgDb.pfamDesc.pfamAC
     $kgDb.knownToPfam.value
 
+identifier scopName
+"scop Domain Names"
+    $kgDb.ucscScop.domainName dupeOk
+    $kgDb.scopDesc.name full minCheck=0.60
+
+identifier scopToUcscId
+"scop Domains to UCSC Id"
+    $kgDb.kgProtMap2.qName
+    $kgDb,!hg18.ucscScop.ucscId minCheck=0.99
+    hg18.ucscScop.ucscId minCheck=0.70
+
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $kgDb.knownCanonical.clusterId
