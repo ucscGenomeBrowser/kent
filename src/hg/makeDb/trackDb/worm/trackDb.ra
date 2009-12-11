@@ -172,6 +172,7 @@ spectrum on
 html chainNet
 
     track chainCb3
+    release alpha
     subTrack cb3ChainNet
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -179,6 +180,7 @@ html chainNet
     type chain cb3
 
     track netCb3
+    release alpha
     subTrack cb3ChainNet
     subGroups view=net
     shortLabel $o_Organism Net
@@ -237,6 +239,7 @@ spectrum on
 html chainNet
 
     track chainCaeRem3
+    release alpha
     subTrack caeRem3ChainNet
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -244,6 +247,7 @@ html chainNet
     type chain caeRem3
 
     track netCaeRem3
+    release alpha
     subTrack caeRem3ChainNet
     subGroups view=net
     shortLabel $o_Organism Net
@@ -326,6 +330,7 @@ spectrum on
 html chainNet
 
     track chainCaePb2
+    release alpha
     subTrack caePb2ChainNet
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -333,6 +338,7 @@ html chainNet
     type chain caePb2
 
     track netCaePb2
+    release alpha
     subTrack caePb2ChainNet
     subGroups view=net
     shortLabel $o_Organism Net
