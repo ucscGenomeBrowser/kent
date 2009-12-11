@@ -255,9 +255,15 @@ The format of the type fields:
     will be calculated from the data itself.
 
 18. type bigWig [lower] [upper]
-    This uses a binary indexed file rather than a database table.  It is, other than
-    substituting "bigWig" for "wig" in the type line, the same as the "type wig"
-    explained above.
+    This uses a binary indexed file rather than a database table.  It is, other
+    than substituting "bigWig" for "wig" in the type line, the same as the
+    "type wig" explained above.  The database loading procedure is simply:
+    hgsql hg19 -e 'drop table if exists myLocalBigWig; \
+            create table myLocalBigWig (fileName varchar(255) not null); \
+            insert into myLocalBigWig values
+        ("/gbdb/hg19/bbi/myLocalBigWig.bw");' 
+    I believe this works even if the entry is a URL to a remote
+    bigWig file.
 
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
