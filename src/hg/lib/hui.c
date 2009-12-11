@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.4 2009/12/11 17:49:20 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.5 2009/12/11 18:01:59 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3071,6 +3071,16 @@ for (child = children; child != NULL; child = child->next)
     }
 }
 
+static int countDescendentLeaves(struct trackDb *tdb)
+/* Count the number of leaves in children list and their children. */
+{
+struct slRef *leafRefs = NULL;
+rGetRefsToDescendentLeaves(&leafRefs, tdb->subtracks);
+int result = slCount(leafRefs);
+slFreeList(&leafRefs);
+return result;
+}
+
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
@@ -5588,7 +5598,7 @@ else
 
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
-        if (slCount(tdb->subtracks) > 5)
+    if (countDescendentLeaves(tdb) > 5)
         {
         cgiMakeButton("Submit", "Submit");
         puts("<P>");
