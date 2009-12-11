@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.179 2009/12/09 19:27:06 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.180 2009/12/11 15:32:47 angie Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -870,7 +870,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
     customTracksSaveCart(genomeDb, cart, ctList);
 
-if (!endsWith(cgiScriptName(),"hgCustom"))
+if (cgiScriptName() && !endsWith(cgiScriptName(),"hgCustom"))
     {
     /* filter out cts that are unavailable remote resources */
     ctList = customTrackRemoveUnavailableFromList(ctList);
