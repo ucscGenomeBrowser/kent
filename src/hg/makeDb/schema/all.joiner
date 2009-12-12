@@ -2569,8 +2569,8 @@ identifier transMapExtFileSplicedEstId
 # transMap and knownGenes
 identifier transMapGeneUcscGenesId
 "UCSC Genes and transMapGene table"
-    hgFixed.transMapGeneUcscGenes.id
-    $kgDb3.knownGene.name minCheck=0.60
+    hgFixed.transMapGeneUcscGenes.id dupeOk
+    $kgDb3.knownGene.name full
 
 identifier transMapAlnKnownGeneHgId
 "UCSC Genes and transMapAln table"
