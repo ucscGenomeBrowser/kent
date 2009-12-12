@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1582 2009/12/08 23:25:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.1 2009/12/12 08:28:26 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2568,6 +2568,19 @@ if (!trackDbOrigAssembly(tdb))
 trackDbPrintOrigAssembly(tdb, database);
 }
 
+static char *getHtmlFromSelfOrParent(struct trackDb *tdb)
+/* Get html from self or from parent if not in self. */
+{
+uglyf("getHtmlFromSelfOrParent %s (html=%p) parent %p<BR>\n", tdb->tableName, tdb->html, tdb->parent);
+for (;tdb != NULL; tdb = tdb->parent)
+    {
+uglyf("looping up  %s (html=%p) parent %p<BR>\n", tdb->tableName, tdb->html, tdb->parent);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+        return tdb->html;
+    }
+return NULL;
+}
+
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link
@@ -2592,10 +2605,11 @@ if (!isCustomTrack(tdb->tableName))
 	}
     printDataRestrictionDate(tdb);
     }
-if (tdb->html != NULL && tdb->html[0] != 0)
+char *html = getHtmlFromSelfOrParent(tdb);
+if (html != NULL && html[0] != 0)
     {
     htmlHorizontalLine();
-    puts(tdb->html);
+    puts(html);
     }
 hPrintf("<BR>\n");
 }
