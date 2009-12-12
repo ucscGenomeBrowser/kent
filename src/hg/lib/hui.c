@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.7 2009/12/12 05:22:18 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.8 2009/12/12 09:32:55 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1729,6 +1729,22 @@ slFreeList(&trackList);
 return trackName;
 }
 
+static void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+	boolean leafOnly)
+/* Recursively add trackList to trackHash */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (hTrackOnChrom(tdb, chrom))
+	{
+	if (tdb->subtracks == NULL || !leafOnly)
+	    hashAdd(trackHash, tdb->tableName, tdb);
+	}
+    rAddTrackListToHash(trackHash, tdb->subtracks, chrom, leafOnly);
+    }
+}
+
 struct hash *makeTrackHashWithComposites(char *database, char *chrom,
                                         bool withComposites)
 /* Make hash of trackDb items for this chromosome, including composites,
@@ -1736,39 +1752,14 @@ struct hash *makeTrackHashWithComposites(char *database, char *chrom,
 {
 struct trackDb *tdbs = hTrackDb(database, chrom);
 struct hash *trackHash = newHash(7);
-
-while (tdbs != NULL)
-    {
-    struct trackDb *tdb = slPopHead(&tdbs);
-    if (hTrackOnChrom(tdb, chrom))
-        {
-        if (tdb->subtracks)
-            {
-            struct trackDb *subtrack;
-            for (subtrack = tdb->subtracks; subtrack != NULL;
-                        subtrack = subtrack->next)
-                {
-                /* need track description for hgc */
-                subtrack->html = cloneString(tdb->html);
-                hashAdd(trackHash, subtrack->tableName, subtrack);
-                }
-            if (withComposites)
-                hashAdd(trackHash, tdb->tableName, tdb);
-            }
-        else
-            hashAdd(trackHash, tdb->tableName, tdb);
-        }
-    else
-        trackDbFree(&tdb);
-    }
-
+rAddTrackListToHash(trackHash, tdbs, chrom, !withComposites);
 return trackHash;
 }
 
 struct hash *makeTrackHash(char *database, char *chrom)
 /* Make hash of trackDb items for this chromosome. */
 {
-    return makeTrackHashWithComposites(database, chrom, FALSE);
+return makeTrackHashWithComposites(database, chrom, FALSE);
 }
 
 /****** Stuff for acembly related options *******/
@@ -4747,38 +4738,38 @@ if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
 cfgEndBox(boxed);
 }
 
+struct trackDb *rFindViewInList(struct trackDb *tdbList, char *view)
+/* Return the trackDb on the list (or on any children of the list) that has matching view tag. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *viewSetting = trackDbSetting(tdb, "view");
+    if (sameOk(viewSetting, view))
+        return tdb;
+    }
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    struct trackDb *viewTdb = rFindViewInList(tdb->subtracks, view);
+    if (viewTdb != NULL)
+        return viewTdb;
+    }
+return NULL;
+}
+
 static boolean compositeViewCfgExpandedByDefault(struct trackDb *parentTdb,char *view,char **visibility)
 /* returns true if the view cfg is expanded by default.  Optionally allocates string of view setting (eg 'dense') */
 {
-int cnt,ix;
 boolean expanded = FALSE;
 if ( visibility != NULL )
     *visibility = cloneString(hStringFromTv(parentTdb->visibility));
-char *setting = trackDbSetting(parentTdb, "visibilityViewDefaults");
-if(setting == NULL)
+struct trackDb *viewTdb = rFindViewInList(parentTdb->subtracks, view);
+if (viewTdb == NULL)
     return FALSE;
-
-char *target = cloneString(setting);
-char *words[SMALLBUF];
-cnt = chopLine(target, words);
-for(ix=0;ix<cnt;ix++)
-    {
-    if(startsWith(view,words[ix]) && words[ix][strlen(view)] == '=')
-        {
-        if (words[ix][strlen(words[ix]) - 1] == '+')
-            {
-            expanded = TRUE;
-            if ( visibility != NULL )
-                words[ix][strlen(words[ix]) - 1] = 0;
-            }
-        if ( visibility != NULL )
-            *visibility = cloneString(words[ix] + strlen(view) + 1);
-        break;
-        }
-    }
-// At this point we need to search the cart to see if any others are already expanded.
-// cart var of style "wgEncodeYaleChIPseq.Peaks.showCfg" {parentTable}.{view}.showCfg value='on'
-freeMem(target);
+if (visibility != NULL)
+    *visibility = cloneString(hStringFromTv(viewTdb->visibility));
+if (trackDbSetting(viewTdb, "viewUi"))
+    expanded = TRUE;
 return expanded;
 }
 
@@ -5203,7 +5194,6 @@ members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
 members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
 if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
-
 // Get list of leaf subtracks to work with
 struct slRef *subtrackRefList=NULL, *subtrackRef; 
 trackDbListGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
@@ -5260,7 +5250,6 @@ puts("<BR>\n");
 
 if(dims->count > 2)
     {
-    uglyf("Holy cow, %d dimensions<BR>\n", dims->count);
     displayABCdimensions(cart,parentTdb,subtrackRefList, dims->count - 2);  // No dimABCs without X & Y both
     }
 dimensionsFree(&dims);
@@ -5535,6 +5524,7 @@ if(primarySubtrack == NULL)
     {
     if(subgroupingExists(tdb,"view"))
         {
+	// uglyf("<BR>!Views!<BR>\n");
         hCompositeDisplayViewDropDowns(db, cart,tdb);
         if(subgroupCount(tdb) <= 1)
             viewsOnly = TRUE;
@@ -5551,7 +5541,7 @@ if(primarySubtrack == NULL)
 	    }
         else
 	    {
-	    uglyf("<BR>!Matrix!<BR>\n");
+	    // uglyf("<BR>!Matrix!<BR>\n");
             hCompositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }

@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.3 2009/12/12 05:22:17 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.4 2009/12/12 09:32:54 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3424,7 +3424,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	}
     }
 
-/* Do subtrack inheritance. */
+/* Do subtrack inheritance - filling in parent and subtracks fields. */
 for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
@@ -3509,6 +3509,7 @@ rInheritFields(tdbList);
 return tdbList;
 }
 
+#ifdef OLD
 struct trackDb *old_hTrackDb(char *db, char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
  * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
@@ -3599,6 +3600,7 @@ for (tdb = tdbRetList; tdb != NULL; tdb = tdb->next)
 
 return tdbRetList;
 }
+#endif /* OLD */
 
 static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
 					    char *where)
@@ -3620,8 +3622,10 @@ safef(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
 if (!trackTdb)
     return NULL;
+#ifdef UNUSED
 if (trackDbSetting(trackTdb, "compositeTrack") != NULL)
     {
+    /* TODO: make this more fully recursive - if it needs deal with subtracks at all that is. */
     /* Fill in trackDb->subtracks.  Query to get _exact_ match for composite
      * track name in the subTrack setting, so we don't pick up subtracks of
      * some other track with the same root name. */
@@ -3644,6 +3648,7 @@ else if (trackDbSetting(trackTdb, "subTrack") != NULL)
 	subtrackInherit(trackTdb, cTdb);
     freez(&subTrackSetting);
     }
+#endif /* UNUSED */
 return trackTdb;
 }
 
@@ -3796,6 +3801,7 @@ slFreeList(&tdbs);
 return NULL;
 }
 
+#ifdef UNUSED
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
 /* Look up track in database, errAbort if it's not there. */
 {
@@ -3806,6 +3812,7 @@ if (tdb == NULL)
     errAbort("Track %s not found", trackName);
 return tdb;
 }
+#endif /* UNUSED */
 
 
 boolean hTrackCanPack(char *db, char *trackName)

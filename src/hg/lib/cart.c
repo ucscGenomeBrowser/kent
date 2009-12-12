@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.114 2009/12/09 03:35:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.114.2.1 2009/12/12 09:32:54 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1879,6 +1879,6 @@ void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb)
 cartRemoveAllForTdb(cart,tdb);
 struct trackDb *subTdb;
 for(subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
-    cartRemoveAllForTdb(cart,subTdb);
+    cartRemoveAllForTdbAndChildren(cart,subTdb);
 }
 
