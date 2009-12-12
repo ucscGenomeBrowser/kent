@@ -95,10 +95,10 @@ longLabel California Condor 454
 group rna
 type psl
 priority 100
-color 0,50,100
+color 0,90,190
 visibility hide
 baseColorDefault diffBases
-baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes hgFixed.transMapExtFileUcscGenes
+baseColorUseSequence extFile seq extFile
 indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .

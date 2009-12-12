@@ -2782,4 +2782,5 @@ see doc/builds.txt for specific details.
      # load tracks
      hgLoadPsl galGal3 -table=caCondor454 results/nscanPasaUnmappedRealign/combined.psl.gz
      ln -s /hive/data/genomes/galGal3/bed/caCondor454/data/wugsc-454-cdna.fa  /gbdb/galGal3/caCondor454.fa
+     hgLoadSeq galGal3 /gbdb/galGal3/caCondor454.fa
 ############################################################################
