@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1613 2009/12/12 00:49:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1614 2009/12/12 01:03:18 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1273,6 +1273,7 @@ if (track->limitedVis != tvHide)
         int trackPastTabWidth = tl.picWidth - trackPastTabX;
         int fontHeight = mgFontLineHeight(font);
         int insideHeight = fontHeight-1;
+        boolean toggleDone = FALSE;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
@@ -1280,12 +1281,13 @@ if (track->limitedVis != tvHide)
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
+                {
                 doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
                         trackPastTabWidth, fontHeight, insideHeight, labelColor);
-            else
-                mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight, track );
+                toggleDone = TRUE;
+                }
             }
-        else
+        if(!toggleDone)
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
         y += fontHeight;
