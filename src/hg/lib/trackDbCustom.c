@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.1 2009/12/11 01:57:58 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.2 2009/12/12 05:22:19 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -927,5 +927,39 @@ if(goodKids != NULL)
     slReverse(&goodKids);
 parentTdb->subtracks = goodKids;
 return badKids;
+}
+
+void trackDbListGetRefsToDescendents(struct slRef **pList, struct trackDb *tdbList)
+/* Add all member of tdbList, and all of their children to pList recursively. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    refAdd(pList, tdb);
+    trackDbListGetRefsToDescendents(pList, tdb->subtracks);
+    }
+}
+
+void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *tdbList)
+/* Add all leaf members of trackList, and any leaf descendants to pList recursively. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdb->subtracks)
+	trackDbListGetRefsToDescendentLeaves(pList, tdb->subtracks);
+    else
+	refAdd(pList, tdb);
+    }
+}
+
+int trackDbCountDescendentLeaves(struct trackDb *tdb)
+/* Count the number of leaves in children list and their children. */
+{
+struct slRef *leafRefs = NULL;
+trackDbListGetRefsToDescendentLeaves(&leafRefs, tdb->subtracks);
+int result = slCount(leafRefs);
+slFreeList(&leafRefs);
+return result;
 }
 

@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.6 2009/12/11 20:23:11 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.7 2009/12/12 05:22:18 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2264,6 +2264,7 @@ if(value != (void*)NULL)
     }
 return TRUE;
 }
+
 boolean subgroupFindTitle(struct trackDb *parentTdb, char *name,char **value)
 /* looks for a a subgroup matching the name and returns the title if found */
 {
@@ -3047,41 +3048,6 @@ if(tdbIsComposite(tdb))
     printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
 }
 
-static void rGetRefsToDescendents(struct slRef **pList, struct trackDb *children)
-/* Recursively get children and grandchildren adding each to head of list. */
-{
-struct trackDb *child;
-for (child = children; child != NULL; child = child->next)
-    {
-    refAdd(pList, child);
-    rGetRefsToDescendents(pList, child->subtracks);
-    }
-}
-
-static void rGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *children)
-/* Recursively get children and grandchildren and add ones that are leaves to head of list. */
-{
-struct trackDb *child;
-for (child = children; child != NULL; child = child->next)
-    {
-    if (child->subtracks)
-	rGetRefsToDescendentLeaves(pList, child->subtracks);
-    else
-	refAdd(pList, child);
-    }
-}
-
-static int countDescendentLeaves(struct trackDb *tdb)
-/* Count the number of leaves in children list and their children. */
-{
-struct slRef *leafRefs = NULL;
-rGetRefsToDescendentLeaves(&leafRefs, tdb->subtracks);
-int result = slCount(leafRefs);
-slFreeList(&leafRefs);
-return result;
-}
-
-
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
@@ -3098,7 +3064,7 @@ boolean dependentCfgsNeedBinding = FALSE;
 
 // Get list of leaf subtracks to work with
 struct slRef *subtrackRefList=NULL, *subtrackRef; 
-rGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
+trackDbListGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
 slReverse(&subtrackRefList);
 
 // Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
@@ -5143,7 +5109,7 @@ else if (left && dimensionY && childTdb != NULL)
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
 }
 
-static int displayABCdimensions(struct cart *cart, struct trackDb *parentTdb,int expected)
+static int displayABCdimensions(struct cart *cart, struct trackDb *parentTdb, struct slRef *subtrackRefList, int expected)
 /* This will walk through all declared nonX&Y dimensions (X and Y is the 2D matrix of CBs.
    NOTE: ABC dims are only supported if there are X & Y both.  Also expected number should be passed in */
 {
@@ -5169,9 +5135,10 @@ for(ix=0;ix<26;ix++)
     memset(tdbs,  0, sizeof(tdbs));
 
     int aIx;
-    struct trackDb *subtrack;
-    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    struct slRef *subtrackRef;
+    for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
         {
+	struct trackDb *subtrack = subtrackRef->val;
         char *value;
         if(subgroupFind(subtrack,dim->tag,&value))
             {
@@ -5226,7 +5193,6 @@ static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb 
 //int ix;
 char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-struct trackDb *subtrack;
 
 dimensions_t *dims = dimensionSettingsGet(parentTdb);
 if(dims == NULL)
@@ -5238,6 +5204,12 @@ members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
 if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
 
+// Get list of leaf subtracks to work with
+struct slRef *subtrackRefList=NULL, *subtrackRef; 
+trackDbListGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
+slReverse(&subtrackRefList);
+struct trackDb *subtrack;
+
 // use array of char determine all the cells (in X,Y,Z dimensions) that are actually populated
 char *value;
 int sizeOfX = dimensionX?dimensionX->count:1;
@@ -5248,8 +5220,9 @@ struct trackDb *tdbsY[sizeOfY];
 memset(cells, 0, sizeof(cells));
 memset(tdbsX, 0, sizeof(tdbsX));
 memset(tdbsY, 0, sizeof(tdbsY));
-for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
+    subtrack = subtrackRef->val;
     ixX = (dimensionX ? -1 : 0 );
     ixY = (dimensionY ? -1 : 0 );
     if(dimensionX && subgroupFind(subtrack,dimensionX->tag,&value))
@@ -5286,7 +5259,10 @@ if(!subgroupingExists(parentTdb,"view"))
 puts("<BR>\n");
 
 if(dims->count > 2)
-    displayABCdimensions(cart,parentTdb,(dims->count - 2));  // No dimABCs without X & Y both
+    {
+    uglyf("Holy cow, %d dimensions<BR>\n", dims->count);
+    displayABCdimensions(cart,parentTdb,subtrackRefList, dims->count - 2);  // No dimABCs without X & Y both
+    }
 dimensionsFree(&dims);
 
 printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
@@ -5547,7 +5523,7 @@ if(trackDbSetting(tdb, "dragAndDrop") != NULL)
 jsIncludeFile("hui.js",NULL);
 
 puts("<P>");
-if (countDescendentLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
+if (trackDbCountDescendentLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     return;
@@ -5575,6 +5551,7 @@ if(primarySubtrack == NULL)
 	    }
         else
 	    {
+	    uglyf("<BR>!Matrix!<BR>\n");
             hCompositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }
@@ -5594,7 +5571,7 @@ else
 
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
-    if (countDescendentLeaves(tdb) > 5)
+    if (trackDbCountDescendentLeaves(tdb) > 5)
         {
         cgiMakeButton("Submit", "Submit");
         puts("<P>");

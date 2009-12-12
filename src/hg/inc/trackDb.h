@@ -311,5 +311,14 @@ int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb);
 /* abandons tableless children from a container tdb, such as a composite
    returns count of children that have been abandoned */
 
+void trackDbListGetRefsToDescendents(struct slRef **pList, struct trackDb *tdbList);
+/* Add all member of tdbList, and all of their children to pList recursively. */
+
+void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *tdbList);
+/* Add all leaf members of trackList, and any leaf descendants to pList recursively. */
+
+int trackDbCountDescendentLeaves(struct trackDb *tdb);
+/* Count the number of leaves in children list and their children. */
+
 #endif /* TRACKDB_H */
 

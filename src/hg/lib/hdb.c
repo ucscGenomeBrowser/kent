@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.2 2009/12/11 17:17:59 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.3 2009/12/12 05:22:17 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3341,6 +3341,7 @@ struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
 boolean foundOne = FALSE;
 // A cleaner implementation of loaded hash would be something like slListContainer with support for an exists method
+// Hmm, why would that be cleaner? -jk
 struct hash *loaded = hashNew(0);
 for (one = tableList; one != NULL; one = one->next)
     {
