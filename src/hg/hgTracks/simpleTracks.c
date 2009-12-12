@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.1 2009/12/11 01:58:41 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.2 2009/12/12 05:23:09 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -8882,19 +8882,30 @@ tg->drawItems = drawEranModule;
 }
 #endif /* GBROWSE */
 
+static struct trackDb *rGetTdbNamed(struct trackDb *tdb, char *name)
+/* Return tdb of given name in self or children. */
+{
+if (sameString(name, tdb->tableName))
+    return tdb;
+struct trackDb *child;
+for (child = tdb->subtracks; child != NULL; child = child->next)
+    {
+    struct trackDb *ret = rGetTdbNamed(child, name);
+    if (ret != NULL)
+        return ret;
+    }
+return NULL;
+}
+
 static struct trackDb *getSubtrackTdb(struct track *subtrack)
 /* If subtrack->tdb is actually the composite tdb, return the tdb for
  * the subtrack so we can see its settings. */
 {
-if (sameString(subtrack->mapName, subtrack->tdb->tableName))
-    return subtrack->tdb;
-struct trackDb *subTdb;
-for (subTdb = subtrack->tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    if (sameString(subtrack->mapName, subTdb->tableName))
-	return subTdb;
-errAbort("Can't find tdb for subtrack %s -- was getSubtrackTdb called on "
-	 "non-subtrack?", subtrack->mapName);
-return NULL;
+struct trackDb *subTdb = rGetTdbNamed(subtrack->tdb, subtrack->mapName);
+if (subTdb == NULL)
+    errAbort("Can't find tdb for subtrack %s -- was getSubtrackTdb called on "
+	     "non-subtrack?", subtrack->mapName);
+return subTdb;
 }
 
 static bool subtrackEnabledInTdb(struct track *subtrack)
@@ -10828,9 +10839,12 @@ unsigned char finalR = track->color.r, finalG = track->color.g,
 unsigned char altR = track->altColor.r, altG = track->altColor.g,
                             altB = track->altColor.b;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
+
+struct slRef *tdbRef, *tdbRefList = NULL;
+trackDbListGetRefsToDescendentLeaves(&tdbRefList, tdb->subtracks);
+
 struct trackDb *subTdb;
-/* number of possible subtracks for this track */
-int subtrackCt = slCount(tdb->subtracks);
+int subtrackCt = slCount(tdbRefList);
 int altColors = subtrackCt - 1;
 struct track *subtrack = NULL;
 TrackHandler handler;
@@ -10876,8 +10890,10 @@ if (!smart)
     }
 
 /* fill in subtracks of composite track */
-for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-{
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    subTdb = tdbRef->val;
+
     /* initialize from composite track settings */
     if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
 	{
@@ -10945,7 +10961,6 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     slAddHead(&track->subtracks, subtrack);
     }
 slSort(&track->subtracks, trackPriCmp);
-
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)

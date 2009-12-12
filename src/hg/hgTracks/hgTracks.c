@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.1 2009/12/11 01:58:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.2 2009/12/12 05:23:07 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3909,7 +3909,7 @@ for (track = trackList; track != NULL; track = track->next)
 		}
 	}
     if (s != NULL)
-    track->visibility = hTvFromString(s);
+	track->visibility = hTvFromString(s);
     if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
 	{
 	struct trackDb *parent = track->tdb->parent;
