@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.390 2009/12/09 20:54:34 fanhsu Exp $
+# $Id: hg18.txt,v 1.391 2009/12/12 04:39:22 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.390 2009/12/09 20:54:34 fanhsu Exp $
+# $Id: hg18.txt,v 1.391 2009/12/12 04:39:22 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28894,6 +28894,68 @@ see doc/builds.txt for specific details.
     ./bin/lsSnpPdbDbLoadStep hg18
     # once this has been QAed, will auto-update from genbank scripts
 #############################################################################
+# BURGE	LAB DATA MAPPED WITH GEMMAPPER. PROVIDED BY THOMAS DERRIEN FROM RODERIC
+# GUIGO'S LAB AT CRG. (E-MAIL: thomas.derrien@crg.es)
+# (hartera, 2009-09-13 - 2009-09-16, DONE) 
+   mkdir /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
+   cd /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
+
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325476_brain_HCT168_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325477_liver_HCT169_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325478_heart_HCT170_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325479_skelMuscle_HCT171_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325480_colon_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325481_adipose_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325482_testes_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325483_lymphNode_hg18.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325484_HCT204_bt474_.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325485_HCT205_HME_.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325486_HCT202_s2468_.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325487_HCT203_s2468.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325488_HCT206_s2468_.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+   wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode2b/GSM325489_HCT207_s2468_.fa.GEM_index.hg18.gencode_data.rel2b.length_32.gff.gz"
+  
+   cd /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
+   # Load this data into tables for hg18.
+   # Unzip the files:
+   gunzip *.gff.gz 
+   # Create a file with the list of file names and tissues.
+   ls *.gff > burgeDataFiles.txt
+   GSM325486_HCT202_s2468	breast
+   GSM325487_HCT203_s2468	MCF-7
+   GSM325488_HCT206_s2468	MB435 
+   GSM325489_HCT207_s2468	T47D
+   # Did not map these two as they are not 32 bp. 
+   GSM325490_brain_s1368	MAQC	mixed human brain tissue/cell lines
+   GSM325491_UHR_s247		MAQC_UHR mixed human cell lines
+   # Edit the file above to add a tab separation between file name and tissue
+   # name. Then remove the "read_name: " from the last field in each 
+   # file otherwise it gets included in the name and load the data into hg18.
+   # Write a script to do this: 
+cat << '_EOF_' > formatAndLoadData
+#!/bin/bash -e
+   
+# Assign variables
+# Tab-separated file of file names and tissue/cell line names
+DATAFILES=$1
+# track name used as prefix for subtracks
+TRACK=$2
+# database
+DATABASE=$3
+
+cat $DATAFILES | while read file tissue; do
+    subTrack=`echo $TRACK$tissue`
+    echo $subTrack   
+    sed -e 's/read_name:\s//' $file > ${subTrack}.gff
+    ldHgGene -exon=read $DATABASE ${subTrack} ${subTrack}.gff 
+done
+'_EOF_'
+   chmod +x formatAndLoadData
+   ./formatAndLoadData burgeDataFiles.txt burgeRnaSeqGemMapperAlign hg18 \
+     > load.log &
+   # Added a trackDb entry in 
+   # ccds/trunk/gencode/browser/trackDb/human/hg18/trackDb.ra
+
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
