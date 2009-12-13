@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251 2009/12/07 19:16:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.252 2009/12/13 20:20:46 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -792,8 +792,8 @@ static char *baseColorDrawAllOptionLabels[] =
     BASE_COLOR_DRAW_GENOMIC_CODONS_LABEL,
     BASE_COLOR_DRAW_ITEM_CODONS_LABEL,
     BASE_COLOR_DRAW_DIFF_CODONS_LABEL,
-    BASE_COLOR_DRAW_ITEM_BASES_LABEL,
-    BASE_COLOR_DRAW_DIFF_BASES_LABEL,
+    BASE_COLOR_DRAW_ITEM_BASES_CDS_LABEL,
+    BASE_COLOR_DRAW_DIFF_BASES_CDS_LABEL,
     };
 static char *baseColorDrawAllOptionValues[] =
     {
@@ -821,8 +821,8 @@ static char *baseColorDrawGenomicOptionValues[] =
 static char *baseColorDrawItemOptionLabels[] =
     {
     BASE_COLOR_DRAW_OFF_LABEL,
-    BASE_COLOR_DRAW_ITEM_BASES_LABEL,
-    BASE_COLOR_DRAW_DIFF_BASES_LABEL,
+    BASE_COLOR_DRAW_ITEM_BASES_NC_LABEL,
+    BASE_COLOR_DRAW_DIFF_BASES_NC_LABEL,
     };
 static char *baseColorDrawItemOptionValues[] =
     {

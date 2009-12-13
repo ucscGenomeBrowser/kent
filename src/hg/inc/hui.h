@@ -608,8 +608,10 @@ enum baseColorDrawOpt
 #define BASE_COLOR_DRAW_GENOMIC_CODONS_LABEL "genomic codons"
 #define BASE_COLOR_DRAW_ITEM_CODONS_LABEL "mRNA codons"
 #define BASE_COLOR_DRAW_DIFF_CODONS_LABEL "nonsynonymous mRNA codons"
-#define BASE_COLOR_DRAW_ITEM_BASES_LABEL "mRNA bases"
-#define BASE_COLOR_DRAW_DIFF_BASES_LABEL "different mRNA bases"
+#define BASE_COLOR_DRAW_ITEM_BASES_CDS_LABEL "mRNA bases"
+#define BASE_COLOR_DRAW_DIFF_BASES_CDS_LABEL "different mRNA bases"
+#define BASE_COLOR_DRAW_ITEM_BASES_NC_LABEL "item bases"
+#define BASE_COLOR_DRAW_DIFF_BASES_NC_LABEL "different item bases"
 
 /* Drawing mode select box values: */
 #define BASE_COLOR_DRAW_OFF "none"
