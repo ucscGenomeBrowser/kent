@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1582 2009/12/08 23:25:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1583 2009/12/14 18:01:46 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20197,6 +20197,67 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doSnpArray2 (struct trackDb *tdb, char *itemName, char *dataSource)
+/* doSnpArray2 is essential the same as doSnpArray except that the strand is blanked out */
+/* This is a temp solution for 3 Illumina SNP Arrays to blank out strand info for non-dbSnp entries */
+/* Should be removed once Illumina comes up with a clear defintion of their strand data */
+{
+char *table = tdb->tableName;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+int start = cartInt(cart, "o");
+int end = 0;
+char nibName[HDB_MAX_PATH_STRING];
+struct dnaSeq *seq;
+
+genericHeader(tdb, itemName);
+/* Affy uses their own identifiers */
+if (sameString(dataSource, "Affy"))
+    safef(query, sizeof(query),
+        "select chromEnd, strand, observed, rsId from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+else
+    safef(query, sizeof(query), "select chromEnd, strand, observed from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    end = sqlUnsigned(row[0]);
+
+    /* force strand info to be blank for non-dbSnp entries, per Illumina's request */
+    printPosOnChrom(seqName, start, end, " ", FALSE, NULL);
+    printf("<B>Polymorphism:</B> %s \n", row[2]);
+
+    if (end == start + 1)
+        {
+        hNibForChrom(database, seqName, nibName);
+        seq = hFetchSeq(nibName, seqName, start, end);
+	touppers(seq->dna);
+        if (sameString(row[1], "-"))
+           reverseComplement(seq->dna, 1);
+        printf("<BR><B>Reference allele:</B> %s \n", seq->dna);
+        }
+
+    if (sameString(dataSource, "Affy"))
+        {
+        printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A> (log in required, registration is free)\n", itemName);
+        if (!sameString(row[3], "unknown"))
+            {
+            printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+            printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", row[3], row[3]);
+	    }
+	}
+    else
+        {
+        printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
+	}
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 
 void printGvAttrCatType (int i)
 /* prints new category and type labels for attributes as needed */
@@ -22431,6 +22492,14 @@ else if (sameString("snpArrayIllumina300", track) ||
 	 (sameString("snpArrayIlluminaHumanCytoSNP_12", track) && startsWith("rs", item) ) )
     {
     doSnpArray(tdb, item, "Illumina");
+    }
+else if (
+	 (sameString("snpArrayIlluminaHuman660W_Quad", track) && !startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanOmni1_Quad", track) && !startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanCytoSNP_12", track) && !startsWith("rs", item) ) )
+    {
+    /* special processing for non-dbSnp entries of the 3 new Illumina arrays */
+    doSnpArray2(tdb, item, "Illumina");
     }
 else if (sameString("pgVenter", track) ||
          sameString("pgWatson", track) ||
