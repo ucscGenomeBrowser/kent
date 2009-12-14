@@ -94,7 +94,12 @@ groupings affyZonWildTypeGroups
 
 track affyZebrafish 
 compositeTrack on
+shortLabel Affy Zebrafish
 longLabel Alignments of Affymetrix Sequences from Zebrafish Chip
+group regulation
+priority 89
+visibility hide
+type psl .
 
     track affyZebrafishConsensus
     subTrack affyZebrafish
