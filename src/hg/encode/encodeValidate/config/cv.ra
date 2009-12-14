@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.155 2009/12/11 21:29:43 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.156 2009/12/14 23:41:44 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2446,7 +2446,7 @@ description 1h,500pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
-tag DMSO02pct
+tag DMSO02
 description 1h,0.02% DMSO (Myers)
 type treatment
 
@@ -2456,7 +2456,7 @@ description 100 nM treatment for 45 minutes (Crawford)
 type treatment
 
 term EtOH_0.02pct
-tag EtOH02pct
+tag EtOH02
 description 1h,0.02% EtOH (Myers)
 type treatment
 
@@ -2491,7 +2491,7 @@ description Interferon gamma treatment - 6 hours (Snyder)
 type treatment
 
 term Prednisolone_100nM
-tag Prednisolone
+tag Prednis
 description 1h,100nM Prednisolone (Myers)
 type treatment
 
