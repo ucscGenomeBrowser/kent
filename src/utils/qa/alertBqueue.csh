@@ -45,22 +45,26 @@ endif
 # echo "testing \n \n sending only to ann and bob right now \n \n "  > Bfile
 echo "greetings. \n\n  you have content in the B-queue that someone should look at." > Bfile
 echo "  this is a periodic reminder from a QA cronjob.\n" >> Bfile
+echo "\n  usually a track is in the B-queue because QA is expecting something" >> Bfile
+echo "  from the dev crew.\n" >> Bfile
 hgsql -h $sqlbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
-  qadate FROM pushQ WHERE priority = 'B' ORDER BY qadate" qapushq >> Bfile
+  qadate FROM pushQ WHERE priority = 'B' AND reviewer != '' ORDER BY qadate" \
+  qapushq >> Bfile
 
 # get list of all developers and QA involved in B-queue tracks
-set contacts=`hgsql -N -h $sqlbeta -e "SELECT sponsor, reviewer, sponsor FROM pushQ \
-  WHERE priority = 'B'" qapushq`
+set contacts=`hgsql -N -h $sqlbeta -e "SELECT sponsor, reviewer FROM pushQ \
+  WHERE priority = 'B' AND reviewer != ''" qapushq`
 # clean up list to get unique names
 set contacts=`echo $contacts | sed "s/,/ /g" | sed "s/ /\n/g" \
   | perl -wpe '$_ = lcfirst($_);' | sort -u`
 
+set debug=true
 set debug=false
 if ( $debug == "true" ) then
   echo "\ncontacts $contacts"
     set contacts=`echo $contacts | sed "s/,/ /" | sed "s/ /\n/g" \
     | perl -wpe '$_ = lcfirst($_);' | sort -u`
-  set contacts="larrym kate, fan ting ann Hiram rachel Andy andy bob larry kayla"
+  set contacts="larrym kate fan ting ann Hiram rachel Andy andy bob larry kayla"
   echo "contacts $contacts"
 endif
 
