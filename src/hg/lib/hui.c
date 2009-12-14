@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.8 2009/12/12 09:32:55 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.9 2009/12/14 03:38:26 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4822,8 +4822,6 @@ memset(configurable,cfgNone,sizeof(configurable));
 int firstOpened = -1;
 boolean makeCfgRows = FALSE;
 struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
-// char *setting = trackDbSetting(parentTdb,"settingsByView");
-// boolean blockCfgs = (setting != NULL && (sameWord(setting,"off") || sameWord(setting,"disabled") || sameWord(setting,"false")));
 
 for (ix = 0; ix < membersOfView->count; ix++)
     {

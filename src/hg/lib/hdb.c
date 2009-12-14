@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.4 2009/12/12 09:32:54 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.5 2009/12/14 03:38:26 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3359,7 +3359,7 @@ trackDbSuperMarkup(tdbList);
 return tdbList;
 }
 
-static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
+static void addTrackIfDataAccessible(char *database, struct trackDb *tdb, char *chrom,
                            boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
@@ -3400,60 +3400,6 @@ if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
 }
 
 
-struct trackDb *linkUpGenerations(struct trackDb *tdbList)
-/* Convert a list to a forest - filling in parent and subtrack pointers */
-{
-struct trackDb *forest = NULL;
-struct hash *trackHash = hashNew(0);
-struct trackDb *tdb, *next;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    hashAdd(trackHash, tdb->tableName, tdb);
-
-/* Loop through making list without super-tracks. */
-struct trackDb *superlessList = NULL;
-for (tdb = tdbList; tdb != NULL; tdb = next)
-    {
-    next = tdb->next;
-    char *superTrack = trackDbSetting(tdb, "superTrack");
-    if (superTrack != NULL && sameWord(superTrack, "on"))
-        {
-	}
-    else
-        {
-	slAddHead(&superlessList, tdb);
-	}
-    }
-
-/* Do subtrack inheritance - filling in parent and subtracks fields. */
-for (tdb = superlessList; tdb != NULL; tdb = next)
-    {
-    next = tdb->next;
-    char *subtrackSetting = trackDbSetting(tdb, "subTrack");
-    if (subtrackSetting == NULL)
-        {
-	subtrackSetting = tdb->parentName;
-	}
-    if (subtrackSetting != NULL)
-        {
-	char *parentName = cloneFirstWord(subtrackSetting);
-	struct trackDb *parent = hashFindVal(trackHash, parentName);
-	if (parent != NULL)
-	    {
-	    slAddHead(&parent->subtracks, tdb);
-	    tdb->parent = parent;
-	    }
-	freez(&parentName);
-	}
-    else
-        {
-	slAddHead(&forest, tdb);
-	}
-    }
-
-hashFree(&trackHash);
-return forest;
-}
-
 static void rInheritFields(struct trackDb *tdbList)
 /* Go through list inheriting fields from parent if possible, and invoking self on children. */
 {
@@ -3488,7 +3434,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	}
     else 
         {
-        processTrackDb(db, tdb, chrom, privateHost, &newList);
+        addTrackIfDataAccessible(db, tdb, chrom, privateHost, &newList);
 	}
     }
 slReverse(&newList);
@@ -3503,7 +3449,7 @@ struct trackDb *hTrackDb(char *db, char *chrom)
  * incompatible with the returned list) */
 {
 struct trackDb *tdbList = loadTrackDb(db, NULL);
-tdbList = linkUpGenerations(tdbList);
+tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
 rInheritFields(tdbList);
 return tdbList;
@@ -3548,7 +3494,7 @@ while (tdbList != NULL)
         hashAdd(compositeHash, tdb->tableName, tdb);
         }
     else
-        processTrackDb(db, tdb, chrom, privateHost, &tdbFullList);
+        addTrackIfDataAccessible(db, tdb, chrom, privateHost, &tdbFullList);
     }
 
 /* create new list with subtrack entries in subtracks field of composite track*/

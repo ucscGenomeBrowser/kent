@@ -15,7 +15,7 @@
 struct trackDb
 /* This describes an annotation track. */
     {
-    struct trackDb *next;  /* Next in singly linked list. */
+    struct trackDb *next;  /* Next in singly linked list.  Next sibling in tree. */
     char *tableName;	/* Symbolic ID of Track */
     char *shortLabel;	/* Short label displayed on left */
     char *type;	/* Track type: bed, psl, genePred, etc. */
@@ -270,12 +270,10 @@ char *trackDbSettingByView(struct trackDb *tdb, char *name);
    returns a string that must be freed */
 
 char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name);
-/* Look for a trackDb setting from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
+/* Look for a trackDb setting from lowest level on up through chain of ancestors. */
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
-/* Look for a trackDb setting (or default) from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
+/* Look for a trackDb setting (or default) from lowest level on up through chain of ancestors. */
 
 boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
@@ -311,10 +309,31 @@ int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb);
 /* abandons tableless children from a container tdb, such as a composite
    returns count of children that have been abandoned */
 
-void trackDbListGetRefsToDescendents(struct slRef **pList, struct trackDb *tdbList);
+struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
+/* Convert a list to a forest - filling in parent and subtrack pointers.
+ * The exact topology of the forest is a little complex due to the
+ * fact there are two "inheritance" systems - the superTrack system
+ * and the subTrack system.  In the superTrack system (which is on it's
+ * way out)  the superTrack's themselves have the tag:
+ *     superTrack on
+ * and the children of superTracks have the tag:
+ *     superTrack parentName
+ * In the subTrack system the parents have the tag:
+ *     compositeTrack on
+ * and the children have the tag:
+ *     subTrack parentName
+ * In this routine the subTrack is treated as system is treated as you
+ * might expect - the children of the system are removed from the main
+ * list and instead put on the subtracks list of their parents.  The highest
+ * level parents stay on the list.  There can be multiple levels of inheritance.
+ *    For the supertracks the _parents_ are removed from the list.  The only
+ * reference to them in the returned forest is that they are in the parent
+ * field of their children.  The parents of supertracks have no subtracks. */
+
+void trackDbListGetRefsToDescendents(struct slRef **pList, struct trackDb *tdbForest);
 /* Add all member of tdbList, and all of their children to pList recursively. */
 
-void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *tdbList);
+void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *tdbForest);
 /* Add all leaf members of trackList, and any leaf descendants to pList recursively. */
 
 int trackDbCountDescendentLeaves(struct trackDb *tdb);

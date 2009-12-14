@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.2 2009/12/12 05:22:19 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.3 2009/12/14 03:38:27 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -700,53 +700,9 @@ if(cType == cfgNone && warnIfNecessary)
 return cType;
 }
 
-
  
-#ifdef OLD
-char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name)
-/* Get a trackDb setting at the view level for a multiview composite.
-   returns a string that must be freed */
-{
-char *trackSetting = NULL;
-char *settingsByView = cloneString(trackDbSetting(parentTdb,"settingsByView"));
-if(settingsByView != NULL)
-    {
-    char *settingForAView = NULL;
-    char *words[32];
-    int cnt,ix;
-    // parse settingsByView "Signal:viewLimits=5:500,viewLimitsMax=0:20910 ..."
-    cnt = chopLine(cloneString(settingsByView), words);
-    for(ix=0;ix<cnt;ix++)
-        {
-        if(startsWithWordByDelimiter(view,':',words[ix]))
-            {
-            settingForAView = cloneString(words[ix]+(strlen(view)+1));
-            break;
-            }
-        }
-    freeMem(settingsByView);
-    if(settingForAView != NULL) // found a match
-        {
-        // parse settingByView: "viewLimits=5:500,viewLimitsMax=0:20910"
-        cnt = chopByChar(settingForAView,',',words,ArraySize(words));
-        for(ix=0;ix<cnt;ix++)
-            {
-            if(startsWithWordByDelimiter(name,'=',words[ix]))
-                {
-                trackSetting = cloneString(words[ix]+strlen(name)+1);
-                break;
-                }
-            }
-        freeMem(settingForAView);
-        }
-    }
-return trackSetting;
-}
-#endif /* OLD */
-
 char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name)
-/* Look for a trackDb setting from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
+/* Look for a trackDb setting from lowest level on up chain of parents. */
 {
 struct trackDb *generation;
 char *trackSetting = NULL;
@@ -760,8 +716,8 @@ return trackSetting;
 }
 
 char *trackDbSettingByView(struct trackDb *tdb, char *name)
-/* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
-   returns a string that must be freed */
+/* For a subtrack of a multiview composite, get a setting stored in the view or any other
+ * ancestor. */
 {
 if (tdb->parent == NULL)
     return NULL;
@@ -771,8 +727,7 @@ return NULL;
 
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
-/* Look for a trackDb setting (or default) from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
+/* Look for a trackDb setting (or default) from lowest level on up chain of parents. */
 {
 char *trackSetting = trackDbSettingClosestToHome(tdb,name);
 if(trackSetting == NULL)
@@ -904,6 +859,96 @@ for(;ix<metadata->count;ix++)
 metadataFree(&metadata);
 return setting;
 }
+
+struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList)
+/* Convert a list to a forest - filling in parent and subtrack pointers.
+ * The exact topology of the forest is a little complex due to the
+ * fact there are two "inheritance" systems - the superTrack system
+ * and the subTrack system.  In the superTrack system (which is on it's
+ * way out)  the superTrack's themselves have the tag:
+ *     superTrack on
+ * and the children of superTracks have the tag:
+ *     superTrack parentName
+ * In the subTrack system the parents have the tag:
+ *     compositeTrack on
+ * and the children have the tag:
+ *     subTrack parentName
+ * In this routine the subTrack is treated as system is treated as you
+ * might expect - the children of the system are removed from the main
+ * list and instead put on the subtracks list of their parents.  The highest
+ * level parents stay on the list.  There can be multiple levels of inheritance.
+ *    For the supertracks the _parents_ are removed from the list.  The only
+ * reference to them in the returned forest is that they are in the parent
+ * field of their children.  The parents of supertracks have no subtracks. */
+{
+struct trackDb *forest = NULL;
+struct hash *trackHash = hashNew(0);
+struct trackDb *tdb, *next;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    hashAdd(trackHash, tdb->tableName, tdb);
+
+/* Do superTrack inheritance.  This involves setting up the parent pointers to superTracks,
+ * but removing the superTracks themselves from the list. */
+struct trackDb *superlessList = NULL;
+for (tdb = tdbList; tdb != NULL; tdb = next)
+    {
+    next = tdb->next;
+    char *superTrack = trackDbSetting(tdb, "superTrack");
+    if (sameString(tdb->tableName, "transMap")) {uglyf("got transMap superTrack %s in linkUpGenerations\n", superTrack);}
+    if (superTrack != NULL)
+        {
+	if (sameWord(superTrack, "on"))
+	    {
+	    uglyf("Skipping superTrack %s, it exists only in heavens\n", tdb->tableName);
+	    tdb->next = NULL;
+	    }
+	else
+	    {
+	    char *parentName = tdb->parentName = cloneFirstWord(superTrack);
+	    struct trackDb *parent = hashFindVal(trackHash, parentName);
+	    if (parent == NULL)
+		errAbort("Parent track %s of supertrack %s doesn't exist", 
+			parentName, tdb->tableName);
+	    tdb->parent = parent;
+	    slAddHead(&superlessList, tdb);
+	    }
+	}
+    else
+        {
+	slAddHead(&superlessList, tdb);
+	}
+    }
+
+/* Do subtrack inheritance - filling in parent and subtracks fields. */
+for (tdb = superlessList; tdb != NULL; tdb = next)
+    {
+    next = tdb->next;
+    char *subtrackSetting = trackDbSetting(tdb, "subTrack");
+    if (subtrackSetting != NULL)
+        {
+	char *parentName = cloneFirstWord(subtrackSetting);
+	struct trackDb *parent = hashFindVal(trackHash, parentName);
+	if (parent != NULL)
+	    {
+	    slAddHead(&parent->subtracks, tdb);
+	    tdb->parent = parent;
+	    }
+	else
+	    {
+	    errAbort("Parent track %s of subTrack %s doesn't exist", parentName, tdb->tableName);
+	    }
+	freez(&parentName);
+	}
+    else
+        {
+	slAddHead(&forest, tdb);
+	}
+    }
+
+hashFree(&trackHash);
+return forest;
+}
+
 
 int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb)
 /* abandons tableless children from a container tdb, such as a composite
