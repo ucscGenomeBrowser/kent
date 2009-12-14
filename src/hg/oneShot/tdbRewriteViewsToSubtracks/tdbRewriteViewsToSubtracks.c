@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3 2009/12/10 04:38:10 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.4 2009/12/14 03:14:06 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -480,6 +480,13 @@ for (t = r->tagList; t != NULL; t = t->next)
     }
 }
 
+
+boolean shouldBeParentOfView(struct raRecord *r)
+/* Return TRUE if its a record that we'll insert views underneath */
+{
+return findViewSubGroup(r) != NULL;
+}
+
 void rewriteSettingsByViewComplex(struct raFile *file, struct raRecord *complexRecord, FILE *f,	
 	struct lm *lm)
 /* Rewrite track that has settings by view */
@@ -574,40 +581,48 @@ for (view = viewList; view != NULL; view = view->next)
     subChar(shortLabel, '_', ' ');
     fprintf(f, "    shortLabel %s\n", shortLabel);
     fprintf(f, "    view %s\n", view->name);
+    char *vis = NULL;
     if (visHash != NULL)
-        {
-	char *vis = hashFindVal(visHash, view->name);
-	if (vis != NULL)
-	    {
-	    fprintf(f, "    visibility %s\n", vis);
-	    fprintf(f, "    subTrack %s\n", complexRecord->key);
-	    }
-	struct slPair *settingList = hashFindVal(settingsHash, view->name);
-	struct slPair *setting;
-	for (setting = settingList; setting != NULL; setting = setting->next)
-	    fprintf(f, "    %s %s\n", setting->name, (char*)setting->val);
+         vis = hashFindVal(visHash, view->name);
+    if (vis != NULL)
+	{
+	int len = strlen(vis);
+	boolean gotPlus = (lastChar(vis) == '+');
+	if (gotPlus)
+	    len -= 1;
+	char visOnly[len+1];
+	memcpy(visOnly, vis, len);
+	visOnly[len] = 0;
+	fprintf(f, "    visibility %s\n", visOnly);
+	if (gotPlus)
+	    fprintf(f, "    viewUi on\n");
+	}
+    fprintf(f, "    subTrack %s\n", complexRecord->key);
+    struct slPair *settingList = hashFindVal(settingsHash, view->name);
+    struct slPair *setting;
+    for (setting = settingList; setting != NULL; setting = setting->next)
+	fprintf(f, "    %s %s\n", setting->name, (char*)setting->val);
 
-	/* Scan for children that are in this view. */
-	struct raRecord *r;
-	for (r = file->recordList; r != NULL; r = r->next)
+    /* Scan for children that are in this view. */
+    struct raRecord *r;
+    for (r = file->recordList; r != NULL; r = r->next)
+	{
+	struct raTag *subTrackTag = raRecordFindTag(r, "subTrack");
+	if (subTrackTag != NULL)
 	    {
-	    struct raTag *subTrackTag = raRecordFindTag(r, "subTrack");
-	    if (subTrackTag != NULL)
-	        {
-		if (startsWithWord(complexRecord->key, subTrackTag->val))
+	    if (startsWithWord(complexRecord->key, subTrackTag->val))
+		{
+		struct raTag *subGroupsTag = raRecordFindTag(r, "subGroups");
+		if (subGroupsTag != NULL)
 		    {
-		    struct raTag *subGroupsTag = raRecordFindTag(r, "subGroups");
-		    if (subGroupsTag != NULL)
-		        {
-			struct hash *hash = hashThisEqThatLine(subGroupsTag->val, 
-				r->startLineIx, FALSE);
-			char *viewName = hashFindVal(hash, "view");
-			if (viewName != NULL && sameString(viewName, view->name))
-			    {
-			    writeRecordAsSubOfView(r, f, viewTrackName);
-			    }
-			hashFree(&hash);
+		    struct hash *hash = hashThisEqThatLine(subGroupsTag->val, 
+			    r->startLineIx, FALSE);
+		    char *viewName = hashFindVal(hash, "view");
+		    if (viewName != NULL && sameString(viewName, view->name))
+			{
+			writeRecordAsSubOfView(r, f, viewTrackName);
 			}
+		    hashFree(&hash);
 		    }
 		}
 	    }
@@ -620,15 +635,14 @@ void rewriteTrack(struct raLevel *level, struct raFile *file,
 /* Write one track record.  */
 {
 struct raRecord *recordInParentFile = findRecordInParentFileLevel(level, r);
-struct raTag *settingsByViewTag = raRecordFindTag(r, "settingsByView");
 struct raTag *subTrack = raRecordFindTag(r, "subTrack");
 
-if (settingsByViewTag)
+if (shouldBeParentOfView(r))
     {
     if (recordInParentFile)
         recordAbort(r, "Can't handle settingsByViews with records in parent file levels");
     /* We are the parent. */
-    fprintf(f, "# Rewriting parent with settingsByView %s\n", r->key);
+    fprintf(f, "# Rewriting parent with subGroup view %s\n", r->key);
     rewriteSettingsByViewComplex(file, r, f, lm);
     }
 else if (subTrack)
@@ -638,13 +652,12 @@ else if (subTrack)
     	findRelease(r, level));
     if (rParent == NULL)
         recordAbort(r, "Couldn't find rParent track %s, subTrack %s.", r->key, subTrack->val);
-    settingsByViewTag = raRecordFindTag(rParent, "settingsByView");
-    if (settingsByViewTag)
+    if (shouldBeParentOfView(rParent))
         {
 	if (rParent->file != r->file)
 	    recordAbort(r, "complex parent %s not in same file as subTrack %s", 
 	    	rParent->key, r->key);
-	fprintf(f, "# Omitting child (%s) of parent (%s) with settingsByView\n", 
+	fprintf(f, "# Omitting child (%s) of parent (%s) with views\n", 
 		r->key, rParent->key);
 	}
     else
