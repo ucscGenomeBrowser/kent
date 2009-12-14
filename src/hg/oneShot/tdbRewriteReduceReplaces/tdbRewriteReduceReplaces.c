@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: tdbRewriteReduceReplaces.c,v 1.1 2009/12/09 02:28:29 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteReduceReplaces.c,v 1.1.2.1 2009/12/14 03:54:48 kent Exp $";
 
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
@@ -78,22 +78,6 @@ struct raLevel
     struct raFile *fileList;	/* List of files at this level. */
     struct hash *trackHash;	/* Hash of all track records in level. */
     };
-
-#ifdef SOON
-static void raTagWrite(struct raTag *tag, FILE *f)
-/* Write tag to file */
-{
-fputs(tag->text, f);
-}
-#endif
-
-int raTagCmp(const void *va, const void *vb)
-/* Compare two raTags. */
-{
-const struct raTag *a = *((struct raTag **)va);
-const struct raTag *b = *((struct raTag **)vb);
-return strcmp(a->name, b->name);
-}
 
 void recordLocationReport(struct raRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -287,7 +271,7 @@ for (hel = hashLookup(level->trackHash, parentKey); hel != NULL; hel = hashLooku
     {
     struct raRecord *parent = hel->val;
     int distance = record->startLineIx - parent->startLineIx;
-    if (distance < 0)
+    if (distance > 0)
         distance = BIGNUM/4 - distance;
     if (record->file != parent->file)
         distance = BIGNUM/2; 
@@ -367,18 +351,22 @@ if (!sameString(t->val, tag->val))
 return TRUE;
 }
 
-boolean canTurnToOverride(struct raRecord *parent, struct raRecord *child)
+boolean canTurnToOverride(struct raRecord *parent, struct raRecord *child, struct dyString *dy)
 /* If child has all the fields that parent has, then can express it as override of parent. */
 {
 struct raTag *t;
+boolean ok = TRUE;
 for (t = parent->tagList; t != NULL; t = t->next)
     {
     if (!raRecordFindTag(child, t->name))
 	{
-	return FALSE;
+	if (dy->stringSize != 0)
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, t->name);
+	ok = FALSE;
 	}
     }
-return TRUE;
+return ok;
 }
 
 boolean canSwallow(struct raRecord *parent, struct raRecord *child)
@@ -419,15 +407,20 @@ if (parentRecord != NULL)
 
 if (parentRecord != NULL && sameString(mergeOp, "replace"))
     {
-    if (canTurnToOverride(parentRecord, r))
+    struct dyString *replaceReasons = dyStringNew(0);
+    if (canTurnToOverride(parentRecord, r, replaceReasons))
 	{
 	if (canSwallow(parentRecord, r))
 	    {
+	    if (verboseLevel() >= 2)
+	        recordWarn(r, "swallowing record that is same as in parent dir");
 	    }
 	else
 	    {
 	    mustWrite(f, t->text, tagStart - t->text);
 	    fprintf(f, "track %s override\n", r->key);
+	    if (verboseLevel() >= 2)
+	        recordWarn(r, "turning replace record into override");
 	    for (t = t->next; t != NULL; t = t->next)
 		{
 		if (!sameTagInOtherRecord(t, parentRecord))
@@ -449,7 +442,8 @@ if (parentRecord != NULL && sameString(mergeOp, "replace"))
 	    }
 
 	/* Write out comment making replacement explicit. */
-	fprintf(f, "#%s replaces record in parent directory\n", r->key);
+	fprintf(f, "#replaces record %s in parent dir missing/extra %s\n", r->key, 
+		replaceReasons->string);
 
 	/* Writing out rest of stanza. */
 	for (; t != NULL; t = t->next)
