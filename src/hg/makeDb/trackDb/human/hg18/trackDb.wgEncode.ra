@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.720 2009/12/14 22:41:34 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.721 2009/12/14 22:44:16 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15517,8 +15517,8 @@ wgEncode 1
 # CSHL short rna-seq (wrangler: braney)
 track wgEncodeCshlShortRnaSeq
 compositeTrack on
-shortLabel CSHL Sh RNA-seq
-longLabel ENCODE Cold Spring Harbor Labs Short RNA-seq
+shortLabel CSHL Sm RNA-seq
+longLabel ENCODE Cold Spring Harbor Labs Small RNA-seq
 group expression
 subGroup1 view Views 1-Transfrags=Transfrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
@@ -15545,7 +15545,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 cytosol)
     subGroups view=4-Alignments cellType=GM12878 localization=20-cytosol
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
@@ -15555,7 +15555,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto A+ TF
     color 153,38,0
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 cytosol)
     subGroups view=1-Transfrags cellType=GM12878 localization=20-cytosol
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort.broadPeak.gz
@@ -15571,7 +15571,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 nucleus)
     subGroups view=4-Alignments cellType=GM12878 localization=30-nucleus
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
@@ -15581,7 +15581,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel GM12 nucl A+ TF
     color 153,38,0
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 nucleus)
     subGroups view=1-Transfrags cellType=GM12878 localization=30-nucleus
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort.broadPeak.gz
@@ -15597,7 +15597,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 chromatin)
     subGroups view=4-Alignments cellType=K562 localization=50-chromatin
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort.tagAlign.gz
@@ -15607,7 +15607,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 chrm A+ TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 chromatin)
     subGroups view=1-Transfrags cellType=K562 localization=50-chromatin
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort.broadPeak.gz
@@ -15623,7 +15623,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 localization=20-cytosol
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort.tagAlign.gz
@@ -15633,7 +15633,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto A+ TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 cytosol)
     subGroups view=1-Transfrags cellType=K562 localization=20-cytosol
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort.broadPeak.gz
@@ -15642,7 +15642,7 @@ noInherit on
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl A+ AL
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleus)
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15659,7 +15659,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl A+ TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleus)
     subGroups view=1-Transfrags cellType=K562 localization=30-nucleus
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort.broadPeak.gz
@@ -15675,7 +15675,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleolus)
     subGroups view=4-Alignments cellType=K562 localization=60-nucleolus
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort.tagAlign.gz
@@ -15685,7 +15685,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nlos A+ TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleolus)
     subGroups view=1-Transfrags cellType=K562 localization=60-nucleolus
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort.broadPeak.gz
@@ -15701,7 +15701,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleoplasm)
     subGroups view=4-Alignments cellType=K562 localization=40-nucleoplasm
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
@@ -15711,7 +15711,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nplm A+ TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleoplasm)
     subGroups view=1-Transfrags cellType=K562 localization=40-nucleoplasm
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort.broadPeak.gz
@@ -15727,7 +15727,7 @@ noInherit on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 polysome)
     subGroups view=4-Alignments cellType=K562 localization=10-polysome
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
@@ -15737,7 +15737,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom A+ TF
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 polysome)
     subGroups view=1-Transfrags cellType=K562 localization=10-polysome
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort.broadPeak.gz
@@ -15753,7 +15753,7 @@ noInherit on
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    longLabel ENCODE CSHL RNA-seq Tags (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Tags (small RNA in prostate cell)
     subGroups view=4-Alignments cellType=prostate localization=0-cell
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
@@ -15763,7 +15763,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell A+ TF
     color 0,102,136
-    longLabel ENCODE CSHL RNA-seq Transfrags (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in prostate cell)
     subGroups view=1-Transfrags cellType=prostate localization=0-cell
     type broadPeak
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
@@ -15773,7 +15773,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto A+ +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 cytosol)
     subGroups view=2-PlusRawSignal cellType=K562 localization=20-cytosol
     # type bigWig 0 3557599
     minLimit 0
@@ -15787,7 +15787,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto A+ -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 cytosol)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 cytosol)
     subGroups view=3-MinusRawSignal cellType=K562 localization=20-cytosol
     # type bigWig 0 3557416
     minLimit 0
@@ -15801,7 +15801,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 chrm A+ +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 chromatin)
     subGroups view=2-PlusRawSignal cellType=K562 localization=50-chromatin
     # type bigWig 0 5055640
     minLimit 0
@@ -15815,7 +15815,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 chrm A+ -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 chromatin)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 chromatin)
     subGroups view=3-MinusRawSignal cellType=K562 localization=50-chromatin
     # type bigWig 0 3376353
     minLimit 0
@@ -15829,7 +15829,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom A+ +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 polysome)
     subGroups view=2-PlusRawSignal cellType=K562 localization=10-polysome
     # type bigWig 0 25082
     minLimit 0
@@ -15843,7 +15843,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 psom A+ -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 polysome)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 polysome)
     subGroups view=3-MinusRawSignal cellType=K562 localization=10-polysome
     # type bigWig 0 203241
     minLimit 0
@@ -15857,7 +15857,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto A+ +S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in GM12878 cytosol)
     subGroups view=2-PlusRawSignal cellType=GM12878 localization=20-cytosol
     # type bigWig 0 449639
     minLimit 0
@@ -15871,7 +15871,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto A+ -S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in GM12878 cytosol)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in GM12878 cytosol)
     subGroups view=3-MinusRawSignal cellType=GM12878 localization=20-cytosol
     # type bigWig 0 333231
     minLimit 0
@@ -15885,7 +15885,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nplm A+ +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleoplasm)
     subGroups view=2-PlusRawSignal cellType=K562 localization=40-nucleoplasm
     # type bigWig 0 5059134
     minLimit 0
@@ -15899,7 +15899,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nplm A+ -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 nucleoplasm)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleoplasm)
     subGroups view=3-MinusRawSignal cellType=K562 localization=40-nucleoplasm
     # type bigWig 0 1595004
     minLimit 0
@@ -15913,7 +15913,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell A+ +S
     color 0,102,136
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in prostate cell)
     subGroups view=2-PlusRawSignal cellType=prostate localization=0-cell
     # type bigWig 0 1611371
     minLimit 0
@@ -15927,7 +15927,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell A+ -S
     color 0,102,136
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in prostate cell)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in prostate cell)
     subGroups view=3-MinusRawSignal cellType=prostate localization=0-cell
     # type bigWig 0 1611371
     minLimit 0
@@ -15941,7 +15941,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel GM12 nucl A+ +S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in GM12878 nucleus)
     subGroups view=2-PlusRawSignal cellType=GM12878 localization=30-nucleus
     # type bigWig 0 641103
     minLimit 0
@@ -15955,7 +15955,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel GM12 nucl A+ -S
     color 153,38,0
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in GM12878 nucleus)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in GM12878 nucleus)
     subGroups view=3-MinusRawSignal cellType=GM12878 localization=30-nucleus
     # type bigWig 0 4876484
     minLimit 0
@@ -15969,7 +15969,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl A+ +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleus)
     subGroups view=2-PlusRawSignal cellType=K562 localization=30-nucleus
     # type bigWig 0 516729
     minLimit 0
@@ -15983,7 +15983,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nucl A+ -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 nucleus)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleus)
     subGroups view=3-MinusRawSignal cellType=K562 localization=30-nucleus
     # type bigWig 0 768499
     minLimit 0
@@ -15997,7 +15997,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nlos A+ +S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleolus)
     subGroups view=2-PlusRawSignal cellType=K562 localization=60-nucleolus
     # type bigWig 0 968064
     minLimit 0
@@ -16011,7 +16011,7 @@ noInherit on
     subTrack wgEncodeCshlShortRnaSeq off
     shortLabel K562 nlos A+ -S
     color 46,0,184
-    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short RNA in K562 nucleolus)
+    longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleolus)
     subGroups view=3-MinusRawSignal cellType=K562 localization=60-nucleolus
     # type bigWig 0 1076632
     minLimit 0
