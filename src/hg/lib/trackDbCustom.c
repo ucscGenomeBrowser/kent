@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.3 2009/12/14 03:38:27 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.4 2009/12/14 03:40:21 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -894,12 +894,10 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
     char *superTrack = trackDbSetting(tdb, "superTrack");
-    if (sameString(tdb->tableName, "transMap")) {uglyf("got transMap superTrack %s in linkUpGenerations\n", superTrack);}
     if (superTrack != NULL)
         {
 	if (sameWord(superTrack, "on"))
 	    {
-	    uglyf("Skipping superTrack %s, it exists only in heavens\n", tdb->tableName);
 	    tdb->next = NULL;
 	    }
 	else
