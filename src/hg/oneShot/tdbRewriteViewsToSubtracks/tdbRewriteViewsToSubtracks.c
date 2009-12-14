@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3.2.2 2009/12/11 23:20:37 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.3.2.3 2009/12/14 02:58:35 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -446,9 +446,13 @@ for (t = r->tagList; t != NULL; t = t->next)
 	mustWrite(f, t->text, s - t->text);
 	spaceOut(f, 4);
 	fprintf(f, "subTrack %s", viewTrackName);
-	/* Skip over subTrack name in original text. */
-	s = skipLeadingSpaces(s);
-	s = skipToSpaces(s);
+	/* Skip over subTrack and name in original text. */
+	int i;
+	for (i=0; i<2; ++i)
+	    {
+	    s = skipLeadingSpaces(s);
+	    s = skipToSpaces(s);
+	    }
 	if (s != NULL)
 	     fputs(s, f);
 	else
@@ -470,6 +474,8 @@ struct raTag *viewSubGroupTag = findViewSubGroup(complexRecord);
 if (viewSubGroupTag == NULL)
     recordAbort(complexRecord, "Can't find view subGroup#");
 char *line = lmCloneString(lm, viewSubGroupTag->val);
+/*  line looks something like: 
+ *       view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags */
 char *viewWord = nextWord(&line);
 assert(sameString(viewWord, "view"));
 char *viewLabelWord = nextWord(&line);
@@ -620,6 +626,8 @@ if (settingsByViewTag)
     if (recordInParentFile)
         recordAbort(r, "Can't handle settingsByViews with records in parent file levels");
     /* We are the parent. */
+    /* TODO - more checking.  It's possible to have subGroups with a view, but no
+     * settingsByView actually if there were no settings to override at the view level. */
     fprintf(f, "# Rewriting parent with settingsByView %s\n", r->key);
     rewriteSettingsByViewComplex(file, r, f, lm);
     }
