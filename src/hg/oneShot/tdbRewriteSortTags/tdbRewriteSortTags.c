@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbRewriteSortTags.c,v 1.1 2009/12/08 08:48:53 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteSortTags.c,v 1.1.2.1 2009/12/14 03:53:35 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -89,7 +89,7 @@ while (raSkipLeadingEmptyLines(lf, dy))
 	slAddHead(&r->tagList, tag);
 	dyStringClear(dy);
 	}
-    fputs(dy->string, f);
+    fputs(dy->string, f);  /* Catches trailing comments in stanza */
     slReverse(&r->tagList);
     r->endLineIx = lf->lineIx;
 
@@ -107,6 +107,7 @@ while (raSkipLeadingEmptyLines(lf, dy))
     /* Clean up memory pool for loop. */
     lmCleanup(&lm);
     }
+fputs(dy->string, f);		/* Print part of file after last stanza */
 dyStringFree(&dy);
 carefulClose(&f);
 lineFileClose(&lf);
