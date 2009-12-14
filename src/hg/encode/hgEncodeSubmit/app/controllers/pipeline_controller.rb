@@ -46,7 +46,7 @@ class PipelineController < ApplicationController
     ]
     @sort_key = params[:sort_key]
     if @sort_key == "pi" || @sort_key == "login"
-      @proje= Project.find(:all, :include => :user, :order => sort_clause, :conditions => active_conditions)
+      @projects = Project.find(:all, :include => :user, :order => sort_clause, :conditions => active_conditions)
     elsif @sort_key
       @projects = Project.find(:all, :order => sort_clause, :conditions => active_conditions)
     else
