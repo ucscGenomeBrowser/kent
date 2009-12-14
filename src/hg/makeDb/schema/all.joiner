@@ -2579,8 +2579,8 @@ identifier transMapAlnKnownGeneHgId
 
 identifier transMapAlnKnownGeneMmId
 "UCSC Genes and transMapAln table"
-    hg18.knownGene.name
-    mm9.transMapAlnUcscGenes.qName minCheck=0.70 chopAfter=-
+    hg19.knownGene.name
+    mm9.transMapAlnUcscGenes.qName chopAfter=-
 
 # lsSnpPdb tables
 identifier lsSnpPdbProtId
