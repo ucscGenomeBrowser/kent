@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.126 2009/12/09 19:24:35 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.127 2009/12/14 19:04:29 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -634,10 +634,10 @@ return res;
 }
 
 char *javaScriptLiteralEncode(char *inString)
-/* Use backslash escaping on newline *
- * and quote chars, backslash and others. *
- * Intended that the encoded string will be *
- * put between quotes at a higher level and *
+/* Use backslash escaping on newline 
+ * and quote chars, backslash and others. 
+ * Intended that the encoded string will be 
+ * put between quotes at a higher level and 
  * then interpreted by Javascript. */
 {
 char c;
