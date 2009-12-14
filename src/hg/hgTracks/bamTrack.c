@@ -14,13 +14,12 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.19 2009/12/10 15:02:12 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.20 2009/12/14 23:19:57 angie Exp $";
 
 struct bamTrackData
     {
     struct track *tg;
     struct hash *pairHash;
-    struct hash *nameHash;
     int minAliQual;
     char *colorMode;
     char *grayMode;
@@ -252,8 +251,6 @@ int addBamPaired(const bam1_t *bam, void *data)
 {
 const bam1_core_t *core = &bam->core;
 struct bamTrackData *btd = (struct bamTrackData *)data;
-if (btd->nameHash != NULL && hashLookup(btd->nameHash, bam1_qname(bam)) == NULL)
-    return 0;
 if (! passesFilters(bam, btd))
     return 0;
 struct linkedFeatures *lf = bamToLf(bam, data);
@@ -343,7 +340,7 @@ int minAliQual = atoi(cartOrTdbClosest(tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QU
 char *colorMode = cartOrTdbClosest(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *grayMode = cartOrTdbClosest(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 char *userTag = cartOrTdbClosest(tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
-struct bamTrackData btd = {tg, pairHash, NULL, minAliQual, colorMode, grayMode, userTag};
+struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag};
 char *fileName;
 if (tg->customPt)
     {
@@ -353,29 +350,25 @@ if (tg->customPt)
     }
 else
     fileName = bamFileNameFromTable(database, tg->mapName, chromName);
-bamFetch(fileName, position, (isPaired ? addBamPaired : addBam), &btd);
-if (isPaired)
+if (!isPaired)
+    bamFetch(fileName, position, addBam, &btd);
+else
     {
+    char posForBam[512];
+    safecpy(posForBam, sizeof(posForBam), position);
     char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
     int pairSearchRange = atoi(setting);
-    if (pairSearchRange > 0 && hashNumEntries(pairHash) > 0)
-	{
-	// Search in a wider region, only for item names that are left over in pairHash
-	// (i.e. improperly paired reads whose mates aren't in the window)
-	struct hash *newPairHash = hashNew(12);
-	btd.nameHash = pairHash;
-	btd.pairHash = newPairHash;
-	char posForBam[512];
+    if (pairSearchRange > 0)
 	safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, posForBam, addBamPaired, &btd);
-	}
+    bamFetch(fileName, posForBam, addBamPaired, &btd);
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(btd.pairHash);
     while ((hel = hashNext(&cookie)) != NULL)
 	{
 	struct linkedFeatures *lf = hel->val;
-	slAddHead(&(tg->items), lfsFromLf(lf));
+	if (lf->start < winEnd && lf->end > winStart)
+	    slAddHead(&(tg->items), lfsFromLf(lf));
 	}
     }
 if (tg->visibility != tvDense)
