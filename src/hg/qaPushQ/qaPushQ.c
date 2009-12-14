@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.115 2009/12/03 00:28:29 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.116 2009/12/14 18:56:31 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1092,7 +1092,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	    
 	    }
 	printf("<tr>");
-	printf("<td><h1>%s<A name=\"priority%s\"></h1></td><td><b>%s</b></td>\n", ki->priority, ki->priority, comment);
+	printf("<td><h1><A name=\"priority%s\">%s</A></h1></td><td><b>%s</b></td>\n", ki->priority, ki->priority, comment);
 	printf("</tr>");
     
     }
