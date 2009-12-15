@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.114.2.1 2009/12/12 09:32:54 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.114.2.2 2009/12/15 20:48:00 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1652,47 +1652,28 @@ else
 return dyStringCannibalize(&orderDY);
 }
 
-char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,char **pVariable)
-/* Returns value or NULL for a cart variable from lowest level on up:
-   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix
-   Optionally fills the non NULL pVariable with the actual name of the variable in the cart */
+char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, 
+	boolean compositeLevel, char *suffix,char **pVariable)
+/* Returns value or NULL for a cart variable from lowest level on up. Optionally 
+ * fills the non NULL pVariable with the actual name of the variable in the cart */
 {
-char buf[512];
-safef(buf, sizeof buf, "%s.%s", tdb->tableName,suffix);
-
-char *cartSetting = NULL;
-if(!compositeLevel)
-    cartSetting = hashFindVal(cart->hash, buf);
-if( cartSetting == NULL && tdbIsCompositeChild(tdb))
+if (compositeLevel)
+    tdb = tdb->parent;
+for ( ; tdb != NULL; tdb = tdb->parent)
     {
-    char *stView = NULL;
-    if(subgroupFind(tdb,"view",&stView))
-        {
-        if(!compositeLevel)
-            {
-            safef(buf, sizeof buf, "%s.%s.%s", tdb->tableName,stView,suffix);
-            cartSetting = hashFindVal(cart->hash, buf);
-            }
-        if(cartSetting == NULL)
-            {
-            safef(buf, sizeof buf, "%s.%s.%s", tdb->parent->tableName,stView,suffix);
-            cartSetting = hashFindVal(cart->hash, buf);
-            }
-        }
-    if(cartSetting == NULL)
-        {
-        safef(buf, sizeof buf, "%s.%s", tdb->parent->tableName,suffix);
-        cartSetting = hashFindVal(cart->hash, buf);
-        }
+    char buf[512];
+    safef(buf, sizeof buf, "%s.%s", tdb->tableName,suffix);
+    char *cartSetting = hashFindVal(cart->hash, buf);
+    if (cartSetting != NULL)
+	{
+	if(pVariable != NULL)
+	    *pVariable = cloneString(buf);
+	return cartSetting;
+	}
     }
-if(pVariable != NULL)
-    {
-    if(cartSetting != NULL)
-        *pVariable = cloneString(buf);
-    else
-        *pVariable = NULL;
-    }
-return cartSetting;
+if (pVariable != NULL)
+    *pVariable = NULL;
+return NULL;
 }
 
 // NEVER CHECKED IN.

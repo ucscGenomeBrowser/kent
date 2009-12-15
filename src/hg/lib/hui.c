@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.9 2009/12/14 03:38:26 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.10 2009/12/15 20:48:01 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -68,24 +68,33 @@ boolean makeDownloadsLink(struct trackDb *tdb)
 return makeNamedDownloadsLink(tdb,"Downloads");
 }
 
+struct trackDb *findTopLevelSelfOrParent(struct trackDb *tdb)
+/* Look for a parent who is a composite track and return that.  Failing that
+ * just return self. */
+{
+struct trackDb *parent;
+for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+    {
+    if (trackDbSettingOn(parent, "compositeTrack"))
+        return parent;
+    }
+return tdb;
+}
+
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
 if (hTableOrSplitExists(db, tdb->tableName))
     {
-	char *tableName  = tdb->tableName;
-	if (sameString(tableName, "mrna"))
-	    tableName = "all_mrna";
+    char *tableName  = tdb->tableName;
+    if (sameString(tableName, "mrna"))
+	tableName = "all_mrna";
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
-
-    if(tdbIsCompositeChild(tdb))
-        printf(SCHEMA_LINKED, db, tdb->parent->grp, tdb->parent->tableName,tableName,hint,label);
-    else
-        printf(SCHEMA_LINKED, db, tdb->grp, tdb->tableName,tableName,hint,label);
-
+    struct trackDb *topLevel = findTopLevelSelfOrParent(tdb);
+    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->tableName,tableName,hint,label);
     return TRUE;
     }
 return FALSE;
@@ -3422,7 +3431,7 @@ if (boxed)
     puts("</td></tr></table>");
 }
 
-void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed)
+void wigCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* UI for the wiggle track */
 {
 char *typeLine = NULL;  /*  to parse the trackDb type line  */
@@ -3452,17 +3461,17 @@ wigFetchMinMaxPixelsWithCart(cart,tdb,name,&minHeightPixels, &maxHeightPixels, &
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
 
-wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+wigFetchMinMaxYWithCart(cart, tdb, name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 freeMem(typeLine);
 
-(void) wigFetchTransformFuncWithCart(cart,tdb,name, &transformFunc);
-(void) wigFetchAlwaysZeroWithCart(cart,tdb,name, &alwaysZero);
-(void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
-(void) wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
-(void) wigFetchGraphTypeWithCart(cart,tdb,name, &lineBar);
-(void) wigFetchWindowingFunctionWithCart(cart,tdb,name, &windowingFunction);
-(void) wigFetchSmoothingWindowWithCart(cart,tdb,name, &smoothingWindow);
-(void) wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
+wigFetchTransformFuncWithCart(cart,tdb,name, &transformFunc);
+wigFetchAlwaysZeroWithCart(cart,tdb,name, &alwaysZero);
+wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
+wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
+wigFetchGraphTypeWithCart(cart,tdb,name, &lineBar);
+wigFetchWindowingFunctionWithCart(cart,tdb,name, &windowingFunction);
+wigFetchSmoothingWindowWithCart(cart,tdb,name, &smoothingWindow);
+wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
 printf("<TABLE BORDER=0>");
@@ -3486,10 +3495,10 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Vertical viewing range:</th><td align=left>&nbsp;min:&nbsp;");
 snprintf(option, sizeof(option), "%s.%s", name, MIN_Y );
-cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);//tDbMinY, tDbMaxY);  // Jim requests this does not enforce limits
+cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);  
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
 snprintf(option, sizeof(option), "%s.%s", name, MAX_Y );
-cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);//tDbMinY, tDbMaxY);
+cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
 printf("&nbsp;(range: %g to %g)",
     tDbMinY, tDbMaxY);
 puts("</TD></TR>");
@@ -4324,9 +4333,9 @@ return ret;
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt)
 {
 int speciesCt = 0;
-char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
-char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
-char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
+char *speciesGroup = trackDbSettingClosestToHome(tdb, SPECIES_GROUP_VAR);
+char *speciesUseFile = trackDbSettingClosestToHome(tdb, SPECIES_USE_FILE);
+char *speciesOrder = trackDbSettingClosestToHome(tdb, SPECIES_ORDER_VAR);
 char sGroup[24];
 //Ochar *groups[20];
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
@@ -4783,21 +4792,18 @@ freeMem(visibility);
 return vis;
 }
 
-struct trackDb *rFindSubtrackWithView(struct trackDb *parentTdb, char *viewName)
+struct trackDb *rFindView(struct trackDb *forest, char *viewName)
 /* Find a descendent with given view. */
 {
-struct trackDb *subtrack;
-for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+struct trackDb *tdb;
+for (tdb = forest; tdb != NULL; tdb = tdb->next)
     {
-    char *stView;
-    if(subgroupFind(subtrack,"view",&stView))
-        {
-	if (sameString(stView, viewName))
-	    return subtrack;
-	}
-    struct trackDb *subSub = rFindSubtrackWithView(subtrack, viewName);
-    if (subSub != NULL)
-        return subSub;
+    char *viewSetting = trackDbSetting(tdb, "view");
+    if (sameOk(viewSetting, viewName))
+        return tdb;
+    struct trackDb *view = rFindView(tdb->subtracks, viewName);
+    if (view)
+        return view;
     }
 return NULL;
 }
@@ -4806,12 +4812,11 @@ static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struc
 /* UI for composite view drop down selections. */
 {
 int ix;
-struct trackDb *subtrack;
-char objName[SMALLBUF];
+char varName[SMALLBUF];
 char classes[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
-#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
+#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.showCfg' value='%s'></B>\n"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (tbl),(tbl),(tbl),(tbl),(title),(title),(tbl),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -4826,17 +4831,17 @@ struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfVi
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     char *viewName = membersOfView->names[ix];
-    subtrack = rFindSubtrackWithView(parentTdb, viewName);
-    if (subtrack != NULL)
+    struct trackDb *view = rFindView(parentTdb->subtracks, viewName);
+    if (view != NULL)
 	{
-	matchedSubtracks[ix] = subtrack;
-	configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
+	matchedSubtracks[ix] = view;
+	configurable[ix] = (char)cfgTypeFromTdb(view->subtracks, TRUE); 
 	if(configurable[ix] != cfgNone)
 	    {
 	    if(firstOpened == -1)
 		{
-		safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
-		if(cartUsualBoolean(cart,objName,FALSE))
+		safef(varName, sizeof(varName), "%s.showCfg", view->tableName);
+		if(cartUsualBoolean(cart,varName,FALSE))
 		    firstOpened = ix;
 		}
 	    makeCfgRows = TRUE;
@@ -4849,30 +4854,28 @@ printf("<B>Select %s </B>(<A HREF=\"../goldenPath/help/multiView.html\" title='H
 puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
-    if(matchedSubtracks[ix] != NULL)
+    struct trackDb *view = matchedSubtracks[ix];
+    if (view != NULL)
 	{
 	printf("<TD>");
 	if(configurable[ix] != cfgNone)
 	    {
-	    MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,(firstOpened == ix));
+	    MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],view->tableName,(firstOpened == ix));
 	    }
 	else
 	    printf("<B>%s</B>\n",membersOfView->values[ix]);
 	puts("</TD>");
 
-	safef(objName, sizeof(objName), "%s.%s.vis", parentTdb->tableName,membersOfView->names[ix]);
+	safef(varName, sizeof(varName), "%s.vis", view->tableName);
 	enum trackVisibility tv =
-	    hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
+	    hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
 
 	safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
 
 	printf("<TD>");
 	safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->names[ix]);
-	hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,classes,javascript);
+	hTvDropDownClassWithJavascript(varName, tv, parentTdb->canPack,classes,javascript);
 	puts(" &nbsp; &nbsp; &nbsp;</TD>");
-	// Until the cfg boxes are inserted here, this divorces the relationship
-	//if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
-	//    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
 	}
     }
 // Need to do the same for ENCODE Gencode 'filterBy's
@@ -4882,9 +4885,10 @@ if(makeCfgRows)
     puts("</TABLE><TABLE>");
     for (ix = 0; ix < membersOfView->count; ix++)
 	{
-	if(matchedSubtracks[ix] != NULL)
+	struct trackDb *view = matchedSubtracks[ix];
+	if (view != NULL)
 	    {
-	    printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
+	    printf("<TR id=\"tr_cfg_%s\"", view->tableName);
 	    if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
 	    || (firstOpened != -1 && firstOpened != ix))
 		printf(" style=\"display:none\"");
@@ -4893,11 +4897,12 @@ if(makeCfgRows)
 	    while(0 < ix2--)
 		printf("<TD width=100>&nbsp;</TD>");
 	    printf("<TD colspan=%d>",membersOfView->count+1);
-	    safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
+	    safef(varName, sizeof(varName), "%s", view->tableName);
 	    if(configurable[ix] != cfgNone)
 		{
-		cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
-		cfgLinkToDependentCfgs(parentTdb,objName);
+		cfgByCfgType(configurable[ix],db,cart,view->subtracks,varName,
+			membersOfView->values[ix],TRUE);
+		cfgLinkToDependentCfgs(parentTdb,varName);
 		}
 	    }
 	}
@@ -5522,7 +5527,6 @@ if(primarySubtrack == NULL)
     {
     if(subgroupingExists(tdb,"view"))
         {
-	// uglyf("<BR>!Views!<BR>\n");
         hCompositeDisplayViewDropDowns(db, cart,tdb);
         if(subgroupCount(tdb) <= 1)
             viewsOnly = TRUE;
@@ -5539,7 +5543,6 @@ if(primarySubtrack == NULL)
 	    }
         else
 	    {
-	    // uglyf("<BR>!Matrix!<BR>\n");
             hCompositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }
@@ -5672,10 +5675,10 @@ boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name)
 /* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
    returns TRUE for composite level name */
 {
-if(tdbIsCompositeChild(tdb)
-&& startsWith(tdb->parent->tableName,name)
-&& name[strlen(tdb->parent->tableName)] == '.')  // Cfg name at composite view level
-    return TRUE;
+struct trackDb *parent;
+for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+    if (startsWith(parent->tableName, name) && name[strlen(parent->tableName)] == '.')
+        return TRUE;
 return FALSE;
 }
 
