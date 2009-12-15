@@ -13,7 +13,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.24.2.1 2009/12/10 10:29:35 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.24.2.2 2009/12/15 20:03:33 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -21,6 +21,7 @@ static boolean clStrict = FALSE;	/* If set only return tracks with actual tables
 static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
 static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 static char *clRewrite = NULL;		/* Rewrite to given directory. */
+static boolean clNoCompSub = FALSE;	/* If set don't do subtrack inheritence of fields. */
 
 boolean uglyOne;
 
@@ -53,10 +54,9 @@ errAbort(
 "there's problems.\n"
 "   -strict\n"
 "Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist.\n"
-"   -alpha\n"
-"Do checking on release alpha (and not release beta) tracks\n"
-"   -noBlank\n"
-"Don't print out blank lines separating records"
+"   -alpha Do checking on release alpha (and not release beta) tracks\n"
+"   -noBlank  Don't print out blank lines separating records"
+"   -noCompSub Subtracks don't inherit fields from parents\n"
 );
 }
 
@@ -68,6 +68,7 @@ static struct optionSpec options[] = {
    {"alpha", OPTION_BOOLEAN},
    {"noBlank", OPTION_BOOLEAN},
    {"rewrite", OPTION_STRING},
+   {"noCompSub", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -568,6 +569,8 @@ static struct tdbRecord *findParent(struct tdbRecord *rec,
  * match parents and children from the same release if possible.  Our
  * strategy is to just ignore records from the wrond release. */
 {
+if (clNoCompSub)
+    return NULL;
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
 if (parentField == NULL)
     return NULL;
@@ -746,25 +749,28 @@ for (rec = list; rec != NULL; rec = rec->next)
 		    }
 		}
 	    }
-	if (view != NULL)
+	if (!clNoCompSub)
 	    {
-	    struct slPair *setting;
-	    for (setting = view->val; setting != NULL; setting = setting->next)
-	        {
-		struct tdbField *oldField = tdbRecordField(rec, setting->name);
-		if (oldField == NULL)
+	    if (view != NULL)
+		{
+		struct slPair *setting;
+		for (setting = view->val; setting != NULL; setting = setting->next)
 		    {
-		    struct tdbField *newField;
-		    lmAllocVar(lm, newField);
-		    newField->name = lmCloneString(lm, setting->name);
-		    newField->val = lmCloneString(lm, setting->val);
-		    slAddTail(&rec->fieldList, newField);
+		    struct tdbField *oldField = tdbRecordField(rec, setting->name);
+		    if (oldField == NULL)
+			{
+			struct tdbField *newField;
+			lmAllocVar(lm, newField);
+			newField->name = lmCloneString(lm, setting->name);
+			newField->val = lmCloneString(lm, setting->val);
+			slAddTail(&rec->fieldList, newField);
+			}
 		    }
 		}
-	    }
-	else 
-	    {
-	    verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+	    else 
+		{
+		verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+		}
 	    }
 	}
 
@@ -772,7 +778,8 @@ for (rec = list; rec != NULL; rec = rec->next)
     struct tdbRecord *parent;
     for (parent = rec->parent; parent != NULL; parent = parent->parent)
 	{
-	mergeParentRecord(rec, parent, lm);
+	if (!clNoCompSub)
+	    mergeParentRecord(rec, parent, lm);
 	}
     }
 }
@@ -1281,6 +1288,7 @@ clStrict = optionExists("strict");
 clAlpha = optionExists("alpha");
 clNoBlank = optionExists("noBlank");
 clRewrite = optionVal("rewrite", clRewrite);
+clNoCompSub = optionExists("noCompSub");
 if (clRewrite)
     {
     doRewrite(clRewrite, clRoot, "trackDb.ra", "visibility.ra", "priority.ra");
