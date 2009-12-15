@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.156 2009/12/14 23:41:44 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.157 2009/12/15 00:10:16 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2416,42 +2416,42 @@ type control
 
 ### Treatments
 term androgen
-tag androgen
+tag andro
 description 1 nM treatment for 12 hours (Crawford)
 type treatment
 
 term Betamethasone_100nM
-tag Betamethasone
+tag Bmeth
 description 1h,100nM Betamethasone (Myers)
 type treatment
 
 term DEX_100nM
-tag DEX100nM
+tag DEXa
 description 1h,100nM DEX (Myers)
 type treatment
 
 term DEX_50nM
-tag DEX50nM
+tag DEXb
 description 1h,50nM DEX (Myers)
 type treatment
 
 term DEX_5nM
-term DEX5nM
+term DEXc
 description 1h,5nM DEX (Myers)
 type treatment
 
 term DEX_500pM
-tag DEX500pM
+tag DEXd
 description 1h,500pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
-tag DMSO02
+tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
 term estrogen
-tag estrogen
+tag estro
 description 100 nM treatment for 45 minutes (Crawford)
 type treatment
 
