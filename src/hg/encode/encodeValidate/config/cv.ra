@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.158 2009/12/15 22:19:53 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.159 2009/12/15 22:24:27 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -700,8 +700,8 @@ vendorName Lonza
 vendorId CC-2580
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
 karyotype normal
-termId BTO:0000256 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
+termId BTO:0001760 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
 tier 3
 protocol HSMMtube_Bernstein_protocol.pdf
 
