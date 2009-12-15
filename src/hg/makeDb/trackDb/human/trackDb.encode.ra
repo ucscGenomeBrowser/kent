@@ -21,6 +21,15 @@ type bed 6 +
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
+# supertrack for Gencode
+track encodeGencodeSuper
+superTrack on
+shortLabel Gencode Genes
+longLabel Gencode Gene Annotation
+group encodeGenes
+priority 10.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 track encodeGencodeGeneMar07
 superTrack encodeGencodeSuper dense
 compositeTrack on
@@ -270,6 +279,15 @@ origAssembly hg17
     longLabel Gencode RACEfrags from HeLaS3 cells
     color 125,130,255
     priority 16
+
+# supertrack for EGASP
+track encodeEgaspSuper
+superTrack on
+shortLabel EGASP 
+longLabel ENCODE Gene Prediction Workshop (EGASP) 
+group encodeGenes
+priority 12.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeEgaspFull
 superTrack encodeEgaspSuper dense
@@ -1564,6 +1582,15 @@ type wig 0 62385
     longLabel Affy Ext Trans Signal (51-base window) (Tert-BJ)
     color 0,0,205
     priority 32
+
+# Affy supertrack
+track encodeAffyChipSuper
+superTrack on
+shortLabel Affy ChIP
+longLabel Affymetrix ChIP-chip
+group encodeChip
+priority 43.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeAffyChIpHl60Pval
 superTrack encodeAffyChipSuper dense
@@ -2865,6 +2892,15 @@ dataVersion ENCODE June 2005 Freeze
     priority 14
     color 109,51,43
 
+# Stanford supertrack
+
+track encodeStanfordChipSuper
+superTrack on
+shortLabel Stanf ChIP
+longLabel Stanford ChIP-chip
+group encodeChip
+priority 55.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeStanfordChip
 superTrack encodeStanfordChipSuper dense
@@ -3367,6 +3403,16 @@ origAssembly hg17
     windowingFunction mean
     color 0,0,255
     priority 3
+
+# supertrack for UVa
+
+track encodeUvaDnaRepSuper
+superTrack on
+shortLabel UVa DNA Rep
+longLabel University of Virginia DNA Replication Timing and Origins
+group encodeChrom
+priority 64.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUvaDnaRep
 superTrack encodeUvaDnaRepSuper dense
