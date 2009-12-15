@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.722 2009/12/15 00:31:30 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.723 2009/12/15 20:53:51 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15437,50 +15437,50 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
 
-    track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCytosolLongpolya
+    track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
-    shortLabel H1-hESC cyto A+ +S1
+    longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
+    shortLabel hESC cell A+ +S1
     subGroups view=1-PlusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=1
     type bedGraph 4
     #type bigWig 0 45103
     minLimit 0
     maxLimit 45103
     transformFunc NONE
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCytosolLongpolya
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
 
-    track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCytosolLongpolya
+    track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq on
-    longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
-    shortLabel H1-hESC cyto A+ -S1
+    longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
+    shortLabel hESC cell A+ -S1
     subGroups view=2-MinusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=1
     type bedGraph 4
     #type bigWig 0 48723
     minLimit 0
     maxLimit 48723
     transformFunc NONE
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCytosolLongpolya
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
 
-    track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCytosolLongpolya
+    track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cytosol)
-    shortLabel H1-hESC cyto A+ AS1
+    longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
+    shortLabel hESC cell A+ AS1
     subGroups view=3-AllRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=1
     type bedGraph 4
     #type bigWig 0 48723
     minLimit 0
     maxLimit 48723
     transformFunc NONE
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1H1hescCytosolLongpolya
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
 
-    track wgEncodeGisRnaSeqSplitAlignRep1H1hescCytosolLongpolya
+    track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    shortLabel H1-hESC cyto A+ SA1
-    longLabel ENCODE GIS RNA-seq Split Tags Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    shortLabel hESC cell A+ SA1
+    longLabel ENCODE GIS RNA-seq Split Tags Rep 1 (PolyA+ RNA in H1-hESC cell)
     subGroups view=5-SplitAlign cellType=H1-hESC rnaExtract=longPolyA  rep=1
 #    type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
@@ -15491,13 +15491,13 @@ wgEncode 1
     showDiffBasesMaxZoom 10000.0
 #    configurable on
     type bed 6
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCytosolLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCytosolLongpolya.pairedTagAlign.gz
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
 
-    track wgEncodeGisRnaSeqAlignmentsRep1H1hescCytosolLongpolya
+    track wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    shortLabel H1-hESC cyto A+ AL1
-    longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in H1-hESC cytosol)
+    shortLabel hESC cell A+ AL1
+    longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in H1-hESC cell)
     subGroups view=4-Alignments cellType=H1-hESC rnaExtract=longPolyA  rep=1
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15506,7 +15506,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     type bigBed 6
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCytosolLongpolya.tagAlign.gz
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
 
 
 # GIS DNA Pet (wrangler: braney)
@@ -16853,12 +16853,12 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya.pairedTagAlign.gz
 
 
-    track wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya
+    track wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel hESC cyto A+ AL1
-    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in H1-hESC cytosol)
-    subGroups view=2-Alignments cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
+    shortLabel hESC cell A+ AL1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in H1-hESC cell)
+    subGroups view=2-Alignments cellType=H1-hESC localization=0-cell rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
     type bigBed 6
@@ -16867,7 +16867,7 @@ wgEncode 1
     baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya.pairedTagAlign.gz
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya fileName=wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya.pairedTagAlign.gz
 
     track wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya
     release alpha
@@ -16911,16 +16911,16 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya.wig.gz
 
-    track wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya
+    track wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel hESC cyto A+ +S1
-    longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in H1-hESC cytosol)
-    subGroups view=0-PlusRawSignal cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
+    shortLabel hESC cell A+ +S1
+    longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in H1-hESC cell)
+    subGroups view=0-PlusRawSignal cellType=H1-hESC localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
     minLimit 0
     maxLimit 412829
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya fileName=wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya.wig.gz
 
     track wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
     release alpha
@@ -17112,16 +17112,16 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya.wig.gz
 
-    track wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya
+    track wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel hESC cyto A+ -S1
-    longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in H1-hESC cytosol)
-    subGroups view=1-MinusRawSignal cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
+    shortLabel hESC cell A+ -S1
+    longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in H1-hESC cell)
+    subGroups view=1-MinusRawSignal cellType=H1-hESC localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
     minLimit 0
     maxLimit 292914
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya fileName=wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya.wig.gz
 
     track wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
     release alpha
