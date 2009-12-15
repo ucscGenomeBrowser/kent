@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.67 2009/12/12 04:45:10 hartera Exp $";
+#	"$Id: hg19.txt,v 1.68 2009/12/15 18:48:27 hartera Exp $";
 
 #############################################################################
 
@@ -7273,6 +7273,9 @@ see doc/builds.txt for specific details.
 # GUIGO'S LAB AT CRG. (E-MAIL: thomas.derrien@crg.es). Data received on
 # 09/14/09. 
 # (hartera, 2009-09-28, DONE) 
+# 2009-12-14. Set cdsStart = cdsEnd = 0. Moved track data directory to 
+# /hive/data/genomes/hg18/bed.
+
    mkdir /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
 
@@ -7334,6 +7337,20 @@ done
    # Took about 2 hours to load the tables.
    # Copy trackDb entry in hg18 trackDb.ra to
    # ccds/trunk/gencode/browser/trackDb/human/hg19/trackDb.ra
+
+   # 2009-12-14, Need to change cdsStart = cdsEnd = 0 in the tables as this
+   # data should have no CDS defined. Currently cdsStart = cdsEnd = txEnd. 
+   cd /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
+   hgsql -Ne 'show tables like "burge%";' hg19 > burgeTables
+   foreach t (`cat burgeTables`)
+      echo $t
+      hgsql -e "update $t set cdsStart = 0;" hg19
+      hgsql -e "update $t set cdsEnd = 0;" hg19
+   end
+   # Then move data to directory in hg19 genome bed directory
+   cd /hive/data/genomes/hg19/bed
+   mv /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign ./
+
 ##########################################################################
 # BUILD ALLEN BRAIN TRACK (DONE 09/30/09 kent)
 
