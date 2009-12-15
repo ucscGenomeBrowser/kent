@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.391 2009/12/12 04:39:22 hartera Exp $
+# $Id: hg18.txt,v 1.392 2009/12/15 18:48:11 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.391 2009/12/12 04:39:22 hartera Exp $
+# $Id: hg18.txt,v 1.392 2009/12/15 18:48:11 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28897,6 +28897,9 @@ see doc/builds.txt for specific details.
 # BURGE	LAB DATA MAPPED WITH GEMMAPPER. PROVIDED BY THOMAS DERRIEN FROM RODERIC
 # GUIGO'S LAB AT CRG. (E-MAIL: thomas.derrien@crg.es)
 # (hartera, 2009-09-13 - 2009-09-16, DONE) 
+# 2009-12-14. Set cdsStart = cdsEnd = 0. Moved track data directory to 
+# /hive/data/genomes/hg18/bed.
+
    mkdir /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
 
@@ -28956,6 +28959,19 @@ done
    # Added a trackDb entry in 
    # ccds/trunk/gencode/browser/trackDb/human/hg18/trackDb.ra
 
+   # 2009-12-14, Need to change cdsStart = cdsEnd = 0 in the table as this
+   # data should have no CDS defined. Currently cdsStart = cdsEnd = txEnd. 
+   cd /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
+   hgsql -Ne 'show tables like "burge%";' hg18 > burgeTables
+   foreach t (`cat burgeTables`)
+      echo $t
+      hgsql -e "update $t set cdsStart = 0;" hg18
+      hgsql -e "update $t set cdsEnd = 0;" hg18
+   end
+   # Then move data to directory in hg18 genome bed directory
+   cd /hive/data/genomes/hg18/bed
+   mv /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign ./
+  
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
