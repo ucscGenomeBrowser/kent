@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.31 2009/12/09 19:33:31 braney Exp $";
-static char *version = "$Revision: 1.31 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.32 2009/12/15 22:59:06 tdreszer Exp $";
+static char *version = "$Revision: 1.32 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -20,7 +20,6 @@ enum bedType {BED_GRAPH = 0, BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK};
 int maxErrors;
 boolean colorSpace;
 boolean zeroSizeOk;
-boolean chrMSizeOk;
 boolean printOkLines;
 boolean printFailLines;
 boolean mmPerPair;
@@ -104,7 +103,6 @@ static struct optionSpec options[] = {
    {"maxErrors", OPTION_INT},
    {"colorSpace", OPTION_BOOLEAN},
    {"zeroSizeOk", OPTION_BOOLEAN},
-   {"chrMSizeOk", OPTION_BOOLEAN},
    {"printOkLines", OPTION_BOOLEAN},
    {"printFailLines", OPTION_BOOLEAN},
    {"genome", OPTION_STRING},
@@ -444,7 +442,7 @@ boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, c
 // Return TRUE if start and end are both >= 0,
 // and if zeroSizeOk then start <= end
 //        otherwise  then start < end
-// Also check end <= chromSize (as a special case, ignore chrM end if chrMSizeOk)
+// Also check end <= chromSize (special case circular chrM start <= chromSize)
 // start and end values are returned in sVal and eVal
 // Othewise print warning and return FALSE
 {
@@ -457,11 +455,11 @@ if (   !checkUnsigned(file, line, row, start, &s, "chromStart")
 *eVal = e;
 if (chromSize > 0)
     {
-    if (e > chromSize && !(chrMSizeOk && sameString(chrom, "chrM")))
+    if (e > chromSize && (differentString(chrom, "chrM") || s > chromSize)) // passes test if end < chromSize or chrM and start < chromSize
 	{
-	warn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", file, line, e, chrom, chromSize, row);
-	return FALSE;
-	}
+        warn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", file, line, e, chrom, chromSize, row);
+        return FALSE;
+        }
     else
 	verbose(2,"[%s %3d] end <= chromSize (%u <= %u)\n", __func__, __LINE__, e, chromSize);
     }
@@ -1093,7 +1091,6 @@ if (strlen(type) == 0)
     errAbort("please specify type");
 maxErrors      = optionInt("maxErrors", MAX_ERRORS);
 zeroSizeOk     = optionExists("zeroSizeOk");
-chrMSizeOk     = optionExists("chrMSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
 genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) : NULL;
