@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.207 2009/12/09 19:58:17 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.208 2009/12/15 20:25:31 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -162,24 +162,14 @@ our %validators = (
     labVersion => \&validateNoValidation,
     softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
-    cell => \&validateCellLine,
-    gene => \&validateGeneType,
-    promoter => \&validatePromoter,
-    antibody => \&validateAntibody,
-    rnaExtract => \&validateRnaExtract,
-    localization => \&validateLocalization,
-    mapAlgorithm => \&validateMapAlgorithm,
-    ripAntibody => \&validateRipAntibody,
-    ripTgtProtein => \&validateRipTgtProtein,
-    fragSize => \&validateFragSize,
-    readType => \&validateReadType,
-    freezeDate => \&validateFreezeDate,
-    replicate => \&validateReplicate,
-    species => \&validateSpecies,
+    replicate => \&validateNoValidation,
     fragLength => \&validateNoValidation,
-    treatment => \&validateNoValidation,
-    protocol => \&validateNoValidation,
-    restrictionEnzyme => \&validateNoValidation,
+    cell => \&validateControlledVocabOrControl,
+    antibody => \&validateControlledVocabOrControl,
+    ripAntibody => \&validateControlledVocabOrControl,
+    treatment => \&validateControlledVocabOrControl,
+    protocol => \&validateControlledVocabOrControl,
+    default => \&validateControlledVocab,
     );
 
 # standard validators (required or optional for all projects)
@@ -187,7 +177,7 @@ our %validators = (
 sub validateFiles {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
-    my ($files, $track, $daf) = @_;
+    my ($files, $type, $track, $daf) = @_;
     my @newFiles;
     my @errors;
     my $regex = "\`\|\\\|\|\"\|\'";
@@ -249,81 +239,21 @@ sub validateNoValidation {
 
 # project-specific validators
 
-sub validateCellLine {
-    my ($val) = @_;
-    return defined($terms{'Cell Line'}{$val} || $terms{'control'}{$val}) ? () : ("Cell line \'$val\' is not known");
-}
-
-sub validateRnaExtract {
-    my ($val) = @_;
-    return defined($terms{'rnaExtract'}{$val}) ? () : ("rnaExtract \'$val\' is not known");
-}
-
-sub validateLocalization {
-    my ($val) = @_;
-    return defined($terms{'localization'}{$val}) ? () : ("localization \'$val\' is not known");
-}
-
-sub validateMapAlgorithm {
-    my ($val) = @_;
-    return defined($terms{'mapAlgorithm'}{$val}) ? () : ("mapAlgorithm \'$val\' is not known");
-}
-
-sub validateRipAntibody {
-    my ($val) = @_;
-    # TODO: Remove Encode::isControlInput after testing
-    # return defined(lc($val) eq 'input' || lc($val) eq 'control' || $terms{'ripAntibody'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
-    return defined($terms{'ripAntibody'}{$val} || $terms{'control'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
-}
-
-sub validateRipTgtProtein {
-    my ($val) = @_;
-    return defined($terms{'ripTgtProtein'}{$val}) ? () : ("ripTgtProtein \'$val\' is not known");
-}
-
-sub validateFragSize {
-    my ($val) = @_;
-    return defined($terms{'fragSize'}{$val}) ? () : ("fragSize \'$val\' is not known");
-}
-
-sub validateReadType {
-    my ($val) = @_;
-    return defined($terms{'readType'}{$val}) ? () : ("readType \'$val\' is not known");
-}
-
-sub validateGeneType {
-    my ($val) = @_;
-    return defined($terms{'Gene Type'}{$val}) ? () : ("Gene type \'$val\' is not known");
-}
-
-sub validatePromoter {
-    my ($val) = @_;
-    return defined($terms{'promoter'}{$val}) ? () : ("promoter \'$val\' is not known");
-}
-
-sub validateAntibody {
-    my ($val) = @_;
-    if(defined($terms{'Antibody'}{$val}) || defined($terms{'control'}{$val})) {
-        return ();
-    } else {
-        return ("Antibody \'$val\' is not known");
+sub validateControlledVocabOrControl {
+    my ($val, $type) = @_;
+    if($type eq 'cell') {
+        $type = 'Cell Line';
+    } elsif ($type eq 'antibody') {
+        $type = 'Antibody';
     }
+    return defined($terms{$type}{$val} || $terms{'control'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
-sub validateFreezeDate {
-    my ($val) = @_;
-    return defined($terms{'freezeDate'}{$val}) ? () : ("freezeDate \'$val\' is not known");
+sub validateControlledVocab {
+    my ($val, $type) = @_;
+    return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
-sub validateReplicate {
-    return ();
-}
-
-
-sub validateSpecies {
-    my ($val) = @_;
-    return defined($terms{'species'}{$val}) ? () : ("species \'$val\' is not known");
-}
 ############################################################################
 # Format checkers - check file format for given types; extend when adding new
 # data formats
@@ -996,9 +926,9 @@ sub validateDdfField {
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        return $validators{$type}->($val, $track, $daf);
+        return $validators{$type}->($val, $type, $track, $daf);
     } else {
-        die "Validator for type '$type' is missing";
+        return $validators{'default'}->($val, $type, $track, $daf); # Considers the term controlled vocab
     }
 }
 
@@ -1755,12 +1685,23 @@ foreach my $ddfLine (@ddfLines) {
     if (@variables) {
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
-            my $val = $hash{$var};
+            my $cvTypeVar = $var;
+            if ($var eq "antibody") {
+                $cvTypeVar = "Antibody";
+            } elsif ($var eq "cell") {
+                $cvTypeVar = "Cell Line";
+            }
+            if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
+                $cvTypeVar = "control";
+            }
+            my $val = $terms{$cvTypeVar}->{$hash{$var}}->{'tag'};
             $val = ucfirst(lc($val));
-            # trailing + => Plus, - => Neg (e.g. H9ES-AFP+)
-            $val =~ s/\+$/Pos/;
-            $val =~ s/\-$/Neg/;
-            $tableName = $tableName . $val;
+            if($val ne 'None') {  # Special control term does not show up in the name!
+                # trailing + => Plus, - => Neg (e.g. H9ES-AFP+)
+                $val =~ s/\+$/Pos/;
+                $val =~ s/\-$/Neg/;
+                $tableName = $tableName . $val;
+            }
         }
 
         my $shortSuffix = "";
@@ -1813,21 +1754,26 @@ foreach my $ddfLine (@ddfLines) {
         if($longSuffix) {
             $longLabel .= " ($longSuffix)";
         }
-    	# make the "subGroups" setting from all variables
-	   for my $var (sort keys %hash) {
+        # make the "subGroups" setting from all variables
+        for my $var (sort keys %hash) {
             # The var name is over-ridden for antibody and cell, for historical reasons
             my $groupVar = $var;
             my $cvTypeVar = $groupVar;
             # handle inconsistent naming for antibody & cell type
-	    if ($var eq "antibody") {
+            if ($var eq "antibody") {
                 $groupVar = "factor";
                 $cvTypeVar = "Antibody";
-            }
-	    if ($var eq "cell") {
+            } elsif ($var eq "cell") {
                 $groupVar = "cellType";
                 $cvTypeVar = "Cell Line";
             }
+            if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
+                $cvTypeVar = "control";
+            }
             $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
+        }
+        if(defined($replicate) && ($daf->{lab} eq "HudsonAlpha" || $daf->{lab} eq "Uw") || $daf->{lab} eq "Gis") {
+            $subGroups .= " rep=rep$replicate"; # UGLY special casing
         }
     }
     #if($Encode::dafVersion gt "1.0") {
