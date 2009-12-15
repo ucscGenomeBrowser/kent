@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.32 2009/12/15 22:59:06 tdreszer Exp $";
-static char *version = "$Revision: 1.32 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.33 2009/12/15 23:50:33 tdreszer Exp $";
+static char *version = "$Revision: 1.33 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -579,6 +579,7 @@ static struct dnaSeq *cacheSeq = NULL;
 static char cacheChrom[1024];
 static char bigArr[100 * 1024]; // 100K limit on tagAlign seqLen
 struct dnaSeq ourSeq;
+boolean chrMSizeAjustment=FALSE;
 
 if (!genome)
     return TRUE; // only check if 2bit file specified
@@ -586,6 +587,16 @@ if (line % mmCheckOneInN != 0)
     return TRUE; // dont check if this is not one in N
 if (!isSort)
     {
+    //unsigned end = chromEnd;
+    if(sameString(chrom,"chrM"))
+        {
+        unsigned size =  twoBitSeqSize(genome, chrom);
+        if( chromEnd>size)
+            {
+            chrMSizeAjustment=TRUE;
+            chromEnd=size;
+            }
+        }
     g = twoBitReadSeqFragLower(genome, chrom, chromStart, chromEnd);
     }
 else
@@ -612,11 +623,11 @@ else
 if (strand == '-')
     reverseComplement(g->dna, g->size);
 
-if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
+if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
-    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d)",
-         file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
-	 chrom, chromStart, chromEnd);
+    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+        file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
+        chrom, chromStart, chromEnd, strand);
     return FALSE;
     }
 
