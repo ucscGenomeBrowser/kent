@@ -2740,7 +2740,7 @@ searchName snpArrayIlluminaHuman660W_Quad
 searchTable snpArrayIlluminaHuman660W_Quad
 searchType bed
 searchMethod exact
-termRegex ((rs|SNP|GA|cnvi|VG|[0-9])[0-9]+)
+termRegex ((rs|MitoA|MitoC|MitoG|MitoT|cnvi|pgxUn|hCV|[0-9])[0-9]+)
 searchPriority 14
 padding 250
 semiShortCircuit 1
@@ -2758,7 +2758,7 @@ searchName snpArrayIlluminaHumanOmni1_Quad
 searchTable snpArrayIlluminaHumanOmni1_Quad
 searchType bed
 searchMethod exact
-termRegex ((rs|SNP|GA|cnvi|VG|[0-9])[0-9]+)
+termRegex ((rs|SNP|GA|JK_SNP|LE_SNP|LW_SNP|HPA#_|MNS_S|ABO_SNP|DI_SNP|FY_SNP|MitoA|MitoC|MitoG|MitoT|cnvi|pgxUn|hCV|VG|VGXS|[0-9])[0-9]+)
 searchPriority 14
 padding 250
 semiShortCircuit 1
@@ -2767,7 +2767,7 @@ searchName snpArrayIlluminaHumanCytoSNP_12
 searchTable snpArrayIlluminaHumanCytoSNP_12
 searchType bed
 searchMethod exact
-termRegex ((rs|SNP|GA|cnvi|VG|[0-9])[0-9]+)
+termRegex ((rs|cnvi)[0-9]+)
 searchPriority 14
 padding 250
 semiShortCircuit 1
