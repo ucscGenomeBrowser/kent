@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.52 2009/12/04 23:34:37 braney Exp $
+# $Id: Encode.pm,v 1.53 2009/12/15 18:49:34 tdreszer Exp $
 
 package Encode;
 
@@ -202,7 +202,9 @@ sub getControlledVocab
     my %termRa = RAFile::readRaFile("$configPath/$vocabConfigFile", "term");
     foreach my $term (keys %termRa) {
         my $type = $termRa{$term}->{type};
-        $terms{$type}->{$term} = $termRa{$term};
+        if(defined($type)) {
+            $terms{$type}->{$term} = $termRa{$term};
+        }
     }
     return %terms;
 }
