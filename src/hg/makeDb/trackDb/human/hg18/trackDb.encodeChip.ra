@@ -1,14 +1,5 @@
 # ENCODE Chromatin Immunoprecipitation track group
 
-# Affy supertrack
-        track encodeAffyChipSuper
-        superTrack on
-        shortLabel Affy ChIP
-        longLabel Affymetrix ChIP-chip
-        group encodeChip
-        priority 43.0
-        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-
 #track encodeGisChipPetAll
 #compositeTrack on
 #shortLabel GIS ChIP-PET
@@ -695,15 +686,6 @@ origAssembly hg17
     priority 28
     color 10,10,130
 
-# Stanford supertrack
-
-        track encodeStanfordChipSuper
-        superTrack on
-        shortLabel Stanf ChIP
-        longLabel Stanford ChIP-chip
-        group encodeChip
-        priority 55.0
-        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 # Davis supertrack
 
