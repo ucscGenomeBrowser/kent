@@ -10,6 +10,8 @@
 	chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 # other entries for this supertrack are up-level
+# This one left to work around hgTrackDb bug where supertrack disappears
+# in strict mode if it has no children here.
 track encodeAffyChIpHl60SitesStrict
 superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict Sites
