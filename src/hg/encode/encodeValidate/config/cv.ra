@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.157 2009/12/15 00:10:16 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.158 2009/12/15 22:19:53 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -676,6 +676,34 @@ termId BTO:0000059 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
 tier 3
 protocol HRE_Stam_protocol.pdf
+
+term HSMM
+tag HSMM
+type Cell Line
+organism Human
+description Normal Human Skeletal Muscle Myoblasts
+vendorName Lonza
+vendorId CC-2580
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
+karyotype normal
+termId BTO:0000256 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
+tier 3
+protocol HSMM_Bernstein_protocol.pdf
+
+term HSMMtube
+tag HSMMt
+type Cell Line
+organism Human
+description Normal Human Skeletal Muscle Myotubes
+vendorName Lonza
+vendorId CC-2580
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
+karyotype normal
+termId BTO:0000256 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
+tier 3
+protocol HSMMtube_Bernstein_protocol.pdf
 
 term HTB-11
 tag HTB11
@@ -2495,16 +2523,6 @@ tag Prednis
 description 1h,100nM Prednisolone (Myers)
 type treatment
 
-term PCR1x
-tag PCR1x
-description 1-cycle of PCR (Myers)
-type protocol
-
-term PCR2x
-tag PCR2x
-description 2-cycles of PCR (Myers)
-type protocol
-
 term TNFa
 tag TNFa
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
@@ -2514,6 +2532,17 @@ term vehicle
 tag vehicle
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
+
+### Protocols
+term PCR1x
+tag PCR1x
+description 1-cycle of PCR (Myers)
+type protocol
+
+term PCR2x
+tag PCR2x
+description 2-cycles of PCR (Myers)
+type protocol
 
 
 ### restrictionEnzyme
