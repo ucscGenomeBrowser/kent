@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.12 2009/12/16 09:10:00 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.13 2009/12/16 19:33:11 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2000,6 +2000,7 @@ for (ix = 0,dimensions->count=0; ix < cnt; ix++)
     }
 return dimensions;
 }
+
 static void dimensionsFree(dimensions_t **dimensions)
 /* frees any previously obtained dividers setting */
 {
@@ -3050,7 +3051,8 @@ if(tdbIsComposite(tdb))
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
-/* Show checkboxes for subtracks. */
+/* Display list of subtracks and descriptions with checkboxes to control visibility and possibly other
+ * nice things including links to schema and metadata and a release date. */
 {
 struct trackDb *subtrack;
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
@@ -5183,6 +5185,16 @@ if(count>0)
 return count;
 }
 
+static void dumpDimension(members_t *dimension, char *name, FILE *f)
+/* Dump out information on dimension. */
+{
+int count = dimension->count;
+fprintf(f, "%s: count=%d tag=%s title=%s setting=%s<BR>\n", name, count, dimension->tag, dimension->title, dimension->setting);
+int i;
+for (i=0; i<count; ++i)
+    fprintf(f, "%s=%s ", dimension->names[i], dimension->values[i]);
+fprintf(f, "<BR>\n");
+}
 
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
@@ -5198,6 +5210,9 @@ if(dims == NULL)
 int ixX,ixY;
 members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
 members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
+uglyf("<BR>dimensionX=%p, dimensionY=%p<BR>\n", dimensionX, dimensionY);
+dumpDimension(dimensionX, "dimensionX", uglyOut);
+dumpDimension(dimensionY, "dimensionY", uglyOut);
 if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
 // Get list of leaf subtracks to work with
