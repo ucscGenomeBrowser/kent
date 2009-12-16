@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.13 2009/12/16 19:33:11 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.14 2009/12/16 20:13:02 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1801,7 +1801,7 @@ cgiMakeDropList(var, acemblyOptions, ArraySize(acemblyOptions),
 	curVal);
 }
 
-boolean parseAssignment(char *words, char **name, char **value)
+static boolean parseAssignment(char *words, char **name, char **value)
 /* parse <name>=<value>, destroying input words in the process */
 {
 char *p;
@@ -5185,6 +5185,7 @@ if(count>0)
 return count;
 }
 
+#ifdef DEBUG
 static void dumpDimension(members_t *dimension, char *name, FILE *f)
 /* Dump out information on dimension. */
 {
@@ -5195,6 +5196,7 @@ for (i=0; i<count; ++i)
     fprintf(f, "%s=%s ", dimension->names[i], dimension->values[i]);
 fprintf(f, "<BR>\n");
 }
+#endif /* DEBUG */
 
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
@@ -5210,9 +5212,6 @@ if(dims == NULL)
 int ixX,ixY;
 members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
 members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
-uglyf("<BR>dimensionX=%p, dimensionY=%p<BR>\n", dimensionX, dimensionY);
-dumpDimension(dimensionX, "dimensionX", uglyOut);
-dumpDimension(dimensionY, "dimensionY", uglyOut);
 if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
 // Get list of leaf subtracks to work with
