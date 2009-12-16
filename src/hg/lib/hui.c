@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.10 2009/12/15 20:48:01 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.11 2009/12/16 08:58:17 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3203,6 +3203,7 @@ else
     puts("</TR></THEAD><TBODY>");
     }
 
+// cgiMakeOnClickButton("matChkBoxesNormalizeAll(); return 1;", "jkTest");
 
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
@@ -4815,8 +4816,8 @@ int ix;
 char varName[SMALLBUF];
 char classes[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.showCfg' value='%s'></B>\n"
-#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (tbl),(tbl),(tbl),(tbl),(title),(title),(tbl),((open)?"on":"off"))
+#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -4840,7 +4841,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
 	    {
 	    if(firstOpened == -1)
 		{
-		safef(varName, sizeof(varName), "%s.showCfg", view->tableName);
+		safef(varName, sizeof(varName), "%s.%s.showCfg", parentTdb->tableName, viewName);
 		if(cartUsualBoolean(cart,varName,FALSE))
 		    firstOpened = ix;
 		}
@@ -4855,22 +4856,23 @@ puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     struct trackDb *view = matchedSubtracks[ix];
+    char *viewName = membersOfView->names[ix];
     if (view != NULL)
 	{
 	printf("<TD>");
 	if(configurable[ix] != cfgNone)
 	    {
-	    MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],view->tableName,(firstOpened == ix));
+	    MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,(firstOpened == ix));
 	    }
 	else
 	    printf("<B>%s</B>\n",membersOfView->values[ix]);
 	puts("</TD>");
 
-	safef(varName, sizeof(varName), "%s.vis", view->tableName);
+	safef(varName, sizeof(varName), "%s.%s.vis", parentTdb->tableName, viewName);
 	enum trackVisibility tv =
-	    hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
+	    hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
 
-	safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
+	safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", viewName);
 
 	printf("<TD>");
 	safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->names[ix]);
@@ -4888,7 +4890,8 @@ if(makeCfgRows)
 	struct trackDb *view = matchedSubtracks[ix];
 	if (view != NULL)
 	    {
-	    printf("<TR id=\"tr_cfg_%s\"", view->tableName);
+	    char *viewName = membersOfView->names[ix];
+	    printf("<TR id=\"tr_cfg_%s\"", viewName);
 	    if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
 	    || (firstOpened != -1 && firstOpened != ix))
 		printf(" style=\"display:none\"");

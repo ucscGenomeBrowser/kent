@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.44.2.1 2009/12/15 18:15:24 kent Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.44.2.2 2009/12/16 08:57:56 kent Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -545,7 +545,7 @@ function showConfigControls(name)
     $( trs ).each( function (i) {
         if( this.id == 'tr_cfg_'+name && this.style.display == 'none') {
             $( this ).css('display','');
-            $("input[name$='"+name+".showCfg']").val("on");
+	    $("input[name$='."+name+".showCfg']").val("on");
         }
         else if( this.style.display == '') {
             $( this ).css('display','none');
