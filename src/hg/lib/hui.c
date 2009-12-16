@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.11 2009/12/16 08:58:17 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.12 2009/12/16 09:10:00 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -118,13 +118,13 @@ if(metadata != NULL)
         if(sameString(metadata->tags[ix],"fileName"))
             {
             printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
-            makeNamedDownloadsLink(tdb->parent != NULL? tdb->parent :tdb ,metadata->values[ix]);
+            makeNamedDownloadsLink(findTopLevelSelfOrParent(tdb), metadata->values[ix]);
             printf("</td></tr>");
             }
         else
             if(!sameString(metadata->tags[ix],"subId")
                 && !sameString(metadata->tags[ix],"composite"))
-            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
+		printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
         }
     printf("</table>--></div>");
     metadataFree(&metadata);
