@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.1 2009/12/12 08:28:26 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.2 2009/12/16 21:14:39 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2571,10 +2571,8 @@ trackDbPrintOrigAssembly(tdb, database);
 static char *getHtmlFromSelfOrParent(struct trackDb *tdb)
 /* Get html from self or from parent if not in self. */
 {
-uglyf("getHtmlFromSelfOrParent %s (html=%p) parent %p<BR>\n", tdb->tableName, tdb->html, tdb->parent);
 for (;tdb != NULL; tdb = tdb->parent)
     {
-uglyf("looping up  %s (html=%p) parent %p<BR>\n", tdb->tableName, tdb->html, tdb->parent);
     if (tdb->html != NULL && tdb->html[0] != 0)
         return tdb->html;
     }
