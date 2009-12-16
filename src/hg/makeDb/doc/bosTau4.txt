@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.20 2009/12/16 23:02:05 galt Exp $"
+#	"$Id: bosTau4.txt,v 1.21 2009/12/16 23:43:36 galt Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1817,11 +1817,14 @@ see doc/builds.txt for specific details.
 
 #############################################################################
 # LIFTOVER TO bosTauMd3 (DONE - 2009-12-16 - galt)
+    ssh hgwdev
     cd /hive/data/genomes/bosTau4
     ln -s bosTau4.11.ooc 11.ooc
     time nice +19 doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
          bosTau4 bosTauMd3 >& doLiftOverToBosTauMd3.log
 
-
+    pushd /usr/local/apache/htdocs/goldenPath/bosTau4/liftOver/
+    md5sum bosTau4ToBosTauMd3.over.chain.gz >> md5sum.txt
+    popd
 
