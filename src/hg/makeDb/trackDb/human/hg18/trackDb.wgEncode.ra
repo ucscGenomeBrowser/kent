@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.723 2009/12/15 20:53:51 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.724 2009/12/16 16:35:06 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15685,7 +15685,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel GM12 cyto A+ AL
+    shortLabel GM12 cyto tot AL
     color 153,38,0
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15701,7 +15701,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel GM12 cyto A+ TF
+    shortLabel GM12 cyto tot TF
     color 153,38,0
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 cytosol)
     subGroups view=1-Transfrags cellType=GM12878 localization=20-cytosol
@@ -15711,7 +15711,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel GM12 nucl A+ AL
+    shortLabel GM12 nucl tot AL
     color 153,38,0
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15727,7 +15727,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel GM12 nucl A+ TF
+    shortLabel GM12 nucl tot TF
     color 153,38,0
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 nucleus)
     subGroups view=1-Transfrags cellType=GM12878 localization=30-nucleus
@@ -15737,7 +15737,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 chrm A+ AL
+    shortLabel K562 chrm tot AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15753,7 +15753,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 chrm A+ TF
+    shortLabel K562 chrm tot TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 chromatin)
     subGroups view=1-Transfrags cellType=K562 localization=50-chromatin
@@ -15763,7 +15763,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel K562 cyto A+ AL
+    shortLabel K562 cyto tot AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15779,7 +15779,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel K562 cyto A+ TF
+    shortLabel K562 cyto tot TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 cytosol)
     subGroups view=1-Transfrags cellType=K562 localization=20-cytosol
@@ -15789,7 +15789,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nucl A+ AL
+    shortLabel K562 nucl tot AL
     longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleus)
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
@@ -15805,7 +15805,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nucl A+ TF
+    shortLabel K562 nucl tot TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleus)
     subGroups view=1-Transfrags cellType=K562 localization=30-nucleus
@@ -15815,7 +15815,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nlos A+ AL
+    shortLabel K562 nlos tot AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15831,7 +15831,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nlos A+ TF
+    shortLabel K562 nlos tot TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleolus)
     subGroups view=1-Transfrags cellType=K562 localization=60-nucleolus
@@ -15841,7 +15841,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nplm A+ AL
+    shortLabel K562 nplm tot AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15857,7 +15857,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nplm A+ TF
+    shortLabel K562 nplm tot TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleoplasm)
     subGroups view=1-Transfrags cellType=K562 localization=40-nucleoplasm
@@ -15867,7 +15867,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 psom A+ AL
+    shortLabel K562 psom tot AL
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
     baseColorTickColor lighterShade
@@ -15883,7 +15883,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 psom A+ TF
+    shortLabel K562 psom tot TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 polysome)
     subGroups view=1-Transfrags cellType=K562 localization=10-polysome
@@ -15893,7 +15893,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel pros cell A+ AL
+    shortLabel pros cell tot AL
     color 0,102,136
     colorByStrand 46,0,184 238,85,34
     baseColorDefault diffBases
@@ -15909,7 +15909,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel pros cell A+ TF
+    shortLabel pros cell tot TF
     color 0,102,136
     longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in prostate cell)
     subGroups view=1-Transfrags cellType=prostate localization=0-cell
@@ -15919,7 +15919,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel K562 cyto A+ +S
+    shortLabel K562 cyto tot +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 cytosol)
     subGroups view=2-PlusRawSignal cellType=K562 localization=20-cytosol
@@ -15933,7 +15933,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel K562 cyto A+ -S
+    shortLabel K562 cyto tot -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 cytosol)
     subGroups view=3-MinusRawSignal cellType=K562 localization=20-cytosol
@@ -15947,7 +15947,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 chrm A+ +S
+    shortLabel K562 chrm tot +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 chromatin)
     subGroups view=2-PlusRawSignal cellType=K562 localization=50-chromatin
@@ -15961,7 +15961,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 chrm A+ -S
+    shortLabel K562 chrm tot -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 chromatin)
     subGroups view=3-MinusRawSignal cellType=K562 localization=50-chromatin
@@ -15975,7 +15975,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 psom A+ +S
+    shortLabel K562 psom tot +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 polysome)
     subGroups view=2-PlusRawSignal cellType=K562 localization=10-polysome
@@ -15989,7 +15989,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 psom A+ -S
+    shortLabel K562 psom tot -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 polysome)
     subGroups view=3-MinusRawSignal cellType=K562 localization=10-polysome
@@ -16003,7 +16003,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel GM12 cyto A+ +S
+    shortLabel GM12 cyto tot +S
     color 153,38,0
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in GM12878 cytosol)
     subGroups view=2-PlusRawSignal cellType=GM12878 localization=20-cytosol
@@ -16017,7 +16017,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel GM12 cyto A+ -S
+    shortLabel GM12 cyto tot -S
     color 153,38,0
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in GM12878 cytosol)
     subGroups view=3-MinusRawSignal cellType=GM12878 localization=20-cytosol
@@ -16031,7 +16031,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nplm A+ +S
+    shortLabel K562 nplm tot +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleoplasm)
     subGroups view=2-PlusRawSignal cellType=K562 localization=40-nucleoplasm
@@ -16045,7 +16045,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nplm A+ -S
+    shortLabel K562 nplm tot -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleoplasm)
     subGroups view=3-MinusRawSignal cellType=K562 localization=40-nucleoplasm
@@ -16059,7 +16059,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel pros cell A+ +S
+    shortLabel pros cell tot +S
     color 0,102,136
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in prostate cell)
     subGroups view=2-PlusRawSignal cellType=prostate localization=0-cell
@@ -16073,7 +16073,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq on
-    shortLabel pros cell A+ -S
+    shortLabel pros cell tot -S
     color 0,102,136
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in prostate cell)
     subGroups view=3-MinusRawSignal cellType=prostate localization=0-cell
@@ -16087,7 +16087,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel GM12 nucl A+ +S
+    shortLabel GM12 nucl tot +S
     color 153,38,0
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in GM12878 nucleus)
     subGroups view=2-PlusRawSignal cellType=GM12878 localization=30-nucleus
@@ -16101,7 +16101,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel GM12 nucl A+ -S
+    shortLabel GM12 nucl tot -S
     color 153,38,0
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in GM12878 nucleus)
     subGroups view=3-MinusRawSignal cellType=GM12878 localization=30-nucleus
@@ -16115,7 +16115,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nucl A+ +S
+    shortLabel K562 nucl tot +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleus)
     subGroups view=2-PlusRawSignal cellType=K562 localization=30-nucleus
@@ -16129,7 +16129,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nucl A+ -S
+    shortLabel K562 nucl tot -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleus)
     subGroups view=3-MinusRawSignal cellType=K562 localization=30-nucleus
@@ -16143,7 +16143,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nlos A+ +S
+    shortLabel K562 nlos tot +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleolus)
     subGroups view=2-PlusRawSignal cellType=K562 localization=60-nucleolus
@@ -16157,7 +16157,7 @@ noInherit on
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlShortRnaSeq off
-    shortLabel K562 nlos A+ -S
+    shortLabel K562 nlos tot -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleolus)
     subGroups view=3-MinusRawSignal cellType=K562 localization=60-nucleolus
