@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.6 2009/12/16 20:13:49 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.7 2009/12/16 21:09:08 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3406,7 +3406,7 @@ static void rInheritFields(struct trackDb *tdbList)
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (tdb->parent != NULL)
+    if (tdb->parent != NULL && tdb->parent->subtracks != NULL)
         {
 	subtrackInherit(tdb, tdb->parent);
 	}
@@ -3440,6 +3440,45 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 slReverse(&newList);
 return newList;
 }
+
+static struct trackDb *rFindTrack(int level, struct trackDb *tdbList, char *track)
+/* Look for named track in list or children. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(track, tdb->tableName))
+        return tdb;
+    struct trackDb *matchingChild = rFindTrack(level+1, tdb->subtracks, track);
+    if (matchingChild != NULL)
+        return matchingChild;
+    }
+
+/* Look "to the sky" in parents of root generation well. */
+if (level == 0)
+    {
+    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+	{
+	struct trackDb *p = tdb->parent;
+	if (p != NULL && sameString(track, p->tableName))
+	    return p;
+	}
+    }
+
+return NULL;
+}
+
+#ifdef DEBUG
+static void dumpFlagStatus(struct trackDb *tdbList, char *tableName, char *label)
+/* Look for tdbList for track matching tableName.  Print out info on it starting with label. */
+{
+struct trackDb *tdb = rFindTrack(0, tdbList, tableName);
+if (tdb == NULL)
+     uglyf("%s: nil<BR>\n", label);
+else
+     uglyf("%s: treeNodeType %d, composite? %d, supertrack ? %d<BR>\n", label, tdb->treeNodeType, COMPOSITE_NODE(tdb->treeNodeType), SUPERTRACK_NODE(tdb->treeNodeType));
+}
+#endif /* DEBUG */
 
 struct trackDb *hTrackDb(char *db, char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
@@ -3619,21 +3658,6 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 hFreeConn(&conn);
 }
 
-struct trackDb *rFindTrack(struct trackDb *tdbList, char *track)
-/* Look for named track in list or children. */
-{
-struct trackDb *tdb;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    if (sameString(track, tdb->tableName))
-        return tdb;
-    struct trackDb *matchingChild = rFindTrack(tdb->subtracks, track);
-    if (matchingChild != NULL)
-        return matchingChild;
-    }
-return NULL;
-}
-
 struct trackDb *hTrackDbForTrack(char *db, char *track)
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
@@ -3643,21 +3667,7 @@ struct trackDb *hTrackDbForTrack(char *db, char *track)
 {
 /* Get track list .*/
 struct trackDb *tdbList = hTrackDb(db, NULL);
-
-/* Look first in list and children. */
-struct trackDb *tdb =  rFindTrack(tdbList, track);
-if (tdb != NULL)
-    return tdb;
-
-/* Look in parents as well. */
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    struct trackDb *parent = tdb->parent;
-    if (parent != NULL && sameString(track, parent->tableName))
-	return parent;
-    }
-
-return NULL;
+return rFindTrack(0, tdbList, track);
 }
 
 struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb)
