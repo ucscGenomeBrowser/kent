@@ -107,7 +107,7 @@ A) Untouched Tables:
    wgEncodeBroadChipSeqSignalNhekH3k9me1
    wgEncodeBroadChipSeqSignalNhekH4k20me1
    wgEncodeBroadChipSeqSignalNhekPol2b
-   180 rows in set (0.10 sec)
+   80 rows in set (0.10 sec)
 
 
 A') Untouched Files:
@@ -295,7 +295,7 @@ A') Untouched Files:
    wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
    wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
    wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
-   (180 files)
+   (80 files)
 
 B) Eliminated tables (not replaced):
    wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
@@ -388,6 +388,9 @@ C') Replaced Files:
   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9ac.tagAlign.gz
+  wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1.tagAlign.gz
+  wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1.tagAlign.gz
+  wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2b.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.gz
@@ -432,7 +435,9 @@ C') Replaced Files:
   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9ac.tagAlign.gz
   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1.tagAlign.gz
-  (84 files)
+  wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1.tagAlign.gz
+  wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2b.tagAlign.gz
+  (91 files)
 
 D) Versioned tables: none
 
@@ -467,7 +472,7 @@ D') Versioned files (what is being replaced in parens):
    wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1V2.tagAlign.gz          (wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2V2.tagAlign.gz          (wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3V2.tagAlign.gz          (wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3.tagAlign.gz)
-   wgEncodeBroadChipSeqAlignmentsRep1K562H3k9acV2.tagAlign.gz           (wgEncodeBroadChipSeqAlignmentsRep1K562H3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k9acV2.tagAlign.gz           (wgEncodeBroadChipSeqAlignmentsRep1K562H3k9ac.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1V2.tagAlign.gz          (wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1V2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1K562Pol2bV2.tagAlign.gz            (wgEncodeBroadChipSeqAlignmentsRep1K562Pol2b.tagAlign.gz)
@@ -479,24 +484,27 @@ D') Versioned files (what is being replaced in parens):
    wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1V2.tagAlign.gz  (wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2V2.tagAlign.gz  (wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9acV2.tagAlign.gz   (wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9ac.tagAlign.gz)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control.tagAlign.)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAlign.gz  (wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagAlign.gz (wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAlign.gz    (wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2b.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz       (wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.        (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1.tagAlign)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3.tagAlign)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.          (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.)
-   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign         (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz       (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz      (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz      (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz       (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz       (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz       (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz        (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz      (wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecControl.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcfV2.tagAlign.gz            (wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcf.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27acV2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27ac.tagAlign.gz)
-   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.g         (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3.tagAlign.g)
-   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign           (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3.tagAlign)
-   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.g          (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1.tagAlign.g)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz        (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz        (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2V2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2.tagAlign.gz)
-   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign            (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz          (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9ac.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1V2.tagAlign.gz         (wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1V2.tagAlign.gz        (wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1.tagAlign.gz)
@@ -523,7 +531,9 @@ D') Versioned files (what is being replaced in parens):
    wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3V2.tagAlign.gz  (wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9acV2.tagAlign.gz   (wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9ac.tagAlign.gz)
    wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1V2.tagAlign.gz  (wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1.tagAlign.gz)
-   (85 files)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.tagAlign.gz (wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAlign.gz    (wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2b.tagAlign.gz)
+   (91 files)
 
 E) New Tables
    wgEncodeBroadChipSeqPeaksH1hescCtcf
@@ -1028,7 +1038,7 @@ New
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqSignalNhlfH3k9ac.wig.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
 
-Replaced
+Improved (new but replacing older versions):
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1Gm12878CtcfV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27acV2.tagAlign.gz
@@ -1066,27 +1076,32 @@ Replaced
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteControlV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteCtcfV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27acV2.tagAlign.gz
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27me3V2.tagAlign.g
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k36me3V2.tagAlign.g
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k36me3V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9acV2.tagAlign.gz
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcfV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27acV2.tagAlign.gz
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.g
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.g
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2V2.tagAlign.gz
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1V2.tagAlign.gz
@@ -1106,13 +1121,15 @@ Replaced
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteControlV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteCtcfV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27acV2.tagAlign.gz
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27me3V2.tagAlign.g
-/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k36me3V2.tagAlign.g
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27me3V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k36me3V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me1V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me2V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3V2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9acV2.tagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAlign.gz
 
 
 
