@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.4 2009/12/14 03:40:21 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.5 2009/12/16 21:04:59 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -584,8 +584,6 @@ tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
-    //if(tdb->parent->subtracks || tdb->next == NULL)  // TODO: Currently supertracks Sometimes don't contain their subtracks!
-    //   slAddHead(&tdb->parent->subtracks, tdb);
     }
 freeMem(stInfo);
 }
