@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509.2.2 2009/12/11 17:18:09 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509.2.3 2009/12/16 21:04:03 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2522,8 +2522,8 @@ printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 /* Print link for supertrack */
 if (tdbIsSuperTrackChild(tdb))
     {
-    assert((tdb->parentName));
-    struct trackDb *superTdb = hTrackDbForTrack(database, tdb->parentName);
+    struct trackDb *superTdb = tdb->parent;
+    assert(superTdb != NULL);
     if (superTdb)
         {
         char *encodedMapName = cgiEncode(superTdb->tableName);
@@ -2704,7 +2704,6 @@ char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
     /* configured as a supertrack member in trackDb */
-    tdb->parent = hTrackDbForTrack(database, super);    // TODO: Parent will not point to children
     if (tdb->parent)
         {
         /* the supertrack is also configured, so use supertrack defaults */
