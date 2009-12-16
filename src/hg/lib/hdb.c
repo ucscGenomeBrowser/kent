@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.5 2009/12/14 03:38:26 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.6 2009/12/16 20:13:49 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3641,8 +3641,23 @@ struct trackDb *hTrackDbForTrack(char *db, char *track)
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found. */
 {
+/* Get track list .*/
 struct trackDb *tdbList = hTrackDb(db, NULL);
-return rFindTrack(tdbList, track);
+
+/* Look first in list and children. */
+struct trackDb *tdb =  rFindTrack(tdbList, track);
+if (tdb != NULL)
+    return tdb;
+
+/* Look in parents as well. */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL && sameString(track, parent->tableName))
+	return parent;
+    }
+
+return NULL;
 }
 
 struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb)
