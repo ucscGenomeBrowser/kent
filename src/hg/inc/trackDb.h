@@ -339,5 +339,12 @@ void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *
 int trackDbCountDescendentLeaves(struct trackDb *tdb);
 /* Count the number of leaves in children list and their children. */
 
+struct trackDb *trackDbCompositeParent(struct trackDb *tdb);
+/* Return closest ancestor who is a composite track. */
+
+struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb);
+/* Look for a parent who is a composite track and return that.  Failing that
+ * just return self. */
+
 #endif /* TRACKDB_H */
 
