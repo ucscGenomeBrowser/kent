@@ -388,7 +388,7 @@ searchPriority 50
 searchTable gold
 query select chrom,chromStart,chromEnd,frag from %s where frag = '%s'
 shortCircuit 1
-termRegex [AC][0-9]+(\.[0-9]+)?|(Zv[0-9]+_)?(scaffold|NA|Finished)[0-9]+
+termRegex ([A-C][A-Z][0-9]+(/.[0-9]+)?(_[0-9]+)?)|((Zv[0-9]+_)?(scaffold|NA|Finished)[0-9]+(\.[0-9]+)?)|(NC_[0-9]+(\.[0-9]+)?)
 searchPriority 8
 
 searchTable affyZebrafish
