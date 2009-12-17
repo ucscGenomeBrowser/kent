@@ -1,5 +1,4 @@
 track knownGene
-#replaces record knownGene in parent dir missing/extra idXref,hgGene,hgsid,directUrl,baseColorUseCds,baseColorDefault,defaultLinkedTables
 shortLabel Known Genes
 longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
 group genes
@@ -9,7 +8,6 @@ color 12,12,120
 type genePred refPep refMrna
 
 track vegaGene
-#replaces record vegaGene in parent dir missing/extra release
 shortLabel Vega Genes
 longLabel Vega Annotations from Sanger, Genoscope
 group genes
@@ -21,7 +19,6 @@ type genePred vegaPep
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
 track acembly
-#replaces record acembly in parent dir missing/extra autoTranslate,itemClassTbl,geneClasses,gClass_main,gClass_putative,urlLabel
 shortLabel Acembly Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
@@ -32,7 +29,6 @@ type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg13&l=$$
 
 track vegaPseudoGene
-#replaces record vegaPseudoGene in parent dir missing/extra release
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
@@ -43,24 +39,66 @@ color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track slamMouse override
+track slamMouse
+shortLabel Slam Mouse
 longLabel Slam Gene Predictions Using Human/Mouse (Feb. 2002/mm2) Homology
+group genes
+priority 45.5
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred 
 
-track slamRat override
+track slamRat
+shortLabel Slam Rat
 longLabel Slam Gene Predictions Using Human/Rat (Nov. 2002/rn1) Homology
+group genes
+priority 45.6
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred 
 
-track sgpGene override
+track sgpGene
+shortLabel SGP Genes
 longLabel SGP Gene Predictions Using Human/Mouse (Feb. 2002/mm2) Homology
+group genes
+priority 47
+visibility hide
+color 0,90,100
+type genePred sgpPep
 
-track slamNonCodingMouse override
+track slamNonCodingMouse
+shortLabel Slam Non-Coding Mouse
 longLabel Slam Predictions of Human/Mouse (Feb. 2002/mm2) Conserved Non-Coding Regions
+group compGeno
+priority 180
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 .
 
-track slamNonCodingRat override
+track slamNonCodingRat
+shortLabel Slam Non-Coding Rat
 longLabel Slam Predictions of Human/Rat (Nov. 2002/rn1) Conserved Non-Coding Regions
+group compGeno
+priority 170
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 .
 
-track humMusL override
+track humMusL
+shortLabel Mouse Cons
+longLabel Human/Mouse Evolutionary Conservation Score (std units)
+group compGeno
+color 175,150,128
+altColor 175,150,128
 priority 181
 visibility full
+type sample 0 8
 
 track syntenyMouse
 shortLabel Mouse Synteny
@@ -73,9 +111,15 @@ altColor 255,240,200
 type bed 4 .
 otherDb mm3
 
-track syntenyRat override
+track syntenyRat
+shortLabel Rat Synteny
 longLabel Rat (Nov. 2002/rn1) Synteny Using Blastz Single Coverage (100k window)
+group compGeno
 priority 175
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 +
 otherDb rn1
 
 track blastzMm
@@ -244,8 +288,14 @@ type psl xeno mm2
 otherDb mm2
 colorChromDefault off
 
-track uniGene_2 override
+track uniGene_2
+shortLabel UniGene
 longLabel UniGene Hs 159 Alignments and SAGEmap Info
+group rna
+priority 69
+visibility hide
+spectrum on
+type bed 12 .
 
 track blatChimp
 shortLabel Chimp Blat
@@ -284,7 +334,6 @@ type chain hg15
 otherDb hg15
 
 track bacEndPairs
-#replaces record bacEndPairs in parent dir missing/extra color,altColor
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
 group map

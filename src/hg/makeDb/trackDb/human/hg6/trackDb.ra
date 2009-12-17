@@ -1,5 +1,11 @@
-track stsMap override
+track stsMap
+shortLabel STS Markers
 longLabel STS Markers on Genetic (blue), FISH (green) and Radiation Hybrid (black) Maps
+group map
+priority 4
+visibility dense
+altColor 128,128,255,
+type bed 5 +
 
 track blatMouse
 shortLabel Mouse Blat

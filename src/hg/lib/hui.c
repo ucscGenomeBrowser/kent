@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.15 2009/12/17 00:17:08 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.16 2009/12/17 03:53:38 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1805,17 +1805,21 @@ return TRUE;
 static char *getPrimaryType(char *primarySubtrack, struct trackDb *tdb)
 /* Do not free when done. */
 {
-struct trackDb *subtrack = NULL;
 char *type = NULL;
 if (primarySubtrack)
-    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(tdb->subtracks);
+    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
+	struct trackDb *subtrack = tdbRef->val;
 	if (sameString(subtrack->tableName, primarySubtrack))
 	    {
 	    type = subtrack->type;
 	    break;
 	    }
 	}
+    slFreeList(&tdbRefList);
+    }
 return type;
 }
 
@@ -2928,16 +2932,6 @@ slSort(tdbList, trackDbCmp);
 return cartPriorities;
 }
 
-static int trackDbRefCmp(const void *va, const void *vb)
-/* Do trackDbCmp on list of references as opposed to actual trackDbs. */
-{
-const struct slRef *aRef = *((struct slRef **)va);
-const struct slRef *bRef = *((struct slRef **)vb);
-struct trackDb *a = aRef->val, *b = bRef->val;
-return trackDbCmp(&a, &b);
-}
-
-
 boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefList)
 /* Updates the tdb->priority from cart then sorts the list anew.
    Returns TRUE if priorities obtained from cart */
@@ -3052,9 +3046,7 @@ int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
 boolean dependentCfgsNeedBinding = FALSE;
 
 // Get list of leaf subtracks to work with
-struct slRef *subtrackRefList=NULL, *subtrackRef; 
-trackDbListGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
-slReverse(&subtrackRefList);
+struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 
 // Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
 char **lastDivide = NULL;
@@ -3220,8 +3212,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     if (primarySubtrack)
         {
+// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 8 isPrimary %d, primaryType %s, subtrack->type %s", isPrimary, primaryType, subtrack->type);
         if (isPrimary)
             {
+// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 8a");
             puts("<TR><TD>");
             cgiMakeHiddenBoolean(htmlIdentifier, TRUE);
             puts("[on] ");
@@ -3230,10 +3224,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             }
         else if (hSameTrackDbType(primaryType, subtrack->type))
             {
+// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 8b");
             puts("<TR><TD>");
             cgiMakeCheckBox(htmlIdentifier, checkedCB && enabledCB);
             printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
             }
+// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 9");
         }
     else
         {
@@ -5202,9 +5198,7 @@ members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
 if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
 // Get list of leaf subtracks to work with
-struct slRef *subtrackRefList=NULL, *subtrackRef; 
-trackDbListGetRefsToDescendentLeaves(&subtrackRefList, parentTdb->subtracks);
-slReverse(&subtrackRefList);
+struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 struct trackDb *subtrack;
 
 // use array of char determine all the cells (in X,Y,Z dimensions) that are actually populated
@@ -5519,7 +5513,7 @@ if(trackDbSetting(tdb, "dragAndDrop") != NULL)
 jsIncludeFile("hui.js",NULL);
 
 puts("<P>");
-if (trackDbCountDescendentLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
+if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     return;
@@ -5566,7 +5560,7 @@ else
 
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
-    if (trackDbCountDescendentLeaves(tdb) > 5)
+    if (trackDbCountDescendantLeaves(tdb) > 5)
         {
         cgiMakeButton("Submit", "Submit");
         puts("<P>");

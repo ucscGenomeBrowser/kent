@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.75 2009/07/20 23:33:13 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.75.22.1 2009/12/17 03:53:36 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -384,7 +384,6 @@ struct trackDb *tdb1 = hTrackDbForTrack(database, table);
 struct trackTable *tt1 = trackTableNew(tdb1, table, conn);
 struct dataVector *dataVector1 = dataVectorFetchOneRegion(tt1, region, conn);
 struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb1);
-struct trackDb *sTdb = NULL;
 int numSubtracks = 1;
 char *op = cartString(cart, hgtaSubtrackMergeWigOp);
 boolean requireAll = cartBoolean(cart, hgtaSubtrackMergeRequireAll);
@@ -400,8 +399,11 @@ if (dataVector1 == NULL)
     return NULL;
     }
 
-for (sTdb = cTdb->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(cTdb->subtracks);
+struct slRef *tdbRef;
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
+    struct trackDb *sTdb = tdbRef->val;
     if (isSubtrackMerged(sTdb->tableName) &&
 	! sameString(tdb1->tableName, sTdb->tableName) &&
 	hSameTrackDbType(tdb1->type, sTdb->type))
@@ -432,6 +434,7 @@ for (sTdb = cTdb->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
 	dataVectorFree(&dataVector2);
 	}
     }
+slFreeList(&tdbRefList);
 if (sameString(op, "average"))
     dataVectorNormalize(dataVector1, numSubtracks);
 if (useMinScore)
@@ -642,15 +645,18 @@ if (track != NULL)
     {
     if (!sameString(track->tableName, table) && track->subtracks != NULL)
 	{
-	struct trackDb *tdb = NULL;
-	for (tdb = track->subtracks;  tdb != NULL;  tdb = tdb->next)
+	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
+	struct slRef *tdbRef;
+	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	    {
+	    struct trackDb *tdb = tdbRef->val;
 	    if (sameString(tdb->tableName, table))
 		{
 		track = tdb;
 		break;
 		}
 	    }
+	slFreeList(&tdbRefList);
 	}
     shortLabel = track->shortLabel;
     longLabel = track->longLabel;

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.144 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.144.30.1 2009/12/17 03:53:35 kent Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -793,15 +793,18 @@ if (correlateTrackTableOK(tdb, curTable))
         struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,hgtaCorrelateTrack);
         if (tdbIsComposite(tdb2))
             {
-            struct trackDb *subTdb;
-            for (subTdb=tdb2->subtracks; subTdb != NULL; subTdb=subTdb->next)
+	    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb2->subtracks);
+	    struct slRef *tdbRef;
+	    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
                 {
+		struct trackDb *subTdb = tdbRef->val;
                 if (sameString(table2, subTdb->tableName))
                     {
                     tdb2 = subTdb;
                     break;
                     }
                 }
+	    slFreeList(&tdbRefList);
             }
         cgiMakeButton(hgtaDoCorrelatePage, "calculate");
         cgiMakeButton(hgtaDoClearCorrelate, "clear");

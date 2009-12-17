@@ -1,10 +1,20 @@
-track sgpGene override
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Rat/Human Homology
+group genes
+priority 47
 visibility hide
+color 0,90,100
+type genePred sgpPep
 
-track rgdGene override
+track rgdGene
+shortLabel RGD Genes
 longLabel RGD Curated Genes
+group genes
 priority 50
+visibility dense
 color 0,100,100
+type genePred
 url http://rgd.mcw.edu/tools/query/query.cgi?id=$$
 
 track blastzBestHuman

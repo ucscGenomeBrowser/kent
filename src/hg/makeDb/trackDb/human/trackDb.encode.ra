@@ -21,6 +21,16 @@ type bed 6 +
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
+# supertrack for Gencode
+        track encodeGencodeSuper
+        superTrack on
+        shortLabel Gencode Genes
+        longLabel Gencode Gene Annotation
+        group encodeGenes
+        priority 10.3
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+
 track encodeGencodeGeneMar07
 superTrack encodeGencodeSuper dense
 compositeTrack on
@@ -493,6 +503,16 @@ dataVersion ENCODE June 2005 Freeze
     color 80,20,80
     priority 8
 
+# supertrack for EGASP
+
+        track encodeEgaspSuper
+        superTrack on
+        shortLabel EGASP 
+        longLabel ENCODE Gene Prediction Workshop (EGASP) 
+        group encodeGenes
+        priority 12.0
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 track encodeEgaspUpdate
 superTrack encodeEgaspSuper dense
 compositeTrack on
@@ -953,6 +973,15 @@ useScore 1
 type bed 5 +
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
+
+# Yale RNA supertrack
+        track encodeYaleRnaSuper
+        superTrack on
+        shortLabel Yale RNA
+        longLabel Yale RNA (Neutrophil, Placenta and NB4 cells)
+        group encodeTxLevels
+        priority 28
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeYaleMASPlacRNATransMap
 superTrack encodeYaleRnaSuper dense
@@ -1564,6 +1593,16 @@ type wig 0 62385
     longLabel Affy Ext Trans Signal (51-base window) (Tert-BJ)
     color 0,0,205
     priority 32
+
+# Affy supertrack
+
+        track encodeAffyChipSuper
+        superTrack on
+        shortLabel Affy ChIP
+        longLabel Affymetrix ChIP-chip
+        group encodeChip
+        priority 43.0
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeAffyChIpHl60Pval
 superTrack encodeAffyChipSuper dense
@@ -2648,6 +2687,15 @@ dataVersion ENCODE Oct 2005 Freeze
     color 0,0,200
     priority 14
 
+# UCSD supertrack
+
+        track encodeUcsdChipSuper
+        superTrack on
+        shortLabel LI/UCSD ChIP
+        longLabel Ludwig Institute/UC San Diego ChIP-chip
+        group encodeChip
+        priority 48
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeLIChIP
 superTrack encodeUcsdChipSuper dense
@@ -2865,6 +2913,15 @@ dataVersion ENCODE June 2005 Freeze
     priority 14
     color 109,51,43
 
+# Stanford supertrack
+
+        track encodeStanfordChipSuper
+        superTrack on
+        shortLabel Stanf ChIP
+        longLabel Stanford ChIP-chip
+        group encodeChip
+        priority 55.0
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeStanfordChip
 superTrack encodeStanfordChipSuper dense
@@ -3096,6 +3153,18 @@ dataVersion Mar 2007
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Upstate ChIP)
     priority 12
 
+
+# UT-Austin supertrack
+
+        track encodeUtexChipSuper
+        superTrack on
+        shortLabel UT-Austin ChIP
+        longLabel University of Texas, Austin ChIP-chip and STAGE
+        group encodeChip
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+        visibility hide
+        priority 60
+        origAssembly hg17
 
 track encodeUtexChip
 superTrack encodeUtexChipSuper dense
@@ -3367,6 +3436,16 @@ origAssembly hg17
     windowingFunction mean
     color 0,0,255
     priority 3
+
+# supertrack for UVa
+
+        track encodeUvaDnaRepSuper
+        superTrack on
+        shortLabel UVa DNA Rep
+        longLabel University of Virginia DNA Replication Timing and Origins
+        group encodeChrom
+        priority 64.0
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUvaDnaRep
 superTrack encodeUvaDnaRepSuper dense

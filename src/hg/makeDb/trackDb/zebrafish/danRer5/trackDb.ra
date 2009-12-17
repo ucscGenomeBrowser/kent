@@ -1,3 +1,13 @@
+# Local declaration so that local gold.html is picked up.
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
 
 track ctgPos2
 shortLabel Contigs
@@ -6,6 +16,15 @@ group map
 priority 10.1
 visibility hide
 type ctgPos
+
+# Local declaration so that local gap.html is picked up.
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
 
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
@@ -25,7 +44,6 @@ indelQueryInsert on
 indelPolyA on
 
 track vegaGene
-#replaces record vegaGene in parent dir missing/extra subTrack
 shortLabel Vega Genes
 longLabel Vega v28 Annotations
 group genes
@@ -39,7 +57,6 @@ dataVersion VEGA Release 28
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
 
 track vegaPseudoGene
-#replaces record vegaPseudoGene in parent dir missing/extra subTrack
 shortLabel Vega Pseudogenes
 longLabel Vega v28 Annotated Pseudogenes 
 group genes
@@ -80,7 +97,6 @@ expStep 0.2
 groupings affyZonWildTypeGroups
     
     track affyZonWildType
-    #replaces record affyZonWildType in parent dir missing/extra group,visibility,type,expScale,expStep,groupings
     subTrack affyConsensusAndTargetZonWildType
     shortLabel WT Array Cons
     longLabel Zon Lab Expression for Wild Type Zfish (Consensus Seq.)
@@ -92,9 +108,14 @@ groupings affyZonWildTypeGroups
     longLabel Zon Lab Expression for Wild Type Zfish (Target Seq.)
     priority 2
 
-track affyZebrafish override
+track affyZebrafish
 compositeTrack on
+shortLabel Affy Zebrafish
 longLabel Alignments of Affymetrix Sequences from Zebrafish Chip
+group regulation
+priority 89
+visibility hide
+type psl .
 
     track affyZebrafishConsensus
     subTrack affyZebrafish
@@ -109,7 +130,6 @@ longLabel Alignments of Affymetrix Sequences from Zebrafish Chip
     priority 2 
 
 track rmsk
-#replaces record rmsk in parent dir missing/extra maxWindowToDraw
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
@@ -120,7 +140,6 @@ type rmsk
 canPack off
 
 track chainMm9
-#replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -135,7 +154,6 @@ type chain mm9
 otherDb mm9
 
 track netMm9
-#replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

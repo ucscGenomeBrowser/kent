@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.4 2009/12/17 00:27:22 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.5 2009/12/17 03:53:37 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10840,12 +10840,11 @@ unsigned char altR = track->altColor.r, altG = track->altColor.g,
                             altB = track->altColor.b;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
 
-struct slRef *tdbRef, *tdbRefList = NULL;
-trackDbListGetRefsToDescendentLeaves(&tdbRefList, tdb->subtracks);
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
 
 struct trackDb *subTdb;
-int subtrackCt = slCount(tdbRefList);
-int altColors = subtrackCt - 1;
+int subCount = slCount(tdbRefList);
+int altColors = subCount - 1;
 struct track *subtrack = NULL;
 TrackHandler handler;
 char table[SMALLBUF];
@@ -10854,7 +10853,7 @@ int len;
 boolean smart = FALSE;
 
 /* ignore if no subtracks */
-if (!subtrackCt)
+if (!subCount)
     return;
 
 char *compositeTrack = trackDbSetting(tdb, "compositeTrack");

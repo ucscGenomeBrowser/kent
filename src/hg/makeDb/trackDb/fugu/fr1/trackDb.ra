@@ -1,5 +1,4 @@
 track genomicSuperDups
-#replaces record genomicSuperDups in parent dir missing/extra noScoreFilter
 shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep

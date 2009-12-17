@@ -330,13 +330,19 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
  * reference to them in the returned forest is that they are in the parent
  * field of their children.  The parents of supertracks have no subtracks. */
 
-void trackDbListGetRefsToDescendents(struct slRef **pList, struct trackDb *tdbForest);
-/* Add all member of tdbList, and all of their children to pList recursively. */
+struct slRef *trackDbListGetRefsToDescendants(struct trackDb *tdbForest);
+/* Return reference list to everything in forest. Do slFreeList when done. */
 
-void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *tdbForest);
-/* Add all leaf members of trackList, and any leaf descendants to pList recursively. */
+struct slRef *trackDbListGetRefsToDescendantLeaves(struct trackDb *tdbForest);
+/* Return reference list all leaves in forest. Do slFreeList when done. */
 
-int trackDbCountDescendentLeaves(struct trackDb *tdb);
+int trackDbRefCmp(const void *va, const void *vb);
+/* Do trackDbCmp on list of references as opposed to actual trackDbs. */
+
+int trackDbCountDescendants(struct trackDb *tdb);
+/* Count the number of tracks in subtracks list and their subtracks too . */
+
+int trackDbCountDescendantLeaves(struct trackDb *tdb);
 /* Count the number of leaves in children list and their children. */
 
 struct trackDb *trackDbCompositeParent(struct trackDb *tdb);

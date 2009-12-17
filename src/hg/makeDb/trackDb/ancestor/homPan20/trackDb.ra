@@ -1,6 +1,24 @@
+# Local declaration so that local gold.html is picked up.
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
+# Local declaration so that local gap.html is picked up.
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
 
 track chainHg18
-#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel Human Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -13,7 +31,6 @@ type chain hg18
 otherDb hg18
 
 track chainPanTro2
-#replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel Chimp Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno

@@ -38,10 +38,35 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track chainXenTro1 override
+track chainDanRer3
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
+priority 160
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain danRer3
+otherDb danRer3
+
+track netDanRer3
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 160.1
+visibility hide
+spectrum on
+type netAlign danRer3 chainDanRer3
+otherDb danRer3
+
+track chainXenTro1
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 170.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -51,16 +76,17 @@ matrixHeader A, C, G, T
 type chain xenTro1
 otherDb xenTro1
 
-track netXenTro1 override
+track netXenTro1
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
+priority 170.3
 visibility dense
 spectrum on
 type netAlign xenTro1 chainXenTro1
 otherDb xenTro1
 
-track chainXenTro2 override
+track chainXenTro2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -74,7 +100,7 @@ matrixHeader A, C, G, T
 type chain xenTro2
 otherDb xenTro2
 
-track netXenTro2 override
+track netXenTro2
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -84,10 +110,11 @@ spectrum on
 type netAlign xenTro2 chainXenTro2
 otherDb xenTro2
 
-track chainMm7 override
+track chainMm7
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
+priority 280.4
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -97,17 +124,17 @@ matrixHeader A, C, G, T
 type chain mm7
 otherDb mm7
 
-track netMm7 override
+track netMm7
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
+priority 280.5
 visibility hide
 spectrum on
 type netAlign mm7 chainMm7
 otherDb mm7
 
 track chainPanTro2
-#replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -122,7 +149,6 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
-#replaces record netPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -132,12 +158,21 @@ spectrum on
 type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
 track nscanGene override
 visibility pack
 informant Rat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
 
 track snp125
-#replaces record snp125 in parent dir missing/extra maxWindowToDraw
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 125)
 group varRep

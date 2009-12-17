@@ -1,9 +1,25 @@
-track rnaGene override
+track rnaGene
+shortLabel RNA Genes
 longLabel Non-Coding RNA Genes (dark) and Pseudogenes (light)
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
 chromosomes chr7
 
+track slamMouse
+shortLabel Slam Mouse
+longLabel Slam Gene Predictions Using Human/Mouse Homology
+group genes
+priority 45.5
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred 
+
 track slamRat
-#replaces record slamRat in parent dir missing/extra type
 shortLabel Slam Rat
 longLabel Slam Gene Predictions Using Human/Rat Homology
 group genes
@@ -153,11 +169,25 @@ visibility hide
 color 0, 0, 100
 type psl .
 
-track slamNonCodingMouse override
+track slamNonCodingMouse
+shortLabel Slam Non-Coding Mouse
 longLabel Slam predictions of human/mouse conserved non-coding regions
+group compGeno
 priority 120
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 .
 
-track slamNonCodingRat override
+track slamNonCodingRat
+shortLabel Slam Non-Coding Rat
 longLabel Slam predictions of human/rat conserved non-coding regions
+group compGeno
 priority 121
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 .
 

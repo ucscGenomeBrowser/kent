@@ -1,3 +1,12 @@
+track bdgpLiftGene
+shortLabel D.mel. BDGP Genes
+longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to $Organism
+group genes
+priority 45.5
+visibility pack
+color 0,100,180
+type genePred bdgpLiftGenePep
+otherDb dm1
 
 searchTable bdgpLiftGene
 searchMethod exact

@@ -1,8 +1,20 @@
-track mrna override
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
 spectrum on
+type psl .
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track est
-#replaces record est in parent dir missing/extra maxItems
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
@@ -33,8 +45,14 @@ visibility hide
 altColor 200,150,150
 type bed 4 +
 
-track twinscan override
+track twinscan
+shortLabel Twinscan
 longLabel Twinscan Gene Predictions Using D. melanogaster/pseudoobscura Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
 
 track evofold
 shortLabel evofold
@@ -148,9 +166,16 @@ autoScale Off
 pairwise myp2a
 speciesOrder droYak1 dp2 anoGam1
 
-track phastConsElementsPaper override
+track phastConsElementsPaper
+shortLabel Most Cons. (Std)
 longLabel PhastCons Conserved Elements for Three Flies and Mosquito, Standardized Across Species
+group compGeno
 priority 106.02
+visibility hide
+exonArrows off
+showTopScorers 200
+useScore 1
+type bed 5 .
 
 track anophelesEcores
 shortLabel Anopheles Ecores

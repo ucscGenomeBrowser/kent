@@ -1,7 +1,12 @@
-track gold override
+track gold
 shortLabel Scaffolds
 longLabel Assembly Scaffolds (Supercontigs)
+group map
 priority 9
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
 
 track ctgPos2
 shortLabel Contigs
@@ -10,6 +15,14 @@ group map
 priority 10
 visibility hide
 type ctgPos
+
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
 
 track rhMap
 shortLabel Radiation Hybrid
@@ -24,7 +37,6 @@ urlLabel ZFIN ID:
 dataVersion Oct 2006
 
 track bacEndPairs
-#replaces record bacEndPairs in parent dir missing/extra color,altColor
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
 group map
@@ -43,7 +55,6 @@ type bed 6 +
 exonArrows off
                                                                                 
 track bacEndPairsBad
-#replaces record bacEndPairsBad in parent dir missing/extra color,altColor
 shortLabel Incorrect BAC End Pairs
 longLabel Orphan, Short, Long and Incorrectly Oriented BAC End Pairs
 group map
@@ -90,7 +101,6 @@ speciesDefaultOff fr1
 treeImage phylo/danRer4_7way.gif
 
 track chainPanTro2
-#replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -105,7 +115,6 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
-#replaces record netPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -116,7 +125,6 @@ type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
 track chainHg18
-#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -131,7 +139,6 @@ type chain hg18
 otherDb hg18
 
 track netHg18
-#replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -141,11 +148,21 @@ spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
 
-track chainMm8 override
+track chainMm8
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 126.2 
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain mm8
+otherDb mm8
 
 track netMm8
-#replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -155,16 +172,53 @@ spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
 
-track chainFr1 override
-shortLabel $o_db Chain
-priority 140.2
+track chainTetNig1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 132.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+spectrum on
+type chain tetNig1
+otherDb tetNig1
 
-track netFr1 override
+track netTetNig1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 132.3
+visibility dense
+spectrum on
+type netAlign tetNig1 chainTetNig1
+otherDb tetNig1
+
+track chainFr1
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 140.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain fr1
+otherDb fr1
+
+track netFr1
 shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
 priority 140.3
+visibility hide
+spectrum on
+type netAlign fr1 chainFr1
+otherDb fr1
 
 track chainFr2
-#replaces record chainFr2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -179,7 +233,6 @@ type chain fr2
 otherDb fr2
 
 track netFr2
-#replaces record netFr2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -189,11 +242,30 @@ spectrum on
 type netAlign fr2 chainFr2
 otherDb fr2
 
-track chainOryLat1 override
+track chainOryLat1
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 227
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
+spectrum on
+type chain oryLat1
+otherDb oryLat1
 
-track netOryLat1 override
+track netOryLat1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 227.1
+visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
+spectrum on
+type netAlign oryLat1 chainOryLat1
+otherDb oryLat1
 
 track nscanGene override
 informant Zebrafish N-SCAN uses fugu (fr1) as the informant.

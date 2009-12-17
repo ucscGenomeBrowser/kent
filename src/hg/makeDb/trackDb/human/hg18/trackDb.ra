@@ -1,8 +1,23 @@
 include trackDb.encode.ra
 include trackDb.wgEncode.ra
 
-track clonePos override
+track clonePos
+priority 14
+shortLabel Coverage
 longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180
+type clonePos
+
+track geneid
+shortLabel Geneid Genes
+longLabel Geneid Gene Predictions
+group genes
+priority 49
+visibility hide
+color 0,90,100
+type genePred geneidPep
 
 track exoniphy
 shortLabel Exoniphy
@@ -191,8 +206,14 @@ useScore 1
 color 0, 60, 120
 type bed 5 .
 
-track stsMap override
+track stsMap
+shortLabel STS Markers
+longLabel STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps
+group map
+priority 4
 visibility hide
+altColor 128,128,255,
+type bed 5 +
 
 #track fakeChromGraph
 #shortLabel Fake ChromGraph
@@ -244,8 +265,21 @@ visibility hide
 #minMax 0,1
 
 
-track mrna override
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank
+group rna
+priority 54
 visibility dense
+spectrum on
+type psl .
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track haplotypePos
 shortLabel $Organism hapPos
@@ -389,29 +423,76 @@ maxLimit 90.6690141023
 autoScale Off
 maxHeightPixels 128:32:11
 
-track tajdSnp override
+track tajdSnp
+compositeTrack on
+shortLabel Tajima's D SNPs
 longLabel Tajima's D SNPs (from Human May 2004 assembly)
+group varRep
+priority 144.6
+visibility hide
+type bed 4 .
 
-    track tajdSnpAd override
+    track tajdSnpAd
+    subTrack tajdSnp
+    shortLabel SNPs AD
     longLabel  SNPs from African Descent used for Tajima's D (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 1
 
-    track tajdSnpEd override
+    track tajdSnpEd
+    subTrack tajdSnp
+    shortLabel SNPs ED
     longLabel  SNPs from European Descent used for Tajima's D (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 3
 
-    track tajdSnpXd override
+    track tajdSnpXd
+    subTrack tajdSnp
+    shortLabel SNPs XD
     longLabel  SNPs from Chinese Descent used for Tajima's D (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 5
 
-track tajD override
+track tajD
+compositeTrack on
+shortLabel Tajima's D
 longLabel Tajima's D (from Human May 2004 assembly)
+group varRep
+visibility hide
+viewLimits -2.5:3
+minLimit -4
+maxLimit 5
+autoScale Off
+maxHeightPixels 128:64:11
+priority 144.65
+type bedGraph 4
 
-    track tajdAd override
+    track tajdAd
+    subTrack tajD
+    shortLabel Tajima's D AD
     longLabel  Tajima's D from African Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 2
 
-    track tajdEd override
+    track tajdEd
+    subTrack tajD
+    shortLabel Tajima's D ED
     longLabel  Tajima's D from European Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 4
 
-    track tajdXd override
+    track tajdXd
+    subTrack tajD
+    shortLabel Tajima's D XD
     longLabel  Tajima's D from Chinese Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 6
 
 track knownGeneOld3
 shortLabel Old UCSC Genes
@@ -559,7 +640,6 @@ type bed 4 +
 
 
 track augustus
-#replaces record augustus in parent dir missing/extra color
 compositeTrack on
 shortLabel Augustus
 longLabel Augustus Gene Predictions
@@ -626,7 +706,6 @@ baseColorDefault genomicCodons
     priority 1
 
     track nscanGene
-    #replaces record nscanGene in parent dir missing/extra group,visibility,type,baseColorUseCds,baseColorDefault,informant
     subTrack nscan
     shortLabel N-SCAN
     longLabel N-SCAN Gene Predictions
@@ -644,11 +723,17 @@ termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
 searchPriority 50
 
 
-track phastConsElements override
+track phastConsElements
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish
+group compGeno
 priority 109.52
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
-track chainDanRer3 override
+track chainDanRer3
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -662,7 +747,7 @@ matrixHeader A, C, G, T
 type chain danRer3
 otherDb danRer3
 
-track netDanRer3 override
+track netDanRer3
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -672,7 +757,7 @@ spectrum on
 type netAlign danRer3 chainDanRer3
 otherDb danRer3
 
-track chainDanRer4 override
+track chainDanRer4
 shortLabel $o_db chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -686,7 +771,7 @@ matrixHeader A, C, G, T
 type chain danRer4
 otherDb danRer4
 
-track netDanRer4 override
+track netDanRer4
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -696,7 +781,7 @@ spectrum on
 type netAlign danRer4 chainDanRer4
 otherDb danRer4
 
-track chainMonDom1 override
+track chainMonDom1
 shortLabel MonDom1 Chain
 longLabel MonDom1 ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -708,7 +793,7 @@ spectrum on
 type chain monDom1
 otherDb monDom1
 
-track netMonDom1 override
+track netMonDom1
 shortLabel MonDom1 Net
 longLabel MonDom1 ($o_date/$o_db) Alignment Net
 group compGeno
@@ -718,20 +803,68 @@ spectrum on
 type netAlign monDom1 chainMonDom1
 otherDb monDom1
 
-track chainMonDom4 override
+track chainMonDom4
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 190.14
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netMonDom4 override
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-priority 190.15
-
-track gap override
 visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain monDom4
+otherDb monDom4
+
+track netMonDom4
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 190.15
+visibility hide
+spectrum on
+type netAlign monDom4 chainMonDom4
+otherDb monDom4
+
+track HInvGeneMrna
+shortLabel H-Inv
+longLabel H-Invitational Genes mRNA Alignments
+group rna
+priority 67.5
+visibility hide
+color 0,100,100
+type psl .
+
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility hide
+type bed 3 +
+
+track rnaGene
+shortLabel RNA Genes
+longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
 
 track chainFr2
-#replaces record chainFr2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -746,7 +879,6 @@ type chain fr2
 otherDb fr2
 
 track netFr2
-#replaces record netFr2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -756,13 +888,29 @@ spectrum on
 type netAlign fr2 chainFr2
 otherDb fr2
 
-track chainFr1 override
+track chainFr1
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 140.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
+type chain fr1
+otherDb fr1
 
-track netFr1 override
+track netFr1
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
 priority 140.3
+visibility hide
+spectrum on
+type netAlign fr1 chainFr1
+otherDb fr1
 
 track exaptedRepeats
 shortLabel Exapted Repeats
@@ -779,11 +927,35 @@ searchType bed
 searchPriority 11
 termRegex exap[0-9]+
 
-track chainTetNig1 override
+track chainTetNig1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 150
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
+type chain tetNig1
+otherDb tetNig1
 
-track chainEchTel1 override
+track chainGalGal2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 180
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain galGal2
+otherDb galGal2
+
+track chainEchTel1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -796,7 +968,7 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 type chain echTel1
 otherDb echTel1
 
-track netEchTel1 override
+track netEchTel1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -806,7 +978,7 @@ spectrum on
 type netAlign echTel1 chainEchTel1
 otherDb echTel1
 
-track chainDasNov1 override
+track chainDasNov1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -819,7 +991,7 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 type chain dasNov1
 otherDb dasNov1
 
-track netDasNov1 override
+track netDasNov1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -829,10 +1001,11 @@ spectrum on
 type netAlign dasNov1 chainDasNov1
 otherDb dasNov1
 
-track chainRn3 override
+track chainRn3
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
+priority 260.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -842,16 +1015,17 @@ matrixHeader A, C, G, T
 type chain rn3
 otherDb rn3
 
-track netRn3 override
+track netRn3
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
+priority 260.3
 visibility hide
 spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
-track chainRn4 override
+track chainRn4
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -865,7 +1039,7 @@ matrixHeader A, C, G, T
 type chain rn4
 otherDb rn4
 
-track netRn4 override
+track netRn4
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -875,7 +1049,7 @@ spectrum on
 type netAlign rn4 chainRn4
 otherDb rn4
 
-track chainBosTau2 override
+track chainBosTau2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -889,7 +1063,7 @@ matrixHeader A, C, G, T
 type chain bosTau2
 otherDb bosTau2
 
-track netBosTau2 override
+track netBosTau2
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -899,7 +1073,7 @@ spectrum on
 type netAlign bosTau2 chainBosTau2
 otherDb bosTau2
 
-track netEquCab1 override
+track netEquCab1
 shortLabel  $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -937,7 +1111,7 @@ matrixHeader A, C, G, T
 type chain felCat1
 otherDb felCat1
 
-track chainCanFam2 override
+track chainCanFam2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -951,7 +1125,7 @@ matrixHeader A, C, G, T
 type chain canFam2
 otherDb canFam2
 
-track netCanFam2 override
+track netCanFam2
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -961,7 +1135,7 @@ spectrum on
 type netAlign canFam2 chainCanFam2
 otherDb canFam2
 
-track chainOryCun1 override
+track chainOryCun1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -975,7 +1149,7 @@ matrixHeader A, C, G, T
 type chain oryCun1
 otherDb oryCun1
 
-track netOryCun1 override
+track netOryCun1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -986,7 +1160,6 @@ type netAlign oryCun1 chainOryCun1
 otherDb oryCun1
 
 track chainRheMac2
-#replaces record chainRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1001,7 +1174,6 @@ type chain rheMac2
 otherDb rheMac2
 
 track netRheMac2
-#replaces record netRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -1024,7 +1196,6 @@ type chain ponAbe0
 otherDb ponAbe0
 
 track chainPanTro2
-#replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1039,7 +1210,6 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
-#replaces record netPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -1049,17 +1219,29 @@ spectrum on
 type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
-track chainPanTro1 override
+track chainPanTro1
 shortLabel panTro1 Chain
 longLabel panTro1 ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 290.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
+type chain panTro1
+otherDb panTro1
 
-track netPanTro1 override
+track netPanTro1
 shortLabel panTro1 Net
 longLabel panTro1 ($o_date/$o_db) Alignment Net
+group compGeno
 priority 290.3
+visibility hide
+spectrum on
+type netAlign panTro1 chainPanTro1
+otherDb panTro1
 
 track netHomIni13
 shortLabel $o_Organism Net
@@ -1119,16 +1301,29 @@ spectrum on
 type chain homIni13
 otherDb homIni13
 
-track chainMm7 override
+track chainMm7
 shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 270.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain mm7
+otherDb mm7
 
-track netMm7 override
+track netMm7
 shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
 priority 270.3
+visibility hide
+spectrum on
+type netAlign mm7 chainMm7
+otherDb mm7
 
 track chainMm8
-#replaces record chainMm8 in parent dir missing/extra release
 shortLabel mm8 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1143,7 +1338,6 @@ type chain mm8
 otherDb mm8
 
 track netMm8
-#replaces record netMm8 in parent dir missing/extra release
 shortLabel mm8 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -1154,7 +1348,6 @@ type netAlign mm8 chainMm8
 otherDb mm8
 
 track chainMm9
-#replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1169,7 +1362,6 @@ type chain mm9
 otherDb mm9
 
 track netMm9
-#replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -1260,11 +1452,18 @@ type bed 4 +
     type bed 4 .
     priority 9
 
-track chainSelf override
+track chainSelf
+shortLabel Self Chain
 longLabel $Organism Chained Self Alignments
+group varRep
+priority 400
+visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chrX,chrY,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
+color 100,50,0
+altColor 255,240,200
 chainColor Normalized Score
 chainNormScoreAvailable yes
+spectrum on
 matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 type chain hg18
@@ -1314,7 +1513,14 @@ viewLimits 0:4000
 spanList 1
 type wig 0 10310
 
-track evofold override
+track evofold
+shortLabel EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
 mafTrack multiz17way
 origAssembly hg17
 
@@ -1351,6 +1557,7 @@ type bed 8 .
     longLabel Predicted Poly(A) Sites Using an SVM
     color 102,0,153
     priority 2
+# Rewriting parent with subGroup view fantomCageGraphTop
 
 track fantomCageGraphTop
 compositeTrack on
@@ -1365,59 +1572,78 @@ type bed 3
 autoScale Off
 noInherit on
 subGroup1 view Views SIG=Clusters BED=Reads
-#settingsByView SIG:viewLimits=1.0:20.0,minLimit=0,maxLimit=1000,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:32:16
-settingsByView SIG:viewLimits=0.0:1.0,minLimit=0,maxLimit=1,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:32:16
-visibilityViewDefaults SIG=full BED=squish
 #dragAndDrop subtracks
 allButtonPair on
 
-    track FantomCageForwardPowerLawGraph
+    track fantomCageGraphTopViewSIG
+    shortLabel Clusters
+    view SIG
+    visibility full
     subTrack fantomCageGraphTop
-    shortLabel Fantom 4 + CAGE
-    longLabel  Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 2
+    viewLimits 0.0:1.0
     minLimit 0
-    maxLimit 1000
-    type bedGraph 4
-    configurable on
-    color 43,51,109
+    maxLimit 1
+    autoScale Off
+    windowingFunction mean
+    maxHeightPixels 128:32:16
 
-    track FantomCageReversePowerLawGraph
-    subTrack fantomCageGraphTop
-    shortLabel Fantom 4 - CAGE
-    longLabel  Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 3
-    minLimit 0
-    maxLimit 1000
-    type bedGraph 4
-    configurable on
-    color 43,51,109
+        track FantomCageForwardPowerLawGraph
+        subTrack fantomCageGraphTopViewSIG
+        shortLabel Fantom 4 + CAGE
+        longLabel  Forward Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 2
+        minLimit 0
+        maxLimit 1000
+        type bedGraph 4
+        configurable on
+        color 43,51,109
 
-    track FantomCageBedForward
-    subTrack fantomCageGraphTop
-    shortLabel Fantom (+) CAGE
-    longLabel Fantom/Riken CAGE Reads Forward
-    subGroups view=BED
-    priority 7
-    configurable on
-    useScore 1
-    bedFilter on
-    exonArrows off
-    type bed 12 .
+        track FantomCageReversePowerLawGraph
+        subTrack fantomCageGraphTopViewSIG
+        shortLabel Fantom 4 - CAGE
+        longLabel  Reverse Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 3
+        minLimit 0
+        maxLimit 1000
+        type bedGraph 4
+        configurable on
+        color 43,51,109
 
-    track FantomCageBedReverse
+    track fantomCageGraphTopViewBED
+    shortLabel Reads
+    view BED
+    visibility squish
     subTrack fantomCageGraphTop
-    shortLabel Fantom (-) CAGE
-    longLabel Fantom/Riken CAGE Reads Reverse
-    subGroups view=BED
-    priority 8
-    configurable on
-    useScore 1
-    exonArrows off
-    bedFilter on
-    type bed 12 .
+
+        track FantomCageBedForward
+        subTrack fantomCageGraphTopViewBED
+        shortLabel Fantom (+) CAGE
+        longLabel Fantom/Riken CAGE Reads Forward
+        subGroups view=BED
+        priority 7
+        configurable on
+        useScore 1
+        bedFilter on
+        exonArrows off
+        type bed 12 .
+
+        track FantomCageBedReverse
+        subTrack fantomCageGraphTopViewBED
+        shortLabel Fantom (-) CAGE
+        longLabel Fantom/Riken CAGE Reads Reverse
+        subGroups view=BED
+        priority 8
+        configurable on
+        useScore 1
+        exonArrows off
+        bedFilter on
+        type bed 12 .
+# Omitting child (FantomCageForwardPowerLawGraph) of parent (fantomCageGraphTop) with views
+# Omitting child (FantomCageReversePowerLawGraph) of parent (fantomCageGraphTop) with views
+# Omitting child (FantomCageBedForward) of parent (fantomCageGraphTop) with views
+# Omitting child (FantomCageBedReverse) of parent (fantomCageGraphTop) with views
 
 track tfbsConsSites
 shortLabel TFBS Conserved
@@ -1937,9 +2163,17 @@ dataVersion March 2007
     priority 2
     color 0,128,0
 
-track uc16 override
+track uc16
+shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
+group compGeno
 priority 104.605
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
 
 searchTable uc16
 searchMethod exact
@@ -1947,10 +2181,15 @@ searchType bed
 searchPriority 10
 termRegex uc\.[0-9]+
 
-track ux16 override
+track ux16
+shortLabel Extended Ultras
 longLabel Extended Ultraconserved Elements (Until 5 Bases Below 85%)
+group compGeno
 priority 104.6055
+visibility hide
+exonArrows off
 color 200,0,0
+type bed 4 .
 searchMethod exact
 searchType bed
 
@@ -2053,6 +2292,13 @@ type bed 4 .
     type bed 6 +
     priority 5
 
+    track snpArrayIllumina650
+    subTrack snpArray off
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 6
+
     track snpArrayIllumina550
     subTrack snpArray off
     shortLabel Illumina 550
@@ -2073,27 +2319,6 @@ type bed 4 .
     longLabel Illumina Human1M-Duo
     type bed 6 +
     priority 9
-
-    track snpArrayIlluminaHumanCytoSNP_12
-    subTrack snpArray
-    shortLabel Illumina CytoSNP-12
-    longLabel Illumina Human CytoSNP-12
-    type bed 6 +
-    priority 10
-
-    track snpArrayIlluminaHuman660W_Quad
-    subTrack snpArray
-    shortLabel Illumina Human660W-Quad
-    longLabel Illumina Human 660W-Quad
-    type bed 6 +
-    priority 11
-
-    track snpArrayIlluminaHumanOmni1_Quad
-    subTrack snpArray
-    shortLabel Illumina HumanOmni1-Quad
-    longLabel Illumina Human Omni1-Quad
-    type bed 6 +
-    priority 12
 
 track divMKAR
 shortLabel Recent Selection NC
@@ -2866,7 +3091,6 @@ urlLabel Vega Transcript:
 url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
 
     track vegaGene
-    #replaces record vegaGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     subTrack vegaGeneComposite
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
@@ -2874,7 +3098,6 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     color 0,50,225
 
     track vegaPseudoGene
-    #replaces record vegaPseudoGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     subTrack vegaGeneComposite
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
@@ -3001,6 +3224,7 @@ priority 300
     visibility hide
     spanList 1
     type wig -10 10
+# Rewriting parent with subGroup view zhaoLabNucleosome
 
 track zhaoLabNucleosome
 compositeTrack on
@@ -3018,249 +3242,280 @@ dimensions dimensionX=ACT dimensionY=FAC dimensionZ=STRAND
 dimensionZchecked DBL,FWD,RWD
 sortOrder FAC=+ ACT=+ STRAND=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults PK=pack SIG=full
-settingsByView SIG:viewLimits=0:10520,viewLimitsMax=0:10520
 chromosomes chr1
 
-    track zhaoLabActivatedNucleosomeFwd
+    track zhaoLabNucleosomeViewPK
+    shortLabel Sites
+    view PK
+    visibility pack
     subTrack zhaoLabNucleosome
-    shortLabel ActiveNucleosome
-    longLabel Activated nucleosome forward strand
-    subGroups FAC=NUC STRAND=FWD ACT=ACTV view=PK
-    exonArrows off
-    type bed 12
-    itemRgb on
-    priority 1
-    noInherit	on
 
-    track zhaoLabActivatedNucleosomeRev
-    subTrack zhaoLabNucleosome
-    shortLabel ActiveNucleosome
-    longLabel Activated nucleosome reverse strand
-    subGroups FAC=NUC STRAND=RWD ACT=ACTV view=PK
-    exonArrows off
-    type bed 12
-    itemRgb on
-    priority 2
-    noInherit	on
+        track zhaoLabActivatedNucleosomeFwd
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel ActiveNucleosome
+        longLabel Activated nucleosome forward strand
+        subGroups FAC=NUC STRAND=FWD ACT=ACTV view=PK
+        exonArrows off
+        type bed 12
+        itemRgb on
+        priority 1
+        noInherit	on
 
-    track zhaoLabRestingNucleosomeFwd
-    subTrack zhaoLabNucleosome
-    shortLabel RestingNucleosome
-    longLabel Resting nucleosome forward strand
-    subGroups FAC=NUC STRAND=FWD ACT=REST view=PK
-    exonArrows off
-    type bed 12
-    itemRgb on
-    priority 3
-    noInherit	on
+        track zhaoLabActivatedNucleosomeRev
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel ActiveNucleosome
+        longLabel Activated nucleosome reverse strand
+        subGroups FAC=NUC STRAND=RWD ACT=ACTV view=PK
+        exonArrows off
+        type bed 12
+        itemRgb on
+        priority 2
+        noInherit	on
 
-    track zhaoLabRestingNucleosomeRev
-    subTrack zhaoLabNucleosome
-    shortLabel RestingNucleosome
-    longLabel Resting nucleosome reverse strand
-    subGroups FAC=NUC STRAND=RWD ACT=REST view=PK
-    exonArrows off
-    type bed 12
-    itemRgb on
-    priority 4
-    noInherit	on
+        track zhaoLabRestingNucleosomeFwd
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel RestingNucleosome
+        longLabel Resting nucleosome forward strand
+        subGroups FAC=NUC STRAND=FWD ACT=REST view=PK
+        exonArrows off
+        type bed 12
+        itemRgb on
+        priority 3
+        noInherit	on
 
-    track zhaoLabRestingH3Fwd
-    subTrack zhaoLabNucleosome
-    shortLabel RestingHistoneH3
-    longLabel Resting histone H3 forward strand
-    subGroups FAC=H3 STRAND=FWD ACT=REST view=PK
-    exonArrows off
-    type bed 12
-    itemRgb on
-    priority 5
-    noInherit	on
+        track zhaoLabRestingNucleosomeRev
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel RestingNucleosome
+        longLabel Resting nucleosome reverse strand
+        subGroups FAC=NUC STRAND=RWD ACT=REST view=PK
+        exonArrows off
+        type bed 12
+        itemRgb on
+        priority 4
+        noInherit	on
 
-    track zhaoLabRestingH3Rev
-    subTrack zhaoLabNucleosome
-    shortLabel RestingNucleosome
-    longLabel Resting histone H3 reverse strand
-    subGroups FAC=H3 STRAND=RWD ACT=REST view=PK
-    exonArrows off
-    type bed 12
-    itemRgb on
-    priority 6
-    noInherit	on
+        track zhaoLabRestingH3Fwd
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel RestingHistoneH3
+        longLabel Resting histone H3 forward strand
+        subGroups FAC=H3 STRAND=FWD ACT=REST view=PK
+        exonArrows off
+        type bed 12
+        itemRgb on
+        priority 5
+        noInherit	on
 
-    track zhaoLabActivatedNucleosomeFwdWig
+        track zhaoLabRestingH3Rev
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel RestingNucleosome
+        longLabel Resting histone H3 reverse strand
+        subGroups FAC=H3 STRAND=RWD ACT=REST view=PK
+        exonArrows off
+        type bed 12
+        itemRgb on
+        priority 6
+        noInherit	on
+
+        track zhaoLabActiveUnphosPolII
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel Active Unphosphor PolII
+        longLabel Activated Unphosphorylated Pol II
+        subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=PK
+        exonArrows off
+        type bed 9
+        itemRgb on
+        priority 21
+        noInherit	on
+
+        track zhaoLabRestingUnphosPolII
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel Resting Unphosphor PolII
+        longLabel Resting Unphosphorylated Pol II
+        subGroups FAC=POL2U STRAND=DBL ACT=REST view=PK
+        exonArrows off
+        type bed 9
+        itemRgb on
+        priority 22
+        noInherit	on
+
+        track zhaoLabActiveSer5PhosPolII
+        subTrack zhaoLabNucleosomeViewPK
+        shortLabel Active Ser5 PolII
+        longLabel Activated Ser5 Phosphorylated Pol II
+        subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=PK
+        exonArrows off
+        type bed 9
+        itemRgb on
+        priority 23
+        noInherit	on
+
+    track zhaoLabNucleosomeViewSIG
+    shortLabel Density
+    view SIG
+    visibility full
     subTrack zhaoLabNucleosome
-    shortLabel ActiveNucleosome
-    longLabel Density graph, activated nucleosome forward strand
-    subGroups FAC=NUC STRAND=FWD ACT=ACTV view=SIG
-    type wig 0 10520
     viewLimits 0:10520
-    spanList 1
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 11
-    noInherit	on
+    viewLimitsMax 0:10520
 
-    track zhaoLabActivatedNucleosomeRevWig
-    subTrack zhaoLabNucleosome
-    shortLabel ActiveNucleosome
-    longLabel Density graph, activated nucleosome reverse strand
-    subGroups FAC=NUC STRAND=RWD ACT=ACTV view=SIG
-    type wig 0 10520
-    viewLimits 0:10520
-    spanList 1
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 12
-    noInherit	on
+        track zhaoLabActivatedNucleosomeFwdWig
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel ActiveNucleosome
+        longLabel Density graph, activated nucleosome forward strand
+        subGroups FAC=NUC STRAND=FWD ACT=ACTV view=SIG
+        type wig 0 10520
+        viewLimits 0:10520
+        spanList 1
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 11
+        noInherit	on
 
-    track zhaoLabRestingNucleosomeFwdWig
-    subTrack zhaoLabNucleosome
-    shortLabel RestingNucleosome
-    longLabel Density graph, resting nucleosome forward strand
-    subGroups FAC=NUC STRAND=FWD ACT=REST view=SIG
-    type wig 0 10520
-    viewLimits 0:10520
-    spanList 1
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 13
-    noInherit	on
+        track zhaoLabActivatedNucleosomeRevWig
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel ActiveNucleosome
+        longLabel Density graph, activated nucleosome reverse strand
+        subGroups FAC=NUC STRAND=RWD ACT=ACTV view=SIG
+        type wig 0 10520
+        viewLimits 0:10520
+        spanList 1
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 12
+        noInherit	on
 
-    track zhaoLabRestingNucleosomeRevWig
-    subTrack zhaoLabNucleosome
-    shortLabel RestingNucleosome
-    longLabel Density graph, resting nucleosome reverse strand
-    subGroups FAC=NUC STRAND=RWD ACT=REST view=SIG
-    type wig 0 10520
-    viewLimits 0:10520
-    spanList 1
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 14
-    noInherit	on
+        track zhaoLabRestingNucleosomeFwdWig
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel RestingNucleosome
+        longLabel Density graph, resting nucleosome forward strand
+        subGroups FAC=NUC STRAND=FWD ACT=REST view=SIG
+        type wig 0 10520
+        viewLimits 0:10520
+        spanList 1
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 13
+        noInherit	on
 
-    track zhaoLabRestingH3FwdWig
-    subTrack zhaoLabNucleosome
-    shortLabel RestingHistoneH3
-    longLabel Density graph, resting histone H3 forward strand
-    subGroups FAC=H3 STRAND=FWD ACT=REST view=SIG
-    type wig 0 10520
-    viewLimits 0:10520
-    spanList 1
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 15
-    noInherit	on
+        track zhaoLabRestingNucleosomeRevWig
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel RestingNucleosome
+        longLabel Density graph, resting nucleosome reverse strand
+        subGroups FAC=NUC STRAND=RWD ACT=REST view=SIG
+        type wig 0 10520
+        viewLimits 0:10520
+        spanList 1
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 14
+        noInherit	on
 
-    track zhaoLabRestingH3RevWig
-    subTrack zhaoLabNucleosome
-    shortLabel RestingNucleosome
-    longLabel Density graph, resting histone H3 reverse strand
-    subGroups FAC=H3 STRAND=RWD ACT=REST view=SIG
-    type wig 0 10520
-    viewLimits 0:10520
-    spanList 1
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 16
-    noInherit	on
+        track zhaoLabRestingH3FwdWig
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel RestingHistoneH3
+        longLabel Density graph, resting histone H3 forward strand
+        subGroups FAC=H3 STRAND=FWD ACT=REST view=SIG
+        type wig 0 10520
+        viewLimits 0:10520
+        spanList 1
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 15
+        noInherit	on
 
-    track zhaoLabActiveUnphosPolII
-    subTrack zhaoLabNucleosome
-    shortLabel Active Unphosphor PolII
-    longLabel Activated Unphosphorylated Pol II
-    subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=PK
-    exonArrows off
-    type bed 9
-    itemRgb on
-    priority 21
-    noInherit	on
+        track zhaoLabRestingH3RevWig
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel RestingNucleosome
+        longLabel Density graph, resting histone H3 reverse strand
+        subGroups FAC=H3 STRAND=RWD ACT=REST view=SIG
+        type wig 0 10520
+        viewLimits 0:10520
+        spanList 1
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 16
+        noInherit	on
 
-    track zhaoLabRestingUnphosPolII
-    subTrack zhaoLabNucleosome
-    shortLabel Resting Unphosphor PolII
-    longLabel Resting Unphosphorylated Pol II
-    subGroups FAC=POL2U STRAND=DBL ACT=REST view=PK
-    exonArrows off
-    type bed 9
-    itemRgb on
-    priority 22
-    noInherit	on
+        track zhaoLabActiveUnphosPolIIBedGraph
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel density Active Unphosphor PolII
+        longLabel Density graph, activated Unphosphorylated Pol II
+        subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=SIG
+        type bedGraph 4
+        viewLimits 0:10520
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 31
+        noInherit	on
 
-    track zhaoLabActiveSer5PhosPolII
-    subTrack zhaoLabNucleosome
-    shortLabel Active Ser5 PolII
-    longLabel Activated Ser5 Phosphorylated Pol II
-    subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=PK
-    exonArrows off
-    type bed 9
-    itemRgb on
-    priority 23
-    noInherit	on
+        track zhaoLabRestingUnphosPolIIBedGraph
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel density Resting Unphosphor PolII
+        longLabel Density graph, resting Unphosphorylated Pol II
+        subGroups FAC=POL2U STRAND=DBL ACT=REST view=SIG
+        type bedGraph 4
+        viewLimits 0:10520
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 32
+        noInherit	on
 
-    track zhaoLabActiveUnphosPolIIBedGraph
-    subTrack zhaoLabNucleosome
-    shortLabel density Active Unphosphor PolII
-    longLabel Density graph, activated Unphosphorylated Pol II
-    subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=SIG
-    type bedGraph 4
-    viewLimits 0:10520
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 31
-    noInherit	on
-
-    track zhaoLabRestingUnphosPolIIBedGraph
-    subTrack zhaoLabNucleosome
-    shortLabel density Resting Unphosphor PolII
-    longLabel Density graph, resting Unphosphorylated Pol II
-    subGroups FAC=POL2U STRAND=DBL ACT=REST view=SIG
-    type bedGraph 4
-    viewLimits 0:10520
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 32
-    noInherit	on
-
-    track zhaoLabActiveSer5PhosPolIIBedGraph
-    subTrack zhaoLabNucleosome
-    shortLabel density Active Ser5 PolII
-    longLabel Density graph, activated Ser5 Phosphorylated Pol II
-    subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=SIG
-    type bedGraph 4
-    viewLimits 0:10520
-    minLimit 0
-    maxLimit 10520
-    autoScale On
-    maxHeightPixels 128:40:11
-    configurable on
-    priority 33
-    noInherit	on
+        track zhaoLabActiveSer5PhosPolIIBedGraph
+        subTrack zhaoLabNucleosomeViewSIG
+        shortLabel density Active Ser5 PolII
+        longLabel Density graph, activated Ser5 Phosphorylated Pol II
+        subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=SIG
+        type bedGraph 4
+        viewLimits 0:10520
+        minLimit 0
+        maxLimit 10520
+        autoScale On
+        maxHeightPixels 128:40:11
+        configurable on
+        priority 33
+        noInherit	on
+# Omitting child (zhaoLabActivatedNucleosomeFwd) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActivatedNucleosomeRev) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingNucleosomeFwd) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingNucleosomeRev) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingH3Fwd) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingH3Rev) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActivatedNucleosomeFwdWig) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActivatedNucleosomeRevWig) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingNucleosomeFwdWig) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingNucleosomeRevWig) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingH3FwdWig) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingH3RevWig) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActiveUnphosPolII) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingUnphosPolII) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActiveSer5PhosPolII) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActiveUnphosPolIIBedGraph) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabRestingUnphosPolIIBedGraph) of parent (zhaoLabNucleosome) with views
+# Omitting child (zhaoLabActiveSer5PhosPolIIBedGraph) of parent (zhaoLabNucleosome) with views
+# Rewriting parent with subGroup view barskiChIPseq
 
 track barskiChIPseq
 compositeTrack on
@@ -3273,395 +3528,425 @@ subGroup3 METH Methylation m1=me1 m2=me2 m3=me3 NA=N/A
 dimensions dimensionX=METH dimensionY=AB
 sortOrder AB=+ METH=+ view=+
 dragAndDrop subTracks
-settingsByView SIG:viewLimitsMax=0:319
 #settingsByView SIG:viewLimits=.2:1.6,viewLimits=0:319
 visibility hide
 priority 0
 type bed 3
+#noInherit on
 
-    track barskiChIPseqH3K4me1
+    track barskiChIPseqViewSIG
+    shortLabel Signal
+    view SIG
     subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K04 METH=m1
-    shortLabel Barski H3K4me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me1)
-    type wig 1 121
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 1
+    viewLimitsMax 0:319
 
-    track barskiChIPseqH3K4me2
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K04 METH=m2
-    shortLabel Barski H3K4me2
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me2)
-    type wig 1 57
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 2
+        track barskiChIPseqH3K4me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K04 METH=m1
+        shortLabel Barski H3K4me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me1)
+        type wig 1 121
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 1
 
-    track barskiChIPseqH3K4me3
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K04 METH=m3
-    shortLabel Barski H3K4me3
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me3)
-    type wig 1 153
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 3
+        track barskiChIPseqH3K4me2
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K04 METH=m2
+        shortLabel Barski H3K4me2
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me2)
+        type wig 1 57
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 2
 
-    track barskiChIPseqH3K9me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K09 METH=m1
-    shortLabel Barski H3K9me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me1)
-    type wig 1 78
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 4
+        track barskiChIPseqH3K4me3
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K04 METH=m3
+        shortLabel Barski H3K4me3
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me3)
+        type wig 1 153
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 3
 
-    track barskiChIPseqH3K9me2
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K09 METH=m2
-    shortLabel Barski H3K9me2
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me2)
-    type wig 1 99
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 5
+        track barskiChIPseqH3K9me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K09 METH=m1
+        shortLabel Barski H3K9me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me1)
+        type wig 1 78
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 4
 
-    track barskiChIPseqH3K9me3
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K09 METH=m3
-    shortLabel Barski H3K9me3
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me3)
-    type wig 1 114
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 6
+        track barskiChIPseqH3K9me2
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K09 METH=m2
+        shortLabel Barski H3K9me2
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me2)
+        type wig 1 99
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 5
 
-    track barskiChIPseqH3K27me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K27 METH=m1
-    shortLabel Barski H3K27me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me1)
-    type wig 1 106
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 7
+        track barskiChIPseqH3K9me3
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K09 METH=m3
+        shortLabel Barski H3K9me3
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me3)
+        type wig 1 114
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 6
 
-    track barskiChIPseqH3K27me2
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K27 METH=m2
-    shortLabel Barski H3K27me2
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me2)
-    type wig 1 119
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 8
+        track barskiChIPseqH3K27me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K27 METH=m1
+        shortLabel Barski H3K27me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me1)
+        type wig 1 106
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 7
 
-    track barskiChIPseqH3K27me3
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K27 METH=m3
-    shortLabel Barski H3K27me3
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me3)
-    type wig 1 86
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 9
+        track barskiChIPseqH3K27me2
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K27 METH=m2
+        shortLabel Barski H3K27me2
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me2)
+        type wig 1 119
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 8
 
-    track barskiChIPseqH3K36me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K36 METH=m1
-    shortLabel Barski H3K36me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me1)
-    type wig 1 99
-    noInherit on
-    configurable on
-    priority 10
+        track barskiChIPseqH3K27me3
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K27 METH=m3
+        shortLabel Barski H3K27me3
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me3)
+        type wig 1 86
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 9
 
-    track barskiChIPseqH3K36me3
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K36 METH=m3
-    shortLabel Barski H3K36me3
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me3)
-    type wig 1 132
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 11
+        track barskiChIPseqH3K36me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K36 METH=m1
+        shortLabel Barski H3K36me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me1)
+        type wig 1 99
+        noInherit on
+        configurable on
+        priority 10
 
-    track barskiChIPseqH3K79me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K79 METH=m1
-    shortLabel Barski H3K79me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me1)
-    type wig 1 89
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 12
+        track barskiChIPseqH3K36me3
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K36 METH=m3
+        shortLabel Barski H3K36me3
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me3)
+        type wig 1 132
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 11
 
-    track barskiChIPseqH3K79me2
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K79 METH=m2
-    shortLabel Barski H3K79me2
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me2)
-    type wig 1 115
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 13
+        track barskiChIPseqH3K79me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K79 METH=m1
+        shortLabel Barski H3K79me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me1)
+        type wig 1 89
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 12
 
-    track barskiChIPseqH3K79me3
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3K79 METH=m3
-    shortLabel Barski H3K79me3
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me3)
-    type wig 1 179
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 14
+        track barskiChIPseqH3K79me2
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K79 METH=m2
+        shortLabel Barski H3K79me2
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me2)
+        type wig 1 115
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 13
 
-    track barskiChIPseqH3R2me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3R2 METH=m1
-    shortLabel Barski H3R2me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me1)
-    type wig 1 101
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 15
+        track barskiChIPseqH3K79me3
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3K79 METH=m3
+        shortLabel Barski H3K79me3
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me3)
+        type wig 1 179
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 14
 
-    track barskiChIPseqH3R2me2
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H3R2 METH=m2
-    shortLabel Barski H3R2me2
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me2)
-    type wig 1 102
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 16
+        track barskiChIPseqH3R2me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3R2 METH=m1
+        shortLabel Barski H3R2me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me1)
+        type wig 1 101
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 15
 
-    track barskiChIPseqH4K20me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H4K20 METH=m1
-    shortLabel Barski H4K20me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me1)
-    type wig 1 154
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 17
+        track barskiChIPseqH3R2me2
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H3R2 METH=m2
+        shortLabel Barski H3R2me2
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me2)
+        type wig 1 102
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 16
 
-    track barskiChIPseqH4K20me3
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H4K20 METH=m3
-    shortLabel Barski H4K20me3
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me3)
-    type wig 1 196
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 18
+        track barskiChIPseqH4K20me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H4K20 METH=m1
+        shortLabel Barski H4K20me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me1)
+        type wig 1 154
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 17
 
-    track barskiChIPseqH4R3me2
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H4R3 METH=m1
-    shortLabel Barski H4R3me2
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4R3me2)
-    type wig 1 156
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 19
+        track barskiChIPseqH4K20me3
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H4K20 METH=m3
+        shortLabel Barski H4K20me3
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me3)
+        type wig 1 196
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 18
 
-    track barskiChIPseqH2BK5me1
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H2BK5 METH=m1
-    shortLabel Barski H2BK5me1
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2BK5me1)
-    type wig 1 122
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 20
+        track barskiChIPseqH4R3me2
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H4R3 METH=m1
+        shortLabel Barski H4R3me2
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4R3me2)
+        type wig 1 156
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 19
 
-    track barskiChIPseqH2AZ
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=H2AZ  METH=NA
-    shortLabel Barski H2AZ
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2AZ)
-    type wig 1 65
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 21
+        track barskiChIPseqH2BK5me1
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H2BK5 METH=m1
+        shortLabel Barski H2BK5me1
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2BK5me1)
+        type wig 1 122
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 20
 
-    track barskiChIPseqPolII
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=PolII METH=NA
-    shortLabel Barski PolII
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. PolII)
-    type wig 1 319
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 22
+        track barskiChIPseqH2AZ
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=H2AZ  METH=NA
+        shortLabel Barski H2AZ
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2AZ)
+        type wig 1 65
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 21
 
-    track barskiChIPseqCTCF
-    subTrack barskiChIPseq
-    subGroups view=SIG AB=CTCF METH=NA
-    shortLabel Barski CTCF
-    longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. CTCF)
-    type wig 1 152
-    maxHeightPixels 100:40:11
-    autoScale Off
-    windowingFunction mean
-    group compGeno
-    color 0, 10, 100
-    altColor 0,90,10
-    #viewLimits .2:1.6
-    noInherit on
-    configurable on
-    priority 23
+        track barskiChIPseqPolII
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=PolII METH=NA
+        shortLabel Barski PolII
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. PolII)
+        type wig 1 319
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 22
+
+        track barskiChIPseqCTCF
+        subTrack barskiChIPseqViewSIG
+        subGroups view=SIG AB=CTCF METH=NA
+        shortLabel Barski CTCF
+        longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. CTCF)
+        type wig 1 152
+        maxHeightPixels 100:40:11
+        autoScale Off
+        windowingFunction mean
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        #viewLimits .2:1.6
+        noInherit on
+        configurable on
+        priority 23
+# Omitting child (barskiChIPseqH3K4me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K4me2) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K4me3) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K9me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K9me2) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K9me3) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K27me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K27me2) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K27me3) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K36me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K36me3) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K79me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K79me2) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3K79me3) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3R2me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH3R2me2) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH4K20me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH4K20me3) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH4R3me2) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH2BK5me1) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqH2AZ) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqPolII) of parent (barskiChIPseq) with views
+# Omitting child (barskiChIPseqCTCF) of parent (barskiChIPseq) with views
+# Rewriting parent with subGroup view cons44way
 
 track cons44way
 compositeTrack on
@@ -3672,218 +3957,201 @@ subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
 dragAndDrop subTracks
 dimensions dimensionX=clade
 visibility full
-visibilityViewDefaults align=pack+ phastcons=hide phyloP=full elements=hide
-settingsByView phyloP:viewLimits=-.3:2,viewLimitsMax=-15.41:7.13
 type bed 4
 group compGeno
 priority 103.29
 
-track multiz44way
-subTrack cons44way on
-shortLabel Multiz Align
-longLabel Multiz Alignments of 44 Vertebrates
-subGroups view=align clade=vert
-noInherit on
-irows on
-summary multiz44waySummary
-frames multiz44wayFrames
-group compGeno
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-speciesCodonDefault hg18
-speciesGroups Primate Placental_Mammal Vertebrate
-sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 calJac1 tarSyr1 micMur1 otoGar1
-sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr2 proCap1 echTel1 dasNov2 choHof1
-sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 gasAcu1 oryLat2 danRer5 petMar1
-speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
-itemFirstCharCase noChange
-treeImage phylo/hg18_44way.gif
-priority 100
+    track cons44wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons44way
 
-    # Conserved Elements (Most Conserved)
-    track phastConsElements44wayPrimates
-    subTrack cons44way off
-    subGroups view=elements clade=primate
-    shortLabel Primate El
-    longLabel Primate Conserved Elements
+    track multiz44way
+    subTrack cons44wayViewalign on
+    shortLabel Multiz Align
+    longLabel Multiz Alignments of 44 Vertebrates
+    subGroups view=align clade=vert
     noInherit on
-    type bed 5 .
-    color 170,50,100
-    priority 20
+    irows on
+    summary multiz44waySummary
+    frames multiz44wayFrames
+    group compGeno
+    color 0, 10, 100
+    altColor 0,90,10
+    type wigMaf 0.0 1.0
+    speciesCodonDefault hg18
+    speciesGroups Primate Placental_Mammal Vertebrate
+    sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 calJac1 tarSyr1 micMur1 otoGar1
+    sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr2 proCap1 echTel1 dasNov2 choHof1
+    sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 gasAcu1 oryLat2 danRer5 petMar1
+    speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
+    itemFirstCharCase noChange
+    treeImage phylo/hg18_44way.gif
+    priority 100
 
-    track phastConsElements44wayPlacental
-    subTrack cons44way on
-    subGroups view=elements clade=mammal
-    shortLabel Mammal El
-    longLabel Placental Mammal Conserved Elements
-    noInherit on
-    type bed 5 .
-    color 100,50,170
-    priority 22
-
-    track phastConsElements44way
-    subTrack cons44way off
-    subGroups view=elements clade=vert
-    shortLabel Vertebrate El
-    longLabel Vertebrate Conserved Elements
-    noInherit on
-    color 170,100,50
-    type bed 5 .
-    priority 23
-
-    # PhyloP conservation
-    track phyloP44wayPrimate
-    subTrack cons44way off
-    subGroups view=phyloP clade=primate
-    shortLabel Primate Cons
-    longLabel Primate Basewise Conservation by PhyloP
-    noInherit on
-    configurable on
-    type wig -8.17 .99
-    maxHeightPixels 100:50:11
+    track cons44wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons44way
     viewLimits -.3:2
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 10,10,70
-    altColor 70,10,10
-    priority 1
+    viewLimitsMax -15.41:7.13
 
-    track phyloP44wayPlacMammal
-    subTrack cons44way on
-    subGroups view=phyloP clade=mammal
-    shortLabel Mammal Cons
-    longLabel Placental Mammal Basewise Conservation by PhyloP
-    noInherit on
-    configurable on
-    type wig -14.42 3.46
-    maxHeightPixels 100:50:11
-    viewLimits -.3:2
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 25,25,95
-    altColor 95,25,25
-    priority 3
+        # PhyloP conservation
+        track phyloP44wayPrimate
+        subTrack cons44wayViewphyloP off
+        subGroups view=phyloP clade=primate
+        shortLabel Primate Cons
+        longLabel Primate Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -8.17 .99
+        maxHeightPixels 100:50:11
+        viewLimits -.3:2
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,10,70
+        altColor 70,10,10
+        priority 1
 
-    track phyloP44wayAll
-    subTrack cons44way off
-    subGroups view=phyloP clade=vert
-    shortLabel Vertebrate Cons
-    longLabel Vertebrate Basewise Conservation by PhyloP
-    noInherit on
-    configurable on
-    type wig -15.41 7.13
-    maxHeightPixels 100:50:11
-    viewLimits -.3:2
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 40,40,120
-    altColor 120,40,40
-    priority 4
+        track phyloP44wayPlacMammal
+        subTrack cons44wayViewphyloP on
+        subGroups view=phyloP clade=mammal
+        shortLabel Mammal Cons
+        longLabel Placental Mammal Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -14.42 3.46
+        maxHeightPixels 100:50:11
+        viewLimits -.3:2
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 25,25,95
+        altColor 95,25,25
+        priority 3
 
-    # PhyloP V2 conservation (chrX-specific tree)
-    track phyloP44wayPrimates_v2
-    subTrack cons44way off
-    subGroups view=phyloP clade=primate
-    shortLabel Primate Cons2
-    longLabel Primate Basewise Conservation by PhyloP V2
-    noInherit on
-    configurable on
-    type wig -7.87 .69
-    maxHeightPixels 100:50:11
-    viewLimits -.3:2
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 10,10,70
-    altColor 70,10,10
-    priority 5
+        track phyloP44wayAll
+        subTrack cons44wayViewphyloP off
+        subGroups view=phyloP clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -15.41 7.13
+        maxHeightPixels 100:50:11
+        viewLimits -.3:2
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,40,120
+        altColor 120,40,40
+        priority 4
 
-    track phyloP44wayPlacental_v2
-    subTrack cons44way on
-    subGroups view=phyloP clade=mammal
-    shortLabel Mammal Cons2
-    longLabel Placental Mammal Basewise Conservation by PhyloP V2
-    noInherit on
-    configurable on
-    type wig -14.12 3.15
-    maxHeightPixels 100:50:11
-    viewLimits -.3:2
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 25,25,95
-    altColor 95,25,25
-    priority 6
+    track cons44wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons44way
 
-    track phyloP44way_v2
-    subTrack cons44way off
-    subGroups view=phyloP clade=vert
-    shortLabel Vertebrate Cons2
-    longLabel Vertebrate Basewise Conservation by PhyloP V2
-    noInherit on
-    configurable on
-    type wig -15.11 6.83
-    maxHeightPixels 100:50:11
-    viewLimits -.3:2
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 40,40,120
-    altColor 120,40,40
-    priority 8
+        # phastCons conservation
+        track phastCons44wayPrimates
+        subTrack cons44wayViewphastcons off
+        subGroups view=phastcons clade=primate
+        shortLabel Primate Cons
+        longLabel Primate Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 10
 
-    # phastCons conservation
-    track phastCons44wayPrimates
-    subTrack cons44way off
-    subGroups view=phastcons clade=primate
-    shortLabel Primate Cons
-    longLabel Primate Conservation by PhastCons
-    noInherit on
-    configurable on
-    type wig 0 1
-    maxHeightPixels 100:40:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 10,70,10
-    altColor 70,10,10
-    priority 10
+        track phastCons44wayPlacental
+        subTrack cons44wayViewphastcons on
+        subGroups view=phastcons clade=mammal
+        shortLabel Mammal Cons
+        longLabel Placental Mammal Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 25,95,25
+        altColor 95,25,25
+        priority 12
 
-    track phastCons44wayPlacental
-    subTrack cons44way on
-    subGroups view=phastcons clade=mammal
-    shortLabel Mammal Cons
-    longLabel Placental Mammal Conservation by PhastCons
-    noInherit on
-    configurable on
-    type wig 0 1
-    maxHeightPixels 100:40:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 25,95,25
-    altColor 95,25,25
-    priority 12
+        track phastCons44way
+        subTrack cons44wayViewphastcons off
+        subGroups view=phastcons clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,120,40
+        altColor 120,40,40
+        priority 13
 
-    track phastCons44way
-    subTrack cons44way off
-    subGroups view=phastcons clade=vert
-    shortLabel Vertebrate Cons
-    longLabel Vertebrate Conservation by PhastCons
-    noInherit on
-    configurable on
-    type wig 0 1
-    maxHeightPixels 100:40:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 40,120,40
-    altColor 120,40,40
-    priority 13
+    track cons44wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons44way
+
+        # Conserved Elements (Most Conserved)
+        track phastConsElements44wayPrimates
+        subTrack cons44wayViewelements off
+        subGroups view=elements clade=primate
+        shortLabel Primate El
+        longLabel Primate Conserved Elements
+        noInherit on
+        type bed 5 .
+        color 170,50,100
+        priority 20
+
+        track phastConsElements44wayPlacental
+        subTrack cons44wayViewelements on
+        subGroups view=elements clade=mammal
+        shortLabel Mammal El
+        longLabel Placental Mammal Conserved Elements
+        noInherit on
+        type bed 5 .
+        color 100,50,170
+        priority 22
+
+        track phastConsElements44way
+        subTrack cons44wayViewelements off
+        subGroups view=elements clade=vert
+        shortLabel Vertebrate El
+        longLabel Vertebrate Conserved Elements
+        noInherit on
+        color 170,100,50
+        type bed 5 .
+        priority 23
+# Omitting child (multiz44way) of parent (cons44way) with views
+# Omitting child (phastConsElements44wayPrimates) of parent (cons44way) with views
+# Omitting child (phastConsElements44wayPlacental) of parent (cons44way) with views
+# Omitting child (phastConsElements44way) of parent (cons44way) with views
+# Omitting child (phyloP44wayPrimate) of parent (cons44way) with views
+# Omitting child (phyloP44wayPlacMammal) of parent (cons44way) with views
+# Omitting child (phyloP44wayAll) of parent (cons44way) with views
+# Omitting child (phastCons44wayPrimates) of parent (cons44way) with views
+# Omitting child (phastCons44wayPlacental) of parent (cons44way) with views
+# Omitting child (phastCons44way) of parent (cons44way) with views
 
 # PhyloP lineage-specific conservation
 track phyloPConsLs44way
@@ -3900,35 +4168,6 @@ windowingFunction mean
 group compGeno
 priority 103.292
 
-    track phyloP44wayPrimatesLs_v2
-    subTrack phyloPConsLs44way
-    shortLabel Primates V2
-    longLabel Primates V2
-    type wig -9.28 3.91
-    maxHeightPixels 100:32:16
-    noInherit on
-    autoScale off
-    windowingFunction mean
-    spanList 1
-    viewLimits -3:3
-    color 10,10,70
-    altColor 70,10,10
-    priority 1
-
-    track phyloP44wayGliresLs_v2
-    subTrack phyloPConsLs44way
-    shortLabel Glires V2
-    longLabel Glires (Rodent, Rabbit and Pika) V2
-    type wig -6.99 5.95
-    maxHeightPixels 100:32:16
-    noInherit on
-    viewLimits -3:3
-    spanList 1
-    windowingFunction mean
-    color 25,25,95
-    altColor 95,25,25
-    priority 2
-
     track phyloP44wayPrimateLs
     subTrack phyloPConsLs44way
     shortLabel Primates
@@ -3942,7 +4181,7 @@ priority 103.292
     viewLimits -3:3
     color 10,10,70
     altColor 70,10,10
-    priority 3
+    priority 1
 
     track phyloP44wayGlireLs
     subTrack phyloPConsLs44way
@@ -3956,51 +4195,64 @@ priority 103.292
     windowingFunction mean
     color 25,25,95
     altColor 95,25,25
-    priority 4
+    priority 2
+# Rewriting parent with subGroup view ensembl31wayGerp
 
 track ensembl31wayGerp
 compositeTrack on
 shortLabel GERP Conserved
 longLabel GERP Conservation for Ensembl PECAN Alignments (31 Mammal Species)
 subGroup1 view Views scores=Basewise_Conservation elements=Conserved_Elements
-visibilityViewDefaults scores=full elements=dense
 #settingsByView elements:pValueFilter=0.0,pValueFilterLimits=0:100,scoreFilter=0,scoreFilterLimits=0:99,minScore=0,maxScore=99 scores:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
 useScore 1
 type bed 4
 group compGeno
 priority 110
 
-    #track ensembl31wayGerpScores
-    #subTrack ensembl31wayGerp on
-    #subGroups view=scores
-    #shortLabel GERP Scores
-    #longLabel GERP Conservation for 31-Mammal Ensembl PECAN Alignments
-    #noInherit on
-    #type wig -14.42 3.46
-    #maxHeightPixels 100:50:11
-    #viewLimits -.3:2
-    #autoScale off
-    #spanList 1
-    #windowingFunction mean
-    #color 0, 10, 100
-    #altColor 0,90,10
-    #type wig 0.0 1.0
+    track ensembl31wayGerpViewscores
+    shortLabel Basewise Conservation
+    view scores
+    visibility full
+    subTrack ensembl31wayGerp
 
-    track ensembl31wayGerpElements
-    subTrack ensembl31wayGerp on
-    subGroups view=elements
-    shortLabel GERP Elements
-    longLabel GERP Conserved Elements for 31-Mammal Ensembl PECAN Alignments
-    noInherit on
-    color 170,100,50
-    type broadPeak
-    useScore 1
-    pValueFilter 0.0
-    pValueFilterLimits 0:100
-    scoreFilter 0
-    scoreFilterLimits 0:99
-    minScore 0
-    maxScore 99
+    track ensembl31wayGerpViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack ensembl31wayGerp
+
+        #track ensembl31wayGerpScores
+        #subTrack ensembl31wayGerp on
+        #subGroups view=scores
+        #shortLabel GERP Scores
+        #longLabel GERP Conservation for 31-Mammal Ensembl PECAN Alignments
+        #noInherit on
+        #type wig -14.42 3.46
+        #maxHeightPixels 100:50:11
+        #viewLimits -.3:2
+        #autoScale off
+        #spanList 1
+        #windowingFunction mean
+        #color 0, 10, 100
+        #altColor 0,90,10
+        #type wig 0.0 1.0
+
+        track ensembl31wayGerpElements
+        subTrack ensembl31wayGerpViewelements on
+        subGroups view=elements
+        shortLabel GERP Elements
+        longLabel GERP Conserved Elements for 31-Mammal Ensembl PECAN Alignments
+        noInherit on
+        color 170,100,50
+        type broadPeak
+        useScore 1
+        pValueFilter 0.0
+        pValueFilterLimits 0:100
+        scoreFilter 0
+        scoreFilterLimits 0:99
+        minScore 0
+        maxScore 99
+# Omitting child (ensembl31wayGerpElements) of parent (ensembl31wayGerp) with views
 
 track oneKGHighCovSeq
 compositeTrack on
@@ -4049,6 +4301,7 @@ priority 4.12
 visibility hide
 type bed 4
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
+# Rewriting parent with subGroup view fantom4CageGraphTop
 
 track fantom4CageGraphTop
 compositeTrack on
@@ -4063,104 +4316,127 @@ type bed 3
 autoScale on
 noInherit on
 subGroup1 view Views SIG=Clusters BED=Reads
-#settingsByView SIG:viewLimits=1.0:5000.0,minLimit=0,maxLimit=5000,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:32:16
-settingsByView SIG:viewLimits=0.0:50.0,minLimit=0,maxLimit=50,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:32:16
-visibilityViewDefaults SIG=full BED=squish
 #dragAndDrop subtracks
 allButtonPair on
 
-    track Fantom4CageLevel1Forward
+    track fantom4CageGraphTopViewSIG
+    shortLabel Clusters
+    view SIG
+    visibility full
     subTrack fantom4CageGraphTop
-    shortLabel Level 1 Forward
-    longLabel  Level 1 Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 2
-    minLimit 0
-    maxLimit 1
-    type bedGraph 4
-    configurable on
-    color 30,25,110
-
-    track Fantom4CageLevel1Reverse
-    subTrack fantom4CageGraphTop
-    shortLabel Level 1 Reverse
-    longLabel  Level 1 Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 3
-    minLimit 0
-    maxLimit 1
-    type bedGraph 4
-    configurable on
-    color 170,35,45
-
-    track Fantom4CageLevel2Forward
-    subTrack fantom4CageGraphTop
-    shortLabel Level 2 Forward
-    longLabel  Level 2 Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 4
-    minLimit 0
-    maxLimit 10
-    type bedGraph 4
-    configurable on
-    color 50,50,170
-
-    track Fantom4CageLevel2Reverse
-    subTrack fantom4CageGraphTop
-    shortLabel Level 2 Reverse
-    longLabel  Level 2 Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 5
-    minLimit 0
-    maxLimit 10
-    type bedGraph 4
-    configurable on
-    color 170,40,70
-
-    track Fantom4CageLevel3Forward
-    subTrack fantom4CageGraphTop
-    shortLabel Level 3 Forward
-    longLabel  Level 3 Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 6
+    viewLimits 0.0:50.0
     minLimit 0
     maxLimit 50
-    type bedGraph 4
-    configurable on
-    color 75,75,225
+    autoScale Off
+    windowingFunction mean
+    maxHeightPixels 128:32:16
 
-    track Fantom4CageLevel3Reverse
-    subTrack fantom4CageGraphTop
-    shortLabel Level 3 Reverse
-    longLabel  Level 3 Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG
-    priority 7
-    minLimit 0
-    maxLimit 50
-    type bedGraph 4
-    configurable on
-    color 225,75,130
+        track Fantom4CageLevel1Forward
+        subTrack fantom4CageGraphTopViewSIG
+        shortLabel Level 1 Forward
+        longLabel  Level 1 Forward Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 2
+        minLimit 0
+        maxLimit 1
+        type bedGraph 4
+        configurable on
+        color 30,25,110
 
-    track FantomCageReadForward
-    subTrack fantom4CageGraphTop
-    shortLabel Fantom (+) CAGE
-    longLabel Fantom/Riken CAGE Reads Forward
-    subGroups view=BED
-    priority 8
-    configurable on
-    useScore 1
-    bedFilter on
-    exonArrows off
-    type bed 12 .
+        track Fantom4CageLevel1Reverse
+        subTrack fantom4CageGraphTopViewSIG
+        shortLabel Level 1 Reverse
+        longLabel  Level 1 Reverse Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 3
+        minLimit 0
+        maxLimit 1
+        type bedGraph 4
+        configurable on
+        color 170,35,45
 
-    track FantomCageReadReverse
+        track Fantom4CageLevel2Forward
+        subTrack fantom4CageGraphTopViewSIG
+        shortLabel Level 2 Forward
+        longLabel  Level 2 Forward Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 4
+        minLimit 0
+        maxLimit 10
+        type bedGraph 4
+        configurable on
+        color 50,50,170
+
+        track Fantom4CageLevel2Reverse
+        subTrack fantom4CageGraphTopViewSIG
+        shortLabel Level 2 Reverse
+        longLabel  Level 2 Reverse Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 5
+        minLimit 0
+        maxLimit 10
+        type bedGraph 4
+        configurable on
+        color 170,40,70
+
+        track Fantom4CageLevel3Forward
+        subTrack fantom4CageGraphTopViewSIG
+        shortLabel Level 3 Forward
+        longLabel  Level 3 Forward Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 6
+        minLimit 0
+        maxLimit 50
+        type bedGraph 4
+        configurable on
+        color 75,75,225
+
+        track Fantom4CageLevel3Reverse
+        subTrack fantom4CageGraphTopViewSIG
+        shortLabel Level 3 Reverse
+        longLabel  Level 3 Reverse Fantom/Riken 4 CAGE
+        subGroups view=SIG
+        priority 7
+        minLimit 0
+        maxLimit 50
+        type bedGraph 4
+        configurable on
+        color 225,75,130
+
+    track fantom4CageGraphTopViewBED
+    shortLabel Reads
+    view BED
+    visibility squish
     subTrack fantom4CageGraphTop
-    shortLabel Fantom (-) CAGE
-    longLabel Fantom/Riken CAGE Reads Reverse
-    subGroups view=BED
-    priority 9
-    configurable on
-    useScore 1
-    exonArrows off
-    bedFilter on
-    type bed 12 .
+
+        track FantomCageReadForward
+        subTrack fantom4CageGraphTopViewBED
+        shortLabel Fantom (+) CAGE
+        longLabel Fantom/Riken CAGE Reads Forward
+        subGroups view=BED
+        priority 8
+        configurable on
+        useScore 1
+        bedFilter on
+        exonArrows off
+        type bed 12 .
+
+        track FantomCageReadReverse
+        subTrack fantom4CageGraphTopViewBED
+        shortLabel Fantom (-) CAGE
+        longLabel Fantom/Riken CAGE Reads Reverse
+        subGroups view=BED
+        priority 9
+        configurable on
+        useScore 1
+        exonArrows off
+        bedFilter on
+        type bed 12 .
+# Omitting child (Fantom4CageLevel1Forward) of parent (fantom4CageGraphTop) with views
+# Omitting child (Fantom4CageLevel1Reverse) of parent (fantom4CageGraphTop) with views
+# Omitting child (Fantom4CageLevel2Forward) of parent (fantom4CageGraphTop) with views
+# Omitting child (Fantom4CageLevel2Reverse) of parent (fantom4CageGraphTop) with views
+# Omitting child (Fantom4CageLevel3Forward) of parent (fantom4CageGraphTop) with views
+# Omitting child (Fantom4CageLevel3Reverse) of parent (fantom4CageGraphTop) with views
+# Omitting child (FantomCageReadForward) of parent (fantom4CageGraphTop) with views
+# Omitting child (FantomCageReadReverse) of parent (fantom4CageGraphTop) with views

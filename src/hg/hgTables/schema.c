@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.60 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.60.30.1 2009/12/17 03:53:36 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -582,9 +582,11 @@ else if (startsWith("wigMaf", curTrack->type))
     }
 else if (curTrack->subtracks != NULL)
     {
-    struct trackDb *sTdb = NULL;
-    for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(curTrack->subtracks);
+    struct slRef *tdbRef;
+    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
+	struct trackDb *sTdb = tdbRef->val;
         if (sameString(sTdb->tableName, curTable))
             return TRUE;
         }

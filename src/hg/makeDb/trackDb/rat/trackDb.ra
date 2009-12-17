@@ -24,6 +24,14 @@ priority 8
 visibility hide
 type bed 4 +
 
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track bactigPos
 shortLabel Bactigs
 longLabel Bactigs
@@ -44,8 +52,25 @@ altColor 175,150,128
 type genePred 
 
 
-track softberryGene override
+track softberryGene
+shortLabel Fgenesh++ Genes
+longLabel Fgenesh++ Gene Predictions
+group genes
+priority 48
 visibility dense
+color 0,100,0
+type genePred softberryPep
+
+
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
 
 track slamNonCodingHuman
 shortLabel Slam Non-Coding Human
@@ -58,14 +83,24 @@ altColor 200,220,255
 spectrum on
 type bed 5 .
 
-track twinscan override
+track twinscan
+shortLabel Twinscan
 longLabel Twinscan Gene Predictions Using Rat/Human Homology
+group genes
+priority 45
 visibility dense
+color 0,100,100
 altColor 0,50,50
+type genePred twinscanPep
 
-track sgpGene override
+track sgpGene
+shortLabel SGP Genes
 longLabel SGP Gene Predictions Using Rat/Human Homology
+group genes
+priority 47
 visibility dense
+color 0,90,100
+type genePred sgpPep
 
 track stsMapRat
 shortLabel STS Markers
@@ -76,16 +111,30 @@ visibility dense
 altColor 128,128,255
 type bed 5 +
 
-track blatFugu override
+track blatFugu
+shortLabel Fugu Blat
+longLabel Takifugu rubripes Translated Blat Alignments
+group compGeno
 priority 113
 visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
 
-track blatCi1 override
+track blatCi1
+shortLabel Squirt Blat
+longLabel Ciona intestinalis Translated Blat Alignments
+group compGeno
 priority 111
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno 
 
 # release alpha: shortLabel $o_db
 track chainHg18
-#replaces record chainHg18 in parent dir missing/extra subTrack,subGroups
 shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -101,13 +150,23 @@ otherDb hg18
 release alpha
 
 # release beta: shortLabel $o_Organism
-track chainHg18 override
-release beta
+track chainHg18
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 250
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain hg18
+otherDb hg18
+release beta
 
 # release alpha: shortLabel $o_db
 track netHg18
-#replaces record netHg18 in parent dir missing/extra subTrack,subGroups
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -117,6 +176,18 @@ spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
 release alpha
+
+# release beta: shortLabel $o_Organism
+track netHg18
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 250.1
+visibility dense
+spectrum on
+type netAlign hg18 chainHg18
+otherDb hg18
+release beta
 
 # release alpha: shortLabel $o_db
 track chainHg17
@@ -174,14 +245,31 @@ type netAlign hg17 chainHg17
 otherDb hg17
 release beta
 
-track chainDanRer4 override
+track chainDanRer4
 shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 159.3
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain danRer4
+otherDb danRer4
 
-track netDanRer4 override
+track netDanRer4
 shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 159.4
+visibility hide
+spectrum on
+type netAlign danRer4 chainDanRer4
+otherDb danRer4
 
 track chainMm9
-#replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -196,7 +284,6 @@ type chain mm9
 otherDb mm9
 
 track netMm9
-#replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -207,7 +294,6 @@ type netAlign mm9 chainMm9
 otherDb mm9
 
 track chainMm8
-#replaces record chainMm8 in parent dir missing/extra release
 shortLabel mm8 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -222,7 +308,6 @@ type chain mm8
 otherDb mm8
 
 track netMm8
-#replaces record netMm8 in parent dir missing/extra release
 shortLabel mm8 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -232,13 +317,29 @@ spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
 
-track chainBosTau3 override
+track chainBosTau3
 shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 229.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain bosTau3
+otherDb bosTau3
 
-track netBosTau3 override
+track netBosTau3
 shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
 priority 229.3
+visibility hide
+spectrum on
+type netAlign bosTau3 chainBosTau3
+otherDb bosTau3
 
 track agilentCgh
 shortLabel Agilent CGH

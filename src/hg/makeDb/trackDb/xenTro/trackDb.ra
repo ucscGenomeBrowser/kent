@@ -1,8 +1,21 @@
-track mgcFullMrna override
+track mgcFullMrna
 #track mgcGenes
 shortLabel XGC Genes
 longLabel Xenopus Gene Collection Full ORF mRNAs
+group genes
+priority 36
 visibility pack
+color 34,139,34
+type psl
+baseColorDefault diffCodons
+baseColorUseCds genbank
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
 
 track jgiFilteredModels
 shortLabel JGI Genes
@@ -15,7 +28,6 @@ type genePred
 url http://genome.jgi-psf.org/cgi-bin/dispGeneModel.v4?db=Xentr3&id=$$
 
 track intronEst
-#replaces record intronEst in parent dir missing/extra maxItems
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
 group rna
@@ -68,7 +80,6 @@ type psl xeno
 url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511
 
 track chainMm8
-#replaces record chainMm8 in parent dir missing/extra release,matrix,matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -81,7 +92,6 @@ type chain mm8
 otherDb mm8
 
 track netMm8
-#replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -92,7 +102,6 @@ type netAlign mm8 chainMm8
 otherDb mm8
 
 track chainRn4
-#replaces record chainRn4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -107,7 +116,6 @@ type chain rn4
 otherDb rn4
 
 track netRn4
-#replaces record netRn4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

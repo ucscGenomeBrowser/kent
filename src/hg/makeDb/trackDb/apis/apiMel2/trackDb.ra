@@ -8,6 +8,16 @@ color 99,66,20
 altColor 199,147,35
 type bed 4 .
 
+track gold
+shortLabel Assembly 
+longLabel Assembly from Fragments 
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
 track blastHg17KG
 shortLabel Human  Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
@@ -61,15 +71,30 @@ visibility hide
 color 100,100,100
 type genePred .
 
-track blastDm1FB override
+track blastDm1FB
 shortLabel D. mel. Proteins (dm1)
 longLabel $o_Organism ($o_date/$o_db) Proteins
+group genes
+priority 201
 visibility pack
+colorChromDefault off
+type psl protein
+pred dm1.blastFBPep00
+blastRef dm1.blastFBRef00
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 otherDb dm1
 
-track blastDm2FB override
+track blastDm2FB
 shortLabel D. mel. Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
+group genes
+priority 200
+visibility dense
+colorChromDefault off
+type psl protein
+pred dm2.blastFBPep01
+blastRef dm2.blastFBRef01
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 otherDb dm2
 
 

@@ -92,9 +92,15 @@ visibility dense
 color 0,0,255
 type bed 8 .
       
-track affyTranscriptome override
+track affyTranscriptome 
+shortLabel Transcriptome
+longLabel Affymetrix Experimentally Derived Transcriptome
 group regulation
 priority 89
+visibility hide
+color 100,50,0
+altColor 0,0,255
+chromosomes chr22,chr21
 type sample 9
 
 track blatMouse

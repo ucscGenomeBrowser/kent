@@ -1,3 +1,10 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
 
 track all_mrna
 shortLabel $Organism mRNAs
@@ -15,14 +22,18 @@ indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
 
-track blastHg17KG override
+track blastHg17KG
+shortLabel Hg17  Proteins
 longLabel Hg17 Proteins
+group genes
 priority 201
+visibility pack
+colorChromDefault off
+type psl protein
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 
 track chainHg18
-#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -35,7 +46,6 @@ type chain hg18
 otherDb hg18
 
 track netHg18
-#replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

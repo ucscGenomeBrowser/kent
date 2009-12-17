@@ -1,13 +1,25 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
 
-track clonePos override
+track clonePos
+priority 14
+shortLabel Coverage
 longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180 
+type clonePos
 
 track knownGene override
 shortLabel Known Genes
 longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
 
 track vegaGene
-#replaces record vegaGene in parent dir missing/extra release
 shortLabel Vega Genes
 longLabel Vega Annotations 
 group genes
@@ -19,7 +31,6 @@ type genePred vegaPep
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
 track acembly
-#replaces record acembly in parent dir missing/extra autoTranslate,itemClassTbl,geneClasses,gClass_main,gClass_putative
 shortLabel Acembly Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
@@ -31,7 +42,6 @@ url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg15&l=$$
 urlLabel AceView Gene Summary:
 
 track vegaPseudoGene
-#replaces record vegaPseudoGene in parent dir missing/extra release
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
@@ -42,8 +52,24 @@ color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track twinscan override
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
 altColor 0,50,50
+type genePred twinscanPep
+
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Mouse/Human Homology
+group genes
+priority 47
+visibility hide
+color 0,90,100
+type genePred sgpPep
 
 track tfbsCons
 shortLabel TFBS Conserved
@@ -243,9 +269,15 @@ spectrum on
 type psl xeno rn2
 otherDb rn2
 
-track syntenyRat override
+track syntenyRat
+shortLabel Rat Synteny
 longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+group compGeno
 priority 175
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 +
 otherDb rn2
 
 track blastzBestRn2
@@ -272,8 +304,15 @@ spectrum on
 type psl xeno rn2
 otherDb rn2
 
-track syntenyCow override
+track syntenyCow
+shortLabel Cow Synteny
+longLabel Cow Synteny Using RH Mapping
+group compGeno
 priority 178
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6 .
 
 track bacendsCow
 shortLabel Cow BAC Ends
@@ -340,8 +379,14 @@ spectrum on
 type netAlign hg15 selfChain
 otherDb hg15
 
-track uniGene_2 override
+track uniGene_2
+shortLabel UniGene
 longLabel UniGene Hs 160 Alignments and SAGEmap Info
+group rna
+priority 69
+visibility hide
+spectrum on
+type bed 12 .
 
 track blastzCe1
 shortLabel Worm Blastz
@@ -429,7 +474,6 @@ type chain hg16
 otherDb hg16
 
 track bacEndPairs
-#replaces record bacEndPairs in parent dir missing/extra color,altColor
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
 group map
@@ -439,7 +483,6 @@ type bed 6 +
 exonArrows off
 
 track genomicSuperDups
-#replaces record genomicSuperDups in parent dir missing/extra noScoreFilter
 shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep

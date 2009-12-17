@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.17 2009/05/20 20:59:55 mikep Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.17.30.1 2009/12/17 03:53:34 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -149,10 +149,10 @@ printf("Base-pair-wise union (OR) of %s and other selected subtracks<P>\n",
        curTable);
 }
 
+
 void doSubtrackMergeMore(struct sqlConnection *conn)
 /* Respond to subtrack merge create/edit button */
 {
-struct trackDb *primary = subTdbFind(curTrack,curTable);
 char *dbTable = getDbTable(database, curTable);
 
 htmlOpen("Merge subtracks of %s (%s)",
@@ -169,10 +169,12 @@ hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
 hCompositeUi(database, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm");
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
+struct trackDb *primary = subTdbFind(curTrack,curTable);
 if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable))
     showWiggleMergeOptions(primary->longLabel);
 else
     showBedMergeOptions();
+int trackDbCountDescendants(struct trackDb *tdb);
 hPrintf("If a filter is specified on the main Table Browser page, it will "
 	"be applied only to %s, not to any other selected subtrack.  ",
 	primary->longLabel);
@@ -241,8 +243,10 @@ else
     else
 	errAbort("describeSubtrackMerge: unrecognized op %s", op);
     }
-for (tdb=curTrack->subtracks;  tdb != NULL;  tdb = tdb->next)
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(curTrack->subtracks);
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
+    tdb = tdbRef->val;
     if (!sameString(tdb->tableName, curTable) &&
 	isSubtrackMerged(tdb->tableName) &&
 	sameString(tdb->type, primary->type))

@@ -1,3 +1,12 @@
+track gold
+shortLabel Assembly 
+longLabel Assembly from Fragments 
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
 
 track blastzCe1
 shortLabel Ce1 Blastz
@@ -24,7 +33,6 @@ type chain ce1
 otherDb ce1
 
 track gc5Base
-#replaces record gc5Base in parent dir missing/extra spanList
 shortLabel GC % 5 base
 longLabel GC Percent in 5-Base Windows
 group map
@@ -69,10 +77,15 @@ visibility hide
 color 0,0,0
 type bed 6 .
 
-track twinscan override
+track twinscan
+shortLabel Twinscan
 longLabel Twinscan Gene Predictions Using C. briggsae/C. elegans WS98 Homology
+group genes
+priority 45
 visibility dense
+color 0,100,100
 altColor 0,50,50
+type genePred twinscanPep
 
 track blastzCe2
 shortLabel Elegans Blastz

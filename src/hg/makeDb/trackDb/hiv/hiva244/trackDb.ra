@@ -31,6 +31,15 @@ selectSubject on
 maxItems 2000
 type psl
 
+track interPro
+shortLabel InterPro
+longLabel InterPro Domains
+group genes
+priority 34.6
+visibility hide
+color 12,12,120
+type bed 4
+
 track vax003AECons
 shortLabel VAX003 AE Conservation
 longLabel VAX003 AE DNA Sequence Conservation

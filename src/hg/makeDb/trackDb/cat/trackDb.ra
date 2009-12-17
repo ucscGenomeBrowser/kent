@@ -1,5 +1,4 @@
 track chainHg18
-#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -14,7 +13,6 @@ type chain hg18
 otherDb hg18
 
 track netHg18
-#replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -25,7 +23,6 @@ type netAlign hg18 chainHg18
 otherDb hg18
 
 track chainMm8
-#replaces record chainMm8 in parent dir missing/extra release
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -40,7 +37,6 @@ type chain mm8
 otherDb mm8
 
 track netMm8
-#replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

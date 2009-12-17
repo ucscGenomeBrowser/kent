@@ -1,7 +1,29 @@
+track cytoBand
+shortLabel Chromosome Band
+longLabel Chromosome Bands Based On ISCN Lengths
+group map
+priority 1
+visibility hide
+altColor 150,50,50
+type bed 4 +
 
-track ECgene override
+track ECgene
+shortLabel ECgene Genes
 longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
+group genes
+priority 41.5
+visibility hide
 color 155, 0, 125
+type genePred ECgenePep
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
 
 track multiz5way
 shortLabel Conservation
@@ -18,9 +40,15 @@ windowingFunction mean
 pairwise netBlastz
 speciesOrder rn3 hg17 canFam1 galGal2
 
-track phastConsElements override
+track phastConsElements
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Rat/Human/Dog/Chicken
+group compGeno
 priority 100.1
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track exoniphyGene
 shortLabel Exoniphy Genes
@@ -80,10 +108,18 @@ spectrum on
 type psl xeno danRer1
 otherDb danRer1
 
-track chainDanRer1 override
+track chainDanRer1
+shortLabel $o_db Chain
 longLabel $O_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
 priority 160.01
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+type chain danRer1
+otherDb danRer1
 
 track netDanRer1
 shortLabel $o_db Net
@@ -115,8 +151,17 @@ spectrum on
 type netAlign canFam1 chainCanFam1
 otherDb canFam1
 
-track blastzHg17 override
+track blastzHg17
+shortLabel Human Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
 priority 258.9
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg17
+otherDb hg17
 
 track blastzBestHg17
 shortLabel Human Best
@@ -153,8 +198,13 @@ altColor 255,240,200
 type bed 6 +
 otherDb hg17
 
-track gap override
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
 visibility dense
+type bed 3 +
 
 track blastzRn3
 shortLabel Rat Blastz
@@ -167,6 +217,15 @@ altColor 255,240,200
 spectrum on
 type psl xeno rn3
 otherDb rn3
+
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
 
 track blastzMm3X
 shortLabel Mouse3X Blastz

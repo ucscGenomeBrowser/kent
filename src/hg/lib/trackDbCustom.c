@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.6 2009/12/17 00:17:08 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.7 2009/12/17 03:53:39 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -749,11 +749,19 @@ struct trackDb *subTdbFind(struct trackDb *parent,char *table)
 if(parent == NULL)
     return NULL;
 
-struct trackDb *tdb;
-for (tdb = parent->subtracks;
-     tdb != NULL && differentString(tdb->tableName,table);
-     tdb = tdb->next) {}
-return tdb;
+struct trackDb *found = NULL;
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(parent->subtracks);
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    struct trackDb *tdb = tdbRef->val;
+    if (sameString(tdb->tableName, table))
+	{
+	found = tdb;
+        break;
+	}
+    }
+slFreeList(&tdbRefList);
+return found;
 }
 
 struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table)
@@ -970,38 +978,73 @@ parentTdb->subtracks = goodKids;
 return badKids;
 }
 
-void trackDbListGetRefsToDescendents(struct slRef **pList, struct trackDb *tdbList)
+void rGetRefsToDescendants(struct slRef **pList, struct trackDb *tdbList)
 /* Add all member of tdbList, and all of their children to pList recursively. */
 {
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     refAdd(pList, tdb);
-    trackDbListGetRefsToDescendents(pList, tdb->subtracks);
+    rGetRefsToDescendants(pList, tdb->subtracks);
     }
 }
 
-void trackDbListGetRefsToDescendentLeaves(struct slRef **pList, struct trackDb *tdbList)
+struct slRef *trackDbListGetRefsToDescendants(struct trackDb *tdbList)
+/* Return reference list to everything in forest. Do slFreeList when done. */
+{
+struct slRef *refList = NULL;
+rGetRefsToDescendants(&refList, tdbList);
+slReverse(&refList);
+return refList;
+}
+
+int trackDbCountDescendants(struct trackDb *tdb)
+/* Count the number of tracks in subtracks list and their subtracks too . */
+{
+struct slRef *tdbRefList = trackDbListGetRefsToDescendants(tdb->subtracks);
+int result = slCount(tdbRefList);
+slFreeList(&tdbRefList);
+return result;
+}
+
+void rGetRefsToDescendantLeaves(struct slRef **pList, struct trackDb *tdbList)
 /* Add all leaf members of trackList, and any leaf descendants to pList recursively. */
 {
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (tdb->subtracks)
-	trackDbListGetRefsToDescendentLeaves(pList, tdb->subtracks);
+	rGetRefsToDescendantLeaves(pList, tdb->subtracks);
     else
 	refAdd(pList, tdb);
     }
 }
 
-int trackDbCountDescendentLeaves(struct trackDb *tdb)
+struct slRef *trackDbListGetRefsToDescendantLeaves(struct trackDb *tdbList)
+/* Return reference list all leaves in forest. Do slFreeList when done. */
+{
+struct slRef *refList = NULL;
+rGetRefsToDescendantLeaves(&refList, tdbList);
+slReverse(&refList);
+return refList;
+}
+
+int trackDbCountDescendantLeaves(struct trackDb *tdb)
 /* Count the number of leaves in children list and their children. */
 {
-struct slRef *leafRefs = NULL;
-trackDbListGetRefsToDescendentLeaves(&leafRefs, tdb->subtracks);
+struct slRef *leafRefs = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
 int result = slCount(leafRefs);
 slFreeList(&leafRefs);
 return result;
+}
+
+int trackDbRefCmp(const void *va, const void *vb)
+/* Do trackDbCmp on list of references as opposed to actual trackDbs. */
+{
+const struct slRef *aRef = *((struct slRef **)va);
+const struct slRef *bRef = *((struct slRef **)vb);
+struct trackDb *a = aRef->val, *b = bRef->val;
+return trackDbCmp(&a, &b);
 }
 
 struct trackDb *trackDbCompositeParent(struct trackDb *tdb)
