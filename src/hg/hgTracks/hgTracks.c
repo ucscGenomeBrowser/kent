@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.3 2009/12/17 00:19:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.4 2009/12/17 08:38:32 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -353,12 +353,11 @@ if (isWithCenterLabels(track))
 if (tdbIsComposite(track->tdb))
     {
     struct track *subtrack;
-    for (subtrack = track->subtracks;  subtrack != NULL;
-     subtrack = subtrack->next)
-    {
-    if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
-        y += fontHeight;
-    }
+    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+	{
+	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
+	    y += fontHeight;
+	}
     }
 return y;
 }
@@ -2620,27 +2619,30 @@ for (hel = hels; hel != NULL; hel = hel->next)
     char *table = hel->val;
     /* check non-subtrack. */
     if (sameString(track->tdb->tableName, table))
-    {
-    track->visibility = tvFull;
-    track->tdb->visibility = tvFull;
-    cartSetString(cart, track->tdb->tableName, "full");
-    }
+	{
+	track->visibility = tvFull;
+	track->tdb->visibility = tvFull;
+	cartSetString(cart, track->tdb->tableName, "full");
+	}
     else if (track->tdb->subtracks != NULL)
-    {
-    for (subtrack = track->tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        {
-        if (sameString(subtrack->tableName, table))
-            {
-            char selName[SMALLBUF];
-            track->visibility = tvFull;
-            cartSetString(cart, track->tdb->tableName, "full");
-            track->tdb->visibility = tvFull;
-            subtrack->visibility = tvFull;
-            safef(selName, sizeof(selName), "%s_sel", table);
-            cartSetBoolean(cart, selName, TRUE);
-            }
-        }
-    }
+	{
+	struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(track->tdb->subtracks);
+	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+	    {
+	    subtrack = tdbRef->val;
+	    if (sameString(subtrack->tableName, table))
+		{
+		char selName[SMALLBUF];
+		track->visibility = tvFull;
+		cartSetString(cart, track->tdb->tableName, "full");
+		track->tdb->visibility = tvFull;
+		subtrack->visibility = tvFull;
+		safef(selName, sizeof(selName), "%s_sel", table);
+		cartSetBoolean(cart, selName, TRUE);
+		}
+	    }
+	slFreeList(&tdbRefList);
+	}
     }
 hashElFreeList(&hels);
 }

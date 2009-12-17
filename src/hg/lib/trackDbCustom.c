@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.7 2009/12/17 03:53:39 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.8 2009/12/17 08:38:35 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -923,7 +923,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	}
     }
 
-/* Do subtrack inheritance - filling in parent and subtracks fields. */
+/* Do subtrack hierarchy - filling in parent and subtracks fields. */
 for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
@@ -951,31 +951,6 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 
 hashFree(&trackHash);
 return forest;
-}
-
-
-int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb)
-/* abandons tableless children from a container tdb, such as a composite
-   returns count of children that have been abandoned */
-{
-struct trackDb *goodKids = NULL;
-struct trackDb *childTdb;
-int badKids = 0;
-
-while((childTdb = slPopHead(&(parentTdb->subtracks))) != NULL)
-    {
-    if (hTableOrSplitExists(db, childTdb->tableName))
-        slAddHead(&goodKids,childTdb);
-    else
-        {
-        badKids++;
-        trackDbFree(&childTdb);
-        }
-    }
-if(goodKids != NULL)
-    slReverse(&goodKids);
-parentTdb->subtracks = goodKids;
-return badKids;
 }
 
 void rGetRefsToDescendants(struct slRef **pList, struct trackDb *tdbList)

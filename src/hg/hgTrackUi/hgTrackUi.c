@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509.2.3 2009/12/16 21:04:03 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.509.2.4 2009/12/17 08:38:31 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -541,11 +541,13 @@ printf("&nbsp;Trim to triangle<BR>\n");
 
 if (tdbIsComposite(tdb))
     {
-    struct trackDb *subTdb;
     printf("<BR>&nbsp;&nbsp;&nbsp;");
-    slSort(&(tdb->subtracks), trackDbCmp);
-    for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
+    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+    slSort(tdbRefList, trackDbRefCmp);
+    struct slRef *tdbRef;
+    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
+	struct trackDb *subTdb = tdbRef->val;
 	if (hTableExists(database, subTdb->tableName))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->tableName);
@@ -554,6 +556,7 @@ if (tdbIsComposite(tdb))
 		   subTdb->longLabel);
 	    }
 	}
+    slFreeList(&tdbRefList);
     }
 else
     {

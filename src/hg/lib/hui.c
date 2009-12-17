@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.16 2009/12/17 03:53:38 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.17 2009/12/17 08:38:34 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2911,14 +2911,14 @@ if(strptime (date,format, &tp))
 return newDate;  // newDate is never freed!
 }
 
-boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList)
-/* Updates the tdb->priority from cart then sorts the list anew.
-   Returns TRUE if priorities obtained from cart */
+boolean tdbAddPrioritiesFromCart(struct cart *cart, struct trackDb *tdbList)
+/* Updates the tdb->priority from cart for all tracks in list and their
+ * descendents. */
 {
 char htmlIdentifier[128];
 struct trackDb *tdb;
 boolean cartPriorities = FALSE;
-for (tdb = *tdbList; tdb != NULL; tdb = tdb->next)
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
     char *cartHas = cartOptionalString(cart,htmlIdentifier);
@@ -2927,7 +2927,17 @@ for (tdb = *tdbList; tdb != NULL; tdb = tdb->next)
 	tdb->priority = atof(cartHas);
 	cartPriorities = TRUE;
 	}
+    if (tdbAddPrioritiesFromCart(cart, tdb->subtracks))
+        cartPriorities = TRUE;
     }
+return cartPriorities;
+}
+
+boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList)
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
+{
+boolean cartPriorities = tdbAddPrioritiesFromCart(cart, *tdbList);
 slSort(tdbList, trackDbCmp);
 return cartPriorities;
 }
@@ -5328,7 +5338,7 @@ return TRUE;
 static boolean hCompositeUiAllButtons(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: all/none buttons only (as opposed to matrix or lots of buttons */
 {
-if(slCount(parentTdb->subtracks) <= 1)
+if (trackDbCountDescendantLeaves(parentTdb) <= 1)
     return FALSE;
 
 if(dimensionsExist(parentTdb))
@@ -5396,8 +5406,11 @@ else
 button = cgiOptionalString(buttonVar);
 if (isNotEmpty(button))
     {
-    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+    struct slRef *tdbRef;
+    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
+	subtrack = tdbRef->val;
         boolean newVal = FALSE;
         safef(option, sizeof(option), "%s_sel", subtrack->tableName);
         newVal = sameString(button, ADD_BUTTON_LABEL);
@@ -5457,9 +5470,11 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         button = cgiOptionalString(buttonVar);
         if (isEmpty(button))
             continue;
-        for (subtrack = parentTdb->subtracks; subtrack != NULL;
-                subtrack = subtrack->next)
+	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+	struct slRef *tdbRef;
+	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
             {
+	    subtrack = tdbRef->val;
             char *p;
             int n;
             if ((p = trackDbSetting(subtrack, "subGroups")) == NULL)
@@ -5505,8 +5520,6 @@ boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
-
-// (void)parentTdbAbandonTablelessChildren(db,tdb);
 
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);

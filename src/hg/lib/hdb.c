@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.8 2009/12/17 00:17:07 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.9 2009/12/17 08:38:34 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3341,7 +3341,7 @@ struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
 boolean foundOne = FALSE;
 // A cleaner implementation of loaded hash would be something like slListContainer with support for an exists method
-// Hmm, why would that be cleaner? -jk
+// Hmm, why would that be cleaner? -jk Also there is slElOnList and stuff....
 struct hash *loaded = hashNew(0);
 for (one = tableList; one != NULL; one = one->next)
     {
@@ -3406,7 +3406,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (tdb->parent != NULL)
         {
-	if (tdb->parent->subtracks == NULL)
+	if (tdbIsSuperTrack(tdb->parent))
 	    /* Do supertrack-specific inheritance. */
 	    subtrackInherit(tdb, tdb->parent);
 	}
@@ -3510,99 +3510,6 @@ rInheritFields(tdbList);
 return tdbList;
 }
 
-#ifdef OLD
-struct trackDb *old_hTrackDb(char *db, char *chrom)
-/* Load tracks associated with current chromosome (which may be NULL for
- * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
- * but are accessible via the parent pointers of the member tracks.  Also,
- * the supertrack trackDb subtrack fields are not set here (would be
- * incompatible with the returned list)
- * Note that this is a relatively expensive call if you are only interested
- * in a few tables.  The first time this function is called it queries and
- * caches all tracks in db. In addition, it substitutes text in the shortLabel,
- * longLabel, and html fields (amongst others) (for example, replace
- * $ORGANISM with HUMAN). At Sep 2008, hg18 database (9000 tables)
- * this results in >12M calls to lib/subText.c:firstInList()
- * for the substitution process. */
-{
-struct trackDb *tdbList = loadTrackDb(db, NULL);
-struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
-struct trackDb *tdbRetList = NULL;
-boolean privateHost = hIsPrivateHost();
-struct hash *compositeHash = newHash(0);
-struct hash *superHash = newHash(0);
-struct trackDb *tdb, *compositeTdb;
-struct trackDb *nextTdb;
-
-/* Process list */
-while (tdbList != NULL)
-    {
-    tdb = slPopHead(&tdbList);
-    if (tdbIsSuper(tdb))
-	{
-        /* save supertrack entries, but don't add to list */
-        hashAdd(superHash, tdb->tableName, tdb);
-	}
-    else if (trackDbSetting(tdb, "compositeTrack"))
-        {
-        slAddHead(&tdbFullList, tdb);
-        hashAdd(compositeHash, tdb->tableName, tdb);
-        }
-    else
-        addTrackIfDataAccessible(db, tdb, chrom, privateHost, &tdbFullList);
-    }
-
-/* create new list with subtrack entries in subtracks field of composite track*/
-nextTdb = tdbFullList;
-for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
-    {
-    char *words[1];
-    char *setting;
-
-    nextTdb = tdb->next;
-    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
-        {
-        if (chopLine(cloneString(setting), words) >= 1)
-            {
-            compositeTdb =
-                (struct trackDb *)hashFindVal(compositeHash, words[0]);
-            if (compositeTdb)
-                {
-		subtrackInherit(tdb, compositeTdb);
-                /* should be a short list -- we can shortcut and add to tail
-                 * rather than reversing later */
-                slAddTail(&compositeTdb->subtracks, tdb);  // TODO: slAddHead then rely upon slSort
-                }
-            }
-        }
-    else
-        slAddHead(&tdbSubtrackedList, tdb);
-    }
-/* Prune composite tracks that have empty subtracks lists because their
- * tables do not exist in the database. */
-slReverse(&tdbSubtrackedList);
-for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
-    {
-    nextTdb = tdb->next;
-    if (! (trackDbSetting(tdb, "compositeTrack") && tdb->subtracks == NULL))
-        {
-	slAddHead(&tdbRetList, tdb);
-	}
-    }
-slSort(&tdbRetList, trackDbCmp);
-
-/* Add parent pointers to supertrack members */
-for (tdb = tdbRetList; tdb != NULL; tdb = tdb->next)
-    {
-    if (tdb->parentName)
-        tdb->parent =
-                (struct trackDb *)hashFindVal(superHash, tdb->parentName);
-    }
-
-return tdbRetList;
-}
-#endif /* OLD */
-
 static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
 					    char *where)
 /* Load trackDb object(s). Nothing done for composite tracks here. */
@@ -3623,33 +3530,6 @@ safef(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
 if (!trackTdb)
     return NULL;
-#ifdef UNUSED
-if (trackDbSetting(trackTdb, "compositeTrack") != NULL)
-    {
-    /* TODO: make this more fully recursive - if it needs deal with subtracks at all that is. */
-    /* Fill in trackDb->subtracks.  Query to get _exact_ match for composite
-     * track name in the subTrack setting, so we don't pick up subtracks of
-     * some other track with the same root name. */
-    struct trackDb *subTdbList = NULL, *tdb = NULL;
-    safef(where, sizeof(where),
-            "settings rlike '^(.*\n)?subTrack %s([ \n].*)?$'", track);
-    subTdbList = loadAndLookupTrackDb(conn, where);
-    for (tdb = subTdbList; tdb != NULL; tdb = tdb->next)
-	subtrackInherit(tdb, trackTdb);
-    trackTdb->subtracks = subTdbList;
-    }
-else if (trackDbSetting(trackTdb, "subTrack") != NULL)
-    {
-    struct trackDb *cTdb = NULL;
-    char *subTrackSetting = cloneString(trackDbSetting(trackTdb, "subTrack"));
-    char *compositeName = firstWordInLine(subTrackSetting);
-    safef(where, sizeof(where), "tableName = '%s'", compositeName);
-    cTdb = loadAndLookupTrackDb(conn, where);
-    if (cTdb)
-	subtrackInherit(trackTdb, cTdb);
-    freez(&subTrackSetting);
-    }
-#endif /* UNUSED */
 return trackTdb;
 }
 
@@ -3769,10 +3649,9 @@ return hgParseChromRange(db, spec, NULL, NULL, NULL);
 }
 
 struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
-/* Load trackDb object for a track. If track is composite, its subtracks
- * will also be loaded and inheritance will be handled; if track is a
- * subtrack then inheritance will be handled.  (Unless a subtrack has
- * "noInherit on"...) Don't die if conn has no trackDb table.  Return NULL
+/* Load trackDb object for a track.  Actually the whole trackDb gets loaded
+ * and just the one track returned. This is mostly just so parent and subtracks
+ * fields can be correct. Don't die if conn has no trackDb table.  Return NULL
  * if trackName is not found. */
 {
 struct slName *tdb, *tdbs = hTrackDbList();
