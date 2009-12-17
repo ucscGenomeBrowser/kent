@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.14 2009/12/16 20:13:02 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.15 2009/12/17 00:17:08 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -68,19 +68,6 @@ boolean makeDownloadsLink(struct trackDb *tdb)
 return makeNamedDownloadsLink(tdb,"Downloads");
 }
 
-struct trackDb *findTopLevelSelfOrParent(struct trackDb *tdb)
-/* Look for a parent who is a composite track and return that.  Failing that
- * just return self. */
-{
-struct trackDb *parent;
-for (parent = tdb->parent; parent != NULL; parent = parent->parent)
-    {
-    if (trackDbSettingOn(parent, "compositeTrack"))
-        return parent;
-    }
-return tdb;
-}
-
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
@@ -93,7 +80,7 @@ if (hTableOrSplitExists(db, tdb->tableName))
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
-    struct trackDb *topLevel = findTopLevelSelfOrParent(tdb);
+    struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
     printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->tableName,tableName,hint,label);
     return TRUE;
     }
@@ -118,7 +105,7 @@ if(metadata != NULL)
         if(sameString(metadata->tags[ix],"fileName"))
             {
             printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
-            makeNamedDownloadsLink(findTopLevelSelfOrParent(tdb), metadata->values[ix]);
+            makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), metadata->values[ix]);
             printf("</td></tr>");
             }
         else

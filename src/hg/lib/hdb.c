@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.7 2009/12/16 21:09:08 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.8 2009/12/17 00:17:07 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3376,8 +3376,6 @@ static void subtrackInherit(struct trackDb *subtrackTdb,
 assert(subtrackTdb->parent == NULL || subtrackTdb->parent == compositeTdb);
 subtrackTdb->parent = compositeTdb;
 //subtrackTdb->parentName = compositeTdb->tableName; // TODO: Currently superTracks may be distinguished by this
-tdbMarkAsComposite(compositeTdb);
-tdbMarkAsCompositeChild(subtrackTdb);
 if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     {
     /* no longer necessary ? -- this is done in hgTrackDb now */
@@ -3406,11 +3404,28 @@ static void rInheritFields(struct trackDb *tdbList)
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (tdb->parent != NULL && tdb->parent->subtracks != NULL)
+    if (tdb->parent != NULL)
         {
-	subtrackInherit(tdb, tdb->parent);
+	if (tdb->parent->subtracks == NULL)
+	    /* Do supertrack-specific inheritance. */
+	    subtrackInherit(tdb, tdb->parent);
 	}
     rInheritFields(tdb->subtracks);
+    }
+}
+
+static void trackDbCompositeMarkup(struct trackDb *parent, struct trackDb *tdbList)
+/* Set up things so that the COMPOSITE_NODE and related macros work on tdbList. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (parent != NULL)
+        {
+	tdbMarkAsComposite(parent);
+	tdbMarkAsCompositeChild(tdb);
+	}
+    trackDbCompositeMarkup(tdb, tdb->subtracks);
     }
 }
 
@@ -3474,9 +3489,9 @@ static void dumpFlagStatus(struct trackDb *tdbList, char *tableName, char *label
 {
 struct trackDb *tdb = rFindTrack(0, tdbList, tableName);
 if (tdb == NULL)
-     uglyf("%s: nil<BR>\n", label);
+     printf("%s: nil<BR>\n", label);
 else
-     uglyf("%s: treeNodeType %d, composite? %d, supertrack ? %d<BR>\n", label, tdb->treeNodeType, COMPOSITE_NODE(tdb->treeNodeType), SUPERTRACK_NODE(tdb->treeNodeType));
+     printf("%s: treeNodeType %d, composite? %d, supertrack ? %d<BR>\n", label, tdb->treeNodeType, COMPOSITE_NODE(tdb->treeNodeType), SUPERTRACK_NODE(tdb->treeNodeType));
 }
 #endif /* DEBUG */
 
@@ -3490,6 +3505,7 @@ struct trackDb *hTrackDb(char *db, char *chrom)
 struct trackDb *tdbList = loadTrackDb(db, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
+trackDbCompositeMarkup(NULL, tdbList);
 rInheritFields(tdbList);
 return tdbList;
 }

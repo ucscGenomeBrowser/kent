@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.5 2009/12/16 21:04:59 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.6 2009/12/17 00:17:08 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -1002,5 +1002,28 @@ trackDbListGetRefsToDescendentLeaves(&leafRefs, tdb->subtracks);
 int result = slCount(leafRefs);
 slFreeList(&leafRefs);
 return result;
+}
+
+struct trackDb *trackDbCompositeParent(struct trackDb *tdb)
+/* Return closest ancestor who is a composite track. */
+{
+struct trackDb *parent;
+for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+    {
+    if (trackDbSettingOn(parent, "compositeTrack"))
+        return parent;
+    }
+return NULL;
+}
+
+struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb)
+/* Look for a parent who is a composite track and return that.  Failing that
+ * just return self. */
+{
+struct trackDb *parent = trackDbCompositeParent(tdb);
+if (parent != NULL)
+    return parent;
+else
+    return tdb;
 }
 
