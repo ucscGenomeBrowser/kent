@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.99 2009/12/09 03:30:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.100 2009/12/17 23:04:35 hiram Exp $";
 
 #define SMALLBUF 128
 
@@ -739,7 +739,6 @@ static Color * makeColorArray(struct preDrawElement *preDraw, int width,
 /*	allocate and fill in a coloring array based on another track */
 {
 char *colorTrack = wigCart->colorTrack;
-boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers);
 int x1;
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 
@@ -757,17 +756,10 @@ for(x1 = 0; x1 < width; ++x1)
 
 	dataValue = preDraw[preDrawIndex].smooth;
 	/*	negative data is the alternate color	*/
-	if (whiskers)
-	    {
-	    colorArray[x1] = tg->ixColor;
-	    }
+	if (dataValue < 0.0)
+	    colorArray[x1] = tg->ixAltColor;
 	else
-	    {
-	    if (dataValue < 0.0)
-		colorArray[x1] = tg->ixAltColor;
-	    else
-		colorArray[x1] = tg->ixColor;
-	    }
+	    colorArray[x1] = tg->ixColor;
 	}
     }
 
