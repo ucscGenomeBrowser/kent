@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.107 2009/12/04 23:50:23 markd Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.108 2009/12/17 23:54:51 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1019,15 +1019,16 @@ long warnSeconds = warnTime*60;
 long duration;
 time_t now = time(NULL);
 
-long time = clock1000();
+long queryTime = clock1000();
 
 /* Get job list from paraHub. */
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, "pstat2 %s %s", getUser(), resultsName);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
+now = time(NULL);  /* need to refresh this after we get the info */
 
-verbose(2, "pstat2 time: %.2f seconds\n", (clock1000() - time) / 1000.0);
+verbose(2, "pstat2 time: %.2f seconds\n", (clock1000() - queryTime) / 1000.0);
 
 long hashTime = clock1000();
 
@@ -1131,7 +1132,7 @@ verbose(2, "pstat list time: %.2f seconds\n", (clock1000() - pstatListTime) / 10
 slFreeList(&lineList);
 
 freeHash(&hash);
-verbose(2, "markQueuedJobs time (includes pstat2, hash, list): %.2f seconds\n", (clock1000() - time) / 1000.0);
+verbose(2, "markQueuedJobs time (includes pstat2, hash, list): %.2f seconds\n", (clock1000() - queryTime) / 1000.0);
 return queueSize;
 }
 
