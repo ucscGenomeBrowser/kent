@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.3 2009/12/17 00:19:10 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.4 2009/12/17 00:27:22 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -437,7 +437,6 @@ return '.';
 }
 
 
-
 struct dyString *uiStateUrlPart(struct track *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
  * format.  If toggleGroup is non-null the visibility of that
@@ -450,13 +449,14 @@ dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 #ifdef TOGGLE_SUBTRACKS
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
-    // JK TODO - replace with better routine to find composite parent
     int vis = toggleGroup->visibility;
-    // Find parent track
+    struct trackDb *tdbParent = trackDbCompositeParent(toggleGroup->tdb);
+    char *parentName = tdbParent->tableName;
+    // Find parent track (as opposed to trackDb)
     struct track *tgParent = trackList;
     for (;tgParent != NULL; tgParent = tgParent->next)
         {
-        if(sameString(tgParent->mapName,toggleGroup->tdb->parent->tableName))
+        if (sameString(tgParent->mapName,parentName))
             break;
         }
     // should be assertable assert(tgParent!=NULL);
