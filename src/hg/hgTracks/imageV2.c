@@ -7,8 +7,9 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 #include "hgTracks.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.17 2009/12/09 03:30:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.18 2009/12/17 00:26:26 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1253,7 +1254,7 @@ else
                         imgTrack->tdb->parent ?
                         imgTrack->tdb->parent->tableName:
                         imgTrack->tdb->tableName );
-        hPrintf(" width:9px; display:none;' class='%s btn btnN btnGrey'></p>",trackName);
+        hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
@@ -1312,7 +1313,8 @@ void imageBoxDraw(struct imgBox *imgBox)
 {
 if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
     return;
-if(!imgBoxIsComplete(imgBox,TRUE))
+boolean verbose = (differentString(cfgOptionDefault("browser.javaScriptDir", "na"),"na"));   // Warnings for javascript developers
+if(!imgBoxIsComplete(imgBox,verbose))
     return;
 char name[128];
 int bgOffset = NO_VALUE;
@@ -1335,7 +1337,6 @@ hPrintf(".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // c
 hPrintf(".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
 hPrintf(".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
 hPrintf(".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
-//hPrintf(".btnGrey {background-color:#cccccc; border-color:#dddddd;}\n");
 hPrintf(".btnBlue {background-color:#91B3E6; border-color:#91B3E6;}\n");
 #endif//def FLAT_TRACK_LIST
 hPrintf("div.dragZoom {cursor: text;}\n");
@@ -1409,7 +1410,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         {
         safef(name, sizeof(name), "center_%s", trackName);
         sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
-        //hPrintf("<BR>\n");
+        hPrintf("\n");
         }
     // data image
     safef(name, sizeof(name), "data_%s", trackName);
