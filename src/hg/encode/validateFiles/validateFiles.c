@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.33 2009/12/15 23:50:33 tdreszer Exp $";
-static char *version = "$Revision: 1.33 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.34 2009/12/17 18:46:57 tdreszer Exp $";
+static char *version = "$Revision: 1.34 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -25,6 +25,7 @@ boolean printFailLines;
 boolean mmPerPair;
 boolean nMatch;
 boolean isSort;
+boolean privateData;
 int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
@@ -86,12 +87,13 @@ errAbort(
   "   -mmPerPair                   Check either pair dont exceed mismatch count if validating\n"
   "                                  pairedTagAlign files (default is the total for the pair)\n"
   "   -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)\n"
+  "   -nMatch                      N's do not count as a mismatch\n"
+  "   -privateData                 Private data so empty sequence is tolerated\n"
   "   -printOkLines                Print lines which pass validation to stdout\n"
   "   -quick[=N]                   Just test the first N lines of each file (default 1000)\n"
   "   -printFailLines              Print lines which fail validation to stdout\n"
   "   -isSort                      input is sorted by chrom\n"
 //"   -acceptDot                   Accept '.' as 'N' in DNA sequence\n"
-  "   -nMatch                      N's do not count as a mismatch\n"
   "   -version                     Print version\n"
   , MAX_ERRORS);
 }
@@ -112,6 +114,7 @@ static struct optionSpec options[] = {
    {"mmCheckOneInN", OPTION_INT},
    {"quick", OPTION_INT},
    {"nMatch", OPTION_BOOLEAN},
+   {"privateData", OPTION_BOOLEAN},
 // {"acceptDot", OPTION_BOOLEAN},
    {"isSort", OPTION_BOOLEAN},
    {"version", OPTION_BOOLEAN},
@@ -295,10 +298,19 @@ for ( i = 0; s[i] ; ++i)
     }
 if (i == 0)
     {
+    if(privateData)  // PrivateData means sequence should be empty
+        return TRUE;
     if (s==row)
 	warn("Error [file=%s, line=%d]: %s empty", file, line, name);
     else
 	warn("Error [file=%s, line=%d]: %s empty in line [%s]", file, line, name, row);
+    return FALSE;
+    }
+else if(privateData) { // PrivateData means sequence should be empty
+    if (s==row)
+        warn("Error [file=%s, line=%d]: %s is not empty but this should be private data", file, line, name);
+    else
+        warn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", file, line, name, row);
     return FALSE;
     }
 return TRUE;
@@ -562,7 +574,7 @@ boolean checkColumns(char *file, int line, char *row, char *buf, char *words[], 
 // Split buf into wordSize columns in words[] array
 // Return TRUE if number of columns == expected, otherwise FALSE
 {
-int n = chopByWhite(buf, words, wordSize);
+int n = chopByChar(buf, '\t', words, wordSize);
 if ( n != expected)
     {
     warn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", file, line, n, expected, row);
@@ -580,6 +592,9 @@ static char cacheChrom[1024];
 static char bigArr[100 * 1024]; // 100K limit on tagAlign seqLen
 struct dnaSeq ourSeq;
 boolean chrMSizeAjustment=FALSE;
+
+if(privateData)  // No way to check private data
+    return TRUE;
 
 if (!genome)
     return TRUE; // only check if 2bit file specified
@@ -656,6 +671,8 @@ boolean checkMismatchesSeq1Seq2(char *file, int line, char *chrom, unsigned chro
 {
 int i, mm1, mm2, len1, len2;
 struct dnaSeq *g1, *g2;
+if(privateData)  // No way to check private data
+    return TRUE;
 if (!genome)
     return TRUE; // dont check unless 2bit file specified
 if (line % mmCheckOneInN != 0)
@@ -1109,6 +1126,7 @@ mismatches     = optionInt("mismatches",0);
 matchFirst     = optionInt("matchFirst",0);
 mmPerPair      = optionExists("mmPerPair");
 nMatch         = optionExists("nMatch");
+privateData    = optionExists("privateData");
 isSort         = optionExists("isSort");
 mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
 quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
