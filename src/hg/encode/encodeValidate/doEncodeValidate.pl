@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.208 2009/12/15 20:25:31 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.209 2009/12/17 18:16:49 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1833,7 +1833,15 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " dateSubmitted=$dateSubmitted";
     $metadata .= " dateUnrestricted=$dateUnrestricted";
 
-    die "Table name [$tableName] too long, must be <= 64 chars, got [".length($tableName)."]\n" if length($tableName) > 64;
+    $tableName =~ "/Utaustin/Uta/";  # Special case for certain transgressors
+    if(length($tableName) > 64) {
+        $tableName =~ "/Hudsonalpha/Haib/" if length($tableName) > 64; # Special case for certain transgressors
+        $tableName =~ "/Sunyalbany/Sunya/" if length($tableName) > 64;
+        $tableName =~ "/Alignments/Aln/" if length($tableName) > 64;
+        $tableName =~ "/Signal/Sig/" if length($tableName) > 64;
+        $tableName =~ "/Control/Ctrl/" if length($tableName) > 64;
+        die "Table name [$tableName] too long, must be <= 64 chars, got [".length($tableName)."]\n" if length($tableName) > 64;
+    }
 
 
     if($tableNamesUsed{$tableName}++) {
