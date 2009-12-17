@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.2 2009/12/12 05:23:09 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.3 2009/12/17 00:19:10 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -450,6 +450,7 @@ dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 #ifdef TOGGLE_SUBTRACKS
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
+    // JK TODO - replace with better routine to find composite parent
     int vis = toggleGroup->visibility;
     // Find parent track
     struct track *tgParent = trackList;
@@ -8974,7 +8975,7 @@ if (!tg->limitedVisSet)
 	tg->limitedVis = tvHide;
 	return tvHide;
 	}
-    if (trackIsCompositeWithSubtracks(tg))  //TODO: Change when tracks->subtracks are always set for composite
+    if (trackIsCompositeWithSubtracks(tg))
 	{
 	struct track *subtrack;
 	int subCnt = subtrackCount(tg->subtracks);
@@ -10779,7 +10780,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
-
 	lastTime = clock1000();
 	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
 	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->mapName, track->mapName);
@@ -10808,15 +10808,15 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	   {
-       limitVisibility(subtrack);
+	   limitVisibility(subtrack);
 	   enum trackVisibility minVis = vis;
 	   if (subtrack->limitedVisSet)
 	       minVis = tvMin(minVis, subtrack->limitedVis);
 	   int h = subtrack->totalHeight(subtrack, minVis);
 	   subtrack->height = h;
 	   height += h;
-       }
-	}
+	   }
+    }
 track->height = height;
 return track->height;
 }

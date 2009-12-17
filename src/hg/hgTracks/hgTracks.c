@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.2 2009/12/12 05:23:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.3 2009/12/17 00:19:07 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1537,7 +1537,9 @@ if(tdbIsCompositeChild(subtrack->tdb))
         {
         int len = strlen(subtrack->tdb->parent->tableName) + strlen(stView) + 10;
         char *ddName = needMem(len);
-        safef(ddName,len,"%s.%s.vis",subtrack->tdb->parent->tableName,stView);
+	struct trackDb *composite = trackDbCompositeParent(subtrack->tdb);
+	assert(composite != NULL);
+        safef(ddName,len,"%s.%s.vis", composite->tableName,stView);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
             vis = hTvFromString(fromParent);
@@ -1821,9 +1823,11 @@ int sliceOffsetX[stMaxSliceTypes];
 int sliceHeight        = 0;
 int sliceOffsetY       = 0;
 char *rulerTtl = NULL;
-if(theImgBox)  // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started prior to this in doTrackForm()
+if(theImgBox)  
+// theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started 
+// prior to this in doTrackForm()
     {
-    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
+    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2110,6 +2114,7 @@ if (withLeftLabels && psOutput == NULL)
             if (track->hasUi)
                 {
                 if(tdbIsCompositeChild(track->tdb))
+    // JK TODO - replace with better routine to find composite parent
                     mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1), track->tdb->parent->tableName, track->tdb->parent->shortLabel, track->mapName);
                 else
                     mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h, track->mapName, track->shortLabel, track->mapName);
@@ -4218,36 +4223,36 @@ for (track = trackList; track != NULL; track = track->next)
     /* remove cart priority variables if they are set
        to the default values in the trackDb */
     if(!hTrackOnChrom(track->tdb, chromName))
-    {
-    track->limitedVis = tvHide;
-    track->limitedVisSet = TRUE;
-    }
+	{
+	track->limitedVis = tvHide;
+	track->limitedVisSet = TRUE;
+	}
     else if (track->visibility != tvHide)
-    {
-    if (measureTiming)
-        lastTime = clock1000();
-    checkMaxWindowToDraw(track);
-    track->loadItems(track);
+	{
+	if (measureTiming)
+	    lastTime = clock1000();
+	checkMaxWindowToDraw(track);
+	track->loadItems(track);
 
-    if (measureTiming)
-        {
-        thisTime = clock1000();
-        track->loadTime = thisTime - lastTime;
-        }
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    track->loadTime = thisTime - lastTime;
+	    }
 #ifdef CONTEXT_MENU
-        trackJson(trackDbJson, track, trackDbJsonCount++);
-        if (trackIsCompositeWithSubtracks(track))
-            {
-            struct track *subtrack;
-            for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-                {
-                // isSubtrackVisible is causing a problem in panTro2
-                if (isSubtrackVisible(subtrack))
-                    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
-                }
-            }
+	trackJson(trackDbJson, track, trackDbJsonCount++);
+	if (trackIsCompositeWithSubtracks(track))
+	    {
+	    struct track *subtrack;
+	    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+		{
+		// isSubtrackVisible is causing a problem in panTro2
+		if (isSubtrackVisible(subtrack))
+		    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
+		}
+	    }
 #endif
-        }
+	}
     }
 
 #ifdef CONTEXT_MENU
