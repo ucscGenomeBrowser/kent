@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.18 2009/12/17 00:26:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.19 2009/12/17 19:20:24 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1313,7 +1313,7 @@ void imageBoxDraw(struct imgBox *imgBox)
 {
 if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
     return;
-boolean verbose = (differentString(cfgOptionDefault("browser.javaScriptDir", "na"),"na"));   // Warnings for javascript developers
+boolean verbose = (hIsPrivateHost());   // Warnings for hgwdev only
 if(!imgBoxIsComplete(imgBox,verbose))
     return;
 char name[128];
