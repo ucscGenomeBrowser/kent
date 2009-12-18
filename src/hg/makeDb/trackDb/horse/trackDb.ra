@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.17 2009/12/18 20:19:49 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.18 2009/12/18 20:26:51 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -53,13 +53,6 @@ priority 280
 
 track netGalGal3 override
 priority 280.1
-
-track chainNetMonDom5 override
-priority 270
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-chainMinScore 5000
-chainLinearGap loose
 
 track chainOrnAna1
 #replaces record chainOrnAna1 in parent dir missing/extra release,subTrack,subGroups
