@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.726 2009/12/18 18:48:59 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.727 2009/12/18 18:51:43 ann Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14602,7 +14602,7 @@ longLabel ENCODE Gencode Gene Annotations
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
-priority 34
+priority 34.3
 #visibility pack
 color 12,12,120
 type genePred
