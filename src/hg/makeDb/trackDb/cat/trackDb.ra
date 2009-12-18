@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.7 2009/12/18 22:21:28 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track chainHg18
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain

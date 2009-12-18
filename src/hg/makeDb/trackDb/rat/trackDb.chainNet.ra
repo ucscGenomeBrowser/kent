@@ -1,4 +1,9 @@
-#	"$Id: trackDb.chainNet.ra,v 1.3 2009/12/18 20:19:51 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.4 2009/12/18 22:21:33 hiram Exp $";
+
+track chainNetCanFam2 override
+priority 420.3
+chainMinScore 1000
+chainLinearGap loose
 
 track chainNetBosTau3 override
 priority 450.3

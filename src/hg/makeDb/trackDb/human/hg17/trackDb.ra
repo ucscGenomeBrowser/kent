@@ -1,3 +1,8 @@
+#	"$Id: trackDb.ra,v 1.433 2009/12/18 22:21:30 hiram Exp $";
+
+# chain/net composites
+include trackDb.chainNet.ra
+
 # ENCODE tracks
 include trackDb.encode.ra
 include trackDb.instinct.ra
