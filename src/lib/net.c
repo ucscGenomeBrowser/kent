@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.77 2009/11/13 06:35:45 angie Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.78 2009/12/18 22:48:27 angie Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -382,7 +382,7 @@ int readyCount;
 
 for (;;)
     {
-    if (microseconds > 1000000)
+    if (microseconds >= 1000000)
 	{
 	tv.tv_sec = microseconds/1000000;
 	tv.tv_usec = microseconds%1000000;
@@ -459,6 +459,8 @@ while (1)
 	startLastLine[3]==' ')
 	break;
 	
+    if (readSize == 0)
+	break;  // EOF
     /* must be some text info we can't use, ignore it till we get status code */
 
     }
