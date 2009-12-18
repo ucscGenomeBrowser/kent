@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.17 2009/12/17 08:38:34 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.18 2009/12/18 00:05:43 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3320,19 +3320,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             if(cType != cfgNone)
                 {
                 dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
-                if(membership)
-                    ix = stringArrayIx("view", membership->subgroups, membership->count);
-                else
-                    ix = -1;
 #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
 #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
                 safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->tableName);
                 boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
                 MAKE_CFG_SUBTRACK_DIV(subtrack->tableName,htmlIdentifier,open);
-                if(ix >= 0)
-                    safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
-                else
-                    safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->tableName);
+		safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->tableName);
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
@@ -4888,7 +4881,7 @@ if(makeCfgRows)
 	    char *viewName = membersOfView->names[ix];
 	    printf("<TR id=\"tr_cfg_%s\"", viewName);
 	    if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
-	    || (firstOpened != -1 && firstOpened != ix))
+		|| (firstOpened != -1 && firstOpened != ix))
 		printf(" style=\"display:none\"");
 	    printf("><TD width=10>&nbsp;</TD>");
 	    int ix2=ix;

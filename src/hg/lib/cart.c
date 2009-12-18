@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.114.2.2 2009/12/15 20:48:00 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.114.2.3 2009/12/18 00:05:42 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1833,7 +1833,7 @@ struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct tra
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
 char *var = NULL;
-(void)cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&var);
+cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&var);
 if(var == NULL)
     return NULL;
 
