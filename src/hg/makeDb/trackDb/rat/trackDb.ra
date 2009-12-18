@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.62 2009/12/18 20:19:51 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)

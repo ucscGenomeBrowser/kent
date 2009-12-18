@@ -1,3 +1,5 @@
+#	"$Id: trackDb.ra,v 1.556 2009/12/18 20:19:46 hiram Exp $";
+
 include trackDb.chainNet.ra
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
@@ -2595,7 +2597,9 @@ spectrum on
 type netAlign monDom2 chainMonDom2
 otherDb monDom2
 
+# release beta until composite chainNetMonDom1 track becomes the default
 track chainMonDom1
+release beta
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2608,6 +2612,7 @@ type chain monDom1
 otherDb monDom1
 
 track netMonDom1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

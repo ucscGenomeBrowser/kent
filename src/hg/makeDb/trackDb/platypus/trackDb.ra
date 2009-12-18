@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.10 2009/12/18 20:19:51 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track chainEquCab2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -37,9 +41,5 @@ priority 250.2
 shortLabel $o_db Net  
 otherDb hg18
 
-track chainNetMonDom5 override
-priority 260
-
 track chainNetHg19 override
 priority 250.3
-

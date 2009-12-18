@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.25 2009/12/18 20:19:52 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track mgcFullMrna override
 #track mgcGenes
 shortLabel XGC Genes

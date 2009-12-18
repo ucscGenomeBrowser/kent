@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.8 2009/12/18 20:19:50 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track chainCalJac1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
