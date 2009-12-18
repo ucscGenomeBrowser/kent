@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.7 2009/12/18 23:41:21 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track chainGalGal3 override
 priority 255.1
 

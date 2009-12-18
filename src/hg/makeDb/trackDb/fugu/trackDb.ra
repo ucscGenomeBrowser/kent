@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.65 2009/12/18 23:41:19 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track gold override
 shortLabel Scaffolds
 longLabel Assembly Scaffolds

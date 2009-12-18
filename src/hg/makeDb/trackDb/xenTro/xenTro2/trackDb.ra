@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.20 2009/12/18 23:41:22 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 track all_est
 shortLabel $Organism ESTs

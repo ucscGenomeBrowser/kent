@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.8 2009/12/18 23:41:23 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 # release alpha: $o_db in shortLabel
 track chainGalGal3

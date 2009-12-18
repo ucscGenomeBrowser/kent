@@ -1,0 +1,7 @@
+#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/18 23:41:20 hiram Exp $";
+
+track chainNetGalGal3 override
+priority 650.3
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
