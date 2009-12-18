@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1614 2009/12/12 01:03:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1615 2009/12/18 23:41:45 kate Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -5063,12 +5063,12 @@ else
     doTrackForm(NULL, NULL);
 }
 
-void chromInfoTotalRow(long long total)
-/* Make table row with total size from chromInfo. */
+void chromInfoTotalRow(int count, long long total)
+/* Make table row with total number of sequences and size from chromInfo. */
 {
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-printf("Total");
+printf("Total: %d", count);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 printLongWithCommas(stdout, total);
@@ -5100,7 +5100,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     cgiTableRowEnd();
     total += size;
     }
-chromInfoTotalRow(total);
+chromInfoTotalRow(slCount(chromList), total);
 slFreeList(&chromList);
 }
 
@@ -5148,7 +5148,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (!truncating)
     {
-    chromInfoTotalRow(total);
+    chromInfoTotalRow(seqCount, total);
     }
 else
     {
