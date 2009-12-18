@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.727 2009/12/18 18:51:43 ann Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.728 2009/12/18 21:49:10 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4864,7 +4864,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pValueFilterLimits=0:100 zRawSig:viewLimits=1:10,minLimit=-1:maxLimit=16000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
+settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pValueFilterLimits=0:100 zRawSig:viewLimits=1:10,minLimit=-1,maxLimit=16000.0,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
 
 #submission 517
     track wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
