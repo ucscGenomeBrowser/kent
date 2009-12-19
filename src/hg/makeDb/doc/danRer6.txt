@@ -4,20 +4,12 @@
 #
 #  by Galt Barber 2009-06-17
 #
-
 # Danio Rerio (zebrafish) from Sanger, version Zv8 (released 2008-12-12)
 #  Project website:
 #    http://www.sanger.ac.uk/Projects/D_rerio/
 #  Assembly notes:
 #    http://www.sanger.ac.uk/Projects/D_rerio/
 #    http://www.sanger.ac.uk/Projects/D_rerio/Zv8_assembly_information.shtml
-
-# TODO this comment is copied over from old makedoc and may need removal
-#  NOTE:  this doc may have genePred loads that fail to include
-#  the bin column.  Please correct that for the next build by adding
-#  a bin column when you make any of these tables:
-#
-
 ###############################################
 # set up main genome directory
 
@@ -890,4 +882,49 @@ otherDb danRer6
 
     # added danRer6 to all.joiner both $gbd and $chainDest
 
+
+
+
+#########################################################################
+# LASTZ Zebrafish DanRer6 (DONE - 2009-12-17 - Galt)
+    mkdir /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-17
+    cd /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-17
+
+    cat << '_EOF_' > DEF
+# zebrafish vs. mouse
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer6
+SEQ1_DIR=/scratch/data/danRer6/danRer6.2bit
+SEQ1_LEN=/scratch/data/danRer6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=0
+SEQ1_LIMIT=40
+
+# QUERY: Mouse mm9
+SEQ2_DIR=/scratch/data/mm9/mm9.2bit
+SEQ2_LEN=/scratch/data/mm9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=5
+
+BASE=/hive/data/genomes/danRer6/bed/lastzMm9.2009-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	>& do.log &
+
+    cat fb.danRer6.chainMm9Link.txt 
+    #   77099032 bases of 1506896106 (5.116%) in intersection
 

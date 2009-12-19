@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.116 2009/11/06 22:38:30 fanhsu Exp $"
+#	"$Id: mm9.txt,v 1.117 2009/12/19 00:57:58 galt Exp $"
 #
 
 #######################################################################
@@ -9855,3 +9855,24 @@ see doc/builds.txt for specific details.
 
 #########################################################################
 
+# LASTZ/CHAIN/NET swap danRer6 (DONE - 2009-12-18 - Galt)
+    # original alignment to danRer6
+    cd /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-17
+    cat fb.danRer6.chainMm9Link.txt 
+    #   77099032 bases of 1506896106 (5.116%) in intersection
+
+    #	running the swap - DONE - 2009-12-18
+    mkdir /hive/data/genomes/mm9/bed/blastz.danRer6.swap
+    cd /hive/data/genomes/mm9/bed/blastz.danRer6.swap
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap >& swap.log &
+    #	real    183m21.102s
+# TODO BOOKMARK
+    cat fb.mm9.chainDanRer6Link.txt 
+    #	96424507 bases of 1506896106 (6.399%) in intersection
+
+
+#######################################################################
