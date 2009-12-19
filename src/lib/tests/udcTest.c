@@ -1,27 +1,34 @@
 /* udcTest -- test the URL data cache */
 
-// TODO:
-// add seed as a cmd line option
-
 // suggestions from Mark: 1. try setvbuf, to make FILE * unbuffered -- does that help?
 //                        2. *if* need to do own buffering, consider mmap()
 //                           (kernel handles buffering)
 
+#include <sys/wait.h>
 #include "common.h"
+#include "errabort.h"
 #include "options.h"
 #include "portable.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udcTest.c,v 1.1 2009/12/07 19:44:24 angie Exp $";
+static char const rcsid[] = "$Id: udcTest.c,v 1.2 2009/12/19 01:06:27 angie Exp $";
 
 static struct optionSpec options[] = {
+    {"fork",     OPTION_BOOLEAN},
+    {"protocol", OPTION_STRING},
+    {"seed",     OPTION_INT},
     {NULL, 0},
 };
+
+boolean doFork = FALSE;
+char *protocol = "ftp";
+unsigned int seed = 0;
 
 // Local copy (reference file) and URL for testing:
 #define THOUSAND_HIVE "/hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/"
 #define THOUSAND_FTP "ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/data/"
 #define CHR3_SLX_BAM "NA12878/alignment/NA12878.chrom3.SLX.maq.SRP000032.2009_07.bam"
+#define CHR4_SLX_BAM "NA12878/alignment/NA12878.chrom4.SLX.maq.SRP000032.2009_07.bam"
 
 // Use typical size range of bgzip-compressed data blocks:
 #define MIN_BLK_SIZE 20000
@@ -30,42 +37,13 @@ static struct optionSpec options[] = {
 // Read at most this many consecutive blocks:
 #define MAX_BLOCKS 100
 
-int mustOpen2(char *filename, int options)
-/* Like mustOpen, but uses the "man 2 open" instead of fopen. */
-{
-int fd = open(filename, options);
-if (fd < 0)
-    errnoAbort("failed to open(%s, 0x%02x)", filename, options);
-return fd;
-}
-
-void mustLseek(int fd, bits64 offset, int options, char *filename)
-/* lseek() or die. */
-{
-bits64 checkOffset = lseek(fd, offset, options);
-if (checkOffset != offset)
-    errnoAbort("Unable to lseek to %lld in %s (lseek ret: %lld)", offset, filename, checkOffset);
-}
-
-bits64 mustRead2(int fd, char *buf, bits64 len, char *filename, bits64 offset)
-/* Like mustRead, but uses the "man 2 read" instead of fread. */
-{
-bits64 bytesRead = read(fd, buf, len);
-if (bytesRead < 0)
-    errnoAbort("read of %lld bytes from %s @%lld failed", len, filename, offset);
-return bytesRead;
-}
-
 void openSeekRead(char *filename, bits64 offset, bits64 len, char *buf)
 /* Read len bits starting at offset from filename into buf or die. */
 {
-int fd = mustOpen2(filename, O_RDONLY);
-mustLseek(fd, offset, SEEK_SET, filename);
-bits64 bytesRead = mustRead2(fd, buf, len, filename, offset);
-close(fd);
-if (bytesRead != len)
-    errAbort("Expected to read %lld bytes from %s @%lld, but got %lld",
-	     len, filename, offset, bytesRead);
+int fd = mustOpenFd(filename, O_RDONLY);
+mustLseek(fd, offset, SEEK_SET);
+mustReadFd(fd, buf, len);
+mustCloseFd(&fd);
 }
 
 boolean compareBytes(char *bufTest, char *bufRef, bits64 len, char *testName, char *refName,
@@ -73,14 +51,17 @@ boolean compareBytes(char *bufTest, char *bufRef, bits64 len, char *testName, ch
 /* Report any differences between bufTest and bufRef (don't errAbort). */
 {
 boolean gotError = FALSE;
-bits64 i, difCount = 0;
+bits64 i, difCount = 0, nonZeroDifCount = 0;
 for (i=0;  i < len;  i++)
     {
     if (bufTest[i] != bufRef[i])
 	{
 	if (difCount == 0)
-	    warn("%s and %s first differ at offset %lld + %lld = %lld [0x%02x != 0x%02x]",
-		 testName, refName, offset, i, offset+i, (bits8)bufTest[i], (bits8)bufRef[i]);
+	    warn("*** %s%s and ref first differ at offset %lld + %lld = %lld [0x%02x != 0x%02x]",
+		 (bufTest[i] != '\0' ? "NONZERO " : ""),
+		 testDesc, offset, i, offset+i, (bits8)bufTest[i], (bits8)bufRef[i]);
+	if (bufTest[i] != '\0')
+	    nonZeroDifCount++;
 	difCount++;
 	}
     }
@@ -88,13 +69,25 @@ if (difCount == 0)
     verbose(3, "Success: %s = ref, %lld bytes @%lld\n", testDesc, len, offset);
 else
     {
-    warn("-- %lld different bytes total in block of %lld bytes starting at %lld",
-	 difCount, len, offset);
+    warn("--> %lld different bytes (%lld %s) total in block of %lld bytes starting at %lld",
+	 difCount, nonZeroDifCount, (nonZeroDifCount ? "NONZERO" : "nonzero"), len, offset);
     gotError = TRUE;
     }
 return gotError;
 }
 
+char *getSparseFileName(char *url)
+/* Return the path to sparseData cache file for url. */
+{
+struct slName *sl, *cacheFiles = udcFileCacheFiles(url, udcDefaultDir());
+char *sparseFileName = NULL;
+for (sl = cacheFiles; sl != NULL; sl = sl->next)
+    if (endsWith(sl->name, "sparseData"))
+	sparseFileName = sl->name;
+if (sparseFileName == NULL)
+    errAbort("can't find sparseData file in udcFileCacheFiles(%s) results", url);
+return sparseFileName;
+}
 
 boolean readAndTest(struct udcFile *udcf, bits64 offset, bits64 len, char *localCopy, char *url)
 /* Read len bytes starting at offset in udcf.  Compare both the bytes returned,
@@ -141,16 +134,13 @@ if (bytesRead < len)
     errAbort("Got %lld bytes instead of %lld from %s @%lld", bytesRead, len, url, offset);
 gotError |= compareBytes(bufTest, bufRef, len, url, localCopy, "url", offset);
 
-// Get data from udcf's sparse data file and compare to reference:
-struct slName *sl, *cacheFiles = udcFileCacheFiles(url, udcDefaultDir());
-char *sparseFileName = NULL;
-for (sl = cacheFiles; sl != NULL; sl = sl->next)
-    if (endsWith(sl->name, "sparseData"))
-	sparseFileName = sl->name;
-if (sparseFileName == NULL)
-    errAbort("readAndTest: can't file sparseData file in udcFileCacheFiles results");
-openSeekRead(sparseFileName, offset, len, bufTest);
-gotError |= compareBytes(bufTest, bufRef, len, sparseFileName, localCopy, "sparse", offset);
+if (0) // -- Check sparseData after the dust settles.
+    {
+    // Get data from udcf's sparse data file and compare to reference:
+    char *sparseFileName = getSparseFileName(url);
+    openSeekRead(sparseFileName, offset, len, bufTest);
+    gotError |= compareBytes(bufTest, bufRef, len, sparseFileName, localCopy, "sparse", offset);
+    }
 return gotError;
 }
 
@@ -205,6 +195,52 @@ for (i = 0;  i < numBlks;  i++)
 return gotError;
 }
 
+// These are defined in udc.c but not udc.h:
+#define udcBlockSize (8*1024)
+boolean udcCheckCacheBits(struct udcFile *file, int startBlock, int endBlock);
+/* Warn and return TRUE (error) if any bit in (startBlock,endBlock] is not set. */
+
+boolean checkCacheFiles(bits64 accessStart, bits64 accessEnd, char *url, char *localCopy)
+/* Given a range of byte offsets accessed via udc, translate those into udc block
+ * coords.  Check that all bytes in the sparseData offsets corresponding to the 
+ * block coords are equal to the reference (very important!) and that all blocks'
+ * bits are set in bitmap (not as important). */
+{
+boolean gotError = FALSE;
+char *bufRef = needMem(udcBlockSize), *bufSparse = needMem(udcBlockSize);
+int startBlock = (int)(accessStart / udcBlockSize);
+int endBlock = (int)((accessEnd + udcBlockSize-1) / udcBlockSize);
+bits64 startOffset = (bits64)startBlock * udcBlockSize;
+verbose(1, "checking sparseData (%lld..%lld] blocks (%d..%d].\n",
+	startOffset, ((bits64)endBlock*udcBlockSize), startBlock, endBlock);
+int fdLocal = mustOpenFd(localCopy, O_RDONLY);
+mustLseek(fdLocal, startOffset, SEEK_SET);
+char *sparseFileName = getSparseFileName(url);
+int fdSparse = mustOpenFd(sparseFileName, O_RDONLY);
+mustLseek(fdSparse, startOffset, SEEK_SET);
+int i;
+for (i = startBlock;  i < endBlock;  i++)
+    {
+    bits64 offset = ((bits64)i * udcBlockSize);
+    memset(bufRef, 0x59, udcBlockSize);
+    memset(bufSparse, 0xae, udcBlockSize);
+    mustReadFd(fdLocal, bufRef, udcBlockSize);
+    mustReadFd(fdSparse, bufSparse, udcBlockSize);
+    char testDesc[64];
+    safef(testDesc, sizeof(testDesc), "SPARSE %lld blk %d", offset, i);
+    gotError |= compareBytes(bufSparse, bufRef, udcBlockSize, sparseFileName, localCopy,
+			     testDesc, offset);
+    }
+mustCloseFd(&fdLocal);
+mustCloseFd(&fdSparse);
+// Check bitmap bits too:
+struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+verbose(1, "checking bitmap bits (%d..%d].\n", startBlock, endBlock);
+udcCheckCacheBits(udcf, startBlock, endBlock);
+udcFileClose(&udcf);
+return gotError;
+}
+
 boolean testInterleaved(char *url, char *localCopy)
 /* Open two udcFile handles to the same file, read probably-different random locations,
  * read from probably-overlapping random locations, and check for errors. */
@@ -213,13 +249,13 @@ boolean gotError = FALSE;
 bits64 size = fileSize(localCopy);
 
 // First, read some bytes from udcFile udcf1.
-struct udcFile *udcf1 = udcFileOpen(url, NULL);
+struct udcFile *udcf1 = udcFileOpen(url, udcDefaultDir());
 int blksRead1 = 0;
 bits64 offset1 = randomStartOffset(size);
 gotError |= readAndTestBlocks(udcf1, &offset1, 2, &blksRead1, localCopy, url);
 // While keeping udcf1 open, create udcf2 on the same URL, and read from a 
 // (probably) different location:
-struct udcFile *udcf2 = udcFileOpen(url, NULL);
+struct udcFile *udcf2 = udcFileOpen(url, udcDefaultDir());
 int blksRead2 = 0;
 bits64 offset2 = randomStartOffset(size);
 gotError |= readAndTestBlocks(udcf2, &offset2, 2, &blksRead2, localCopy, url);
@@ -256,14 +292,65 @@ while (blksRead1 < MAX_BLOCKS || blksRead2 < MAX_BLOCKS)
     }
 udcFileClose(&udcf1);
 udcFileClose(&udcf2);
+gotError |= checkCacheFiles(sameOffset, max(offset1, offset2), url, localCopy);
 return gotError;
+}
+
+boolean testConcurrent(char *url, char *localCopy)
+/* Fork; then parent and child access the same locations (hopefully) concurrently. */
+{
+boolean gotErrorParent = FALSE, gotErrorChild = FALSE;
+bits64 size = fileSize(localCopy);
+bits64 sameOffset = randomStartOffset(size);
+bits64 offsetParent = sameOffset, offsetChild = sameOffset;
+
+pid_t kidPid = fork();
+if (kidPid < 0)
+    errnoAbort("testConcurrent: fork failed");
+else if (kidPid == 0)
+    {
+    // child: access url and then exit, to pass control back to parent.
+    struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+    int blksRead = 0;
+    gotErrorChild = readAndTestBlocks(udcf, &offsetParent, MAX_BLOCKS, &blksRead, localCopy, url);
+    udcFileClose(&udcf);
+    exit(0);
+    }
+else
+    {
+    // parent: access url, wait for child, do post-checking.
+    struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+    int blksRead = 0;
+    gotErrorParent = readAndTestBlocks(udcf, &offsetChild, MAX_BLOCKS, &blksRead, localCopy, url);
+    udcFileClose(&udcf);
+    // wait for child to finish:
+    int childStatus;
+    int retPid = waitpid(kidPid, &childStatus, 0);
+    if (retPid < 0)
+	errnoAbort("testConcurrent: waitpid(%d) failed", kidPid);
+    if (! WIFEXITED(childStatus))
+	warn("testConcurrent: child process did not exit() normally");
+    if (WEXITSTATUS(childStatus))
+	warn("testConcurrent: child exit status = %d)", WEXITSTATUS(childStatus));
+    if (gotErrorChild)
+	verbose(1, "Parent can see child got error.\n");
+    gotErrorParent |= checkCacheFiles(sameOffset, max(offsetParent, offsetChild), url, localCopy);
+    return (gotErrorParent || gotErrorChild);
+    }
+errAbort("testConcurrent: control should never reach this point.");
+return TRUE;
 }
 
 
 int main(int argc, char *argv[])
+/* Set up test params and run tests. */
 {
 boolean gotError = FALSE;
 optionInit(&argc, argv, options);
+doFork = optionExists("fork");
+protocol = optionVal("protocol", protocol);
+seed = optionInt("seed", seed);
+
 char *host = getenv("HOST");
 if (host == NULL || !startsWith("hgwdev", host))
     {
@@ -271,15 +358,39 @@ if (host == NULL || !startsWith("hgwdev", host))
     puts("Sorry, this must be run on hgwdev (with HOST=hgwdev)");
     exit(0);
     }
-// [hgwdev:~] grep udc.cacheDir /usr/local/apache/cgi-bin/hg.conf
-// udc.cacheDir=../trash/udcCache
-udcSetDefaultDir("/usr/local/apache/trash/udcCache");
-long now = clock1();
-printf("Seeding random with unix time %ld\n", now);
-srand(now);
+errAbortDebugnPushPopErr();
+udcSetDefaultDir("/data/tmp/angie/udcCache");
+if (seed == 0)
+    {
+    long now = clock1();
+    printf("Seeding random with unix time %ld\n", now);
+    srand(now);
+    }
+else
+    {
+    printf("Seeding random with option -seed=%d\n", seed);
+    srand(seed);
+    }
 
-char *url = THOUSAND_FTP CHR3_SLX_BAM;
-char *localCopy = THOUSAND_HIVE CHR3_SLX_BAM;
-gotError |= testInterleaved(url, localCopy);
+if (sameString(protocol, "http"))
+    {
+    char *httpUrl = "http://hgwdev.cse.ucsc.edu/~angie/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
+    char *httpLocalCopy = "/gbdb/hg18/bbi/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
+    if (doFork)
+	gotError |= testConcurrent(httpUrl, httpLocalCopy);
+    else
+	gotError |= testInterleaved(httpUrl, httpLocalCopy);
+    }
+else if (sameString(protocol, "ftp"))
+    {
+    char *ftpUrl = THOUSAND_FTP CHR4_SLX_BAM;
+    char *ftpLocalCopy = THOUSAND_HIVE CHR4_SLX_BAM;
+    if (doFork)
+	gotError |= testConcurrent(ftpUrl, ftpLocalCopy);
+    else
+	gotError |= testInterleaved(ftpUrl, ftpLocalCopy);
+    }
+else
+    errAbort("Unrecognized protocol '%s'", protocol);
 return gotError;
 }
