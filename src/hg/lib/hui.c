@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.18 2009/12/18 00:05:43 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.19 2009/12/19 02:52:56 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3204,7 +3204,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     boolean isPrimary = FALSE;
     char *setting;
     int ix;
-    if ((setting = trackDbSetting(subtrack, "subTrack")) != NULL)
+    if ((setting = trackDbLocalSetting(subtrack, "subTrack")) != NULL)
         {
         if (chopLine(cloneString(setting), words) >= 2)
             checkedCB = differentString(words[1], "off");
@@ -4755,17 +4755,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 return NULL;
 }
 
-static boolean compositeViewCfgExpandedByDefault(struct trackDb *parentTdb,char *view,char **visibility)
-/* returns true if the view cfg is expanded by default.  Optionally allocates string of view setting (eg 'dense') */
+static boolean compositeViewCfgExpandedByDefault(struct trackDb *parentTdb,char *view,
+	char **retVisibility)
+/* returns true if the view cfg is expanded by default.  Optionally allocates string of view 
+ * setting (eg 'dense') */
 {
 boolean expanded = FALSE;
-if ( visibility != NULL )
-    *visibility = cloneString(hStringFromTv(parentTdb->visibility));
+if ( retVisibility != NULL )
+    *retVisibility = cloneString(hStringFromTv(parentTdb->visibility));
 struct trackDb *viewTdb = rFindViewInList(parentTdb->subtracks, view);
 if (viewTdb == NULL)
     return FALSE;
-if (visibility != NULL)
-    *visibility = cloneString(hStringFromTv(viewTdb->visibility));
+if (retVisibility != NULL)
+    *retVisibility = cloneString(hStringFromTv(viewTdb->visibility));
 if (trackDbSetting(viewTdb, "viewUi"))
     expanded = TRUE;
 return expanded;
@@ -4775,7 +4777,7 @@ enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *vie
 /* returns the default track visibility of particular view within a composite track */
 {
 char *visibility = NULL;
-(void)compositeViewCfgExpandedByDefault(parentTdb,view,&visibility);
+compositeViewCfgExpandedByDefault(parentTdb,view,&visibility);
 enum trackVisibility vis = hTvFromString(visibility);
 freeMem(visibility);
 return vis;
@@ -5645,12 +5647,12 @@ char *stView   = NULL;
 char *name     = NULL;
 char *rootName = NULL;
 // This routine should give these results: compositeName.viewName or else subtrackName.viewName or else compositeName or else subtrackName
-if(tdbIsCompositeChild(tdb) == TRUE && trackDbSetting(tdb, "subTrack") != NULL)
+if(tdbIsCompositeChild(tdb) == TRUE && trackDbLocalSetting(tdb, "subTrack") != NULL)
     {
     if(trackDbSettingClosestToHomeOn(tdb, "configurable"))
         rootName = tdb->tableName;  // subtrackName
     else
-        rootName = firstWordInLine(cloneString(trackDbSetting(tdb, "subTrack"))); // compositeName
+        rootName = firstWordInLine(cloneString(trackDbLocalSetting(tdb, "subTrack"))); // compositeName
     }
 if(rootName != NULL)
     {

@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.9 2009/12/17 08:38:34 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.10 2009/12/19 02:52:55 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3318,15 +3318,17 @@ if ((exists = sqlTableExists(conn, tbl)))
         {
         if (!hashLookup(loaded, oneRow->tableName))
             {
-            hashAddInt(loaded, oneRow->tableName, 1);
+            hashAdd(loaded, oneRow->tableName, NULL);
             slAddHead(tdbList, oneRow);
             // record for use in check available tracks
             char *profileName = getTrackProfileName(oneRow);
             if (profileName != NULL)
                 tableListProcessTblProfile(profileName, db);
-        }
+	    }
         else
+	    {
             trackDbFree(&oneRow);
+	    }
         }
     }
 hFreeConn(&conn);
@@ -3340,8 +3342,6 @@ static struct trackDb *loadTrackDb(char *db, char *where)
 struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
 boolean foundOne = FALSE;
-// A cleaner implementation of loaded hash would be something like slListContainer with support for an exists method
-// Hmm, why would that be cleaner? -jk Also there is slElOnList and stuff....
 struct hash *loaded = hashNew(0);
 for (one = tableList; one != NULL; one = one->next)
     {
@@ -3370,15 +3370,35 @@ else
     trackDbFree(&tdb);
 }
 
-static void subtrackInherit(struct trackDb *subtrackTdb,
-			    struct trackDb *compositeTdb)
+#ifdef UNUSED
+static void inheritFieldsFromParents(struct trackDb *tdb, struct trackDb *parent)
+/* Inherit undefined fields (outside of settings) from parent. */
 {
-assert(subtrackTdb->parent == NULL || subtrackTdb->parent == compositeTdb);
-subtrackTdb->parent = compositeTdb;
-//subtrackTdb->parentName = compositeTdb->tableName; // TODO: Currently superTracks may be distinguished by this
+if (tdb->shortLabel == NULL)
+    tdb->shortLabel = cloneString(parent->shortLabel);
+if (tdb->type == NULL)
+    tdb->type = cloneString(parent->type);
+if (tdb->longLabel == NULL)
+    tdb->longLabel = cloneString(parent->longLabel);
+if (tdb->restrictList == NULL)
+    tdb->restrictList = parent->restrictList;
+if (tdb->url == NULL)
+    tdb->url = cloneString(parent->url);
+if (tdb->html == NULL)
+    tdb->html = parent->html;
+if (tdb->grp == NULL)
+    tdb->grp = cloneString(parent->grp);
+}
+#endif /* UNUSED */
+
+static void inheritFromSuper(struct trackDb *subtrackTdb,
+			    struct trackDb *compositeTdb)
+/* Do the sort of inheritence a supertrack user. */
+{
+assert(subtrackTdb->parent == compositeTdb);
+subtrackTdb->parentName = compositeTdb->tableName; 
 if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     {
-    /* no longer necessary ? -- this is done in hgTrackDb now */
     if (isEmpty(subtrackTdb->type))
         subtrackTdb->type = cloneString(compositeTdb->type);
     subtrackTdb->grp = cloneString(compositeTdb->grp);
@@ -3397,7 +3417,6 @@ if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     }
 }
 
-
 static void rInheritFields(struct trackDb *tdbList)
 /* Go through list inheriting fields from parent if possible, and invoking self on children. */
 {
@@ -3408,7 +3427,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
 	if (tdbIsSuperTrack(tdb->parent))
 	    /* Do supertrack-specific inheritance. */
-	    subtrackInherit(tdb, tdb->parent);
+	    inheritFromSuper(tdb, tdb->parent);
 	}
     rInheritFields(tdb->subtracks);
     }
@@ -3575,7 +3594,7 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb)
 struct trackDb *cTdb = NULL;
 if (sTdb != NULL)
     {
-    char *subTrackSetting = cloneString(trackDbSetting(sTdb, "subTrack"));
+    char *subTrackSetting = cloneString(trackDbLocalSetting(sTdb, "subTrack"));
     if (subTrackSetting != NULL)
 	{
 	char *compositeName = firstWordInLine(subTrackSetting);
@@ -3710,7 +3729,7 @@ struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
 char *ret = NULL;
 if (tdb != NULL)
     {
-    ret = trackDbSetting(tdb, "subTrack");
+    ret = trackDbLocalSetting(tdb, "subTrack");
     trackDbFree(&tdb);
     }
 hFreeConn(&conn);

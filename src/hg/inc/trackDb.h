@@ -192,6 +192,9 @@ struct trackDb *trackDbFromRa(char *raFile);
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
 
+char *trackDbLocalSetting(struct trackDb *tdb, char *name);
+/* Return setting from tdb, but *not* any of it's parents. */
+
 struct hash *trackDbHashSettings(struct trackDb *tdb);
 /* Force trackDb to hash up it's settings.  Usually this is just
  * done on demand. Returns settings hash. */
@@ -269,8 +272,12 @@ char *trackDbSettingByView(struct trackDb *tdb, char *name);
 /* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
    returns a string that must be freed */
 
+#define trackDbSettingClosestToHome(tdb, name) trackDbSetting(tdb, name)
+
+#ifdef OLD
 char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name);
 /* Look for a trackDb setting from lowest level on up through chain of ancestors. */
+#endif /* OLD */
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
 /* Look for a trackDb setting (or default) from lowest level on up through chain of ancestors. */

@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.8 2009/12/17 08:38:35 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.9 2009/12/19 02:52:57 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -130,12 +130,10 @@ else if (sameWord(var, "group"))
     {
     bt->grp = cloneString(value);
     }
-else	/* Add to settings. */
-    {
-    if (bt->settingsHash == NULL)
-	bt->settingsHash = hashNew(7);
-    hashAdd(bt->settingsHash, var, cloneString(value));
-    }
+if (bt->settingsHash == NULL)
+    bt->settingsHash = hashNew(7);
+hashAdd(bt->settingsHash, var, cloneString(value));
+
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
 }
@@ -237,23 +235,6 @@ freeMem(t);
 return canPack;
 }
 
-
-void trackDbInherit(struct trackDb *bt, struct trackDb *composite)
-/* Fill in some missing values with values from parent track */
-{
-if (bt->type == NULL)
-    bt->type = cloneString(composite->type);
-if (bt->url == NULL && composite->url != NULL)
-    bt->url = cloneString(composite->url);
-if (bt->grp == NULL)
-    bt->grp = cloneString(composite->grp);
-if (bt->canPack == 2 && composite->canPack != 2)
-    bt->canPack = composite->canPack;
-if (composite->private)
-    bt->private = TRUE;
-if (composite->useScore)
-    bt->useScore = TRUE;
-}
 
 
 void trackDbPolish(struct trackDb *bt)
@@ -363,22 +344,11 @@ for (;;)
 	line = trimSpaces(line);
 	trackDbAddInfo(bt, word, line, lf);
 	}
-    if (trackDbSetting(bt, "compositeTrack") != NULL)
+    if (trackDbLocalSetting(bt, "compositeTrack") != NULL)
         hashAdd(compositeHash, bt->tableName, bt);
     }
 lineFileClose(&lf);
 
-for (bt = btList; bt != NULL; bt = bt->next)
-    {
-    struct trackDb *compositeTdb;
-    char *compositeName;
-    if ((compositeName = trackDbSetting(bt, "subTrack")) != NULL &&
-        trackDbSettingClosestToHome(bt, "noInherit") == NULL)
-            if ((compositeTdb =
-                    hashFindVal(compositeHash, compositeName)) != NULL)
-                trackDbInherit(bt, compositeTdb);
-    trackDbPolish(bt);
-    }
 slReverse(&btList);
 return btList;
 }
@@ -418,6 +388,7 @@ while ((raRecord = raNextRecord(lf)) != NULL)
 lineFileClose(&lf);
 }
 
+#ifdef OLD
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa)
 /* Override priority settings using a ra file. */
 {
@@ -443,6 +414,7 @@ while ((raRecord = raNextRecord(lf)) != NULL)
     }
 lineFileClose(&lf);
 }
+#endif /* OLD */
 
 struct hash *trackDbHashSettings(struct trackDb *tdb)
 /* Force trackDb to hash up it's settings.  Usually this is just
@@ -453,8 +425,8 @@ if (tdb->settingsHash == NULL)
 return tdb->settingsHash;
 }
 
-char *trackDbSetting(struct trackDb *tdb, char *name)
-/* Return setting string or NULL if none exists. */
+char *trackDbLocalSetting(struct trackDb *tdb, char *name)
+/* Return setting from tdb, but *not* any of it's parents. */
 {
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
@@ -654,59 +626,62 @@ eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary)
    warn if not multi-view compatible */
 {
 eCfgType cType = cfgNone;
-if(startsWith("wigMaf", tdb->type))
+char *type = tdb->type;
+if(startsWith("wigMaf", type))
     cType = cfgWigMaf;
-else if(startsWith("wig", tdb->type))
+else if(startsWith("wig", type))
     cType = cfgWig;
-else if(startsWith("bigWig", tdb->type))
+else if(startsWith("bigWig", type))
     cType = cfgWig;
-else if(startsWith("bedGraph", tdb->type))
+else if(startsWith("bedGraph", type))
     cType = cfgWig;
-else if(startsWith("netAlign", tdb->type))
+else if(startsWith("netAlign", type))
     {
     cType = cfgNetAlign;
     warnIfNecessary = FALSE;
     }
-else if(sameWord("bed5FloatScore",       tdb->type)
-     || sameWord("bed5FloatScoreWithFdr",tdb->type))
+else if(sameWord("bed5FloatScore",       type)
+     || sameWord("bed5FloatScoreWithFdr",type))
     cType = cfgBedScore;
-else if(sameWord("narrowPeak",tdb->type)
-     || sameWord("broadPeak", tdb->type)
-     || sameWord("encodePeak",tdb->type)
-     || sameWord("gappedPeak",tdb->type))
+else if(sameWord("narrowPeak",type)
+     || sameWord("broadPeak", type)
+     || sameWord("encodePeak",type)
+     || sameWord("gappedPeak",type))
     cType = cfgPeak;
-else if(sameWord("genePred",tdb->type))
+else if(sameWord("genePred",type))
         cType = cfgGenePred;
-else if(startsWith("bed ", tdb->type) || startsWith("bigBed ", tdb->type)) // TODO: Only these are configurable so far
+else if(startsWith("bed ", type) || startsWith("bigBed ", type)) 
     {
     char *words[3];
-    chopLine(cloneString( tdb->type), words);
+    chopLine(cloneString( type), words);
     if (trackDbSetting(tdb, "bedFilter") != NULL)
 	   cType = cfgBedFilt;
     else if (atoi(words[1]) >= 5 && trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }
-else if(startsWith("chain",tdb->type))
+else if(startsWith("chain",type))
     cType = cfgChain;
+// TODO: Only these are configurable so far
 
+// uglyAbort("cfgTypeFromTdb 3 tdb=%s type=%s", tdb->tableName,type);
 if(cType == cfgNone && warnIfNecessary)
     {
-    if(!startsWith("bed ", tdb->type) && !startsWith("bigBed", tdb->type)
+    if(!startsWith("bed ", type) && !startsWith("bigBed", type)
     && subgroupFind(tdb,"view",NULL))
-        warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",tdb->type,tdb->tableName);
+        warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->tableName);
     }
 return cType;
 }
 
  
-char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name)
+char *trackDbSetting(struct trackDb *tdb, char *name)
 /* Look for a trackDb setting from lowest level on up chain of parents. */
 {
 struct trackDb *generation;
 char *trackSetting = NULL;
 for (generation = tdb; generation != NULL; generation = generation->parent)
     {
-    trackSetting = trackDbSetting(generation,name);
+    trackSetting = trackDbLocalSetting(generation,name);
     if (trackSetting != NULL)
         break;
     }
@@ -927,7 +902,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    char *subtrackSetting = trackDbSetting(tdb, "subTrack");
+    char *subtrackSetting = trackDbLocalSetting(tdb, "subTrack");
     if (subtrackSetting != NULL)
         {
 	char *parentName = cloneFirstWord(subtrackSetting);
@@ -1028,7 +1003,7 @@ struct trackDb *trackDbCompositeParent(struct trackDb *tdb)
 struct trackDb *parent;
 for (parent = tdb->parent; parent != NULL; parent = parent->parent)
     {
-    if (trackDbSettingOn(parent, "compositeTrack"))
+    if (trackDbLocalSetting(parent, "compositeTrack"))
         return parent;
     }
 return NULL;

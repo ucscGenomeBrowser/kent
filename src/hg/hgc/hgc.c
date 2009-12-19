@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.2 2009/12/16 21:14:39 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.3 2009/12/19 02:52:53 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2474,7 +2474,7 @@ pslFreeList(&pslList);
 char *getParentTrackName(struct trackDb *tdb)
 /* Get the track table name or composite track parent name if applicable. */
 {
-char *trackTable = trackDbSetting(tdb, "subTrack");
+char *trackTable = trackDbLocalSetting(tdb, "subTrack");
 if (trackTable == NULL)
     {
     /* Look for parentWigMaf passed in explicitly via CGI, not from cart.
@@ -2554,17 +2554,7 @@ void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-char *composite;
-struct trackDb *fullTdb = NULL;
-
-if (!trackDbOrigAssembly(tdb))
-    {
-    /* look in composite's settings */
-    if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
-        fullTdb = hashFindVal(trackHash, composite);
-    if (fullTdb != NULL)
-        tdb = fullTdb;
-    }
+trackDbOrigAssembly(tdb);
 trackDbPrintOrigAssembly(tdb, database);
 }
 

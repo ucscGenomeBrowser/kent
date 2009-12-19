@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.4 2009/12/17 08:38:32 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.5 2009/12/19 02:52:51 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1527,26 +1527,27 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 enum trackVisibility vis = subtrack->limitedVis == tvHide ?
                            subtrack->visibility :
                            tvMin(subtrack->visibility,subtrack->limitedVis);
-
-if(tdbIsCompositeChild(subtrack->tdb))
+struct trackDb *tdb = subtrack->tdb;
+if(tdbIsCompositeChild(tdb))
     {
-    char *stView;
-    // If the composite track has "view" based drop downs, set visibility based upon those
-    if(subgroupFind(subtrack->tdb,"view",&stView))
-        {
-        int len = strlen(subtrack->tdb->parent->tableName) + strlen(stView) + 10;
-        char *ddName = needMem(len);
-	struct trackDb *composite = trackDbCompositeParent(subtrack->tdb);
-	assert(composite != NULL);
-        safef(ddName,len,"%s.%s.vis", composite->tableName,stView);
+    char *viewName = NULL;
+    if (subgroupFind(tdb,"view",&viewName))
+	{
+	struct trackDb *parent = trackDbCompositeParent(tdb);
+	assert(parent != NULL);
+        int len = strlen(parent->tableName) + strlen(viewName) + 10;
+
+	// Create the view dropdown var name.  This needs to have the view name surrounded by dots 
+	// in the middle for the javascript to work.
+	char ddName[len];
+        safef(ddName,len,"%s.%s.vis", parent->tableName,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
             vis = hTvFromString(fromParent);
         else
-            vis = visCompositeViewDefault(subtrack->tdb->parent,stView);
-        freeMem(ddName);
-        subgroupFree(&stView);
-        }
+            vis = visCompositeViewDefault(parent,viewName);
+        subgroupFree(&viewName);
+	}
     }
 return vis;
 }
@@ -4395,7 +4396,7 @@ if (!hideControls)
     hButton("hgt.jump", "jump");
     hOnClickButton(clearButtonJavascript,"clear");
     hPrintf(" size <span id='size'>%s</span> bp. ", buf);
-        hButton("hgTracksConfigPage", "configure");
+    hButton("hgTracksConfigPage", "configure");
 #define SURVEY 1
 #ifdef SURVEY
         //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");

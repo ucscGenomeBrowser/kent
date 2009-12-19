@@ -9,5 +9,5 @@ O = hgTrackDb.o
 
 hgTrackDb: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgTrackDb $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/hgTrackDb${EXE}
+#	${STRIP} ${BINDIR}/hgTrackDb${EXE}
 
