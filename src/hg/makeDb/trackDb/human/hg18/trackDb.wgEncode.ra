@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.729 2009/12/19 00:32:47 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.730 2009/12/19 00:35:56 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -228,7 +228,7 @@ wgEncode 1
 noInherit on
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,minLimit=-1,maxLimit=473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,minLimit=1,maxLimit=21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 #settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100,signalValueFilter0.0,signalValueLimits=0:45000 Signal:viewLimits=1:20,minLimit=-1,maxLimit=473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,minLimit=1,maxLimit=21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
-dataVersion ENCODE Feb 2009 Freeze
+dataVersion ENCODE Feb 2009, Sep 2009 data freezes
 
 # submission 148
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
