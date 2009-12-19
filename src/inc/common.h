@@ -952,11 +952,33 @@ void mustGetLine(FILE *file, char *buf, int charCount);
  * encountered.  The string in buf is '\0'-terminated.  (See man 3 fgets.)
  * Die if there is an error. */
 
+int mustOpenFd(char *fileName, int flags);
+/* Open a file descriptor (see man 2 open) or squawk and die. */
+
+void mustReadFd(int fd, void *buf, size_t size);
+/* Read size bytes from a file descriptor or squawk and die. */
+
 void mustWriteFd(int fd, void *buf, size_t size);
 /* Write size bytes to file descriptor fd or die.  (See man 2 write.) */
 
+off_t mustLseek(int fd, off_t offset, int whence);
+/* Seek to given offset, relative to whence (see man lseek) in file descriptor fd or errAbort.
+ * Return final offset (e.g. if this is just an (fd, 0, SEEK_CUR) query for current position). */
+
+void mustCloseFd(int *pFd);
+/* Close file descriptor *pFd if >= 0, abort if there's an error, set *pFd = -1. */
+
+#define writeOneFd(fd, var) mustWriteFd((fd), &(var), sizeof(var))
+/* Write out one variable to file descriptor fd. */
+
 #define readOne(file, var) (fread(&(var), sizeof(var), 1, (file)) == 1)
 /* Read one variable from file. Returns FALSE if can't do it. */
+
+#define readOneFd(fd, var) (read((fd), &(var), sizeof(var)) == sizeof(var))
+/* Read one variable from file. Returns FALSE if can't do it. */
+
+#define mustReadOneFd(fd, var) mustReadFd((fd), &(var), sizeof(var))
+/* Read one variable from file or die. */
 
 #define memReadOne(pPt, var) memRead((pPt), &(var), sizeof(var))
 /* Read one variable from memory. */
@@ -1084,6 +1106,9 @@ bits64 byteSwap64(bits64 a);
 bits64 readBits64(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 64 bit entity. */
 
+bits64 fdReadBits64(int fd, boolean isSwapped);
+/* Read and optionally byte-swap 64 bit entity. */
+
 bits64 memReadBits64(char **pPt, boolean isSwapped);
 /* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
@@ -1094,6 +1119,9 @@ bits32 byteSwap32(bits32 a);
 bits32 readBits32(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity. */
 
+bits32 fdReadBits32(int fd, boolean isSwapped);
+/* Read and optionally byte-swap 32 bit entity. */
+
 bits32 memReadBits32(char **pPt, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
@@ -1102,6 +1130,9 @@ bits16 byteSwap16(bits16 a);
 /* Swap from intel to sparc order of a 16 bit quantity. */
 
 bits16 readBits16(FILE *f, boolean isSwapped);
+/* Read and optionally byte-swap 16 bit entity. */
+
+bits16 fdReadBits16(int fd, boolean isSwapped);
 /* Read and optionally byte-swap 16 bit entity. */
 
 bits16 memReadBits16(char **pPt, boolean isSwapped);

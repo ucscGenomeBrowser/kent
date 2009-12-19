@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.140 2009/11/24 15:36:59 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.141 2009/12/19 00:23:21 angie Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1948,12 +1948,76 @@ if (ferror(file))
     errAbort("mustGetLine: fgets failed: %s", strerror(ferror(file)));
 }
 
+int mustOpenFd(char *fileName, int flags)
+/* Open a file descriptor (see man 2 open) or squawk and die. */
+{
+if (sameString(fileName, "stdin"))
+    return STDIN_FILENO;
+if (sameString(fileName, "stdout"))
+    return STDOUT_FILENO;
+// mode is necessary when O_CREAT is given, ignored otherwise
+int mode = 00664;
+int fd = open(fileName, flags, mode);
+if (fd < 0)
+    {
+    char *modeName = "";
+    if ((flags & (O_WRONLY | O_CREAT | O_TRUNC)) == (O_WRONLY | O_CREAT | O_TRUNC))
+	modeName = " to create and truncate";
+    else if ((flags & (O_WRONLY | O_CREAT)) == (O_WRONLY | O_CREAT))
+	modeName = " to create";
+    else if ((flags & O_WRONLY) == O_WRONLY)
+	modeName = " to write";
+    else if ((flags & O_RDWR) == O_RDWR)
+	modeName = " to append";
+    else
+	modeName = " to read";
+    errnoAbort("Can't open %s%s", fileName, modeName);
+    }
+return fd;
+}
+
+void mustReadFd(int fd, void *buf, size_t size)
+/* Read size bytes from a file or squawk and die. */
+{
+long long actualSize;
+if (size != 0 && (actualSize = read(fd, buf, size)) != size)
+    {
+    if (actualSize < 0)
+	errnoAbort("Error reading %lld bytes", (long long)size);
+    else
+	errAbort("End of file reading %lld bytes (got %lld)", (long long)size, actualSize);
+    }
+}
+
 void mustWriteFd(int fd, void *buf, size_t size)
 /* Write size bytes to file descriptor fd or die.  (See man 2 write.) */
 {
 ssize_t result = write(fd, buf, size);
 if (result < size)
     errAbort("mustWriteFd: write failed: %s", strerror(errno));
+}
+
+off_t mustLseek(int fd, off_t offset, int whence)
+/* Seek to given offset, relative to whence (see man lseek) in file descriptor fd or errAbort.
+ * Return final offset (e.g. if this is just an (fd, 0, SEEK_CUR) query for current position). */
+{
+off_t ret = lseek(fd, offset, whence);
+if (ret < 0)
+    errnoAbort("lseek(%d, %lld, %s (%d)) failed", fd, (long long)offset,
+	       ((whence == SEEK_SET) ? "SEEK_SET" : (whence == SEEK_CUR) ? "SEEK_CUR" :
+		(whence == SEEK_END) ? "SEEK_END" : "invalid 'whence' value"), whence);
+return ret;
+}
+
+void mustCloseFd(int *pFd)
+/* Close file descriptor *pFd if >= 0, abort if there's an error, set *pFd = -1. */
+{
+if (pFd != NULL && *pFd >= 0)
+    {
+    if (close(*pFd) < 0)
+	errnoAbort("close failed");
+    *pFd = -1;
+    }
 }
 
 char *addSuffix(char *head, char *suffix)
@@ -2187,6 +2251,16 @@ if (isSwapped)
 return val;
 }
 
+bits64 fdReadBits64(int fd, boolean isSwapped)
+/* Read and optionally byte-swap 64 bit entity. */
+{
+bits64 val;
+mustReadOneFd(fd, val);
+if (isSwapped)
+    val = byteSwap64(val);
+return val;
+}
+
 bits64 memReadBits64(char **pPt, boolean isSwapped)
 /* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
@@ -2221,6 +2295,16 @@ if (isSwapped)
 return val;
 }
 
+bits32 fdReadBits32(int fd, boolean isSwapped)
+/* Read and optionally byte-swap 32 bit entity. */
+{
+bits32 val;
+mustReadOneFd(fd, val);
+if (isSwapped)
+    val = byteSwap32(val);
+return val;
+}
+
 bits32 memReadBits32(char **pPt, boolean isSwapped)
 /* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
@@ -2248,6 +2332,16 @@ bits16 readBits16(FILE *f, boolean isSwapped)
 {
 bits16 val;
 mustReadOne(f, val);
+if (isSwapped)
+    val = byteSwap16(val);
+return val;
+}
+
+bits16 fdReadBits16(int fd, boolean isSwapped)
+/* Read and optionally byte-swap 16 bit entity. */
+{
+bits16 val;
+mustReadOneFd(fd, val);
 if (isSwapped)
     val = byteSwap16(val);
 return val;

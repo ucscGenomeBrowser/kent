@@ -4,7 +4,7 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pipelineTester.c,v 1.4 2006/08/04 06:00:20 markd Exp $";
+static char const rcsid[] = "$Id: pipelineTester.c,v 1.5 2009/12/19 00:23:21 angie Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -69,22 +69,6 @@ for (fd = 0; fd < 64; fd++)
         cnt++;
     }
 return cnt;
-}
-
-int mustOpenFd(char *fname, boolean isWrite)
-/* open a file, returning a descriptor or aborting */
-{
-int fd = open(fname, (isWrite ? O_WRONLY|O_CREAT|O_TRUNC : O_RDONLY), 0777);
-if (fd < 0)
-    errnoAbort("open of %s failed", fname);
-return fd;
-}
-
-void mustCloseFd(int fd)
-/* close a file, abort on an error */
-{
-if (close(fd) < 0)
-    errnoAbort("close failed");
 }
 
 char *parseQuoted(char **spPtr, char *cmdArgs)
@@ -205,22 +189,23 @@ if (exitCode != expectExitCode)
 void pipelineTestFd(char ***cmds, unsigned options)
 /* test for file descriptor API */
 {
-int otherEndFd = mustOpenFd(otherEndFile, isWrite);
+int mode = (isWrite ? O_WRONLY|O_CREAT|O_TRUNC : O_RDONLY);
+int otherEndFd = mustOpenFd(otherEndFile, mode);
 int stderrFd = (stderrFile == NULL) ? STDERR_FILENO
-    : mustOpenFd(stderrFile, TRUE);
+    : mustOpenFd(stderrFile, O_WRONLY|O_CREAT|O_TRUNC);
 struct pipeline *pl = pipelineOpenFd(cmds, options, otherEndFd, stderrFd);
 runPipelineTest(pl);
 pipelineFree(&pl);
-mustCloseFd(otherEndFd);
+mustCloseFd(&otherEndFd);
 if (stderrFile != NULL)
-    mustCloseFd(stderrFd);
+    mustCloseFd(&stderrFd);
 }
 
 void pipelineTestMem(char ***cmds, unsigned options)
 /* test for memory buffer API */
 {
 int stderrFd = (stderrFile == NULL) ? STDERR_FILENO
-    : mustOpenFd(stderrFile, TRUE);
+    : mustOpenFd(stderrFile, O_WRONLY|O_CREAT|O_TRUNC);
 size_t otherEndBufSize = 0;
 void *otherEndBuf = loadMemData(otherEndFile, &otherEndBufSize);
 struct pipeline *pl = pipelineOpenMem(cmds, options, otherEndBuf, otherEndBufSize, stderrFd);
@@ -228,7 +213,7 @@ runPipelineTest(pl);
 pipelineFree(&pl);
 freeMem(otherEndBuf);
 if (stderrFile != NULL)
-    mustCloseFd(stderrFd);
+    mustCloseFd(&stderrFd);
 }
 
 void pipelineTestFName(char ***cmds, unsigned options)
