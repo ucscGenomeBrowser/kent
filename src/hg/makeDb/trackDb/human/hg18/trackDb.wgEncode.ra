@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.728 2009/12/18 21:49:10 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.729 2009/12/19 00:32:47 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15936,7 +15936,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults  1-Transfrags=dense 2-PlusRawSignal=dense 3-MinusRawSignal=dense 4-Alignments=dense
 settingsByView 1-Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 2-PlusRawSignal:viewLimits=0:500,minLimit=0,maxLimit=5059134,autoScale=on,transformFunc=NONE,windowingFunction=mean,maxHeightPixels=100:24:16 3-MinusRawSignal:viewLimits=0:500,minLimit=0,maxLimit=4876484,autoScale=on,transformFunc=NONE,windowingFunction=mean,maxHeightPixels=100:24:16
