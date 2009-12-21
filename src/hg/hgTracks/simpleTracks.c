@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.6 2009/12/19 02:52:53 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.7 2009/12/21 21:56:31 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10892,8 +10892,20 @@ if (!smart)
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     subTdb = tdbRef->val;
-    subtrack = trackFromTrackDb(subTdb);
-    handler = lookupTrackHandler(subTdb->tableName);
+
+    /* initialize from composite track settings */
+    if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
+	{
+	/* install parent's track handler */
+	subtrack = trackFromTrackDb(tdb);
+	subtrack->tdb = subTdb;
+	handler = lookupTrackHandler(tdb->tableName);
+	}
+    else
+	{
+	subtrack = trackFromTrackDb(subTdb);
+	handler = lookupTrackHandler(subTdb->tableName);
+	}
     if (handler != NULL)
         handler(subtrack);
 
@@ -11036,6 +11048,14 @@ else
     hashAdd(handlerHash, name, handler);
 }
 
+#define registerTrackHandlerOnFamily(name, handler) registerTrackHandler(name, handler)
+// Marker to show that are actually registering subtracks as well.  I'd like to redo
+// this system a little.  It seems dangerous now.  There's no way to know in the .ra
+// file that there is a handler,  and as composite tracks start to allow multiple types
+// of subtracks,  the handler of the parent will still override _all_ of the children.
+// If parents and children put in different handlers, there's no way to know which one
+// the child will get.
+
 TrackHandler lookupTrackHandler(char *name)
 /* Lookup handler for track of give name.  Return NULL if none. */
 {
@@ -11094,7 +11114,7 @@ registerTrackHandler("delConrad2", delConrad2Methods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
 registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("delHinds2", delHindsMethods);
-registerTrackHandler("hapmapLd", ldMethods);
+registerTrackHandlerOnFamily("hapmapLd", ldMethods);
 registerTrackHandler("illuminaProbes", illuminaProbesMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
@@ -11175,9 +11195,9 @@ registerTrackHandler("tblastnHg16KGPep", blastMethods);
 registerTrackHandler("xenoRefGene", xenoRefGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
-registerTrackHandler("vegaGene", vegaMethods);
-registerTrackHandler("vegaPseudoGene", vegaMethods);
-registerTrackHandler("vegaGeneComposite", vegaMethods);
+registerTrackHandlerOnFamily("vegaGene", vegaMethods);
+registerTrackHandlerOnFamily("vegaPseudoGene", vegaMethods);
+registerTrackHandlerOnFamily("vegaGeneComposite", vegaMethods);
 registerTrackHandler("vegaGeneZfish", vegaMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
@@ -11234,7 +11254,7 @@ registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
 registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
-registerTrackHandler("encodeStanfordNRSF",encodeStanfordNRSFMethods);
+registerTrackHandlerOnFamily("encodeStanfordNRSF",encodeStanfordNRSFMethods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
@@ -11320,23 +11340,23 @@ registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
-registerTrackHandler("wgEncodeGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeSangerGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
-registerTrackHandler("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneOct05", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneMar07", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneJun05", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneOct05", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneMar07", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
+registerTrackHandlerOnFamily("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
-registerTrackHandler("pgSnp", pgSnpMethods);
-registerTrackHandler("pgSnpHgwdev", pgSnpMethods);
-registerTrackHandler("pgPop", pgSnpMethods);
+registerTrackHandlerOnFamily("pgSnp", pgSnpMethods);
+registerTrackHandlerOnFamily("pgSnpHgwdev", pgSnpMethods);
+registerTrackHandlerOnFamily("pgPop", pgSnpMethods);
 registerTrackHandler("pgTest", pgSnpMethods);
 registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
@@ -11344,13 +11364,13 @@ registerTrackHandler("encodeDless", dlessMethods);
 transMapRegisterTrackHandlers();
 retroRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
-registerTrackHandler("kiddEichlerDisc", kiddEichlerMethods);
-registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);
+registerTrackHandlerOnFamily("kiddEichlerDisc", kiddEichlerMethods);
+registerTrackHandlerOnFamily("kiddEichlerValid", kiddEichlerMethods);
 registerTrackHandler("dgv", dgvMethods);
 
-registerTrackHandler("hapmapSnps", hapmapMethods);
-registerTrackHandler("hapmapSnpsPhaseII", hapmapMethods);
-registerTrackHandler("omicia", omiciaMethods);
+registerTrackHandlerOnFamily("hapmapSnps", hapmapMethods);
+registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
+registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
