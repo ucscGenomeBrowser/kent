@@ -1,0 +1,5 @@
+#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/21 22:56:03 hiram Exp $";
+
+
+track chainNetHg18 override
+shortLabel Human Chain/Net

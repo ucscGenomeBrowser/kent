@@ -1,26 +1,29 @@
-#	"$Id: trackDb.chainNet.ra,v 1.5 2009/12/18 22:27:02 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.6 2009/12/21 22:55:56 hiram Exp $";
 
 track chainNetCanFam2 override
 priority 250.3
 
-track chainNetOrnAna1 override
-priority 300.3
+track chainNetRn4 override
+priority 350.3
+
+track chainNetMm9 override
+priority 360.3
+
+track chainNetHg19 override
+priority 470.3
+visibility dense
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg18 override
+priority 470.3
+shortLabel $o_db Chain/Net
+visibility dense
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetMonDom5 override
-priority 290.3
+priority 540.3
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
-track chainNetHg19 override
-priority 280.3
-visibility dense
-
-track chainNetHg18 override
-priority 270.3
-visibility dense
-
-track chainNetMm9 override
-priority 270.3
-
-track chainNetRn4 override
-priority 260.3
+track chainNetOrnAna1 override
+priority 550.3

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.3 2009/12/18 20:19:50 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.4 2009/12/21 22:55:59 hiram Exp $";
 
 track chainNetRheMac2 override
 priority 220.3
@@ -10,14 +10,15 @@ track chainNetPanTro2 override
 priority 250.3
 
 track chainNetHg19 override
+priority 260.3
 chainMinScore 5000
 visibility dense
-priority 260.3
 
 track chainNetHg18 override
+priority 260.3
 shortLabel $o_db Chain/Net
 visibility dense
-priority 260.3
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetMm9 override
 priority 370.3
