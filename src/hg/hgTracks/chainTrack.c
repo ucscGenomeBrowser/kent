@@ -15,7 +15,7 @@
 #include "chainCart.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.37 2009/09/24 23:15:47 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.38 2009/12/21 22:43:32 markd Exp $";
 
 
 struct cartOptions
@@ -318,11 +318,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	lf->orientation = 1;
 	qs = chain.qStart;
 	}
-    snprintf(lf->name, sizeof(lf->name), "%s %c %dk", 
-    	chain.qName, chain.qStrand, qs/1000);
-    snprintf(lf->popUp, sizeof(lf->name), "%s %c start %d size %d",
-    	chain.qName, chain.qStrand, qs, chain.qEnd - chain.qStart);
-    snprintf(buf, sizeof(buf), "%d", chain.id);
+    int len = strlen(chain.qName) + 32;
+    lf->name = needMem(len);
+    safef(lf->name, len, "%s %c %dk", chain.qName, chain.qStrand, qs/1000);
+    safef(buf, sizeof(buf), "%d", chain.id);
     lf->extra = cloneString(buf);
     slAddHead(&list, lf);
     }

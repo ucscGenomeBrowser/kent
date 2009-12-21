@@ -279,7 +279,7 @@ struct linkedFeatures
     int grayIx;				/* Average of components. */
     int filterColor;			/* Filter color (-1 for none) */
     float score;                        /* score for this feature */
-    char name[64];			/* Accession of query seq. */
+    char *name;				/* Accession of query seq. */
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
@@ -287,7 +287,6 @@ struct linkedFeatures
     void *original;			/* The structure that was converted
 					   into this (when needed later).  */
     struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
-    char popUp[128];			/* text for popup */
     };
 
 struct linkedFeaturesSeries

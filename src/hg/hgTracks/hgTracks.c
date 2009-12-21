@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1615 2009/12/18 23:41:45 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1616 2009/12/21 22:43:33 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -667,7 +667,7 @@ if (target != NULL)
             {
             lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
             }
-        safecpy(lf->name, sizeof(lf->name), itemAcc);
+        lf->name = cloneString(itemAcc);
         char extraInfo[512];
         safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
               (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
@@ -685,7 +685,7 @@ else
         {
         struct linkedFeatures *lf =
         lfFromPslx(psl, 1, FALSE, FALSE, tg);
-        safecpy(lf->name, sizeof(lf->name), "");
+        lf->name = cloneString("");
         lf->extra = cloneString("");
         slAddHead(&itemList, lf);
         }

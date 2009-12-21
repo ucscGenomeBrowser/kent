@@ -119,7 +119,7 @@ unsigned sampleCount = sample->sampleCount;
 assert(X != NULL && Y != NULL && sampleCount > 0);
 AllocVar(lf);
 lf->grayIx = grayIx;
-strncpy(lf->name, sample->name, sizeof(lf->name));
+lf->name = cloneString(sample->name);
 lf->orientation = orientFromChar(sample->strand[0]);
 
 for (i=0; i<sampleCount; ++i)

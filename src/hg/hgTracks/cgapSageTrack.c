@@ -170,7 +170,7 @@ if (vis == tvDense)
 	}
     if (libsUsed > 0)
 	{
-	safef(skel->name, sizeof(skel->name), "whatever");
+	skel->name = cloneString("whatever");
 	skel->score = (float)((double)freqTotal * (1000000/tagTotal));
 	skel->grayIx = grayIxForCgap(skel->score);
 	addSimpleFeature(skel);
@@ -191,7 +191,9 @@ else if (vis == tvPack)
 	char link[256];
 	char *encTissName = NULL;
 	double score = 0;
-	safef(tiss->name, sizeof(tiss->name), "%s (%d)", tpmEl->name, tpm->count);
+        int len = strlen(tpmEl->name) + 32;
+        tiss->name = needMem(len);
+	safef(tiss->name, len, "%s (%d)", tpmEl->name, tpm->count);
 	encTissName = cgiEncode(tpmEl->name);
 	safef(link, sizeof(link), "i=%s&tiss=%s", tag->name, encTissName);
 	score = (double)tpm->freqTotal*(1000000/(double)tpm->libTotals);
@@ -219,7 +221,7 @@ else
 	if (keepThisLib(libName, libId))
 	    {	    
 	    lf = CloneVar(skel);
-	    safef(lf->name, sizeof(lf->name), "%s", libName);
+	    lf->name = cloneString(libName);
 	    safef(link, sizeof(link), "i=%s&lib=%s", tag->name, libId);
 	    lf->score = (float)tag->tagTpms[i];
 	    lf->grayIx = grayIxForCgap(tag->tagTpms[i]);

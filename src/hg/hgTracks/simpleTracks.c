@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116 2009/12/09 03:30:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.117 2009/12/21 22:43:35 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3372,8 +3372,7 @@ assert(starts != NULL && sizes != NULL && blockCount > 0);
 
 AllocVar(lf);
 lf->grayIx = grayIx;
-strncpy(lf->name, bed->name, sizeof(lf->name));
-lf->name[sizeof(lf->name)-1] = 0;
+lf->name = cloneString(bed->name);
 lf->orientation = orientFromChar(bed->strand[0]);
 for (i=0; i<blockCount; ++i)
     {
@@ -3415,7 +3414,7 @@ for (i = 0; i < blockCount; i++)
     struct linkedFeatures *lf;
     struct simpleFeature *sf;
     AllocVar(lf);
-    strncpy(lf->name, bed->name, sizeof(lf->name));
+    lf->name = cloneString(bed->name);
     lf->start = starts[i] + bed->chromStart;
     lf->end = lf->start + sizes[i];
     AllocVar(sf);
@@ -3883,7 +3882,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
 	}
     AllocVar(lf);
     lf->grayIx = grayIx;
-    strncpy(lf->name, gp->name, sizeof(lf->name));
+    lf->name = cloneString(gp->name);
     if (extra && gp->name2)
         lf->extra = cloneString(gp->name2);
     lf->orientation = orientFromChar(gp->strand[0]);
@@ -4079,7 +4078,7 @@ if (hTableExists(database, "knownMore"))
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    km = knownMoreLoad(row);
-	    strncpy(lf->name, km->name, sizeof(lf->name));
+	    lf->name = cloneString(km->name);
 	    if (km->omimId)
 	        lf->extra = km;
 	    else
@@ -8486,7 +8485,7 @@ boolean rcTarget = (psl->strand[1] == '-');
 
 AllocVar(lf);
 lf->grayIx = grayIx;
-strncpy(lf->name, psl->qName, sizeof(lf->name));
+lf->name = cloneString(psl->qName);
 lf->orientation = orientFromChar(psl->strand[0]);
 if (rcTarget)
     lf->orientation = -lf->orientation;
@@ -10395,7 +10394,7 @@ char *jaxAlleleName(struct track *tg, void *item)
 static char truncName[128];
 struct linkedFeatures *lf = item;
 /* todo: make this check a cart variable so it can be hgTrackUi-tweaked. */
-assert(lf->name);
+assert(lf->name != NULL);
 if (startsWith("NM_", lf->name) || startsWith("XM_", lf->name))
     {
     char *ptr = lf->name + 3;

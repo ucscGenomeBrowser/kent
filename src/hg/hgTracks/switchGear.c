@@ -35,7 +35,7 @@ lf->tallEnd = tss->chromEnd;
 lf->filterColor = -1;
 lf->orientation = orientFromChar(tss->strand[0]);
 lf->grayIx = grayInRange((int)tss->confScore, 0, 100);
-strncpy(lf->name, tss->name, sizeof(lf->name));
+lf->name = cloneString(tss->name);
 AllocVar(sf);
 sf->start = tss->chromStart;
 sf->end = tss->chromEnd;

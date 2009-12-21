@@ -10,7 +10,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.22 2009/11/01 19:46:03 aamp Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.23 2009/12/21 22:43:33 markd Exp $";
 
 #define SMALLBUF 128
 
@@ -129,7 +129,7 @@ lf->filterColor = -1;
 lf->orientation = orientFromChar(peak->strand[0]);
 adjustBedScoreGrayLevel(tdb, (struct bed *)peak, scoreMin, scoreMax);
 lf->grayIx = grayInRange((int)peak->score, scoreMin, scoreMax);
-safecpy(lf->name, sizeof(lf->name), peak->name);
+lf->name = cloneString(peak->name);
 if (peak->blockCount > 0)
     {
     int i;

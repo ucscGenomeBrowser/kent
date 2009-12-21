@@ -270,7 +270,7 @@ struct linkedFeatures *lfsToLf(struct linkedFeaturesSeries *lfs)
 struct linkedFeatures *lf = NULL;
 struct simpleFeature *sf = NULL;
 AllocVar(lf);
-safef(lf->name,64,"%s",lfs->name);
+lf->name = cloneString(lfs->name);
 lf->start = lfs->start;
 lf->end = lfs->end;
 lf->tallStart = lfs->start;
@@ -295,7 +295,7 @@ struct simpleFeature *sf;
 int grayIx = grayInRange(bed->score, scoreMin, scoreMax);
 AllocVar(lf);
 lf->grayIx = grayIx;
-strncpy(lf->name, bed->name, sizeof(lf->name));
+lf->name = cloneString(bed->name);
 lf->orientation = orientFromChar(bed->strand[0]);
 AllocVar(sf);
 sf->start = bed->chromStart;

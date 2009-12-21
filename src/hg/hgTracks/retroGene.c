@@ -2,7 +2,7 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.17 2008/09/03 19:19:04 markd Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.18 2009/12/21 22:43:34 markd Exp $";
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -25,7 +25,7 @@ assert(starts != NULL && sizes != NULL && blockCount > 0);
 
 AllocVar(lf);
 lf->grayIx = grayIx;
-safef(lf->name, sizeof(lf->name), "%s", pg->name);
+lf->name = cloneString(pg->name);
 lf->orientation = orientFromChar(pg->strand[0]);
 for (i=0; i<blockCount; ++i)
     {

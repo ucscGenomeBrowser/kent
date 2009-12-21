@@ -267,11 +267,12 @@ if (nameGetsPos)
     safef(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", psl->qName, psl->qStart, psl->qEnd,
     	psl->tName, psl->tStart, psl->tEnd);
     lf->extra = cloneString(buf);
-    safef(lf->name, sizeof(lf->name), "%s %s %dk", psl->qName, psl->strand, psl->qStart/1000);
-    safef(lf->popUp, sizeof(lf->popUp), "%s:%d-%d score %9.0f", psl->qName, psl->qStart, psl->qEnd, lf->score);
+    int len = strlen(psl->qName) + 32;
+    lf->name = needMem(len);
+    safef(lf->name, len, "%s %s %dk", psl->qName, psl->strand, psl->qStart/1000);
     }
 else
-    strncpy(lf->name, psl->qName, sizeof(lf->name));
+    lf->name = cloneString(psl->qName);
 lf->orientation = orientFromChar(psl->strand[0]);
 if (rcTarget)
     lf->orientation = -lf->orientation;

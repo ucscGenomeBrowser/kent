@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.20 2009/12/14 23:19:57 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.21 2009/12/21 22:43:32 markd Exp $";
 
 struct bamTrackData
     {
@@ -132,7 +132,7 @@ const bam1_core_t *core = &bam->core;
 struct linkedFeatures *lf;
 AllocVar(lf);
 lf->score = core->qual;
-safef(lf->name, sizeof(lf->name), bam1_qname(bam));
+lf->name = cloneString(bam1_qname(bam));
 lf->orientation = (core->flag & BAM_FREVERSE) ? -1 : 1;
 int length;
 lf->components = sfFromNumericCigar(bam, &length);
@@ -217,7 +217,7 @@ static struct linkedFeatures *lfStub(int startEnd, int orientation)
 {
 struct linkedFeatures *lf;
 AllocVar(lf);
-safef(lf->name, sizeof(lf->name), "stub");
+lf->name = cloneString("stub");
 lf->orientation = orientation;
 struct simpleFeature *sf;
 AllocVar(sf);

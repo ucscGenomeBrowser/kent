@@ -687,7 +687,7 @@ if (b)
 	}
     slReverse(&lf->components);
     if (bedFields > 3)
-	safecpy(lf->name, sizeof(lf->name), b->name);
+	lf->name = cloneString(b->name);
     if (bedFields > 4)
 	lf->score = b->score;
     lf->original = b;
