@@ -11,9 +11,11 @@
 
 /*	size of memory to work with during wiggle data fetch operations,
  *	~4 Gb is good enough for about 750,000,000 bases	*/
-#define	HUGE_LIMIT	4280000000
+/* raising this number has a big effect and slows down some tracks ?
+ * namely, psl/bed custom tracks, this doesn't make any sense */
+#define	HUGE_LIMIT	2100000000
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.86 2009/12/21 18:37:10 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.87 2009/12/21 23:09:17 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
