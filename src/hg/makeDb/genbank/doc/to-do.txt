@@ -1182,3 +1182,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - NM_016429.2 has a 3 non-contiguous insertions in the mRNA near start of CDS.
   This gets the frame confused in the browser display.
   
+
+- APOBEC - 7 gene tandem cluster, some broken cases.
