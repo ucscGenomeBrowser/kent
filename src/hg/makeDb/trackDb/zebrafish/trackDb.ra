@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.59 2009/12/18 20:19:52 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.60 2009/12/21 23:02:57 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -600,12 +600,6 @@ searchTable ucscRetroMrnaInfo1
 searchType bed
 searchMethod prefix
 searchPriority 3.51
-
-track chainNetHg19 override
-chainMinScore 5000
-chainLinearGap loose
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 99
 
 track chainNetTetNig2 override
 chainMinScore 2000

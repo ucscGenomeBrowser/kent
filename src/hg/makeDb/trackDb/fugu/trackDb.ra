@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.65 2009/12/18 23:41:19 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.66 2009/12/21 23:02:57 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -233,12 +233,6 @@ priority 240
 
 track netOryLat1 override
 priority 240.1
-
-track chainNetHg19 override
-chainMinScore 5000
-chainLinearGap loose
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 150.3
 
 track chainHg18
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups

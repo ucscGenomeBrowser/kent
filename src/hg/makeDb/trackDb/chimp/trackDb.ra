@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.25 2009/12/18 20:19:47 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.26 2009/12/21 23:02:56 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -85,9 +85,6 @@ priority 144.1
 
 track chainCalJac1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track chainNetHg19 override
-chainMinScore 5000
 
 track chainHg17 override
 priority 300.3

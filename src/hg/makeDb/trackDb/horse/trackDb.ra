@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.18 2009/12/18 20:26:51 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.19 2009/12/21 23:02:57 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -33,9 +33,6 @@ chainLinearGap medium
 spectrum on
 type chain mm9
 otherDb mm9
-
-track chainNetHg19 override
-priority 260.1
 
 track chainCanFam2 override
 priority 240.1
