@@ -9,7 +9,11 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.85 2009/03/12 20:56:40 kent Exp $";
+/*	size of memory to work with during wiggle data fetch operations,
+ *	~4 Gb is good enough for about 750,000,000 bases	*/
+#define	HUGE_LIMIT	4280000000
+
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.86 2009/12/21 18:37:10 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -928,15 +932,14 @@ if (doDataArray && wds->winEnd && wds->chrName)
 
     if (sizeof(size_t) == 4)
 	{
-	if (hugeSize > 2100000000)
+	if (hugeSize > HUGE_LIMIT)
 	    {
 		warn("ERROR: Can not perform requested data operation.<BR>");
 		errAbort("Not enough memory (requested: %llu bytes)", hugeSize);
 	    }
 	}
     size = sizeof(float) * winSize;
-    /*	good enough for 500,000,000 bases	*/
-    setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
+    setMaxAlloc((size_t)HUGE_LIMIT);
     if (verboseLevel() >= VERBOSE_CHR_LEVEL)
 	startTime = clock1000();
     wa->data = (float *)needLargeMem(size);
@@ -1419,8 +1422,7 @@ struct wigAsciiData *asciiData = NULL;
 if (count < 1)
     return floatArray;
 
-/*	good enough for 500,000,000 bases	*/
-setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
+setMaxAlloc((size_t)HUGE_LIMIT);
 
 AllocArray(floatArray, count);
 fptr = floatArray;
@@ -1649,8 +1651,7 @@ if (bedList && *bedList)
 	bedArraySize = max(winExtent,bedExtent);
 	bedArraySize *= sizeof(char);	/*	in bytes	*/
 
-	/*	good enough for 2,000,000,000 bases (bedArray elem 1 byte) */
-	setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
+	setMaxAlloc((size_t)HUGE_LIMIT);
 	if (verboseLevel() >= VERBOSE_CHR_LEVEL)
 	    startTime = clock1000();
 	bedArray = (char *)needLargeMem(bedArraySize);
@@ -1768,10 +1769,10 @@ if (bedList && *bedList)
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
 		wigAscii->dataRange = 0.0;	/* to be determined */
-		setMaxAlloc((size_t)( 2100000000 *
+		setMaxAlloc((size_t)( HUGE_LIMIT *
                  (((sizeof(size_t)/4)*(sizeof(size_t)/4)*(sizeof(size_t)/4)))));
-                /* produces: size_t is 4 == 2100000000 ~= 2^31 = 2Gb
-                 *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
+                /* produces: size_t is 4 ~= 4 Gb
+                 *      size_t is 8 ~= 32 Gb
                  */
 		verbose(VERBOSE_CHR_LEVEL,
 		    "#\tworst case ascii array needLargeMem (%llu * %llu = %llu)\n",
@@ -1910,10 +1911,10 @@ if (bedList && *bedList)
 
 		if (newSize > 0)
 		    {
-		    setMaxAlloc((size_t)( 2100000000 *
+		    setMaxAlloc((size_t)( HUGE_LIMIT *
                  (((sizeof(size_t)/4)*(sizeof(size_t)/4)*(sizeof(size_t)/4)))));
-		    /* produces: size_t is 4 == 2100000000 ~= 2^31 = 2Gb
-		     *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
+		    /* produces: size_t is 4 ~= 4 Gb
+		     *      size_t is 8 ~= 32 Gb
 		     */
 		    verbose(VERBOSE_CHR_LEVEL,
 	    "#\tmoving to smaller ascii array needLargeMem( %llu * %llu = %llu)\n",
