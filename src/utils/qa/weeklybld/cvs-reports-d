@@ -405,6 +405,11 @@ package require Itcl
         }
     }
 
+    # does revSpec exists as a revison
+    public method hasRevision {revSpec} {
+        return [expr {![lempty [toRevision $revSpec 0]]}]
+    }
+
     # Given a branch or revision number (or tag), return its parent.
     # A trunk revision returns {}
     public method getRevisionParent {revSpec} {
@@ -532,7 +537,6 @@ package require Itcl
         }
         return $maxRev
     }
-
 
     # get list of revisions in the specified range (from < rev <= to)
     # handles toSpec being a branch magic tag.  fromSpec can be empty
@@ -1136,7 +1140,7 @@ proc genUserReports {outDir title2 userTableVar numChangedFiles rangeDiffs} {
     return $totalChgCnt
 }
 
-proc genFileReports {outDir title2 fileTableVar lineChgCount} {
+proc genFileReports {outDir title2 fileTableVar lineChgCount rangeDiffs} {
     upvar $fileTableVar fileTable
 
     progress "generating file reports"
@@ -1151,7 +1155,12 @@ proc genFileReports {outDir title2 fileTableVar lineChgCount} {
     puts $fh "<h2>$title2</h2>"
     puts $fh "<ul>"
     foreach f [lsort [array names fileTable]] {
-        fileReport $fh $outDir [lindex $fileTable($f) 0] [lindex $fileTable($f) 1]
+        lassign $fileTable($f) fileInfo revisions
+        if {$rangeDiffs} {
+            fileRangeReport $fh $outDir $fileInfo $revisions
+        } else {
+            fileReport $fh $outDir $fileInfo $revisions
+        }
     }
     puts $fh "</ul>"
     puts $fh "<ul>"
@@ -1163,13 +1172,34 @@ proc genFileReports {outDir title2 fileTableVar lineChgCount} {
     file rename -force $index.tmp $index
 }
 
+# check if fromTag is brach point of toTag
+proc isRevParent {fileInfo fromTag toTag} {
+    return [expr {[$fileInfo getRevisionParent $toTag] == [lindex [$fileInfo getRevision $fromTag] 0]}]
+}
+
+proc isSameBranch {fileInfo fromTag toTag} {
+    return [expr {[$fileInfo getRevisionBranch $fromTag] == [$fileInfo getRevisionBranch $toTag]}]
+}
+
+# Code will lose stuff if fromTag is not branch point of toTag or if
+# fromTag and toTag are on different branches.  Check if tags are ok
+proc checkRevTags {fileInfo fromTag toTag} {
+    # only check if file contans revision, and fromTag doesn't specify the base
+    if {![lempty $fromTag] && [$fileInfo hasRevision $fromTag] && [$fileInfo hasRevision $toTag]} {
+        if {!([isRevParent $fileInfo $fromTag $toTag] || [isSameBranch $fileInfo $fromTag $toTag])} {
+            error "[$fileInfo getWorkingFile] fromTag $fromTag not on same branch as toTag $toTag or fromTag is not point branch point for two"
+        }
+    }
+}
 
 # select and sort by user add to use table
 # user table are entries of {{fileObj {rev ...} ...}
 # file table entries are {fileObj {rev ...}}
 proc selectFileRevs {fileInfo userTableVar fileTableVar fromTag toTag} {
     upvar $userTableVar userTable $fileTableVar fileTable
-    
+
+    checkRevTags $fileInfo $fromTag $toTag
+
     # sort revisions out by users
     set selectRevs [$fileInfo getRevsForRange $fromTag $toTag]
     
@@ -1257,7 +1287,7 @@ proc genReports {outDir title2 module infoList fromTag toTag rangeDiffs} {
     file rename $outDir/user.new $outDir/user
 
     exec rm -rf $outDir/file.new
-    genFileReports $outDir/file.new $title2 fileTable $lineChgCount
+    genFileReports $outDir/file.new $title2 fileTable $lineChgCount $rangeDiffs
     exec rm -rf $outDir/file
     file rename $outDir/file.new $outDir/file
 
@@ -1421,7 +1451,11 @@ if {$doUpdate} {
 
 progress "collecting cvs change logs for $module"
 set infoList [$gCvsInvoke getLogInfo $fileSubset]
-set title2 "$fromTag to $toTag ($fromTagDate to $toTagDate) $branchVersion"
+set title2 "$fromTag to $toTag"
+if {![lempty $fromTag]} {
+    append title2 " ($fromTagDate to $toTagDate)"
+}
+append title2 " $branchVersion"
 genReports $outDir $title2 $module $infoList $fromTag $toTag $rangeDiffs
 
 progress "cvs report generation complete"
