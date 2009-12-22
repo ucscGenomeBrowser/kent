@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.68 2009/12/22 21:47:49 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.69 2009/12/22 22:48:05 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -287,6 +287,7 @@ type netAlign galGal3 chainGalGal3
 otherDb galGal3
 
 track chainGasAcu1
+release beta
 #replaces record chainGasAcu1 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -302,6 +303,7 @@ type chain gasAcu1
 otherDb gasAcu1
 
 track netGasAcu1
+release beta
 #replaces record netGasAcu1 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
