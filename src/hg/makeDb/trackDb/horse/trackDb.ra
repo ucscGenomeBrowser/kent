@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.20 2009/12/22 18:55:38 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.21 2009/12/22 22:21:29 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -54,6 +54,7 @@ track netGalGal3 override
 priority 280.1
 
 track chainOrnAna1
+release beta
 #replaces record chainOrnAna1 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
