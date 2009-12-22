@@ -413,14 +413,12 @@ priority 139
 track chainFr1 override
 shortLabel $o_Organism Chain
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
 
 track netFr1 override
 shortLabel $o_Organism Net
 
 track chainTetNig1 override
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
 
 track chainXenTro1 override
 priority 170
@@ -428,7 +426,6 @@ priority 170
 track chainRn3 override
 priority 286.2
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
 
 track chainBosTau2
 release beta
@@ -550,7 +547,6 @@ priority 159.4
 track chainDanRer2 override
 priority 160
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
                                                                                 
 track netDanRer2 override
 priority 160.1

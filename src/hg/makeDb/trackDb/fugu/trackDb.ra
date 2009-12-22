@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.67 2009/12/22 18:55:37 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.68 2009/12/22 21:47:49 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -311,20 +311,6 @@ visibility hide
 spectrum on
 type netAlign gasAcu1 chainGasAcu1
 otherDb gasAcu1
-
-track chainNetTetNig2 override
-chainMinScore 2000
-chainLinearGap medium
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 250
-
-track chainTetNig1 override
-priority 250
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-
-track netTetNig1 override
-priority 250.1
 
 track chainMm9
 release beta

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.20 2009/12/22 18:55:40 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.21 2009/12/22 21:47:50 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -91,7 +91,6 @@ otherDb gasAcu1
 
 track chainTetNig1 override
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
 
 # in priority.ra
 #
