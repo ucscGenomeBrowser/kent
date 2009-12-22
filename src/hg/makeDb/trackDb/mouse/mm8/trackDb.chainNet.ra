@@ -1,4 +1,7 @@
-#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/21 22:56:00 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.2 2009/12/22 20:16:32 hiram Exp $";
+
+track chainNetMm8 override
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetHg18 override
 shortLabel Mouse Chain/Net

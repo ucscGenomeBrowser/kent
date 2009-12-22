@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.443 2009/12/22 20:16:31 hiram Exp $";
+
+include trackDb.chainNet.ra
 include trackDb.encode.ra
 include trackDb.wgEncode.ra
 
