@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.5 2009/11/20 02:30:03 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.6 2009/12/22 06:04:47 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -83,6 +83,8 @@ if(!(-d $configPath)) {
 HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 
 my %terms = Encode::getControlledVocab($configPath);
+my %tags = Encode::getControlledVocabTags($configPath);
+
 # use pi.ra file to map pi/lab/institution/grant/project
 my $labRef = Encode::getLabs($configPath);
 my %labs = %{$labRef};
@@ -96,9 +98,10 @@ my $sth = $dbh->execute(
         "select settings, tableName from trackDb where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Lab", "Data_Type", "Cell_Type", "Experiment_Parameters",
-        "Version", "Freeze", "Submit_Date", "Release_Date", 
+        #"Version", 
+        "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs");
 while (@row = $sth->fetchrow_array()) {
     my $settings = $row[0];
@@ -110,8 +113,12 @@ while (@row = $sth->fetchrow_array()) {
     my $ref = Encode::metadataLineToHash($settings);
     my %metadata =  %{$ref};
     my %experiment = ();
-    $experiment{"project"} = defined($metadata{"grant"}) ? $metadata{"grant"} : "unknown";
+    if (!defined($metadata{"grant"})) {
+        $metadata{"grant"} = "unknown";
+    }
+    $experiment{"project"} = $metadata{"grant"};
     foreach my $lab (keys %labs) {
+        die "no grant for $lab" unless defined($labs{$lab}->{"grant"});
         if ($labs{$lab}->{"grant"} eq $metadata{"grant"}) {
             $experiment{"project"} = $labs{$lab}->{"project"};
             last;
@@ -147,14 +154,21 @@ while (@row = $sth->fetchrow_array()) {
     }
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
+     $experiment{"varLabels"} = "none";
     if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
         # TODO: define explicit ordering for term type in cv.ra
         $experiment{"vars"} = "";
+        $experiment{"varLabels"} = "";
         foreach my $termType (sort keys %vars) {
-            $experiment{"vars"} = $experiment{"vars"} .  $vars{$termType} . ";";
+            my $var = $vars{$termType};
+            $experiment{"vars"} = $experiment{"vars"} .  $var . ";";
+            my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
+                                $terms{$termType}{$var}->{"label"} : $var;
+            $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
         }
         chop $experiment{"vars"};
+        chop $experiment{"varLabels"};
     }
     $experiment{"version"} = "V1";
     if (defined($metadata{"submittedDataVersion"})) {
@@ -185,7 +199,6 @@ while (@row = $sth->fetchrow_array()) {
     #die "undefined dataType" unless defined($experiment{"dataType"});
     #die "undefined cell" unless defined($experiment{"cell"});
     #die "undefined vars" unless defined($experiment{"vars"});
-    #die "undefined freeze" unless defined($experiment{"freeze"});
     #die "undefined freeze" unless defined($experiment{"freeze"});
     #die "undefined submitDate" unless defined($experiment{"submitDate"});
     #die "undefined releaseDate" unless defined($experiment{"releaseDate"});
@@ -254,6 +267,7 @@ while (@row = $sth->fetchrow_array()) {
     my $version = "V1";         # need this in project table
         my $cell = "none";
     my $varString = "none";
+    my $varLabelString = "none";
 
 # get cell type and experimental vars
     if (defined($row[2])) {
@@ -282,11 +296,18 @@ while (@row = $sth->fetchrow_array()) {
             # experimental params -- iterate through all tags, lookup in cv.ra, 
             if (scalar(keys %varHash) > 0) {
                 # alphasort vars by term type, to assure consistency
+                # TODO: define a priority order in cv.ra
                 $varString = "";
+                $varLabelString = "";
                 foreach $termType (sort keys %varHash) {
-                    $varString = $varString . $varHash{$termType} . ";";
+                    my $var = $varHash{$termType};
+                    $varString = $varString . $var . ";";
+                    my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
+                                        $terms{$termType}{$var}->{"label"} : $var;
+                    $varLabelString = $varLabelString . $varLabel . ";";
                 }
                 chop $varString;
+                chop $varLabelString;
             }
             my $expKey = $lab . "+" . lc($dataType) .  "+" .
                                 $cell . "+" .  $varString;
@@ -344,13 +365,17 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"tempStatus"} = $status;
                 $experiment{"tempStatusId"} = $id;
                 $experiment{"vars"} = $varString;
+                $experiment{"varLabels"} = $varLabelString;
                 $experiment{"submitDate"} = $created_at;
                 # trim off time
                 $experiment{"submitDate"} =~ s/ \d\d:\d\d:\d\d//;
-                $experiment{"releaseDate"} = 
-                        ($status eq "released" ? $updated_at : "none");
+                $experiment{"releaseDate"} = "none";
+                # fill in manually for now -- later, extend releaseLog program 
+                # to create a table
+                        #($status eq "released" ? $updated_at : "none");
                 $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
-                $experiment{"freeze"} = "unknown";
+                $experiment{"freeze"} = $Encode::dataVersion;
+                $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-$2/;
                 $experiments{$expKey} = \%experiment;
                 print STDERR "ADDING2: " . $expKey . " IDs: " . 
                         join(",", keys %ids) . " PROJ: " . $project . "\n";
@@ -371,7 +396,7 @@ foreach my $key (keys %experiments) {
     die "undefined dataType" unless defined($experiment{"dataType"});
     die "undefined cell" unless defined($experiment{"cell"});
     die "undefined vars" unless defined($experiment{"vars"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
+    die "undefined varLabels" unless defined($experiment{"varLabels"});
     die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined submitDate" unless defined($experiment{"submitDate"});
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
@@ -379,10 +404,24 @@ foreach my $key (keys %experiments) {
         $experiment{"status"} = $experiment{"tempStatus"};
     }
     die "undefined status" unless defined($experiment{"status"});
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+
+    # Cosmetics so that auto-generated spreadsheet matches old manual version
+    # map dataType tag to term from cv.ra
+    my $dataType = $experiment{"dataType"};
+    if (defined($tags{"dataType"}{$dataType})) {
+        $experiment{"dataType"} = $tags{"dataType"}{$dataType}->{"term"};
+    }
+    # map lab to label in pi.ra
+    my $lab = $experiment{"lab"};
+    if (defined($labs{$lab}->{"label"})) {
+        $experiment{"lab"} = $labs{$lab}->{"label"};
+    }
+
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"lab"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
-                $experiment{"vars"}, $experiment{"version"}, 
+                $experiment{"varLabels"}, 
+                #$experiment{"version"}, 
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
                 join(",", keys %ids));
