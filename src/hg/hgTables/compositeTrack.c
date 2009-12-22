@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.17.30.1 2009/12/17 03:53:34 kent Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.17.30.2 2009/12/22 07:01:05 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -174,7 +174,6 @@ if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable))
     showWiggleMergeOptions(primary->longLabel);
 else
     showBedMergeOptions();
-int trackDbCountDescendants(struct trackDb *tdb);
 hPrintf("If a filter is specified on the main Table Browser page, it will "
 	"be applied only to %s, not to any other selected subtrack.  ",
 	primary->longLabel);
