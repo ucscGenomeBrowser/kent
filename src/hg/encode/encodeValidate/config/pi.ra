@@ -12,6 +12,7 @@ lab	Cshl
 pi      Gingeras
 grant   Gingeras
 project Transcriptome
+label   CSHL
 
 lab	Duke
 pi      Crawford
@@ -22,6 +23,7 @@ lab	Gis
 pi      Ruan
 grant   Gingeras
 project Transcriptome
+label   GIS
 
 lab	Helicos
 pi      Kapranov
@@ -47,11 +49,13 @@ lab     Riken
 pi      Carninci
 grant   Gingeras
 project Transcriptome
+label   RIKEN
 
 lab	Sanger
 pi      Hubbard
 grant   Hubbard
 project Gencode
+label   Gencode
 
 lab	SunyAlbany
 pi      Tenebaum
@@ -62,11 +66,13 @@ lab	UMass
 pi      Dekker
 grant   Dekker
 project 5C
+label   UMass-Dekker
 
 lab	UMassHA
 pi      Weng
 grant   Weng
 project UMass-Weng
+label   UMass-Weng
 
 lab	UNC
 pi      Lieb
@@ -82,6 +88,7 @@ lab     Uw
 pi      Stam
 grant   Stam
 project UW
+label   UW
 
 lab	Yale
 pi      Snyder
@@ -102,13 +109,15 @@ lab	Affy
 pi	Gingeras
 grant	Gingeras
 project	Transcriptome
+label   Affymetrix
 
 # Mouse and ARRA grants
 
-lab	Caltech
-pi	Wold
-grant	Hardison
-project	PSU
+# TODO: fix Conflict w/ Caltech Myers
+#lab	Caltech
+#pi	Wold
+#grant	Hardison
+#project	PSU
 
 lab	UNC
 pi	Giddings
