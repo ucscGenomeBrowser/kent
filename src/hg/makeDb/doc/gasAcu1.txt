@@ -2788,4 +2788,23 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
-############################################################################
+#########################################################################
+# LASTZ/CHAIN/NET swap danRer6 (DONE - 2009-12-21 - Galt)
+    # original alignment to danRer6
+    cd /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-21
+    cat fb.danRer6.chainMm9Link.txt
+    #  147479454 bases of 1506896106 (9.787%) in intersection
+
+    #   running the swap - DONE - 2009-12-21
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.danRer6.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.danRer6.swap
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer6/bed/lastzGasAcu1.2009-12-21/DEF \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -swap >& swap.log &
+    cat fb.gasAcu1.chainDanRer6Link.txt
+    #  114451338 bases of 446627861 (25.626%) in intersection
+
+#######################################################################
+
