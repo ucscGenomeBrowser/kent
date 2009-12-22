@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.8 2009/12/22 17:50:04 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.9 2009/12/22 23:10:42 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -631,7 +631,7 @@ else if(tdbIsComposite(curGroup->tdb))
 else
     safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
 
-    mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
+mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
 }
 
 void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
