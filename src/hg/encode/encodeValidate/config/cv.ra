@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.159 2009/12/15 22:24:27 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.160 2009/12/22 06:06:30 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2246,6 +2246,7 @@ type localization
 description Whole cell
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
+label whole_cell
 
 term nucleus
 tag nucleus
@@ -2301,11 +2302,13 @@ term total
 tag total
 type rnaExtract
 description Total RNA extract (longer than 200 nt)
+label Total_RNA
 
 term short
 tag short
 type rnaExtract
 description RNA shorter than 200 nt
+label short_RNA
 
 term shortDeplRrna
 tag shortDeplRrna
@@ -2331,11 +2334,13 @@ term longPolyA
 tag longPolyA
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
+label PolyA+
 
 term longNonPolyA
 tag longNonPolyA
 type rnaExtract
 description Poly(A)- RNA longer than 200 nt
+label PolyA-
 
 term proteinRnaExtracts
 tag proteinRnaExtracts
@@ -2464,7 +2469,7 @@ description 1h,50nM DEX (Myers)
 type treatment
 
 term DEX_5nM
-term DEXc
+tag DEXc
 description 1h,5nM DEX (Myers)
 type treatment
 
@@ -2557,5 +2562,83 @@ description HPA Restriction Enzyme
 type restrictionEnzyme
 
 
+### dataType
+term ChIP-seq
+tag chipseq
+type dataType
 
+term Exon-array
+tag affyexonarray
+type dataType
 
+term BIP
+tag bip
+type dataType
+
+term CAGE
+tag cage
+type dataType
+
+term CNV
+tag cnv
+type dataType
+
+term DGF
+tag dgf
+type dataType
+
+term DNA-PET
+tag dnapet
+type dataType
+
+term DNase-seq
+tag dnaseseq
+type dataType
+
+term FAIRE-seq
+tag faireseq
+type dataType
+
+term Genes
+tag gencode
+type dataType
+
+term loRNA-seq
+tag longrnaseq
+type dataType
+
+term Mapability
+tag mapability
+type dataType
+
+term Methyl27
+tag methyl27
+type dataType
+
+term Methyl-seq
+tag methylseq
+type dataType
+
+term NRE
+tag nre
+type dataType
+
+term PET
+tag pet
+type dataType
+
+term RNA-chip
+tag rnachip
+type dataType
+
+term RNA-seq
+tag rnaseq
+type dataType
+
+term shRNA-seq
+tag shortrnaseq
+type dataType
+
+term TFBS-valid
+tag tfbsvalid
+type dataType
