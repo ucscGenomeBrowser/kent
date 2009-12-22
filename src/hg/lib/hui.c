@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.251.2.19 2009/12/19 02:52:56 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.251.2.20 2009/12/22 07:00:26 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -144,7 +144,7 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    struct trackDb *trueTdb = tdbIsCompositeChild(tdb)? tdb->parent: tdb;
+    struct trackDb *trueTdb = trackDbTopLevelSelfOrParent(tdb);
     makeNamedDownloadsLink(trueTdb,(moreThanOne ? "downloads":"Downloads"));
     if(metadataLink)
         printf(",");
@@ -3222,10 +3222,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     if (primarySubtrack)
         {
-// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 8 isPrimary %d, primaryType %s, subtrack->type %s", isPrimary, primaryType, subtrack->type);
         if (isPrimary)
             {
-// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 8a");
             puts("<TR><TD>");
             cgiMakeHiddenBoolean(htmlIdentifier, TRUE);
             puts("[on] ");
@@ -3234,12 +3232,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             }
         else if (hSameTrackDbType(primaryType, subtrack->type))
             {
-// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 8b");
             puts("<TR><TD>");
             cgiMakeCheckBox(htmlIdentifier, checkedCB && enabledCB);
             printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
             }
-// if (subtrackRef != subtrackRefList) uglyAbort("Arrr 9");
         }
     else
         {
