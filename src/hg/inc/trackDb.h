@@ -329,13 +329,13 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
  *     compositeTrack on
  * and the children have the tag:
  *     subTrack parentName
- * In this routine the subTrack is treated as system is treated as you
- * might expect - the children of the system are removed from the main
- * list and instead put on the subtracks list of their parents.  The highest
- * level parents stay on the list.  There can be multiple levels of inheritance.
+ * In this routine the subtracks are removed from the list, and stuffed into
+ * the subtracks lists of their parents.  The highest level parents stay on 
+ * the list.  There can be multiple levels of inheritance.
  *    For the supertracks the _parents_ are removed from the list.  The only
  * reference to them in the returned forest is that they are in the parent
- * field of their children.  The parents of supertracks have no subtracks. */
+ * field of their children.  The parents of supertracks have no subtracks
+ * after this call currently. */
 
 struct slRef *trackDbListGetRefsToDescendants(struct trackDb *tdbForest);
 /* Return reference list to everything in forest. Do slFreeList when done. */

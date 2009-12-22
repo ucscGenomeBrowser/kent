@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.416.10.10 2009/12/19 02:52:55 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416.10.11 2009/12/22 06:58:39 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3393,7 +3393,12 @@ if (tdb->grp == NULL)
 
 static void inheritFromSuper(struct trackDb *subtrackTdb,
 			    struct trackDb *compositeTdb)
-/* Do the sort of inheritence a supertrack user. */
+/* Do the sort of inheritence a supertrack expects.  It's very similar in
+ * effect to the inheritance of subtracks in effect if not in method.  Rather
+ * than relying on trackDbSetting to chase missing settings from parents, this
+ * on copies in the settings from parent to child settingsHash.  I suspect that
+ * this is no longer needed, but am leaving it in until such time as the 
+ * supertrack system as a whole is factored out -jk. */
 {
 assert(subtrackTdb->parent == compositeTdb);
 subtrackTdb->parentName = compositeTdb->tableName; 

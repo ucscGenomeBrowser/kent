@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.9 2009/12/19 02:52:57 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.72.4.10 2009/12/22 06:59:20 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -854,13 +854,13 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList)
  *     compositeTrack on
  * and the children have the tag:
  *     subTrack parentName
- * In this routine the subTrack is treated as system is treated as you
- * might expect - the children of the system are removed from the main
- * list and instead put on the subtracks list of their parents.  The highest
- * level parents stay on the list.  There can be multiple levels of inheritance.
+ * In this routine the subtracks are removed from the list, and stuffed into
+ * the subtracks lists of their parents.  The highest level parents stay on 
+ * the list.  There can be multiple levels of inheritance.
  *    For the supertracks the _parents_ are removed from the list.  The only
  * reference to them in the returned forest is that they are in the parent
- * field of their children.  The parents of supertracks have no subtracks. */
+ * field of their children.  The parents of supertracks have no subtracks
+ * after this call currently. */
 {
 struct trackDb *forest = NULL;
 struct hash *trackHash = hashNew(0);
@@ -930,6 +930,25 @@ return forest;
 
 void rGetRefsToDescendants(struct slRef **pList, struct trackDb *tdbList)
 /* Add all member of tdbList, and all of their children to pList recursively. */
+/* Convert a list to a forest - filling in parent and subtrack pointers.
+ * The exact topology of the forest is a little complex due to the
+ * fact there are two "inheritance" systems - the superTrack system
+ * and the subTrack system.  In the superTrack system (which is on it's
+ * way out)  the superTrack's themselves have the tag:
+ *     superTrack on
+ * and the children of superTracks have the tag:
+ *     superTrack parentName
+ * In the subTrack system the parents have the tag:
+ *     compositeTrack on
+ * and the children have the tag:
+ *     subTrack parentName
+ * In this routine the subtracks are removed from the list, and stuffed into
+ * the subtracks lists of their parents.  The highest level parents stay on 
+ * the list.  There can be multiple levels of inheritance.
+ *    For the supertracks the _parents_ are removed from the list.  The only
+ * reference to them in the returned forest is that they are in the parent
+ * field of their children.  The parents of supertracks have no subtracks
+ * after this call currently. */
 {
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
