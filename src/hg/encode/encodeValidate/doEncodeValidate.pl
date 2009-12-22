@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.209 2009/12/17 18:16:49 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.210 2009/12/22 17:43:28 kate Exp $
 
 use warnings;
 use strict;
@@ -1325,6 +1325,7 @@ if(validationSettings("skipOutput")) {
 my @glob = glob "*.DDF";
 push(@glob, glob "*.ddf");
 my $ddfFile = Encode::newestFile(@glob);
+die "ERROR: Can't find DDF file\n" unless -e $ddfFile;
 my $ddfFileTime = (stat($ddfFile))->ctime;
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($ddfFileTime);
 
