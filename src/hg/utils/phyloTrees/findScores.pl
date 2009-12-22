@@ -2,7 +2,7 @@
 # findScores.pl - search our hive hierarchy for traces of -minScore
 #	and -linearGap used in blastz/lastz axtChain operation
 
-#	$Id: findScores.pl,v 1.1 2009/12/11 21:36:03 hiram Exp $
+#	$Id: findScores.pl,v 1.2 2009/12/22 20:05:10 hiram Exp $
 
 use strict;
 use warnings;
@@ -38,14 +38,39 @@ if ( ! -d $targetDir ) {
 my $searchDir = "$targetDir/bed/*lastz.$queryDb/axtChain/run";
 my $chainFile = `ls -rtd $searchDir/chain.csh 2> /dev/null | tail -1`;
 chomp $chainFile;
+# maybe reverse target and query to find result
 if (length($chainFile) < 1) {
+    $targetDir = "$hiveData/$queryDb";
+    $searchDir = "$targetDir/bed/*lastz.$targetDb/axtChain/run";
+    $chainFile = `ls -rtd $searchDir/chain.csh 2> /dev/null | tail -1`;
+    chomp $chainFile;
+}
+# ancient style of running blastz
+if (length($chainFile) < 1) {
+    $targetDir = "$hiveData/$targetDb";
+    $searchDir = "$targetDir/bed/*lastz.$queryDb/axtChain/run1";
+    $chainFile = `ls -rtd $searchDir/doChain 2> /dev/null | tail -1`;
+}
+# ancient style of running blastz reverse query and target
+if (length($chainFile) < 1) {
+    $targetDir = "$hiveData/$queryDb";
+    $searchDir = "$targetDir/bed/*lastz.$targetDb/axtChain/run1";
+    $chainFile = `ls -rtd $searchDir/doChain 2> /dev/null | tail -1`;
+}
+
+if (length($chainFile) < 1) {
+    $targetDir = "$hiveData/$targetDb";
+    $searchDir = "$targetDir/bed/*lastz.$queryDb/axtChain/run";
     printf STDERR "ERROR: do not find any chain.csh in:\n\n$searchDir\n\n";
-    printf STDERR "maybe try: findScores.pl $queryDb $targetDb\n\n";
+    $targetDir = "$hiveData/$queryDb";
+    $searchDir = "$targetDir/bed/*lastz.$targetDb/axtChain/run";
+    printf STDERR "ERROR: do not find any chain.csh in:\n\n$searchDir\n\n";
     usage;
     exit 255;
 }
 
 printf "looking in file:\n  $chainFile\n";
+my %foundSome;
 
 open (FH, "<$chainFile") or die "can not read $chainFile";
 while (my $line = <FH>) {
@@ -53,9 +78,32 @@ while (my $line = <FH>) {
     my @a = split('\s+', $line);
     for (my $i = 0; $i < scalar(@a); ++$i) {
 	if ($a[$i] =~ m/-minScore=|-scoreScheme=|-linearGap/ ) {
+	    my ($tag, $value) = split('=',$a[$i]);
+	    $foundSome{$tag} = $value;
 	    printf "%s\n", $a[$i];
+	    if ( $a[$i] =~ m/-scoreScheme/ ) {
+		if ( -s $value ) {
+		    my $matrix=`cat $value | egrep -v "A|O" | xargs echo | sed -e "s/ /,/g"`;
+		    chomp($matrix);
+		    printf "matrix 16 %s\n", $matrix;
+		}
+	    }
 	}
     }
+}
+my $foundCount = 0;
+foreach my $key (keys %foundSome) {
+    ++$foundCount;
+}
+printf "default values:\n" if ($foundCount != 3);
+if (! exists($foundSome{'-minScore'}) ) {
+    printf "chainMinScore 1000\n";
+}
+if (! exists($foundSome{'-scoreScheme'}) ) {
+    printf "matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91\n";
+}
+if (! exists($foundSome{'-linearGap'}) ) {
+    printf "chainLinearGap loose\n";
 }
 close (FH);
 
