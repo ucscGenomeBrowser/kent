@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.36 2009/12/22 18:55:41 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.37 2009/12/22 19:19:20 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -84,6 +84,7 @@ track netDanRer4 override
 shortLabel $o_Organism Net
 
 track chainGalGal2
+release beta
 #replaces record chainGalGal2 in parent dir missing/extra matrix,matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.558 2009/12/22 18:55:34 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.559 2009/12/22 19:19:19 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -3372,6 +3372,7 @@ type chain hg16
 otherDb hg16
 
 track chainHg17
+release beta
 shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3384,6 +3385,7 @@ type chain hg17
 otherDb hg17
 
 track netHg17
+release beta
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
