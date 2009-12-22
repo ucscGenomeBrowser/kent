@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.5 2009/12/19 02:52:51 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1612.2.6 2009/12/22 17:50:03 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2114,8 +2114,11 @@ if (withLeftLabels && psOutput == NULL)
             if (track->hasUi)
                 {
                 if(tdbIsCompositeChild(track->tdb))
-    // JK TODO - replace with better routine to find composite parent
-                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1), track->tdb->parent->tableName, track->tdb->parent->shortLabel, track->mapName);
+		    {
+		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
+                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1), 
+		    	parent->tableName, parent->shortLabel, track->mapName);
+		    }
                 else
                     mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h, track->mapName, track->shortLabel, track->mapName);
                 }

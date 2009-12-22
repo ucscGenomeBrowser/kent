@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.7 2009/12/21 21:56:31 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.8 2009/12/22 17:50:04 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9697,12 +9697,12 @@ Color genePredItemClassColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw a genePred based on looking up the gene class */
 /* in an itemClass table. */
 {
-char *geneClasses = trackDbSettingClosestToHome(tg->tdb, GENEPRED_CLASS_VAR);
+char *geneClasses = trackDbSetting(tg->tdb, GENEPRED_CLASS_VAR);
 char *gClassesClone = NULL;
 int class, classCt = 0;
 char *classes[20];
 char gClass[SMALLBUF];
-char *classTable = trackDbSettingClosestToHome(tg->tdb, GENEPRED_CLASS_TBL);
+char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -9739,7 +9739,7 @@ if (hTableExists(database, classTable))
               {
               found = TRUE;
               safef(gClass, sizeof(gClass), "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
-              colorString = trackDbSettingClosestToHome(tg->tdb, gClass);
+              colorString = trackDbSetting(tg->tdb, gClass);
               if (!colorString)
                   found = FALSE;
               break;
@@ -9881,7 +9881,7 @@ if (!gotColors)
     gainColor = hvGfxFindColorIx(hvg, 0, 255, 0);
     lossColor = hvGfxFindColorIx(hvg, 255, 0, 0);
 
-    if ((rgbStr = trackDbSettingClosestToHome(tg->tdb, "gainColor")) != NULL)
+    if ((rgbStr = trackDbSetting(tg->tdb, "gainColor")) != NULL)
         {
         count = chopString(rgbStr, ",", rgb, ArraySize(rgb));
         if (count == 3 && isdigit(rgb[0][0]) && isdigit(rgb[1][0]) &&
@@ -9889,7 +9889,7 @@ if (!gotColors)
             gainColor = hvGfxFindColorIx(hvg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2]));
         }
 
-    if ((rgbStr = trackDbSettingClosestToHome(tg->tdb, "lossColor")) != NULL)
+    if ((rgbStr = trackDbSetting(tg->tdb, "lossColor")) != NULL)
         {
         count = chopString(rgbStr, ",", rgb, ArraySize(rgb));
         if (count == 3 && isdigit(rgb[0][0]) && isdigit(rgb[1][0]) &&
@@ -10641,7 +10641,7 @@ if (sameWord(type, "bed"))
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb
        settings. */
-    if (trackDbSettingClosestToHome(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
+    if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
     }
 else if (sameWord(type, "bigBed"))
@@ -10678,7 +10678,7 @@ else if (sameWord(type, "genePred"))
     track->colorShades = NULL;
     if (track->itemAttrTbl != NULL)
         track->itemColor = genePredItemAttrColor;
-    else if (trackDbSettingClosestToHome(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
+    else if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
     }
 else if (sameWord(type, "logo"))
@@ -10847,9 +10847,6 @@ int subCount = slCount(tdbRefList);
 int altColors = subCount - 1;
 struct track *subtrack = NULL;
 TrackHandler handler;
-char table[SMALLBUF];
-struct hashEl *hel, *hels = NULL;
-int len;
 boolean smart = FALSE;
 
 /* ignore if no subtracks */
@@ -10881,22 +10878,21 @@ if (altColors && (finalR || finalG || finalB))
     deltaG = (finalG - altG) / altColors;
     deltaB = (finalB - altB) / altColors;
     }
-/* get cart variables for the composite, unless track handles it's own */
-if (!smart)
-    {
-    safef(table, sizeof table, "%s.", track->mapName);
-    hels = cartFindPrefix(cart, table);
-    }
 
 /* fill in subtracks of composite track */
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     subTdb = tdbRef->val;
 
-    /* initialize from composite track settings */
+    /* Initialize from composite track settings */
     if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
 	{
 	/* install parent's track handler */
+	/* TODO JK - rework.  The gencode tracks currently depend on this, wgEncodeGencode in particular,
+	 * but it seems very dangerous in general.  What if the subtracks already have their own handler? 
+	 * Waiting to fix until after viewInTheMiddle branch merge since preferred fix involves
+	 * edits to trackDb.ra files - that is putting in an explicit setting when you want
+	 * this behavior rather than relying on absence of an overloaded setting. */
 	subtrack = trackFromTrackDb(tdb);
 	subtrack->tdb = subTdb;
 	handler = lookupTrackHandler(tdb->tableName);
@@ -10909,28 +10905,14 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     if (handler != NULL)
         handler(subtrack);
 
-   eCfgType cfgType = cfgTypeFromTdb(subTdb,FALSE);
-   if (!smart && cfgType == cfgNone)      // TODO: Ideally this will go away with ClosestToHome methods
-	{                                  //       For now, limit it to non-multiview compatible types
-	/* add cart variables from parent */
-	char cartVar[128];
-	char *lastName = "";
-	for (hel = hels; hel != NULL; hel = hel->next)
-	    {
-	    len = strlen(track->mapName);
-	    safef(cartVar, sizeof cartVar, "%s.%s",
-			       subTdb->tableName, hel->name+len+1);
-	    if(sameString(hel->name,lastName))   // Allows propagating multi-element settings (as in multi-select)
-		cartAddString(cart, cartVar, hel->val);
-	    else
-		cartSetString(cart, cartVar, hel->val);
-	    lastName = hel->name;
-	    }
-	}
-    /* add subtrack settings (table, colors, labels, vis & pri) */
+    /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
+     * needed in the "not noInherit" case that hopefully will go away soon. */
     subtrack->mapName = subTdb->tableName;
     subtrack->shortLabel = subTdb->shortLabel;
     subtrack->longLabel = subTdb->longLabel;
+    subtrack->priority = subTdb->priority;
+
+    /* Add color gradient. */
     if (finalR || finalG || finalB)
 	{
 	subtrack->color.r = altR;
@@ -10952,7 +10934,6 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	subtrack->altColor.g = subTdb->altColorG;
 	subtrack->altColor.b = subTdb->altColorB;
 	}
-    subtrack->priority = subTdb->priority;
     slAddHead(&track->subtracks, subtrack);
     }
 slSort(&track->subtracks, trackPriCmp);
