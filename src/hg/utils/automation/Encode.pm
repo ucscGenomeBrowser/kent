@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.53 2009/12/15 18:49:34 tdreszer Exp $
+# $Id: Encode.pm,v 1.54 2009/12/22 06:07:07 kate Exp $
 
 package Encode;
 
@@ -207,6 +207,22 @@ sub getControlledVocab
         }
     }
     return %terms;
+}
+
+sub getControlledVocabTags
+{
+# Returns hash of cv tags, indexed by the types in the cv.ra file
+    my ($configPath) = @_;
+    my %tags = ();
+    my %termRa = RAFile::readRaFile("$configPath/$vocabConfigFile", "term");
+    foreach my $term (keys %termRa) {
+        my $type = $termRa{$term}->{type};
+        my $tag = $termRa{$term}->{tag};
+        die "no type for $term" unless defined($type);
+        die "no tag for $term" unless defined($tag);
+        $tags{$type}->{$tag} = $termRa{$term};
+    }
+    return %tags;
 }
 
 sub getFields
