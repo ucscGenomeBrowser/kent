@@ -1,0 +1,4 @@
+#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/22 18:57:14 hiram Exp $";
+
+track chainNetMm6 override
+shortLabel Mouse Chain/Net
