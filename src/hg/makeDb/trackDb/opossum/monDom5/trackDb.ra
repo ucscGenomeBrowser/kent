@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.23 2009/12/22 18:55:41 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 # Unsplit mRNA
 track all_mrna

@@ -1,4 +1,9 @@
+#	"$Id: trackDb.ra,v 1.20 2009/12/22 18:55:40 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track chainHg18
+release beta
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -14,6 +19,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+release beta
 #replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -24,10 +30,8 @@ spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
 
-track chainNetHg19 override
-priority 138.3
-
 track chainMm9
+release beta
 #replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -43,6 +47,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+release beta
 #replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

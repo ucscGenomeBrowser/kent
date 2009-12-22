@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.60 2009/12/21 23:02:57 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.61 2009/12/22 18:55:45 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -270,6 +270,7 @@ priority 170.1
 visibility dense
 
 track chainMm8
+release beta
 #replaces record chainMm8 in parent dir missing/extra release
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

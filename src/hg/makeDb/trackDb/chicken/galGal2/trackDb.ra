@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.73 2009/12/22 18:55:35 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track supercontig
 shortLabel Supercontigs
 longLabel Supercontigs from Whole Genome Shotgun Assembly

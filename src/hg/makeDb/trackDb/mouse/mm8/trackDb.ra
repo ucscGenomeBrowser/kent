@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.61 2009/12/22 18:55:40 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 track wssdCoverage
 shortLabel WSSD Coverage

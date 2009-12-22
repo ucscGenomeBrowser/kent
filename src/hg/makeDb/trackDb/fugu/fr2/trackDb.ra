@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.10 2009/12/22 18:55:37 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 visibility hide

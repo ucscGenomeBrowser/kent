@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.9 2009/12/22 18:55:36 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 track scaffold
 shortLabel Scaffolds

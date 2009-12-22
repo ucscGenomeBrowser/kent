@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.44 2009/12/22 18:55:43 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track mrna override
 spectrum on
 
@@ -127,18 +131,6 @@ visibility dense
 track netMm5 override
 priority 127.3
 
-track chainNetHg19 override
-priority 124.6
-chainMinScore 5000
-chainLinearGap loose
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track chainNetMm9 override
-chainMinScore 5000
-chainLinearGap loose
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 128.1
-
 track chainNetFr2 override
 chainMinScore 2000
 chainLinearGap medium
@@ -166,6 +158,7 @@ track netMm9 override
 priority 128.2
 
 track chainMm8
+release beta
 #replaces record chainMm8 in parent dir missing/extra release,matrix,matrixHeader
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -179,6 +172,7 @@ type chain mm8
 otherDb mm8
 
 track netMm8
+release beta
 #replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

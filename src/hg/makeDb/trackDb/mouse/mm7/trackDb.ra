@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.58 2009/12/22 18:55:40 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 track knownGene override
 shortLabel Known Genes

@@ -1,0 +1,4 @@
+#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/22 18:55:41 hiram Exp $";
+
+track chainNetMm9 override
+chainMinScore 3000

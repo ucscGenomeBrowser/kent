@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.25 2009/12/18 20:19:52 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.26 2009/12/22 18:55:44 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -72,6 +72,7 @@ type psl xeno
 url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511
 
 track chainMm8
+release beta
 #replaces record chainMm8 in parent dir missing/extra release,matrix,matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -85,6 +86,7 @@ type chain mm8
 otherDb mm8
 
 track netMm8
+release beta
 #replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

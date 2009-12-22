@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.16 2009/12/21 23:02:57 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.17 2009/12/22 18:55:43 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -56,6 +56,7 @@ type netAlign rn4 chainRn4
 otherDb rn4
 
 track chainMm9
+release beta
 #replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -71,6 +72,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+release beta
 #replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -82,6 +84,7 @@ type netAlign mm9 chainMm9
 otherDb mm9
 
 track chainMm8
+release beta
 #replaces record chainMm8 in parent dir missing/extra release,matrix,matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -95,6 +98,7 @@ type chain mm8
 otherDb mm8
 
 track netMm8
+release beta
 #replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
