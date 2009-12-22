@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.3 2009/12/19 02:52:53 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1582.2.4 2009/12/22 07:26:00 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2471,27 +2471,12 @@ else
 pslFreeList(&pslList);
 }
 
-char *getParentTrackName(struct trackDb *tdb)
+
+static char *getParentTrackName(struct trackDb *tdb)
 /* Get the track table name or composite track parent name if applicable. */
 {
-char *trackTable = trackDbLocalSetting(tdb, "subTrack");
-if (trackTable == NULL)
-    {
-    /* Look for parentWigMaf passed in explicitly via CGI, not from cart.
-     * tdb->type in this case is wig not wigMaf... */
-    trackTable = cgiUsualString("parentWigMaf", NULL);
-    if (trackTable == NULL)
-	trackTable = tdb->tableName;
-    trackTable = cloneString(trackTable);
-    }
-else
-    {
-    /* trim off extra words in subTrack setting, if any: */
-    char *words[2];
-    if (chopLine(cloneString(trackTable), words) > 0)
-	trackTable = words[0];
-    }
-return trackTable;
+tdb = trackDbTopLevelSelfOrParent(tdb);
+return tdb->tableName;
 }
 
 void printTBSchemaLink(struct trackDb *tdb)
