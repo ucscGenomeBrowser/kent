@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.5 2009/12/22 20:16:33 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.6 2009/12/22 21:14:20 hiram Exp $";
 
 track chainNetGalGal3 override
 priority 280.3
@@ -35,6 +35,12 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 track chainNetMm8 override
 priority 530.3
 shortLabel $o_db Chain/Net
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetPanTro2 override
+priority 630.3
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91

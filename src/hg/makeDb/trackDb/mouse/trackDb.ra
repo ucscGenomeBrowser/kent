@@ -659,6 +659,7 @@ track netPanTro1 override
 priority 278.6
 
 track chainPanTro2
+release beta
 #replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -674,6 +675,7 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
+release beta
 #replaces record netPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -685,6 +687,7 @@ type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
 track chainHg18
+release beta
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -700,6 +703,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+release beta
 #replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

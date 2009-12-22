@@ -1,4 +1,12 @@
-#	"$Id: trackDb.chainNet.ra,v 1.9 2009/12/22 20:16:31 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.10 2009/12/22 21:14:17 hiram Exp $";
+
+track chainNetPanTro2 override
+priority 210.3
+chainMinScore 5000
+
+track chainNetPanTro1 override
+priority 210.3
+shortLabel $o_db Chain/Net
 
 track chainNetRn4 override
 priority 360.3
