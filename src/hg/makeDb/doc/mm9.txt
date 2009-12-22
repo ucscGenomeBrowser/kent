@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.117 2009/12/19 00:57:58 galt Exp $"
+#	"$Id: mm9.txt,v 1.118 2009/12/22 19:49:25 galt Exp $"
 #
 
 #######################################################################
@@ -9854,7 +9854,6 @@ see doc/builds.txt for specific details.
     'load data local infile "GN_mouse_RefSeq.txt" into table geneNetworkId'
 
 #########################################################################
-
 # LASTZ/CHAIN/NET swap danRer6 (DONE - 2009-12-18 - Galt)
     # original alignment to danRer6
     cd /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-17
@@ -9870,9 +9869,8 @@ see doc/builds.txt for specific details.
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap >& swap.log &
     #	real    183m21.102s
-# TODO BOOKMARK
     cat fb.mm9.chainDanRer6Link.txt 
-    #	96424507 bases of 1506896106 (6.399%) in intersection
+    #   73444297 bases of 2620346127 (2.803%) in intersection
 
 
 #######################################################################
