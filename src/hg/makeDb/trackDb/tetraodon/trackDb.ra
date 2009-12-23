@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.46 2009/12/23 20:09:05 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.47 2009/12/23 23:19:24 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -136,11 +136,6 @@ chainMinScore 2000
 chainLinearGap medium
 priority 159.3
 
-track chainNetOryLat2 override
-chainMinScore 3000
-chainLinearGap medium
-priority 227
-
 track chainMm9 override
 priority 128.1
 
@@ -248,6 +243,7 @@ type netAlign tetNig1 chainSelf
 otherDb tetNig1
 
 track chainOryLat1
+release beta
 #replaces record chainOryLat1 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

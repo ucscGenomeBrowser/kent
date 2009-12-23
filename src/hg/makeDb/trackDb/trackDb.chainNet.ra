@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.18 2009/12/23 20:40:03 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.19 2009/12/23 23:19:22 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -325,6 +325,49 @@ html chainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign oryLat2 chainOryLat2
     otherDb oryLat2
+
+# release alpha since oryLat1 is obsolete
+track chainNetOryLat1
+release alpha
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel Medaka (Oct. 2005/oryLat1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 165.5
+color 100,50,0
+altColor 255,240,200
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb oryLat1
+chainMinScore 3000
+chainLinearGap medium
+html chainNet
+
+    track chainOryLat1
+    release alpha
+    subTrack chainNetOryLat1
+    subGroups view=chain
+    shortLabel $o_Organism Chain 
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain oryLat1
+    otherDb oryLat1
+
+    track netOryLat1
+    release alpha
+    subTrack chainNetOryLat1
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign oryLat1 chainOryLat1
+    otherDb oryLat1
 
 # release alpha until individual gasAcu1 tracks are obsolete
 track chainNetGasAcu1
