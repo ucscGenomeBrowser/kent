@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.7 2009/12/23 05:00:09 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.8 2009/12/23 05:01:47 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -23,8 +23,7 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-#use lib "/cluster/bin/scripts";
-use lib "/cluster/home/kate/kent/src/hg/utils/automation";
+use lib "/cluster/bin/scripts";
 use Encode;
 use HgAutomate;
 use HgDb;
