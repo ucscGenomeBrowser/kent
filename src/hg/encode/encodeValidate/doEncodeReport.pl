@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.6 2009/12/22 06:04:47 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.7 2009/12/23 05:00:09 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -90,12 +90,11 @@ my $labRef = Encode::getLabs($configPath);
 my %labs = %{$labRef};
 
 # parse all trackDb entries w/ metadata setting into hash of submissions
-#   key is lab+dataType+cell+vars+version
 #   key is lab+dataType+cell+vars
 
 my $dbh = HgDb->new(DB => $assembly);
 my $sth = $dbh->execute(
-        "select settings, tableName from trackDb where settings like \'\%metadata\%\'");
+        "select settings, tableName from trackDb_encodeReport where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
 printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
@@ -110,6 +109,7 @@ while (@row = $sth->fetchrow_array()) {
     $settings =~ tr/\n/|/;
     $settings =~ s/^.*metadata //;  
     $settings =~ s/\|.*$//;
+    print STDERR "     SETTINGS: $settings\n";
     my $ref = Encode::metadataLineToHash($settings);
     my %metadata =  %{$ref};
     my %experiment = ();
@@ -138,7 +138,6 @@ while (@row = $sth->fetchrow_array()) {
     if (defined($metadata{"cell"})) {
         $experiment{"cell"} = $metadata{"cell"};
     }
-    #print STDERR "    tableName  " . $tableName . "\n";
     print STDERR "    tableName  " . $tableName . "\n";
 
     # determine term type for experiment parameters 
@@ -147,10 +146,18 @@ while (@row = $sth->fetchrow_array()) {
     foreach my $var (keys %metadata) {
         foreach my $termType (@termTypes) {
             next if ($termType eq "Cell Line");
+            next if ($termType eq "dataType");
             if (defined($terms{$termType}{$metadata{$var}})) {
                 $vars{$termType} = $metadata{$var};
             }
         }
+    }
+    # treat version like a variable
+    if (defined($metadata{"submittedDataVersion"})) {
+        my $version = $metadata{"submittedDataVersion"};
+        # strip comment
+        $version =~ s/^.*(V\d+).*/$1/;
+        $vars{"version"} = $version;
     }
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
@@ -170,18 +177,13 @@ while (@row = $sth->fetchrow_array()) {
         chop $experiment{"vars"};
         chop $experiment{"varLabels"};
     }
-    $experiment{"version"} = "V1";
-    if (defined($metadata{"submittedDataVersion"})) {
-        $experiment{"version"} = $metadata{"submittedDataVersion"};
-        $experiment{"version"} =~ s/^.*(V\d+).*/$1/;
-    }
+
     $experiment{"freeze"} = $metadata{"dataVersion"};
     $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-$2/;
 
-    $experiment{"submitDate"} = "00-00-00";
-    if (defined($metadata{"dateSubmitted"})) {
-        $experiment{"submitDate"} = $metadata{"dateSubmitted"};
-    }
+    $experiment{"submitDate"} = defined($metadata{"dateResubmitted"}) ?
+                $metadata{"dateResubmitted"} : $metadata{"dateSubmitted"};
+
     $experiment{"releaseDate"} = "unknown";
 
     # note that this was found in trackDb (not just in pipeline, below)
@@ -193,7 +195,6 @@ while (@row = $sth->fetchrow_array()) {
     # a few tracks are missing the subId
     my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
 
-    #print STDERR "    ID  " . $subId "\n";
     #die "undefined project" unless defined($experiment{"project"});
     #die "undefined lab" unless defined($experiment{"lab"});
     #die "undefined dataType" unless defined($experiment{"dataType"});
@@ -204,18 +205,16 @@ while (@row = $sth->fetchrow_array()) {
     #die "undefined releaseDate" unless defined($experiment{"releaseDate"});
     #die "undefined status" unless defined($experiment{"status"});
 
-    # create key for experiment: lab+dataType+cell+vars+version
     # create key for experiment: lab+dataType+cell+vars
     my $expKey = $experiment{"lab"} . "+" . $experiment{"dataType"} . "+" . 
                                 $experiment{"cell"} . "+" . 
                                 $experiment{"vars"};
-                                #$experiment{"vars"} . "+" .  $experiment{"version"};
 
     print STDERR "KEY: " . $expKey . "\n";
 
     # save in a hash of experiments, 
     #   keyed by lab+dataType+cell+vars
-    # (may need to add version to key)
+    # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
         my %ids = %{$experiments{$expKey}->{"ids"}};
@@ -237,8 +236,9 @@ while (@row = $sth->fetchrow_array()) {
 $sth->finish;
 $dbh->{DBH}->disconnect;
 
-# merge in submissions from pipeline projects table
-# use status in projects table to assign statuses to submissions already found in trackDb
+# Merge in submissions from pipeline projects table (including release beta entries
+# that will not be found in trackDb).
+# Use status in projects table to assign statuses to submissions already found in trackDb,
 
 $dbh = HgDb->new(DB => $pipeline);
 $sth = $dbh->execute( 
@@ -264,16 +264,17 @@ while (@row = $sth->fetchrow_array()) {
 # note: lcase the datatype before generating key (inconsistent in DAFs)
     my $created_at = $row[3];
     my $updated_at = $row[4];
-    my $version = "V1";         # need this in project table
-        my $cell = "none";
+    my $cell = "none";
     my $varString = "none";
     my $varLabelString = "none";
 
 # get cell type and experimental vars
     if (defined($row[2])) {
         my @metadata = split("; ", $row[2]);
+        #print STDERR "      metadata " . $row[2] . "\n";
         foreach my $expVars (@metadata) {
 # one experiment
+            #print STDERR "      expVars " . $expVars . "\n";
             my @vars = split(", ", $expVars);
 
             my $termType;
@@ -281,7 +282,9 @@ while (@row = $sth->fetchrow_array()) {
 # determine term type for experiment parameters 
             my %varHash = ();
             my @termTypes = (keys %terms);
+            #print STDERR "      lab " . $lab . " subId=" . $id . " " . $name . "\n";
             foreach my $var (@vars) {
+                #print STDERR $var . ",";
                 foreach $termType (@termTypes) {
                     if (defined($terms{$termType}{$var})) {
                         if ($termType eq "Cell Line") {
@@ -292,13 +295,16 @@ while (@row = $sth->fetchrow_array()) {
 
                     }
                 }
+            print STDERR "\n";
             }
+            $varString = "none";
+            $varLabelString = "none";
             # experimental params -- iterate through all tags, lookup in cv.ra, 
             if (scalar(keys %varHash) > 0) {
-                # alphasort vars by term type, to assure consistency
-                # TODO: define a priority order in cv.ra
                 $varString = "";
                 $varLabelString = "";
+                # alphasort vars by term type, to assure consistency
+                # TODO: define a priority order in cv.ra
                 foreach $termType (sort keys %varHash) {
                     my $var = $varHash{$termType};
                     $varString = $varString . $var . ";";
@@ -309,29 +315,31 @@ while (@row = $sth->fetchrow_array()) {
                 chop $varString;
                 chop $varLabelString;
             }
+            #print STDERR "    varString:" . $varString . "\n";
             my $expKey = $lab . "+" . lc($dataType) .  "+" .
                                 $cell . "+" .  $varString;
-                                #$cell . "+" .  $varString . "+" . $version;
             print STDERR "KEY+STATUS+ID: " . $expKey . "|" . $status . "|" . $id . "\n";
             if (defined($experiments{$expKey})) {
                 my %experiment = %{$experiments{$expKey}};
                 if (defined($experiment{"trackDb"})) {
-                    if (defined $experiment{"ids"}->{$id}) {
-                        # this id is in trackDb
-                        if (!defined $experiment{"statusId"} || $id gt $experiment{"statusId"}) {
-                            # need to change status
-                            $experiment{"statusId"} = $id;
-                            if ($experiment{"status"} ne $status && 
-                                        $experiment{"status"} ne "unknown") {
-                                warn("STATUS change for KEY: " . $expKey . 
-                                        " OLD: " . $experiment{"status"} . 
-                                                " from ID: " . $experiment{"statusId"} . 
-                                        " NEW: " . $status . " from ID " . $id . "\n");
-                            }
-                            $experiment{"status"} = $status;
-                            print STDERR "    Setting status: " . $expKey . 
-                                " from ID: " . $id . " to " . $status . "\n";
+                    if (!defined $experiment{"ids"}->{$id}) {
+                        $experiment{"ids"}->{$id} = $id;
+                    }
+                    # this id is in trackDb
+                    if (!defined($experiment{"statusId"}) || 
+                            Encode::laterPipelineStatus($status, $experiment{"status"})) {
+                        # need to set or change status
+                        $experiment{"statusId"} = $id;
+                        if ($experiment{"status"} ne $status && 
+                                    $experiment{"status"} ne "unknown") {
+                            warn("STATUS change for KEY: " . $expKey . 
+                                    " OLD: " . $experiment{"status"} . 
+                                            " from ID: " . $experiment{"statusId"} . 
+                                    " NEW: " . $status . " from ID " . $id . "\n");
                         }
+                        $experiment{"status"} = $status;
+                        print STDERR "    Setting status: " . $expKey . 
+                            " from ID: " . $id . " to " . $status . "\n";
                     }
                 } else {
                     # not in trackDb but already added to hash, update tempStatus if id is bigger
@@ -350,6 +358,8 @@ while (@row = $sth->fetchrow_array()) {
                     }
                 }
                 # save updated experiment to hash
+                $experiment{"releaseDate"} =  ($status eq "released") ? $updated_at : "none";
+                $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiments{$expKey} = \%experiment;
             } else {
                 # not in trackDb or found yet in projects table
@@ -358,7 +368,6 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"lab"} = $lab;
                 $experiment{"dataType"} = lc $dataType;
                 $experiment{"cell"} = $cell;
-                $experiment{"version"} = $version;
                 my %ids = ();
                 $ids{$id} = $id;
                 $experiment{"ids"} = \%ids;
@@ -369,10 +378,7 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"submitDate"} = $created_at;
                 # trim off time
                 $experiment{"submitDate"} =~ s/ \d\d:\d\d:\d\d//;
-                $experiment{"releaseDate"} = "none";
-                # fill in manually for now -- later, extend releaseLog program 
-                # to create a table
-                        #($status eq "released" ? $updated_at : "none");
+                $experiment{"releaseDate"} =  ($status eq "released") ? $updated_at : "none";
                 $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiment{"freeze"} = $Encode::dataVersion;
                 $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-$2/;
@@ -421,7 +427,6 @@ foreach my $key (keys %experiments) {
                 $experiment{"project"}, $experiment{"lab"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
                 $experiment{"varLabels"}, 
-                #$experiment{"version"}, 
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
                 join(",", keys %ids));
