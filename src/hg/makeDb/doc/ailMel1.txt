@@ -1,0 +1,94 @@
+# for emacs: -*- mode: sh; -*-
+
+#	$Id: ailMel1.txt,v 1.1 2009/12/23 22:54:57 hiram Exp $
+
+# Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
+#	Ailuropoda melanoleuca
+
+##########################################################################
+# Download sequence (DONE - 2009-12-17 - Hiram)
+    mkdir /hive/data/genomes/ailMel1
+    cd /hive/data/genomes/ailMel1
+    mkdir download
+    cd download
+
+wget --timestamping \
+'ftp://public.genomics.org.cn/BGI/panda/genome_sequence/panda.scafSeq.gapFilled.noMito.GeneScaffold.fa.gz'
+
+wget --timestamping \
+'ftp://public.genomics.org.cn/BGI/panda/genome_sequence/panda_contig100.mapping_scaffolds_nucmer.list.clean.tab.sort.gff.gz'
+
+wget --timestamping \
+'ftp://panda.genomics.org.cn/pub/panda/panda.scafSeq.gapFilled.noMito.GeneScaffold.fa.gz'
+
+
+    faCount panda.scafSeq.gapFilled.noMito.GeneScaffold.fa.gz > faCount.txt
+
+    grep "^scaff" faCount.txt | awk '{print $1}' > scaffold.list
+
+    faSomeRecords panda.scafSeq.gapFilled.noMito.GeneScaffold.fa.gz \
+	scaffold.list stdout | gzip > scaffolds.fa.gz
+
+    hgFakeAgp scaffolds.fa.gz stdout | sed -e "s/D/W/" > fake.agp
+
+##########################################################################
+# Initial genome build (DONE - 2009-12-17 - Hiram)
+    cd /hive/data/genomes/ailMel1
+
+    cat << '_EOF_' > ailMel1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ailMel1
+clade mammal
+genomeCladePriority 19
+scientificName Ailuropoda melanoleuca
+commonName Panda
+assemblyDate Dec. 2009
+assemblyLabel BGI-Shenzhen AilMel 1.0 Dec. 2009
+orderKey 220
+mitoAcc NC_009492
+fastaFiles /hive/data/genomes/ailMel1/download/scaffolds.fa.gz
+agpFiles /hive/data/genomes/ailMel1/download/fake.agp
+# qualFiles none
+dbDbSpeciesDir panda
+taxId 9646
+
+    makeGenomeDb.pl -stop=seq ailMel1.config.ra > seq.out 2>&1
+    makeGenomeDb.pl -start=agp -stop=agp ailMel1.config.ra > agp.out 2>&1
+    makeGenomeDb.pl -start=db -stop=db ailMel1.config.ra > db.out 2>&1
+    makeGenomeDb.pl -start=dbDb -stop=dbDb ailMel1.config.ra > dbDb.out 2>&1
+    makeGenomeDb.pl -start=trackDb -stop=trackDb ailMel1.config.ra > trackDb.out 2>&1
+
+##########################################################################
+# running repeat masker (DONE - 2009-12-21 - Hiram)
+    mkdir /hive/data/genomes/ailMel1/bed/repeatMasker
+    cd /hive/data/genomes/ailMel1/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=`pwd` -noSplit -bigClusterHub=swarm \
+	-workhorse=hgwdev ailMel > do.log 2>&1
+    cat faSize.rmsk.txt
+# 2279048486 bases (54196431 N's 2224852055 real 1356361826 upper
+#	868490229 lower) in 12195 sequences in 1 files
+# %38.11 masked total, %39.04 masked real
+
+##########################################################################
+# running simple repeat (DONE - 2009-12-21 - Hiram)
+    mkdir /hive/data/genomes/ailMel1/bed/simpleRepeat
+    cd /hive/data/genomes/ailMel1/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` -smallClusterHub=swarm \
+	-workhorse=hgwdev ailMel > do.log 2>&1
+
+    cat fb.simpleRepeat 
+# 24968229 bases of 2225124764 (1.122%) in intersection
+
+    twoBitMask ailMel1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed ailMel1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa ailMel1.2bit stdout | faSize stdin > faSize.ailMel1.2bit.txt
+    cat faSize.ailMel1.2bit.txt
+# 2279048486 bases (54196431 N's 2224852055 real 1355773543 upper
+#	869078512 lower) in 12195 sequences in 1 files
+# %38.13 masked total, %39.06 masked real
+    rm /gbdb/ailMel1/ailMel1.2bit
+    ln -s `pwd`/ailMel1.2bit /gbdb/ailMel1/ailMel1.2bit
+
+##########################################################################
