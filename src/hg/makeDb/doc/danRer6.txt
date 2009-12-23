@@ -934,7 +934,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/danRer6/bed/lastzGasAcu1.2009-12-21
 
     cat << '_EOF_' > DEF
-# zebrafish vs. mouse
+# zebrafish vs. stickleback
 BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=6000
@@ -970,6 +970,49 @@ TMPDIR=/scratch/tmp
 
     cat fb.danRer6.chainGasAcu1Link.txt 
     #   147479454 bases of 1506896106 (9.787%) in intersection
+
+#########################################################################
+# LASTZ Xenopus xenTro2 (DONE - 2009-12-22 - Galt)
+    mkdir /hive/data/genomes/danRer6/bed/lastzXenTro2.2009-12-22
+    cd /hive/data/genomes/danRer6/bed/lastzXenTro2.2009-12-22
+
+    cat << '_EOF_' > DEF
+# zebrafish vs. xenopus
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer6
+SEQ1_DIR=/scratch/data/danRer6/danRer6.2bit
+SEQ1_LEN=/scratch/data/danRer6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=0
+SEQ1_LIMIT=40
+
+# QUERY: Xenopus xenTro2
+SEQ2_DIR=/scratch/data/xenTro2/xenTro2.2bit
+SEQ2_LEN=/scratch/data/xenTro2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/danRer6/bed/lastzXenTro2.2009-12-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	>& do.log &
+
+    cat fb.danRer6.chainXenTro2Link.txt 
+    #   100078259 bases of 1506896106 (6.641%) in intersection
 
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
