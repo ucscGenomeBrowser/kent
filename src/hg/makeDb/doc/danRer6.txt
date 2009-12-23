@@ -971,3 +971,11 @@ TMPDIR=/scratch/tmp
     cat fb.danRer6.chainGasAcu1Link.txt 
     #   147479454 bases of 1506896106 (9.787%) in intersection
 
+############################################################################
+# TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+
+############################################################################
