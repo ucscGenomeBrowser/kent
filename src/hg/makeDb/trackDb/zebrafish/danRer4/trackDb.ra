@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.38 2009/12/22 18:55:45 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.39 2009/12/23 20:09:06 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -168,6 +168,7 @@ shortLabel $o_db Net
 priority 140.3
 
 track chainFr2
+release beta
 #replaces record chainFr2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -183,6 +184,7 @@ type chain fr2
 otherDb fr2
 
 track netFr2
+release beta
 #replaces record netFr2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

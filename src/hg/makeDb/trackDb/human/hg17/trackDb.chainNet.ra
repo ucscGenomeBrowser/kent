@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.7 2009/12/23 19:06:34 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.8 2009/12/23 20:09:02 hiram Exp $";
 
 track chainNetPanTro1 override
 priority 210.3
@@ -27,3 +27,6 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 track chainNetXenTro1 override
 shortLabel Tetraodon Chain/Net
 chainMinScore 1000
+
+track chainNetFr1 override
+shortLabel Fugu Chain/Net

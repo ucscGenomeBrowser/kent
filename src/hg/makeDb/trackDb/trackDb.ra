@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.563 2009/12/23 17:59:15 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.564 2009/12/23 20:09:02 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -2038,7 +2038,9 @@ type netAlign dm3 chainDm3
 otherDb dm3
 release beta
 
+# release beta until composite chainNetFr1 track becomes the default
 track chainFr1
+release beta
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2051,6 +2053,7 @@ type chain fr1
 otherDb fr1
 
 track netFr1
+release beta
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

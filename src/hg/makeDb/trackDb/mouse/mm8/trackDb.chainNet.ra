@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.5 2009/12/22 22:48:07 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.6 2009/12/23 20:09:04 hiram Exp $";
 
 track chainNetRn4 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -11,3 +11,6 @@ chainMinScore 1000
 
 track chainNetGasAcu1 override
 chainMinScore 2000
+
+track chainNetFr1 override
+shortLabel Fugu Chain/Net

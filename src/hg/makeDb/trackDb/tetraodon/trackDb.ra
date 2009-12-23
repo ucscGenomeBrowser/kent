@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.45 2009/12/22 22:48:08 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.46 2009/12/23 20:09:05 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -130,11 +130,6 @@ visibility dense
 
 track netMm5 override
 priority 127.3
-
-track chainNetFr2 override
-chainMinScore 2000
-chainLinearGap medium
-priority 140
 
 track chainNetDanRer6 override
 chainMinScore 2000
