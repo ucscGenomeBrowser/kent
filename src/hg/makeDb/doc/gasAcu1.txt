@@ -2791,8 +2791,8 @@ see doc/builds.txt for specific details.
 #########################################################################
 # LASTZ/CHAIN/NET swap danRer6 (DONE - 2009-12-21 - Galt)
     # original alignment to danRer6
-    cd /hive/data/genomes/danRer6/bed/lastzMm9.2009-12-21
-    cat fb.danRer6.chainMm9Link.txt
+    cd /hive/data/genomes/danRer6/bed/lastzGasAcu1.2009-12-21
+    cat fb.danRer6.chainGasAcu1Link.txt
     #  147479454 bases of 1506896106 (9.787%) in intersection
 
     #   running the swap - DONE - 2009-12-21
