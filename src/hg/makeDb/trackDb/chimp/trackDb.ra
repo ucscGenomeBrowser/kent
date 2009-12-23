@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.26 2009/12/21 23:02:56 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.27 2009/12/23 19:06:33 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -46,6 +46,7 @@ type netAlign hg18 chainHg18
 otherDb hg18
 
 track chainRheMac2
+release beta
 #replaces record chainRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -59,6 +60,7 @@ type chain rheMac2
 otherDb rheMac2
 
 track netRheMac2
+release beta
 #replaces record netRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
