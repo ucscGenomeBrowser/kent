@@ -86,3 +86,11 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track chainDanRer5 override
+shortLabel $o_db Chain
+
+track netDanRer5 override
+shortLabel $o_db Net
+
+
