@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.54 2009/12/22 06:07:07 kate Exp $
+# $Id: Encode.pm,v 1.55 2009/12/23 05:00:53 kate Exp $
 
 package Encode;
 
@@ -523,6 +523,32 @@ sub metadataLineToHash {
         $i++
     }
     return \%hash;
+}
+
+my %pipelineStatuses = (
+ 'loaded' => 1,
+ 'displayed' => 2,
+ 'approved' => 3,
+ 'reviewing' => 4,
+ 'released' => 5
+);
+
+sub latestPipelineStatus {
+# Return status that is farther along in the pipeline
+# Any status not in the list is assigned 0
+    my ($status1, $status2) = @_;
+    my $first = defined($pipelineStatuses{$status1}) ? 
+        $pipelineStatuses{$status1} : 0;
+    my $second = defined($pipelineStatuses{$status2}) ? 
+        $pipelineStatuses{$status2} : 0;
+    return ($first > $second ? $status1 : $status2);
+}
+
+sub laterPipelineStatus {
+# Return true if first status is later than second status, else false
+    my ($status1, $status2) = @_;
+    my $latest = latestPipelineStatus($status1, $status2);
+    return ($latest eq $status1 ? 1  : 0);
 }
 
 1;
