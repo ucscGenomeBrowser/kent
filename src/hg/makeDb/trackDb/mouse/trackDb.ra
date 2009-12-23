@@ -1036,7 +1036,7 @@ searchTable komp
 searchType bed
 searchMethod exact
 searchPriority 5
-termRegex [a-zA-Z0-9.-]+
+termRegex [a-z0-9]+((-|.|_)[a-z0-9]+(.[a-z0-9])?)?_[a-z0-9]+
 
 track affyMOE430v2
 shortLabel Affy MOE430v2
