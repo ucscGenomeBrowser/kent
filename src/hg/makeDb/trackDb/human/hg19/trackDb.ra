@@ -1131,23 +1131,23 @@ html hg19vertChainNet
     type netAlign fr2 chainFr2
     otherDb fr2
 
-    track chainDanRer5
+    track chainDanRer6
     #replaces record chainDanRer5 in parent dir missing/extra priority
     subTrack vertebrateChainNet off
     subGroups view=chain species=lDanRer clade=eTele
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer5
-    otherDb danRer5
+    type chain danRer6
+    otherDb danRer6
 
-    track netDanRer5
+    track netDanRer6
     #replaces record netDanRer5 in parent dir missing/extra priority
     subTrack vertebrateChainNet on 
     subGroups view=net species=lDanRer clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer5 chainDanRer5
-    otherDb danRer5
+    type netAlign danRer6 chainDanRer6
+    otherDb danRer6
 
     track chainTetNig1
     #replaces record chainTetNig1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
@@ -1202,6 +1202,12 @@ html hg19vertChainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign petMar1 chainPetMar1
     otherDb petMar1
+
+track chainDanRer5 override
+shortLabel $o_db Chain
+
+track netDanRer5 override
+shortLabel $o_db Net
 
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
