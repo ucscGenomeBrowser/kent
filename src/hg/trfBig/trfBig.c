@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.19 2009/12/24 03:59:38 markd Exp $";
+static char const rcsid[] = "$Id: trfBig.c,v 1.20 2009/12/24 05:10:49 markd Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
@@ -108,15 +108,17 @@ uglyf("faFile %s, command %s\n", faFile, command);
 /* Run the system command, expecting a return code of 1, as trf
    returns the number of successfully processed sequences. */
 int status = system(command);
-if (WIFSIGNALED(status))
-    errAbort("Command terminated by signal %d: %s", WTERMSIG(status), command);
+if (status == -1) 
+    errnoAbort("error starting command: %s", command);
+else if (WIFSIGNALED(status))
+    errAbort("command terminated by signal %d: %s", WTERMSIG(status), command);
 else if (WIFEXITED(status))
     {
     if (WEXITSTATUS(status) != 1)
-        errAbort("Command exited with status %d (expected 1): %s", WEXITSTATUS(status), command);
+        errAbort("command exited with status %d (expected 1): %s", WEXITSTATUS(status), command);
     }
 else
-    errAbort("Unexpected exit for command: %s", command);
+    errAbort("unexpected exit for command: %s", command);
 }
 
 void outputWithBreaks(FILE *out, char *s, int size, int lineSize)
