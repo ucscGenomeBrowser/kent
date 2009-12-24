@@ -9,10 +9,10 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.1.2.1 2009/12/24 01:06:56 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.1.2.2 2009/12/24 01:51:13 kent Exp $";
 
 char *clMode = "add";
-char *clTest = "test.out";
+char *clTest = NULL;
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
 
@@ -439,8 +439,27 @@ for (myGroupEl = myGroupList; myGroupEl != NULL; myGroupEl = myGroupEl->next)
     char *groupName = hashFindVal(parentGroup, myVal);
     if (groupName == NULL)
         recordAbort(sub, "Parent %s doesn't have a %s %s", parent->key, myName, myVal);
-    uglyf("%s %s %s found in %s\n", sub->key, myName, myVal, parent->key);
+    verbose(2, "%s %s %s found in %s\n", sub->key, myName, myVal, parent->key);
     }
+}
+
+
+void patchIntoEndOfView(struct raRecord *sub, struct raRecord *view)
+/* Assuming view is in a file,  chase down later records in file until come to
+ * first one that does not have view as a parent.  Insert sub right before that. */
+{
+struct raRecord *viewChild = NULL;
+struct raRecord *r;
+for (r = view->next; r != NULL; r = r->next)
+    {
+    if (r->parent == view)
+        viewChild = r;
+    else
+        break;
+    }
+struct raRecord *recordBefore = (viewChild != NULL ? viewChild : view);
+sub->next = recordBefore->next;
+recordBefore->next = sub;
 }
 
 void patchInSubtrack(struct raRecord *parent, struct raRecord *sub)
@@ -453,13 +472,23 @@ if (hasViewSubtracks(parent))
         recordAbort(sub, "Can only handle subtracks with view in subGroups");
     char viewTrackName[PATH_LEN];
     safef(viewTrackName, sizeof(viewTrackName), "%sView%s", parent->key, viewOfSub);
-    uglyf("thinking about patching %s into view %s (%s) of %s\n", sub->key, viewOfSub, viewTrackName, parent->key);
     char *parentRelease = raRecordFindTagVal(parent, "release");
     char *subRelease = raRecordFindTagVal(sub, "release");
     char *release = nonNullRelease(parentRelease, subRelease);
     struct raRecord *view = findRecordCompatibleWithRelease(parent->file, release, viewTrackName);
+    struct raRecord *oldSub = findRecordCompatibleWithRelease(parent->file, release, sub->key);
+    if (oldSub)
+	{
+        if (sameString(clMode, "update")  || sameString(clMode, "replace"))
+	    {
+	    uglyAbort("Unfortunately really don't know how to update or replace");
+	    }
+	else
+	    recordAbort(sub, "record %s already exists - use mode update or replace",
+	    	sub->key);
+	}
     validateParentViewSub(parent, view, sub);
-    uglyf("Got nice validated combo of parent, view, subtrack\n");
+    patchIntoEndOfView(sub, view);
     }
 else
     {
@@ -470,7 +499,6 @@ else
 void patchInSubtracks(struct raRecord *tdbParent, struct raRecord *patchList)
 /* Move records in patchList to correct position in tdbParent. */
 {
-uglyf("patchInSubtracks: %d subtracks to %s\n", slCount(patchList), tdbParent->key);
 struct raRecord *patch, *nextPatch;
 for (patch = patchList; patch != NULL; patch = nextPatch)
     {
@@ -509,14 +537,11 @@ else
 
 /* Load file to patch. */
 struct raFile *tdbFile = raFileRead(tdbFileName);
-struct raRecord *tdbList = tdbFile->recordList;
-int oldTdbCount = slCount(tdbList);
+int oldTdbCount = slCount(tdbFile->recordList);
 if (oldTdbCount < 100)
     warn("%s only has %d records, I hope you meant to hit a new file\n", tdbFileName, 
     	oldTdbCount);
-uglyf("before linkUpParents\n");
 linkUpParents(tdbFile);
-uglyf("after linkUpParents\n");
 
 struct raRecord *tdbParent = findRecordCompatibleWithRelease(tdbFile, "alpha", parentName);
 if (hasTrack)
@@ -541,6 +566,24 @@ else
 	errAbort("parent track %s doesn't exist in %s", parentName, tdbFileName);
     patchInSubtracks(tdbParent, patchList);
     }
+
+char *outName = tdbFileName;
+if (clTest != NULL)
+    outName = clTest;
+
+
+FILE *f = mustOpen(outName, "w");
+struct raRecord *r;
+for (r = tdbFile->recordList; r != NULL; r = r->next)
+    {
+    struct raTag *tag;
+    for (tag = r->tagList; tag != NULL; tag = tag->next)
+        fputs(tag->text, f);
+    if (r->endComments != NULL)
+	fputs(r->endComments, f);
+    }
+fputs(tdbFile->endSpace, f);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
