@@ -1611,3 +1611,22 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# LASTZ/CHAIN/NET swap danRer6 (DONE - 2009-12-23 - Galt)
+    # original alignment to danRer6
+    cd /hive/data/genomes/danRer6/bed/lastzXenTro2.2009-12-22
+    cat fb.danRer6.chainXenTro2Link.txt
+    #  100078259 bases of 1506896106 (6.641%) in intersection
+
+    #   running the swap - DONE - 2009-12-23
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.danRer6.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.danRer6.swap
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer6/bed/lastzXenTro2.2009-12-22/DEF \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -swap >& swap.log &
+
+    cat fb.xenTro2.chainDanRer6Link.txt
+    #   92089833 bases of 1359412157 (6.774%) in intersection
+
+#######################################################################
