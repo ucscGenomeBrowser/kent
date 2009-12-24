@@ -1038,9 +1038,6 @@ void fileOffsetSizeFindGap(struct fileOffsetSize *list,
 /* Starting at list, find all items that don't have a gap between them and the previous item.  
  * Return at gap, or at end of list, returning pointers to the items before and after the gap. */
 
-void maybeSystem(char *cmd);
-/* Execute cmd using "sh -c" or die.  (See man 3 system.) warning on errors */
-
 void mustSystem(char *cmd);
 /* Execute cmd using "sh -c" or die.  (See man 3 system.) fail on errors */
 

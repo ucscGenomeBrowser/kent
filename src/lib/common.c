@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.141 2009/12/19 00:23:21 angie Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.142 2009/12/24 04:55:40 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -2164,26 +2164,23 @@ for (pt = list; ; pt = next)
 }
 
 
-void maybeSystem(char *cmd)
-/* Execute cmd using "sh -c" or die.  (See man 3 system.) warn on errors */
-{
-if (cmd == NULL) // don't allow (system() supports testing for shell this way)
-    errAbort("mustSystem: called with NULL command.");
-int status = system(cmd);
-if (status != 0)
-    warn("maybeSystem: system(%s) failed (exit status %d): %s",
-	     cmd, WEXITSTATUS(status), strerror(errno));
-}
-
 void mustSystem(char *cmd)
 /* Execute cmd using "sh -c" or die.  (See man 3 system.) fail on errors */
 {
 if (cmd == NULL) // don't allow (system() supports testing for shell this way)
     errAbort("mustSystem: called with NULL command.");
 int status = system(cmd);
-if (status != 0)
-    errAbort("mustSystem: system(%s) failed (exit status %d): %s",
-	     cmd, WEXITSTATUS(status), strerror(errno));
+if (status == -1) 
+    errnoAbort("error starting command: %s", cmd);
+else if (WIFSIGNALED(status))
+    errAbort("command terminated by signal %d: %s", WTERMSIG(status), cmd);
+else if (WIFEXITED(status))
+    {
+    if (WEXITSTATUS(status) != 0)
+        errAbort("command exited with %d: %s", WEXITSTATUS(status), cmd);
+    }
+else
+    errAbort("bug: invalid exit status for command: %s", cmd);
 }
 
 int roundingScale(int a, int p, int q)
