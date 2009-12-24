@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.18 2009/11/02 21:27:50 hiram Exp $";
+static char const rcsid[] = "$Id: trfBig.c,v 1.19 2009/12/24 03:59:38 markd Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
@@ -101,10 +101,22 @@ void trfSysCall(char *faFile)
 /* Invoke trf program on file. */
 {
 char command[1024];
-sprintf(command, "cd %s; %s %s 2 7 7 80 10 50 %d -m %s", 
-	tempDir, trfExe, faFile, maxPeriod, doBed ? "-d" : "");
+safef(command, sizeof(command), "cd %s; %s %s 2 7 7 80 10 50 %d -m %s", 
+      tempDir, trfExe, faFile, maxPeriod, doBed ? "-d" : "");
 uglyf("faFile %s, command %s\n", faFile, command);
-maybeSystem(command);
+
+/* Run the system command, expecting a return code of 1, as trf
+   returns the number of successfully processed sequences. */
+int status = system(command);
+if (WIFSIGNALED(status))
+    errAbort("Command terminated by signal %d: %s", WTERMSIG(status), command);
+else if (WIFEXITED(status))
+    {
+    if (WEXITSTATUS(status) != 1)
+        errAbort("Command exited with status %d (expected 1): %s", WEXITSTATUS(status), command);
+    }
+else
+    errAbort("Unexpected exit for command: %s", command);
 }
 
 void outputWithBreaks(FILE *out, char *s, int size, int lineSize)
