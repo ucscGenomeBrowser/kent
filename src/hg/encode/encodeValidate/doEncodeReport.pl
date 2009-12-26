@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.8 2009/12/23 05:01:47 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.9 2009/12/26 01:11:57 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -246,6 +246,7 @@ $sth = $dbh->execute(
 while (@row = $sth->fetchrow_array()) {
     my $lab = $row[0];
     my $status = $row[5];
+    next if ($status eq 'revoked');
     my $id = $row[6];
     my $name = $row[7];
     # lookup in lab from hash to find project
