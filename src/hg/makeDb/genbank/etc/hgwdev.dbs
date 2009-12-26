@@ -1,11 +1,11 @@
 ##
 # genome databases to update on hgwdev
 ##
+ailMel1
 anoGam1
 apiMel1
 apiMel2
 aplCal1
-# bosTau1
 bosTau2
 bosTau3
 bosTau4
@@ -30,7 +30,6 @@ ci1
 ci2
 dasNov1
 danRer1
-# danRer2
 danRer3
 danRer4
 danRer5
@@ -69,8 +68,6 @@ hg19
 loxAfr3
 loxAfr1
 macEug1
-# mm5
-# mm6
 mm7
 mm8
 mm9
