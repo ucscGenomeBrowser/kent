@@ -97,7 +97,7 @@ switch -glob $host {
     }
 }
 cd $genbankRoot
-set env(PATH) bin/tcl_platform(machine):$env(PATH)
+set env(PATH) bin/$tcl_platform(machine):$env(PATH)
 
 if {[llength $dbs] == 0} {
     set dbs [loadDbs $dbFile $host]
