@@ -119,10 +119,11 @@ label   Affymetrix
 #grant	Hardison
 #project	PSU
 
-lab	UNC
-pi	Giddings
-grant	Giddings
-project	UNC
+# TODO: fix conflict w/ Lieb lab
+#lab	UNC
+#pi	Giddings
+#grant	Giddings
+#project	UNC
 
 lab	UChicago
 pi	White
