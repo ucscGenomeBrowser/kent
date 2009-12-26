@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.734 2009/12/26 18:40:22 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.735 2009/12/26 19:07:35 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12004,8 +12004,8 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqRel2SignalK562bGata1
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 GATA1 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562 cells)
+    shortLabel K562b GATA1 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562b cells)
     subGroups view=Signal factor=GATA1 cellType=t1K562
     type bedGraph 4
     color 46,0,184
