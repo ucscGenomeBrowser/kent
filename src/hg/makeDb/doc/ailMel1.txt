@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.1 2009/12/23 22:54:57 hiram Exp $
+#	$Id: ailMel1.txt,v 1.2 2009/12/26 06:09:30 hiram Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -92,3 +92,44 @@ taxId 9646
     ln -s `pwd`/ailMel1.2bit /gbdb/ailMel1/ailMel1.2bit
 
 ##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-12-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ailMel1", "blat12", "17802", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ailMel1", "blat12", "17803", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+# MAKE 11.OOC FILES FOR BLAT (DONE - 2009-12-23 - Hiram)
+    ssh kolossus
+    # numerator is ailMel1 gapless bases as reported by faSize 
+    # denominator is hg17 gapless bases as reported by featureBits,
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2224852055 / 2897310462 \) \* 1024
+# ( 2224852055 / 2897310462 ) * 1024 = 786.332198
+    # ==> use -repMatch=750 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50
+    cd /hive/data/genomes/ailMel1
+    blat ailMel1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/ailMel1.11.ooc -repMatch=750
+    #	Wrote 25042 overused 11-mers to jkStuff/ailMel1.11.ooc
+
+    mkdir /hive/data/staging/data/ailMel
+    cp -p ailMel1.2bit chrom.sizes jkStuff/ailMel1.11.ooc \
+	/hive/data/staging/data/ailMel1
+
+
+#########################################################################
+# genbank run
+    time nice -n +19 bin/gbAlignStep -initial  ailMel1 &
+
+    logFile: var/build/logs/2009.12.24-15:03:26.ailMel1.initalign.log
+
+ nice ./bin/gbDbLoadStep -drop -initialLoad ailMel1 &
+[1] 10050
+[hiram@hgwdev /cluster/data/genbank] logFile: var/dbload/hgwdev/logs/2009.12.25-00:08:46.dbload.log
+
