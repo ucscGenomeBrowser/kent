@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.12 2008/09/03 19:19:34 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.13 2009/12/26 03:37:14 markd Exp $";
 
 /*
  * Algorithm:
@@ -319,31 +319,40 @@ else
     }
 }
 
+static void extFileUpdatePartOutdated(char *db, struct sqlConnection *conn, 
+                                      struct gbSelect *select,
+                                      struct extFileTbl* extFileTbl,
+                                      struct outdatedSeq *outdatedSeqs)
+/* update gbSeq/gbExtFile entries that were found */
+{
+char *tmpDir = "/data/tmp";
+if (!fileExists(tmpDir))
+    tmpDir = "tmp";
+
+struct seqTbl *seqTbl = seqTblNew(conn, tmpDir, (gbVerbose >= 4));
+struct raInfoTbl *rit = loadPartRaInfo(db, extFileTbl, select);
+struct outdatedSeq *os;
+for (os = outdatedSeqs; os != NULL; os = os->next)
+    updateSeqEntry(db, rit, seqTbl, os);
+outdatedSeqFreeList(&outdatedSeqs);
+raInfoTblFree(&rit);
+if (gOptions.flags & DBLOAD_DRY_RUN)
+    seqTblCancel(seqTbl);
+else
+    seqTblCommit(seqTbl, conn);
+seqTblFree(&seqTbl);
+}
+
 static void extFileUpdatePart(char *db, struct sqlConnection *conn, 
                               struct gbSelect *select,
                               struct extFileTbl* extFileTbl)
 /* update gbSeq/gbExtFile entries for one partition of the database */
 {
-struct extFileRef* extFiles = extFileTblMatch(extFileTbl, select);
-struct outdatedSeq *outdatedSeqs = NULL;
 gbVerbEnter(3, "update %s", gbSelectDesc(select));
-
-outdatedSeqs = getOutdatedSeqs(conn, select, extFiles);
+struct extFileRef* extFiles = extFileTblMatch(extFileTbl, select);
+struct outdatedSeq *outdatedSeqs = getOutdatedSeqs(conn, select, extFiles);
 if (outdatedSeqs != NULL)
-    {
-    struct seqTbl *seqTbl = seqTblNew(conn, "/data/tmp", (gbVerbose >= 4));
-    struct raInfoTbl *rit = loadPartRaInfo(db, extFileTbl, select);
-    struct outdatedSeq *os;
-    for (os = outdatedSeqs; os != NULL; os = os->next)
-        updateSeqEntry(db, rit, seqTbl, os);
-    outdatedSeqFreeList(&outdatedSeqs);
-    raInfoTblFree(&rit);
-    if (gOptions.flags & DBLOAD_DRY_RUN)
-        seqTblCancel(seqTbl);
-    else
-        seqTblCommit(seqTbl, conn);
-    seqTblFree(&seqTbl);
-    }
+    extFileUpdatePartOutdated(db, conn, select, extFileTbl, outdatedSeqs);
 slFreeList(&extFiles);
 gbVerbLeave(3, "update %s", gbSelectDesc(select));
 checkForStop();

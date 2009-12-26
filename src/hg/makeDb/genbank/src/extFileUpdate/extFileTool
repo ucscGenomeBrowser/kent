@@ -51,19 +51,7 @@ proc extFileDump {dbs logFh} {
 }
 
 # load the list of databases for the specified host
-proc loadDbs {host} {
-    switch -glob $host {
-        hgwdev {
-            set dbFile etc/hgwdev.dbs
-        }
-        hgwbeta {
-            set dbFile etc/hgwbeta.dbs
-        }
-        hgw[0-9]* {
-            set dbFile etc/rr.dbs
-        }
-        error "don't know how to handle $host"
-    }
+proc loadDbs {dbFile host} {
     return [split [exec fgrep -v "#"  $dbFile] \n]
 }
 
@@ -87,21 +75,32 @@ if {[llength $argv] != 1} {
 set cmd [lindex $argv 0]
 set host [lindex [split [exec hostname] .] 0]
 
-if {$host == "hgwdev"} {
-    cd /cluster/data/genbank
-} else {
-    cd /genbank
+# host specific setup
+switch -glob $host {
+    hgwdev {
+        set genbankRoot /cluster/data/genbank
+        set dbFile etc/hgwdev.dbs
+        set env(HGDB_CONF) etc/.hg.conf
+    }
+    hgwbeta {
+        set genbankRoot /genbank
+        set dbFile etc/hgwbeta.dbs
+        set env(HGDB_CONF) etc/.hg.mysqlbeta.conf
+    }
+    hgnfs1 {
+        set genbankRoot /genbank
+        set dbFile etc/rr.dbs
+        set env(HGDB_CONF) etc/.hg.mysqlrr.conf
+    }
+    default {
+        error "don't know how to handle $host"
+    }
 }
+
 if {[llength $dbs] == 0} {
-    set dbs [loadDbs $host]
+    set dbs [loadDbs $dbFile $host]
 }
 set logFh [open misc/$host.$cmd.log w]
-
-if {$host == "hgwbeta"} {
-    set env(HGDB_CONF) etc/.hg.hgsqlbeta.conf
-} else {
-    set env(HGDB_CONF) etc/.hg.conf
-}
 
 if {[catch {
     switch $cmd {
