@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.732 2009/12/23 06:46:06 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.733 2009/12/26 01:17:58 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8092,7 +8092,7 @@ controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
 #visibilityViewDefaults  Footprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
 visibilityViewDefaults  Hotspots=pack Peaks=dense Signal=full RawSignal=hide
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,minLimit=1,maxLimit=118408,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum RawSignal:viewLimits=1:250,minLimit=1,maxLimit=751561.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,minLimit=1,maxLimit=118408,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum RawSignal:viewLimits=1:250,minLimit=1,maxLimit=751561.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3
 wgEncode 1
@@ -8266,7 +8266,7 @@ dragAndDrop subTracks
 visibilityViewDefaults aPeaks=pack cHot=pack zRawSig=full
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:100,minLimit=1,maxLimit=127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
+settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:100,minLimit=1,maxLimit=127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 #settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:100,minLimit=1,maxLimit=127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3 +
