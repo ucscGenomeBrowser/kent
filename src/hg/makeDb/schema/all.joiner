@@ -2925,6 +2925,7 @@ tablesIgnored $gbd
     cytoBand
     cytoBandIdeo
     evofold
+    exoniphy
     firstEF
     gbLoaded
     gbDelete_tmp
