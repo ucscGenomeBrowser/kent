@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.6 2009/12/23 20:09:04 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.7 2009/12/28 21:41:54 hiram Exp $";
 
 track chainNetPanTro1 override
 shortLabel Chimp Chain/Net
@@ -14,6 +14,9 @@ shortLabel Human Chain/Net
 
 track chainNetXenTro1 override
 shortLabel Tetraodon Chain/Net
+
+track chainNetDanRer3 override
+shortLabel Zebrafish Chain/Net
 
 track chainNetFr1 override
 shortLabel Fugu Chain/Net

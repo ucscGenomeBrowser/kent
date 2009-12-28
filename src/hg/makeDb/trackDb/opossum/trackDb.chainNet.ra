@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.11 2009/12/23 20:40:04 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.12 2009/12/28 21:41:55 hiram Exp $";
 
 track chainNetCanFam2 override
 priority 310.3
@@ -90,3 +90,14 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 track chainNetXenTro2 override
 priority 590.3
 
+track chainNetDanRer5 override
+priority 600.3
+
+track chainNetDanRer4 override
+priority 600.3
+
+track chainNetDanRer3 override
+priority 600.3
+
+track chainNetDanRer2 override
+priority 600.3

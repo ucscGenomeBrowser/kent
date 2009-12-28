@@ -1,11 +1,11 @@
-#	"$Id: trackDb.chainNet.ra,v 1.19 2009/12/23 23:19:22 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.20 2009/12/28 21:41:51 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
 release alpha
 compositeTrack on
-shortLabel Fugu Chain/Net
-longLabel Fugu (Oct. 2004/fr2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Oct. 2004/fr2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -47,7 +47,7 @@ track chainNetFr1
 release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel Fugu (Aug. 2002/fr1), Chain and Net Alignments
+longLabel $o_Organism (Aug. 2002/fr1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -86,8 +86,8 @@ html chainNet
 
 track chainNetTetNig2
 compositeTrack on
-shortLabel Tetraodon Chain/Net
-longLabel Tetraodon (Mar. 2007/tetNig2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2007/tetNig2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -125,8 +125,8 @@ html chainNet
 track chainNetTetNig1
 release alpha
 compositeTrack on
-shortLabel Tetraodon Chain/Net
-longLabel Tetraodon (Feb. 2004/tetNig1), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Feb. 2004/tetNig1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -165,8 +165,8 @@ html chainNet
 
 track chainNetDanRer6
 compositeTrack on
-shortLabel Zebrafish Chain/Net
-longLabel Zebrafish (Dec. 2008/danRer6), Chain and Net Alignments
+shortLabel $o_db Chain/Net
+longLabel $o_Organism (Dec. 2008/danRer6), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -201,11 +201,216 @@ html chainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign danRer6 chainDanRer6
 
+track chainNetDanRer5
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Dec. 2008/danRer5), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 159
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb danRer5
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainDanRer5
+    release alpha
+    subTrack chainNetDanRer5
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain danRer5
+
+    track netDanRer5
+    release alpha
+    subTrack chainNetDanRer5
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign danRer5 chainDanRer5
+
+track chainNetDanRer4
+release alpha
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism (Dec. 2008/danRer4), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 159
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb danRer4
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainDanRer4
+    release alpha
+    subTrack chainNetDanRer4
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain danRer4
+
+    track netDanRer4
+    release alpha
+    subTrack chainNetDanRer4
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign danRer4 chainDanRer4
+
+track chainNetDanRer3
+release alpha
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism (Dec. 2008/danRer3), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 159
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb danRer3
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainDanRer3
+    release alpha
+    subTrack chainNetDanRer3
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain danRer3
+
+    track netDanRer3
+    release alpha
+    subTrack chainNetDanRer3
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign danRer3 chainDanRer3
+
+track chainNetDanRer2
+release alpha
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism (Dec. 2008/danRer2), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 159
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb danRer2
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainDanRer2
+    release alpha
+    subTrack chainNetDanRer2
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain danRer2
+
+    track netDanRer2
+    release alpha
+    subTrack chainNetDanRer2
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign danRer2 chainDanRer2
+
+track chainNetDanRer1
+release alpha
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism (Dec. 2008/danRer1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 159
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb danRer1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainDanRer1
+    release alpha
+    subTrack chainNetDanRer1
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain danRer1
+
+    track netDanRer1
+    release alpha
+    subTrack chainNetDanRer1
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign danRer1 chainDanRer1
+
 track chainNetXenTro2
 release alpha
 compositeTrack on
-shortLabel Zebrafish Chain/Net
-longLabel Zebrafish (Aug. 2005/xenTro2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Aug. 2005/xenTro2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -246,7 +451,7 @@ track chainNetXenTro1
 release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel Zebrafish (Oct. 2004/xenTro1), Chain and Net Alignments
+longLabel $o_Organism (Oct. 2004/xenTro1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -287,8 +492,8 @@ html chainNet
 track chainNetOryLat2
 release alpha
 compositeTrack on
-shortLabel Medaka Chain/Net
-longLabel Medaka (Oct. 2005/oryLat2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Oct. 2005/oryLat2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -331,7 +536,7 @@ track chainNetOryLat1
 release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel Medaka (Oct. 2005/oryLat1), Chain and Net Alignments
+longLabel $o_Organism (Oct. 2005/oryLat1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -373,8 +578,8 @@ html chainNet
 track chainNetGasAcu1
 release alpha
 compositeTrack on
-shortLabel Stickleback Chain/Net
-longLabel Stickleback (Feb 2006/gasAcu1), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Feb 2006/gasAcu1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -415,8 +620,8 @@ html chainNet
 track chainNetGalGal2
 release alpha
 compositeTrack on
-shortLabel Chicken Chain/Net
-longLabel Chicken (Feb 2004/galGal2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Feb 2004/galGal2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -457,8 +662,8 @@ html chainNet
 track chainNetGalGal3
 release alpha
 compositeTrack on
-shortLabel Chicken Chain/Net
-longLabel Chicken (May 2006/galGal3), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (May 2006/galGal3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -499,8 +704,8 @@ html chainNet
 track chainNetOrnAna1
 release alpha
 compositeTrack on
-shortLabel Platypus Chain/Net
-longLabel Platypus (Mar. 2007/ornAna1), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2007/ornAna1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -540,8 +745,8 @@ html chainNet
 track chainNetMonDom1
 release alpha
 compositeTrack on
-shortLabel Opossum Chain/Net
-longLabel Opossum (Oct. 2004/monDom1), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Oct. 2004/monDom1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -581,8 +786,8 @@ html chainNet
 track chainNetMonDom4
 release alpha
 compositeTrack on
-shortLabel Opossum Chain/Net
-longLabel Opossum (Jan. 2006/monDom4), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Jan. 2006/monDom4), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -621,8 +826,8 @@ html chainNet
 
 track chainNetMonDom5
 compositeTrack on
-shortLabel Opossum Chain/Net
-longLabel Opossum (Oct. 2006/monDom5), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Oct. 2006/monDom5), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -661,8 +866,8 @@ html chainNet
 track chainNetMm9
 release alpha
 compositeTrack on
-shortLabel Mouse Chain/Net
-longLabel Mouse (Jul. 2007/mm9), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Jul. 2007/mm9), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -703,8 +908,8 @@ html chainNet
 track chainNetMm8
 release alpha
 compositeTrack on
-shortLabel Mouse Chain/Net
-longLabel Mouse (Feb. 2006/mm8), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Feb. 2006/mm8), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -745,8 +950,8 @@ html chainNet
 track chainNetMm7
 release alpha
 compositeTrack on
-shortLabel Mouse Chain/Net
-longLabel Mouse (Aug. 2005/mm7), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Aug. 2005/mm7), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -787,8 +992,8 @@ html chainNet
 track chainNetMm6
 release alpha
 compositeTrack on
-shortLabel Mouse Chain/Net
-longLabel Mouse (Mar. 2005/mm6), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2005/mm6), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -829,8 +1034,8 @@ html chainNet
 track chainNetRn4
 release alpha
 compositeTrack on
-shortLabel Rat Chain/Net
-longLabel Rat (Nov. 2004/rn4), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Nov. 2004/rn4), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -872,7 +1077,7 @@ track chainNetRn3
 release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel Rat (Jun. 2003/rn3), Chain and Net Alignments
+longLabel $o_Organism (Jun. 2003/rn3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -911,8 +1116,8 @@ html chainNet
 
 track chainNetEquCab2
 compositeTrack on
-shortLabel Horse Chain/Net
-longLabel Horse (Sep. 2007/equCab2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Sep. 2007/equCab2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -951,8 +1156,8 @@ html chainNet
 track chainNetBosTau4
 release alpha
 compositeTrack on
-shortLabel Cow Chain/Net
-longLabel Cow (Oct. 2007/bosTau4), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Oct. 2007/bosTau4), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -993,8 +1198,8 @@ html chainNet
 track chainNetBosTau3
 release alpha
 compositeTrack on
-shortLabel Cow Chain/Net
-longLabel Cow (Aug. 2006/bosTau3), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Aug. 2006/bosTau3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1035,8 +1240,8 @@ html chainNet
 track chainNetBosTau2
 release alpha
 compositeTrack on
-shortLabel Cow Chain/Net
-longLabel Cow (Mar. 2005/bosTau2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2005/bosTau2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1077,8 +1282,8 @@ html chainNet
 track chainNetCanFam2
 release alpha
 compositeTrack on
-shortLabel Dog Chain/Net
-longLabel Dog (May 2005/canFam2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (May 2005/canFam2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1119,8 +1324,8 @@ html chainNet
 track chainNetFelCat3
 release alpha
 compositeTrack on
-shortLabel Cat Chain/Net
-longLabel Cat (Mar. 2006/felCat3), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2006/felCat3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1197,8 +1402,8 @@ sortOrder view=+
 track chainNetHg18
 release alpha
 compositeTrack on
-shortLabel Human Chain/Net
-longLabel Human (Mar. 2006/hg18), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2006/hg18), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1236,8 +1441,8 @@ html chainNet
 
 track chainNetHg19
 compositeTrack on
-shortLabel Human Chain/Net
-longLabel Human (Feb. 2009/hg19), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Feb. 2009/hg19), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1274,8 +1479,8 @@ html chainNet
 track chainNetHg17
 release alpha
 compositeTrack on
-shortLabel Human Chain/Net
-longLabel Human (May. 2004/hg17), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (May. 2004/hg17), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1314,8 +1519,8 @@ html chainNet
 track chainNetPanTro2
 release alpha
 compositeTrack on
-shortLabel Chimp Chain/Net
-longLabel Chimp (Mar. 2006/panTro2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Mar. 2006/panTro2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1354,8 +1559,8 @@ html chainNet
 track chainNetPanTro1
 release alpha
 compositeTrack on
-shortLabel Chimp Chain/Net
-longLabel Chimp (Nov. 2003/panTro1), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Nov. 2003/panTro1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1394,8 +1599,8 @@ html chainNet
 track chainNetPonAbe2
 release alpha
 compositeTrack on
-shortLabel Orangutan Chain/Net
-longLabel Orangutan (Jul. 2007/ponAbe2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Jul. 2007/ponAbe2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1474,8 +1679,8 @@ html chainNet
 track chainNetRheMac2
 release alpha
 compositeTrack on
-shortLabel Rhesus Chain/Net
-longLabel Rhesus (Jan. 2006/rheMac2), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Jan. 2006/rheMac2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1514,8 +1719,8 @@ html chainNet
 track chainNetRheMac1
 release alpha
 compositeTrack on
-shortLabel Rhesus Chain/Net
-longLabel Rhesus (Jan. 2005/rheMac1), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Jan. 2005/rheMac1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
