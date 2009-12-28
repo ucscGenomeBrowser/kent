@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.22 2009/12/28 22:28:19 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.23 2009/12/28 22:51:27 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -1235,6 +1235,47 @@ html chainNet
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign equCab2 chainEquCab2
+
+track chainNetEquCab1
+release alpha
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism (Jan. 2007/equCab1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb equCab1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainEquCab1
+    release alpha
+    subTrack chainNetEquCab1
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain equCab1
+
+    track netEquCab1
+    release alpha
+    subTrack chainNetEquCab1
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign equCab1 chainEquCab1
 
 # release alpha until bosTau4 individual tracks phased out
 track chainNetBosTau4

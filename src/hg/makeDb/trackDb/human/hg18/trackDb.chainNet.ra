@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.7 2009/12/23 20:40:04 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.8 2009/12/28 22:51:28 hiram Exp $";
 
 track chainNetPanTro1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -13,6 +13,12 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 track chainNetCalJac1 override
 priority 260.3
 chainMinScore 3000
+
+track chainNetEquCab2 override
+shortLabel $o_db Chain/Net
+
+track chainNetEquCab1 override
+shortLabel $o_Organism Chain/Net
 
 track chainNetRn4 override
 chainMinScore 1000
