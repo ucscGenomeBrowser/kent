@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.68 2009/12/15 18:48:27 hartera Exp $";
+#	"$Id: hg19.txt,v 1.69 2009/12/28 19:38:30 hartera Exp $";
 
 #############################################################################
 
@@ -8240,5 +8240,20 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     hgsql hg19 -e \
     'load data local infile "GN_human_RefSeq.txt" into table geneNetworkId'
 
-#########################################################################
+######################################################################## EXONIPHY (2009-12-28, hartera, DONE)
 
+    # New predictions for hg19 run by Melissa Hubisz 
+    # (mjhubisz at gmail.com) for hg19 and sent by 
+    # Adam Siepel (acs4 at cornell.edu) on 2009-12-18
+    mkdir -p /hive/data/genomes/hg19/bed/exoniphy.2009-12-18
+    cd /hive/data/genomes/hg19/bed/exoniphy.2009-12-18
+    # Download predictions file, exoniphy.gff
+    wget --timestamping \
+         "http://compgen.bscb.cornell.edu/~acs/exoniphy.gff.gz"
+    gunzip exoniphy.gff.gz
+    # Remove table of lifted predictions from hg18
+    hgsql -e 'drop table exoniphy;' hg19
+    ldHgGene -genePredExt -gtf hg19 exoniphy exoniphy.gff
+    # Read 620689 transcripts in 647299 lines in 1 files
+    # 620689 groups 24 seqs 1 sources 4 feature types
+    # 186601 gene predictions
