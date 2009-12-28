@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.25 2009/12/28 23:29:09 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.26 2009/12/28 23:43:28 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -616,6 +616,48 @@ html chainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign gasAcu1 chainGasAcu1
 
+# release alpha until individual galGal3 tracks are obsolete
+track chainNetGalGal3
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (May 2006/galGal3), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 181
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb galGal3
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainGalGal3
+    release alpha
+    subTrack chainNetGalGal3
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain galGal3
+
+    track netGalGal3
+    release alpha
+    subTrack chainNetGalGal3
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign galGal3 chainGalGal3
+
 # release alpha until individual galGal2 tracks are obsolete
 track chainNetGalGal2
 release alpha
@@ -658,12 +700,12 @@ html chainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign galGal2 chainGalGal2
 
-# release alpha until individual galGal3 tracks are obsolete
-track chainNetGalGal3
+# release alpha until individual taeGut1 tracks are obsolete
+track chainNetTaeGut1
 release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism (May 2006/galGal3), Chain and Net Alignments
+longLabel $o_Organism (Jul. 2008/taeGut1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -676,29 +718,29 @@ altColor 255,255,0
 type bed 3
 settingsByView chain:spectrum=on
 sortOrder view=+
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
-otherDb galGal3
-chainMinScore 3000
-chainLinearGap medium
+otherDb taeGut1
+chainMinScore 5000
+chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainGalGal3
+    track chainTaeGut1
     release alpha
-    subTrack chainNetGalGal3
+    subTrack chainNetTaeGut1
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain galGal3
+    type chain taeGut1
 
-    track netGalGal3
+    track netTaeGut1
     release alpha
-    subTrack chainNetGalGal3
+    subTrack chainNetTaeGut1
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign galGal3 chainGalGal3
+    type netAlign taeGut1 chainTaeGut1
 
 # release alpha until ornAna1 individual chain/net tracks phased out
 track chainNetOrnAna1
