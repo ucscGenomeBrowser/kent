@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.20 2009/12/28 21:41:51 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.21 2009/12/28 22:07:29 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -741,6 +741,48 @@ html chainNet
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign ornAna1 chainOrnAna1
+
+# release alpha until anoCar1 individual chain/net tracks phased out
+track chainNetAnoCar1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism (Feb. 2007/anoCar1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 191
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb anoCar1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainAnoCar1
+    release alpha
+    subTrack chainNetAnoCar1
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain anoCar1
+
+    track netAnoCar1
+    release alpha
+    subTrack chainNetAnoCar1
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign anoCar1 chainAnoCar1
 
 track chainNetMonDom1
 release alpha
