@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.571 2009/12/28 23:11:37 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.572 2009/12/28 23:29:09 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -1853,7 +1853,9 @@ visibility hide
 colorChromDefault off
 type psl protein
 
+# release beta until composite chainBraFlo1 track becomes the default
 track chainBraFlo1
+release beta
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1868,6 +1870,7 @@ type chain braFlo1
 otherDb braFlo1
 
 track netBraFlo1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
