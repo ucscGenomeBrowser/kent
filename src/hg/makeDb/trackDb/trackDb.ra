@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.568 2009/12/28 22:07:29 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.569 2009/12/28 22:28:19 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -2238,7 +2238,7 @@ spectrum on
 type chain danRer1
 otherDb danRer1
 
-# release beta until composite danRer1 tracks become the default
+# release beta until composite petMar1 tracks become the default
 track chainPetMar1
 release beta
 shortLabel $o_Organism Chain 
@@ -2255,6 +2255,7 @@ type chain petMar1
 otherDb petMar1
 
 track netPetMar1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
