@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.48 2009/12/09 03:31:09 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.49 2009/12/29 20:24:53 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -19,7 +19,7 @@ var trackImgTbl;            // jQuery element used for image table under imageV2
 var imgAreaSelect;          // jQuery element used for imgAreaSelect
 var originalImgTitle;
 var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
-var selectedMapItem;        // index of currently choosen map item (via context menu).
+var selectedMenuItem;       // currently choosen context menu item (via context menu).
 var browser;                // browser ("msie", "safari" etc.)
 
 function commify (str) {
@@ -41,7 +41,7 @@ function initVars(img)
 // There are various entry points, so we call initVars in several places to make sure this variables get updated.
     if(!originalPosition) {
         // remember initial position and size so we can restore it if user cancels
-        originalPosition = $('#positionHidden').val();
+        originalPosition = $('#positionHidden').val() || getPosition();
         originalSize = $('#size').text();
         originalCursor = jQuery('body').css('cursor');
     }
@@ -74,6 +74,21 @@ function setPositionByCoordinates(chrom, start, end)
     var newPosition = chrom + ":" + commify(start) + "-" + commify(end);
     setPosition(newPosition, commify(end - start + 1));
     return newPosition;
+}
+
+function getPosition()
+{
+// Return current value of position box
+    var tags = document.getElementsByName("position");
+    // There are multiple tags with name == "position" (the visible position text input 
+    // and a hidden with id='positionHidden'); we return value of visible element.
+    for (var i = 0; i < tags.length; i++) {
+	    var ele = tags[i];
+            if(ele.id != "positionHidden") {
+	        return ele.value;
+            }
+    }
+    return null;
 }
 
 function setPosition(position, size)
@@ -224,6 +239,9 @@ $(window).load(function () {
     // jQuery load function with stuff to support drag selection in track img
     loadImgAreaSelect(true);
 
+    if($('#hgTrackUiDialog'))
+        $('#hgTrackUiDialog').hide();
+                   
     // Don't load contextMenu if jquery.contextmenu.js hasn't been loaded
     if(trackImg && jQuery.fn.contextMenu) {
         $('#hgTrackUiDialog').hide();
@@ -720,6 +738,18 @@ function imgTblZipButtons(table)
     //warn("Zipped "+count+" buttons "+countN+" are independent.");
 }
 
+function initImgTblButtons()
+{
+// Make side buttons visible (must also be called when updating rows in the imgTbl).
+    var btns = $("p.btn");
+    if(btns.length > 0) {
+        imgTblZipButtons($('#imgTbl'));
+        $(btns).mouseover( imgTblButtonMouseOver );
+        $(btns).mouseout(  imgTblButtonMouseOut  );
+        $(btns).show();
+    }
+}
+
 function imgTblButtonMouseOver()
 {
 // Highlights a composite set of buttons, regarless of whether tracks are adjacent
@@ -948,8 +978,38 @@ function blockTheMap(e)
     blockUseMap=true;
 }
 
+// wait for jStore to prepare the storage engine (this token reload code is currently dead code).
+jQuery.jStore && jQuery.jStore.ready(function(engine) {
+    // alert(engine.jri);
+    // wait for the storage engine to be ready.  
+    engine.ready(function(){ 
+        var engine = this;
+        var newToken = document.getElementById("hgt.token").value;
+        if(newToken) {
+            var oldToken = engine.get("token");
+            if(oldToken && oldToken == newToken) {
+                // user has hit the back button.
+                jQuery('body').css('cursor', 'wait');
+                window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+            }
+        }
+        engine.set("token", newToken);
+    });
+});
+
 $(document).ready(function()
 {
+    if(jQuery.jStore) {
+        if(0) {
+            jQuery.extend(jQuery.jStore.defaults, {
+                              project: 'hgTracks',
+                              engine: 'flash',  
+                              flash: '/jStore.Flash.html'
+                          });
+        }
+        jQuery.jStore.load();
+    }
+    
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     if($("FORM").length > 0) {
         $('a,area').not("[href*='#']").not("[target]").click(function(i) {
@@ -982,13 +1042,7 @@ $(document).ready(function()
     }
     if($('#imgTbl').length == 1) {
         imageV2   = true;
-        var btns = $("p.btn");
-        if(btns.length > 0) {
-            imgTblZipButtons($('#imgTbl'));
-            $(btns).mouseover( imgTblButtonMouseOver );
-            $(btns).mouseout(  imgTblButtonMouseOut  );
-            $(btns).show();
-        }
+        initImgTblButtons();
         // Make imgTbl allow draw reorder of imgTrack rows
         var imgTable = $(".tableWithDragAndDrop");
         if($(imgTable).length > 0) {
@@ -1046,7 +1100,7 @@ function rulerModeToggle (ele)
 
 function findMapItem(e)
 {
-// Find mapItem for given event
+// Find mapItem for given event; returns item object or null if none found.
     var x,y;
     if(imageV2) {
         // It IS appropriate to use coordinates relative to the img WHEN we have a hit in the right-hand side, but NOT
@@ -1071,7 +1125,25 @@ function findMapItem(e)
         x = e.pageX - e.target.offsetLeft;
         y = e.pageY - e.target.offsetTop;
     }
+    if(e.target.tagName.toUpperCase() == "P") {
+        var a = /p_btn_(.*)/.exec(e.target.id);
+        if(a && a[1]) {
+            // XXXX get title from json
+            var id = a[1];
+            var title;
+            var rec = trackDbJson[id];
+            if(rec) {
+                title = rec.shortLabel;                
+            } else {
+                title = id;
+            }
+            return {id: id, title: "configure " + title};
+        } else {
+            return null;
+        }
+    }
     var retval = -1;
+    // console.log(e.target.tagName + "; " + e.target.id);
     for(var i=0;i<mapItems.length;i++)
     {
         if(mapItems[i].obj && e.target === mapItems[i].obj) {
@@ -1094,15 +1166,18 @@ function findMapItem(e)
     // showWarning(x + " " + y + " " + retval + " " + e.target.tagName + " " + $(e.target).attr('src'));
     // console.log("findMapItem:", e.clientX, e.clientY, x, y, pos.left, pos.top, retval, mapItems.length, e.target.tagName);
     // console.log(e.clientX, pos);
-    return retval;
+    if(retval >= 0) {
+        return mapItems[retval];
+    } else {
+        return null;
+    }
 }
 
 function mapEvent(e)
 {
-    var i = findMapItem(e);
-    if(i >= 0)
-    {
-        e.target.title = mapItems[i].title;
+    var o = findMapItem(e);
+    if(o) {
+        e.target.title = o.title;
     } else {
         // XXXX this doesn't work.
         // $('#myMenu').html("<ul id='myMenu' class='contextMenu'><li class='edit'><a href='#img'>Get Image</a></li></ul>");
@@ -1118,11 +1193,10 @@ function mapMouseDown(e)
     {
         return false;
     } else {
-        var i = findMapItem(e);
-        if(i >= 0)
-        {
+        var o = findMapItem(e);
+        if(o) {
             // XXXX Why does href get changed to "about://" on IE?
-            window.location = mapItems[i].href;
+            window.location = o.href;
         }
         return true;
     }
@@ -1143,7 +1217,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     }
     if(cmd == 'selectWholeGene') {
             // bring whole gene into view
-            var href = mapItems[selectedMapItem].href;
+            var href = selectedMenuItem.href;
             var chromStart, chromEnd;
             var a = /hgg_chrom=(\w+)&/.exec(href);
             // Many links leave out the chrom (b/c it's in the server side cart as "c")
@@ -1175,10 +1249,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                 if(browser == "safari" || imageV2) {
-                    // See comments below on safari.
-                    // We need to parse out more stuff to support imageV2 via ajax, but it's probably possible.
+                    // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
+                    // See comments below on safari problems.
                     jQuery('body').css('cursor', 'wait');
-                    document.TrackHeaderForm.submit();
+                    document.TrackForm.submit();
                 } else {
                     jQuery('body').css('cursor', '');
                     $.ajax({
@@ -1198,7 +1272,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         jQuery('body').css('cursor', 'wait');
         $.ajax({
                    type: "POST",
-                   url: "../cgi-bin/hgTrackUi?ajax=1&g=" + mapItems[selectedMapItem].id + "&hgsid=" + getHgsid(),
+                   url: "../cgi-bin/hgTrackUi?ajax=1&g=" + selectedMenuItem.id + "&hgsid=" + getHgsid(),
                    dataType: "html",
                    trueSuccess: handleTrackUi,
                    success: catchErrorOrDispatch,
@@ -1216,9 +1290,13 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         window.open(trackImg.attr('src'));
     } else if (cmd == 'openLink') {
         // XXXX This is blocked by Safari's popup blocker (without any warning message).
-        window.open(mapItems[selectedMapItem].href);
+        window.open(selectedMenuItem.href);
     } else {
-        var id = mapItems[selectedMapItem].id;
+        // Change visibility settings:
+        //
+        // First change the select on our form:
+
+        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         if(rec && rec.parentTrack) {
             // currently we fall back to the parentTrack
@@ -1227,6 +1305,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
                 });
+        
+        // Now change the track image
         if(imageV2 && cmd == 'hide')
         {
             // Tell remote cart what happened (to keep them in sync with us).
@@ -1234,11 +1314,11 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             $('#tr_' + id).remove();
             loadImgAreaSelect(false);
         } else if (browser == "safari") {
-            // Safari has the following bug: if we update the local map dynamically, the changes don't get registered (even
+            // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
             // though if you look in the DOM the changes are there); so we have to do a full form submission when the
             // user changes visibility settings.
             jQuery('body').css('cursor', 'wait');
-            document.TrackHeaderForm.submit();
+            document.TrackForm.submit();
         } else {
             var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();
             if(imageV2) {
@@ -1266,13 +1346,15 @@ function loadContextMenu(img)
             var menu = [];
             var selectedImg = " <img src='../images/Green_check.png' height='10' width='10' />";
             var done = false;
-            if(selectedMapItem >= 0)
-            {
-                var href = mapItems[selectedMapItem].href;
-                var isGene = href.match("hgGene");
-                var isHgc = href.match("hgc");
+            if(selectedMenuItem) {
+                var href = selectedMenuItem.href;
+                var isHgc, isGene;
+                if(href) {
+                    isGene = href.match("hgGene");
+                    isHgc = href.match("hgc");
+                }
                 var rec = trackDbJson[id];
-                var id = mapItems[selectedMapItem].id;
+                var id = selectedMenuItem.id;
                 var rec = trackDbJson[id];
                 if(rec && rec.parentTrack) {
                     // currently we fall back to the parentTrack
@@ -1293,19 +1375,9 @@ function loadContextMenu(img)
                                                o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
                                                menu.push(o);
                                            });
-                    menu.push($.contextMenu.separator);
-                    var o = new Object();
-                    if(isGene || isHgc) {
-                        var title = mapItems[selectedMapItem].title || "feature";
-                        o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
-                        o["Open Link in New Window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
-                    } else {
-                        o[mapItems[selectedMapItem].title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi"); return true; }};
-                    }
-                    menu.push(o);
                     done = true;
                 } else {
-                    // XXXX currently dead code
+                    // XXXX currently dead code (unless JSON is enabled in hgTracks.c)
                     if(rec) {
                         // XXXX check current state from a hidden variable.
                         var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");
@@ -1325,6 +1397,18 @@ function loadContextMenu(img)
                         done = true;
                     }
                 }
+                if(done) {
+                    menu.push($.contextMenu.separator);
+                    var o = new Object();
+                    if(isGene || isHgc) {
+                        var title = selectedMenuItem.title || "feature";
+                        o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                        o["Open Link in New Window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
+                    } else {
+                        o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi"); return true; }};
+                    }
+                    menu.push(o);
+                }
             }
             if(!done) {
                 var str = "drag-and-zoom mode";
@@ -1336,6 +1420,7 @@ function loadContextMenu(img)
                 o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "dragZoomMode"); return true; }};
                 menu.push(o);
                 o = new Object();
+                // console.dir(ele);
                 str = "hilight mode";
                 if(!autoHideSetting) {
                     str += selectedImg;
@@ -1348,8 +1433,8 @@ function loadContextMenu(img)
         },
         {
             beforeShow: function(e) {
-                // console.log(mapItems[selectedMapItem]);
-                selectedMapItem = findMapItem(e);
+                // console.log(mapItems[selectedMenuItem]);
+                selectedMenuItem = findMapItem(e);
                 // XXXX? blockUseMap = true;
             },
             hideCallback: function() {
@@ -1444,15 +1529,15 @@ function handleUpdateTrackMap(response, status)
         }
     }
     if(imageV2 && this.cmd && this.cmd != 'selectWholeGene') {
-          // Extract <TR id='tr_ID' class='trDraggable'>...</TR> and update appropriate row in imgTbl;
+          // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
-          var id = mapItems[selectedMapItem].id;
+          var id = selectedMenuItem.id;
           var rec = trackDbJson[id];
           if(rec && rec.parentTrack) {
               // currently we fall back to the parentTrack
               id = rec.parentTrack;
           }
-          var str = "<TR id='tr_" + id + "' class='trDraggable'>([\\s\\S]+?)</TR>";
+          var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
           var reg = new RegExp(str);
           a = reg.exec(response);
           if(a && a[1]) {
@@ -1462,12 +1547,14 @@ function handleUpdateTrackMap(response, status)
                // XXXX move following to a shared method
                parseMap(null, true);
                $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
+               initImgTblButtons();
                loadImgAreaSelect(false);
                // Do NOT reload context menu (otherwise we get the "context menu sticks" problem).
                // loadContextMenu($('#tr_' + id));
-               trackImgTbl.tableDnDUpdate();
+               if(trackImgTbl.tableDnDUpdate)
+                   trackImgTbl.tableDnDUpdate();
           } else {
-               showWarning("Couldn't parse out new image");
+               showWarning("Couldn't parse out new image for id: " + id);
           }
     } else {
         if(imageV2) {
