@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.573 2009/12/28 23:43:28 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.574 2009/12/29 23:27:33 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -2841,6 +2841,7 @@ type netAlign mm7 chainMm7
 otherDb mm7
 
 track chainSorAra1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2855,6 +2856,7 @@ type chain sorAra1
 otherDb sorAra1
 
 track netSorAra1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -2865,6 +2867,7 @@ type netAlign sorAra1 chainSorAra1
 otherDb sorAra1
 
 track chainEriEur1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2879,6 +2882,7 @@ type chain eriEur1
 otherDb eriEur1
 
 track netEriEur1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3029,6 +3033,7 @@ type chain felCat3
 otherDb felCat3
 
 track chainTupBel1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments 
 group compGeno
@@ -3041,6 +3046,7 @@ type chain tupBel1
 otherDb tupBel1
 
 track netTupBel1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3051,6 +3057,7 @@ type netAlign tupBel1 chainTupBel1
 otherDb tupBel1
 
 track chainOtoGar1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3075,6 +3082,7 @@ type chain otoGar1
 otherDb otoGar1
 
 track netOtoGar1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3206,6 +3214,7 @@ type netAlign cavPor2 chainCavPor2
 otherDb cavPor2
 
 track chainOryCun1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3220,6 +3229,7 @@ type chain oryCun1
 otherDb oryCun1
 
 track netOryCun1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -3281,6 +3291,7 @@ type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
 track chainGorGor1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -3293,6 +3304,7 @@ type chain gorGor1
 otherDb gorGor1
 
 track netGorGor1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

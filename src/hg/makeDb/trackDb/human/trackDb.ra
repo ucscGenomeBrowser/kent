@@ -2348,7 +2348,8 @@ altColor 255,240,200
 type bed 6 .
 
 track chainMonDom4
-#replaces record chainMonDom4 in parent dir missing/extra release,subTrack,subGroups
+#replaces record netMonDom4 in parent dir missing/extra release,subTrack,subGroups
+release beta
 shortLabel $o_Organism Chain
 longLabel monDom4 ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2363,6 +2364,7 @@ type chain monDom4
 otherDb monDom4
 
 track netMonDom4
+release beta
 #replaces record netMonDom4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel monDom4 ($o_date/$o_db) Alignment Net
@@ -2374,6 +2376,7 @@ type netAlign monDom4 chainMonDom4
 otherDb monDom4
 
 track chainLoxAfr1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2387,6 +2390,7 @@ type chain loxAfr1
 otherDb loxAfr1
 
 track netLoxAfr1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno

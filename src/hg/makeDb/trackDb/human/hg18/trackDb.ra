@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.444 2009/12/23 20:09:03 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.445 2009/12/29 23:27:34 hiram Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -984,6 +984,7 @@ type netAlign oryCun1 chainOryCun1
 otherDb oryCun1
 
 track chainRheMac2
+release beta
 #replaces record chainRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -999,6 +1000,7 @@ type chain rheMac2
 otherDb rheMac2
 
 track netRheMac2
+release beta
 #replaces record netRheMac2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -1022,6 +1024,7 @@ type chain ponAbe0
 otherDb ponAbe0
 
 track chainPanTro2
+release beta
 #replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -1037,6 +1040,7 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
+release beta
 #replaces record netPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -1126,6 +1130,7 @@ shortLabel $o_db Net
 priority 270.3
 
 track chainMm8
+release beta
 #replaces record chainMm8 in parent dir missing/extra release
 shortLabel mm8 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -1141,6 +1146,7 @@ type chain mm8
 otherDb mm8
 
 track netMm8
+release beta
 #replaces record netMm8 in parent dir missing/extra release
 shortLabel mm8 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -1152,6 +1158,7 @@ type netAlign mm8 chainMm8
 otherDb mm8
 
 track chainMm9
+release beta
 #replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -1167,6 +1174,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+release beta
 #replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
