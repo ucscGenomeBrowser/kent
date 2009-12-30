@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.50 2009/12/30 04:14:21 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.51 2009/12/30 19:48:20 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -1276,6 +1276,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    dataType: "html",
                    trueSuccess: handleTrackUi,
                    success: catchErrorOrDispatch,
+                   cmd: selectedMenuItem,
                    cache: true
                });
     } else if (cmd == 'dragZoomMode') {
@@ -1510,17 +1511,20 @@ function handleTrackUi(response, status)
                                },
                                resizable: true,
                                bgiframe: true,
-                               height: 600,
-                               width: 600,
+                               height: 'auto',
+                               width: 'auto',
+                               minHeight: 200,
+                               minWidth: 400,
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
-                               title: "Track Settings",
-                               close: function(){
+                               close: function() {
                                    // clear out html after close to prevent problems caused by duplicate html elements
                                    $('#hgTrackUiDialog').html("");
                                }
                            });
+    // Apparently the options above to dialog take only once, so we set title explicitly.
+    $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[this.cmd.id].shortLabel + " Track Settings");
     jQuery('body').css('cursor', '');
     $('#hgTrackUiDialog').dialog('open');
 }
@@ -1531,8 +1535,7 @@ function handleUpdateTrackMap(response, status)
 //
 // this.cmd can be used to figure out which menu item triggered this.
 //
-//    var a= /(<IMG SRC\s*=\s*([^"]+)"[^>]+id='trackMap'\s*>/.exec(response);
-// <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+// e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
     // Parse out new ideoGram url (if available)
     var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
     if(a && a[1]) {
