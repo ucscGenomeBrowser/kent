@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.17 2009/12/22 18:55:43 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.18 2009/12/30 21:33:03 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -32,6 +32,7 @@ indelQueryInsert on
 indelPolyA on
 
 track chainRn4
+release beta
 #replaces record chainRn4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -45,6 +46,7 @@ type chain rn4
 otherDb rn4
 
 track netRn4
+release beta
 #replaces record netRn4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

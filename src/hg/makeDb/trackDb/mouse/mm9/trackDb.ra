@@ -1,3 +1,6 @@
+#	"$Id: trackDb.ra,v 1.73 2009/12/30 21:33:02 hiram Exp $";
+
+include trackDb.chainNet.ra
 
 track jaxQTLLift
 shortLabel MGI QTL LiftO

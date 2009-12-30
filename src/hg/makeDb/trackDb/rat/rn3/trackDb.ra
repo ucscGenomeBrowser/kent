@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.64 2009/12/22 18:55:42 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.65 2009/12/30 21:33:03 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -340,6 +340,7 @@ type psl xeno hg17
 otherDb hg17
 
 track chainHg17
+release beta
 #replaces record chainHg17 in parent dir missing/extra matrix,matrixHeader,release
 shortLabel Human Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -353,6 +354,7 @@ type chain hg17
 otherDb hg17
 
 track netHg17
+release beta
 #replaces record netHg17 in parent dir missing/extra release
 shortLabel Human Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

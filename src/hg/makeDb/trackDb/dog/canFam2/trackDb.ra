@@ -138,9 +138,6 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 track netPanTro2 override
 priority 250.2
 
-track chainNetHg19 override
-priority 255.3
-
 track chainBosTau4 override
 priority 260.1
 
@@ -156,9 +153,6 @@ track netEquCab1 override
 priority 265.2
 shortLabel $o_db Net
 otherOrg equCab1
-
-track chainNetEquCab2 override
-priority 265.3
 
 track chainFelCat3 override
 priority 270.1

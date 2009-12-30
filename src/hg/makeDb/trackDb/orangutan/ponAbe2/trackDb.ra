@@ -57,9 +57,6 @@ priority 280.1
 track netRheMac2 override
 priority 280.2
 
-track chainNetHg19 override
-priority 310
-
 track chainHg18 override
 shortLabel $o_db Chain
 priority 300.1

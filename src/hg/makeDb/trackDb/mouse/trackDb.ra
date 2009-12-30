@@ -458,6 +458,7 @@ type netAlign bosTau2 chainBosTau2
 otherDb bosTau2
 
 track chainCanFam2
+release beta
 #replaces record chainCanFam2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -473,6 +474,7 @@ type chain canFam2
 otherDb canFam2
 
 track netCanFam2
+release beta
 #replaces record netCanFam2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -547,6 +549,7 @@ track netDanRer2 override
 priority 160.1
 
 track chainMonDom4
+release beta
 #replaces record chainMonDom4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -562,6 +565,7 @@ type chain monDom4
 otherDb monDom4
 
 track netMonDom4
+release beta
 #replaces record netMonDom4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
