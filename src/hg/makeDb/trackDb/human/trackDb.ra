@@ -2375,32 +2375,6 @@ spectrum on
 type netAlign monDom4 chainMonDom4
 otherDb monDom4
 
-track chainLoxAfr1
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 197
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-type chain loxAfr1
-otherDb loxAfr1
-
-track netLoxAfr1
-release beta
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 197.1
-visibility hide
-spectrum on
-type netAlign loxAfr1 chainLoxAfr1
-otherDb loxAfr1
-
-
 track syntenicNet
 shortLabel Syntenic Nets
 longLabel Syntenic Alignment Nets for Chimp, Macaque, Mouse, Rat, and Dog
@@ -3299,20 +3273,6 @@ priority 183
 track netAnoCar1 override
 priority 183.1
 
-# armadillo
-track chainDasNov1 override
-priority 195
-
-track netDasNov1 override
-priority 195.1
-
-# tenrec
-track chainEchTel1 override
-priority 196
-
-track netEchTel1 override
-priority 196.1
-
 # dog
 track chainCanFam2 override
 priority 228
@@ -3357,13 +3317,6 @@ priority 236.4
 
 track netBosTau2 override
 priority 236.5
-
-track chainBosTau1 override
-priority 236.6
-
-track netBosTau1 override
-priority 236.7
-
 
 # guinea pig
 track chainCavPor3 override
