@@ -3365,14 +3365,6 @@ track netBosTau1 override
 priority 236.7
 
 
-# rabbit
-track chainOryCun1 override
-priority 257
-
-track netOryCun1 override
-priority 257.1
-
-
 # guinea pig
 track chainCavPor3 override
 priority 258

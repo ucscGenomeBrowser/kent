@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.27 2009/12/29 23:27:33 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.28 2009/12/30 18:49:34 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -1113,7 +1113,6 @@ html chainNet
     type netAlign monDom5 chainMonDom5
 
 track chainNetEriEur1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -1152,7 +1151,6 @@ html chainNet
     type netAlign eriEur1 chainEriEur1
 
 track chainNetSorAra1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -1177,7 +1175,6 @@ spectrum on
 html chainNet
 
     track chainSorAra1
-    release alpha
     subTrack chainNetSorAra1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -1185,7 +1182,6 @@ html chainNet
     type chain sorAra1
 
     track netSorAra1
-    release alpha
     subTrack chainNetSorAra1
     subGroups view=net
     shortLabel $o_Organism Net
@@ -1529,7 +1525,6 @@ html chainNet
     type netAlign cavPor2 chainCavPor2
 
 track chainNetOryCun2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -1554,7 +1549,6 @@ spectrum on
 html chainNet
 
     track chainOryCun2
-    release alpha
     subTrack chainNetOryCun2
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -1562,7 +1556,6 @@ html chainNet
     type chain oryCun2
 
     track netOryCun2
-    release alpha
     subTrack chainNetOryCun2
     subGroups view=net
     shortLabel $o_Organism Net
@@ -1570,7 +1563,6 @@ html chainNet
     type netAlign oryCun2 chainOryCun2
 
 track chainNetOryCun1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -1595,7 +1587,6 @@ spectrum on
 html chainNet
 
     track chainOryCun1
-    release alpha
     subTrack chainNetOryCun1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -1603,7 +1594,6 @@ html chainNet
     type chain oryCun1
 
     track netOryCun1
-    release alpha
     subTrack chainNetOryCun1
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2134,7 +2124,6 @@ html chainNet
     type netAlign panTro1 chainPanTro1
 
 track chainNetGorGor1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -2158,7 +2147,6 @@ chainLinearGap medium
 html chainNet
 
     track chainGorGor1
-    release alpha
     subTrack chainNetGorGor1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2166,7 +2154,6 @@ html chainNet
     type chain gorGor1
 
     track netGorGor1
-    release alpha
     subTrack chainNetGorGor1
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2214,7 +2201,6 @@ html chainNet
     type netAlign ponAbe2 chainPonAbe2
 
 track chainNetTupBel1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -2238,7 +2224,6 @@ chainLinearGap medium
 html chainNet
 
     track chainTupBel1
-    release alpha
     subTrack chainNetTupBel1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2246,7 +2231,6 @@ html chainNet
     type chain tupBel1
 
     track netTupBel1
-    release alpha
     subTrack chainNetTupBel1
     subGroups view=net
     shortLabel $o_Organism Net
@@ -2254,7 +2238,6 @@ html chainNet
     type netAlign tupBel1 chainTupBel1
 
 track chainNetOtoGar1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -2278,7 +2261,6 @@ chainLinearGap medium
 html chainNet
 
     track chainOtoGar1
-    release alpha
     subTrack chainNetOtoGar1
     subGroups view=chain
     shortLabel $o_Organism Chain
@@ -2286,7 +2268,6 @@ html chainNet
     type chain otoGar1
 
     track netOtoGar1
-    release alpha
     subTrack chainNetOtoGar1
     subGroups view=net
     shortLabel $o_Organism Net
