@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.45 2009/08/23 16:18:36 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.46 2010/01/03 07:42:33 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-
@@ -45,7 +45,7 @@ static void dasHead(int code)
 {
 printf("X-DAS-Version: DAS/0.95\n");
 printf("X-DAS-Status: %d\n", code);
-printf("Content-Type:text/plain\n");
+printf("Content-Type:text/xml\n");
 printf("\n");
 }
 
