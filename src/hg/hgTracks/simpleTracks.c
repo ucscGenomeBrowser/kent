@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.9 2009/12/22 23:10:42 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.116.2.10 2010/01/04 16:29:27 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -223,12 +223,22 @@ tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
 }
 
 Color lighterColor(struct hvGfx *hvg, Color color)
-/* Get lighter shade of a color */
+/* Get lighter shade of a color - half way between this color and white */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (rgbColor.r+255)/2;
 rgbColor.g = (rgbColor.g+255)/2;
 rgbColor.b = (rgbColor.b+255)/2;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+Color somewhatLighterColor(struct hvGfx *hvg, Color color)
+/* Get a somewhat lighter shade of a color - 1/3 of the way towards white. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = (2*rgbColor.r+255)/3;
+rgbColor.g = (2*rgbColor.g+255)/3;
+rgbColor.b = (2*rgbColor.b+255)/3;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
@@ -239,7 +249,7 @@ return (tdbIsComposite(track->tdb) && track->subtracks != NULL);
 }
 
 Color slightlyLighterColor(struct hvGfx *hvg, Color color)
-/* Get slightly lighter shade of a color */
+/* Get slightly lighter shade of a color - closer to gray actually  */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (rgbColor.r+128)/2;

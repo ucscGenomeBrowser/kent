@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.99.2.1 2009/12/11 01:58:41 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.99.2.2 2010/01/04 16:29:28 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -814,8 +814,8 @@ for (x1 = 0; x1 < width; ++x1)
     Color drawColor = colorArray[x1];
     if (drawColor != oldDrawColor)
         {
-	mediumColor = lighterColor(hvg, drawColor);
-	lightColor = lighterColor(hvg, mediumColor);
+	mediumColor = somewhatLighterColor(hvg, drawColor);
+	lightColor = somewhatLighterColor(hvg, mediumColor);
 	oldDrawColor = drawColor;
         }
 
