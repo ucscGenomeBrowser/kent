@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.166 2010/01/04 19:54:11 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.167 2010/01/04 20:12:55 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2500,7 +2500,7 @@ type rnaExtract
 description RNA sized 60-200 nt
 
 term longPolyA
-tag longPolyA
+tag pAP
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
 label PolyA+
