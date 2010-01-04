@@ -11,7 +11,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.4 2009/12/14 03:14:06 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.5 2010/01/04 19:12:40 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -84,14 +84,6 @@ static void raTagWrite(struct raTag *tag, FILE *f)
 fputs(tag->text, f);
 }
 #endif
-
-int raTagCmp(const void *va, const void *vb)
-/* Compare two raTags. */
-{
-const struct raTag *a = *((struct raTag **)va);
-const struct raTag *b = *((struct raTag **)vb);
-return strcmp(a->name, b->name);
-}
 
 void recordLocationReport(struct raRecord *rec, FILE *out)
 /* Write out where record ends. */
@@ -376,17 +368,6 @@ for (generation = level; generation != NULL; generation = generation->parent)
 return NULL;
 }
 
-boolean sameTagInOtherRecord(struct raTag *tag, struct raRecord *r)
-/* Return TRUE if tag exists in record r, and has same value in r. */
-{
-struct raTag *t = raRecordFindTag(r, tag->name);
-if (t == NULL)
-    return FALSE;
-if (!sameString(t->val, tag->val))
-    return FALSE;
-return TRUE;
-}
-
 void raRecordWriteTags(struct raRecord *r, FILE *f)
 /* Write out tags in record to file, including preceding spaces. */
 {
@@ -430,7 +411,10 @@ struct raTag *t;
 for (t = r->tagList; t != NULL; t = t->next)
     raTagWriteIndented(t, f, indent);
 if (r->endComments)
+    {
+    spaceOut(f, indent);
     fputs(r->endComments, f);
+    }
 }
 
 struct raTag *findViewSubGroup(struct raRecord *r)
@@ -462,7 +446,8 @@ for (t = r->tagList; t != NULL; t = t->next)
 	mustWrite(f, t->text, s - t->text);
 	spaceOut(f, 4);
 	fprintf(f, "subTrack %s", viewTrackName);
-	int i;	/* Skip over two words we've already written. */
+	/* Skip over subTrack and name in original text. */
+	int i;
 	for (i=0; i<2; ++i)
 	    {
 	    s = skipLeadingSpaces(s);
@@ -496,9 +481,11 @@ struct raTag *viewSubGroupTag = findViewSubGroup(complexRecord);
 if (viewSubGroupTag == NULL)
     recordAbort(complexRecord, "Can't find view subGroup#");
 char *line = lmCloneString(lm, viewSubGroupTag->val);
+/*  line looks something like: 
+ *       view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags */
 char *viewWord = nextWord(&line);
 assert(sameString(viewWord, "view"));
-char *viewLabelWord = nextWord(&line);
+nextWord(&line);	// Just skip over name to label views with
 struct slPair *viewList = NULL;
 char *thisEqThat;
 while ((thisEqThat = nextWord(&line)) != NULL)
@@ -642,7 +629,7 @@ if (shouldBeParentOfView(r))
     if (recordInParentFile)
         recordAbort(r, "Can't handle settingsByViews with records in parent file levels");
     /* We are the parent. */
-    fprintf(f, "# Rewriting parent with subGroup view %s\n", r->key);
+    // fprintf(f, "# Rewriting parent with subGroup view %s\n", r->key);
     rewriteSettingsByViewComplex(file, r, f, lm);
     }
 else if (subTrack)
@@ -657,8 +644,7 @@ else if (subTrack)
 	if (rParent->file != r->file)
 	    recordAbort(r, "complex parent %s not in same file as subTrack %s", 
 	    	rParent->key, r->key);
-	fprintf(f, "# Omitting child (%s) of parent (%s) with views\n", 
-		r->key, rParent->key);
+	// fprintf(f, "# Omitting child (%s) of parent (%s) with views\n", r->key, rParent->key);
 	}
     else
         {
@@ -720,6 +706,7 @@ struct lm *rootLm = lmInit(0);
 char rootName[PATH_LEN];
 safef(rootName, sizeof(rootName), "%s/%s", inDir, trackFile);
 struct raLevel *rootLevel = raLevelRead(rootName, rootLm);
+rewriteLevel(rootLevel, outDir, rootLm);
 
 /* Make subdirectory list. */
 struct fileInfo *org, *orgList = listDirX(inDir, "*", FALSE);

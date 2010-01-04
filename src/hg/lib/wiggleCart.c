@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.36 2009/12/10 19:58:49 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.37 2010/01/04 19:12:30 kent Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -100,7 +100,7 @@ if (isNotEmpty(setting))
 
 static void viewLimitsCompositeOverride(struct trackDb *tdb,char *name,
                       double *retMin, double *retMax,double *absMin, double *absMax)
-/* If aquiring min/max for composite level wig cfg, look for trackDb.ra "settingsByView" */
+/* If aquiring min/max for composite level wig cfg. Look in parents as well as self. */
 {
 if(isNameAtCompositeLevel(tdb,name))
     {

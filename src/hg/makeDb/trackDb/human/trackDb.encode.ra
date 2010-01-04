@@ -972,6 +972,15 @@ type bed 5 +
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
+# Yale RNA supertrack
+        track encodeYaleRnaSuper
+        superTrack on
+        shortLabel Yale RNA
+        longLabel Yale RNA (Neutrophil, Placenta and NB4 cells)
+        group encodeTxLevels
+        priority 28
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 track encodeYaleMASPlacRNATransMap
 superTrack encodeYaleRnaSuper dense
 compositeTrack on
@@ -2675,6 +2684,16 @@ dataVersion ENCODE Oct 2005 Freeze
     color 0,0,200
     priority 14
 
+# UCSD supertrack
+
+        track encodeUcsdChipSuper
+        superTrack on
+        shortLabel LI/UCSD ChIP
+        longLabel Ludwig Institute/UC San Diego ChIP-chip
+        group encodeChip
+        priority 48
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 
 track encodeLIChIP
 superTrack encodeUcsdChipSuper dense
@@ -3131,6 +3150,18 @@ dataVersion Mar 2007
     shortLabel Stan Jurkat NRSF/REST/Upstate 
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Upstate ChIP)
     priority 12
+
+# UT-Austin supertrack
+
+        track encodeUtexChipSuper
+        superTrack on
+        shortLabel UT-Austin ChIP
+        longLabel University of Texas, Austin ChIP-chip and STAGE
+        group encodeChip
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+        visibility hide
+        priority 60
+        origAssembly hg17
 
 
 track encodeUtexChip

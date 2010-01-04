@@ -6,7 +6,7 @@
 #include "ra.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: makeTrackDbTagVals.c,v 1.1 2009/12/08 01:24:28 kent Exp $";
+static char const rcsid[] = "$Id: makeTrackDbTagVals.c,v 1.2 2010/01/04 19:12:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,9 +71,8 @@ slSort(&useList, tagUseCmp);
 for (use = useList; use != NULL; use = use->next)
     {
     int valCount = use->vals->elCount;
-    boolean doSimple = TRUE;
     fprintf(f, "%s", use->name);
-    if (valCount < 10 && valCount*3 < use->count)
+    if (use->count > 5 && valCount < 10 && valCount*3 <= use->count)
          {
 	 struct hashEl *hel, *helList = hashElListHash(use->vals);
 	 for (hel = helList; hel != NULL; hel = hel->next)
@@ -82,7 +81,7 @@ for (use = useList; use != NULL; use = use->next)
 	     if (hasWhiteSpace(s))
 	         {
 		 char *q = makeQuotedString(s, '"');
-		 fprintf(f, " \"%s\"", q);
+		 fprintf(f, " %s", q);
 		 freeMem(q);
 		 }
 	     else

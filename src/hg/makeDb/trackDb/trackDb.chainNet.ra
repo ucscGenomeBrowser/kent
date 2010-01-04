@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.29 2009/12/30 19:50:12 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.30 2010/01/04 19:12:31 kent Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -9,14 +9,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -26,21 +24,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainFr2
-    release alpha
+    track chainNetFr2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetFr2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain fr2
+    spectrum on
 
-    track netFr2
-    release alpha
+        track chainFr2
+        release alpha
+        subTrack chainNetFr2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain fr2
+
+    track chainNetFr2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetFr2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign fr2 chainFr2
+
+        track netFr2
+        release alpha
+        subTrack chainNetFr2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign fr2 chainFr2
 
 # release alpha until individual fr1 tracks are obsolete
 track chainNetFr1
@@ -51,14 +62,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -68,21 +77,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainFr1
-    release alpha
+    track chainNetFr1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetFr1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain fr1
+    spectrum on
 
-    track netFr1
-    release alpha
+        track chainFr1
+        release alpha
+        subTrack chainNetFr1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain fr1
+
+    track chainNetFr1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetFr1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign fr1 chainFr1
+
+        track netFr1
+        release alpha
+        subTrack chainNetFr1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign fr1 chainFr1
 
 track chainNetTetNig2
 compositeTrack on
@@ -91,14 +113,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -108,19 +128,32 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainTetNig2
+    track chainNetTetNig2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetTetNig2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain tetNig2
+    spectrum on
 
-    track netTetNig2
+        track chainTetNig2
+        subTrack chainNetTetNig2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain tetNig2
+
+    track chainNetTetNig2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetTetNig2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign tetNig2 chainTetNig2
+
+        track netTetNig2
+        subTrack chainNetTetNig2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign tetNig2 chainTetNig2
 
 track chainNetTetNig1
 release alpha
@@ -130,14 +163,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -147,21 +178,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainTetNig1
-    release alpha
+    track chainNetTetNig1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetTetNig1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain tetNig1
+    spectrum on
 
-    track netTetNig1
-    release alpha
+        track chainTetNig1
+        release alpha
+        subTrack chainNetTetNig1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain tetNig1
+
+    track chainNetTetNig1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetTetNig1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign tetNig1 chainTetNig1
+
+        track netTetNig1
+        release alpha
+        subTrack chainNetTetNig1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign tetNig1 chainTetNig1
 
 track chainNetDanRer6
 compositeTrack on
@@ -170,14 +214,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -187,19 +229,32 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainDanRer6
+    track chainNetDanRer6Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDanRer6
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer6
+    spectrum on
 
-    track netDanRer6
+        track chainDanRer6
+        subTrack chainNetDanRer6Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain danRer6
+
+    track chainNetDanRer6Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDanRer6
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer6 chainDanRer6
+
+        track netDanRer6
+        subTrack chainNetDanRer6Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign danRer6 chainDanRer6
 
 track chainNetDanRer5
 release alpha
@@ -209,14 +264,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -226,21 +279,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainDanRer5
-    release alpha
+    track chainNetDanRer5Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDanRer5
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer5
+    spectrum on
 
-    track netDanRer5
-    release alpha
+        track chainDanRer5
+        release alpha
+        subTrack chainNetDanRer5Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain danRer5
+
+    track chainNetDanRer5Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDanRer5
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer5 chainDanRer5
+
+        track netDanRer5
+        release alpha
+        subTrack chainNetDanRer5Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign danRer5 chainDanRer5
 
 track chainNetDanRer4
 release alpha
@@ -250,14 +316,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -267,21 +331,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainDanRer4
-    release alpha
+    track chainNetDanRer4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDanRer4
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer4
+    spectrum on
 
-    track netDanRer4
-    release alpha
+        track chainDanRer4
+        release alpha
+        subTrack chainNetDanRer4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain danRer4
+
+    track chainNetDanRer4Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDanRer4
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer4 chainDanRer4
+
+        track netDanRer4
+        release alpha
+        subTrack chainNetDanRer4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign danRer4 chainDanRer4
 
 track chainNetDanRer3
 release alpha
@@ -291,14 +368,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -308,21 +383,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainDanRer3
-    release alpha
+    track chainNetDanRer3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDanRer3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer3
+    spectrum on
 
-    track netDanRer3
-    release alpha
+        track chainDanRer3
+        release alpha
+        subTrack chainNetDanRer3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain danRer3
+
+    track chainNetDanRer3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDanRer3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer3 chainDanRer3
+
+        track netDanRer3
+        release alpha
+        subTrack chainNetDanRer3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign danRer3 chainDanRer3
 
 track chainNetDanRer2
 release alpha
@@ -332,14 +420,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -349,21 +435,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainDanRer2
-    release alpha
+    track chainNetDanRer2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDanRer2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer2
+    spectrum on
 
-    track netDanRer2
-    release alpha
+        track chainDanRer2
+        release alpha
+        subTrack chainNetDanRer2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain danRer2
+
+    track chainNetDanRer2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDanRer2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer2 chainDanRer2
+
+        track netDanRer2
+        release alpha
+        subTrack chainNetDanRer2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign danRer2 chainDanRer2
 
 track chainNetDanRer1
 release alpha
@@ -373,14 +472,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -390,21 +487,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainDanRer1
-    release alpha
+    track chainNetDanRer1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDanRer1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain danRer1
+    spectrum on
 
-    track netDanRer1
-    release alpha
+        track chainDanRer1
+        release alpha
+        subTrack chainNetDanRer1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain danRer1
+
+    track chainNetDanRer1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDanRer1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign danRer1 chainDanRer1
+
+        track netDanRer1
+        release alpha
+        subTrack chainNetDanRer1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign danRer1 chainDanRer1
 
 track chainNetXenTro2
 release alpha
@@ -414,14 +524,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -431,21 +539,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainXenTro2
-    release alpha
+    track chainNetXenTro2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetXenTro2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain xenTro2
+    spectrum on
 
-    track netXenTro2
-    release alpha
+        track chainXenTro2
+        release alpha
+        subTrack chainNetXenTro2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain xenTro2
+
+    track chainNetXenTro2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetXenTro2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign xenTro2 chainXenTro2
+
+        track netXenTro2
+        release alpha
+        subTrack chainNetXenTro2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign xenTro2 chainXenTro2
 
 track chainNetXenTro1
 release alpha
@@ -455,14 +576,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 159
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -472,21 +591,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainXenTro1
-    release alpha
+    track chainNetXenTro1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetXenTro1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain xenTro1
+    spectrum on
 
-    track netXenTro1
-    release alpha
+        track chainXenTro1
+        release alpha
+        subTrack chainNetXenTro1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain xenTro1
+
+    track chainNetXenTro1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetXenTro1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign xenTro1 chainXenTro1
+
+        track netXenTro1
+        release alpha
+        subTrack chainNetXenTro1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign xenTro1 chainXenTro1
 
 # release alpha until individual oryLat2 tracks are obsolete
 track chainNetOryLat2
@@ -497,14 +629,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 165.5
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -513,23 +643,36 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainOryLat2
-    release alpha
+    track chainNetOryLat2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetOryLat2
-    subGroups view=chain
-    shortLabel $o_Organism Chain 
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain oryLat2
-    otherDb oryLat2
+    spectrum on
 
-    track netOryLat2
-    release alpha
+        track chainOryLat2
+        release alpha
+        subTrack chainNetOryLat2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain 
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain oryLat2
+        otherDb oryLat2
+
+    track chainNetOryLat2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetOryLat2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign oryLat2 chainOryLat2
-    otherDb oryLat2
+
+        track netOryLat2
+        release alpha
+        subTrack chainNetOryLat2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign oryLat2 chainOryLat2
+        otherDb oryLat2
 
 # release alpha since oryLat1 is obsolete
 track chainNetOryLat1
@@ -540,14 +683,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 165.5
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -556,23 +697,36 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainOryLat1
-    release alpha
+    track chainNetOryLat1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetOryLat1
-    subGroups view=chain
-    shortLabel $o_Organism Chain 
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain oryLat1
-    otherDb oryLat1
+    spectrum on
 
-    track netOryLat1
-    release alpha
+        track chainOryLat1
+        release alpha
+        subTrack chainNetOryLat1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain 
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain oryLat1
+        otherDb oryLat1
+
+    track chainNetOryLat1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetOryLat1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign oryLat1 chainOryLat1
-    otherDb oryLat1
+
+        track netOryLat1
+        release alpha
+        subTrack chainNetOryLat1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign oryLat1 chainOryLat1
+        otherDb oryLat1
 
 # release alpha until individual gasAcu1 tracks are obsolete
 track chainNetGasAcu1
@@ -583,14 +737,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 181
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -600,21 +752,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainGasAcu1
-    release alpha
+    track chainNetGasAcu1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetGasAcu1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain gasAcu1
+    spectrum on
 
-    track netGasAcu1
-    release alpha
+        track chainGasAcu1
+        release alpha
+        subTrack chainNetGasAcu1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain gasAcu1
+
+    track chainNetGasAcu1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetGasAcu1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign gasAcu1 chainGasAcu1
+
+        track netGasAcu1
+        release alpha
+        subTrack chainNetGasAcu1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign gasAcu1 chainGasAcu1
 
 # release alpha until individual galGal3 tracks are obsolete
 track chainNetGalGal3
@@ -625,14 +790,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 181
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -642,21 +805,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainGalGal3
-    release alpha
+    track chainNetGalGal3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetGalGal3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain galGal3
+    spectrum on
 
-    track netGalGal3
-    release alpha
+        track chainGalGal3
+        release alpha
+        subTrack chainNetGalGal3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain galGal3
+
+    track chainNetGalGal3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetGalGal3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign galGal3 chainGalGal3
+
+        track netGalGal3
+        release alpha
+        subTrack chainNetGalGal3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign galGal3 chainGalGal3
 
 # release alpha until individual galGal2 tracks are obsolete
 track chainNetGalGal2
@@ -667,14 +843,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 181
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -684,21 +858,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainGalGal2
-    release alpha
+    track chainNetGalGal2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetGalGal2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain galGal2
+    spectrum on
 
-    track netGalGal2
-    release alpha
+        track chainGalGal2
+        release alpha
+        subTrack chainNetGalGal2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain galGal2
+
+    track chainNetGalGal2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetGalGal2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign galGal2 chainGalGal2
+
+        track netGalGal2
+        release alpha
+        subTrack chainNetGalGal2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign galGal2 chainGalGal2
 
 # release alpha until individual taeGut1 tracks are obsolete
 track chainNetTaeGut1
@@ -709,14 +896,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 181
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -726,21 +911,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainTaeGut1
-    release alpha
+    track chainNetTaeGut1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetTaeGut1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain taeGut1
+    spectrum on
 
-    track netTaeGut1
-    release alpha
+        track chainTaeGut1
+        release alpha
+        subTrack chainNetTaeGut1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain taeGut1
+
+    track chainNetTaeGut1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetTaeGut1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign taeGut1 chainTaeGut1
+
+        track netTaeGut1
+        release alpha
+        subTrack chainNetTaeGut1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign taeGut1 chainTaeGut1
 
 # release alpha until ornAna1 individual chain/net tracks phased out
 track chainNetOrnAna1
@@ -751,14 +949,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -768,21 +964,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainOrnAna1
-    release alpha
+    track chainNetOrnAna1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetOrnAna1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain ornAna1
+    spectrum on
 
-    track netOrnAna1
-    release alpha
+        track chainOrnAna1
+        release alpha
+        subTrack chainNetOrnAna1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain ornAna1
+
+    track chainNetOrnAna1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetOrnAna1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign ornAna1 chainOrnAna1
+
+        track netOrnAna1
+        release alpha
+        subTrack chainNetOrnAna1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign ornAna1 chainOrnAna1
 
 # release alpha until anoCar1 individual chain/net tracks phased out
 track chainNetAnoCar1
@@ -793,14 +1002,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -810,21 +1017,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainAnoCar1
-    release alpha
+    track chainNetAnoCar1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetAnoCar1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain anoCar1
+    spectrum on
 
-    track netAnoCar1
-    release alpha
+        track chainAnoCar1
+        release alpha
+        subTrack chainNetAnoCar1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain anoCar1
+
+    track chainNetAnoCar1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetAnoCar1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign anoCar1 chainAnoCar1
+
+        track netAnoCar1
+        release alpha
+        subTrack chainNetAnoCar1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign anoCar1 chainAnoCar1
 
 # release alpha until petMar1 individual chain/net tracks phased out
 track chainNetPetMar1
@@ -835,14 +1055,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -852,21 +1070,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainPetMar1
-    release alpha
+    track chainNetPetMar1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetPetMar1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain petMar1
+    spectrum on
 
-    track netPetMar1
-    release alpha
+        track chainPetMar1
+        release alpha
+        subTrack chainNetPetMar1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain petMar1
+
+    track chainNetPetMar1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetPetMar1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign petMar1 chainPetMar1
+
+        track netPetMar1
+        release alpha
+        subTrack chainNetPetMar1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign petMar1 chainPetMar1
 
 # release alpha until braFlo1 individual chain/net tracks phased out
 track chainNetBraFlo1
@@ -877,14 +1108,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -894,21 +1123,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainBraFlo1
-    release alpha
+    track chainNetBraFlo1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetBraFlo1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain braFlo1
+    spectrum on
 
-    track netBraFlo1
-    release alpha
+        track chainBraFlo1
+        release alpha
+        subTrack chainNetBraFlo1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain braFlo1
+
+    track chainNetBraFlo1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetBraFlo1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign braFlo1 chainBraFlo1
+
+        track netBraFlo1
+        release alpha
+        subTrack chainNetBraFlo1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign braFlo1 chainBraFlo1
 
 track chainNetLoxAfr3
 compositeTrack on
@@ -917,14 +1159,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -934,19 +1174,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainLoxAfr3
+    track chainNetLoxAfr3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetLoxAfr3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain loxAfr3
+    spectrum on
 
-    track netLoxAfr3
+        track chainLoxAfr3
+        subTrack chainNetLoxAfr3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain loxAfr3
+
+    track chainNetLoxAfr3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetLoxAfr3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign loxAfr3 chainLoxAfr3
+
+        track netLoxAfr3
+        subTrack chainNetLoxAfr3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign loxAfr3 chainLoxAfr3
 
 track chainNetLoxAfr2
 compositeTrack on
@@ -955,14 +1208,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -972,19 +1223,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainLoxAfr2
+    track chainNetLoxAfr2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetLoxAfr2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain loxAfr2
+    spectrum on
 
-    track netLoxAfr2
+        track chainLoxAfr2
+        subTrack chainNetLoxAfr2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain loxAfr2
+
+    track chainNetLoxAfr2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetLoxAfr2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign loxAfr2 chainLoxAfr2
+
+        track netLoxAfr2
+        subTrack chainNetLoxAfr2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign loxAfr2 chainLoxAfr2
 
 track chainNetLoxAfr1
 compositeTrack on
@@ -993,14 +1257,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1010,19 +1272,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainLoxAfr1
+    track chainNetLoxAfr1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetLoxAfr1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain loxAfr1
+    spectrum on
 
-    track netLoxAfr1
+        track chainLoxAfr1
+        subTrack chainNetLoxAfr1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain loxAfr1
+
+    track chainNetLoxAfr1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetLoxAfr1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign loxAfr1 chainLoxAfr1
+
+        track netLoxAfr1
+        subTrack chainNetLoxAfr1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign loxAfr1 chainLoxAfr1
 
 track chainNetMonDom1
 release alpha
@@ -1032,14 +1307,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -1049,21 +1322,34 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainMonDom1
-    release alpha
+    track chainNetMonDom1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMonDom1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain monDom1
+    spectrum on
 
-    track netMonDom1
-    release alpha
+        track chainMonDom1
+        release alpha
+        subTrack chainNetMonDom1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain monDom1
+
+    track chainNetMonDom1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMonDom1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign monDom1 chainMonDom1
+
+        track netMonDom1
+        release alpha
+        subTrack chainNetMonDom1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign monDom1 chainMonDom1
 
 track chainNetMonDom4
 release alpha
@@ -1073,14 +1359,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
@@ -1090,21 +1374,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainMonDom4
-    release alpha
+    track chainNetMonDom4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMonDom4
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain monDom4
+    spectrum on
 
-    track netMonDom4
-    release alpha
+        track chainMonDom4
+        release alpha
+        subTrack chainNetMonDom4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain monDom4
+
+    track chainNetMonDom4Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMonDom4
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign monDom4 chainMonDom4
+
+        track netMonDom4
+        release alpha
+        subTrack chainNetMonDom4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign monDom4 chainMonDom4
 
 track chainNetMonDom5
 compositeTrack on
@@ -1113,14 +1410,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1130,19 +1425,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainMonDom5
+    track chainNetMonDom5Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMonDom5
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain monDom5
+    spectrum on
 
-    track netMonDom5
+        track chainMonDom5
+        subTrack chainNetMonDom5Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain monDom5
+
+    track chainNetMonDom5Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMonDom5
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign monDom5 chainMonDom5
+
+        track netMonDom5
+        subTrack chainNetMonDom5Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign monDom5 chainMonDom5
 
 track chainNetEriEur1
 compositeTrack on
@@ -1151,14 +1459,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1168,19 +1474,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainEriEur1
+    track chainNetEriEur1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetEriEur1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain eriEur1
+    spectrum on
 
-    track netEriEur1
+        track chainEriEur1
+        subTrack chainNetEriEur1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain eriEur1
+
+    track chainNetEriEur1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetEriEur1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign eriEur1 chainEriEur1
+
+        track netEriEur1
+        subTrack chainNetEriEur1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign eriEur1 chainEriEur1
 
 track chainNetSorAra1
 compositeTrack on
@@ -1189,14 +1508,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1206,19 +1523,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainSorAra1
+    track chainNetSorAra1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetSorAra1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain sorAra1
+    spectrum on
 
-    track netSorAra1
+        track chainSorAra1
+        subTrack chainNetSorAra1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain sorAra1
+
+    track chainNetSorAra1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetSorAra1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign sorAra1 chainSorAra1
+
+        track netSorAra1
+        subTrack chainNetSorAra1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign sorAra1 chainSorAra1
 
 # release alpha until mm9 individual chain/net tracks phased out
 track chainNetMm9
@@ -1229,14 +1559,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1246,21 +1574,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainMm9
-    release alpha
+    track chainNetMm9Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMm9
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain mm9
+    spectrum on
 
-    track netMm9
-    release alpha
+        track chainMm9
+        release alpha
+        subTrack chainNetMm9Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain mm9
+
+    track chainNetMm9Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMm9
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign mm9 chainMm9
+
+        track netMm9
+        release alpha
+        subTrack chainNetMm9Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign mm9 chainMm9
 
 # release alpha until mm8 individual chain/net tracks phased out
 track chainNetMm8
@@ -1271,14 +1612,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1288,21 +1627,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainMm8
-    release alpha
+    track chainNetMm8Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMm8
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain mm8
+    spectrum on
 
-    track netMm8
-    release alpha
+        track chainMm8
+        release alpha
+        subTrack chainNetMm8Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain mm8
+
+    track chainNetMm8Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMm8
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign mm8 chainMm8
+
+        track netMm8
+        release alpha
+        subTrack chainNetMm8Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign mm8 chainMm8
 
 # release alpha until mm7 individual chain/net tracks phased out
 track chainNetMm7
@@ -1313,14 +1665,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1330,21 +1680,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainMm7
-    release alpha
+    track chainNetMm7Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMm7
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain mm7
+    spectrum on
 
-    track netMm7
-    release alpha
+        track chainMm7
+        release alpha
+        subTrack chainNetMm7Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain mm7
+
+    track chainNetMm7Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMm7
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign mm7 chainMm7
+
+        track netMm7
+        release alpha
+        subTrack chainNetMm7Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign mm7 chainMm7
 
 # release alpha until mm6 individual chain/net tracks phased out
 track chainNetMm6
@@ -1355,14 +1718,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1372,21 +1733,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainMm6
-    release alpha
+    track chainNetMm6Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetMm6
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain mm6
+    spectrum on
 
-    track netMm6
-    release alpha
+        track chainMm6
+        release alpha
+        subTrack chainNetMm6Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain mm6
+
+    track chainNetMm6Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetMm6
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign mm6 chainMm6
+
+        track netMm6
+        release alpha
+        subTrack chainNetMm6Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign mm6 chainMm6
 
 # release alpha until rn4 individual chain/net tracks phased out
 track chainNetRn4
@@ -1397,14 +1771,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1414,21 +1786,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainRn4
-    release alpha
+    track chainNetRn4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetRn4
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain rn4
+    spectrum on
 
-    track netRn4
-    release alpha
+        track chainRn4
+        release alpha
+        subTrack chainNetRn4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain rn4
+
+    track chainNetRn4Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetRn4
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign rn4 chainRn4
+
+        track netRn4
+        release alpha
+        subTrack chainNetRn4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign rn4 chainRn4
 
 # release alpha until rn3 individual chain/net tracks phased out
 track chainNetRn3
@@ -1439,14 +1824,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1456,21 +1839,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainRn3
-    release alpha
+    track chainNetRn3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetRn3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain rn3
+    spectrum on
 
-    track netRn3
-    release alpha
+        track chainRn3
+        release alpha
+        subTrack chainNetRn3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain rn3
+
+    track chainNetRn3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetRn3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign rn3 chainRn3
+
+        track netRn3
+        release alpha
+        subTrack chainNetRn3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign rn3 chainRn3
 
 # release alpha until cavPor3 individual chain/net tracks phased out
 track chainNetCavPor3
@@ -1481,14 +1877,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1498,21 +1892,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainCavPor3
-    release alpha
+    track chainNetCavPor3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetCavPor3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain cavPor3
+    spectrum on
 
-    track netCavPor3
-    release alpha
+        track chainCavPor3
+        release alpha
+        subTrack chainNetCavPor3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain cavPor3
+
+    track chainNetCavPor3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetCavPor3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign cavPor3 chainCavPor3
+
+        track netCavPor3
+        release alpha
+        subTrack chainNetCavPor3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign cavPor3 chainCavPor3
 
 # release alpha until cavPor2 individual chain/net tracks phased out
 track chainNetCavPor2
@@ -1523,14 +1930,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1540,21 +1945,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainCavPor2
-    release alpha
+    track chainNetCavPor2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetCavPor2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain cavPor2
+    spectrum on
 
-    track netCavPor2
-    release alpha
+        track chainCavPor2
+        release alpha
+        subTrack chainNetCavPor2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain cavPor2
+
+    track chainNetCavPor2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetCavPor2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign cavPor2 chainCavPor2
+
+        track netCavPor2
+        release alpha
+        subTrack chainNetCavPor2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign cavPor2 chainCavPor2
 
 track chainNetOryCun2
 compositeTrack on
@@ -1563,14 +1981,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1580,19 +1996,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainOryCun2
+    track chainNetOryCun2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetOryCun2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain oryCun2
+    spectrum on
 
-    track netOryCun2
+        track chainOryCun2
+        subTrack chainNetOryCun2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain oryCun2
+
+    track chainNetOryCun2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetOryCun2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign oryCun2 chainOryCun2
+
+        track netOryCun2
+        subTrack chainNetOryCun2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign oryCun2 chainOryCun2
 
 track chainNetOryCun1
 compositeTrack on
@@ -1601,14 +2030,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 209
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1618,19 +2045,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainOryCun1
+    track chainNetOryCun1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetOryCun1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain oryCun1
+    spectrum on
 
-    track netOryCun1
+        track chainOryCun1
+        subTrack chainNetOryCun1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain oryCun1
+
+    track chainNetOryCun1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetOryCun1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign oryCun1 chainOryCun1
+
+        track netOryCun1
+        subTrack chainNetOryCun1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign oryCun1 chainOryCun1
 
 track chainNetEquCab2
 compositeTrack on
@@ -1639,14 +2079,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1656,19 +2094,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainEquCab2
+    track chainNetEquCab2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetEquCab2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain equCab2
+    spectrum on
 
-    track netEquCab2
+        track chainEquCab2
+        subTrack chainNetEquCab2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain equCab2
+
+    track chainNetEquCab2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetEquCab2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign equCab2 chainEquCab2
+
+        track netEquCab2
+        subTrack chainNetEquCab2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign equCab2 chainEquCab2
 
 track chainNetEquCab1
 release alpha
@@ -1678,14 +2129,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1695,21 +2144,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainEquCab1
-    release alpha
+    track chainNetEquCab1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetEquCab1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain equCab1
+    spectrum on
 
-    track netEquCab1
-    release alpha
+        track chainEquCab1
+        release alpha
+        subTrack chainNetEquCab1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain equCab1
+
+    track chainNetEquCab1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetEquCab1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign equCab1 chainEquCab1
+
+        track netEquCab1
+        release alpha
+        subTrack chainNetEquCab1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign equCab1 chainEquCab1
 
 track chainNetEchTel1
 compositeTrack on
@@ -1718,14 +2180,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1735,19 +2195,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainEchTel1
+    track chainNetEchTel1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetEchTel1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain echTel1
+    spectrum on
 
-    track netEchTel1
+        track chainEchTel1
+        subTrack chainNetEchTel1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain echTel1
+
+    track chainNetEchTel1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetEchTel1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign echTel1 chainEchTel1
+
+        track netEchTel1
+        subTrack chainNetEchTel1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign echTel1 chainEchTel1
 
 track chainNetDasNov2
 compositeTrack on
@@ -1756,14 +2229,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1773,19 +2244,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainDasNov2
+    track chainNetDasNov2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDasNov2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain dasNov2
+    spectrum on
 
-    track netDasNov2
+        track chainDasNov2
+        subTrack chainNetDasNov2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain dasNov2
+
+    track chainNetDasNov2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDasNov2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign dasNov2 chainDasNov2
+
+        track netDasNov2
+        subTrack chainNetDasNov2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign dasNov2 chainDasNov2
 
 track chainNetDasNov1
 compositeTrack on
@@ -1794,14 +2278,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1811,19 +2293,32 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainDasNov1
+    track chainNetDasNov1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetDasNov1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain dasNov1
+    spectrum on
 
-    track netDasNov1
+        track chainDasNov1
+        subTrack chainNetDasNov1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain dasNov1
+
+    track chainNetDasNov1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetDasNov1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign dasNov1 chainDasNov1
+
+        track netDasNov1
+        subTrack chainNetDasNov1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign dasNov1 chainDasNov1
 
 # release alpha until bosTau4 individual tracks phased out
 track chainNetBosTau4
@@ -1834,14 +2329,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1851,21 +2344,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainBosTau4
-    release alpha
+    track chainNetBosTau4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetBosTau4
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain bosTau4
+    spectrum on
 
-    track netBosTau4
-    release alpha
+        track chainBosTau4
+        release alpha
+        subTrack chainNetBosTau4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain bosTau4
+
+    track chainNetBosTau4Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetBosTau4
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign bosTau4 chainBosTau4
+
+        track netBosTau4
+        release alpha
+        subTrack chainNetBosTau4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign bosTau4 chainBosTau4
 
 # release alpha until bosTau3 individual tracks phased out
 track chainNetBosTau3
@@ -1876,14 +2382,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1893,21 +2397,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainBosTau3
-    release alpha
+    track chainNetBosTau3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetBosTau3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain bosTau3
+    spectrum on
 
-    track netBosTau3
-    release alpha
+        track chainBosTau3
+        release alpha
+        subTrack chainNetBosTau3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain bosTau3
+
+    track chainNetBosTau3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetBosTau3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign bosTau3 chainBosTau3
+
+        track netBosTau3
+        release alpha
+        subTrack chainNetBosTau3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign bosTau3 chainBosTau3
 
 # release alpha until bosTau2 individual tracks phased out
 track chainNetBosTau2
@@ -1918,14 +2435,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1935,21 +2450,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainBosTau2
-    release alpha
+    track chainNetBosTau2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetBosTau2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain bosTau2
+    spectrum on
 
-    track netBosTau2
-    release alpha
+        track chainBosTau2
+        release alpha
+        subTrack chainNetBosTau2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain bosTau2
+
+    track chainNetBosTau2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetBosTau2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign bosTau2 chainBosTau2
+
+        track netBosTau2
+        release alpha
+        subTrack chainNetBosTau2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign bosTau2 chainBosTau2
 
 track chainNetBosTau1
 compositeTrack on
@@ -1958,14 +2486,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -1975,19 +2501,32 @@ chainLinearGap loose
 spectrum on
 html chainNet
 
-    track chainBosTau1
+    track chainNetBosTau1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetBosTau1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain bosTau1
+    spectrum on
 
-    track netBosTau1
+        track chainBosTau1
+        subTrack chainNetBosTau1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain bosTau1
+
+    track chainNetBosTau1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetBosTau1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign bosTau1 chainBosTau1
+
+        track netBosTau1
+        subTrack chainNetBosTau1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign bosTau1 chainBosTau1
 
 # release alpha until canFam2 individual tracks phased out
 track chainNetCanFam2
@@ -1998,14 +2537,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2015,21 +2552,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainCanFam2
-    release alpha
+    track chainNetCanFam2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetCanFam2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain canFam2
+    spectrum on
 
-    track netCanFam2
-    release alpha
+        track chainCanFam2
+        release alpha
+        subTrack chainNetCanFam2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain canFam2
+
+    track chainNetCanFam2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetCanFam2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign canFam2 chainCanFam2
+
+        track netCanFam2
+        release alpha
+        subTrack chainNetCanFam2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign canFam2 chainCanFam2
 
 # release alpha until felCat3 individual tracks phased out
 track chainNetFelCat3
@@ -2040,14 +2590,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 240
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2057,21 +2605,34 @@ chainLinearGap medium
 spectrum on
 html chainNet
 
-    track chainFelCat3
-    release alpha
+    track chainNetFelCat3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetFelCat3
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain felCat3
+    spectrum on
 
-    track netFelCat3
-    release alpha
+        track chainFelCat3
+        release alpha
+        subTrack chainNetFelCat3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain felCat3
+
+    track chainNetFelCat3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetFelCat3
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign felCat3 chainFelCat3
+
+        track netFelCat3
+        release alpha
+        subTrack chainNetFelCat3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign felCat3 chainFelCat3
 
 track chainNetVenter
 compositeTrack on
@@ -2080,35 +2641,46 @@ longLabel J. Craig Venter Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 500
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 
-    track chainVenter1
-    subTrack chainNetVenter off
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    color 100,50,0
-    altColor 255,240,200
-    matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-    matrixHeader A, C, G, T
-    type chain venter1
-    otherDb venter1
+    track chainNetVenterViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    subTrack chainNetVenter
+    spectrum on
 
-    track netVenter1
-    subTrack chainNetVenter off
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign venter1 chainVenter1
-    otherDb venter1
+        track chainVenter1
+        subTrack chainNetVenterViewchain off
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        color 100,50,0
+        altColor 255,240,200
+        matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+        matrixHeader A, C, G, T
+        type chain venter1
+        otherDb venter1
+
+    track chainNetVenterViewnet
+    shortLabel Nets
+    view net
+    visibility dense
+    subTrack chainNetVenter
+
+        track netVenter1
+        subTrack chainNetVenterViewnet off
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign venter1 chainVenter1
+        otherDb venter1
 
 track chainNetHg18
 release alpha
@@ -2118,14 +2690,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 matrixHeader A, C, G, T
@@ -2134,21 +2704,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainHg18
-    release alpha
+    track chainNetHg18Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetHg18
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain hg18
+    spectrum on
 
-    track netHg18
-    release alpha
+        track chainHg18
+        release alpha
+        subTrack chainNetHg18Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain hg18
+
+    track chainNetHg18Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetHg18
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign hg18 chainHg18
+
+        track netHg18
+        release alpha
+        subTrack chainNetHg18Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign hg18 chainHg18
 
 track chainNetHg19
 compositeTrack on
@@ -2157,14 +2740,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 matrixHeader A, C, G, T
@@ -2173,19 +2754,32 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainHg19
+    track chainNetHg19Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetHg19
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain hg19
+    spectrum on
 
-    track netHg19
+        track chainHg19
+        subTrack chainNetHg19Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain hg19
+
+    track chainNetHg19Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetHg19
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign hg19 chainHg19
+
+        track netHg19
+        subTrack chainNetHg19Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign hg19 chainHg19
 
 track chainNetHg17
 release alpha
@@ -2195,14 +2789,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2211,21 +2803,34 @@ chainMinScore 1000
 chainLinearGap loose
 html chainNet
 
-    track chainHg17
-    release alpha
+    track chainNetHg17Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetHg17
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain hg17
+    spectrum on
 
-    track netHg17
-    release alpha
+        track chainHg17
+        release alpha
+        subTrack chainNetHg17Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain hg17
+
+    track chainNetHg17Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetHg17
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign hg17 chainHg17
+
+        track netHg17
+        release alpha
+        subTrack chainNetHg17Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign hg17 chainHg17
 
 track chainNetPanTro2
 release alpha
@@ -2235,14 +2840,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 matrixHeader A, C, G, T
@@ -2251,21 +2854,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainPanTro2
-    release alpha
+    track chainNetPanTro2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetPanTro2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain panTro2
+    spectrum on
 
-    track netPanTro2
-    release alpha
+        track chainPanTro2
+        release alpha
+        subTrack chainNetPanTro2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain panTro2
+
+    track chainNetPanTro2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetPanTro2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign panTro2 chainPanTro2
+
+        track netPanTro2
+        release alpha
+        subTrack chainNetPanTro2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign panTro2 chainPanTro2
 
 track chainNetPanTro1
 release alpha
@@ -2275,14 +2891,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 matrixHeader A, C, G, T
@@ -2291,21 +2905,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainPanTro1
-    release alpha
+    track chainNetPanTro1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetPanTro1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain panTro1
+    spectrum on
 
-    track netPanTro1
-    release alpha
+        track chainPanTro1
+        release alpha
+        subTrack chainNetPanTro1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain panTro1
+
+    track chainNetPanTro1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetPanTro1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign panTro1 chainPanTro1
+
+        track netPanTro1
+        release alpha
+        subTrack chainNetPanTro1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign panTro1 chainPanTro1
 
 track chainNetGorGor1
 compositeTrack on
@@ -2314,14 +2941,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2330,19 +2955,32 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainGorGor1
+    track chainNetGorGor1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetGorGor1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain gorGor1
+    spectrum on
 
-    track netGorGor1
+        track chainGorGor1
+        subTrack chainNetGorGor1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain gorGor1
+
+    track chainNetGorGor1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetGorGor1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign gorGor1 chainGorGor1
+
+        track netGorGor1
+        subTrack chainNetGorGor1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign gorGor1 chainGorGor1
 
 track chainNetPonAbe2
 release alpha
@@ -2352,14 +2990,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 matrixHeader A, C, G, T
@@ -2368,21 +3004,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainPonAbe2
-    release alpha
+    track chainNetPonAbe2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetPonAbe2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain ponAbe2
+    spectrum on
 
-    track netPonAbe2
-    release alpha
+        track chainPonAbe2
+        release alpha
+        subTrack chainNetPonAbe2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain ponAbe2
+
+    track chainNetPonAbe2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetPonAbe2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign ponAbe2 chainPonAbe2
+
+        track netPonAbe2
+        release alpha
+        subTrack chainNetPonAbe2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign ponAbe2 chainPonAbe2
 
 track chainNetTupBel1
 compositeTrack on
@@ -2391,14 +3040,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2407,19 +3054,32 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainTupBel1
+    track chainNetTupBel1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetTupBel1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain tupBel1
+    spectrum on
 
-    track netTupBel1
+        track chainTupBel1
+        subTrack chainNetTupBel1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain tupBel1
+
+    track chainNetTupBel1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetTupBel1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign tupBel1 chainTupBel1
+
+        track netTupBel1
+        subTrack chainNetTupBel1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign tupBel1 chainTupBel1
 
 track chainNetOtoGar1
 compositeTrack on
@@ -2428,14 +3088,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2444,19 +3102,32 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainOtoGar1
+    track chainNetOtoGar1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetOtoGar1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain otoGar1
+    spectrum on
 
-    track netOtoGar1
+        track chainOtoGar1
+        subTrack chainNetOtoGar1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain otoGar1
+
+    track chainNetOtoGar1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetOtoGar1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign otoGar1 chainOtoGar1
+
+        track netOtoGar1
+        subTrack chainNetOtoGar1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign otoGar1 chainOtoGar1
 
 track chainNetCalJac1
 release alpha
@@ -2466,14 +3137,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2482,21 +3151,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainCalJac1
-    release alpha
+    track chainNetCalJac1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetCalJac1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain calJac1
+    spectrum on
 
-    track netCalJac1
-    release alpha
+        track chainCalJac1
+        release alpha
+        subTrack chainNetCalJac1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain calJac1
+
+    track chainNetCalJac1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetCalJac1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign calJac1 chainCalJac1
+
+        track netCalJac1
+        release alpha
+        subTrack chainNetCalJac1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign calJac1 chainCalJac1
 
 track chainNetRheMac2
 release alpha
@@ -2506,14 +3188,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2522,21 +3202,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainRheMac2
-    release alpha
+    track chainNetRheMac2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetRheMac2
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain rheMac2
+    spectrum on
 
-    track netRheMac2
-    release alpha
+        track chainRheMac2
+        release alpha
+        subTrack chainNetRheMac2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain rheMac2
+
+    track chainNetRheMac2Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetRheMac2
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign rheMac2 chainRheMac2
+
+        track netRheMac2
+        release alpha
+        subTrack chainNetRheMac2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign rheMac2 chainRheMac2
 
 track chainNetRheMac1
 release alpha
@@ -2546,14 +3239,12 @@ longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 498
 color 100,50,0
 altColor 255,240,200
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
@@ -2562,21 +3253,34 @@ chainMinScore 3000
 chainLinearGap medium
 html chainNet
 
-    track chainRheMac1
-    release alpha
+    track chainNetRheMac1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
     subTrack chainNetRheMac1
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain rheMac1
+    spectrum on
 
-    track netRheMac1
-    release alpha
+        track chainRheMac1
+        release alpha
+        subTrack chainNetRheMac1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain rheMac1
+
+    track chainNetRheMac1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
     subTrack chainNetRheMac1
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign rheMac1 chainRheMac1
+
+        track netRheMac1
+        release alpha
+        subTrack chainNetRheMac1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        type netAlign rheMac1 chainRheMac1
 
 track chainNetPoodle
 compositeTrack on
@@ -2585,32 +3289,44 @@ longLabel Poodle Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 500
 color 0,0,0
 altColor 255,255,0
 type bed 3
-settingsByView chain:spectrum=on
 sortOrder view=+
 
-    track chainCanFamPoodle1
-    subTrack chainNetPoodle off
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    color 100,50,0
-    altColor 255,240,200
-    matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-    matrixHeader A, C, G, T
-    type chain canFamPoodle1
-    otherDb canFamPoodle1
+    track chainNetPoodleViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    subTrack chainNetPoodle
+    spectrum on
 
-    track netCanFamPoodle1
-    subTrack chainNetPoodle off
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign canFamPoodle1 chainCanFamPoodle1
-    otherDb canFamPoodle1
+        track chainCanFamPoodle1
+        subTrack chainNetPoodleViewchain off
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        color 100,50,0
+        altColor 255,240,200
+        matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+        matrixHeader A, C, G, T
+        type chain canFamPoodle1
+        otherDb canFamPoodle1
+
+    track chainNetPoodleViewnet
+    shortLabel Nets
+    view net
+    visibility dense
+    subTrack chainNetPoodle
+
+        track netCanFamPoodle1
+        subTrack chainNetPoodleViewnet off
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign canFamPoodle1 chainCanFamPoodle1
+        otherDb canFamPoodle1
+

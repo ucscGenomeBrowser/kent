@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../../src/lib/$(MACHTYPE)
+MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = hgChroms.o

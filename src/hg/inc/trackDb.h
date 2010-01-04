@@ -15,7 +15,7 @@
 struct trackDb
 /* This describes an annotation track. */
     {
-    struct trackDb *next;  /* Next in singly linked list. */
+    struct trackDb *next;  /* Next in singly linked list.  Next sibling in tree. */
     char *tableName;	/* Symbolic ID of Track */
     char *shortLabel;	/* Short label displayed on left */
     char *type;	/* Track type: bed, psl, genePred, etc. */
@@ -192,6 +192,9 @@ struct trackDb *trackDbFromRa(char *raFile);
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
 
+char *trackDbLocalSetting(struct trackDb *tdb, char *name);
+/* Return setting from tdb, but *not* any of it's parents. */
+
 struct hash *trackDbHashSettings(struct trackDb *tdb);
 /* Force trackDb to hash up it's settings.  Usually this is just
  * done on demand. Returns settings hash. */
@@ -222,7 +225,7 @@ void trackDbSuperMemberSettings(struct trackDb *tdb);
 /* Set fields in trackDb to indicate this is a member of a
  * supertrack. */
 
-void trackDbSuperSettings(struct trackDb *tdbList);
+void trackDbSuperMarkup(struct trackDb *tdbList);
 /* Get info from supertrack setting.  There are 2 forms:
  * Parent:   'supertrack on [show]'
  * Child:    'supertrack <parent> [vis]
@@ -259,21 +262,25 @@ eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */
 
+#ifdef OLD
 char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name);
 /* Get a trackDb setting at the view level for a multiview composite.
    returns a string that must be freed */
+#endif /* OLD */
 
 char *trackDbSettingByView(struct trackDb *tdb, char *name);
 /* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
    returns a string that must be freed */
 
+#define trackDbSettingClosestToHome(tdb, name) trackDbSetting(tdb, name)
+
+#ifdef OLD
 char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name);
-/* Look for a trackDb setting from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
+/* Look for a trackDb setting from lowest level on up through chain of ancestors. */
+#endif /* OLD */
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
-/* Look for a trackDb setting (or default) from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
+/* Look for a trackDb setting (or default) from lowest level on up through chain of ancestors. */
 
 boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
@@ -308,6 +315,49 @@ void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b
 int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb);
 /* abandons tableless children from a container tdb, such as a composite
    returns count of children that have been abandoned */
+
+struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
+/* Convert a list to a forest - filling in parent and subtrack pointers.
+ * The exact topology of the forest is a little complex due to the
+ * fact there are two "inheritance" systems - the superTrack system
+ * and the subTrack system.  In the superTrack system (which is on it's
+ * way out)  the superTrack's themselves have the tag:
+ *     superTrack on
+ * and the children of superTracks have the tag:
+ *     superTrack parentName
+ * In the subTrack system the parents have the tag:
+ *     compositeTrack on
+ * and the children have the tag:
+ *     subTrack parentName
+ * In this routine the subtracks are removed from the list, and stuffed into
+ * the subtracks lists of their parents.  The highest level parents stay on 
+ * the list.  There can be multiple levels of inheritance.
+ *    For the supertracks the _parents_ are removed from the list.  The only
+ * reference to them in the returned forest is that they are in the parent
+ * field of their children.  The parents of supertracks have no subtracks
+ * after this call currently. */
+
+struct slRef *trackDbListGetRefsToDescendants(struct trackDb *tdbForest);
+/* Return reference list to everything in forest. Do slFreeList when done. */
+
+struct slRef *trackDbListGetRefsToDescendantLeaves(struct trackDb *tdbForest);
+/* Return reference list all leaves in forest. Do slFreeList when done. */
+
+int trackDbRefCmp(const void *va, const void *vb);
+/* Do trackDbCmp on list of references as opposed to actual trackDbs. */
+
+int trackDbCountDescendants(struct trackDb *tdb);
+/* Count the number of tracks in subtracks list and their subtracks too . */
+
+int trackDbCountDescendantLeaves(struct trackDb *tdb);
+/* Count the number of leaves in children list and their children. */
+
+struct trackDb *trackDbCompositeParent(struct trackDb *tdb);
+/* Return closest ancestor who is a composite track. */
+
+struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb);
+/* Look for a parent who is a composite track and return that.  Failing that
+ * just return self. */
 
 #endif /* TRACKDB_H */
 

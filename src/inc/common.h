@@ -858,6 +858,9 @@ char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
 
+char *cloneFirstWord(char *line);
+/* Clone first word in line */
+
 char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */
 

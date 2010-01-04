@@ -111,7 +111,7 @@ gainColor bed
 geneClasses bed genePred
 graphType bed5FloatScore bedGraph
 graphTypeDefault wig
-gridDefault bedGraph wig
+gridDefault bed bedGraph wig
 group *
 groupings expRatio
 hapmapPhase bed
@@ -153,10 +153,10 @@ maxWindowToDraw bam rmsk bed
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
-minGrayLevel broadPeak
+minGrayLevel bed broadPeak
 minLimit *
 minMax chromGraph
-minScore broadPeak narrowPeak
+minScore bed broadPeak narrowPeak
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 nextItemButton *
@@ -171,8 +171,8 @@ origAssembly *
 otherDb *
 otherDbTable bed
 otherOrg netAlign chain
-pValueFilter narrowPeak broadPeak
-pValueFilterLimits narrowPeak broadPeak
+pValueFilter bed narrowPeak broadPeak
+pValueFilterLimits bed narrowPeak broadPeak
 pairEndsByName bam
 pairedEndUrlFormat bed
 pairwise wigMaf
@@ -185,8 +185,8 @@ priority *
 private bed
 pslSequence psl
 pslTable bed
-qValueFilter narrowPeak broadPeak
-qValueFilterLimits narrowPeak broadPeak
+qValueFilter bed narrowPeak broadPeak
+qValueFilterLimits bed narrowPeak broadPeak
 release *
 retroMrnaInfo psl
 sGroup_Chimp wigMaf
@@ -221,8 +221,8 @@ showCdsMaxZoom psl
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
-signalFilter narrowPeak
-signalFilterLimits narrowPeak
+signalFilter bed narrowPeak
+signalFilterLimits bed narrowPeak
 smoothingWindow wig bed5FloatScore bedGraph
 snpSeq bed
 snpSeqFile bed
@@ -256,7 +256,7 @@ transMapGene psl
 transMapInfo psl
 transMapSrc psl
 transMapTypeDesc psl
-transformFunc bedGraph
+transformFunc bed bedGraph
 treeImage wigMaf
 txInfo genePred
 type *
@@ -266,9 +266,10 @@ url2Label bed genePred
 urlLabel *
 urlName genePred psl
 useScore *
+view *
 viewLimits *
-viewLimitsMax bedGraph wig
-viewLimts wig
+viewLimitsMax bed bedGraph wig
+viewUi *
 visibility *
 visibilityViewDefaults *
 wgEncode *

@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.510 2009/12/11 15:14:44 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.511 2010/01/04 19:12:24 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -540,11 +540,13 @@ printf("&nbsp;Trim to triangle<BR>\n");
 
 if (tdbIsComposite(tdb))
     {
-    struct trackDb *subTdb;
     printf("<BR>&nbsp;&nbsp;&nbsp;");
-    slSort(&(tdb->subtracks), trackDbCmp);
-    for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
+    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+    slSort(tdbRefList, trackDbRefCmp);
+    struct slRef *tdbRef;
+    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
+	struct trackDb *subTdb = tdbRef->val;
 	if (hTableExists(database, subTdb->tableName))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->tableName);
@@ -553,6 +555,7 @@ if (tdbIsComposite(tdb))
 		   subTdb->longLabel);
 	    }
 	}
+    slFreeList(&tdbRefList);
     }
 else
     {
@@ -2234,7 +2237,7 @@ struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(database, tdb->tableName) && trackDbSetting(tdb, "compositeTrack") == NULL) // NOTE: tdb if composite, is not yet populated with it's own subtracks!
+    if (!hTableOrSplitExists(database, tdb->tableName) && trackDbLocalSetting(tdb, "compositeTrack") == NULL) // NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
@@ -2521,8 +2524,8 @@ printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 /* Print link for supertrack */
 if (tdbIsSuperTrackChild(tdb))
     {
-    assert((tdb->parentName));
-    struct trackDb *superTdb = hTrackDbForTrack(database, tdb->parentName);
+    struct trackDb *superTdb = tdb->parent;
+    assert(superTdb != NULL);
     if (superTdb)
         {
         char *encodedMapName = cgiEncode(superTdb->tableName);
@@ -2693,7 +2696,9 @@ else if (isCustomTrack(track))
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();
 else
+    {
     tdb = hTrackDbForTrack(database, track);
+    }
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
@@ -2701,7 +2706,6 @@ char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
     /* configured as a supertrack member in trackDb */
-    tdb->parent = hTrackDbForTrack(database, super);    // TODO: Parent will not point to children
     if (tdb->parent)
         {
         /* the supertrack is also configured, so use supertrack defaults */

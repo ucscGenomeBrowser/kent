@@ -1,5 +1,4 @@
-/* tdbRewriteReduceReplaces - Rewrite trackDb system to reduce the amount of replacement records and increase the number of override records.. */
-
+/* tdbRewriteRemoveUnused - Remove stanzas that have no table that exists in any existing database.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,9 +9,10 @@
 #include "portable.h"
 #include "errabort.h"
 #include "ra.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: tdbRewriteReduceReplaces.c,v 1.2 2010/01/04 19:12:39 kent Exp $";
 
+static char const rcsid[] = "$Id: tdbRewriteRemoveUnused.c,v 1.2 2010/01/04 19:12:40 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
@@ -20,11 +20,10 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "tdbRewriteReduceReplaces - Rewrite trackDb system to reduce the amount of replacement records and increase the number of override records.\n"
+  "tdbRewriteRemoveUnused - Remove stanzas that have no table that exists in any existing database.\n"
   "usage:\n"
-  "   tdbRewriteReduceReplaces outDir\n"
+  "   tdbRewriteRemoveUnused outDir\n"
   "options:\n"
-  "   -xxx=XXX\n"
   "   -root=/path/to/trackDb/root/dir\n"
   "Sets the root directory of the trackDb.ra directory hierarchy to be given path. By default\n"
   "this is ~/kent/src/hg/makeDb/trackDb.\n"
@@ -57,6 +56,7 @@ struct raRecord
     int startLineIx, endLineIx; /* Start and end in file for error reporting. */
     struct raFile *file;	/* Pointer to file we are in. */
     char *endComments;		/* Some comments that may follow record. */
+    boolean seenInDb;		/* True if associated table exists. */
     };
 
 struct raFile
@@ -271,7 +271,7 @@ for (hel = hashLookup(level->trackHash, parentKey); hel != NULL; hel = hashLooku
     {
     struct raRecord *parent = hel->val;
     int distance = record->startLineIx - parent->startLineIx;
-    if (distance > 0)
+    if (distance < 0)
         distance = BIGNUM/4 - distance;
     if (record->file != parent->file)
         distance = BIGNUM/2; 
@@ -319,9 +319,18 @@ for (hel = firstEl; hel != NULL; hel = hashLookupNext(hel))
         return r;
     }
 
-/* If given record hash no defined release, return first match regardless of release. */
+/* If given record has no defined release, return first match regardless of release. */
 if (release == NULL && firstEl != NULL)
     return firstEl->val;
+
+/* Match to records that have no release defined. */
+for (hel = firstEl; hel != NULL; hel = hashLookupNext(hel))
+    {
+    struct raRecord *r = hel->val;
+    struct raTag *releaseTag = raRecordFindTag(r, "release");
+    if (releaseTag == NULL)
+        return r;
+    }
 
 return NULL;
 }
@@ -340,124 +349,52 @@ for (parent = level->parent; parent != NULL; parent = parent->parent)
 return parentRecord;
 }
 
-boolean sameTagInOtherRecord(struct raTag *tag, struct raRecord *r)
-/* Return TRUE if tag exists in record r, and has same value in r. */
+struct raRecord *findRecordInLevelOrLevelsUp(struct raLevel *level, char *key, char *release)
+/* Find record matching key and compatible with release in level or ancestral levels.  */
 {
-struct raTag *t = raRecordFindTag(r, tag->name);
-if (t == NULL)
-    return FALSE;
-if (!sameString(t->val, tag->val))
-    return FALSE;
-return TRUE;
-}
-
-boolean canTurnToOverride(struct raRecord *parent, struct raRecord *child, struct dyString *dy)
-/* If child has all the fields that parent has, then can express it as override of parent. */
-{
-struct raTag *t;
-boolean ok = TRUE;
-for (t = parent->tagList; t != NULL; t = t->next)
+struct raLevel *generation;
+for (generation = level; generation != NULL; generation = generation->parent)
     {
-    if (!raRecordFindTag(child, t->name))
-	{
-	if (dy->stringSize != 0)
-	    dyStringAppendC(dy, ',');
-	dyStringAppend(dy, t->name);
-	ok = FALSE;
-	}
+    struct raRecord *record = findRecordAtLevel(generation, key, release);
+    if (record != NULL)
+        return record;
     }
-return ok;
+return NULL;
 }
 
-boolean canSwallow(struct raRecord *parent, struct raRecord *child)
-/* Return TRUE if parent has all records in child, and has the same value for them. */
+void raRecordWriteTags(struct raRecord *r, FILE *f)
+/* Write out tags in record to file, including preceding spaces. */
 {
+/* Write all tags. */
 struct raTag *t;
-for (t = child->tagList; t != NULL; t = t->next)
-    {
-    struct raTag *tParent = raRecordFindTag(parent, t->name);
-    if (tParent == NULL)
-        return FALSE;
-    if (!sameString(tParent->val, t->val))
-        return FALSE;
-    }
-return TRUE;
+for (t = r->tagList; t != NULL; t = t->next)
+    fputs(t->text, f);
 }
 
-void rewriteTrack(struct raLevel *level, struct raRecord *r, FILE *f, struct lm *lm)
+boolean tableExistsInAnyDb(struct fileInfo *dbList, struct raRecord *r)
+/* Return TRUE if record exists in any database on list. */
+{
+struct fileInfo *db;
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (hTableOrSplitExists(db->name, r->key))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void rewriteTrack(struct raLevel *level, struct raFile *file, 
+	struct raRecord *r, FILE *f, struct lm *lm)
 /* Write one track record.  */
 {
-struct raTag *t = r->tagList;
-char *tagStart = firstTagInText(t->text);
-char *dupeVal = cloneString(t->val);
-char *words[8];
-int wordCount;
-wordCount = chopLine(dupeVal, words);
-if (wordCount > 2)
-    recordAbort(r, "too many words in track line");
-char *key = words[0];
-assert(sameString(key, r->key));
-char *mergeOp = (wordCount > 1 ? words[1] : NULL);
-struct raRecord *parentRecord = findRecordInParentFileLevel(level, r);
-if (parentRecord != NULL)
+if (r->seenInDb)
     {
-    if (mergeOp == NULL)
-	mergeOp = "replace";
-    }
-
-if (parentRecord != NULL && sameString(mergeOp, "replace"))
-    {
-    struct dyString *replaceReasons = dyStringNew(0);
-    if (canTurnToOverride(parentRecord, r, replaceReasons))
-	{
-	if (canSwallow(parentRecord, r))
-	    {
-	    if (verboseLevel() >= 2)
-	        recordWarn(r, "swallowing record that is same as in parent dir");
-	    }
-	else
-	    {
-	    mustWrite(f, t->text, tagStart - t->text);
-	    fprintf(f, "track %s override\n", r->key);
-	    if (verboseLevel() >= 2)
-	        recordWarn(r, "turning replace record into override");
-	    for (t = t->next; t != NULL; t = t->next)
-		{
-		if (!sameTagInOtherRecord(t, parentRecord))
-		    fputs(t->text, f);
-		}
-	    }
-	}
-    else
-	{
-	/* Print out first line of stanza including blank lines before and comments. */
-	fputs(t->text, f);
-
-	/* Go to next line and attempt to indent to that same level. */
-	t = t->next;
-	if (t != NULL)
-	    {
-	    int spaceCount = skipLeadingSpaces(t->text) - t->text;
-	    mustWrite(f, t->text, spaceCount);
-	    }
-
-	/* Write out comment making replacement explicit. */
-	fprintf(f, "#replaces record %s in parent dir missing/extra %s\n", r->key, 
-		replaceReasons->string);
-
-	/* Writing out rest of stanza. */
-	for (; t != NULL; t = t->next)
-	    fputs(t->text, f);
-	}
-    }
-else
-    {
-    for (; t != NULL; t = t->next)
-	fputs(t->text, f);
+    raRecordWriteTags(r, f);
     }
 }
 
-void rewriteFile(struct raLevel *level, struct raFile *file, char *outName, struct lm *lm)
+void rewriteFile(struct raLevel *level, struct raFile *file, char *outName, 
+	struct lm *lm)
 /* Rewrite file to outName, consulting symbols in parent. */
 {
 FILE *f = mustOpen(outName, "w");
@@ -468,7 +405,7 @@ for (r = file->recordList; r != NULL; r = r->next)
     struct raTag *t = r->tagList;
     if (sameString(t->name, "track"))
         {
-	rewriteTrack(level, r, f, lm);
+	rewriteTrack(level, file, r, f, lm);
 	}
     else
 	{
@@ -482,12 +419,71 @@ fputs(file->endSpace, f);
 carefulClose(&f);
 }
 
-void rewriteLevel(struct raLevel *level, char *outDir, struct lm *lm)
+void markSelfAndParentsAtAllLevels(struct raRecord *r, struct raLevel *startLevel)
+/* Set seenInDb field. See if track has a parent (supertrack or subtrack system).  
+ * in which case will call self to do same on parent. */
+{
+r->seenInDb = TRUE;
+
+/* Get sub tab. */
+struct raTag *subTag = raRecordFindTag(r, "subTrack");
+
+/* Get super tag if it points to a parent. */
+struct raTag *superTag = raRecordFindTag(r, "superTrack");
+if (superTag && sameWord(superTag->val, "on"))
+    superTag = NULL;
+
+/* If have one or the other then parse out name and call self on parent (in all releases) */
+if (superTag != NULL || subTag != NULL)
+     {
+     /* Do some error checking and figure out parent's name. */
+     if (superTag != NULL && subTag != NULL)
+         recordAbort(r, "%s has parents in both subTrack and superTrack systems, can't cope.",
+	 	r->key);
+     struct raTag *parentTag = (superTag != NULL ? superTag : subTag);
+     char *parentName = cloneFirstWord(parentTag->val);
+
+     /* We may have parents at any level above us as well as our own. */
+     struct raLevel *level;
+     for (level = startLevel; level != NULL; level = level->parent)
+         {
+	 struct hashEl *hel;
+	 /* Might have multiple parents in one level because of releases.  A better program
+	  * might distinguish between them, but this one just marks them both. */
+	 for (hel = hashLookup(level->trackHash, parentName); hel != NULL; hel=hashLookupNext(hel))
+	     {
+	     struct raRecord *parent = hel->val;
+	     if (!parent->seenInDb)
+		 markSelfAndParentsAtAllLevels(parent, startLevel);
+	     }
+	 }
+     }
+}
+
+void rewriteLevel(struct raLevel *level, char *outDir, struct fileInfo *dbList, struct lm *lm)
 /* Rewrite files in level. */
 {
 struct raFile *file;
 if (level->fileList != NULL)
     makeDirsOnPath(outDir);   
+
+/* Make pass that marks used records. */
+for (file = level->fileList; file != NULL; file = file->next)
+    {
+    struct raRecord *r;
+    for (r = file->recordList; r != NULL; r = r->next)
+        {
+	if (r->key)
+	    {
+	    if (tableExistsInAnyDb(dbList, r))
+		{
+		markSelfAndParentsAtAllLevels(r, level);
+		}
+	    }
+	}
+    }
+
+/* Make second pass that writes out used records. */
 for (file = level->fileList; file != NULL; file = file->next)
     {
     char outName[FILENAME_LEN], outExtension[FILEEXT_LEN];
@@ -503,12 +499,14 @@ void doRewrite(char *outDir, char *inDir, char *trackFile)
 {
 /* Make list and hash of root dir */
 struct lm *rootLm = lmInit(0);
+struct fileInfo *allDbList = NULL;
 char rootName[PATH_LEN];
 safef(rootName, sizeof(rootName), "%s/%s", inDir, trackFile);
 struct raLevel *rootLevel = raLevelRead(rootName, rootLm);
 
 /* Make subdirectory list. */
 struct fileInfo *org, *orgList = listDirX(inDir, "*", FALSE);
+uglyf("orgList has %d elements\n", slCount(orgList));
 for (org = orgList; org != NULL; org = org->next)
     {
     if (org->isDir)
@@ -521,7 +519,6 @@ for (org = orgList; org != NULL; org = org->next)
 	safef(inOrgFile, sizeof(inOrgFile), "%s/%s", inOrgDir, trackFile);
 	struct raLevel *orgLevel = raLevelRead(inOrgFile, orgLm);
 	orgLevel->parent = rootLevel;
-	rewriteLevel(orgLevel, outOrgDir, orgLm);
 	struct fileInfo *db, *dbList = listDirX(inOrgDir, "*", FALSE);
 	for (db = dbList; db != NULL; db = db->next)
 	    {
@@ -534,22 +531,30 @@ for (org = orgList; org != NULL; org = org->next)
 		char inDbFile[PATH_LEN];
 		safef(inDbFile, sizeof(inDbFile), "%s/%s", inDbDir, trackFile);
 		struct raLevel *dbLevel = raLevelRead(inDbFile, dbLm);
+		/* Reduce db to a list of one temporarily and call rewrite level. */
+		struct fileInfo *next = db->next;
+		db->next = NULL;
 		dbLevel->parent = orgLevel;
-		rewriteLevel(dbLevel, outDbDir, dbLm);
+		rewriteLevel(dbLevel, outDbDir, db, dbLm);
+		db->next = next;
 		hashFree(&dbLevel->trackHash);
 		lmCleanup(&dbLm);
 		}
 	    }
+	rewriteLevel(orgLevel, outOrgDir, dbList, orgLm);
+	allDbList = slCat(dbList, allDbList);
 	hashFree(&orgLevel->trackHash);
 	lmCleanup(&orgLm);
 	}
     }
+rewriteLevel(rootLevel, outDir, allDbList, rootLm);
 hashFree(&rootLevel->trackHash);
 lmCleanup(&rootLm);
 }
 
-void tdbRewriteReduceReplaces(char *outDir)
-/* tdbRewriteReduceReplaces - Rewrite trackDb system to reduce the amount of replacement records and increase the number of override records.. */
+
+void tdbRewriteRemoveUnused(char *outDir)
+/* tdbRewriteRemoveUnused - Remove stanzas that have no table that exists in any existing database.. */
 {
 doRewrite(outDir, clRoot, "trackDb.ra");
 }
@@ -558,9 +563,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-clRoot = simplifyPathToDir(optionVal("root", clRoot));
 if (argc != 2)
     usage();
-tdbRewriteReduceReplaces(argv[1]);
+clRoot = simplifyPathToDir(optionVal("root", clRoot));
+tdbRewriteRemoveUnused(argv[1]);
 return 0;
 }

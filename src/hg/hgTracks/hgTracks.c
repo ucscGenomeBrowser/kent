@@ -46,8 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1616 2009/12/21 22:43:33 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1617 2010/01/04 19:12:24 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -354,12 +353,11 @@ if (isWithCenterLabels(track))
 if (tdbIsComposite(track->tdb))
     {
     struct track *subtrack;
-    for (subtrack = track->subtracks;  subtrack != NULL;
-     subtrack = subtrack->next)
-    {
-    if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
-        y += fontHeight;
-    }
+    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+	{
+	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
+	    y += fontHeight;
+	}
     }
 return y;
 }
@@ -1273,7 +1271,7 @@ if (track->limitedVis != tvHide)
         int trackPastTabWidth = tl.picWidth - trackPastTabX;
         int fontHeight = mgFontLineHeight(font);
         int insideHeight = fontHeight-1;
-        boolean toggleDone = FALSE;
+	boolean toggleDone = FALSE;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
@@ -1287,7 +1285,7 @@ if (track->limitedVis != tvHide)
                 toggleDone = TRUE;
                 }
             }
-        if(!toggleDone)
+        if (!toggleDone)
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
         y += fontHeight;
@@ -1533,24 +1531,27 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 enum trackVisibility vis = subtrack->limitedVis == tvHide ?
                            subtrack->visibility :
                            tvMin(subtrack->visibility,subtrack->limitedVis);
-
-if(tdbIsCompositeChild(subtrack->tdb))
+struct trackDb *tdb = subtrack->tdb;
+if(tdbIsCompositeChild(tdb))
     {
-    char *stView;
-    // If the composite track has "view" based drop downs, set visibility based upon those
-    if(subgroupFind(subtrack->tdb,"view",&stView))
-        {
-        int len = strlen(subtrack->tdb->parent->tableName) + strlen(stView) + 10;
-        char *ddName = needMem(len);
-        safef(ddName,len,"%s.%s.vis",subtrack->tdb->parent->tableName,stView);
+    char *viewName = NULL;
+    if (subgroupFind(tdb,"view",&viewName))
+	{
+	struct trackDb *parent = trackDbCompositeParent(tdb);
+	assert(parent != NULL);
+        int len = strlen(parent->tableName) + strlen(viewName) + 10;
+
+	// Create the view dropdown var name.  This needs to have the view name surrounded by dots 
+	// in the middle for the javascript to work.
+	char ddName[len];
+        safef(ddName,len,"%s.%s.vis", parent->tableName,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
             vis = hTvFromString(fromParent);
         else
-            vis = visCompositeViewDefault(subtrack->tdb->parent,stView);
-        freeMem(ddName);
-        subgroupFree(&stView);
-        }
+            vis = visCompositeViewDefault(parent,viewName);
+        subgroupFree(&viewName);
+	}
     }
 return vis;
 }
@@ -1826,9 +1827,11 @@ int sliceOffsetX[stMaxSliceTypes];
 int sliceHeight        = 0;
 int sliceOffsetY       = 0;
 char *rulerTtl = NULL;
-if(theImgBox)  // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started prior to this in doTrackForm()
+if(theImgBox)  
+// theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started 
+// prior to this in doTrackForm()
     {
-    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
+    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2115,7 +2118,11 @@ if (withLeftLabels && psOutput == NULL)
             if (track->hasUi)
                 {
                 if(tdbIsCompositeChild(track->tdb))
-                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1), track->tdb->parent->tableName, track->tdb->parent->shortLabel, track->mapName);
+		    {
+		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
+                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1), 
+		    	parent->tableName, parent->shortLabel, track->mapName);
+		    }
                 else
                     mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h, track->mapName, track->shortLabel, track->mapName);
                 }
@@ -2620,27 +2627,30 @@ for (hel = hels; hel != NULL; hel = hel->next)
     char *table = hel->val;
     /* check non-subtrack. */
     if (sameString(track->tdb->tableName, table))
-    {
-    track->visibility = tvFull;
-    track->tdb->visibility = tvFull;
-    cartSetString(cart, track->tdb->tableName, "full");
-    }
+	{
+	track->visibility = tvFull;
+	track->tdb->visibility = tvFull;
+	cartSetString(cart, track->tdb->tableName, "full");
+	}
     else if (track->tdb->subtracks != NULL)
-    {
-    for (subtrack = track->tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        {
-        if (sameString(subtrack->tableName, table))
-            {
-            char selName[SMALLBUF];
-            track->visibility = tvFull;
-            cartSetString(cart, track->tdb->tableName, "full");
-            track->tdb->visibility = tvFull;
-            subtrack->visibility = tvFull;
-            safef(selName, sizeof(selName), "%s_sel", table);
-            cartSetBoolean(cart, selName, TRUE);
-            }
-        }
-    }
+	{
+	struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(track->tdb->subtracks);
+	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+	    {
+	    subtrack = tdbRef->val;
+	    if (sameString(subtrack->tableName, table))
+		{
+		char selName[SMALLBUF];
+		track->visibility = tvFull;
+		cartSetString(cart, track->tdb->tableName, "full");
+		track->tdb->visibility = tvFull;
+		subtrack->visibility = tvFull;
+		safef(selName, sizeof(selName), "%s_sel", table);
+		cartSetBoolean(cart, selName, TRUE);
+		}
+	    }
+	slFreeList(&tdbRefList);
+	}
     }
 hashElFreeList(&hels);
 }
@@ -2663,7 +2673,7 @@ else
 void loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
 {
-struct trackDb *tdb, *tdbList = NULL;
+struct trackDb *tdb, *next, *tdbList = NULL;
 struct track *track;
 TrackHandler handler;
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
@@ -2672,14 +2682,16 @@ if(trackNameFilter == NULL)
 else
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 tdbSortPrioritiesFromCart(cart, &tdbList);
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+for (tdb = tdbList; tdb != NULL; tdb = next)
     {
+    next = tdb->next;
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->tableName))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    if (slCount(tdb->subtracks) != 0) {
+    if (slCount(tdb->subtracks) != 0) 
+        {
         tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
         makeCompositeTrack(track, tdb);
         }
@@ -2690,7 +2702,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             handler(track);
         }
     if (cgiVarExists("hgGenomeClick"))
-    makeHgGenomeTrackVisible(track);
+	makeHgGenomeTrackVisible(track);
     if (track->loadItems == NULL)
         warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->tableName);
     else if (track->drawItems == NULL)
@@ -3904,25 +3916,25 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
     if (cgiOptionalString("hideTracks"))
-    {
-    s = cgiOptionalString(track->mapName);
-    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
-            {
-            cartSetString(cart, track->mapName, s);
-            }
-    }
+	{
+	s = cgiOptionalString(track->mapName);
+	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+		{
+		cartSetString(cart, track->mapName, s);
+		}
+	}
     if (s != NULL)
-    track->visibility = hTvFromString(s);
+	track->visibility = hTvFromString(s);
     if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
-    {
-    struct trackDb *parent = track->tdb->parent;
-    char *parentShow = NULL;
-    if (parent)
-        parentShow = cartUsualString(cart, parent->tableName,
-                     parent->isShow ? "show" : "hide");
-    if (!parent || sameString(parentShow, "show"))
-        compositeTrackVis(track);
-    }
+	{
+	struct trackDb *parent = track->tdb->parent;
+	char *parentShow = NULL;
+	if (parent)
+	    parentShow = cartUsualString(cart, parent->tableName,
+			 parent->isShow ? "show" : "hide");
+	if (!parent || sameString(parentShow, "show"))
+	    compositeTrackVis(track);
+	}
     }
 if (measureTiming)
     uglyTime("getTrackList");
@@ -4221,36 +4233,36 @@ for (track = trackList; track != NULL; track = track->next)
     /* remove cart priority variables if they are set
        to the default values in the trackDb */
     if(!hTrackOnChrom(track->tdb, chromName))
-    {
-    track->limitedVis = tvHide;
-    track->limitedVisSet = TRUE;
-    }
+	{
+	track->limitedVis = tvHide;
+	track->limitedVisSet = TRUE;
+	}
     else if (track->visibility != tvHide)
-    {
-    if (measureTiming)
-        lastTime = clock1000();
-    checkMaxWindowToDraw(track);
-    track->loadItems(track);
+	{
+	if (measureTiming)
+	    lastTime = clock1000();
+	checkMaxWindowToDraw(track);
+	track->loadItems(track);
 
-    if (measureTiming)
-        {
-        thisTime = clock1000();
-        track->loadTime = thisTime - lastTime;
-        }
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    track->loadTime = thisTime - lastTime;
+	    }
 #ifdef CONTEXT_MENU
-        trackJson(trackDbJson, track, trackDbJsonCount++);
-        if (trackIsCompositeWithSubtracks(track))
-            {
-            struct track *subtrack;
-            for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-                {
-                // isSubtrackVisible is causing a problem in panTro2
-                if (isSubtrackVisible(subtrack))
-                    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
-                }
-            }
+	trackJson(trackDbJson, track, trackDbJsonCount++);
+	if (trackIsCompositeWithSubtracks(track))
+	    {
+	    struct track *subtrack;
+	    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+		{
+		// isSubtrackVisible is causing a problem in panTro2
+		if (isSubtrackVisible(subtrack))
+		    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
+		}
+	    }
 #endif
-        }
+	}
     }
 
 #ifdef CONTEXT_MENU
@@ -4391,7 +4403,7 @@ if (!hideControls)
     hButton("hgt.jump", "jump");
     hOnClickButton(clearButtonJavascript,"clear");
     hPrintf(" size <span id='size'>%s</span> bp. ", buf);
-        hButton("hgTracksConfigPage", "configure");
+    hButton("hgTracksConfigPage", "configure");
 #define SURVEY 1
 #ifdef SURVEY
         //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");

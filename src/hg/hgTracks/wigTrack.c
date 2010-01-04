@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.100 2009/12/17 23:04:35 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.101 2010/01/04 19:12:26 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -774,8 +774,6 @@ if(colorTrack != NULL)
 return colorArray;
 }
 
-double uglyFoo;
-
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
@@ -808,8 +806,8 @@ for (x1 = 0; x1 < width; ++x1)
     Color drawColor = colorArray[x1];
     if (drawColor != oldDrawColor)
         {
-	mediumColor = lighterColor(hvg, drawColor);
-	lightColor = lighterColor(hvg, mediumColor);
+	mediumColor = somewhatLighterColor(hvg, drawColor);
+	lightColor = somewhatLighterColor(hvg, mediumColor);
 	oldDrawColor = drawColor;
         }
 

@@ -11,7 +11,7 @@
 #include "customTrack.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.32 2009/08/12 21:20:26 galt Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.33 2010/01/04 19:12:27 kent Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -125,10 +125,11 @@ if ((winEnd - winStart) < MAX_WINDOW_ALLOW_STATS)
      *	line, or the actual range in this data.  If there is a good
      *	actual range in the data, use that instead
      */
-    if (hRange > 0.0) {
+    if (hRange > 0.0) 
+    	{
 	if (wds->stats->dataRange != 0)
 	    hRange = 0.0;
-    }
+	}
 
     /*	If we have a valid range, use a specified 20 bin histogram
      *	NOTE: pass 21 as binCount to get a 20 bin histogram

@@ -13,7 +13,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.25 2009/12/10 07:13:56 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.26 2010/01/04 19:12:40 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -21,6 +21,9 @@ static boolean clStrict = FALSE;	/* If set only return tracks with actual tables
 static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
 static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 static char *clRewrite = NULL;		/* Rewrite to given directory. */
+static boolean clNoCompSub = FALSE;	/* If set don't do subtrack inheritence of fields. */
+
+boolean uglyOne;
 
 void usage()
 /* Explain usage and exit. */
@@ -51,10 +54,9 @@ errAbort(
 "there's problems.\n"
 "   -strict\n"
 "Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist.\n"
-"   -alpha\n"
-"Do checking on release alpha (and not release beta) tracks\n"
-"   -noBlank\n"
-"Don't print out blank lines separating records"
+"   -alpha Do checking on release alpha (and not release beta) tracks\n"
+"   -noBlank  Don't print out blank lines separating records"
+"   -noCompSub Subtracks don't inherit fields from parents\n"
 );
 }
 
@@ -66,6 +68,7 @@ static struct optionSpec options[] = {
    {"alpha", OPTION_BOOLEAN},
    {"noBlank", OPTION_BOOLEAN},
    {"rewrite", OPTION_STRING},
+   {"noCompSub", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -568,6 +571,8 @@ static struct tdbRecord *findParent(struct tdbRecord *rec,
  * match parents and children from the same release if possible.  Our
  * strategy is to just ignore records from the wrond release. */
 {
+if (clNoCompSub)
+    return NULL;
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
 if (parentField == NULL)
     return NULL;
@@ -746,25 +751,28 @@ for (rec = list; rec != NULL; rec = rec->next)
 		    }
 		}
 	    }
-	if (view != NULL)
+	if (!clNoCompSub)
 	    {
-	    struct slPair *setting;
-	    for (setting = view->val; setting != NULL; setting = setting->next)
-	        {
-		struct tdbField *oldField = tdbRecordField(rec, setting->name);
-		if (oldField == NULL)
+	    if (view != NULL)
+		{
+		struct slPair *setting;
+		for (setting = view->val; setting != NULL; setting = setting->next)
 		    {
-		    struct tdbField *newField;
-		    lmAllocVar(lm, newField);
-		    newField->name = lmCloneString(lm, setting->name);
-		    newField->val = lmCloneString(lm, setting->val);
-		    slAddTail(&rec->fieldList, newField);
+		    struct tdbField *oldField = tdbRecordField(rec, setting->name);
+		    if (oldField == NULL)
+			{
+			struct tdbField *newField;
+			lmAllocVar(lm, newField);
+			newField->name = lmCloneString(lm, setting->name);
+			newField->val = lmCloneString(lm, setting->val);
+			slAddTail(&rec->fieldList, newField);
+			}
 		    }
 		}
-	    }
-	else 
-	    {
-	    verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+	    else 
+		{
+		verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
+		}
 	    }
 	}
 
@@ -772,7 +780,8 @@ for (rec = list; rec != NULL; rec = rec->next)
     struct tdbRecord *parent;
     for (parent = rec->parent; parent != NULL; parent = parent->parent)
 	{
-	mergeParentRecord(rec, parent, lm);
+	if (!clNoCompSub)
+	    mergeParentRecord(rec, parent, lm);
 	}
     }
 }
@@ -860,28 +869,39 @@ for (child = record->children; child != NULL; child = child->olderSibling)
 return FALSE;
 }
 
-static struct tdbRecord *closestParentInFile(struct slRef *allParentRefs, 
-	struct tdbFilePos *childPos)
-/* Find parent that comes closest to (but before) childPos. */
+static int countAncestors(struct tdbRecord *r)
+/* Return 0 if has no parent, 1 if has a parent, 2 if it has a grandparent, etc. */
 {
-struct slRef *parentRef;
-struct tdbRecord *closestParent = NULL;
+int count = 0;
+struct tdbRecord *p;
+for (p = r->parent; p != NULL; p = p->parent)
+    count += 1;
+return count;
+}
+
+static struct tdbRecord *closestTdbAboveLevel(struct tdbRecord *tdbList, 
+	struct tdbFilePos *childPos, int parentDepth)
+/* Find parent at given depth that comes closest to (but before) childPos. */
+{
+struct tdbRecord *parent, *closestParent = NULL;
 int closestDistance = BIGNUM;
-for (parentRef = allParentRefs; parentRef != NULL; parentRef = parentRef->next)
+for (parent = tdbList; parent != NULL; parent = parent->next)
     {
-    struct tdbRecord *parent = parentRef->val;
-    struct tdbFilePos *pos;
-    for (pos = parent->posList; pos != NULL; pos = pos->next)
-        {
-	if (sameString(pos->fileName, childPos->fileName))
+    if (countAncestors(parent) <= parentDepth)
+	{
+	struct tdbFilePos *pos;
+	for (pos = parent->posList; pos != NULL; pos = pos->next)
 	    {
-	    int distance = childPos->startLineIx - pos->startLineIx;
-	    if (distance > 0)
-	        {
-		if (distance < closestDistance)
+	    if (sameString(pos->fileName, childPos->fileName))
+		{
+		int distance = childPos->startLineIx - pos->startLineIx;
+		if (distance > 0)
 		    {
-		    closestDistance = distance;
-		    closestParent = parent;
+		    if (distance < closestDistance)
+			{
+			closestDistance = distance;
+			closestParent = parent;
+			}
 		    }
 		}
 	    }
@@ -890,11 +910,13 @@ for (parentRef = allParentRefs; parentRef != NULL; parentRef = parentRef->next)
 return closestParent;
 }
 
-static void checkChildUnderNearestParent(struct slRef *allParentRefs,
-	struct tdbRecord *parent, struct tdbRecord *child)
+static void checkChildUnderNearestParent(struct tdbRecord *recordList, struct tdbRecord *child)
 /* Make sure that parent record occurs before child, and that indeed it is the
  * closest parent before the child. */
 {
+struct tdbRecord *parent = child->parent;
+int parentDepth = countAncestors(parent);
+
 /* We do the check for each file the child is in */
 struct tdbFilePos *childFp, *parentFp;
 for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
@@ -909,7 +931,8 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 		         "Child (%s) at line %d, parent (%s) at line %d",
 			 childFp->fileName, child->key, childFp->startLineIx, 
 			 parent->key, parentFp->startLineIx);
-	    struct tdbRecord *closestParent = closestParentInFile(allParentRefs, childFp);
+	    struct tdbRecord *closestParent = closestTdbAboveLevel(recordList, childFp, 
+	    	parentDepth);
 	    assert(closestParent != NULL);
 	    if (closestParent != parent)
 	        errAbort("%s comes between parent (%s) and child (%s) in %s\n"
@@ -952,19 +975,11 @@ for (record = recordList; record != NULL; record = record->next)
 	}
     }
 
-/* Create parent list, which we'll use for various child/parent checks. */
-struct slRef *parentRefList = NULL;
-for (record = recordList; record != NULL; record = record->next)
-    {
-    if (record->children != NULL)
-        refAdd(&parentRefList, record);
-    }
-
 /* Additional child/parent checks. */
 for (record = recordList; record != NULL; record = record->next)
     {
     if (record->parent != NULL)
-        checkChildUnderNearestParent(parentRefList, record->parent, record);
+        checkChildUnderNearestParent(recordList, record);
     }
 }
 
@@ -1275,6 +1290,7 @@ clStrict = optionExists("strict");
 clAlpha = optionExists("alpha");
 clNoBlank = optionExists("noBlank");
 clRewrite = optionVal("rewrite", clRewrite);
+clNoCompSub = optionExists("noCompSub");
 if (clRewrite)
     {
     doRewrite(clRewrite, clRoot, "trackDb.ra", "visibility.ra", "priority.ra");

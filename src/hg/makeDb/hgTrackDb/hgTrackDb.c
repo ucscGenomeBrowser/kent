@@ -13,7 +13,8 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.55 2009/11/25 00:58:02 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.56 2010/01/04 19:12:30 kent Exp $";
+
 
 void usage()
 /* Explain usage and exit. */
@@ -79,163 +80,142 @@ static struct trackDb *trackDbListFromHash(struct hash *tdHash)
 /* build a list of the tracks in hash.  List will be threaded through
  * the entries. */
 {
-struct trackDb *tdList = NULL;
+struct trackDb *tdbList = NULL;
 struct hashCookie cookie = hashFirst(tdHash);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
-    slSafeAddHead(&tdList, (struct trackDb*)hel->val);
-return tdList;
+    slSafeAddHead(&tdbList, (struct trackDb*)hel->val);
+return tdbList;
 }
 
-static void pruneStrict(struct trackDb **tdListPtr, char *database)
-/* purge unused trackDb entries */
+static struct trackDb *pruneStrict(struct trackDb *tdbList, char *db)
+/* Remove tracks without data.  For parent tracks data in any child is sufficient to keep
+ * them alive. */
 {
-struct trackDb *td;
-struct trackDb *strictList = NULL;
-struct hash *compositeHash = hashNew(0);
-struct trackDb *compositeList = NULL;
-struct hash *superHash = hashNew(0);
-struct trackDb *superList = NULL;
-char *setting, *words[1];
-
-while ((td = slPopHead(tdListPtr)) != NULL)
+struct trackDb *newList = NULL, *tdb, *next;
+for (tdb = tdbList; tdb != NULL; tdb = next)
     {
-    if (td->overrides != NULL)
+    next = tdb->next;
+    if (tdb->subtracks != NULL)
+	{
+	tdb->subtracks = pruneStrict(tdb->subtracks, db);
+	}
+    if (tdb->subtracks != NULL)
         {
-        // override entry, just keep it in the list for now
-        slAddHead(&strictList, td);
-        }
-    else if (hTableOrSplitExists(database, td->tableName))
+	slAddHead(&newList, tdb);
+	}
+    else if (hTableOrSplitExists(db, tdb->tableName))
         {
-        verbose(2, "%s table exists\n", td->tableName);
-        slAddHead(&strictList, td);
-        if ((setting = trackDbSetting(td, "subTrack")) != NULL)
-            {
-            /* note subtracks with tables so we can later add
-             * the composite trackdb */
-            chopLine(cloneString(setting), words);
-            hashStore(compositeHash, words[0]);
-            }
-        else if ((setting = trackDbSetting(td, "superTrack")) != NULL)
-            {
-            /* note super track member tracks with tables so we can later add
-             * the super track trackdb */
-            chopLine(cloneString(setting), words);
-            hashStore(superHash, words[0]);
-            }
-        }
-    else
-        {
-        if (trackDbSetting(td, "compositeTrack"))
-            {
-            slAddHead(&compositeList, td);
-            }
-        else if (sameOk("on", trackDbSetting(td, "superTrack")))
-            {
-            slAddHead(&superList, td);
-            }
-        else
-            {
-            verbose(2, "%s missing\n", td->tableName);
-            trackDbFree(&td);
-            }
-        }
+	slAddHead(&newList, tdb);
+	}
     }
-/* add all composite tracks that have a subtrack with a table */
-while ((td = slPopHead(&compositeList)) != NULL)
-    {
-    if (hashLookup(compositeHash, td->tableName))
-        {
-        slAddHead(&strictList, td);
-        if ((setting = trackDbSetting(td, "superTrack")) != NULL)
-            {
-            /* note that this is part of a super track so the
-             * super track will be added to the strict list */
-            chopLine(cloneString(setting), words);
-            hashStore(superHash, words[0]);
-            }
-        }
-    }
-hashFree(&compositeHash);
-
-/* add all super tracks that have a member (simple or composite) with a table */
-while ((td = slPopHead(&superList)) != NULL)
-    {
-    if (hashLookup(superHash, td->tableName))
-        {
-        slAddHead(&strictList, td);
-        }
-    }
-hashFree(&superHash);
-
-/* No need to slReverse, it's sorted later. */
-*tdListPtr = strictList;
+slReverse(&newList);
+return newList;
 }
 
-/* keep track of prunedTracks so their subTracks can also be pruned */
-static struct hash *prunedTracks = NULL;
+static boolean releasesCompatible(struct trackDb *a, struct trackDb *b)
+/* Return TRUE if either release is NULL, or if they both exist and match. */
+{
+char *aRelease = trackDbSetting(a, "release");
+char *bRelease = trackDbSetting(b, "release");
+return aRelease == NULL || bRelease == NULL || sameString(aRelease, bRelease);
+}
 
-static void pruneRelease(struct trackDb **tdListPtr, char *database)
+static void fillInSubtrackParentsRespectingRelease(struct trackDb *tdbList, struct hash *trackHash)
+/* Fill in parent pointers. This just handles a part of the heirarchy, but it does handle releases. */
+{
+/* Loop through looking for parent tracks whenever see the subTrack tag. 
+ * Try to find parent just in compatible release. */
+struct trackDb *td;
+for (td = tdbList; td != NULL; td = td->next)
+    {
+    char *parentName = trackDbLocalSetting(td, "subTrack");
+    if (parentName != NULL)
+        {
+	struct hashEl *hel;
+	for (hel = hashLookup(trackHash, parentName); hel != NULL; hel = hashLookupNext(hel))
+	    {
+	    struct trackDb *p = hel->val;
+	    if (releasesCompatible(p, td))
+		{
+	        td->parent = p;
+		break;
+		}
+	    }
+	}
+    }
+}
+
+static struct trackDb *pruneEmptyContainers(struct trackDb *tdbList)
+/* Remove container tracks (views and compositeTracks) with no children. */
+{
+struct trackDb *newList = NULL, *tdb, *next;
+for (tdb = tdbList; tdb != NULL; tdb = next)
+    {
+    next = tdb->next;
+    if (trackDbLocalSetting(tdb, "compositeTrack") || trackDbLocalSetting(tdb, "view"))
+	{
+	tdb->subtracks = pruneEmptyContainers(tdb->subtracks);
+	if (tdb->subtracks != NULL)
+	    slAddHead(&newList, tdb);
+	}
+    else 
+        {
+	slAddHead(&newList, tdb);
+	}
+    }
+slReverse(&newList);
+return newList;
+}
+
+static struct trackDb * pruneRelease(struct trackDb *tdbList, struct hash *trackHash)
 /* prune out alternate track entries for another release */
 {
-struct trackDb *td;
-struct trackDb *relList = NULL;
+/* Link up parents so that trackDbSettingClosest to home will work. */
+fillInSubtrackParentsRespectingRelease(tdbList, trackHash);
 
-while ((td = slPopHead(tdListPtr)) != NULL)
+/* Build up list that only includes things in this release.  Release
+ * can be inherited from parents. */
+struct trackDb *tdb;
+struct trackDb *relList = NULL;
+while ((tdb = slPopHead(&tdbList)) != NULL)
     {
-    char *rel = trackDbSetting(td, "release");
-    if (rel != NULL)
-        {
-        if (sameString(rel, release))
-            {
-            /* remove release setting from trackDb entry -- there
-             * should only be a single entry for the track, so
-             * the release setting is no longer relevant (and it
-             * confuses Q/A */
-            hashRemove(td->settingsHash, "release");
-            slSafeAddHead(&relList, td);
-            }
-	else
-            {
-	    if (prunedTracks == NULL)
-		prunedTracks = newHash(8);
-	    hashAddInt(prunedTracks, td->tableName, 1);
-            }
-        }
-    else
-        slSafeAddHead(&relList, td);
+    char *rel = trackDbSettingClosestToHome(tdb, "release");
+    if (rel == NULL || sameString(rel, release))
+	slAddHead(&relList, tdb);
     }
-*tdListPtr = relList;
+
+/* Remove release tags in remaining tracks, since its purpose is served. */
+for (tdb = relList; tdb != NULL; tdb = tdb->next)
+    hashRemove(tdb->settingsHash, "release");
+
+return relList;
 }
 
-static void applyOverride(struct hash *uniqHash,
+static void applyOverride(struct hash *trackHash,
                           struct trackDb *overTd)
 /* apply a trackDb override to a track, if it exists */
 {
-struct trackDb *td = hashFindVal(uniqHash, overTd->tableName);
-if (td != NULL)
-    trackDbOverride(td, overTd);
+struct trackDb *tdb = hashFindVal(trackHash, overTd->tableName);
+if (tdb != NULL)
+    trackDbOverride(tdb, overTd);
 }
 
 static void addVersionRa(boolean strict, char *database, char *dirName, char *raName,
-                         struct hash *uniqHash)
+                         struct hash *trackHash)
 /* Read in tracks from raName and add them to table, pruning as required. Call
  * top-down so that track override will work. */
 {
-struct trackDb *tdList = trackDbFromRa(raName), *td;
-
-if (strict)
-    pruneStrict(&tdList, database);
-pruneRelease(&tdList, database);
+struct trackDb *tdbList = trackDbFromRa(raName), *tdb;
 
 /* load tracks, replacing higher-level ones with lower-level and
  * applying overrides*/
-while ((td = slPopHead(&tdList)) != NULL)
+while ((tdb = slPopHead(&tdbList)) != NULL)
     {
-    if (td->overrides != NULL)
-        applyOverride(uniqHash, td);
+    if (tdb->overrides != NULL)
+        applyOverride(trackHash, tdb);
     else
-        hashStore(uniqHash, td->tableName)->val = td;
+        hashStore(trackHash, tdb->tableName)->val = tdb;
     }
 }
 
@@ -253,7 +233,7 @@ sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
 
-char *subTrackName(char *create, char *tableName)
+char *substituteTrackName(char *create, char *tableName)
 /* Substitute tableName for whatever is between CREATE TABLE  and  first '('
    freez()'s create passed in. */
 {
@@ -266,12 +246,12 @@ front = strstr(create, "TABLE");
 if(front == NULL)
     front = strstr(create, "table");
 if(front == NULL)
-    errAbort("hgTrackDb::subTrackName() - Can't find 'TABLE' in %s", create);
+    errAbort("hgTrackDb::substituteTrackName() - Can't find 'TABLE' in %s", create);
 
 /* try to find first "(" in string */
 rear = strstr(create, "(");
 if(rear == NULL)
-    errAbort("hgTrackDb::subTrackName() - Can't find '(' in %s", create);
+    errAbort("hgTrackDb::substituteTrackName() - Can't find '(' in %s", create);
 
 /* set to NULL character after "TABLE" */
 front += 5;
@@ -281,9 +261,9 @@ safef(newCreate, length , "%s %s %s", create, tableName, rear);
 return cloneString(newCreate);
 }
 
-void layerOnRa(boolean strict, char *database, char *dir, struct hash *uniqHash,
+void layerOnRa(boolean strict, char *database, char *dir, struct hash *trackHash,
                boolean raMustExist)
-/* Read trackDb.ra from directory and layer them on top of whatever is in tdList.
+/* Read trackDb.ra from directory and layer them on top of whatever is in trackHash.
  * Must call top-down (root->org->assembly) */
 {
 char raFile[512];
@@ -293,7 +273,7 @@ else
     safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
-    addVersionRa(strict, database, dir, raFile, uniqHash);
+    addVersionRa(strict, database, dir, raFile, trackHash);
     }
 else
     {
@@ -302,12 +282,12 @@ else
     }
 }
 
-static void layerOnHtml(char *dirName, struct trackDb *tdList)
+static void layerOnHtml(char *dirName, struct trackDb *tdbList)
 /* Read in track HTML call bottom-up. */
 {
 char fileName[512];
 struct trackDb *td;
-for (td = tdList; td != NULL; td = td->next)
+for (td = tdbList; td != NULL; td = td->next)
     {
     if (isEmpty(td->html))
         {
@@ -354,23 +334,24 @@ struct hash *nameHash;   /* hash of subGroup names */
 struct trackDb *compositeTdb;  /* tdb of composite parent */
 };
 
-static struct hash *buildCompositeHash(struct trackDb *tdList)
+static struct hash *buildCompositeHash(struct trackDb *tdbList)
+/* Create a hash of all composite tracks.  This is keyed by their name with
+ * subGroupData values. */
 {
 struct hash *compositeHash = newHash(8);
 
 /* process all composite tracks */
 struct trackDb *td, *tdNext;
-for (td = tdList; td != NULL; td = tdNext)
+for (td = tdbList; td != NULL; td = tdNext)
     {
     tdNext = td->next;
-    if (trackDbSetting(td, "compositeTrack"))
+    if (trackDbLocalSetting(td, "compositeTrack"))
 	{
 	int i;
 	struct subGroupData *sgd;
         char subGroupName[256];
         AllocVar(sgd);
 	sgd->compositeTdb = td;
-	tdbMarkAsComposite(td);
 
 	for(i=1; ; i++)
 	    {
@@ -388,16 +369,13 @@ for (td = tdList; td != NULL; td = tdNext)
 		{
 		hashAdd(subGroupHash, slPair->name, slPair->val);
 		}
-
 	    if (sgd->nameHash == NULL)
 		sgd->nameHash = newHash(3);
 	    hashAdd(sgd->nameHash, sgName, subGroupHash);
 	    }
-
 	hashAdd(compositeHash, td->tableName, sgd);
 	}
     }
-
 return compositeHash;
 }
 
@@ -452,58 +430,37 @@ while ((hel = hashNext(&cookie)) != NULL)
 
 }
 
-static void verifySubTracks(struct trackDb **tdList, struct hash *compositeHash)
+static void verifySubTracks(struct trackDb *tdbList, struct hash *compositeHash)
+/* Verify subGroup relelated settings in subtracks, assisted by compositeHash */
 {
-/* now verify and prune subtracks */
-struct trackDb *td, *tdPrev = NULL;
-for (td = *tdList; td != NULL; td = td->next)
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (!trackDbSetting(td, "compositeTrack")
-     && !sameOk("on", trackDbSetting(td, "superTrack")))
+    struct trackDb *parent = tdb->parent;
+    if (parent && parent->subtracks)  /* Second part of if is to escape superTrack system. */
 	{
-	char *trackName = trackDbSetting(td, "subTrack");
-	if (trackName)
+	/* Look for some ancestor in composite hash and set sgd to it. */
+	struct subGroupData *sgd = NULL;
+	for (;parent != NULL; parent = parent->parent)
 	    {
-	    char *words[2];
-	    chopLine(cloneString(trackName), words);
-	    trackName = words[0];
-
-	    struct subGroupData *sgd = hashFindVal(compositeHash, trackName);
-	    if ( sgd )
-		{
-		td->parent = sgd->compositeTdb;
-		tdbMarkAsCompositeChild(td);
-		checkOneSubGroups(trackName, td, sgd);
-		tdPrev = td;
-		}
-	    else
-		{
-		if ((prunedTracks != NULL) && 
-		    hashFindVal(prunedTracks, trackName))
-		    {	/* parent was pruned, get rid of subTrack too */
-		    if (tdPrev == NULL)
-			*tdList = td->next;
-		    else
-		    	tdPrev->next = td->next;
-		    }
-		else
-		    {
-		    errAbort("parent %s missing for subtrack %s\n",
-			trackName, td->tableName);
-		    }
-		}
+	    sgd = hashFindVal(compositeHash, parent->tableName);
+	    if (sgd != NULL)
+	        break;
 	    }
+	assert(sgd != NULL);	
+	checkOneSubGroups(parent->tableName, tdb, sgd);
 	}
     }
 }
 
-static void checkSubGroups(struct trackDb *tdList)
+static void checkSubGroups(struct trackDb *tdbList)
 /* check integrity of subGroup clauses */
 {
-struct hash *compositeHash = buildCompositeHash(tdList);
+struct hash *compositeHash = buildCompositeHash(tdbList);
 
-verifySubTracks(&tdList, compositeHash);
+verifySubTracks(tdbList, compositeHash);
 }
+
 
 static void prioritizeContainerItems(struct trackDb *tdbList)
 /* set priorities in containers if they have no priorities already set
@@ -515,47 +472,40 @@ int countOfSortedContainers = 0;
 struct trackDb *tdbContainer;
 for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
     {
-    if (trackDbSetting(tdbContainer, "compositeTrack") == NULL) // TODO: Expand beyond composites
+    if (tdbContainer->subtracks == NULL)
         continue;
 
-    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);   // TODO: Expand beyond composites
+    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);
     boolean needsSorting = TRUE; // default
     float firstPriority = -1.0;
     sortableTdbItem *item,*itemsToSort = NULL;
 
+    struct slRef *child, *childList = trackDbListGetRefsToDescendantLeaves(tdbContainer->subtracks);
     // Walk through tdbs looking for items contained
-    struct trackDb *tdbItem;
-    for (tdbItem = tdbList; tdbItem != NULL; tdbItem = tdbItem->next)
+    for (child = childList; child != NULL; child = child->next)
         {
-        char *containerName = containerName = trackDbSetting(tdbItem, "subTrack");  // TODO: Expand beyond subtracks
-        if (containerName == NULL)
-            continue;
-
-        containerName = strSwapChar(cloneString(containerName),' ',0);  // subTrack "compositeName off"
-        if(sameString(containerName,tdbContainer->tableName))
-            {
-            if( needsSorting && sortOrder == NULL )  // do we?
-            {
-                if( firstPriority == -1.0)    // all 0 or all the same value
-                    firstPriority = tdbItem->priority;
-                if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
-                    {
-                    needsSorting = FALSE;
-                    break;
-                    }
-            }
-            // create an Item
-            item = sortableTdbItemCreate(tdbItem,sortOrder);
-            if(item != NULL)
-                slAddHead(&itemsToSort, item);
-            else
-                {
-                verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->tableName);
-                needsSorting = FALSE;
-                break;
-                }
-            }
-        freeMem(containerName); // good accounting
+	struct trackDb *tdbItem = child->val;
+	if( needsSorting && sortOrder == NULL )  // do we?
+	    {
+	    if( firstPriority == -1.0)    // all 0 or all the same value
+		firstPriority = tdbItem->priority;
+	    if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
+		{
+		needsSorting = FALSE;
+		break;
+		}
+	    }
+	// create an Item
+	item = sortableTdbItemCreate(tdbItem,sortOrder);
+	if(item != NULL)
+	    slAddHead(&itemsToSort, item);
+	else
+	    {
+	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->tableName);
+	    needsSorting = FALSE;
+	    sortableTdbItemCreate(tdbItem,sortOrder);
+	    break;
+	    }
         }
 
     // Does this container need to be sorted?
@@ -574,40 +524,153 @@ if(countOfSortedContainers > 0)
     verbose(1,"Sorted %d containers\n",countOfSortedContainers);
 }
 
+static void inheritFieldsFromParents(struct trackDb *tdb, struct trackDb *parent)
+/* Inherit undefined fields (outside of settings) from parent. */
+{
+if (tdb->shortLabel == NULL)
+    tdb->shortLabel = cloneString(parent->shortLabel);
+if (tdb->type == NULL)
+    tdb->type = cloneString(parent->type);
+if (tdb->longLabel == NULL)
+    tdb->longLabel = cloneString(parent->longLabel);
+if (tdb->restrictList == NULL)
+    tdb->restrictList = parent->restrictList;
+if (tdb->url == NULL)
+    tdb->url = cloneString(parent->url);
+if (tdb->grp == NULL)
+    tdb->grp = cloneString(parent->grp);
+if (tdb->canPack == 2 && parent->canPack != 2)
+    tdb->canPack = parent->canPack;
+if (parent->private)
+    tdb->private = TRUE;
+if (parent->useScore)
+    tdb->useScore = TRUE;
+}
+
+
+
+static void rFillInFromParents(struct trackDb *parent, struct trackDb *tdbList)
+/* Fill in some possibly missing fields recursively. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (parent != NULL)
+	inheritFieldsFromParents(tdb, parent);
+    rFillInFromParents(tdb, tdb->subtracks);
+    }
+}
+
+static void rPolish(struct trackDb *tdbList)
+/* Call polisher on list and all children of list. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    trackDbPolish(tdb);
+    rPolish(tdb->subtracks);
+    }
+}
+
+static void polishSupers(struct trackDb *tdbList)
+/* Run polish on supertracks. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL)
+	trackDbPolish(parent);
+    }
+}
+
 static struct trackDb *buildTrackDb(char *org, char *database, char *hgRoot,
                                     char *visibilityRa, char *priorityRa,
                                     boolean strict)
 /* build trackDb objects from files. */
 {
-struct hash *uniqHash = newHash(8);
+struct hash *trackHash = newHash(0);
 char rootDir[PATH_LEN], orgDir[PATH_LEN], asmDir[PATH_LEN];
 
 /* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly
  * ra format database. */
+
 safef(rootDir, sizeof(rootDir), "%s", hgRoot);
 safef(orgDir, sizeof(orgDir), "%s/%s", hgRoot, org);
 safef(asmDir, sizeof(asmDir), "%s/%s/%s", hgRoot, org, database);
 
 // must call these top-down
-layerOnRa(strict, database, rootDir, uniqHash, TRUE);
-layerOnRa(strict, database, orgDir, uniqHash, FALSE);
-layerOnRa(strict, database, asmDir, uniqHash, FALSE);
+layerOnRa(strict, database, rootDir, trackHash, TRUE);
+layerOnRa(strict, database, orgDir, trackHash, FALSE);
+layerOnRa(strict, database, asmDir, trackHash, FALSE);
 
-struct trackDb *tdList = trackDbListFromHash(uniqHash);
-
-// must call these bottom-up
-layerOnHtml(asmDir, tdList);
-layerOnHtml(orgDir, tdList);
-layerOnHtml(rootDir, tdList);
-
+#ifdef OLD
 if (visibilityRa != NULL)
-    trackDbOverrideVisbility(uniqHash, visibilityRa, optionExists("hideFirst"));
+    trackDbOverrideVisbility(trackHash, visibilityRa, optionExists("hideFirst"));
 if (priorityRa != NULL)
-    trackDbOverridePriority(uniqHash, priorityRa);
-prioritizeContainerItems(tdList);
-slSort(&tdList, trackDbCmp);
-hashFree(&uniqHash);
-return tdList;
+    trackDbOverridePriority(trackHash, priorityRa);
+#endif /* OLD */
+
+/* Represent as list as well as hash, and prune things not in our release from list. 
+ * After this hash is no longer userful since it contains pruned things, so get rid of it. */
+struct trackDb *tdbList = trackDbListFromHash(trackHash);
+tdbList= pruneRelease(tdbList, trackHash);
+hashFree(&trackHash);
+
+/* Read in HTML bits onto what remains. */
+layerOnHtml(asmDir, tdbList);
+layerOnHtml(orgDir, tdbList);
+layerOnHtml(rootDir, tdbList);
+
+/* Set up parent/subtracks pointers. */
+tdbList = trackDbLinkUpGenerations(tdbList);
+
+/* Fill in missing info in fields (but not settings) from parents. */
+rFillInFromParents(NULL, tdbList);
+
+/* Fill in any additional missing info from defaults. */
+rPolish(tdbList);
+polishSupers(tdbList);
+
+/* Optionally check for tables/tracks that actually exist and get rid of ones that don't. */
+if (strict)
+    tdbList = pruneStrict(tdbList, database);
+
+tdbList = pruneEmptyContainers(tdbList);
+checkSubGroups(tdbList);
+prioritizeContainerItems(tdbList);
+return tdbList;
+}
+
+static struct trackDb *flatten(struct trackDb *tdbForest)
+/* Convert our peculiar forest back to a list. 
+ * This for now rescues superTracks from the heavens. */
+{
+struct hash *superTrackHash = hashNew(0);
+struct slRef *ref, *refList = trackDbListGetRefsToDescendants(tdbForest);
+
+struct trackDb *tdbList = NULL;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct trackDb *tdb = ref->val;
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL && parent->subtracks == NULL) /* Our supertrack clue. */
+	{
+	/* The supertrack may appear as a 'floating' parent for multiple tracks.
+	 * Only put it on the list once. */
+	if (!hashLookup(superTrackHash, parent->tableName))
+	    {
+	    hashAdd(superTrackHash, parent->tableName, parent);
+	    slAddHead(&tdbList, parent);
+	    }
+	}
+    slAddHead(&tdbList, tdb);
+    }
+
+slFreeList(&refList);
+hashFree(&superTrackHash);
+slReverse(&tdbList);
+return tdbList;
 }
 
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
@@ -618,16 +681,16 @@ struct trackDb *td;
 char tab[PATH_LEN];
 safef(tab, sizeof(tab), "%s.tab", trackDbName);
 
-struct trackDb *tdList = buildTrackDb(org, database, hgRoot,
+struct trackDb *tdbList = buildTrackDb(org, database, hgRoot,
                                       visibilityRa, priorityRa, strict);
-checkSubGroups(tdList);
-
-verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
+tdbList = flatten(tdbList);
+slSort(&tdbList, trackDbCmp);
+verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */
     {
     FILE *f = mustOpen(tab, "w");
-    for (td = tdList; td != NULL; td = td->next)
+    for (td = tdbList; td != NULL; td = td->next)
         {
         hVarSubstTrackDb(td, database);
         char *hold = td->html;
@@ -647,7 +710,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
     /* Load in table definition. */
     readInGulp(sqlFile, &create, NULL);
     create = trimSpaces(create);
-    create = subTrackName(create, trackDbName);
+    create = substituteTrackName(create, trackDbName);
     end = create + strlen(create)-1;
     if (*end == ';') *end = 0;
     sqlRemakeTable(conn, trackDbName, create);
@@ -657,20 +720,19 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
     sqlUpdate(conn, query);
 
     /* Load in html and settings fields. */
-    for (td = tdList; td != NULL; td = td->next)
+    for (td = tdbList; td != NULL; td = td->next)
 	{
-        if ( (! tdbIsCompositeChild(td)) && isEmpty(td->html))
+        if (isEmpty(td->html))
 	    {
-	    if (strict && !trackDbSetting(td, "subTrack") && !sameString(td->tableName,"cytoBandIdeo"))
+	    if (strict && !trackDbLocalSetting(td, "subTrack") && !trackDbLocalSetting(td, "superTrack") &&
+	    	!sameString(td->tableName,"cytoBandIdeo"))
 		{
 		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
 		}
 	    }
 	else
 	    {
-	    if (! tdbIsCompositeChild(td))
-		updateBigTextField(conn,  trackDbName, "tableName",
-		    td->tableName, "html", td->html);
+	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, "html", td->html);
 	    }
 	if (td->settingsHash != NULL)
 	    {

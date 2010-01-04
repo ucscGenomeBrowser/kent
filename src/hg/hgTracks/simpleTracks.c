@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.117 2009/12/21 22:43:35 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.118 2010/01/04 19:12:26 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -223,12 +223,22 @@ tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
 }
 
 Color lighterColor(struct hvGfx *hvg, Color color)
-/* Get lighter shade of a color */
+/* Get lighter shade of a color - half way between this color and white */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (rgbColor.r+255)/2;
 rgbColor.g = (rgbColor.g+255)/2;
 rgbColor.b = (rgbColor.b+255)/2;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+Color somewhatLighterColor(struct hvGfx *hvg, Color color)
+/* Get a somewhat lighter shade of a color - 1/3 of the way towards white. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = (2*rgbColor.r+255)/3;
+rgbColor.g = (2*rgbColor.g+255)/3;
+rgbColor.b = (2*rgbColor.b+255)/3;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
@@ -239,7 +249,7 @@ return (tdbIsComposite(track->tdb) && track->subtracks != NULL);
 }
 
 Color slightlyLighterColor(struct hvGfx *hvg, Color color)
-/* Get slightly lighter shade of a color */
+/* Get slightly lighter shade of a color - closer to gray actually  */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (rgbColor.r+128)/2;
@@ -437,7 +447,6 @@ return '.';
 }
 
 
-
 struct dyString *uiStateUrlPart(struct track *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
  * format.  If toggleGroup is non-null the visibility of that
@@ -451,11 +460,13 @@ dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
-    // Find parent track
+    struct trackDb *tdbParent = trackDbCompositeParent(toggleGroup->tdb);
+    char *parentName = tdbParent->tableName;
+    // Find parent track (as opposed to trackDb)
     struct track *tgParent = trackList;
     for (;tgParent != NULL; tgParent = tgParent->next)
         {
-        if(sameString(tgParent->mapName,toggleGroup->tdb->parent->tableName))
+        if (sameString(tgParent->mapName,parentName))
             break;
         }
     // should be assertable assert(tgParent!=NULL);
@@ -630,7 +641,7 @@ else if(tdbIsComposite(curGroup->tdb))
 else
     safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
 
-    mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
+mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
 }
 
 void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -8881,19 +8892,30 @@ tg->drawItems = drawEranModule;
 }
 #endif /* GBROWSE */
 
+static struct trackDb *rGetTdbNamed(struct trackDb *tdb, char *name)
+/* Return tdb of given name in self or children. */
+{
+if (sameString(name, tdb->tableName))
+    return tdb;
+struct trackDb *child;
+for (child = tdb->subtracks; child != NULL; child = child->next)
+    {
+    struct trackDb *ret = rGetTdbNamed(child, name);
+    if (ret != NULL)
+        return ret;
+    }
+return NULL;
+}
+
 static struct trackDb *getSubtrackTdb(struct track *subtrack)
 /* If subtrack->tdb is actually the composite tdb, return the tdb for
  * the subtrack so we can see its settings. */
 {
-if (sameString(subtrack->mapName, subtrack->tdb->tableName))
-    return subtrack->tdb;
-struct trackDb *subTdb;
-for (subTdb = subtrack->tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    if (sameString(subtrack->mapName, subTdb->tableName))
-	return subTdb;
-errAbort("Can't find tdb for subtrack %s -- was getSubtrackTdb called on "
-	 "non-subtrack?", subtrack->mapName);
-return NULL;
+struct trackDb *subTdb = rGetTdbNamed(subtrack->tdb, subtrack->mapName);
+if (subTdb == NULL)
+    errAbort("Can't find tdb for subtrack %s -- was getSubtrackTdb called on "
+	     "non-subtrack?", subtrack->mapName);
+return subTdb;
 }
 
 static bool subtrackEnabledInTdb(struct track *subtrack)
@@ -8905,7 +8927,7 @@ char *setting;
 /* Get the actual subtrack tdb so we can see its subTrack setting (not
  * composite tdb's):  */
 struct trackDb *subTdb= getSubtrackTdb(subtrack);
-if ((setting = trackDbSetting(subTdb, "subTrack")) != NULL)
+if ((setting = trackDbLocalSetting(subTdb, "subTrack")) != NULL)
     {
     if (chopLine(cloneString(setting), words) >= 2)
         if (sameString(words[1], "off"))
@@ -8962,7 +8984,7 @@ if (!tg->limitedVisSet)
 	tg->limitedVis = tvHide;
 	return tvHide;
 	}
-    if (trackIsCompositeWithSubtracks(tg))  //TODO: Change when tracks->subtracks are always set for composite
+    if (trackIsCompositeWithSubtracks(tg))
 	{
 	struct track *subtrack;
 	int subCnt = subtrackCount(tg->subtracks);
@@ -10767,7 +10789,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
-
 	lastTime = clock1000();
 	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
 	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->mapName, track->mapName);
@@ -10796,15 +10817,15 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	   {
-       limitVisibility(subtrack);
+	   limitVisibility(subtrack);
 	   enum trackVisibility minVis = vis;
 	   if (subtrack->limitedVisSet)
 	       minVis = tvMin(minVis, subtrack->limitedVis);
 	   int h = subtrack->totalHeight(subtrack, minVis);
 	   subtrack->height = h;
 	   height += h;
-       }
-	}
+	   }
+    }
 track->height = height;
 return track->height;
 }
@@ -10827,24 +10848,24 @@ unsigned char finalR = track->color.r, finalG = track->color.g,
 unsigned char altR = track->altColor.r, altG = track->altColor.g,
                             altB = track->altColor.b;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
+
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+
 struct trackDb *subTdb;
-/* number of possible subtracks for this track */
-int subtrackCt = slCount(tdb->subtracks);
-int altColors = subtrackCt - 1;
+int subCount = slCount(tdbRefList);
+int altColors = subCount - 1;
 struct track *subtrack = NULL;
 TrackHandler handler;
-char table[SMALLBUF];
-struct hashEl *hel, *hels = NULL;
-int len;
 boolean smart = FALSE;
 
 /* ignore if no subtracks */
-if (!subtrackCt)
+if (!subCount)
     return;
 
+char *compositeTrack = trackDbLocalSetting(tdb, "compositeTrack");
 /* look out for tracks that manage their own subtracks */
 if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
-    rStringIn("smart", trackDbSetting(tdb, "compositeTrack")))
+    (compositeTrack != NULL && rStringIn("smart", compositeTrack)))
         smart = TRUE;
 
 /* setup function handlers for composite track */
@@ -10866,20 +10887,21 @@ if (altColors && (finalR || finalG || finalB))
     deltaG = (finalG - altG) / altColors;
     deltaB = (finalB - altB) / altColors;
     }
-/* get cart variables for the composite, unless track handles it's own */
-if (!smart)
-    {
-    safef(table, sizeof table, "%s.", track->mapName);
-    hels = cartFindPrefix(cart, table);
-    }
 
 /* fill in subtracks of composite track */
-for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-{
-    /* initialize from composite track settings */
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    subTdb = tdbRef->val;
+
+    /* Initialize from composite track settings */
     if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
 	{
 	/* install parent's track handler */
+	/* TODO JK - rework.  The gencode tracks currently depend on this, wgEncodeGencode in particular,
+	 * but it seems very dangerous in general.  What if the subtracks already have their own handler? 
+	 * Waiting to fix until after viewInTheMiddle branch merge since preferred fix involves
+	 * edits to trackDb.ra files - that is putting in an explicit setting when you want
+	 * this behavior rather than relying on absence of an overloaded setting. */
 	subtrack = trackFromTrackDb(tdb);
 	subtrack->tdb = subTdb;
 	handler = lookupTrackHandler(tdb->tableName);
@@ -10890,60 +10912,40 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 	handler = lookupTrackHandler(subTdb->tableName);
 	}
     if (handler != NULL)
-	   handler(subtrack);
+        handler(subtrack);
 
-    if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
-	   {
-        eCfgType cfgType = cfgTypeFromTdb(subTdb,FALSE);
-        if (!smart && cfgType == cfgNone)      // TODO: Ideally this will go away with ClosestToHome methods
-            {                                  //       For now, limit it to non-multiview compatible types
-            /* add cart variables from parent */
-            char cartVar[128];
-            char *lastName = "";
-            for (hel = hels; hel != NULL; hel = hel->next)
-                {
-                len = strlen(track->mapName);
-                safef(cartVar, sizeof cartVar, "%s.%s",
-                                   subTdb->tableName, hel->name+len+1);
-                if(sameString(hel->name,lastName))   // Allows propagating multi-element settings (as in multi-select)
-                    cartAddString(cart, cartVar, hel->val);
-                else
-                    cartSetString(cart, cartVar, hel->val);
-                lastName = hel->name;
-                }
-            }
-        /* add subtrack settings (table, colors, labels, vis & pri) */
-        subtrack->mapName = subTdb->tableName;
-        subtrack->shortLabel = subTdb->shortLabel;
-        subtrack->longLabel = subTdb->longLabel;
-        if (finalR || finalG || finalB)
-            {
-            subtrack->color.r = altR;
-            subtrack->altColor.r = (255+altR)/2;
-            altR += deltaR;
-            subtrack->color.g = altG;
-            subtrack->altColor.g = (255+altG)/2;
-            altG += deltaG;
-            subtrack->color.b = altB;
-            subtrack->altColor.b = (255+altB)/2;
-            altB += deltaB;
-            }
-        else
-            {
-            subtrack->color.r = subTdb->colorR;
-            subtrack->color.g = subTdb->colorG;
-            subtrack->color.b = subTdb->colorB;
-            subtrack->altColor.r = subTdb->altColorR;
-            subtrack->altColor.g = subTdb->altColorG;
-            subtrack->altColor.b = subTdb->altColorB;
-            }
-        subtrack->priority = subTdb->priority;
-        }
+    /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
+     * needed in the "not noInherit" case that hopefully will go away soon. */
+    subtrack->mapName = subTdb->tableName;
+    subtrack->shortLabel = subTdb->shortLabel;
+    subtrack->longLabel = subTdb->longLabel;
+    subtrack->priority = subTdb->priority;
 
+    /* Add color gradient. */
+    if (finalR || finalG || finalB)
+	{
+	subtrack->color.r = altR;
+	subtrack->altColor.r = (255+altR)/2;
+	altR += deltaR;
+	subtrack->color.g = altG;
+	subtrack->altColor.g = (255+altG)/2;
+	altG += deltaG;
+	subtrack->color.b = altB;
+	subtrack->altColor.b = (255+altB)/2;
+	altB += deltaB;
+	}
+    else
+	{
+	subtrack->color.r = subTdb->colorR;
+	subtrack->color.g = subTdb->colorG;
+	subtrack->color.b = subTdb->colorB;
+	subtrack->altColor.r = subTdb->altColorR;
+	subtrack->altColor.g = subTdb->altColorG;
+	subtrack->altColor.b = subTdb->altColorB;
+	}
     slAddHead(&track->subtracks, subtrack);
     }
 slSort(&track->subtracks, trackPriCmp);
-
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
@@ -11036,6 +11038,14 @@ else
     hashAdd(handlerHash, name, handler);
 }
 
+#define registerTrackHandlerOnFamily(name, handler) registerTrackHandler(name, handler)
+// Marker to show that are actually registering subtracks as well.  I'd like to redo
+// this system a little.  It seems dangerous now.  There's no way to know in the .ra
+// file that there is a handler,  and as composite tracks start to allow multiple types
+// of subtracks,  the handler of the parent will still override _all_ of the children.
+// If parents and children put in different handlers, there's no way to know which one
+// the child will get.
+
 TrackHandler lookupTrackHandler(char *name)
 /* Lookup handler for track of give name.  Return NULL if none. */
 {
@@ -11094,7 +11104,7 @@ registerTrackHandler("delConrad2", delConrad2Methods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
 registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("delHinds2", delHindsMethods);
-registerTrackHandler("hapmapLd", ldMethods);
+registerTrackHandlerOnFamily("hapmapLd", ldMethods);
 registerTrackHandler("illuminaProbes", illuminaProbesMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
@@ -11175,9 +11185,9 @@ registerTrackHandler("tblastnHg16KGPep", blastMethods);
 registerTrackHandler("xenoRefGene", xenoRefGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
-registerTrackHandler("vegaGene", vegaMethods);
-registerTrackHandler("vegaPseudoGene", vegaMethods);
-registerTrackHandler("vegaGeneComposite", vegaMethods);
+registerTrackHandlerOnFamily("vegaGene", vegaMethods);
+registerTrackHandlerOnFamily("vegaPseudoGene", vegaMethods);
+registerTrackHandlerOnFamily("vegaGeneComposite", vegaMethods);
 registerTrackHandler("vegaGeneZfish", vegaMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
@@ -11234,7 +11244,7 @@ registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
 registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
-registerTrackHandler("encodeStanfordNRSF",encodeStanfordNRSFMethods);
+registerTrackHandlerOnFamily("encodeStanfordNRSF",encodeStanfordNRSFMethods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
@@ -11320,23 +11330,23 @@ registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
-registerTrackHandler("wgEncodeGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeSangerGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
-registerTrackHandler("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneOct05", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneMar07", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneJun05", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneOct05", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneMar07", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
+registerTrackHandlerOnFamily("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
-registerTrackHandler("pgSnp", pgSnpMethods);
-registerTrackHandler("pgSnpHgwdev", pgSnpMethods);
-registerTrackHandler("pgPop", pgSnpMethods);
+registerTrackHandlerOnFamily("pgSnp", pgSnpMethods);
+registerTrackHandlerOnFamily("pgSnpHgwdev", pgSnpMethods);
+registerTrackHandlerOnFamily("pgPop", pgSnpMethods);
 registerTrackHandler("pgTest", pgSnpMethods);
 registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
@@ -11344,13 +11354,13 @@ registerTrackHandler("encodeDless", dlessMethods);
 transMapRegisterTrackHandlers();
 retroRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
-registerTrackHandler("kiddEichlerDisc", kiddEichlerMethods);
-registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);
+registerTrackHandlerOnFamily("kiddEichlerDisc", kiddEichlerMethods);
+registerTrackHandlerOnFamily("kiddEichlerValid", kiddEichlerMethods);
 registerTrackHandler("dgv", dgvMethods);
 
-registerTrackHandler("hapmapSnps", hapmapMethods);
-registerTrackHandler("hapmapSnpsPhaseII", hapmapMethods);
-registerTrackHandler("omicia", omiciaMethods);
+registerTrackHandlerOnFamily("hapmapSnps", hapmapMethods);
+registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
+registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */

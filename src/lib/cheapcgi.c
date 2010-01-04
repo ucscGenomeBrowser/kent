@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.127 2009/12/14 19:04:29 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.128 2010/01/04 19:12:41 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1356,6 +1356,7 @@ if(title)
     printf(" title='%s'",title);
 printf(">\n");
 }
+
 void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max)
 {
 char minLimit[20];
@@ -1374,6 +1375,7 @@ if((int)max != NO_VALUE)
     }
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,maxStr);
 }
+
 void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min)
 {
 char minLimit[20];

@@ -7,7 +7,7 @@
 #include "ra.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: trackDbPatch.c,v 1.3 2009/12/04 00:41:00 kent Exp $";
+static char const rcsid[] = "$Id: trackDbPatch.c,v 1.4 2010/01/04 19:12:37 kent Exp $";
 
 char *clPatchDir = NULL;
 char *clKey = "track";
@@ -169,19 +169,6 @@ if (patch->fileList == NULL)
     errAbort("Missing %s tag before line %d of %s", "file", lf->lineIx, lf->fileName);
 patch->tagList= newTagList;
 return patch;
-}
-
-char *cloneFirstWord(char *string)
-/* Clone leading word in string. */
-{
-char *s = skipLeadingSpaces(string);
-char *e = skipToSpaces(s);
-if (e == NULL)
-    return cloneString(s);
-int size = e - s;
-if (size == 0)
-    return NULL;
-return cloneStringZ(s, size);
 }
 
 char *findLastMatchInString(char *string, char *match)

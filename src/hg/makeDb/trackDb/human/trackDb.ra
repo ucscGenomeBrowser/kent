@@ -3089,69 +3089,84 @@ semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
 
-
-
 track fox2ClipSeqComp
 compositeTrack on
 shortLabel FOX2 CLIP-seq
 longLabel FOX2 adaptor-trimmed CLIP-seq reads
 subGroup1	view Tracks reads=Reads density=Density clusters=Clusters
-settingsByView	density:viewLimitsMax=0:2401
 group regulation
 priority 250
 visibility hide
-visibilityViewDefaults	reads=pack density=full clusters=pack
 type bed 3 .
 dataVersion January 2009
 
-    track fox2ClipSeq
+    track fox2ClipSeqCompViewreads
+    shortLabel Reads
+    view reads
+    visibility pack
     subTrack fox2ClipSeqComp
-    shortLabel FOX2 CLIP-seq
-    longLabel FOX2 adaptor-trimmed CLIP-seq reads
-    subGroups	view=reads
-    priority 1
-    type bed 9 .
-    itemRgb on
-    noInherit	on
-    noScoreFilter .
 
-    track fox2ClipSeqDensityForwardStrand
-    subTrack fox2ClipSeqComp
-    shortLabel Density Forward
-    longLabel FOX2 adaptor-trimmed CLIP-seq Density Forward Strand
-    subGroups	view=density
-    priority 2
-    type wig 0 2401
-    configurable	on
-    spanList 1
-    maxHeightPixels 128:36:16
-    graphTypeDefault Bar
-    windowingFunction mean
-    noInherit	on
+        track fox2ClipSeq
+        subTrack fox2ClipSeqCompViewreads
+        shortLabel FOX2 CLIP-seq
+        longLabel FOX2 adaptor-trimmed CLIP-seq reads
+        subGroups	view=reads
+        priority 1
+        type bed 9 .
+        itemRgb on
+        noInherit	on
+        noScoreFilter .
 
-    track fox2ClipSeqDensityReverseStrand
+    track fox2ClipSeqCompViewdensity
+    shortLabel Density
+    view density
+    visibility full
     subTrack fox2ClipSeqComp
-    shortLabel Density Reverse
-    longLabel FOX2 adaptor-trimmed CLIP-seq Density Reverse Strand
-    subGroups	view=density
-    priority 3
-    type wig 0 1406
-    configurable	on
-    spanList 1
-    maxHeightPixels 128:36:16
-    graphTypeDefault Bar
-    windowingFunction mean
-    noInherit	on
+    viewLimitsMax 0:2401
 
-    track fox2ClipClusters
+        track fox2ClipSeqDensityForwardStrand
+        subTrack fox2ClipSeqCompViewdensity
+        shortLabel Density Forward
+        longLabel FOX2 adaptor-trimmed CLIP-seq Density Forward Strand
+        subGroups	view=density
+        priority 2
+        type wig 0 2401
+        configurable	on
+        spanList 1
+        maxHeightPixels 128:36:16
+        graphTypeDefault Bar
+        windowingFunction mean
+        noInherit	on
+
+        track fox2ClipSeqDensityReverseStrand
+        subTrack fox2ClipSeqCompViewdensity
+        shortLabel Density Reverse
+        longLabel FOX2 adaptor-trimmed CLIP-seq Density Reverse Strand
+        subGroups	view=density
+        priority 3
+        type wig 0 1406
+        configurable	on
+        spanList 1
+        maxHeightPixels 128:36:16
+        graphTypeDefault Bar
+        windowingFunction mean
+        noInherit	on
+
+    track fox2ClipSeqCompViewclusters
+    shortLabel Clusters
+    view clusters
+    visibility pack
     subTrack fox2ClipSeqComp
-    shortLabel FOX2 clusters
-    longLabel FOX2 binding site clusters
-    subGroups   view=clusters
-    priority 4
-    type bed 4 .
-    noInherit on
-    noScoreFilter .
+
+        track fox2ClipClusters
+        subTrack fox2ClipSeqCompViewclusters
+        shortLabel FOX2 clusters
+        longLabel FOX2 binding site clusters
+        subGroups   view=clusters
+        priority 4
+        type bed 4 .
+        noInherit on
+        noScoreFilter .
 
 searchName fox2ClipSeq
 searchTable fox2ClipSeq

@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.51 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.52 2010/01/04 19:12:22 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -622,9 +622,11 @@ else
 	{
 	struct bed *bedList = getRegionAsBed(db, table, region, filter,
 					     idHash, lm, retFieldCount);
-	for (subtrack = curTrack->subtracks; subtrack != NULL;
-	     subtrack = subtrack->next)
+	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(curTrack->subtracks);
+	struct slRef *tdbRef;
+	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	    {
+	    subtrack = tdbRef->val;
 	    if (! sameString(curTable, subtrack->tableName) &&
 		isSubtrackMerged(subtrack->tableName) &&
 		sameString(subtrack->type, primaryType))
@@ -635,6 +637,7 @@ else
 		bedList = slCat(bedList, bedList2);
 		}
 	    }
+	slFreeList(&tdbRefList);
 	return bedList;
 	}
     bits1 = bitAlloc(chromSize+8);
@@ -652,9 +655,11 @@ else
 	bedOrBits(bits1, chromSize, bedList1, hti->hasBlocks, 0);
 	lmCleanup(&lm2);
 	}
-    for (subtrack = curTrack->subtracks; subtrack != NULL;
-	 subtrack = subtrack->next)
+    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(curTrack->subtracks);
+    struct slRef *tdbRef;
+    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
+	subtrack = tdbRef->val;
 	if (! sameString(curTable, subtrack->tableName) &&
 	    isSubtrackMerged(subtrack->tableName) &&
 	    sameString(subtrack->type, primaryType))
@@ -676,6 +681,7 @@ else
 	    lmCleanup(&lm2);
 	    }
 	}
+    slFreeList(&tdbRefList);
     if (isBpWise)
 	{
 	bedMerged = bitsToBed4List(bits1, chromSize, region->chrom, 1,

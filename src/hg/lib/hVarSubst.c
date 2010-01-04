@@ -32,7 +32,7 @@ int nameIdx = 0;
 while ((nameIdx < varNameSize-1) && !isVarEnd(inBraces, *p))
     varName[nameIdx++] = *p++;
 if (nameIdx == 0)
-    errAbort("empty variable name in %s", desc);
+    errAbort("empty variable name in %s varStart='%s' varName='%s'", desc, varStart, varName);
 if (nameIdx == varNameSize)
     errAbort("variable name in desc %s exceeds maximum length of %d, starting with: \"%.*s\"",
              desc, varNameSize-1, varNameSize-1, varName);

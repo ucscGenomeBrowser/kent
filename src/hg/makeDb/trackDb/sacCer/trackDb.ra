@@ -146,40 +146,57 @@ type bed 3
 noInherit on
 configurable on
 subGroup1 view Views Counts=Tag_Counts Map=Mappability Print=Footprints
-visibilityViewDefaults Counts=full Map=dense Print=pack ALN=hide
 dragAndDrop subTracks
 
-     track uwFootprintsTagCounts
-     subTrack uwFootprints
-     subGroups view=Counts
-     shortLabel Tag Counts
-     longLabel UW Footprints Tag Counts
-     type wig 1 13798
-     viewLimits 1:146
-     autoScale Off
-     color 25,25,150
-     group regulation
-     priority 1
-     html uwFootprints
+    track uwFootprintsViewCounts
+    shortLabel Tag Counts
+    view Counts
+    visibility full
+    subTrack uwFootprints
 
-     track uwFootprintsMappability
-     subTrack uwFootprints
-     subGroups view=Map
-     shortLabel Mappability
-     longLabel UW Footprints Mappability
-     type bed 3
-     color 25,25,150
-     group regulation
-     priority 2
-     html uwFootprints
+         track uwFootprintsTagCounts
+         subTrack uwFootprintsViewCounts
+         subGroups view=Counts
+         shortLabel Tag Counts
+         longLabel UW Footprints Tag Counts
+         type wig 1 13798
+         viewLimits 1:146
+         autoScale Off
+         color 25,25,150
+         group regulation
+         priority 1
+         html uwFootprints
 
-     track uwFootprintsPrints
-     subTrack uwFootprints
-     subGroups view=Print
-     shortLabel Footprints
-     longLabel UW Protein-binding Footprints
-     type bed 4
-     color 25,25,150
-     group regulation
-     priority 3
-     html uwFootprints
+    track uwFootprintsViewMap
+    shortLabel Mappability
+    view Map
+    visibility dense
+    subTrack uwFootprints
+
+         track uwFootprintsMappability
+         subTrack uwFootprintsViewMap
+         subGroups view=Map
+         shortLabel Mappability
+         longLabel UW Footprints Mappability
+         type bed 3
+         color 25,25,150
+         group regulation
+         priority 2
+         html uwFootprints
+
+    track uwFootprintsViewPrint
+    shortLabel Footprints
+    view Print
+    visibility pack
+    subTrack uwFootprints
+
+         track uwFootprintsPrints
+         subTrack uwFootprintsViewPrint
+         subGroups view=Print
+         shortLabel Footprints
+         longLabel UW Protein-binding Footprints
+         type bed 4
+         color 25,25,150
+         group regulation
+         priority 3
+         html uwFootprints

@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1583 2009/12/14 18:01:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1584 2010/01/04 19:12:26 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2471,27 +2471,12 @@ else
 pslFreeList(&pslList);
 }
 
-char *getParentTrackName(struct trackDb *tdb)
+
+static char *getParentTrackName(struct trackDb *tdb)
 /* Get the track table name or composite track parent name if applicable. */
 {
-char *trackTable = trackDbSetting(tdb, "subTrack");
-if (trackTable == NULL)
-    {
-    /* Look for parentWigMaf passed in explicitly via CGI, not from cart.
-     * tdb->type in this case is wig not wigMaf... */
-    trackTable = cgiUsualString("parentWigMaf", NULL);
-    if (trackTable == NULL)
-	trackTable = tdb->tableName;
-    trackTable = cloneString(trackTable);
-    }
-else
-    {
-    /* trim off extra words in subTrack setting, if any: */
-    char *words[2];
-    if (chopLine(cloneString(trackTable), words) > 0)
-	trackTable = words[0];
-    }
-return trackTable;
+tdb = trackDbTopLevelSelfOrParent(tdb);
+return tdb->tableName;
 }
 
 void printTBSchemaLink(struct trackDb *tdb)
@@ -2554,18 +2539,19 @@ void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-char *composite;
-struct trackDb *fullTdb = NULL;
-
-if (!trackDbOrigAssembly(tdb))
-    {
-    /* look in composite's settings */
-    if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
-        fullTdb = hashFindVal(trackHash, composite);
-    if (fullTdb != NULL)
-        tdb = fullTdb;
-    }
+trackDbOrigAssembly(tdb);
 trackDbPrintOrigAssembly(tdb, database);
+}
+
+static char *getHtmlFromSelfOrParent(struct trackDb *tdb)
+/* Get html from self or from parent if not in self. */
+{
+for (;tdb != NULL; tdb = tdb->parent)
+    {
+    if (tdb->html != NULL && tdb->html[0] != 0)
+        return tdb->html;
+    }
+return NULL;
 }
 
 void printTrackHtml(struct trackDb *tdb)
@@ -2592,10 +2578,11 @@ if (!isCustomTrack(tdb->tableName))
 	}
     printDataRestrictionDate(tdb);
     }
-if (tdb->html != NULL && tdb->html[0] != 0)
+char *html = getHtmlFromSelfOrParent(tdb);
+if (html != NULL && html[0] != 0)
     {
     htmlHorizontalLine();
-    puts(tdb->html);
+    puts(html);
     }
 hPrintf("<BR>\n");
 }

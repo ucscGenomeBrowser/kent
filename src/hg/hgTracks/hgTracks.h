@@ -518,10 +518,13 @@ Color getSeqColor(char *name, struct hvGfx *hvg);
 /* Return color index corresponding to chromosome/scaffold name. */
 
 Color lighterColor(struct hvGfx *hvg, Color color);
-/* Get lighter shade of a color */
+/* Get lighter shade of a color - half way between this color and white */
+
+Color somewhatLighterColor(struct hvGfx *hvg, Color color);
+/* Get a somewhat lighter shade of a color - 1/3 of the way towards white. */
 
 Color slightlyLighterColor(struct hvGfx *hvg, Color color);
-/* Get slightly lighter shade of a color */
+/* Get slightly lighter shade of a color - closer to gray actually  */
 
 void clippedBarbs(struct hvGfx *hvg, int x, int y,
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,

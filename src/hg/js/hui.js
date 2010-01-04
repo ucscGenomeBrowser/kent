@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.46 2009/12/11 23:08:06 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.47 2010/01/04 19:12:27 kent Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -541,24 +541,20 @@ function showConfigControls(name)
 {
 // Will show configuration controls for name= {tableName}.{view}
 // Config controls not matching name will be hidden
-    //if($( ".viewDD[name$='" + name + ".vis']").attr("selectedIndex") == 0) {
-    //    $("input[name$='.showCfg']").val("off");
-    //    $("tr[id^='tr_cfg_']").css('display','none');  // hide cfg controls when view is hide
-    //    return true;
-    //}
     var trs  = $("tr[id^='tr_cfg_']")
     $("input[name$='.showCfg']").val("off"); // Turn all off
     $( trs ).each( function (i) {
         if( this.id == 'tr_cfg_'+name && this.style.display == 'none') {
             $( this ).css('display','');
-            $("input[name$='."+name+".showCfg']").val("on");
+	    $("input[name$='."+name+".showCfg']").val("on");
         }
         else if( this.style.display == '') {
             $( this ).css('display','none');
         }
     });
 
-    $("table[id^='subtracks.']").each( function (i) { subtrackCfgHideAll(this);} ); // Close the cfg controls in the subtracks
+    // Close the cfg controls in the subtracks
+    $("table[id^='subtracks.']").each( function (i) { subtrackCfgHideAll(this);} ); 
     return true;
 }
 
