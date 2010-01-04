@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.581 2009/12/22 18:55:38 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.582 2010/01/04 23:23:25 hartera Exp $";
 
 include trackDb.chainNet.ra
 
@@ -1241,15 +1241,6 @@ visibility hide
 color 0,60,120
 altColor 200,220,255
 type bed 12 .
-
-track exoniphy
-shortLabel Exoniphy 
-longLabel Exoniphy: Conserved Exon Predictions (Human/Mouse/Rat)
-group genes
-priority 50.9
-visibility hide
-color 173,17,162
-type genePred
 
 track exoniphyGene
 shortLabel Exoniphy Genes

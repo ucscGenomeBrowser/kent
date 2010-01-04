@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.79 2010/01/04 19:12:36 kent Exp $";
+#	"$Id: trackDb.ra,v 1.80 2010/01/04 23:25:10 hartera Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1269,15 +1269,6 @@ group map
 priority 1
 visibility hide
 type bed 4 +
-
-track exoniphy
-shortLabel Exoniphy
-longLabel Exoniphy Human/Mouse/Rat/Dog
-group genes
-priority 50.9
-visibility hide
-color 173,17,162
-type genePred
 
 track cons46way
 compositeTrack on
