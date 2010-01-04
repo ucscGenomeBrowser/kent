@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.55 2009/12/22 18:55:45 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.56 2010/01/04 19:59:34 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -79,6 +79,7 @@ speciesCodonDefault danRer3
 treeImage phylo/danRer3_5way.gif
 
 track chainHg18
+release beta
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel  $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -93,6 +94,8 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+release beta
+#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 #replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel  $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -114,6 +117,8 @@ longLabel Mm6 ($o_date/$o_db) Alignment Net
 priority 126.3
 
 track chainMm8
+release beta
+#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 #replaces record chainMm8 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -128,6 +133,8 @@ type chain mm8
 otherDb mm8
 
 track netMm8
+release beta
+#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 #replaces record netMm8 in parent dir missing/extra release
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -162,6 +169,8 @@ track netFr1 override
 priority 130.2
 
 track chainTetNig1
+release beta
+#replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 #replaces record chainTetNig1 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.47 2009/12/23 23:19:24 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.48 2010/01/04 19:59:33 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -64,6 +64,7 @@ priority 124.3
 visibility full
 
 track chainHg18
+release beta
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -77,6 +78,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+release beta
 #replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_db Net  
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -130,11 +132,6 @@ visibility dense
 
 track netMm5 override
 priority 127.3
-
-track chainNetDanRer6 override
-chainMinScore 2000
-chainLinearGap medium
-priority 159.3
 
 track chainMm9 override
 priority 128.1

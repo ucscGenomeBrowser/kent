@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.39 2009/12/22 21:14:19 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.40 2010/01/04 19:59:32 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -150,6 +150,7 @@ visibility hide
 
 track chainHg18
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -164,6 +165,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
+release beta
 #replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net

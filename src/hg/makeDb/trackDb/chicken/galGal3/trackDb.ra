@@ -1,3 +1,7 @@
+#	"$Id: trackDb.ra,v 1.17 2010/01/04 19:59:31 hiram Exp $";
+
+include trackDb.chainNet.ra
+
 track multiz7way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignments & Cons.
@@ -85,9 +89,6 @@ priority 250.1
 track netHg18 override
 shortLabel $o_db Net 
 priority 250.2
-
-track chainNetHg19 override
-priority 250.3
 
 track caCondor454
 shortLabel Condor 454 

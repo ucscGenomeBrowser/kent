@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.7 2009/12/28 21:41:55 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.8 2010/01/04 19:59:32 hiram Exp $";
 
 track chainNetRn4 override
 chainMinScore 5000
@@ -24,8 +24,11 @@ chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
+track chainNetMm8 override
+shortLabel $o_db Chain/Net
+
 track chainNetHg18 override
-shortLabel Human Chain/Net
+shortLabel $o_Organism Chain/Net
 
 track chainNetOrnAna1 override
 chainMinScore 5000

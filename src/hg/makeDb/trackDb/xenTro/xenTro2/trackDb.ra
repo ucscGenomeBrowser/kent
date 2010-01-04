@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.20 2009/12/18 23:41:22 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.21 2010/01/04 19:59:34 hiram Exp $";
 
 include trackDb.chainNet.ra
 
@@ -68,6 +68,7 @@ showTopScorers 200
 type bed 5 .
 
 track chainDanRer4
+release beta
 #replaces record chainDanRer4 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -92,6 +93,7 @@ track netRn4 override
 priority 115.1
 
 track chainGalGal2
+release beta
 #replaces record chainGalGal2 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -109,6 +111,7 @@ track netGalGal2 override
 priority 135.1
 
 track chainMonDom4
+release beta
 #replaces record chainMonDom4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -123,6 +126,7 @@ type chain monDom4
 otherDb monDom4
 
 track netMonDom4
+release beta
 #replaces record netMonDom4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -163,7 +167,3 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track netMm8 override
 priority 120.1
-
-track chainNetHg19 override
-priority 125.3
-

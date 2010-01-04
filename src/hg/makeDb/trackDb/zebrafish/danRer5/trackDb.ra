@@ -125,6 +125,7 @@ type rmsk
 canPack off
 
 track chainMm9
+release beta
 #replaces record chainMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -140,6 +141,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+release beta
 #replaces record netMm9 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -159,12 +161,6 @@ track netHg18 override
 shortLabel $o_db Net
 otherDb hg18
 priority 99.2
-
-track chainNetHg19 override
-priority 99.3
-
-track chainNetMonDom5 override
-priority 105 
 
 # track chainOryLat1 
 # priority 110
