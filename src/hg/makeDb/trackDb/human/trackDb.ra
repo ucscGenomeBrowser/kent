@@ -274,6 +274,15 @@ color 100,50,0
 altColor 175,150,128
 type genePred
 
+track exoniphy
+shortLabel Exoniphy
+longLabel Exoniphy Human/Mouse/Rat/Dog
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 track pseudoYale
 shortLabel Yale Pseudo
 longLabel Yale Pseudogenes.
