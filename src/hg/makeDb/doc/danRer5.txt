@@ -3168,4 +3168,11 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# CREATE LIFTOVER CHAINS FROM danRer5 TO danRer6 (DONE 10/27/09 angie)
+    doSameSpeciesLiftOver.pl -debug danRer5 danRer6
+    cd /hive/data/genomes/danRer5/bed/blat.danRer6.2009-10-27
+    doSameSpeciesLiftOver.pl danRer5 danRer6 >& do.log & tail -f do.log
+
 ############################################################################
