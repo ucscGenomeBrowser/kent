@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.162 2009/12/26 20:16:10 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.163 2010/01/04 19:42:51 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2211,6 +2211,12 @@ term BB1
 tag BB1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
+
+term BB2
+tag BB2
+type mapAlgorithm
+description NEED THIS
+
 
 # readType : type of read for Wold/Caltech RNA-seq project (1x32 = single 32 nt, 2x75 = paired read 75 nt)
 term 1x32
