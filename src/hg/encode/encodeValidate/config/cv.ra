@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.163 2010/01/04 19:42:51 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.164 2010/01/04 19:48:26 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2186,6 +2186,11 @@ term NA
 tag NA
 type mapAlgorithm
 description No algorithm applicable
+
+term erng32a
+tag erng32a
+type mapAlgorithm
+description erange v3.2a
 
 term erng3
 tag erng3
