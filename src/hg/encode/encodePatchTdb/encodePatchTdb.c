@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "localmem.h"
 #include "options.h"
 #include "obscure.h"
 #include "errabort.h"
@@ -9,7 +10,7 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.1.2.2 2009/12/24 01:51:13 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.1.2.3 2010/01/04 16:28:33 kent Exp $";
 
 char *clMode = "add";
 char *clTest = NULL;
@@ -421,8 +422,9 @@ for (groupIx=1; ; groupIx++)
 return hashOfHashes;
 }
 
-void validateParentViewSub(struct raRecord *parent, struct raRecord *view, struct raRecord *sub)
-/* Make sure that it is kosher that sub belongs to parent and view.  */
+void validateParentSub(struct raRecord *parent, struct raRecord *sub)
+/* Make sure that it is kosher that sub belongs to parent.  Mostly check
+ * that subGroup1, subGroup2, etc in parent work with subGroups of sub. */
 {
 char *subGroups = raRecordMustFindTagVal(sub, "subGroups");
 struct hash *myGroups = hashThisEqThatLine(subGroups, sub->startLineIx, FALSE);
@@ -441,6 +443,12 @@ for (myGroupEl = myGroupList; myGroupEl != NULL; myGroupEl = myGroupEl->next)
         recordAbort(sub, "Parent %s doesn't have a %s %s", parent->key, myName, myVal);
     verbose(2, "%s %s %s found in %s\n", sub->key, myName, myVal, parent->key);
     }
+}
+
+void validateParentViewSub(struct raRecord *parent, struct raRecord *view, struct raRecord *sub)
+/* Make sure that it is kosher that sub belongs to parent and view.  */
+{
+validateParentSub(parent, sub);
 }
 
 
@@ -507,6 +515,201 @@ for (patch = patchList; patch != NULL; patch = nextPatch)
     }
 }
 
+struct raTag *findViewSubGroup(struct raRecord *r)
+/* Find tag that is one of the subGroup tags with first word view.  May return NULL. */
+{
+int i;
+for (i=1; ; ++i)
+    {
+    char tagName[16];
+    safef(tagName, sizeof(tagName), "subGroup%d", i);
+    struct raTag *tag = raRecordFindTag(r, tagName);
+    if (tag == NULL)
+        return NULL;
+    if (startsWithWord("view", tag->val))
+        return tag;
+    }
+}
+
+struct raRecord *makeParentPlusViewSubsFromComplexRecord(struct raRecord *complexRecord)
+/* Convert one complex parent record from the settings-by-view era to parent record plus views. */
+{
+struct lm *lm = lmInit(0);
+/* Get list of views from subGroup1 or subGroup2 tag. */
+struct raTag *viewSubGroupTag = findViewSubGroup(complexRecord);
+if (viewSubGroupTag == NULL)
+    recordAbort(complexRecord, "Can't find view subGroup#");
+char *line = lmCloneString(lm, viewSubGroupTag->val);
+/*  line looks something like: 
+ *       view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags */
+char *viewWord = nextWord(&line);
+assert(sameString(viewWord, "view"));
+nextWord(&line);	// Just skip over name to label views with
+struct slPair *viewList = NULL;
+char *thisEqThat;
+while ((thisEqThat = nextWord(&line)) != NULL)
+    {
+    char *eq = strchr(thisEqThat, '=');
+    if (eq == NULL)
+        recordAbort(complexRecord, "expecting this=that got %s in %s tag", 
+		eq, viewSubGroupTag->name);
+    *eq = 0;
+    slPairAdd(&viewList, thisEqThat, lmCloneString(lm, eq+1));
+    }
+slReverse(&viewList);
+
+
+/* Get pointers to settingsByView and visibilityViewDefaults tags, and take them off of list. */
+struct raTag *settingsByViewTag = raRecordFindTag(complexRecord, "settingsByView");
+struct raTag *visibilityViewDefaultsTag = raRecordFindTag(complexRecord, "visibilityViewDefaults");
+struct raTag *tagList = NULL, *t, *next;
+for (t = complexRecord->tagList; t != NULL; t = next)
+    {
+    next = t->next;
+    if (t != settingsByViewTag && t != visibilityViewDefaultsTag)
+        slAddHead(&tagList, t);
+    }
+slReverse(&tagList);
+complexRecord->tagList = tagList;
+
+/* Parse out visibilityViewDefaults. */
+struct hash *visHash = NULL;
+struct raTag *visTag = raRecordFindTag(complexRecord, "visibilityViewDefaults");
+if (visTag != NULL)
+    {
+    char *dupe = lmCloneString(lm, visTag->val);
+    visHash = hashThisEqThatLine(dupe, complexRecord->startLineIx, FALSE);
+    }
+
+/* Parse out settingsByView. */
+struct raTag *settingsTag = raRecordFindTag(complexRecord, "settingsByView");
+struct hash  *settingsHash = hashNew(4);
+if (settingsTag != NULL)
+    {
+    char *dupe = lmCloneString(lm, settingsTag->val);
+    char *line = dupe;
+    char *viewName;
+    while ((viewName = nextWord(&line)) != NULL)
+	{
+	char *settings = strchr(viewName, ':');
+	if (settings == NULL)
+	    recordAbort(complexRecord, "missing colon in settingsByView '%s'", viewName);
+	struct slPair *el, *list = NULL;
+	*settings++ = 0;
+	if (!slPairFind(viewList, viewName))
+	    recordAbort(complexRecord, "View '%s' in settingsByView is not defined in subGroup",
+	    	viewName);
+	char *words[32];
+	int cnt,ix;
+	cnt = chopByChar(settings,',',words,ArraySize(words));
+	for (ix=0; ix<cnt; ix++)
+	    {
+	    char *name = words[ix];
+	    char *val = strchr(name, '=');
+	    if (val == NULL)
+		recordAbort(complexRecord, "Missing equals in settingsByView on %s", name);
+	    *val++ = 0;
+
+	    AllocVar(el);
+	    el->name = cloneString(name);
+	    el->val = cloneString(val);
+	    slAddHead(&list,el);
+	    }
+	slReverse(&list);
+	hashAdd(settingsHash, viewName, list);
+	}
+    }
+
+#ifdef SOON
+/* Go through each view and write it, and then the children who are in that view. */
+struct slPair *view;
+for (view = viewList; view != NULL; view = view->next)
+    {
+    char viewTrackName[256];
+    safef(viewTrackName, sizeof(viewTrackName), "%sView%s", complexRecord->key, view->name);
+    fprintf(f, "\n");	/* Blank line to open view. */
+    fprintf(f, "    track %s\n", viewTrackName);
+    char *shortLabel = lmCloneString(lm, view->val);
+    subChar(shortLabel, '_', ' ');
+    fprintf(f, "    shortLabel %s\n", shortLabel);
+    fprintf(f, "    view %s\n", view->name);
+    char *vis = NULL;
+    if (visHash != NULL)
+         vis = hashFindVal(visHash, view->name);
+    if (vis != NULL)
+	{
+	int len = strlen(vis);
+	boolean gotPlus = (lastChar(vis) == '+');
+	if (gotPlus)
+	    len -= 1;
+	char visOnly[len+1];
+	memcpy(visOnly, vis, len);
+	visOnly[len] = 0;
+	fprintf(f, "    visibility %s\n", visOnly);
+	if (gotPlus)
+	    fprintf(f, "    viewUi on\n");
+	}
+    fprintf(f, "    subTrack %s\n", complexRecord->key);
+    struct slPair *settingList = hashFindVal(settingsHash, view->name);
+    struct slPair *setting;
+    for (setting = settingList; setting != NULL; setting = setting->next)
+	fprintf(f, "    %s %s\n", setting->name, (char*)setting->val);
+
+    /* Scan for children that are in this view. */
+    struct raRecord *r;
+    for (r = file->recordList; r != NULL; r = r->next)
+	{
+	struct raTag *subTrackTag = raRecordFindTag(r, "subTrack");
+	if (subTrackTag != NULL)
+	    {
+	    if (startsWithWord(complexRecord->key, subTrackTag->val))
+		{
+		struct raTag *subGroupsTag = raRecordFindTag(r, "subGroups");
+		if (subGroupsTag != NULL)
+		    {
+		    struct hash *hash = hashThisEqThatLine(subGroupsTag->val, 
+			    r->startLineIx, FALSE);
+		    char *viewName = hashFindVal(hash, "view");
+		    if (viewName != NULL && sameString(viewName, view->name))
+			{
+			writeRecordAsSubOfView(r, f, viewTrackName);
+			}
+		    hashFree(&hash);
+		    }
+		}
+	    }
+	}
+    }
+#endif /* SOON */
+return NULL;  // uglyf
+}
+
+
+void patchInTrack(struct raFile *tdbFile, struct raRecord *patchList)
+/* Move records in patch to appropriate place in file.   Have to make up view subtracks. */
+{
+struct raFile *patchFile = patchList->file;
+linkUpParents(patchFile);
+struct raRecord *r;
+for (r=patchFile->recordList; r != NULL; r = r->next)
+    {
+    if (r->parent)
+        validateParentSub(r->parent, r);
+    char *release = raRecordFindTagVal(r, "release");
+    struct raRecord *oldR = findRecordCompatibleWithRelease(tdbFile, release, r->key);
+    if (oldR)
+        {
+	if (!sameString(clMode, "update") && !sameString(clMode, "replace"))
+	    {
+	    errAbort("track %s already exists in %s.  Use mode=update or mode=replace",
+	    	r->key, tdbFile->name);
+	    }
+	uglyAbort("mode update and replace not yet implemented");
+	}
+    }
+uglyf("At least the subGroups in %s check\n", patchFile->name);
+uglyAbort("patchInTrack not implemented");
+}
 
 void encodePatchTdb(char *patchFileName, char *tdbFileName)
 /* encodePatchTdb - Lay a trackDb.ra file from the pipeline gently on top of the trackDb system. */
@@ -557,7 +760,7 @@ if (hasTrack)
 	}
     else
         {
-	uglyAbort("Don't know how to add a new track yet");
+	patchInTrack(tdbFile, patchList);
 	}
     }
 else
