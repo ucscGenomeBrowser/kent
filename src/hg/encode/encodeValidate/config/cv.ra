@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.169 2010/01/04 23:38:22 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.170 2010/01/04 23:43:18 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -181,23 +181,21 @@ protocol A549_protocol.pdf
 term AG04449
 tag AG04449
 type Cell Line
-description Fetal Buttock/Thigh Fibroblast
+description Fetal Buttock/Thigh Fibroblast (provisional)
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
 tier 3
-protocol pending...
 #protocol AG04449_Stam_protocol.pdf
 
 term AG04450
 tag AG04450
 type Cell Line
-description Fetal Lung Fibroblast
+description Fetal Lung Fibroblast (provisional)
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
 tier 3
-protocol pending...
 #protocol AG04450_Stam_protocol.pdf
 
 term AG09309
@@ -213,12 +211,11 @@ protocol AG09309_Stam_protocol.pdf
 term AG09319
 tag AG09319
 type Cell Line
-description Adult Toe Fibroblast
+description Adult Toe Fibroblast (provisional)
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
 tier 3
-protocol pending...
 #protocol AG09319_Stam_protocol.pdf
 
 term AG10803
@@ -583,12 +580,11 @@ protocol GM19240_Crawford_protocol.pdf
 term H7-hESC
 tag H7es
 type Cell Line
-description Undifferentiated human embryonic stem cells
+description Undifferentiated human embryonic stem cells (provisional)
 vendorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 tier 3
-protocol pending...
 #protocol H7-hESC_Stam_protocol.pdf
 
 term H9ES
@@ -685,12 +681,11 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term HAEpiC
 tag HAE
 type Cell Line
-description Human amniotic epithelial cells
+description Human amniotic epithelial cells (provisional)
 vendorName ScienCell
 vendorId 7100
 orderUrl http://www.sciencellonline.com/site/products/7100.php
 tier 3
-protocol pending...
 #protocol HAEpiC_Stam_protocol.pdf
 
 term HAL
@@ -719,12 +714,11 @@ protocol HCF_Stam_protocol.pdf
 term HCM
 tag HCM
 type Cell Line
-description Human Cardiac Myocytes
+description Human Cardiac Myocytes (provisional)
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/products/6200.php
 tier 3
-protocol pending...
 #protocol HCM_Stam_protocol.pdf
 
 term HCPEpiC
@@ -755,12 +749,11 @@ protocol HCT-116_protocol.pdf
 term HEEpiC
 tag HEE
 type Cell Line
-description Human esophageal epithelial cells
+description Human esophageal epithelial cells (provisional)
 vendorName ScienCell
 vendorId 2700
 orderUrl http://www.sciencellonline.com/site/products/2700.php
 tier 3
-protocol pending...
 #protocol HEEpiC_Stam_protocol.pdf
 
 term HEK293
@@ -831,12 +824,11 @@ protocol HGF_Stam_protocol.pdf
 term HIPEpiC
 tag HIPE
 type Cell Line
-description Human iris pigment epithelial cells
+description Human iris pigment epithelial cells (provisional)
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/products/6560.php
 tier 3
-protocol pending...
 #protocol HIPEpiC_Stam_protocol.pdf
 
 term HL-60
@@ -912,12 +904,11 @@ protocol HRE_Stam_protocol.pdf
 term HRPEpiC
 tag HRPE
 type Cell Line
-description Human retinal pigment epithelial cells
+description Human retinal pigment epithelial cells (provisional)
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/products/6540.php
 tier 3
-protocol pending...
 #protocol HRPEpiC_Stam_protocol.pdf
 
 term HSMM
