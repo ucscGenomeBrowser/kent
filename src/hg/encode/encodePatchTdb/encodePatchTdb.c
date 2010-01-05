@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.4 2010/01/05 05:31:25 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.5 2010/01/05 05:34:27 kent Exp $";
 
 char *clMode = "add";
 char *clTest = NULL;
@@ -150,39 +150,6 @@ char *raRecordMustFindTagVal(struct raRecord *r, char *name)
 {
 struct raTag *tag = raRecordMustFindTag(r, name);
 return tag->val;
-}
-
-struct loadInfo *loadInfoReadRa(char *fileName)
-/* Read ra file and turn it into a list of loadInfo. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct loadInfo *list = NULL, *el;
-while (raSkipLeadingEmptyLines(lf, NULL))
-    {
-    char *tag, *val;
-    AllocVar(el);
-    while (raNextTagVal(lf, &tag, &val, NULL))
-        {
-	if (sameString(tag, "tablename"))
-	    el->name = cloneString(val);
-	else if (sameString(tag, "assembly"))
-	    el->db = cloneString(val);
-	else if (sameString(tag, "view"))
-	    el->view = cloneString(val);
-	else if (sameString(tag, "downloadOnly"))
-	    el->downloadOnly = cloneString(val);
-	}
-    if (el->name == NULL)
-        errAbort("missing tablename line %d of %s", lf->lineIx, lf->fileName);
-    if (el->db == NULL)
-        errAbort("missing assembly line %d of %s", lf->lineIx, lf->fileName);
-    if (el->downloadOnly == NULL)
-        errAbort("missing downloadOnly line %d of %s", lf->lineIx,lf->fileName);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
 }
 
 static struct raRecord *readRecordsFromFile(struct raFile *file, struct dyString *dy)
