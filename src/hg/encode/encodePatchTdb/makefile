@@ -16,3 +16,6 @@ compile:: ${O}
 
 clean::
 	rm -f ${A} ${O}
+
+test: 
+	cd tests; test.sh

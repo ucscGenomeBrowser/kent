@@ -10,10 +10,11 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.6 2010/01/05 05:39:14 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.7 2010/01/05 20:15:44 kent Exp $";
 
 char *clMode = "add";
 char *clTest = NULL;
+boolean clNoComment = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,8 +28,10 @@ errAbort(
   "options:\n"
   "   -mode=mode (default %s).  Operate in one of the following modes\n"
   "         replace - replace existing records rather than doing field by field update.\n"
+  "                   Leaves existing record commented out.\n"
   "         add - add new records at end of parent's subtrack list. Complain if record isn't new\n"
   "               warn if it's a new track rather than just new subtracks\n"
+  "   -noComment - If set will not leave old record commented out\n"
   "   -test=patchFile - rather than doing patches in place, write patched output to this file\n"
   , clMode
   );
@@ -37,6 +40,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"mode", OPTION_STRING},
    {"test", OPTION_STRING},
+   {"noComment", OPTION_BOOLEAN},
    {"root", OPTION_STRING},
    {NULL, 0},
 };
@@ -75,6 +79,7 @@ struct raRecord
     struct raFile *file;	/* Pointer to file we are in. */
     char *endComments;		/* Some comments that may follow record. */
     struct raRecord *subtracks;	/* Subtracks of this track. */
+    boolean isRemoved;		/* If set, suppresses output. */
     };
 
 struct raFile
@@ -427,27 +432,8 @@ for (r = view->next; r != NULL; r = r->next)
         break;
     }
 struct raRecord *recordBefore = (viewChild != NULL ? viewChild : view);
+sub->parent = view;
 sub->next = recordBefore->next;
-recordBefore->next = sub;
-}
-
-void substituteIntoView(struct raRecord *sub, struct raRecord *oldSub, struct raRecord *view)
-/* Substitute sub for oldSub as a child of view.  Assumes oldSub is in same file and after view. */
-{
-uglyf("substituteIntoView sub=%s oldSub=%s %p view=%s\n", sub->key, oldSub->key, oldSub, view->key);
-struct raRecord *recordBefore = NULL;
-struct raRecord *r, *prev = NULL;
-for (r = view; r != NULL; r = r->next)
-    {
-    if (r->next == oldSub)
-	{
-        recordBefore = prev;
-	break;
-	}
-    prev = r;
-    }
-assert(recordBefore != NULL);
-sub->next = oldSub->next;
 recordBefore->next = sub;
 }
 
@@ -491,8 +477,38 @@ else
 t->text = dyStringCannibalize(&dy);
 }
 
-void indentTdbText(struct raRecord *r, int indentCount)
-/* Add spaces to start of all text in r. */
+boolean hasBlankLine(char *text)
+/* Return TRUE if there is an empty line in text. */
+{
+char *s, *e;
+for (s = text; !isEmpty(s); s = e)
+    {
+    e = strchr(s, '\n');
+    if (e == s)
+        return TRUE;
+    else
+        e += 1;
+    }
+return FALSE;
+}
+
+void makeSureBlankLineBefore(struct raRecord *r)
+/* Make sure there is a blank line before record. */
+{
+struct raTag *first = r->tagList;
+char *firstText = first->text;
+if (!hasBlankLine(firstText))
+    {
+    int len = strlen(firstText);
+    char *newText = needMem(len+2);
+    newText[0] = '\n';
+    strcpy(newText+1, firstText);
+    first->text = newText;
+    }
+}
+
+void addToStartOfTextLines(struct raRecord *r, char c, int charCount)
+/* Add char to start of all text in r. */
 {
 struct raTag *t;
 struct dyString *dy = dyStringNew(0);
@@ -512,8 +528,8 @@ for (t = r->tagList; t != NULL; t = t->next)
 	else
 	    {
 	    // Indent some extra. 
-	    for (i=0; i<indentCount; ++i)
-		dyStringAppendC(dy, ' ');
+	    for (i=0; i<charCount; ++i)
+		dyStringAppendC(dy, c);
 	    if (e == NULL)
 		{
 		dyStringAppend(dy, s);
@@ -528,6 +544,31 @@ for (t = r->tagList; t != NULL; t = t->next)
     t->text = cloneString(dy->string);
     }
 dyStringFree(&dy);
+}
+
+void indentTdbText(struct raRecord *r, int indentCount)
+/* Add spaces to start of all text in r. */
+{
+addToStartOfTextLines(r, ' ', indentCount);
+}
+
+void commentOutStanza(struct raRecord *r)
+/* Add # to start of all test in r. */
+{
+addToStartOfTextLines(r, '#', 1);
+}
+
+void substituteIntoView(struct raRecord *sub, struct raRecord *oldSub, struct raRecord *view)
+/* Substitute sub for oldSub as a child of view.  Assumes oldSub is in same file and after view. 
+ * Leaves in oldSub, but "commented out" */
+{
+sub->parent = view;
+sub->next = oldSub->next;
+oldSub->next = sub;
+if (clNoComment)
+    oldSub->isRemoved = TRUE;
+else
+    commentOutStanza(oldSub);
 }
 
 void patchInSubtrack(struct raRecord *parent, struct raRecord *sub)
@@ -546,6 +587,7 @@ if (hasViewSubtracks(parent))
     struct raRecord *view = findRecordCompatibleWithRelease(parent->file, release, viewTrackName);
     validateParentViewSub(parent, view, sub);
     substituteParentText(parent, view, sub);
+    makeSureBlankLineBefore(sub);
     indentTdbText(sub, 4);
     struct raRecord *oldSub = findRecordCompatibleWithRelease(parent->file, release, sub->key);
     if (glReplace)
@@ -608,7 +650,7 @@ checkSubsAreForParent(parentName, subList);
 /* Load file to patch. */
 struct raFile *tdbFile = raFileRead(tdbFileName);
 int oldTdbCount = slCount(tdbFile->recordList);
-if (oldTdbCount < 100)
+if (oldTdbCount < 50)
     warn("%s only has %d records, I hope you meant to hit a new file\n", tdbFileName, 
     	oldTdbCount);
 linkUpParents(tdbFile);
@@ -626,11 +668,16 @@ FILE *f = mustOpen(outName, "w");
 struct raRecord *r;
 for (r = tdbFile->recordList; r != NULL; r = r->next)
     {
-    struct raTag *tag;
-    for (tag = r->tagList; tag != NULL; tag = tag->next)
-        fputs(tag->text, f);
-    if (r->endComments != NULL)
-	fputs(r->endComments, f);
+    if (!r->isRemoved)
+	{
+	struct raTag *tag;
+	for (tag = r->tagList; tag != NULL; tag = tag->next)
+	    {
+	    fputs(tag->text, f);
+	    }
+	if (r->endComments != NULL)
+	    fputs(r->endComments, f);
+	}
     }
 fputs(tdbFile->endSpace, f);
 carefulClose(&f);
@@ -645,6 +692,7 @@ if (argc != 3)
     usage();
 clMode = optionVal("mode", clMode);
 clTest = optionVal("test", clTest);
+clNoComment = optionExists("noComment");
 if (sameString(clMode, "add"))
     glReplace = FALSE;
 else if (sameString(clMode, "replace"))
