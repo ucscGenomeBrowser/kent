@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.7 2010/01/05 20:15:44 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.8 2010/01/05 20:25:37 kent Exp $";
 
 char *clMode = "add";
 char *clTest = NULL;
@@ -46,16 +46,6 @@ static struct optionSpec options[] = {
 };
 
 boolean glReplace;	// If TRUE then do a replacement operation.
-
-struct loadInfo
-/* Information from a stanza of a load.ra file. */
-    {
-    struct loadInfo *next;
-    char *name;		/* from tablename. */
-    char *db;		/* from assembly. */
-    char *view;		/* form view. */
-    char *downloadOnly;	/* downloadOnly 0 or 1 */
-    };
 
 struct raTag
 /* A tag in a .ra file. */
@@ -214,20 +204,6 @@ for (r = raFile->recordList; r != NULL; r = r->next)
 /* Clean up and go home. */
 dyStringFree(&dy);
 return raFile;
-}
-
-char *findDb(struct loadInfo *loadList, char *loadRa)
-/* Find the db common to the list.  Abort if mixing dbs. */
-{
-struct loadInfo *loadInfo;
-char *db = loadList->db;
-for (loadInfo = loadList->next; loadInfo != NULL; loadInfo = loadInfo->next)
-    {
-    if (!sameString(db, loadInfo->db))
-        errAbort("Multiple databases in %s: %s and %s, can't handle this.", 
-		loadRa, db, loadInfo->db);
-    }
-return db;
 }
 
 boolean compositeFirst(struct raRecord *raList)
