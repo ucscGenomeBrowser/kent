@@ -10,11 +10,10 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.5 2010/01/05 05:34:27 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.6 2010/01/05 05:39:14 kent Exp $";
 
 char *clMode = "add";
 char *clTest = NULL;
-static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 
 void usage()
 /* Explain usage and exit. */
@@ -31,9 +30,6 @@ errAbort(
   "         add - add new records at end of parent's subtrack list. Complain if record isn't new\n"
   "               warn if it's a new track rather than just new subtracks\n"
   "   -test=patchFile - rather than doing patches in place, write patched output to this file\n"
-  "   -root=/path/to/trackDb/root/dir - Sets the root directory of the trackDb.ra directory\n"
-  "         hierarchy to be given path. By default this is ~/kent/src/hg/makeDb/trackDb.\n"
-  "   -org=organism - try to put this at the organism level of the hierarchy instead of bottom\n"
   , clMode
   );
 }
@@ -647,7 +643,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-clRoot = simplifyPathToDir(optionVal("root", clRoot));
 clMode = optionVal("mode", clMode);
 clTest = optionVal("test", clTest);
 if (sameString(clMode, "add"))
