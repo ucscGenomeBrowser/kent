@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.3 2010/01/05 04:59:58 kent Exp $";
+static char const rcsid[] = "$Id: encodePatchTdb.c,v 1.4 2010/01/05 05:31:25 kent Exp $";
 
 char *clMode = "add";
 char *clTest = NULL;
@@ -468,6 +468,26 @@ sub->next = recordBefore->next;
 recordBefore->next = sub;
 }
 
+void substituteIntoView(struct raRecord *sub, struct raRecord *oldSub, struct raRecord *view)
+/* Substitute sub for oldSub as a child of view.  Assumes oldSub is in same file and after view. */
+{
+uglyf("substituteIntoView sub=%s oldSub=%s %p view=%s\n", sub->key, oldSub->key, oldSub, view->key);
+struct raRecord *recordBefore = NULL;
+struct raRecord *r, *prev = NULL;
+for (r = view; r != NULL; r = r->next)
+    {
+    if (r->next == oldSub)
+	{
+        recordBefore = prev;
+	break;
+	}
+    prev = r;
+    }
+assert(recordBefore != NULL);
+sub->next = oldSub->next;
+recordBefore->next = sub;
+}
+
 char *firstTagInText(char *text)
 /* Return the location of tag in text - skipping blank and comment lines and white-space */
 {
@@ -561,21 +581,22 @@ if (hasViewSubtracks(parent))
     char *subRelease = raRecordFindTagVal(sub, "release");
     char *release = nonNullRelease(parentRelease, subRelease);
     struct raRecord *view = findRecordCompatibleWithRelease(parent->file, release, viewTrackName);
-    struct raRecord *oldSub = findRecordCompatibleWithRelease(parent->file, release, sub->key);
-    if (oldSub)
-	{
-        if (glReplace)
-	    {
-	    uglyAbort("Unfortunately really don't know how to update or replace");
-	    }
-	else
-	    recordAbort(sub, "record %s already exists - use mode=replace",
-	    	sub->key);
-	}
     validateParentViewSub(parent, view, sub);
     substituteParentText(parent, view, sub);
     indentTdbText(sub, 4);
-    patchIntoEndOfView(sub, view);
+    struct raRecord *oldSub = findRecordCompatibleWithRelease(parent->file, release, sub->key);
+    if (glReplace)
+        {
+	if (oldSub == NULL)
+	    recordAbort(sub, "%s doesn't exist but using mode=replace\n", sub->key);
+	substituteIntoView(sub, oldSub, view);
+	}
+    else
+        {
+	if (oldSub != NULL)
+	    recordAbort(sub, "record %s already exists - use mode=replace", sub->key);
+	patchIntoEndOfView(sub, view);
+	}
     }
 else
     {
