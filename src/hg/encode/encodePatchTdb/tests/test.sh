@@ -10,3 +10,5 @@ encodePatchTdb mode=replace in/replace3.ra trackDb.ra -test=out/replace3.ra
 diff expected/replace3.ra out/replace3.ra
 encodePatchTdb mode=replace -noComment in/replace3.ra trackDb.ra -test=out/replace3NoComment.ra
 diff expected/replace3NoComment.ra out/replace3NoComment.ra
+encodePatchTdb in/composite.ra trackDb.ra -test=out/composite.ra
+diff expected/composite.ra out/composite.ra
