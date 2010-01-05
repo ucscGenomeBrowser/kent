@@ -372,7 +372,7 @@ dragAndDrop subTracks
 group expression
 priority 0
 visibility hide
-type genePred
+type bed 12
 
     track burgeRnaSeqGemMapperAlignBrain
     subTrack burgeRnaSeqGemMapperAlign
