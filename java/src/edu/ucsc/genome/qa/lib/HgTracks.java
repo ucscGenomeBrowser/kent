@@ -424,10 +424,15 @@ public class HgTracks {
         System.out.println("Unexpected response code " + code);
       }
       WebForm form = page.getFormWithName("TrackForm");
-      // this will fail gracefully if we attempt an unsupported
-      // display mode
-      // That is, it returns, throwing an exception
-      form.setParameter(track, displayMode);
+      // there should really be a check for valid parameters below instead
+      // of the try/catch block. This was dying on supertracks because they
+      // can't be set to "full".
+      try {
+        form.setParameter(track, displayMode);
+      } catch (Exception e) {
+        form.setParameter(track, "show"); // works on supertracks
+      }
+	  
       HgTracks.refreshHGTracks(page);
 
       for (int zooms = 1; zooms <= zoomCount; zooms++) {
