@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.69 2009/12/28 19:38:30 hartera Exp $";
+#	"$Id: hg19.txt,v 1.70 2010/01/05 03:04:20 hartera Exp $";
 
 #############################################################################
 
@@ -7273,8 +7273,10 @@ see doc/builds.txt for specific details.
 # GUIGO'S LAB AT CRG. (E-MAIL: thomas.derrien@crg.es). Data received on
 # 09/14/09. 
 # (hartera, 2009-09-28, DONE) 
-# 2009-12-14. Set cdsStart = cdsEnd = 0. Moved track data directory to 
+# 2009-12-14, hartera. Set cdsStart = cdsEnd = 0. Moved track data directory to 
 # /hive/data/genomes/hg18/bed.
+# 2010-01-04, hartera. Change the data to BED format and re-loaded tables. BED
+# is more appropriate for this data type.
 
    mkdir /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
@@ -7350,6 +7352,29 @@ done
    # Then move data to directory in hg19 genome bed directory
    cd /hive/data/genomes/hg19/bed
    mv /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign ./
+
+   # 2010-01-04 Change the data to BED format. For genePred format, 
+   # there is always a track configuration added for colouring tracks by
+   # genomic codons which does not make sense for this data. Also, BED is
+   # more appropriate for this data type.
+   cd /hive/data/genomes/hg19/bed/burgeRnaSeqGemMapperAlign
+   # Convert gff to genePred and then genePred to BED, drop old table and
+   # then load database with BED format data. Need to fix the cdStart and
+   # cdsEnd fields to be 0. 
+   foreach f (`ls burgeRnaSeqGemMapperAlign*.gff`)
+     echo $f >> bed.log
+     set g=$f:r
+     echo $g
+     ldHgGene -exon=read -nobin -out=${g}.gp hg19 $g $f >>& bed.log
+     awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1,$2,$3,$4,$5,0,0,$8,$9,$10}' \
+         ${g}.gp > ${g}Fixed.gp 
+     genePredToBed ${g}Fixed.gp > ${g}.bed 
+     echo "Dropping table $g"
+     hgsql -e "drop table ${g};" hg19
+     hgLoadBed hg19 $g ${g}.bed >>& bed.log 
+   end
+   # Changed track type in trackDb/human/trackDb.ra to bed 12 and 
+   # then did make alpha in trackDb directory.
 
 ##########################################################################
 # BUILD ALLEN BRAIN TRACK (DONE 09/30/09 kent)
@@ -8240,8 +8265,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     hgsql hg19 -e \
     'load data local infile "GN_human_RefSeq.txt" into table geneNetworkId'
 
-######################################################################## EXONIPHY (2009-12-28, hartera, DONE)
-
+######################################################################## 
+# EXONIPHY (2009-12-28, hartera, DONE)
+# 2010-01-05, hartera. Moved trackDb entry for exoniphy up to human directory
+# level as it is the same for all assemblies.
     # New predictions for hg19 run by Melissa Hubisz 
     # (mjhubisz at gmail.com) for hg19 and sent by 
     # Adam Siepel (acs4 at cornell.edu) on 2009-12-18
@@ -8257,3 +8284,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # Read 620689 transcripts in 647299 lines in 1 files
     # 620689 groups 24 seqs 1 sources 4 feature types
     # 186601 gene predictions
+    # Added a copy of the hg18 track description to trackDb/human/hg19 and 
+    # updated it and added a trackDb entry to the trackDb.ra there.
+    # 2010-01-04. Moved exoniphy trackDb entry up to the human level
+    # trackDb.ra since the entry is the same for hg16-19. Removed the entry in
+    # trackDb.ra in each of those assembly directories.
