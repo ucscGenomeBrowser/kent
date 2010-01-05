@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1584 2010/01/04 19:12:26 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1585 2010/01/05 23:10:35 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18925,8 +18925,11 @@ for (i=0;  i < HAP_PHASEIII_POPCOUNT;  i++)
 	    allele1 = item->allele1;
 	    allele2 = item->allele2;
 	    }
-	else if (!sameString(allele1, item->allele1) || !sameString(allele2, item->allele2))
-	    warn("Allele order in hapmapSnps%s is different from earlier table(s)", popCode);
+	else if (!sameString(allele1, item->allele1) ||
+		 (isNotEmpty(allele2) && isNotEmpty(item->allele2) &&
+		  !sameString(allele2, item->allele2)))
+	    warn("Allele order in hapmapSnps%s (%s/%s) is different from earlier table(s) (%s/%s)",
+		 popCode, item->allele1, item->allele2, allele1, allele2);
 	totalA1Count += 2*item->homoCount1 + item->heteroCount;
 	totalA2Count += 2*item->homoCount2 + item->heteroCount;
 	totalHaploCount += haploCounts[i];
