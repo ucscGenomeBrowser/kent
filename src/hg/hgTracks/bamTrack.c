@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.23 2010/01/05 05:36:26 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.21 2009/12/21 22:43:32 markd Exp $";
 
 struct bamTrackData
     {
@@ -257,8 +257,7 @@ struct linkedFeatures *lf = bamToLf(bam, data);
 struct track *tg = btd->tg;
 if (!(core->flag & BAM_FPAIRED) || (core->flag & BAM_FMUNMAP))
     {
-    if (lf->start < winEnd && lf->end > winStart)
-	slAddHead(&(tg->items), lfsFromLf(lf));
+    slAddHead(&(tg->items), lfsFromLf(lf));
     }
 else
     {
@@ -297,8 +296,7 @@ else
     else
 	{
 	lfMate->next = lf;
-	if (min(lfMate->start, lf->start) < winEnd && max(lfMate->end, lf->end) > winStart)
-	    slAddHead(&(tg->items), lfsFromLf(lfMate));
+	slAddHead(&(tg->items), lfsFromLf(lfMate));
 	hashRemove(btd->pairHash, lf->name);
 	}
     }
@@ -352,13 +350,12 @@ if (tg->customPt)
     }
 else
     fileName = bamFileNameFromTable(database, tg->mapName, chromName);
-
-char posForBam[512];
-safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
 if (!isPaired)
-    bamFetch(fileName, posForBam, addBam, &btd);
+    bamFetch(fileName, position, addBam, &btd);
 else
     {
+    char posForBam[512];
+    safecpy(posForBam, sizeof(posForBam), position);
     char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
     int pairSearchRange = atoi(setting);
     if (pairSearchRange > 0)

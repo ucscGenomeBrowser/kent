@@ -3096,7 +3096,6 @@ tablesIgnored $fr
 tablesIgnored $galGal
     chr%_gold
     supercontig
-    caCondor454
 
 tablesIgnored $danRer
     chr%_gold

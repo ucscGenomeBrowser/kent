@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.171 2010/01/05 00:10:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.162 2009/12/26 20:16:10 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -178,56 +178,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol A549_protocol.pdf
 
-term AG04449
-tag AG04449
-type Cell Line
-description Fetal Buttock/Thigh Fibroblast (provisional)
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
-vendorName Coriell
-vendorId AG04449
-tier 3
-#protocol AG04449_Stam_protocol.pdf
-
-term AG04450
-tag AG04450
-type Cell Line
-description Fetal Lung Fibroblast (provisional)
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
-vendorName Coriell
-vendorId AG04450
-tier 3
-#protocol AG04450_Stam_protocol.pdf
-
-term AG09309
-tag AG09309
-type Cell Line
-description Adult Toe Fibroblast
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
-vendorName Coriell
-vendorId AG09309
-tier 3
-protocol AG09309_Stam_protocol.pdf
-
-term AG09319
-tag AG09319
-type Cell Line
-description Adult Toe Fibroblast (provisional)
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
-vendorName Coriell
-vendorId AG09319
-tier 3
-#protocol AG09319_Stam_protocol.pdf
-
-term AG10803
-tag AG10803
-type Cell Line
-description Adult Abdomen Fibroblast
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
-vendorName Coriell
-vendorId AG10803
-tier 3
-protocol AG10803_Stam_protocol.pdf
-
 term Astrocy
 tag Astrocy
 type Cell Line
@@ -327,16 +277,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Chorion_and_decidua_Crawford_protocol.pdf
 
-term CMK
-tag CMK
-type Cell Line
-description Human Acute Megakaryocytic Leukemia Cells
-orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
-vendorName DSMZ
-vendorId ACC-392
-tier 3
-protocol CMK_Stam_protocol.pdf
-
 term Decidua
 tag Decidua
 type Cell Line
@@ -393,18 +333,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Stam_15_protocols.pdf
 
-term GM10847
-tag GM10847
-type Cell Line
-description Lymphoblastoid International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
-vendorName Coriell
-vendorId GM10847
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
-
 term GM12801
 tag GM12801
 type Cell Line
@@ -448,30 +376,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol GM12892_Crawford_protocol.pdf
 
-term GM15510
-tag GM15510
-type Cell Line
-description Lymphoblastoid NIGMS Human Genetic Cell Repository; DNA POLYMORPHISM DISCOVERY RESOURCE COLLECTION; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
-vendorName Coriell
-vendorId GM15510
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
-
-term GM18505
-tag GM18505
-type Cell Line
-description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
-vendorName Coriell
-vendorId GM18505
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
-
 term GM18507
 tag GM18507
 type Cell Line
@@ -486,54 +390,6 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
 protocol GM18507_protocol.pdf
-
-term GM18526
-tag GM18526
-type Cell Line
-description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - HAN CHINESE IN BEIJING, CHINA; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
-vendorName Coriell
-vendorId GM18526
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
-
-term GM18951
-tag GM18951
-type Cell Line
-description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - JAPANESE IN TOKYO, JAPAN; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
-vendorName Coriell
-vendorId GM18951
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
-
-term GM19099
-tag GM19099
-type Cell Line
-description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
-vendorName Coriell
-vendorId GM19099
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
-
-term GM19193
-tag GM19193
-type Cell Line
-description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
-vendorName Coriell
-vendorId GM19193
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-tier 3
-protocol GM-generalized_Snyder_protocol.pdf
 
 term GM19238
 tag GM19238
@@ -576,16 +432,6 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
 protocol GM19240_Crawford_protocol.pdf
-
-term H7-hESC
-tag H7es
-type Cell Line
-description Undifferentiated human embryonic stem cells (provisional)
-vendorName WiCell
-vendorId WA07 (H7)
-orderUrl http://www.wicell.org/index.php
-tier 3
-#protocol H7-hESC_Stam_protocol.pdf
 
 term H9ES
 tag H9ES
@@ -678,16 +524,6 @@ vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
-term HAEpiC
-tag HAE
-type Cell Line
-description Human amniotic epithelial cells (provisional)
-vendorName ScienCell
-vendorId 7100
-orderUrl http://www.sciencellonline.com/site/products/7100.php
-tier 3
-#protocol HAEpiC_Stam_protocol.pdf
-
 term HAL
 tag HAL
 type Cell Line
@@ -700,36 +536,6 @@ vendorName Asterand, Inc.
 vendorId HAL
 orderUrl http://www.asterand.com/Asterand/
 protocol HAL_Myers_protocol.pdf
-
-term HCF
-tag HCF
-type Cell Line
-description Human Cardiac Fibroblasts
-vendorName ScienCell
-vendorId 6300
-orderUrl http://www.sciencellonline.com/site/products/6300.php
-tier 3
-protocol HCF_Stam_protocol.pdf
-
-term HCM
-tag HCM
-type Cell Line
-description Human Cardiac Myocytes (provisional)
-vendorName ScienCell
-vendorId 6200
-orderUrl http://www.sciencellonline.com/site/products/6200.php
-tier 3
-#protocol HCM_Stam_protocol.pdf
-
-term HCPEpiC
-tag HCPE
-type Cell Line
-description Human Choroid Plexus Epithelial Cells
-vendorName ScienCell
-vendorId 1310
-orderUrl http://www.sciencellonline.com/site/products/1310.php
-tier 3
-protocol HCPEpiC_Stam_protocol.pdf
 
 term HCT-116
 tag HCT116
@@ -745,16 +551,6 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 tier 3
 protocol HCT-116_protocol.pdf
-
-term HEEpiC
-tag HEE
-type Cell Line
-description Human esophageal epithelial cells (provisional)
-vendorName ScienCell
-vendorId 2700
-orderUrl http://www.sciencellonline.com/site/products/2700.php
-tier 3
-#protocol HEEpiC_Stam_protocol.pdf
 
 term HEK293
 tag HEK293
@@ -821,16 +617,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol HGF_Stam_protocol.pdf
 
-term HIPEpiC
-tag HIPE
-type Cell Line
-description Human iris pigment epithelial cells (provisional)
-vendorName ScienCell
-vendorId 6560
-orderUrl http://www.sciencellonline.com/site/products/6560.php
-tier 3
-#protocol HIPEpiC_Stam_protocol.pdf
-
 term HL-60
 tag HL60
 type Cell Line
@@ -861,18 +647,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
-term HNPCEpiC
-tag HNPCE
-type Cell Line
-description Human Non-pigment Ciliary Epithelial Cells
-vendorName ScienCell
-vendorId 6580
-orderUrl http://www.sciencellonline.com/site/products/6580.php
-tier 3
-protocol HNPCEpiC_Stam_protocol.pdf
-
 term HRCEpiC
-tag HRCE
+tag HRCEpiC
 type Cell Line
 organism Human
 description Human renal cortical epithelial cells
@@ -900,16 +676,6 @@ termId BTO:0000059 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
 tier 3
 protocol HRE_Stam_protocol.pdf
-
-term HRPEpiC
-tag HRPE
-type Cell Line
-description Human retinal pigment epithelial cells (provisional)
-vendorName ScienCell
-vendorId 6540
-orderUrl http://www.sciencellonline.com/site/products/6540.php
-tier 3
-#protocol HRPEpiC_Stam_protocol.pdf
 
 term HSMM
 tag HSMM
@@ -1042,16 +808,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Snyder:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
 
-term NHDF-neo
-tag NHDF-neo
-type Cell Line
-description Neonatal Human Dermal Fibroblasts
-vendorName Lonza
-vendorId CC-2509
-orderUrl http://www.lonza.com/group/en/products_services/products/cat4.html
-tier 3
-protocol NHDF-neo_Stam_protocol.pdf
-
 term NHLF
 tag NHLF
 type Cell Line
@@ -1065,8 +821,7 @@ karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161&termName=lung%20fibroblast%20cell%20line
 tier 3
-protocol Bernstein:NHLF_Bernstein_protocol.pdf Stam:pending...
-#protocol Bernstein:NHLF_Bernstein_protocol.pdf Stam:NHLF_Stam_protocol.pdf
+protocol NHLF_Bernstein_protocol.pdf
 
 term NT2-D1
 tag NT2D1
@@ -1920,26 +1675,6 @@ orderUrl
 lab Myers / Wold
 lots 20070905JV
 
-term Oct-2
-tag Oct2
-type Antibody
-targetDescription Oct-2 (C-20)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-233
-orderUrl  http://www.scbt.com/product.php?datasheet=233
-lab Myers
-
-term p300
-tag p300
-type Antibody
-targetDescription EP300(c-20)
-antibodyDescription Rabbit Polyclonal
-vendorName Santa Cruz Biotech
-vendorId sc-585
-orderUrl  http://www.scbt.com/product.php?datasheet=585
-lab Myers
-
 term PAX5-C20
 tag PAX5C20
 type Antibody
@@ -1963,16 +1698,6 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-
-term Pbx3
-tag Pbx3
-type Antibody
-targetDescription Pbx 3 (D-17)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-891
-orderUrl  http://www.scbt.com/product.php?datasheet=891
-lab Myers
 
 term Pol2
 tag Pol2
@@ -2029,16 +1754,6 @@ orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC19M047286
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
-
-term PU.1
-tag PU1
-type Antibody
-targetDescription PU.1 (H-135)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-22805
-orderUrl  http://www.scbt.com/product.php?datasheet=22805
-lab Myers
 
 term Rad21
 tag Rad21
@@ -2344,18 +2059,45 @@ lab Farnham
 targetId GeneCard:GC16P003273
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P003273
 
-term ZNF274
-tag ZNF274
+term p300
+tag p300
 type Antibody
-antibodyDescription Mouse polyclonal antibody raised against a partial recombinant ZNF274 (GST-fusion of a.a.420-531 of human ZNF274 protein). Works in IP, WB and ELISA.
-targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRAB A) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor. It localizes predominantly to the nucleolus.
-vendorName ABNOVA
-vendorId H00010782-A01
-orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-A01
-lab Farnham
-lots 060729QCS1
-targetId GeneCard:GC19P063386
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
+targetDescription EP300(c-20)
+antibodyDescription Rabbit Polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-585
+orderUrl  http://www.scbt.com/product.php?datasheet=585
+lab Myers
+
+term Pbx3
+tag Pbx3
+type Antibody
+targetDescription Pbx 3 (D-17)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-891
+orderUrl  http://www.scbt.com/product.php?datasheet=891
+lab Myers
+
+term PU.1
+tag PU1
+type Antibody
+targetDescription PU.1 (H-135)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-22805
+orderUrl  http://www.scbt.com/product.php?datasheet=22805
+lab Myers
+
+term Oct-2
+tag Oct2
+type Antibody
+targetDescription Oct-2 (C-20)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-233
+orderUrl  http://www.scbt.com/product.php?datasheet=233
+lab Myers
 
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
@@ -2445,11 +2187,6 @@ tag NA
 type mapAlgorithm
 description No algorithm applicable
 
-term erng32a
-tag erng32a
-type mapAlgorithm
-description erange v3.2.0alpha
-
 term erng3
 tag erng3
 type mapAlgorithm
@@ -2475,21 +2212,11 @@ tag BB1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
 
-term BB2
-tag BB2
-type mapAlgorithm
-description bowtie0.10.0 followed by blat v34
-
 # readType : type of read for Wold/Caltech RNA-seq project (1x32 = single 32 nt, 2x75 = paired read 75 nt)
 term 1x32
 tag r1x32
 type readType
 description Single 32 n.t. read
-
-term 1x75
-tag r1x75
-type readType
-description Single 75 n.t. reads
 
 term 2x75
 tag r2x75
@@ -2604,7 +2331,7 @@ type rnaExtract
 description RNA sized 60-200 nt
 
 term longPolyA
-tag pAP
+tag longPolyA
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
 label PolyA+

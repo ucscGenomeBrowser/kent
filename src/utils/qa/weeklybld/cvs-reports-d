@@ -756,13 +756,6 @@ package require Itcl
     # rev1 of 1.0 for a new file, rev maybe a file or date.  rev2 maybe
     # empty.
     public method uniDiff {contextSize rev1 rev2 file} {
-
-        # -r 1.0 no longer accepted by new cvs diff
-        # maybe BASE work instead? (still needs -N)
-        if {$rev1 == 1.0} {
-            set rev1 "BASE"
-        }
-
         # -N required to make -r 1.0 work
         set cmd [list cvs -q diff -bB -U$contextSize -kk -N]
         lappend cmd [getRevFlag $rev1] $rev1

@@ -13,7 +13,7 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.7 2010/01/05 00:39:06 angie Exp $";
+static char const rcsid[] = "$Id: udcFuse.c,v 1.6 2009/11/20 17:56:35 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -89,13 +89,9 @@ if (stbuf->st_mode | S_IFDIR)
 	{
 	// should we make sure that there are not also subdirectories??
 	boolean gotBitmap = FALSE, gotSparse = FALSE;
-	int isEmpty = TRUE;
 	struct dirent *dirInfo;
 	while ((dirInfo = readdir(dirHandle)) != NULL)
 	    {
-	    if (sameString(dirInfo->d_name, ".") || sameString(dirInfo->d_name, ".."))
-		continue;
-	    isEmpty = FALSE;
 	    if (sameString(dirInfo->d_name, "bitmap"))
 		gotBitmap = TRUE;
 	    else if (sameString(dirInfo->d_name, "sparseData"))
@@ -103,12 +99,6 @@ if (stbuf->st_mode | S_IFDIR)
 	    if (gotBitmap && gotSparse)
 		break;
 	    }
-	// fuse gets confused when a cache path is an empty dir, and then suddenly morphs
-	// into a regular file, as happens when old cache files are removed by the 
-	// trash cleaner but then reappear due to a new udc access.  So if empty dir,
-	// just tell fuse that it doesn't exist.
-	if (isEmpty)
-	    return -ENOENT;
 	if (gotBitmap || gotSparse)
 	    {
 	    if (gotBitmap ^ gotSparse)
@@ -197,31 +187,6 @@ fprintf(stderr, "...[%d] getattr %s finish %ld\n", pid, path, clock1000());
 return ret;
 }
 
-static boolean isEmptyDir(char *udcCachePath, char *subdir)
-/* Return TRUE if subdir of path is a directory with no children. */
-{
-boolean isDir = FALSE, isEmpty = TRUE;
-char fullPath[4096];
-ERR_CATCH_START();
-safef(fullPath, sizeof(fullPath), "%s/%s", udcCachePath, subdir);
-ERR_CATCH_END("safef fullPath");
-DIR *dirHandle = opendir(fullPath);
-if (dirHandle != NULL)
-    {
-    isDir = TRUE;
-    struct dirent *dirInfo;
-    while ((dirInfo = readdir(dirHandle)) != NULL)
-	{
-	if (sameString(dirInfo->d_name, ".") || sameString(dirInfo->d_name, ".."))
-	    continue;
-	isEmpty = FALSE;
-	break;
-	}
-    closedir(dirHandle);
-    }
-return isDir && isEmpty;
-}
-
 static int udcfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 			 off_t offset, struct fuse_file_info *fi)
 /* Read the corresponding udc cache directory. */
@@ -239,15 +204,8 @@ if (dirHandle == NULL)
     }
 struct dirent *dirInfo;
 while ((dirInfo = readdir(dirHandle)) != NULL)
-    // getattr denies the existence of empty udcCache directories because they
-    // might get bitmap and sparseData files and then we report them as regular
-    // files not directories.  Filter out components here that are empty directories:
-    if (sameString(".", dirInfo->d_name) || sameString("..", dirInfo->d_name) ||
-	!isEmptyDir(udcCachePath, dirInfo->d_name))
-	{
-	if (filler(buf, dirInfo->d_name, NULL, 0))
-	    break;
-	}
+    if (filler(buf, dirInfo->d_name, NULL, 0))
+	break;
 int ret = closedir(dirHandle);
 fprintf(stderr, "...[%d] readdir %s finish %ld\n", pid, path, clock1000());
 return ret;

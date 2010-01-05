@@ -124,17 +124,13 @@ if ( $err ) then
 endif
 
 if ( "$mode" == "review") then
-    set cmd="./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${NEXTNN} $CVS_REPORTS_WORKDIR/kent"
-    echo "$cmd"
-    $cmd
+    ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${NEXTNN} $CVS_REPORTS_WORKDIR/kent
     if ( $status ) then
         echo "Error: [mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1
     endif
 else    
-    set cmd="./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} $CVS_REPORTS_WORKDIR/kent"
-    echo "$cmd"
-    $cmd
+    ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} $CVS_REPORTS_WORKDIR/kent
     if ( $status ) then
         echo "Error: [mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1

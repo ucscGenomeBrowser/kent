@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!-- Build file for genome.ucsc.edu QA library directory -->
-
-<project name="lib" default="build" basedir=".">
-    <target name="build">
-	<javac srcdir="." />
-    </target>
-</project>

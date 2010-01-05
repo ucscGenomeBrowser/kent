@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.393 2010/01/05 01:14:06 hartera Exp $
+# $Id: hg18.txt,v 1.392 2009/12/15 18:48:11 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.393 2010/01/05 01:14:06 hartera Exp $
+# $Id: hg18.txt,v 1.392 2009/12/15 18:48:11 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28897,10 +28897,8 @@ see doc/builds.txt for specific details.
 # BURGE	LAB DATA MAPPED WITH GEMMAPPER. PROVIDED BY THOMAS DERRIEN FROM RODERIC
 # GUIGO'S LAB AT CRG. (E-MAIL: thomas.derrien@crg.es)
 # (hartera, 2009-09-13 - 2009-09-16, DONE) 
-# 2009-12-14, hartera. Set cdsStart = cdsEnd = 0. Moved track data directory to 
+# 2009-12-14. Set cdsStart = cdsEnd = 0. Moved track data directory to 
 # /hive/data/genomes/hg18/bed.
-# 2010-01-04, hartera. Change the data to BED format and re-loaded tables. BED
-# is more appropriate for this data type.
 
    mkdir /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
@@ -28974,29 +28972,6 @@ done
    cd /hive/data/genomes/hg18/bed
    mv /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign ./
   
-   # 2010-01-04 Change the data to BED format. For genePred format, 
-   # there is always a track configuration added for colouring tracks by
-   # genomic codons which does not make sense for this data. Also, BED is
-   # more appropriate for this data type.
-   cd /hive/data/genomes/hg18/bed/burgeRnaSeqGemMapperAlign
-   # Convert gff to genePred and then genePred to BED, drop old table and
-   # then load database with BED format data. Need to fix the cdStart and
-   # cdsEnd fields to be 0. 
-   foreach f (`ls burgeRnaSeqGemMapperAlign*.gff`)
-     echo $f >> bed.log
-     set g=$f:r
-     echo $g
-     ldHgGene -exon=read -nobin -out=${g}.gp hg18 $g $f >>& bed.log
-     awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1,$2,$3,$4,$5,0,0,$8,$9,$10}' \
-         ${g}.gp > ${g}Fixed.gp 
-     genePredToBed ${g}Fixed.gp > ${g}.bed 
-     echo "Dropping table $g"
-     hgsql -e "drop table ${g};" hg18 
-     hgLoadBed hg18 $g ${g}.bed >>& bed.log 
-   end
-   # Changed track type in trackDb/human/trackDb.ra to bed 12 and 
-   # then did make alpha in trackDb directory.
- 
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
