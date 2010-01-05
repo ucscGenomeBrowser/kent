@@ -31,7 +31,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.31 2009/12/19 00:57:09 angie Exp $";
+static char const rcsid[] = "$Id: udc.c,v 1.32 2010/01/05 17:32:07 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -1027,8 +1027,8 @@ int nextClearBit = bitFindClear(bits, partBitStart, partBitEnd);
 while (nextClearBit < partBitEnd)
     {
     int clearBlock = nextClearBit + partOffset;
-    warn("... udcFile 0x%08llx: bit for block %d (%lld..%lld] is not set",
-	 (bits64)file, clearBlock,
+    warn("... udcFile 0x%04lx: bit for block %d (%lld..%lld] is not set",
+	 (unsigned long)file, clearBlock,
 	 ((long long)clearBlock * udcBlockSize), (((long long)clearBlock+1) * udcBlockSize));
     gotUnset = TRUE;
     int nextSetBit = bitFindSet(bits, nextClearBit, partBitEnd);
