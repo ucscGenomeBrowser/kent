@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.170 2010/01/04 23:43:18 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.171 2010/01/05 00:10:21 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1920,6 +1920,26 @@ orderUrl
 lab Myers / Wold
 lots 20070905JV
 
+term Oct-2
+tag Oct2
+type Antibody
+targetDescription Oct-2 (C-20)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-233
+orderUrl  http://www.scbt.com/product.php?datasheet=233
+lab Myers
+
+term p300
+tag p300
+type Antibody
+targetDescription EP300(c-20)
+antibodyDescription Rabbit Polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-585
+orderUrl  http://www.scbt.com/product.php?datasheet=585
+lab Myers
+
 term PAX5-C20
 tag PAX5C20
 type Antibody
@@ -1943,6 +1963,16 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+
+term Pbx3
+tag Pbx3
+type Antibody
+targetDescription Pbx 3 (D-17)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-891
+orderUrl  http://www.scbt.com/product.php?datasheet=891
+lab Myers
 
 term Pol2
 tag Pol2
@@ -1999,6 +2029,16 @@ orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC19M047286
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
+
+term PU.1
+tag PU1
+type Antibody
+targetDescription PU.1 (H-135)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-22805
+orderUrl  http://www.scbt.com/product.php?datasheet=22805
+lab Myers
 
 term Rad21
 tag Rad21
@@ -2304,45 +2344,18 @@ lab Farnham
 targetId GeneCard:GC16P003273
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P003273
 
-term p300
-tag p300
+term ZNF274
+tag ZNF274
 type Antibody
-targetDescription EP300(c-20)
-antibodyDescription Rabbit Polyclonal
-vendorName Santa Cruz Biotech
-vendorId sc-585
-orderUrl  http://www.scbt.com/product.php?datasheet=585
-lab Myers
-
-term Pbx3
-tag Pbx3
-type Antibody
-targetDescription Pbx 3 (D-17)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-891
-orderUrl  http://www.scbt.com/product.php?datasheet=891
-lab Myers
-
-term PU.1
-tag PU1
-type Antibody
-targetDescription PU.1 (H-135)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-22805
-orderUrl  http://www.scbt.com/product.php?datasheet=22805
-lab Myers
-
-term Oct-2
-tag Oct2
-type Antibody
-targetDescription Oct-2 (C-20)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-233
-orderUrl  http://www.scbt.com/product.php?datasheet=233
-lab Myers
+antibodyDescription Mouse polyclonal antibody raised against a partial recombinant ZNF274 (GST-fusion of a.a.420-531 of human ZNF274 protein). Works in IP, WB and ELISA.
+targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRAB A) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor. It localizes predominantly to the nucleolus.
+vendorName ABNOVA
+vendorId H00010782-A01
+orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-A01
+lab Farnham
+lots 060729QCS1
+targetId GeneCard:GC19P063386
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
 
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
