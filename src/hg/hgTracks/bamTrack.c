@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.22 2010/01/05 00:34:49 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.23 2010/01/05 05:36:26 angie Exp $";
 
 struct bamTrackData
     {
@@ -352,12 +352,13 @@ if (tg->customPt)
     }
 else
     fileName = bamFileNameFromTable(database, tg->mapName, chromName);
+
+char posForBam[512];
+safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
 if (!isPaired)
-    bamFetch(fileName, position, addBam, &btd);
+    bamFetch(fileName, posForBam, addBam, &btd);
 else
     {
-    char posForBam[512];
-    safecpy(posForBam, sizeof(posForBam), position);
     char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
     int pairSearchRange = atoi(setting);
     if (pairSearchRange > 0)
