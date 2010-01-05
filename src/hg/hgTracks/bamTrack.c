@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.21 2009/12/21 22:43:32 markd Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.22 2010/01/05 00:34:49 angie Exp $";
 
 struct bamTrackData
     {
@@ -257,7 +257,8 @@ struct linkedFeatures *lf = bamToLf(bam, data);
 struct track *tg = btd->tg;
 if (!(core->flag & BAM_FPAIRED) || (core->flag & BAM_FMUNMAP))
     {
-    slAddHead(&(tg->items), lfsFromLf(lf));
+    if (lf->start < winEnd && lf->end > winStart)
+	slAddHead(&(tg->items), lfsFromLf(lf));
     }
 else
     {
@@ -296,7 +297,8 @@ else
     else
 	{
 	lfMate->next = lf;
-	slAddHead(&(tg->items), lfsFromLf(lfMate));
+	if (min(lfMate->start, lf->start) < winEnd && max(lfMate->end, lf->end) > winStart)
+	    slAddHead(&(tg->items), lfsFromLf(lfMate));
 	hashRemove(btd->pairHash, lf->name);
 	}
     }
