@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.171 2010/01/05 00:10:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.172 2010/01/06 01:02:52 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1387,6 +1387,30 @@ lab Farnham
 targetId GeneCard:GC20P054637
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C&search=TFAP2C_id=GC20P054637
 
+term BAF155
+tag BAF155
+type Antibody
+antibodyDescription BAF155 (Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
+targetDescription BAF155 (H-76) is a rabbit polyclonal antibody raised against amino acids 998-1073 of BAF155 of human origin.
+orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-10756
+lab Snyder
+targetId GeneCard:GC03M047602
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC03M047602
+
+term BAF170
+tag BAF170
+type Antibody
+antibodyDescription BAF170 (Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
+targetDescription BAF170 (H-116) is a rabbit polyclonal antibody raised against amino acids 1093-1208 of BAF170 of human origin.
+orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-10757
+lab Snyder
+targetId GeneCard:GC12M054843
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M054843
+
 term BATF
 tag BATF
 type Antibody
@@ -1458,6 +1482,18 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GC14M104746
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
+
+term Brg1
+tag Brg1
+type Antibody
+antibodyDescription Brg1 is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
+targetDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin.
+orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
+vendorName Santa Cruz Biotech
+vendorId 16189
+lab Snyder
+targetId GeneCard:GC19P010932
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19P010932
 
 term c-Fos
 tag cFos
@@ -1811,6 +1847,18 @@ orderUrl http://www.scbt.com/datasheet-16424-hrt1-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC08M080838
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
+
+term Ini1
+tag Ini1
+type Antibody
+antibodyDescription Ini1 (BAF47) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
+targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin.
+orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-17796
+lab Snyder
+targetId GeneCard:GC22P022453
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC22P022453
 
 term IRF4
 tag IRF4
@@ -2356,6 +2404,7 @@ lab Farnham
 lots 060729QCS1
 targetId GeneCard:GC19P063386
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
+
 
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
