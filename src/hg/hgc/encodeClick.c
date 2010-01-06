@@ -37,10 +37,12 @@ if (peakType == 0)
 genericHeader(tdb, NULL);
 sr = hOrderedRangeQuery(conn, table, chrom, start, end,
 			NULL, &rowOffset);
-row = sqlNextRow(sr);
-if (row != NULL)
+while((row = sqlNextRow(sr)) != NULL)
     {
     char **rowPastOffset = row + rowOffset;
+    if ((sqlUnsigned(rowPastOffset[1]) != start) ||  (sqlUnsigned(rowPastOffset[2]) != end))
+	continue;
+
     float signal = -1;
     float pValue = -1;
     float qValue = -1;
