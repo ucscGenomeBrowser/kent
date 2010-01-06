@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.3 2010/01/06 02:49:31 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.4 2010/01/06 03:01:26 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3919,9 +3919,9 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	s = cgiOptionalString(track->mapName);
 	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
-		{
-		cartSetString(cart, track->mapName, s);
-		}
+	    {
+	    cartSetString(cart, track->mapName, s);
+	    }
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
