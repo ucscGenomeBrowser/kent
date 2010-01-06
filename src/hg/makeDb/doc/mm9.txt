@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.118 2009/12/22 19:49:25 galt Exp $"
+#	"$Id: mm9.txt,v 1.119 2010/01/06 21:59:18 angie Exp $"
 #
 
 #######################################################################
@@ -8612,17 +8612,18 @@ rm bed.tab
 
 
 #########################################################################
-# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 7/24/09 angie)
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 12/8/09 angie)
+# done 7/24/09 w/files emailed from Carol 7/24
 # done 5/7/09 w/files emailed from Carol Bult 5/7
 # done 2/12/09 w/files emailed from Carol Bult 2/12
 # done 10/21/08 w/files emailed from Carol Bult 10/18
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/komp/2009_07
-    cd /hive/data/genomes/mm9/bed/komp/2009_07
-    # Save files emailed from Carol Bult 7/24 as 
-    # 20090724_ikmc.gff.gz
+    mkdir -p /hive/data/genomes/mm9/bed/komp/2009_12
+    cd /hive/data/genomes/mm9/bed/komp/2009_12
+    # Save files emailed from Carol Bult 12/7 as 
+    # 20091204_ikmc.gff.gz
     # Make bed12 with itemRgb:
-    zcat 20090724_ikmc.gff.gz \
+    zcat 20091204_ikmc.gff.gz \
     | perl -we \
       'while (<>) { \
          s/\r?\n$//; \
@@ -8657,10 +8658,10 @@ rm bed.tab
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
     | sort -k 1,1 -k 2n,2n > komp.bed
-#Got 32185 genes.
+#Got 36359 genes.
     # No stderr empty-coord warnings this time (no unmapped items).
     # Make an alias-style table with associated info (MGI ID and status):
-    zcat 20090724_ikmc.gff.gz \
+    zcat 20091204_ikmc.gff.gz \
     | perl -wpe 's/\r?\n$//; @w = split("\t"); \
       if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
       if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
@@ -8668,6 +8669,8 @@ rm bed.tab
       ($mgi, $designId, $status) = ($1, $2, $3); \
       $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
     | sort -u > kompExtra.tab
+    wc -l kompExtra.tab
+#36359 kompExtra.tab
     # Load 'em up:
     hgLoadBed mm9 komp komp.bed
 #Loaded 32185 elements of size 12
@@ -8680,13 +8683,29 @@ rm bed.tab
 #mm9.komp item Cntn5_44827 chr9:10008998-10019351: blocks 1 and 2 overlap.
     # Carol talked to the Sanger folks about those... pls waive.
 
-    # NOTE FOR NEXT TIME: Carol noticed some very long items and is asking
+    # Note from July '09: Carol noticed some very long items and is asking
     # Sanger about them.  Here's how to check it ourselves next time:
     hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from komp \
                   where chromEnd - chromStart > 1000000 order by length desc;'
+#+----------------------+----------+
+#| name                 | length   |
+#+----------------------+----------+
+#| Ankrd22_67616        | 51920750 | 
+#| Ptprd_VG12763        |  2270723 | 
+#| Macrod2_VG12650      |  1997658 | 
+#| A430089I19Rik_71812  |  1814706 | 
+#| 1700049E17Rik2_68957 |  1596021 | 
+#| Pcdh15_VG15967       |  1550393 | 
+#| Gpc5_VG15750         |  1431812 | 
+#| Lrrc4c_VG10110       |  1313498 | 
+#| Agbl4_VG16439        |  1266664 | 
+#| Prkg1_VG15918        |  1197272 | 
+#| Ptprt_VG10147        |  1139158 | 
+#| Ccl21b_67667         |  1019106 | 
+#+----------------------+----------+
 
     runJoiner.csh mm9 komp
-# mm9.kompExtra.name - hits 32185 of 32185 ok
+# mm9.kompExtra.name - hits 36359 of 36359 ok
 
 
 #########################################################################
