@@ -1,0 +1,4 @@
+#strand	qName	qStart	qEnd	tName	tStart	tEnd	bitScore	eVal
++	Q9HB50	0	73	A6BM01	0	73	132	5e-30
++	Q9HB50	6	73	Q0GBX3	7	78	63.1	4e-09
++	Q9HB50	7	71	Q9QZ50	3	68	61.6	1e-08

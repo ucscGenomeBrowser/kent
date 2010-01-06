@@ -8,7 +8,7 @@ all:
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
 	longDbNameTest multiLineDescTest tblastxTest tblastnTest \
-	blastpPsiTest psiNoHitsTest psiBadFormatTest
+	blastpPsiTest psiNoHitsTest psiBadFormatTest blastpPsiWrapTest
 
 #tblastnDbFirstTest megaBlastTest
 
@@ -104,6 +104,13 @@ megaBlastTest: mkdirs
 # PSI-BLASTP 
 blastpPsiTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/blastpPsi.blast output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
+# PSI-BLASTP with Identities line wrapping
+blastpPsiWrapTest: mkdirs
+	${blastToPsl} -scores=output/$@.bscores input/blastpPsiWrap.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores

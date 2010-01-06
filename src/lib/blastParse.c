@@ -8,7 +8,7 @@
 #include "blastParse.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: blastParse.c,v 1.24 2009/04/12 18:45:54 markd Exp $";
+static char const rcsid[] = "$Id: blastParse.c,v 1.25 2010/01/06 21:09:18 markd Exp $";
 
 #define WARN_LEVEL 1   /* verbose level to enable warnings */
 #define TRACE_LEVEL 3  /* verbose level to enable tracing of files */
@@ -632,6 +632,10 @@ bb->eVal = evalToDouble(words[7]);
  *   Frame = +1 / -2
  *     (tblastn)
  *
+ *   Identities = 1317/10108 (13%), Positives = 2779/10108 (27%), Gaps = 1040/10108
+ *   (10%)
+ *      - wrap on long lines
+ *
  * Handle weird cases where the is only a `Score' line, with no `Identities'
  * lines by skipping the alignment; they seem line small, junky alignments.
  */
@@ -666,6 +670,9 @@ if ((wordCount >= 11) && sameWord("Frame", words[8]))
     bb->tFrame = atoi(words[10]);
     }
 
+line = bfNeedNextLine(bf);
+boolean wrapped = (startsWith("(", line));
+
 /* Process something like:
  *     Strand = Plus / Plus (blastn)
  *     Frame = +1           (tblastn)
@@ -673,7 +680,8 @@ if ((wordCount >= 11) && sameWord("Frame", words[8]))
  *     <blank line>         (blastp)
  * note that wu-tblastn puts frame on Identities line
  */
-line = bfNeedNextLine(bf);
+if (wrapped)
+    line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
 if ((wordCount >= 5) && sameWord("Strand", words[0]))
     {
