@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.737 2010/01/04 23:44:34 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.738 2010/01/06 17:45:48 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11099,8 +11099,8 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 HAE2F1=HA-E2F1 JUND=JunD MAX=Max NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
+subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t3GM10847=GM10847 t3GM12891=GM12891 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
+subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma BAF155=BAF155 BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 HAE2F1=HA-E2F1 JUND=JunD MAX=Max NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -11727,6 +11727,45 @@ wgEncode 1
         subGroups view=Peaks factor=YY1 cellType=t3NT2D1
         type narrowPeak
         metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=YY1 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=348 dateSubmitted=2009-06-05 dateUnrestricted=2010-03-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksNt2d1Yy1 fileName=wgEncodeYaleChIPseqPeaksNt2d1Yy1.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksGm12878Yy1
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 YY1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in GM12878 cells)
+        subGroups view=Peaks factor=YY1 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=YY1 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Jan 2010 Freeze" subId=853 dateSubmitted=2009-12-20 dateUnrestricted=2010-09-19 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Yy1 fileName=wgEncodeYaleChIPseqPeaksGm12878Yy1.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksK562bZnf274
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b ZNF274 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in K562b cells)
+        subGroups view=Peaks factor=ZNF274 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562b antibody=ZNF274 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Jan 2010 Freeze" subId=860 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bZnf274 fileName=wgEncodeYaleChIPseqPeaksK562bZnf274.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHelas3Baf155
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa BAF155 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF155 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BAF155 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=BAF155 view=Peaks dataVersion="ENCODE Jan 2010 Freeze" subId=888 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Baf155 fileName=wgEncodeYaleChIPseqPeaksHelas3Baf155.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksGm10847Pol2
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM10847 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM10847 cells)
+        subGroups view=Peaks factor=POL2 cellType=t3GM10847
+        type narrowPeak
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM10847 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=862 dateSubmitted=2009-12-22 dateUnrestricted=2010-09-22 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm10847Pol2 fileName=wgEncodeYaleChIPseqPeaksGm10847Pol2.narrowPeak.gz
 
     track wgEncodeYaleChIPseqViewSignal
     shortLabel Signal
@@ -12503,9 +12542,73 @@ wgEncode 1
         subGroups view=Signal factor=zaCTRL cellType=t3NT2D1
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=346 dateSubmitted=2009-06-08 dateUnrestricted=2010-03-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalNt2d1Input fileName=wgEncodeYaleChIPseqSignalNt2d1Input.bedGraph4.gz
-# end of submission
-# end of submission
-# end of submission
+
+        track wgEncodeYaleChIPseqSignalGm12878Yy1
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 YY1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in GM12878 cells)
+        subGroups view=Signal factor=YY1 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=YY1 view=Signal labVersion="Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Jan 2010 Freeze" subId=853 dateSubmitted=2009-12-20 dateUnrestricted=2010-09-19 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Yy1 fileName=wgEncodeYaleChIPseqSignalGm12878Yy1.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalK562bZnf274
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b ZNF274 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in K562b cells)
+        subGroups view=Signal factor=ZNF274 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562b antibody=ZNF274 view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Jan 2010 Freeze" subId=860 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bZnf274 fileName=wgEncodeYaleChIPseqSignalK562bZnf274.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalGm10847Input
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM10847 MusIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (mIgG Control in GM10847 cells)
+        subGroups view=Signal factor=yMouseIG cellType=t3GM10847
+        type bedGraph 4
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12891 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=861 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm10847Input fileName=wgEncodeYaleChIPseqSignalGm10847Input.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalGm12891Mouseigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12891 MusIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (mIgG Control in GM12891 cells)
+        subGroups view=Signal factor=yMouseIG cellType=t3GM12891
+        type bedGraph 4
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12891 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=863 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12891Mouseigg fileName=wgEncodeYaleChIPseqSignalGm12891Mouseigg.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalK562Mouseigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 MusIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (mIgG Control in K562 cells)
+        subGroups view=Signal factor=yMouseIG cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=864 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Mouseigg fileName=wgEncodeYaleChIPseqSignalK562Mouseigg.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHelas3Baf155
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa BAF155 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF155 in HeLa-S3 cells)
+        subGroups view=Signal factor=BAF155 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=BAF155 view=Signal dataVersion="ENCODE Jan 2010 Freeze" subId=888 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Baf155 fileName=wgEncodeYaleChIPseqSignalHelas3Baf155.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalGm10847Pol2
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM10847 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM10847 cells)
+        subGroups view=Signal factor=POL2 cellType=t3GM10847
+        type bedGraph 4
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM10847 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=862 dateSubmitted=2009-12-22 dateUnrestricted=2010-09-22 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm10847Pol2 fileName=wgEncodeYaleChIPseqSignalGm10847Pol2.bedGraph4.gz
 
 
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: braney, soon Tim)
@@ -17224,7 +17327,7 @@ wgEncode 1
         subGroups view=0-PlusRawSignal cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1HuvecCytosolLongpolya
         release alpha
@@ -17235,7 +17338,7 @@ wgEncode 1
         type bedGraph 4
         accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya
         release alpha
@@ -17245,7 +17348,7 @@ wgEncode 1
         subGroups view=0-PlusRawSignal cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
 
 
         track wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
@@ -17258,7 +17361,7 @@ wgEncode 1
         minLimit 0
         maxLimit 341723
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
         release alpha
@@ -17270,7 +17373,7 @@ wgEncode 1
         minLimit 0
         maxLimit 190066
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya
         release alpha
@@ -17281,7 +17384,7 @@ wgEncode 1
         type bedGraph 4
         minLimit 0
         maxLimit 412829
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
         release alpha
@@ -17293,7 +17396,7 @@ wgEncode 1
         minLimit 0
         maxLimit 124707
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
         release alpha
@@ -17305,7 +17408,7 @@ wgEncode 1
         minLimit 0
         maxLimit 101038
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
         release alpha
@@ -17317,7 +17420,7 @@ wgEncode 1
         minLimit 0
         maxLimit 48215
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
         release alpha
@@ -17329,7 +17432,7 @@ wgEncode 1
         minLimit 0
         maxLimit 9882
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=chromatin view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=chromatin view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
 
         track wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
         release alpha
@@ -17341,7 +17444,7 @@ wgEncode 1
         minLimit 0
         maxLimit 1035636
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal
         release alpha
@@ -17353,7 +17456,7 @@ wgEncode 1
         minLimit 0
         maxLimit 24603
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleolus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleolus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal
         release alpha
@@ -17365,7 +17468,7 @@ wgEncode 1
         minLimit 0
         maxLimit 202
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleoplasm view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleoplasm view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
         release alpha
@@ -17377,7 +17480,7 @@ wgEncode 1
         minLimit 0
         maxLimit 83090
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
         release alpha
@@ -17389,7 +17492,7 @@ wgEncode 1
         minLimit 0
         maxLimit 424940
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
         release alpha
@@ -17401,7 +17504,7 @@ wgEncode 1
         minLimit 0
         maxLimit 524696
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
         release alpha
@@ -17413,7 +17516,7 @@ wgEncode 1
         minLimit 0
         maxLimit 654435
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1ProstateCellLongpolya
         release alpha
@@ -17424,7 +17527,7 @@ wgEncode 1
         type bedGraph 4
         minLimit 0
         maxLimit 148438
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep2Gm12878CellLongpolya
         release alpha
@@ -17435,7 +17538,7 @@ wgEncode 1
         type bedGraph 4
         # ASH 11/16/09: can't specify {min,max}Limit here because table doesn't exist.
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
         release alpha
@@ -17447,7 +17550,7 @@ wgEncode 1
         minLimit 0
         maxLimit 82622
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
         release alpha
@@ -17459,7 +17562,7 @@ wgEncode 1
         minLimit 0
         maxLimit 13366
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=1-PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=1-PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
 
     track wgEncodeGisPetView1-MinusRawSignal
     shortLabel Minus Raw Signal
@@ -17481,7 +17584,7 @@ wgEncode 1
         subGroups view=1-MinusRawSignal cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1HuvecCytosolLongpolya
         release alpha
@@ -17492,7 +17595,7 @@ wgEncode 1
         type bedGraph 4
         accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1Helas3NucleusLongpolya
         release alpha
@@ -17502,7 +17605,7 @@ wgEncode 1
         subGroups view=1-MinusRawSignal cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
         release alpha
@@ -17514,7 +17617,7 @@ wgEncode 1
         minLimit 0
         maxLimit 824467
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
         release alpha
@@ -17526,7 +17629,7 @@ wgEncode 1
         minLimit 0
         maxLimit 621182
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya
         release alpha
@@ -17537,7 +17640,7 @@ wgEncode 1
         type bedGraph 4
         minLimit 0
         maxLimit 292914
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
         release alpha
@@ -17549,7 +17652,7 @@ wgEncode 1
         minLimit 0
         maxLimit 235213
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
         release alpha
@@ -17561,7 +17664,7 @@ wgEncode 1
         minLimit 0
         maxLimit 105810
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
         release alpha
@@ -17573,7 +17676,7 @@ wgEncode 1
         minLimit 0
         maxLimit 31125
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal
         release alpha
@@ -17585,7 +17688,7 @@ wgEncode 1
         minLimit 0
         maxLimit 331367
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=chromatin view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=chromatin view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal
 
         track wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
         release alpha
@@ -17597,7 +17700,7 @@ wgEncode 1
         minLimit 0
         maxLimit 728914
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal
         release alpha
@@ -17609,7 +17712,7 @@ wgEncode 1
         minLimit 0
         maxLimit 42871
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleolus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleolus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal
         release alpha
@@ -17621,7 +17724,7 @@ wgEncode 1
         minLimit 0
         maxLimit 5294
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleoplasm view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleoplasm view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
         release alpha
@@ -17633,7 +17736,7 @@ wgEncode 1
         minLimit 0
         maxLimit 203666
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
         release alpha
@@ -17645,7 +17748,7 @@ wgEncode 1
         minLimit 0
         maxLimit 1469507
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
         release alpha
@@ -17657,7 +17760,7 @@ wgEncode 1
         minLimit 0
         maxLimit 579932
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
         release alpha
@@ -17669,7 +17772,7 @@ wgEncode 1
         minLimit 0
         maxLimit 2196027
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1ProstateCellLongpolya
         release alpha
@@ -17680,7 +17783,7 @@ wgEncode 1
         type bedGraph 4
         minLimit 0
         maxLimit 80851
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
         release alpha
@@ -17692,7 +17795,7 @@ wgEncode 1
         minLimit 0
         maxLimit 13366
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya
         release alpha
@@ -17704,7 +17807,7 @@ wgEncode 1
         minLimit 0
         maxLimit 472562
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya 
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya
 
     track wgEncodeGisPetView2-Alignments
     shortLabel Alignments
