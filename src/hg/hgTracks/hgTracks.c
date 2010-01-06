@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1617 2010/01/04 19:12:24 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.1 2010/01/06 02:05:28 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4319,20 +4319,23 @@ if (!hideControls)
     freezeName = "Unknown";
     hPrintf("<FONT SIZE=5><B>");
     if (startsWith("zoo",database) )
-    {
-    hPrintf("%s %s on %s June 2002 Assembly %s target1",
-        organization, browserName, organism, freezeName);
-    }
+	{
+	hPrintf("%s %s on %s June 2002 Assembly %s target1",
+	    organization, browserName, organism, freezeName);
+	}
     else
-    {
-
-    if (sameString(organism, "Archaea"))
-        hPrintf("%s %s on Archaeon %s Assembly",
-            organization, browserName, freezeName);
-    else
-        hPrintf("%s %s on %s %s Assembly (%s)",
-            organization, browserName, organism, freezeName, database);
-    }
+	{
+	if (sameString(organism, "Archaea"))
+	    {
+	    hPrintf("%s %s on Archaeon %s Assembly",
+		organization, browserName, freezeName);
+	    }
+	else
+	    {
+	    hPrintf("%s %s on %s %s Assembly (%s)",
+		organization, browserName, organism, freezeName, database);
+	    }
+	}
     hPrintf("</B></FONT><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
@@ -4528,20 +4531,20 @@ if (showTrackControls)
 
     if (!hIsGsidServer())
         {
-    cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-    }
+	cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+	}
     else
-    {
-    /* 4 cols fit GSID's display better */
+	{
+	/* 4 cols fit GSID's display better */
         cg = startControlGrid(4, "left");
-    }
+	}
     boolean isFirstNotCtGroup = TRUE;
     for (group = groupList; group != NULL; group = group->next)
         {
-    if (group->trackList == NULL)
-        continue;
+	if (group->trackList == NULL)
+	    continue;
 
-    struct trackRef *tr;
+	struct trackRef *tr;
 
         /* check if group section should be displayed */
         char *otherState;
@@ -4550,50 +4553,50 @@ if (showTrackControls)
         boolean isOpen = !isCollapsedGroup(group);
         collapseGroupGoodies(isOpen, TRUE, &indicatorImg,
                                 &indicator, &otherState);
-    hPrintf("<TR>");
-    cg->rowOpen = TRUE;
-    if (!hIsGsidServer())
-        {
+	hPrintf("<TR>");
+	cg->rowOpen = TRUE;
+	if (!hIsGsidServer())
+	    {
             hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
                 MAX_CONTROL_COLUMNS);
-        }
-    else
-        {
+	    }
+	else
+	    {
             hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
                 MAX_CONTROL_COLUMNS-1);
-        }
-    hPrintf("<table width='100%%'><tr><td align='left'>");
-    hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+	    }
+	hPrintf("<table width='100%%'><tr><td align='left'>");
+	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
         hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue'></A>&nbsp;&nbsp;",
                 hgTracksName(), cartSidUrlString(cart),
                 collapseGroupVar(group->name),
                 otherState, group->name,
                 group->name, group->name, indicatorImg, indicator);
-    hPrintf("</td><td align='center' width='100%%'>\n");
-    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-    hPrintf("</td><td align='right'>\n");
-    hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
-    hPrintf("</td></tr></table></th>\n");
-    controlGridEndRow(cg);
+	hPrintf("</td><td align='center' width='100%%'>\n");
+	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
+	hPrintf("</td><td align='right'>\n");
+	hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
+	hPrintf("</td></tr></table></th>\n");
+	controlGridEndRow(cg);
 
-    /* First track group that is not custom track group gets ruler,
+	/* First track group that is not custom track group gets ruler,
          * unless it's collapsed. */
-    if (!showedRuler && isFirstNotCtGroup &&
-                differentString(group->name, "user"))
-        {
-        showedRuler = TRUE;
-        myControlGridStartCell(cg, isOpen, group->name);
+	if (!showedRuler && isFirstNotCtGroup &&
+		    differentString(group->name, "user"))
+	    {
+	    showedRuler = TRUE;
+	    myControlGridStartCell(cg, isOpen, group->name);
             hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
             cartSessionVarName(), cartSessionId(cart),
             chromName, RULER_TRACK_NAME);
-        hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
+	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
             hPrintf("</A>");
-        hDropListClassWithStyle("ruler", rulerMenu,
+	    hDropListClassWithStyle("ruler", rulerMenu,
                     sizeof(rulerMenu)/sizeof(char *), rulerMenu[rulerMode],
                     rulerMode == tvHide ? "hiddenText" : "normalText",
                     TV_DROPDOWN_STYLE);
-        controlGridEndCell(cg);
-        }
+	    controlGridEndCell(cg);
+	    }
         if (differentString(group->name, "user"))
             isFirstNotCtGroup = FALSE;
 
@@ -4602,32 +4605,32 @@ if (showTrackControls)
         groupTrackListAddSuper(cart, group);
 
         /* Display track controls */
-    for (tr = group->trackList; tr != NULL; tr = tr->next)
-        {
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
             struct track *track = tr->track;
             if (tdbIsSuperTrackChild(track->tdb))
                 /* don't display supertrack members */
                 continue;
-        myControlGridStartCell(cg, isOpen, group->name);
-        if (track->hasUi)
-        {
-        char *encodedMapName = cgiEncode(track->mapName);
+	    myControlGridStartCell(cg, isOpen, group->name);
+	    if (track->hasUi)
+		{
+		char *encodedMapName = cgiEncode(track->mapName);
                 if(trackDbSetting(track->tdb, "wgEncode") != NULL)
                     hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
-        hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
-            cartSessionVarName(), cartSessionId(cart),
-            chromName, encodedMapName);
-        freeMem(encodedMapName);
-        }
+		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+			cartSessionVarName(), cartSessionId(cart),
+			chromName, encodedMapName);
+		freeMem(encodedMapName);
+		}
             hPrintf(" %s", track->shortLabel);
             if (tdbIsSuper(track->tdb))
                 hPrintf("...");
-        hPrintf("<BR> ");
-        if (track->hasUi)
-        hPrintf("</A>");
+	    hPrintf("<BR> ");
+	    if (track->hasUi)
+		hPrintf("</A>");
 
-        if (hTrackOnChrom(track->tdb, chromName))
-        {
+	    if (hTrackOnChrom(track->tdb, chromName))
+		{
                 if (tdbIsSuper(track->tdb))
                     superTrackDropDown(cart, track->tdb,
                                         superTrackHasVisibleMembers(track->tdb));
@@ -4640,16 +4643,16 @@ if (showTrackControls)
                                 trackDbSetting(track->tdb, "onlyVisibility"));
                     }
                 }
-        else
+	    else
                 /* If track is not on this chrom print an informational
                 message for the user. */
-        hPrintf("[No data-%s]", chromName);
-        controlGridEndCell(cg);
-        }
-    /* now finish out the table */
-    if (group->next != NULL)
-        controlGridEndRow(cg);
-    }
+		hPrintf("[No data-%s]", chromName);
+	    controlGridEndCell(cg);
+	    }
+	/* now finish out the table */
+	if (group->next != NULL)
+	    controlGridEndRow(cg);
+	}
     endControlGrid(&cg);
     }
 
