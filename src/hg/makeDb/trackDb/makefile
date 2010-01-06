@@ -8,6 +8,8 @@
 #	make updateLocal  
 # Make non-private trackDb on local host (if defined as localDB.XXX=XXX in .hg.conf) with
 #	make alphaLocal  
+# Make for ENCODE reporting (includes release alpha and release beta)
+#	make encodeReport
 
 # Browser supports multiple trackDb's so that individual developers
 # can change things rapidly without stepping on other people's toes. 
@@ -123,6 +125,10 @@ checkbeta:
 	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
 beta: checkbeta clean strict
+
+encodeReport:
+	${CVS} -q up -d -P .
+	./loadTracks trackDb_encodeReport hgFindSpec ${DBS}
 
 listDbs:
 	@echo "# databases listed in trackDb/makefile DBS variable, with table counts"
