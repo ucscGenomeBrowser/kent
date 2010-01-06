@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.172 2010/01/06 01:02:52 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.173 2010/01/06 21:21:30 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2529,11 +2529,21 @@ tag BB2
 type mapAlgorithm
 description bowtie0.10.0 followed by blat v34
 
-# readType : type of read for Wold/Caltech RNA-seq project (1x32 = single 32 nt, 2x75 = paired read 75 nt)
+# readType 
 term 1x32
 tag r1x32
 type readType
 description Single 32 n.t. read
+
+term 1x36
+tag r1x36
+type readType
+description Single 36 n.t. read
+
+term 1x50
+tag r1x50
+type readType
+description Single 50 n.t. read
 
 term 1x75
 tag r1x75
@@ -2873,6 +2883,11 @@ type protocol
 
 
 ### restrictionEnzyme
+term None
+tag None
+description None
+type restrictionEnzyme
+
 term msp
 tag msp
 description MSP Restriction Enzyme
