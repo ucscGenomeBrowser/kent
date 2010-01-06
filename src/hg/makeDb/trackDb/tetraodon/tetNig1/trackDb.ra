@@ -5,15 +5,6 @@ longLabel Assembly Scaffolds (Supercontigs)
 track gap override
 visibility hide
 
-track gaze
-shortLabel Genoscope GAZE 
-longLabel Genoscope Annotations Using GAZE
-group genes
-priority 48
-visibility dense
-color 0,0,206
-type genePred
-
 track genscan override
 visibility dense
 type genePred
@@ -41,13 +32,6 @@ type genePred
 track blastHg17KG override
 shortLabel Human Proteins (hg17)
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-
-searchTable gaze
-searchType genePred
-searchMethod exact
-searchPriority 50
-termRegex GSTENT[0-9]{11}
-shortCircuit 1
 
 track nscanGene override
 informant Tetraodon N-SCAN uses Zebrafish (danRer4) as the informant.

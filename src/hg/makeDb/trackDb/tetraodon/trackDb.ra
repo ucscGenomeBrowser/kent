@@ -1,6 +1,22 @@
-#	"$Id: trackDb.ra,v 1.48 2010/01/04 19:59:33 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.49 2010/01/06 23:21:49 hiram Exp $";
 
 include trackDb.chainNet.ra
+
+track gaze
+shortLabel Genoscope GAZE 
+longLabel Genoscope Annotations Using GAZE
+group genes
+priority 48
+visibility dense
+color 0,0,206
+type genePred
+
+searchTable gaze
+searchType genePred
+searchMethod exact
+searchPriority 50
+termRegex GSTENT[0-9]{11}
+shortCircuit 1
 
 track mrna override
 spectrum on
@@ -263,7 +279,6 @@ shortcircuit 1
 termRegex EG3THT[0-9]+
 searchPriority 50
 
-
 #Overrides from priority.ra
 
 # medaka
@@ -272,4 +287,3 @@ priority 227
 
 track netOryLat2 override
 priority 227.1
-
