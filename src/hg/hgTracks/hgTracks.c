@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.4 2010/01/06 03:01:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.5 2010/01/06 22:04:35 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -454,12 +454,12 @@ struct track *track;
 for(track = trackList; track != NULL; track = track->next)
     {
     if(sameString(track->mapName, "cytoBandIdeo"))
-    {
-    if (hTableExists(database, track->mapName))
-        return track;
-    else
-        return NULL;
-    }
+	{
+	if (hTableExists(database, track->mapName))
+	    return track;
+	else
+	    return NULL;
+	}
     }
 return NULL;
 }
@@ -471,10 +471,10 @@ struct trackRef *tr = NULL;
 for(tr = track->group->trackList; tr != NULL; tr = tr->next)
     {
     if(tr->track == track)
-    {
-    slRemoveEl(&track->group->trackList, tr);
-    break;
-    }
+	{
+	slRemoveEl(&track->group->trackList, tr);
+	break;
+	}
     }
 }
 
@@ -490,17 +490,17 @@ for(cb = cbList; cb != NULL; cb = cb->next)
        it in. */
     if(winStart >= cb->chromStart &&
        winStart <= cb->chromEnd)
-    {
-    safef(startBand, buffSize, "%s", cb->name);
-    }
+	{
+	safef(startBand, buffSize, "%s", cb->name);
+	}
     /* End is > rather than >= due to odditiy in the
        cytoband track where the starts and ends of two
        bands overlaps by one. */
     if(winEnd > cb->chromStart &&
        winEnd <= cb->chromEnd)
-    {
-    safef(endBand, buffSize, "%s", cb->name);
-    }
+	{
+	safef(endBand, buffSize, "%s", cb->name);
+	}
     }
 }
 
@@ -540,10 +540,10 @@ else
 
     /* Fix for hide all button hiding the ideogram as well. */
     if(withIdeogram && ideoTrack->items == NULL)
-    {
-    ideoTrack->visibility = tvDense;
-    ideoTrack->loadItems(ideoTrack);
-    }
+	{
+	ideoTrack->visibility = tvDense;
+	ideoTrack->loadItems(ideoTrack);
+	}
     limitVisibility(ideoTrack);
 
     /* If hidden don't draw. */
@@ -637,49 +637,47 @@ if (target != NULL)
     char query[2048];
     struct psl *tpsl;
     for (tpsl = pslList;  tpsl != NULL;  tpsl = tpsl->next)
-    {
-    char *itemAcc = pcrResultItemAccession(tpsl->tName);
-    char *itemName = pcrResultItemName(tpsl->tName);
-    /* Query target->pslTable to get target-to-genomic mapping: */
-    safef(query, sizeof(query), "select * from %s where qName = '%s'",
-          target->pslTable, itemAcc);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        struct psl *gpsl = pslLoad(row+rowOffset);
-        if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd &&
-        gpsl->tEnd > winStart)
-        {
-        struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
-                              tpsl->tEnd);
-        struct linkedFeatures *lf;
-        char *targetStyle = cartUsualString(cart,
-             PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
-        if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
-            {
-            lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
-            lf->tallStart = trimmed->tStart;
-            lf->tallEnd = trimmed->tEnd;
-            }
-        else
-            {
-            lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
-            }
-        lf->name = cloneString(itemAcc);
-        char extraInfo[512];
-        safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
-              (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
-        lf->extra = cloneString(extraInfo);
-        slAddHead(&itemList, lf);
-        }
-        }
-    }
+	{
+	char *itemAcc = pcrResultItemAccession(tpsl->tName);
+	char *itemName = pcrResultItemName(tpsl->tName);
+	/* Query target->pslTable to get target-to-genomic mapping: */
+	safef(query, sizeof(query), "select * from %s where qName = '%s'",
+	      target->pslTable, itemAcc);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    struct psl *gpsl = pslLoad(row+rowOffset);
+	    if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd && gpsl->tEnd > winStart)
+		{
+		struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
+				      tpsl->tEnd);
+		struct linkedFeatures *lf;
+		char *targetStyle = cartUsualString(cart,
+		     PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
+		if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
+		    {
+		    lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
+		    lf->tallStart = trimmed->tStart;
+		    lf->tallEnd = trimmed->tEnd;
+		    }
+		else
+		    {
+		    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
+		    }
+		lf->name = cloneString(itemAcc);
+		char extraInfo[512];
+		safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
+		      (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
+		lf->extra = cloneString(extraInfo);
+		slAddHead(&itemList, lf);
+		}
+	    }
+	}
     hFreeConn(&conn);
     }
 else
     for (psl = pslList;  psl != NULL;  psl = psl->next)
-    if (sameString(psl->tName, chromName) && psl->tStart < winEnd &&
-        psl->tEnd > winStart)
+    if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
         {
         struct linkedFeatures *lf =
         lfFromPslx(psl, 1, FALSE, FALSE, tg);
@@ -703,9 +701,9 @@ if (isNotEmpty(extra))
     safecpy(displayName, sizeof(displayName), extra);
     char *ptr = strchr(displayName, '|');
     if (ptr != NULL)
-    *ptr = '\0';
+	*ptr = '\0';
     if (isNotEmpty(displayName))
-    return displayName;
+	return displayName;
     }
 return lf->name;
 }
@@ -792,15 +790,15 @@ tg->itemName = linkedFeaturesName;
 while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
-    {
-    lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg);
-    sprintf(buf2, "%s %s", ss, psl->qName);
-    lf->extra = cloneString(buf2);
-    slAddHead(&lfList, lf);
-    /* Don't free psl -- used in drawing phase by baseColor code. */
-    }
+	{
+	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg);
+	sprintf(buf2, "%s %s", ss, psl->qName);
+	lf->extra = cloneString(buf2);
+	slAddHead(&lfList, lf);
+	/* Don't free psl -- used in drawing phase by baseColor code. */
+	}
     else
-    pslFree(&psl);
+	pslFree(&psl);
     }
 slSort(&lfList, linkedFeaturesCmpStart);
 lineFileClose(&f);
@@ -820,7 +818,7 @@ lineFileClose(&lf);
 if (qt != gftProt)
     {
     if (tdb->settingsHash == NULL)
-    tdb->settingsHash = hashNew(0);
+	tdb->settingsHash = hashNew(0);
     hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
     hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("ss"));
     hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
@@ -923,54 +921,53 @@ if (oligoSize >= 2)
     rMatch = stringIn(rOligo, dna);
     for (;;)
         {
-    char *oneMatch = NULL;
-    if (rMatch == NULL)
-        {
-        if (fMatch == NULL)
-            break;
-        else
-        {
-            oneMatch = fMatch;
-        fMatch = stringIn(fOligo, fMatch+1);
-        strand = '+';
-        }
-        }
-    else if (fMatch == NULL)
-        {
-        oneMatch = rMatch;
-        rMatch = stringIn(rOligo, rMatch+1);
-        strand = '-';
-        }
-    else if (rMatch < fMatch)
-        {
-        oneMatch = rMatch;
-        rMatch = stringIn(rOligo, rMatch+1);
-        strand = '-';
-        }
-    else
-        {
-        oneMatch = fMatch;
-        fMatch = stringIn(fOligo, fMatch+1);
-        strand = '+';
-        }
-    if (count < maxCount)
-        {
-        ++count;
-        AllocVar(bed);
-        bed->chromStart = winStart + (oneMatch - dna);
-        bed->chromEnd = bed->chromStart + oligoSize;
-        bed->strand[0] = strand;
-        slAddHead(&bedList, bed);
-        }
-    else
-        break;
-    }
+	char *oneMatch = NULL;
+	if (rMatch == NULL)
+	    {
+	    if (fMatch == NULL)
+		break;
+	    else
+		{
+		oneMatch = fMatch;
+		fMatch = stringIn(fOligo, fMatch+1);
+		strand = '+';
+		}
+	    }
+	else if (fMatch == NULL)
+	    {
+	    oneMatch = rMatch;
+	    rMatch = stringIn(rOligo, rMatch+1);
+	    strand = '-';
+	    }
+	else if (rMatch < fMatch)
+	    {
+	    oneMatch = rMatch;
+	    rMatch = stringIn(rOligo, rMatch+1);
+	    strand = '-';
+	    }
+	else
+	    {
+	    oneMatch = fMatch;
+	    fMatch = stringIn(fOligo, fMatch+1);
+	    strand = '+';
+	    }
+	if (count < maxCount)
+	    {
+	    ++count;
+	    AllocVar(bed);
+	    bed->chromStart = winStart + (oneMatch - dna);
+	    bed->chromEnd = bed->chromStart + oligoSize;
+	    bed->strand[0] = strand;
+	    slAddHead(&bedList, bed);
+	    }
+	else
+	    break;
+	}
     slReverse(&bedList);
     if (count < maxCount)
-    tg->items = bedList;
+	tg->items = bedList;
     else
-        warn("More than %d items in %s, suppressing display",
-        maxCount, tg->shortLabel);
+        warn("More than %d items in %s, suppressing display", maxCount, tg->shortLabel);
     }
 }
 
@@ -1134,9 +1131,8 @@ switch (vis)
 
             /* Do some fancy stuff for sample tracks.
              * Draw y-value limits for 'sample' tracks. */
-            if(track->subType == lfSubSample )
+            if (track->subType == lfSubSample )
                 {
-
                 if( prev == NULL )
                     newy += itemHeight;
                 else
@@ -1181,20 +1177,20 @@ switch (vis)
             else
                 {
                 /* standard item labeling */
-        if (highlightItem(track, item))
-            {
-            int nameWidth = mgFontStringWidth(font, name);
-            int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-            hvGfxBox(hvg, boxStart, y, nameWidth+1, itemHeight - 1,
-              labelColor);
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1,
-                itemHeight, MG_WHITE, font, name);
-            }
-        else
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
-                itemHeight, labelColor, font, name);
-                y += itemHeight;
-                }
+		if (highlightItem(track, item))
+		    {
+		    int nameWidth = mgFontStringWidth(font, name);
+		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+		    hvGfxBox(hvg, boxStart, y, nameWidth+1, itemHeight - 1,
+		      labelColor);
+		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1,
+			itemHeight, MG_WHITE, font, name);
+		    }
+		else
+		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
+			itemHeight, labelColor, font, name);
+		y += itemHeight;
+		}
             }
         break;
     case tvDense:
@@ -1373,11 +1369,11 @@ for (item = track->items; item != NULL; item = item->next)
         }
     else
         {
-    if (track->mapItem == NULL)
-        track->mapItem = genericMapItem;
+	if (track->mapItem == NULL)
+	    track->mapItem = genericMapItem;
         if (!track->mapsSelf)
             {
-        track->mapItem(track, hvg, item, track->itemName(track, item),
+	    track->mapItem(track, hvg, item, track->itemName(track, item),
                            track->mapItemName(track, item),
                            track->itemStart(track, item),
                            track->itemEnd(track, item), trackPastTabX,
@@ -1469,7 +1465,7 @@ switch (track->limitedVis)
                     }
                 }
             else
-            y = doMapItems(track, hvg, fontHeight, y);
+		y = doMapItems(track, hvg, fontHeight, y);
             }
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2364,7 +2360,7 @@ if (withCenterLabels)
     }
 
 /* Draw tracks. */
-{
+    {
     long lastTime = 0;
     y = yAfterRuler;
     if (measureTiming)
@@ -2422,8 +2418,8 @@ if (withCenterLabels)
         if(yEnd!=y)
             warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
         }
-        y++;
-}
+    y++;
+    }
 /* if a track can draw its left labels, now is the time since it
  *  knows what exactly happened during drawItems
  */
@@ -2582,18 +2578,18 @@ else if (sameWord(scientificName, "Gasterosteus aculeatus"))
 else if (sameWord(scientificName, "Ciona intestinalis"))
     {
     if (stringIn("chr0", chrName))
-    {
-    char *fixupName = replaceChars(chrName, "chr0", "chr");
-    name = fixupName;
-    }
+	{
+	char *fixupName = replaceChars(chrName, "chr0", "chr");
+	name = fixupName;
+	}
     }
 else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
     {
     if (stringIn("2micron", chrName))
-    {
-    char *fixupName = replaceChars(chrName, "2micron", "2-micron");
-    name = fixupName;
-    }
+	{
+	char *fixupName = replaceChars(chrName, "2micron", "2-micron");
+	name = fixupName;
+	}
     }
 
 if (sameWord(chrName, "chrM"))
@@ -2741,27 +2737,27 @@ if (ct->dbTrack)
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
              NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, fieldCount);
-        if (scoreFilter && bed->score < scoreFilter)
-            continue;
-    slAddHead(&list, bed);
-    }
+	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	slAddHead(&list, bed);
+	}
     hFreeConn(&conn);
     }
 else
     {
     for (bed = ct->bedList; bed != NULL; bed = nextBed)
-    {
-    nextBed = bed->next;
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart
-            && sameString(chromName, bed->chrom))
-        {
-            if (scoreFilter && bed->score < scoreFilter)
-                continue;
-        slAddHead(&list, bed);
-        }
-    }
+	{
+	nextBed = bed->next;
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart
+		&& sameString(chromName, bed->chrom))
+	    {
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	    slAddHead(&list, bed);
+	    }
+	}
     }
 slSort(&list, bedCmp);
 tg->items = list;
@@ -2788,40 +2784,40 @@ if (ct->dbTrack)
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
              NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, 9);
-        if (scoreFilter && bed->score < scoreFilter)
-            continue;
-    bed8To12(bed);
-    lf = lfFromBed(bed);
-    if (useItemRgb)
-        {
-        lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
-        lf->filterColor=bed->itemRgb;
-        }
-    slAddHead(&lfList, lf);
-    }
+	{
+	bed = bedLoadN(row+rowOffset, 9);
+	if (scoreFilter && bed->score < scoreFilter)
+	    continue;
+	bed8To12(bed);
+	lf = lfFromBed(bed);
+	if (useItemRgb)
+	    {
+	    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+	    lf->filterColor=bed->itemRgb;
+	    }
+	slAddHead(&lfList, lf);
+	}
     hFreeConn(&conn);
     }
 else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
-    {
+	{
         if (scoreFilter && bed->score < scoreFilter)
             continue;
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart
-            && sameString(chromName, bed->chrom))
-        {
-        bed8To12(bed);
-        lf = lfFromBed(bed);
-        if (useItemRgb)
-        {
-        lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
-        lf->filterColor=bed->itemRgb;
-        }
-        slAddHead(&lfList, lf);
-        }
-    }
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart
+		&& sameString(chromName, bed->chrom))
+	    {
+	    bed8To12(bed);
+	    lf = lfFromBed(bed);
+	    if (useItemRgb)
+		{
+		lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+		lf->filterColor=bed->itemRgb;
+		}
+	    slAddHead(&lfList, lf);
+	    }
+	}
     }
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
@@ -2848,30 +2844,30 @@ if (ct->dbTrack)
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
              NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, fieldCount);
-        if (scoreFilter && bed->score < scoreFilter)
-            continue;
-    bed8To12(bed);
-    lf = lfFromBed(bed);
-    slAddHead(&lfList, lf);
-    }
+	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	bed8To12(bed);
+	lf = lfFromBed(bed);
+	slAddHead(&lfList, lf);
+	}
     hFreeConn(&conn);
     }
 else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
-    {
-        if (scoreFilter && bed->score < scoreFilter)
-            continue;
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart
-            && sameString(chromName, bed->chrom))
-        {
-        bed8To12(bed);
-        lf = lfFromBed(bed);
-        slAddHead(&lfList, lf);
-        }
-    }
+	{
+	if (scoreFilter && bed->score < scoreFilter)
+	    continue;
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart
+		&& sameString(chromName, bed->chrom))
+	    {
+	    bed8To12(bed);
+	    lf = lfFromBed(bed);
+	    slAddHead(&lfList, lf);
+	    }
+	}
     }
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
@@ -2900,38 +2896,38 @@ if (ct->dbTrack)
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
              NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, fieldCount);
-    lf = lfFromBed(bed);
-        if (scoreFilter && bed->score < scoreFilter)
-            continue;
-    if (useItemRgb)
-        {
-        lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
-        lf->filterColor=bed->itemRgb;
-        }
-    slAddHead(&lfList, lf);
-    }
+	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
+	lf = lfFromBed(bed);
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	if (useItemRgb)
+	    {
+	    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+	    lf->filterColor=bed->itemRgb;
+	    }
+	slAddHead(&lfList, lf);
+	}
     hFreeConn(&conn);
     }
 else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
-    {
+	{
         if (scoreFilter && bed->score < scoreFilter)
             continue;
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart
-            && sameString(chromName, bed->chrom))
-        {
-        lf = lfFromBed(bed);
-        if (useItemRgb)
-        {
-        lf->extra = (void *)USE_ITEM_RGB; /* signal for coloring */
-        lf->filterColor=bed->itemRgb;
-        }
-        slAddHead(&lfList, lf);
-        }
-    }
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart
+		&& sameString(chromName, bed->chrom))
+	    {
+	    lf = lfFromBed(bed);
+	    if (useItemRgb)
+		{
+		lf->extra = (void *)USE_ITEM_RGB; /* signal for coloring */
+		lf->filterColor=bed->itemRgb;
+		}
+	    slAddHead(&lfList, lf);
+	    }
+	}
     }
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
@@ -2954,24 +2950,24 @@ if (ct->dbTrack)
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
              NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, fieldCount);
-    lfs = lfsFromColoredExonBed(bed);
-    slAddHead(&lfsList, lfs);
-    }
+	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
+	lfs = lfsFromColoredExonBed(bed);
+	slAddHead(&lfsList, lfs);
+	}
     hFreeConn(&conn);
     }
 else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
-    {
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart
-            && sameString(chromName, bed->chrom))
-        {
-        lfs = lfsFromColoredExonBed(bed);
-        slAddHead(&lfsList, lfs);
-        }
-    }
+	{
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart
+		&& sameString(chromName, bed->chrom))
+	    {
+	    lfs = lfsFromColoredExonBed(bed);
+	    slAddHead(&lfsList, lfs);
+	    }
+	}
     }
 slReverse(&lfsList);
 slSort(&lfsList, linkedFeaturesSeriesCmp);
@@ -2981,13 +2977,13 @@ tg->items = lfsList;
 char *ctMapItemName(struct track *tg, void *item)
 /* Return composite item name for custom tracks. */
 {
-  char *itemName = tg->itemName(tg, item);
-  static char buf[256];
-  if (strlen(itemName) > 0)
-      sprintf(buf, "%s %s", ctFileName, itemName);
-  else
-      sprintf(buf, "%s NoItemName", ctFileName);
-  return buf;
+char *itemName = tg->itemName(tg, item);
+static char buf[256];
+if (strlen(itemName) > 0)
+  sprintf(buf, "%s %s", ctFileName, itemName);
+else
+  sprintf(buf, "%s NoItemName", ctFileName);
+return buf;
 }
 
 
@@ -3079,32 +3075,32 @@ else if (sameString(type, "bed"))
     {
     tg = trackFromTrackDb(tdb);
     if (ct->fieldCount < 8)
-    {
-    tg->loadItems = ctLoadSimpleBed;
-    }
+	{
+	tg->loadItems = ctLoadSimpleBed;
+	}
     else if (useItemRgb && ct->fieldCount == 9)
-    {
-    tg->loadItems = ctLoadBed9;
-    }
+	{
+	tg->loadItems = ctLoadBed9;
+	}
     else if (ct->fieldCount < 12)
-    {
-    tg->loadItems = ctLoadBed8;
-    }
+	{
+	tg->loadItems = ctLoadBed8;
+	}
     else if (ct->fieldCount == 15)
-    {
-    char *theType = trackDbSetting(tdb, "type");
-    if (theType && sameString(theType, "expRatio"))
-        {
-        tg = trackFromTrackDb(tdb);
-        expRatioMethodsFromCt(tg);
-        }
+	{
+	char *theType = trackDbSetting(tdb, "type");
+	if (theType && sameString(theType, "expRatio"))
+	    {
+	    tg = trackFromTrackDb(tdb);
+	    expRatioMethodsFromCt(tg);
+	    }
+	else
+	    tg->loadItems = ctLoadGappedBed;
+	}
     else
-        tg->loadItems = ctLoadGappedBed;
-    }
-    else
-    {
-    tg->loadItems = ctLoadGappedBed;
-    }
+	{
+	tg->loadItems = ctLoadGappedBed;
+	}
     tg->mapItemName = ctMapItemName;
     tg->canPack = TRUE;
     tg->nextItemButtonable = TRUE;
@@ -3230,66 +3226,66 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     wordCount = chopLine(bl->name, words);
     if (wordCount > 1)
         {
-    char *command = words[1];
-    if (sameString(command, "hide")
+	char *command = words[1];
+	if (sameString(command, "hide")
             || sameString(command, "dense")
             || sameString(command, "pack")
             || sameString(command, "squish")
             || sameString(command, "full"))
-        {
-        if (wordCount > 2)
-            {
-        int i;
-        for (i=2; i<wordCount; ++i)
-            {
-            char *s = words[i];
-            struct track *tg;
-            boolean toAll = sameWord(s, "all");
-            for (tg = *pGroupList; tg != NULL; tg = tg->next)
-                {
-            if (toAll || sameString(s, tg->mapName))
-                            {
-                            if (hTvFromString(command) == tg->tdb->visibility)
-                                /* remove if setting to default vis */
-                                cartRemove(cart, tg->mapName);
-                            else
-                                cartSetString(cart, tg->mapName, command);
-                            /* hide or show supertrack enclosing this track */
-                            if (tdbIsSuperTrackChild(tg->tdb))
-                                {
-                                assert(tg->tdb->parentName != NULL);
-                                cartSetString(cart, tg->tdb->parentName,
-                                            (sameString(command, "hide") ?
-                                                "hide" : "show"));
-                                }
-                            }
-                        }
-            }
-        }
-        }
-    else if (sameString(command, "position"))
-        {
-        if (wordCount < 3)
-            errAbort("Expecting 3 words in browser position line");
-        if (!hgIsChromRange(database, words[2]))
-            errAbort("browser position needs to be in chrN:123-456 format");
-        hgParseChromRange(database, words[2], &chromName, &winStart, &winEnd);
+	    {
+	    if (wordCount > 2)
+		{
+		int i;
+		for (i=2; i<wordCount; ++i)
+		    {
+		    char *s = words[i];
+		    struct track *tg;
+		    boolean toAll = sameWord(s, "all");
+		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
+			{
+			if (toAll || sameString(s, tg->mapName))
+			    {
+			    if (hTvFromString(command) == tg->tdb->visibility)
+				/* remove if setting to default vis */
+				cartRemove(cart, tg->mapName);
+			    else
+				cartSetString(cart, tg->mapName, command);
+			    /* hide or show supertrack enclosing this track */
+			    if (tdbIsSuperTrackChild(tg->tdb))
+				{
+				assert(tg->tdb->parentName != NULL);
+				cartSetString(cart, tg->tdb->parentName,
+					    (sameString(command, "hide") ?
+						"hide" : "show"));
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	else if (sameString(command, "position"))
+	    {
+	    if (wordCount < 3)
+		errAbort("Expecting 3 words in browser position line");
+	    if (!hgIsChromRange(database, words[2]))
+		errAbort("browser position needs to be in chrN:123-456 format");
+	    hgParseChromRange(database, words[2], &chromName, &winStart, &winEnd);
 
-            /*Fix a start window of -1 that is returned when a custom track position
-              begins at 0
-            */
-            if (winStart < 0)
-                {
-                winStart = 0;
-                }
-        }
-    else if (sameString(command, "pix"))
-        {
-        if (wordCount != 3)
-            errAbort("Expecting 3 words in pix line");
-        trackLayoutSetPicWidth(&tl, words[2]);
-        }
-    }
+		/*Fix a start window of -1 that is returned when a custom track position
+		  begins at 0
+		*/
+		if (winStart < 0)
+		    {
+		    winStart = 0;
+		    }
+	    }
+	else if (sameString(command, "pix"))
+	    {
+	    if (wordCount != 3)
+		errAbort("Expecting 3 words in pix line");
+	    trackLayoutSetPicWidth(&tl, words[2]);
+	    }
+	}
     }
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
@@ -3310,41 +3306,41 @@ return (hTableExists("hgFixed", "cutters") &&
 void fr2ScaffoldEnsemblLink(char *archive)
 /* print out Ensembl link to appropriate scaffold there */
 {
-    struct sqlConnection *conn = hAllocConn(database);
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    char query[256];
-    safef(query, sizeof(query),
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char query[256];
+safef(query, sizeof(query),
 "select * from chrUn_gold where chrom = '%s' and chromStart<%u and chromEnd>%u",
-    chromName, winEnd, winStart);
-    sr = sqlGetResult(conn, query);
+chromName, winEnd, winStart);
+sr = sqlGetResult(conn, query);
 
-    int itemCount = 0;
-    struct agpFrag *agpItem = NULL;
-    while ((row = sqlNextRow(sr)) != NULL)
+int itemCount = 0;
+struct agpFrag *agpItem = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
     {
     agpFragFree(&agpItem);  // if there is a second one
     agpItem = agpFragLoad(row+1);
     ++itemCount;
     if (itemCount > 1)
-        break;
+	break;
     }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    if (1 == itemCount)
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (1 == itemCount)
     {   // verify *entirely* within single contig
     if ((winEnd <= agpItem->chromEnd) &&
-        (winStart >= agpItem->chromStart))
-        {
-        int agpStart = winStart - agpItem->chromStart;
-        int agpEnd = agpStart + winEnd - winStart;
-        hPuts("<TD ALIGN=CENTER>");
-        printEnsemblAnchor(database, archive, agpItem->frag,
-        agpStart, agpEnd);
-        hPrintf("%s</A></TD>", "Ensembl");
-        }
+	(winStart >= agpItem->chromStart))
+	{
+	int agpStart = winStart - agpItem->chromStart;
+	int agpEnd = agpStart + winEnd - winStart;
+	hPuts("<TD ALIGN=CENTER>");
+	printEnsemblAnchor(database, archive, agpItem->frag,
+	agpStart, agpEnd);
+	hPrintf("%s</A></TD>", "Ensembl");
+	}
     }
-    agpFragFree(&agpItem);  // the one we maybe used
+agpFragFree(&agpItem);  // the one we maybe used
 }
 
 void hotLinks()
@@ -3394,8 +3390,7 @@ if (hIsGisaidServer())
        cartSessionId(cart),
        "Table View");
     }
-else
-if (hIsGsidServer())
+else if (hIsGsidServer())
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A></TD>",
        database, "Table View");
@@ -3404,13 +3399,13 @@ else
     {
     /* disable TB for CGB servers */
     if (!hIsCgbServer())
-    {
-        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
-        database, chromName, winStart+1, winEnd,
-    cartSessionVarName(),
-        cartSessionId(cart),
-    "Tables");
-        }
+	{
+	    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
+	    database, chromName, winStart+1, winEnd,
+	cartSessionVarName(),
+	    cartSessionId(cart),
+	"Tables");
+	}
     }
 
 if (hgNearOk(database))
@@ -3482,55 +3477,55 @@ else if (ensVersionString[0])
         archive = cloneString(ensDateReference);
     /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
     if (isUnknownChrom(database, chromName))
-    {
-    if (sameWord(database,"fr2"))
-        fr2ScaffoldEnsemblLink(archive);
-    else if (hTableExists(database, "ctgPos"))
-        /* see if we are entirely within a single contig */
-        {
-        struct sqlConnection *conn = hAllocConn(database);
-        struct sqlResult *sr = NULL;
-        char **row = NULL;
-        char query[256];
-        safef(query, sizeof(query),
-"select * from ctgPos where chrom = '%s' and chromStart<%u and chromEnd>%u",
-        chromName, winEnd, winStart);
-        sr = sqlGetResult(conn, query);
+	{
+	if (sameWord(database,"fr2"))
+	    fr2ScaffoldEnsemblLink(archive);
+	else if (hTableExists(database, "ctgPos"))
+	    /* see if we are entirely within a single contig */
+	    {
+	    struct sqlConnection *conn = hAllocConn(database);
+	    struct sqlResult *sr = NULL;
+	    char **row = NULL;
+	    char query[256];
+	    safef(query, sizeof(query),
+    "select * from ctgPos where chrom = '%s' and chromStart<%u and chromEnd>%u",
+	    chromName, winEnd, winStart);
+	    sr = sqlGetResult(conn, query);
 
-        int itemCount = 0;
-        struct ctgPos *ctgItem = NULL;
-        while ((row = sqlNextRow(sr)) != NULL)
-        {
-        ctgPosFree(&ctgItem);   // if there is a second one
-        ctgItem = ctgPosLoad(row);
-        ++itemCount;
-        if (itemCount > 1)
-            break;
-        }
-        sqlFreeResult(&sr);
-        hFreeConn(&conn);
-        if (1 == itemCount)
-        {   // verify *entirely* within single contig
-        if ((winEnd <= ctgItem->chromEnd) &&
-            (winStart >= ctgItem->chromStart))
-            {
-            int ctgStart = winStart - ctgItem->chromStart;
-            int ctgEnd = ctgStart + winEnd - winStart;
-            hPuts("<TD ALIGN=CENTER>");
-            printEnsemblAnchor(database, archive, ctgItem->contig,
-            ctgStart, ctgEnd);
-            hPrintf("%s</A></TD>", "Ensembl");
-            }
-        }
-        ctgPosFree(&ctgItem);   // the one we maybe used
-        }
-    }
+	    int itemCount = 0;
+	    struct ctgPos *ctgItem = NULL;
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		ctgPosFree(&ctgItem);   // if there is a second one
+		ctgItem = ctgPosLoad(row);
+		++itemCount;
+		if (itemCount > 1)
+		    break;
+		}
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn);
+	    if (1 == itemCount)
+		{   // verify *entirely* within single contig
+		if ((winEnd <= ctgItem->chromEnd) &&
+		    (winStart >= ctgItem->chromStart))
+		    {
+		    int ctgStart = winStart - ctgItem->chromStart;
+		    int ctgEnd = ctgStart + winEnd - winStart;
+		    hPuts("<TD ALIGN=CENTER>");
+		    printEnsemblAnchor(database, archive, ctgItem->contig,
+		    ctgStart, ctgEnd);
+		    hPrintf("%s</A></TD>", "Ensembl");
+		    }
+		}
+	    ctgPosFree(&ctgItem);   // the one we maybe used
+	    }
+	}
     else
-    {
-    hPuts("<TD ALIGN=CENTER>");
-    printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
-    hPrintf("%s</A></TD>", "Ensembl");
-    }
+	{
+	hPuts("<TD ALIGN=CENTER>");
+	printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
+	hPrintf("%s</A></TD>", "Ensembl");
+	}
     }
 
 /* Print NCBI MapView anchor */
@@ -3755,19 +3750,19 @@ for (track = *pTrackList; track != NULL; track = track->next)
     if (track->groupName == NULL)
         group = NULL;
     else
-    group = hashFindVal(hash, track->groupName);
+	group = hashFindVal(hash, track->groupName);
     if (group == NULL)
         {
-    if (unknown == NULL)
-        {
-        AllocVar(unknown);
-        unknown->name = cloneString("other");
-        unknown->label = cloneString("other");
-        unknown->priority = 1000000;
-        slAddHead(&list, unknown);
-        }
-    group = unknown;
-    }
+	if (unknown == NULL)
+	    {
+	    AllocVar(unknown);
+	    unknown->name = cloneString("other");
+	    unknown->label = cloneString("other");
+	    unknown->priority = 1000000;
+	    slAddHead(&list, unknown);
+	    }
+	group = unknown;
+	}
     track->group = group;
     }
 
@@ -4085,18 +4080,18 @@ if (tdbIsComposite(tg->tdb))
     {
     struct track *subtrack;
     for (subtrack = tg->subtracks;  subtrack != NULL;  subtrack = subtrack->next)
-    {
-    if (!isSubtrackVisible(subtrack))
-        continue;
-    maxWinToDraw = getMaxWindowToDraw(subtrack->tdb);
-    if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
-        {
-        subtrack->loadItems = dontLoadItems;
-        subtrack->drawItems = drawMaxWindowWarning;
-        subtrack->limitedVis = tvDense;
-        subtrack->limitedVisSet = TRUE;
-        }
-    }
+	{
+	if (!isSubtrackVisible(subtrack))
+	    continue;
+	maxWinToDraw = getMaxWindowToDraw(subtrack->tdb);
+	if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
+	    {
+	    subtrack->loadItems = dontLoadItems;
+	    subtrack->drawItems = drawMaxWindowWarning;
+	    subtrack->limitedVis = tvDense;
+	    subtrack->limitedVisSet = TRUE;
+	    }
+	}
     }
 else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     {
@@ -4407,7 +4402,7 @@ if (!hideControls)
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hButton("hgTracksConfigPage", "configure");
-  ``    //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
 	if (survey && sameWord(survey, "on"))
 	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
 	// info for drag selection javascript
@@ -5177,28 +5172,28 @@ else
     safef(query, sizeof(query), "select count(*),sum(size) from chromInfo");
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-    {
-    unsigned scafCount = sqlUnsigned(row[0]);
-    unsigned totalSize = sqlUnsigned(row[1]);
-    cgiTableRowEnd();
-    safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
-    safef(msg2, sizeof(msg2), "total size:");
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    puts(msg1);
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
-    puts(msg2);
-    cgiTableFieldEnd();
-    cgiTableRowEnd();
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    printLongWithCommas(stdout, scafCount);
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
-    printLongWithCommas(stdout, totalSize);
-    cgiTableFieldEnd();
-    }
+	{
+	unsigned scafCount = sqlUnsigned(row[0]);
+	unsigned totalSize = sqlUnsigned(row[1]);
+	cgiTableRowEnd();
+	safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
+	safef(msg2, sizeof(msg2), "total size:");
+	cgiSimpleTableRowStart();
+	cgiSimpleTableFieldStart();
+	puts(msg1);
+	cgiTableFieldEnd();
+	cgiSimpleTableFieldStart();
+	puts(msg2);
+	cgiTableFieldEnd();
+	cgiTableRowEnd();
+	cgiSimpleTableRowStart();
+	cgiSimpleTableFieldStart();
+	printLongWithCommas(stdout, scafCount);
+	cgiTableFieldEnd();
+	cgiSimpleTableFieldStart();
+	printLongWithCommas(stdout, totalSize);
+	cgiTableFieldEnd();
+	}
     cgiTableRowEnd();
     }
 sqlFreeResult(&sr);
