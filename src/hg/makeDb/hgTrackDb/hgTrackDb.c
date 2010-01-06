@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.56 2010/01/04 19:12:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.57 2010/01/06 19:09:37 hiram Exp $";
 
 
 void usage()
@@ -96,6 +96,7 @@ struct trackDb *newList = NULL, *tdb, *next;
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
+    verbose(3,"pruneStrict checking table: '%s'\n", tdb->tableName);
     if (tdb->subtracks != NULL)
 	{
 	tdb->subtracks = pruneStrict(tdb->subtracks, db);
@@ -108,6 +109,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
+    else
+	verbose(3,"pruneStrict removing table: '%s'\n", tdb->tableName);
     }
 slReverse(&newList);
 return newList;
@@ -158,6 +161,9 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	tdb->subtracks = pruneEmptyContainers(tdb->subtracks);
 	if (tdb->subtracks != NULL)
 	    slAddHead(&newList, tdb);
+	else
+	    verbose(3,"pruneEmptyContainers: empty track: '%s'\n",
+		tdb->tableName);
 	}
     else 
         {
@@ -182,7 +188,14 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     char *rel = trackDbSettingClosestToHome(tdb, "release");
     if (rel == NULL || sameString(rel, release))
+	{
+	verbose(3,"pruneRelease: adding '%s', release: '%s' =? '%s'\n",
+	    tdb->tableName, rel, release);
 	slAddHead(&relList, tdb);
+	}
+    else
+	verbose(3,"pruneRelease: removing '%s', release: '%s' != '%s'\n",
+	    tdb->tableName, rel, release);
     }
 
 /* Remove release tags in remaining tracks, since its purpose is served. */
