@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.17 2010/01/04 19:59:31 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.18 2010/01/06 20:12:20 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -105,8 +105,12 @@ indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 
+searchTable caCondor454
+searchType psl 
+termRegex gnl|ti|[0-9]{10}
+searchPriority 50
+
 searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)\.[0-9]+(\.[0-9a-z]+)?
 searchPriority 50
-
