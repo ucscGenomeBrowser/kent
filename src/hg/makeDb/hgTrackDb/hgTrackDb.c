@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.57 2010/01/06 19:09:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.58 2010/01/06 21:48:19 hiram Exp $";
 
 
 void usage()
@@ -186,7 +186,7 @@ struct trackDb *tdb;
 struct trackDb *relList = NULL;
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
-    char *rel = trackDbSettingClosestToHome(tdb, "release");
+    char *rel = trackDbSetting(tdb, "release");
     if (rel == NULL || sameString(rel, release))
 	{
 	verbose(3,"pruneRelease: adding '%s', release: '%s' =? '%s'\n",
@@ -228,7 +228,13 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
     if (tdb->overrides != NULL)
         applyOverride(trackHash, tdb);
     else
-        hashStore(trackHash, tdb->tableName)->val = tdb;
+	{
+	struct hashEl *hel = hashLookup(trackHash, tdb->tableName);
+	if (hel != NULL)
+	    verbose(2,"addVersionRa: warning duplicate tableName: '%s'\n",
+		tdb->tableName);
+	hashAdd(trackHash, tdb->tableName, tdb);
+	}
     }
 }
 
