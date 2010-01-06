@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.2 2010/01/06 02:09:06 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.3 2010/01/06 02:49:31 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4407,16 +4407,13 @@ if (!hideControls)
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hButton("hgTracksConfigPage", "configure");
-    #define SURVEY 1
-    #ifdef SURVEY
-	    //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+  ``    //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
 	if (survey && sameWord(survey, "on"))
 	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
-    #endif
-	    // info for drag selection javascript
-	    hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
-	    hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
-	    hPrintf("<input type='hidden' id='hgt.chromName' name='chromName' value='%s'>\n", chromName);
+	// info for drag selection javascript
+	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
+	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
+	hPrintf("<input type='hidden' id='hgt.chromName' name='chromName' value='%s'>\n", chromName);
 
 	hPutc('\n');
 
@@ -4478,10 +4475,10 @@ if (!hideControls)
     hButton("hgt.defaultImgOrder", "default order");
 #endif//def IMAGEv2_DRAG_REORDER
     // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
-    {
-    hPrintf("&nbsp;");
-    hButton("hgt.hideAll", "hide all");
-    }
+	{
+	hPrintf("&nbsp;");
+	hButton("hgt.hideAll", "hide all");
+	}
 
     hPrintf(" ");
     hOnClickButton("document.customTrackForm.submit();return false;",
@@ -4493,10 +4490,10 @@ if (!hideControls)
     hPrintf(" ");
 
     if (!hIsGsidServer())
-    {
+	{
         hButton("hgt.toggleRevCmplDisp", "reverse");
         hPrintf(" ");
-    }
+	}
 
     hButton("hgt.refresh", "refresh");
 
@@ -4508,153 +4505,153 @@ if (!hideControls)
         hPrintf("<IMG SRC = \"../images/new_colorchrom.gif\" BORDER=1 WIDTH=596 HEIGHT=18 ><BR>\n");
         }
 
-if (showTrackControls)
-    {
-    /* Display viewing options for each track. */
-    /* Chuck: This is going to be wrapped in a table so that
-     * the controls don't wrap around randomly */
-    hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    hPrintf("<tr><td align='left'>\n");
-
-    hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
-    hPrintf("</td>");
-
-    hPrintf("<td colspan='%d' align='CENTER' nowrap>"
-       "Use drop-down controls below and press refresh to alter tracks "
-       "displayed.<BR>"
-       "Tracks with lots of items will automatically be displayed in "
-       "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
-
-    hPrintf("<td align='right'>");
-    hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
-    hPrintf("</td></tr>");
-
-    if (!hIsGsidServer())
-        {
-	cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-	}
-    else
+    if (showTrackControls)
 	{
-	/* 4 cols fit GSID's display better */
-        cg = startControlGrid(4, "left");
-	}
-    boolean isFirstNotCtGroup = TRUE;
-    for (group = groupList; group != NULL; group = group->next)
-        {
-	if (group->trackList == NULL)
-	    continue;
+	/* Display viewing options for each track. */
+	/* Chuck: This is going to be wrapped in a table so that
+	 * the controls don't wrap around randomly */
+	hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+	hPrintf("<tr><td align='left'>\n");
 
-	struct trackRef *tr;
+	hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
+	hPrintf("</td>");
 
-        /* check if group section should be displayed */
-        char *otherState;
-        char *indicator;
-        char *indicatorImg;
-        boolean isOpen = !isCollapsedGroup(group);
-        collapseGroupGoodies(isOpen, TRUE, &indicatorImg,
-                                &indicator, &otherState);
-	hPrintf("<TR>");
-	cg->rowOpen = TRUE;
+	hPrintf("<td colspan='%d' align='CENTER' nowrap>"
+	   "Use drop-down controls below and press refresh to alter tracks "
+	   "displayed.<BR>"
+	   "Tracks with lots of items will automatically be displayed in "
+	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+
+	hPrintf("<td align='right'>");
+	hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
+	hPrintf("</td></tr>");
+
 	if (!hIsGsidServer())
 	    {
-            hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-                MAX_CONTROL_COLUMNS);
+	    cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
 	    }
 	else
 	    {
-            hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-                MAX_CONTROL_COLUMNS-1);
+	    /* 4 cols fit GSID's display better */
+	    cg = startControlGrid(4, "left");
 	    }
-	hPrintf("<table width='100%%'><tr><td align='left'>");
-	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-        hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue'></A>&nbsp;&nbsp;",
-                hgTracksName(), cartSidUrlString(cart),
-                collapseGroupVar(group->name),
-                otherState, group->name,
-                group->name, group->name, indicatorImg, indicator);
-	hPrintf("</td><td align='center' width='100%%'>\n");
-	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	hPrintf("</td><td align='right'>\n");
-	hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
-	hPrintf("</td></tr></table></th>\n");
-	controlGridEndRow(cg);
-
-	/* First track group that is not custom track group gets ruler,
-         * unless it's collapsed. */
-	if (!showedRuler && isFirstNotCtGroup &&
-		    differentString(group->name, "user"))
+	boolean isFirstNotCtGroup = TRUE;
+	for (group = groupList; group != NULL; group = group->next)
 	    {
-	    showedRuler = TRUE;
-	    myControlGridStartCell(cg, isOpen, group->name);
-            hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
-            cartSessionVarName(), cartSessionId(cart),
-            chromName, RULER_TRACK_NAME);
-	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
-            hPrintf("</A>");
-	    hDropListClassWithStyle("ruler", rulerMenu,
-                    sizeof(rulerMenu)/sizeof(char *), rulerMenu[rulerMode],
-                    rulerMode == tvHide ? "hiddenText" : "normalText",
-                    TV_DROPDOWN_STYLE);
-	    controlGridEndCell(cg);
-	    }
-        if (differentString(group->name, "user"))
-            isFirstNotCtGroup = FALSE;
+	    if (group->trackList == NULL)
+		continue;
 
-        /* Add supertracks to  track list, sort by priority and
-         * determine if they have visible member tracks */
-        groupTrackListAddSuper(cart, group);
+	    struct trackRef *tr;
 
-        /* Display track controls */
-	for (tr = group->trackList; tr != NULL; tr = tr->next)
-	    {
-            struct track *track = tr->track;
-            if (tdbIsSuperTrackChild(track->tdb))
-                /* don't display supertrack members */
-                continue;
-	    myControlGridStartCell(cg, isOpen, group->name);
-	    if (track->hasUi)
+	    /* check if group section should be displayed */
+	    char *otherState;
+	    char *indicator;
+	    char *indicatorImg;
+	    boolean isOpen = !isCollapsedGroup(group);
+	    collapseGroupGoodies(isOpen, TRUE, &indicatorImg,
+				    &indicator, &otherState);
+	    hPrintf("<TR>");
+	    cg->rowOpen = TRUE;
+	    if (!hIsGsidServer())
 		{
-		char *encodedMapName = cgiEncode(track->mapName);
-                if(trackDbSetting(track->tdb, "wgEncode") != NULL)
-                    hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
-		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
-			cartSessionVarName(), cartSessionId(cart),
-			chromName, encodedMapName);
-		freeMem(encodedMapName);
+		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
+		    MAX_CONTROL_COLUMNS);
 		}
-            hPrintf(" %s", track->shortLabel);
-            if (tdbIsSuper(track->tdb))
-                hPrintf("...");
-	    hPrintf("<BR> ");
-	    if (track->hasUi)
-		hPrintf("</A>");
-
-	    if (hTrackOnChrom(track->tdb, chromName))
-		{
-                if (tdbIsSuper(track->tdb))
-                    superTrackDropDown(cart, track->tdb,
-                                        superTrackHasVisibleMembers(track->tdb));
-                else
-                    {
-                    /* check for option of limiting visibility to one mode */
-                    hTvDropDownClassVisOnly(track->mapName, track->visibility,
-                                track->canPack, (track->visibility == tvHide) ?
-                                "hiddenText" : "normalText",
-                                trackDbSetting(track->tdb, "onlyVisibility"));
-                    }
-                }
 	    else
-                /* If track is not on this chrom print an informational
-                message for the user. */
-		hPrintf("[No data-%s]", chromName);
-	    controlGridEndCell(cg);
-	    }
-	/* now finish out the table */
-	if (group->next != NULL)
+		{
+		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
+		    MAX_CONTROL_COLUMNS-1);
+		}
+	    hPrintf("<table width='100%%'><tr><td align='left'>");
+	    hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+	    hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue'></A>&nbsp;&nbsp;",
+		    hgTracksName(), cartSidUrlString(cart),
+		    collapseGroupVar(group->name),
+		    otherState, group->name,
+		    group->name, group->name, indicatorImg, indicator);
+	    hPrintf("</td><td align='center' width='100%%'>\n");
+	    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
+	    hPrintf("</td><td align='right'>\n");
+	    hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
+	    hPrintf("</td></tr></table></th>\n");
 	    controlGridEndRow(cg);
+
+	    /* First track group that is not custom track group gets ruler,
+	     * unless it's collapsed. */
+	    if (!showedRuler && isFirstNotCtGroup &&
+			differentString(group->name, "user"))
+		{
+		showedRuler = TRUE;
+		myControlGridStartCell(cg, isOpen, group->name);
+		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+		cartSessionVarName(), cartSessionId(cart),
+		chromName, RULER_TRACK_NAME);
+		hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
+		hPrintf("</A>");
+		hDropListClassWithStyle("ruler", rulerMenu,
+			sizeof(rulerMenu)/sizeof(char *), rulerMenu[rulerMode],
+			rulerMode == tvHide ? "hiddenText" : "normalText",
+			TV_DROPDOWN_STYLE);
+		controlGridEndCell(cg);
+		}
+	    if (differentString(group->name, "user"))
+		isFirstNotCtGroup = FALSE;
+
+	    /* Add supertracks to  track list, sort by priority and
+	     * determine if they have visible member tracks */
+	    groupTrackListAddSuper(cart, group);
+
+	    /* Display track controls */
+	    for (tr = group->trackList; tr != NULL; tr = tr->next)
+		{
+		struct track *track = tr->track;
+		if (tdbIsSuperTrackChild(track->tdb))
+		    /* don't display supertrack members */
+		    continue;
+		myControlGridStartCell(cg, isOpen, group->name);
+		if (track->hasUi)
+		    {
+		    char *encodedMapName = cgiEncode(track->mapName);
+		    if(trackDbSetting(track->tdb, "wgEncode") != NULL)
+			hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
+		    hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+			    cartSessionVarName(), cartSessionId(cart),
+			    chromName, encodedMapName);
+		    freeMem(encodedMapName);
+		    }
+		hPrintf(" %s", track->shortLabel);
+		if (tdbIsSuper(track->tdb))
+		    hPrintf("...");
+		hPrintf("<BR> ");
+		if (track->hasUi)
+		    hPrintf("</A>");
+
+		if (hTrackOnChrom(track->tdb, chromName))
+		    {
+		    if (tdbIsSuper(track->tdb))
+			superTrackDropDown(cart, track->tdb,
+					    superTrackHasVisibleMembers(track->tdb));
+		    else
+			{
+			/* check for option of limiting visibility to one mode */
+			hTvDropDownClassVisOnly(track->mapName, track->visibility,
+				    track->canPack, (track->visibility == tvHide) ?
+				    "hiddenText" : "normalText",
+				    trackDbSetting(track->tdb, "onlyVisibility"));
+			}
+		    }
+		else
+		    /* If track is not on this chrom print an informational
+		    message for the user. */
+		    hPrintf("[No data-%s]", chromName);
+		controlGridEndCell(cg);
+		}
+	    /* now finish out the table */
+	    if (group->next != NULL)
+		controlGridEndRow(cg);
+	    }
+	endControlGrid(&cg);
 	}
-    endControlGrid(&cg);
-    }
 
     if (measureTiming)
 	{
@@ -4706,11 +4703,11 @@ hPrintf("</CENTER>\n");
 for (track = trackList; track != NULL; track = track->next)
     {
     if (track->visibility != tvHide)
-    {
-    if (track->freeItems != NULL)
-        track->freeItems(track);
-    lmCleanup(&track->lm);
-    }
+	{
+	if (track->freeItems != NULL)
+	    track->freeItems(track);
+	lmCleanup(&track->lm);
+	}
     }
 #endif /* SLOW */
 hPrintf("</FORM>\n");
