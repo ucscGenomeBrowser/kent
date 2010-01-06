@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.1 2010/01/06 02:05:28 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1617.4.2 2010/01/06 02:09:06 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4361,66 +4361,66 @@ if (!hideControls)
     hWrites("<BR>\n");
 
     if (showTrackControls)
-    {
-    /* Break into a second form so that zooming and scrolling
-     * can be done with a 'GET' so that user can back up from details
-     * page without Internet Explorer popping up an annoying dialog.
-     * Do rest of page as a 'POST' so that the ultra-long URL from
-     * all the track controls doesn't break things.  IE URL limit
-     * is 2000 bytes, but some firewalls impose a ~1000 byte limit.
-     * As a side effect of breaking up the page into two forms
-     * we need to repeat the position in a hidden variable here
-     * so that zoom/scrolling always has current position to work
-     * from. */
-    hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
-        "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
-        hPrintf("\n%s", trackGroupsHidden1->string);
-    hPrintf("</CENTER></FORM>\n");
-    hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
-        hPrintf("%s", trackGroupsHidden2->string);
-        freeDyString(&trackGroupsHidden1);
-        freeDyString(&trackGroupsHidden2);
-    if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
-    clearButtonJavascript = "document.TrackForm.position.value=''";
-    hPrintf("<CENTER>");
-    }
+	{
+	/* Break into a second form so that zooming and scrolling
+	 * can be done with a 'GET' so that user can back up from details
+	 * page without Internet Explorer popping up an annoying dialog.
+	 * Do rest of page as a 'POST' so that the ultra-long URL from
+	 * all the track controls doesn't break things.  IE URL limit
+	 * is 2000 bytes, but some firewalls impose a ~1000 byte limit.
+	 * As a side effect of breaking up the page into two forms
+	 * we need to repeat the position in a hidden variable here
+	 * so that zoom/scrolling always has current position to work
+	 * from. */
+	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
+	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
+	    hPrintf("\n%s", trackGroupsHidden1->string);
+	hPrintf("</CENTER></FORM>\n");
+	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
+	    hPrintf("%s", trackGroupsHidden2->string);
+	    freeDyString(&trackGroupsHidden1);
+	    freeDyString(&trackGroupsHidden2);
+	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
+	clearButtonJavascript = "document.TrackForm.position.value=''";
+	hPrintf("<CENTER>");
+	}
 
 
     /* Make line that says position. */
-    {
-    char buf[256];
-    char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
-        char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
-        if (containsStringNoCase(database, "zoo"))
-            {
-            hPuts("Organism ");
-            printAssemblyListHtmlExtra(database, javascript);
-            }
+	{
+	char buf[256];
+	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+	    char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
+	    if (containsStringNoCase(database, "zoo"))
+		{
+		hPuts("Organism ");
+		printAssemblyListHtmlExtra(database, javascript);
+		}
 
-    sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
-    position = cloneString(buf);
-    hWrites("position/search ");
-    hTextVar("position", addCommasToPos(database, position), 30);
-    sprintLongWithCommas(buf, winEnd - winStart);
-    hWrites(" ");
-    hButton("hgt.jump", "jump");
-    hOnClickButton(clearButtonJavascript,"clear");
-    hPrintf(" size <span id='size'>%s</span> bp. ", buf);
-    hButton("hgTracksConfigPage", "configure");
-#define SURVEY 1
-#ifdef SURVEY
-        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
-    if (survey && sameWord(survey, "on"))
-        hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
-#endif
-        // info for drag selection javascript
-        hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
-        hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
-        hPrintf("<input type='hidden' id='hgt.chromName' name='chromName' value='%s'>\n", chromName);
+	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
+	position = cloneString(buf);
+	hWrites("position/search ");
+	hTextVar("position", addCommasToPos(database, position), 30);
+	sprintLongWithCommas(buf, winEnd - winStart);
+	hWrites(" ");
+	hButton("hgt.jump", "jump");
+	hOnClickButton(clearButtonJavascript,"clear");
+	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
+	hButton("hgTracksConfigPage", "configure");
+    #define SURVEY 1
+    #ifdef SURVEY
+	    //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+	if (survey && sameWord(survey, "on"))
+	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
+    #endif
+	    // info for drag selection javascript
+	    hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
+	    hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
+	    hPrintf("<input type='hidden' id='hgt.chromName' name='chromName' value='%s'>\n", chromName);
 
-    hPutc('\n');
+	hPutc('\n');
 
-    }
+	}
     }
 
 /* Make chromsome ideogram gif and map. */
@@ -4657,35 +4657,35 @@ if (showTrackControls)
     }
 
     if (measureTiming)
-        {
-    hPrintf("track, load time, draw time, total<BR>\n");
-    for (track = trackList; track != NULL; track = track->next)
-        {
-        if (track->visibility == tvHide)
-                continue;
-            if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-                {
-                struct track *subtrack;
-                for (subtrack = track->subtracks; subtrack != NULL;
-                                                    subtrack = subtrack->next)
-                    if (isSubtrackVisible(subtrack))
-                        hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel,
-                                subtrack->loadTime, subtrack->drawTime,
-                subtrack->loadTime + subtrack->drawTime);
-                }
-            else
-                {
-            hPrintf("%s, %d, %d, %d<BR>\n",
-            track->shortLabel, track->loadTime, track->drawTime,
-            track->loadTime + track->drawTime);
-                if (startsWith("wigMaf", track->tdb->type))
-                  if (track->subtracks)
-                      if (track->subtracks->loadTime)
-                         hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n",
-                            track->shortLabel, track->subtracks->loadTime);
-                }
-        }
-    }
+	{
+	hPrintf("track, load time, draw time, total<BR>\n");
+	for (track = trackList; track != NULL; track = track->next)
+	    {
+	    if (track->visibility == tvHide)
+		    continue;
+	    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+		{
+		struct track *subtrack;
+		for (subtrack = track->subtracks; subtrack != NULL;
+						    subtrack = subtrack->next)
+		    if (isSubtrackVisible(subtrack))
+			hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel,
+				subtrack->loadTime, subtrack->drawTime,
+		subtrack->loadTime + subtrack->drawTime);
+		}
+	    else
+		{
+		hPrintf("%s, %d, %d, %d<BR>\n",
+		    track->shortLabel, track->loadTime, track->drawTime,
+		    track->loadTime + track->drawTime);
+		if (startsWith("wigMaf", track->tdb->type))
+		  if (track->subtracks)
+		      if (track->subtracks->loadTime)
+			 hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n",
+			    track->shortLabel, track->subtracks->loadTime);
+		}
+	    }
+	}
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
