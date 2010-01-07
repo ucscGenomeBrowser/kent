@@ -962,7 +962,7 @@ searchType bed
 searchMethod prefix
 searchPriority 5
 termRegex [a-z0-9.-]+
-dontCheck termRegex [a-z0-9.-]+_[a-z0-9]+
+dontCheck [a-z0-9.-]+_[a-z0-9]+
 
 track affyMOE430v2
 shortLabel Affy MOE430v2
