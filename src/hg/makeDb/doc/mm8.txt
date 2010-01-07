@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.75 2009/09/20 17:16:45 markd Exp $"
+#	"$Id: mm8.txt,v 1.76 2010/01/07 20:47:49 rhead Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7449,6 +7449,7 @@ set out = $3
 
 ############################################################################
 # JAX TRACKS (DONE 10/20/06 angie - UPDATED 7/18/07, 9/27/07)
+# Table jaxQTL renamed to jaxQtl on 1/7/10 (see NOTE FOR NEXT TIME below)
     ssh kkstore04
     mkdir /cluster/data/mm8/bed/jax/2007_09
     cd /cluster/data/mm8/bed/jax/2007_09
@@ -7584,6 +7585,9 @@ set out = $3
       jaxPhenotypeAlias.sql jaxPhenotypeAlias.tab
 ### NOTE FOR NEXT TIME ###
 ### Call the table jaxQtl instead of jaxQTL -- QA doesn't like jaxQTL.
+### (brooke) In fact, QA renamed the table to jaxQtl on 1/7/10 on hgwdev and
+### mysqlbeta with this command:  mysql> alter table jaxQTL rename to jaxQtl;
+### (to make trackDb load with a single trackDb.ra entry for mm8 and mm9)
 ### Use -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql .
     # jaxQTL
     hgLoadBed -tab -notItemRgb -noBin \
