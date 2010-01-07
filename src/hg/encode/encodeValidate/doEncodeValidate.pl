@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.210 2009/12/22 17:43:28 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.211 2010/01/07 23:30:05 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -169,6 +169,7 @@ our %validators = (
     ripAntibody => \&validateControlledVocabOrControl,
     treatment => \&validateControlledVocabOrControl,
     protocol => \&validateControlledVocabOrControl,
+    restrictionEnzyme => \&validateControlledVocabOrControl,
     default => \&validateControlledVocab,
     );
 
