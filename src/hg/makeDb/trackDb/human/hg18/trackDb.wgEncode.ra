@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.742 2010/01/07 19:05:33 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.743 2010/01/07 20:06:56 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3363,12 +3363,14 @@ shortLabel Open Chromatin
 longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
-subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> CHORN=Chorion FIBRO=Fibrobl GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR MEDULO=Medullo MCF7=MCF-7 PROG=ProgFib PANI=PanIslets
+subGroup2 cellType Cell_Line CHORN=Chorion FIBRO=Fibrobl GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MEDULO=Medullo MCF7=MCF-7 NHEK=NHEK_<i>Tier2</i> PROG=ProgFib PANI=PanIslets
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc IP-pol2=ChIP-seq_Pol2 zCTRL=Input_Control
 subGroup4 treat Treatment 1NONE=None ANDRO=androgen ESTRO=estrogen IFNa4h=IFNa4h IFNg4h=IFNg4h
-sortOrder cellType=+ EXP=+ treat=+ view=+
-dimensions dimensionY=cellType dimensionX=EXP dimensionA=treat
-dimensionAchecked 1NONE
+#sortOrder cellType=+ EXP=+ treat=+ view=+
+#dimensions dimensionY=cellType dimensionX=EXP dimensionA=treat
+#dimensionAchecked 1NONE
+sortOrder cellType=+ EXP=+ view=+
+dimensions dimensionY=cellType dimensionX=EXP
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
@@ -3395,7 +3397,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel GM12878 DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
-        subGroups view=Peaks EXP=DNase cellType=1GM12878 treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=GM12878 treat=1NONE
         type narrowPeak
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Peaks labVersion="DNaseHS, p-value cutoff: 0.5" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-02 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksGm12878V2 fileName=wgEncodeDukeDNaseSeqPeaksGm12878V2.narrowPeak.gz
@@ -3405,7 +3407,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel GM12878 FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12878 cells)
-        subGroups view=Peaks EXP=FAIRE cellType=1GM12878 treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=GM12878 treat=1NONE
         type narrowPeak
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878V2 fileName=wgEncodeUncFAIREseqPeaksGm12878V2.narrowPeak.gz
@@ -3415,7 +3417,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel GM12878 CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12878 cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=1GM12878 treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=GM12878 treat=1NONE
         type narrowPeak
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-04 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksGm12878CtcfV2 fileName=wgEncodeUtaChIPseqPeaksGm12878CtcfV2.narrowPeak.gz
@@ -3425,7 +3427,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel GM12878 c-Myc Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in GM12878 cells)
-        subGroups view=Peaks EXP=IP-cMyc cellType=1GM12878 treat=1NONE
+        subGroups view=Peaks EXP=IP-cMyc cellType=GM12878 treat=1NONE
         type narrowPeak
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.001" dataVersion="ENCODE Sep 2009 Freeze" subId=472 dateSubmitted=2009-09-08 dateUnrestricted=2010-06-08 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksGm12878Cmyc fileName=wgEncodeUtaChIPseqPeaksGm12878Cmyc.narrowPeak.gz
@@ -3525,7 +3527,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel H1-hESC DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in H1-hESC cells)
-        subGroups view=Peaks EXP=DNase cellType=2H1 treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=H1 treat=1NONE
         type narrowPeak
         color 0,107,27
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=H1-hESC view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=628 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksH1hesc fileName=wgEncodeDukeDNaseSeqPeaksH1hesc.narrowPeak.gz
@@ -3535,7 +3537,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel H1-hESC FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in H1-hESC cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2H1 treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=H1 treat=1NONE
         type narrowPeak
         color 0,107,27
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=H1-hESC view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=629 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksH1hesc fileName=wgEncodeUncFAIREseqPeaksH1hesc.narrowPeak.gz
@@ -3545,7 +3547,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel H1-hESC CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in H1-hESC cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=2H1 treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=H1 treat=1NONE
         type narrowPeak
         color 0,107,27
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=636 dateSubmitted=2009-10-01 dateUnrestricted=2010-07-01 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksH1hescCtcf fileName=wgEncodeUtaChIPseqPeaksH1hescCtcf.narrowPeak.gz
@@ -3555,7 +3557,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel H1-hESC Pol2 Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in H1-hESC cells)
-        subGroups view=Peaks EXP=IP-pol2 cellType=2H1 treat=1NONE
+        subGroups view=Peaks EXP=IP-pol2 cellType=H1 treat=1NONE
         type narrowPeak
         color 0,107,27
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=641 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksH1hescPol2 fileName=wgEncodeUtaChIPseqPeaksH1hescPol2.narrowPeak.gz
@@ -3565,7 +3567,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HeLa-S3 cells)
-        subGroups view=Peaks EXP=DNase cellType=2HELA treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=HELA treat=1NONE
         type narrowPeak
         color 0,102,136
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHelas3V2 fileName=wgEncodeDukeDNaseSeqPeaksHelas3V2.narrowPeak.gz
@@ -3575,7 +3577,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HeLa-S3 cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2HELA treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=HELA treat=1NONE
         type narrowPeak
         color 0,102,136
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHelas3V2 fileName=wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz
@@ -3586,7 +3588,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HeLa-S3 cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=2HELA treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=HELA treat=1NONE
         type narrowPeak
         color 0,102,136
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHelas3CtcfV2.narrowPeak.gz
@@ -3596,7 +3598,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa c-Myc Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
-        subGroups view=Peaks EXP=IP-cMyc cellType=2HELA treat=1NONE
+        subGroups view=Peaks EXP=IP-cMyc cellType=HELA treat=1NONE
         type narrowPeak
         color 0,102,136
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3CmycV2 fileName=wgEncodeUtaChIPseqPeaksHelas3CmycV2.narrowPeak.gz
@@ -3606,7 +3608,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HepG2 DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HepG2 cells)
-        subGroups view=Peaks EXP=DNase cellType=2HEPG2 treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=HEPG2 treat=1NONE
         type narrowPeak
         color 189,0,157
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHepg2V2 fileName=wgEncodeDukeDNaseSeqPeaksHepg2V2.narrowPeak.gz
@@ -3616,7 +3618,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HepG2 FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HepG2 cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2HEPG2 treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=HEPG2 treat=1NONE
         type narrowPeak
         color 189,0,157
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2V2 fileName=wgEncodeUncFAIREseqPeaksHepg2V2.narrowPeak.gz
@@ -3626,7 +3628,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HepG2 CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HepG2 cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=2HEPG2 treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=HEPG2 treat=1NONE
         type narrowPeak
         color 189,0,157
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2.narrowPeak.gz
@@ -3636,7 +3638,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HepG2 c-Myc Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HepG2 cells)
-        subGroups view=Peaks EXP=IP-cMyc cellType=2HEPG2 treat=1NONE
+        subGroups view=Peaks EXP=IP-cMyc cellType=HEPG2 treat=1NONE
         type narrowPeak
         color 189,0,157
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CmycV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CmycV2.narrowPeak.gz
@@ -3646,7 +3648,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HepG2 Pol2 Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HepG2 cells)
-        subGroups view=Peaks EXP=IP-pol2 cellType=2HEPG2 treat=1NONE
+        subGroups view=Peaks EXP=IP-pol2 cellType=HEPG2 treat=1NONE
         type narrowPeak
         color 189,0,157
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=589 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2Pol2 fileName=wgEncodeUtaChIPseqPeaksHepg2Pol2.narrowPeak.gz
@@ -3656,7 +3658,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HUVEC DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HUVEC cells)
-        subGroups view=Peaks EXP=DNase cellType=2HUVEC treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=HUVEC treat=1NONE
         type narrowPeak
         color 224,75,0
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HUVEC view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=545 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHuvec fileName=wgEncodeDukeDNaseSeqPeaksHuvec.narrowPeak.gz
@@ -3666,7 +3668,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HUVEC FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HUVEC cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2HUVEC treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=HUVEC treat=1NONE
         type narrowPeak
         color 224,75,0
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HUVEC view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=546 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHuvec fileName=wgEncodeUncFAIREseqPeaksHuvec.narrowPeak.gz
@@ -3676,7 +3678,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HUVEC CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HUVEC cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=2HUVEC treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=HUVEC treat=1NONE
         type narrowPeak
         color 224,75,0
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=548 dateSubmitted=2009-09-25 dateUnrestricted=2010-06-25 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHuvecCtcf fileName=wgEncodeUtaChIPseqPeaksHuvecCtcf.narrowPeak.gz
@@ -3686,7 +3688,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HUVEC c-Myc Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HUVEC cells)
-        subGroups view=Peaks EXP=IP-cMyc cellType=2HUVEC treat=1NONE
+        subGroups view=Peaks EXP=IP-cMyc cellType=HUVEC treat=1NONE
         type narrowPeak
         color 224,75,0
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=635 dateSubmitted=2009-10-01 dateUnrestricted=2010-07-01 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHuvecCmyc fileName=wgEncodeUtaChIPseqPeaksHuvecCmyc.narrowPeak.gz
@@ -3696,7 +3698,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HUVEC Pol2 Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HUVEC cells)
-        subGroups view=Peaks EXP=IP-pol2 cellType=2HUVEC treat=1NONE
+        subGroups view=Peaks EXP=IP-pol2 cellType=HUVEC treat=1NONE
         color 224,75,0
         type narrowPeak
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=552 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHuvecPol2 fileName=wgEncodeUtaChIPseqPeaksHuvecPol2.narrowPeak.gz
@@ -3706,7 +3708,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel K562 DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
-        subGroups view=Peaks EXP=DNase cellType=1K562 treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=K562 treat=1NONE
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksK562V2 fileName=wgEncodeDukeDNaseSeqPeaksK562V2.narrowPeak.gz
@@ -3716,7 +3718,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel K562 FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
-        subGroups view=Peaks EXP=FAIRE cellType=1K562 treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=K562 treat=1NONE
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-10-02 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562V2 fileName=wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz
@@ -3727,7 +3729,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel K562 CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in K562 cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=1K562 treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=K562 treat=1NONE
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562CtcfV2 fileName=wgEncodeUtaChIPseqPeaksK562CtcfV2.narrowPeak.gz
@@ -3737,7 +3739,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel K562 c-Myc Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in K562 cells)
-        subGroups view=Peaks EXP=IP-cMyc cellType=1K562 treat=1NONE
+        subGroups view=Peaks EXP=IP-cMyc cellType=K562 treat=1NONE
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562CmycV2 fileName=wgEncodeUtaChIPseqPeaksK562CmycV2.narrowPeak.gz
@@ -3747,7 +3749,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks
         shortLabel K562 Pol2 Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in K562 cells)
-        subGroups view=Peaks EXP=IP-pol2 cellType=1K562 treat=1NONE
+        subGroups view=Peaks EXP=IP-pol2 cellType=K562 treat=1NONE
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=588 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562Pol2 fileName=wgEncodeUtaChIPseqPeaksK562Pol2.narrowPeak.gz
@@ -3757,7 +3759,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel NHEK DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in NHEK cells)
-        subGroups view=Peaks EXP=DNase cellType=2NHEK treat=1NONE
+        subGroups view=Peaks EXP=DNase cellType=NHEK treat=1NONE
         type narrowPeak
         color 179,0,134
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=594 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksNhek fileName=wgEncodeDukeDNaseSeqPeaksNhek.narrowPeak.gz
@@ -3767,7 +3769,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel NHEK FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in NHEK cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2NHEK treat=1NONE
+        subGroups view=Peaks EXP=FAIRE cellType=NHEK treat=1NONE
         type narrowPeak
         color 179,0,134
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=630 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksNhek fileName=wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz
@@ -3777,7 +3779,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel NHEK CTCF Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in NHEK cells)
-        subGroups view=Peaks EXP=IP-CTCF cellType=2NHEK treat=1NONE
+        subGroups view=Peaks EXP=IP-CTCF cellType=NHEK treat=1NONE
         type narrowPeak
         color 179,0,134
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=NHEK antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=624 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksNhekCtcf fileName=wgEncodeUtaChIPseqPeaksNhekCtcf.narrowPeak.gz
@@ -3823,7 +3825,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HeLa-S3/IFNa4h cells)
-        subGroups view=Peaks EXP=DNase cellType=2HELA treat=IFNa4h
+        subGroups view=Peaks EXP=DNase cellType=HELAifa treat=IFNa4h
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 treatment=IFNa4h view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=836 dateSubmitted=2009-12-18 dateUnrestricted=2010-09-18 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqPeaksHelas3Ifna4h fileName=wgEncodeDukeDNaseSeqPeaksHelas3Ifna4h.narrowPeak.gz
@@ -3869,7 +3871,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel LHSR DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in LHSR/androgen cells)
-        subGroups view=Peaks EXP=DNase cellType=LHSR treat=ANDRO
+        subGroups view=Peaks EXP=DNase cellType=LHSRa treat=ANDRO
         type narrowPeak
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=LHSR treatment=androgen view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=851 dateSubmitted=2009-12-19 dateUnrestricted=2010-09-18 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqPeaksLhsrAndro fileName=wgEncodeDukeDNaseSeqPeaksLhsrAndro.narrowPeak.gz
 
@@ -3914,7 +3916,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HeLa-S3/IFNa4h cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2HELA treat=IFNa4h
+        subGroups view=Peaks EXP=FAIRE cellType=HELAifa treat=IFNa4h
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 treatment=IFNa4h view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=858 dateSubmitted=2009-12-20 dateUnrestricted=2010-09-20 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqPeaksHelas3Ifna4h fileName=wgEncodeUncFAIREseqPeaksHelas3Ifna4h.narrowPeak.gz
@@ -3924,7 +3926,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel GM12878 Pol2 Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in GM12878 cells)
-        subGroups view=Peaks EXP=IP-pol2 cellType=1GM12878 treat=1NONE
+        subGroups view=Peaks EXP=IP-pol2 cellType=GM12878 treat=1NONE
         type narrowPeak
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=868 dateSubmitted=2009-12-23 dateUnrestricted=2010-09-22 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqPeaksGm12878Pol2 fileName=wgEncodeUtaChIPseqPeaksGm12878Pol2.narrowPeak.gz
@@ -3943,7 +3945,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel LHSR FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in LHSR/androgen cells)
-        subGroups view=Peaks EXP=FAIRE cellType=LHSR treat=ANDRO
+        subGroups view=Peaks EXP=FAIRE cellType=LHSRa treat=ANDRO
         type narrowPeak
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=LHSR treatment=androgen view=Peaks labVersion="p-value cutoff: 0.1" dataVersion="ENCODE Jan 2010 Freeze" subId=874 dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqPeaksLhsrAndro fileName=wgEncodeUncFAIREseqPeaksLhsrAndro.narrowPeak.gz
 
@@ -3970,7 +3972,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel H1-hESC cMyc Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in H1-hESC cells)
-        subGroups view=Peaks EXP=IP-cMyc cellType=2H1 treat=1NONE
+        subGroups view=Peaks EXP=IP-cMyc cellType=H1 treat=1NONE
         type narrowPeak
         color 0,107,27
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Jan 2010 Freeze" subId=882 dateSubmitted=2009-12-28 dateUnrestricted=2010-09-27 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqPeaksH1hescCmyc fileName=wgEncodeUtaChIPseqPeaksH1hescCmyc.narrowPeak.gz
@@ -3998,7 +4000,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa Pol2 Pk
         longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
-        subGroups view=Peaks EXP=IP-pol2 cellType=2HELA treat=1NONE
+        subGroups view=Peaks EXP=IP-pol2 cellType=HELA treat=1NONE
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=885 dateSubmitted=2009-12-28 dateUnrestricted=2010-09-28 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqPeaksHelas3Pol2 fileName=wgEncodeUtaChIPseqPeaksHelas3Pol2.narrowPeak.gz
@@ -4017,7 +4019,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewPeaks off
         shortLabel HeLa FAIRE Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HeLa-S3/IFNg4h cells)
-        subGroups view=Peaks EXP=FAIRE cellType=2HELA treat=IFNg4h
+        subGroups view=Peaks EXP=FAIRE cellType=HELAifg treat=IFNg4h
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 treatment=IFNg4h view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=859 dateSubmitted=2009-12-20 dateUnrestricted=2010-09-20 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqPeaksHelas3Ifng4h fileName=wgEncodeUncFAIREseqPeaksHelas3Ifng4h.narrowPeak.gz
@@ -4040,7 +4042,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel GM12878 DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM12878 cells)
-        subGroups view=SIG EXP=DNase cellType=1GM12878 treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=GM12878 treat=1NONE
         type wig 0.00 1.26
         viewLimits 0:0.15
         color 153,38,0
@@ -4051,7 +4053,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel GM12878 FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12878 cells)
-        subGroups view=SIG EXP=FAIRE cellType=1GM12878 treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=GM12878 treat=1NONE
         type wig 0.00 0.81
         viewLimits 0.0005:0.04
         color 153,38,0
@@ -4062,7 +4064,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel GM12878 CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM12878 cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=1GM12878 treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=GM12878 treat=1NONE
         type wig 0.00 8.78
         viewLimits 0:0.4
         color 153,38,0
@@ -4073,7 +4075,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel GM12878 c-Myc FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in GM12878 cells)
-        subGroups view=SIG EXP=IP-cMyc cellType=1GM12878 treat=1NONE
+        subGroups view=SIG EXP=IP-cMyc cellType=GM12878 treat=1NONE
         type wig 0.00 0.79
         viewLimits 0:0.08
         color 153,38,0
@@ -4084,7 +4086,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel GM12878 Input FD
         longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in GM12878 cells)
-        subGroups view=SIG EXP=zCTRL cellType=1GM12878 treat=1NONE
+        subGroups view=SIG EXP=zCTRL cellType=GM12878 treat=1NONE
         type wig 0.00 29.05
         viewLimits 0:0.1
         spanList 1
@@ -4196,7 +4198,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel H1-hESC DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in H1-hESC cells)
-        subGroups view=SIG EXP=DNase cellType=2H1 treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=H1 treat=1NONE
         type wig 0.00 2.01
         viewLimits 0:0.15
         color 0,107,27
@@ -4207,7 +4209,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel H1-hESC FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in H1-hESC cells)
-        subGroups view=SIG EXP=FAIRE cellType=2H1 treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=H1 treat=1NONE
         type wig 0.00 0.28
         viewLimits 0.0005:0.04
         color 0,107,27
@@ -4218,7 +4220,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel H1-hESC CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in H1-hESC cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=2H1 treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=H1 treat=1NONE
         type wig 0.00 12.26
         viewLimits 0:0.4
         color 0,107,27
@@ -4229,7 +4231,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel H1-hESC Pol2 FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in H1-hESC cells)
-        subGroups view=SIG EXP=IP-pol2 cellType=2H1 treat=1NONE
+        subGroups view=SIG EXP=IP-pol2 cellType=H1 treat=1NONE
         type wig 0.00 3.04
         viewLimits 0:0.4
         color 0,107,27
@@ -4240,7 +4242,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HeLa-S3 cells)
-        subGroups view=SIG EXP=DNase cellType=2HELA treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=HELA treat=1NONE
         type wig 0.00 1.50
         viewLimits 0:0.15
         color 0,102,136
@@ -4251,7 +4253,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HeLa-S3 cells)
-        subGroups view=SIG EXP=FAIRE cellType=2HELA treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=HELA treat=1NONE
         type wig 0.00 0.47
         viewLimits 0.0005:0.04
         color 0,102,136
@@ -4263,7 +4265,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HeLa-S3 cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=2HELA treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=HELA treat=1NONE
         type wig 0.00 8.59
         viewLimits 0:0.4
         color 0,102,136
@@ -4274,7 +4276,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa c-Myc FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HeLa-S3 cells)
-        subGroups view=SIG EXP=IP-cMyc cellType=2HELA treat=1NONE
+        subGroups view=SIG EXP=IP-cMyc cellType=HELA treat=1NONE
         type wig 0.00 0.77
         viewLimits 0:0.08
         color 0,102,136
@@ -4285,7 +4287,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa Input FD
         longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HeLa-S3 cells)
-        subGroups view=SIG EXP=zCTRL cellType=2HELA treat=1NONE
+        subGroups view=SIG EXP=zCTRL cellType=HELA treat=1NONE
         type wig 0.00 3.70
         viewLimits 0:0.1
         spanList first
@@ -4297,7 +4299,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HepG2 DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HepG2 cells)
-        subGroups view=SIG EXP=DNase cellType=2HEPG2 treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=HEPG2 treat=1NONE
         type wig 0.00 2.57
         viewLimits 0:0.15
         color 189,0,157
@@ -4308,7 +4310,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HepG2 FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HepG2 cells)
-        subGroups view=SIG EXP=FAIRE cellType=2HEPG2 treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=HEPG2 treat=1NONE
         type wig 0.00 0.27
         viewLimits 0.0005:0.04
         color 189,0,157
@@ -4319,7 +4321,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HepG2 CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HepG2 cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=2HEPG2 treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=HEPG2 treat=1NONE
         type wig 0.00 8.20
         viewLimits 0:0.4
         color 189,0,157
@@ -4330,7 +4332,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HepG2 c-Myc FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HepG2 cells)
-        subGroups view=SIG EXP=IP-cMyc cellType=2HEPG2 treat=1NONE
+        subGroups view=SIG EXP=IP-cMyc cellType=HEPG2 treat=1NONE
         type wig 0.00 1.75
         viewLimits 0:0.08
         color 189,0,157
@@ -4341,7 +4343,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HepG2 Pol2 FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in HepG2 cells)
-        subGroups view=SIG EXP=IP-pol2 cellType=2HEPG2 treat=1NONE
+        subGroups view=SIG EXP=IP-pol2 cellType=HEPG2 treat=1NONE
         type wig 0.00 4.10
         viewLimits 0:0.4
         color 189,0,157
@@ -4352,7 +4354,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HepG2 Input FD
         longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HepG2 cells)
-        subGroups view=SIG EXP=zCTRL cellType=2HEPG2 treat=1NONE
+        subGroups view=SIG EXP=zCTRL cellType=HEPG2 treat=1NONE
         type wig 0.00 2.78
         viewLimits 0:0.1
         spanList first
@@ -4364,7 +4366,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HUVEC DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HUVEC cells)
-        subGroups view=SIG EXP=DNase cellType=2HUVEC treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=HUVEC treat=1NONE
         type wig 0.00 2.24
         color 224,75,0
         viewLimits 0:0.15
@@ -4375,7 +4377,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HUVEC FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HUVEC cells)
-        subGroups view=SIG EXP=FAIRE cellType=2HUVEC treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=HUVEC treat=1NONE
         type wig 0.00 0.41
         color 224,75,0
         viewLimits 0.0005:0.04
@@ -4386,7 +4388,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HUVEC CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HUVEC cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=2HUVEC treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=HUVEC treat=1NONE
         type wig 0.00 9.55
         color 224,75,0
         viewLimits 0:0.4
@@ -4397,7 +4399,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HUVEC c-Myc FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HUVEC cells)
-        subGroups view=SIG EXP=IP-cMyc cellType=2HUVEC treat=1NONE
+        subGroups view=SIG EXP=IP-cMyc cellType=HUVEC treat=1NONE
         type wig 0.00 2.09
         viewLimits 0:0.08
         color 224,75,0
@@ -4408,7 +4410,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HUVEC Pol2 FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in HUVEC cells)
-        subGroups view=SIG EXP=IP-pol2 cellType=2HUVEC treat=1NONE
+        subGroups view=SIG EXP=IP-pol2 cellType=HUVEC treat=1NONE
         type wig 0.00 5.49
         viewLimits 0:0.4
         color 224,75,0
@@ -4419,7 +4421,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HUVEC Input FD
         longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HUVEC cells)
-        subGroups view=SIG EXP=zCTRL cellType=2HUVEC treat=1NONE
+        subGroups view=SIG EXP=zCTRL cellType=HUVEC treat=1NONE
         color 224,75,0
         type wig 0.00 1.45
         viewLimits 0:0.1
@@ -4430,7 +4432,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel K562 DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in K562 cells)
-        subGroups view=SIG EXP=DNase cellType=1K562 treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=K562 treat=1NONE
         type wig 0.00 1.92
         viewLimits 0:0.15
         color 46,0,184
@@ -4441,7 +4443,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel K562 FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in K562 cells)
-        subGroups view=SIG EXP=FAIRE cellType=1K562 treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=K562 treat=1NONE
         type wig 0.00 0.54
         viewLimits 0.0005:0.04
         color 46,0,184
@@ -4453,7 +4455,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel K562 CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in K562 cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=1K562 treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=K562 treat=1NONE
         type wig 0.00 6.78
         viewLimits 0:0.4
         color 46,0,184
@@ -4464,7 +4466,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel K562 c-Myc FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in K562 cells)
-        subGroups view=SIG EXP=IP-cMyc cellType=1K562 treat=1NONE
+        subGroups view=SIG EXP=IP-cMyc cellType=K562 treat=1NONE
         type wig 0.00 1.97
         viewLimits 0:0.08
         color 46,0,184
@@ -4475,7 +4477,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel K562 Pol2 FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in K562 cells)
-        subGroups view=SIG EXP=IP-pol2 cellType=1K562 treat=1NONE
+        subGroups view=SIG EXP=IP-pol2 cellType=K562 treat=1NONE
         type wig 0.00 4.32
         viewLimits 0:0.4
         color 46,0,184
@@ -4486,7 +4488,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG
         shortLabel K562 Input FD
         longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in K562 cells)
-        subGroups view=SIG EXP=zCTRL cellType=1K562 treat=1NONE
+        subGroups view=SIG EXP=zCTRL cellType=K562 treat=1NONE
         type wig 0.00 2.98
         viewLimits 0:0.1
         spanList 1
@@ -4498,7 +4500,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel NHEK DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in NHEK cells)
-        subGroups view=SIG EXP=DNase cellType=2NHEK treat=1NONE
+        subGroups view=SIG EXP=DNase cellType=NHEK treat=1NONE
         type wig 0.00 2.85
         viewLimits 0:0.15
         color 179,0,134
@@ -4509,7 +4511,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel NHEK FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in NHEK cells)
-        subGroups view=SIG EXP=FAIRE cellType=2NHEK treat=1NONE
+        subGroups view=SIG EXP=FAIRE cellType=NHEK treat=1NONE
         type wig 0.00 0.32
         viewLimits 0.0005:0.04
         color 179,0,134
@@ -4520,7 +4522,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel NHEK CTCF FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in NHEK cells)
-        subGroups view=SIG EXP=IP-CTCF cellType=2NHEK treat=1NONE
+        subGroups view=SIG EXP=IP-CTCF cellType=NHEK treat=1NONE
         type wig 0.00 15.67
         viewLimits 0:0.4
         color 179,0,134
@@ -4571,7 +4573,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HeLa-S3/IFNa4h cells)
-        subGroups view=SIG EXP=DNase cellType=2HELA treat=IFNa4h
+        subGroups view=SIG EXP=DNase cellType=HELAifa treat=IFNa4h
         type wig 0.00 0.81
         color 0,119,158
         viewLimits 0:0.15
@@ -4622,7 +4624,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel LHSR DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in LHSR/androgen cells)
-        subGroups view=SIG EXP=DNase cellType=LHSR treat=ANDRO
+        subGroups view=SIG EXP=DNase cellType=LHSRa treat=ANDRO
         type wig 0.00 1.15
         viewLimits 0:0.15
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=LHSR treatment=androgen view=Signal labVersion="fseq v 1.82, iff_GM12878" dataVersion="ENCODE Jan 2010 Freeze" subId=851 dateSubmitted=2009-12-19 dateUnrestricted=2010-09-18 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqSignalLhsrAndro fileName=wgEncodeDukeDNaseSeqSignalLhsrAndro.wig.gz
@@ -4672,7 +4674,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HeLa-S3/IFNa4h cells)
-        subGroups view=SIG EXP=FAIRE cellType=2HELA treat=IFNa4h
+        subGroups view=SIG EXP=FAIRE cellType=HELAifa treat=IFNa4h
         type wig 0.00 0.31
         color 0,119,158
         viewLimits 0.0005:0.04
@@ -4693,7 +4695,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel GM12878 Pol2 FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in GM12878 cells)
-        subGroups view=SIG EXP=IP-pol2 cellType=1GM12878 treat=1NONE
+        subGroups view=SIG EXP=IP-pol2 cellType=GM12878 treat=1NONE
         type wig 0.00 2.35
         color 153,38,0
         viewLimits 0:0.4
@@ -4724,7 +4726,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel LHSR FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in LHSR/androgen cells)
-        subGroups view=SIG EXP=FAIRE cellType=LHSR treat=ANDRO
+        subGroups view=SIG EXP=FAIRE cellType=LHSRa treat=ANDRO
         type wig 0.00 0.42
         viewLimits 0.0005:0.04
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=LHSR treatment=androgen view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Jan 2010 Freeze" subId=874 dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqSignalLhsrAndro fileName=wgEncodeUncFAIREseqSignalLhsrAndro.wig.gz
@@ -4754,7 +4756,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel H1-hESC cMyc FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in H1-hESC cells)
-        subGroups view=SIG EXP=IP-cMyc cellType=2H1 treat=1NONE
+        subGroups view=SIG EXP=IP-cMyc cellType=H1 treat=1NONE
         type wig 0.00 2.82
         viewLimits 0:0.08
         color 0,107,27
@@ -4785,7 +4787,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa Pol2 FD
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in HeLa-S3 cells)
-        subGroups view=SIG EXP=IP-pol2 cellType=2HELA treat=1NONE
+        subGroups view=SIG EXP=IP-pol2 cellType=HELA treat=1NONE
         type wig 0.00 5.33
         color 0,119,158
         viewLimits 0:0.4
@@ -4806,7 +4808,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIG off
         shortLabel HeLa FAIRE Sig
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HeLa-S3/IFNg4h cells)
-        subGroups view=SIG EXP=FAIRE cellType=2HELA treat=IFNg4h
+        subGroups view=SIG EXP=FAIRE cellType=HELAifg treat=IFNg4h
         type wig 0.00 0.34
         color 0,119,158
         viewLimits 0.0005:0.04
@@ -4830,7 +4832,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel GM12878 DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
-        subGroups view=SIGBO EXP=DNase cellType=1GM12878 treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=GM12878 treat=1NONE
         type wig 0.00 576.00
         viewLimits 0:25
         color 153,38,0
@@ -4841,7 +4843,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel GM12878 FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=1GM12878 treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=GM12878 treat=1NONE
         type wig 0.00 6246.00
         viewLimits 4:20
         color 153,38,0
@@ -4852,7 +4854,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel GM12878 CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=1GM12878 treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=GM12878 treat=1NONE
         type wig 0.00 1951.00
         viewLimits 0:100
         color 153,38,0
@@ -4863,7 +4865,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel GM12878 c-Myc BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in GM12878 cells)
-        subGroups view=SIGBO EXP=IP-cMyc cellType=1GM12878 treat=1NONE
+        subGroups view=SIGBO EXP=IP-cMyc cellType=GM12878 treat=1NONE
         type wig 0.00 307.00
         viewLimits 0:20
         color 153,38,0
@@ -4974,7 +4976,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel H1-hESC DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in H1-hESC cells)
-        subGroups view=SIGBO EXP=DNase cellType=2H1 treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=H1 treat=1NONE
         type wig 0.00 187.00
         viewLimits 0:25
         color 0,107,27
@@ -4985,7 +4987,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel H1-hESC FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in H1-hESC cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2H1 treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=H1 treat=1NONE
         type wig 0.00 670.00
         viewLimits 4:20
         color 0,107,27
@@ -4996,7 +4998,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel H1-hESC CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in H1-hESC cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=2H1 treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=H1 treat=1NONE
         type wig 0.00 742.00
         viewLimits 0:100
         color 0,107,27
@@ -5007,7 +5009,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel H1-hESC Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in H1-hESC cells)
-        subGroups view=SIGBO EXP=IP-pol2 cellType=2H1 treat=1NONE
+        subGroups view=SIGBO EXP=IP-pol2 cellType=H1 treat=1NONE
         type wig 0.00 760.00
         viewLimits 0:100
         color 0,107,27
@@ -5018,7 +5020,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
-        subGroups view=SIGBO EXP=DNase cellType=2HELA treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=HELA treat=1NONE
         type wig 0.00 277.00
         viewLimits 0:25
         color 0,102,136
@@ -5029,7 +5031,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3 cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2HELA treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=HELA treat=1NONE
         type wig 0.00 3249.00
         viewLimits 4:20
         color 0,102,136
@@ -5041,7 +5043,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HeLa-S3 cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=2HELA treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=HELA treat=1NONE
         type wig 0.00 1920.00
         viewLimits 0:100
         color 0,102,136
@@ -5052,7 +5054,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa c-Myc BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
-        subGroups view=SIGBO EXP=IP-cMyc cellType=2HELA treat=1NONE
+        subGroups view=SIGBO EXP=IP-cMyc cellType=HELA treat=1NONE
         type wig 0.00 170.00
         viewLimits 0:20
         color 0,102,136
@@ -5063,7 +5065,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HepG2 DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
-        subGroups view=SIGBO EXP=DNase cellType=2HEPG2 treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=HEPG2 treat=1NONE
         type wig 0.00 177.00
         viewLimits 0:25
         color 189,0,157
@@ -5074,7 +5076,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HepG2 FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HepG2 cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2HEPG2 treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=HEPG2 treat=1NONE
         type wig 0.00 1773.00
         viewLimits 4:20
         color 189,0,157
@@ -5085,7 +5087,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HepG2 CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HepG2 cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=2HEPG2 treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=HEPG2 treat=1NONE
         type wig 0.00 555.00
         viewLimits 0:100
         color 189,0,157
@@ -5096,7 +5098,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HepG2 c-Myc BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HepG2 cells)
-        subGroups view=SIGBO EXP=IP-cMyc cellType=2HEPG2 treat=1NONE
+        subGroups view=SIGBO EXP=IP-cMyc cellType=HEPG2 treat=1NONE
         type wig 0.00 513.00
         viewLimits 0:20
         color 189,0,157
@@ -5107,7 +5109,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HepG2 Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in HepG2 cells)
-        subGroups view=SIGBO EXP=IP-pol2 cellType=2HEPG2 treat=1NONE
+        subGroups view=SIGBO EXP=IP-pol2 cellType=HEPG2 treat=1NONE
         type wig 0.00 1276.00
         viewLimits 0:100
         color 189,0,157
@@ -5118,7 +5120,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HUVEC DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HUVEC cells)
-        subGroups view=SIGBO EXP=DNase cellType=2HUVEC treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=HUVEC treat=1NONE
         type wig 0.00 147.00
         viewLimits 0:25
         color 224,75,0
@@ -5129,7 +5131,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HUVEC FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HUVEC cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2HUVEC treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=HUVEC treat=1NONE
         type wig 0.00 1177.00
         viewLimits 4:20
         color 224,75,0
@@ -5140,7 +5142,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HUVEC CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HUVEC cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=2HUVEC treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=HUVEC treat=1NONE
         type wig 0.00 1190.00
         color 224,75,0
         viewLimits 0:100
@@ -5151,7 +5153,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HUVEC c-Myc BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HUVEC cells)
-        subGroups view=SIGBO EXP=IP-cMyc cellType=2HUVEC treat=1NONE
+        subGroups view=SIGBO EXP=IP-cMyc cellType=HUVEC treat=1NONE
         type wig 0.00 341.00
         viewLimits 0:20
         color 224,75,0
@@ -5162,7 +5164,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HUVEC Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in HUVEC cells)
-        subGroups view=SIGBO EXP=IP-pol2 cellType=2HUVEC treat=1NONE
+        subGroups view=SIGBO EXP=IP-pol2 cellType=HUVEC treat=1NONE
         type wig 0.00 1447.00
         viewLimits 0:100
         color 224,75,0
@@ -5173,7 +5175,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel K562 DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
-        subGroups view=SIGBO EXP=DNase cellType=1K562 treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=K562 treat=1NONE
         type wig 0.00 374.00
         viewLimits 0:25
         color 46,0,184
@@ -5184,7 +5186,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel K562 FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=1K562 treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=K562 treat=1NONE
         type wig 0.00 6846.00
         viewLimits 4:20
         color 46,0,184
@@ -5196,7 +5198,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel K562 CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=1K562 treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=K562 treat=1NONE
         type wig 0.00 3339.00
         viewLimits 0:100
         color 46,0,184
@@ -5207,7 +5209,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel K562 c-Myc BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
-        subGroups view=SIGBO EXP=IP-cMyc cellType=1K562 treat=1NONE
+        subGroups view=SIGBO EXP=IP-cMyc cellType=K562 treat=1NONE
         type wig 0.00 1925.00
         viewLimits 0:20
         color 46,0,184
@@ -5218,7 +5220,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO
         shortLabel K562 Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in K562 cells)
-        subGroups view=SIGBO EXP=IP-pol2 cellType=1K562 treat=1NONE
+        subGroups view=SIGBO EXP=IP-pol2 cellType=K562 treat=1NONE
         type wig 0.00 1655.00
         viewLimits 0:100
         color 46,0,184
@@ -5229,7 +5231,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel NHEK DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in NHEK cells)
-        subGroups view=SIGBO EXP=DNase cellType=2NHEK treat=1NONE
+        subGroups view=SIGBO EXP=DNase cellType=NHEK treat=1NONE
         type wig 0.00 550.00
         viewLimits 0:25
         color 179,0,134
@@ -5240,7 +5242,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel NHEK FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in NHEK cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2NHEK treat=1NONE
+        subGroups view=SIGBO EXP=FAIRE cellType=NHEK treat=1NONE
         type wig 0.00 1184.00
         viewLimits 4:20
         color 179,0,134
@@ -5251,7 +5253,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel NHEK CTCF BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in NHEK cells)
-        subGroups view=SIGBO EXP=IP-CTCF cellType=2NHEK treat=1NONE
+        subGroups view=SIGBO EXP=IP-CTCF cellType=NHEK treat=1NONE
         type wig 0.00 1792.00
         viewLimits 0:100
         color 179,0,134
@@ -5302,7 +5304,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3/IFNa4h cells)
-        subGroups view=SIGBO EXP=DNase cellType=2HELA treat=IFNa4h
+        subGroups view=SIGBO EXP=DNase cellType=HELAifa treat=IFNa4h
         type wig 0.00 117.00
         viewLimits 0:25
         color 0,119,158
@@ -5353,7 +5355,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel LHSR DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in LHSR/androgen cells)
-        subGroups view=SIGBO EXP=DNase cellType=LHSR treat=ANDRO
+        subGroups view=SIGBO EXP=DNase cellType=LHSRa treat=ANDRO
         type wig 0.00 125.00
         viewLimits 0:25
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=LHSR treatment=androgen view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=851 dateSubmitted=2009-12-19 dateUnrestricted=2010-09-18 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalLhsrAndro fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalLhsrAndro.wig.gz
@@ -5403,7 +5405,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3/IFNa4h cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2HELA treat=IFNa4h
+        subGroups view=SIGBO EXP=FAIRE cellType=HELAifa treat=IFNa4h
         type wig 0.00 593.00
         viewLimits 4:20
         color 0,119,158
@@ -5414,7 +5416,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel GM12878 Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in GM12878 cells)
-        subGroups view=SIGBO EXP=IP-pol2 cellType=1GM12878 treat=1NONE
+        subGroups view=SIGBO EXP=IP-pol2 cellType=GM12878 treat=1NONE
         type wig 0.00 1502.00
         viewLimits 0:100
         color 153,38,0
@@ -5435,7 +5437,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel LHSR FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in LHSR/androgen cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=LHSR treat=ANDRO
+        subGroups view=SIGBO EXP=FAIRE cellType=LHSRa treat=ANDRO
         type wig 0.00 589.00
         viewLimits 4:20
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=LHSR treatment=androgen view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=874 dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqBaseOverlapSignalLhsrAndro fileName=wgEncodeUncFAIREseqBaseOverlapSignalLhsrAndro.wig.gz
@@ -5465,7 +5467,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel H1-hESC cMyc BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in H1-hESC cells)
-        subGroups view=SIGBO EXP=IP-cMyc cellType=2H1 treat=1NONE
+        subGroups view=SIGBO EXP=IP-cMyc cellType=H1 treat=1NONE
         type wig 0.00 200.00
         viewLimits 0:20
         color 0,107,27
@@ -5496,7 +5498,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in HeLa-S3 cells)
-        subGroups view=SIGBO EXP=IP-pol2 cellType=2HELA treat=1NONE
+        subGroups view=SIGBO EXP=IP-pol2 cellType=HELA treat=1NONE
         type wig 0.00 2213.00
         viewLimits 0:100
         color 0,119,158
@@ -5517,7 +5519,7 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewSIGBO off
         shortLabel HeLa FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3/IFNg4h cells)
-        subGroups view=SIGBO EXP=FAIRE cellType=2HELA treat=IFNg4h
+        subGroups view=SIGBO EXP=FAIRE cellType=HELAifg treat=IFNg4h
         type wig 0.00 589.00
         viewLimits 4:20
         color 0,119,158
@@ -6181,9 +6183,9 @@ compositeTrack on
 shortLabel Duke Affy Exon
 longLabel ENCODE Duke Affy All-Exon Arrays
 group expression
-subGroup1 cellType Cell_Line Astrocy=Astrocy Chorion=Chorion Fibrobl=Fibrobl GM12878=GM12878 GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 Gliobla=Gliobla HMEC=HMEC HUVEC=HUVEC HeLaS3=HeLa-S3 HepG2=HepG2 LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib
+subGroup1 cellType Cell_Line Astrocy=Astrocy Chorion=Chorion Fibrobl=Fibrobl GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 Gliobla=Gliobla HELA=HeLa-S3_<i>Tier2</i> HELA-ifa=HeLa-S3_<i>IFN&alpha;</i> HELA-ifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HMEC=HMEC HUVEC=HUVEC_<i>Tier2</i> LHSR=LHSR LHSR=LHSR LHSR-a=LHSR_<i>androgen</i> LNCaP=LNCaP LNCaP-a=LNCaP_<i>androgen</i> MCF7=MCF-7 MCF7-a=MCF-7_<i>androgen</i> MCF7-e=MCF-7_<i>estrogen</i> MCF7-v=MCF-7_<i>vehicle</i> Medullo=Medullo NHEK=NHEK_<i>Tier2</i> Osteobl=Osteobl ProgFib=ProgFib
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3
-dimensions dimensionX=cellType dimensionY=rep
+dimensions dimensionY=cellType dimensionX=rep
 boxedCfg on
 sortOrder cellType=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell
@@ -6409,7 +6411,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep1
+    subGroups  cellType=HELA rep=rep1
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3.broadPeak.gz
@@ -6419,7 +6421,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep2
+    subGroups  cellType=HELA rep=rep2
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
@@ -6429,7 +6431,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep3
+    subGroups  cellType=HELA rep=rep3
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3.broadPeak.gz
@@ -6439,7 +6441,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep1
+    subGroups  cellType=HELA-ifa rep=rep1
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNa4h  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h.broadPeak.gz
@@ -6449,7 +6451,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep2
+    subGroups  cellType=HELA-ifa rep=rep2
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNa4h  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h.broadPeak.gz
@@ -6459,7 +6461,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep1
+    subGroups  cellType=HELA-ifg rep=rep1
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNg4h  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h.broadPeak.gz
@@ -6469,7 +6471,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
-    subGroups  cellType=HeLaS3 rep=rep2
+    subGroups  cellType=HELA-ifg rep=rep2
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNg4h  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h.broadPeak.gz
@@ -6479,7 +6481,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HepG2 cells)
-    subGroups  cellType=HepG2 rep=rep1
+    subGroups  cellType=HEPG2 rep=rep1
     type broadPeak
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2.broadPeak.gz
@@ -6489,7 +6491,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HepG2 cells)
-    subGroups  cellType=HepG2 rep=rep2
+    subGroups  cellType=HEPG2 rep=rep2
     type broadPeak
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2.broadPeak.gz
@@ -6499,7 +6501,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HepG2 cells)
-    subGroups  cellType=HepG2 rep=rep3
+    subGroups  cellType=HEPG2 rep=rep3
     type broadPeak
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2.broadPeak.gz
@@ -6547,7 +6549,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
-    subGroups  cellType=LHSR rep=rep1
+    subGroups  cellType=LHSR-a rep=rep1
     type broadPeak
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=androgen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro.broadPeak.gz
 
@@ -6556,7 +6558,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
-    subGroups  cellType=LHSR rep=rep2
+    subGroups  cellType=LHSR-a rep=rep2
     type broadPeak
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=androgen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro.broadPeak.gz
 
@@ -6583,7 +6585,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
-    subGroups  cellType=LNCaP rep=rep1
+    subGroups  cellType=LNCaP-a rep=rep1
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=androgen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro.broadPeak.gz
@@ -6593,7 +6595,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
-    subGroups  cellType=LNCaP rep=rep1
+    subGroups  cellType=LNCaP-a rep=rep1
     type broadPeak
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=androgen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro.broadPeak.gz
@@ -6632,7 +6634,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
-    subGroups  cellType=MCF7 rep=rep1
+    subGroups  cellType=MCF7-e rep=rep1
     type broadPeak
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=estrogen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro.broadPeak.gz
 
@@ -6641,7 +6643,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
-    subGroups  cellType=MCF7 rep=rep2
+    subGroups  cellType=MCF7-e rep=rep2
     type broadPeak
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=estrogen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro.broadPeak.gz
 
@@ -6650,7 +6652,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
-    subGroups  cellType=MCF7 rep=rep1
+    subGroups  cellType=MCF7-v rep=rep1
     type broadPeak
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=vehicle  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle.broadPeak.gz
 
@@ -6659,7 +6661,7 @@ wgEncode 1
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
-    subGroups  cellType=MCF7 rep=rep2
+    subGroups  cellType=MCF7-v rep=rep2
     type broadPeak
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=vehicle  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle.broadPeak.gz
 
