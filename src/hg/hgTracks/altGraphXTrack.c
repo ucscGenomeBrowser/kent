@@ -10,6 +10,8 @@
 #include "geneGraph.h"
 #include "spaceSaver.h"
 
+static char const rcsid[] = "$Id: altGraphXTrack.c,v 1.16 2010/01/07 01:35:19 kent Exp $";
+
 const static int altGraphXMaxRows = 20;
 
 boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
