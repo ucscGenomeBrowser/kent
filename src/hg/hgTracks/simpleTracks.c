@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.118 2010/01/04 19:12:26 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.119 2010/01/07 23:49:29 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -173,7 +173,12 @@ int winEnd;			/* End of window in sequence. */
 char *position = NULL; 		/* Name of position. */
 
 int trackTabWidth = 11;
+int leftLabelWidthDefaultChars = 17;   /* default number of characters allowed for left label */
+#if 0
 int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
+#else
+int leftLabelWidthChars = 22;   /* number of characters allowed for left label */
+#endif
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
@@ -219,7 +224,17 @@ void initTl()
  * wide. */
 {
 trackLayoutInit(&tl, cart);
+
+// label width, but don't exceed 1/2 of image
+leftLabelWidthChars = cartUsualInt(cart, "hgt.labelWidth", leftLabelWidthDefaultChars);
+if (leftLabelWidthChars < 2)
+    leftLabelWidthChars = leftLabelWidthDefaultChars;
 tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
+if (tl.leftLabelWidth > 0.5*tl.picWidth)
+    {
+    leftLabelWidthChars = leftLabelWidthDefaultChars;
+    tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
+    }
 }
 
 Color lighterColor(struct hvGfx *hvg, Color color)

@@ -329,12 +329,25 @@ webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, F
 cartSaveSession(cart);
 
 hPrintf("<INPUT TYPE=HIDDEN NAME=\"hgTracksConfigPage\" VALUE=\"\">");
+/* do not want all the submit buttons named the same thing, this one is: */
+cgiMakeButton("topSubmit", "submit");
 
-hPrintf(" image width: ");
+// 3 column table
+hPrintf("<TABLE style=\"border:0px; \">\n");
+hPrintf("<TR><TD>image width:");
+hPrintf("<TD style=\"text-align: right\">");
 hIntVar("pix", tl.picWidth, 4);
-hPrintf(" text size: ");
+hPrintf("<TD>pixels</TR>");
+
+hPrintf("<TR><TD>label area width:");
+hPrintf("<TD style=\"text-align: right\">");
+hIntVar("hgt.labelWidth", leftLabelWidthChars, 2);
+hPrintf("<TD>characters<TD></TR>");
+
+hPrintf("<TR><TD>text size:");
+hPrintf("<TD style=\"text-align: right\">");
 textSizeDropDown();
-hPrintf("&nbsp;");
+hPrintf("<TD>");
 if (trackLayoutInclFontExtras())
     {
     char *defaultStyle = cartUsualString(cart, "fontType", "medium");
@@ -346,9 +359,7 @@ if (trackLayoutInclFontExtras())
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
     }
-/* do not want all the submit buttons named the same thing, this one is: */
-cgiMakeButton("topSubmit", "submit");
-hPrintf("<P>");
+hPrintf("<TR><BR>");
 hTableStart();
 if (ideoTrack != NULL)
     {
