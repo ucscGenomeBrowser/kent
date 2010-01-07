@@ -10,7 +10,7 @@ table tRNAs
   string aa;         "Amino acid for the tRNA"
   string ac;         "Anticodon for the tRNA"
   string intron;     "Coordinates for intron"
-  float trnaScore;        "tRNAScanSE score"
-  string seq;         "Sequence of tRNA"
-  string ss;      "Secondary structure string for tRNA"
+  float trnaScore;     "tRNAScanSE score"
+  string genomeUrl;    "GtRNAdb genome summary URL"
+  string trnaUrl;      "GtRNAdb tRNA alignment URL"
   )

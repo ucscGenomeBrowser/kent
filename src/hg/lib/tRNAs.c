@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "tRNAs.h"
 
-static char const rcsid[] = "$Id: tRNAs.c,v 1.1 2005/12/01 01:32:38 lowe Exp $";
+static char const rcsid[] = "$Id: tRNAs.c,v 1.2 2010/01/07 02:54:53 pchan Exp $";
 
 void tRNAsStaticLoad(char **row, struct tRNAs *ret)
 /* Load a row from tRNAs table into ret.  The contents of ret will
@@ -20,11 +20,13 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->aa = row[6];
 ret->ac = row[7];
 ret->intron = row[8];
-ret->trnaScore = atof(row[9]);
+ret->trnaScore = sqlFloat(row[9]);
+ret->genomeUrl = row[10];
+ret->trnaUrl = row[11];
 }
 
 struct tRNAs *tRNAsLoad(char **row)
@@ -39,11 +41,13 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->aa = cloneString(row[6]);
 ret->ac = cloneString(row[7]);
 ret->intron = cloneString(row[8]);
-ret->trnaScore = atof(row[9]);
+ret->trnaScore = sqlFloat(row[9]);
+ret->genomeUrl = cloneString(row[10]);
+ret->trnaUrl = cloneString(row[11]);
 return ret;
 }
 
@@ -53,7 +57,7 @@ struct tRNAs *tRNAsLoadAll(char *fileName)
 {
 struct tRNAs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[12];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +75,7 @@ struct tRNAs *tRNAsLoadAllByChar(char *fileName, char chopper)
 {
 struct tRNAs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[12];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -102,6 +106,8 @@ ret->aa = sqlStringComma(&s);
 ret->ac = sqlStringComma(&s);
 ret->intron = sqlStringComma(&s);
 ret->trnaScore = sqlFloatComma(&s);
+ret->genomeUrl = sqlStringComma(&s);
+ret->trnaUrl = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -118,6 +124,8 @@ freeMem(el->name);
 freeMem(el->aa);
 freeMem(el->ac);
 freeMem(el->intron);
+freeMem(el->genomeUrl);
+freeMem(el->trnaUrl);
 freez(pEl);
 }
 
@@ -168,6 +176,14 @@ fprintf(f, "%s", el->intron);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->trnaScore);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->genomeUrl);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->trnaUrl);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

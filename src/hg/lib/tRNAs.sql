@@ -5,7 +5,6 @@
 
 #transfer RNA genes
 CREATE TABLE tRNAs (
-    bin int unsigned not null, 
     chrom varchar(255) not null,	# chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -16,6 +15,8 @@ CREATE TABLE tRNAs (
     ac varchar(255) not null,	# Anticodon for the tRNA
     intron varchar(255) not null,	# Coordinates for intron
     trnaScore float not null,	# tRNAScanSE score
+    genomeUrl varchar(255) not null,	# GtRNAdb genome summary URL
+    trnaUrl varchar(255) not null,	# GtRNAdb tRNA alignment URL
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(chrom, chromStart, chromEnd)
 );

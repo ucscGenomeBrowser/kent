@@ -5,7 +5,7 @@
 #ifndef TRNAS_H
 #define TRNAS_H
 
-#define TRNAS_NUM_COLS 10
+#define TRNAS_NUM_COLS 12
 
 struct tRNAs
 /* transfer RNA genes */
@@ -21,6 +21,8 @@ struct tRNAs
     char *ac;	/* Anticodon for the tRNA */
     char *intron;	/* Coordinates for intron */
     float trnaScore;	/* tRNAScanSE score */
+    char *genomeUrl;	/* GtRNAdb genome summary URL */
+    char *trnaUrl;	/* GtRNAdb tRNA alignment URL */
     };
 
 void tRNAsStaticLoad(char **row, struct tRNAs *ret);
