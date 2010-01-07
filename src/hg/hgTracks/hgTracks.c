@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1618 2010/01/07 01:35:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1619 2010/01/07 22:39:42 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -95,7 +95,7 @@ boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
-boolean trackImgOnly = FALSE;           /* caller wants the image and map for just the given track */
+boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
 boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when requesting just one track) */
 
 /* Structure returned from findGenomePos.
@@ -4110,7 +4110,7 @@ static void trackJson(struct dyString *trackDbJson, struct track *track, int cou
 if(count)
     dyStringAppend(trackDbJson, "\n,");
 dyStringPrintf(trackDbJson, "\t%s: {", track->mapName);
-if(track->tdb->parent != NULL)
+if(tdbIsSuperTrackChild(track->tdb))
     dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->tableName);
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                track->shortLabel, track->longLabel, track->canPack, track->limitedVis);
@@ -4262,7 +4262,8 @@ for (track = trackList; track != NULL; track = track->next)
 
 #ifdef CONTEXT_MENU
 dyStringAppend(trackDbJson, "}\n</script>\n");
-hPrintf(dyStringContents(trackDbJson));
+if(!trackImgOnly)
+    hPrintf(dyStringContents(trackDbJson));
 #endif
 
 /* Generate two lists of hidden variables for track group visibility.  Kludgy,
@@ -4607,12 +4608,14 @@ if (!hideControls)
 		if (track->hasUi)
 		    {
 		    char *encodedMapName = cgiEncode(track->mapName);
+		    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
 		    if(trackDbSetting(track->tdb, "wgEncode") != NULL)
 			hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
-		    hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+		    hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\" title=\"%s\">", hgTrackUiName(),
 			    cartSessionVarName(), cartSessionId(cart),
-			    chromName, encodedMapName);
+			    chromName, encodedMapName, longLabel);
 		    freeMem(encodedMapName);
+		    freeMem(longLabel);
 		    }
 		hPrintf(" %s", track->shortLabel);
 		if (tdbIsSuper(track->tdb))
@@ -5320,15 +5323,16 @@ jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
 #ifdef CONTEXT_MENU
+hPrintf("<link href='../style/jquery.contextmenu.css' rel='stylesheet' type='text/css' />\n");
+hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("jquery.contextmenu.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 
-hPrintf("<div style='height: 400px; width: 400px;' id='hgTrackUiDialog' style='display: none'></div>");
-hPrintf("<link href='../style/jquery.contextmenu.css' rel='stylesheet' type='text/css' />\n");
-hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
-hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong>Alert:  </strong><span id='warningText'></span> (click to hide)</p></div>\n");
+hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong>Alert:  </strong><span id='warningText'></span> (click to hide)</p></div>\n");
 #endif
 
 if (cartVarExists(cart, "chromInfoPage"))
