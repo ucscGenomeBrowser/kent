@@ -16,6 +16,22 @@ struct point
     int y;	/* vertical position top to bottom */
     };
 
+struct point *pointLoad(char **row);
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+
+struct point *pointLoadAll(char *fileName);
+/* Load all point from whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+
+struct point *pointLoadAllByChar(char *fileName, char chopper);
+/* Load all point from chopper separated file.
+ * Dispose of this with pointFreeList(). */
+
+#define pointLoadAllByTab(a) pointLoadAllByChar(a, '\t');
+/* Load all point from tab separated file.
+ * Dispose of this with pointFreeList(). */
+
 struct point *pointCommaIn(char **pS, struct point *ret);
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -56,22 +72,6 @@ struct autoTest
     char **vals;	/* list of values */
     };
 
-struct autoTest *autoTestLoad(char **row);
-/* Load a autoTest from row fetched with select * from autoTest
- * from database.  Dispose of this with autoTestFree(). */
-
-struct autoTest *autoTestLoadAll(char *fileName);
-/* Load all autoTest from whitespace-separated file.
- * Dispose of this with autoTestFreeList(). */
-
-struct autoTest *autoTestLoadAllByChar(char *fileName, char chopper);
-/* Load all autoTest from chopper separated file.
- * Dispose of this with autoTestFreeList(). */
-
-#define autoTestLoadAllByTab(a) autoTestLoadAllByChar(a, '\t');
-/* Load all autoTest from tab separated file.
- * Dispose of this with autoTestFreeList(). */
-
 struct autoTest *autoTestLoadByQuery(struct sqlConnection *conn, char *query);
 /* Load all autoTest from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
@@ -96,6 +96,22 @@ void autoTestSaveToDbEscaped(struct sqlConnection *conn, struct autoTest *el, ch
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
+
+struct autoTest *autoTestLoad(char **row);
+/* Load a autoTest from row fetched with select * from autoTest
+ * from database.  Dispose of this with autoTestFree(). */
+
+struct autoTest *autoTestLoadAll(char *fileName);
+/* Load all autoTest from whitespace-separated file.
+ * Dispose of this with autoTestFreeList(). */
+
+struct autoTest *autoTestLoadAllByChar(char *fileName, char chopper);
+/* Load all autoTest from chopper separated file.
+ * Dispose of this with autoTestFreeList(). */
+
+#define autoTestLoadAllByTab(a) autoTestLoadAllByChar(a, '\t');
+/* Load all autoTest from tab separated file.
+ * Dispose of this with autoTestFreeList(). */
 
 struct autoTest *autoTestCommaIn(char **pS, struct autoTest *ret);
 /* Create a autoTest out of a comma separated string. 

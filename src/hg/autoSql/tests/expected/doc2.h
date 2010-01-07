@@ -15,6 +15,22 @@ struct point
     float z;	/* In/out of screen coordinate */
     };
 
+struct point *pointLoad(char **row);
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+
+struct point *pointLoadAll(char *fileName);
+/* Load all point from whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+
+struct point *pointLoadAllByChar(char *fileName, char chopper);
+/* Load all point from chopper separated file.
+ * Dispose of this with pointFreeList(). */
+
+#define pointLoadAllByTab(a) pointLoadAllByChar(a, '\t');
+/* Load all point from tab separated file.
+ * Dispose of this with pointFreeList(). */
+
 struct point *pointCommaIn(char **pS, struct point *ret);
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -41,6 +57,22 @@ struct color
     unsigned char green;	/* Green value 0-255 */
     unsigned char blue;	/* Blue value 0-255 */
     };
+
+struct color *colorLoad(char **row);
+/* Load a color from row fetched with select * from color
+ * from database.  Dispose of this with colorFree(). */
+
+struct color *colorLoadAll(char *fileName);
+/* Load all color from whitespace-separated file.
+ * Dispose of this with colorFreeList(). */
+
+struct color *colorLoadAllByChar(char *fileName, char chopper);
+/* Load all color from chopper separated file.
+ * Dispose of this with colorFreeList(). */
+
+#define colorLoadAllByTab(a) colorLoadAllByChar(a, '\t');
+/* Load all color from tab separated file.
+ * Dispose of this with colorFreeList(). */
 
 struct color *colorCommaIn(char **pS, struct color *ret);
 /* Create a color out of a comma separated string. 
@@ -69,6 +101,22 @@ struct face
     int pointCount;	/* Number of points in this polygon */
     unsigned *points;	/* Indices of points that make up face in polyhedron point array */
     };
+
+struct face *faceLoad(char **row);
+/* Load a face from row fetched with select * from face
+ * from database.  Dispose of this with faceFree(). */
+
+struct face *faceLoadAll(char *fileName);
+/* Load all face from whitespace-separated file.
+ * Dispose of this with faceFreeList(). */
+
+struct face *faceLoadAllByChar(char *fileName, char chopper);
+/* Load all face from chopper separated file.
+ * Dispose of this with faceFreeList(). */
+
+#define faceLoadAllByTab(a) faceLoadAllByChar(a, '\t');
+/* Load all face from tab separated file.
+ * Dispose of this with faceFreeList(). */
 
 struct face *faceCommaIn(char **pS, struct face *ret);
 /* Create a face out of a comma separated string. 

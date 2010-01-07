@@ -9,6 +9,54 @@
 #include "output/simpleTest.h"
 
 
+struct point *pointLoad(char **row)
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+{
+struct point *ret;
+
+AllocVar(ret);
+ret->x = sqlSigned(row[0]);
+ret->y = sqlSigned(row[1]);
+return ret;
+}
+
+struct point *pointLoadAll(char *fileName) 
+/* Load all point from a whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct point *pointLoadAllByChar(char *fileName, char chopper) 
+/* Load all point from a chopper separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct point *pointCommaIn(char **pS, struct point *ret)
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -31,6 +79,58 @@ fprintf(f, "%d", el->x);
 fputc(sep,f);
 fprintf(f, "%d", el->y);
 fputc(lastSep,f);
+}
+
+struct namedPoint *namedPointLoad(char **row)
+/* Load a namedPoint from row fetched with select * from namedPoint
+ * from database.  Dispose of this with namedPointFree(). */
+{
+struct namedPoint *ret;
+
+AllocVar(ret);
+ret->name = cloneString(row[0]);
+{
+char *s = row[1];
+if(s != NULL && differentString(s, ""))
+   pointCommaIn(&s, &ret->point);
+}
+return ret;
+}
+
+struct namedPoint *namedPointLoadAll(char *fileName) 
+/* Load all namedPoint from a whitespace-separated file.
+ * Dispose of this with namedPointFreeList(). */
+{
+struct namedPoint *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = namedPointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct namedPoint *namedPointLoadAllByChar(char *fileName, char chopper) 
+/* Load all namedPoint from a chopper separated file.
+ * Dispose of this with namedPointFreeList(). */
+{
+struct namedPoint *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = namedPointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct namedPoint *namedPointCommaIn(char **pS, struct namedPoint *ret)
@@ -73,6 +173,64 @@ if (sep == ',') fputc('{',f);
 pointCommaOut(&el->point,f);
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
+}
+
+struct triangle *triangleLoad(char **row)
+/* Load a triangle from row fetched with select * from triangle
+ * from database.  Dispose of this with triangleFree(). */
+{
+struct triangle *ret;
+
+AllocVar(ret);
+ret->name = cloneString(row[0]);
+{
+int i;
+char *s = row[1];
+for (i=0; i<3; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    pointCommaIn(&s, &ret->points[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+}
+return ret;
+}
+
+struct triangle *triangleLoadAll(char *fileName) 
+/* Load all triangle from a whitespace-separated file.
+ * Dispose of this with triangleFreeList(). */
+{
+struct triangle *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = triangleLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct triangle *triangleLoadAllByChar(char *fileName, char chopper) 
+/* Load all triangle from a chopper separated file.
+ * Dispose of this with triangleFreeList(). */
+{
+struct triangle *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = triangleLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct triangle *triangleCommaIn(char **pS, struct triangle *ret)
@@ -137,6 +295,66 @@ int i;
     }
 }
 fputc(lastSep,f);
+}
+
+struct polygon *polygonLoad(char **row)
+/* Load a polygon from row fetched with select * from polygon
+ * from database.  Dispose of this with polygonFree(). */
+{
+struct polygon *ret;
+
+AllocVar(ret);
+ret->vertexCount = sqlSigned(row[1]);
+ret->name = cloneString(row[0]);
+{
+int i;
+char *s = row[2];
+AllocArray(ret->vertices, ret->vertexCount);
+for (i=0; i<ret->vertexCount; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    pointCommaIn(&s, &ret->vertices[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+}
+return ret;
+}
+
+struct polygon *polygonLoadAll(char *fileName) 
+/* Load all polygon from a whitespace-separated file.
+ * Dispose of this with polygonFreeList(). */
+{
+struct polygon *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = polygonLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct polygon *polygonLoadAllByChar(char *fileName, char chopper) 
+/* Load all polygon from a chopper separated file.
+ * Dispose of this with polygonFreeList(). */
+{
+struct polygon *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = polygonLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret)
@@ -208,6 +426,55 @@ int i;
 fputc(lastSep,f);
 }
 
+struct person *personLoad(char **row)
+/* Load a person from row fetched with select * from person
+ * from database.  Dispose of this with personFree(). */
+{
+struct person *ret;
+
+AllocVar(ret);
+ret->firstName = cloneString(row[0]);
+ret->lastName = cloneString(row[1]);
+ret->ssn = sqlLongLong(row[2]);
+return ret;
+}
+
+struct person *personLoadAll(char *fileName) 
+/* Load all person from a whitespace-separated file.
+ * Dispose of this with personFreeList(). */
+{
+struct person *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = personLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct person *personLoadAllByChar(char *fileName, char chopper) 
+/* Load all person from a chopper separated file.
+ * Dispose of this with personFreeList(). */
+{
+struct person *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = personLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct person *personCommaIn(char **pS, struct person *ret)
 /* Create a person out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -249,6 +516,64 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%lld", el->ssn);
 fputc(lastSep,f);
+}
+
+struct couple *coupleLoad(char **row)
+/* Load a couple from row fetched with select * from couple
+ * from database.  Dispose of this with coupleFree(). */
+{
+struct couple *ret;
+
+AllocVar(ret);
+ret->name = cloneString(row[0]);
+{
+int i;
+char *s = row[1];
+for (i=0; i<2; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    personCommaIn(&s, &ret->members[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+}
+return ret;
+}
+
+struct couple *coupleLoadAll(char *fileName) 
+/* Load all couple from a whitespace-separated file.
+ * Dispose of this with coupleFreeList(). */
+{
+struct couple *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = coupleLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct couple *coupleLoadAllByChar(char *fileName, char chopper) 
+/* Load all couple from a chopper separated file.
+ * Dispose of this with coupleFreeList(). */
+{
+struct couple *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = coupleLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct couple *coupleCommaIn(char **pS, struct couple *ret)
@@ -314,6 +639,66 @@ int i;
     }
 }
 fputc(lastSep,f);
+}
+
+struct group *groupLoad(char **row)
+/* Load a group from row fetched with select * from group
+ * from database.  Dispose of this with groupFree(). */
+{
+struct group *ret;
+
+AllocVar(ret);
+ret->size = sqlSigned(row[1]);
+ret->name = cloneString(row[0]);
+{
+int i;
+char *s = row[2];
+AllocArray(ret->members, ret->size);
+for (i=0; i<ret->size; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    personCommaIn(&s, &ret->members[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+}
+return ret;
+}
+
+struct group *groupLoadAll(char *fileName) 
+/* Load all group from a whitespace-separated file.
+ * Dispose of this with groupFreeList(). */
+{
+struct group *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = groupLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct group *groupLoadAllByChar(char *fileName, char chopper) 
+/* Load all group from a chopper separated file.
+ * Dispose of this with groupFreeList(). */
+{
+struct group *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = groupLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct group *groupCommaIn(char **pS, struct group *ret)
@@ -384,6 +769,66 @@ int i;
     }
 }
 fputc(lastSep,f);
+}
+
+struct metaGroup *metaGroupLoad(char **row)
+/* Load a metaGroup from row fetched with select * from metaGroup
+ * from database.  Dispose of this with metaGroupFree(). */
+{
+struct metaGroup *ret;
+
+AllocVar(ret);
+ret->metaSize = sqlSigned(row[1]);
+ret->name = cloneString(row[0]);
+{
+int i;
+char *s = row[2];
+AllocArray(ret->groups, ret->metaSize);
+for (i=0; i<ret->metaSize; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    groupCommaIn(&s, &ret->groups[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+}
+return ret;
+}
+
+struct metaGroup *metaGroupLoadAll(char *fileName) 
+/* Load all metaGroup from a whitespace-separated file.
+ * Dispose of this with metaGroupFreeList(). */
+{
+struct metaGroup *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = metaGroupLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct metaGroup *metaGroupLoadAllByChar(char *fileName, char chopper) 
+/* Load all metaGroup from a chopper separated file.
+ * Dispose of this with metaGroupFreeList(). */
+{
+struct metaGroup *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = metaGroupLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct metaGroup *metaGroupCommaIn(char **pS, struct metaGroup *ret)

@@ -14,6 +14,22 @@ struct pt
     int y;	/* y coor */
     };
 
+struct pt *ptLoad(char **row);
+/* Load a pt from row fetched with select * from pt
+ * from database.  Dispose of this with ptFree(). */
+
+struct pt *ptLoadAll(char *fileName);
+/* Load all pt from whitespace-separated file.
+ * Dispose of this with ptFreeList(). */
+
+struct pt *ptLoadAllByChar(char *fileName, char chopper);
+/* Load all pt from chopper separated file.
+ * Dispose of this with ptFreeList(). */
+
+#define ptLoadAllByTab(a) ptLoadAllByChar(a, '\t');
+/* Load all pt from tab separated file.
+ * Dispose of this with ptFreeList(). */
+
 struct pt *ptCommaIn(char **pS, struct pt *ret);
 /* Create a pt out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -40,6 +56,22 @@ struct point
     int z;	/* z coor */
     struct pt pt;	/* Transformed point. */
     };
+
+struct point *pointLoad(char **row);
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+
+struct point *pointLoadAll(char *fileName);
+/* Load all point from whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+
+struct point *pointLoadAllByChar(char *fileName, char chopper);
+/* Load all point from chopper separated file.
+ * Dispose of this with pointFreeList(). */
+
+#define pointLoadAllByTab(a) pointLoadAllByChar(a, '\t');
+/* Load all point from tab separated file.
+ * Dispose of this with pointFreeList(). */
 
 struct point *pointCommaIn(char **pS, struct point *ret);
 /* Create a point out of a comma separated string. 
@@ -171,6 +203,22 @@ struct twoPoint
     struct pt b;	/* point b */
     struct pt points[2];	/* points as array */
     };
+
+struct twoPoint *twoPointLoad(char **row);
+/* Load a twoPoint from row fetched with select * from twoPoint
+ * from database.  Dispose of this with twoPointFree(). */
+
+struct twoPoint *twoPointLoadAll(char *fileName);
+/* Load all twoPoint from whitespace-separated file.
+ * Dispose of this with twoPointFreeList(). */
+
+struct twoPoint *twoPointLoadAllByChar(char *fileName, char chopper);
+/* Load all twoPoint from chopper separated file.
+ * Dispose of this with twoPointFreeList(). */
+
+#define twoPointLoadAllByTab(a) twoPointLoadAllByChar(a, '\t');
+/* Load all twoPoint from tab separated file.
+ * Dispose of this with twoPointFreeList(). */
 
 struct twoPoint *twoPointCommaIn(char **pS, struct twoPoint *ret);
 /* Create a twoPoint out of a comma separated string. 

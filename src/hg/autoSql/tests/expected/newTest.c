@@ -9,6 +9,54 @@
 #include "output/newTest.h"
 
 
+struct point *pointLoad(char **row)
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+{
+struct point *ret;
+
+AllocVar(ret);
+ret->x = sqlSigned(row[0]);
+ret->y = sqlSigned(row[1]);
+return ret;
+}
+
+struct point *pointLoadAll(char *fileName) 
+/* Load all point from a whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct point *pointLoadAllByChar(char *fileName, char chopper) 
+/* Load all point from a chopper separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct point *pointCommaIn(char **pS, struct point *ret)
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -54,82 +102,6 @@ fprintf(f, "%d", el->x);
 fputc(sep,f);
 fprintf(f, "%d", el->y);
 fputc(lastSep,f);
-}
-
-struct autoTest *autoTestLoad(char **row)
-/* Load a autoTest from row fetched with select * from autoTest
- * from database.  Dispose of this with autoTestFree(). */
-{
-struct autoTest *ret;
-
-AllocVar(ret);
-ret->ptCount = sqlSigned(row[4]);
-ret->difCount = sqlSigned(row[6]);
-ret->valCount = sqlSigned(row[9]);
-ret->id = sqlUnsigned(row[0]);
-safecpy(ret->shortName, sizeof(ret->shortName), row[1]);
-ret->longName = cloneString(row[2]);
-{
-char *s = cloneString(row[3]);
-sqlStringArray(s, ret->aliases, 3);
-}
-{
-int sizeOne;
-sqlShortDynamicArray(row[5], &ret->pts, &sizeOne);
-assert(sizeOne == ret->ptCount);
-}
-{
-int sizeOne;
-sqlUbyteDynamicArray(row[7], &ret->difs, &sizeOne);
-assert(sizeOne == ret->difCount);
-}
-{
-char *s = row[8];
-if(s != NULL && differentString(s, ""))
-   ret->xy = pointCommaIn(&s, NULL);
-}
-{
-int sizeOne;
-sqlStringDynamicArray(row[10], &ret->vals, &sizeOne);
-assert(sizeOne == ret->valCount);
-}
-return ret;
-}
-
-struct autoTest *autoTestLoadAll(char *fileName) 
-/* Load all autoTest from a whitespace-separated file.
- * Dispose of this with autoTestFreeList(). */
-{
-struct autoTest *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
-
-while (lineFileRow(lf, row))
-    {
-    el = autoTestLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct autoTest *autoTestLoadAllByChar(char *fileName, char chopper) 
-/* Load all autoTest from a chopper separated file.
- * Dispose of this with autoTestFreeList(). */
-{
-struct autoTest *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
-
-while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
-    {
-    el = autoTestLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
 }
 
 struct autoTest *autoTestLoadByQuery(struct sqlConnection *conn, char *query)
@@ -207,6 +179,82 @@ freez(&aliasesArray);
 freez(&ptsArray);
 freez(&difsArray);
 freez(&valsArray);
+}
+
+struct autoTest *autoTestLoad(char **row)
+/* Load a autoTest from row fetched with select * from autoTest
+ * from database.  Dispose of this with autoTestFree(). */
+{
+struct autoTest *ret;
+
+AllocVar(ret);
+ret->ptCount = sqlSigned(row[4]);
+ret->difCount = sqlSigned(row[6]);
+ret->valCount = sqlSigned(row[9]);
+ret->id = sqlUnsigned(row[0]);
+safecpy(ret->shortName, sizeof(ret->shortName), row[1]);
+ret->longName = cloneString(row[2]);
+{
+char *s = cloneString(row[3]);
+sqlStringArray(s, ret->aliases, 3);
+}
+{
+int sizeOne;
+sqlShortDynamicArray(row[5], &ret->pts, &sizeOne);
+assert(sizeOne == ret->ptCount);
+}
+{
+int sizeOne;
+sqlUbyteDynamicArray(row[7], &ret->difs, &sizeOne);
+assert(sizeOne == ret->difCount);
+}
+{
+char *s = row[8];
+if(s != NULL && differentString(s, ""))
+   ret->xy = pointCommaIn(&s, NULL);
+}
+{
+int sizeOne;
+sqlStringDynamicArray(row[10], &ret->vals, &sizeOne);
+assert(sizeOne == ret->valCount);
+}
+return ret;
+}
+
+struct autoTest *autoTestLoadAll(char *fileName) 
+/* Load all autoTest from a whitespace-separated file.
+ * Dispose of this with autoTestFreeList(). */
+{
+struct autoTest *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[11];
+
+while (lineFileRow(lf, row))
+    {
+    el = autoTestLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct autoTest *autoTestLoadAllByChar(char *fileName, char chopper) 
+/* Load all autoTest from a chopper separated file.
+ * Dispose of this with autoTestFreeList(). */
+{
+struct autoTest *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[11];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = autoTestLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct autoTest *autoTestCommaIn(char **pS, struct autoTest *ret)

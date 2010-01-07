@@ -9,6 +9,55 @@
 #include "output/doc2.h"
 
 
+struct point *pointLoad(char **row)
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+{
+struct point *ret;
+
+AllocVar(ret);
+ret->x = sqlFloat(row[0]);
+ret->y = sqlFloat(row[1]);
+ret->z = sqlFloat(row[2]);
+return ret;
+}
+
+struct point *pointLoadAll(char *fileName) 
+/* Load all point from a whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct point *pointLoadAllByChar(char *fileName, char chopper) 
+/* Load all point from a chopper separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct point *pointCommaIn(char **pS, struct point *ret)
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -60,6 +109,55 @@ fprintf(f, "%g", el->z);
 fputc('}',f);
 }
 
+struct color *colorLoad(char **row)
+/* Load a color from row fetched with select * from color
+ * from database.  Dispose of this with colorFree(). */
+{
+struct color *ret;
+
+AllocVar(ret);
+ret->red = sqlUnsigned(row[0]);
+ret->green = sqlUnsigned(row[1]);
+ret->blue = sqlUnsigned(row[2]);
+return ret;
+}
+
+struct color *colorLoadAll(char *fileName) 
+/* Load all color from a whitespace-separated file.
+ * Dispose of this with colorFreeList(). */
+{
+struct color *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = colorLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct color *colorLoadAllByChar(char *fileName, char chopper) 
+/* Load all color from a chopper separated file.
+ * Dispose of this with colorFreeList(). */
+{
+struct color *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = colorLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct color *colorCommaIn(char **pS, struct color *ret)
 /* Create a color out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -109,6 +207,63 @@ fputc('"',f);
 fputc(':',f);
 fprintf(f, "%u", el->blue);
 fputc('}',f);
+}
+
+struct face *faceLoad(char **row)
+/* Load a face from row fetched with select * from face
+ * from database.  Dispose of this with faceFree(). */
+{
+struct face *ret;
+
+AllocVar(ret);
+ret->pointCount = sqlSigned(row[1]);
+{
+char *s = row[0];
+if(s != NULL && differentString(s, ""))
+   colorCommaIn(&s, &ret->color);
+}
+{
+int sizeOne;
+sqlUnsignedDynamicArray(row[2], &ret->points, &sizeOne);
+assert(sizeOne == ret->pointCount);
+}
+return ret;
+}
+
+struct face *faceLoadAll(char *fileName) 
+/* Load all face from a whitespace-separated file.
+ * Dispose of this with faceFreeList(). */
+{
+struct face *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = faceLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct face *faceLoadAllByChar(char *fileName, char chopper) 
+/* Load all face from a chopper separated file.
+ * Dispose of this with faceFreeList(). */
+{
+struct face *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = faceLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct face *faceCommaIn(char **pS, struct face *ret)

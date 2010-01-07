@@ -17,6 +17,22 @@ struct point
     int z;	/* z coor */
     };
 
+struct point *pointLoad(char **row);
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+
+struct point *pointLoadAll(char *fileName);
+/* Load all point from whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+
+struct point *pointLoadAllByChar(char *fileName, char chopper);
+/* Load all point from chopper separated file.
+ * Dispose of this with pointFreeList(). */
+
+#define pointLoadAllByTab(a) pointLoadAllByChar(a, '\t');
+/* Load all point from tab separated file.
+ * Dispose of this with pointFreeList(). */
+
 struct point *pointCommaIn(char **pS, struct point *ret);
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will

@@ -18,7 +18,7 @@
 #include "asParse.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.38 2009/07/04 04:45:29 markd Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.39 2010/01/07 19:13:42 markd Exp $";
 
 boolean withNull = FALSE;
 boolean makeJson = FALSE;
@@ -1715,9 +1715,6 @@ if (obj->isTable)
     sqlTable(obj, sqlFile);
     if (!objectHasVariableLists(obj) && !objectHasSubObjects(obj))
         staticLoadRow(obj, cFile, hFile);
-    dynamicLoadRow(obj, cFile, hFile);
-    dynamicLoadAll(obj, cFile, hFile);
-    dynamicLoadAllByChar(obj, cFile, hFile);
     if(doDbLoadAndSave)
         {
         dynamicLoadByQuery(obj, cFile, hFile);
@@ -1725,6 +1722,9 @@ if (obj->isTable)
         dynamicSaveToDbEscaped(obj, cFile, hFile);
         }
     }
+dynamicLoadRow(obj, cFile, hFile);
+dynamicLoadAll(obj, cFile, hFile);
+dynamicLoadAllByChar(obj, cFile, hFile);
 makeCommaIn(obj, cFile, hFile);
 /*if (makeJson)
     makeJsonInput(obj, cFile, hFile);*/

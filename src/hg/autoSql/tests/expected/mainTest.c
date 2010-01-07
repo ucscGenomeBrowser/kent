@@ -9,6 +9,54 @@
 #include "output/mainTest.h"
 
 
+struct pt *ptLoad(char **row)
+/* Load a pt from row fetched with select * from pt
+ * from database.  Dispose of this with ptFree(). */
+{
+struct pt *ret;
+
+AllocVar(ret);
+ret->x = sqlSigned(row[0]);
+ret->y = sqlSigned(row[1]);
+return ret;
+}
+
+struct pt *ptLoadAll(char *fileName) 
+/* Load all pt from a whitespace-separated file.
+ * Dispose of this with ptFreeList(). */
+{
+struct pt *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = ptLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct pt *ptLoadAllByChar(char *fileName, char chopper) 
+/* Load all pt from a chopper separated file.
+ * Dispose of this with ptFreeList(). */
+{
+struct pt *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = ptLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct pt *ptCommaIn(char **pS, struct pt *ret)
 /* Create a pt out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -31,6 +79,61 @@ fprintf(f, "%d", el->x);
 fputc(sep,f);
 fprintf(f, "%d", el->y);
 fputc(lastSep,f);
+}
+
+struct point *pointLoad(char **row)
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+{
+struct point *ret;
+
+AllocVar(ret);
+safecpy(ret->acc, sizeof(ret->acc), row[0]);
+ret->x = sqlSigned(row[1]);
+ret->y = sqlSigned(row[2]);
+ret->z = sqlSigned(row[3]);
+{
+char *s = row[4];
+if(s != NULL && differentString(s, ""))
+   ptCommaIn(&s, &ret->pt);
+}
+return ret;
+}
+
+struct point *pointLoadAll(char *fileName) 
+/* Load all point from a whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileRow(lf, row))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct point *pointLoadAllByChar(char *fileName, char chopper) 
+/* Load all point from a chopper separated file.
+ * Dispose of this with pointFreeList(). */
+{
+struct point *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = pointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct point *pointCommaIn(char **pS, struct point *ret)
@@ -489,6 +592,74 @@ int i;
     }
 }
 fputc(lastSep,f);
+}
+
+struct twoPoint *twoPointLoad(char **row)
+/* Load a twoPoint from row fetched with select * from twoPoint
+ * from database.  Dispose of this with twoPointFree(). */
+{
+struct twoPoint *ret;
+
+AllocVar(ret);
+safecpy(ret->name, sizeof(ret->name), row[0]);
+{
+char *s = row[1];
+if(s != NULL && differentString(s, ""))
+   ptCommaIn(&s, &ret->a);
+}
+{
+char *s = row[2];
+if(s != NULL && differentString(s, ""))
+   ptCommaIn(&s, &ret->b);
+}
+{
+int i;
+char *s = row[3];
+for (i=0; i<2; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    ptCommaIn(&s, &ret->points[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+}
+return ret;
+}
+
+struct twoPoint *twoPointLoadAll(char *fileName) 
+/* Load all twoPoint from a whitespace-separated file.
+ * Dispose of this with twoPointFreeList(). */
+{
+struct twoPoint *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileRow(lf, row))
+    {
+    el = twoPointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct twoPoint *twoPointLoadAllByChar(char *fileName, char chopper) 
+/* Load all twoPoint from a chopper separated file.
+ * Dispose of this with twoPointFreeList(). */
+{
+struct twoPoint *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = twoPointLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct twoPoint *twoPointCommaIn(char **pS, struct twoPoint *ret)

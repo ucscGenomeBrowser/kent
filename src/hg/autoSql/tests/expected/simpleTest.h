@@ -14,6 +14,22 @@ struct point
     int y;	/* Y dimension */
     };
 
+struct point *pointLoad(char **row);
+/* Load a point from row fetched with select * from point
+ * from database.  Dispose of this with pointFree(). */
+
+struct point *pointLoadAll(char *fileName);
+/* Load all point from whitespace-separated file.
+ * Dispose of this with pointFreeList(). */
+
+struct point *pointLoadAllByChar(char *fileName, char chopper);
+/* Load all point from chopper separated file.
+ * Dispose of this with pointFreeList(). */
+
+#define pointLoadAllByTab(a) pointLoadAllByChar(a, '\t');
+/* Load all point from tab separated file.
+ * Dispose of this with pointFreeList(). */
+
 struct point *pointCommaIn(char **pS, struct point *ret);
 /* Create a point out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -36,6 +52,22 @@ struct namedPoint
     char *name;	/* Name of point */
     struct point point;	/* X/Y coordinates */
     };
+
+struct namedPoint *namedPointLoad(char **row);
+/* Load a namedPoint from row fetched with select * from namedPoint
+ * from database.  Dispose of this with namedPointFree(). */
+
+struct namedPoint *namedPointLoadAll(char *fileName);
+/* Load all namedPoint from whitespace-separated file.
+ * Dispose of this with namedPointFreeList(). */
+
+struct namedPoint *namedPointLoadAllByChar(char *fileName, char chopper);
+/* Load all namedPoint from chopper separated file.
+ * Dispose of this with namedPointFreeList(). */
+
+#define namedPointLoadAllByTab(a) namedPointLoadAllByChar(a, '\t');
+/* Load all namedPoint from tab separated file.
+ * Dispose of this with namedPointFreeList(). */
 
 struct namedPoint *namedPointCommaIn(char **pS, struct namedPoint *ret);
 /* Create a namedPoint out of a comma separated string. 
@@ -62,6 +94,22 @@ struct triangle
     char *name;	/* Name of triangle */
     struct point points[3];	/* The three vertices */
     };
+
+struct triangle *triangleLoad(char **row);
+/* Load a triangle from row fetched with select * from triangle
+ * from database.  Dispose of this with triangleFree(). */
+
+struct triangle *triangleLoadAll(char *fileName);
+/* Load all triangle from whitespace-separated file.
+ * Dispose of this with triangleFreeList(). */
+
+struct triangle *triangleLoadAllByChar(char *fileName, char chopper);
+/* Load all triangle from chopper separated file.
+ * Dispose of this with triangleFreeList(). */
+
+#define triangleLoadAllByTab(a) triangleLoadAllByChar(a, '\t');
+/* Load all triangle from tab separated file.
+ * Dispose of this with triangleFreeList(). */
 
 struct triangle *triangleCommaIn(char **pS, struct triangle *ret);
 /* Create a triangle out of a comma separated string. 
@@ -90,6 +138,22 @@ struct polygon
     struct point *vertices;	/* The x/y coordinates of all vertices */
     };
 
+struct polygon *polygonLoad(char **row);
+/* Load a polygon from row fetched with select * from polygon
+ * from database.  Dispose of this with polygonFree(). */
+
+struct polygon *polygonLoadAll(char *fileName);
+/* Load all polygon from whitespace-separated file.
+ * Dispose of this with polygonFreeList(). */
+
+struct polygon *polygonLoadAllByChar(char *fileName, char chopper);
+/* Load all polygon from chopper separated file.
+ * Dispose of this with polygonFreeList(). */
+
+#define polygonLoadAllByTab(a) polygonLoadAllByChar(a, '\t');
+/* Load all polygon from tab separated file.
+ * Dispose of this with polygonFreeList(). */
+
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret);
 /* Create a polygon out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -117,6 +181,22 @@ struct person
     long long ssn;	/* Social security number */
     };
 
+struct person *personLoad(char **row);
+/* Load a person from row fetched with select * from person
+ * from database.  Dispose of this with personFree(). */
+
+struct person *personLoadAll(char *fileName);
+/* Load all person from whitespace-separated file.
+ * Dispose of this with personFreeList(). */
+
+struct person *personLoadAllByChar(char *fileName, char chopper);
+/* Load all person from chopper separated file.
+ * Dispose of this with personFreeList(). */
+
+#define personLoadAllByTab(a) personLoadAllByChar(a, '\t');
+/* Load all person from tab separated file.
+ * Dispose of this with personFreeList(). */
+
 struct person *personCommaIn(char **pS, struct person *ret);
 /* Create a person out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -142,6 +222,22 @@ struct couple
     char *name;	/* Couple's name */
     struct person members[2];	/* Members of couple */
     };
+
+struct couple *coupleLoad(char **row);
+/* Load a couple from row fetched with select * from couple
+ * from database.  Dispose of this with coupleFree(). */
+
+struct couple *coupleLoadAll(char *fileName);
+/* Load all couple from whitespace-separated file.
+ * Dispose of this with coupleFreeList(). */
+
+struct couple *coupleLoadAllByChar(char *fileName, char chopper);
+/* Load all couple from chopper separated file.
+ * Dispose of this with coupleFreeList(). */
+
+#define coupleLoadAllByTab(a) coupleLoadAllByChar(a, '\t');
+/* Load all couple from tab separated file.
+ * Dispose of this with coupleFreeList(). */
 
 struct couple *coupleCommaIn(char **pS, struct couple *ret);
 /* Create a couple out of a comma separated string. 
@@ -170,6 +266,22 @@ struct group
     struct person *members;	/* All members of group */
     };
 
+struct group *groupLoad(char **row);
+/* Load a group from row fetched with select * from group
+ * from database.  Dispose of this with groupFree(). */
+
+struct group *groupLoadAll(char *fileName);
+/* Load all group from whitespace-separated file.
+ * Dispose of this with groupFreeList(). */
+
+struct group *groupLoadAllByChar(char *fileName, char chopper);
+/* Load all group from chopper separated file.
+ * Dispose of this with groupFreeList(). */
+
+#define groupLoadAllByTab(a) groupLoadAllByChar(a, '\t');
+/* Load all group from tab separated file.
+ * Dispose of this with groupFreeList(). */
+
 struct group *groupCommaIn(char **pS, struct group *ret);
 /* Create a group out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -196,6 +308,22 @@ struct metaGroup
     int metaSize;	/* Number of groups */
     struct group *groups;	/* All groups in metaGroup */
     };
+
+struct metaGroup *metaGroupLoad(char **row);
+/* Load a metaGroup from row fetched with select * from metaGroup
+ * from database.  Dispose of this with metaGroupFree(). */
+
+struct metaGroup *metaGroupLoadAll(char *fileName);
+/* Load all metaGroup from whitespace-separated file.
+ * Dispose of this with metaGroupFreeList(). */
+
+struct metaGroup *metaGroupLoadAllByChar(char *fileName, char chopper);
+/* Load all metaGroup from chopper separated file.
+ * Dispose of this with metaGroupFreeList(). */
+
+#define metaGroupLoadAllByTab(a) metaGroupLoadAllByChar(a, '\t');
+/* Load all metaGroup from tab separated file.
+ * Dispose of this with metaGroupFreeList(). */
 
 struct metaGroup *metaGroupCommaIn(char **pS, struct metaGroup *ret);
 /* Create a metaGroup out of a comma separated string. 
