@@ -96,7 +96,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.40 2009/11/09 19:20:29 holmes Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.41 2010/01/07 02:56:48 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -833,7 +833,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
     printf("<B>tRNAscan-SE score: </B> %.2f<BR>\n",trna->trnaScore);
     printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
-
+    if (!sameString(trna->genomeUrl, ""))
+    {
+        printf("<B>Summary of all genomic tRNA predictions:</B> "
+                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->genomeUrl);
+        printf("<B>tRNA alignments:</B> "
+                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->trnaUrl);
+    }
     printf("<BR><B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
     printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
