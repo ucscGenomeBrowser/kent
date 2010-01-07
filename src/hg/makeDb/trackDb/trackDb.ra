@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.578 2010/01/04 20:27:01 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.579 2010/01/07 20:44:50 angie Exp $";
 
 include trackDb.chainNet.ra
 
@@ -3936,7 +3936,7 @@ searchPriority 50
 
 searchTable genscan
 searchType genePred
-termRegex [[:alnum:]_?]+\.?[0-9]+
+termRegex [[:alnum:]_?]+(\.[0-9]+)*
 searchPriority 50
 
 searchTable twinscan
