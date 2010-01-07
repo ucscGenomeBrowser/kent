@@ -59,7 +59,7 @@
 #include "obscure.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.23 2008/06/23 21:47:55 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.24 2010/01/07 19:53:45 angie Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -238,7 +238,7 @@ int readyCount;
 
 for (;;)
     {
-    if (microseconds > 1000000)
+    if (microseconds >= 1000000)
 	{
 	tv.tv_sec = microseconds/1000000;
 	tv.tv_usec = microseconds%1000000;
