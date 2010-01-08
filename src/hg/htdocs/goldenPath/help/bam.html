@@ -76,7 +76,7 @@ samtools index my.sorted.bam</TT></PRE>
       Again, in addition to <EM>http://myorg.edu/mylab/my.sorted.bam</EM>, the associated index
       file <EM>http://myorg.edu/mylab/my.sorted.bam.bai</EM> must also be available.</LI>
   <LI>Paste the custom track line into the text box in the 
-      <A HREF="../../cgi-bin/hgCustom">custom track management page</A>, 
+      <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>, 
       click submit and view in the Genome Browser.</LI>
 </OL>
 </P>
@@ -153,7 +153,7 @@ track line:
 <TT>browser position chr21:33,038,946-33,039,092</TT>
 
 <P>Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
-<A HREF="../../cgi-bin/hgCustom">custom track management page</A> for the
+<A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A> for the
 human assembly hg18 (May 2006), 
 remove the extra line breaks from the track line above, 
 then press the <EM>submit</EM> button.
@@ -167,13 +167,20 @@ In this example, you will create indexed BAM from an existing SAM file.
 First, save this SAM file <A HREF="samExample.sam" TARGET=_BLANK>samExample.sam</A> 
 to your machine.
 Perform steps 1 and 3-7 in the workflow described above, but substituting
-<TT>samExample.sam</TT> for <TT>my.sam</TT>.  This track line is a little nicer 
+<TT>samExample.sam</TT> for <TT>my.sam</TT>.  On the 
+<A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>, 
+click the &quot;add custom tracks&quot; button if necessary and 
+make sure that the genome is set to Human and the assembly is set to Mar. 2006 (hg18)
+before pasting the track line and submitting.
+This track line is a little nicer 
 than the one shown in step 6, but remember to remove the line breaks that have
-been added here for readability.
+been added to the track line for readability:
 <PRE><TT>track type=bam name="BAM Example Two" bigDataUrl=<EM>http://myorg.edu/mylab/my.sorted.bam</EM>
-    description="Bam Ex. 2: Fictional RNA-seq alignments" visibility=squish
-    db=hg18 chromosomes=chr21</TT></PRE>
-View the data in the genome browser at position chr21:33,031,597-33,041,570.
+    description="Bam Ex. 2: Simulated RNA-seq read alignments" visibility=squish
+    db=hg18 chromosomes=chr21
+
+browser position chr21:33,037,317-33,038,137
+browser pack mrna</TT></PRE>
 </P>
 
       </TD><TD WIDTH=15></TD></TR></TABLE>
