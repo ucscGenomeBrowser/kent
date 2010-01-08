@@ -2064,6 +2064,9 @@ identifier snpName129
     $gbd.snp129Seq.acc minCheck=.99
     hg18.snp129OrthoPt2Pa2Rm2.name
     hg18.snpArrayIllumina1M.name minCheck=0.95
+    hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
+    hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
+    hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
 
 identifier snpExceptions129
 "Annotations of unusual conditions in dbSNP version 129"
