@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.211 2010/01/07 23:30:05 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.212 2010/01/08 22:11:25 braney Exp $
 
 use warnings;
 use strict;
@@ -1851,7 +1851,7 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     if(!$opt_allowReloads) {
-        if($db->quickQuery("select count(*) from trackDb where tableName = ?", $tableName)) {
+        if ($db->tableExist( $tableName)) {
             die "view '$view' has already been loaded as track '$tableName'\nPlease contact your wrangler if you need to reload this data\n";
         }
     }
