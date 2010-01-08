@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.745 2010/01/07 23:27:49 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.746 2010/01/08 00:28:29 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -17672,7 +17672,7 @@ subGroup1 view Views RawSignal=Raw_Signal Splices=Splice_Sites Paired=Paired zAl
 subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562
 subGroup3 localization Localization 0-cell=Cell
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
-subGroup5 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 blowBlat=Bowtie+BLAT bow098=Bowtie_0.981 erng3b=Erange_3.0b erng32a=erng32a BB2=Bowtie1.0+BLAT
+subGroup5 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 blowBlat=Bowtie0.98+BLAT bow098=Bowtie_0.981 erng3b=Erange_3.0b erng32a=erng32a BB2=Bowtie0.10.0+BLAT
 subGroup6 readType Read_Type 1x32=Single_32nt 2x75=Paired_75nt r1x75=Single_75nt r2x75=Paired_75nt
 #dimensions dimensionX=cellType dimensionY=mapAlgorithm dimensionZ=readType
 #dimensionZchecked 1x32,2x75
@@ -17691,7 +17691,8 @@ wgEncode 1
     visibility full
     subTrack wgEncodeCaltechRnaSeq
     maxHeightPixels 100:24:16
-    windowingFunction mean
+    windowingFunction maximum
+    autoScale on
 
         track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75
         subTrack wgEncodeCaltechRnaSeqViewRawSignal off
@@ -18109,6 +18110,7 @@ wgEncode 1
         longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 1 (longPolyA in GM12878 cellusingBB2)
         subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75 rnaExtract=longPolyA
         type bed 12
+        colorByStrand 46,0,184 238,85,34
         color 153,38,0
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Aligns replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=870 dateSubmitted=2010-01-04 dateUnrestricted=2010-10-04 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75.bed12.gz
 
@@ -18120,6 +18122,7 @@ wgEncode 1
         subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75 rnaExtract=longPolyA
         type bed 12
         color 153,38,0
+        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Aligns replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=898 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75
@@ -18129,6 +18132,7 @@ wgEncode 1
         longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 1 (longPolyA in K562 cellusingBB2)
         subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75 rnaExtract=longPolyA
         type bed 12
+        colorByStrand 46,0,184 238,85,34
         color 46,0,184
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Aligns replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=903 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75.bed12.gz
 
@@ -18140,6 +18144,7 @@ wgEncode 1
         subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75 rnaExtract=longPolyA
         type bed 12
         color 46,0,184
+        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Aligns replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=904 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75
@@ -18158,7 +18163,8 @@ wgEncode 1
     visibility full
     subTrack wgEncodeCaltechRnaSeq
     maxHeightPixels 100:24:16
-    windowingFunction mean
+    autoScale on
+    windowingFunction maximum
 
         track wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75
         release alpha
@@ -18206,7 +18212,8 @@ wgEncode 1
     visibility full
     subTrack wgEncodeCaltechRnaSeq
     maxHeightPixels 100:24:16
-    windowingFunction mean
+    autoScale on
+    windowingFunction maximum
 
         track wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75
         release alpha
