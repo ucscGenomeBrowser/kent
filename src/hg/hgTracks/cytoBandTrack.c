@@ -132,7 +132,7 @@ heightPer = tg->heightPer;
 yOff = yOff;
 
 /* Time to draw the bands. */
-hvGfxSetClip(hvg, xOff, yOff, insideWidth, tg->height);
+hvGfxSetClip(hvg, xOff, yOff, width, tg->height);
 genericDrawItems(tg, 0, chromSize, hvg, xOff+xBorder, yOff+5, width-(2*xBorder), font, color, tvDense);
 
 x1 = round((winStart)*scale) + xOff + xBorder -1;
