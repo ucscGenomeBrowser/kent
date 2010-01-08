@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1619 2010/01/07 22:39:42 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1620 2010/01/08 23:50:44 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -548,7 +548,7 @@ else
 
     /* If hidden don't draw. */
     if(ideoTrack->limitedVis == tvHide || !withIdeogram)
-    doIdeo = FALSE;
+        doIdeo = FALSE;
     }
 if(doIdeo)
     {
@@ -578,9 +578,9 @@ if(doIdeo)
     ideoTrack->ixAltColor = hvGfxFindRgb(hvg, &ideoTrack->altColor);
     hvGfxSetClip(hvg, 0, gfxBorder, ideoWidth, ideoTrack->height);
     if(sameString(startBand, endBand))
-    safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        safef(title, sizeof(title), "%s (%s)", chromName, startBand);
     else
-    safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
+        safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
     hvGfxTextCentered(hvg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
     ideoTrack->drawItems(ideoTrack, winStart, winEnd, hvg, textWidth+4, gfxBorder, ideoWidth-textWidth-4,
