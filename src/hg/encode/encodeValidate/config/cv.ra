@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.174 2010/01/07 23:29:13 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.175 2010/01/08 18:41:05 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -228,6 +228,18 @@ vendorId AG10803
 tier 3
 protocol AG10803_Stam_protocol.pdf
 
+term AoSMC
+tag AOSMC
+type Cell Line
+organism Human
+description aortic smooth muscle cells
+vendorName Lonza
+vendorId CC-2571
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001685
+termId BTO:0001685
+protocol AoSMC_Crawford_protocol.pdf
+
 term Astrocy
 tag Astrocy
 type Cell Line
@@ -366,6 +378,16 @@ termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
 tier 3
 protocol fibroblast_Crawford_protocol.pdf
+
+term FibroP
+tag FIBROP
+type Cell Line
+organism Human
+description normal fibroblasts taken from individuals with Parkinson's disease (provisional)
+vendorName Paul Tesar (Case Western)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+termId BTO:0000452
+#protocol FibroP_Crawford_protocol.pdf
 
 term Gliobla
 tag Gliobla
@@ -923,7 +945,7 @@ karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
 tier 3
-protocol HSMM_Bernstein_protocol.pdf
+protocol Bernstein:HSMM_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -937,7 +959,7 @@ karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
 tier 3
-protocol HSMMtube_Bernstein_protocol.pdf
+protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HTB-11
 tag HTB11
@@ -1025,6 +1047,28 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol D721_Crawford_protocol.pdf
 
+term Melano
+tag MELANO
+type Cell Line
+organism Human
+description melanocytes
+vendorName ScienCell
+vendorId 2200
+orderUrl http://www.sciencellonline.com/site/products/2200.php
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+termId BTO:0000847
+protocol Melano_Crawford_protocol.pdf
+
+term Myometr
+tag MYOMETR
+type Cell Line
+organism Human
+description Myometrial cells (provisional)
+vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
+termId BTO:0000907
+#protocol Myometr_Crawford_protocol.pdf
+
 term NB4
 tag NB4
 type Cell Line
@@ -1041,6 +1085,18 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 tier 3
 protocol Snyder:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
+
+term NHBE
+tag NHBE
+type Cell Line
+organism Human
+description normal human bronchial epithelial cells (provisional)
+vendorName Lonza
+vendorId CC-2541
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
+termId BTO:0002022
+#protocol NHBE_Crawford_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -1362,7 +1418,7 @@ tag Pseudo
 type Gene Type
 description pseudogene
 
-# Antibodies
+#### Antibodies
 term AP-2alpha
 tag AP2alpha
 type Antibody
@@ -1569,6 +1625,18 @@ vendorId 612044
 lab Farnham
 targetId GeneCard:GC10M126666
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
+
+term E2F1
+tag E2F1
+type Antibody
+antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.  Recommended for detection of E2F1 of H and Xn origin by WB and IP.
+targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
+orderUrl http://www.millipore.com/catalogue/item/05-379#
+vendorName Millipore
+vendorId 05-379
+lab Farnham
+targetId GeneCard:GC20M031727
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1
 
 term E2F4
 tag E2F4
@@ -2406,7 +2474,7 @@ targetId GeneCard:GC19P063386
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
 
 
-# ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
+### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
 tag T7Tag
 type ripTgtProtein
@@ -2488,7 +2556,7 @@ vendorName ABR-Affinity Bioreagents
 vendorId MA156353 lot 7308-S2(Nov2008)
 orderUrl http://www.bioreagents.com/
 
-# mapAlgorithm : Comparing map algorithms
+### mapAlgorithm : Comparing map algorithms
 term NA
 tag NA
 type mapAlgorithm
@@ -2529,7 +2597,7 @@ tag BB2
 type mapAlgorithm
 description bowtie0.10.0 followed by blat v34
 
-# readType
+### readType
 term 1x32
 tag r1x32
 type readType
@@ -2555,7 +2623,7 @@ tag r2x75
 type readType
 description Paired 75 n.t. reads
 
-# fragSize : DNA Fragment Size for GIS DNA PET (gPET)
+### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
 tag f1k
 type fragSize
@@ -2571,7 +2639,7 @@ tag f10k
 type fragSize
 description 10kb DNA fragments
 
-# localization
+### localization
 term cell
 tag cell
 type localization
@@ -2629,7 +2697,7 @@ description The dense fibrillar network lying on the inner side of the nuclear m
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
 
-# RNA extracts
+### RNA extracts
 term total
 tag total
 type rnaExtract
@@ -2679,7 +2747,7 @@ tag proteinRnaExtracts
 type rnaExtract
 description RNA associated with RNA binding proteins
 
-# promoters
+### promoters
 term SV40
 tag SV40
 type promoter
@@ -2701,7 +2769,7 @@ tag d20090101
 type freezeDate
 description 2009-01-01 rel2 January freeze
 
-# Species
+### Species
 term hg18
 tag hg18
 type species
@@ -2737,7 +2805,7 @@ tag bosTau4
 type species
 description Cow: Bos Taurus; October 2007 release
 
-# Control Terms
+##### Control Terms
 term Control
 tag Control
 type control
@@ -2781,12 +2849,12 @@ type control
 
 ### Treatments
 term androgen
-tag andro
+tag ANDRO
 description 1 nM treatment for 12 hours (Crawford)
 type treatment
 
 term Betamethasone_100nM
-tag Bmeth
+tag BMETH
 description 1h,100nM Betamethasone (Myers)
 type treatment
 
@@ -2816,12 +2884,12 @@ description 1h,0.02% DMSO (Myers)
 type treatment
 
 term estrogen
-tag estro
+tag ESTRO
 description 100 nM treatment for 45 minutes (Crawford)
 type treatment
 
 term EtOH_0.02pct
-tag EtOH02
+tag ETOH02
 description 1h,0.02% EtOH (Myers)
 type treatment
 
@@ -2856,8 +2924,13 @@ description Interferon gamma treatment - 6 hours (Snyder)
 type treatment
 
 term Prednisolone_100nM
-tag Prednis
+tag PREDNIS
 description 1h,100nM Prednisolone (Myers)
+type treatment
+
+term serumFree
+tag SERUMFREE
+description grown in serum free media (Crawford)
 type treatment
 
 term TNFa
@@ -2866,7 +2939,7 @@ description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (
 type treatment
 
 term vehicle
-tag vehicle
+tag VEH
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
 
