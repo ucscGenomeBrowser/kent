@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.511 2010/01/04 19:12:24 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.512 2010/01/08 18:11:02 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2226,6 +2226,11 @@ cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COL
 printf("No additional coloring<BR>\n");
 
 //TODO: include / exclude flags
+
+if (fileExists(hHelpFile("hgBamTrackHelp")))
+    printf("<P><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
+	   "configuration help</A></P>");
+
 }
 #endif//def USE_BAM
 
