@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.447 2010/01/04 23:24:31 hartera Exp $";
+#	"$Id: trackDb.ra,v 1.448 2010/01/08 18:52:36 katrina Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -1988,21 +1988,21 @@ type bed 4 .
 
     track snpArrayIlluminaHumanCytoSNP_12
     subTrack snpArray
-    shortLabel Illumina CytoSNP-12
+    shortLabel Illumina Cyto-12
     longLabel Illumina Human CytoSNP-12
     type bed 6 +
     priority 10
 
     track snpArrayIlluminaHuman660W_Quad
     subTrack snpArray
-    shortLabel Illumina Human660W-Quad
+    shortLabel Illumina 660W-Q
     longLabel Illumina Human 660W-Quad
     type bed 6 +
     priority 11
 
     track snpArrayIlluminaHumanOmni1_Quad
     subTrack snpArray
-    shortLabel Illumina HumanOmni1-Quad
+    shortLabel Illumina Omni1-Q
     longLabel Illumina Human Omni1-Quad
     type bed 6 +
     priority 12
