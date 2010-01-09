@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.58 2010/01/06 21:48:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.59 2010/01/09 20:54:15 galt Exp $";
 
 
 void usage()
@@ -62,7 +62,7 @@ static char *release = "alpha";
 static bool showSettings = FALSE;
 
 static boolean hasNonAsciiChars(char *text)
-/* check if text has any non-printing or non-ascii characters */
+/* Check if text has any non-printing or non-ascii characters */
 {
 char *c;
 for (c = text; *c != '\0'; c++)
@@ -77,7 +77,7 @@ return FALSE;
 
 
 static struct trackDb *trackDbListFromHash(struct hash *tdHash)
-/* build a list of the tracks in hash.  List will be threaded through
+/* Build a list of the tracks in hash.  List will be threaded through
  * the entries. */
 {
 struct trackDb *tdbList = NULL;
@@ -116,38 +116,6 @@ slReverse(&newList);
 return newList;
 }
 
-static boolean releasesCompatible(struct trackDb *a, struct trackDb *b)
-/* Return TRUE if either release is NULL, or if they both exist and match. */
-{
-char *aRelease = trackDbSetting(a, "release");
-char *bRelease = trackDbSetting(b, "release");
-return aRelease == NULL || bRelease == NULL || sameString(aRelease, bRelease);
-}
-
-static void fillInSubtrackParentsRespectingRelease(struct trackDb *tdbList, struct hash *trackHash)
-/* Fill in parent pointers. This just handles a part of the heirarchy, but it does handle releases. */
-{
-/* Loop through looking for parent tracks whenever see the subTrack tag. 
- * Try to find parent just in compatible release. */
-struct trackDb *td;
-for (td = tdbList; td != NULL; td = td->next)
-    {
-    char *parentName = trackDbLocalSetting(td, "subTrack");
-    if (parentName != NULL)
-        {
-	struct hashEl *hel;
-	for (hel = hashLookup(trackHash, parentName); hel != NULL; hel = hashLookupNext(hel))
-	    {
-	    struct trackDb *p = hel->val;
-	    if (releasesCompatible(p, td))
-		{
-	        td->parent = p;
-		break;
-		}
-	    }
-	}
-    }
-}
 
 static struct trackDb *pruneEmptyContainers(struct trackDb *tdbList)
 /* Remove container tracks (views and compositeTracks) with no children. */
@@ -174,12 +142,9 @@ slReverse(&newList);
 return newList;
 }
 
-static struct trackDb * pruneRelease(struct trackDb *tdbList, struct hash *trackHash)
-/* prune out alternate track entries for another release */
+static struct trackDb * pruneRelease(struct trackDb *tdbList)
+/* Prune out alternate track entries for another release */
 {
-/* Link up parents so that trackDbSettingClosest to home will work. */
-fillInSubtrackParentsRespectingRelease(tdbList, trackHash);
-
 /* Build up list that only includes things in this release.  Release
  * can be inherited from parents. */
 struct trackDb *tdb;
@@ -189,25 +154,55 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
     char *rel = trackDbSetting(tdb, "release");
     if (rel == NULL || sameString(rel, release))
 	{
-	verbose(3,"pruneRelease: adding '%s', release: '%s' =? '%s'\n",
-	    tdb->tableName, rel, release);
+	/* Remove release tags in remaining tracks, since its purpose is served. */
+	hashRemove(tdb->settingsHash, "release");
 	slAddHead(&relList, tdb);
 	}
     else
 	verbose(3,"pruneRelease: removing '%s', release: '%s' != '%s'\n",
 	    tdb->tableName, rel, release);
     }
-
-/* Remove release tags in remaining tracks, since its purpose is served. */
-for (tdb = relList; tdb != NULL; tdb = tdb->next)
-    hashRemove(tdb->settingsHash, "release");
-
 return relList;
+}
+
+static struct trackDb * pruneOrphans(struct trackDb *tdbList, struct hash *trackHash)
+/* Prune out orphans with no parents of the right release */
+{
+boolean done = FALSE;
+struct trackDb *tdb;
+struct trackDb *nonOrphanList = NULL;
+while (!done)
+    {
+    done = TRUE;
+    nonOrphanList = NULL;
+    while ((tdb = slPopHead(&tdbList)) != NULL)
+	{
+	char *parentName = trackDbLocalSetting(tdb, "subTrack");
+	struct hashEl *hel = NULL;
+	if (parentName != NULL)
+	    {
+	    hel = hashLookup(trackHash, parentName);
+	    }
+	if (parentName == NULL || hel != NULL)
+	    {
+	    slAddHead(&nonOrphanList, tdb);
+	    }
+	else
+	    {
+	    verbose(3,"pruneOrhans: removing '%s'\n",
+		tdb->tableName);
+	    hashRemove(trackHash, tdb->tableName);
+	    done = FALSE;
+	    }
+	}
+    tdbList = nonOrphanList;
+    }
+return tdbList;
 }
 
 static void applyOverride(struct hash *trackHash,
                           struct trackDb *overTd)
-/* apply a trackDb override to a track, if it exists */
+/* Apply a trackDb override to a track, if it exists */
 {
 struct trackDb *tdb = hashFindVal(trackHash, overTd->tableName);
 if (tdb != NULL)
@@ -220,21 +215,17 @@ static void addVersionRa(boolean strict, char *database, char *dirName, char *ra
  * top-down so that track override will work. */
 {
 struct trackDb *tdbList = trackDbFromRa(raName), *tdb;
+/* prune records of the incorrect release */
+tdbList= pruneRelease(tdbList);
 
 /* load tracks, replacing higher-level ones with lower-level and
  * applying overrides*/
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     if (tdb->overrides != NULL)
-        applyOverride(trackHash, tdb);
+	applyOverride(trackHash, tdb);
     else
-	{
-	struct hashEl *hel = hashLookup(trackHash, tdb->tableName);
-	if (hel != NULL)
-	    verbose(2,"addVersionRa: warning duplicate tableName: '%s'\n",
-		tdb->tableName);
-	hashAdd(trackHash, tdb->tableName, tdb);
-	}
+	hashStore(trackHash, tdb->tableName)->val = tdb;
     }
 }
 
@@ -310,7 +301,7 @@ for (td = tdbList; td != NULL; td = td->next)
     {
     if (isEmpty(td->html))
         {
-        char *htmlName = trackDbSettingClosestToHome(td, "html");
+        char *htmlName = trackDbSetting(td, "html");
         if (htmlName == NULL)
             htmlName = td->tableName;
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
@@ -473,7 +464,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 }
 
 static void checkSubGroups(struct trackDb *tdbList)
-/* check integrity of subGroup clauses */
+/* Check integrity of subGroup clauses */
 {
 struct hash *compositeHash = buildCompositeHash(tdbList);
 
@@ -482,7 +473,7 @@ verifySubTracks(tdbList, compositeHash);
 
 
 static void prioritizeContainerItems(struct trackDb *tdbList)
-/* set priorities in containers if they have no priorities already set
+/* Set priorities in containers if they have no priorities already set
    priorities are based upon 'sortOrder' setting or else shortLabel */
 {
 int countOfSortedContainers = 0;
@@ -606,7 +597,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 static struct trackDb *buildTrackDb(char *org, char *database, char *hgRoot,
                                     char *visibilityRa, char *priorityRa,
                                     boolean strict)
-/* build trackDb objects from files. */
+/* Build trackDb objects from files. */
 {
 struct hash *trackHash = newHash(0);
 char rootDir[PATH_LEN], orgDir[PATH_LEN], asmDir[PATH_LEN];
@@ -618,7 +609,8 @@ safef(rootDir, sizeof(rootDir), "%s", hgRoot);
 safef(orgDir, sizeof(orgDir), "%s/%s", hgRoot, org);
 safef(asmDir, sizeof(asmDir), "%s/%s/%s", hgRoot, org, database);
 
-// must call these top-down
+/* Must call these top-down.
+ * Also prunes things not in our release. */
 layerOnRa(strict, database, rootDir, trackHash, TRUE);
 layerOnRa(strict, database, orgDir, trackHash, FALSE);
 layerOnRa(strict, database, asmDir, trackHash, FALSE);
@@ -630,10 +622,13 @@ if (priorityRa != NULL)
     trackDbOverridePriority(trackHash, priorityRa);
 #endif /* OLD */
 
-/* Represent as list as well as hash, and prune things not in our release from list. 
- * After this hash is no longer userful since it contains pruned things, so get rid of it. */
+/* Represent hash as list */
 struct trackDb *tdbList = trackDbListFromHash(trackHash);
-tdbList= pruneRelease(tdbList, trackHash);
+
+/* Get rid of orphans with no parent of the correct release. */
+tdbList = pruneOrphans(tdbList, trackHash);
+
+/* After this the hash is no longer needed, so get rid of it. */
 hashFree(&trackHash);
 
 /* Read in HTML bits onto what remains. */
