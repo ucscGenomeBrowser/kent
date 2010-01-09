@@ -11,3 +11,6 @@ hgTrackDb: $O
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgTrackDb $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/hgTrackDb${EXE}
 
+clean:
+        rm -f $O
+
