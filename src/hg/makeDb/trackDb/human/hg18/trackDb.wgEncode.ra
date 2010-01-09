@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.747 2010/01/08 18:23:23 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.748 2010/01/09 00:35:58 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5629,7 +5629,7 @@ wgEncode 1
     view UUNIQ
     visibility full
     subTrack wgEncodeMapability
-    viewLimits 0:1
+    viewLimits 0.1:0.55
     autoScale off
     windowingFunction mean
     maxHeightPixels 100:32:16
