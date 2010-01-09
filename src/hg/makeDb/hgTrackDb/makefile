@@ -12,5 +12,5 @@ hgTrackDb: $O
 #	${STRIP} ${BINDIR}/hgTrackDb${EXE}
 
 clean:
-        rm -f $O
+	rm -f $O
 
