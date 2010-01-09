@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.749 2010/01/09 21:07:39 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.750 2010/01/09 21:18:52 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -17399,7 +17399,7 @@ compositeTrack on
 shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
-subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HepG2=HepG2 HeLaS3=HeLa-S3 HFL11W=HFL11W HFL24W=HFL24W K562=K562
+subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 H1hESC=H1-hESC H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HepG2=HepG2 HeLaS3=HeLa-S3 HFL11W=HFL11W HFL24W=HFL24W K562=K562
 subGroup2 replicate Replicate 1=1 2=2
 dimensions dimensionX=replicate dimensionY=cellType
 sortOrder cellType=+ replicate=+
@@ -17411,6 +17411,26 @@ type bed 9
 nextItemButton on
 itemRgb on
 wgEncode 1
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H1-hESC 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in H1-hESC cells)
+    subGroups cellType=H1hESC replicate=2
+    type bed 9
+    color 0,107,27
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H1-hESC protocol=PCR1x restrictionEnzyme=None treatment=None view=Regions replicate=2 softwareVersion=SL659 dataVersion="ENCODE Jan 2010 Freeze" subId=887 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc.bed9.gz
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H1-hESC 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H1-hESC cells)
+    subGroups cellType=H1hESC replicate=1
+    type bed 9
+    color 0,107,27
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H1-hESC protocol=PCR2x restrictionEnzyme=None treatment=None view=Regions replicate=1 softwareVersion=SL605 dataVersion="ENCODE Jan 2010 Freeze" subId=887 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc.bed9.gz
 
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
