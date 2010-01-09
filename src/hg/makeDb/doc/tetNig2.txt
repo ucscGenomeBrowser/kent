@@ -81,6 +81,10 @@ taxId 99883
     hgsql -e "drop table rmsk;" tetNig2
     #	this leaves the interrupted repeats track showing on genome-test
 
+    # from the do.log:
+# Repeat masker version: June 4 2009 (open-3-2-8)
+# Library release 20090604
+
 ########################################################################
 # Simple Repeats (DONE - 2009-08-06 - Hiram)
     mkdir /hive/data/genomes/tetNig2/bed/simpleRepeat
@@ -755,4 +759,45 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+#  GAZE - predictions from Genoscope - (DONE - 2010-01-06 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/gaze
+    sed -e "s/ ; /\t/g; s/CDS G/G/;" \
+	../../genoscope/annotation_tetraodon_v8.2.gff > gaze.gff
+
+    ldHgGene -nobin -genePredExt tetNig2 genscan gaze.gff -out=gaze.gp
+Read 90337 transcripts in 284179 lines in 1 files
+  90337 groups 26 seqs 1 sources 4 feature types
+26681 gene predictions
+
+    hgLoadGenePred tetNig2 gaze gaze.gp
+
+    zcat ../../genoscope/Tetraodon_peptide_v8.2.fa.gz \
+	| sed -e "s/ assembled CDS//;" \
+	| ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+	| sed -e "s/*$//; s/^GSTENP/GSTENT/;" > gaze.pep.tab
+
+    hgPepPred tetNig2 tab gazePep gaze.pep.tab
+
+############################################################################
+# all.joiner update - (DONE - 2010-01-06,08 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=tetNig2 -all all.joiner
+
+    mkdir /hive/data/genomes/tetNig2/goldenPath
+    cd /hive/data/genomes/tetNig2/goldenPath
+    makeDownloads.pl tetNig2 > do.log 2>&1
+
+    #	now ready for pushQ entry
+    mkdir /hive/data/genomes/tetNig2/pushQ
+    cd /hive/data/genomes/tetNig2/pushQ
+    makePushQSql.pl tetNig2 > tetNig2.pushQ.sql 2> stderr.out
+    #	copy it to hgwbeta
+    scp -p tetNig2.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    hgsql qapushq < tetNig2.pushQ.sql
+    #	in that pushQ entry walk through each entry and see if the
+    #	sizes will set properly
 ############################################################################

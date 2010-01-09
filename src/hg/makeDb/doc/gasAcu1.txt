@@ -2771,6 +2771,13 @@ TMPDIR=/scratch/tmp
     cat fb.gasAcu1.chainTetNig2Link.txt
     #	134497679 bases of 446627861 (30.114%) in intersection
 
+    #	and finish the downloads
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=download > downloads.log 2>&1
+
     mkdir /hive/data/genomes/tetNig2/bed/blastz.gasAcu1.swap
     cd /hive/data/genomes/tetNig2/bed/blastz.gasAcu1.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
