@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.27 2009/08/29 00:29:26 galt Exp $
+# $Id: makePushQSql.pl,v 1.28 2010/01/09 00:07:01 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -249,10 +249,27 @@ sub getTrackDb {
     chomp;
     my ($tableName, $type, $shortLabel, $priority) = split("\t");
     my $otherTables = "";
-    if ($type =~ /^wigMaf/) {
-      my $settingsQuery = "select settings from trackDb " .
+    my $settingsQuery = "select settings from trackDb " .
 			    "where tableName = \\'$tableName\\'";
-      my $settings = `echo $settingsQuery | $sql`;
+    my $settings = `echo $settingsQuery | $sql`;
+# I don't know why this is, but the settings string comes back with
+# the newlines as explicit literal backslash and n instead of a real
+# newline \n character.  This sed will turn those two characters
+#	'\' and 'n' into the real \n newline character.
+    $settings =~ s#\\n#\n#g;
+# we are not using this settingHash yet, but may need it some day
+    my %settingHash;
+# now we can split the settings on newlines:
+    my @setNameValue = split('\n',$settings);
+
+    &HgAutomate::verbose(2, "settings for tableName '$tableName', type='$type'\n") if (scalar(@setNameValue) > 0);
+    for (my $i = 0; $i < scalar(@setNameValue); ++$i) {
+	# first space separates the tag and its value
+	my ($tag, $value) = split('\s', $setNameValue[$i], 2);
+	$settingHash{$tag} = $value;
+	&HgAutomate::verbose(2, "$i: $tag='$value'\n");
+    }
+    if ($type =~ /^wigMaf/) {
       if ($settings =~ /wiggle\s+(\w+)/) {
 	$otherTables .= " $1";
 	push @wigTables, $1;
@@ -337,11 +354,7 @@ sub getTrackEntries {
       if ($type =~ /^chain ?/) {
 	$entry{'tables'} .= " ${table}Link";
 	my $net = $table;
-	if ($prefixPattern) {
-	  $net =~ s/^${prefixPattern}chain/net/;
-	} else {
-	  $net =~ s/^chain/net/;
-	}
+	$net =~ s/^.*chain/net/;
 	# Lump in nets with chains, when we find them.
 	if (defined $allTables->{$net}) {
 	  &HgAutomate::verbose(2, "Lumping $net in with $table\n");
@@ -412,7 +425,7 @@ sub getTrackEntries {
       foreach my $t (split(" ", $entry{'tables'})) {
 	delete $allTables->{$t};
       }
-      &HgAutomate::verbose(3, "Deleted $entry{tables}\n");
+      &HgAutomate::verbose(3, "Deleted $entry{'tables'}\n");
       $trackEntries{$track} = \%entry;
     }
   }
@@ -533,7 +546,7 @@ sub printSwaps($) {
   my ($oO) = &HgAutomate::getAssemblyInfo($dbHost, $db);
   foreach my $oDb (@netODbs) {
     my %entry = ();
-    $entry{'shortLabel'} = "$oO Chain and Net";
+    $entry{'shortLabel'} = "$oO Chain/Net";
     $entry{'priority'} = 1;
     my $tableList = "";
     my $dbTables = &getAllTables($oDb);
@@ -557,7 +570,7 @@ sub printSwaps($) {
 			     "chain/net download $downloads !\n");
 	  }
       }
-    &printEntry(\%entry, $id, $oDb, "$oO Chain and Net");
+    &printEntry(\%entry, $id, $oDb, "$oO Chain/Net");
     ++$id;
     undef($dbTables);
     undef(%entry);
@@ -647,7 +660,9 @@ _EOF_
         Files go in the second field after tables (it's tables, cgis, files).
  *** 5. This script currently does not recognize composite tracks.  If $db
         has any composite tracks, you should manually merge the separate
-        per-table entries into one entry.
+        per-table entries into one entry.  The Chain/Net composites are taken
+        care of, and the beginning of handling composites is here but not used
+        yet.
  *** 6. Make sure that qapushq does not already have a table named $db:
           ssh hgwbeta hgsql -h mysqlbeta qapushq -NBe "'desc $db;'"
         You *should* see this error:
