@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.17 2009/12/10 15:02:12 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.18 2010/01/11 17:52:10 angie Exp $";
 
 char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -93,7 +93,11 @@ if (udcFuseRoot != NULL && afterProtocol != NULL)
 		}
 	    }
 	else
-	    errAbort("Failed to open BAM URL \"%s\" with udc", fileOrUrl);
+	    {
+	    warn("Failed to open BAM URL \"%s\" with udc", fileOrUrl);
+	    freeMem(bamFileName);
+	    return cloneString(fileOrUrl);
+	    }
 	}
     // Look for index file: xxx.bam.bai or xxx.bai.  Look for both in udcFuse,
     // and only open the URL with udc if neither udcFuse file exists.
@@ -124,12 +128,18 @@ if (udcFuseRoot != NULL && afterProtocol != NULL)
 		verbose(2, "going to call udcFileMayOpen(%s).\n", altIndexUrl);
 		udcf = udcFileMayOpen(altIndexUrl, NULL);
 		if (udcf == NULL)
-		    errAbort("Cannot find BAM index file (%s or %s)", indexUrl, altIndexUrl);
+		    {
+		    warn("Cannot find BAM index file (%s or %s)", indexUrl, altIndexUrl);
+		    return cloneString(fileOrUrl);
+		    }
 		udcFileClose(&udcf);
 		freeMem(altIndexUrl);
 		}
 	    else
-		errAbort("Cannot find BAM index file for \"%s\"", fileOrUrl);
+		{
+		warn("Cannot find BAM index file for \"%s\"", fileOrUrl);
+		return cloneString(fileOrUrl);
+		}
 	    freeMem(indexUrl);
 	    }
 	freeMem(altIndexFileName);
@@ -224,10 +234,10 @@ setCurrentDir(samDir);
 bam_index_t *idx = bam_index_load(bamFileName);
 setCurrentDir(runDir);
 if (idx == NULL)
-    errAbort("bam_index_load(%s) failed.", bamFileName);
+    warn("bam_index_load(%s) failed.", bamFileName);
 ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
 if (ret != 0)
-    errAbort("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+    warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
 free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
 samclose(fh);
 }
