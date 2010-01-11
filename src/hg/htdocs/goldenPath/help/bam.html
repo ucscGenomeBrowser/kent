@@ -47,15 +47,15 @@ The typical workflow for generating a BAM custom track is this:
 
 <OL>
   <LI>If you haven't done so already,
-      <A HREF="http://sourceforge.net/projects/samtools/files/" TARGET=_BLANK>download</A> 
-      and build the 
+      <A HREF="http://sourceforge.net/projects/samtools/files/" TARGET=_BLANK>
+      download</A> and build the 
       <A HREF="http://samtools.sourceforge.net/" TARGET=_BLANK>samtools</A>
       program.  Test your installation by running <TT>samtools</TT> with no
       command line arguments; it should print a brief usage message.
-  <LI>Align sequences using a tool that outputs SAM directly, or outputs a format
-      that can be converted to SAM.  (See 
-      <A HREF="http://samtools.sourceforge.net/swlist.shtml" TARGET=_BLANK>list of 
-      tools and converters</A>)</LI>
+  <LI>Align sequences using a tool that outputs SAM directly, or outputs a 
+      format that can be converted to SAM.  (See 
+      <A HREF="http://samtools.sourceforge.net/swlist.shtml" TARGET=_BLANK>
+      list of tools and converters</A>)</LI>
   <LI>Convert SAM to BAM using the samtools program:
 <PRE><TT>samtools view -S -b -o my.bam my.sam</TT></PRE>
       If converting a SAM file that does not have a proper header, the -t or -T
@@ -65,8 +65,8 @@ The typical workflow for generating a BAM custom track is this:
 <PRE><TT>samtools sort my.bam my.sorted
 samtools index my.sorted.bam</TT></PRE>
       That command generates a new file, my.sorted.bam.bai .</LI>
-  <LI>Move both the BAM file and index file (my.sorted.bam and my.sorted.bam.bai) to an 
-      http or ftp location.</LI>
+  <LI>Move both the BAM file and index file (my.sorted.bam and 
+      my.sorted.bam.bai) to an http or ftp location.</LI>
   <LI>Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
       using a single 
       <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
@@ -74,10 +74,11 @@ samtools index my.sorted.bam</TT></PRE>
       like this:
 <PRE><TT>track type=bam name="My BAM" bigDataUrl=<EM>http://myorg.edu/mylab/my.sorted.bam</EM></TT></PRE>
       Again, in addition to <EM>http://myorg.edu/mylab/my.sorted.bam</EM>, the associated index
-      file <EM>http://myorg.edu/mylab/my.sorted.bam.bai</EM> must also be available.</LI>
+      file <EM>http://myorg.edu/mylab/my.sorted.bam.bai</EM> must also be 
+      available.</LI>
   <LI>Paste the custom track line into the text box in the 
-      <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>, 
-      click submit and view in the Genome Browser.</LI>
+      <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track 
+      management page</A>, click submit and view in the Genome Browser.</LI>
 </OL>
 </P>
 
@@ -85,14 +86,19 @@ samtools index my.sorted.bam</TT></PRE>
 <P>
 All options are placed in a single line separated by spaces (lines are broken 
 only for readability here):
-<PRE>  <B>track type=bam bigDataUrl=</B><EM>http://...</EM>
-<B>        pairEndsByName=</B><EM>.</EM> <B>pairSearchRange=</B><EM>N</EM>
-<B>        bamColorMode=</B><EM>strand|gray|tag|off</EM> <B>bamGrayMode=</B><EM>aliQual|baseQual|unpaired</EM>
-<B>        bamColorTag=</B><EM>XX</EM> <B>minAliQual=</B><EM>N</EM>
-<B>        name=</B><EM>track_label</EM> <B>description=</B><EM>center_label</EM> <B>visibility=</B><EM>display_mode</EM> <B>priority=</B><EM>priority</EM>
-<B>        db=</B><EM>db</EM> <B>maxWindowToDraw=</B><EM>N</EM> <B>chromosomes=</B><EM>chr1,chr2,...</EM>
+<PRE>
+  <B>track type=bam bigDataUrl=</B><EM>http://...</EM>
+     <B>pairEndsByName=</B><EM>.</EM> <B>pairSearchRange=</B><EM>N</EM>
+     <B>bamColorMode=</B><EM>strand|gray|tag|off</EM> 
+     <B>bamGrayMode=</B><EM>aliQual|baseQual|unpaired</EM>
+     <B>bamColorTag=</B><EM>XX</EM> <B>minAliQual=</B><EM>N</EM>
+     <B>name=</B><EM>track_label</EM> <B>description=</B><EM>center_label</EM> 
+     <B>visibility=</B><EM>display_mode</EM> <B>priority=</B><EM>priority</EM>
+     <B>db=</B><EM>db</EM> <B>maxWindowToDraw=</B><EM>N</EM> 
+     <B>chromosomes=</B><EM>chr1,chr2,...</EM>
 </PRE></P>
-<P>(Note if you copy/paste the above example, you have to remove the line breaks.)</P>
+<P>(Note if you copy/paste the above example, you must remove the line breaks.)
+</P>
 <P>
 The track type and bigDataUrl are REQUIRED:
 <PRE>  <B>type=bam bigDataUrl=</B><EM>http://myorg.edu/mylab/my.sorted.bam</EM></B></PRE>
@@ -123,14 +129,15 @@ in more detail.</P>
 <P>
 <TT>pairSearchRange</TT> applies only when <TT>pairEndsByName</TT> is given.  
 It allows for a tradeoff of display speed vs. completeness of 
-pairing the paired-end alignments.  When paired ends are split or separated by large 
-gaps or introns, but one is viewing a small genomic region, it is necessary to search 
-a large number of bases upstream and downstream of the viewed region in order to find 
-mates of the alignments in the viewed region.  However, searching a very large region 
-can be slow, especially when the alignments have deep coverage of the genome.  
-To ensure that all properly paired mates will be found, <TT>pairSearchRange</TT> 
-should be set to the largest genomic size of a mapped pair.  However, it can be set to 
-a smaller size if necessary to speed up the display, at the cost of some items being 
+pairing the paired-end alignments.  When paired ends are split or separated 
+by large gaps or introns, but one is viewing a small genomic region, it is 
+necessary to search a large number of bases upstream and downstream of the 
+viewed region in order to find mates of the alignments in the viewed region.  
+However, searching a very large region can be slow, especially when the 
+alignments have deep coverage of the genome.  To ensure that all properly 
+paired mates will be found, <TT>pairSearchRange</TT> should be set to the 
+largest genomic size of a mapped pair.  However, it can be set to a smaller 
+size if necessary to speed up the display, at the cost of some items being 
 displayed as unpaired when the mate is too far outside the viewed window.
 </P>
 
@@ -138,25 +145,25 @@ displayed as unpaired when the mate is too far outside the viewed window.
 <P></P>
 <H3>Example One</H3>
 <P>
-In this example, you will create a custom track for an indexed BAM file that is already 
-on a public server -- alignments of sequence generated by the 
+In this example, you will create a custom track for an indexed BAM file that 
+is already on a public server &mdash; alignments of sequence generated by the 
 <A HREF="http://1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>.  
-The line breaks inserted here for readability must be removed before submitting the 
-track line:
+The line breaks inserted here for readability must be removed before submitting
+the track line:
 <PRE><TT>track type=bam name="BAM Example One" description="Bam Ex. 1: 1000 Genomes read alignments (individual NA12878)"
     pairEndsByName=. pairSearchRange=10000 chromosomes=chr21 bamColorMode=gray maxWindowToDraw=200000
     db=hg18 visibility=pack
     bigDataUrl=http://hgwdev.cse.ucsc.edu/goldenPath/help/bamExample.bam
 </TT></PRE>
-<P>Include the following &quot;browser&quot; line to view a small region of chromosome 21 with alignments from the .bam file:</P>
+<P>Include the following &quot;browser&quot; line to view a small region of 
+chromosome 21 with alignments from the .bam file:</P>
 
 <TT>browser position chr21:33,038,946-33,039,092</TT>
 
 <P>Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
-<A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A> for the
-human assembly hg18 (May 2006), 
-remove the extra line breaks from the track line above, 
-then press the <EM>submit</EM> button.
+<A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>
+for the human assembly hg18 (May 2006), remove the extra line breaks from the 
+track line above, then press the <EM>submit</EM> button.
 On the following page, press the <EM>chr21</EM> link in the custom track
 listing to view the BAM track in the Genome Browser.</P>
 
@@ -170,11 +177,11 @@ Perform steps 1 and 3-7 in the workflow described above, but substituting
 <TT>samExample.sam</TT> for <TT>my.sam</TT>.  On the 
 <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>, 
 click the &quot;add custom tracks&quot; button if necessary and 
-make sure that the genome is set to Human and the assembly is set to Mar. 2006 (hg18)
-before pasting the track line and submitting.
-This track line is a little nicer 
-than the one shown in step 6, but remember to remove the line breaks that have
-been added to the track line for readability:
+make sure that the genome is set to Human and the assembly is set to Mar. 
+2006 (hg18) before pasting the track line and submitting.
+This track line is a little nicer than the one shown in step 6, but remember 
+to remove the line breaks that have been added to the track line for 
+readability:
 <PRE><TT>track type=bam name="BAM Example Two" bigDataUrl=<EM>http://myorg.edu/mylab/my.sorted.bam</EM>
     description="Bam Ex. 2: Simulated RNA-seq read alignments" visibility=squish
     db=hg18 chromosomes=chr21
