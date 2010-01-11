@@ -1,6 +1,6 @@
-# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
+# Data Agreement File for Yale ChipSeq project  $Revision: 1.2 $
 
-# This file specifies the data agreement between your lab and 
+# This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
  # Lab and general info
@@ -12,7 +12,7 @@
  dafVersion        1.1
  dataVersion       1
  medianFragmentLength 200
- validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch
+ validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=32
 
 # # Track/view definition
  view             Signal
@@ -24,10 +24,10 @@
  view             Alignments
  longLabelPrefix  TFBS, Yale/UCD/Harvard ChIP-seq Alignments
  type             tagAlign
- hasReplicates    no
+ hasReplicates    yes
  required         yes
 
  view             RawData
  type             fastq
- hasReplicates    no
+ hasReplicates    yes
  required         yes
