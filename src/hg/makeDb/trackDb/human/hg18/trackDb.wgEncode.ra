@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.750 2010/01/09 21:18:52 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.751 2010/01/11 19:38:46 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6745,7 +6745,7 @@ longLabel ENCODE UW Affy All-Exon Arrays
 group expression
 subGroup1 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> BJ=BJ Caco2=Caco-2 GM06990=GM06990 HMEC=HMEC HRCEpiC=HRCEpiC HRE=HRE Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 subGroup2 rep Replicate rep1=1 rep2=2
-dimensions dimensionX=cellType dimensionY=rep
+dimensions dimensionX=rep dimensionY=cellType 
 boxedCfg on
 sortOrder cellType=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell
@@ -6755,6 +6755,16 @@ canPack On
 priority 0
 type broadPeak
 wgEncode 1
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep2Skmc
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel SKMC 2
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SKMC cells)
+    subGroups cellType=SKMC rep=rep2
+    type broadPeak
+    accession GSM472911
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SKMC accession=GSM472911 view=SimpleSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=972 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Skmc fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Skmc.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Bjtert
     release alpha
