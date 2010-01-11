@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.13 2009/12/10 15:02:12 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.14 2010/01/11 18:34:25 angie Exp $";
 
 #include "bamFile.h"
 
@@ -95,6 +95,17 @@ if ((rightStart > leftStart && leftStart + leftLen > rightStart) ||
 static void bamPairDetails(const bam1_t *leftBam, const bam1_t *rightBam)
 /* Print out details for paired-end reads. */
 {
+if (leftBam && rightBam)
+    {
+    const bam1_core_t *leftCore = &leftBam->core, *rightCore = &rightBam->core;
+    int leftLength = bamGetTargetLength(leftBam), rightLength = bamGetTargetLength(rightBam);
+    int start = min(leftCore->pos, rightCore->pos);
+    int end = max(leftCore->pos+leftLength, rightCore->pos+rightLength);
+    char *itemName = bam1_qname(leftBam);
+    printf("<B>Paired read name:</B> %s<BR>\n", itemName);
+    printPosOnChrom(seqName, start, end, NULL, FALSE, itemName);
+    puts("<P>");
+    }
 showOverlap(leftBam, rightBam);
 printf("<TABLE><TR><TD><H4>Left end read</H4>\n");
 singleBamDetails(leftBam);
@@ -115,7 +126,10 @@ if (sameString(bam1_qname(bam), btd->itemName))
     if (btd->pairHash == NULL || (core->flag & BAM_FPAIRED) == 0)
 	{
 	if (core->pos == btd->itemStart)
+	    {
+	    printf("<B>Read name:</B> %s<BR>\n", btd->itemName);
 	    singleBamDetails(bam);
+	    }
 	}
     else
 	{
@@ -181,6 +195,8 @@ if (isPaired)
 	    printf("<B>Note: </B>unable to find paired end for %s "
 		   "within +-%d bases of viewing window %s<BR>\n",
 		   item, pairSearchRange, addCommasToPos(database, cartString(cart, "position")));
+	else
+	    printf("<B>Paired read name:</B> %s<BR>\n", item);
 	singleBamDetails(bam);
 	}
     }
