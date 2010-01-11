@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.177 2010/01/09 00:32:56 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.178 2010/01/11 17:30:58 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -441,6 +441,76 @@ termId BTO:0001522 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
 tier 3
 protocol GM12801_Stam_protocol.pdf
+
+term GM12864
+tag GM12864
+type Cell Line
+organism Human
+description B-Lymphocyte (provisional)
+karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
+vendorName Coriell
+vendorId GM12864
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+#protocol GM12864_Stam_protocol.pdf
+
+term GM12865
+tag GM12865
+type Cell Line
+organism Human
+description B-Lymphocyte (provisional)
+karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
+vendorName Coriell
+vendorId GM12865
+orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+#protocol GM12865_Stam_protocol.pdf
+
+term GM12873
+tag GM12873
+type Cell Line
+organism Human
+description B-Lymphocyte (provisional)
+karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
+vendorName Coriell
+vendorId GM12873
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+#protocol GM12873_Stam_protocol.pdf
+
+term GM12874
+tag GM12874
+type Cell Line
+organism Human
+description B-Lymphocyte (provisional)
+karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
+vendorName Coriell
+vendorId GM12874
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+#protocol GM12874_Stam_protocol.pdf
+
+term GM12875
+tag GM12875
+type Cell Line
+organism Human
+description B-Lymphocyte (provisional)
+karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
+vendorName Coriell
+vendorId GM12875
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+#protocol GM12875_Stam_protocol.pdf
 
 term GM12891
 tag GM12891
@@ -1419,6 +1489,7 @@ type Gene Type
 description pseudogene
 
 #### Antibodies
+
 term AP-2alpha
 tag AP2alpha
 type Antibody
@@ -1442,6 +1513,18 @@ orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
 targetId GeneCard:GC20P054637
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C&search=TFAP2C_id=GC20P054637
+
+term ATF3
+tag ATF3
+type Antibody
+antibodyDescription Activating transcription factor 3
+ targetDescription A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
+orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-188
+lab Struhl
+targetId GeneCard:GC01P210805
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P210805
 
 term BAF155
 tag BAF155
@@ -1760,6 +1843,18 @@ lots A2508, E1908
 targetId GeneCard:GC04M149219
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
 
+term GTF2B
+tag GTF2B
+type Antibody
+antibodyDescription rabbit polyclonal IgG, 200 µg/ml. epitope mapping near the C-terminus of TFIIB of human origin.
+targetDescription DNA- binding general transcription factor
+orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-225
+lab Struhl
+targetId GeneCard:GC01M089030
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M089030
+
 term H3K4me1
 tag H3K4me1
 type Antibody
@@ -1975,6 +2070,18 @@ orderUrl http://www.scbt.com/product.php?datasheet=197
 lab Snyder
 targetId GeneCard:GC14M064542
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
+
+term NELFe
+tag NELFE
+type Antibody
+ antibodyDescription NELFe (RDBP)
+targetDescription NELFe (RDBP) is a part of the negative elongation factor complex which binds to RNAPII to suppress elongation.
+orderUrl http://www.scbt.com/datasheet-32912-nelf-e-h-140-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-32912
+lab Struhl
+targetId GeneCard:GC06M032027
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC06M032027
 
 term NF-E2
 tag NFE2
@@ -2473,6 +2580,18 @@ lots 060729QCS1
 targetId GeneCard:GC19P063386
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
 
+term ZZZ3
+tag ZZZ3
+type Antibody
+antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW)
+targetDescription ZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
+orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
+vendorName Lazlo Tora, Institut de Génétique et de Biologie Moléculaire et Cellulaire
+lab Struhl
+Lots NP_056349
+targetId GeneCard:GC01M077742
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
+
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
@@ -2839,7 +2958,7 @@ description Control signal from Naked DNA.
 term Rabbit_IgG
 tag RABIGG
 type control
-description Control signal from normal rabbit IgG ChIP-seq.
+description Control signal from normal Rabbit IgG ChIP-seq.
 
 term Reference_Genome
 tag ReferenceGenome
