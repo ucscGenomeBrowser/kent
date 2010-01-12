@@ -10,7 +10,7 @@ table simpleRepeat
    uint   consensusSize;	"Length of consensus sequence"
    uint   perMatch;  	"Percentage Match"
    uint   perIndel;  	"Percentage Indel"
-   uint   score; 	"Score between  and .  Best is ."
+   uint   score; 	"Alignment Score = 2*match-7*mismatch-7*indel; minscore=50"
    uint   A;  	"Percent of A's in repeat unit"
    uint   C;  	"Percent of C's in repeat unit"
    uint   G;  	"Percent of G's in repeat unit"

@@ -15,7 +15,7 @@ CREATE TABLE simpleRepeat (
     consensusSize int unsigned not null,	# Length of consensus sequence
     perMatch int unsigned not null,	# Percentage Match
     perIndel int unsigned not null,	# Percentage Indel
-    score int unsigned not null,	# Score between  and .  Best is .
+    score int unsigned not null,	# Alignment Score = 2*match-7*mismatch-7*indel; minscore=50
     A int unsigned not null,	# Number of A's in repeat unit
     C int unsigned not null,	# Number of C's in repeat unit
     G int unsigned not null,	# Number of G's in repeat unit
