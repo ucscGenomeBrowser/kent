@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.448 2010/01/08 18:52:36 katrina Exp $";
+#	"$Id: trackDb.ra,v 1.449 2010/01/12 21:09:19 fanhsu Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -419,6 +419,16 @@ hgsid on
 oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
 
 track pgSnpHgwdev
 compositeTrack on
@@ -2790,7 +2800,6 @@ searchMethod exact
 shortCircuit 1
 termRegex IGS.+
 searchPriority 50
-
 
 track vegaGeneComposite
 compositeTrack on
