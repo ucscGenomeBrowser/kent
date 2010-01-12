@@ -43,8 +43,9 @@ if ( $go != "go" ) then
 endif 
 
 # echo "testing \n \n sending only to ann and bob right now \n \n "  > Bfile
-echo "greetings. \n\n  you have content in the B-queue that someone should look at." > Bfile
-echo "  this is a periodic reminder from a QA cronjob.\n" >> Bfile
+echo "greetings. \n" > Bfile
+echo "  this is a periodic reminder from a QA cronjob." >> Bfile
+echo "  you have content in the B-queue that someone should look at." >> Bfile
 echo "\n  usually a track is in the B-queue because QA is expecting something" >> Bfile
 echo "  from the dev crew.\n" >> Bfile
 hgsql -h $sqlbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
@@ -80,6 +81,7 @@ foreach i ( $counter )
     # set contacts="ann kuhn pauline rhead kayla"
     # set contacts="pauline rhead ann kayla"
     echo "   contacts $contacts"
+    cat Bfile 
   endif 
 end
 

@@ -65,8 +65,11 @@ set uniq=`hgsql -N -h $sqlrr -e 'SELECT COUNT(DISTINCT(userName)) \
   FROM namedSessionDb' hgcentral`
 echo "uniq " "-" "$uniq" \
   | awk '{printf ("%7s %4s %5s \n", $1, $2, $3)}'
-echo
 
+echo "------  ----- ----- -------  -------"
+echo " first  count users  shared   reused  "
+
+echo
 # see how often people make more than one session:
 echo "how many people had more than one session?"
 echo " people sessions"
