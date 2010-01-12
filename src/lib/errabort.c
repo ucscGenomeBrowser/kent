@@ -15,9 +15,12 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.15 2009/06/07 07:13:37 markd Exp $";
+static char const rcsid[] = "$Id: errabort.c,v 1.16 2010/01/12 18:16:27 markd Exp $";
 
 static boolean debugPushPopErr = FALSE; // generate stack dump on push/pop error
+boolean errAbortInProgress = FALSE;  /* Flag to indicate that an error abort is in progress.
+                                      * Needed so that a warn handler can tell if it's really
+                                      * being called because of a warning or an error. */
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
@@ -108,6 +111,12 @@ exit(-1);		/* This is just to make compiler happy.
 void vaErrAbort(char *format, va_list args)
 /* Abort function, with optional (vprintf formatted) error message. */
 {
+/* flag is needed because both errAbort and warn generate message
+ * using the warn handler, however sometimes one needed to know
+ * (like when logging), if it's an error or a warning.  This is far from
+ * perfect, as this isn't cleared if the error handler continues, 
+ * as with an exception mechanism. */
+errAbortInProgress = TRUE;
 vaWarn(format, args);
 noWarnAbort();
 }
