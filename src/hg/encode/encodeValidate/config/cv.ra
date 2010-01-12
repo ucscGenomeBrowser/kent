@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.179 2010/01/12 18:19:47 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.180 2010/01/12 20:58:45 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -181,22 +181,22 @@ protocol A549_protocol.pdf
 term AG04449
 tag AG04449
 type Cell Line
-description Fetal Buttock/Thigh Fibroblast (provisional)
+description Fetal Buttock/Thigh Fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
 tier 3
-#protocol AG04449_Stam_protocol.pdf
+protocol AG04449_Stam_protocol.pdf
 
 term AG04450
 tag AG04450
 type Cell Line
-description Fetal Lung Fibroblast (provisional)
+description Fetal Lung Fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
 tier 3
-#protocol AG04450_Stam_protocol.pdf
+protocol AG04450_Stam_protocol.pdf
 
 term AG09309
 tag AG09309
@@ -211,12 +211,12 @@ protocol AG09309_Stam_protocol.pdf
 term AG09319
 tag AG09319
 type Cell Line
-description Adult Toe Fibroblast (provisional)
+description Adult Toe Fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
 tier 3
-#protocol AG09319_Stam_protocol.pdf
+protocol AG09319_Stam_protocol.pdf
 
 term AG10803
 tag AG10803
@@ -686,12 +686,12 @@ protocol GM19240_Crawford_protocol.pdf
 term H7-hESC
 tag H7es
 type Cell Line
-description Undifferentiated human embryonic stem cells (provisional)
+description Undifferentiated human embryonic stem cells
 vendorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 tier 3
-#protocol H7-hESC_Stam_protocol.pdf
+protocol H7-hESC_Stam_protocol.pdf
 
 term H9ES
 tag H9ES
@@ -787,12 +787,12 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term HAEpiC
 tag HAE
 type Cell Line
-description Human amniotic epithelial cells (provisional)
+description Human amniotic epithelial cells
 vendorName ScienCell
 vendorId 7100
 orderUrl http://www.sciencellonline.com/site/products/7100.php
 tier 3
-#protocol HAEpiC_Stam_protocol.pdf
+protocol HAEpiC_Stam_protocol.pdf
 
 term HAL
 tag HAL
@@ -820,12 +820,12 @@ protocol HCF_Stam_protocol.pdf
 term HCM
 tag HCM
 type Cell Line
-description Human Cardiac Myocytes (provisional)
+description Human Cardiac Myocytes
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/products/6200.php
 tier 3
-#protocol HCM_Stam_protocol.pdf
+protocol HCM_Stam_protocol.pdf
 
 term HCPEpiC
 tag HCPE
@@ -855,12 +855,12 @@ protocol HCT-116_protocol.pdf
 term HEEpiC
 tag HEE
 type Cell Line
-description Human esophageal epithelial cells (provisional)
+description Human esophageal epithelial cells
 vendorName ScienCell
 vendorId 2700
 orderUrl http://www.sciencellonline.com/site/products/2700.php
 tier 3
-#protocol HEEpiC_Stam_protocol.pdf
+protocol HEEpiC_Stam_protocol.pdf
 
 term HEK293
 tag HEK293
@@ -930,12 +930,12 @@ protocol HGF_Stam_protocol.pdf
 term HIPEpiC
 tag HIPE
 type Cell Line
-description Human iris pigment epithelial cells (provisional)
+description Human iris pigment epithelial cells
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/products/6560.php
 tier 3
-#protocol HIPEpiC_Stam_protocol.pdf
+protocol HIPEpiC_Stam_protocol.pdf
 
 term HL-60
 tag HL60
@@ -1010,12 +1010,12 @@ protocol HRE_Stam_protocol.pdf
 term HRPEpiC
 tag HRPE
 type Cell Line
-description Human retinal pigment epithelial cells (provisional)
+description Human retinal pigment epithelial cells
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/products/6540.php
 tier 3
-#protocol HRPEpiC_Stam_protocol.pdf
+protocol HRPEpiC_Stam_protocol.pdf
 
 term HSMM
 tag HSMM
@@ -1205,8 +1205,7 @@ karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161&termName=lung%20fibroblast%20cell%20line
 tier 3
-protocol Bernstein:NHLF_Bernstein_protocol.pdf Stam:pending...
-#protocol Bernstein:NHLF_Bernstein_protocol.pdf Stam:NHLF_Stam_protocol.pdf
+protocol Bernstein:NHLF_Bernstein_protocol.pdf Stam:NHLF_Stam_protocol.pdf
 
 term NT2-D1
 tag NT2D1
