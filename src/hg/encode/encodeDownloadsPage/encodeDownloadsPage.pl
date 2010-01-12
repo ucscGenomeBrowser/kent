@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.21 2009/11/02 19:48:55 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.22 2010/01/12 03:02:20 kate Exp $
 
 use warnings;
 use strict;
@@ -32,11 +32,13 @@ use vars qw/
     $opt_verbose
     /;
 
+our $checksumFile = "md5sum.txt";
+
 sub usage {
     print STDERR <<END;
 usage: hgEncodeDownloads.pl {index.html} [downloads-dir]
 
-Creates the an HTML page listing the downloads in the current directory or optional directory
+Creates an HTML page and README text file listing the downloads in the current directory or optional directory.
 
 options:
     -help               Displays this usage info
@@ -296,6 +298,7 @@ my @fileList = `ls -hogL  --time-style=long-iso $downloadsDir/$fileMask 2> /dev/
 if(length(@fileList) == 0) {
     die ("ERROR; No files were found in \'$downloadsDir\' that match \'$fileMask\'.\n");
 }
+my @files;      # Stripped down to filenames, for checksumming
 
 # TODO determine whether we should even look this up
 $opt_db = "hg18" if(!defined $opt_db);
@@ -325,6 +328,7 @@ for my $line (@fileList) {
 #print OUT_FILE join ' ', @file,"\n";
     my @path = split('/', $file[5]);    # split on /
     my $fileName = $path[$#path]; # Last element
+    push @files, $fileName;
     my $tableName = "";
     my $dataType  = "";
     ### Special case for Elnitski BiPs !!!
@@ -499,7 +503,15 @@ print OUT_FILE "</TABLE>\n";
 
 htmlEndPage(*OUT_FILE);
 
+# create file of checksums
+open STDOUT, ">$checksumFile" or die "Cannot open $checksumFile file";
+foreach my $file (@files) {
+    system("md5sum", $file);
+}
+close STDOUT;
+
 chdir $downloadsDir;
 chmod 0775, $indexHtml;
+chmod 0775, $checksumFile;
 
 exit 0;
