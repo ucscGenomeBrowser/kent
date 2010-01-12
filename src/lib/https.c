@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "common.h"
 #include "errabort.h"
 
 int netMustConnectHttps(char *hostName, int port)
