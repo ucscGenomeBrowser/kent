@@ -17,6 +17,10 @@ void logOpenFile(char* program, char *logFile);
  * are added, they should call logErrorVa(). 
  */
 
+void logSetMinPriority(char *minPriority);
+/* set minimum priority to log, which is one of the syslog priority names,
+ * even when logging to a file */
+
 FILE *logGetFile();
 /* Returns the log FILE object if file logging is enabled, or NULL if it
  * isn't. This is useful for logging debugging data that doesn't fit the log

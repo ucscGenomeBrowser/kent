@@ -13,18 +13,22 @@
 #endif
 #include <time.h>
 
-static char const rcsid[] = "$Id: log.c,v 1.9 2008/09/17 17:56:37 kent Exp $";
+static char const rcsid[] = "$Id: log.c,v 1.10 2010/01/12 09:06:24 markd Exp $";
 
 static char *gProgram = "unknown";  /* name of program */
 static boolean gSysLogOn = FALSE;   /* syslog logging enabled? */
 static FILE *gLogFh = NULL;         /* logging file */
 
+struct nameVal
+/* pair of string name and integer value */
+{
+    char *name;
+    int val;
+};
+
 #ifndef NO_SYSLOG
 
-static struct {
-    char *name;   /* string name for facility */
-    int   fac;    /* integer value */
-} facilityNameTbl[] =
+static struct nameVal facilityNameTbl[] =
 /* not all version of syslog have the facilitynames table, so  define our own */
 {
     {"auth",         LOG_AUTH},
@@ -57,11 +61,67 @@ static struct {
 };
 #endif
 
+/* Priority numbers and names used for setting minimum priority to log.  This
+ * is kept independent of syslog, so it works on file logging too.  */
+#define	PRI_EMERG	0
+#define	PRI_ALERT	1
+#define	PRI_CRIT	2
+#define	PRI_ERR		3
+#define	PRI_WARNING	4
+#define	PRI_NOTICE	5
+#define	PRI_INFO	6
+#define	PRI_DEBUG	7
+
+static struct nameVal priorityNameTbl[] = {
+    {"panic", PRI_EMERG},
+    {"emerg", PRI_EMERG},
+    {"alert", PRI_ALERT},
+    {"crit", PRI_CRIT},
+    {"err", PRI_ERR},
+    {"error", PRI_ERR},
+    {"warn", PRI_WARNING},
+    {"warning", PRI_WARNING},
+    {"notice", PRI_NOTICE},
+    {"info", PRI_INFO},
+    {"debug", PRI_DEBUG},
+    {NULL, -1}
+    };
+
+static int gMinPriority = PRI_INFO;  // minimum priority to log (reverse numbering)
+
+static int nameValTblFind(struct nameVal *tbl, char *name)
+/* search a nameVal table, return -1 if not found */
+{
+int i;
+for (i = 0; tbl[i].name != NULL; i++)
+    {
+    if (sameString(tbl[i].name, name))
+        return tbl[i].val;
+    }
+return -1;
+}
+
+static char *nameValTblMsg(struct nameVal *tbl)
+/* generate a message for values in table */
+{
+struct dyString *msg = dyStringNew(256);
+int i;
+for (i = 0; tbl[i].name != NULL; i++)
+    {
+    if (i > 0)
+        dyStringAppend(msg, ", ");
+    dyStringAppend(msg, tbl[i].name);
+    }
+return dyStringCannibalize(&msg);
+}
+
 static void logWarnHander(char *format, va_list args)
 /* Warn handler that logs message. */
 {
-/* use logError, since errAbort and warn all print through warn handler */
-logErrorVa(format, args);
+if (errAbortInProgress)
+    logErrorVa(format, args);
+else
+    logWarnVa(format, args);
 }
 
 static void logAbortHandler()
@@ -89,28 +149,25 @@ if (ext[0] != '\0')
 static int parseFacility(char *facility)
 /* parse a facility name into a number, or use default if NULL. */
 {
-int i;
-struct dyString *msg;
 if (facility == NULL)
     return LOG_LOCAL0;
-for (i = 0; facilityNameTbl[i].name != NULL; i++)
-    {
-    if (sameString(facilityNameTbl[i].name, facility))
-        return facilityNameTbl[i].fac;
-    }
-msg = dyStringNew(256);
-
-for (i = 0; facilityNameTbl[i].name != NULL; i++)
-    {
-    if (i > 0)
-        dyStringAppend(msg, ", ");
-    dyStringAppend(msg, facilityNameTbl[i].name);
-    }
-
-errAbort("invalid log facility: %s, expected one of: %s", facility, msg->string);
-return 0; /* never reached */
+int val = nameValTblFind(facilityNameTbl, facility);
+if (val < 0)
+    errAbort("invalid log facility: %s, expected one of: %s", facility, nameValTblMsg(facilityNameTbl));
+return val;
 }
 #endif
+
+static int parsePriority(char *pri)
+/* parse a priority name into a number, or use default if NULL. */
+{
+if (pri == NULL)
+    return PRI_INFO;
+int val = nameValTblFind(priorityNameTbl, pri);
+if (val < 0)
+    errAbort("invalid log priority: %s, expected one of: %s", pri, nameValTblMsg(priorityNameTbl));
+return val;
+}
 
 void logOpenSyslog(char* program, char *facility)
 /* Initialize syslog using the specified facility.  Facility is the syslog
@@ -142,6 +199,13 @@ pushWarnHandler(logWarnHander);
 pushAbortHandler(logAbortHandler);
 }
 
+void logSetMinPriority(char *minPriority)
+/* set minimum priority to log, which is one of the syslog priority names,
+ * even when logging to a file */
+{
+gMinPriority = parsePriority(minPriority);
+}
+
 FILE *logGetFile()
 /* Returns the log FILE object if file logging is enabled, or NULL if it
  * isn't. This is useful for logging debugging data that doesn't fit the log
@@ -166,12 +230,15 @@ fflush(gLogFh);
 void logErrorVa(char *format, va_list args)
 /* Variable args logError. */
 {
+if (gMinPriority >= PRI_ERR)
+    {
 #ifndef NO_SYSLOG
-if (gSysLogOn)
-    vsyslog(LOG_ERR, format, args);
+    if (gSysLogOn)
+        vsyslog(LOG_ERR, format, args);
 #endif
-if (gLogFh != NULL)
-    logFilePrint("error", format, args);
+    if (gLogFh != NULL)
+        logFilePrint("error", format, args);
+    }
 }
 
 void logError(char *format, ...)
@@ -186,12 +253,15 @@ va_end(args);
 void logWarnVa(char *format, va_list args)
 /* Variable args logWarn. */
 {
+if (gMinPriority >= PRI_WARNING)
+    {
 #ifndef NO_SYSLOG
-if (gSysLogOn)
-    vsyslog(LOG_WARNING, format, args);
+    if (gSysLogOn)
+        vsyslog(LOG_WARNING, format, args);
 #endif
-if (gLogFh != NULL)
-    logFilePrint("warn", format, args);
+    if (gLogFh != NULL)
+        logFilePrint("warn", format, args);
+    }
 }
 
 void logWarn(char *format, ...)
@@ -206,12 +276,15 @@ va_end(args);
 void logInfoVa(char *format, va_list args)
 /* Variable args logInfo. */
 {
+if (gMinPriority >= PRI_INFO)
+    {
 #ifndef NO_SYSLOG
-if (gSysLogOn)
-    vsyslog(LOG_INFO, format, args);
+    if (gSysLogOn)
+        vsyslog(LOG_INFO, format, args);
 #endif
-if (gLogFh != NULL)
-    logFilePrint("info", format, args);
+    if (gLogFh != NULL)
+        logFilePrint("info", format, args);
+    }
 }
 
 void logInfo(char *format, ...)
@@ -226,12 +299,15 @@ va_end(args);
 void logDebugVa(char *format, va_list args)
 /* Variable args logDebug. */
 {
+if (gMinPriority >= PRI_DEBUG)
+    {
 #ifndef NO_SYSLOG
-if (gSysLogOn)
-    vsyslog(LOG_DEBUG, format, args);
+    if (gSysLogOn)
+        vsyslog(LOG_DEBUG, format, args);
 #endif
-if (gLogFh != NULL)
-    logFilePrint("debug", format, args);
+    if (gLogFh != NULL)
+        logFilePrint("debug", format, args);
+    }
 }
 
 void logDebug(char *format, ...)
