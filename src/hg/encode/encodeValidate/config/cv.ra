@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.178 2010/01/11 17:30:58 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.179 2010/01/12 18:19:47 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -469,6 +469,20 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
 #protocol GM12865_Stam_protocol.pdf
+
+term GM12872
+tag GM12872
+type Cell Line
+organism Human
+description B-Lymphocyte (provisional)
+karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
+vendorName Coriell
+vendorId GM12872
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+#protocol GM12872_Stam_protocol.pdf
 
 term GM12873
 tag GM12873
