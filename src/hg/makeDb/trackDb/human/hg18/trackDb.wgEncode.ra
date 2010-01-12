@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.752 2010/01/11 22:23:14 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.753 2010/01/12 23:21:29 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6745,8 +6745,8 @@ longLabel ENCODE UW Affy All-Exon Arrays
 group expression
 subGroup1 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HCF=HCF HCM=HCM HCPE=HCPE HEE=HEE HIPE=HIPE HMEC=HMEC HNPCE=HNPCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 subGroup2 rep Replicate rep1=1 rep2=2
-dimensions dimensionX=cellType dimensionY=rep 
-#dimensions dimensionX=rep dimensionY=cellType 
+# dimensions dimensionX=cellType dimensionY=rep 
+dimensions dimensionX=rep dimensionY=cellType 
 boxedCfg on
 sortOrder cellType=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell
@@ -6757,13 +6757,30 @@ priority 0
 type broadPeak
 wgEncode 1
 
-#new stuff
+    track wgEncodeUwAffyExonArraySimpleSignalRep1SkmcV2
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel SKMC 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in SKMC cells)
+    subGroups cellType=SKMC rep=rep1
+    type broadPeak
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SKMC view=SimpleSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=971 submittedDataVersion=V2 dateResubmitted=2010-01-10 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1SkmcV2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1SkmcV2.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Nb4V2
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel NB4 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in NB4 cells)
+    subGroups cellType=NB4 rep=rep1
+    type broadPeak
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=NB4 view=SimpleSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=971 submittedDataVersion=V2 dateResubmitted=2010-01-10 dateSubmitted=2009-09-21 dateUnrestricted=2010-06-21 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Nb4V2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Nb4V2.broadPeak.gz
+
     track wgEncodeUwAffyExonArraySimpleSignalRep2Mcf7
     release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel MCF-7 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
-    subGroups cellType=mofoMCF7 rep=rep2
+    subGroups cellType=MCF7 rep=rep2
     type broadPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=MCF-7 view=SimpleSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=970 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Mcf7 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Mcf7.broadPeak.gz
 
@@ -7073,7 +7090,6 @@ wgEncode 1
     type broadPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=CMK view=SimpleSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=970 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Cmk fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Cmk.broadPeak.gz
 
-#end new stuff
     track wgEncodeUwAffyExonArraySimpleSignalRep2Skmc
     release alpha
     subTrack wgEncodeUwAffyExonArray off
@@ -7291,7 +7307,7 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=MCF-7 view=SimpleSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=534 dateSubmitted=2009-09-21 dateUnrestricted=2010-06-21 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Mcf7 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Mcf7.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Nb4
-    release alpha
+    release beta
     subTrack wgEncodeUwAffyExonArray off
     shortLabel NB4 1
     longLabel ENCODE UW Affy All-Exon Array Signal Replicate 1 (in NB4 cells)
@@ -7347,6 +7363,7 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SAEC view=SimpleSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=534 dateSubmitted=2009-09-21 dateUnrestricted=2010-06-21 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Saec fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Saec.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Skmc
+    release beta
     subTrack wgEncodeUwAffyExonArray off
     shortLabel SKMC 1
     longLabel ENCODE UW Affy All-Exon Array Signal Replicate 1 (in SKMC cells)
@@ -18175,15 +18192,25 @@ wgEncode 1
         spanList first
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75.wig.gz
 
+        track wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75
+        release alpha
+        subTrack wgEncodeCaltechRnaSeqViewRawSignal off
+        shortLabel HepG2 cell longPolyABB2 Raw 2
+        longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in HepG2 cellusingBB2)
+        subGroups view=RawSignal cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA
+        type wig 0.00 1674.27
+        color 189,0,157
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=RawSignal replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75.wig.gz
+
         track wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewRawSignal off
         shortLabel HepG2 cell longPolyABB2 Raw 1
         longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in HepG2 cellusingBB2)
         subGroups view=RawSignal cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA
-        type wig 0.00 1674.27
+        type wig 0.00 2320.36
         color 189,0,157
-        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=RawSignal replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75.wig.gz
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=RawSignal replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=998 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75.wig.gz
 
     track wgEncodeCaltechRnaSeqViewSplices
     shortLabel Splice Sites
@@ -18391,6 +18418,16 @@ wgEncode 1
         color 46,0,184
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Splices replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=904 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75.bed12.gz
 
+        track wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75
+        release alpha
+        subTrack wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel HepG2 cell longPolyABB2 2
+        longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in HepG2 cellusingBB2)
+        subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA
+        type bed 12
+        color 189,0,157
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=Splices replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75.bed12.gz
+
         track wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
@@ -18399,7 +18436,7 @@ wgEncode 1
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA
         type bed 12
         color 189,0,157
-        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75.bed12.gz
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=998 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqViewzAligns
     shortLabel Alignments
@@ -18536,6 +18573,16 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Aligns replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=904 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75.bed12.gz
 
+        track wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75
+        release alpha
+        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        shortLabel HepG2 cell longPolyAerng32a 2
+        longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Alignments Replicate 2 (longPolyA in HepG2 cellusingerng32a)
+        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA
+        type bed 12
+        color 189,0,157
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75.bed12.gz
+
         track wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewzAligns off
@@ -18544,7 +18591,7 @@ wgEncode 1
         subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA
         type bed 12
         color 189,0,157
-        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75.bed12.gz
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=zAligns replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=998 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqViewMinusRawSignal
     shortLabel Minus Raw Signal
