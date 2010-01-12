@@ -61,7 +61,8 @@ The typical workflow for generating a BAM custom track is this:
       list of tools and converters</A>)</LI>
   <LI>Convert SAM to BAM using the samtools program:
 <PRE><TT>samtools view -S -b -o my.bam my.sam</TT></PRE>
-      If converting a SAM file that does not have a proper header, the -t or -T
+      If converting a SAM file that does not have a proper header, the 
+      <TT>-t</TT> or <TT>-T</TT> 
       option is necessary.  For more information about the command, run 
       <TT>samtools view</TT> with no other arguments.</LI>
   <LI>Sort and create an index for the BAM:
@@ -76,9 +77,9 @@ samtools index my.sorted.bam</TT></PRE>
       The most basic version of the &quot;track&quot; line will look something 
       like this:
 <PRE><TT>track type=bam name="My BAM" bigDataUrl=<EM>http://myorg.edu/mylab/my.sorted.bam</EM></TT></PRE>
-      Again, in addition to <EM>http://myorg.edu/mylab/my.sorted.bam</EM>, the associated index
-      file <EM>http://myorg.edu/mylab/my.sorted.bam.bai</EM> must also be 
-      available.</LI>
+      Again, in addition to <EM>http://myorg.edu/mylab/my.sorted.bam</EM>, the 
+      associated index file <EM>http://myorg.edu/mylab/my.sorted.bam.bai</EM> 
+      must also be available at the same location.</LI>
   <LI>Paste the custom track line into the text box in the 
       <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track 
       management page</A>, click submit and view in the Genome Browser.</LI>
