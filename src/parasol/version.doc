@@ -294,3 +294,15 @@
 
 	Fixed parasol client addJob to errAbort with sick batch message if hub returns jobid 0.
 
+12.11   Add option -logMinPriority to paraHub and paraNode.  This sets the minimum syslog
+        priority to log and also works with file logging. It defaults to "warn".
+
+        Moved several log message to debug priority.  This greatly reduces the number of
+        messages logged.  Messages at warn or error priorities should now be ones requiring
+        operator attention.
+
+        Log parasol remove machine at error level so that operators can easily find
+        machines removed by users.
+
+        Remove trailing / and /. from para -batch argument to fix common problem of
+        batch name mismatch with using file name completion.
