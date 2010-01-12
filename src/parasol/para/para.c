@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.108 2009/12/17 23:54:51 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.109 2010/01/12 18:48:12 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2113,6 +2113,13 @@ else if (opt[0] != '/')
     }
 else
     safecpy(path, sizeof(path), opt);
+// remove trailing "/" or "/." from name.  While the whole path should be normalized,
+// this at least removes a common difference when using file name completion.
+if (endsWith(path, "/."))
+    path[strlen(path)-2] = '\0';
+if (endsWith(path, "/"))
+    path[strlen(path)-1] = '\0';
+
 return cloneString(path);
 }
 
