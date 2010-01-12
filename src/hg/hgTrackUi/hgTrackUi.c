@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.512 2010/01/08 18:11:02 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.513 2010/01/12 23:36:03 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2175,7 +2175,7 @@ static char *grayValues[] =
       } \
     }\""
 
-void bamUi(struct trackDb *tdb)
+void bamUi(struct trackDb *tdb, struct customTrack *ct)
 /* BAM: short-read-oriented alignment file format. */
 {
 char cartVarName[1024];
@@ -2193,6 +2193,14 @@ safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, tdb->tableName);
 cartMakeIntVar(cart, cartVarName,
 	       atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 puts("<BR>");
+if (ct)
+    {
+    // Auto-magic baseColor defaults for BAM, same as in hgTracks.c newCustomTrack
+    hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
+    hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
+    hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+    hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
+    }
 baseColorDrawOptDropDown(cart, tdb);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
@@ -2427,7 +2435,7 @@ else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track
     dgvUi(tdb);
 #ifdef USE_BAM
 else if (sameString(tdb->type, "bam"))
-    bamUi(tdb);
+    bamUi(tdb, ct);
 #endif
 else if (tdb->type != NULL)
     {
