@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1585 2010/01/05 23:10:35 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1586 2010/01/12 21:07:53 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10277,6 +10277,60 @@ genericHeader(tdb, geneName);
 showSangerExtra(geneName, extraTable);
 geneShowCommon(geneName, tdb, pepTable);
 printTrackHtml(tdb);
+}
+
+void doTrnaGenesGb(struct trackDb *tdb, char *trnaName)
+{
+char *track = tdb->tableName;
+struct tRNAs *trna;
+char query[512];
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char *dupe, *words[16];
+char **row;
+int wordCount;
+int rowOffset;
+
+genericHeader(tdb,trnaName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+
+rowOffset = hOffsetPastBin(database, seqName, track);
+sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+  {
+    trna = tRNAsLoad(row+rowOffset);
+
+    printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+       database,database,trna->chrom,trna->name,trna->name);
+
+    printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
+    printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
+    printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
+    printf("<B>tRNAscan-SE score: </B> %.2f<BR>\n",trna->trnaScore);
+    printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
+    if (!sameString(trna->genomeUrl, ""))
+    {
+        printf("<B>Summary of all genomic tRNA predictions:</B> "
+                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->genomeUrl);
+        printf("<B>tRNA alignments:</B> "
+                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->trnaUrl);
+    }
+    printf("<BR><B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
+    printf("<B>Position:</B> "
+       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+       hgTracksPathAndSettings(), database, trna->chrom, trna->chromStart+1, trna->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", trna->chrom, trna->chromStart+1, trna->chromEnd);
+    printf("<B>Strand:</B> %s<BR>\n", trna->strand);
+
+    if (trna->next != NULL)
+      printf("<hr>\n");
+  }
+ sqlFreeResult(&sr);
+ hFreeConn(&conn);
+ printTrackHtml(tdb);
+ tRNAsFree(&trna);
 }
 
 void doVegaGeneZfish(struct trackDb *tdb, char *name)
@@ -21816,6 +21870,10 @@ else if (startsWith("encodePseudogene", track))
 else if (sameWord(track, "sanger22"))
     {
     doSangerGene(tdb, item, "sanger22pep", "sanger22mrna", "sanger22extra");
+    }
+else if (sameWord(track,"tRNAs"))
+    {
+    doTrnaGenesGb(tdb, item);
     }
 else if (sameWord(track, "sanger20"))
     {
