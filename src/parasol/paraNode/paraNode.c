@@ -21,6 +21,7 @@
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"logFacility", OPTION_STRING},
+    {"logMinPriority", OPTION_STRING},
     {"log", OPTION_STRING},
     {"debug", OPTION_BOOLEAN},
     {"hub", OPTION_STRING},
@@ -45,6 +46,8 @@ errAbort("paraNode - version %s\n"
 	 "    paraNode start\n"
 	 "options:\n"
 	 "    -logFacility=facility  Log to the specified syslog facility - default local0.\n"
+         "    -logMinPriority=pri minimum syslog priority to log, also filters file logging.\n"
+         "     defaults to \"warn\"\n"
          "    -log=file  Log to file instead of syslog.\n"
          "    -debug  Don't daemonize\n"
 	 "    -hub=host  Restrict access to connections from hub.\n"
@@ -61,7 +64,7 @@ errAbort("paraNode - version %s\n"
 	);
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.82 2009/11/21 01:07:58 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.83 2010/01/12 09:09:15 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -785,6 +788,14 @@ hostName = getMachine();
 initRandom();
 getTicksToHundreths();
 
+/* log init */
+if (optionExists("log"))
+    logOpenFile("paraNode", optionVal("log", NULL));
+else    
+    logOpenSyslog("paraNode", optionVal("logFacility", NULL));
+logSetMinPriority(optionVal("logMinPriority", "info"));
+logInfo("starting paraNode on %s", hostName);
+
 /* Make job lists. */
 jobsRunning = newDlList();
 jobsFinished = newDlList();
@@ -799,7 +810,6 @@ mainRudp->maxRetries = 12;
 
 /* Event loop. */
 findNow();
-logInfo("starting %s", hostName);
 for (;;)
     {
     /* Get next incoming message and optionally check to make

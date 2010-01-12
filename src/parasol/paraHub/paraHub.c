@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.132 2009/11/21 01:07:12 markd Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.133 2010/01/12 09:09:15 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -79,6 +79,7 @@ static struct optionSpec optionSpecs[] = {
     {"subnet", OPTION_STRING},
     {"nextJobId", OPTION_INT},
     {"logFacility", OPTION_STRING},
+    {"logMinPriority", OPTION_STRING},
     {"log", OPTION_STRING},
     {"debug", OPTION_BOOLEAN},
     {"noResume", OPTION_BOOLEAN},
@@ -125,6 +126,8 @@ errAbort("paraHub - parasol hub server version %s\n"
 	 "   -subnet=XXX.YYY.ZZZ  Only accept connections from subnet (example 192.168).\n"
 	 "   -nextJobId=N  Starting job ID number.\n"
 	 "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
+         "   -logMinPriority=pri minimum syslog priority to log, also filters file logging.\n"
+         "    defaults to \"warn\"\n"
          "   -log=file  Log to file instead of syslog.\n"
          "   -debug  Don't daemonize\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes.\n"
@@ -676,7 +679,7 @@ void plan(struct paraMessage *pm)
 /* Make a new plan allocating resources to batches */
 {
 
-logInfo("executing new plan");
+logDebug("executing new plan");
 
 if (pm)
     {
@@ -961,7 +964,7 @@ if (pm)
     }
 
 needsPlanning = FALSE;
-logInfo("plan finished");
+logDebug("plan finished");
 
 }
 
@@ -1273,7 +1276,9 @@ boolean removeMachine(char *machName, char *user, char *reason)
 struct machine *mach;
 if ((mach = findMachine(machName)))
     {
-    logInfo("hub: user %s removed machine %s because: %s",user,machName,reason);
+    // logged as an error because it's important for admins to know that there is an
+    // error with this machine
+    logError("hub: user %s removed machine %s because: %s",user,machName,reason);
     requeueAllJobs(mach, FALSE);
     dlRemove(mach->node);
     slRemoveEl(&machineList, mach);
@@ -1283,9 +1288,9 @@ if ((mach = findMachine(machName)))
     }
 else
     {
-    logInfo("hub: user %s wanted to removed machine %s because: %s but machine was not found",user,machName,reason);
+    logDebug("hub: user %s wanted to removed machine %s because: %s but machine was not found",user,machName,reason);
+    return FALSE;
     }
-return FALSE;
 }
 
 
@@ -1983,7 +1988,7 @@ needsPlanning = TRUE;
 batch->maxJob = maxJob;
 updateUserMaxJob(user);
 if (maxJob>=-1)
-    logInfo("paraHub: User %s set maxJob=%d for batch %s", userName, maxJob, dir);
+    logDebug("paraHub: User %s set maxJob=%d for batch %s", userName, maxJob, dir);
 return maxJob;
 }
 
@@ -2024,7 +2029,7 @@ if (batch == NULL) return -2;
 batch->doneCount = 0;
 batch->doneTime = 0;
 batch->crashCount = 0;
-logInfo("paraHub: User %s reset done and crashed counts for batch %s", userName, dir);
+logDebug("paraHub: User %s reset done and crashed counts for batch %s", userName, dir);
 return 0;
 }
 
@@ -2066,7 +2071,7 @@ if (batch == NULL) return -2;
 if (batch->runningCount > 0) return -1;
 if (!dlEnd(batch->jobQueue->head)) return -1;
 sweepResultsWithRemove(name);
-logInfo("paraHub: User %s freed batch %s", userName, batchName);
+logDebug("paraHub: User %s freed batch %s", userName, batchName);
 /* remove batch from batchList */
 slRemoveEl(&batchList, batch);
 /* remove from user cur/old batches */
@@ -2114,7 +2119,7 @@ batch->sickNodes = newHashExt(6, FALSE);
 batch->continuousCrashCount = 0;  /* reset so user can retry */
 needsPlanning = TRUE;
 updateUserSickNodes(user);
-logInfo("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
+logDebug("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
 return 0;
 }
 
@@ -2148,7 +2153,7 @@ struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
-logInfo("paraHub: User %s ran showSickNodes for batch %s", userName, dir);
+logDebug("paraHub: User %s ran showSickNodes for batch %s", userName, dir);
 struct hashEl *el, *list = hashElListHash(batch->sickNodes);
 slSort(&list, hashElCmp);
 for (el = list; el != NULL; el = el->next)
@@ -2203,7 +2208,7 @@ needsPlanning = TRUE;
 batch->priority = priority;
 updateUserPriority(user);
 if ((priority>=1)&&(priority<NORMAL_PRIORITY))
-    logInfo("paraHub: User %s set priority=%d for batch %s", userName, priority, dir);
+    logDebug("paraHub: User %s set priority=%d for batch %s", userName, priority, dir);
 return priority;
 }
 
@@ -3178,7 +3183,7 @@ int running = 0, finished = 0;
 struct hash *erHash = newHashExt(8, FALSE); /* A hash of existingResults */
 struct existingResults *erList = NULL;
 
-logInfo("Checking for jobs already running on nodes");
+logDebug("Checking for jobs already running on nodes");
 for (mach = machineList; mach != NULL; mach = mach->next)
     {
     struct paraMessage pm;
@@ -3201,7 +3206,7 @@ hashFree(&erHash);
 needsPlanning = TRUE;
 
 /* Report results. */
-logInfo("%d running jobs, %d jobs that finished while hub was down",
+logDebug("%d running jobs, %d jobs that finished while hub was down",
 	running, finished);
 }
 
@@ -3222,6 +3227,7 @@ if (optionExists("log"))
     logOpenFile("paraHub", optionVal("log", NULL));
 else    
     logOpenSyslog("paraHub", optionVal("logFacility", NULL));
+logSetMinPriority(optionVal("logMinPriority", "info"));
 logInfo("starting paraHub on %s", hubHost);
 
 /* Set up various lists. */
@@ -3232,8 +3238,7 @@ machineHash = newHash(0);
 startMachines(machineList);
 
 openJobId();
-logInfo("----------------------------------------------------------------");
-logInfo("Starting paraHub. Next job ID is %d.", nextJobId);
+logInfo("next job ID is %d.", nextJobId);
 
 rudpOut = rudpMustOpen();
 if (!optionExists("noResume"))
@@ -3251,7 +3256,7 @@ sockSuckStart(rudpIn);
 startHeartbeat();
 startSpokes();
 
-logInfo("sockSuck,Heartbeat,Spokes have been started");
+logDebug("sockSuck,Heartbeat,Spokes have been started");
 
 /* Bump up our priority to just shy of real-time. */
 nice(-40);

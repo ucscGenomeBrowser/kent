@@ -13,6 +13,7 @@ static struct optionSpec optionSpecs[] = {
     {"hubInPort", OPTION_INT},
     {"nodeInPort", OPTION_INT},
     {"logFacility", OPTION_STRING},
+    {"logMinPriority", OPTION_STRING},
     {"log", OPTION_STRING},
     {"drop", OPTION_INT},
     {"ip", OPTION_STRING},
@@ -33,6 +34,7 @@ errAbort(
   "   -hubInPort=N (default %d)\n"
   "   -nodeInPort=N (default %d)\n"
   "   -logFacility=facility log to the specified syslog facility.\n"
+  "   -logMinPriority=pri minimum syslog priority to log, also filters file logging.\n"
   "   -log=file  log to file instead of syslog.\n"
   "   -debug  Don't daemonize\n"
   "   -drop=N - Drop every Nth packet\n"
