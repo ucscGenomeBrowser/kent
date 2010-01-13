@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.181 2010/01/13 00:25:07 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.182 2010/01/13 20:50:29 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2144,6 +2144,15 @@ orderUrl
 lab Struhl
 targetId GeneCard:GC12M103013
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
+
+term Nrf1
+term NRF1
+antibodyDescription Nrf1 is an mystery antibody awaiting description from the Snyder lab (provisional)
+targetDescription ??
+vendorName ??
+vendorId
+orderUrl
+lab Snyder
 
 term NRSF
 tag NRSF
