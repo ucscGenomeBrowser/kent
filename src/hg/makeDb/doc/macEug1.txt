@@ -77,3 +77,47 @@ commonName Wallaby
     ##   link to gbdb
     ln -s `pwd`/macEug1.2bit /gbdb/macEug1
 
+#########################################################################
+## Genbank gene run (DONE - 2009-09-25 - Hiram)
+    cd /hive/data/genomes/macEug1
+    # MAKE 11.OOC FILE FOR BLAT
+    blat macEug1.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/macEug1.11.ooc \
+	-repMatch=1024
+    #	Wrote 24249 overused 11-mers to jkStuff/macEug1.11.ooc
+
+    mkdir /hive/data/staging/data/macEug1
+    cp -p macEug1.2bit chrom.sizes jkStuff/macEug1.11.ooc \
+	/hive/data/staging/data/macEug1
+
+    #	add the following two lines to src/lib/gbGenome.c
+    #	static char *macEugNames[] = {"Macropus eugenii", NULL};
+    #	{"macEug", macEugNames},
+
+    cvs ci -m "Adding Wallaby Macropus eugenii" src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time nice -n +19 bin/gbAlignStep -initial macEug1 &
+    #	logFile: var/build/logs/2009.09.25-14:54:03.macEug1.initalign.log
+    #	real    2613m8.027s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad macEug1
+    #	logFile:  var/dbload/hgwdev/logs/2009.09.28-09:23:52.dbload.log
+    #	real    15m28.552s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add macEug1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added macEug1 - Macropus eugenii - Wallaby" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+    #	done - 2009-09-28 - Hiram
