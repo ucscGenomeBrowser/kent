@@ -15,6 +15,19 @@ if @project.user_id == @current_user.id or current_user.role == "admin"
 else
   authorized = false
 end
+
+if [
+"loaded",
+"approved",
+"displayed",
+"released",
+"reviewing",
+"revoked"
+].any? {|nonActiveStatus| @project.status == nonActiveStatus }
+  nonActive = true
+else
+  nonActive = false
+end
 %>
 <% if @project.project_archives.blank? and @project.status=="new" %>
    <b>Submit data for this project:</b>
@@ -61,7 +74,7 @@ end
 
 <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 
-<% if (not busy) and authorized and (@project.status != "loaded" or current_user.role == "admin") %> 
+<% if (not busy) and authorized and ((not nonActive) or current_user.role == "admin") %> 
 
   <tr>
     <td>
