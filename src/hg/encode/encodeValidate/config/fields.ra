@@ -51,6 +51,11 @@ file ddf
 type string
 required no
 
+field phase
+file ddf
+type string
+required no
+
 field dafVersion
 file dafHeader
 type string
