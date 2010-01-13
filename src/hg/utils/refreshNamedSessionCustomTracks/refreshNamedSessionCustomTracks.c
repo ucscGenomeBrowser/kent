@@ -10,7 +10,7 @@
 #include "customFactory.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.10 2009/05/19 23:54:31 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -23,6 +23,9 @@ errAbort(
   "    them from being removed by the custom track cleanup process.\n"
   "usage:\n"
   "    refreshNamedSessionCustomTracks hgcentral[test,beta]\n"
+  "options:\n"
+  "    -atime=N           If the session has not been accessed since N days ago,\n"
+  "                       don't refresh its custom tracks.  Default: no limit.\n"
   "This is intended to be run as a nightly cron job for each central db.\n"
   "The ~/.hg.conf file (or $HGDB_CONF) must specify the same central db\n"
   "as the command line.  [The command line arg exists only to suppress this\n"
@@ -34,6 +37,7 @@ errAbort(
 
 /* Options: */
 static struct optionSpec options[] = {
+    {"atime",    OPTION_INT},
     {"hardcore", OPTION_BOOLEAN}, /* Intentionally omitted from usage(). */
     {NULL, 0},
 };
@@ -158,6 +162,14 @@ if (!sameString(centralDbName, actualDbName))
 else
     verbose(2, "Got connection to %s\n", centralDbName);
 
+long long threshold = 0;
+int atime = optionInt("atime", 0);
+if (atime > 0)
+    {
+    time_t now = time(NULL);
+    threshold = now - ((long long)atime * 24 * 60 * 60);
+    }
+
 if (sqlTableExists(conn, savedSessionTable))
     {
     struct sessionInfo *sessionList = NULL, *si;
@@ -165,17 +177,27 @@ if (sqlTableExists(conn, savedSessionTable))
     char **row = NULL;
     char query[512];
     safef(query, sizeof(query),
-	  "select userName,sessionName,contents from %s "
+	  "select userName,sessionName,UNIX_TIMESTAMP(lastUse),contents from %s "
 	  "order by userName,sessionName", savedSessionTable);
     sr = sqlGetResult(conn, query);
     // Slurp results into memory instead of processing row by row,
     // reducing the chance of lost connection.
     while ((row = sqlNextRow(sr)) != NULL)
 	{
+	if (atime > 0)
+	    {
+	    long long lastUse = atoll(row[2]);
+	    if (lastUse < threshold)
+		{
+		verbose(2, "User %s session %s is older than %d days, skipping.\n",
+			row[0], row[1], atime);
+		continue;
+		}
+	    }
 	AllocVar(si);
 	safecpy(si->userName, sizeof(si->userName), row[0]);
 	safecpy(si->sessionName, sizeof(si->sessionName), row[1]);
-	si->contents = cloneString(row[2]);
+	si->contents = cloneString(row[3]);
 	slAddHead(&sessionList, si);
 	}
     sqlFreeResult(&sr);
