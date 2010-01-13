@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.754 2010/01/13 19:59:41 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.755 2010/01/13 20:38:25 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15024,8 +15024,8 @@ shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
 subGroup1 view Views Peaks=Peaks zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i> 2H1=H1-hESC&nbsp;<i>Tier2</i> 2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA U87=U87
-subGroup3 factor Factor BATF=BATF BCL03=BCL3 BCL11A=BCL11A CTCF=CTCF EBF=EBF EGR1=Egr-1 FOSL2=FOSL2 FOXP2=FOXP2 GABP=GABP GR=GR HEY1=HEY1 JUND=JunD IRF4=IRF4 NRSF=NRSF OCT2=Oct-2 P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=Pbx3 POL2=Pol2 POL24H8=Pol2-4H8 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SRF=SRF SP1=SP1 TAF1=TAF1 TCF12=TCF12 USF1=USF-1 ZBTB33=ZBTB33 zCTRL=Input zCTRL2=Input_<i>(PCR2x)</i>
+subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i> 2H1=H1-hESC&nbsp;<i>Tier2</i> 2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA U87=U87
+subGroup3 factor Factor BATF=BATF BCL03=BCL3 BCL11A=BCL11A CTCF=CTCF EBF=EBF EGR1=Egr-1 FOSL2=FOSL2 FOXP2=FOXP2 GABP=GABP GR=GR HEY1=HEY1 JUND=JunD IRF4=IRF4 NRSF=NRSF OCT2=Oct-2 P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=Pbx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SRF=SRF SP1=SP1 TAF1=TAF1 TCF12=TCF12 USF1=USF-1 ZBTB33=ZBTB33 zCTRL=Input zCTRL2=Input_<i>(PCR2x)</i>
 subGroup4 rep Replicate rep1=1 rep2=2
 subGroup5 prot Protocol PCR1x=PCR_1x PCR2x=PCR_2x
 subGroup6 treat Treatment aNONE=None Betamethasone=Betamethasone_100nM DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX_500pM DMSO02=DMSO_0.02pct EtOH02=EtOH_0.02pct Prednis=Prednisolone_100nM
@@ -16426,6 +16426,168 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
         subGroups view=Peaks factor=POL2 cellType=A549 prot=PCR2x treat=EtOH02 rep=rep1
         type broadPeak
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=Pol2 protocol=PCR2x treatment=EtOH_0.02pct view=Peaks replicate=1 labVersion=SL245 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=813 dateSubmitted=2009-12-15 dateUnrestricted=2010-09-15 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xEtoh02 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xEtoh02.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel A549 USF-1 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (USF-1 in A549 cells)
+        subGroups view=Peaks factor=USF1 cellType=A549 prot=PCR1x treat=EtOH02 rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=USF-1 protocol=PCR1x treatment=EtOH_0.02pct view=Peaks replicate=1 labVersion=SL1207 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=901 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xEtoh02.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel A549 USF-1 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (USF-1 in A549 cells)
+        subGroups view=Peaks factor=USF1 cellType=A549 prot=PCR1x treat=EtOH02 rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=USF-1 protocol=PCR1x treatment=EtOH_0.02pct view=Peaks replicate=2 labVersion=SL1080 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=901 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xEtoh02.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 Pol2-4H8 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (Pol2-4H8 in GM12891 cells)
+        subGroups view=Peaks factor=POL24H8 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2-4H8 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL922 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=976 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol24h8Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 Pol2-4H8 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (Pol2-4H8 in GM12891 cells)
+        subGroups view=Peaks factor=POL24H8 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2-4H8 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL910 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=976 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol24h8Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 Pol2 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (Pol2 in GM12891 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL921 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=977 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol2Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 Pol2 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (Pol2 in GM12891 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL908 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=977 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol2Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pou2f2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 POU2F2 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (POU2F2 in GM12891 cells)
+        subGroups view=Peaks factor=POU2F2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=POU2F2 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL918 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=978 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pou2f2Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pou2f2Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pou2f2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 POU2F2 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (POU2F2 in GM12891 cells)
+        subGroups view=Peaks factor=POU2F2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=POU2F2 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL802 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=978 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pou2f2Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pou2f2Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 TAF1 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (TAF1 in GM12891 cells)
+        subGroups view=Peaks factor=TAF1 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=TAF1 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL920 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=979 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Taf1Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12891 TAF1 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (TAF1 in GM12891 cells)
+        subGroups view=Peaks factor=TAF1 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=TAF1 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL749 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=979 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Taf1Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12892 Pol2 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (Pol2 in GM12892 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL944 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=980 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol2Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12892 Pol2 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (Pol2 in GM12892 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL909 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=980 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol2Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12892 Pol2-4H8 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (Pol2-4H8 in GM12892 cells)
+        subGroups view=Peaks factor=POL24H8 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2-4H8 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL946 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=981 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol24h8Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12892 Pol2-4H8 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (Pol2-4H8 in GM12892 cells)
+        subGroups view=Peaks factor=POL24H8 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2-4H8 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL911 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=981 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol24h8Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12892 TAF1 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (TAF1 in GM12892 cells)
+        subGroups view=Peaks factor=TAF1 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=TAF1 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL945 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=994 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Taf1Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12892 TAF1 Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (TAF1 in GM12892 cells)
+        subGroups view=Peaks factor=TAF1 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=TAF1 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL736 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=994 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Taf1Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel A549 CTCF Pk 1
+        longLabel ENCODE TFBS, TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (CTCF in A549 cells)
+        subGroups view=Peaks factor=CTCF cellType=A549 prot=PCR1x treat=EtOH02 rep=rep1
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=CTCF protocol=PCR1x treatment=EtOH_0.02pct view=Peaks replicate=1 labVersion=SL1205 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1003 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel A549 CTCF Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (CTCF in A549 cells)
+        subGroups view=Peaks factor=CTCF cellType=A549 prot=PCR1x treat=EtOH02 rep=rep2
+        type broadPeak
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=CTCF protocol=PCR1x treatment=EtOH_0.02pct view=Peaks replicate=2 labVersion=SL1078 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1003 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xEtoh02.broadPeak.gz
 
     track wgEncodeHudsonalphaChipSeqViewzRaw
     shortLabel Raw Signal
@@ -18145,6 +18307,186 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
         subGroups view=zRaw factor=POL2 cellType=A549 prot=PCR2x treat=EtOH02 rep=rep2
         type wig 1.00 19808.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=Pol2 protocol=PCR2x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL334 dataVersion="ENCODE Jan 2010 Freeze" subId=813 dateSubmitted=2009-12-15 dateUnrestricted=2010-09-15 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel A549 Control Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in A549 cells)
+        subGroups view=zRaw factor=zCTRL cellType=A549 prot=PCR1x treat=EtOH02 rep=rep1
+        type wig 1.00 3468.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=Control protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL475 dataVersion="ENCODE Jan 2010 Freeze" subId=901 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel A549 USF-1 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (USF-1 in A549 cells)
+        subGroups view=zRaw factor=USF1 cellType=A549 prot=PCR1x treat=EtOH02 rep=rep1
+        type wig 1.00 6156.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=USF-1 protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL1207 dataVersion="ENCODE Jan 2010 Freeze" subId=901 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel A549 USF-1 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (USF-1 in A549 cells)
+        subGroups view=zRaw factor=USF1 cellType=A549 prot=PCR1x treat=EtOH02 rep=rep2
+        type wig 1.00 7714.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=USF-1 protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL1080 dataVersion="ENCODE Jan 2010 Freeze" subId=901 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 Pol2-4H8 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (Pol2-4H8 in GM12891 cells)
+        subGroups view=zRaw factor=POL24H8 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 8250.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2-4H8 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL922 dataVersion="ENCODE Jan 2010 Freeze" subId=976 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 Pol2-4H8 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Pol2-4H8 in GM12891 cells)
+        subGroups view=zRaw factor=POL24H8 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 12824.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2-4H8 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL910 dataVersion="ENCODE Jan 2010 Freeze" subId=976 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 Pol2 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Pol2 in GM12891 cells)
+        subGroups view=zRaw factor=POL2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 19463.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL908 dataVersion="ENCODE Jan 2010 Freeze" subId=977 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 Pol2 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (Pol2 in GM12891 cells)
+        subGroups view=zRaw factor=POL2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 9104.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Pol2 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL921 dataVersion="ENCODE Jan 2010 Freeze" subId=977 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 POU2F2 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (POU2F2 in GM12891 cells)
+        subGroups view=zRaw factor=POU2F2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 6245.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=POU2F2 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL918 dataVersion="ENCODE Jan 2010 Freeze" subId=978 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 POU2F2 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (POU2F2 in GM12891 cells)
+        subGroups view=zRaw factor=POU2F2 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 15201.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=POU2F2 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL802 dataVersion="ENCODE Jan 2010 Freeze" subId=978 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 TAF1 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (TAF1 in GM12891 cells)
+        subGroups view=zRaw factor=TAF1 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 7998.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=TAF1 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL920 dataVersion="ENCODE Jan 2010 Freeze" subId=979 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12891 TAF1 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (TAF1 in GM12891 cells)
+        subGroups view=zRaw factor=TAF1 cellType=GM12891 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 12765.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=TAF1 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL749 dataVersion="ENCODE Jan 2010 Freeze" subId=979 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 Pol2 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (Pol2 in GM12892 cells)
+        subGroups view=zRaw factor=POL2 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 9009.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL944 dataVersion="ENCODE Jan 2010 Freeze" subId=980 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 Pol2 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Pol2 in GM12892 cells)
+        subGroups view=zRaw factor=POL2 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 17558.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL909 dataVersion="ENCODE Jan 2010 Freeze" subId=980 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 Control Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in GM12892 cells)
+        subGroups view=zRaw factor=zCTRL cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 8413.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Control protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL818 dataVersion="ENCODE Jan 2010 Freeze" subId=981 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 Pol2-4H8 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (Pol2-4H8 in GM12892 cells)
+        subGroups view=zRaw factor=POL24H8 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 7827.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2-4H8 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL946 dataVersion="ENCODE Jan 2010 Freeze" subId=981 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 Pol2-4H8 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Pol2-4H8 in GM12892 cells)
+        subGroups view=zRaw factor=POL24H8 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 8396.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Pol2-4H8 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL911 dataVersion="ENCODE Jan 2010 Freeze" subId=981 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 TAF1 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (TAF1 in GM12892 cells)
+        subGroups view=zRaw factor=TAF1 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 10018.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=TAF1 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL945 dataVersion="ENCODE Jan 2010 Freeze" subId=994 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12892 TAF1 Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (TAF1 in GM12892 cells)
+        subGroups view=zRaw factor=TAF1 cellType=GM12892 prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 11513.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=TAF1 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL736 dataVersion="ENCODE Jan 2010 Freeze" subId=994 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel A549 CTCF Raw 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (CTCF in A549 cells)
+        subGroups view=zRaw factor=CTCF cellType=A549 prot=PCR1x treat=EtOH02 rep=rep1
+        type wig 1.00 4963.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=CTCF protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL1205 dataVersion="ENCODE Jan 2010 Freeze" subId=1003 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel A549 CTCF Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (CTCF in A549 cells)
+        subGroups view=zRaw factor=CTCF cellType=A549 prot=PCR1x treat=EtOH02 rep=rep2
+        type wig 1.00 8537.00
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=CTCF protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL1078 dataVersion="ENCODE Jan 2010 Freeze" subId=1003 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02.wig.gz
 
 #  GENCODE genes (wrangler: tdreszer, soon Brian)
 
