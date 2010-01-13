@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.129 2010/01/13 22:05:53 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.130 2010/01/13 23:45:56 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -356,14 +356,15 @@ while (isNotEmpty(namePt))
     {
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)
-	errAbort("Mangled Cookie input string '%s' (complete cookie string: '%s')",
-		 namePt, getenv("HTTP_COOKIE"));
+	errAbort("Mangled Cookie input string: no = in '%s' (offset %d in complete cookie string: '%s')",
+		 namePt, (int)(namePt - str), getenv("HTTP_COOKIE"));
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, ';');
     if (nextNamePt != NULL)
 	{
          *nextNamePt++ = 0;
-         nextNamePt++;
+	 if (*nextNamePt == ' ')
+	     nextNamePt++;
 	}
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
