@@ -784,8 +784,10 @@ package require Itcl
                 }
                 if {[file size $errTmp] != 0} {
                     set errMsg [read_file $errTmp]
-                    file delete $errTmp
-                    error $errMsg
+		    if {[string first "obtained lock in" $errTmp] == -1} {
+			file delete $errTmp
+			error $errMsg
+		    }
                 }
                 file delete $errTmp
             }
