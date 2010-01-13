@@ -127,6 +127,29 @@ end
   <% end %>
 
   </tr>
+
+<% else %>
+
+  <%
+  # some people want this to show up even if it has already been loaded   
+  %>
+  <% if (not busy) and authorized and ((@dafText != "") or (@ddfText != "")) %> 
+    <tr>
+      <% if @dafText != "" %>
+        <td><%= ' [ ' -%> 
+        <%= link_to 'Show DAF', {:action => 'show_daf', :id => @project.id} -%>
+        <%= ' ] ' -%> </td>
+      <% end %>
+
+      <% if @ddfText != "" %>
+        <td><%= ' [ ' -%> 
+        <%= link_to 'Show DDF', {:action => 'show_ddf', :id => @project.id} -%>
+        <%= ' ] ' -%> </td>
+      <% end %>
+
+    </tr>
+  <% end %>
+
 <% end %>
 
 </table>
