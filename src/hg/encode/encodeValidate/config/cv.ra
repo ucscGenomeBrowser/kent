@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.180 2010/01/12 20:58:45 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.181 2010/01/13 00:25:07 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3090,6 +3090,13 @@ term PCR2x
 tag PCR2x
 description 2-cycles of PCR (Myers)
 type protocol
+
+### phase
+term G1
+tag G1
+type phase
+description Flow sorted, G1 phase
+
 
 
 ### restrictionEnzyme
