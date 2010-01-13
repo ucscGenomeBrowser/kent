@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.80 2010/01/04 23:25:10 hartera Exp $";
+#	"$Id: trackDb.ra,v 1.81 2010/01/13 16:36:56 fanhsu Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -48,6 +48,16 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
 
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
