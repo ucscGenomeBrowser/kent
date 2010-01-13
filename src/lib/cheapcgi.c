@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.128 2010/01/04 19:12:41 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.129 2010/01/13 22:05:53 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -352,11 +352,12 @@ if(str == NULL) /* don't have a cookie */
 hash = newHash(6);
 
 namePt = str;
-while (namePt != NULL)
+while (isNotEmpty(namePt))
     {
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)
-	errAbort("Mangled Cookie input string %s", namePt);
+	errAbort("Mangled Cookie input string '%s' (complete cookie string: '%s')",
+		 namePt, getenv("HTTP_COOKIE"));
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, ';');
     if (nextNamePt != NULL)
@@ -1664,7 +1665,7 @@ int argc = *pArgc;
 int i;
 int argcLeft = argc;
 char *name;
-static char queryString[4096];
+static char queryString[16384];
 char *q = queryString;
 boolean needAnd = TRUE;
 boolean gotAny = FALSE;
