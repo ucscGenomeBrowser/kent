@@ -39,7 +39,6 @@ class PipelineController < ApplicationController
     active_conditions = [
       "status != 'reviewing'  and " +
       "status != 'displayed'  and " +
-      "status != 'superseded' and " +
       "status != 'approved'   and " +
       "status != 'revoked'    and " +
       "status != 'released'"
