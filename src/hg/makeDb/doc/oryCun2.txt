@@ -1,5 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
+#	Rabbit
 # Oryctolagus cuniculus from Broad, version oryCun2 (released Apr 2009)
 #    Project website:
 #    ftp://ftp.broad.mit.edu/pub/assemblies/mammals/rabbit/oryCun2/
@@ -245,4 +246,64 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+############################################################################
+# GENBANK AUTO UPDATE (DONE - 2009-09-25 - Hiram)
+    #	add the following to genbank/etc/genbank.conf just before Orang ponAbe2
+# Rabbit
+oryCun2.serverGenome = /hive/data/genomes/oryCun2/oryCun2.2bit
+oryCun2.clusterGenome = /scratch/data/oryCun2/oryCun2.2bit
+oryCun2.ooc = /scratch/data/oryCun2/oryCun2.11.ooc
+oryCun2.lift = /hive/data/genomes/oryCun2/contigs/oryCun2.contigs.lift
+oryCun2.perChromTables = no
+oryCun2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+oryCun2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+oryCun2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+oryCun2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+oryCun2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+oryCun2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+oryCun2.downloadDir = oryCun2
+oryCun2.refseq.mrna.native.load  = yes
+oryCun2.refseq.mrna.xeno.load = yes
+oryCun2.refseq.mrna.xeno.loadDesc  = yes
+
+    # Edit src/lib/gbGenome.c to add new species.  With these two lines:
+    #	static char *papHamNames[] = {"Papio hamadryas",
+    #		"Papio hamadryas hamadryas", NULL};
+    #	{"papHam", papHamNames},
+# Oryctolagus cuniculus from Broad, version oryCun2 (released Apr 2009)
+
+    cvs ci -m "Adding Baboon Papio hamadryas hamadryas" src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time nice -n +19 bin/gbAlignStep -initial oryCun2 &
+    #	logFile: var/build/logs/2009.09.25-14:55:27.oryCun2.initalign.log
+    #	real    163m41.298s
+    #	something when haywire in the swarm batch run, finished
+    #	that manually, then, continuing:
+    time nice -n +19 bin/gbAlignStep -continue=finish -initial oryCun2 &
+    #	var/build/logs/2009.09.28-10:46:25.oryCun2.initalign.log
+    #	real    76m41.952s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oryCun2
+    #	var/dbload/hgwdev/logs/2009.09.28-12:15:42.dbload.log
+    #	real    32m14.821s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add oryCun2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added oryCun2 - Oryctolagus cuniculus - Rabbit" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+    #	done - 2009-09-28 - Hiram
+
 ############################################################################
