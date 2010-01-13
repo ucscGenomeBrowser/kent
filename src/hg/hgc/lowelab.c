@@ -96,7 +96,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.41 2010/01/07 02:56:48 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.42 2010/01/13 04:03:21 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -814,12 +814,14 @@ char **row;
 int wordCount;
 int rowOffset;
 
+char* chrom = cartString(cart, "c");
+
 genericHeader(tdb,trnaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sprintf(query, "select * from %s where chrom = '%s' and name = '%s'", track, chrom, trnaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
   {
