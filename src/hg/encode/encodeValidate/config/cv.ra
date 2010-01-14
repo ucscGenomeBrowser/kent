@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.187 2010/01/14 20:01:05 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.188 2010/01/14 20:25:40 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1045,6 +1045,20 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
+term HT-1080
+tag HT1080
+type Cell Line
+organism Human
+description HT?1080 ?is ?an ?epithelial ?cell ?line ?derived ?from? a ?fibrosarcoma.
+karyotype pseudo-diploid? male ?with ?a modal? chromosome ?number ?of ?46. ?There ?are ?numerous ?chromosome ?abnormalities.
+vendorName ATCC
+vendorId CCL­121
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
+termId BTO:0001282
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282&termName=HT-1080%20cell
+tier 3
+protocol HT1080_Myers_protocol.pdf
+
 term HTB-11
 tag HTB11
 type Cell Line
@@ -1398,6 +1412,20 @@ termId BTO:0001801 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
 tier 3
 protocol SkMC_Stam_protocol.pdf
+
+term T98G
+tag T98G
+type Cell Line
+organism Human
+description T98G ?is a ?fibroblast ?cell ?line ?derived ?from ?a ?glioblastoma? multiforme.
+karyotype hyper-pentaploid ?male ?with a? modal ?chromosome ?number ?around ?128 ?to ?132. ?There ?are ?numerous ?chromosome? abnormalities ?and ?marker ?chromosomes.
+vendorName ATCC
+vendorId CRL­1690
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
+termId BTO:0001583
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583&termName=T98G%20cell
+tier 3
+protocol T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
