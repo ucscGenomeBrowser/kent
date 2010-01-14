@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.81 2010/01/13 16:36:56 fanhsu Exp $";
+#	"$Id: trackDb.ra,v 1.82 2010/01/14 23:28:55 giardine Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1498,6 +1498,33 @@ priority 450
 
 track chainNetPoodle override
 priority 451
+
+track pgVenter override
+longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI) (from Human Mar. 2006 assembly)
+
+track pgWatson override
+longLabel James Watson (CSHL) (from Human Mar. 2006 assembly)
+
+track pgYoruban3 override
+longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU) (from Human Mar. 2006 assembly)
+
+track pgYh1 override
+longLabel Han Chinese Individual (YanHuang Project) (from Human Mar. 2006 assembly)
+
+track pgSjk override
+longLabel Seong-Jin Kim (SJK, GUMS/KOBIC) (from Human Mar. 2006 assembly)
+
+track pgNA12878 override
+longLabel CEU Trio Daughter NA12878 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+
+track pgNA12891 override
+longLabel CEU Trio Father NA12891 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+
+track pgNA12892 override
+longLabel CEU Trio Mother NA12892 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+
+track pgNA19240 override
+longLabel YRI Trio Daughter NA19240 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 
 searchTable nscanGene
 searchType genePred

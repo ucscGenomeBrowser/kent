@@ -3169,6 +3169,87 @@ semiShortCircuit 1
 termRegex ES_[0-9]+_[0-9]+
 searchPriority 30
 
+track pgSnp
+compositeTrack on
+shortLabel Genome Variants
+longLabel Personal Genome Variants
+group varRep
+priority 500
+visibility hide
+type bed 4 +
+
+    track pgVenter
+    subTrack pgSnp
+    shortLabel Venter
+    longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
+    group varRep
+    priority 1
+    color 128,0,128
+
+    track pgWatson
+    subTrack pgSnp
+    shortLabel Watson
+    longLabel James Watson (CSHL)
+    group varRep
+    priority 2
+    color 153,0,0
+
+    track pgYoruban3
+    subTrack pgSnp
+    shortLabel YRI NA18507
+    longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
+    group varRep
+    priority 5
+    color 128,0,128
+
+    track pgYh1
+    subTrack pgSnp
+    shortLabel YanHuang
+    longLabel Han Chinese Individual (YanHuang Project)
+    group varRep
+    priority 6
+    color 0,128,128
+
+    track pgSjk
+    subTrack pgSnp
+    shortLabel SJK
+    longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
+    group varRep
+    priority 7
+    color 0,128,128
+
+    track pgNA12878
+    subTrack pgSnp
+    shortLabel CEU daught '2878
+    longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
+    group varRep
+    priority 8
+    color 128,64,0
+
+    track pgNA12891
+    subTrack pgSnp
+    shortLabel CEU father '2891
+    longLabel CEU Trio Father NA12891 (1000 Genomes Project)
+    group varRep
+    priority 9
+    color 128,64,0
+
+    track pgNA12892
+    subTrack pgSnp
+    shortLabel CEU mother '2892
+    longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
+    group varRep
+    priority 10
+    color 128,64,0
+
+    track pgNA19240
+    subTrack pgSnp
+    shortLabel YRI daught '9240
+    longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
+    group varRep
+    priority 11
+    color 128,64,0
+
 
 #Overrides from priority.ra
 
