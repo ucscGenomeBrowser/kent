@@ -83,24 +83,27 @@ if ((setting = trackDbSettingClosestToHome(tg->tdb, "filterTopScorers")) != NULL
 /* Get list of items */
 if (tg->isBigBed)
     {
-    struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, tg,
-    							   chromName, winStart, winEnd, lm);
-    char *bedRow[32];
-    char startBuf[16], endBuf[16];
-    int minScore = 0;
     char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
-    if (scoreFilter)
-        minScore = atoi(scoreFilter);
+    if (scoreFilter != NULL || tg->visibility != tvDense)
+	{
+	struct lm *lm = lmInit(0);
+	struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, tg,
+							       chromName, winStart, winEnd, lm);
+	char *bedRow[32];
+	char startBuf[16], endBuf[16];
+	int minScore = 0;
+	if (scoreFilter)
+	    minScore = atoi(scoreFilter);
 
-    for (bb = bbList; bb != NULL; bb = bb->next)
-        {
-	bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-	bed = loader(bedRow);
-	if (scoreFilter == NULL || bed->score >= minScore)
-	    slAddHead(&list, bed);
+	for (bb = bbList; bb != NULL; bb = bb->next)
+	    {
+	    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+	    bed = loader(bedRow);
+	    if (scoreFilter == NULL || bed->score >= minScore)
+		slAddHead(&list, bed);
+	    }
+	lmCleanup(&lm);
 	}
-    lmCleanup(&lm);
     }
 else
     {
@@ -564,8 +567,10 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 
-if (vis == tvDense && tg->isBigBed)
+if (vis == tvDense && canDrawBigBedDense(tg))
+    {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
+    }
 else
     genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	    font, color, vis);

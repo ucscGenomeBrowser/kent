@@ -72,10 +72,21 @@ lmCleanup(&lm);
 }
 
 
+boolean canDrawBigBedDense(struct track *tg)
+/* Return TRUE if conditions are such that can do the fast bigBed dense data fetch and
+ * draw. */
+{
+if (!tg->isBigBed)
+    return FALSE;
+int scoreFilter = cartOrTdbInt(cart, tg->tdb, "scoreFilter", 0);
+return scoreFilter == 0;
+}
+
 
 void bigBedDrawDense(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color)
+/* Use big-bed summary data to quickly draw bigBed. */
 {
 struct bbiSummaryElement summary[width];
 if (bigBedSummaryArrayExtended(tg->bbiFile, chromName, seqStart, seqEnd, width, summary))

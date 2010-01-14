@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.120 2010/01/14 07:39:20 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.121 2010/01/14 22:36:31 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3116,8 +3116,10 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-if (vis == tvDense && tg->isBigBed)
+if (vis == tvDense && canDrawBigBedDense(tg))
+    {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
+    }
 else
     {
     if (vis == tvDense && tg->colorShades)

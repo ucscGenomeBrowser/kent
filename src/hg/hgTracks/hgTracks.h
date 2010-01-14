@@ -620,10 +620,14 @@ void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track
 /* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
  * them to linkedFeatures, and add to head of list. */
 
+boolean canDrawBigBedDense(struct track *tg);
+/* Return TRUE if conditions are such that can do the fast bigBed dense data fetch and
+ * draw. */
+
 void bigBedDrawDense(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color);
-/* Draw dense mode bigBed. */
+/* Use big-bed summary data to quickly draw bigBed. */
 
 void adjustBedScoreGrayLevel(struct trackDb *tdb, struct bed *bed, int scoreMin, int scoreMax);
 /* For each distinct trackName passed in, check cart for trackName.minGrayLevel; if
