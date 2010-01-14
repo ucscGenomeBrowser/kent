@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.757 2010/01/14 00:06:56 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.758 2010/01/14 01:08:11 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4869,6 +4869,7 @@ wgEncode 1
         shortLabel AoSMC DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in AoSMC cells)
         subGroups view=SIG cellType=AOSMCs EXP=DNase 
+        viewLimits 0:0.15
         type wig 0.00 1.20
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=AoSMC treatment=serum_free_media view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Jan 2010 Freeze" subId=939 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-08 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqSignalAosmcSerumfree fileName=wgEncodeDukeDNaseSeqSignalAosmcSerumfree.wig.gz
 
@@ -4879,6 +4880,7 @@ wgEncode 1
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Myometr cells)
         subGroups view=SIG cellType=MYOMETR EXP=DNase 
         type wig 0.00 1.36
+        viewLimits 0:0.15
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=Myometr view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Jan 2010 Freeze" subId=940 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-08 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqSignalMyometr fileName=wgEncodeDukeDNaseSeqSignalMyometr.wig.gz
 
         track wgEncodeDukeDNaseSeqSignalFibrop
@@ -4887,6 +4889,7 @@ wgEncode 1
         shortLabel FibroP DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in FibroP cells)
         subGroups view=SIG cellType=FIBROP EXP=DNase 
+        viewLimits 0:0.15
         type wig 0.00 1.49
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=FibroP view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Jan 2010 Freeze" subId=960 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-09 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqSignalFibrop fileName=wgEncodeDukeDNaseSeqSignalFibrop.wig.gz
 
@@ -4897,6 +4900,7 @@ wgEncode 1
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Melano cells)
         subGroups view=SIG cellType=MELANO EXP=DNase
         type wig 0.00 1.05
+        viewLimits 0:0.15
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=Melano view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Jan 2010 Freeze" subId=953 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqSignalMelano fileName=wgEncodeDukeDNaseSeqSignalMelano.wig.gz
 
         track wgEncodeUtaChIPseqSignalProgfibPol2
@@ -4905,6 +4909,7 @@ wgEncode 1
         shortLabel ProgFib Pol2 Sig
         longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in ProgFib cells)
         subGroups view=SIG EXP=IP-pol2 cellType=bPROG
+        viewLimits 0:0.4
         type wig 0.00 4.97
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=ProgFib antibody=Pol2 view=Signal labVersion="fseq v 1.82, iff_FB0167P" dataVersion="ENCODE Jan 2010 Freeze" subId=969 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqSignalProgfibPol2 fileName=wgEncodeUtaChIPseqSignalProgfibPol2.wig.gz
 
@@ -4914,6 +4919,7 @@ wgEncode 1
         shortLabel NHBE FAIRE FD
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in NHBE cells)
         subGroups view=SIG cellType=NHBE EXP=FAIRE
+        viewLimits 0.0005:0.04
         type wig 0.00 0.37
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHBE view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Jan 2010 Freeze" subId=955 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqSignalNhbe fileName=wgEncodeUncFAIREseqSignalNhbe.wig.gz
 
@@ -5635,6 +5641,7 @@ wgEncode 1
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in AoSMC cells)
         subGroups view=SIGBO cellType=AOSMCs EXP=DNase 
         type wig 0.00 132.00
+        viewLimits 0:25
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=AoSMC treatment=serum_free_media view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=939 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-08 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalAosmcSerumfree fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalAosmcSerumfree.wig.gz
 
         track wgEncodeDukeDNaseSeqBaseOverlapSignalMyometr
@@ -5643,6 +5650,7 @@ wgEncode 1
         shortLabel Myometr DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Myometr cells)
         subGroups view=SIGBO cellType=MYOMETR EXP=DNase 
+        viewLimits 0:25
         type wig 0.00 141.00
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=Myometr view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=940 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-08 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalMyometr fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalMyometr.wig.gz
 
@@ -5652,6 +5660,7 @@ wgEncode 1
         shortLabel FibroP DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in FibroP cells)
         subGroups view=SIGBO cellType=FIBROP EXP=DNase 
+        viewLimits 0:25
         type wig 0.00 182.00
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=FibroP view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=960 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-09 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalFibrop fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalFibrop.wig.gz
 
@@ -5661,6 +5670,7 @@ wgEncode 1
         shortLabel Melano DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Melano cells)
         subGroups view=SIGBO cellType=MELANO EXP=DNase
+        viewLimits 0:25
         type wig 0.00 185.00
         metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=Melano view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=953 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeDukeDNaseSeq tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalMelano fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalMelano.wig.gz
 
@@ -5670,6 +5680,7 @@ wgEncode 1
         shortLabel ProgFib Pol2
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in ProgFib cells)
         subGroups view=SIGBO EXP=IP-pol2 cellType=bPROG
+        viewLimits 0:100
         type wig 0.00 1326.00
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=ProgFib antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=969 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqBaseOverlapSignalProgfibPol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalProgfibPol2.wig.gz
 
@@ -5679,6 +5690,7 @@ wgEncode 1
         shortLabel NHBE FAIRE BO
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in NHBE cells)
         subGroups view=SIGBO cellType=NHBE EXP=FAIRE
+        viewLimits 4:20
         type wig 0.00 604.00
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHBE view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=955 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqBaseOverlapSignalNhbe fileName=wgEncodeUncFAIREseqBaseOverlapSignalNhbe.wig.gz
 
