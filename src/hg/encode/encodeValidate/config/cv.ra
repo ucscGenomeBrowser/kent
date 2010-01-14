@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.186 2010/01/14 19:36:06 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.187 2010/01/14 20:01:05 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -446,7 +446,7 @@ term GM12864
 tag GM12864
 type Cell Line
 organism Human
-description B-Lymphocyte (provisional)
+description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12864
@@ -454,13 +454,13 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&P
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
-#protocol GM12864_Stam_protocol.pdf
+protocol GM12864_Stam_protocol.pdf
 
 term GM12865
 tag GM12865
 type Cell Line
 organism Human
-description B-Lymphocyte (provisional)
+description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12865
@@ -468,13 +468,13 @@ orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&P
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
-#protocol GM12865_Stam_protocol.pdf
+protocol GM12865_Stam_protocol.pdf
 
 term GM12872
 tag GM12872
 type Cell Line
 organism Human
-description B-Lymphocyte (provisional)
+description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12872
@@ -482,13 +482,13 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&P
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
-#protocol GM12872_Stam_protocol.pdf
+protocol GM12872_Stam_protocol.pdf
 
 term GM12873
 tag GM12873
 type Cell Line
 organism Human
-description B-Lymphocyte (provisional)
+description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12873
@@ -496,13 +496,13 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&P
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
-#protocol GM12873_Stam_protocol.pdf
+protocol GM12873_Stam_protocol.pdf
 
 term GM12874
 tag GM12874
 type Cell Line
 organism Human
-description B-Lymphocyte (provisional)
+description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12874
@@ -510,13 +510,13 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&P
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
-#protocol GM12874_Stam_protocol.pdf
+protocol GM12874_Stam_protocol.pdf
 
 term GM12875
 tag GM12875
 type Cell Line
 organism Human
-description B-Lymphocyte (provisional)
+description B-Lymphocyte
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12875
@@ -524,7 +524,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&P
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 tier 3
-#protocol GM12875_Stam_protocol.pdf
+protocol GM12875_Stam_protocol.pdf
 
 term GM12891
 tag GM12891
