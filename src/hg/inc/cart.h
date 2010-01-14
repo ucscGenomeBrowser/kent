@@ -492,5 +492,15 @@ void cartRemoveAllForTdb(struct cart *cart, struct trackDb *tdb);
 void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb);
 /* Remove all variables from cart that are associated
    with this tdb and it's children. */
+
+char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal);
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+
+int cartOrTdbInt(struct cart *cart, struct trackDb *tdb, char *var, int defaultVal);
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+
+double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double defaultVal);
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+
 #endif /* CART_H */
 

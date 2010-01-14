@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.115 2010/01/04 19:12:28 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.116 2010/01/14 07:37:39 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1861,5 +1861,34 @@ cartRemoveAllForTdb(cart,tdb);
 struct trackDb *subTdb;
 for(subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
     cartRemoveAllForTdbAndChildren(cart,subTdb);
+}
+
+char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal)
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+{
+char *tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, var, defaultVal);
+boolean compositeLevel = isNameAtCompositeLevel(tdb, var);
+return cartUsualStringClosestToHome(cart, tdb, compositeLevel, var, tdbDefault);
+}
+
+int cartOrTdbInt(struct cart *cart, struct trackDb *tdb, char *var, int defaultVal)
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+{
+char *a = cartOrTdbString(cart, tdb, var, NULL);
+if (a == NULL)
+    return defaultVal;
+else
+    return atoi(a);
+}
+
+
+double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double defaultVal)
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+{
+char *a = cartOrTdbString(cart, tdb, var, NULL);
+if (a == NULL)
+    return defaultVal;
+else
+    return atof(a);
 }
 
