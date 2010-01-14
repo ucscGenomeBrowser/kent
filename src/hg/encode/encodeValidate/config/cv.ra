@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.185 2010/01/14 18:06:23 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.186 2010/01/14 19:36:06 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1684,6 +1684,16 @@ lab Snyder
 targetId GeneCard:GC01M058958
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
 
+term CEBPB
+tag CEBPB
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription epitope mapping at the C-terminus of C/EBP ? of rat origin
+orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-150
+lab Snyder
+
 term CTCF
 tag CTCF
 type Antibody
@@ -1782,6 +1792,16 @@ lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1&search=Egr-1
 
+term ERRA
+tag ERRA
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERR? of human origin
+orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-66882
+lab Snyder
+
 term FOSL2
 tag FOSL2
 type Antibody
@@ -1855,6 +1875,16 @@ lab Myers
 lots A2508, E1908
 targetId GeneCard:GC04M149219
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
+
+term GRp20
+tag GRP20
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription epitope mapping at the C-terminus of GR ? of human origin
+orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-1002
+lab Snyder
 
 term GTF2B
 tag GTF2B
@@ -2024,6 +2054,26 @@ lab Myers
 targetId GeneCard:GC08M080838
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
 
+term HNF4A
+tag HNF4A
+type Antibody
+antibodyDescription Goat polyclonal IgG
+targetDescription epitope mapping at the C-terminus of Rab 11 of human origin
+orderUrl http://www.scbt.com/datasheet-6556-hnf-4alpha-c-19-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-6556
+lab Snyder
+
+term HSF1
+tag HSF1
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription epitope corresponding to amino acids 219-529 of heat shock transcription factor 1 (HSF1) of human origin
+orderUrl http://www.scbt.com/datasheet-9144-hsf1-h-311-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-9144
+lab Snyder
+
 term Ini1
 tag Ini1
 type Antibody
@@ -2153,6 +2203,16 @@ targetDescription ??
 vendorName ??
 vendorId
 orderUrl
+lab Snyder
+
+term Nrf2
+tag NRF2
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-? of human origin
+orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-22810
 lab Snyder
 
 term NRSF
