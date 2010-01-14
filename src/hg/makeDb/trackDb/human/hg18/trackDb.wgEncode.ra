@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.756 2010/01/13 23:58:11 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.757 2010/01/14 00:06:56 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3362,7 +3362,7 @@ shortLabel Open Chromatin
 longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
-subGroup2 cellType Cell_Line AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULO=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK_<i>Tier2</i> bPROG=ProgFib PANI=PanIslets
+subGroup2 cellType Cell_Line AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> bPROG=ProgFib PANI=PanIslets
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc IP-pol2=ChIP-seq_Pol2 zCTRL=Input_Control
 sortOrder cellType=+ EXP=+ view=+
 dimensions dimensionY=cellType dimensionX=EXP
@@ -4063,6 +4063,15 @@ wgEncode 1
         subGroups view=Peaks EXP=IP-pol2 cellType=bPROG
         type narrowPeak
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=ProgFib antibody=Pol2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Jan 2010 Freeze" subId=969 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqPeaksProgfibPol2 fileName=wgEncodeUtaChIPseqPeaksProgfibPol2.narrowPeak.gz
+
+        track wgEncodeUncFAIREseqPeaksNhbe
+        release alpha
+        subTrack wgEncodeChromatinMapViewPeaks off
+        shortLabel NHBE FAIRE Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in NHBE cells)
+        subGroups view=Peaks cellType=NHBE EXP=FAIRE
+        type narrowPeak
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHBE view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Jan 2010 Freeze" subId=955 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqPeaksNhbe fileName=wgEncodeUncFAIREseqPeaksNhbe.narrowPeak.gz
 
     track wgEncodeChromatinMapViewSIG
     release alpha
@@ -4899,6 +4908,15 @@ wgEncode 1
         type wig 0.00 4.97
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=ProgFib antibody=Pol2 view=Signal labVersion="fseq v 1.82, iff_FB0167P" dataVersion="ENCODE Jan 2010 Freeze" subId=969 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqSignalProgfibPol2 fileName=wgEncodeUtaChIPseqSignalProgfibPol2.wig.gz
 
+        track wgEncodeUncFAIREseqSignalNhbe
+        release alpha
+        subTrack wgEncodeChromatinMapViewSIG off
+        shortLabel NHBE FAIRE FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in NHBE cells)
+        subGroups view=SIG cellType=NHBE EXP=FAIRE
+        type wig 0.00 0.37
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHBE view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Jan 2010 Freeze" subId=955 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqSignalNhbe fileName=wgEncodeUncFAIREseqSignalNhbe.wig.gz
+
     track wgEncodeChromatinMapViewSIGBO
     release alpha
     shortLabel Signal (Base Overlap)
@@ -5654,6 +5672,15 @@ wgEncode 1
         subGroups view=SIGBO EXP=IP-pol2 cellType=bPROG
         type wig 0.00 1326.00
         metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=ProgFib antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=969 dateSubmitted=2010-01-10 dateUnrestricted=2010-10-10 composite=wgEncodeUt-aChIPseq tableName=wgEncodeUtaChIPseqBaseOverlapSignalProgfibPol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalProgfibPol2.wig.gz
+
+        track wgEncodeUncFAIREseqBaseOverlapSignalNhbe
+        release alpha
+        subTrack wgEncodeChromatinMapViewSIGBO off
+        shortLabel NHBE FAIRE BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in NHBE cells)
+        subGroups view=SIGBO cellType=NHBE EXP=FAIRE
+        type wig 0.00 604.00
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHBE view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Jan 2010 Freeze" subId=955 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqBaseOverlapSignalNhbe fileName=wgEncodeUncFAIREseqBaseOverlapSignalNhbe.wig.gz
 
 
 # Mapability - Cross lab special track (wrangler: tdreszer)
