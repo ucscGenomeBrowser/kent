@@ -175,6 +175,7 @@ return sv[0];
 #else
 
 #include <stdarg.h>
+#include "common.h"
 #include "errabort.h"
 
 int netMustConnectHttps(char *hostName, int port)
