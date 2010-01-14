@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.189 2010/01/14 20:36:20 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.190 2010/01/14 22:23:17 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3133,6 +3133,11 @@ tag ETOH02
 description 1h,0.02% EtOH (Myers)
 type treatment
 
+term forskolin
+tag FORSKLN
+description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
+type treatment
+
 term IFNa30
 tag IFNa30
 description Interferon alpha treatment - 30 minutes (Snyder)
@@ -3161,6 +3166,11 @@ type treatment
 term IFNg6h
 tag IFNg6h
 description Interferon gamma treatment - 6 hours (Snyder)
+type treatment
+
+term insolin
+tag INSLN
+description Human DMEM with 0.5% BSA supplemented with 100nM insulin and 10uM 22-hydroxycholesterol for 6h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
