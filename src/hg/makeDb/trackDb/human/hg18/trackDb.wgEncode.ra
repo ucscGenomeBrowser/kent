@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.763 2010/01/14 22:06:10 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.764 2010/01/14 22:17:57 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5931,7 +5931,7 @@ shortLabel RIKEN CAGE Loc
 longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views 1-PlusClusters=Plus_Clusters 3-MinusClusters=Minus_Clusters 5-Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
+subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
@@ -6345,6 +6345,16 @@ wgEncode 1
         color 153,38,0
         colorByStrand 153,38,0 34,136,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya.tagAlign.gz
+
+        track wgEncodeRikenCageAlignmentsHuvecCytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel HUVEC cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in HUVEC cytosol)
+        subGroups view=5-Alignments cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
+        type bigBed 6
+        color 224,75,0
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HUVEC rnaExtract=longNonPolyA localization=cytosol view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1014 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsHuvecCytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsHuvecCytosolLongnonpolya.tagAlign.gz
 
 # Duke Affy Exon (wrangler: braney)
 track wgEncodeDukeAffyExonArray
