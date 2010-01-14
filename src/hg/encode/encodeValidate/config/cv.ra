@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.183 2010/01/13 21:34:59 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.184 2010/01/14 04:03:50 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2759,6 +2759,11 @@ term 1x75
 tag r1x75
 type readType
 description Single 75 n.t. reads
+
+term 1x75D
+tag r1x75D
+type readType
+description Single 75 n.t. directed reads 
 
 term 2x75
 tag r2x75
