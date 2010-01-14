@@ -1,6 +1,16 @@
+<%
+# handle freeze deadline
+deadline = Time.local(2010, 01, 16, 0,0,0)   # 2010-01-16 00:00:00
+if Time.now > deadline
+  flash[:notice] = "Pipeline not available due to post-freeze processing<br>(as of Fri Jan 15th midnight PST)."
+  %> Press the back button on your browser <%
+else
+%>
+
 <p>
 <b>Create new submission:</b>
 <p>
+
 <%= error_messages_for 'project' -%>
 
 <% form_tag(:action => 'create') do %>
@@ -38,9 +48,13 @@
    <% @project.project_type_id = @projectTypes[0].id %>
    <%= hidden_field :project, :project_type_id %>
 <% end %>
-  
+
+
 <table><tr>
 <td > <%= submit_tag 'Create' -%></td>
 <td > <%= submit_tag 'Cancel' -%></td>
-<% end %>
 </tr></table>
+
+<% end %>
+
+<% end %>

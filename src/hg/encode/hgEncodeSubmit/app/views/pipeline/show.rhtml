@@ -28,6 +28,14 @@ if [
 else
   nonActive = false
 end
+
+# handle freeze deadline
+deadline = Time.local(2010, 01, 16, 0,0,0)   # 2010-01-16 00:00:00
+if Time.now > deadline
+  nonActive = true
+  flash[:notice] = "Pipeline not available due to post-freeze processing<br>(as of Fri Jan 15th midnight PST)."
+end
+
 %>
 <% if @project.project_archives.blank? and @project.status=="new" %>
    <b>Submit data for this project:</b>
