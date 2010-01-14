@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.190 2010/01/14 22:23:17 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.191 2010/01/14 23:44:30 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2226,12 +2226,14 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 term Nrf1
 tag NRF1
 type Antibody
-antibodyDescription Nrf1 is an mystery antibody awaiting description from the Snyder lab (provisional)
-targetDescription ??
-vendorName ??
-vendorId
-orderUrl
+antibodyDescription Mouse monoclonal, Immunogen corresponding to amino acids 201-286 of Human NRF1
+targetDescription NRF1 is the mammalian homolog to the erect wing (ewg) Drosophila protein that is required for proper development of the central nervous system and indirect flight muscles. In mammals NRF1 functions as a transcription factor that activates the expression of the EIF2S1 (EIF-alpha) gene. This protein links the transcriptional modulation of key metabolic genes to cellular growth and development, and has been implicated in the control of nuclear genes required for respiration, heme biosynthesis and mitochondrial DNA transcription and replication. NRF1 forms a homodimer and binds DNA as a dimer. NRF1 shows a nuclear localization and is expressed widely in embryonic, fetal and adult tissues. Phosphorylation of NRF1 enhances DNA binding.
+vendorName Abcam
+vendorId ab55744
+orderUrl http://www.abcam.com/NRF1-antibody-ab55744.html
 lab Snyder
+targetId GeneCard:GC07P129038
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1&search=nrf1
 
 term Nrf2
 tag NRF2
