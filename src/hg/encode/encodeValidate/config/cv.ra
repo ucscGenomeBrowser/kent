@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.188 2010/01/14 20:25:40 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.189 2010/01/14 20:36:20 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1049,8 +1049,8 @@ term HT-1080
 tag HT1080
 type Cell Line
 organism Human
-description HT?1080 ?is ?an ?epithelial ?cell ?line ?derived ?from? a ?fibrosarcoma.
-karyotype pseudo-diploid? male ?with ?a modal? chromosome ?number ?of ?46. ?There ?are ?numerous ?chromosome ?abnormalities.
+description HT-1080 is an epithelial cell line derived from a fibrosarcoma.
+karyotype pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
 vendorName ATCC
 vendorId CCL­121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
@@ -1417,8 +1417,8 @@ term T98G
 tag T98G
 type Cell Line
 organism Human
-description T98G ?is a ?fibroblast ?cell ?line ?derived ?from ?a ?glioblastoma? multiforme.
-karyotype hyper-pentaploid ?male ?with a? modal ?chromosome ?number ?around ?128 ?to ?132. ?There ?are ?numerous ?chromosome? abnormalities ?and ?marker ?chromosomes.
+description T98G is a fibroblast cell line derived from a glioblastoma multiforme.
+karyotype hyper-pentaploid male with a modal chromosome number around 128 to 132. There are numerous chromosome abnormalities and marker chromosomes.
 vendorName ATCC
 vendorId CRL­1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
@@ -1534,8 +1534,8 @@ description pseudogene
 term AP-2alpha
 tag AP2alpha
 type Antibody
-antibodyDescription Rabbit polyclonal - AP-2? (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2? of human origin.
-targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.  AP-2? is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
+antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin.
+targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.  AP-2alpha is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
 vendorName Santa Cruz Biotech
 vendorId sc-8975
 orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
@@ -1654,7 +1654,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
 term BRF1
 tag BRF1
 type Antibody
-antibodyDescription Rabbit polyclonal - Anti-BRF antibody 128 was raised by immunising rabbits with synthetic peptide KISSKINYSVLRGLS (human BRF residues 533? 547) coupled to keyhole limpet haemocyanin.
+antibodyDescription Rabbit polyclonal - Anti-BRF antibody 128 was raised by immunising rabbits with synthetic peptide KISSKINYSVLRGLS (human BRF residues 533-547) coupled to keyhole limpet haemocyanin.
 targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 128
@@ -1716,7 +1716,7 @@ term CEBPB
 tag CEBPB
 type Antibody
 antibodyDescription Rabbit polyclonal IgG
-targetDescription epitope mapping at the C-terminus of C/EBP ? of rat origin
+targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-150
@@ -1824,7 +1824,7 @@ term ERRA
 tag ERRA
 type Antibody
 antibodyDescription Rabbit polyclonal IgG
-targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERR? of human origin
+targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-66882
@@ -1908,7 +1908,7 @@ term GRp20
 tag GRP20
 type Antibody
 antibodyDescription Rabbit polyclonal IgG
-targetDescription epitope mapping at the C-terminus of GR ? of human origin
+targetDescription epitope mapping at the C-terminus of GR alpha of human origin
 orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-1002
@@ -2237,7 +2237,7 @@ term Nrf2
 tag NRF2
 type Antibody
 antibodyDescription Rabbit polyclonal IgG
-targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-? of human origin
+targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-alpha of human origin
 orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-22810
@@ -2323,7 +2323,7 @@ term Pol2(b)
 tag Pol2b
 type Antibody
 antibodyDescription mouse monoclonal, clone CTD4H8
-targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5? gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
+targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5' gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
@@ -2401,7 +2401,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10M079405
 term RXRA
 tag RXRA
 type Antibody
-antibodyDescription RXRa(D-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the N-terminus of RXR? of human origin. Recommended for detection of RXR? of m, r and h origin by WB, IP, IF, IHC(P) and ELISA.
+antibodyDescription RXRa(D-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Recommended for detection of RXRalpha of m, r and h origin by WB, IP, IF, IHC(P) and ELISA.
 targetDescription Retinoid X receptors (RXRs) and retinoic acid receptors (RARs), are nuclear receptors that mediate the biological effects of retinoids by their involvement in retinoic acid-mediated gene activation. These receptors exert their action by binding, as homodimers or heterodimers, to specific sequences in the promoters of target genes and regulating their transcription. The protein encoded by this gene is a member of the steroid and thyroid hormone receptor superfamily of transcriptional regulators.
 vendorName Santa Cruz Biotech
 vendorId sc-553
