@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.765 2010/01/14 22:24:23 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.766 2010/01/14 23:06:32 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6055,6 +6055,16 @@ wgEncode 1
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE NFeb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
+        track wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView1-PlusClusters off
+        shortLabel HUVEC cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in HUVEC cytosol)
+        subGroups view=1-PlusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
+        type bedGraph 4
+        color 224,75,0
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HUVEC rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1023 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya.bedGraph4.gz
+
     track wgEncodeRikenCageView3-MinusClusters
     shortLabel Minus Clusters
     view 3-MinusClusters
@@ -6165,6 +6175,16 @@ wgEncode 1
         type bedGraph 4
         color 34,136,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
+
+        track wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView3-MinusClusters off
+        shortLabel HUVEC cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in HUVEC cytosol)
+        subGroups view=3-MinusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
+        type bedGraph 4
+        color 224,75,0
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HUVEC rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1023 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageView5-Alignments
     shortLabel Alignments
