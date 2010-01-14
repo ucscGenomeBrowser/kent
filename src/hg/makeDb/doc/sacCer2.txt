@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.14 2009/07/22 17:35:50 hiram Exp $
+#  $Id: sacCer2.txt,v 1.15 2010/01/14 22:10:58 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1360,4 +1360,17 @@ done
     hgsql -e "alter table chrM_gold add index frag (frag(9));" sacCer2
     hgsql -e "alter table chrM_gap add index chromStart (chromStart);" sacCer2
     hgsql -e "alter table chrM_gap add index bin (bin);" sacCer2
+
 ############################################################################
+# LIFTOVER TO SacCer1 (DONE - 2010-01-14 - Hiram )
+    mkdir /hive/data/genomes/sacCer2/bed/blat.sacCer1.2010-01-14
+    cd /hive/data/genomes/sacCer2/bed/blat.sacCer1.2010-01-14
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug sacCer2 sacCer1
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	 sacCer2 sacCer1 > do.log 2>&1
+    #	real    3m42.700s
+
+#############################################################################
