@@ -88,12 +88,17 @@ if (tg->isBigBed)
     							   chromName, winStart, winEnd, lm);
     char *bedRow[32];
     char startBuf[16], endBuf[16];
+    int minScore = 0;
+    char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
+    if (scoreFilter)
+        minScore = atoi(scoreFilter);
 
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
 	bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 	bed = loader(bedRow);
-	slAddHead(&list, bed);
+	if (scoreFilter == NULL || bed->score >= minScore)
+	    slAddHead(&list, bed);
 	}
     lmCleanup(&lm);
     }

@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.23 2010/01/05 05:36:26 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.24 2010/01/14 07:39:19 kent Exp $";
 
 struct bamTrackData
     {
@@ -324,29 +324,20 @@ if (ret == 0)
 return ret;
 }
 
-static char *cartOrTdbClosest(struct trackDb *tdb, char *var, char *defaultVal)
-/* Combine cart and tdb closest-to-home search */
-// (shouldn't there already be a lib routine to do this?)
-{
-char *tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, var, defaultVal);
-boolean compositeLevel = isNameAtCompositeLevel(tdb, var);
-return cartUsualStringClosestToHome(cart, tdb, compositeLevel, var, tdbDefault);
-}
-
 void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
 {
 struct hash *pairHash = isPaired ? hashNew(18) : NULL;
-int minAliQual = atoi(cartOrTdbClosest(tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT));
-char *colorMode = cartOrTdbClosest(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
-char *grayMode = cartOrTdbClosest(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
-char *userTag = cartOrTdbClosest(tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
+int minAliQual = atoi(cartOrTdbString(cart, tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT));
+char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
+char *userTag = cartOrTdbString(cart, tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag};
 char *fileName;
 if (tg->customPt)
     {
-    fileName = trackDbSettingClosestToHome(tg->tdb, "bigDataUrl");
+    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
 	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->mapName);
     }
@@ -425,8 +416,8 @@ struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 struct psl *psl = NULL;
-char *colorMode = cartOrTdbClosest(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
-char *grayMode = cartOrTdbClosest(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
+char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
 		     sameString(grayMode, BAM_GRAY_MODE_BASE_QUAL));
 if (vis != tvDense)
@@ -538,8 +529,8 @@ boolean compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_PAIR_ENDS_BY_NAM
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
 			 BAM_PAIR_ENDS_BY_NAME,
 			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
-char *colorMode = cartOrTdbClosest(track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
-char *userTag = cartOrTdbClosest(track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
+char *colorMode = cartOrTdbString(cart, track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+char *userTag = cartOrTdbString(cart, track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
     {
     if (! (isalpha(userTag[0]) && isalnum(userTag[1]) && userTag[2] == '\0'))

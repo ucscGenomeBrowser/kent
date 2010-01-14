@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.119 2010/01/07 23:49:29 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.120 2010/01/14 07:39:20 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -1914,13 +1914,13 @@ enum {blackShadeIx=9,whiteShadeIx=0};
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn)
 // Returns "score >= ..." extra where clause if one is needed
 {
-if( scoreColumn == NULL)
+if (scoreColumn == NULL)
     scoreColumn = "score";
 
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,"score",&and);
-if(and == FALSE) // Cannot have both 'filterBy' score and 'scoreFilter'
+if (and == FALSE) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
     return NULL;
