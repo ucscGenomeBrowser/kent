@@ -1,7 +1,7 @@
 <%
 # handle freeze deadline
 deadline = Time.local(2010, 01, 16, 0,0,0)   # 2010-01-16 00:00:00
-if Time.now > deadline
+if (Time.now > deadline) and (current_user.role != "admin")
   flash[:notice] = "Pipeline not available due to post-freeze processing<br>(as of Fri Jan 15th midnight PST)."
   %> Press the back button on your browser <%
 else
