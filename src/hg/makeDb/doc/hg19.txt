@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.70 2010/01/05 03:04:20 hartera Exp $";
+#	"$Id: hg19.txt,v 1.71 2010/01/15 23:49:38 hiram Exp $";
 
 #############################################################################
 
@@ -8289,3 +8289,24 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 2010-01-04. Moved exoniphy trackDb entry up to the human level
     # trackDb.ra since the entry is the same for hg16-19. Removed the entry in
     # trackDb.ra in each of those assembly directories.
+
+######################################################################## 
+# Vega gene update (DONE - 2010-01-15 - Hiram)
+    #	lookup version number at the Vega WEB site:
+    #	http://vega.sanger.ac.uk/index.html
+    #	and FTP site:
+    #	ftp://ftp.sanger.ac.uk/pub/vega/
+    cd /hive/data/genomes/hg19
+    #	step wise to verify operation
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=36 -stop=download hg19.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=36 \
+	-continue=process -stop=process hg19.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=36 \
+	-continue=load -stop=load hg19.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=36 \
+	-continue=cleanup hg19.ensGene.ra
+    featureBits hg19 vegaGene
+    # 64888909 bases of 2897316137 (2.240%) in intersection
+    featureBits hg19 vegaPseudoGene
+    # 6885145 bases of 2897316137 (0.238%) in intersection
+######################################################################## 

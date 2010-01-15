@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.119 2010/01/06 21:59:18 angie Exp $"
+#	"$Id: mm9.txt,v 1.120 2010/01/15 23:49:38 hiram Exp $"
 #
 
 #######################################################################
@@ -9893,3 +9893,22 @@ see doc/builds.txt for specific details.
 
 
 #######################################################################
+# Vega gene update (DONE - 2010-01-15 - Hiram)
+    #	lookup version number at the Vega WEB site:
+    #	http://vega.sanger.ac.uk/index.html
+    #	and FTP site:
+    #	ftp://ftp.sanger.ac.uk/pub/vega/
+    cd /hive/data/genomes/mm9
+    #	step wise to verify operation
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=37 -stop=download mm9.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=37 \
+	-continue=process -stop=process mm9.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=37 \
+	-continue=load -stop=load mm9.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=37 \
+	-continue=cleanup mm9.ensGene.ra
+    featureBits mm9 vegaGene
+    # 53838752 bases of 2620346127 (2.055%) in intersection
+    featureBits mm9 vegaPseudoGene
+    # 3060300 bases of 2620346127 (0.117%) in intersection
+######################################################################## 
