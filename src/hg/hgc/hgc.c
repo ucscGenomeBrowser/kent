@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1587 2010/01/15 15:35:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1588 2010/01/15 23:19:01 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8112,8 +8112,8 @@ int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char condStr[256];
-char ensVersionString[256];
-char ensDateReference[256];
+char versionString[256];
+char dateReference[256];
 char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
@@ -8122,33 +8122,33 @@ boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 if (trackVersionExists)
     {
     char query[256];
-    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
+    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' AND name = 'ensGene' order by updateTime DESC limit 1", database);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
 
     /* in case of NULL result from the table */
-    ensVersionString[0] = 0;
+    versionString[0] = 0;
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
+	safef(versionString, sizeof(versionString), "Ensembl %s",
 		row[0]);
-	safef(ensDateReference, sizeof(ensDateReference), "%s",
+	safef(dateReference, sizeof(dateReference), "%s",
 		row[1]);
 	}
     sqlFreeResult(&sr);
     }
 else
     {
-    ensVersionString[0] = 0;
-    ensDateReference[0] = 0;
+    versionString[0] = 0;
+    dateReference[0] = 0;
     }
 
 
 if (itemForUrl == NULL)
     itemForUrl = item;
 dupe = cloneString(tdb->type);
-if (ensVersionString[0])
-    safef(headerTitle, sizeof(headerTitle), "%s - %s", item, ensVersionString);
+if (versionString[0])
+    safef(headerTitle, sizeof(headerTitle), "%s - %s", item, versionString);
 else
     safef(headerTitle, sizeof(headerTitle), "%s", item);
 
@@ -8157,10 +8157,10 @@ wordCount = chopLine(dupe, words);
 char *archive = trackDbSetting(tdb, "ensArchive");
 if (archive == NULL)
     {
-    if (ensDateReference[0])
+    if (dateReference[0])
 	{
-	if (differentWord("current", ensDateReference))
-	    archive = cloneString(ensDateReference);
+	if (differentWord("current", dateReference))
+	    archive = cloneString(dateReference);
 	}
     }
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl, archive);
@@ -10400,9 +10400,49 @@ void doVegaGene(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Handle click on Vega gene track. */
 {
 struct vegaInfo *vi = NULL;
+char versionString[256];
+char dateReference[256];
+char headerTitle[512];
+
+/* see if hgFixed.trackVersion exists */
+boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+
+if (trackVersionExists)
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn(database);
+    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' AND name = 'vegaGene' order by updateTime DESC limit 1", database);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+
+    /* in case of NULL result from the table */
+    versionString[0] = 0;
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	safef(versionString, sizeof(versionString), "Vega %s",
+		row[0]);
+	safef(dateReference, sizeof(dateReference), "%s",
+		row[1]);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+else
+    {
+    versionString[0] = 0;
+    dateReference[0] = 0;
+    }
+
 if (itemForUrl == NULL)
     itemForUrl = item;
-genericHeader(tdb, item);
+
+if (versionString[0])
+    safef(headerTitle, sizeof(headerTitle), "%s - %s", item, versionString);
+else
+    safef(headerTitle, sizeof(headerTitle), "%s", item);
+
+genericHeader(tdb, headerTitle);
+
 if (hTableExists(database, "vegaInfo"))
     {
     char query[256];
