@@ -561,6 +561,7 @@ both 'Validated' and 'Manual', then an item must have a 1 or 2 in the level fiel
 And if the user also selects 'coding' in the second filter, an item would have to have level 1 or 2 and
 class='coding'.
 
+
 COMPOSITE TRACKS
 ================
 Tracks that are somehow related can be grouped in a single "composite track",
@@ -629,31 +630,17 @@ COMPOSITE SUBTRACK CONFIGURATION - 3 ways
    trackDb cfg settings can be at composite level (noInherit off - default)
    Optionally use 'boxedCfg" to put a box around setting controls.
 2) Subtrack settings have different types.  "Multi-view" required (see below).
-   "noInherit on" is most likely required.
-   Cfg settings in "settingsByView" or in all related subtracks.
+   Cfg settings can be at level of composite, view, or subtrack.
 3) Individual subtracks configurable - used in combination with 1 or 2.
-   "configurable on" at composite level makes all subtracks configurable.
-   settingsByView {view}:configurable=on,... all subtracks per view are configurable
-   "configurable on" in subtrack settings makes that one subtrack configurable.
+   "configurable on" setting, which can be at composite, view, or subtrack level.
 
 Composite Track "ClosestToHome" paradigm
 ----------------------------------------
 With a composite track with or without multi-view, there are many settings that
-could be at the subtrack, view or composite level.  In order to establish rules
-of which setting should take precedence, the ClosestToHome paradigm and API 
-was invented.  This applies both to trackDb settings and cart settings (which 
-are the choices made by a user).  The ClosestToHome paradigm is that subtracks 
-settings supercede view level setting which supercede composite level settings. For instance, if the setting is "useScore" (to color items), this could be set at the subtrack level for only one subtrack, or at the view level (in settingsByView)
-for all subtracks belonging to that view, or at the composite level so that all
-subtracks are affected.  Thus, putting "noInherit on" at the composite level 
-says that all subtracks will have their 'type' specified at the subtrack level.  And "configurable on" at the composite level means all subtracks will be 
-individually configurable by the user.
-NOTE: The "ClosestToHome" APIs must be specifically called in the code, so not
-all  settings are yet supported.  In some cases (such as visibility), it is
-desirable to have separate functionality depending upon the level (composite
-visibility limits view visibility, rather than being superceded by it).  You
-should always examine the effects of putting a setting at composite, view or
-subtrack level, rather than assume it works as you intend.
+could be at the subtrack, view or composite level. The usual way of querying settings,
+trackDbSetting(), will look for the setting in the subtrack first, then in the view,
+and finally in the composite level.  In cases where one only wants the settings at a
+particular level, use trackDbLocalSetting() instead.   
 
 Composite Track ADDITIONAL OPTIONS
 ----------------------------------
@@ -691,23 +678,21 @@ different types or views. For instance, ChIP-seq tracks may cover raw aligns,
 a signal track and called peaks.  The aligns may be 'bed 3', peaks 'bed 5 +'
 and signal 'wig'.  These views need different controls, though all signal
 subtracks may share the same controls (based upon subgroups).  This organization
-is achieved with the specialized subgroup "views". Example:
-    subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
-where each view (HMM,WIN,SIG,ALN) will be controlled by a separate drop down
+is achieved by inserting a "view" level of tracks in between the composite level and the
+subtracks.  The view track needs to have a view tag.  Settings that are common to all tracks in 
+a view can also be put in the view level track.  In addition a specialize specialized subgroup 
+"views" needs to be put in the view or subtrack level. Example:
+    subGroup1 view Views Hmm=Sites-HMM Win=Sites-Windowing Sig=Signal_Densities Aln=Alignments
+where each view (Hmm,Win,Sig,Aln) will be controlled by a separate drop down
 (hide,dense,...) and auxilary controls.  All subtracks for a given view must
-be of the same track type.  Each subtrack of a multi-view should have the
-"noInherit on" setting, and all the proper settings for the subtrack type.
-This can be accomplished using the ClosestToHome paradigm.
+be of the same track type.  Each subtrack of a multi-view should have all the proper settings 
+for the subtrack type.
 
     MULTI-VIEW VISIBILITY DEFAULTS
     ------------------------------
-    Because using multi-view represents two levels of drop-downs controlling whether a
-    subtrack will be displayed, and because the "visibility' setting on the composite
-    (parent) track controls the default setting (eg 'dense'), it is necessary to
-    have an additional setting for the multi-view defaults:
-        visibilityViewDefaults HMM=pack WIN=pack+ SIG=full ALN=hide
-    By adding a '+' at the end of a default visibility, the view's configuration
-    settings (if any) will be displayed by default.
+    The setting 
+        viewUi on
+    inside of a view if present will make the view's configuration settings displayed by default.
 
     MULTI-VIEW INDIVIDUAL SUBTRACK CONFIGURATION
     --------------------------------------------
@@ -722,16 +707,6 @@ This can be accomplished using the ClosestToHome paradigm.
     will apply only to that subtrack.  If the setting is then changed at the view
     level again, the individual setting is lost.
 
-    SETTINGSBYVIEW
-    ==============
-    The default settings for a view come from a random subtrack that belongs to that view
-    Since some defaults must be different for individual subtracks, the view's defaults
-    must be explicitly set.  To do this use the following setting
-        settingsByView Signal:viewLimits=0:2,viewLimitsMax=0:40
-    Here the view "Signal" is a wig with data range of 0 to 40 and a default view range of
-    0 to 2. Currently only two parameters are supported and these are both for wig:
-        viewLimits=lower:upper    # default is from the type line limits
-        viewLimitsMax=lower:upper # The max range (type wig lower upper)
 
 SORT
 ----
@@ -741,7 +716,7 @@ The order of subtracks within a composite track are originally defined by the
 UI allowing the resorting of the subtracks which will effect both the hgTrackUi
 display and the hgTracks display of the track data.  The sortOrder relies
 upon subGroups:
-    subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
+    subGroup1 view Views Hmm=Sites-Hmm Win=Sites-Windowing Sig=Signal_Densities Aln=Alignments
     subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
     subGroup3 factor Factor K04=H3K4me3 K09=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3
     sortOrder cellType=+ factor=+ view=-
@@ -780,9 +755,9 @@ This setting allows one more means of visually organizing many subtracks on
 the composite track configuration page.  It is especially useful in easily
 distinguishing views which are likely to be different within a single group
 of subtracks.  Example:
-    hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+    hierarchy view Hmm=0 Win=0 Sig=1 Aln=2
 While a particular cell type and factor combination may be set off with dividers,
-between the dividers the HMM and WIN type subtracks have no indentation, while
+between the dividers the Hmm and Win type subtracks have no indentation, while
 the signal track is indented by one and the alignment subtrack by two.
 NOTE: This setting is incompatible with and overridden by sortOrder.
 
@@ -837,64 +812,86 @@ compositeTrack on
 shortLabel Broad Chromatin ChIP-Seq
 longLabel Broad Institute Chromatin State Mapping using ChIP-Seq
 group regulation
-subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
+subGroup1 view Views Hmm=Sites-HMM Win=Sites-Windowing Sig=Signal_Densities Aln=Alignments
 subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
 subGroup3 factor Factor K04=H3K4me3 K09=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=-
 dragAndDrop subTracks
 #dividers cellType factor
-#hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+#hierarchy view Hmm=0 Win=0 Sig=1 Aln=2
 noInherit on
 visibility hide
-visibilityViewDefaults HMM=pack WIN=pack+ SIG=full ALN=hide
-settingsByView SIG:viewLimits=0:2,viewLimitsMax=0:40,maxHeightPixels=100:32:8,configurable=on ALN:configurable=off
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 priority 130
 type bed 3
 
-    track broadStemChipHmmSitesH3K4me3Es
-    shortLabel H3K4me3-ES HMM
-    longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
+    track broadChromatinChIPSeqViewHmm
+    shortLabel Sites-HMM
+    view Hmm
+    visibility pack
     subTrack broadChromatinChIPSeq
-    subGroups factor=K04 cellType=ES view=HMM
-    type bed 3
-    color 25,25,150
-    configurable on
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="PeakSeq v2.1"
 
-    track broadStemChipWinSitesH3K4me3Es
-    shortLabel H3K4me3-ES Win
-    longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
+        track broadStemChipHmmSitesH3K4me3Es
+        shortLabel H3K4me3-ES HMM
+        longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
+        subTrack broadChromatinChIPSeqViewHmm
+        subGroups factor=K04 cellType=ES view=Hmm
+        type bed 3
+        color 25,25,150
+        configurable on
+        metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="PeakSeq v2.1"
+
+    track broadChromatinChIPSeqViewWin
+    shortLabel Sites Windowing
+    view Win
+    viewUi on
+    visibility pack
     subTrack broadChromatinChIPSeq
-    subGroups factor=K04 cellType=ES view=WIN
-    type bed 5 +
-    useScore 1
-    color 25,25,150
-    configurable on
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
 
-    track broadStemChipSignalH3K4Es
-    shortLabel H3K4me3-ES Sig
-    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
+        track broadStemChipWinSitesH3K4me3Es
+        shortLabel H3K4me3-ES Win
+        longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
+        subTrack broadChromatinChIPSeqViewWin
+        subGroups factor=K04 cellType=ES view=Win
+        type bed 5 +
+        useScore 1
+        color 25,25,150
+        configurable on
+        metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
+
+    track broadChromatinChIPSeqViewSig
+    shortLabel Signal Densities
+    view Sig
+    visibility full
     subTrack broadChromatinChIPSeq
-    subGroups factor=K04 cellType=ES view=SIG
-    type wig 0 35
-    yLineOnOff On
-    yLineMark 1.0
-    color 25,150,25
 
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
+        track broadStemChipSignalH3K4Es
+        shortLabel H3K4me3-ES Sig
+        longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
+        subTrack broadChromatinChIPSeqViewSig
+        subGroups factor=K04 cellType=ES view=Sig
+        type wig 0 35
+        yLineOnOff On
+        yLineMark 1.0
+        color 25,150,25
+	metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
 
-    track broadStemChipAlignmentsH3K4Me3Es
-    shortLabel H3K4me3-ES Align
-    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
+    track broadChromatinChIPSeqViewAln
+    shortLabel Sites Alignments
+    view Aln
+    visibility hide
     subTrack broadChromatinChIPSeq
-    subGroups factor=K04 cellType=ES view=ALN
-    type bed 9 +
-    useScore 1
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1, unique, mismatch<=2"
-     . . .
+
+        track broadStemChipAlignmentsH3K4Me3Es
+        shortLabel H3K4me3-ES Align
+        longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
+        subTrack broadChromatinChIPSeqViewAln
+        subGroups factor=K04 cellType=ES view=Aln
+        type bed 9 +
+        useScore 1
+        metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1, unique, mismatch<=2"
+         . . .
 
 This example set up a composite track configuration page with an X and Y
 dimension matrix of check boxes for Cell Types by Factors, and a multi-view.
@@ -908,8 +905,8 @@ of subtracks will be displayed as packed, the signal will be displayed as
 full and the alignments subtracks will still be hidden.  Also, the configurable
 settings for "Sites-Windowing" will be displayed by default.  Additionally all
 of the subtracks are individually configurable except alignments.  Notice this is
-accomplised using "ClosestToHome" methods for 2 of the views (HMM and WIN), but
-directly for the other 2 (SIG and ALN). The wigs have many default settings but
+accomplised using "ClosestToHome" methods for 2 of the views (Hmm and Win), but
+directly for the other 2 (Sig and Aln). The wigs have many default settings but
 only the one wig shown has yLine. Notice this example defines a controlled
 vocabulary for both cellTypes and factors with definitions found in the
 encode/cv.ra directory (off apache/cgi-bin/). (Don't be confused though, this
