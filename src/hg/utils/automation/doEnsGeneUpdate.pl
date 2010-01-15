@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.21 2010/01/15 23:43:32 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.22 2010/01/15 23:47:36 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -557,7 +557,7 @@ _EOF_
     print "'_EOF_'\n";
     print "#  << happy emacs\n\n";
   }
-  print "    doEnsGeneUpdate.pl ${vegaOpt} -ensVersion=$ensVersion $db.$tableName.ra\n";
+  print "    doEnsGeneUpdate.pl ${vegaOpt} -ensVersion=$ensVersion $db.ensGene.ra\n";
   print "    ssh hgwdev\n";
   print "    cd /hive/data/genomes/$db/bed/$workDir.$ensVersion\n";
   print "    featureBits $db $tableName\n";
