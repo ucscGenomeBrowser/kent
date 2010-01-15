@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.74 2010/01/04 19:12:36 kent Exp $";
+#	"$Id: trackDb.ra,v 1.75 2010/01/15 23:42:26 fanhsu Exp $";
 
 include trackDb.chainNet.ra
 
@@ -27,6 +27,16 @@ noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 release beta
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
 
 track NIAGene
 shortLabel NIA Gene Index
