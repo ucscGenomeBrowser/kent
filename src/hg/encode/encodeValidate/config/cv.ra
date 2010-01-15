@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.192 2010/01/15 18:21:54 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.193 2010/01/15 20:09:36 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1664,7 +1664,7 @@ targetId GeneCard:GC14M104746
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
 
 term Brg1
-tag Brg1
+tag BRG1
 type Antibody
 antibodyDescription Brg1 is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
 targetDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin.
@@ -1676,7 +1676,7 @@ targetId GeneCard:GC19P010932
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19P010932
 
 term c-Fos
-tag cFos
+tag cFOS
 type Antibody
 antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
@@ -1688,7 +1688,7 @@ targetId GeneCard:GC14P074815
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14P074815
 
 term c-Myc
-tag cMyc
+tag cMYC
 type Antibody
 antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin
 targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
@@ -1701,7 +1701,7 @@ targetId GeneCard:GC08P128817
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08P128817
 
 term c-Jun
-tag cJun
+tag cJUN
 type Antibody
 antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
@@ -1737,7 +1737,7 @@ targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
 
 term CtBP1
-tag CtBP1
+tag CTBP1
 type Antibody
 antibodyDescription mouse monoclonal
 targetDescription C-terminal binding protein 1
@@ -1749,7 +1749,7 @@ targetId GeneCard:GC04M001195
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1&search=ctbp1=GC04M001195
 
 term CtBP2
-tag CtBP2
+tag CTBP2
 type Antibody
 antibodyDescription mouse monoclonal
 targetDescription C-terminal binding protein 2
@@ -1809,7 +1809,7 @@ targetId GeneCard:GC05M158059
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 
 term Egr-1
-tag Egr1
+tag EGR1
 type Antibody
 antibodyDescription Rabbit polyclonal, EGR-1 (588).
 targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III). Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its own gene promoter in a dose dependent manner.
@@ -2103,7 +2103,7 @@ vendorId sc-9144
 lab Snyder
 
 term Ini1
-tag Ini1
+tag INI1
 type Antibody
 antibodyDescription Ini1 (BAF47) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
 targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin.
@@ -2127,7 +2127,7 @@ targetId GeneCard:GC06P000336
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
 
 term JunD
-tag JunD
+tag JUND
 type Antibody
 antibodyDescription rabbit polyclonal IgG
 targetDescription TBD
@@ -2151,7 +2151,7 @@ targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
 
 term Max
-tag Max
+tag MAX
 type Antibody
 antibodyDescription rabbit polyclonal, epitope mapping at the C-terminus of Max of human origin
 targetDescription MYC associated factor X
@@ -2257,7 +2257,7 @@ lab Myers / Wold
 lots 20070905JV
 
 term Oct-2
-tag Oct2
+tag OCT2
 type Antibody
 targetDescription Oct-2 (C-20)
 antibodyDescription Rabbit Polyclonal IgG
@@ -2267,7 +2267,7 @@ orderUrl  http://www.scbt.com/product.php?datasheet=233
 lab Myers
 
 term p300
-tag p300
+tag P300
 type Antibody
 targetDescription EP300(c-20)
 antibodyDescription Rabbit Polyclonal
@@ -2301,7 +2301,7 @@ targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 
 term Pbx3
-tag Pbx3
+tag PBX3
 type Antibody
 targetDescription Pbx 3 (D-17)
 antibodyDescription Rabbit Polyclonal IgG
@@ -2310,8 +2310,20 @@ vendorId sc-891
 orderUrl  http://www.scbt.com/product.php?datasheet=891
 lab Myers
 
+term PGC1A
+tag PGC1A
+type Antibody
+antibodyDescription rabbit polyclonal IgG
+targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory factors (NRFs).
+orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-13067
+lab Snyder
+targetId GeneCard:GC04M023544
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC04M023544]
+
 term Pol2
-tag Pol2
+tag POL2
 type Antibody
 targetDescription RNA Polymerase II
 antibodyDescription mouse monoclonal, clone 8WG16
@@ -2322,7 +2334,7 @@ lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 
 term Pol2(b)
-tag Pol2b
+tag POL2B
 type Antibody
 antibodyDescription mouse monoclonal, clone CTD4H8
 targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5' gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
@@ -2333,7 +2345,7 @@ lab Bernstein
 lots 147337002
 
 term Pol2-4H8
-tag Pol24H8
+tag POL24H8
 type Antibody
 antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade
 targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
@@ -2345,7 +2357,7 @@ targetId GeneCard:GC17P007329
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 
 term Pol3
-tag Pol3
+tag POL3
 type Antibody
 targetDescription RNA Polymerase III
 antibodyDescription mouse monoclonal IgG1
@@ -2377,7 +2389,7 @@ orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 
 term Rad21
-tag Rad21
+tag RAD21
 type Antibody
 targetDescription Synthetic peptide (Human) conjugated to KLH - which represents a portion of human Rad21 encoded within exon 14
 antibodyDescription Rabbit polyclonal
@@ -2425,7 +2437,7 @@ targetId GeneCard:GC01P149165
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1&search=setdb1
 
 term Sin3Ak-20
-tag Sin3Ak20
+tag SIN3AK20
 type Antibody
 antibodyDescription Rabbit polyclonal, Sin3A (k-20).
 targetDescription Co-repressor interacting with HDAC1, N-coR, SMRT, and MeCP2
@@ -3176,7 +3188,7 @@ tag IFNg6h
 description Interferon gamma treatment - 6 hours (Snyder)
 type treatment
 
-term insolin
+term insulin
 tag INSLN
 description Human DMEM with 0.5% BSA supplemented with 100nM insulin and 10uM 22-hydroxycholesterol for 6h. (Snyder)
 type treatment
