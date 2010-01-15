@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1586 2010/01/12 21:07:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1587 2010/01/15 15:35:30 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10291,12 +10291,15 @@ char **row;
 int wordCount;
 int rowOffset;
 
+char* chrom = cartString(cart, "c");
+
 genericHeader(tdb,trnaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+safef(query, ArraySize(query), "select * from %s where chrom = '%s' and name = '%s'", track, chrom, trnaName);
+
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
   {
