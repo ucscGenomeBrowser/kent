@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.20 2010/01/15 22:25:55 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.21 2010/01/15 23:43:32 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -501,10 +501,18 @@ sub doCleanup {
   my $whatItDoes = "It cleans up or compresses intermediate files.";
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $dbHost,
 				      $runDir, $whatItDoes);
-  $bossScript->add(<<_EOF_
+  if ($opt_vegaGene) {
+    $bossScript->add(<<_EOF_
+rm -f pseudo.name not.pseudo.name vegaGene.name vegaPepAll.$db.fa.tab vegaPep.name
+gzip vegaPep.$db.fa.tab
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
 rm -f bed.tab ensPep.txt.gz ensPep.$db.fa.tab ensPep.name ensGene.name
 _EOF_
-  );
+    );
+  }
   $bossScript->execute();
 } # doCleanup
 
@@ -520,23 +528,46 @@ sub doMakeDoc {
   my $organism = `hgsql -N -e 'select organism from dbDb where name = "$db";' hgcentraltest`;
   chomp $organism;
 
-  print <<_EOF_
+  my $vegaOpt = "";
+  my $trackName = "Ensembl";
+  my $tableName = "ensGene";
+  my $workDir = "ensGene";
+  $tableName = "vegaGene" if ($opt_vegaGene);
+  $trackName = "Vega" if ($opt_vegaGene);
+  $vegaOpt = "-vegaGene" if ($opt_vegaGene);
+  $workDir = "vega" if ($opt_vegaGene);
+  if ($opt_vegaGene) {
+    print <<_EOF_
 ############################################################################
-#  $db - $organism - Ensembl Genes version $ensVersion  (DONE - $updateTime - $ENV{'USER'})
+#  $db - $organism - $trackName Genes version $ensVersion  (DONE - $updateTime - $ENV{'USER'})
     ssh $dbHost
     cd /hive/data/genomes/$db
-    cat << '_EOF_' > $db.ensGene.ra
 _EOF_
   ;
-  print `cat $db.ensGene.ra`;
-  print "'_EOF_'\n";
-  print "#  << happy emacs\n\n";
-  print "    doEnsGeneUpdate.pl -ensVersion=$ensVersion $db.ensGene.ra\n";
+  } else {
+    print <<_EOF_
+############################################################################
+#  $db - $organism - $trackName Genes version $ensVersion  (DONE - $updateTime - $ENV{'USER'})
+    ssh $dbHost
+    cd /hive/data/genomes/$db
+    cat << '_EOF_' > $db.$tableName.ra
+_EOF_
+  ;
+    print `cat $db.ensGene.ra`;
+    print "'_EOF_'\n";
+    print "#  << happy emacs\n\n";
+  }
+  print "    doEnsGeneUpdate.pl ${vegaOpt} -ensVersion=$ensVersion $db.$tableName.ra\n";
   print "    ssh hgwdev\n";
-  print "    cd /hive/data/genomes/$db/bed/ensGene.$ensVersion\n";
-  print "    featureBits $db ensGene\n";
+  print "    cd /hive/data/genomes/$db/bed/$workDir.$ensVersion\n";
+  print "    featureBits $db $tableName\n";
   print "    # ";
-  print `featureBits $db ensGene`;
+  print `featureBits $db $tableName`;
+  if ($opt_vegaGene) {
+    print "    featureBits $db vegaPseudoGene\n";
+    print "    # ";
+    print `featureBits $db vegaPseudoGene`;
+  }
   print "############################################################################\n";
 
 } # doMakeDoc
