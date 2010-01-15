@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.19 2009/10/27 21:26:00 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.20 2010/01/15 22:25:55 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -22,6 +22,7 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_ensVersion
+    $opt_vegaGene
     $opt_buildDir
     /;
 
@@ -38,6 +39,8 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $dbHost = 'hgwdev';
+my $vegaSpecies = "human";
+my $vegaPep = "Homo_sapiens.VEGA";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -59,8 +62,8 @@ other options:
 ";
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
-    -ensVersion NN        Request one of the Ensembl versions:
-                          Currently available: $versionListString
+    -vegaGene             Special processing for vegaGene instead of Ensembl
+                          works only on Human, Mouse, Zebrafish
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #>
                           (necessary if experimenting with builds).
@@ -68,7 +71,6 @@ _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
-						'fileServer' => '',
 						'bigClusterHub' => '',
 						'smallClusterHub' => '');
   print STDERR "
@@ -141,10 +143,10 @@ _EOF_
 # Globals:
 my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile,
     $ensMySqlUrl, $ensVersionDateReference, $previousEnsVersion, $buildDir,
-    $previousBuildDir);
+    $previousBuildDir, $vegaGene);
 # Command line argument:
 my $CONFIG;
-# Required command line argumen:
+# Required command line arguments:
 my ($ensVersion);
 # Required config parameters:
 my ($db);
@@ -159,6 +161,7 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'ensVersion=s',
+		      'vegaGene',
 		      'buildDir=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -212,7 +215,43 @@ _EOF_
       my $skipInv = "";
       $skipInv = "-skipInvalid" if (defined $skipInvalid);
 
-      if (defined $geneScaffolds) {
+      if ($opt_vegaGene) {
+      $bossScript->add(<<_EOF_
+hgLoadGenePred $skipInv -genePredExt $db \\
+    vegaGene process/not.vegaPseudo.gp.gz >& load.not.pseudo.errors.txt
+hgLoadGenePred $skipInv -genePredExt $db \\
+    vegaPseudoGene process/vegaPseudo.gp.gz >& load.pseudo.errors.txt
+hgsql -N -e "select name from vegaPseudoGene;" $db > pseudo.name
+hgsql -N -e "select name from vegaGene;" $db > not.pseudo.name
+sort -u pseudo.name not.pseudo.name > vegaGene.name
+sed -e "s/20/40/; s/19/39/" $ENV{'HOME'}/kent/src/hg/lib/ensGtp.sql \\
+    > vegaGtp.sql
+hgLoadSqlTab $db vegaGtp vegaGtp.sql process/ensGtp.tab
+zcat download/$ensPepFile \\
+	| sed -e 's/^>.* Transcript:/>/;' | gzip > vegaPep.txt.gz
+zcat vegaPep.txt.gz \\
+    | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \\
+	 | sed -e '/^\$/d; s/\*\$//' | sort > vegaPepAll.$db.fa.tab
+join vegaPepAll.$db.fa.tab vegaGene.name | sed -e "s/ /\\t/" \\
+    > vegaPep.$db.fa.tab
+hgPepPred $db tab vegaPep vegaPep.$db.fa.tab
+# verify names in vegaGene is a superset of names in vegaPep
+hgsql -N -e "select name from vegaPep;" $db | sort > vegaPep.name
+set geneCount = `cat vegaGene.name | wc -l`
+set pepCount = `cat vegaPep.name | wc -l`
+set commonCount = `comm -12 vegaPep.name vegaGene.name | wc -l`
+set percentId = \\
+    `echo \$commonCount \$pepCount | awk '{printf "%d", 100.0*\$1/\$2}'`
+echo "gene count: \$geneCount, peptide count: \$pepCount, common name count: \$commonCount"
+echo "percentId: \$percentId"
+if (! (\$percentId > 95)) then
+    echo "ERROR: percent coverage of peptides to genes: \$percentId"
+    echo "ERROR: should be greater than 95"
+    exit 255
+endif
+_EOF_
+	  );
+      } elsif (defined $geneScaffolds) {
 	  $bossScript->add(<<_EOF_
 hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz \\
 	>& loadGenePred.errors.txt
@@ -228,6 +267,7 @@ _EOF_
 	  );
       }
 
+      if (! $opt_vegaGene) {
       $bossScript->add(<<_EOF_
 zcat download/$ensPepFile \\
 	| sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//;' | gzip > ensPep.txt.gz
@@ -253,12 +293,23 @@ if (! (\$percentId > 95)) then
 endif
 _EOF_
       );
-      if (defined $knownToEnsembl) {
+      }
+      if (! $opt_vegaGene && defined $knownToEnsembl) {
 	  $bossScript->add(<<_EOF_
 hgMapToGene $db ensGene knownGene knownToEnsembl
 _EOF_
 	  );
       }
+      if ($opt_vegaGene) {
+      $bossScript->add(<<_EOF_
+hgsql -e 'INSERT INTO trackVersion \\
+    (db, name, who, version, updateTime, comment, source) \\
+    VALUES("$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+	"with peptides $ensPepFile", \\
+	"$ensGtfUrl" );' hgFixed
+_EOF_
+      );
+      } else {
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source) \\
@@ -267,6 +318,7 @@ hgsql -e 'INSERT INTO trackVersion \\
 	"$ensGtfUrl" );' hgFixed
 _EOF_
       );
+      }
   }
   $bossScript->execute();
 } # doLoad
@@ -341,6 +393,18 @@ gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
 $Bin/extractGtf.pl infoOut.txt > ensGtp.tab
 _EOF_
   );
+  if ($opt_vegaGene) {
+  $bossScript->add(<<_EOF_
+zcat allGenes.gtf.gz | grep -i pseudo \\
+  | sed -e 's/gene_id/other_gene_id/; s/gene_name/gene_id/' > vegaPseudo.gtf
+zcat allGenes.gtf.gz | grep -v -i pseudo \\
+  | sed -e 's/gene_id/other_gene_id/; s/gene_name/gene_id/' > not.vegaPseudo.gtf
+gtfToGenePred -genePredExt vegaPseudo.gtf vegaPseudo.gp
+gtfToGenePred -genePredExt not.vegaPseudo.gtf not.vegaPseudo.gp
+gzip vegaPseudo.gp not.vegaPseudo.gp
+_EOF_
+  );
+  }
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
 mv $db.allGenes.gp.gz $db.allGenes.beforeLift.gp.gz
@@ -375,6 +439,13 @@ _EOF_
   # if all of these are supposed to be valid, they should be able to
   #	pass genePredCheck right now
   if (! defined $skipInvalid) {
+      if ($opt_vegaGene) {
+      $bossScript->add(<<_EOF_
+genePredCheck -db=$db vegaPseudo.gp.gz
+genePredCheck -db=$db not.vegaPseudo.gp.gz
+_EOF_
+	  );
+      }
       $bossScript->add(<<_EOF_
 genePredCheck -db=$db $db.allGenes.gp.gz
 _EOF_
@@ -384,7 +455,7 @@ _EOF_
 } # doProcess
 
 #########################################################################
-# * step: download [fileServer]
+# * step: download [dbHost]
 sub doDownload {
   my $runDir = "$buildDir/download";
   # First, make sure we're starting clean.
@@ -396,8 +467,7 @@ sub doDownload {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "download data from Ensembl FTP site.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doDownload.csh", $fileServer,
+  my $bossScript = new HgRemoteScript("$runDir/doDownload.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
@@ -425,12 +495,11 @@ _EOF_
 
 
 #########################################################################
-# * step: cleanup [fileServer]
+# * step: cleanup [dbHost]
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $dbHost,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 rm -f bed.tab ensPep.txt.gz ensPep.$db.fa.tab ensPep.name ensGene.name
@@ -440,11 +509,10 @@ _EOF_
 } # doCleanup
 
 #########################################################################
-# * step: makeDoc [fileServer]
+# * step: makeDoc [dbHost]
 sub doMakeDoc {
   my $runDir = "$buildDir";
   my $whatItDoes = "Display the make doc text to stdout.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
 
   my $updateTime = `hgsql -N -e 'select updateTime from trackVersion where db = "$db" order by updateTime DESC limit 1;' hgFixed`;
   chomp $updateTime;
@@ -455,7 +523,7 @@ sub doMakeDoc {
   print <<_EOF_
 ############################################################################
 #  $db - $organism - Ensembl Genes version $ensVersion  (DONE - $updateTime - $ENV{'USER'})
-    ssh $fileServer
+    ssh $dbHost
     cd /hive/data/genomes/$db
     cat << '_EOF_' > $db.ensGene.ra
 _EOF_
@@ -588,9 +656,11 @@ if (!defined $opt_ensVersion) {
 $ensVersion = $opt_ensVersion;
 $previousEnsVersion = $ensVersion - 1;
 
-if ($versionListString !~ m/$ensVersion/) {
+if (! $opt_vegaGene) {
+  if ($versionListString !~ m/$ensVersion/) {
     print STDERR "ERROR: do not recognize given -ensVersion=$ensVersion\n";
     die "must be one of: $versionListString\n";
+  }
 }
 
 ($CONFIG) = @ARGV;
@@ -602,13 +672,41 @@ $bedDir = "$topDir/$HgAutomate::trackBuild";
 # $opt_verbose = 3 if ($opt_verbose < 3);
 
 # Establish what directory we will work in, tack on the ensembl version ID.
-$buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$ensVersion";
-$previousBuildDir =
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$previousEnsVersion";
+if ($opt_vegaGene) {
+  if ($db !~ m/^mm|^hg|^danRer/) {
+    printf STDERR "ERROR: this is database: $db\n";
+    die "vegaGene build only good on human, mouse or zebrafish\n";
+  }
+  $buildDir = $opt_buildDir ? $opt_buildDir :
+    "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/vega.$ensVersion";
+  $previousBuildDir =
+    "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/vega.$previousEnsVersion";
+} else {
+  $buildDir = $opt_buildDir ? $opt_buildDir :
+    "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$ensVersion";
+  $previousBuildDir =
+    "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$previousEnsVersion";
+}
 
-($ensGtfUrl, $ensPepUrl, $ensMySqlUrl, $ensVersionDateReference) =
-	&EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );
+if ($opt_vegaGene) {
+    $vegaSpecies = "mouse" if ($db =~ m/^mm/);
+    $vegaSpecies = "human" if ($db =~ m/^hg/);
+    $vegaSpecies = "danio" if ($db =~ m/^danRer/);
+    $vegaPep = "Mus_musculus.VEGA$ensVersion" if ($db =~ m/^mm/);
+    $vegaPep = "Homo_sapiens.VEGA" if ($db =~ m/^hg/);
+    $vegaPep = "Danio_rerio.VEGA$ensVersion" if ($db =~ m/^danRer/);
+}
+
+if ($opt_vegaGene) {
+  $ensGtfUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/gtf_file.gz";
+  $ensPepUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/pep/$vegaPep.$ensVersion.pep.all.fa.gz";
+  $ensMySqlUrl = "";
+  $ensVersionDateReference = `date "+%Y-%m-%d"`;
+  chomp $ensVersionDateReference;
+} else {
+  ($ensGtfUrl, $ensPepUrl, $ensMySqlUrl, $ensVersionDateReference) =
+    &EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );
+}
 
 die "ERROR: download: can not find Ensembl version $ensVersion FTP URL for UCSC database $db"
     if (!defined $ensGtfUrl);
