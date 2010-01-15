@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.766 2010/01/14 23:06:32 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.767 2010/01/15 00:14:05 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -20848,6 +20848,26 @@ noInherit on
         subGroups view=1-Transfrags cellType=prostate localization=0-cell
         type broadPeak
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
+
+        track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
+        release alpha
+        subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel GM12878 cell short
+        longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell)
+        subGroups view=1-Transfrags cellType=GM12878 localization=0-cell 
+        type broadPeak
+        color 153,38,0
+        metadata project=wgEncode grant=Gingeras lab=CshlShort dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort.broadPeak.gz
+
+        track wgEncodeCshlShortRnaSeqTransfragsK562CellShort
+        release alpha
+        subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 cell short
+        longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell)
+        subGroups view=1-Transfrags cellType=K562 localization=0-cell 
+        type broadPeak
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=CshlShort dataType=RnaSeq cell=K562 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CellShort.broadPeak.gz
 
     track wgEncodeCshlShortRnaSeqView2-PlusRawSignal
     shortLabel Plus Raw Signal
