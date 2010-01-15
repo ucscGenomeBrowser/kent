@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.194 2010/01/15 21:17:17 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.195 2010/01/15 22:47:26 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2839,6 +2839,11 @@ tag bow098
 type mapAlgorithm
 description bowtie v0.981
 
+term bow10
+tag bow10
+type mapAlgorithm
+description bowtie v0.10.0
+
 term BB1
 tag BB1
 type mapAlgorithm
@@ -2850,6 +2855,11 @@ type mapAlgorithm
 description bowtie0.10.0 followed by blat v34
 
 ### readType
+term 1x25
+tag r1x25
+type readType
+description Single 25 n.t. reads
+
 term 1x32
 tag r1x32
 type readType
