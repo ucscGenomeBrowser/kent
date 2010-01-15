@@ -280,3 +280,173 @@ priority 130
 
 track netCaeRem3 override
 priority 131
+
+track algBinding
+compositeTrack on
+shortLabel ALG-1 binding
+longLabel ALG-1 Argonaute binding sites
+group regulation
+priority 100.0
+visibility hide
+dragAndDrop subtracks
+noInherit on
+subGroup1 view Data_Sets mutant=Mutant wild=Wild_type sites=Sites
+color 0,0,0
+type bed 3
+maxHeightPixels 100:40:11
+spanList 1
+autoScale Off
+windowingFunction mean
+configurable on
+
+    track algBindingViewmutant
+    shortLabel Mutant
+    view mutant
+    subTrack algBinding
+
+	    track mt1Reverse
+	    subTrack algBindingViewmutant
+	    subGroups view=mutant
+	    shortLabel Mutant 1 R
+	    longLabel Mutant Experiment 1 reverse strand
+	    type wig 0 612
+	    viewLimits 0:120
+	    color 170,0,0
+	    priority 1
+
+	    track mt1Forward
+	    subTrack algBindingViewmutant
+	    subGroups view=mutant
+	    shortLabel Mutant 1 F
+	    longLabel Mutant Experiment 1 forward strand
+	    type wig 0 1542
+	    viewLimits 0:300
+	    color 120,0,50
+	    priority 2
+
+	    track mt2Reverse
+	    subTrack algBindingViewmutant
+	    subGroups view=mutant
+	    shortLabel Mutant 2 R
+	    longLabel Mutant Experiment 2 reverse strand
+	    type wig 0 7852
+	    viewLimits 0:1350
+	    color 0,170,0
+	    priority 3
+
+	    track mt2Forward
+	    subTrack algBindingViewmutant
+	    subGroups view=mutant
+	    shortLabel Mutant 2 F
+	    longLabel Mutant Experiment 2 forward strand
+	    type wig 0 36212
+	    viewLimits 0:3500
+	    color 0,120,50
+	    priority 4
+
+	    track mt3Reverse
+	    subTrack algBindingViewmutant
+	    subGroups view=mutant
+	    shortLabel Mutant 3 R
+	    longLabel Mutant Experiment 3 reverse strand
+	    type wig 0 3624
+	    viewLimits 0:500
+	    color 170,170,50
+	    priority 5
+
+	    track mt3Forward
+	    subTrack algBindingViewmutant
+	    subGroups view=mutant
+	    shortLabel Mutant 3 F
+	    longLabel Mutant Experiment 3 forward strand
+	    type wig 0 10031
+	    viewLimits 0:1450
+	    color 170,120,100
+	    priority 6
+
+    track algBindingViewwild
+    shortLabel Wild type
+    view wild
+    subTrack algBinding
+
+	    track wt1Reverse
+	    subTrack algBindingViewwild
+	    subGroups view=wild
+	    shortLabel WildT 1 R
+	    longLabel Wild type Experiment 1 reverse strand
+	    type wig 0 2408
+	    viewLimits 0:260
+	    color 170,0,170
+	    priority 7
+
+	    track wt1Forward
+	    subTrack algBindingViewwild
+	    subGroups view=wild
+	    shortLabel WildT 1 F
+	    longLabel Wild type Experiment 1 forward strand
+	    type wig 0 43839
+	    viewLimits 0:1900
+	    color 120,50,170
+	    priority 8
+
+	    track wt2Reverse
+	    subTrack algBindingViewwild
+	    subGroups view=wild
+	    shortLabel WildT 2 R
+	    longLabel Wild type Experiment 2 reverse strand
+	    type wig 0 19061
+	    viewLimits 0:1000
+	    color 0,170,170
+	    priority 9
+
+	    track wt2Forward
+	    subTrack algBindingViewwild
+	    subGroups view=wild
+	    shortLabel WildT 2 F
+	    longLabel Wild type Experiment 2 forward strand
+	    type wig 0 223704
+	    viewLimits 0:8500
+	    color 0,220,90
+	    priority 10
+
+	    track wt3Reverse
+	    subTrack algBindingViewwild
+	    subGroups view=wild
+	    shortLabel WildT 3 R
+	    longLabel Wild type Experiment 3 reverse strand
+	    type wig 0 5378
+	    viewLimits 0:500
+	    color 150,50,0
+	    priority 11
+
+	    track wt3Forward
+	    subTrack algBindingViewwild
+	    subGroups view=wild
+	    shortLabel WildT 3 F
+	    longLabel Wild type Experiment 3 forward strand
+	    type wig 0 68387
+	    viewLimits 0:2850
+	    color 80,50,0
+	    priority 12
+
+    track algBindingViewsites
+    shortLabel Sites
+    view sites
+    subTrack algBinding
+
+	    track algBindSites
+	    subTrack algBindingViewsites
+	    subGroups view=sites
+	    shortLabel Binding Sites
+	    longLabel ALG-1 binding sites in larval stage 4 worms
+	    type bed 6
+	    priority 13
+
+	    track algBindGenic
+	    subTrack algBindingViewsites
+	    subGroups view=sites
+	    shortLabel Genic regions
+	    longLabel Reannotated genic regions based on data from L3 and L4 RNAseq from Hillier et al
+	    type bed 6
+	    color 51,0,255
+	    priority 14
