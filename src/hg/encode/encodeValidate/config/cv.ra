@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.193 2010/01/15 20:09:36 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.194 2010/01/15 21:17:17 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2621,6 +2621,14 @@ orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:GC10P114700
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10P114700
+
+term TFIIIC
+tag TFIIIC
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin.
+vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+lab Struhl
 
 term TR4
 tag TR4
