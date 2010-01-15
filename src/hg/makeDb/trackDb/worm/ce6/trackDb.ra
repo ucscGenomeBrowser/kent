@@ -303,6 +303,8 @@ configurable on
     shortLabel Mutant
     view mutant
     subTrack algBinding
+    visibility full
+    viewLimits 0:250
 
 	    track mt1Reverse
 	    subTrack algBindingViewmutant
@@ -310,7 +312,7 @@ configurable on
 	    shortLabel Mutant 1 R
 	    longLabel Mutant Experiment 1 reverse strand
 	    type wig 0 612
-	    viewLimits 0:120
+#	    viewLimits 0:120
 	    color 170,0,0
 	    priority 1
 
@@ -320,7 +322,7 @@ configurable on
 	    shortLabel Mutant 1 F
 	    longLabel Mutant Experiment 1 forward strand
 	    type wig 0 1542
-	    viewLimits 0:300
+#	    viewLimits 0:300
 	    color 120,0,50
 	    priority 2
 
@@ -330,7 +332,7 @@ configurable on
 	    shortLabel Mutant 2 R
 	    longLabel Mutant Experiment 2 reverse strand
 	    type wig 0 7852
-	    viewLimits 0:1350
+#	    viewLimits 0:1350
 	    color 0,170,0
 	    priority 3
 
@@ -340,7 +342,7 @@ configurable on
 	    shortLabel Mutant 2 F
 	    longLabel Mutant Experiment 2 forward strand
 	    type wig 0 36212
-	    viewLimits 0:3500
+#	    viewLimits 0:3500
 	    color 0,120,50
 	    priority 4
 
@@ -350,7 +352,7 @@ configurable on
 	    shortLabel Mutant 3 R
 	    longLabel Mutant Experiment 3 reverse strand
 	    type wig 0 3624
-	    viewLimits 0:500
+#	    viewLimits 0:500
 	    color 170,170,50
 	    priority 5
 
@@ -360,7 +362,7 @@ configurable on
 	    shortLabel Mutant 3 F
 	    longLabel Mutant Experiment 3 forward strand
 	    type wig 0 10031
-	    viewLimits 0:1450
+#	    viewLimits 0:1450
 	    color 170,120,100
 	    priority 6
 
@@ -368,6 +370,8 @@ configurable on
     shortLabel Wild type
     view wild
     subTrack algBinding
+    visibility full
+    viewLimits 0:250
 
 	    track wt1Reverse
 	    subTrack algBindingViewwild
@@ -375,7 +379,7 @@ configurable on
 	    shortLabel WildT 1 R
 	    longLabel Wild type Experiment 1 reverse strand
 	    type wig 0 2408
-	    viewLimits 0:260
+#	    viewLimits 0:260
 	    color 170,0,170
 	    priority 7
 
@@ -385,7 +389,7 @@ configurable on
 	    shortLabel WildT 1 F
 	    longLabel Wild type Experiment 1 forward strand
 	    type wig 0 43839
-	    viewLimits 0:1900
+#	    viewLimits 0:1900
 	    color 120,50,170
 	    priority 8
 
@@ -395,7 +399,7 @@ configurable on
 	    shortLabel WildT 2 R
 	    longLabel Wild type Experiment 2 reverse strand
 	    type wig 0 19061
-	    viewLimits 0:1000
+#	    viewLimits 0:1000
 	    color 0,170,170
 	    priority 9
 
@@ -405,7 +409,7 @@ configurable on
 	    shortLabel WildT 2 F
 	    longLabel Wild type Experiment 2 forward strand
 	    type wig 0 223704
-	    viewLimits 0:8500
+#	    viewLimits 0:8500
 	    color 0,220,90
 	    priority 10
 
@@ -415,7 +419,7 @@ configurable on
 	    shortLabel WildT 3 R
 	    longLabel Wild type Experiment 3 reverse strand
 	    type wig 0 5378
-	    viewLimits 0:500
+#	    viewLimits 0:500
 	    color 150,50,0
 	    priority 11
 
@@ -425,7 +429,7 @@ configurable on
 	    shortLabel WildT 3 F
 	    longLabel Wild type Experiment 3 forward strand
 	    type wig 0 68387
-	    viewLimits 0:2850
+#	    viewLimits 0:2850
 	    color 80,50,0
 	    priority 12
 
@@ -433,6 +437,7 @@ configurable on
     shortLabel Sites
     view sites
     subTrack algBinding
+    visibility pack
 
 	    track algBindSites
 	    subTrack algBindingViewsites
