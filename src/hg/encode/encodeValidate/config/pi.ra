@@ -62,10 +62,10 @@ pi      Tenebaum
 grant   Tenenbaum
 project SUNY
 
-lab	UMass
+lab	UMass-Dekker
 pi      Dekker
 grant   Dekker
-project 5C
+project Umass-Dekker
 label   UMass-Dekker
 
 lab	UMassHA
