@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.195 2010/01/15 22:47:26 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.196 2010/01/16 00:17:12 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1662,6 +1662,18 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GC14M104746
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
+
+term BRF2
+tag BRF2
+type Antibody
+antibodyDescription Rabbit polyclonal - (provisional)
+targetDescription BRF2, subunit of RNA polymerase III transcription
+#vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+#vendorId 128
+#orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+#targetId GeneCard: GC08M037820
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2&search=Brf2
 
 term Brg1
 tag BRG1
