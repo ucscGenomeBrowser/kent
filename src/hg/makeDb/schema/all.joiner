@@ -52,7 +52,7 @@ set tetNig tetNig1,tetNig2
 set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
