@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.196 2010/01/16 00:17:12 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.197 2010/01/16 00:41:40 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1666,14 +1666,14 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
 term BRF2
 tag BRF2
 type Antibody
-antibodyDescription Rabbit polyclonal - (provisional)
-targetDescription BRF2, subunit of RNA polymerase III transcription
-#vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
-#vendorId 128
-#orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+antibodyDescription Antibody 4295 against Brf2 was raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively.
+targetDescription Brf2 is a component of an alternate form of the RNA Polymerase III transcription factor TFIIIB.
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 4295
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
-#targetId GeneCard: GC08M037820
-#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2&search=Brf2
+targetId GeneCard: GC08M037820
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2&search=Brf2
 
 term Brg1
 tag BRG1
@@ -2640,6 +2640,8 @@ type Antibody
 antibodyDescription rabbit polyclonal
 targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin.
 vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+vendorId 4286
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
 
 term TR4
