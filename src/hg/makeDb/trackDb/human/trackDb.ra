@@ -3401,12 +3401,6 @@ priority 236.2
 track netBosTau3 override
 priority 236.3
 
-track chainBosTau2 override
-priority 236.4
-
-track netBosTau2 override
-priority 236.5
-
 # guinea pig
 track chainCavPor3 override
 priority 258
