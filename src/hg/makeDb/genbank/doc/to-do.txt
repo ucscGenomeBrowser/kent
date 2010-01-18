@@ -1184,3 +1184,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   
 
 - APOBEC - 7 gene tandem cluster, some broken cases.
+
+- hg18: EST BG217227 not in gbWarn, but is an Athersys RAGE
+
