@@ -1,7 +1,0 @@
-    track wgEncodeDukeRegionsExcluded
-    subTrack wgEncodeMapability
-    shortLabel Excluded Regions
-    longLabel REPLACED Mapability - ENCODE Duke Excluded Regions
-    subGroups view=XR win=zNA
-    type bed 6
-    noScoreFilter on

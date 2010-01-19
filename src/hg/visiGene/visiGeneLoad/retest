@@ -1,9 +1,0 @@
-#!/bin/tcsh -ef
-hgsql -e "drop database visiTest; create database visiTest" mysql
-hgsql visiTest < ~/kent/src/hg/visiGene/visiGene.sql
-visiGeneLoad -database=visiTest test/nibb.ra test/nibb.tab /dev/null -verbose=2
-visiGeneLoad -database=visiTest test/paulGrayWhole.ra test/paulGrayWhole.tab -verbose=2 /dev/null
-visiGeneLoad -database=visiTest test/slices.ra test/slices.tab -verbose=2 /dev/null
-visiGeneLoad -database=visiTest test/abTest.ra test/abTest.tab test/abTest.txt -verbose=2
-visiGeneLoad -database=visiTest test/otherRna.ra test/otherRna.tab /dev/null -verbose=2
-visiGeneLoad -database=visiTest test/bacTest.ra test/bacTest.tab /dev/null -verbose=2

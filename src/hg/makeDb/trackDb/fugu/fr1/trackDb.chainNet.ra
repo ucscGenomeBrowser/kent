@@ -1,5 +1,0 @@
-#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/28 21:53:10 hiram Exp $";
-
-track chainNetDanRer4 override
-priority 240.3
-shortLabel Zebrafish Chain/Net

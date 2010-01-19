@@ -1,7 +1,0 @@
-#	"$Id: trackDb.chainNet.ra,v 1.2 2009/12/22 18:55:36 hiram Exp $";
-
-track chainNetHg18 override
-shortLabel Human Chain/Net
-
-track chainNetBosTau2 override
-shortLabel Mouse Chain/Net

@@ -1,9 +1,0 @@
-#
-# generate download files on hgdownload
-# - this file needs to work on both linux and solaris
-#
-
-# copy new download files from genbank server
-# try 6 hours, just because more frequence emails are 
-# annoying
-30 0,6,12,18 * * * /genbank/etc/hgdownload-copy

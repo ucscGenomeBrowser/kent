@@ -1,8 +1,0 @@
-Comparing inA.orf (a)  vs inB.orf (b)
-Total: 10
-Exact match: 3 30.00%
-Same frame >80% overlap: 2 20.00%
-Same frame <80% overlap: 1 10.00%
-Different frames: 1 10.00%
-Unique to a: 2 20.00%
-Unique to b: 1 10.00%

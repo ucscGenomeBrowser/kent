@@ -1,7 +1,0 @@
-files	view	cell	replicate	accession	labVersion
-HCT116_hpaII.txt.BED	Regions	HCT-116	1
-HCT116_hpaII.txt.peaks	Alignments	HCT-116	1
-small.fastq	RawData	HCT-116	1
-GM12878.txt.BED	Regions	GM12878	1
-GM12878.txt.peaks	Alignments	GM12878	1
-small.fastq	RawData	GM12878	1

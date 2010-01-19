@@ -1,7 +1,0 @@
-#!/bin/bash -e
-[ $# != 2 ] && echo "usage: ensemblVegaMap [options] organism version " >&2 && \
-organism=$1
-version=$2
-ensDb=ensembl_${organism}_${version}
-hgsql $ensDb -N -B -e "select s.name , seq_region_start, seq_region_end, ts.stable_id , dbprimary_acc, display_label from external_db edb , object_xref o, transcript t, xref x, transcript_stable_id ts, seq_region s  where o.xref_id = x.xref_id and ensembl_id = t.transcript_id and t.transcript_id = ts.transcript_id and t.seq_region_id = s.seq_region_id and edb.db_name = 'OTTT' and edb.external_db_id = x.external_db_id" > ensVegaMap.tab
-

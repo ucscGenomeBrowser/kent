@@ -1,4 +1,0 @@
-#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/22 19:00:04 hiram Exp $";
-
-track chainNetHg18 override
-chainMinScore 2000
