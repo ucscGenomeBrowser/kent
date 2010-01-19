@@ -117,6 +117,15 @@ linesAt 1,3
     priority 2
 
 
+track gwasCatalog
+shortLabel GWAS Catalog
+longLabel NHGRI Catalog of Published Genome-Wide Association Studies
+group phenDis
+visibility hide
+priority 51
+type bed 4 +
+color 0,0,200
+
 track xenoRefGene override
 visibility hide
 
@@ -3168,6 +3177,14 @@ searchType bed
 semiShortCircuit 1
 termRegex ES_[0-9]+_[0-9]+
 searchPriority 30
+
+searchTable gwasCatalog
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 13.5
+padding 250
 
 track pgSnp
 compositeTrack on

@@ -223,8 +223,9 @@
 #include "net.h"
 #include "jsHelper.h"
 #include "virusClick.h"
+#include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1588 2010/01/15 23:19:01 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1589 2010/01/19 23:13:17 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15579,6 +15580,69 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+#define GWAS_NOT_REPORTED "<em>Not reported</em>"
+#define GWAS_NONE_SIGNIFICANT "<em>None significant</em>"
+
+static char *subNrNs(char *str)
+/* The GWAS catalog has "NR" or "NS" for many values -- substitute those with something
+ * more readable.  Don't free return value, it might be static. */
+{
+if (isEmpty(str) || sameString("NR", str))
+    return GWAS_NOT_REPORTED;
+if (sameString("NS", str))
+    return GWAS_NONE_SIGNIFICANT;
+struct dyString *dy1 = dyStringSub(str, "[NR]", "[" GWAS_NOT_REPORTED "]");
+struct dyString *dy2 = dyStringSub(dy1->string, "[NS]", "[" GWAS_NONE_SIGNIFICANT "]");
+return dyStringCannibalize(&dy2);
+}
+
+void doGwasCatalog(struct trackDb *tdb, char *item)
+/* Show details from NHGRI's Genome-Wide Association Study catalog. */
+{
+int itemStart = cartInt(cart, "o"), itemEnd = cartInt(cart, "t");
+genericHeader(tdb, item);
+struct sqlConnection *conn = hAllocConn(database);
+struct dyString *dy = dyStringNew(512);
+dyStringPrintf(dy, "select * from %s where chrom = '%s' and ", tdb->tableName, seqName);
+hAddBinToQuery(itemStart, itemEnd, dy);
+dyStringPrintf(dy, "chromStart = %d and name = '%s'", itemStart, item);
+struct sqlResult *sr = sqlGetResult(conn, dy->string);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+boolean first = TRUE;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (first)
+	first = FALSE;
+    else
+	printf("<HR>\n");
+    struct gwasCatalog *gc = gwasCatalogLoad(row+rowOffset);
+    printPos(gc->chrom, gc->chromStart, gc->chromEnd, NULL, TRUE, gc->name);
+    printf("<B>Reported region:</B> %s<BR>\n", gc->region);
+    printf("<B>Publication:</B> %s <em>et al.</em> "
+	   "<A HREF=\"", gc->author);
+    printEntrezPubMedUidAbstractUrl(stdout, gc->pubMedID);
+    printf("\" TARGET=_BLANK>%s</A>. <em>%s.</em> %s<BR>\n", gc->title, gc->journal, gc->pubDate);
+    printf("<B>Disease or trait:</B> %s<BR>\n", subNrNs(gc->trait));
+    printf("<B>Initial sample size:</B> %s<BR>\n", subNrNs(gc->initSample));
+    printf("<B>Replication sample size:</B> %s<BR>\n", subNrNs(gc->replSample));
+    printf("<B>Reported gene(s):</B> %s<BR>\n", subNrNs(gc->genes));
+    printf("<B>Strongest SNP-Risk allele:</B> %s<BR>\n", subNrNs(gc->riskAllele));
+    printf("<B>Risk Allele Frequency:</B> %s<BR>\n", subNrNs(gc->riskAlFreq));
+    if (gc->pValueDesc[0] == '(')
+	printf("<B>p-Value:</B> %s %s<BR>\n", gc->pValue, subNrNs(gc->pValueDesc));
+    else
+	printf("<B>p-Value:</B> %s (%s)<BR>\n", gc->pValue, subNrNs(gc->pValueDesc));
+    printf("<B>Odds Ratio or beta:</B> %s<BR>\n", subNrNs(gc->orOrBeta));
+    printf("<B>95%% confidence interval:</B> %s<BR>\n", subNrNs(gc->ci95));
+    printf("<B>Platform:</B> %s<BR>\n", subNrNs(gc->platform));
+    printf("<B>Copy Number Variant (CNV)?:</B> %s<BR>\n",
+	   (gc->cnv == gwasCatalogY ? "Yes" : "No"));
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+}
+
 void ncRnaPrintPos(struct bed *bed, int bedSize)
 /* Print first two fields of an ncRna entry in
  * standard format. */
@@ -22673,6 +22737,10 @@ else if (startsWith(KIDD_EICHLER_DISC_PREFIX, track))
 else if (startsWith("hgdpGeo", track))
     {
     doHgdpGeo(tdb, item);
+    }
+else if (startsWith("gwasCatalog", track))
+    {
+    doGwasCatalog(tdb, item);
     }
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
