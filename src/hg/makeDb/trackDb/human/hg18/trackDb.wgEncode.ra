@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.779 2010/01/19 23:28:52 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.780 2010/01/19 23:31:52 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21814,6 +21814,16 @@ noInherit on
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort fileName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort.bedGraph.gz
 
+        track wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
+        release alpha
+        subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
+        shortLabel K562 cell short PlusRaw
+        longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in K562 cell)
+        subGroups view=2-PlusRawSignal cellType=K562 localization=0-cell
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort fileName=wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort.bedGraph4.gz
+
     track wgEncodeCshlShortRnaSeqView3-MinusRawSignal
     shortLabel Minus Raw Signal
     view 3-MinusRawSignal
@@ -21953,6 +21963,16 @@ noInherit on
         type bedGraph 4
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort fileName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort.bedGraph.gz
+
+        track wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
+        release alpha
+        subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
+        shortLabel K562 cell short MinusRaw
+        longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in K562 cell)
+        subGroups view=3-MinusRawSignal cellType=K562 localization=0-cell
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort fileName=wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort.bedGraph4.gz
 
     track wgEncodeCshlShortRnaSeqView4-Alignments
     shortLabel Alignments
@@ -22104,6 +22124,16 @@ noInherit on
         type bigBed 6
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
+
+        track wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
+        release alpha
+        subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
+        shortLabel K562 cell short
+        longLabel ENCODE CSHL RNA-Seq Tags (short in K562 cell)
+        subGroups view=4-Alignments cellType=K562 localization=0-cell 
+        type bigBed 6
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CellShort.tagAlign.gz
 
 # CSHL long rna-seq (wrangler: braney)
 track wgEncodeCshlLongRnaSeq
