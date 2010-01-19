@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.17 2009/07/28 21:55:25 hiram Exp $
+#  $Id: ce6.txt,v 1.18 2010/01/19 20:14:21 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2742,5 +2742,67 @@ ce6.upstreamMaf = multiz6way /hive/data/genomes/ce6/bed/multiz6way/species.lst
 	-workhorse=hgwdev \
 	-ooc /hive/data/genomes/ce6/jkStuff/11.ooc ce6 ce7 > do.log 2>&1 &
     #	real    8m7.833s
+
+#########################################################################
+# ALG Binding sites (DONE - 2010-01-14 - Hiram)
+    #	From the Gene Yeo lab:
+    #	fetch files
+T="http://www.snl.salk.edu/~lovci/Amy/ce6/alltheexperiments/for_ucsc"
+
+one() {
+wget --timestamping \
+"${T}/$1" -O $1
+}
+
+one all_L3_L4.L3_L4.ce6.ingenes.both_strands.reannotated.BED.gz
+one all_L3_L4.L3_L4.ce6.ingenes.both_strands.reannotated.BED.gz
+one MT1.neg.off.WIG.gz
+one MT1.pos.off.WIG.gz
+one MT2.neg.off.WIG.gz
+one MT2.pos.off.WIG.gz
+one MT3.neg.off.WIG.gz
+one MT3.pos.off.WIG.gz
+one WT1.neg.off.WIG.gz
+one WT1.pos.off.WIG.gz
+one WT2.neg.off.WIG.gz
+one WT2.pos.off.WIG.gz
+one WT3.neg.off.WIG.gz
+one WT3.pos.off.WIG.gz
+one WT_region_specific_clusters.weight_normal.3.rp.bed.WT.good_clusters.25.gz
+
+    #	encode and load wiggle tracks
+
+one() {
+ID=$1
+NP=$2
+RF=$3
+UC=$4
+LC=`echo $ID | tr '[A-Z]' '[a-z]'`
+zcat $ID.$NP.off.WIG.gz \
+        | wigEncode stdin ${LC}${UC}.wig ${LC}${UC}.wib > ${LC}$UC.log 2>&1
+ln -s `pwd`/${LC}${UC}.wib /gbdb/ce6/wib
+hgLoadWiggle ce6 ${LC}${UC} ${LC}${UC}.wig
+}
+
+one MT1 neg reverse Reverse
+one MT1 pos forward Forward
+one MT2 neg reverse Reverse
+one MT2 pos forward Forward
+one MT3 neg reverse Reverse
+one MT3 pos forward Forward
+one WT1 neg reverse Reverse
+one WT1 pos forward Forward
+one WT2 neg reverse Reverse
+one WT2 pos forward Forward
+one WT3 neg reverse Reverse
+one WT3 pos forward Forward
+
+    #	load BED tables:
+zcat WT_region_specific_clusters.weight_normal.3.rp.bed.WT.good_clusters.25.gz \
+    | grep -v track \
+        | awk -F'\t' '{printf "%s %d %d %s 1 %s\n", $1, $2, $3, $4, $6}' \
+            | hgLoadBed -noNameIx ce6 algBindSites stdin
+zcat all_L3_L4.L3_L4.ce6.ingenes.both_strands.reannotated.BED.gz \
+    | grep -v track | awk -F'\t' '{printf "%s %d %d %s 0 %s\n", $1, $2, $3, $4, $6}' | hgLoadBed -noNameIx ce6 algBindGenic stdin
 
 #########################################################################
