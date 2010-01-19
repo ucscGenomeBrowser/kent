@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.769 2010/01/19 20:14:21 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.770 2010/01/19 20:25:39 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5931,7 +5931,7 @@ shortLabel RIKEN CAGE Loc
 longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views 1-PlusClusters=Plus_Clusters 3-MinusClusters=Minus_Clusters 5-Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1hESC HUVEC=HUVEC K562=K562 prostate=Prostate
+subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1hESC HUVEC=HUVEC K562=K562 NHEK=NHEK prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
@@ -6085,6 +6085,16 @@ wgEncode 1
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1021 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878NucleolusTotal fileName=wgEncodeRikenCagePlusClustersGm12878NucleolusTotal.bedGraph4.gz
 
+        track wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView1-PlusClusters off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
+        subGroups view=1-PlusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
+        type bedGraph 4
+        color 179,0,134
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya.bedGraph4.gz
+
     track wgEncodeRikenCageView3-MinusClusters
     shortLabel Minus Clusters
     view 3-MinusClusters
@@ -6225,6 +6235,16 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1021 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleolusTotal fileName=wgEncodeRikenCageMinusClustersGm12878NucleolusTotal.bedGraph4.gz
+
+        track wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView3-MinusClusters off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
+        subGroups view=3-MinusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
+        type bedGraph 4
+        color 179,0,134
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageView5-Alignments
     shortLabel Alignments
@@ -6426,6 +6446,26 @@ wgEncode 1
         accession Nexalign
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus accession=Nexalign view=Alignments softwareVersion=1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1001 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878NucleolusTotal fileName=wgEncodeRikenCageAlignmentsGm12878NucleolusTotal.tagAlign.gz
+
+        track wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in NHEK cytosol)
+        subGroups view=5-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
+        type bed 6
+        color 179,0,134
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya.tagAlign.gz
+
+        track wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel NHEK nucleus longNonPolyA
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in NHEK nucleus)
+        subGroups view=5-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
+        type bed 6
+        color 179,0,134
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya.tagAlign.gz
 
 # Duke Affy Exon (wrangler: braney)
 track wgEncodeDukeAffyExonArray
