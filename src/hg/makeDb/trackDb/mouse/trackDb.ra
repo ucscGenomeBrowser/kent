@@ -1012,13 +1012,6 @@ priority 221.0
 track netFelCat3 override
 priority 221.1
 
-# cow
-track chainBosTau3 override
-priority 256.3
-
-track netBosTau3 override
-priority 256.4
-
 # horse
 track chainEquCab1 override
 priority 264.2

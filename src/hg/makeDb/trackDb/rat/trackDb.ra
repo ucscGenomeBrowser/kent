@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.65 2010/01/18 07:31:00 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.66 2010/01/19 04:24:17 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -200,14 +200,6 @@ visibility hide
 spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
-
-track chainBosTau3 override
-shortLabel $o_Organism Chain
-priority 229.2
-
-track netBosTau3 override
-shortLabel $o_Organism Net
-priority 229.3
 
 track agilentCgh
 shortLabel Agilent CGH
