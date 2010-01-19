@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.768 2010/01/19 19:55:46 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.769 2010/01/19 20:14:21 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6075,6 +6075,16 @@ wgEncode 1
         color 0,107,27
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=H1-hESC rnaExtract=longNonPolyA localization=cell view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1022 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya.bedGraph4.gz
 
+        track wgEncodeRikenCagePlusClustersGm12878NucleolusTotal
+        release alpha
+        subTrack wgEncodeRikenCageView1-PlusClusters off
+        shortLabel GM12878 nucleolus total
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleolus)
+        subGroups view=1-PlusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
+        type bedGraph 4
+        color 153,38,0
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1021 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878NucleolusTotal fileName=wgEncodeRikenCagePlusClustersGm12878NucleolusTotal.bedGraph4.gz
+
     track wgEncodeRikenCageView3-MinusClusters
     shortLabel Minus Clusters
     view 3-MinusClusters
@@ -6205,6 +6215,16 @@ wgEncode 1
         type bedGraph 4
         color 0,107,27
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=H1-hESC rnaExtract=longNonPolyA localization=cell view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1022 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya.bedGraph4.gz
+
+        track wgEncodeRikenCageMinusClustersGm12878NucleolusTotal
+        release alpha
+        subTrack wgEncodeRikenCageView3-MinusClusters off
+        shortLabel GM12878 nucleolus total
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleolus)
+        subGroups view=3-MinusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
+        type bedGraph 4
+        color 153,38,0
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1021 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleolusTotal fileName=wgEncodeRikenCageMinusClustersGm12878NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCageView5-Alignments
     shortLabel Alignments
@@ -6402,7 +6422,7 @@ wgEncode 1
         shortLabel GM12878 nucleolus total
         longLabel ENCODE RIKEN CAGE Tags (total in GM12878 nucleolus)
         subGroups view=5-Alignments cellType=GM12878 localization=60-nucleolus rnaExtract=total
-        type bed 6
+        type bigBed 6
         accession Nexalign
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus accession=Nexalign view=Alignments softwareVersion=1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1001 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878NucleolusTotal fileName=wgEncodeRikenCageAlignmentsGm12878NucleolusTotal.tagAlign.gz
