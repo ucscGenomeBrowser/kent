@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.773 2010/01/19 20:35:44 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.774 2010/01/19 20:37:24 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6473,7 +6473,7 @@ wgEncode 1
         shortLabel H1-hESC cell longNonPolyA
         longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in H1-hESC cell)
         subGroups view=5-Alignments cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
-        type bed 6
+        type bigBed 6
         color 0,107,27
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=H1-hESC rnaExtract=longNonPolyA localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1002 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsH1hescCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsH1hescCellLongnonpolya.tagAlign.gz
 
