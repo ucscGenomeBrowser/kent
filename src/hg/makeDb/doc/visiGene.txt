@@ -1492,4 +1492,12 @@ cd ~/kent/src/hg/visiGene/knownToVisiGene
 make
 knownToVisiGene hg19
 
-#######################################
+#################################################
+# Fix Mahoney Lab submissionSource website gone.
+# this website mahoney.chip.org is dead 
+# and it looks like forever.
+# Changed visiGene.submissionSource.{setUrl,itemUrl} to ""
+# for the Mahoney Lab (id==1).
+# Also changed source of hgVisiGene/printCaption.c
+# to tolerate the blank string.
+
