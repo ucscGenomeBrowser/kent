@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.777 2010/01/19 23:12:26 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.778 2010/01/19 23:22:09 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6536,6 +6536,36 @@ wgEncode 1
         type bigBed 6
         color 0,107,27
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=H1-hESC rnaExtract=longNonPolyA localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1002 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsH1hescCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsH1hescCellLongnonpolya.tagAlign.gz
+
+        track wgEncodeRikenCageAlignmentsHepg2CytosolLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel HepG2 cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in HepG2 cytosol)
+        subGroups view=5-Alignments cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
+        type bigBed 6
+        color 189,0,157
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1015 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsHepg2CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsHepg2CytosolLongnonpolya.tagAlign.gz
+
+        track wgEncodeRikenCageAlignmentsHepg2NucleusLongnonpolya
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel HepG2 nucleus longNonPolyA
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in HepG2 nucleus)
+        subGroups view=5-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
+        type bigBed 6
+        color 189,0,157
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1015 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsHepg2NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsHepg2NucleusLongnonpolya.tagAlign.gz
+
+        track wgEncodeRikenCageAlignmentsHepg2NucleolusTotal
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel HepG2 nucleolus total
+        longLabel ENCODE RIKEN CAGE Tags (total in HepG2 nucleolus)
+        subGroups view=5-Alignments cellType=HepG2 localization=60-nucleolus rnaExtract=total
+        type bigBed 6
+        color 189,0,157
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=total localization=nucleolus view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1015 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsHepg2NucleolusTotal fileName=wgEncodeRikenCageAlignmentsHepg2NucleolusTotal.tagAlign.gz
 
 # Duke Affy Exon (wrangler: braney)
 track wgEncodeDukeAffyExonArray
