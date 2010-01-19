@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.393 2010/01/05 01:14:06 hartera Exp $
+# $Id: hg18.txt,v 1.394 2010/01/19 21:44:30 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.393 2010/01/05 01:14:06 hartera Exp $
+# $Id: hg18.txt,v 1.394 2010/01/19 21:44:30 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28691,6 +28691,35 @@ cageSingleTrack -input=all.wscores.bed  -forward=all.forward.plaw.bg2 -reverse=a
 # Load up the bed graph tracks
 hgLoadBed -bedGraph=4 hg18 FantomCageForwardPowerLawGraph all.forward.plaw.bg2
 hgLoadBed -bedGraph=4 hg18 FantomCageReversePowerLawGraph all.reverse.plaw.bg2
+
+
+############################################################################
+# ENCODE PHASED GENOTYPES for NA12878 (DONE 7/22/09 angie)
+    mkdir /hive/data/genomes/hg18/bed/phasedGenotypesNA12878
+    cd /hive/data/genomes/hg18/bed/phasedGenotypesNA12878
+    wget http://illumina-mac.stanford.edu/NA12878_Reference_Genome/code/CEU.trio.dec.with.x.with.rs.calls
+    wget http://illumina-mac.stanford.edu/NA12878_Reference_Genome/code/{Makefile,PhaseSNPs.pm}
+
+#TODO: strip homozyg-same-as-reference SNPs from CEU.trio, then make:
+
+    make NA12878_SNPs_Phased.bed
+    perl -wpe '/^(\w+)\t(\d+)\t(\d+)\t([ACGT])\/([ACGT])\t([MP\/HA]+)$/ || die "parse\n$_\t"; \
+      ($c, $s, $e, $a1, $a2, $t) = ($1, $2, $3, $4, $5, $6); \
+      if ($t eq "M/P") { \
+        $_ = "$c\t$s\t$e\tM:$a1\n" . "$c\t$s\t$e\tP:$a2\n"; \
+      } elsif ($t eq "P/M") { \
+        $_ = "$c\t$s\t$e\tM:$a2\n" . "$c\t$s\t$e\tP:$a1\n"; \
+      } elsif ($t eq "H") { \
+        $_ = "$c\t$s\t$e\t$a1\n"; \
+      } elsif ($t eq "A") { \
+        $_ = "$c\t$s\t$e\tA:$a1/$a2\n"; \
+      } else { die "unrec type $t"; } \
+      ' NA12878_SNPs_Phased.bed \
+      > phasedGenotypesNA12878.bed
+    hgLoadBed -noNameIx hg18 phasedGenotypesNA12878 phasedGenotypesNA12878.bed
+#Loaded 5469032 elements of size 4
+
+
 ############################################################################
 # TRANSMAP vertebrate.2009-07-01 build  (2009-07-21 markd)
 
@@ -28955,6 +28984,7 @@ cat $DATAFILES | while read file tissue; do
     ldHgGene -exon=read $DATABASE ${subTrack} ${subTrack}.gff 
 done
 '_EOF_'
+    # << emacs
    chmod +x formatAndLoadData
    ./formatAndLoadData burgeDataFiles.txt burgeRnaSeqGemMapperAlign hg18 \
      > load.log &
@@ -29150,3 +29180,105 @@ see doc/builds.txt for specific details.
 # load the table
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
+
+#############################################################################
+# NHGRI GWAS CATALOG (DONE 1/19/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/gwasCatalog
+    cd /hive/data/genomes/hg18/bed/gwasCatalog
+    # Oops -- this link is supposed to produce .xls but it actually spits out
+    # an HTML table (which Excel can open so probably noone has complained):
+    wget -O gwas.100115.html http://www.genome.gov/gwastoexcel.cfm
+    # Make it tab-sep text:
+    perl -we 'while (<>) { \
+                if (! $gotTBody) { $gotTBody = (m/\<TBODY\>/); next; } \
+                chomp; s/\r$//; \
+                $addSpace = /\w+$/; \
+                if (s/\s*\<TR[^\>]*\>\s*//) { $rowStart = 1; }; \
+                $rowEnd = s/\s*\<\/TR[^\>]*\>\s*//; \
+                $itemStart = s/\s*\<TD[^\>]*\>\s*//; \
+                s/\s*\<\/TD[^\>]*\>\s*//; \
+                last if /\<\/TBODY/; \
+                if ($itemStart && $rowStart) { $rowStart = 0 } elsif ($itemStart) { print "\t" }; \
+                print unless (/^\s*$/); \
+                print " " if ($addSpace); \
+                print "\n" if ($rowEnd); \
+              }' \
+      gwas.100115.html \
+      > gwas.100115.tab
+    # Look at the column headers:
+    head -40 gwas.100115.html \
+    | perl -wpe 's/<\/TH>//; s/\s*<TH[^>]*>/# / || s/^.*\n$//'
+#  1 Date Added to Catalog (since 11/25/08)
+#  2 PubMedID
+#  3 First Author
+#  4 Date
+#  5 Journal
+#  6 Link
+#  7 Study
+#  8 Disease/Trait
+#  9 Initial Sample Size
+# 10 Replication Sample Size
+# 11 Region
+# 12 Reported Gene(s)
+# 13 Strongest SNP-Risk Allele
+# 14 SNPs
+# 15 Risk Allele Frequency
+# 16 p-Value
+# 17 p-Value (text)
+# 18 OR or beta
+# 19 95% CI (text)
+# 20 Platform [SNPs passing QC]
+# 21 CNV
+    # Columns of interest: pretty much all except for Date Added to the Catalog,
+    # and Link which can be generated from PubMedID.  Watch out for these:
+    # * Some rows don't name a SNP ("" or "NR") -- in that case, skip.
+    # * They are missing a pubmedID: 20031603 is the missing ID for Marroni,
+    #   "A Genome-Wide Association Scan of RR and QT Interval Duration in 3 European Genetically Isolated Populations: The EUROSPAN Project"
+    # * One of their Reported Gene(s) has HTML: "HBB<br />"
+    # * Risk allele is not always just a number, may have desc
+    # * Missing data may be "", "NR", "NS" or "Pending"
+    # * p-Value (text) items seem to all end with "&nbsp;" (unless missing)
+    # * Platform has some "Illumima", "Ilumina"
+    # + The CNV column is entirely [YN], yay!  use enum.
+
+    # Use SNPs (comma-sep list) to map to genome coords, and strongest SNP-Risk Allele 
+    # as bed 4+ name.
+    perl -we '%y2m = (January=>"01", February=>"02", March=>"03", April=>"04", May=>"05", \
+                      June=>"06", July=>"07", August=>"08", September=>"09", October=>"10", \
+                      November=>"11", December=>"12"); \
+              while (<>) { \
+                @w = split("\t"); \
+                next if ($w[13] !~ /^rs\d+/); \
+                if ($w[1] eq "" && $w[2] eq "Marroni" && $w[6] =~ /EUROSPAN Project$/) { \
+                  $w[1] = 20031603; \
+                } \
+                if ($w[3] =~ /^(\w+) (\d+), (\d+)$/) { # transform to mysql DATE \
+                  ($month, $day, $year) = ($1, $2, $3); \
+                  $month = $y2m{$month} || die "Cant find month ($month)\t"; \
+                  $w[3] = "$year-$month-$day"; \
+                } else { die "Cant parse date ($w[3])\t" } \
+                $w[11] =~ s@<br />$@@; \
+                $w[16] =~ s/&nbsp;$//; \
+                $w[19] =~ s/^(Illumima|Ilumina)/Illumina/; \
+                my @snps = split(",", $w[13]); \
+                foreach $i (13, 5, 0) { # discard columns (use descending order) \
+                  splice(@w, $i, 1); \
+                } \
+                foreach $s (@snps) { \
+                  print join("\t", $s, @w); \
+                } \
+              }' \
+      gwas.100115.tab \
+    | sort > noCoords.100115.tab
+    cut -f 1-4 ../snp130/snp130.bed \
+    | sort -k4,4 \
+    | join -t "	" -1 4 - noCoords.100115.tab \
+        -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
+    | sort -k1,1 -k2n,2n \
+        > gwasCatalog.bed
+
+    hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
+
+
+#############################################################################
