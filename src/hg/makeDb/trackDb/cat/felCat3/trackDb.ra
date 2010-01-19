@@ -48,12 +48,6 @@ priority 10004.1
 track netMm8 override
 priority 10004.2
 
-track chainCanFam2 override
-priority 10006.1
-
-track netCanFam2 override
-priority 10006.2
-
 searchTable nscanGene
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]

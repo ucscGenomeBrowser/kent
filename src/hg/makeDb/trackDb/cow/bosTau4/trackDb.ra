@@ -99,10 +99,3 @@ track chainNetHg18 override
 release alpha
 shortLabel $o_db Chain/Net
 
-track chainCanFam2 override
-release beta
-priority 10004.1
-
-track netCanFam2 override
-release beta
-priority 10004.2

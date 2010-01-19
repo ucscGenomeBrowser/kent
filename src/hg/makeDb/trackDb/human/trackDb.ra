@@ -3362,19 +3362,6 @@ priority 183
 track netAnoCar1 override
 priority 183.1
 
-# dog
-track chainCanFam2 override
-priority 228
-
-track netCanFam2 override
-priority 228.1
-
-track chainCanFam1 override
-priority 228.2
-
-track netCanFam1 override
-priority 228.3
-
 # horse
 track chainEquCab2 override
 priority 235
