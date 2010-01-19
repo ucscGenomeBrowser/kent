@@ -21,7 +21,7 @@
 #include "printCaption.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgVisiGene.c,v 1.101 2008/09/17 20:10:43 galt Exp $";
+static char const rcsid[] = "$Id: hgVisiGene.c,v 1.102 2010/01/19 19:17:06 galt Exp $";
 
 /* Globals */
 struct cart *cart;		/* Current CGI values */
@@ -575,8 +575,7 @@ puts(
 "<A HREF=\"http://www.informatics.jax.org/expression.shtml\" \n"
 "TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI \n" 
 "<LI>Transcription factors in mouse embryos from the \n"
-"<A HREF=\"http://mahoney.chip.org/mahoney/\" TARGET=_blank>Mahoney Center \n"
-"for Neuro-Oncology</A> \n"
+"Mahoney Center for Neuro-Oncology</A> \n"
 "<LI>Mouse head and brain <em>in situ</em> images from NCBI's  \n"
 "<A HREF=\"http://www.ncbi.nlm.nih.gov/projects/gensat/\" TARGET=_blank>Gene \n"
 "Expression Nervous System Atlas</A> (GENSAT) database \n"

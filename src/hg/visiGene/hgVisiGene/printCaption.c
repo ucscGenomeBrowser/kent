@@ -859,9 +859,16 @@ char *itemUrl = visiGeneItemUrl(conn, id);
 if (itemUrl != NULL)
     {
     printf("<B>source:</B> ");
-    printf("<A HREF=\"");
-    printf(itemUrl, visiGeneSubmitId(conn, id));
-    printf("\" target=_blank>%s</A> ", visiGeneSubmissionSource(conn, id));
+    char *source = visiGeneSubmissionSource(conn, id);
+    if (sameString(itemUrl,""))
+	printf("%s ", source);
+    else
+	{
+	printf("<A HREF=\"");
+	printf(itemUrl, visiGeneSubmitId(conn, id));
+	printf("\" target=_blank>%s</A> ", source);
+	}
+
     }
 }
 
