@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.770 2010/01/19 20:25:39 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.771 2010/01/19 20:27:56 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6453,7 +6453,7 @@ wgEncode 1
         shortLabel NHEK cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in NHEK cytosol)
         subGroups view=5-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
-        type bed 6
+        type bigBed 6
         color 179,0,134
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya.tagAlign.gz
 
@@ -6463,7 +6463,7 @@ wgEncode 1
         shortLabel NHEK nucleus longNonPolyA
         longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in NHEK nucleus)
         subGroups view=5-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
-        type bed 6
+        type bigBed 6
         color 179,0,134
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=Alignments softwareVersion=Nexalign1.3.5 dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya.tagAlign.gz
 
