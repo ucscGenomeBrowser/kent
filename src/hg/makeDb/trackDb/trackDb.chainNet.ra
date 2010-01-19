@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.36 2010/01/19 04:24:15 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.37 2010/01/19 05:57:35 kuhn Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -2399,9 +2399,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign dasNov1 chainDasNov1
 
-# release alpha until bosTau4 individual tracks phased out
 track chainNetBosTau4
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -2431,7 +2429,6 @@ html chainNet
     spectrum on
 
         track chainBosTau4
-        release alpha
         subTrack chainNetBosTau4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -2445,7 +2442,6 @@ html chainNet
     subTrack chainNetBosTau4
 
         track netBosTau4
-        release alpha
         subTrack chainNetBosTau4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -2599,9 +2595,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign bosTau1 chainBosTau1
 
-# release alpha until canFam2 individual tracks phased out
 track chainNetCanFam2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -2631,7 +2625,6 @@ html chainNet
     spectrum on
 
         track chainCanFam2
-        release alpha
         subTrack chainNetCanFam2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -2645,7 +2638,6 @@ html chainNet
     subTrack chainNetCanFam2
 
         track netCanFam2
-        release alpha
         subTrack chainNetCanFam2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

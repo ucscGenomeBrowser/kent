@@ -73,10 +73,6 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track chainBosTau4 override
-priority 220
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
 track netBosTau4 override
 priority 220.1
 

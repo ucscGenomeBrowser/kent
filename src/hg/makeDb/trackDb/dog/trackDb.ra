@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.31 2010/01/18 07:30:57 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.32 2010/01/19 05:57:36 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -167,14 +167,6 @@ priority 220
 
 track netPanTro2 override
 priority 220.1
-
-track chainBosTau4 override
-priority 250
-
-track netBosTau4 override
-priority 250.1
-
-#Overrides from priority.ra
 
 track blatFr1 override
 priority 120.1

@@ -3388,13 +3388,6 @@ priority 235.2
 track netEquCab1 override
 priority 235.3
 
-# cow
-track chainBosTau4 override
-priority 236
-
-track netBosTau4 override
-priority 236.1
-
 # guinea pig
 track chainCavPor3 override
 priority 258
