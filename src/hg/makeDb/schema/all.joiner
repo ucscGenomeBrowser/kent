@@ -3085,6 +3085,11 @@ tablesIgnored $ce
     nucleosomeControlAntisenseCoverage
     nucleosomeAdjustedCoverage
     25mersRepeats
+    mt%Forward
+    mt%Reverse
+    wt%Forward
+    wt%Reverse
+    algBind%
 
 tablesIgnored $ci
     snapGene
