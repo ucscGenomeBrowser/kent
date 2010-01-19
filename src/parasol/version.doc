@@ -306,3 +306,6 @@
 
         Remove trailing / and /. from para -batch argument to fix common problem of
         batch name mismatch with using file name completion.
+
+        Added -env option to paraNode, to allow specifying arbitray environment variables
+        for jobs.
