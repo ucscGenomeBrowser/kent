@@ -148,9 +148,3 @@ priority 265.2
 shortLabel $o_db Net
 otherOrg equCab1
 
-track chainFelCat3 override
-priority 270.1
-
-track netFelCat3 override
-priority 270.2
-
