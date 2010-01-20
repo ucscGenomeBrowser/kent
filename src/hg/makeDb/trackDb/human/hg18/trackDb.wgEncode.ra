@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.783 2010/01/20 17:50:51 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.784 2010/01/20 18:24:06 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14959,6 +14959,36 @@ wgEncode 1
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Brg1 protocol=Mouse_IgG view=Peaks labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=891 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Brg1Musigg fileName=wgEncodeYaleChIPseqPeaksHelas3Brg1Musigg.narrowPeak.gz
 
+        track wgEncodeYaleChIPseqPeaksK562Ifng30Pol2
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Pol2 in K562/IFNg30 cells)
+        subGroups view=Peaks factor=POL2 cellType=uK562Ig30
+        type narrowPeak
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Pol2 treatment=IFNg30 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=974 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Ifng30Pol2 fileName=wgEncodeYaleChIPseqPeaksK562Ifng30Pol2.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksK562Stat1Ifng30
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNg30 cells)
+        subGroups view=Peaks factor=STAT1 cellType=uK562Ig30
+        type narrowPeak
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=STAT1 treatment=IFNg30 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1058 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Stat1Ifng30 fileName=wgEncodeYaleChIPseqPeaksK562Stat1Ifng30.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksK562Stat1Ifng6h
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNg6h cells)
+        subGroups view=Peaks factor=STAT1 cellType=uK562Ig6
+        type narrowPeak
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=STAT1 treatment=IFNg6h view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1059 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Stat1 fileName=wgEncodeYaleChIPseqPeaksK562Stat1.narrowPeak.gz
+
     track wgEncodeYaleChIPseqViewSignal
     shortLabel Signal
     view Signal
@@ -16324,6 +16354,36 @@ wgEncode 1
         type bedGraph 4
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Brg1 protocol=Mouse_IgG view=Signal labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=891 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Brg1Musigg fileName=wgEncodeYaleChIPseqSignalHelas3Brg1Musigg.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalK562Ifng30Pol2
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Pol2 in K562/IFNg30 cells)
+        subGroups view=Signal factor=POL2 cellType=uK562Ig30
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Pol2 treatment=IFNg30 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=974 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Ifng30Pol2 fileName=wgEncodeYaleChIPseqSignalK562Ifng30Pol2.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalK562Stat1Ifng30
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNg30 cells)
+        subGroups view=Signal factor=STAT1 cellType=uK562Ig30
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=STAT1 treatment=IFNg30 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1058 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Stat1Ifng30 fileName=wgEncodeYaleChIPseqSignalK562Stat1Ifng30.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalK562Stat1Ifng6h
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNg6h cells)
+        subGroups view=Signal factor=STAT1 cellType=uK562Ig6
+        type bedGraph 4
+        color 46,0,184
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=STAT1 treatment=IFNg6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1059 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Stat1 fileName=wgEncodeYaleChIPseqSignalK562Stat1.bedGraph4.gz
 
 
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: braney, soon Tim)
