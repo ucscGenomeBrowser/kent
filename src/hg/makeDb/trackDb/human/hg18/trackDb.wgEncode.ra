@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.780 2010/01/19 23:31:52 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.781 2010/01/20 00:06:57 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -13900,7 +13900,7 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma BAF155=BAF155 BDP1=BDP1 BRF1=BRF1 Brg1mig=Brg1_(musIgG) CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 Ini1mig=Ini1_(musIgG) JUND=JunD MAX=Max NFE2=NF-E2 NFKB=NFKB NFKBmig=NFKB_(musIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) POL2=Pol2 Pol2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
+subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma BAF155=BAF155 BDP1=BDP1 BRF1=BRF1 BRG1mig=Brg1_(musIgG) CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(rabIgG) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 INI1mig=Ini1_(musIgG) JUND=JunD JUNDrig=JunD_(rabIgG) MAX=Max NFE2=NF-E2 NFKB=NFKB NFKBmig=NFKB_(musIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) POL2=Pol2 Pol2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yIGGmus=IgG(mouse)_Control yIGGrab=IgG(rabbit)_Control yMNase=MNase_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -14117,7 +14117,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa MusIgG Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Input/musIgG in HeLa cells)
-        subGroups view=Peaks factor=yMouseIG cellType=t2HeLa
+        subGroups view=Peaks factor=yIGGmus cellType=t2HeLa
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg fileName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
@@ -14784,7 +14784,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Brg1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG in K562 cells)
-        subGroups view=Peaks factor=Brg1mig cellType=t1K562
+        subGroups view=Peaks factor=BRG1mig cellType=t1K562
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Brg1 protocol=Mouse_IgG view=Peaks labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=893 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Brg1Musigg fileName=wgEncodeYaleChIPseqPeaksK562Brg1Musigg.narrowPeak.gz
@@ -14794,7 +14794,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Ini1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG in K562 cells)
-        subGroups view=Peaks factor=Ini1mig cellType=t1K562
+        subGroups view=Peaks factor=INI1mig cellType=t1K562
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Ini1 protocol=Mouse_IgG view=Peaks labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=894 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Ini1Musigg fileName=wgEncodeYaleChIPseqPeaksK562Ini1Musigg.narrowPeak.gz
@@ -14814,7 +14814,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa-S3 Ini1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG in HeLa-S3 cells)
-        subGroups view=Peaks factor=Ini1mig cellType=t2HeLa
+        subGroups view=Peaks factor=INI1mig cellType=t2HeLa
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Ini1 protocol=Mouse_IgG view=Peaks labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=892 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Ini1Musigg fileName=wgEncodeYaleChIPseqPeaksHelas3Ini1Musigg.narrowPeak.gz
@@ -14828,6 +14828,26 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Nrf1 protocol=Mouse_IgG view=Peaks labVersion="Data set generated with PeakSeq1.0.  Data set paired with HeLa-S3_MouseIgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=999 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Nrf1Musigg fileName=wgEncodeYaleChIPseqPeaksHelas3Nrf1Musigg.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHelas3CjunRabigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa-S3 c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun/rabIgG in HeLa-S3 cells)
+        subGroups view=Peaks factor=CJUNrig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=c-Jun protocol=Rabbit_IgG view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1031 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3CjunRabigg fileName=wgEncodeYaleChIPseqPeaksHelas3CjunRabigg.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHelas3JundRabigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa-S3 JunD Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD/rabIgG in HeLa-S3 cells)
+        subGroups view=Peaks factor=JUNDrig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=JunD protocol=Rabbit_IgG view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1032 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3JundRabigg fileName=wgEncodeYaleChIPseqPeaksHelas3JundRabigg.narrowPeak.gz
 
     track wgEncodeYaleChIPseqViewSignal
     shortLabel Signal
@@ -15096,7 +15116,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa MusIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in HeLa cells)
-        subGroups view=Signal factor=yMouseIG cellType=t2HeLa
+        subGroups view=Signal factor=yIGGmus cellType=t2HeLa
         type bedGraph 4
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion="V2 - corrected sparse signals" dateResubmitted=2009-07-21 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3MouseiggV2 fileName=wgEncodeYaleChIPseqSignalHelas3MouseiggV2.bedGraph4.gz
@@ -15630,7 +15650,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 MusIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in GM10847 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM10847
+        subGroups view=Signal factor=yIGGmus cellType=t3GM10847
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12891 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=861 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm10847Input fileName=wgEncodeYaleChIPseqSignalGm10847Input.bedGraph4.gz
 
@@ -15639,7 +15659,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 MusIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in GM12891 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM12891
+        subGroups view=Signal factor=yIGGmus cellType=t3GM12891
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12891 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=863 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12891Mouseigg fileName=wgEncodeYaleChIPseqSignalGm12891Mouseigg.bedGraph4.gz
 
@@ -15648,7 +15668,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 MusIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in K562 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t1K562
+        subGroups view=Signal factor=yIGGmus cellType=t1K562
         type bedGraph 4
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=864 dateSubmitted=2010-01-05 dateUnrestricted=2010-10-05 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Mouseigg fileName=wgEncodeYaleChIPseqSignalK562Mouseigg.bedGraph4.gz
@@ -15707,7 +15727,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM10847 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM10847
+        subGroups view=Signal factor=yIGGmus cellType=t3GM10847
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM10847 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=861 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm10847MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm10847MusiggMusigg.bedGraph4.gz
 
@@ -15734,7 +15754,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM12878 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t1GM12878
+        subGroups view=Signal factor=yIGGmus cellType=t1GM12878
         type bedGraph 4
         color 153,38,0
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=956 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm12878MusiggMusigg.bedGraph4.gz
@@ -15764,7 +15784,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM12891 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM12891
+        subGroups view=Signal factor=yIGGmus cellType=t3GM12891
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12891 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=863 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12891MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm12891MusiggMusigg.bedGraph4.gz
 
@@ -15791,7 +15811,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12892 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM12892 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM12892
+        subGroups view=Signal factor=yIGGmus cellType=t3GM12892
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12892 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=959 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12892MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm12892MusiggMusigg.bedGraph4.gz
 
@@ -15818,7 +15838,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM15510 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in GM15510 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM15510
+        subGroups view=Signal factor=yIGGmus cellType=t3GM15510
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM15510 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=996 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm15510MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm15510MusiggMusigg.bedGraph4.gz
 
@@ -15845,7 +15865,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18505 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in GM18505 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM18505
+        subGroups view=Signal factor=yIGGmus cellType=t3GM18505
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18505 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1020 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18505MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm18505MusiggMusigg.bedGraph4.gz
 
@@ -15872,7 +15892,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18526 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/musIgG in GM18526 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM18526
+        subGroups view=Signal factor=yIGGmus cellType=t3GM18526
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18526 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1025 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18526MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm18526MusiggMusigg.bedGraph4.gz
 
@@ -15899,7 +15919,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18951 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM18951 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM18951
+        subGroups view=Signal factor=yIGGmus cellType=t3GM18951
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18951 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1044 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18951MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm18951MusiggMusigg.bedGraph4.gz
 
@@ -15926,7 +15946,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19099 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM19099 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM19099
+        subGroups view=Signal factor=yIGGmus cellType=t3GM19099
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19099 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1045 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm19099MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm19099MusiggMusigg.bedGraph4.gz
 
@@ -15953,7 +15973,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19193 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in GM19193 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t3GM19193
+        subGroups view=Signal factor=yIGGmus cellType=t3GM19193
         type bedGraph 4
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19193 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1047 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm19193MusiggMusigg fileName=wgEncodeYaleChIPseqSignalGm19193MusiggMusigg.bedGraph4.gz
 
@@ -15980,7 +16000,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Brg1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG in K562 cells)
-        subGroups view=Signal factor=Brg1mig cellType=t1K562
+        subGroups view=Signal factor=BRG1mig cellType=t1K562
         type bedGraph 4
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Brg1 protocol=Mouse_IgG view=Signal labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=893 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Brg1Musigg fileName=wgEncodeYaleChIPseqSignalK562Brg1Musigg.bedGraph4.gz
@@ -15990,7 +16010,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Mouse_IgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/musIgG in K562 cells)
-        subGroups view=Signal factor=yMouseIG cellType=t1K562
+        subGroups view=Signal factor=yIGGmus cellType=t1K562
         type bedGraph 4
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Mouse_IgG protocol=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=864 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562MusiggMusigg fileName=wgEncodeYaleChIPseqSignalK562MusiggMusigg.bedGraph4.gz
@@ -16000,7 +16020,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Ini1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG in K562 cells)
-        subGroups view=Signal factor=Ini1mig cellType=t1K562
+        subGroups view=Signal factor=INI1mig cellType=t1K562
         type bedGraph 4
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=Ini1 protocol=Mouse_IgG view=Signal labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=894 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Ini1Musigg fileName=wgEncodeYaleChIPseqSignalK562Ini1Musigg.bedGraph4.gz
@@ -16020,7 +16040,7 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa-S3 Ini1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG in HeLa-S3 cells)
-        subGroups view=Signal factor=Ini1mig cellType=t2HeLa
+        subGroups view=Signal factor=INI1mig cellType=t2HeLa
         type bedGraph 4
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Ini1 protocol=Mouse_IgG view=Signal labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=892 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Ini1Musigg fileName=wgEncodeYaleChIPseqSignalHelas3Ini1Musigg.bedGraph4.gz
@@ -16034,6 +16054,36 @@ wgEncode 1
         type bedGraph 4
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Nrf1 protocol=Mouse_IgG view=Signal labVersion="Data set generated with PeakSeq1.0.  Data set paired with HeLa-S3_MouseIgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=999 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg fileName=wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHelas3Rabigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa-S3 Rabbit_IgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/rabIgG in HeLa-S3 cells)
+        subGroups view=Signal factor=yIGGrab cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Rabbit_IgG protocol=Rabbit_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1030 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Rabigg fileName=wgEncodeYaleChIPseqSignalHelas3Rabigg.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHelas3CjunRabigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa-S3 c-Jun Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun/rabIgG in HeLa-S3 cells)
+        subGroups view=Signal factor=CJUNrig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=c-Jun protocol=Rabbit_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1031 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3CjunRabigg fileName=wgEncodeYaleChIPseqSignalHelas3CjunRabigg.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHelas3JundRabigg
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa-S3 JunD Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD/rabIgG in HeLa-S3 cells)
+        subGroups view=Signal factor=JUNDrig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=JunD protocol=Rabbit_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1032 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3JundRabigg fileName=wgEncodeYaleChIPseqSignalHelas3JundRabigg.bedGraph4.gz
 
 
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: braney, soon Tim)
@@ -22120,7 +22170,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel GM12878 cell short
         longLabel ENCODE CSHL RNA-Seq Tags (short in GM12878 cell)
-        subGroups view=4-Alignments cellType=GM12878 localization=0-cell 
+        subGroups view=4-Alignments cellType=GM12878 localization=0-cell
         type bigBed 6
         color 153,38,0
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
