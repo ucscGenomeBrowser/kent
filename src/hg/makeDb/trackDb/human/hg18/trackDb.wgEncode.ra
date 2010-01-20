@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.784 2010/01/20 18:24:06 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.785 2010/01/20 18:41:47 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -13899,7 +13899,7 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
+subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t2HUVEC=HUVEC t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
 subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma BAF155=BAF155 BAF155mig=BAF155_(musIgG) BAF170mig=BAF170_(musIgG) BDP1=BDP1 BRF1=BRF1 BRG1mig=Brg1_(musIgG) CEBPB=CEBPB CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(rabIgG) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 ERRA=ERRA GATA1=GATA-1 GATA2=GATA-2 GRP20=GRp20 HNF4A=HNF4A HSF1=HSF1 INI1mig=Ini1_(musIgG) JUND=JunD JUNDrig=JunD_(rabIgG) MAX=Max NFE2=NF-E2 NFKB=NFKB NFKBmig=NFKB_(musIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) PGC1A=PGC1A POL2=Pol2 POL2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yIGGmus=IgG(mouse)_Control yIGGrab=IgG(rabbit)_Control yMNase=MNase_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
@@ -14988,6 +14988,46 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=STAT1 treatment=IFNg6h view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1059 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Stat1 fileName=wgEncodeYaleChIPseqPeaksK562Stat1.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHuvecPol2
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HUVEC Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HUVEC cells)
+        subGroups view=Peaks factor=POL2 cellType=t2HUVEC
+        type narrowPeak
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HUVEC antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=950 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHuvecPol2 fileName=wgEncodeYaleChIPseqPeaksHuvecPol2.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHuvecCjun
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HUVEC c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in HUVEC cells)
+        subGroups view=Peaks factor=CJUN cellType=t2HUVEC
+        type narrowPeak
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HUVEC antibody=c-Jun view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=995 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHuvecCjun fileName=wgEncodeYaleChIPseqPeaksHuvecCjun.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHuvecMax
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HUVEC Max Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in HUVEC cells)
+        subGroups view=Peaks factor=MAX cellType=t2HUVEC
+        type narrowPeak
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HUVEC antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1085 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHuvecMax fileName=wgEncodeYaleChIPseqPeaksHuvecMax.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksGm12878Rad21
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 Rad21 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in GM12878 cells)
+        subGroups view=Peaks factor=RAD21 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Rad21 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1076 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Rad21 fileName=wgEncodeYaleChIPseqPeaksGm12878Rad21.narrowPeak.gz
 
     track wgEncodeYaleChIPseqViewSignal
     shortLabel Signal
@@ -16384,6 +16424,46 @@ wgEncode 1
         type bedGraph 4
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=K562 antibody=STAT1 treatment=IFNg6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1059 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Stat1 fileName=wgEncodeYaleChIPseqSignalK562Stat1.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHuvecPol2
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HUVEC cells)
+        subGroups view=Signal factor=POL2 cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HUVEC antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=950 dateSubmitted=2010-01-09 dateUnrestricted=2010-10-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHuvecPol2 fileName=wgEncodeYaleChIPseqSignalHuvecPol2.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHuvecCjun
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC c-Jun Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HUVEC cells)
+        subGroups view=Signal factor=CJUN cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HUVEC antibody=c-Jun view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=995 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHuvecCjun fileName=wgEncodeYaleChIPseqSignalHuvecCjun.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHuvecMax
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC Max Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in HUVEC cells)
+        subGroups view=Signal factor=MAX cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HUVEC antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1085 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHuvecMax fileName=wgEncodeYaleChIPseqSignalHuvecMax.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalGm12878Rad21
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 Rad21 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21 in GM12878 cells)
+        subGroups view=Signal factor=RAD21 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Rad21 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1076 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Rad21 fileName=wgEncodeYaleChIPseqSignalGm12878Rad21.bedGraph4.gz
 
 
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: braney, soon Tim)
