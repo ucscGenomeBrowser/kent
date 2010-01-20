@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.113 2009/12/10 20:02:23 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.114 2010/01/20 17:45:58 angie Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -2356,6 +2356,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		{
 		/* Touch database table to keep it alive. */
 		ctTouchLastUse(ctConn, track->dbTableName, TRUE);
+		verbose(4, "customTrash db table: %s\n", track->dbTableName);
 		}
 	    }
 	else
