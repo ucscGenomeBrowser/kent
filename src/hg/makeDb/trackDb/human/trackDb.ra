@@ -124,7 +124,7 @@ group phenDis
 visibility hide
 priority 51
 type bed 4 +
-color 0,0,200
+color 0,90,0
 
 track xenoRefGene override
 visibility hide
