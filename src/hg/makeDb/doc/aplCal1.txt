@@ -312,6 +312,9 @@ aplCal1.lift = no
     cvs ci -m "Added aplCal1" etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
+# markd 2010-01-19: turns out there are no refseqs, so disable it.
+ aplCal1.refseq.mrna.native.load  = no
+
 #########################################################################
 #  BLATSERVERS ENTRY (DONE - 2009-05-28 - Galt)
 #	After getting a blat server assigned by the Blat Server Gods,
