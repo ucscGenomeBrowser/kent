@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1589 2010/01/19 23:13:17 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1590 2010/01/20 00:29:53 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15366,6 +15366,31 @@ if (gotHapMap && hsTdb != NULL)
     }
 }
 
+static void checkForGwasCatalog(struct sqlConnection *conn, struct trackDb *tdb, char *item)
+/* If item is in gwasCatalog, add link to make the track visible. */
+{
+char *gcTable = "gwasCatalog";
+if (sqlTableExists(conn, gcTable))
+    {
+    char query[512];
+    safef(query, sizeof(query), "select count(*) from %s where name = '%s'", gcTable, item);
+    if (sqlQuickNum(conn, query) > 0)
+	{
+	struct trackDb *gcTdb = hashFindVal(trackHash, gcTable);
+	if (gcTdb != NULL)
+	    {
+	    printf("<B><A HREF=\"%s", hgTracksPathAndSettings());
+	    // If gcTable is hidden, make it dense; otherwise, leave it alone.
+	    if (sameString("hide",
+			   cartUsualString(cart, gcTable,
+					   trackDbSettingOrDefault(gcTdb, "visibility", "hide"))))
+		printf("&%s=dense", gcTable);
+	    printf("\">%s SNP</A> </B><BR>\n", gcTdb->shortLabel);
+	    }
+	}
+    }
+}
+
 static void printLsSnpPdb(struct sqlConnection *conn, char *pdbId, char *snpId)
 /* generate LS-SNP and chimera links for a PDB id */
 {
@@ -15477,6 +15502,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
+checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
 checkForLsSnpMappings(conn, itemName);
