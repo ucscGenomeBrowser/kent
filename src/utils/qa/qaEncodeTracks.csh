@@ -43,16 +43,16 @@ endif
 
 
 # featureBits for all tables
-echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "*** featureBits for all tables ***"
-foreach table ( $tables )
- echo ""
- echo "featureBits -countGaps $db $table"
- nice featureBits -countGaps $db $table
- echo "featureBits -countGaps $db $table gap"
- nice featureBits -countGaps $db $table gap
-end
+#echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#echo "*** featureBits for all tables ***"
+#foreach table ( $tables )
+# echo ""
+# echo "featureBits -countGaps $db $table"
+# nice featureBits -countGaps $db $table
+# echo "featureBits -countGaps $db $table gap"
+# nice featureBits -countGaps $db $table gap
+#end
 
 # check for table descriptions for all tables
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
