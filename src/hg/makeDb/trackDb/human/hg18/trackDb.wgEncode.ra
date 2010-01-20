@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.791 2010/01/20 20:13:36 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.792 2010/01/20 20:21:06 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21476,6 +21476,16 @@ wgEncode 1
         color 189,0,157
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=1x32 mapAlgorithm=BB2 localization=cell view=RawSignal replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1079 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32.wig.gz
 
+        track wgEncodeCaltechRnaSeqRawSignalRep4H1hescCellPapBb2R2x75
+        release alpha
+        subTrack wgEncodeCaltechRnaSeqViewRawSignal off
+        shortLabel H1-hESC cell longPolyABB2 Raw 4
+        longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 4 (longPolyA in H1-hESC cellusingBB2)
+        subGroups view=RawSignal cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA
+        type wig 0.00 1375.66
+        color 0,107,27
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=RawSignal replicate=4 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1064 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep4H1hescCellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep4H1hescCellPapBb2R2x75.wig.gz
+
     track wgEncodeCaltechRnaSeqViewSplices
     shortLabel Splice Sites
     view Splices
@@ -21772,6 +21782,16 @@ wgEncode 1
         color 189,0,157
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=1x32 mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1079 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32.bed12.gz
 
+        track wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75
+        release alpha
+        subTrack wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel H1-hESC cell longPolyABB2 4
+        longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 4 (longPolyA in H1-hESC cellusingBB2)
+        subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA
+        type bed 12
+        color 0,107,27
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB2 localization=cell view=Splices replicate=4 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1064 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75 fileName=wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75.bed12.gz
+
     track wgEncodeCaltechRnaSeqViewzAligns
     shortLabel Alignments
     view zAligns
@@ -21976,6 +21996,16 @@ wgEncode 1
         type bed 12
         color 189,0,157
         metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng32a localization=cell view=Alignments replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1079 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32 fileName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32.bed12.gz
+
+        track wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75
+        release alpha
+        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        shortLabel H1-hESC cell longPolyAerng32a 4
+        longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Alignments Replicate 4 (longPolyA in H1-hESC cellusingerng32a)
+        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA
+        type bed 12
+        color 0,107,27
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Alignments replicate=4 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1064 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqViewMinusRawSignal
     shortLabel Minus Raw Signal
