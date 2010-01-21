@@ -80,100 +80,138 @@ end
 <strong>Progress uploading: </strong> <%= @uploadText -%> <br/>
 <% end %>
 
-<table style="margin-top:10px;" cellpadding=1 cellspacing=1>
+<%
+needLoadLink = false
+needValidateLink = false
+needUploadLink = false
+needDeleteLink = false
+needRenameLink = false
+needUnloadLink = false
+needReexpandAllLink = false
+needShowDafLink = false
+needShowDdfLink = false
 
-<% if (not busy) and authorized and ((not nonActive) or current_user.role == "admin") %> 
 
-  <tr>
-    <td>
+if (not busy) and authorized and ((not nonActive) or current_user.role == "admin")
 
-  <% if @project.status == "validated" %> 
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
 
-  <% if @project.status == "uploaded" \
-     or @project.status == "validate failed" %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  if @project.status == "validated" 
+    needLoadLink = true
+  end
 
-  <% if @project.status == "new" \
-     or @project.status == "uploaded" \
-     or @project.status == "upload failed" \
-     or @project.status == "validate failed" \
-     or @project.status == "load failed" \
-     or advancedView %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  if @project.status == "uploaded" \
+  or @project.status == "validate failed" 
+    needValidateLink = true
+  end
 
-  <% if @project.status != "displayed" or advancedView %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
-      :confirm => "Are you sure you want to delete this submission?" -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  if @project.status == "new" \
+  or @project.status == "uploaded" \
+  or @project.status == "upload failed" \
+  or @project.status == "validate failed" \
+  or @project.status == "load failed" \
+  or advancedView
+     needUploadLink = true
+  end
 
-  <td><%= ' [ ' -%> 
-  <%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
-  <%= ' ] ' -%> </td>
+  if @project.status != "displayed" or advancedView
+    needDeleteLink = true
+  end
 
-  <% if advancedView and @project_status != "new" %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Unload', {:action => 'unload', :id => @project.id},
-      :confirm => "Are you sure you want to unload this submission?" -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  needRenameLink = true
 
-  <% if advancedView and @project_status != "new" %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  if advancedView and @project_status != "new"
+    needUnloadLink = true
+  end
 
-  <% if @dafText != "" %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Show DAF', {:action => 'show_daf', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  if advancedView and @project_status != "new"
+    needReexpandAllLink = true
+  end
 
-  <% if @ddfText != "" %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Show DDF', {:action => 'show_ddf', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+end 
 
-  </tr>
+if authorized  
+  if @dafText != ""
+    needShowDafLink = true
+  end
 
-<% else %>
+  if @ddfText != ""
+    needShowDdfLink = true
+  end
+end 
 
-  <%
-  # some people want this to show up even if it has already been loaded   
-  %>
-  <% if (not busy) and authorized and ((@dafText != "") or (@ddfText != "")) %> 
+if needLoadLink \
+or needValidateLink \
+or needUploadLink \
+or needDeleteLink \
+or needRenameLink \
+or needUnloadLink \
+or needReexpandAllLink \
+or needShowDafLink \
+or needShowDdfLink
+%>
+  <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
     <tr>
-      <% if @dafText != "" %>
-        <td><%= ' [ ' -%> 
-        <%= link_to 'Show DAF', {:action => 'show_daf', :id => @project.id} -%>
-        <%= ' ] ' -%> </td>
-      <% end %>
 
-      <% if @ddfText != "" %>
-        <td><%= ' [ ' -%> 
-        <%= link_to 'Show DDF', {:action => 'show_ddf', :id => @project.id} -%>
-        <%= ' ] ' -%> </td>
-      <% end %>
+    <% if needLoadLink %> 
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needValidateLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needUploadLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needDeleteLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
+	:confirm => "Are you sure you want to delete this submission?" -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needRenameLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needUnloadLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Unload', {:action => 'unload', :id => @project.id},
+	:confirm => "Are you sure you want to unload this submission?" -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needReexpandAllLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needShowDafLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Show DAF', {:action => 'show_daf', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
+
+    <% if needShowDdfLink %>
+      <td><%= ' [ ' -%> 
+      <%= link_to 'Show DDF', {:action => 'show_ddf', :id => @project.id} -%>
+      <%= ' ] ' -%> </td>
+    <% end %>
 
     </tr>
-  <% end %>
 
+  </table>
 <% end %>
-
-</table>
 
 
 <% if current_user.login == "galtx" %>
