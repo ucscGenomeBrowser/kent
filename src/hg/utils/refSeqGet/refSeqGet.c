@@ -12,7 +12,7 @@
 #include "genbank.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: refSeqGet.c,v 1.2 2009/11/23 17:45:19 markd Exp $";
+static char const rcsid[] = "$Id: refSeqGet.c,v 1.3 2010/01/21 20:43:23 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,8 +23,8 @@ errAbort(
   "   refSeqGet db\n"
   "\n"
   "Get a consistent snapshot of the RefSeq data from a genome browser database.\n"
-  "All accessions will include version numbers.  Only ReqSeqs for the particular\n"
-  "are retrieved.\n"
+  "All accessions will include version numbers.  Only ReqSeqs for the organism\n"
+  "associated with the specified genome assembly are retrieved.\n"
   "\n"
   "options:\n"
   "   -aligns=pslFile - get the PSL alignments of the RefSeqs to the genome.\n"
