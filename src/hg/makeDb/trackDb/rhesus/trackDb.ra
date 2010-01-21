@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.18 2009/12/30 21:33:03 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.19 2010/01/21 22:49:29 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -111,10 +111,6 @@ spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
 
-track chainCalJac1 override
-priority 310
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
 track netSyntenyCanFam2
 shortLabel $o_Organism Syn Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
@@ -133,7 +129,4 @@ priority 300
 
 track netPonAbe2 override
 priority 300.1
-
-track netCalJac1 override
-priority 310.1
 

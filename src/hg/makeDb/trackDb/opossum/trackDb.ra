@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.40 2010/01/04 19:59:32 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.41 2010/01/21 22:49:28 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -260,10 +260,6 @@ spectrum on
 type netAlign mm9 chainMm9
 otherDb mm9
 
-track chainCalJac1 override
-priority 230
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
 track syntenicNet
 shortLabel Syntenic Nets
 longLabel Human/Chimp/Rhesus/Mouse/Rat/Dog Syntenic Nets
@@ -339,7 +335,4 @@ type netAlign
     spectrum on
     type netAlign canFam2 chainCanFam2
     otherDb canFam2
-
-track netCalJac1 override
-priority 230.1
 

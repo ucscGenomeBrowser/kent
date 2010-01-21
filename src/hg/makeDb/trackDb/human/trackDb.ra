@@ -1892,10 +1892,6 @@ spectrum on
 type chain fr1
 otherDb fr1
 
-track chainCalJac1 override
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-
 track webbNonExonic
 shortLabel NonExonic
 longLabel Putative Non-Exonic Regions Conserved with Chicken

@@ -598,10 +598,6 @@ spectrum on
 type netAlign rn4 chainRn4
 otherDb rn4
 
-track chainCalJac1 override
-priority 275.0
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
 track blastzHg17
 shortLabel Human Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
@@ -987,9 +983,6 @@ priority 264.3
 # bushbaby
 track chainOtoGar1Best override
 priority 274.0
-
-track netCalJac1 override
-priority 275.1
 
 # rhesus
 track chainRheMac2 override

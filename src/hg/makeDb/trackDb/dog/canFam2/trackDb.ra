@@ -125,12 +125,6 @@ track netHg18 override
 shortLabel $o_db Net
 priority 255.2
 
-track chainCalJac1 override
-priority 245.1
-
-track netCalJac1 override
-priority 245.2
-
 track chainPanTro2 override
 priority 250.1
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
