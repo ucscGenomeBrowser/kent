@@ -265,6 +265,23 @@ The format of the type fields:
     I believe this works even if the entry is a URL to a remote
     bigWig file.
 
+19. type bam
+    This uses a binary indexed file (which can be a URL) named in a database table.
+    See samtools.sourceforge.net for documentation of the SAM/BAM format.
+    In addition to the named .bam file/url, the index must be available at the
+    same path plus the ".bai" suffix.
+    BAM-specific settings:
+    pairEndsByName <placeholder e.g. .>         # presence indicates paired-end alignments
+    pairSearchRange <N>                         # max distance between paired alignments, 
+                                                #   default 20,000 bases
+    bamColorMode    strand|gray|tag|off         # coloring method, default is strand
+    bamGrayMode     aliQual|baseQual|unpaired   # grayscale metric, default is aliQual
+    bamColorTag     <XX>                        # optional tag for RGB color, default is "YC"
+    minAliQual      <N>                         # display only items with alignment quality 
+                                                #   at least N, default 0
+    Additional general settings that may be useful to speed up display for extremely
+    dense data e.g. next-gen sequencing reads: maxWindowToDraw, chromosomes (see below)
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
