@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.810 2010/01/21 19:35:20 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.811 2010/01/21 19:39:10 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11635,7 +11635,7 @@ group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hot_Spots zRawSig=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HEE=HEEpiC HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HRC=HRCEpiC HRE=HRE HRPE=HRPEpiC Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
 subGroup3 rep Replicate rep1=1 rep2=2
-dimensions dimensionX=cellType dimensionY=rep
+dimensions dimensionY=cellType dimensionX=rep
 sortOrder cellType=+ rep=+ view=+
 dragAndDrop subTracks
 noInherit on
@@ -15273,7 +15273,7 @@ subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t2HUVEC=HUVEC t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
 subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma ATF3=ATF3 BAF155=BAF155 BAF155mig=BAF155_(musIgG) BAF170mig=BAF170_(musIgG) BDP1=BDP1 BRF1=BRF1 BRF2=BRF2 BRG1mig=Brg1_(musIgG) CEBPB=CEBPB CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(rabIgG) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 ERRA=ERRA GATA1=GATA-1 GATA2=GATA-2 GRP20=GRp20 GTF2B=GTF2B HNF4A=HNF4A HSF1=HSF1 INI1mig=Ini1_(musIgG) JUND=JunD JUNDrig=JunD_(rabIgG) MAX=Max NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFKBmig=NFKB_(musIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) PGC1A=PGC1A POL2=Pol2 POL2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TFIIIC=TFIIIC TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 ZZZ3=ZZZ3 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yIGGmus=IgG(mouse)_Control yIGGrab=IgG(rabbit)_Control yMNase=MNase_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
-dimensions dimensionY=cellType dimensionX=factor
+dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
