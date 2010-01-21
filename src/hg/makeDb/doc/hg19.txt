@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.71 2010/01/15 23:49:38 hiram Exp $";
+#	"$Id: hg19.txt,v 1.72 2010/01/21 21:46:59 angie Exp $";
 
 #############################################################################
 
@@ -8309,4 +8309,22 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 64888909 bases of 2897316137 (2.240%) in intersection
     featureBits hg19 vegaPseudoGene
     # 6885145 bases of 2897316137 (0.238%) in intersection
+
+########################################################################
+# NHGRI GWAS CATALOG (DONE 1/19/10 angie)
+    mkdir /hive/data/genomes/hg19/bed/gwasCatalog
+    cd /hive/data/genomes/hg19/bed/gwasCatalog
+
+    # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
+    cut -f 1-4 ../snp130/snp130.bed \
+    | sort -k4,4 \
+    | join -t "^V       " -1 4 - /hive/data/genomes/hg18/bed/gwasCatalog/noCoords.100115.tab \
+        -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
+    | sort -k1,1 -k2n,2n \
+        > gwasCatalog.bed
+
+    hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
+
+
 ######################################################################## 
