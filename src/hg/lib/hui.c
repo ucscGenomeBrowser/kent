@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.253 2010/01/04 19:12:29 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.254 2010/01/21 21:46:22 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -914,7 +914,7 @@ else if (gotSeq)
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+    printf("<BR><A HREF=\"%s\">Help on base coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
 }
