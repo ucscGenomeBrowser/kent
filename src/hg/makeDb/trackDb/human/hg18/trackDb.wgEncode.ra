@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.815 2010/01/21 23:29:07 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.816 2010/01/21 23:40:52 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -18091,6 +18091,15 @@ wgEncode 1
         type bedGraph 4
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Harvard(Struhl) dataType=ChIPseq cell=K562 antibody=TFIIIC view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1081 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Tfiiic fileName=wgEncodeYaleChIPseqSignalK562Tfiiic.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalMcf7Input
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel MCF-7 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in MCF-7 cells)
+        subGroups view=Signal factor=zaCTRL cellType=t3MCF7
+        type bedGraph 4
+        metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=MCF-7 antibody=Input view=Signal labVersion="MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Jan 2010 Freeze" subId=1090 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalMcf7Input fileName=wgEncodeYaleChIPseqSignalMcf7Input.bedGraph4.gz
 
 
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: braney, soon Tim)
