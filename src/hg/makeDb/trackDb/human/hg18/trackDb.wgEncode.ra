@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.816 2010/01/21 23:40:52 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.817 2010/01/21 23:59:54 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -26188,7 +26188,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Dexa
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns off
-    shortLabel A549 cell longPolyAerng3 2
+    shortLabel A549 dexa pA+ A2
     longLabel ENCODE Myers RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in A549 cellusingerng3)
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep2
     type bigBed 6
@@ -26196,7 +26196,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns off
-    shortLabel A549 cell longPolyAerng3 2
+    shortLabel A549 etoh pA+ A2
     longLabel ENCODE Myers RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in A549 cellusingerng3)
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep2
     type bigBed 6
@@ -26204,7 +26204,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns off
-    shortLabel A549 cell longPolyAerng3 1
+    shortLabel A549 dexa pA+ A1
     longLabel ENCODE Myers RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in A549 cellusingerng3)
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep1
     type bigBed 6
@@ -26212,7 +26212,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns off
-    shortLabel A549 cell longPolyAerng3 1
+    shortLabel A549 etoh pA+ A1
     longLabel ENCODE Myers RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in A549 cellusingerng3)
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep1
     type bigBed 6
@@ -26221,7 +26221,7 @@ noInherit on
         track wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25
         release alpha
         subTrack wgEncodeHudsonalphaRnaSeqViewAligns off
-        shortLabel Jurkat cell longPolyAbow10 1
+        shortLabel Jurk none pA+ A1
         longLabel ENCODE Myers RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in Jurkat cellusingbow10)
         subGroups view=Aligns cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep1
         type bigBed 6
@@ -26230,7 +26230,7 @@ noInherit on
         track wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25
         release alpha
         subTrack wgEncodeHudsonalphaRnaSeqViewAligns off
-        shortLabel Jurkat cell longPolyAbow10 2
+        shortLabel Jurk none pA+ A2
         longLabel ENCODE Myers RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in Jurkat cellusingbow10)
         subGroups view=Aligns cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep2
         type bigBed 6
@@ -26244,7 +26244,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Dexa
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM off
-    shortLabel A549 cell longPolyAerng3 2
+    shortLabel A549 dexa pA+ S2
     longLabel ENCODE Myers RPKM Replicate 2 (longPolyA in A549 cellusingerng3)
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep2
@@ -26253,7 +26253,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM off
-    shortLabel A549 cell longPolyAerng3 2
+    shortLabel A549 etoh pA+ S2
     longLabel ENCODE Myers RPKM Replicate 2 (longPolyA in A549 cellusingerng3)
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep2
@@ -26262,7 +26262,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Dexa
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM off
-    shortLabel A549 cell longPolyAerng3 1
+    shortLabel A549 dexa pA+ S1
     longLabel ENCODE Myers RPKM Replicate 1 (longPolyA in A549 cellusingerng3)
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep1
@@ -26271,7 +26271,7 @@ noInherit on
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM off
-    shortLabel A549 cell longPolyAerng3 1
+    shortLabel A549 etoh pA+ S1
     longLabel ENCODE Myers RPKM Replicate 1 (longPolyA in A549 cellusingerng3)
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep1
@@ -26281,7 +26281,8 @@ noInherit on
         track wgEncodeHudsonalphaRnaSeqRPKMRep1JurkatCellPapBow10R1x25
         release alpha
         subTrack wgEncodeHudsonalphaRnaSeqViewRPKM off
-        shortLabel Jurkat cell longPolyAbow10 1
+        shortLabel Jurk none pA+ S1
+	useScore 1
         longLabel ENCODE Myers RPKM Replicate 1 (longPolyA in Jurkat cellusingbow10)
         subGroups view=RPKM cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep1
         type bed 12
@@ -26290,7 +26291,8 @@ noInherit on
         track wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25
         release alpha
         subTrack wgEncodeHudsonalphaRnaSeqViewRPKM off
-        shortLabel Jurkat cell longPolyAbow10 2
+	useScore 1
+        shortLabel Jurk none pA+ S2
         longLabel ENCODE Myers RPKM Replicate 2 (longPolyA in Jurkat cellusingbow10)
         subGroups view=RPKM cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep2
         type bed 12
