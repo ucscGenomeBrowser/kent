@@ -393,6 +393,9 @@ extern Color shadesOfRedOnWhite[EXPR_DATA_SHADES];
 extern Color shadesOfBlueOnWhite[EXPR_DATA_SHADES];
 extern Color shadesOfYellowOnWhite[EXPR_DATA_SHADES];
 
+extern Color shadesOfRedOnYellow[EXPR_DATA_SHADES];
+extern Color shadesOfBlueOnYellow[EXPR_DATA_SHADES];
+
 extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors been allocated? */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
@@ -979,9 +982,6 @@ struct linkedFeaturesSeries *lfsFromColoredExonBed(struct bed *bed);
 
 void makeRedGreenShades(struct hvGfx *hvg);
 /* Makes some colors for the typical red/green microarray spectrum. */
-
-void makeRedBlueShadesOnWhiteBackground(struct hvGfx *hvg);
-/* Makes some colors for the typical red/blue microarray spectrum. */
 
 void linkedFeaturesSeriesMethods(struct track *tg);
 

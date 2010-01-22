@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.121 2010/01/14 22:36:31 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.122 2010/01/22 22:52:03 aamp Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -142,6 +142,8 @@ Color shadesOfGreenOnWhite[EXPR_DATA_SHADES];
 Color shadesOfRedOnWhite[EXPR_DATA_SHADES];
 Color shadesOfBlueOnWhite[EXPR_DATA_SHADES];
 Color shadesOfYellowOnWhite[EXPR_DATA_SHADES];
+Color shadesOfRedOnYellow[EXPR_DATA_SHADES];
+Color shadesOfBlueOnYellow[EXPR_DATA_SHADES];
 Color orangeColor = 0;
 Color brickColor = 0;
 Color blueColor = 0;
@@ -2115,25 +2117,17 @@ static struct rgbColor red = {255, 0, 0};
 static struct rgbColor green = {0, 255, 0};
 static struct rgbColor blue = {0, 0, 255};
 static struct rgbColor yellow = {255, 255, 0};
+static struct rgbColor white  = {255, 255, 255};
 hvGfxMakeColorGradient(hvg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
 hvGfxMakeColorGradient(hvg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 hvGfxMakeColorGradient(hvg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 hvGfxMakeColorGradient(hvg, &black, &yellow, EXPR_DATA_SHADES, shadesOfYellow);
-exprBedColorsMade = TRUE;
-}
-
-void makeRedBlueShadesOnWhiteBackground(struct hvGfx *hvg)
-/* Allocate the shades of Red, Green, Blue and Yellow for expression tracks */
-{
-static struct rgbColor red    = {255, 0, 0};
-static struct rgbColor green  = {0, 255, 0};
-static struct rgbColor blue   = {0, 0, 255};
-static struct rgbColor yellow = {255, 255, 0};
-static struct rgbColor white  = {255, 255, 255};
 hvGfxMakeColorGradient(hvg, &white, &blue,   EXPR_DATA_SHADES, shadesOfBlueOnWhite);
 hvGfxMakeColorGradient(hvg, &white, &red,    EXPR_DATA_SHADES, shadesOfRedOnWhite);
 hvGfxMakeColorGradient(hvg, &white, &green,  EXPR_DATA_SHADES, shadesOfGreenOnWhite);
 hvGfxMakeColorGradient(hvg, &white, &yellow, EXPR_DATA_SHADES, shadesOfYellowOnWhite);
+hvGfxMakeColorGradient(hvg, &yellow, &blue,   EXPR_DATA_SHADES, shadesOfBlueOnYellow);
+hvGfxMakeColorGradient(hvg, &yellow, &red,    EXPR_DATA_SHADES, shadesOfRedOnYellow);
 exprBedColorsMade = TRUE;
 }
 

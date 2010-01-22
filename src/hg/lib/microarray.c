@@ -972,3 +972,17 @@ for (bed = bedList, exp = clumpedExps; (bed != NULL) && (exp != NULL);
     }
 expDataFreeList(&clumpedExps);
 }
+
+enum expColorType getExpColorType(char *colorScheme)
+/* From a color type return the respective enum. */
+{
+if (sameString(colorScheme, "redBlue"))
+    return redBlue;
+if (sameString(colorScheme, "yellowBlue"))
+    return yellowBlue;
+if (sameString(colorScheme, "redBlueOnWhite"))
+    return redBlueOnWhite;
+if (sameString(colorScheme, "redBlueOnYellow"))
+    return redBlueOnYellow;
+return redGreen;
+}

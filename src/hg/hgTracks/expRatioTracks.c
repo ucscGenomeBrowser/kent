@@ -897,23 +897,13 @@ float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
 char colorVarName[256];
-boolean redGreen = TRUE;
-boolean redBlueOnWhite = FALSE;
-safef(colorVarName, sizeof(colorVarName), "%s.color", tg->tdb->tableName);
+char *tdbSetting = trackDbSettingOrDefault(tg->tdb, "expColor", "redGreen");
+char *colorVal = NULL;
+enum expColorType expColor;
 
-/* decide color scheme flags */
-if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
-    {
-    if (sameString(cartUsualString(cart, colorVarName, "redGreen"), "redBlueOnWhite"))
-    	{
-	redBlueOnWhite = TRUE;
-    	redGreen = FALSE;
-	}
-    else
-    	{
-    	redGreen = FALSE;
-	}
-    }
+safef(colorVarName, sizeof(colorVarName), "%s.color", tg->tdb->tableName);
+colorVal = cartUsualString(cart, colorVarName, tdbSetting);
+expColor = getExpColorType(colorVal);
 
 /* if val is error value show make it gray */
 if(val <= -10000)
@@ -927,10 +917,7 @@ if(val <= -10000)
 /*     absVal = absVal/1000; */
 
 if(!exprBedColorsMade)
-    {
     makeRedGreenShades(hvg);
-    makeRedBlueShadesOnWhiteBackground(hvg);
-    }
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
@@ -950,39 +937,25 @@ if(absVal > maxDeviation)
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val > 0)
     {
-    if (redGreen)
-    	{
-	return (shadesOfRed[colorIndex]);
-	}
+    if (expColor == yellowBlue)
+	return shadesOfYellow[colorIndex];
+    else if (expColor == redBlueOnWhite)
+	return shadesOfRedOnWhite[colorIndex];
+    else if (expColor == redBlueOnYellow)
+	return shadesOfRedOnYellow[colorIndex];
     else
-    	{
-        if (redBlueOnWhite)
-    	    {
-	    return (shadesOfRedOnWhite[colorIndex]);
-	    }
-	else
-	    {
-	    return (shadesOfYellow[colorIndex]);
-	    }
-	}
+	return shadesOfRed[colorIndex];
     }
 else
     {
-    if (redGreen)
-    	{
-	return (shadesOfGreen[colorIndex]);
-	}
+    if (expColor == redGreen)
+	return shadesOfGreen[colorIndex];
+    else if (expColor == redBlueOnWhite)
+	return shadesOfBlueOnWhite[colorIndex];
+    else if (expColor == redBlueOnYellow)
+	return shadesOfBlueOnYellow[colorIndex];
     else
-    	{
-        if (redBlueOnWhite)
-    	    {
-	    return (shadesOfBlueOnWhite[colorIndex]);
-	    }
-	else
-	    {
-	    return (shadesOfBlue[colorIndex]);
-	    }
-	}
+	return shadesOfBlue[colorIndex];
     }
 }
 

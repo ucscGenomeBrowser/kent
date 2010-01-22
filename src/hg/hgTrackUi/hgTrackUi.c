@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.513 2010/01/12 23:36:03 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.514 2010/01/22 22:52:03 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1045,21 +1045,20 @@ void expRatioColorOption(struct trackDb *tdb)
 {
 char radioName[256];
 char *colorSetting = NULL;
-boolean rgChecked  = FALSE;
-boolean rgwChecked = FALSE;
+char *tdbSetting = trackDbSettingOrDefault(tdb, "expColor", "redGreen");
 safef(radioName, sizeof(radioName), "%s.color", tdb->tableName);
-colorSetting = cartUsualString(cart, radioName, "redGreen");
-if (sameString(colorSetting, "redGreen"))
-    rgChecked = TRUE;
-if (sameString(colorSetting, "redBlueOnWhite"))
-    rgwChecked = TRUE;
-puts("<BR><B>Color: </B> ");
-cgiMakeRadioButton(radioName, "redGreen", rgChecked);
-puts("red/green");
-cgiMakeRadioButton(radioName, "yellowBlue", !(rgChecked || rgwChecked));
-puts("yellow/blue\n");
-cgiMakeRadioButton(radioName, "redBlueOnWhite", rgwChecked);
+colorSetting = cartUsualString(cart, radioName, tdbSetting);
+puts("<BR><B>Color: </B><BR> ");
+cgiMakeRadioButton(radioName, "redGreen", sameString(colorSetting, "redGreen"));
+puts("red/green<BR>");
+cgiMakeRadioButton(radioName, "redBlue", sameString(colorSetting, "redBlue"));
+puts("red/blue<BR>");
+cgiMakeRadioButton(radioName, "yellowBlue", sameString(colorSetting, "yellowBlue"));
+puts("yellow/blue<BR>\n");
+cgiMakeRadioButton(radioName, "redBlueOnWhite", sameString(colorSetting, "redBlueOnWhite"));
 puts("red/blue on white background<BR>");
+cgiMakeRadioButton(radioName, "redBlueOnYellow", sameString(colorSetting, "redBlueOnYellow"));
+puts("red/blue on yellow background<BR>");
 }
 
 void expRatioUi(struct trackDb *tdb)

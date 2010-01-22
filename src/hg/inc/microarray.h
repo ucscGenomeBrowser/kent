@@ -35,6 +35,16 @@ enum maCombineMethod
     useMean = 1,
     };
 
+/* Enum to use list the types of ways to color the microarray */
+enum expColorType 
+    {
+    redGreen = 0,
+    redBlue = 1,
+    yellowBlue = 2,
+    redBlueOnWhite = 3,
+    redBlueOnYellow = 4,
+    };
+
 double maDoubleMeanHandleNA(int count, double *array);
 /* Calculate the mean value of an array, skipping the NA vals. */
 
@@ -165,5 +175,8 @@ void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping);
 struct maGrouping *maHashToMaGrouping(struct hash *oneGroup);
 /* This converts a single "stanza" of the microarrayGroups.ra file to a
    maGrouping struct. */
+
+enum expColorType getExpColorType(char *colorScheme);
+/* From a color type return the respective enum. */
 
 #endif

@@ -12,13 +12,13 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.23 2009/03/05 10:09:22 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.24 2010/01/22 22:52:04 aamp Exp $";
 
 /* global flag to indicate if the track is a cancer genomics track */
 boolean isCancerGenomicsTrack = FALSE;
 
 static struct rgbColor getColorForExprBed(float val, float max,
-	boolean redGreen, boolean redBlueOnWhite)
+        enum expColorType colorScheme)
 /* Return the correct color for a given score */
 {
 float absVal = fabs(val);
@@ -37,53 +37,50 @@ if(absVal > max)
 if (max == 0) 
     errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
 colorIndex = (int)(absVal * 255/max);
-
-
-if (redGreen) 
-    {
-   if(val > 0) 
+color.r = color.g = color.b = 0;
+if (colorScheme == redBlue)
+    if (val > 0)
+	color.r = colorIndex;
+    else
+	color.b = colorIndex;
+else if (colorScheme == yellowBlue)
+    if (val > 0)
 	{
-	color.r = colorIndex; 
-	color.g = 0;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
+	color.r = colorIndex;
 	color.g = colorIndex;
-	color.b = 0;
 	}
-    }
-else if (redBlueOnWhite)
-    {
-    if(val > 0) 
+    else
+	color.b = colorIndex;
+else if (colorScheme == redBlueOnWhite)
+    if (val > 0)
 	{
-	color.r = 255; 
+	color.r = 255;
 	color.g = 255 - colorIndex;
 	color.b = 255 - colorIndex;
+	}
+    else
+	{
+	color.r = 255 - colorIndex;
+	color.g = 255 - colorIndex;
+	color.b = 255;
+	}
+else if (colorScheme == redBlueOnYellow)
+    if (val > 0)
+	{
+	color.r = 255;
+	color.g = 255 - colorIndex;
 	}
     else 
 	{
 	color.r = 255 - colorIndex;
 	color.g = 255 - colorIndex;
-	color.b = 255;
-	}	
-    }
-else
-    {
-    if(val > 0) 
-	{
-	color.r = colorIndex; 
-	color.g = colorIndex;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
-	color.g = 0;
 	color.b = colorIndex;
-	}	
-    }
+	}
+else
+    if (val > 0)
+	color.r = colorIndex;
+    else
+	color.g = colorIndex;
 
 return color;
 }
@@ -124,7 +121,7 @@ msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNa
 }
 
 static void printExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
-	struct rgbColor(*getColor)(float val, float maxVal, boolean redGreen, boolean redBlueOnWhite), boolean redGreen, boolean redBlueOnWhite)
+	  struct rgbColor(*getColor)(float val, float maxVal, enum expColorType colorScheme), enum expColorType colorScheme)
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
@@ -144,7 +141,7 @@ for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += step
 printf("</tr><tr>\n");
 for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
-    struct rgbColor rgb = getColor(currentVal, maxVal, redGreen, redBlueOnWhite);
+    struct rgbColor rgb = getColor(currentVal, maxVal, colorScheme);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
     }
 printf("</tr></table>\n");
@@ -153,7 +150,7 @@ printf("</td></tr></table>\n");
 
 static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
      int expIndex, char *expName, float maxScore,
-    boolean redGreen, boolean redBlueOnWhite)
+     enum expColorType colorScheme)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
    create false two color display */
@@ -183,7 +180,7 @@ else
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
     /* use the background colors to creat patterns */
-    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, redGreen, redBlueOnWhite);
+    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, colorScheme);
     printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
     }
 printf("</tr>\n");
@@ -193,10 +190,10 @@ static void msBedPrintTable(struct bed *bedList, struct hash *erHash,
     char *itemName, char *expName, float minScore, float maxScore,
     float stepSize, int base,
     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
-    void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore, boolean redGreen, boolean redBlueOnWhite),
-    void(*printKey)(float minVal, float maxVal, float size, int base, struct rgbColor(*getColor)(float val, float max, boolean redGreen, boolean redBlueOnWhite), boolean redGreen, boolean redBlueOnWhite),
-    struct rgbColor(*getColor)(float val, float max, boolean redGreen, boolean redBlueOnWhite),
-	boolean redGreen, boolean redBlueOnWhite)
+			    void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore, enum expColorType colorScheme),
+    void(*printKey)(float minVal, float maxVal, float size, int base, struct rgbColor(*getColor)(float val, float max, enum expColorType colorScheme), enum expColorType colorScheme),
+    struct rgbColor(*getColor)(float val, float max, enum expColorType colorScheme),
+	enum expColorType colorScheme)
 /* prints out a table from the data present in the bedList */
 {
 int i,featureCount=0;
@@ -205,7 +202,7 @@ if(bedList == NULL)
 featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
-    printKey(minScore, maxScore, stepSize, base, getColor, redGreen, redBlueOnWhite);
+    printKey(minScore, maxScore, stepSize, base, getColor, colorScheme);
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
@@ -213,7 +210,7 @@ printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\
 printHeader(bedList, erHash, itemName);
 for(i=0; i<bedList->expCount; i++)
     {
-    printRow(bedList, erHash, i, expName, maxScore, redGreen, redBlueOnWhite);
+    printRow(bedList, erHash, i, expName, maxScore, colorScheme);
     }
 printf("</table>");
 printf("</td></tr></table>");
@@ -424,29 +421,18 @@ double stepSize = atof(expStep);
 struct bed *bedList;
 char *itemName = cgiUsualString("i2","none");
 char *expName = (item == NULL) ? itemName : item;
-boolean redGreen = TRUE;
-boolean redBlueOnWhite = FALSE;
+char *tdbSetting = trackDbSettingOrDefault(tdb, "expColor", "redGreen");
+char *colorVal = NULL;
+enum expColorType colorScheme;
 char colorVarName[256];
+safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
+colorVal = cartUsualString(cart, colorVarName, tdbSetting);
+colorScheme = getExpColorType(colorVal);
 
 if (sameWord(tdb->grp, "cancerGenomics"))
     {
     /* set global flag */
     isCancerGenomicsTrack = TRUE;
-    }
-
-safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
-/* decide color scheme flags */
-if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
-    {
-    if (sameString(cartUsualString(cart, colorVarName, "redGreen"), "redBlueOnWhite"))
-    	{
-	redBlueOnWhite = TRUE;
-    	redGreen = FALSE;
-	}
-    else
-    	{
-    	redGreen = FALSE;
-	}
     }
 
 if (!ct)
@@ -491,7 +477,7 @@ else
     puts("<h2></h2><p>\n");
     msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore,
 	stepSize, 2, msBedDefaultPrintHeader, msBedExpressionPrintRow,
-	printExprssnColorKey, getColorForExprBed, redGreen, redBlueOnWhite);
+	printExprssnColorKey, getColorForExprBed, colorScheme);
     hashTraverseEls(erHash, erHashElFree);
     hashFree(&erHash);
     microarrayGroupsFree(&groupings);
