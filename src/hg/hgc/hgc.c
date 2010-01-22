@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1591 2010/01/22 22:23:19 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1592 2010/01/22 23:43:18 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21175,7 +21175,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     char *sc = cloneString(el->alleleScores);
     int i = 0;
     printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
-    printf("Alleles are shown as in plus strand<br>\n");
+    printf("Alleles are relative to forward strand of reference genome:<br>\n");
     printf("<table border=1 cellpadding=3><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
     chopByChar(name, '/', all, el->alleleCount);
     chopByChar(fr, ',', freq, el->alleleCount);
@@ -22783,13 +22783,9 @@ else if (sameString("pgVenter", track) ||
          sameString("pgCeu", track)    ||
          sameString("pgChb", track)    ||
          sameString("pgJpt", track)    ||
-         sameString("pgYoruban1", track) ||
-         sameString("pgYoruban2", track) ||
-         sameString("pgYoruban3", track) ||
-         sameString("pgNA12878", track) ||
-         sameString("pgNA12891", track) ||
-         sameString("pgNA12892", track) ||
-         sameString("pgNA19240", track) ||
+	 sameString("pgSjk", track)    ||
+	 startsWith("pgYoruban", track) ||
+	 (startsWith("pgNA", track) && isdigit(track[4])) ||
          sameString("hbPgTest", track) ||
          sameString("hbPgWild", track) ||
 	 sameString("pgYh1", track) ||
