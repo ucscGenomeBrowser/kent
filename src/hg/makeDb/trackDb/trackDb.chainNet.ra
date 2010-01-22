@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.39 2010/01/21 22:49:26 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.40 2010/01/22 01:10:34 rhead Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -42,7 +42,7 @@ html chainNet
     track chainNetFr2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetFr2
 
         track netFr2
@@ -95,7 +95,7 @@ html chainNet
     track chainNetFr1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetFr1
 
         track netFr1
@@ -145,7 +145,7 @@ html chainNet
     track chainNetTetNig2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetTetNig2
 
         track netTetNig2
@@ -196,7 +196,7 @@ html chainNet
     track chainNetTetNig1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetTetNig1
 
         track netTetNig1
@@ -246,7 +246,7 @@ html chainNet
     track chainNetDanRer6Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDanRer6
 
         track netDanRer6
@@ -297,7 +297,7 @@ html chainNet
     track chainNetDanRer5Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDanRer5
 
         track netDanRer5
@@ -349,7 +349,7 @@ html chainNet
     track chainNetDanRer4Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDanRer4
 
         track netDanRer4
@@ -401,7 +401,7 @@ html chainNet
     track chainNetDanRer3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDanRer3
 
         track netDanRer3
@@ -453,7 +453,7 @@ html chainNet
     track chainNetDanRer2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDanRer2
 
         track netDanRer2
@@ -505,7 +505,7 @@ html chainNet
     track chainNetDanRer1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDanRer1
 
         track netDanRer1
@@ -557,7 +557,7 @@ html chainNet
     track chainNetXenTro2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetXenTro2
 
         track netXenTro2
@@ -609,7 +609,7 @@ html chainNet
     track chainNetXenTro1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetXenTro1
 
         track netXenTro1
@@ -662,7 +662,7 @@ html chainNet
     track chainNetOryLat2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetOryLat2
 
         track netOryLat2
@@ -716,7 +716,7 @@ html chainNet
     track chainNetOryLat1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetOryLat1
 
         track netOryLat1
@@ -770,7 +770,7 @@ html chainNet
     track chainNetGasAcu1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetGasAcu1
 
         track netGasAcu1
@@ -823,7 +823,7 @@ html chainNet
     track chainNetGalGal3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetGalGal3
 
         track netGalGal3
@@ -876,7 +876,7 @@ html chainNet
     track chainNetGalGal2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetGalGal2
 
         track netGalGal2
@@ -929,7 +929,7 @@ html chainNet
     track chainNetTaeGut1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetTaeGut1
 
         track netTaeGut1
@@ -982,7 +982,7 @@ html chainNet
     track chainNetOrnAna1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetOrnAna1
 
         track netOrnAna1
@@ -1035,7 +1035,7 @@ html chainNet
     track chainNetAnoCar1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetAnoCar1
 
         track netAnoCar1
@@ -1088,7 +1088,7 @@ html chainNet
     track chainNetPetMar1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetPetMar1
 
         track netPetMar1
@@ -1141,7 +1141,7 @@ html chainNet
     track chainNetBraFlo1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetBraFlo1
 
         track netBraFlo1
@@ -1229,7 +1229,7 @@ html chainNet
     track chainNetLoxAfr3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetLoxAfr3
 
         track netLoxAfr3
@@ -1278,7 +1278,7 @@ html chainNet
     track chainNetLoxAfr2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetLoxAfr2
 
         track netLoxAfr2
@@ -1327,7 +1327,7 @@ html chainNet
     track chainNetLoxAfr1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetLoxAfr1
 
         track netLoxAfr1
@@ -1378,7 +1378,7 @@ html chainNet
     track chainNetMonDom1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMonDom1
 
         track netMonDom1
@@ -1430,7 +1430,7 @@ html chainNet
     track chainNetMonDom4Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMonDom4
 
         track netMonDom4
@@ -1480,7 +1480,7 @@ html chainNet
     track chainNetMonDom5Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMonDom5
 
         track netMonDom5
@@ -1529,7 +1529,7 @@ html chainNet
     track chainNetEriEur1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetEriEur1
 
         track netEriEur1
@@ -1578,7 +1578,7 @@ html chainNet
     track chainNetSorAra1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetSorAra1
 
         track netSorAra1
@@ -1630,7 +1630,7 @@ html chainNet
     track chainNetMm9Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMm9
 
         track netMm9
@@ -1683,7 +1683,7 @@ html chainNet
     track chainNetMm8Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMm8
 
         track netMm8
@@ -1736,7 +1736,7 @@ html chainNet
     track chainNetMm7Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMm7
 
         track netMm7
@@ -1789,7 +1789,7 @@ html chainNet
     track chainNetMm6Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetMm6
 
         track netMm6
@@ -1883,7 +1883,7 @@ html chainNet
     track chainNetRn4Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetRn4
 
         track netRn4
@@ -1936,7 +1936,7 @@ html chainNet
     track chainNetRn3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetRn3
 
         track netRn3
@@ -1989,7 +1989,7 @@ html chainNet
     track chainNetCavPor3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetCavPor3
 
         track netCavPor3
@@ -2042,7 +2042,7 @@ html chainNet
     track chainNetCavPor2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetCavPor2
 
         track netCavPor2
@@ -2092,7 +2092,7 @@ html chainNet
     track chainNetOryCun2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetOryCun2
 
         track netOryCun2
@@ -2141,7 +2141,7 @@ html chainNet
     track chainNetOryCun1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetOryCun1
 
         track netOryCun1
@@ -2190,7 +2190,7 @@ html chainNet
     track chainNetEquCab2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetEquCab2
 
         track netEquCab2
@@ -2241,7 +2241,7 @@ html chainNet
     track chainNetEquCab1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetEquCab1
 
         track netEquCab1
@@ -2291,7 +2291,7 @@ html chainNet
     track chainNetEchTel1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetEchTel1
 
         track netEchTel1
@@ -2340,7 +2340,7 @@ html chainNet
     track chainNetDasNov2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDasNov2
 
         track netDasNov2
@@ -2389,7 +2389,7 @@ html chainNet
     track chainNetDasNov1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetDasNov1
 
         track netDasNov1
@@ -2438,7 +2438,7 @@ html chainNet
     track chainNetBosTau4Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetBosTau4
 
         track netBosTau4
@@ -2487,7 +2487,7 @@ html chainNet
     track chainNetBosTau3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetBosTau3
 
         track netBosTau3
@@ -2536,7 +2536,7 @@ html chainNet
     track chainNetBosTau2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetBosTau2
 
         track netBosTau2
@@ -2585,7 +2585,7 @@ html chainNet
     track chainNetBosTau1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetBosTau1
 
         track netBosTau1
@@ -2634,7 +2634,7 @@ html chainNet
     track chainNetCanFam2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetCanFam2
 
         track netCanFam2
@@ -2684,7 +2684,7 @@ html chainNet
     track chainNetFelCat3Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetFelCat3
 
         track netFelCat3
@@ -2731,7 +2731,7 @@ sortOrder view=+
     track chainNetVenterViewnet
     shortLabel Nets
     view net
-    visibility dense
+    visibility full
     subTrack chainNetVenter
 
         track netVenter1
@@ -2782,7 +2782,7 @@ html chainNet
     track chainNetHg18Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetHg18
 
         track netHg18
@@ -2831,7 +2831,7 @@ html chainNet
     track chainNetHg19Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetHg19
 
         track netHg19
@@ -2881,7 +2881,7 @@ html chainNet
     track chainNetHg17Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetHg17
 
         track netHg17
@@ -2932,7 +2932,7 @@ html chainNet
     track chainNetPanTro2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetPanTro2
 
         track netPanTro2
@@ -2983,7 +2983,7 @@ html chainNet
     track chainNetPanTro1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetPanTro1
 
         track netPanTro1
@@ -3032,7 +3032,7 @@ html chainNet
     track chainNetGorGor1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetGorGor1
 
         track netGorGor1
@@ -3082,7 +3082,7 @@ html chainNet
     track chainNetPonAbe2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetPonAbe2
 
         track netPonAbe2
@@ -3131,7 +3131,7 @@ html chainNet
     track chainNetTupBel1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetTupBel1
 
         track netTupBel1
@@ -3179,7 +3179,7 @@ html chainNet
     track chainNetOtoGar1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetOtoGar1
 
         track netOtoGar1
@@ -3227,7 +3227,7 @@ html chainNet
     track chainNetCalJac1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetCalJac1
 
         track netCalJac1
@@ -3277,7 +3277,7 @@ html chainNet
     track chainNetRheMac2Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetRheMac2
 
         track netRheMac2
@@ -3328,7 +3328,7 @@ html chainNet
     track chainNetRheMac1Viewnet
     shortLabel Net
     view net
-    visibility dense
+    visibility full
     subTrack chainNetRheMac1
 
         track netRheMac1
@@ -3376,7 +3376,7 @@ sortOrder view=+
     track chainNetPoodleViewnet
     shortLabel Nets
     view net
-    visibility dense
+    visibility full
     subTrack chainNetPoodle
 
         track netCanFamPoodle1
