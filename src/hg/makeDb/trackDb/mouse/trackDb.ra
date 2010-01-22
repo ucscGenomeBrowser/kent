@@ -973,13 +973,6 @@ priority 220.3
 track netCanFam1 override
 priority 220.4
 
-# horse
-track chainEquCab1 override
-priority 264.2
-
-track netEquCab1 override
-priority 264.3
-
 # bushbaby
 track chainOtoGar1Best override
 priority 274.0
