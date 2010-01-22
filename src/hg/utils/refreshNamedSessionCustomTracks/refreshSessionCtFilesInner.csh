@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/refreshSessionCtFilesInner.csh instead.
 
-# $Id: refreshSessionCtFilesInner.csh,v 1.3 2009/10/19 23:10:18 angie Exp $
+# $Id: refreshSessionCtFilesInner.csh,v 1.4 2010/01/22 05:57:54 angie Exp $
 
 setenv HGDB_CONF /cluster/home/qateam/.hg.conf.hgcentral
 
@@ -39,7 +39,7 @@ if ("$strayOut" != "") then
 endif
 
 ps -eafl > $logDir/before.log
-/cluster/bin/x86_64/refreshNamedSessionCustomTracks hgcentral -verbose=4 \
+/cluster/bin/x86_64/refreshNamedSessionCustomTracks hgcentral -atime=123 -verbose=4 \
 >& $tmpLog
 ps -eafl > $logDir/after.log
 /cluster/bin/scripts/makeExclusionList.pl $tmpOut $tmpLog \
