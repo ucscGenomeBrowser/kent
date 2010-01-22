@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.6 2008/09/03 19:19:26 markd Exp $";
+static char const rcsid[] = "$Id: pgSnp.c,v 1.7 2010/01/22 23:44:59 angie Exp $";
 
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
@@ -396,7 +396,6 @@ struct sqlConnection *conn = hAllocConn(db);
 safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, 0, exonCount, exonEnds, exonStarts  from knownGene where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
    item->chrom, item->chromStart, item->chromEnd);
 
-printf("\n<BR>Coding sequence changes shown in strand matching transcript<BR>\n");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -421,6 +420,8 @@ for (el = th; el != NULL; el = el->next)
     struct pgCodon *cod = fetchCodons(db, el, item->chromStart, item->chromEnd);
     if (cod == NULL) 
         continue; /* not in exon */
+    if (found == 0)
+	printf("\n<BR>Coding sequence changes are relative to strand of transcript:<BR>\n");
     found++;
     if (sameString(el->strand, "-")) 
         reverseComplement(cod->seq, strlen(cod->seq)); 
@@ -480,8 +481,6 @@ for (el = th; el != NULL; el = el->next)
             }
         }
     }
-if (!found)
-    printf("None found<BR>\n");
 bedFreeList(&list);
 }
 
