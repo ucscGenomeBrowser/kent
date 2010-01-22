@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.22 2010/01/12 03:02:20 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.23 2010/01/22 01:38:14 kate Exp $
 
 use warnings;
 use strict;
@@ -30,9 +30,11 @@ use vars qw/
     $opt_preamble
     $opt_db
     $opt_verbose
+    $opt_checksum
     /;
 
 our $checksumFile = "md5sum.txt";
+our $textFile = "files.txt";    # plain text file list with metadata
 
 sub usage {
     print STDERR <<END;
@@ -42,6 +44,7 @@ Creates an HTML page and README text file listing the downloads in the current d
 
 options:
     -help               Displays this usage info
+    -checksum           Generate checksum file 
     -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
     -db=hg18            Use a database other than the default hg18 (For aquiring releaseDate and metadata from trackDb)
     -fileType=mask	    mask for file types included (default '*.gz')
@@ -276,6 +279,7 @@ my $ok = GetOptions("fileType=s",
                     "preamble=s",
                     "db=s",
                     "verbose=i",
+                    "checksum",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
@@ -305,6 +309,7 @@ $opt_db = "hg18" if(!defined $opt_db);
 my $db = HgDb->new(DB => $opt_db);
 
 open( OUT_FILE, "> $downloadsDir/$indexHtml") || die "SYS ERROR: Can't write to \'$downloadsDir/$indexHtml\' file; error: $!\n";
+open( TEXT_FILE, "> $downloadsDir/$textFile") || die "SYS ERROR: Can't write to \'$downloadsDir/$textFile\' file; error: $!\n";
 #print OUT_FILE @fileList;
 
 
@@ -317,7 +322,9 @@ if(open(README, "$downloadsDir/README.txt")) {
 # Start the page
 htmlStartPage(*OUT_FILE,$downloadsDir,$indexHtml,$preamble);
 
+# NOTE: these two arrays should be collapsed, and HTML derived from plain text
 my @rows; #  Gather rows to be printed here
+my @textRows; #  Gather rows to be printed here (plain-text)
 
 print OUT_FILE "<TABLE cellspacing=0>\n";
 print OUT_FILE "<TR valign='bottom'><TH>RESTRICTED<BR>until<TH align='left'>&nbsp;&nbsp;File<TH align='right'>Size<TH>Submitted<TH align='left'>&nbsp;&nbsp;Details</TR>\n";
@@ -497,21 +504,26 @@ for my $line (@fileList) {
 
     #htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$details);
     push @rows, sortableHtmlRow(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$details);
+    printf TEXT_FILE "%s\tsize=%s; dateSubmitted=%s; %s\n", $fileName, $file[2], $submitDate, $details;
 }
 sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
 print OUT_FILE "</TABLE>\n";
 
 htmlEndPage(*OUT_FILE);
+close TEXT_FILE;
 
 # create file of checksums
-open STDOUT, ">$checksumFile" or die "Cannot open $checksumFile file";
-foreach my $file (@files) {
-    system("md5sum", $file);
+if (defined $opt_checksum) {
+    open STDOUT, ">$checksumFile" or die "Cannot open $checksumFile file";
+    foreach my $file (@files) {
+        system("md5sum", $file);
+    }
+    close STDOUT;
 }
-close STDOUT;
 
 chdir $downloadsDir;
-chmod 0775, $indexHtml;
-chmod 0775, $checksumFile;
+chmod 0664, $indexHtml;
+chmod 0664, $checksumFile;
+chmod 0664, $textFile;
 
 exit 0;
