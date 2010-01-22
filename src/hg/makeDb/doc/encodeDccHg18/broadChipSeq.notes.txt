@@ -295,7 +295,7 @@ A') Untouched Files:
    wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
    wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
    wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
-   (80 files)
+   (180 files)
 
 B) Eliminated tables (not replaced):
    wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
