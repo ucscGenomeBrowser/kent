@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1590 2010/01/20 00:29:53 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1591 2010/01/22 22:23:19 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15622,6 +15622,91 @@ struct dyString *dy2 = dyStringSub(dy1->string, "[NS]", "[" GWAS_NONE_SIGNIFICAN
 return dyStringCannibalize(&dy2);
 }
 
+static boolean isSnpAndAllele(char *str)
+/* Return TRUE if str ~ /^rs[0-9]+-.+/ . */
+{
+if (isEmpty(str) || !startsWith("rs", str))
+    return FALSE;
+char *p = str + 2;
+if (! isdigit(*p++))
+    return FALSE;
+while (isdigit(*p))
+    p++;
+if (*p++ != '-')
+    return FALSE;
+if (*p == '\0')
+    return FALSE;
+return TRUE;
+}
+
+static char *splitSnpAndAllele(char *str, char **retAllele)
+/* If str is a rsID+allele, return the rsID and if retAllele is non-null, set it
+ * to the allele portion.  Don't free *retAllele.  If str is not rsID+allele,
+ * return NULL. */
+{
+if (isSnpAndAllele(str))
+    {
+    char *rsID = cloneString(str);
+    char *allele = strchr(rsID, '-');
+    if (allele == NULL)
+	errAbort("splitSnpAndAllele: isSnpAllele() allowed %s", str);
+    *allele++ = '\0';
+    if (retAllele != NULL)
+	*retAllele = firstWordInLine(allele);
+    return rsID;
+    }
+else
+    {
+    if (retAllele != NULL)
+	*retAllele = NULL;
+    return NULL;
+    }
+}
+
+static char *getSnpAlleles(struct sqlConnection *conn, char *snpTable, char *snpName)
+/* Look up snpName's observed alleles in snpTable.  Returns NULL if not found. */
+{
+char query[512];
+char buf[256]; // varchar(255)
+safef(query, sizeof(query), "select observed from %s where name = '%s'", snpTable, snpName);
+return cloneString(sqlQuickQuery(conn, query, buf, sizeof(buf)-1));
+}
+
+static void gwasCatalogCheckSnpAlleles(struct trackDb *tdb, struct gwasCatalog *gc)
+/* Look up the SNP's observed alleles in the snp track and warn if they are
+ * complementary (hence the risk allele is ambiguous because strand is often 
+ * not specified in journal articles). */
+{
+char *snpTable = trackDbSetting(tdb, "snpTable");
+if (isEmpty(snpTable))
+    return;
+struct sqlConnection *conn = hAllocConn(database);
+if (sqlTableExists(conn, snpTable) && isSnpAndAllele(gc->riskAllele))
+    {
+    char *riskAllele = NULL, *strongSNP = splitSnpAndAllele(gc->riskAllele, &riskAllele);
+    char *snpVersion = trackDbSettingOrDefault(tdb, "snpVersion", "?");
+    char *dbSnpAlleles = getSnpAlleles(conn, snpTable, strongSNP);
+    if (dbSnpAlleles == NULL)
+	dbSnpAlleles = "<em>not found</em>";
+    boolean showBoth = differentString(strongSNP, gc->name);
+    printf("<B>dbSNP build %s observed alleles for %s%s:</B> %s<BR>\n",
+	   snpVersion, (showBoth ? "Strongest SNP " : ""), strongSNP, dbSnpAlleles);
+    if (stringIn("C/G", dbSnpAlleles) || stringIn("A/T", dbSnpAlleles))
+	printf("<em>Note: when SNP alleles are complementary (A/T or C/G), take care to "
+	       "determine the strand/orientation of the given risk allele from the "
+	       "original publication (above).</em><BR>\n");
+    if (showBoth)
+	{
+	dbSnpAlleles = getSnpAlleles(conn, snpTable, gc->name);
+	if (dbSnpAlleles == NULL)
+	    dbSnpAlleles = "<em>not found</em>";
+	printf("<B>dbSNP build %s observed alleles for mapped SNP %s:</B> %s<BR>\n",
+	       snpVersion, gc->name, dbSnpAlleles);
+	}
+    }
+hFreeConn(&conn);
+}
+
 void doGwasCatalog(struct trackDb *tdb, char *item)
 /* Show details from NHGRI's Genome-Wide Association Study catalog. */
 {
@@ -15643,6 +15728,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	printf("<HR>\n");
     struct gwasCatalog *gc = gwasCatalogLoad(row+rowOffset);
+    printCustomUrl(tdb, item, FALSE);
     printPos(gc->chrom, gc->chromStart, gc->chromEnd, NULL, TRUE, gc->name);
     printf("<B>Reported region:</B> %s<BR>\n", gc->region);
     printf("<B>Publication:</B> %s <em>et al.</em> "
@@ -15653,9 +15739,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Initial sample size:</B> %s<BR>\n", subNrNs(gc->initSample));
     printf("<B>Replication sample size:</B> %s<BR>\n", subNrNs(gc->replSample));
     printf("<B>Reported gene(s):</B> %s<BR>\n", subNrNs(gc->genes));
-    printf("<B>Strongest SNP-Risk allele:</B> %s<BR>\n", subNrNs(gc->riskAllele));
+    char *strongAllele = NULL, *strongRsID = splitSnpAndAllele(gc->riskAllele, &strongAllele);
+    if (strongRsID)
+	printf("<B>Strongest SNP-Risk allele:</B> "
+	       "<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" "
+	       "TARGET=_BLANK>%s</A>-%s<BR>\n", strongRsID, strongRsID, strongAllele);
+    else
+	printf("<B>Strongest SNP-Risk allele:</B> %s<BR>\n", subNrNs(gc->riskAllele));
+    gwasCatalogCheckSnpAlleles(tdb, gc);
     printf("<B>Risk Allele Frequency:</B> %s<BR>\n", subNrNs(gc->riskAlFreq));
-    if (gc->pValueDesc[0] == '(')
+    if (isEmpty(gc->pValueDesc) || sameString(gc->pValueDesc, "NS"))
+	printf("<B>p-Value:</B> %s<BR>\n", subNrNs(gc->pValue));
+    else if (gc->pValueDesc[0] == '(')
 	printf("<B>p-Value:</B> %s %s<BR>\n", gc->pValue, subNrNs(gc->pValueDesc));
     else
 	printf("<B>p-Value:</B> %s (%s)<BR>\n", gc->pValue, subNrNs(gc->pValueDesc));
