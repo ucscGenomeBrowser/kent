@@ -13,11 +13,14 @@ source `which qaConfig.csh`
 
 set db=''
 set tableList=''
+set maxShortLabel='16'
+set maxLongLabel='80'
 
 if ($#argv != 2 ) then
   echo
-  echo "  runs test suite for ENCODE tracks"
-  echo "  (it's best to direct output and errors to a file: '>&')"
+  echo " Runs test suite for ENCODE tracks"
+  echo " (it's best to direct output and errors to a file: '>&')"
+  echo " In general, this script only prints output if there are problems" 
   echo
   echo "    usage: db tableList"
   echo
@@ -41,10 +44,9 @@ else
  set tables=$tableList
 endif
 
-
+# Takes too long to run (commented out for now):
 # featureBits for all tables
 #echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-#echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 #echo "*** featureBits for all tables ***"
 #foreach table ( $tables )
 # echo ""
@@ -56,79 +58,91 @@ endif
 
 # check for table descriptions for all tables
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** check for tableDescription entry for all tables ***"
-echo "Is there an entry in the tableDescriptions table for each"
-echo "table? (1 == yes, 0 == no)"
+echo "(Only prints tablename if there is NO entry in tableDescription table)"
 foreach table ( $tables )
- echo ""
- echo "Table: $table"
- hgsql -Ne "select count(*) from tableDescriptions where tableName = '$table'" $db
+ set num=`hgsql -Ne "select count(*) from tableDescriptions where tableName = '$table'" $db`
+ if ( 0 == $num ) then
+  echo "\nERROR: no description for $table"
+ endif
 end
 
 # no underscores in table names
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** make sure there are no underscores in table names ***"
-echo "If there's output here, you have one or more tables with "_":"
+echo "(If there's output here, you have one or more tables with "_")"
 echo $tables | grep "_"
-echo ""
 
 # check that positional tables are sorted for all tables
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** check that positional tables are sorted ***"
-echo "(No output means table is sorted)"
+echo "(Only prints if the table is NOT sorted)"
 foreach table ( $tables )
- echo ""
- echo "positionalTblCheck $db $table"
  positionalTblCheck $db $table
 end
 
 # check table index for each table
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** Check table INDEX ***"
+echo "(Only prints the INDEX if there are less than two indicies."
+echo "Presumably, these two will include bin and something else)."
 foreach table ( $tables )
- echo ""
- echo ""
- hgsql -e "SHOW INDEX FROM $table" $db
+ set num=`hgsql -N -e "SHOW INDEX FROM $table" $db | wc -l`
+ if ( $num < 2 ) then
+  echo "ERROR:"
+  hgsql -N -e "SHOW INDEX FROM $table" $db
+ endif 
 end
 
 # checkTableCoords for each table (instead of checkOffend.csh)
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** checkTableCoords for each table ***"
+echo "(Only prints if there are coords off the end of a chrom)"
 foreach table ( $tables )
  checkTableCoords $db $table
 end
-echo "\n(Nothing will be printed if all are okay.)"
 
 # check the length of the shortLabel for each track
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** MAX length of shortLabel should be 16 ***"
+echo "(Only prints if shortLabel is greater than 16 characters, or if"
+echo "it can't find a shortLabel at all)"
 foreach table ( $tables )
- echo "Table: $table"
- cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" | grep -m 1 shortLabel \
-  | sed -e 's/shortLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m
+ set num=`cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" \
+  | grep -m 1 shortLabel \
+  | sed -e 's/shortLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m`
+ if ( $maxShortLabel < $num || 0 == $num ) then
+  if ( 0 == $num ) then
+   echo "ERROR: can't find a shortLabel for $table"
+  else
+   echo "ERROR: $table shortLabel is $num characters"
+  endif
+ endif
 end
 
 # check the length of the longLabel for each track
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** MAX length of longLabel should be 80 ***"
+echo "(Only prints if longLabel is greater than 80 characters, or if"
+echo "it can't find a longLabel at all)"
 foreach table ( $tables )
- echo "Table: $table"
- cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" \
+ set num=`cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" \
   | grep -m 1 longLabel \
-  | sed -e 's/longLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m
+  | sed -e 's/longLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m`
+ if ( $maxLongLabel < $num || 0 == $num ) then
+  if ( 0 == $num ) then
+   echo "ERROR: can't find a longLabel for $table"
+  else
+   echo "ERROR: $table longLabel is $num characters"
+  endif
+ endif
 end
 
 # countPerChrom for all tables
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** countPerChrom for all tables ***"
+echo "(prints all counts here -- a useful way to look at this output is to"
+echo "grep for all 'chr4', for example)"
 foreach table ( $tables )
  echo ""
  echo "countPerChrom.csh $db $table"
