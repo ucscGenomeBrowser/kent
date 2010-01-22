@@ -637,3 +637,718 @@ mkdir old
 [hgwdev:tdreszer wgEncodeUwChIPSeq> mv wgEncodeUwChIPSeqPeaksGm12878Ctcf.narrowPeak.gz old
 [hgwdev:tdreszer wgEncodeUwChIPSeq> encodeDownloadsPage.pl index.html 
 [hgwdev:tdreszer wgEncodeUwChIPSeq> cp index.html release1/
+
+2009-11-19 Update Release 1 from long ago
+=========================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  48 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  46 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  50 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  49 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 106 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 110 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 111 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 288 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 295 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 297 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 296 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 311 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 312 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 313 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 299 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 302 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 306 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 314 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 403 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 406 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 393 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 394 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 395 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 397 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 398 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 399 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 401 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 402 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 400 released
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 299 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 302 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 306 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 406 approved
+
+2009-11-19 Need to be in QA
+===========================
+### TODO:
+ChIP:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 407 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 523 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 526 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 520 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 532 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 525 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 527 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 516 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 528 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 517 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 518 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 519 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 595 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 596 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 601 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 613 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 610 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 603 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 609 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 604 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 612 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 599 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 622 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 623 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 598 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 608 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 606 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 626 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 671 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 673 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 683 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 672 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 675 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 681 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 674 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 679 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 676 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 682 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 680 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 678 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 684 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 677 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 652 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 654 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 658 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 656 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 655 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 657 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 660 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 661 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 659 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 692 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 708 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 705 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 706 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 704 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 712 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 711 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 707 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 698 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 703 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 700 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 694 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 702 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 701 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 697 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 696 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 710 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 713 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 714 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 709 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 715 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 717 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 716 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 718 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 719 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 720 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 725 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 721 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 726 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 724 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 723 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 728 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 729 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 727 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 732 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 730 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 731 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 733 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 734 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 690 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 691 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 693 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 722 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 699 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 695 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 742 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 747 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 743 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 744 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 748 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 745 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 746 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 750 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 749 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 753 reviewing
+
+DGF:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 632 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 631 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 637 reviewing
+
+
+2009-12-16 Start on DNase release2
+cd {downloadsDir}
+mkdir release2
+cd release2
+ln ../*.gz .
+cp ../index.html .
+cp ../fileDb.ra .
+### Realized problems with SK-N-SH_RA and SKMC
+rm wgEncodeUwDnaseSeqAlignmentsRep2Sknshra.tagAlign.gz
+rm release2/wgEncodeUwDnaseSeqAlignmentsRep2Sknshra.tagAlign.gz
+
+rm wgEncodeUwDnaseSeqHotspotsRep2Sknshra.broadPeak.gz
+rm release2/wgEncodeUwDnaseSeqHotspotsRep2Sknshra.broadPeak.gz
+
+rm wgEncodeUwDnaseSeqPeaksRep2Sknshra.narrowPeak.gz
+rm release2/wgEncodeUwDnaseSeqPeaksRep2Sknshra.narrowPeak.gz
+
+rm wgEncodeUwDnaseSeqRawDataRep2Sknshra.fastq.gz
+rm release2/wgEncodeUwDnaseSeqRawDataRep2Sknshra.fastq.gz
+
+rm wgEncodeUwDnaseSeqRawSignalRep2Sknshra.wig.gz
+rm release2/wgEncodeUwDnaseSeqRawSignalRep2Sknshra.wig.gz
+
+rm wgEncodeUwDnaseSeqAlignmentsRep1Skmc.tagAlign.gz
+rm release2/wgEncodeUwDnaseSeqAlignmentsRep1Skmc.tagAlign.gz
+
+rm wgEncodeUwDnaseSeqHotspotsRep1Skmc.broadPeak.gz
+rm release2/wgEncodeUwDnaseSeqHotspotsRep1Skmc.broadPeak.gz
+
+rm wgEncodeUwDnaseSeqPeaksRep1Skmc.narrowPeak.gz
+rm release2/wgEncodeUwDnaseSeqPeaksRep1Skmc.narrowPeak.gz
+
+rm wgEncodeUwDnaseSeqRawDataRep1Skmc.fastq.gz
+rm release2/wgEncodeUwDnaseSeqRawDataRep1Skmc.fastq.gz
+
+rm wgEncodeUwDnaseSeqRawSignalRep1Skmc.wig.gz
+rm release2/wgEncodeUwDnaseSeqRawSignalRep1Skmc.wig.gz
+
+
+# use "ll *.gz" and count up the links from release1/release2
+# Unchanged: count 110 (link count of 3 in release1,release2 and downloads)
+wgEncodeUwDnaseSeqAlignmentsRep1Bjtert.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Caco2.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Gm06990.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Gm12878.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Helas3.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Hepg2.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Hrcepic.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Hre.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Huvec.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1K562.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Sknshra.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Th1.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Th2.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Bjtert.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Caco2.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Gm06990.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Gm12878.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Helas3.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Hepg2.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Hrcepic.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Hre.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2K562.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep1Bjtert.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Caco2.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Gm06990.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Gm12878.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Helas3.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hepg2.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hrcepic.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hre.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Huvec.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1K562.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Sknshra.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Th1.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Th2.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Bjtert.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Caco2.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Gm06990.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Gm12878.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Helas3.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Hepg2.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Hrcepic.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Hre.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2K562.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Bjtert.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Caco2.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Gm06990.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Gm12878.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Helas3.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hepg2.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hrcepic.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hre.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Huvec.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1K562.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Sknshra.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Th1.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Th2.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Bjtert.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Caco2.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Gm06990.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Gm12878.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Helas3.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Hepg2.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Hrcepic.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Hre.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2K562.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep1Bjtert.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Caco2.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Gm06990.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Gm12878.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Helas3.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Hepg2.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Hrcepic.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Hre.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Huvec.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1K562.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Sknshra.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Th1.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Th2.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Bjtert.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Caco2.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Gm06990.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Gm12878.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Helas3.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Hepg2.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Hrcepic.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Hre.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2K562.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep1Bjtert.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Caco2.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Gm06990.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Gm12878.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Helas3.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hepg2.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hrcepic.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hre.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Huvec.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1K562.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Sknshra.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Th1.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Th2.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Bjtert.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Caco2.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Gm06990.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Gm12878.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Helas3.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Hepg2.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Hrcepic.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Hre.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2K562.wig.gz
+
+# Dropped (replaced): count 15 (link count of 1 in release1 only)
+wgEncodeUwDnaseSeqAlignmentsRep1Hl60.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hl60.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hl60.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep1Hl60.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hl60.wig.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Sknshra.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep2Sknshra.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Sknshra.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep2Sknshra.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep2Sknshra.wig.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Skmc.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep1Skmc.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Skmc.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep1Skmc.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep1Skmc.wig.gz
+
+# Versioned: 15 (link count 2 in release2 and "V2" of a release1/link 1 file)
+wgEncodeUwDnaseSeqAlignmentsRep1Hl60V2.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hl60V2.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hl60V2.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep1Hl60V2.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hl60V2.wig.gz
+wgEncodeUwDnaseSeqAlignmentsRep2SknshraV2.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep2SknshraV2.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2SknshraV2.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep2SknshraV2.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep2SknshraV2.wig.gz
+wgEncodeUwDnaseSeqAlignmentsRep1SkmcV2.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep1SkmcV2.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1SkmcV2.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep1SkmcV2.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep1SkmcV2.wig.gz
+
+# new: 70 (link count of 2 in release 2 and also in downloads AND not "V2")
+wgEncodeUwDnaseSeqAlignmentsRep1H1es.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Hgf.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Hmec.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Jurkat.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Mcf7.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Nb4.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Nhek.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Panc1.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep1Saec.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Hgf.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Hl60.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Panc1.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Saec.tagAlign.gz
+wgEncodeUwDnaseSeqAlignmentsRep2Skmc.tagAlign.gz
+wgEncodeUwDnaseSeqHotspotsRep1H1es.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hgf.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Hmec.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Jurkat.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Mcf7.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Nb4.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Nhek.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Panc1.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep1Saec.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Hgf.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Hl60.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Panc1.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Saec.broadPeak.gz
+wgEncodeUwDnaseSeqHotspotsRep2Skmc.broadPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1H1es.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hgf.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Hmec.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Jurkat.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Mcf7.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Nb4.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Nhek.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Panc1.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep1Saec.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Hgf.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Hl60.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Panc1.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Saec.narrowPeak.gz
+wgEncodeUwDnaseSeqPeaksRep2Skmc.narrowPeak.gz
+wgEncodeUwDnaseSeqRawDataRep1H1es.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Hgf.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Hmec.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Jurkat.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Mcf7.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Nb4.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Nhek.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Panc1.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep1Saec.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Hgf.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Hl60.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Panc1.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Saec.fastq.gz
+wgEncodeUwDnaseSeqRawDataRep2Skmc.fastq.gz
+wgEncodeUwDnaseSeqRawSignalRep1H1es.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hgf.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Hmec.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Jurkat.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Mcf7.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Nb4.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Nhek.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Panc1.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep1Saec.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Hgf.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Hl60.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Panc1.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Saec.wig.gz
+wgEncodeUwDnaseSeqRawSignalRep2Skmc.wig.gz
+
+DNase:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  396 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  506 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  511 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  509 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  510 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  512 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  513 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  514 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  515 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  507 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  592 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  627 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  625 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  736 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  735 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  737 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  754 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force  755 reviewing
+
+2010-01-12 Jan 2010 freeze work
+===============================
+# bunch of new cell protocols registered (provisionally, then approved)
+cvs ci -m "Approved by resources working group for Stam lab" AG04449_Stam_protocol.pdf AG04450_Stam_protocol.pdf AG09319_Stam_protocol.pdf H7-hESC_Stam_protocol.pdf HAEpiC_Stam_protocol.pdf HCM_Stam_protocol.pdf HEEpiC_Stam_protocol.pdf HIPEpiC_Stam_protocol.pdf HRPEpiC_Stam_protocol.pdf NHLF_Stam_protocol.pdf 
+cp AG04449_Stam_protocol.pdf /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp AG04450_Stam_protocol.pdf /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp AG09319_Stam_protocol.pdf /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp H7-hESC_Stam_protocol.pdf /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp HAEpiC_Stam_protocol.pdf  /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp HCM_Stam_protocol.pdf     /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp HEEpiC_Stam_protocol.pdf  /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp HIPEpiC_Stam_protocol.pdf /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp HRPEpiC_Stam_protocol.pdf /usr/local/apache/htdocs/ENCODE/protocols/cell
+cp NHLF_Stam_protocol.pdf    /usr/local/apache/htdocs/ENCODE/protocols/cell
+
+### Resolved G1 as new term type "phase"
+# TODO:
+1) unload/reload Jurkat properly
+2) Clean up any erroneous Jurkat tables/files (probably not any: make sure release2/ dir isn't hard linked to bad ones.
+3) Find out from Richard what prior submission should be a G1, then fix metadata
+4) In trackDb, probably fold G1 into cell line dimension
+
+# after the freeze:
+select id,name,status,user_id from projects where status = "loaded" and user_id = 21 and id not in (1012) order by id;
+|  515 | UwDnaseSeq-Jurkat-rep2(redo, demotion) sep09 | loaded |      21 | 
+|  896 | UwDnaseSeq-AG04449-DS12319-1 jan10           | loaded |      21 | 
+|  906 | UwDnaseSeq-AG04449-DS12329-2 jan10           | loaded |      21 | 
+|  907 | UwDnaseSeq-AG04450-DS12255-2 jan10           | loaded |      21 | 
+|  908 | UwDnaseSeq-AG04450-DS12270-1 jan10           | loaded |      21 | 
+|  909 | UwDnaseSeq-AG09309-DS12352-1 jan10           | loaded |      21 | 
+|  910 | UwDnaseSeq-AG09309-DS12357-2 jan10           | loaded |      21 | 
+|  911 | UwDnaseSeq-AG09319-DS12286-2 jan10           | loaded |      21 | 
+|  912 | UwDnaseSeq-AG09319-DS12291-1 jan10           | loaded |      21 | 
+|  915 | UwDnaseSeq-AG10803-DS12374-2 jan10           | loaded |      21 | 
+|  916 | UwDnaseSeq-CMK-DS12393-1 jan10               | loaded |      21 | 
+|  917 | UwDnaseSeq-H7-hESC-DS11909-1 jan10           | loaded |      21 | 
+|  918 | UwDnaseSeq-HAEpiC-DS12663-1 jan10            | loaded |      21 | 
+|  919 | UwDnaseSeq-HAEpiC-DS12673-2 jan10            | loaded |      21 | 
+|  921 | UwDnaseSeq-HCF-DS12491-2 jan10               | loaded |      21 | 
+|  922 | UwDnaseSeq-HCPEpiC-DS12447-1 jan10           | loaded |      21 | 
+|  923 | UwDnaseSeq-HCPEpiC-DS12457-2 jan10           | loaded |      21 | 
+|  924 | UwDnaseSeq-HEEpiC-DS12768-2 jan10            | loaded |      21 | 
+|  925 | UwDnaseSeq-HIPEpiC-DS12694-1 jan10           | loaded |      21 | 
+|  926 | UwDnaseSeq-HNPCEpiC-DS12467-1 jan10          | loaded |      21 | 
+|  927 | UwDnaseSeq-HNPCEpiC-DS12471-2 jan10          | loaded |      21 | 
+|  929 | UwDnaseSeq-HRPEpiC-DS12568-2 jan10           | loaded |      21 | 
+|  930 | UwDnaseSeq-HRPEpiC-DS12583-1 jan10           | loaded |      21 | 
+|  931 | UwDnaseSeq-Jurkat-G1-DS12737-1 jan10         | loaded |      21 | 
+|  932 | UwDnaseSeq-NB4-DS12538-2 jan10               | loaded |      21 | 
+|  935 | UwDnaseSeq-AG10803-DS12384-1 jan10           | loaded |      21 | 
+|  936 | UwDnaseSeq-NB4-DS12543-1 jan10               | loaded |      21 | 
+|  937 | UwDnaseSeq-NHDF-neo-DS11923-1 jan10          | loaded |      21 | 
+|  938 | UwDnaseSeq-NHDF-neo-DS11918-2 jan10          | loaded |      21 | 
+|  944 | UwDnaseSeq-HCF-DS12501-1 jan10               | loaded |      21 | 
+|  948 | UwDnaseSeq-HCM-DS12589-2 jan10               | loaded |      21 | 
+|  949 | UwDnaseSeq-HCM-DS12599-1 jan10               | loaded |      21 | 
+|  961 | UwDnaseSeq-GM12865-DS12436-1 jan10           | loaded |      21 | 
+|  962 | UwDnaseSeq-GM12865-DS12442-2 jan10           | loaded |      21 | 
+|  963 | UwDnaseSeq-HEEpiC-DS12763-1 jan10            | loaded |      21 | 
+|  964 | UwDnaseSeq-HIPEpiC-DS12699-2 jan10           | loaded |      21 | 
+|  965 | UwDnaseSeq-Jurkat-DS12659-1 jan10            | loaded |      21 | 
+|  966 | UwDnaseSeq-MCF-7-DS12619-2 jan10             | loaded |      21 | 
+|  967 | UwDnaseSeq-NHLF-DS12829-1 jan10              | loaded |      21 | 
+|  968 | UwDnaseSeq-NHLF-DS12834-2 jan10              | loaded |      21 | 
+|  982 | UwChIPSeq-GM12864-DS10988-CTCF-1 jan10       | loaded |      21 | 
+|  983 | UwChIPSeq-GM12864-DS11499-CTCF-2 jan10       | loaded |      21 | 
+|  984 | UwChIPSeq-GM12865-DS10991-CTCF-2 jan10       | loaded |      21 | 
+|  985 | UwChIPSeq-GM12865-DS11502-CTCF-1 jan10       | loaded |      21 | 
+|  986 | UwChIPSeq-GM12872-DS10989-CTCF-1 jan10       | loaded |      21 | 
+|  987 | UwChIPSeq-GM12872-DS11500-CTCF-2 jan10       | loaded |      21 | 
+|  988 | UwChIPSeq-GM12873-DS10990-CTCF-1 jan10       | loaded |      21 | 
+|  989 | UwChIPSeq-GM12873-DS11501-CTCF-2 jan10       | loaded |      21 | 
+|  990 | UwChIPSeq-GM12874-DS10992-CTCF-2 jan10       | loaded |      21 | 
+|  991 | UwChIPSeq-GM12874-DS11503-CTCF-1 jan10       | loaded |      21 | 
+|  992 | UwChIPSeq-GM12875-DS10993-CTCF-1 jan10       | loaded |      21 | 
+|  993 | UwChIPSeq-GM12875-DS11899-CTCF-2 jan10       | loaded |      21 | 
+| 1027 | UwDgf-K562-DS9767 jan10                      | loaded |      21 | 
+| 1054 | UwDgf-GM06990-DS7748 jan10                   | loaded |      21 | 
++------+----------------------------------------------+--------+---------+
+54 rows in set (0.00 sec)
+
+# Gave UwDnaseSeq-A% and UwDnaseSeq-H% to Krish 
+| 916 | UwDnaseSeq-CMK-DS12393-1 jan10               | loaded | 
+| 961 | UwDnaseSeq-GM12865-DS12436-1 jan10           | loaded | 
+| 962 | UwDnaseSeq-GM12865-DS12442-2 jan10           | loaded | 
+| 965 | UwDnaseSeq-Jurkat-DS12659-1 jan10            | loaded | 
+| 931 | UwDnaseSeq-Jurkat-G1-DS12737-1 jan10         | loaded | 
+| 515 | UwDnaseSeq-Jurkat-rep2(redo, demotion) sep09 | loaded | 
+| 966 | UwDnaseSeq-MCF-7-DS12619-2 jan10             | loaded | 
+| 932 | UwDnaseSeq-NB4-DS12538-2 jan10               | loaded | 
+| 936 | UwDnaseSeq-NB4-DS12543-1 jan10               | loaded | 
+| 938 | UwDnaseSeq-NHDF-neo-DS11918-2 jan10          | loaded | 
+| 937 | UwDnaseSeq-NHDF-neo-DS11923-1 jan10          | loaded | 
+| 967 | UwDnaseSeq-NHLF-DS12829-1 jan10              | loaded | 
+| 968 | UwDnaseSeq-NHLF-DS12834-2 jan10              | loaded | 
+
+cd ../../916/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../961/out/trackDb.ra >> trackDbCombined.ra
+cat ../../962/out/trackDb.ra >> trackDbCombined.ra
+cat ../../965/out/trackDb.ra >> trackDbCombined.ra
+cat ../../931/out/trackDb.ra >> trackDbCombined.ra
+cat ../../515/out/trackDb.ra >> trackDbCombined.ra
+cat ../../966/out/trackDb.ra >> trackDbCombined.ra
+cat ../../932/out/trackDb.ra >> trackDbCombined.ra
+cat ../../936/out/trackDb.ra >> trackDbCombined.ra
+cat ../../938/out/trackDb.ra >> trackDbCombined.ra
+cat ../../937/out/trackDb.ra >> trackDbCombined.ra
+cat ../../967/out/trackDb.ra >> trackDbCombined.ra
+cat ../../968/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../961/out/fileDb.ra >> fileDbCombined.ra
+cat ../../962/out/fileDb.ra >> fileDbCombined.ra
+cat ../../965/out/fileDb.ra >> fileDbCombined.ra
+cat ../../931/out/fileDb.ra >> fileDbCombined.ra
+cat ../../515/out/fileDb.ra >> fileDbCombined.ra
+cat ../../966/out/fileDb.ra >> fileDbCombined.ra
+cat ../../932/out/fileDb.ra >> fileDbCombined.ra
+cat ../../936/out/fileDb.ra >> fileDbCombined.ra
+cat ../../938/out/fileDb.ra >> fileDbCombined.ra
+cat ../../937/out/fileDb.ra >> fileDbCombined.ra
+cat ../../967/out/fileDb.ra >> fileDbCombined.ra
+cat ../../968/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for Hotspots CMK, GM12865, JurkatG1, NHDFneo, NHLF
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/916/out/trackDbCombined.ra trackDb.wgEncode.ra
+# Jurkat Rep1 is duplicate, but this is expected.  Copy it to trackDbJurkat.ra
+
+encodePatchTdb -mode=replace /hive/groups/encode/dcc/pipeline/encpipeline_prod/916/out/trackDbJurkat.ra trackDb.wgEncode.ra
+
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/916/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 916 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 961 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 962 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 965 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 931 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 515 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 966 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 932 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 936 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 938 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 937 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 967 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 968 displayed
+# Done with 13
+
+### Now start another 17
+cd ../../917/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../918/out/trackDb.ra >> trackDbCombined.ra
+cat ../../919/out/trackDb.ra >> trackDbCombined.ra
+cat ../../921/out/trackDb.ra >> trackDbCombined.ra
+cat ../../944/out/trackDb.ra >> trackDbCombined.ra
+cat ../../948/out/trackDb.ra >> trackDbCombined.ra
+cat ../../949/out/trackDb.ra >> trackDbCombined.ra
+cat ../../922/out/trackDb.ra >> trackDbCombined.ra
+cat ../../923/out/trackDb.ra >> trackDbCombined.ra
+cat ../../963/out/trackDb.ra >> trackDbCombined.ra
+cat ../../924/out/trackDb.ra >> trackDbCombined.ra
+cat ../../925/out/trackDb.ra >> trackDbCombined.ra
+cat ../../964/out/trackDb.ra >> trackDbCombined.ra
+cat ../../926/out/trackDb.ra >> trackDbCombined.ra
+cat ../../927/out/trackDb.ra >> trackDbCombined.ra
+cat ../../929/out/trackDb.ra >> trackDbCombined.ra
+cat ../../930/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../918/out/fileDb.ra >> fileDbCombined.ra
+cat ../../919/out/fileDb.ra >> fileDbCombined.ra
+cat ../../921/out/fileDb.ra >> fileDbCombined.ra
+cat ../../944/out/fileDb.ra >> fileDbCombined.ra
+cat ../../948/out/fileDb.ra >> fileDbCombined.ra
+cat ../../949/out/fileDb.ra >> fileDbCombined.ra
+cat ../../922/out/fileDb.ra >> fileDbCombined.ra
+cat ../../923/out/fileDb.ra >> fileDbCombined.ra
+cat ../../963/out/fileDb.ra >> fileDbCombined.ra
+cat ../../924/out/fileDb.ra >> fileDbCombined.ra
+cat ../../925/out/fileDb.ra >> fileDbCombined.ra
+cat ../../964/out/fileDb.ra >> fileDbCombined.ra
+cat ../../926/out/fileDb.ra >> fileDbCombined.ra
+cat ../../927/out/fileDb.ra >> fileDbCombined.ra
+cat ../../929/out/fileDb.ra >> fileDbCombined.ra
+cat ../../930/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for Hotspots H7es HAE,  HCF, HCM, HCPE, HEE, HIPE, HNPCE, HRPE
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/917/out/trackDbCombined.ra trackDb.wgEncode.ra
+
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/917/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 917 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 918 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 919 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 921 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 944 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 948 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 949 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 922 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 923 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 963 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 924 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 925 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 964 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 926 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 927 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 929 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 930 displayed
+# Done with 17
+
+### Now start final 10 for UW DNaseI
+cd ../../896/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../906/out/trackDb.ra >> trackDbCombined.ra
+cat ../../907/out/trackDb.ra >> trackDbCombined.ra
+cat ../../908/out/trackDb.ra >> trackDbCombined.ra
+cat ../../909/out/trackDb.ra >> trackDbCombined.ra
+cat ../../910/out/trackDb.ra >> trackDbCombined.ra
+cat ../../911/out/trackDb.ra >> trackDbCombined.ra
+cat ../../912/out/trackDb.ra >> trackDbCombined.ra
+cat ../../915/out/trackDb.ra >> trackDbCombined.ra
+cat ../../935/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../906/out/fileDb.ra >> fileDbCombined.ra
+cat ../../907/out/fileDb.ra >> fileDbCombined.ra
+cat ../../908/out/fileDb.ra >> fileDbCombined.ra
+cat ../../909/out/fileDb.ra >> fileDbCombined.ra
+cat ../../910/out/fileDb.ra >> fileDbCombined.ra
+cat ../../911/out/fileDb.ra >> fileDbCombined.ra
+cat ../../912/out/fileDb.ra >> fileDbCombined.ra
+cat ../../915/out/fileDb.ra >> fileDbCombined.ra
+cat ../../935/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for Hotspots, AG04449, AG04450, AG09309, AG09319, AG10803  
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/896/out/trackDbCombined.ra trackDb.wgEncode.ra
+
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/896/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 896 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 906 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 907 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 908 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 909 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 910 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 911 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 912 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 915 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 935 displayed
+
+### Missing Jurkat Rep 2 !
+cd {pip}/515
+doEncodeLoad.pl -verbose 2 x /hive/groups/encode/dcc/pipeline/encpipeline_prod/515 &
+
+# UW ChIP - Krish loaded up trackDb and downlaods
+# UW DGF (Krish loaded up trackDb) downlaods:
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1027/out/fileDb.ra | grep parentTable >> fileDb.ra
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1054/out/fileDb.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+NOTES for calls:
+1) ChIP methods description.  In particular, text to "Display Conventions and Configuration"
+2) Missing Jurkat Rep2
+

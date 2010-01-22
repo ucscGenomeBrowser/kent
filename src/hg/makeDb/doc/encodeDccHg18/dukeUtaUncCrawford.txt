@@ -2637,3 +2637,179 @@ cp index.html release2/
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 771 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 772 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 773 reviewing
+
+2009-12-14 Released "Release 2"
+===============================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 104 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 336 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 461 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 468 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 472 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 471 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 481 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 480 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 482 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 493 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 495 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 545 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 546 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 544 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 548 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 552 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 555 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 556 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 557 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 588 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 589 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 593 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 594 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 624 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 628 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 630 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 629 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 635 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 636 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 638 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 641 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 639 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 640 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 643 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 642 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 644 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 645 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 646 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 647 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 649 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 651 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 648 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 650 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 686 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 770 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 764 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 767 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 763 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 765 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 762 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 766 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 771 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 772 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 773 released
+
+2009-12-17 Beginning of Jan 2010 freeze!
+========================================
+# Incoming is private data which will have no sequence in tagAligns
+# fails on validateFiles.  First error chopByWhile() instead of chopByTab()
+~/bin/x86_64/validateFiles -type=tagAlign -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -quick=10 -privateData Raw_FB0167P_DukeDNaseSeq_rep1.taf
+
+# 831 DNCT Duke DNaseHS Medullo 20091216
+# 834 DNCT Duke DNaseHS ProgFib 20091217
+# 835 DNCT Duke DNaseHS PanIslets 20091217
+# 836 DNCT Duke DNaseHS HeLa-S3 IFNa4h 20091217
+# 847 DNCT UNC FAIRE-Seq GM19239 20091218
+# 848 DNCT Duke DNaseHS LHSR 20091218
+# 849 DNCT Duke DNaseHS MCF-7 20091218
+# 850 DNCT Duke DNaseHS GM18507 20091218
+# 851 DNCT Duke DNaseHS LHSR androgen 20091218
+# 852 DNCT UNC FAIRE-Seq GM18507 20091219
+# 855 DNCT Duke DNaseHS Myoblast 20091219
+# 856 DNCT Duke DNaseHS Myotube 20091219
+# 857 DNCT Duke DNaseHS Fibrobla 20091220
+# 858 DNCT UNC FAIRE-Seq HelaS3 IFNA 20091219
+# 859 DNCT UNC FAIRE-Seq HelaS3 IFNG 20091219
+# 866 DNCT UTA Input MCF-7 20091222
+# 868 DNCT UTA PolII GM12878 20091222
+# 871 DNCT UTA Input ProgFib 20091222
+# 873 DNCT UNC FAIRE-Seq LHSR 20091222
+# 874 DNCT UNC FAIRE-Seq LHSR androgen 20091222
+# 877 DNCT Duke DNaseHS H9ES 20091223
+# 881 DNCT Duke DNaseHS Chorion 20091227
+# 882 DNCT UTA c-Myc H1_hESC 20091227
+# 883 DNCT UTA c-Myc MCF-7 20091227
+# 884 DNCT UTA CTCF MCF-7 20091227
+# 885 DNCT UTA PolII HeLa-S3 20091228
+# 886 DNCT UTA CTCF ProgFib 20100101
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/831/out/trackDb.ra ...
+
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/831/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/834/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/835/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/836/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/847/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/848/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/849/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/850/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/851/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/852/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/855/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/856/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/857/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/858/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/859/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/866/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/868/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/871/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/873/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/874/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/877/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/881/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/882/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/883/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/884/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/885/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/886/out/trackDb.ra trackDb.wgEncode.ra
+
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2010-10-06
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/831/out/fileDb.ra | grep parentTable >  tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/834/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/835/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/836/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/847/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/848/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/849/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/850/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/851/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/852/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/855/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/856/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/857/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/858/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/859/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/866/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/868/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/871/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/873/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/874/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/877/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/881/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/882/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/883/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/884/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/885/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/886/out/fileDb.ra | grep parentTable >> tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+### Melissa is doing the trackDb updates for the last set.  Terry takes the silver.
+
+Advice for Melissa:
+Download dir:
+# go to download dir:
+cd /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap
+# Save the fileDb.ra file before altering it:
+cp fileDb.ra fileDb.ra.2010-01-14
+# Gather all the download only metadata lines from the submission dirs:
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/939/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata ...
+# examine the metadata and edit as needed (I don't think you will have any that needs to be edited)
+# add to the loacl fileDb.ra (APPEND is very important here)
+cat tmp.txt >> fileDb.ra
+# make the html page
+encodeDonwlasPage.pl index.html
+# examine the page in the browser.  Look for any files (likely at the bottom) which have no metadata
+# if all is well mark all submission dirs as displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 939 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl ...
+  
+### 2010-01-20 Melissa reports that she has all the Open Chromatin submissions displayed!

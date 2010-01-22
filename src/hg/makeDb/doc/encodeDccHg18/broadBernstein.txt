@@ -1439,3 +1439,216 @@ ln ../wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz    .
 # give this submission id back to Broad:
 update projects set user_id = 34 where id = 800;
 
+2009-12-25 Kayla noticed munged names in downloadsDir
+=====================================================
+cd {downloadsDir}/broad
+wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAl
+wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagA
+wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAli
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlig
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAl
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.
+wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.g
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.g
+wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign
+wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.ta
+wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAl
+
+ll wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAl*
+ll wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagA*
+ll wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAli*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlig*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAl*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.*
+ll wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign*
+ll wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.g*
+ll wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign*
+ll wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.g*
+ll wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign*
+ll wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.ta*
+ll wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAl*
+
+# all full names found (and same sizes as mangled version) found except:
+ll wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAl*
+ll wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagA*
+ll wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAli*
+ll wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.ta*
+ll wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAl*
+
+# remove duplicates
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlig
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAl
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.
+rm wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign
+rm wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.g
+rm wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign
+rm wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.g
+rm wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign
+
+# rename mangled
+mv wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAl wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAlign.gz
+mv wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagA wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagAlign.gz
+mv wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAli  wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAlign.gz
+mv wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.ta   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.tagAlign.gz
+mv wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAl   wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAlign.gz
+
+# link
+cd release2/
+ln ../wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAlign.gz   .
+ln ../wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAlign.gz     .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.tagAlign.gz  .
+ln ../wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAlign.gz     .
+cd ..
+# edit fileDb.ra replace "cell=Keratinocyte" with "cell=NHEK"
+encodeDownloadsPage.pl index.html
+cp index.html release2/ 
+cp fileDb.ra release2/ 
+
+2009-12-18 Start of Jan 2010 freeze
+===================================
+select id,name,status from projects where name like "Broad%" and status = "loaded" order by id;
++-----+----------------------------+--------+
+| id  | name                       | status |
++-----+----------------------------+--------+
+| 815 | BroadChipSeq_H1_H3K9ac     | loaded | 
+| 816 | BroadChipSeq_H1_H3K36me3   | loaded | 
+| 817 | BroadChipSeq_H1_H3K4me2    | loaded | 
+| 818 | BroadChipSeq_NHLF_CTCF     | loaded | 
+| 819 | BroadChipSeq_HSMM_H3K36me3 | loaded | 
+| 820 | BroadChipSeq_HSMM_H4K20me1 | loaded | 
+| 821 | BroadChipSeq_HSMM_H3K4me1  | loaded | 
+| 822 | BroadChipSeq_HSMM_H3K27ac  | loaded | 
+| 823 | BroadChipSeq_HSMM_H3K27me3 | loaded | 
+| 824 | BroadChipSeq_HSMM_H3K9ac   | loaded | 
+| 825 | BroadChipSeq_HSMM_H3K4me2  | loaded | 
+| 826 | BroadChipSeq_HSMM_CTCF     | loaded | 
+| 827 | BroadChipSeq_HSMM_WCE      | loaded | 
+| 828 | BroadChipSeq_HSMM_H3K4me3  | loaded | 
++-----+----------------------------+--------+
+14 rows in set (0.00 sec)
+# added to trackDb.wgEncode.ra, made alpha
+
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2009-12-18
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/815/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/816/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/817/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/818/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/819/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/820/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/821/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/822/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/823/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/824/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/825/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/826/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/827/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/828/out/fileDb.ra | grep parentTable >> tmp.txt
+# e tmp.txt
+cat tmp.txt >> fileDb.ra
+# Eliminated 28 duplicate fileNames in fileDb.ra 
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 815 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 816 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 817 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 818 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 819 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 820 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 821 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 822 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 823 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 824 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 825 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 826 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 827 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 828 displayed
+
+# missing tables on RR
+ HMEC    H3K4me3         Signal  wgEncodeBroadChipSeqSignalHmecH3k4me3
+ HMEC    H3K9ac          Signal  wgEncodeBroadChipSeqSignalHmecH3k9ac
+ HMEC    H4K20me1        Signal  wgEncodeBroadChipSeqSignalHmecH4k20me1
+ NHLF    H3K27ac         Signal  wgEncodeBroadChipSeqSignalNhlfH3k4me1
+ NHLF    H3K27me3        Signal  wgEncodeBroadChipSeqSignalNhlfH3k4me2
+ NHLF    H3K36me3        Signal  wgEncodeBroadChipSeqSignalNhlfH3k4me3
+ NHLF    H3K4me1         Signal  wgEncodeBroadChipSeqSignalNhlfH3k9ac
+ NHLF    H3K4me2         Signal  wgEncodeBroadChipSeqSignalNhlfH3k27ac
+ NHLF    H3K4me3         Signal  wgEncodeBroadChipSeqSignalNhlfH3k27me3
+ NHLF    H3K9ac          Signal  wgEncodeBroadChipSeqSignalNhlfH3k36me3
+ NHLF    H4K20me1        Signal  wgEncodeBroadChipSeqSignalNhlfH4k20me1
+ NHLF    Input Control   Signal  wgEncodeBroadChipSeqSignalNhlfControl
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 332 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 344 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 554 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 558 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 559 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 561 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 562 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 563 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 564 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 565 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 566 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 567 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 568 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 569 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 570 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 571 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 572 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 573 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 574 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 575 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 576 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 577 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 578 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 579 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 580 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 581 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 582 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 583 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 584 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 585 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 586 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 616 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 617 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 618 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 619 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 668 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 800 released
+
+2010-01-06 Redo the H1s by request from Noam
+============================================
+# In pipeline website unload 815,816,817 (which were marked as displayed)
+Noam resubmitted. validation failed because of trackDb entries
+# DANGEROUS: in hgsql hg18
+select count(*) from trackDb where tableName like 'wgEncodeBroadChipSeq%H1hescH3k36me3'; 2
+delete from trackDb where tableName like 'wgEncodeBroadChipSeq%H1hescH3k36me3';
+select count(*) from trackDb where tableName like 'wgEncodeBroadChipSeq%H1hescH3k4me2'; 2
+delete from trackDb where tableName like 'wgEncodeBroadChipSeq%H1hescH3k4me2';
+select count(*) from trackDb where tableName like 'wgEncodeBroadChipSeq%H1hescH3k9ac'; 2
+delete from trackDb where tableName like 'wgEncodeBroadChipSeq%H1hescH3k9ac';
+# restart in pipeline: successful this time. 
+make alpha DBS=hg18
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 815 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 816 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 817 displayed
+
