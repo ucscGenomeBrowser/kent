@@ -29,12 +29,12 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.117 2010/01/20 19:11:53 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.118 2010/01/22 09:09:23 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
 
-#define BUFMAX 65536
+#define BUFMAX 128000
 char html[BUFMAX];
 
 char *action = NULL;   /* have to put declarations first */
