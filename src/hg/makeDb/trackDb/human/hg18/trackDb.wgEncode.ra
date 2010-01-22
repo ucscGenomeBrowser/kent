@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.817 2010/01/21 23:59:54 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.818 2010/01/22 00:25:57 krish Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11419,7 +11419,7 @@ longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
-subGroup2 cellType Cell_Line HepG2=HepG2 K562=K562 SK-N-SH_RA=SK-N-SH_RA Th1=Th1
+subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 SK-N-SH_RA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 noInherit on
@@ -11438,6 +11438,16 @@ wgEncode 1
     pValueFilterLimits 1:324
     scoreFilter 500
     scoreFilterLimits 500:1000
+
+        # submission 1054
+        track wgEncodeUwDGFHotspotsGm06990
+        release alpha
+        subTrack wgEncodeUwDGFViewHotspots off
+        shortLabel GM06990 Hspot
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in GM06990 cells)
+        subGroups view=Hotspots cellType=GM06990
+        type broadPeak
+        metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Hotspots labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFHotspotsGm06990 fileName=wgEncodeUwDGFHotspotsGm06990.broadPeak.gz
 
         # submission 1027
         track wgEncodeUwDGFHotspotsK562
@@ -11487,6 +11497,16 @@ wgEncode 1
     pValueFilterLimits 1:324
     scoreFilter 500
     scoreFilterLimits 500:1000
+
+        # submission 1054
+        track wgEncodeUwDGFPeaksGm06990
+        release alpha
+        subTrack wgEncodeUwDGFViewPeaks off
+        shortLabel GM06990 Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks (in GM06990 cells)
+        subGroups view=Peaks cellType=GM06990
+        type narrowPeak
+        metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFPeaksGm06990 fileName=wgEncodeUwDGFPeaksGm06990.narrowPeak.gz
 
         # submission 1027
         track wgEncodeUwDGFPeaksK562
@@ -11538,6 +11558,16 @@ wgEncode 1
     autoScale off
     maxHeightPixels 100:32:16
     windowingFunction maximum
+
+        # submission 1054
+        track wgEncodeUwDGFSignalGm06990
+        release alpha
+        subTrack wgEncodeUwDGFViewSignal off
+        shortLabel GM06990 Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in GM06990 cells)
+        subGroups view=Signal cellType=GM06990
+        type bedGraph 4
+        metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Signal dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalGm06990 fileName=wgEncodeUwDGFSignalGm06990.bedGraph4.gz
 
         # submission 1027
         track wgEncodeUwDGFSignalK562
@@ -11595,6 +11625,16 @@ wgEncode 1
     autoScale off
     maxHeightPixels 100:32:16
     windowingFunction maximum
+
+        # submission 1054
+        track wgEncodeUwDGFRawSignalGm06990
+        release alpha
+        subTrack wgEncodeUwDGFViewRawSignal off
+        shortLabel GM06990 Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in GM06990 cells)
+        subGroups view=RawSignal cellType=GM06990
+        type wig 1.00 389192.00
+        metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=RawSignal labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFRawSignalGm06990 fileName=wgEncodeUwDGFRawSignalGm06990.wig.gz
 
         # submission 1027
         track wgEncodeUwDGFRawSignalK562
