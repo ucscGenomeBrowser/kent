@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.819 2010/01/22 20:43:34 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.820 2010/01/22 20:45:03 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3484,7 +3484,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqPeaksGm19239
         release alpha
         subTrack wgEncodeChromatinMapViewPeaks off
-        shortLabel GM19239 Pk1
+        shortLabel GM19239 DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19239 cells)
         subGroups view=Peaks EXP=DNase cellType=GM19239
         type narrowPeak
@@ -3502,7 +3502,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqPeaksGm19240
         release alpha
         subTrack wgEncodeChromatinMapViewPeaks off
-        shortLabel GM19240 Pk
+        shortLabel GM19240 DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19240 cells)
         subGroups view=Peaks EXP=DNase cellType=GM19240
         type narrowPeak
@@ -4205,7 +4205,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqSignalGm19239
         release alpha
         subTrack wgEncodeChromatinMapViewSIG off
-        shortLabel GM19239 FD
+        shortLabel GM19239 DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19239 cells)
         subGroups view=SIG EXP=DNase cellType=GM19239
         type wig 0.00 2.29
@@ -4225,7 +4225,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqSignalGm19240
         release alpha
         subTrack wgEncodeChromatinMapViewSIG off
-        shortLabel GM19240 FD
+        shortLabel GM19240 DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19240 cells)
         subGroups view=SIG EXP=DNase cellType=GM19240
         type wig 0.00 3.19
@@ -5043,7 +5043,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239
         release alpha
         subTrack wgEncodeChromatinMapViewSIGBO off
-        shortLabel GM192391 BO
+        shortLabel GM192391 DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19239 cells)
         subGroups view=SIGBO EXP=DNase cellType=GM19239
         type wig 0.00 163.00
@@ -5063,7 +5063,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240
         release alpha
         subTrack wgEncodeChromatinMapViewSIGBO off
-        shortLabel GM19240 BO
+        shortLabel GM19240 DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19240 cells)
         subGroups view=SIGBO EXP=DNase cellType=GM19240
         type wig 0.00 976.00
@@ -5677,7 +5677,7 @@ wgEncode 1
         track wgEncodeUtaChIPseqBaseOverlapSignalProgfibPol2
         release alpha
         subTrack wgEncodeChromatinMapViewSIGBO off
-        shortLabel ProgFib Pol2
+        shortLabel ProgFib Pol2 BO
         longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in ProgFib cells)
         subGroups view=SIGBO EXP=IP-pol2 cellType=PROG
         viewLimits 0:100
