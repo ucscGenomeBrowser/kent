@@ -1,11 +1,11 @@
 #!/usr/bin/env perl
 
-# hgEncodeDownloads.pl - generates a webpage for all tgz downloadable files in a directory.
-#                        The first portion of the file name (delimieted by '.') should be the
-#                        corresponding tableName in order to look up the dateReleased in trackDb.
-#                        Called by automated submission pipeline
+# encodeDownloadsPage.pl - generates a webpage for all tgz downloadable files in a directory.
+#                          The first portion of the file name (delimieted by '.') should be the
+#                          corresponding tableName in order to look up the dateReleased in trackDb.
+#                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.23 2010/01/22 01:38:14 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.24 2010/01/22 17:31:41 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -38,7 +38,7 @@ our $textFile = "files.txt";    # plain text file list with metadata
 
 sub usage {
     print STDERR <<END;
-usage: hgEncodeDownloads.pl {index.html} [downloads-dir]
+usage: encodeDownloadsPage.pl {index.html} [downloads-dir]
 
 Creates an HTML page and README text file listing the downloads in the current directory or optional directory.
 
