@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.9 2009/12/26 01:11:57 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.10 2010/01/22 01:40:56 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -24,6 +24,7 @@ use IO::File;
 use File::Basename;
 
 use lib "/cluster/bin/scripts";
+#use lib "/cluster/home/kate/kent/src/hg/utils/automation";
 use Encode;
 use HgAutomate;
 use HgDb;
@@ -38,8 +39,8 @@ use vars qw/
 # Global variables
 our $pipeline = "encpipeline_prod";
 our $pipelinePath = "/hive/groups/encode/dcc/pipeline/" . $pipeline;
-#our $configPath = $pipelinePath . "/config";
-our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeValidate" . "/config";
+our $configPath = $pipelinePath . "/config";
+#our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeValidate" . "/config";
 our $assembly = "hg18";
 
 sub usage {
@@ -380,7 +381,7 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"submitDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiment{"releaseDate"} =  ($status eq "released") ? $updated_at : "none";
                 $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
-                $experiment{"freeze"} = $Encode::dataVersion;
+                $experiment{"freeze"} = ($status eq "loaded") ? $Encode::dataVersion : "unknown";
                 $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-$2/;
                 $experiments{$expKey} = \%experiment;
                 print STDERR "ADDING2: " . $expKey . " IDs: " . 
