@@ -3513,6 +3513,856 @@ wgEncodeYaleChIPseqAlignmentsRep3Nb4Pol2.tagAlign.gz                   93M  2008
 # edit fileDb.ra to mark all in the above list as "uncorrected".  Edit preamble.html to make this explicit.
 encodeDownloadsPage.pl index.html
 
+2010-01-05 Begin Jan 15th freeze
+================================
+Test of Jim's encodePatchTdb
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/853/out/trackDb.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/853/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/860/out/trackDb.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/860/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
 
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/trackDb.ra
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/862/out/trackDb.ra
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/863/out/trackDb.ra
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/864/out/trackDb.ra
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/888/out/trackDb.ra
+e /hive/groups/encode/dcc/pipeline/encpipeline_prod/889/out/trackDb.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/862/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/863/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/864/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/888/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/889/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+### Problem with 889!!! It conflicts with dataset 
+  Submitted 2009-02-25: wgEncodeYaleChIPseqPeaksHelas3Mouseigg
+  Versioned 2009-07-21: wgEncodeYaleChIPseqSignalHelas3MouseiggV2
+   Incoming 2010-01-06: wgEncodeYaleChIPseqSignalHelas3Mouseigg
+### TODO: Awaiting response from Mike Wilson
+# Resolution: the newer one is a duplicate of the old so unload and delete 889
+
+# changed long label
+encodePatchTdb -mode=replace -noComment /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb -mode=replace -noComment /hive/groups/encode/dcc/pipeline/encpipeline_prod/862/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb -mode=replace -noComment /hive/groups/encode/dcc/pipeline/encpipeline_prod/863/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb -mode=replace -noComment /hive/groups/encode/dcc/pipeline/encpipeline_prod/864/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+encodePatchTdb -mode=replace -noComment /hive/groups/encode/dcc/pipeline/encpipeline_prod/888/out/trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2010-10-06
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/853/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/860/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/862/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/863/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/864/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/888/out/fileDb.ra | grep parentTable >> tmp.txt
+e tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+# done with 7 of 8.
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 853 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 860 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 861 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 862 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 863 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 864 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 888 displayed
+
+2010-01-12 All IgGs must be reloaded with a protocol
+====================================================
+ | 861 | YDH_GM10847_IgG_Control | displayed          |       6 | 
+ | 862 | YDH_GM10847_IgG_Pol2    | displayed          |       6 | 
+ | 863 | YDH_GM12891_IgG_Control | displayed          |       6 | 
+ | 864 | YDH_K562_IgG_Control    | displayed          |       6 | 
+ | 865 | YDH_GM12891_IgG_Pol2    | validate requested |       6 | 
+ | 888 | YDH_HeLa-S3_IgG_BAF155  | displayed          |       6 | 
+ | 890 | YDH_HeLa-S3_IgG_BAF170  | validate requested |       6 | 
+ | 891 | YDH_HeLa-S3_IgG_Brg1    | validate requested |       6 | 
+ | 892 | YDH_HeLa-S3_IgG_Ini1    | validate requested |       6 | 
+ | 893 | YDH_K562_IgG_Brg1       | validating         |       6 | 
+ | 894 | YDH_K562_IgG_Ini1       | validating         |       6 | 
+ | 895 | YDH_K562_IgG_Pol2       | validating         |       6 | 
+ | 941 | YDH_GM12892_IgG_NFKB    | validate requested |       6 | 
+ | 942 | YDH_GM18526_IgG_NFKB    | validate requested |       6 | 
+ | 943 | YDH_GM12878_IgG_NFKB    | validate requested |       6 | 
+ | 945 | YDH_GM18505_IgG_NFKB    | validate requested |       6 | 
+ | 946 | YDH_GM19099_IgG_NFKB    | validate requested |       6 | 
+ | 947 | YDH_GM19193_IgG_NFKB    | validate requested |       6 | 
+ | 956 | YDH_GM12878_IgG_Control | validate requested |       6 | 
+ | 957 | YDH_GM12878_IgG_Pol2    | loaded             |       6 | 
+ | 959 | YDH_GM12892_IgG_Control | validate requested |       6 | 
+ | 996 | YDH_GM15510_IgG_Control | validate requested |       6 | 
+ | 997 | YDH_GM15510_IgG_Pol2    | validate requested |       6 | 
+| 999 | YDH_HeLa-S3_IgG_Nrf1    | validate failed    |       6 | 
+1008
+1016
+1020
+1024
+1025
+1029
+
+# TODO
+1) unload/reload all IgGs (done)
+2) Remove any no longer appropriate download only files or tables
+3) Bring K562/Pol2, GM12878/Pol2 or any other stepped on tables/files back to life.
+
+# After the freeze:
+select id,name,status,user_id from projects where status = "loaded" and user_id = 6 order by id;
++------+--------------------------------+--------+---------+
+| id   | name                           | status | user_id |
++------+--------------------------------+--------+---------+
+|  861 | YDH_GM10847_IgG_Control        | loaded |       6 | 
+|  862 | YDH_GM10847_IgG_Pol2           | loaded |       6 | 
+|  863 | YDH_GM12891_IgG_Control        | loaded |       6 | 
+|  864 | YDH_K562_IgG_Control           | loaded |       6 | 
+|  865 | YDH_GM12891_IgG_Pol2           | loaded |       6 | 
+|  888 | YDH_HeLa-S3_IgG_BAF155         | loaded |       6 | 
+|  890 | YDH_HeLa-S3_IgG_BAF170         | loaded |       6 | 
+|  891 | YDH_HeLa-S3_IgG_Brg1           | loaded |       6 | 
+|  892 | YDH_HeLa-S3_IgG_Ini1           | loaded |       6 | 
+|  893 | YDH_K562_IgG_Brg1              | loaded |       6 | 
+|  894 | YDH_K562_IgG_Ini1              | loaded |       6 | 
+|  895 | YDH_K562_IgG_Pol2              | loaded |       6 | 
+|  900 | YDH_GM12878_TR4                | loaded |       6 | 
+|  928 | YDH_HeLa-S3_E2F1               | loaded |       6 | 
+|  933 | YDH_GM12878_ZZZ3               | loaded |       6 | 
+|  941 | YDH_GM12892_IgG_NFKB           | loaded |       6 | 
+|  942 | YDH_GM18526_IgG_NFKB           | loaded |       6 | 
+|  943 | YDH_GM12878_IgG_NFKB           | loaded |       6 | 
+|  945 | YDH_GM18505_IgG_NFKB           | loaded |       6 | 
+|  946 | YDH_GM19099_IgG_NFKB           | loaded |       6 | 
+|  947 | YDH_GM19193_IgG_NFKB           | loaded |       6 | 
+|  950 | YDH_HUVEC_Pol2                 | loaded |       6 | 
+|  951 | YDH_K562_ATF3                  | loaded |       6 | 
+|  952 | YDH_K562_NELFe                 | loaded |       6 | 
+|  956 | YDH_GM12878_IgG_Control        | loaded |       6 | 
+|  957 | YDH_GM12878_IgG_Pol2           | loaded |       6 | 
+|  959 | YDH_GM12892_IgG_Control        | loaded |       6 | 
+|  974 | YDH_K562_IFNg30_Pol2           | loaded |       6 | 
+|  975 | YDH_K562_GTF2B                 | loaded |       6 | 
+|  995 | YDH_HUVEC_Jun                  | loaded |       6 | 
+|  996 | YDH_GM15510_IgG_Control        | loaded |       6 | 
+|  997 | YDH_GM15510_IgG_Pol2           | loaded |       6 | 
+|  999 | YDH_HeLa-S3_IgG_Nrf1           | loaded |       6 | 
+| 1008 | YDH_GM12892_IgG_Pol2           | loaded |       6 | 
+| 1016 | YDH_GM18505_IgG_Pol2           | loaded |       6 | 
+| 1020 | YHD_GM18505_IgG_Control        | loaded |       6 | 
+| 1024 | YDH_GM18526_IgG_Pol2           | loaded |       6 | 
+| 1025 | YDH_GM18526_IgG_Control        | loaded |       6 | 
+| 1029 | YDH_GM18951_IgG_Pol2           | loaded |       6 | 
+| 1030 | YDH_HeLa-S3_IgG_Rabbit_Control | loaded |       6 | 
+| 1031 | YDH_HeLa-S3_IgG_Rabbit_c-Jun   | loaded |       6 | 
+| 1032 | YDH_HeLa-S3_IgG_Rabbit_JunD    | loaded |       6 | 
+| 1044 | YDH_GM18951_IgG_Control        | loaded |       6 | 
+| 1045 | YDH_GM19099_IgG_Control        | loaded |       6 | 
+| 1046 | YDH_GM19099_IgG_Pol2           | loaded |       6 | 
+| 1047 | YDH_GM19193_IgG_Control        | loaded |       6 | 
+| 1048 | YDH_GM19193_IgG_Pol2           | loaded |       6 | 
+| 1050 | YDH_GM10847_IgG_NFKB           | loaded |       6 | 
+| 1051 | YDH_GM12891_IgG_NFKB           | loaded |       6 | 
+| 1052 | YDH_GM15510_IgG_NFKB           | loaded |       6 | 
+| 1053 | YDH_GM18951_IgG_NFKB           | loaded |       6 | 
+| 1058 | YDH_K562_IFNg30_STAT1          | loaded |       6 | 
+| 1059 | YDH_K562_IFNg6h_STAT1          | loaded |       6 | 
+| 1062 | YDH_HepG2_Forskolin_CEBPB      | loaded |       6 | 
+| 1063 | YHD_HepG2_Forskolin_ERRA       | loaded |       6 | 
+| 1066 | YHD_HepG2_Forskolin_Control    | loaded |       6 | 
+| 1067 | YHD_HepG2_Forskolin_GRp20      | loaded |       6 | 
+| 1068 | YHD_HepG2_Forskolin_HNF4A      | loaded |       6 | 
+| 1069 | YHD_HepG2_Forskolin_HSF1       | loaded |       6 | 
+| 1070 | YHD_HepG2_Insulin_Control      | loaded |       6 | 
+| 1071 | YHD_HepG2_Forskolin_PGC1A      | loaded |       6 | 
+| 1072 | YHD_HepG2_Forskolin_Pol2       | loaded |       6 | 
+| 1073 | YHD_HepG2_Insulin_SREBP1       | loaded |       6 | 
+| 1076 | YDH_GM12878_Rad21              | loaded |       6 | 
+| 1077 | YDH_HeLa-S3_TFIIIC             | loaded |       6 | 
+| 1078 | YDH_HeLa-S3_Bdp1               | loaded |       6 | 
+| 1081 | YDH_K562_TFIIIC                | loaded |       6 | 
+| 1082 | YDH_HeLa-S3_RPC155             | loaded |       6 | 
+| 1083 | YDH_K562_Brf2                  | loaded |       6 | 
+| 1085 | YDH_HUVEC_Max                  | loaded |       6 | 
+| 1086 | YDH_HeLa-S3_Brf1               | loaded |       6 | 
+| 1087 | YDH_HeLa-S3_Brf2               | loaded |       6 | 
+| 1088 | YDH_K562b_MNase_SetDB1         | loaded |       6 | 
++------+--------------------------------+--------+---------+
+73 rows in set (0.00 sec)
+
+Farnham    GM12878 TR4     Loaded     |  900 | YDH_GM12878_TR4                | loaded |
+Farnham    GM12878 YY1     Loaded
+Farnham    HeLa S3 E2F1    Loaded     |  928 | YDH_HeLa-S3_E2F1               | loaded |
+Farnham    HeLa S3 E2F6    Displayed
+Farnham    K562b   SetDB1  Loaded     | 1088 | YDH_K562b_MNase_SetDB1         | loaded |
+Farnham    K562b   ZNF274  Displayed
+Farnham    MCF-7   HA-E2F1 Displayed 
+
+Struhl     GM12878 ZZZ3    Loaded    |  933 | YDH_GM12878_ZZZ3               | loaded |
+Struhl     HeLa S3 Bdp1    Loaded    | 1078 | YDH_HeLa-S3_Bdp1               | loaded |
+Struhl     HeLa S3 Brf1    Loaded    | 1086 | YDH_HeLa-S3_Brf1               | loaded |
+Struhl     HeLa S3 Brf2    Loaded    | 1087 | YDH_HeLa-S3_Brf2               | loaded |
+Struhl     HeLa S3 RPC155  Loaded    | 1082 | YDH_HeLa-S3_RPC155             | loaded |
+Struhl     HeLa S3 TFIIIC  Loaded    | 1077 | YDH_HeLa-S3_TFIIIC             | loaded |
+Struhl     K562    NELFe   Loaded    |  952 | YDH_K562_NELFe                 | loaded |
+
+Synder     GM10847/IgG     Control Loaded     |  861 | YDH_GM10847_IgG_Control        | loaded |
+Synder     GM10847/IgG     NFKB    Loaded     | 1050 | YDH_GM10847_IgG_NFKB           | loaded |
+Synder     GM10847/IgG     Pol II  Loaded     |  862 | YDH_GM10847_IgG_Pol2           | loaded |
+Snyder     GM12878 Rad21   Loaded             | 1076 | YDH_GM12878_Rad21              | loaded |
+Synder     GM12878/IgG     Control Loaded     |  956 | YDH_GM12878_IgG_Control        | loaded |
+Synder     GM12878/IgG     NFKB    Loaded     |  943 | YDH_GM12878_IgG_NFKB           | loaded |
+Snyder     GM12878/IgG     Pol II  Loaded     |  957 | YDH_GM12878_IgG_Pol2           | loaded |
+Synder     GM12891/IgG     Control Displayed  |  863 | YDH_GM12891_IgG_Control        | loaded |
+Synder     GM12891/IgG     NFKB    Loaded     | 1051 | YDH_GM12891_IgG_NFKB           | loaded |
+Synder     GM12891/IgG     Pol II  Loaded     |  865 | YDH_GM12891_IgG_Pol2           | loaded |
+Synder     GM12892/IgG     Control Loaded     |  959 | YDH_GM12892_IgG_Control        | loaded |
+Synder     GM12892/IgG     NFKB    Loaded     |  941 | YDH_GM12892_IgG_NFKB           | loaded |
+Synder     GM12892/IgG     Pol II  Loaded     | 1008 | YDH_GM12892_IgG_Pol2           | loaded |
+Synder     GM15510/IgG     Control Loaded     |  996 | YDH_GM15510_IgG_Control        | loaded |
+Synder     GM15510/IgG     NFKB    Loaded     | 1052 | YDH_GM15510_IgG_NFKB           | loaded |
+Synder     GM15510/IgG     Pol II  Loaded     |  997 | YDH_GM15510_IgG_Pol2           | loaded |
+Synder     GM18505/IgG     Control Loaded     | 1020 | YHD_GM18505_IgG_Control        | loaded |
+Synder     GM18505/IgG     NFKB    Loaded     |  945 | YDH_GM18505_IgG_NFKB           | loaded |
+Synder     GM18505/IgG     Pol II  Loaded     | 1016 | YDH_GM18505_IgG_Pol2           | loaded |
+Synder     GM18526/IgG     Control Loaded     | 1025 | YDH_GM18526_IgG_Control        | loaded |
+Synder     GM18526/IgG     NFKB    Loaded     |  942 | YDH_GM18526_IgG_NFKB           | loaded |
+Synder     GM18526/IgG     Pol II  Loaded     | 1024 | YDH_GM18526_IgG_Pol2           | loaded |
+Synder     GM18951/IgG     Control Loaded     | 1044 | YDH_GM18951_IgG_Control        | loaded |
+Synder     GM18951/IgG     NFKB    Loaded     | 1053 | YDH_GM18951_IgG_NFKB           | loaded |
+Synder     GM18951/IgG     Pol II  Loaded     | 1029 | YDH_GM18951_IgG_Pol2           | loaded |
+Synder     GM19099/IgG     Control Loaded     | 1045 | YDH_GM19099_IgG_Control        | loaded |
+Synder     GM19099/IgG     NFKB    Loaded     |  946 | YDH_GM19099_IgG_NFKB           | loaded |
+Synder     GM19099/IgG     Pol II  Loaded     | 1046 | YDH_GM19099_IgG_Pol2           | loaded |
+Synder     GM19193/IgG     Control Loaded     | 1047 | YDH_GM19193_IgG_Control        | loaded |
+Synder     GM19193/IgG     NFKB    Loaded     |  947 | YDH_GM19193_IgG_NFKB           | loaded |
+Synder     GM19193/IgG     Pol II  Loaded     | 1048 | YDH_GM19193_IgG_Pol2           | loaded |
+Snyder     HeLa S3 IgG     Loaded             | 1030 | YDH_HeLa-S3_IgG_Rabbit_Control | loaded |
+Snyder     HeLa S3 Jun     Loaded             | 1031 | YDH_HeLa-S3_IgG_Rabbit_c-Jun   | loaded |
+Snyder     HeLa S3 JunD    Loaded             | 1032 | YDH_HeLa-S3_IgG_Rabbit_JunD    | loaded |
+Snyder     HeLa S3 Ini1    Loaded             |  892 | YDH_HeLa-S3_IgG_Ini1           | loaded |
+Snyder     HeLa S3 NRF1    Loaded             |  999 | YDH_HeLa-S3_IgG_Nrf1           | loaded |
+Snyder     HepG2/Insulin   SREBP1  Loaded     | 1073 | YHD_HepG2_Insulin_SREBP1       | loaded |
+Snyder     HepG2/Insulin   Control Loaded     | 1070 | YHD_HepG2_Insulin_Control      | loaded |
+Snyder     HepG2/Forskolin HSF1    Loaded     | 1069 | YHD_HepG2_Forskolin_HSF1       | loaded |
+Snyder     HepG2/Forskolin ERRA    Loaded     | 1063 | YHD_HepG2_Forskolin_ERRA       | loaded |
+Snyder     HepG2/Forskolin HNF4A   Loaded     | 1068 | YHD_HepG2_Forskolin_HNF4A      | loaded |
+Snyder     HepG2/Forskolin POL2    Loaded     | 1072 | YHD_HepG2_Forskolin_Pol2       | loaded |
+Snyder     HepG2/Forskolin NRF2    Loaded
+                                              | 1071 | YHD_HepG2_Forskolin_PGC1A      | loaded |
+Snyder     HepG2/Forskolin CEBPB   Loaded     | 1062 | YDH_HepG2_Forskolin_CEBPB      | loaded |
+Snyder     HepG2/Forskolin GRp20   Loaded     | 1067 | YHD_HepG2_Forskolin_GRp20      | loaded |
+Snyder     HepG2/Forskolin Control Loaded     | 1066 | YHD_HepG2_Forskolin_Control    | loaded |
+Snyder     HUVEC   Jun     Loaded             |  995 | YDH_HUVEC_Jun                  | loaded |
+Snyder     HUVEC   Max     Loaded             | 1085 | YDH_HUVEC_Max                  | loaded |
+Snyder     HUVEC   Pol II  Loaded             |  950 | YDH_HUVEC_Pol2                 | loaded |
+Snyder     K562/IFNg30'    Pol II  Loaded     |  974 | YDH_K562_IFNg30_Pol2           | loaded |
+Snyder     K562/IFNg30'    STAT1   Loaded     | 1058 | YDH_K562_IFNg30_STAT1          | loaded |
+Snyder     K562/IFNg6h     STAT1   Loaded     | 1059 | YDH_K562_IFNg6h_STAT1          | loaded |
+Snyder     K562/IgG        Brg1    Loaded     |  893 | YDH_K562_IgG_Brg1              | loaded |
+Snyder     K562/IgG        Control Displayed  |  864 | YDH_K562_IgG_Control           | loaded |
+Snyder     K562/IgG        Ini1    Loaded     |  894 | YDH_K562_IgG_Ini1              | loaded |
+Snyder     K562/IgG        Pol II  Loaded     |  895 | YDH_K562_IgG_Pol2              | loaded |
+
+Whose?
+YHD        HeLa S3 BAF155  Displayed          |  888 | YDH_HeLa-S3_IgG_BAF155         | loaded |
+YHD        HeLa S3 BAF170  Loaded             |  890 | YDH_HeLa-S3_IgG_BAF170         | loaded |
+YHD        HeLa S3 Brg1    Loaded             |  891 | YDH_HeLa-S3_IgG_Brg1           | loaded |
+YHD        K562    ATF3    Loaded             |  951 | YDH_K562_ATF3                  | loaded |
+YHD        K562    Brf2    Loaded             | 1083 | YDH_K562_Brf2                  | loaded |
+YHD        K562    GTF2B   Loaded             |  975 | YDH_K562_GTF2B                 | loaded |
+YHD        K562    NFYB    Released
+YHD        K562    Pol III Displayed
+YHD        K562    TFIIIC  Loaded             | 1081 | YDH_K562_TFIIIC                | loaded |
+YHD        K562    NFYA    Released
+
+# Work on Farnham's first:
+cd {pip}/1088
+cp trackDb.ra trackDbCombined.ra 
+cat ../../900/out/trackDb.ra >> trackDbCombined.ra 
+cat ../../928/out/trackDb.ra >> trackDbCombined.ra 
+cp fileDb.ra fileDbCombined.ra 
+cat ../../900/out/fileDb.ra >> fileDbCombined.ra 
+cat ../../928/out/fileDb.ra >> fileDbCombined.ra 
+e trackDbCombined.ra fileDbCombined.ra
+# convert MNase from treatment to protocol, create SETDB1m=SETDB1_MNase set tags properly
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/1088/out/trackDbCombined.ra trackDb.wgEncode.ra
+record wgEncodeYaleChIPseqSignalK562bSetdb1 already exists - use mode=replace
+### Big problem: wgEncodeYaleChIPseqSignalK562bSetdb1 was stepped on.  Need to revive the table and files!
+# current ones on hgwdev should be MNase:
+rename table wgEncodeYaleChIPseqSignalK562bSetdb1 to wgEncodeYaleChIPseqSignalK562bSetdb1Mnase;
+rename table wgEncodeYaleChIPseqPeaksK562bSetdb1 to wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase;
+cd {downloadsDir}
+ll release2/*.gz | grep K562bSetdb1
+-rw-rw-r-- 1 qateam   protein  251376885 Jun 15  2009 release2/wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  158487144 Jun 15  2009 release2/wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein     219694 Jun 15  2009 release2/wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
+-rw-rw-r-- 1 qateam   protein 1249353960 Jun 15  2009 release2/wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
+-rw-rw-r-- 1 qateam   protein  686668626 Jun 15  2009 release2/wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
+-rw-rw-r-- 1 qateam   protein  177107845 Jun 15  2009 release2/wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
+[hgwdev:tdreszer wgEncodeYaleChIPseq> ll *.gz | grep K562bSetdb1
+-rw-rw-r-- 1 qateam   protein  258272496 Jan 16 01:37 wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  248369876 Nov 21 19:05 wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  306109438 Jan 16 01:36 wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  155170920 Nov 21 17:47 wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein     135460 Jan 16 01:20 wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
+-rw-rw-r-- 1 qateam   protein  539002203 Jan 16 01:40 wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
+-rw-rw-r-- 1 qateam   protein  618070415 Jan 16 01:26 wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
+-rw-rw-r-- 1 qateam   protein  198068283 Jan 16 01:33 wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
+
+mv wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz        wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz       wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz       wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase.fastq.gz
+mv wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz        wgEncodeYaleChIPseqSignalK562bSetdb1Mnase.bedGraph4.gz
+
+ln release2/wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz .
+ln release2/wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz .
+ln release2/wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz        .
+ln release2/wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz       .
+ln release2/wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz       .
+ln release2/wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz        .
+e trackDbCombined.ra fileDbCombined.ra
+# convert MNase from treatment to protocol, create SETDB1m=SETDB1_MNase set tags properly
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/1088/out/trackDbCombined.ra trackDb.wgEncode.ra
+cvs ci
+make alpha DBS=hg18
+
+cp fileDb.ra fileDb.ra.2010-01-19
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1088/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+### Note! Somehow the 2nd parm ('.') is now needed!
+
+### Missing tables now: wgEncodeYaleChIPseqSignalK562bSetdb1 & wgEncodeYaleChIPseqPeaksK562bSetdb1
+# replace tables from 634? or get them from RR some how?
+# Thanks to Erich these are restored.  
+
+# Farnham's are done!
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  900 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  928 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1088 displayed
+
+### Now start Snyder Mouse_IgG
+cd 861/out
+cp trackDb.ra trackDbCombined.ra
+cat ../../1050/out/trackDb.ra >> trackDbCombined.ra 
+cat  ../../862/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../956/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../943/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../957/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../863/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1051/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../865/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../959/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../941/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1008/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../996/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1052/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../997/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1020/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../945/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1016/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1025/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../942/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1024/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1044/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1053/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1029/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1045/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../946/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1046/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1047/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../947/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1048/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../893/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../864/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../894/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../895/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../892/out/trackDb.ra >> trackDbCombined.ra
+cat  ../../999/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../1050/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../862/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../956/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../943/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../957/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../863/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1051/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../865/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../959/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../941/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1008/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../996/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1052/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../997/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1020/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../945/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1016/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1025/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../942/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1024/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1044/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1053/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1029/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1045/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../946/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1046/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1047/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../947/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1048/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../893/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../864/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../894/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../895/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../892/out/fileDb.ra >> fileDbCombined.ra
+cat  ../../999/out/fileDb.ra >> fileDbCombined.ra
+
+e trackDbCombined.ra fileDbCombined.ra
+# Edit for protocol, Brg1mig Ini1mig NRF1mig NFKBmig Pol2mig, GM12892 GM15510 GM15510 GM18505 GM18526 GM18951 GM19099 GM19193 Stanford(Snyder)
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/trackDbCombined.ra trackDb.wgEncode.ra
+
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  861 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1050 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  862 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  956 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  943 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  957 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  863 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1051 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  865 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  959 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  941 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1008 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  996 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1052 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  997 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1020 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  945 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1016 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1025 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  942 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1024 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1044 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1053 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1029 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1045 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  946 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1046 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1047 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  947 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1048 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  893 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  864 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  894 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  895 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  892 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  999 displayed
+
+# Done with Snyder Mouse_IgG
+
+### Now start Snyder Rabbit_IgG
+
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/861/out/trackDbCombined.ra trackDb.wgEncode.ra
+cd ../../1030/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../1031/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1032/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../1031/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1032/out/fileDb.ra >> fileDbCombined.ra
+
+e trackDbCombined.ra fileDbCombined.ra
+# Edit for protocol CJUNrig JUNDrig yIGGrab
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1030/out/trackDbCombined.ra trackDb.wgEncode.ra
+
+### Ouch.  Table names need changing:
+rename table wgEncodeYaleChIPseqSignalHelas3Cjun to wgEncodeYaleChIPseqSignalHelas3CjunRabigg;
+rename table wgEncodeYaleChIPseqPeaksHelas3Cjun to wgEncodeYaleChIPseqPeaksHelas3CjunRabigg;
+rename table wgEncodeYaleChIPseqSignalHelas3Jund to wgEncodeYaleChIPseqSignalHelas3JundRabigg;
+rename table wgEncodeYaleChIPseqPeaksHelas3Jund to wgEncodeYaleChIPseqPeaksHelas3JundRabigg;
+mv wgEncodeYaleChIPseqAlignmentsRep1Helas3Jund.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Helas3JundRabigg.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Helas3Jund.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Helas3JundRabigg.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksHelas3Jund.narrowPeak.gz        wgEncodeYaleChIPseqPeaksHelas3JundRabigg.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1Helas3Jund.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Helas3JundRabigg.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Helas3Jund.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Helas3JundRabigg.fastq.gz
+mv wgEncodeYaleChIPseqSignalHelas3Jund.bedGraph4.gz        wgEncodeYaleChIPseqSignalHelas3JundRabigg.bedGraph4.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Helas3Cjun.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Helas3CjunRabigg.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Helas3Cjun.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Helas3CjunRabigg.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksHelas3Cjun.narrowPeak.gz        wgEncodeYaleChIPseqPeaksHelas3CjunRabigg.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1Helas3Cjun.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Helas3CjunRabigg.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Helas3Cjun.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Helas3CjunRabigg.fastq.gz
+mv wgEncodeYaleChIPseqSignalHelas3Cjun.bedGraph4.gz        wgEncodeYaleChIPseqSignalHelas3CjunRabigg.bedGraph4.gz
+
+e trackDbCombined.ra fileDbCombined.ra
+# Edit for file/table name changes
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1030/out/trackDbCombined.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/1030/out/trackDbCombined.ra trackDb.wgEncode.ra
+
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1030/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1030 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1031 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1032 displayed
+
+# Done with Snyder Rabbit_IgG
+
+### Now start Snyder Insulin and Forkskolin
+cd ../../1070/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../1073/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1066/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1069/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1063/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1068/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1072/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1071/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1062/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1067/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../1073/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1066/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1069/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1063/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1068/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1072/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1071/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1062/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1067/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# Edit for forskolin, insulin uHEPG2for, uHEPG2for, HSF1, ERRA, HNF4A, PGC1A, CEBPB, GRP20
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1070/out/trackDbCombined.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/1070/out/trackDbCombined.ra trackDb.wgEncode.ra
+
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1070/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1070 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1073 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1066 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1069 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1063 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1068 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1072 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1071 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1062 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1067 displayed
+# Done with Snyder Forskolin and Insulin
+
+### Now get 3 more IgGs
+cd ../../888/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../890/out/trackDb.ra >> trackDbCombined.ra
+cat ../../891/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../890/out/fileDb.ra >> fileDbCombined.ra
+cat ../../891/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for BAF155mig, BAF170mig, BRG1mig, protocol=MUSIGG,
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/888/out/trackDbCombined.ra trackDb.wgEncode.ra
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/888/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 888 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 890 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 891 displayed
+# Done with 3 more IgGs
+
+### Now get 3 IFNs
+cd ../../974/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../1058/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1059/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../1058/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1059/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+## Clean up:
+drop table wgEncodeYaleChIPseqRawSignalRep1K562Ifng30Pol2;
+drop table wgEncodeYaleChIPseqRawSignalRep2K562Ifng30Pol2;
+rm /gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalRep1K562Ifng30Pol2.wib
+rm /gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalRep2K562Ifng30Pol2.wib
+
+rename table wgEncodeYaleChIPseqSignalK562Stat1 to wgEncodeYaleChIPseqSignalK562Stat1Ifng6h;
+rename table wgEncodeYaleChIPseqPeaksK562Stat1 to wgEncodeYaleChIPseqPeaksK562Stat1Ifng6h;
+mv wgEncodeYaleChIPseqAlignmentsRep1K562Stat1.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1K562Stat1Ifng6h.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2K562Stat1.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2K562Stat1Ifng6h.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksK562Stat1.narrowPeak.gz        wgEncodeYaleChIPseqPeaksK562Stat1Ifng6h.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1K562Stat1.fastq.gz       wgEncodeYaleChIPseqRawDataRep1K562Stat1Ifng6h.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2K562Stat1.fastq.gz       wgEncodeYaleChIPseqRawDataRep2K562Stat1Ifng6h.fastq.gz
+mv wgEncodeYaleChIPseqSignalK562Stat1.bedGraph4.gz        wgEncodeYaleChIPseqSignalK562Stat1Ifng6h.bedGraph4.gz
+
+# edit for Name change uK562Ig30, uK562Ig6, treatment
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/974/out/trackDbCombined.ra trackDb.wgEncode.ra
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/974/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 974 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1058 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1059 displayed
+# Done with 3 IFNs
+
+### Now get 4 misc. for Snyder
+cd ../../950/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../995/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1085/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1076/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../995/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1085/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1076/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for tags
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/950/out/trackDbCombined.ra trackDb.wgEncode.ra
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/950/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 950 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 995 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1085 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1076 displayed
+# Done with 4 misc. for Snyder
+
+### Now start 7 for Struhl
+
+cd ../../933/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../952/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1078/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1086/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1087/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1082/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1077/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../952/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1078/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1086/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1087/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1082/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1077/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for tags, Struhl, ZZZ3, NELFE, BRF2, TFIIIC
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/933/out/trackDbCombined.ra trackDb.wgEncode.ra
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/933/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 933 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 952 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1078 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1086 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1087 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1082 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1077 displayed
+# Done with 7 for Struhl
+
+### Now start last 4 (for Struhl)
+cd ../../951/out
+cp trackDb.ra trackDbCombined.ra
+
+cat ../../975/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1083/out/trackDb.ra >> trackDbCombined.ra
+cat ../../1081/out/trackDb.ra >> trackDbCombined.ra
+
+cp fileDb.ra fileDbCombined.ra
+cat ../../975/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1083/out/fileDb.ra >> fileDbCombined.ra
+cat ../../1081/out/fileDb.ra >> fileDbCombined.ra
+e trackDbCombined.ra fileDbCombined.ra
+
+# edit for tags, Struhl, ATF3, GTF2B
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/951/out/trackDbCombined.ra trackDb.wgEncode.ra
+cvs ci
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/951/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 951 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 975 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1083 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1081 displayed
+
+### Now there are a loage number of files in the downloads dir without metadata.  Are these from unloaded submissions (correcting protocol)?
+# These were all left overs from correcting protocol submissions: 
+ll *.gz | grep Gm12878Musigg
+ls wgEncodeYaleChIPseq*Gm12878Musigg.*
+rm wgEncodeYaleChIPseq*Gm12878Musigg.*
+
+ll *.gz | grep Gm12878Nfkb
+ls wgEncodeYaleChIPseq*Gm12878Nfkb.*
+rm wgEncodeYaleChIPseq*Gm12878Nfkb.*
+
+ll *.gz | grep Gm12891Pol2
+ll wgEncodeYaleChIPseq*Gm12891Pol2.*
+rm wgEncodeYaleChIPseq*Gm12891Pol2.*
+
+ll *.gz | grep Gm12892Musigg
+ll wgEncodeYaleChIPseq*Gm12892Musigg.*
+rm wgEncodeYaleChIPseq*Gm12892Musigg.*
+
+ll *.gz | grep Gm12892Nfkb
+ll wgEncodeYaleChIPseq*Gm12892Nfkb.*
+rm wgEncodeYaleChIPseq*Gm12892Nfkb.*
+
+ll *.gz | grep Gm12892Pol2
+ll wgEncodeYaleChIPseq*Gm12892Pol2.*
+rm wgEncodeYaleChIPseq*Gm12892Pol2.*
+
+ll *.gz | grep Gm15510Musigg
+ll wgEncodeYaleChIPseq*Gm15510Musigg.*
+rm wgEncodeYaleChIPseq*Gm15510Musigg.*
+
+ll *.gz | grep Gm15510Pol2
+ll wgEncodeYaleChIPseq*Gm15510Pol2.*
+rm wgEncodeYaleChIPseq*Gm15510Pol2.*
+
+ll *.gz | grep Gm18505Nfkb
+ll wgEncodeYaleChIPseq*Gm18505Nfkb.*
+rm wgEncodeYaleChIPseq*Gm18505Nfkb.*
+
+ll *.gz | grep Gm18505Pol2
+ll wgEncodeYaleChIPseq*Gm18505Pol2.*
+rm wgEncodeYaleChIPseq*Gm18505Pol2.*
+
+ll *.gz | grep Gm18526Nfkb
+ll wgEncodeYaleChIPseq*Gm18526Nfkb.*
+rm wgEncodeYaleChIPseq*Gm18526Nfkb.*
+
+ll *.gz | grep Gm18526Pol2
+ll wgEncodeYaleChIPseq*Gm18526Pol2.*
+rm wgEncodeYaleChIPseq*Gm18526Pol2.*
+
+ll *.gz | grep Gm18951Pol2
+ll wgEncodeYaleChIPseq*Gm18951Pol2.*
+rm wgEncodeYaleChIPseq*Gm18951Pol2.*
+
+ll *.gz | grep Gm19099Nfkb
+ll wgEncodeYaleChIPseq*Gm19099Nfkb.*
+rm wgEncodeYaleChIPseq*Gm19099Nfkb.*
+
+ll *.gz | grep Gm19193Nfkb
+ll wgEncodeYaleChIPseq*Gm19193Nfkb.*
+rm wgEncodeYaleChIPseq*Gm19193Nfkb.*
+
+ll *.gz | grep Helas3Baf170
+ll wgEncodeYaleChIPseq*Helas3Baf170.*
+rm wgEncodeYaleChIPseq*Helas3Baf170.*
+
+ll *.gz | grep Helas3Brg1
+ll wgEncodeYaleChIPseq*Helas3Brg1.*
+rm wgEncodeYaleChIPseq*Helas3Brg1.*
+
+ll *.gz | grep Helas3Ini1
+ll wgEncodeYaleChIPseq*Helas3Ini1.*
+rm wgEncodeYaleChIPseq*Helas3Ini1.*
+
+
+ll *.gz | grep K562Brg1
+ll wgEncodeYaleChIPseq*K562Brg1.*
+rm wgEncodeYaleChIPseq*K562Brg1.*
+
+ll *.gz | grep K562Ini1
+ll wgEncodeYaleChIPseq*K562Ini1.*
+rm wgEncodeYaleChIPseq*K562Ini1.*
+
+ll *.gz | grep K562Pol2 | grep Jan
+ll wgEncodeYaleChIPseq*K562Pol2.*
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Pol2.tagAlign.gz
+rm wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz
+rm wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz
+rm wgEncodeYaleChIPseqSignalK562Pol2.bedGraph4.gz
+
+ll *.gz | grep K562bSetdb1
+# old refuse.  Nothing stepped on
+rm wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz
+
+# fileDb.ra editing problems:
+wgEncodeYaleChIPseqAlignmentsRep1Helas3CjunRabigg.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep1K562Stat1Ifng6h.tagAlign.gz
+
+# This one is a mess.  It looks like HeLaMouseIgG from Feb 2009 was stepped on.  However much of this should have been V2
+wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg.tagAlign.gz
+wgEncodeYaleChIPseqSignalHelas3Mouseigg.bedGraph4.gz
+ll *.gz | grep Helas3Mouseigg
+ll *.gz | grep wgEncodeYaleChIPseqAlignmentsRep1Helas3 | grep igg
+
+# stepped on
+-rw-rw-r-- 1 qateam   protein 407130754 Jan  5 23:30 wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein 442269812 Jan  5 23:34 wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz
+ll release1/wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz
+ll release1/wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz
+ln release1/wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz .
+ln release1/wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz .
+# Would have stepped on except no collision because of V2:
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqSignalHelas3Mouseigg.bedGraph4.gz
+encodeDownloadsPage.pl index.html .
+
+### Done for now on getting all of Yale's Jan 2010 freeze submissions displayed!
+
+2010-01-21 Stealph loading of one more submission
+=================================================
+Mike Wilson uploaded to ftp dir
+I created new submission, then assigned it to him
+mkdir {pip}/1090
+cd 1090
+mv ../../ftp/prod/mpw6/MCF-7_Input.tgz 001_MCF-7_Input.tgz
+tar -xzf 001_MCF-7_Input.tgz &
+# load through the pipeline
+make alpha DBS=hg18
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1090/out/fileDb.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1090 displayed
 
 
