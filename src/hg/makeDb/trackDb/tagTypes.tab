@@ -226,6 +226,8 @@ signalFilterLimits bed narrowPeak
 smoothingWindow wig bed5FloatScore bedGraph
 snpSeq bed
 snpSeqFile bed
+snpTable bed
+snpVersion bed
 sortOrder *
 sourceTable factorSource
 spanList *

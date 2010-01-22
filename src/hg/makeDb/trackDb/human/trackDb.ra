@@ -120,10 +120,14 @@ linesAt 1,3
 track gwasCatalog
 shortLabel GWAS Catalog
 longLabel NHGRI Catalog of Published Genome-Wide Association Studies
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
 group phenDis
 visibility hide
 priority 51
 type bed 4 +
+snpTable snp130
+snpVersion 130
 color 0,90,0
 
 track xenoRefGene override
