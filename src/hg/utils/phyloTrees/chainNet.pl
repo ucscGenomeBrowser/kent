@@ -1,17 +1,23 @@
 #!/usr/bin/env perl
 # chainNet.pl - output chainNet.ra definitions in phylogentic order
 
-#	$Id: chainNet.pl,v 1.3 2009/12/11 19:26:41 hiram Exp $
+#	$Id: chainNet.pl,v 1.4 2010/01/22 18:40:22 hiram Exp $
 
 use strict;
 use warnings;
 use FindBin qw($Bin);
 use lib "$Bin";
 
+# new genomes since the 46-way construction.  This will keep
+#	the priority numbers the same for the previous 46 and place
+#	these new ones in between the previous ones.
+my $newAssemblies = "ailMel susScr";
+my $newAssemblyOffset = 5;
+my $offset46way = 10;
 my $reroot = "$Bin/rerootTree.pl";
 my $hgsql = "hgsql";
 my $home = $ENV{'HOME'};
-my $dissectTree = "$home/kent/src/hg/utils/phyloTrees/46way.dissect.txt";
+my $dissectTree = "$home/kent/src/hg/utils/phyloTrees/48way.dissect.txt";
 
 my $argc = scalar(@ARGV);
 
@@ -20,7 +26,7 @@ if ($argc != 1) {
     printf STDERR "usage:\n    chainNet.pl <db>\n";
     printf STDERR "<db> - an existing UCSC database\n";
     printf STDERR "will be using commands: rerootTree.pl and hgsql\n";
-    printf STDERR "and expecting to find \$HOME/kent/src/hg/utils/phyloTrees/46way.dissect.txt\n";
+    printf STDERR "and expecting to find \$HOME/kent/src/hg/utils/phyloTrees/48way.dissect.txt\n";
     printf STDERR "using:\n";
     printf STDERR "$reroot\n";
     printf STDERR "$dissectTree\n";
@@ -63,8 +69,14 @@ while (my $line = <FH>) {
     chomp $line;
     $line =~ s/[0-9]+$//;
     if (!exists($priorities{lcfirst($line)})) {
-	$priorities{lcfirst($line)} = $priority;
-	$priority += 10;
+	if ($newAssemblies =~ m/$line/) {
+	    $priority -= $newAssemblyOffset;
+	    $priorities{lcfirst($line)} = $priority;
+	    $priority += $newAssemblyOffset;
+	} else {
+	    $priorities{lcfirst($line)} = $priority;
+	    $priority += $offset46way;
+        }
     }
 }
 close (FH);
