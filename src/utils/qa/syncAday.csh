@@ -33,10 +33,6 @@ rm -f $basePath/$db
 echo "\n$db\n" >> $basePath/$db
 # checkSync.csh $db times >> $basePath/$db
 checkSync.csh $db hgwbeta hgw2 times >> $basePath/$db
-checkSync.csh $db hgw2 hgw3 times >> $basePath/$db
-checkSync.csh $db hgw3 hgw4 times >> $basePath/$db
-checkSync.csh $db hgw5 hgw6 times >> $basePath/$db
-checkSync.csh $db hgw7 hgw8 times >> $basePath/$db
 cat $basePath/$db
 echo "http://hgwdev.cse.ucsc.edu/qa/test-results/sync/$db" | mail -s "sync for today" $USER@soe.ucsc.edu
 
