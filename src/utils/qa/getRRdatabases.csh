@@ -24,10 +24,11 @@ set active=""
 if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  gets the names of all databases on an RR machine"
-  echo "  not real-time. uses morning TABLE STATUS dump."
+  echo "  not real-time. uses daily TABLE STATUS dump."
   echo
   echo "    usage: machine [active]"
   echo "     use 'active' param to restrict list to only active DBs"
+  echo "     will accept machine = rr"
   echo
   exit
 else
@@ -37,13 +38,10 @@ else
   endif
 endif
 
-set machpath1=$rootpath/$mach1
-
-# check for valid machine names
-if ($mach1 == hgwdev || $mach1 == hgwbeta) then
-  echo
-  echo "  $mach1 is not a RR node"
-  echo
+if ( `echo $mach1 | egrep "hgw1|hgw2|hgw3|hgw4|hgw5|hgw6|hgw7|hgw8|rr"` == $mach1 ) then
+  set machpath1=$rootpath/hgnfs1
+else
+  set machpath1=$rootpath/$mach1
 endif
 
 set betalist=""
@@ -77,8 +75,9 @@ if ($badmach == 1) then
   exit 1
 endif
 
-
+set debug="true"
 set debug="false"
+
 if ($debug == "true") then
   echo
   echo "mach1     $mach1"

@@ -16,6 +16,9 @@ set dirname1=""
 set machpath1=""
 set fullpath1=""
 
+set debug="true"
+set debug="false"
+
 if ($#argv != 2) then
   echo
   echo "  gets the names of all tables from an RR database"
@@ -33,14 +36,18 @@ endif
 
 
 # check for valid machines
-if ($mach1 == hgwdev || $mach1 == hgwbeta) then
+if ( $mach1 == hgwdev || $mach1 == hgwbeta ) then
   echo
   echo "  this is for RR nodes only."
   echo "    usage: RRmachine, database"
   echo
   exit 1
 else 
-  set machpath1=$rootpath/$mach1
+  echo $mach1 | egrep "hgw1|hgw2|hgw3|hgw4|hgw5|hgw6|hgw7|hgw8|rr|mysqlrr" \
+     > /dev/null
+  if ( ! $status ) then
+    set machpath1=$rootpath/hgnfs1
+  endif 
 endif
 
 if (! -e $machpath1 ) then
@@ -54,7 +61,6 @@ endif
 set dirname1=`ls -ogtr $machpath1 | tail -1 | gawk '{print $7}'`
 set fullpath1=$machpath1/$dirname1
 
-set debug="false"
 if ($debug == "true") then
   echo
   echo "mach1     $mach1"

@@ -17,6 +17,9 @@ set rr="false"
 set dumpDate=""
 set quiet=1
 
+set debug=true
+set debug=false
+
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
  exit 1
@@ -36,12 +39,9 @@ else
   set tablename=$argv[1]
 endif
 
-set debug=0
-
 # assign command line arguments
 
-set argNum=$#argv
-if ( $argv[$argNum] == "verbose" ) then
+if ( $argv[$#argv] == "verbose" ) then
   set quiet=0
 endif
 
@@ -54,26 +54,14 @@ else
 endif
 
 
-if ($debug == 1) then
-  echo "tablename = $tablename"
-  echo "machine   = $machine"
-  echo "host      = $host"
-  echo "found     = $found"
-  echo "dbs       = $dbs"
-  echo "rr        = $rr"
-  echo "quiet     = $quiet"
-  echo "dumpDate  = $dumpDate"
-  echo
-endif
-
 # check machine validity
 checkMachineName.csh $machine
-
 if ( $status ) then
   echo "${0}:"
   $0
   exit 1
 endif
+
 
 # -------------------------------------------------
 # get all databases
@@ -84,13 +72,24 @@ else
   set host=""
   set dumpDate=`getRRdatabases.csh $machine | grep "last dump" \
      | gawk '{print $NF}'`
-  set dbs=`getRRdatabases.csh $machine | grep -v "last dump"`
-  set checkMach=`echo $dbs | grep "is not a valid"`
+  set dbs=`getRRdatabases.csh $machine | egrep -v "inform|last dump"`
+  echo $dbs | grep "is not a valid" > /dev/null
   if ( $status == 0 ) then
-    echo "  $dbs"
     echo
     exit 1
   endif
+endif
+
+if ( $debug == "true" ) then
+  echo "tablename = $tablename"
+  echo "machine   = $machine"
+  echo "host      = $host"
+  echo "found     = $found"
+  echo "dbs       = $dbs"
+  echo "rr        = $rr"
+  echo "quiet     = $quiet"
+  echo "dumpDate  = $dumpDate"
+  echo
 endif
 
 # -------------------------------------------------
@@ -141,10 +140,11 @@ else   # not dev or beta
       echo "checking "$db
     endif
     # check for chromInfo table on dev 
-    set isChromInfo=1
     hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" > /dev/null
     if ( $status ) then
       set isChromInfo=0
+    else
+      set isChromInfo=1
     endif
     if ( $isChromInfo == 1 ) then
       set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db` 
