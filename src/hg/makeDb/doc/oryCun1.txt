@@ -1100,3 +1100,36 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# LIFTOVER TO oryCun2 (DONE - 2010-01-19,22 - Hiram )
+    cd /hive/data/genomes/oryCun1
+    #	same repMatch as for oryCun2:
+    blat oryCun1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/oryCun1.11.ooc -repMatch=920
+
+    mkdir /hive/data/genomes/oryCun1/bed/blat.oryCun2.2010-01-19
+    cd /hive/data/genomes/oryCun1/bed/blat.oryCun2.2010-01-19
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+	-ooc=/hive/data/genomes/oryCun1/jkStuff/oryCun1.11.ooc \
+	oryCun1 oryCun2
+    # Real run:
+    doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/oryCun1/jkStuff/oryCun1.11.ooc \
+	oryCun1 oryCun2 > do.log 2>&1
+    #	power failures interrupted the align step, finished manually, then:
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-continue=chain -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/oryCun1/jkStuff/oryCun1.11.ooc \
+	oryCun1 oryCun2 > chain.log 2>&1
+    #	real    150m41.538s
+    #	failed due to out of disk space on /scratch/tmp/ on hgwdev
+    #  go to /hive/data/genomes/oryCun1/bed/blat.oryCun2.2010-01-19/run.chain
+    #	and fix the doNet.csh script to use /data/tmp/ instead and run that.
+    #	then:
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-continue=load -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/oryCun1/jkStuff/oryCun1.11.ooc \
+	oryCun1 oryCun2 > load.log 2>&1
+
+#############################################################################
