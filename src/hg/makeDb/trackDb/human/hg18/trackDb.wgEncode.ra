@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.820 2010/01/22 20:45:03 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.821 2010/01/22 22:46:43 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -19733,6 +19733,26 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
         type broadPeak
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Pol2 protocol=PCR2x treatment=None view=Peaks replicate=1 labVersion=SL127 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x.broadPeak.gz
 
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Bhlhe40Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel HepG2 BHLHE40 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (BHLHE40 in HepG2 cells)
+        subGroups view=Peaks factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
+        type broadPeak
+        color 189,0,157
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 antibody=BHLHE40 protocol=PCR1x treatment=None view=Peaks replicate=2 labVersion=SL1169 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1060 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Bhlhe40Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Bhlhe40Pcr1x.broadPeak.gz
+
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Bhlhe40Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel HepG2 BHLHE40 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (BHLHE40 in HepG2 cells)
+        subGroups view=Peaks factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
+        type broadPeak
+        color 189,0,157
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 antibody=BHLHE40 protocol=PCR1x treatment=None view=Peaks replicate=1 labVersion=SL1059 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1060 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Bhlhe40Pcr1x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Bhlhe40Pcr1x.broadPeak.gz
+
     track wgEncodeHudsonalphaChipSeqViewzRaw
     shortLabel Raw Signal
     view zRaw
@@ -21667,6 +21687,26 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
         subGroups view=zRaw factor=zCTRL2 cellType=JURKAT prot=PCR2x treat=aNONE rep=rep1
         type wig 1.00 4154.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Control protocol=PCR2x treatment=None type=wig fragLength=225 view=zRaw replicate=1 labVersion=SL4 dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel HepG2 BHLHE40 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (BHLHE40 in HepG2 cells)
+        subGroups view=zRaw factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
+        type wig 1.00 12805.00
+        color 189,0,157
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 antibody=BHLHE40 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL1059 dataVersion="ENCODE Jan 2010 Freeze" subId=1060 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x.wig.gz
+
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x
+        release alpha
+        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel HepG2 BHLHE40 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (BHLHE40 in HepG2 cells)
+        subGroups view=zRaw factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
+        type wig 1.00 14511.00
+        color 189,0,157
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 antibody=BHLHE40 protocol=PCR1x treatment=None type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL1169 dataVersion="ENCODE Jan 2010 Freeze" subId=1060 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x.wig.gz
 
 #  GENCODE genes (wrangler: tdreszer, soon Brian)
 
