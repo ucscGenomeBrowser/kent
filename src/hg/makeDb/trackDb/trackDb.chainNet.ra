@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.40 2010/01/22 01:10:34 rhead Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.41 2010/01/22 19:12:37 hiram Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -2399,6 +2399,55 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign dasNov1 chainDasNov1
 
+track chainNetSusScr1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 475.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb susScr1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetSusScr1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    subTrack chainNetSusScr1
+    spectrum on
+
+        track chainSusScr1
+        subTrack chainNetSusScr1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain susScr1
+
+    track chainNetSusScr1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    subTrack chainNetSusScr1
+
+        track netSusScr1
+        subTrack chainNetSusScr1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign susScr1 chainSusScr1
+
 track chainNetBosTau4
 compositeTrack on
 shortLabel $o_Organism Chain/Net
@@ -2594,6 +2643,55 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign bosTau1 chainBosTau1
+
+track chainNetAilMel1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 415.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb ailMel1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetAilMel1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    subTrack chainNetAilMel1
+    spectrum on
+
+        track chainAilMel1
+        subTrack chainNetAilMel1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain ailMel1
+
+    track chainNetAilMel1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    subTrack chainNetAilMel1
+
+        track netAilMel1
+        subTrack chainNetAilMel1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign ailMel1 chainAilMel1
 
 track chainNetCanFam2
 compositeTrack on

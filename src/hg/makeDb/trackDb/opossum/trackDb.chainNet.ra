@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.15 2010/01/04 19:59:32 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.16 2010/01/22 19:12:39 hiram Exp $";
 
 track chainNetMacEug1 override
 priority 210.3
@@ -15,6 +15,11 @@ priority 330.3
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetSusScr1 override
+priority 365.3
+chainMinScore 5000
+chainLinearGap loose
 
 track chainNetCavPor3 override
 priority 400.3
