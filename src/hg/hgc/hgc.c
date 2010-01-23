@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1593 2010/01/23 01:01:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1594 2010/01/23 18:54:07 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10313,7 +10313,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
        database,database,trna->chrom,trna->name,trna->name);
     
-    printf("<B>tRNA name: </B>Chr%s.%s<BR>\n",chrom,trna->name);
+    printf("<B>tRNA name: </B>%s.%s<BR>\n",chrom,trna->name);
     printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
     printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
     printf("<B>tRNAscan-SE score: </B> %.2f bits<BR>\n",trna->trnaScore);
