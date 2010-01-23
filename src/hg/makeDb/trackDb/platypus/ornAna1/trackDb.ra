@@ -73,9 +73,6 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track netBosTau4 override
-priority 220.1
-
 track chainMonDom4 override
 shortLabel $o_db Chain
 priority 260.1
@@ -85,10 +82,4 @@ track netMonDom4 override
 shortLabel $o_db Net
 priority 260.2
 otherDb monDom4
-
-track chainPonAbe2 override
-priority 240
-
-track netPonAbe2 override
-priority 240.1
 

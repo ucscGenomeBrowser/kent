@@ -984,19 +984,6 @@ priority 276.0
 track netRheMac2 override
 priority 276.1
 
-# orangutan
-track chainPonAbe2 override
-priority 277.0
-
-track netPonAbe2 override
-priority 277.1
-
-track chainPonAbe1 override
-priority 277.2
-
-track netPonAbe1 override
-priority 277.3
-
 track chainHg15 override
 priority 279.8
 

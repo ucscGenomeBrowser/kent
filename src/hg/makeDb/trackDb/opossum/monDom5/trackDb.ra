@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.25 2010/01/19 07:05:09 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.26 2010/01/23 00:36:11 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -139,16 +139,6 @@ priority 210
 
 track netPanTro2 override
 priority 210.1
-
-track chainPonAbe2 override
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-chainMinScore 3000
-chainLinearGap loose
-priority 200
-
-track netPonAbe2 override
-priority 200.1
 
 track chainRheMac2 override
 matrixHeader A, C, G, T

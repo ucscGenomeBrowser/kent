@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.19 2010/01/21 22:49:29 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.20 2010/01/23 00:36:11 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -120,13 +120,4 @@ visibility hide
 spectrum on
 type netAlign canFam2 chainCanFam2
 otherDb canFam2
-
-#Overrides from priority.ra
-
-# orangutan
-track chainPonAbe2 override
-priority 300
-
-track netPonAbe2 override
-priority 300.1
 

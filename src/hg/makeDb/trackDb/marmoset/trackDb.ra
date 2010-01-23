@@ -19,11 +19,6 @@ otherDb hg18
 track chainPanTro2 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
-track chainPonAbe2 override
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-#Overrides from priority.ra
-
 # rhesus
 track chainRheMac2 override
 priority 287.1
