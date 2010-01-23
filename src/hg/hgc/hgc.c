@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1592 2010/01/22 23:43:18 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1593 2010/01/23 01:01:06 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10293,13 +10293,17 @@ int wordCount;
 int rowOffset;
 
 char* chrom = cartString(cart, "c");
+int start   = cartInt(cart, "o");
+int end     = cartInt(cart, "t");
 
 genericHeader(tdb,trnaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, track);
-safef(query, ArraySize(query), "select * from %s where chrom = '%s' and name = '%s'", track, chrom, trnaName);
+safef(query, ArraySize(query), 
+"select * from %s where chrom = '%s' and name = '%s' and chromStart=%d and chromEnd=%d", 
+track, chrom, trnaName, start, end);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -10308,11 +10312,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
        database,database,trna->chrom,trna->name,trna->name);
-
-    printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
+    
+    printf("<B>tRNA name: </B>Chr%s.%s<BR>\n",chrom,trna->name);
     printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
     printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
-    printf("<B>tRNAscan-SE score: </B> %.2f<BR>\n",trna->trnaScore);
+    printf("<B>tRNAscan-SE score: </B> %.2f bits<BR>\n",trna->trnaScore);
     printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
     if (!sameString(trna->genomeUrl, ""))
     {
