@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.824 2010/01/23 22:36:41 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.825 2010/01/24 18:06:14 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -24630,7 +24630,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
-        shortLabel GM12878 cell short
+        shortLabel GM12 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell)
         subGroups view=1-Transfrags cellType=GM12878 localization=0-cell
         type broadPeak
@@ -24640,7 +24640,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqTransfragsK562CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
-        shortLabel K562 cell short
+        shortLabel K562 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell)
         subGroups view=1-Transfrags cellType=K562 localization=0-cell
         type broadPeak
@@ -24780,7 +24780,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
-        shortLabel GM12878 cell short PlusRaw
+        shortLabel GM12 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in GM12878 cell)
         subGroups view=2-PlusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
@@ -24790,7 +24790,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
-        shortLabel K562 cell short PlusRaw
+        shortLabel K562 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in K562 cell)
         subGroups view=2-PlusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
@@ -24930,7 +24930,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
-        shortLabel GM12878 cell short MinusRaw
+        shortLabel GM12 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in GM12878 cell)
         subGroups view=3-MinusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
@@ -24940,7 +24940,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
-        shortLabel K562 cell short MinusRaw
+        shortLabel K562 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in K562 cell)
         subGroups view=3-MinusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
@@ -25091,7 +25091,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
-        shortLabel GM12878 cell short
+        shortLabel GM12 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in GM12878 cell)
         subGroups view=4-Alignments cellType=GM12878 localization=0-cell
         type bigBed 6
@@ -25101,7 +25101,7 @@ noInherit on
         track wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
         release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
-        shortLabel K562 cell short
+        shortLabel K562 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in K562 cell)
         subGroups view=4-Alignments cellType=K562 localization=0-cell
         type bigBed 6
