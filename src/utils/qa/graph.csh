@@ -17,7 +17,7 @@ set binsize=1
 set debug=true 
 set debug=false
 
-if ( $#argv != 1 ) then
+if ( $#argv < 1 || $#argv > 2 ) then
   # no command line args
   echo
   echo "  make a graph from a two-column file."
@@ -30,6 +30,10 @@ if ( $#argv != 1 ) then
   exit
 else
   set file=$argv[1]
+endif
+
+if ( $#argv == 2 ) then
+  set width=$argv[2]  # width of graph in chars
 endif
 
 cat $file | egrep "." > Xfile$$
