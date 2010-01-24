@@ -88,6 +88,7 @@ install:
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
+	cp -p --remove-destination graph.csh               ${SCRIPTS}
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
