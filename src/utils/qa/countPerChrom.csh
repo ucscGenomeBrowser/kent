@@ -29,6 +29,7 @@ set split=""
 set regular=""
 set random=""
 set histo="false"
+set histosize=35
 
 set debug=true 
 set debug=false
@@ -44,7 +45,7 @@ if ( $#argv < 2 ||  $#argv > 5 ) then
   echo "      checks database1 on dev"
   echo "      database2 will be checked on beta by default"
   echo "        if RR is specified, will use genome-mysql"
-  echo "        histogram will print only histogram and only for single db"
+  echo "      histogram option prints bar graph, not values"
   echo
   exit
 else
@@ -52,19 +53,17 @@ else
   set table=$argv[2]
 endif
 
-if ( $#argv == 3 ) then
+if ( $#argv == 3 || $#argv == 4 ) then
   if ( $argv[3] == "histogram" ) then
     set histo="true"
   else
-    if ( $argv[3] == "RR" ) then
+    if ( $argv[3] == "RR" || $argv[3] == "rr" ) then
       set host2="mysql -h genome-mysql -u genome -A"
       set oldDb=$db
       set machineOut="(${argv[3]})"
     else
       set host2="hgsql -h $sqlbeta"
       set machineOut="(hgwbeta)"
-      if ( $argv[3] == "histogram" ) then
-      endif
       if ( $argv[3] == "hgwbeta" ) then
         # allow use of "hgwbeta" to check same db in two places
         set oldDb=$db
@@ -76,13 +75,16 @@ if ( $#argv == 3 ) then
   endif
 endif
 
-if ( $#argv == 4 ) then
+if ( $#argv > 3 ) then
+  if ( $argv[4] == "histogram" ) then
+    set histo="true"
+  else
     set oldDb=$argv[3]
     set machineOut="(${argv[4]})"
     if ( $argv[4] == "hgwbeta" ) then
       set host2="hgsql -h $sqlbeta"
     else 
-      if ( $argv[4] == "RR" ) then
+      if ( $argv[4] == "RR" || $argv[4] == "rr" ) then
         set host2="mysql -h genome-mysql -u genome -A"
       else
         echo
@@ -131,9 +133,13 @@ if ( $status ) then
   exit 1
 endif 
 
-# do randoms last
-set regular=`echo $chroms | sed -e "s/ /\n/g" | grep -v random`
-set  random=`echo $chroms | sed -e "s/ /\n/g" | grep random`
+# do randoms last (if no histogram)
+if ( $histo == "true" ) then
+  set regular=`echo $chroms | sed -e "s/ /\n/g" | grep chr`
+else
+  set regular=`echo $chroms | sed -e "s/ /\n/g" | grep -v random`
+  set  random=`echo $chroms | sed -e "s/ /\n/g" | grep random`
+endif
 
 rm -f Xout$$
 rm -f XgraphFile$$
@@ -144,25 +150,37 @@ foreach c ( $regular $random )
   set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
      WHERE '$chrom' = "'$c'"' $db`
   if ( $machineOut != "" ) then
-    set old=`$host2 -Ne 'SELECT COUNT(*) FROM '$table' \
-      WHERE '$chrom' = "'$c'"' $oldDb`
     set old=`nice $host2 -Ne 'SELECT COUNT(*) FROM '$table' \
       WHERE '$chrom' = "'$c'"' $oldDb`
   endif 
-
   # output
   echo "$c\t$new\t$old" >> Xout$$
   set table=$argv[2]
 end
 
 if ( $histo == "true" ) then
-  cat Xout$$ | egrep -v "random|hap|$db" | sed "s/chr//" | sort -n -k1,1  > XgraphFile$$
-  graph.csh XgraphFile$$ 
-  rm -f XgraphFile$$
+  cat Xout$$ | grep chr | egrep -v "random|hap|Un|$db" | sed "s/chr//" \
+    | sort -n -k1,1  > XgraphFile$$
+  if ( $machineOut != "" ) then
+    cat XgraphFile$$ | awk '{print $1, $3}' > XgraphFile2$$ 
+    graph.csh XgraphFile$$  $histosize > Xgraph1$$
+    graph.csh XgraphFile2$$ $histosize > Xgraph2$$
+    # output header
+    echo
+    echo "chr \t$db \t$oldDb$machineOut" | awk '{printf("%3s %'$histosize's %-'$histosize's\n", $1, $2, $3)}'
+    # join on first col, retaining everything from first col
+    join -a1 -j1 Xgraph1$$ Xgraph2$$ | awk '{printf("%3s %'$histosize's %-'$histosize's\n", $1, $2, $3)}'
+  else
+    graph.csh XgraphFile$$ | awk '{printf("%3s %-36s\n", $1, $2)}'
+  endif
 else
   # output header
   echo "chrom \t$db \t$oldDb$machineOut" 
   cat Xout$$
 endif
 
+rm -f Xgraph1$$
+rm -f Xgraph2$$
+rm -f XgraphFile$$
+rm -f XgraphFile2$$
 rm -f Xout$$
