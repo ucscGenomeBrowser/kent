@@ -16,10 +16,6 @@ longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 290.2
 otherDb hg18
 
-track chainPanTro2 override
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-# rhesus
 track chainRheMac2 override
 priority 287.1
 

@@ -125,13 +125,6 @@ track netHg18 override
 shortLabel $o_db Net
 priority 255.2
 
-track chainPanTro2 override
-priority 250.1
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track netPanTro2 override
-priority 250.2
-
 track chainEquCab1 override
 priority 265.1
 shortLabel $o_db Chain
