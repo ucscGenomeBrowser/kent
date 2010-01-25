@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.825 2010/01/24 18:06:14 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.826 2010/01/25 05:08:33 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4737,7 +4737,7 @@ wgEncode 1
         subGroups view=SIG EXP=zCTRL cellType=MCF7
         type wig 0.00 1.36
         viewLimits 0:0.1
-        metadata project=wgEncode grant=Crawford lab=UT-Austin dataType=ChIPseq cell=MCF-7 antibody=Input view=Signal labVersion="fseq v 1.82" dataVersion="ENCODE Jan 2010 Freeze" subId=866 dateSubmitted=2009-12-22 dateUnrestricted=2010-09-22 composite=wgEncodeUt-austinChIPseq tableName=wgEncodeUtaustinChIPseqSignalMcf7 fileName=wgEncodeUtaustinChIPseqSignalMcf7.wig.gz
+        metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=MCF-7 antibody=Input view=Signal labVersion="fseq v 1.82" dataVersion="ENCODE Jan 2010 Freeze" subId=866 dateSubmitted=2009-12-22 dateUnrestricted=2010-09-22 composite=wgEncodeUt-austinChIPseq tableName=wgEncodeUtaustinChIPseqSignalMcf7 fileName=wgEncodeUtaustinChIPseqSignalMcf7.wig.gz
 
         track wgEncodeUtaChIPseqSignalGm12878Pol2
         release alpha
@@ -4758,7 +4758,7 @@ wgEncode 1
         subGroups view=SIG EXP=zCTRL cellType=PROG
         type wig 0.00 2.31
         viewLimits 0:0.1
-        metadata project=wgEncode grant=Crawford lab=UT-Austin dataType=ChIPseq cell=ProgFib antibody=Input view=Signal labVersion="fseq v 1.82" dataVersion="ENCODE Jan 2010 Freeze" subId=871 dateSubmitted=2009-12-23 dateUnrestricted=2010-09-22 composite=wgEncodeUt-austinChIPseq tableName=wgEncodeUtaustinChIPseqSignalProgfib fileName=wgEncodeUtaustinChIPseqSignalProgfib.wig.gz
+        metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=ProgFib antibody=Input view=Signal labVersion="fseq v 1.82" dataVersion="ENCODE Jan 2010 Freeze" subId=871 dateSubmitted=2009-12-23 dateUnrestricted=2010-09-22 composite=wgEncodeUt-austinChIPseq tableName=wgEncodeUtaustinChIPseqSignalProgfib fileName=wgEncodeUtaustinChIPseqSignalProgfib.wig.gz
 
         track wgEncodeUncFAIREseqSignalLhsr
         release alpha
