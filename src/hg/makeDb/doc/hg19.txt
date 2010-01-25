@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.72 2010/01/21 21:46:59 angie Exp $";
+#	"$Id: hg19.txt,v 1.73 2010/01/25 16:46:58 angie Exp $";
 
 #############################################################################
 
@@ -7806,6 +7806,7 @@ cat << '_EOF_' > gsub
 blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
 #ENDLOOP
 '_EOF_'
+# << emacs
 
 # Create parasol batch
     gensub2 genome.lst mrna.lst gsub spec
@@ -8325,6 +8326,14 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
+
+
+######################################################################## 
+# PERSONAL GENOME VARIANTS (DONE 12/29/09 giardine)
+
+# liftOver track files in /hive/data/genomes/hg18/bed/pgSnp/
+
+# remove variants that are homozygous matches to hg19
 
 
 ######################################################################## 
