@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.46 2010/01/25 19:34:47 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.47 2010/01/25 22:15:52 kuhn Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -834,9 +834,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign galGal3 chainGalGal3
 
-# release alpha until individual galGal2 tracks are obsolete
 track chainNetGalGal2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -866,7 +864,6 @@ html chainNet
     spectrum on
 
         track chainGalGal2
-        release alpha
         subTrack chainNetGalGal2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -880,7 +877,6 @@ html chainNet
     subTrack chainNetGalGal2
 
         track netGalGal2
-        release alpha
         subTrack chainNetGalGal2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
