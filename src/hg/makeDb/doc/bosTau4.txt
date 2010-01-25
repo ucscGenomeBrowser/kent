@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.21 2009/12/16 23:43:36 galt Exp $"
+#	"$Id: bosTau4.txt,v 1.22 2010/01/25 19:16:14 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1828,3 +1828,64 @@ see doc/builds.txt for specific details.
     md5sum bosTau4ToBosTauMd3.over.chain.gz >> md5sum.txt
     popd
 
+#########################################################################
+# susScr1 Pig BLASTZ/CHAIN/NET (WORKING - 2010-01-21 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/bosTau4/bed/lastzSusScr1.2010-01-21
+    cd /hive/data/genomes/bosTau4/bed/lastzSusScr1.2010-01-21
+
+    cat << '_EOF_' > DEF
+# Pig vs. Cow
+BLASTZ_M=50
+
+# TARGET: Cow BosTau4
+SEQ1_DIR=/scratch/data/bosTau4/bosTau4.2bit
+SEQ1_LEN=/scratch/data/bosTau4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pig SusScr1
+SEQ2_DIR=/scratch/data/susScr1/susScr1.2bit
+SEQ2_LEN=/scratch/data/susScr1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau4/bed/lastzSusScr1.2010-01-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    3811m31.428s
+    #	failed
+XXX - running Thu Jan 21 14:49:43 PST 2010
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF -verbose=2 \
+	-bigClusterHub=memk -chainMinScore=3000 -chainLinearGap=medium \
+	    -syntenicNet > do.log 2>&1
+
+#########################################################################
+# lastz swap Rat Rn4 (DONE - 2010-01-22 - Hiram)
+    # original run
+    cd /cluster/data/rn4/bed/blastzBosTau4.2010-01-19
+    cat fb.rn4.chainBosTau4Link.txt 
+    #	649931321 bases of 2571531505 (25.274%) in intersection
+
+    mkdir /cluster/data/bosTau4/bed/blastz.rn4.swap
+    cd /cluster/data/bosTau4/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/rn4/bed/blastzBosTau4.2010-01-19/DEF \
+	-noLoadChainSplit -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet > swap.log 2>&1 &
+    #	real    77m18.645s
+    cat fb.bosTau4.chainRn4Link.txt 
+    #	664253901 bases of 2731830700 (24.315%) in intersection
+
+#########################################################################

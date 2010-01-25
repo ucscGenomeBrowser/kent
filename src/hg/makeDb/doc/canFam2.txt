@@ -2982,3 +2982,66 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# ailMel1 Panda alignment (DONE - 2010-01-19 - Hiram)
+    mkdir /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19
+    cd /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19
+
+    cat << '_EOF_' > DEF
+# Dog vs. Panda
+#	parameters from the Panda paper supplemental where they describe
+#	their lastz parameters
+BLASTZ_K=2200
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_H=2000
+BLASTZ_C=2
+BLASTZ_T=2
+
+# our usual M
+BLASTZ_M=50
+
+# TARGET: Dog canFam2
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/ailMel1/ailMel1.2bit
+SEQ2_LEN=/scratch/data/ailMel1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # interrupted by storm induced power failures, finish cat step,
+    #	then continuing under tornado watch:
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=chainRun -workhorse=hgwdev -noLoadChainSplit \
+	-smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > chain.log 2>&1 &
+    #	real    102m27.429s
+    cat fb.canFam2.chainAilMel1Link.txt 
+    #	1785774721 bases of 2384996543 (74.875%) in intersection
+
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.canFam2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19/DEF \
+	-swap -noLoadChainSplit -workhorse=hgwdev -bigClusterHub=pk \
+	-smallClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	> swap.log 2>&1 &
+    #	 real       89m3.603s
+     cat fb.ailMel1.chainCanFam2Link.txt 
+    #	1774362211 bases of 2225124764 (79.742%) in intersection
+
+############################################################################

@@ -150,19 +150,26 @@ close (FH);
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
-    # edit etc/genbank.conf to add susScr1 just before tetNig1
 
-# susScr1 (Tetraodon)
+    #	add the following two lines to src/lib/gbGenome.c
+# static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus",
+#	"Sus scrofa domestica", "Sus scrofa ussuricus", NULL};
+
+    cvs ci -m "Adding susScr - Pig" src/lib/gbGenome.c
+    make install-server
+
+    # edit etc/genbank.conf to add susScr1 just before equCab2
+
+# susScr1 (Pig)
 susScr1.serverGenome = /hive/data/genomes/susScr1/susScr1.2bit
 susScr1.clusterGenome = /scratch/data/susScr1/susScr1.2bit
 susScr1.ooc = /scratch/data/susScr1/susScr1.11.ooc
-susScr1.lift = /scratch/data/susScr1/susScr1.contigs.lift
-susScr1.align.unplacedChroms = chr*_random
-susScr1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-susScr1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}  
-susScr1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-susScr1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-susScr1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+susScr1.lift = /scratch/data/susScr1/susScr1.nonBridged.lft
+susScr1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+susScr1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}  
+susScr1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+susScr1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+susScr1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 susScr1.downloadDir = susScr1
 susScr1.genbank.mrna.xeno.loadDesc = yes
 susScr1.refseq.mrna.native.load = no
@@ -175,14 +182,15 @@ susScr1.refseq.mrna.native.load = no
     screen	#	use a screen to manage this job
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial susScr1 &
-    #	logFile: var/build/logs/2009.08.10-16:42:06.susScr1.initalign.log
-    #	real    578m42.777s
+    #	logFile: var/build/logs/2010.01.14-11:14:40.susScr1.initalign.log
+    #	real    182m41.068s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad susScr1
-    #	logFile: var/dbload/hgwdev/logs/2009.08.11-09:22:29.dbload.log
+    #	logFile: var/dbload/hgwdev/logs/2010.01.15-15:54:26.dbload.log
+XXX - running Fri Jan 15 15:54:42 PST 2010
     #	real    31m29.282s
 
     # enable daily alignment and update of hgwdev
@@ -361,3 +369,29 @@ chainOne $(path1)
 # blastHg18KG 1.362%, xenoRefGene 1.615%, both 0.695%, cover 51.03%, enrich 31.60x
     rm -rf blastOut
 #end tblastn
+
+#########################################################################
+# lastz swap Mouse Mm9 (DONE - 2010-01-22 - Hiram)
+    #  original run
+    cd /hive/data/genomes/mm9/bed/lastzSusScr1.2010-01-21
+    cat fb.mm9.chainSusScr1Link.txt 
+    #	616833828 bases of 2620346127 (23.540%) in intersection
+
+    mkdir /hive/data/genomes/susScr1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/susScr1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzSusScr1.2010-01-21/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    69m27.221s
+    cat fb.susScr1.chainMm9Link.txt 
+    #	656445475 bases of 2231332019 (29.419%) in intersection
+
+############################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="chr13:57394166-57402412" where name="susScr1";' \
+	hgcentraltest
+
+############################################################################

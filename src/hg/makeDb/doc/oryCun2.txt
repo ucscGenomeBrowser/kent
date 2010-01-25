@@ -307,3 +307,103 @@ oryCun2.refseq.mrna.xeno.loadDesc  = yes
     #	done - 2009-09-28 - Hiram
 
 ############################################################################
+#	update defaultDb and default position to RHO refSeq gene
+    hgsql hgcentraltest \
+    	-e 'update defaultDb set name="oryCun2" where genome="Rabbit";'
+    hgsql -e \
+'update dbDb set defaultPos="chr9:11026346-11032288" where name="oryCun2";' \
+	hgcentraltest
+
+############################################################################
+# cavPor3 Guinea Pig alignment (DONE - 2010-01-21 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/lastzCavPor3.2010-01-21
+    cd /hive/data/genomes/oryCun2/bed/lastzCavPor3.2010-01-21
+
+    cat << '_EOF_' > DEF
+# Rabbit vs. Guinea Pig
+
+# TARGET: Rabbit oryCun2
+SEQ1_DIR=/scratch/data/oryCun2/oryCun2.2bit
+SEQ1_LEN=/scratch/data/oryCun2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Guinea Pig
+SEQ2_DIR=/scratch/data/cavPor3/cavPor3.2bit
+SEQ2_LEN=/scratch/data/cavPor3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oryCun2/bed/lastzCavPor3.2010-01-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    1132m45.207s
+    cat fb.oryCun2.chainCavPor3Link.txt 
+    #	964546600 bases of 2604023284 (37.041%) in intersection
+
+    mkdir /hive/data/genomes/cavPor3/bed/blastz.oryCun2.swap
+    cd /hive/data/genomes/cavPor3/bed/blastz.oryCun2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/oryCun2/bed/lastzCavPor3.2010-01-21/DEF \
+	-swap -noLoadChainSplit -workhorse=hgwdev -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    186m1.649s
+    cat fb.cavPor3.chainOryCun2Link.txt 
+    #	1003499831 bases of 2663369733 (37.678%) in intersection
+
+############################################################################
+# monDom5 Opossum alignment (DONE - 2010-01-21 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21
+    cd /hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21
+
+    cat << '_EOF_' > DEF
+# Rabbit vs. Opossum
+
+# TARGET: Rabbit oryCun2
+SEQ1_DIR=/scratch/data/oryCun2/oryCun2.2bit
+SEQ1_LEN=/scratch/data/oryCun2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Opossum
+SEQ2_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ2_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1791m17.275s
+    cat fb.oryCun2.chainMonDom5Link.txt 
+    #	176460344 bases of 2604023284 (6.776%) in intersection
+
+    mkdir /hive/data/genomes/monDom5/bed/blastz.oryCun2.swap
+    cd /hive/data/genomes/monDom5/bed/blastz.oryCun2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21/DEF \
+	-swap -noLoadChainSplit -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    74m20.206s
+    cat fb.monDom5.chainOryCun2Link.txt 
+    #	178331930 bases of 3501660299 (5.093%) in intersection
+
+############################################################################

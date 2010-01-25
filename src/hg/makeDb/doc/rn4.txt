@@ -4963,4 +4963,116 @@ see doc/builds.txt for specific details.
     'load data local infile "GN_rat_RefSeq.txt" into table geneNetworkId'
 
 #########################################################################
+# BLASTZ/CHAIN/NET BOSTAU4 (DONE - 2010-01-19,22 - Hiram)
+    ssh hgwdev
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/rn4/bed/blastzBosTau4.2010-01-19
+    cd /hive/data/genomes/rn4/bed/blastzBosTau4.2010-01-19
 
+    cat << '_EOF_' > DEF
+# Rat vs. Cow
+BLASTZ_M=50
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/data/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau4
+SEQ2_DIR=/scratch/data/bosTau4/bosTau4.2bit
+SEQ2_LEN=/cluster/data/bosTau4/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=100
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastzBosTau4.2010-01-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=pk -chainMinScore=3000 \
+	-chainLinearGap=medium -noLoadChainSplit -syntenicNet > do.log 2>&1 &
+    # interrupted by storm induced power failures, the finish lastz batch
+    #	then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -workhorse=hgwdev -bigClusterHub=pk -chainMinScore=3000 \
+	-smallClusterHub=memk -chainLinearGap=medium -noLoadChainSplit \
+	-syntenicNet > cat.log 2>&1 &
+    #	real    107m32.779s
+    cat fb.rn4.chainBosTau4Link.txt 
+    #	649931321 bases of 2571531505 (25.274%) in intersection
+
+    mkdir /cluster/data/bosTau4/bed/blastz.rn4.swap
+    cd /cluster/data/bosTau4/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/rn4/bed/blastzBosTau4.2010-01-19/DEF \
+	-noLoadChainSplit -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet > swap.log 2>&1 &
+    #	real    77m18.645s
+    cat fb.bosTau4.chainRn4Link.txt 
+    #	664253901 bases of 2731830700 (24.315%) in intersection
+
+#########################################################################
+# ailMel1 Panda alignment (DONE - 2010-01-21 - Hiram)
+    mkdir /hive/data/genomes/rn4/bed/lastzAilMel1.2010-01-21
+    cd /hive/data/genomes/rn4/bed/lastzAilMel1.2010-01-21
+
+    cat << '_EOF_' > DEF
+# Rat vs. Panda
+#	parameters from the Panda paper supplemental where they describe
+#	their lastz parameters
+BLASTZ_K=2200
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_H=2000
+BLASTZ_C=2
+BLASTZ_T=2
+
+# our usual M
+BLASTZ_M=50
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/data/rn4/nib
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Panda
+SEQ2_DIR=/scratch/data/ailMel1/ailMel1.2bit
+SEQ2_LEN=/scratch/data/ailMel1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rn4/bed/lastzAilMel1.2010-01-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    129m23.300s
+    cat fb.rn4.chainAilMel1Link.txt 
+    #	707335282 bases of 2571531505 (27.506%) in intersection
+
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.rn4.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzAilMel1.2010-01-21/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    65m7.728s
+    cat fb.ailMel1.chainRn4Link.txt 
+    #	693099721 bases of 2225124764 (31.149%) in intersection
+
+############################################################################

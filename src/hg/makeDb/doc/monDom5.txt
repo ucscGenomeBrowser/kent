@@ -1440,4 +1440,98 @@ para time
 
 ## Stitch up wig files, make .wibs, load in DB
 
+############################################################################
+# susScr1 Pig BLASTZ/CHAIN/NET (DONE - 2010-01-21,22 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzSusScr1.2010-01-21
+    cd /hive/data/genomes/monDom5/bed/lastzSusScr1.2010-01-21
 
+    cat << '_EOF_' > DEF
+# Pig vs. Opossum
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pig SusScr1
+SEQ2_DIR=/scratch/data/susScr1/susScr1.2bit
+SEQ2_LEN=/scratch/data/susScr1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzSusScr1.2010-01-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    992m51.260s
+    cat fb.monDom5.chainSusScr1Link.txt 
+    #	179898391 bases of 3501660299 (5.138%) in intersection
+
+    mkdir /hive/data/genomes/susScr1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/susScr1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/monDom5/bed/lastzSusScr1.2010-01-21/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    97m35.156s
+    cat fb.susScr1.chainMonDom5Link.txt 
+    #	182834626 bases of 2231332019 (8.194%) in intersection
+
+#########################################################################
+# ailMel1 Panda BLASTZ/CHAIN/NET (DONE - 2010-01-22 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22
+    cd /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22
+
+    cat << '_EOF_' > DEF
+# Panda vs. Opossum
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Panda AilMel1
+SEQ2_DIR=/scratch/data/ailMel1/ailMel1.2bit
+SEQ2_LEN=/scratch/data/ailMel1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    293m25.573s
+    cat fb.monDom5.chainAilMel1Link.txt 
+    #	223233047 bases of 3501660299 (6.375%) in intersection
+
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    65m0.711s
+    cat fb.ailMel1.chainMonDom5Link.txt 
+    #	210235815 bases of 2225124764 (9.448%) in intersection
+
+#########################################################################
