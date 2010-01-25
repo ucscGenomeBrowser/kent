@@ -36,7 +36,65 @@
 <!---------------- 2010 archived news --------------->
 <A NAME="2010"></A>
 <HR>
-<A NAME="110110"></A>
+<A NAME="012510"></A>
+<FONT SIZE=4 COLOR="#006666"><B>25 Jan. 2010 - New Custom Track type: Binary Alignment/Map (BAM)</B></FONT>
+		    <P>
+                    We are pleased to announce the availability of another new track type for
+                    Custom Tracks: the Binary Alignment/Map
+                    (<A HREF="help/bam.html">BAM</A>).
+                    </P>
+                    <P>
+                    BAM is the compressed binary version of the
+                    <A HREF="http://samtools.sourceforge.net/" TARGET=_blank>Sequence Alignment/Map (SAM)</A>
+                    format, a compact and index-able representation of nucleotide sequence
+                    alignments. Many next-generation sequencing and analysis tools work with
+                    SAM/BAM. For custom track display, the main advantage of indexed BAM over
+                    PSL and other human-readable alignment formats is that only the portions
+                    of the files needed to display a particular region are transferred to UCSC.
+                    This makes it possible to display alignments from files that are so large
+                    that the connection to UCSC would time out when attempting to upload the
+                    whole file to UCSC. Both the BAM file and its associated index file remain
+                    on your web-accessible server (http or ftp), not on the UCSC server.
+                    UCSC temporarily caches the accessed portions of the files to speed up
+                    interactive display.
+                    </P>
+<HR>
+<A NAME="011310"></A>
+<FONT SIZE=4 COLOR="#006666"><B>13 Jan. 2010 - Lifespan of Custom Tracks within Sessions</B></FONT>
+		    <P>
+		    Due to the popularity of UCSC 
+		    <a href="help/hgTracksHelp.html#CustomTracks">custom tracks</a>
+		    and 
+		    <a href="help/hgSessionHelp.html">sessions</a>,
+		    we are running out of disk space for storing custom 
+		    tracks accessed within sessions. Although sessions 
+		    themselves are saved for one year, user-generated tracks 
+		    within sessions (including custom tracks) are saved for 48 
+		    hours, the typical period for other custom tracks. Until 
+		    now, because we have had space available on the server, we 
+		    have attempted to keep custom tracks alive for the lifetime 
+		    of the session. 
+		    </P>
+		    <P>
+		    While we provide short-term custom track storage as a 
+		    service to users who want to view their own data in the 
+		    UCSC Genome Browser, we unfortunately do not have the
+		    resources to guarantee long-term data storage.
+		    Over the next few days, we will begin to actively delete 
+		    custom tracks within sessions that have not been accessed 
+		    within the past four months.  If you actively use your 
+		    custom tracks within saved sessions, they will not be 
+		    deleted.</P>
+		    <P>
+		    Instead of uploading your data to our servers, please 
+		    consider using alternate data types such as 
+		    <a href="help/bigBed.html">bigBed</a>, 
+		    <a href="help/bigWig.html">bigWig</a>, 
+		    or other URL-based tracks that enable you to store your 
+		    data locally.  </P>
+
+<HR>
+<A NAME="011110"></A>
 <FONT SIZE=4 COLOR="#006666"><B>11 Jan. 2010 - Zebrafish release zv8 now available in Genome Browser</B></FONT>
 		    <P>
                     The most recent zebrafish assembly -- zv8 (UCSC version

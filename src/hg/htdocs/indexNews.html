@@ -26,8 +26,31 @@
 
                     <!-- start news -->
 
-		    <FONT FACE="courier" SIZE="3"><B>13 Jan. 2010 - Lifespan of custom tracks within sessions</B></FONT>
+		    <FONT FACE="courier" SIZE="3"><B>25 Jan. 2010 - New Custom Track type: Binary Alignment/Map (BAM)</B></FONT>
 		    <P>
+		    We are pleased to announce the availability of another new track type for 
+		    Custom Tracks: the Binary Alignment/Map 
+		    (<A HREF="goldenPath/help/bam.html">BAM</A>).
+		    </P>
+		    <P>
+		    BAM is the compressed binary version of the 
+		    <A HREF="http://samtools.sourceforge.net/" TARGET=_blank>Sequence Alignment/Map (SAM)</A> 
+		    format, a compact and index-able representation of nucleotide sequence 
+		    alignments. Many next-generation sequencing and analysis tools work with 
+		    SAM/BAM. For custom track display, the main advantage of indexed BAM over 
+		    PSL and other human-readable alignment formats is that only the portions 
+		    of the files needed to display a particular region are transferred to UCSC. 
+		    This makes it possible to display alignments from files that are so large 
+		    that the connection to UCSC would time out when attempting to upload the 
+		    whole file to UCSC. Both the BAM file and its associated index file remain 
+		    on your web-accessible server (http or ftp), not on the UCSC server. 
+		    UCSC temporarily caches the accessed portions of the files to speed up 
+		    interactive display.
+		    </P>
+
+		    <HR>
+
+		    <FONT FACE="courier" SIZE="3"><B>13 Jan. 2010 - Lifespan of custom tracks within sessions:</B></FONT>
 		    Due to the popularity of UCSC 
 		    <A HREF="goldenPath/help/hgTracksHelp.html#CustomTracks">custom tracks</A>
 		    and 
@@ -39,71 +62,20 @@
 		    hours, the typical period for other custom tracks. Until 
 		    now, because we have had space available on the server, we 
 		    have attempted to keep custom tracks alive for the lifetime 
-		    of the session. </P>
+		    of the session. 
+		    <A HREF="goldenPath/newsarch.html#011310">Read more</A>.
+		    </P>
+
 		    <P>
-		    While we provide short-term custom track storage as a 
-		    service to users who want to view their own data in the 
-		    UCSC Genome Browser, we unfortunately do not have the
-		    resources to guarantee long-term data storage.
-		    Over the next few days, we will begin to actively delete 
-		    custom tracks within sessions that have not been accessed 
-		    within the past four months.  If you actively use your 
-		    custom tracks within saved sessions, they will not be 
-		    deleted.</P>
-		    <P>
-		    Instead of uploading your data to our servers, please 
-		    consider using alternate data types such as 
-		    <A HREF="http://genome.ucsc.edu/goldenPath/help/bigBed.html">bigBed</A>, 
-		    <A HREF="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</A>, 
-		    or other URL-based tracks that enable you to store your 
-		    data locally.  </P>
-		    <HR>
-		    <FONT FACE="courier" SIZE="3"><B>11 Jan. 2010 - Zebrafish release zv8 now available in Genome Browser </B></FONT><BR>
-		    <P>
+		    <FONT FACE="courier" SIZE="3"><B>11 Jan. 2010 - Zebrafish release zv8 now available in Genome Browser:</B></FONT>
 		    The most recent zebrafish assembly -- zv8 (UCSC version 
 		    danRer6, Dec. 2008) -- is now available in the UCSC
 		    Genome Browser. This assembly was produced by 
 		    the Wellcome Trust Sanger Institute, UK. 
+		    <A HREF="goldenPath/newsarch.html#011110">Read more</A>.
 		    </P>
-                    <P>
-                    The danRer6 assembly consists of nearly 1.5 billion bp in
-                    11,623 scaffolds with a coverage of 6.5-7x. It includes
-                    sequence anchored to chromosomes
-                    1-25 and chrM (mitochondrial), as well as 11,418 unplaced
-                    scaffolds.  Significant problems existing in previous
-                    assemblies have been rectified in this assembly through the
-                    use of a whole-genome shotgun assembly with more coverage
-                    and a reorganization of the fingerprint contig order and
-                    orientation through more careful use of maps.
-                    For more information about this assembly, see the Sanger
-                    Institute web page for the
-                    <A HREF="http://www.sanger.ac.uk/Projects/D_rerio/Zv8_assembly_information.shtml"
-                    TARGET=_blank><em>Danio rerio</em> Sequencing Project</A>
-                    and the track description page for the danRer6 Assembly
-                    track.</P>
-                    <P>
-                    The danRer6 sequence and annotation data can be
-                    downloaded from the UCSC Genome Browser
-                    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/danRer6/">FTP server</A>
-                    or
-                    <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#zebrafish">downloads</A>
-                    page. Please review the
-                    <A HREF="http://www.sanger.ac.uk/notices/use-policy.shtml"
-                    TARGET=_blank>guidelines</A> for using these data.
-                    <P>
-                    We'd like to thank the Wellcome Trust Sanger Institute
-                    for providing this assembly.
-                    The UCSC zebrafish Genome Browser
-                    was produced by Galt Barber, Robert Kuhn, Katrina Learned,
-                    and Donna Karolchik. The initial set of annotation tracks
-                    was generated by the UCSC Genome Bioinformatics Group. See
-                    the
-                    <A HREF="goldenPath/credits.html#zebrafish_credits">credits</A>
-                    page for a detailed list of the organizations and
-                    individuals who contributed to the release of
-                    this browser.</P>
+
 		    <P>
-		    <HR>
 <FONT FACE="courier" SIZE="3"><B>14 Dec. 2009 - New job posting: Biological Data Technician: </B></FONT>
 		    The UCSC Genome Browser project is looking for a 
 		    bioinformatician, biologist, or software engineer with a 
@@ -112,6 +84,7 @@
 		    website. 
 		    <A HREF="goldenPath/newsarch.html#121409">Read more</A>.
 		    </P>
+
 		    <P>
 <FONT FACE="courier" SIZE="3"><B>7 Dec. 2009 - Human Genome Browser default 
 		    changing to hg19: </B></FONT>
