@@ -1,8 +1,8 @@
-#	"$Id: trackDb.chainNet.ra,v 1.10 2010/01/18 07:30:58 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.11 2010/01/25 06:14:59 kuhn Exp $";
 
 track chainNetPanTro1 override
 priority 210.3
-shortLabel Chimp Chain/Net
+shortLabel $o_Organism Chain/Net
 chainMinScore 1000
 chainLinearGap loose
 

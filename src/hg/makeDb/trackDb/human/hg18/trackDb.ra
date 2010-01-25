@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.453 2010/01/19 07:05:08 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.454 2010/01/25 06:15:00 kuhn Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -909,18 +909,6 @@ visibility hide
 spectrum on
 type netAlign panTro2 chainPanTro2
 otherDb panTro2
-
-track chainPanTro1 override
-shortLabel panTro1 Chain
-longLabel panTro1 ($o_date/$o_db) Chained Alignments
-priority 290.2
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-
-track netPanTro1 override
-shortLabel panTro1 Net
-longLabel panTro1 ($o_date/$o_db) Alignment Net
-priority 290.3
 
 track netHomIni13
 shortLabel $o_Organism Net

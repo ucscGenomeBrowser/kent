@@ -506,14 +506,6 @@ spectrum on
 type netAlign monDom4 chainMonDom4
 otherDb monDom4
 
-track chainPanTro1 override
-priority 278.5
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-
-track netPanTro1 override
-priority 278.6
-
 track chainPanTro2
 release beta
 #replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
