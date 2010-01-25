@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.2 2009/12/26 06:09:30 hiram Exp $
+#	$Id: ailMel1.txt,v 1.3 2010/01/25 19:43:27 hiram Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -125,11 +125,61 @@ taxId 9646
 
 #########################################################################
 # genbank run
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    # edit etc/genbank.conf to add this section just after canFam2:
+# ailMel1 (panda)
+ailMel1.serverGenome = /hive/data/genomes/ailMel1/ailMel1.2bit
+ailMel1.clusterGenome = /scratch/data/ailMel1/ailMel1.2bit
+ailMel1.lift = no
+ailMel1.ooc = /scratch/data/ailMel1/ailMel1.11.ooc
+ailMel1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+ailMel1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+ailMel1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+ailMel1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+ailMel1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+ailMel1.refseq.mrna.native.load = yes
+ailMel1.refseq.mrna.xeno.load = yes
+ailMel1.genbank.mrna.xeno.load = yes
+ailMel1.downloadDir = ailMel1
+ailMel1.perChromTables = no
+
+    # Edit src/lib/gbGenome.c to add new species.  With these four lines:
+# static char *ailMelNames[] = {"Ailuropoda melanoleuca", "Canis familiaris",
+#                                "Canis sp.", "Canis lupus familiaris",
+#                                "Canis lupus", NULL};
+#   ... later ...
+# {"ailMel", ailMelNames},
+
+    cvs ci -m "adding ailMel - Panda with Dog specifications" src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial  ailMel1 &
+    #	logFile: var/build/logs/2009.12.24-15:03:26.ailMel1.initalign.log
 
-    logFile: var/build/logs/2009.12.24-15:03:26.ailMel1.initalign.log
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad ailMel1 &
+    #	logFile: var/dbload/hgwdev/logs/2009.12.25-00:08:46.dbload.log
 
- nice ./bin/gbDbLoadStep -drop -initialLoad ailMel1 &
-[1] 10050
-[hiram@hgwdev /cluster/data/genbank] logFile: var/dbload/hgwdev/logs/2009.12.25-00:08:46.dbload.log
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add oryCun2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Adding ailMel1 - Panda - Ailuropoda melanoleuca" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+    #	done - 2010-01-19 - Hiram
 
+############################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="scaffold329:558576-566855" where name="ailMel1";' \
+	hgcentraltest
+
+############################################################################
