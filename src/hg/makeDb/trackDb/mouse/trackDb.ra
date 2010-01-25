@@ -941,13 +941,6 @@ priority 220.4
 track chainOtoGar1Best override
 priority 274.0
 
-# rhesus
-track chainRheMac2 override
-priority 276.0
-
-track netRheMac2 override
-priority 276.1
-
 track chainHg15 override
 priority 279.8
 

@@ -16,12 +16,6 @@ longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 290.2
 otherDb hg18
 
-track chainRheMac2 override
-priority 287.1
-
-track netRheMac2 override
-priority 287.2
-
 track netMm9 override
 priority 232.2
 
