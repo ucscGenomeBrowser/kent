@@ -2080,6 +2080,9 @@ identifier snpName130
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
     hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
     hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
+    # gwasCatalog SNPs were mapped to genome using snp130.  Move this and update trackDb
+    # settings if we remap to new version:
+    $hg.gwasCatalog.name
 
 identifier snpExceptions130
 "Annotations of unusual conditions in dbSNP version 130"
