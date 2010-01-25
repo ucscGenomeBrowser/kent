@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.10 2010/01/22 01:40:56 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.11 2010/01/25 05:47:07 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -184,13 +184,13 @@ while (@row = $sth->fetchrow_array()) {
     $experiment{"submitDate"} = defined($metadata{"dateResubmitted"}) ?
                 $metadata{"dateResubmitted"} : $metadata{"dateSubmitted"};
 
-    $experiment{"releaseDate"} = "unknown";
+    $experiment{"releaseDate"} = "none";
 
     # note that this was found in trackDb (not just in pipeline, below)
     $experiment{"trackDb"} = 1;
 
     # get release date from 'lastUpdated' field of submission dir
-    $experiment{"status"} = "unknown";
+    #$experiment{"status"} = "unknown";
 
     # a few tracks are missing the subId
     my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
@@ -236,20 +236,27 @@ while (@row = $sth->fetchrow_array()) {
 $sth->finish;
 $dbh->{DBH}->disconnect;
 
-# Merge in submissions from pipeline projects table (including release beta entries
-# that will not be found in trackDb).
-# Use status in projects table to assign statuses to submissions already found in trackDb,
+# Merge in submissions from pipeline projects table not found in trackDb
+# (not yet configured, or else retired) that have valid metadata (validated, loaded)
+# Also capture status of all submissions for later use
 
+my %submissionStatus = ();
+my %submissionUpdated = ();
 $dbh = HgDb->new(DB => $pipeline);
 $sth = $dbh->execute( 
     "select lab, data_type, metadata, created_at, updated_at, status, id, name from projects order by id");
 
 while (@row = $sth->fetchrow_array()) {
     my $lab = $row[0];
+    my $dataType = $row[1];
+    my $created_at = $row[3];
+    my $updated_at = $row[4];
     my $status = $row[5];
-    next if ($status eq 'revoked');
     my $id = $row[6];
     my $name = $row[7];
+    $submissionStatus{$id} = $status;
+    $submissionUpdated{$id} = $updated_at;
+    $submissionUpdated{$id} =~ s/ \d\d:\d\d:\d\d//;
     # lookup in lab from hash to find project
     my $project = "unknown";
     if (defined($lab) && defined($labs{$lab})) {
@@ -261,10 +268,7 @@ while (@row = $sth->fetchrow_array()) {
     if ($project eq "unknown") {
         warn "     project unknown for lab " . $lab . " subId=" . $id . " " . $name . "\n";
     }
-    my $dataType = $row[1];
 # note: lcase the datatype before generating key (inconsistent in DAFs)
-    my $created_at = $row[3];
-    my $updated_at = $row[4];
     my $cell = "none";
     my $varString = "none";
     my $varLabelString = "none";
@@ -363,7 +367,8 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiments{$expKey} = \%experiment;
             } else {
-                # not in trackDb or found yet in projects table
+                # not in trackDb or found yet in projects table -- add if status is good
+                next if ($status ne 'loaded' && $status ne 'validated');
                 my %experiment = ();
                 $experiment{"project"} = $project;
                 $experiment{"lab"} = $lab;
@@ -393,7 +398,7 @@ while (@row = $sth->fetchrow_array()) {
 $sth->finish;
 $dbh->{DBH}->disconnect;
 
-# print out results
+# fill in statuses for those experiments missing them, and print out results
 foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
     my %ids = %{$experiment{"ids"}};
@@ -407,8 +412,11 @@ foreach my $key (keys %experiments) {
     die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined submitDate" unless defined($experiment{"submitDate"});
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
-    if (!defined $experiment{"status"}) {
-        $experiment{"status"} = $experiment{"tempStatus"};
+    foreach my $subId (keys %ids) {
+        last if (defined $experiment{"status"});
+        $experiment{"status"} = $submissionStatus{$subId};
+        $experiment{"releaseDate"} = $submissionUpdated{$subId}
+            if ($experiment{"status"} eq "released");
     }
     die "undefined status" unless defined($experiment{"status"});
 
