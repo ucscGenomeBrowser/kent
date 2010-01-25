@@ -89,6 +89,8 @@ The format of the type fields:
     must be defined elsewhere in the trackDb.ra record:
        expTable - table in hgFixed with names of experiments etc.
        expScale - maximum expression value
+       expColor - default coloring scheme: "redGreen", "redBlue", "yellowBlue",
+           "redBlueOnWhite", or "redBlueOnYellow"
        expStep - amount to step in visible expression scale.  Some
            round number close to expScale/8 is best
        expColorDense On - show avg. color in dense mode
