@@ -1021,4 +1021,24 @@ vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
+
+##########################################################################
+# MAKE PER-CHROM FASTA DOWNLOADS (DONE 2010-01-25 galt)
+    ssh hgwdev
+    mkdir /cluster/data/danRer6/goldenPath/chromosomes
+    cd /cluster/data/danRer6/goldenPath/chromosomes
+    awk '$1 !~ /^chr/ {print $1;}' ../../chrom.sizes > scafs.lst
+    awk '$1 ~ /^chr/ {print $1;}' ../../chrom.sizes > chroms.lst
+    foreach chr (`cat chroms.lst`)
+      twoBitToFa ../../danRer6.2bit stdout -seq=$chr \
+      | gzip -c > $chr.fa.gz
+    end
+    twoBitToFa ../../danRer6.2bit stdout -seqList=scafs.lst \
+    | gzip -c > unmappedScaffolds.fa.gz
+    rm chroms.lst scafs.lst
+    md5sum *.gz > md5sum.txt
+    # Make README.txt
+    ln -s /cluster/data/danRer6/goldenPath/chromosomes \
+      /usr/local/apache/htdocs/goldenPath/danRer6/chromosomes
+
 ############################################################################
