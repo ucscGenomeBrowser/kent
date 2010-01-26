@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.835 2010/01/26 20:48:34 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.836 2010/01/26 23:11:22 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15091,7 +15091,7 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t2HUVEC=HUVEC t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
+subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t2HUVEC=HUVEC t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uHEPG2pra=HepG2_<i>pravastatin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
 subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma ATF3=ATF3 BAF155=BAF155 BAF155mig=BAF155_(musIgG) BAF170mig=BAF170_(musIgG) BDP1=BDP1 BRF1=BRF1 BRF2=BRF2 BRG1mig=Brg1_(musIgG) CEBPB=CEBPB CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(rabIgG) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 ERRA=ERRA GATA1=GATA-1 GATA2=GATA-2 GRP20=GRp20 GTF2B=GTF2B HNF4A=HNF4A HSF1=HSF1 INI1mig=Ini1_(musIgG) JUND=JunD JUNDrig=JunD_(rabIgG) MAX=Max NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFKBmig=NFKB_(musIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) PGC1A=PGC1A POL2=Pol2 POL2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TF3C110=TFIIIC-110 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 ZZZ3=ZZZ3 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yIGGmus=IgG(mouse)_Control yIGGrab=IgG(rabbit)_Control yMNase=MNase_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
@@ -15326,11 +15326,11 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Srebp1a
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2 SREBP1 Pk
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2 cells)
-        subGroups view=Peaks factor=SREBP1 cellType=t2HepG2
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/pravastatin cells)
+        subGroups view=Peaks factor=SREBP1 cellType=uHEPG2pra
         type narrowPeak
         color 189,0,157
-        metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=HepG2 antibody=SREBP1 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=HepG2 antibody=SREBP1 treatment=pravastatin view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksHepg2Srebp2
         subTrack wgEncodeYaleChIPseqViewPeaks off
@@ -16043,7 +16043,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2 SREBP1 Pk
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/insolin/forskolin cells)
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/insolin cells)
         subGroups view=Peaks factor=SREBP1 cellType=uHEPG2ins
         type narrowPeak
         color 189,0,157
@@ -16618,11 +16618,11 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Srebp1aV2
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2 SREBP1 Sg
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2 cells)
-        subGroups view=Signal factor=SREBP1 cellType=t2HepG2
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/pravastatin cells)
+        subGroups view=Signal factor=SREBP1 cellType=uHEPG2pra
         type bedGraph 4
         color 189,0,157
-        metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=HepG2 antibody=SREBP1 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion="V2 - corrected sparse signals" dateResubmitted=2009-07-21 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1aV2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1aV2.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Yale(Snyder) dataType=ChIPseq cell=HepG2 antibody=SREBP1 treatment=pravastatin view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion="V2 - corrected sparse signals" dateResubmitted=2009-07-21 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1aV2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1aV2.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalHepg2Srebp2V2
         subTrack wgEncodeYaleChIPseqViewSignal off
@@ -17573,7 +17573,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2 SREBP1 Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/insolin/forskolin cells)
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/insolin cells)
         subGroups view=Signal factor=SREBP1 cellType=uHEPG2ins
         type bedGraph 4
         color 189,0,157
