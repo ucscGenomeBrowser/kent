@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.4 2009/12/28 21:41:55 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.5 2010/01/26 05:19:04 kuhn Exp $";
 
 track chainNetPonAbe2 override
 chainMinScore 1000
@@ -11,3 +11,11 @@ chainMinScore 3000
 
 track chainNetDanRer5 override
 chainMinScore 3000
+
+track chainNetGalGal3 override
+chainMinScore 3000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 120
+
