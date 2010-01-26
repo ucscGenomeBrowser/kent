@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.197 2010/01/16 00:41:40 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.198 2010/01/26 20:00:17 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2214,7 +2214,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1&search=NF-kapp
 term NF-YA
 tag NFYA
 type Antibody
-targetDescription NF-YA is part of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
+targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId
@@ -2226,7 +2226,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
 term NF-YB
 tag NFYB
 type Antibody
-targetDescription NF-YA is part of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
+targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId
@@ -2634,8 +2634,8 @@ lab Farnham
 targetId GeneCard:GC10P114700
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10P114700
 
-term TFIIIC
-tag TFIIIC
+term TFIIIC-110
+tag TF3C110
 type Antibody
 antibodyDescription rabbit polyclonal
 targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin.
@@ -2731,7 +2731,7 @@ term ZZZ3
 tag ZZZ3
 type Antibody
 antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW)
-targetDescription ZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
+targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
 orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 vendorName Lazlo Tora, Institut de Génétique et de Biologie Moléculaire et Cellulaire
 lab Struhl
