@@ -5,6 +5,16 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+visibility hide
+
+track transMap override
+visibility pack
+
+track refGene override
+visibility pack
+
+track xenoRefGene override
+visibility hide
 
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
