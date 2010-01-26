@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.75 2010/01/15 23:42:26 fanhsu Exp $";
+#	"$Id: trackDb.ra,v 1.76 2010/01/26 03:34:04 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -512,14 +512,6 @@ priority 10006.1
 
 track netRn4 override
 priority 10006.2
-
-track chainMonDom4 override
-shortLabel $o_db Chain
-otherDb monDom4
-
-track netMonDom4 override
-shortLabel $o_db Net
-otherDb monDom4
 
 searchName NIAGene
 searchTable NIAGene

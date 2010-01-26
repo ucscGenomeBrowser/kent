@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.63 2010/01/04 19:59:34 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.64 2010/01/26 03:34:04 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -240,19 +240,6 @@ track netMm6 override
 shortLabel $o_Organism Net
 priority 125.2
 
-track chainMonDom5 override
-priority 105
-
-track netMonDom5 override
-priority 105.1
-
-track chainMonDom1 override
-priority 129.1
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netMonDom1 override
-priority 129.2
-
 track chainXenTro1
 release beta
 #replaces record chainXenTro1 in parent dir missing/extra matrixHeader
@@ -287,34 +274,6 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 type chain mm8
 otherDb mm8
-
-track chainMonDom4
-release beta
-#replaces record chainMonDom4 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 128.2 
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-type chain monDom4
-otherDb monDom4
-
-track netMonDom4
-release beta
-#replaces record netMonDom4 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 128.3
-visibility hide
-spectrum on
-type netAlign monDom4 chainMonDom4
-otherDb monDom4
 
 # release beta: $o_Organism in shortLabel
 track chainXenTro2

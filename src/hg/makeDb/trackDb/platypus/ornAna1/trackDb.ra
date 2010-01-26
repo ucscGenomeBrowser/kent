@@ -1,4 +1,3 @@
-
 track wssdCoverage
 shortLabel WSSD Coverage
 longLabel Regions Assayed for SDD
@@ -72,14 +71,4 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
-
-track chainMonDom4 override
-shortLabel $o_db Chain
-priority 260.1
-otherDb monDom4
-
-track netMonDom4 override
-shortLabel $o_db Net
-priority 260.2
-otherDb monDom4
 

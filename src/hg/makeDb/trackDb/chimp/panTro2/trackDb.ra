@@ -197,11 +197,3 @@ priority 288.1
 track netPonAbe2 override
 priority 288.2
 
-track chainMonDom4 override
-shortLabel $o_db Chain
-otherDb monDom4
-
-track netMonDom4 override
-shortLabel $o_db Net
-otherDb monDom4
-
