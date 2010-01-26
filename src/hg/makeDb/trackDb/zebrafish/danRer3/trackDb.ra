@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.56 2010/01/04 19:59:34 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.57 2010/01/26 03:11:25 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -153,13 +153,6 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 track netMm7 override
 shortLabel $o_db Net
 priority 126.5
-
-track chainMonDom2 override
-priority 128
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netMonDom2 override
-priority 128.1
 
 track chainFr1 override
 priority 130.1
