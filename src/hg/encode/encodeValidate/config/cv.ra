@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.198 2010/01/26 20:00:17 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.199 2010/01/26 20:25:28 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2494,8 +2494,8 @@ lab Myers
 targetId GeneCard:GC12P052060
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 
-term SREBP1A
-tag SREBP1A
+term SREBP1
+tag SREBP1
 type Antibody
 targetDescription Sterol regulatory element binding transcription factor 1
 antibodyDescription Rabbit polyclonal
@@ -3223,6 +3223,11 @@ type treatment
 term insulin
 tag INSLN
 description Human DMEM with 0.5% BSA supplemented with 100nM insulin and 10uM 22-hydroxycholesterol for 6h. (Snyder)
+type treatment
+
+term pravastatin
+tag PRAVAST
+description (provisional) Mysterious treatment that needs to be illucidated (Snyder)
 type treatment
 
 term Prednisolone_100nM
