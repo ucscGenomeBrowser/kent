@@ -76,10 +76,15 @@ boolean canDrawBigBedDense(struct track *tg)
 /* Return TRUE if conditions are such that can do the fast bigBed dense data fetch and
  * draw. */
 {
+return tg->isBigBed;
+#ifdef OLD
+/* Unfortunately bigBed datasets are so big, that running filters on them is not so practical
+ * in the dense mode. */
 if (!tg->isBigBed)
     return FALSE;
 int scoreFilter = cartOrTdbInt(cart, tg->tdb, "scoreFilter", 0);
-return scoreFilter == 0;
+return scoreFilter == 0 && trackDbSetting(tg->tdb, "colorByStrand") == NULL;
+#endif /* OLD */
 }
 
 
