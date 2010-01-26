@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.145 2010/01/04 19:12:23 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.146 2010/01/26 00:36:22 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -678,7 +678,7 @@ if (isPositional)
     if (doEncode)
         {
 	makeRegionButton(hgtaRegionTypeEncode, regionType);
-	hPrintf("&nbsp;ENCODE&nbsp;");
+	hPrintf("&nbsp;ENCODE Pilot regions&nbsp;");
 	}
     makeRegionButton(hgtaRegionTypeRange, regionType);
     hPrintf("&nbsp;position&nbsp;");
