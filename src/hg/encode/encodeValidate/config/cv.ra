@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.199 2010/01/26 20:25:28 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.200 2010/01/26 22:04:14 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3227,7 +3227,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description (provisional) Mysterious treatment that needs to be illucidated (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 µM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
