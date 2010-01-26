@@ -7,9 +7,6 @@ track gap override
 html gap
 visibility hide
 
-track transMap override
-visibility pack
-
 track refGene override
 visibility pack
 
