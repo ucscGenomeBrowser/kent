@@ -83,7 +83,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
-set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2
+set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -92,6 +92,8 @@ databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralb
 
 # Define various non-self chains
 set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr3
+
+set nonSplitChains hg19,$tetNig,oryCun2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -1071,14 +1073,10 @@ identifier chain[${chainDest}]Id
 
 identifier chain[${chainDest}]IdNonSplit
 "Link together chain info for chain tables that are not split"
-    hg19.chain[].id
-    hg19.chain[]Link.chainId full
-    hg19.net[].chainId exclude=0
-    hg19.netSynteny[].chainId exclude=0
-    $tetNig.chain[].id
-    $tetNig.chain[]Link.chainId full
-    $tetNig.net[].chainId exclude=0
-    $tetNig.netSynteny[].chainId exclude=0
+    $nonSplitChains.chain[].id
+    $nonSplitChains.chain[]Link.chainId full
+    $nonSplitChains.net[].chainId exclude=0
+    $nonSplitChains.netSynteny[].chainId exclude=0
 
 identifier rBestChainPanTro1Id
 "Link together reciprocal best chain/net"
@@ -3500,3 +3498,8 @@ tablesIgnored equCab2
 
 tablesIgnored oryLat2
     microsat
+
+tablesIgnored oryCun2
+    ctgPos2
+    gold
+    intronEst
