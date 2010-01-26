@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.49 2010/01/26 05:19:03 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.50 2010/01/26 21:31:37 rhead Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -13,7 +13,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -66,7 +66,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -117,7 +117,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -167,7 +167,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -218,7 +218,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -268,7 +268,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -320,7 +320,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -372,7 +372,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -424,7 +424,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -476,7 +476,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -528,7 +528,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -580,7 +580,7 @@ group compGeno
 noInherit on
 priority 159
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -632,8 +632,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 165.5
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -686,8 +686,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 165.5
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -741,7 +741,7 @@ group compGeno
 noInherit on
 priority 181
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -792,7 +792,7 @@ group compGeno
 noInherit on
 priority 181
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -841,7 +841,7 @@ group compGeno
 noInherit on
 priority 181
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -892,7 +892,7 @@ group compGeno
 noInherit on
 priority 181
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -945,7 +945,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -998,7 +998,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -1051,7 +1051,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -1104,7 +1104,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -1155,8 +1155,8 @@ visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 191
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 settingsByView chain:spectrum=on
 sortOrder view=+
@@ -1192,8 +1192,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 191
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1241,8 +1241,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 191
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1290,8 +1290,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 191
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1340,7 +1340,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -1389,7 +1389,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -1438,7 +1438,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1487,7 +1487,7 @@ group compGeno
 noInherit on
 priority 191
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1536,7 +1536,7 @@ group compGeno
 noInherit on
 priority 209
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1587,7 +1587,7 @@ group compGeno
 noInherit on
 priority 209
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1640,7 +1640,7 @@ group compGeno
 noInherit on
 priority 209
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1693,7 +1693,7 @@ group compGeno
 noInherit on
 priority 209
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1746,7 +1746,7 @@ group compGeno
 noInherit on
 priority 209
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1799,7 +1799,7 @@ group compGeno
 noInherit on
 priority 209
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 settingsByView chain:spectrum=on
 sortOrder view=+
@@ -1839,8 +1839,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 209
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1892,8 +1892,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 209
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1945,8 +1945,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 209
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1998,8 +1998,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 209
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2049,8 +2049,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 209
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2098,8 +2098,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 209
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2148,7 +2148,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2197,7 +2197,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2246,7 +2246,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2295,7 +2295,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2344,7 +2344,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2393,7 +2393,7 @@ group compGeno
 noInherit on
 priority 475.3
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2442,7 +2442,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2491,7 +2491,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2540,7 +2540,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2589,7 +2589,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2638,7 +2638,7 @@ group compGeno
 noInherit on
 priority 415.3
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2687,7 +2687,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2737,7 +2737,7 @@ group compGeno
 noInherit on
 priority 240
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2786,7 +2786,7 @@ group compGeno
 noInherit on
 priority 500
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 
@@ -2802,8 +2802,8 @@ sortOrder view=+
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-        color 100,50,0
-        altColor 255,240,200
+        color 0,0,0
+        altColor 100,50,0
         matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
         matrixHeader A, C, G, T
         type chain venter1
@@ -2835,7 +2835,7 @@ group compGeno
 noInherit on
 priority 498
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
@@ -2885,7 +2885,7 @@ group compGeno
 noInherit on
 priority 498
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
@@ -2934,7 +2934,7 @@ group compGeno
 noInherit on
 priority 498
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -2983,8 +2983,10 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+#color 0,0,0
+#altColor 100,50,0
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
@@ -3031,8 +3033,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
@@ -3079,8 +3081,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -3127,8 +3129,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
@@ -3175,8 +3177,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -3223,8 +3225,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -3271,8 +3273,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -3319,8 +3321,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -3368,8 +3370,8 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-color 100,50,0
-altColor 255,240,200
+color 0,0,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -3419,7 +3421,7 @@ group compGeno
 noInherit on
 priority 500
 color 0,0,0
-altColor 255,255,0
+altColor 100,50,0
 type bed 3
 sortOrder view=+
 
@@ -3435,8 +3437,8 @@ sortOrder view=+
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-        color 100,50,0
-        altColor 255,240,200
+        color 0,0,0
+        altColor 100,50,0
         matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
         matrixHeader A, C, G, T
         type chain canFamPoodle1
