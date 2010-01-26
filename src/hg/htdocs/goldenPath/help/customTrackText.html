@@ -1087,6 +1087,28 @@ used&mdash;to the UCSC Genome mailing list
 <A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</A>. 
         <!-- above address is genome at soe.ucsc.edu -->
 
+<P><B><I>Example 11:</I></B><BR>
+If you would like to share a URL that your colleague can click on directly, 
+rather than loading it in the Custom Track tool (as in Example 10), then the URL
+will need a few extra parameters. Let's assume that your data is on a server 
+at your institution in one of the large data formats:
+<A HREF="../../FAQ/FAQformat.html#format1.5">bigBed</A>, 
+<A HREF="../../FAQ/FAQformat.html#format6.1">bigWig</A>, or 
+<A HREF="../../FAQ/FAQformat.html#format5.1">BAM</A>.
+
+In this case, the URL must include an <TT>hgct_customText</TT> parameter, which 
+simulates the text box on the Custom Tracks page.  Also, the URL must include
+the <TT>bigDataUrl</TT> that points to the data file on your server.
+So, a clickable URL that opens a remote bigBed track for the hg18 
+assembly to a certain location on chr21 would look like this:
+<BR><BR>
+
+<font color="000099"><A
+HREF="../../cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505&hgct_customText=track%20type=bigBed%20name=myBigBedTrack%20description=bigBed%20visibility=full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/bigBedExample.bb" 
+TARGET=_BLANK><tt>
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505&hgct_customText=track%20type=bigBed%20name=myBigBedTrack%20description=bigBed%20visibility=full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/bigBedExample.bb
+</tt></A></font><BR><BR>
+
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
