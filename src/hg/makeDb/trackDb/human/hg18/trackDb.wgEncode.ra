@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.829 2010/01/26 17:14:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.830 2010/01/26 17:32:07 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -26202,10 +26202,10 @@ shortLabel BU Orchid/Chai
 longLabel ENCODE BU Orchid/Chai
 group regulation
 subGroup1 view Views Signal=Signal ConsSig=ConsSig ConsBed=ConsBed
-subGroup2 cellType Cell_Line GM12878=GM12878
+#subGroup2 cellType Cell_Line GM12878=GM12878
 #subGroup1 cellType Cell_Line GM12878=GM12878
-dimensions dimensionX=cellType
-sortOrder cellType=+ view=+
+#dimensions dimensionX=cellType
+sortOrder view=+
 controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
 #visibilityViewDefaults  Signal=full
@@ -26227,7 +26227,7 @@ noInherit on
 	subTrack wgEncodeMarguliesOrchidConsBedView
         shortLabel Chai FDR bed
         longLabel Chai FDR bed
-        subGroups cellType=GM12878 view=ConsBed
+        subGroups view=ConsBed
         type bed 3
 	noInherit on
         noScoreFilter on
@@ -26245,9 +26245,9 @@ noInherit on
 	track wgEncodeMarguliesOrchidConsSigRep1Gm12878
 	release alpha
 	subTrack wgEncodeMarguliesOrchidConsSigView
-	shortLabel GM12878 Sig 1
-	longLabel ENCODE Signal Replicate 1 (in GM12878 cells)
-	subGroups cellType=GM12878 view=ConsSig
+	shortLabel Chai
+	longLabel Chai
+	subGroups view=ConsSig
 	type bigWig 0 10000
 	autoScale on
 	configurable on
@@ -26266,9 +26266,9 @@ noInherit on
 	track wgEncodeMarguliesOrchidSignalRep1Gm12878
 	release alpha
 	subTrack wgEncodeMarguliesOrchidSignalView
-	shortLabel GM12878 Sig 1
-	longLabel ENCODE Signal Replicate 1 (in GM12878 cells)
-	subGroups cellType=GM12878 view=Signal
+	shortLabel Orchid v1
+	longLabel Orchid v1
+	subGroups view=Signal
 	type bigWig 0 10000
 	autoScale on
 	configurable on
@@ -26278,9 +26278,9 @@ noInherit on
 	track wgEncodeMarguliesOrchidSignalRep2Gm12878
 	release alpha
 	subTrack wgEncodeMarguliesOrchidSignalView 
-	shortLabel GM12878 Sig 2
-	longLabel ENCODE Signal Replicate 2 (in GM12878 cells)
-	subGroups cellType=GM12878 view=Signal
+	shortLabel Orchid v2
+	longLabel Orchid v2
+	subGroups view=Signal
 	type bigWig 0 10000
 	configurable on
 	autoScale on
