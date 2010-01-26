@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.73 2010/01/04 19:12:30 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.74 2010/01/26 20:55:28 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -650,7 +650,7 @@ else if(sameWord("narrowPeak",type)
     cType = cfgPeak;
 else if(sameWord("genePred",type))
         cType = cfgGenePred;
-else if(startsWith("bed ", type) || startsWith("bigBed ", type)) 
+else if(startsWith("bed ", type))
     {
     char *words[3];
     chopLine(cloneString( type), words);
