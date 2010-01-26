@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.74 2010/01/25 19:16:13 hiram Exp $";
+#	"$Id: hg19.txt,v 1.75 2010/01/26 19:41:22 hartera Exp $";
 
 #############################################################################
 
@@ -8439,5 +8439,43 @@ TMPDIR=/scratch/tmp
 
 # remove variants that are homozygous matches to hg19
 
+########################################################################
+# CRG MAPABILITY (2010-01-19, hartera, in progress)
+    
+    mkdir -p /hive/data/genomes/hg19/bed/crgMapability
+    cd /hive/data/genomes/hg19/bed/crgMapability
+cat << 'EOF' > temp
+#!/bin/tcsh -ef
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome.hg19.main.mappability-36.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome.hg19.main.mappability-50.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome.hg19.main.mappability-75.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome.hg19.main.mappability-100.bw.bz2
+'EOF'
 
-######################################################################## 
+    awk '{if ($0 ~ /#/) print; else print "wget --timestamping \"" $0 "\"";}' \
+        temp > download.csh
+    rm temp
+    chmod +x download.csh
+    ./download.csh >& download.log &
+
+     # Add the data to /gbdb/ and load the file names into tables (2010-01-26)
+     cd /hive/data/genomes/hg19/bed/crgMapability
+     bunzip2 *.bz2
+
+     # Add data to gbdb
+     mkdir -p /gbdb/hg19/bbi/
+     # Symlink files with names as crgMapabilityAlignXmer.bw to /gbdb/hg18/bbi
+     # and load file name into a table - one per dataset. Each table 
+     # represents a subtrack.
+     foreach f (`ls *.bw`)
+        echo $f
+        set g=`echo $f | cut -d "-" -f2`
+        set num=`echo $g | cut -d "." -f1`
+        set mer=`echo "${num}mer"`
+        set nf=`echo "crgMapabilityAlign${mer}.bw"`
+        echo $nf
+        ln -s `pwd`/${f} /gbdb/hg19/bbi/${nf}
+        hgsql hg19 -e "drop table if exists crgMapabilityAlign${mer}; \
+     create table crgMapabilityAlign${mer} (fileName varchar(255) not null); \
+     insert into crgMapabilityAlign${mer} values ('/gbdb/hg19/bbi/${nf}');"
+     end

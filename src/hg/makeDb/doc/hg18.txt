@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.394 2010/01/19 21:44:30 angie Exp $
+# $Id: hg18.txt,v 1.395 2010/01/26 19:39:35 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.394 2010/01/19 21:44:30 angie Exp $
+# $Id: hg18.txt,v 1.395 2010/01/26 19:39:35 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29180,7 +29180,6 @@ see doc/builds.txt for specific details.
 # load the table
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
-
 #############################################################################
 # NHGRI GWAS CATALOG (DONE 1/19/10 angie)
     mkdir /hive/data/genomes/hg18/bed/gwasCatalog
@@ -29280,5 +29279,50 @@ see doc/builds.txt for specific details.
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
 
-
 #############################################################################
+# CRG MAPABILITY (2010-01-19, hartera, in progress)
+# Data was provided by Thomas Derrien (thomas.derrien.crg.es) from the Guigo 
+# lab at the Center for Genomic Regulation (CRG) in Barcelona. Data was
+# produced using their GEM mapper aligner taking sliding k-mers window of the
+# human genome that were mapped back onto the genome with up to 2mimatches.
+# For each window, a mappability score is computed S = 1/(nb of match_found)
+# and the BigWig index was created according to this score.
+    
+     mkdir -p /hive/data/genomes/hg18/bed/crgMapability
+     cd /hive/data/genomes/hg18/bed/crgMapability
+cat << 'EOF' > temp
+#!/bin/tcsh -ef
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome.hg18.main.mappability-36.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome.hg18.main.mappability-40.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome.hg18.main.mappability-50.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome.hg18.main.mappability-75.bw.bz2
+http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome.hg18.main.mappability-100.bw.bz2
+'EOF'
+
+     awk '{if ($0 ~ /#/) print; else print "wget --timestamping \"" $0 "\"";}' \
+         temp > download.csh
+     rm temp
+     chmod +x download.csh
+     ./download.csh >& download.log &
+     
+     # Add the data to /gbdb/ and load the file names into tables (2010-01-26)
+     cd /hive/data/genomes/hg18/bed/crgMapability
+     bunzip2 *.bz2
+
+     # Add data to gbdb
+     mkdir -p /gbdb/hg18/bbi/
+     # Symlink files with names as crgMapabilityAlignXmer.bw to /gbdb/hg18/bbi
+     # and load file name into a table - one per dataset. Each table 
+     # represents a subtrack.
+     foreach f (`ls *.bw`)
+        echo $f
+        set g=`echo $f | cut -d "-" -f2`
+        set num=`echo $g | cut -d "." -f1`
+        set mer=`echo "${num}mer"`
+        set nf=`echo "crgMapabilityAlign${mer}.bw"`
+        echo $nf
+        ln -s `pwd`/${f} /gbdb/hg18/bbi/${nf}
+        hgsql hg18 -e "drop table if exists crgMapabilityAlign${mer}; \
+     create table crgMapabilityAlign${mer} (fileName varchar(255) not null); \
+     insert into crgMapabilityAlign${mer} values ('/gbdb/hg18/bbi/${nf}');"
+     end
