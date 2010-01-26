@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.832 2010/01/26 18:28:01 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.833 2010/01/26 18:31:53 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6123,7 +6123,7 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=nucleolus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHepg2NucleolusTotal fileName=wgEncodeRikenCagePlusClustersHepg2NucleolusTotal.bedGraph4.gz
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHepg2NucleolusTotal fileName=wgEncodeRikenCagePlusClustersHepg2NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCageView3-MinusClusters
     shortLabel Minus Clusters
@@ -6304,7 +6304,7 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=nucleolus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHepg2NucleolusTotal fileName=wgEncodeRikenCageMinusClustersHepg2NucleolusTotal.bedGraph4.gz
+        metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHepg2NucleolusTotal fileName=wgEncodeRikenCageMinusClustersHepg2NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCageView5-Alignments
     shortLabel Alignments
