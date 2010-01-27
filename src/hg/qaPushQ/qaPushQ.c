@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.119 2010/01/27 01:35:32 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.120 2010/01/27 18:12:32 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1021,7 +1021,7 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLog target=\"_blank\">Relea
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityA>A</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityB>B</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityC>C</A>\n",newRandState);
-//printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityD>D</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityD>D</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityL>L</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
 //printf("&nbsp;newRandState=%s\n",newRandState);
