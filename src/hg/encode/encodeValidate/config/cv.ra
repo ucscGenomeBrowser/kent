@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.200 2010/01/26 22:04:14 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.201 2010/01/27 19:20:11 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3113,20 +3113,20 @@ tag MNase
 type control
 description Control signal from MNase digested DNA.
 
-term Mouse_IgG
-tag MUSIGG
+term IgG-mus
+tag IGGmus
 type control
 description Control signal from Normal Mouse IgG ChIP-seq.
+
+term IgG-rab
+tag IGGrab
+type control
+description Control signal from normal Rabbit IgG ChIP-seq.
 
 term Naked_DNA
 tag NakedDNA
 type control
 description Control signal from Naked DNA.
-
-term Rabbit_IgG
-tag RABIGG
-type control
-description Control signal from normal Rabbit IgG ChIP-seq.
 
 term Reference_Genome
 tag ReferenceGenome
