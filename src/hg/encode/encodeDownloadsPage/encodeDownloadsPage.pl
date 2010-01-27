@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.24 2010/01/22 17:31:41 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.25 2010/01/27 22:22:34 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -44,7 +44,7 @@ Creates an HTML page and README text file listing the downloads in the current d
 
 options:
     -help               Displays this usage info
-    -checksum           Generate checksum file 
+    -checksum           Generate checksum file
     -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
     -db=hg18            Use a database other than the default hg18 (For aquiring releaseDate and metadata from trackDb)
     -fileType=mask	    mask for file types included (default '*.gz')
@@ -358,7 +358,7 @@ for my $line (@fileList) {
     my %metaData;
 
     ### TODO: Developer: set sort order here; sortables must have same number of strings and '~' is lowest val printable
-    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","lab","type","view","level","annotation","replicate","subId");
+    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","replicate","subId");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my $typePrefix = "";
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
@@ -373,7 +373,7 @@ for my $line (@fileList) {
     if(!$results) {
         ### TODO: This needs to be replaced with a select from a fileDb table
         if(stat("fileDb.ra")) {
-            $results = `grep metadata fileDb.ra | grep '$fileName'`;
+            $results = `grep metadata fileDb.ra | grep '$fileName' | tail -1`;  # Always prefer the last line found
             chomp $results;
             $results =~ s/^ +//;
             $results =~ s/ +$//;
@@ -409,11 +409,18 @@ for my $line (@fileList) {
                 my @tags = @{$tagRef};
                 my @vals = @{$valRef};
                 my $tix = 0;
+                my $input = "";
                 while($tags[$tix]) {
                     if($tags[$tix] eq "dateUnrestricted") {
                         $releaseDate = $vals[$tix];
                     } elsif($tags[$tix] eq "dateSubmitted") {
                         $submitDate = $vals[$tix];
+                    } elsif($tags[$tix] eq "antibody" || $tags[$tix] eq "input") {
+                        if($input eq "") {
+                            $input = $vals[$tix];
+                        } elsif($input eq $vals[$tix]) {
+                            $input = "removeAntiBodyDup";
+                        }
                     }
                     $tix++;
                 }
@@ -423,6 +430,7 @@ for my $line (@fileList) {
                 }
                 my %remove; # Don't display these metadata values
                 $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
+                $remove{antibody} = 1 if($input eq "removeAntiBodyDup");  # remove antibody if input=antibody
                 ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
                 ( $tagRef, $valRef ) = metadataArraysMoveValuesToFront($tagRef, $valRef,\@sortFields);
                 @tags = @{$tagRef};
