@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.11 2010/01/25 05:47:07 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.12 2010/01/27 01:32:57 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -117,6 +117,8 @@ while (@row = $sth->fetchrow_array()) {
         $metadata{"grant"} = "unknown";
     }
     $experiment{"project"} = $metadata{"grant"};
+    # HACK:  to correct Wold lab (not grant)
+    $experiment{"project"} = "HudsonAlpha" if ($metadata{"grant"} eq "Wold");
     foreach my $lab (keys %labs) {
         die "no grant for $lab" unless defined($labs{$lab}->{"grant"});
         if ($labs{$lab}->{"grant"} eq $metadata{"grant"}) {
@@ -129,9 +131,9 @@ while (@row = $sth->fetchrow_array()) {
     $experiment{"lab"} =~ s/\(\w+\)//;
 
     # for now, force all Yale projects to be Yale lab (until metadata in projects table can match)
-    if ($metadata{"grant"} eq "Snyder") {
-        $experiment{"lab"} = "Yale";
-    }
+    #if ($metadata{"grant"} eq "Snyder") {
+        #$experiment{"lab"} = "Yale";
+    #}
     $experiment{"dataType"} = lc($metadata{"dataType"});
 
     $experiment{"cell"} = "none";
@@ -335,8 +337,8 @@ while (@row = $sth->fetchrow_array()) {
                             Encode::laterPipelineStatus($status, $experiment{"status"})) {
                         # need to set or change status
                         $experiment{"statusId"} = $id;
-                        if ($experiment{"status"} ne $status && 
-                                    $experiment{"status"} ne "unknown") {
+                        $experiment{"status"} = "unknown" if (!defined($experiment{"status"}));
+                        if ($experiment{"status"} ne $status) {
                             warn("STATUS change for KEY: " . $expKey . 
                                     " OLD: " . $experiment{"status"} . 
                                             " from ID: " . $experiment{"statusId"} . 
@@ -424,7 +426,10 @@ foreach my $key (keys %experiments) {
     # map dataType tag to term from cv.ra
     my $dataType = $experiment{"dataType"};
     if (defined($tags{"dataType"}{$dataType})) {
-        $experiment{"dataType"} = $tags{"dataType"}{$dataType}->{"term"};
+        $experiment{"dataType"} = 
+            (defined($tags{"dataType"}{$dataType}->{"label"})) ?
+                $tags{"dataType"}{$dataType}->{"label"} :
+                $tags{"dataType"}{$dataType}->{"term"};
     }
     # map lab to label in pi.ra
     my $lab = $experiment{"lab"};
