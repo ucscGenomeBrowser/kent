@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.52 2009/11/25 17:52:55 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.53 2010/01/27 21:04:04 galt Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -569,6 +569,25 @@ char ascii[32];
 sprintLongWithCommas(ascii, l);
 fprintf(f, "%s", ascii);
 }
+
+void sprintWithGreekByte(char *s, int slength, long long size)
+/* Numbers formatted with PB, TB, GB, MB, KB, B */
+{
+char *greek[] = {"B", "KB", "MB", "GB", "TB", "PB"};
+int i = 0;
+long long d = 1;
+while ((size/d) >= 1024)
+    {
+    ++i;
+    d *= 1024;
+    }
+double result = ((double)size)/d;
+if (result < 10)
+    safef(s,slength,"%3.1f %s",((double)size)/d, greek[i]);
+else
+    safef(s,slength,"%3.0f %s",((double)size)/d, greek[i]);
+}
+
 
 void shuffleArrayOfPointers(void *pointerArray, int arraySize, int shuffleCount)
 /* Shuffle array of pointers of given size given number of times. */

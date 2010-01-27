@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.120 2010/01/27 18:12:32 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.121 2010/01/27 21:03:41 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2457,25 +2457,6 @@ freez(&temp);
 }
 
 
-void mySprintWithGreekByte(char *s, int slength, long long size)
-/* Numbers formatted with PB, TB, GB, MB, KB, B */
-{
-char *greek[] = {"B", "KB", "MB", "GB", "TB", "PB"};
-int i = 0;
-long long d = 1;
-while ((size/d) >= 1024)
-    {
-    ++i;
-    d *= 1024;
-    }
-double result = ((double)size)/d;
-if (result < 10)
-    safef(s,slength,"%3.1f %s",((double)size)/d, greek[i]);
-else
-    safef(s,slength,"%3.0f %s",((double)size)/d, greek[i]);
-}
-
-
 
 long long pq_getTableSize(char *rhost, char *db, char *tbl, int *errCount)  /* added extension pq_ to supress name conflict in hdb.c */
 /* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
@@ -2973,7 +2954,7 @@ if (totalTable > 0)
     printf(" <br>\n");
     mySprintWithCommas(nicenumber, sizeof(nicenumber), totalTable);
     printf(" Total size of tables: %s ",nicenumber);
-    mySprintWithGreekByte(nicenumber, sizeof(nicenumber), totalTable);
+    sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalTable);
     printf("&nbsp; ( %s ) <br>\n",nicenumber);
     }
 
@@ -2982,7 +2963,7 @@ if (totalGbdb > 0)
     printf(" <br>\n");
     mySprintWithCommas(nicenumber, sizeof(nicenumber), totalGbdb);
     printf(" Total size of /gbdb/ files: %s ",nicenumber);
-    mySprintWithGreekByte(nicenumber, sizeof(nicenumber), totalGbdb);
+    sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalGbdb);
     printf("&nbsp; ( %s ) <br>\n",nicenumber);
     }
 
@@ -2991,14 +2972,14 @@ if (totalGoldenPath > 0)
     printf(" <br>\n");
     mySprintWithCommas(nicenumber, sizeof(nicenumber), totalGoldenPath);
     printf(" Total size of .../goldenPath/ files: %s ",nicenumber);
-    mySprintWithGreekByte(nicenumber, sizeof(nicenumber), totalGoldenPath);
+    sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalGoldenPath);
     printf("&nbsp; ( %s ) <br>\n",nicenumber);
     }
 
 printf(" <br>\n");
 mySprintWithCommas(nicenumber, sizeof(nicenumber), totalsize);
 printf(" Total size of all: %s ",nicenumber);
-mySprintWithGreekByte(nicenumber, sizeof(nicenumber), totalsize);
+sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalsize);
 printf("&nbsp; ( %s ) <br>\n",nicenumber);
 
 

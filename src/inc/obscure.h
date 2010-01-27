@@ -22,6 +22,9 @@ void sprintLongWithCommas(char *s, long long l);
 void printLongWithCommas(FILE *f, long long l);
 /* Print out a long number with commas a thousands, millions, etc. */
 
+void sprintWithGreekByte(char *s, int slength, long long size);
+/* Numbers formatted with PB, TB, GB, MB, KB, B */
+
 void writeGulp(char *file, char *buf, int size);
 /* Write out a bunch of memory. */
 
