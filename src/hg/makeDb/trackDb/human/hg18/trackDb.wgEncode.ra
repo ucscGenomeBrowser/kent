@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.836 2010/01/26 23:11:22 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.837 2010/01/27 00:48:26 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15092,7 +15092,7 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t2HUVEC=HUVEC t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uHEPG2pra=HepG2_<i>pravastatin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma ATF3=ATF3 BAF155=BAF155 BAF155mig=BAF155_(musIgG) BAF170mig=BAF170_(musIgG) BDP1=BDP1 BRF1=BRF1 BRF2=BRF2 BRG1mig=Brg1_(musIgG) CEBPB=CEBPB CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(rabIgG) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 ERRA=ERRA GATA1=GATA-1 GATA2=GATA-2 GRP20=GRp20 GTF2B=GTF2B HNF4A=HNF4A HSF1=HSF1 INI1mig=Ini1_(musIgG) JUND=JunD JUNDrig=JunD_(rabIgG) MAX=Max NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFKBmig=NFKB_(musIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) PGC1A=PGC1A POL2=Pol2 POL2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TF3C110=TFIIIC-110 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 ZZZ3=ZZZ3 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yIGGmus=IgG(mouse)_Control yIGGrab=IgG(rabbit)_Control yMNase=MNase_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
+subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma ATF3=ATF3 BAF155=BAF155 BAF155mig=BAF155_(musIgG) BAF170mig=BAF170_(musIgG) BDP1=BDP1 BRF1=BRF1 BRF2=BRF2 BRG1mig=Brg1_(musIgG) CEBPB=CEBPB CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(rabIgG) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 ERRA=ERRA GATA1=GATA-1 GATA2=GATA-2 GRP20=GRp20 GTF2B=GTF2B HNF4A=HNF4A HSF1=HSF1 INI1mig=Ini1_(musIgG) JUND=JunD JUNDrig=JunD_(rabIgG) MAX=Max NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFKBrig=NFKB_(rabIgG) NFYA=NF-YA NFYB=NF-YB NRF1mig=NRF1_(musIgG) PGC1A=PGC1A POL2=Pol2 POL2mig=Pol2_(musIgG) POL3=Pol3 RAD21=Rad21 RAD21rig=Rad21_(rabIgG) RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_MNase SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TF3C110=TFIIIC-110 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 ZZZ3=ZZZ3 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yIGGmus=IgG(mouse)_Control yIGGrab=IgG(rabbit)_Control yMNase=MNase_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -15792,9 +15792,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM10847 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM10847 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM10847
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM10847
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM10847 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="PeakSeq1.0 Data paired with GM10847_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=1050 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm10847NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm10847NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM10847 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="PeakSeq1.0 Data paired with GM10847_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=1050 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm10847NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm10847NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm10847Pol2Musigg
         release alpha
@@ -15810,10 +15810,10 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM12878 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t1GM12878
+        subGroups view=Peaks factor=NFKBrig cellType=t1GM12878
         type narrowPeak
         color 153,38,0
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="Generated using PeakSeq1.0  Data paired with GM12878_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=943 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm12878NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="Generated using PeakSeq1.0  Data paired with GM12878_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=943 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm12878NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm12878Pol2Musigg
         release alpha
@@ -15830,9 +15830,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12891 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM12891 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM12891
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM12891
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12891 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="PeakSeq1.0 Data paired with GM12891_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1051 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12891NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm12891NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12891 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="PeakSeq1.0 Data paired with GM12891_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1051 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12891NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm12891NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm12891Pol2Musigg
         release alpha
@@ -15848,9 +15848,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12892 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM12892 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM12892
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM12892
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12892 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM12892_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=941 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12892NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm12892NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12892 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM12892_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=941 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12892NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm12892NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm12892Pol2Musigg
         release alpha
@@ -15866,9 +15866,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM15510 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM15510 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM15510
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM15510
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM15510 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="PeakSeq1.0.  Data paired with GM15510_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1052 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm15510NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm15510NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM15510 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="PeakSeq1.0.  Data paired with GM15510_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1052 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm15510NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm15510NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm15510Pol2Musigg
         release alpha
@@ -15884,9 +15884,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18505 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM18505 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM18505
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM18505
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18505 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="Data generated with PeakSeq1.0  Data paired with GM18505_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=945 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm18505NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm18505NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18505 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="Data generated with PeakSeq1.0  Data paired with GM18505_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=945 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm18505NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm18505NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm18505Pol2Musigg
         release alpha
@@ -15902,9 +15902,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18526 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM18526 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM18526
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM18526
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18526 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM18526_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=942 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm18526NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm18526NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18526 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM18526_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=942 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm18526NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm18526NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm18526Pol2Musigg
         release alpha
@@ -15920,9 +15920,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18951 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM18951 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM18951
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM18951
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18951 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="PeakSeq1.0.  Data paired with GM18951_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1053 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm18951NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm18951NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18951 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="PeakSeq1.0.  Data paired with GM18951_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1053 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm18951NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm18951NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm18951Pol2Musigg
         release alpha
@@ -15938,9 +15938,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM19099 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM19099 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM19099
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM19099
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19099 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM19099_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=946 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm19099NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm19099NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19099 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM19099_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=946 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm19099NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm19099NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm19099Pol2Musigg
         release alpha
@@ -15956,9 +15956,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM19193 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG in GM19193 cells)
-        subGroups view=Peaks factor=NFKBmig cellType=t3GM19193
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM19193
         type narrowPeak
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19193 antibody=NFKB protocol=Mouse_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM19193_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=947 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm19193NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm19193NfkbMusigg.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19193 antibody=NFKB protocol=Rabbit_IgG view=Peaks labVersion="Generated with PeakSeq1.0  Data paired with GM19193_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=947 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm19193NfkbMusigg fileName=wgEncodeYaleChIPseqPeaksGm19193NfkbMusigg.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm19193Pol2Musigg
         release alpha
@@ -16213,11 +16213,11 @@ wgEncode 1
         release alpha
         subTrack wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 Rad21 Pk
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in GM12878 cells)
-        subGroups view=Peaks factor=RAD21 cellType=t1GM12878
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21/IgG in GM12878 cells)
+        subGroups view=Peaks factor=RAD21rig cellType=t1GM12878
         type narrowPeak
         color 153,38,0
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Rad21 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1076 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Rad21 fileName=wgEncodeYaleChIPseqPeaksGm12878Rad21.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Rad21 protocol=Rabbit_IgG view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1076 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Rad21 fileName=wgEncodeYaleChIPseqPeaksGm12878Rad21.narrowPeak.gz
 
         track wgEncodeYaleChIPseqPeaksGm12878Zzz3
         release alpha
@@ -17210,9 +17210,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM10847 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM10847
+        subGroups view=Signal factor=NFKBrig cellType=t3GM10847
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM10847 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="PeakSeq1.0 Data paired with GM10847_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=1050 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm10847NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm10847NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM10847 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="PeakSeq1.0 Data paired with GM10847_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=1050 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm10847NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm10847NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm10847Pol2Musigg
         release alpha
@@ -17238,10 +17238,10 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM12878 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t1GM12878
+        subGroups view=Signal factor=NFKBrig cellType=t1GM12878
         type bedGraph 4
         color 153,38,0
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="Generated using PeakSeq1.0  Data paired with GM12878_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=943 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm12878NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="Generated using PeakSeq1.0  Data paired with GM12878_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=943 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm12878NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm12878Pol2Musigg
         release alpha
@@ -17267,9 +17267,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM12891 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM12891
+        subGroups view=Signal factor=NFKBrig cellType=t3GM12891
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12891 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="PeakSeq1.0 Data paired with GM12891_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1051 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12891NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm12891NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12891 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="PeakSeq1.0 Data paired with GM12891_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1051 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12891NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm12891NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm12891Pol2Musigg
         release alpha
@@ -17294,9 +17294,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12892 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM12892 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM12892
+        subGroups view=Signal factor=NFKBrig cellType=t3GM12892
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12892 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM12892_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=941 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12892NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm12892NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12892 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM12892_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=941 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12892NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm12892NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm12892Pol2Musigg
         release alpha
@@ -17321,9 +17321,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM15510 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM15510 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM15510
+        subGroups view=Signal factor=NFKBrig cellType=t3GM15510
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM15510 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="PeakSeq1.0.  Data paired with GM15510_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1052 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm15510NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm15510NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM15510 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="PeakSeq1.0.  Data paired with GM15510_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1052 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm15510NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm15510NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm15510Pol2Musigg
         release alpha
@@ -17348,9 +17348,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18505 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM18505 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM18505
+        subGroups view=Signal factor=NFKBrig cellType=t3GM18505
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18505 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="Data generated with PeakSeq1.0  Data paired with GM18505_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=945 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18505NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm18505NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18505 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="Data generated with PeakSeq1.0  Data paired with GM18505_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=945 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18505NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm18505NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm18505Pol2Musigg
         release alpha
@@ -17375,9 +17375,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18526 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM18526 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM18526
+        subGroups view=Signal factor=NFKBrig cellType=t3GM18526
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18526 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM18526_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=942 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18526NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm18526NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18526 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM18526_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=942 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18526NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm18526NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm18526Pol2Musigg
         release alpha
@@ -17402,9 +17402,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18951 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM18951 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM18951
+        subGroups view=Signal factor=NFKBrig cellType=t3GM18951
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18951 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="PeakSeq1.0.  Data paired with GM18951_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1053 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18951NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm18951NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM18951 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="PeakSeq1.0.  Data paired with GM18951_IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=1053 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm18951NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm18951NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm18951Pol2Musigg
         release alpha
@@ -17429,9 +17429,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19099 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM19099 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM19099
+        subGroups view=Signal factor=NFKBrig cellType=t3GM19099
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19099 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM19099_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=946 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm19099NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm19099NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19099 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM19099_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=946 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm19099NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm19099NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm19099Pol2Musigg
         release alpha
@@ -17456,9 +17456,9 @@ wgEncode 1
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19193 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG in GM19193 cells)
-        subGroups view=Signal factor=NFKBmig cellType=t3GM19193
+        subGroups view=Signal factor=NFKBrig cellType=t3GM19193
         type bedGraph 4
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19193 antibody=NFKB protocol=Mouse_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM19193_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=947 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm19193NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm19193NfkbMusigg.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM19193 antibody=NFKB protocol=Rabbit_IgG view=Signal labVersion="Generated with PeakSeq1.0  Data paired with GM19193_IgG_Control" dataVersion="ENCODE Jan 2010 Freeze" subId=947 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm19193NfkbMusigg fileName=wgEncodeYaleChIPseqSignalGm19193NfkbMusigg.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm19193Pol2Musigg
         release alpha
@@ -17753,11 +17753,11 @@ wgEncode 1
         release alpha
         subTrack wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 Rad21 Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21 in GM12878 cells)
-        subGroups view=Signal factor=RAD21 cellType=t1GM12878
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21/IgG in GM12878 cells)
+        subGroups view=Signal factor=RAD21rig cellType=t1GM12878
         type bedGraph 4
         color 153,38,0
-        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Rad21 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1076 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Rad21 fileName=wgEncodeYaleChIPseqSignalGm12878Rad21.bedGraph4.gz
+        metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=GM12878 antibody=Rad21 protocol=Rabbit_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1076 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Rad21 fileName=wgEncodeYaleChIPseqSignalGm12878Rad21.bedGraph4.gz
 
         track wgEncodeYaleChIPseqSignalGm12878Zzz3
         release alpha
