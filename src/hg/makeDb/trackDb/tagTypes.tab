@@ -153,7 +153,7 @@ maxWindowToDraw bam rmsk bed
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
-minGrayLevel bed broadPeak
+minGrayLevel bed broadPeak narrowPeak
 minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
