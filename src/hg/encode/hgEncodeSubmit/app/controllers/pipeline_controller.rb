@@ -111,9 +111,12 @@ class PipelineController < ApplicationController
         @aheadOfYou = nil
       end
     end
+
+    @deadline = get_deadline
+
   rescue
-      redirect_to :action => 'show_user'
-      return
+    redirect_to :action => 'show_user'
+    return
   end
 
 
@@ -191,6 +194,7 @@ class PipelineController < ApplicationController
   def new
     @project = Project.new
     @projectTypes = getProjectTypes
+    @deadline = get_deadline
     #@projectTypesArray = @projectTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   

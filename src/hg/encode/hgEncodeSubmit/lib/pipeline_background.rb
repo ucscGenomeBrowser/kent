@@ -11,6 +11,13 @@ module PipelineBackground
     #return 5
   end
 
+  def get_deadline()
+    x = open("#{RAILS_ROOT}/config/deadline.yml") { |f| YAML.load(f.read) }
+    return Time.local(x["year"], x["month"], x["day"], x["hour"], x["minute"], 0)
+  rescue
+    return nil
+  end
+
   def yell(msg)
     # stupid simple logging:
     f = File.open(File.expand_path(File.dirname(__FILE__) + "/../log/yell.log"),"a")
