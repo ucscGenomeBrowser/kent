@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.840 2010/01/27 16:10:55 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.841 2010/01/27 19:16:28 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21993,7 +21993,7 @@ wgEncode 1
     subGroups cellType=H1hESC replicate=1
     type bed 9
     color 0,107,27
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H1-hESC protocol=PCR2x restrictionEnzyme=None treatment=None view=Regions replicate=1 softwareVersion=SL605 dataVersion="ENCODE Jan 2010 Freeze" subId=887 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc.bed9.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H1-hESC protocol=PCR1x restrictionEnzyme=None treatment=None view=Regions replicate=1 softwareVersion=SL605 dataVersion="ENCODE Jan 2010 Freeze" subId=887 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc.bed9.gz
 
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
@@ -22004,7 +22004,7 @@ wgEncode 1
     subGroups cellType=HeLaS3 replicate=2
     type bed 9
     color 0,119,158
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HeLa-S3 protocol=PCR2x restrictionEnzyme=None treatment=None view=Regions replicate=2 labVersion=SL603 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x.bed9.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HeLa-S3 protocol=PCR1x restrictionEnzyme=None treatment=None view=Regions replicate=2 labVersion=SL603 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
     release alpha
@@ -22014,7 +22014,7 @@ wgEncode 1
     subGroups cellType=HeLaS3 replicate=1
     type bed 9
     color 0,119,158
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HeLa-S3 protocol=PCR2x restrictionEnzyme=None treatment=None view=Regions replicate=1 labVersion=SL577 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x.bed9.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HeLa-S3 protocol=PCR1x restrictionEnzyme=None treatment=None view=Regions replicate=1 labVersion=SL577 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
     release alpha
@@ -22024,7 +22024,7 @@ wgEncode 1
     subGroups cellType=HepG2 replicate=2
     type bed 9
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HepG2 protocol=PCR2x restrictionEnzyme=None treatment=None view=Regions replicate=2 labVersion=SL579 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x.bed9.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HepG2 protocol=PCR1x restrictionEnzyme=None treatment=None view=Regions replicate=2 labVersion=SL579 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
     release alpha
@@ -22034,7 +22034,7 @@ wgEncode 1
     subGroups cellType=HepG2 replicate=1
     type bed 9
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HepG2 protocol=PCR2x restrictionEnzyme=None treatment=None view=Regions replicate=1 labVersion=SL578 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x.bed9.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HepG2 protocol=PCR1x restrictionEnzyme=None treatment=None view=Regions replicate=1 labVersion=SL578 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
     subTrack wgEncodeHudsonalphaMethylSeq off
