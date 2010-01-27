@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.254 2010/01/21 21:46:22 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.255 2010/01/27 21:44:12 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -109,9 +109,16 @@ if(metadata != NULL)
             printf("</td></tr>");
             }
         else
-            if(!sameString(metadata->tags[ix],"subId")
-                && !sameString(metadata->tags[ix],"composite"))
+            if(!sameString(metadata->tags[ix],"composite"))
+                {
+                if(sameString(metadata->tags[ix],"antibody"))
+                    {
+                    int ix2 = stringArrayIx("input",metadata->tags,metadata->count);
+                    if(ix2 != -1 && sameString(metadata->values[ix],metadata->values[ix2]))
+                        continue;
+                    }
 		printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
+                }
         }
     printf("</table>--></div>");
     metadataFree(&metadata);
@@ -3480,7 +3487,7 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Vertical viewing range:</th><td align=left>&nbsp;min:&nbsp;");
 snprintf(option, sizeof(option), "%s.%s", name, MIN_Y );
-cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);  
+cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
 snprintf(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
@@ -4753,7 +4760,7 @@ return NULL;
 
 static boolean compositeViewCfgExpandedByDefault(struct trackDb *parentTdb,char *view,
 	char **retVisibility)
-/* returns true if the view cfg is expanded by default.  Optionally allocates string of view 
+/* returns true if the view cfg is expanded by default.  Optionally allocates string of view
  * setting (eg 'dense') */
 {
 boolean expanded = FALSE;
@@ -4822,7 +4829,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
     if (view != NULL)
 	{
 	matchedSubtracks[ix] = view;
-	configurable[ix] = (char)cfgTypeFromTdb(view->subtracks, TRUE); 
+	configurable[ix] = (char)cfgTypeFromTdb(view->subtracks, TRUE);
 	if(configurable[ix] != cfgNone)
 	    {
 	    if(firstOpened == -1)
