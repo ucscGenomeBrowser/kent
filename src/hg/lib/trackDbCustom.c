@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.74 2010/01/26 20:55:28 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.75 2010/01/27 07:41:21 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -877,7 +877,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     char *superTrack = trackDbSetting(tdb, "superTrack");
     if (superTrack != NULL)
         {
-	if (sameWord(superTrack, "on"))
+	if (startsWithWord("on", superTrack))
 	    {
 	    tdb->next = NULL;
 	    }
