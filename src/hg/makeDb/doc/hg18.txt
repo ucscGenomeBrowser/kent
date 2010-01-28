@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.395 2010/01/26 19:39:35 hartera Exp $
+# $Id: hg18.txt,v 1.396 2010/01/28 23:48:44 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.395 2010/01/26 19:39:35 hartera Exp $
+# $Id: hg18.txt,v 1.396 2010/01/28 23:48:44 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29280,14 +29280,18 @@ see doc/builds.txt for specific details.
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
 
 #############################################################################
-# CRG MAPABILITY (2010-01-19, hartera, in progress)
-# Data was provided by Thomas Derrien (thomas.derrien.crg.es) from the Guigo 
-# lab at the Center for Genomic Regulation (CRG) in Barcelona. Data was
-# produced using their GEM mapper aligner taking sliding k-mers window of the
-# human genome that were mapped back onto the genome with up to 2mimatches.
-# For each window, a mappability score is computed S = 1/(nb of match_found)
-# and the BigWig index was created according to this score.
-    
+# CRG MAPABILITY (2010-01-19 - 2010-01-28, hartera, DONE)
+# Data was provided by Thomas Derrien (thomas.derrien.crg.es) and Paolo Ribeca
+# from the Guigo lab at the Center for Genomic Regulation (CRG) in Barcelona. 
+# Data was produced using their GEM mapper aligner taking sliding k-mers 
+# window of the human genome that were mapped back onto the genome with up 
+# to 2mismatches. For each window, a mappability score is computed 
+# S = 1/(nb of match_found) and the BigWig index was created according to 
+# this score.
+# 2010-01-26 Loaded tables and added data to /gbdb/
+# 2010-01-28 Changed the table names to have wgEncode prefix for consistency. 
+# Added trackDb entry for the subtracks to the ENCODE Mapability track entry.
+ 
      mkdir -p /hive/data/genomes/hg18/bed/crgMapability
      cd /hive/data/genomes/hg18/bed/crgMapability
 cat << 'EOF' > temp
@@ -29326,3 +29330,16 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
      create table crgMapabilityAlign${mer} (fileName varchar(255) not null); \
      insert into crgMapabilityAlign${mer} values ('/gbdb/hg18/bbi/${nf}');"
      end
+
+     # 2010-01-28. 
+     # Renamed the tables to have a wgEncode prefix for consistency. 
+     cd /hive/data/genomes/hg18/bed/crgMapability
+     hgsql -Ne 'show tables like "crg%";' hg18 > tables.txt
+     foreach t (`cat tables.txt`)
+        set g=`echo $t | sed -e 's/c/C/'`
+        hgsql -e "alter table ${t} rename enc${g};" hg19
+     end 
+     # Added a trackDb entry for this subtrack of the ENCODE Mapability 
+     # track in kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+     # use bigWigInfo to check min and max values. 
+
