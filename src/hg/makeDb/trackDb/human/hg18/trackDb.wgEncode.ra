@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.843 2010/01/28 01:25:39 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.844 2010/01/28 03:51:03 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5815,7 +5815,7 @@ wgEncode 1
         subGroups view=UUNIQ win=w15
         type wig 0.00 1.00
         color 46,0,184
-        metadata project=wgEncode grant=Dekker lab=UMass dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
+        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeMapabilityViewXR
     shortLabel Duke Excluded Regions
