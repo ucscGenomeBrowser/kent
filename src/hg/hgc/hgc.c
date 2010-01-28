@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1594 2010/01/23 18:54:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1595 2010/01/28 00:20:16 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2711,9 +2711,10 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 
 if (subChain == NULL)
     nullSubset = TRUE;
-else if (hDbIsActive(otherDb))
+else if (hDbIsActive(otherDb) && subChain != chain)
     {
-    struct gapCalc *gapCalc = gapCalcDefault();
+    char *linearGap = trackDbSettingOrDefault(tdb, "chainLinearGap", "loose");
+    struct gapCalc *gapCalc = gapCalcFromFile(linearGap);
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
     int qStart = subChain->qStart;
     int qEnd   = subChain->qEnd  ;
@@ -2750,8 +2751,10 @@ else if (hDbIsActive(otherDb))
     }
 chainFree(&toFree);
 
-printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
-       thisOrg, chain->tName, chain->tStart+1, chain->tEnd,
+printf("<B>%s position:</B> <A HREF=\"%s?%s&db=%s&position=%s:%d-%d\">%s:%d-%d</A>"
+       "  size: %d <BR>\n",
+       thisOrg, hgTracksName(), cartSidUrlString(cart), database,
+       chain->tName, chain->tStart+1, chain->tEnd, chain->tName, chain->tStart+1, chain->tEnd,
        chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
@@ -2777,9 +2780,11 @@ printf("<B>Score:</B> %1.0f\n", chain->score);
 
 if (nullSubset)
     printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
-else if (hDbIsActive(otherDb))
-    printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
+else if (hDbIsActive(otherDb) && subChain != chain)
+    printf("<B>&nbsp;&nbsp;Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
+else
+    printf("<BR>\n");
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
