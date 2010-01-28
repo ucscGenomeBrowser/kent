@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.847 2010/01/28 22:27:46 hartera Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.848 2010/01/28 22:59:45 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5841,7 +5841,7 @@ wgEncode 1
     windowingFunction mean
     maxHeightPixels 100:32:16
 
-        track crgMapabilityAlign36mer
+        track wgEncodeCrgMapabilityAlign36mer
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 36
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
@@ -5849,7 +5849,7 @@ wgEncode 1
         type bigWig 0.00 1.00
         color 120,0,0
 
-        track crgMapabilityAlign40mer
+        track wgEncodeCrgMapabilityAlign40mer
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 40
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
@@ -5857,7 +5857,7 @@ wgEncode 1
         type bigWig 0.00 1.00
         color 120,0,0
 
-        track crgMapabilityAlign50mer
+        track wgEncodeCrgMapabilityAlign50mer
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 50
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
@@ -5865,7 +5865,7 @@ wgEncode 1
         type bigWig 0.00 1.00
         color 120,0,0
 
-        track crgMapabilityAlign75mer
+        track wgEncodeCrgMapabilityAlign75mer
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 75
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
@@ -5873,7 +5873,7 @@ wgEncode 1
         type bigWig 0.00 1.00
         color 120,0,0
 
-        track crgMapabilityAlign100mer
+        track wgEncodeCrgMapabilityAlign100mer
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 100
         longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
