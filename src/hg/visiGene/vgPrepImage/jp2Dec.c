@@ -1,3 +1,5 @@
+#ifdef USE_JPG2000
+
 /****************************************************
 ** 
 ** FILE:   	jp2Dec.c  (derived from ecw jp2 sdk example4.c)
@@ -217,3 +219,28 @@ NCScbmCloseFileView(pNCSFileView);
 NCSecwShutdown();
 }
 
+
+
+#else
+
+#include <stdarg.h>
+#include "common.h"
+#include "errabort.h"
+
+void jp2DecInit(char *jp2Path, int *retWidth, int *retHeight)
+{
+errnoAbort("No jpg2000 libraries available: %s %d %d", jp2Path, *retWidth, *retHeight);
+}
+
+unsigned char *jp2ReadScanline()
+{
+errnoAbort("No jpg2000 libraries available.");
+return NULL;  // never gets here
+}
+
+void jp2Destroy()
+{
+errnoAbort("No jpg2000 libraries available.");
+}
+
+#endif

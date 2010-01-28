@@ -1,13 +1,18 @@
 
 include ../../../inc/common.mk
 
-ERMAPPER = /scratch/galt/ecw-jpeg/libecwj2-3.3
-XINC = -I${ERMAPPER}/Source/NCSBuildQmake -I${ERMAPPER}/Source/include -I/usr/include -I.
-ERLIBS  = -lpthread ${ERMAPPER}/lib/libecwj2.a /usr/lib64/libjpeg.a
+ifeq (${USE_JPG2000},1)
+    ERMAPPER = /scratch/galt/ecw-jpeg/libecwj2-3.3
+    XINC = -I${ERMAPPER}/Source/NCSBuildQmake -I${ERMAPPER}/Source/include -I/usr/include -I.
+    ERLIBS  = -lpthread ${ERMAPPER}/lib/libecwj2.a
+else
+    XINC = -I/usr/include -I.
+    ERLIBS  = -lpthread
+endif
 
 CFLAGS = -pipe -Wall -W -O2 -DLINUX -DUNICODE -D_REENTRANT -DPOSIX
 
-L += -lm
+L += -lm -ljpeg
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a ${ERLIBS}
 

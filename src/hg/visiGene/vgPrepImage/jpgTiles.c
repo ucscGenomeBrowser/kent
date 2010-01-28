@@ -224,7 +224,7 @@ int i,j,jj,jjj,r,R,G,B;
 UINT8 *p;
 int *tc, *tr;
 static int k=0,kk,rr,kkk;  /* these need to be initialized just once and kept */
-static boolean newH = TRUE;
+static int newH = TRUE; // boolean
 static int thcols[THUMBWIDTH*3];
 static int throws[THUMBWIDTH*3];
 static UINT8 thdata[THUMBWIDTH*3];
@@ -301,7 +301,7 @@ void jpgTiles(int nWidth, int nHeight,
     char *outThumbPath, 
     unsigned char *(*readScanline)(), 
     int *inQuality, 
-    boolean makeFullSize
+    int makeFullSize     // boolean
     )
 /* encode jpg tiles and thumbnail for given image, 
  * optionally create fullsize image too (e.g. when input is from jp2 source)

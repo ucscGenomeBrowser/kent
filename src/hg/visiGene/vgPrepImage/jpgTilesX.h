@@ -1,6 +1,6 @@
 /****************************************************
 ** 
-** FILE:   	jpgTiles.h  (uses libjpeg)
+** FILE:   	jpgTilesX.h 
 ** CREATED:	6th February 2006
 ** AUTHOR: 	Galt Barber
 **
@@ -21,39 +21,8 @@
 **
 *******************************************************/
 
-
-#include "jpeglib.h"
-
-#define TILESIZE 512
-
-#define THUMBWIDTH 200
-
-typedef struct 
-    {
-    char *outFile;
-    FILE * output_file;
-    struct jpeg_compress_struct cinfo;
-    struct jpeg_error_mgr jerr;
-    JDIMENSION num_scanlines;   // for now always 1
-    } jpegTile;
-
-typedef struct 
-    {
-    int level;       // 0 to 4
-    int toggle;      // alternates 0, 1 or FALSE, TRUE
-    int scanline;    // keep track
-    int imgWidth;    // will vary with zoom-level
-    int imgHeight;
-    int numTilesX;   // tiles per row
-    int numTilesY;   // tiles vertically
-    int hangX;  // leftover pixels e.g. width mod tileSize
-    int hangY;  //  note: hang is 1 to 512, not 0-511
-    int row;         // count from 0 to numTilesY-1
-    UINT16 *pAccum;  // accumulate pixels
-    UINT8 *pRGBTriplets;  // copy of condensed values averaged
-    jpegTile **tiles;  // tiles in current row of tiles
-    } levelInfo;
-
+// This is all that client needs to know to use it,
+// a minimal include reduces conflicts when including multiple external libraries
 
 void jpgTiles(int nWidth, int nHeight,
     char *outFullDir, 
