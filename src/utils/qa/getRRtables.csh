@@ -50,7 +50,7 @@ else
   endif 
 endif
 
-if (! -e $machpath1 ) then
+if (! -e "$machpath1" ) then
   echo
   echo "  $mach1 is not a valid machine"
   echo
