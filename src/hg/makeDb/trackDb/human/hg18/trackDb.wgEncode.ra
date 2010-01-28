@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.850 2010/01/28 23:41:30 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.851 2010/01/28 23:46:40 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5610,7 +5610,7 @@ shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
 group map
 subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
-subGroup2 win Sequence_Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp w40=40bp w50=50bp w75=75bp w100=100bp zNA=Varied
+subGroup2 win Sequence_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
 #dimensions dimensionX=win
 allButtonPair on
 sortOrder view=+ win=+
@@ -5634,7 +5634,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewALN
         shortLabel Broad Align 36
         longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
-        subGroups view=ALN win=w36
+        subGroups view=ALN win=w036
         type wig 0.00 1.00
         color 133,0,173
         metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
@@ -5655,7 +5655,7 @@ wgEncode 1
         shortLabel Duke Uniq 20
         longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
         type wig 0.00 1.00
-        subGroups view=DUNIQ win=w20
+        subGroups view=DUNIQ win=w020
         spanList 1
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
@@ -5665,7 +5665,7 @@ wgEncode 1
         shortLabel Duke Uniq 24
         longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
         type wig 0.00 1.00
-        subGroups view=DUNIQ win=w24
+        subGroups view=DUNIQ win=w024
         spanList 1
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
@@ -5675,7 +5675,7 @@ wgEncode 1
         shortLabel Duke Uniq 35
         longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
         type wig 0.00 1.00
-        subGroups view=DUNIQ win=w35
+        subGroups view=DUNIQ win=w035
         spanList 1
         color 153,38,0
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
@@ -5698,7 +5698,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewRUNIQ
         shortLabel Rosetta Uniq 35
         longLabel Mapability - Rosetta Uniqueness 35-mer Alignment (BWA/MAQ, unique alignment=37)
-        subGroups view=RUNIQ win=w35
+        subGroups view=RUNIQ win=w035
         #viewLimits 0:37
         #minLimit 0
         #maxLimit 37
@@ -5719,7 +5719,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewUUNIQ
         shortLabel Umass Uniq 15
         longLabel Mapability - ENCODE UMass Uniqueness at 15bp
-        subGroups view=UUNIQ win=w15
+        subGroups view=UUNIQ win=w015
         type wig 0.00 1.00
         color 46,0,184
         metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
@@ -5752,7 +5752,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 36
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w36
+        subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
         color 120,0,0
 
@@ -5760,7 +5760,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 40
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w40
+        subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
         color 120,0,0
 
@@ -5768,7 +5768,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 50
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w50
+        subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
         color 120,0,0
 
@@ -5776,7 +5776,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 75
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w75
+        subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
         color 120,0,0
 
