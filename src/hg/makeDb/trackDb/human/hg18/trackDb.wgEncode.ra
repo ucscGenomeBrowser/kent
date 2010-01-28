@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.848 2010/01/28 22:59:45 hartera Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.849 2010/01/28 23:25:17 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5702,7 +5702,7 @@ compositeTrack on
 shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
 group map
-subGroup1 view Mapability ALN=Broad_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions CRGMAP=CRG_Alignability
+subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
 subGroup2 win Sequence_Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp w40=40bp w50=50bp w75=75bp w100=100bp zNA=Varied
 #dimensions dimensionX=win
 allButtonPair on
