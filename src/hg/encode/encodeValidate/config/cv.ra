@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.201 2010/01/27 19:20:11 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.202 2010/01/28 01:00:17 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3322,9 +3322,17 @@ term Genes
 tag gencode
 type dataType
 
+# TODO: retire this ?
 term loRNA-seq
 tag longrnaseq
 type dataType
+label RNA-seq
+
+# TODO: retire this ?
+term RNA-seq-pA
+tag rnaseqpolya
+type dataType
+label RNA-seq
 
 term Mapability
 tag mapability
