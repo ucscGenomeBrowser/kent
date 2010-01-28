@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.846 2010/01/28 18:31:47 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.847 2010/01/28 22:27:46 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5702,8 +5702,8 @@ compositeTrack on
 shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
 group map
-subGroup1 view Mapability ALN=Broad_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
-subGroup2 win Sequence_Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp zNA=Varied
+subGroup1 view Mapability ALN=Broad_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions CRGMAP=CRG_Alignability
+subGroup2 win Sequence_Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp w40=40bp w50=50bp w75=75bp w100=100bp zNA=Varied
 #dimensions dimensionX=win
 allButtonPair on
 sortOrder view=+ win=+
@@ -5830,6 +5830,56 @@ wgEncode 1
         type bed 6
         noScoreFilter on
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+
+    track wgEncodeMapabilityViewCRGMAP
+    shortLabel CRG GEM Alignability
+    view CRGMAP
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track crgMapabilityAlign36mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 36
+        longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w36
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track crgMapabilityAlign40mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 40
+        longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w40
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track crgMapabilityAlign50mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 50
+        longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w50
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track crgMapabilityAlign75mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 75
+        longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w75
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track crgMapabilityAlign100mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 100
+        longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w100
+        type bigWig 0.00 1.00
+        color 120,0,0
 
 # NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 
