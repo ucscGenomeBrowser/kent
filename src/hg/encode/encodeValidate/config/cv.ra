@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.202 2010/01/28 01:00:17 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.203 2010/01/29 17:51:41 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -134,7 +134,7 @@ term NHEK
 tag NHEK
 type Cell Line
 organism Human
-description Normal Human Epidermal Keratinocyte
+description Normal Human Epidermal Keratinocytes
 vendorName Lonza
 vendorId CC-2501
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10&cpgnum=1)/.do
@@ -181,7 +181,7 @@ protocol A549_protocol.pdf
 term AG04449
 tag AG04449
 type Cell Line
-description Fetal Buttock/Thigh Fibroblast
+description Fetal buttock/thigh fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
@@ -191,7 +191,7 @@ protocol AG04449_Stam_protocol.pdf
 term AG04450
 tag AG04450
 type Cell Line
-description Fetal Lung Fibroblast
+description Fetal lung fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
@@ -201,7 +201,7 @@ protocol AG04450_Stam_protocol.pdf
 term AG09309
 tag AG09309
 type Cell Line
-description Adult Toe Fibroblast
+description Adult human toe fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
@@ -211,7 +211,7 @@ protocol AG09309_Stam_protocol.pdf
 term AG09319
 tag AG09319
 type Cell Line
-description Adult Toe Fibroblast
+description Adult human gum tissue fibroblasts
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
@@ -221,7 +221,7 @@ protocol AG09319_Stam_protocol.pdf
 term AG10803
 tag AG10803
 type Cell Line
-description Adult Abdomen Fibroblast
+description Adult human abdominal skin fibroblasts
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
@@ -787,7 +787,7 @@ protocol BG02ES_and_H9ES_Myers_protocols.pdf
 term HAEpiC
 tag HAE
 type Cell Line
-description Human amniotic epithelial cells
+description Human Amniotic Epithelial Cells
 vendorName ScienCell
 vendorId 7100
 orderUrl http://www.sciencellonline.com/site/products/7100.php
@@ -855,7 +855,7 @@ protocol HCT-116_protocol.pdf
 term HEEpiC
 tag HEE
 type Cell Line
-description Human esophageal epithelial cells
+description Human Esophageal Epithelial Cells
 vendorName ScienCell
 vendorId 2700
 orderUrl http://www.sciencellonline.com/site/products/2700.php
@@ -916,7 +916,7 @@ term HGF
 tag HGF
 type Cell Line
 organism Human
-description Human gingaval fibroblast
+description Human Gingival Fibroblasts
 vendorName ScienCell
 vendorId 2620
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
@@ -930,7 +930,7 @@ protocol HGF_Stam_protocol.pdf
 term HIPEpiC
 tag HIPE
 type Cell Line
-description Human iris pigment epithelial cells
+description Human Iris Pigment Epithelial Cells
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/products/6560.php
@@ -970,7 +970,7 @@ protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.p
 term HNPCEpiC
 tag HNPCE
 type Cell Line
-description Human Non-pigment Ciliary Epithelial Cells
+description Human Non-Pigment Ciliary Epithelial Cells
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/products/6580.php
@@ -981,7 +981,7 @@ term HRCEpiC
 tag HRCE
 type Cell Line
 organism Human
-description Human renal cortical epithelial cells
+description Human Renal Cortical Epithelial cells (normal)
 vendorName ScienCell
 vendorId #4110
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_32&products_id=44
@@ -996,7 +996,7 @@ term HRE
 tag HRE
 type Cell Line
 organism Human
-description Human renal epithelial cells
+description Human Renal Epithelial cells (normal)
 vendorName Lonza
 vendorId CC-2556
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA20FB87F582F18C7C001A4B525E10&cpgnum=1)/.do
@@ -1010,7 +1010,7 @@ protocol HRE_Stam_protocol.pdf
 term HRPEpiC
 tag HRPE
 type Cell Line
-description Human retinal pigment epithelial cells
+description Human Retinal Pigment Epithelial Cells
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/products/6540.php
@@ -1356,7 +1356,7 @@ term SAEC
 tag SAEC
 type Cell Line
 organism Human
-description Small airway epithelial cells
+description Small Airway Epithelial Cells
 vendorName Lonza
 vendorId CC-2547
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA173DD30B73F18C7C001A4B525E10&cpgnum=1)/.do
@@ -1402,7 +1402,7 @@ term SKMC
 tag SKMC
 type Cell Line
 organism Human
-description Human skeletal muscle cells
+description Human Skeletal Muscle Cells
 vendorName Lonza
 vendorId CC-2561
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA21A59CABF8F18C7C001A4B525E10&cpgnum=1)/.do
@@ -3101,7 +3101,12 @@ description This data represents a control being compared with the other tracks 
 term Input
 tag Input
 type control
-description Control raw signal which may be subtracted from experimental raw signal before peaks are called.
+description Control signal which may be subtracted from experimental raw signal before peaks are called.
+
+term UCDavis
+tag UCD
+type control
+description Control signal (specific to UC Davis) which may be subtracted from experimental raw signal before peaks are called.
 
 term Large_Fragment
 tag LargeFragment
