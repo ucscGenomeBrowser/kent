@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.853 2010/01/29 23:10:13 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.854 2010/01/29 23:19:12 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -10807,7 +10807,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=GM12878 view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=296 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Gm12878 fileName=wgEncodeUwDnaseSeqPeaksRep2Gm12878.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1H1es
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel H1-hESC Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in H1-hESC cells)
@@ -10853,7 +10852,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HepG2 view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=111 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Hepg2 fileName=wgEncodeUwDnaseSeqPeaksRep2Hepg2.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Hgf
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HGF Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in HGF cells)
@@ -10862,7 +10860,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=735 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Hgf fileName=wgEncodeUwDnaseSeqPeaksRep1Hgf.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep2Hgf
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HGF Pk 2
         longLabel ENCODE UW Digital DNaseI Peaks Rep 2 - FDR 0.5% (in HGF cells)
@@ -10871,7 +10868,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=736 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Hgf fileName=wgEncodeUwDnaseSeqPeaksRep2Hgf.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Hl60V2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HL-60 Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in HL-60 cells)
@@ -10889,7 +10885,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HL-60 view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=311 dateSubmitted=2009-04-29 dateUnrestricted=2010-01-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Hl60 fileName=wgEncodeUwDnaseSeqPeaksRep1Hl60.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep2Hl60
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HL-60 Pk 2
         longLabel ENCODE UW Digital DNaseI Peaks Rep 2 - FDR 0.5% (in HL-60 cells)
@@ -10898,7 +10893,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HL-60 view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=507 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Hl60 fileName=wgEncodeUwDnaseSeqPeaksRep2Hl60.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Hmec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HMEC Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in HMEC cells)
@@ -10948,7 +10942,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HUVEC view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=297 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Huvec fileName=wgEncodeUwDnaseSeqPeaksRep1Huvec.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Jurkat
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Jurkat Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in Jurkat cells)
@@ -10975,7 +10968,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=106 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2K562 fileName=wgEncodeUwDnaseSeqPeaksRep2K562.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Mcf7
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel MCF-7 Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in MCF-7 cells)
@@ -10984,7 +10976,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=MCF-7 view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=592 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Mcf7 fileName=wgEncodeUwDnaseSeqPeaksRep1Mcf7.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Nb4
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NB4 Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in NB4 cells)
@@ -10994,7 +10985,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=NB4 view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=509 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Nb4 fileName=wgEncodeUwDnaseSeqPeaksRep1Nb4.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Nhek
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHEK Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in NHEK cells)
@@ -11004,7 +10994,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=NHEK view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=510 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Nhek fileName=wgEncodeUwDnaseSeqPeaksRep1Nhek.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Panc1
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel PANC-1 Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in PANC-1 cells)
@@ -11013,7 +11002,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=PANC-1 view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=512 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Panc1 fileName=wgEncodeUwDnaseSeqPeaksRep1Panc1.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep2Panc1
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel PANC-1 Pk 2
         longLabel ENCODE UW Digital DNaseI Peaks Rep 2 - FDR 0.5% (in PANC-1 cells)
@@ -11022,7 +11010,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=PANC-1 view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=511 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Panc1 fileName=wgEncodeUwDnaseSeqPeaksRep2Panc1.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Saec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SAEC Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in SAEC cells)
@@ -11031,7 +11018,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SAEC view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=514 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Saec fileName=wgEncodeUwDnaseSeqPeaksRep1Saec.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep2Saec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SAEC Pk 2
         longLabel ENCODE UW Digital DNaseI Peaks Rep 2 - FDR 0.5% (in SAEC cells)
@@ -11040,7 +11026,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SAEC view=Peaks replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=513 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Saec fileName=wgEncodeUwDnaseSeqPeaksRep2Saec.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1SkmcV2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SKMC Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks Rep 1 - FDR 0.5% (in SKMC cells)
@@ -11059,7 +11044,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SKMC view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=313 dateSubmitted=2009-04-29 dateUnrestricted=2010-01-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Skmc fileName=wgEncodeUwDnaseSeqPeaksRep1Skmc.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep2Skmc
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SKMC Pk 2
         longLabel ENCODE UW Digital DNaseI Peaks Rep 2 - FDR 0.5% (in SKMC cells)
@@ -11076,7 +11060,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Peaks replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE July 2009 Freeze" subId=50 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Sknshra fileName=wgEncodeUwDnaseSeqPeaksRep1Sknshra.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep2SknshraV2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SK-N-SH_RA Pk 2
         longLabel ENCODE UW Digital DNaseI Peaks Rep 2 - FDR 0.5% (in SK-N-SH_RA cells)
@@ -11537,7 +11520,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=GM12878 view=Hotspots replicate=2 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=296 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Gm12878 fileName=wgEncodeUwDnaseSeqHotspotsRep2Gm12878.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1H1es
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel H1-hESC 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in H1-hESC cells)
@@ -11583,7 +11565,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HepG2 view=Hotspots replicate=2 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=111 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Hepg2 fileName=wgEncodeUwDnaseSeqHotspotsRep2Hepg2.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Hgf
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HGF Hspot 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in HGF cells)
@@ -11592,7 +11573,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=735 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Hgf fileName=wgEncodeUwDnaseSeqHotspotsRep1Hgf.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep2Hgf
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HGF Hspot 2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in HGF cells)
@@ -11601,7 +11581,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=736 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Hgf fileName=wgEncodeUwDnaseSeqHotspotsRep2Hgf.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Hl60V2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HL-60 Hspot 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in HL-60 cells)
@@ -11619,7 +11598,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HL-60 view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=311 dateSubmitted=2009-04-29 dateUnrestricted=2010-01-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Hl60 fileName=wgEncodeUwDnaseSeqHotspotsRep1Hl60.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep2Hl60
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HL-60 2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in HL-60 cells)
@@ -11628,7 +11606,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HL-60 view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=507 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Hl60 fileName=wgEncodeUwDnaseSeqHotspotsRep2Hl60.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Hmec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HMEC Hspot 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in HMEC cells)
@@ -11678,7 +11655,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HUVEC view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=297 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Huvec fileName=wgEncodeUwDnaseSeqHotspotsRep1Huvec.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Jurkat
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Jurkat Hspot 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in Jurkat cells)
@@ -11705,7 +11681,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=Hotspots replicate=2 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=106 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2K562 fileName=wgEncodeUwDnaseSeqHotspotsRep2K562.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Mcf7
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel MCF-7 Hspot 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in MCF-7 cells)
@@ -11714,7 +11689,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=MCF-7 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=592 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Mcf7 fileName=wgEncodeUwDnaseSeqHotspotsRep1Mcf7.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Nb4
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NB4 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in NB4 cells)
@@ -11724,7 +11698,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=NB4 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=509 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Nb4 fileName=wgEncodeUwDnaseSeqHotspotsRep1Nb4.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Nhek
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHEK 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in NHEK cells)
@@ -11734,7 +11707,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=NHEK view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=510 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Nhek fileName=wgEncodeUwDnaseSeqHotspotsRep1Nhek.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Panc1
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel PANC-1 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in PANC-1 cells)
@@ -11743,7 +11715,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=PANC-1 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=512 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Panc1 fileName=wgEncodeUwDnaseSeqHotspotsRep1Panc1.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep2Panc1
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel PANC-1 2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in PANC-1 cells)
@@ -11752,7 +11723,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=PANC-1 view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=511 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Panc1 fileName=wgEncodeUwDnaseSeqHotspotsRep2Panc1.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Saec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SAEC 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in SAEC cells)
@@ -11761,7 +11731,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SAEC view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=514 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Saec fileName=wgEncodeUwDnaseSeqHotspotsRep1Saec.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep2Saec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SAEC 2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in SAEC cells)
@@ -11770,7 +11739,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SAEC view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=513 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Saec fileName=wgEncodeUwDnaseSeqHotspotsRep2Saec.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1SkmcV2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SKMC Hspot 1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in SKMC cells)
@@ -11789,7 +11757,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SKMC view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=313 dateSubmitted=2009-04-29 dateUnrestricted=2010-01-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Skmc fileName=wgEncodeUwDnaseSeqHotspotsRep1Skmc.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep2Skmc
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SKMC Hspot 2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in SKMC cells)
@@ -11806,7 +11773,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=50 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Sknshra fileName=wgEncodeUwDnaseSeqHotspotsRep1Sknshra.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep2SknshraV2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SK-N-SH_RA Hspot 2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in SK-N-SH_RA cells)
@@ -12269,7 +12235,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=GM12878 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=296 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Gm12878 fileName=wgEncodeUwDnaseSeqRawSignalRep2Gm12878.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1H1es
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel H1-hESC Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in H1-hESC cells)
@@ -12315,7 +12280,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HepG2 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=111 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Hepg2 fileName=wgEncodeUwDnaseSeqRawSignalRep2Hepg2.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Hgf
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HGF Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in HGF cells)
@@ -12324,7 +12288,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=735 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Hgf fileName=wgEncodeUwDnaseSeqRawSignalRep1Hgf.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep2Hgf
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HGF Raw 2
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 2 (in HGF cells)
@@ -12333,7 +12296,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=736 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Hgf fileName=wgEncodeUwDnaseSeqRawSignalRep2Hgf.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Hl60V2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HL-60 Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in HL-60 cells)
@@ -12351,7 +12313,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HL-60 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=311 dateSubmitted=2009-04-29 dateUnrestricted=2010-01-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Hl60 fileName=wgEncodeUwDnaseSeqRawSignalRep1Hl60.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep2Hl60
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HL-60 Raw 2
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 2 (in HL-60 cells)
@@ -12360,7 +12321,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HL-60 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=507 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Hl60 fileName=wgEncodeUwDnaseSeqRawSignalRep2Hl60.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Hmec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HMEC Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in HMEC cells)
@@ -12410,7 +12370,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HUVEC view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=297 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Huvec fileName=wgEncodeUwDnaseSeqRawSignalRep1Huvec.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Jurkat
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Jurkat Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in Jurkat cells)
@@ -12437,7 +12396,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=106 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2K562 fileName=wgEncodeUwDnaseSeqRawSignalRep2K562.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Mcf7
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel MCF-7 Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in MCF-7 cells)
@@ -12446,7 +12404,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=MCF-7 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=592 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Mcf7 fileName=wgEncodeUwDnaseSeqRawSignalRep1Mcf7.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Nb4
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NB4 Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in NB4 cells)
@@ -12456,7 +12413,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=NB4 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=509 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Nb4 fileName=wgEncodeUwDnaseSeqRawSignalRep1Nb4.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Nhek
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHEK Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in NHEK cells)
@@ -12466,7 +12422,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=NHEK view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=510 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Nhek fileName=wgEncodeUwDnaseSeqRawSignalRep1Nhek.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Panc1
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel PANC-1 Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in PANC-1 cells)
@@ -12475,7 +12430,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=PANC-1 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=512 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Panc1 fileName=wgEncodeUwDnaseSeqRawSignalRep1Panc1.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep2Panc1
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel PANC-1 Raw 2
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 2 (in PANC-1 cells)
@@ -12484,7 +12438,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=PANC-1 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=511 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Panc1 fileName=wgEncodeUwDnaseSeqRawSignalRep2Panc1.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Saec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SAEC Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in SAEC cells)
@@ -12493,7 +12446,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SAEC view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=514 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Saec fileName=wgEncodeUwDnaseSeqRawSignalRep1Saec.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep2Saec
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SAEC Raw 2
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 2 (in SAEC cells)
@@ -12502,7 +12454,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SAEC view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=513 dateSubmitted=2009-09-19 dateUnrestricted=2010-06-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Saec fileName=wgEncodeUwDnaseSeqRawSignalRep2Saec.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1SkmcV2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SKMC Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 1 (in SKMC cells)
@@ -12521,7 +12472,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SKMC view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=313 dateSubmitted=2009-04-29 dateUnrestricted=2010-01-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Skmc fileName=wgEncodeUwDnaseSeqRawSignalRep1Skmc.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep2Skmc
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SKMC Raw 2
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 2 (in SKMC cells)
@@ -12538,7 +12488,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=50 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Sknshra fileName=wgEncodeUwDnaseSeqRawSignalRep1Sknshra.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
-        release alpha
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SK-N-SH_RA Raw 2
         longLabel ENCODE UW Digital DNaseI Raw Signal Rep 2 (in SK-N-SH_RA cells)
