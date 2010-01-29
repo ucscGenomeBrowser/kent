@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.114 2010/01/20 17:45:58 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.115 2010/01/29 21:49:46 galt Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -2029,9 +2029,25 @@ char *line = NULL;
 struct hash *chromHash = newHash(8);
 float prio = 0.0;
 struct sqlConnection *ctConn = NULL;
+char *ctConnErrMsg = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
-    ctConn = hAllocConn(CUSTOM_TRASH);
+    {
+    /* protect against temporarily offline CT trash server */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+	ctConn = hAllocConn(CUSTOM_TRASH);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+	ctConnErrMsg = cloneString(errCatch->message->string);
+        }
+    errCatchFree(&errCatch);
+    /* warnings from here are not visible to user because of higher-level catching
+     * if we want to make the warning visible, have to extend behavior of customTrack.c */
+    }
 
 struct lineFile *lf = customLineFile(text, isFile);
 
@@ -2086,8 +2102,10 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* Database tracks already mostly loaded, just check that table 
      * still exists (they are removed when not accessed for a while). */
         {
-	if (!ctConn || !ctDbTableExists(ctConn, track->dbTableName))
+	if (ctConn && !ctDbTableExists(ctConn, track->dbTableName))
 	    continue;
+	if (!ctConn && ctConnErrMsg) 
+	    track->networkErrMsg = ctConnErrMsg;
 	if ( startsWith("maf", track->tdb->type))
 	    {
 	    struct hash *settings = track->tdb->settingsHash;
