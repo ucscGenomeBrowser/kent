@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.852 2010/01/29 17:30:04 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.853 2010/01/29 23:10:13 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21916,7 +21916,7 @@ wgEncode 1
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75 rnaExtract=longPolyA
         type bed 12
         color 153,38,0
-        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=0-cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=870 dateSubmitted=2010-01-04 dateUnrestricted=2010-10-04 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75.bed12.gz
+        metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75 mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=870 dateSubmitted=2010-01-04 dateUnrestricted=2010-10-04 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75
         release alpha
