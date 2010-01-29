@@ -99,7 +99,9 @@ echo
 # find the trackDb.ra entry (using tdbQuery)
 
 echo " * trackDb:"
-tdbQuery "select track,priority,visibility,filePos from $db" \
- | grep -w -A3 "$tableName"
+tdbQuery -alpha "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"
+tdbQuery "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"
 
 exit 0
