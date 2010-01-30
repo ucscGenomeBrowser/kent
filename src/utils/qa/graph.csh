@@ -41,7 +41,11 @@ endif
 # clean out blank lines
 cat $file | egrep "." > Xfile$$
 set max=`cat $file | grep "." | awk '{print $2}' | sort -nr | head -1`
-set binsize=`echo $max $width | awk '{printf("%3.0f", $1/$2)}'`
+if ( $width > $max ) then
+  set binsize=1
+else
+  set binsize=`echo $max $width | awk '{printf("%3.0f", $1/$2)}'`
+endif
 
 # find  width of first col for pretty output
 foreach item ( `cat Xfile$$ | awk '{print $1}'` )
