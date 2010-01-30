@@ -22,10 +22,9 @@ Options:
   -selectCoordCols=spec - selectFile is tab-separate with coordinates
        as described by spec, which is one of:
             o chromCol - chrom in this column followed by start and end.
-            o chromCol,startCol,endCol - chrom, start, and end in specified
-              columns.
-            o chromCol,startCol,endCol,strandCol - chrom, start, end, and
-              strand in specified columns.
+            o chromCol,startCol,endCol,strandCol,name - chrom, start, end, and
+              strand in specified columns. Columns can be omitted from the end
+              or left empty to not specify.
           NOTE: column numbers are zero-based
   -selectCds - Use only CDS in the selectFile
   -selectRange - Use entire range instead of blocks from records in

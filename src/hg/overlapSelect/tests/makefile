@@ -228,7 +228,7 @@ exludeself_nonover_mrna2: mkout
 ###
 # select by column tests
 ###
-columnSelectTests: colSelect colExclude colSelectStrand
+columnSelectTests: colSelect colExclude colSelectStrand colStats
 
 # select by column
 colSelect: mkout
@@ -245,6 +245,12 @@ colExclude: mkout
 # select by column, including strand
 colSelectStrand: mkout
 	${OVERSEL} -strand -selectCoordCols=1,2,3,4 -inCoordCols=3,4,5,6 \
+	    input/gene.select input/gene.clusters output/$@.cluster
+	${DIFF} expected/$@.cluster output/$@.cluster
+
+# stats output, by column, including name, ignoring strand
+colStats: mkout
+	${OVERSEL} -statsOutput -selectCoordCols=1,2,3,,0 -inCoordCols=3,4,5,,2 \
 	    input/gene.select input/gene.clusters output/$@.cluster
 	${DIFF} expected/$@.cluster output/$@.cluster
 

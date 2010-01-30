@@ -1,0 +1,5 @@
+#inId	selectId	inOverlap	selectOverlap	overBases	similarity	inBases	selectBases
+NM_153254	gene1	1	1	6165	1	6165	6165
+NM_002978	gene3	1	1	9834	1	9834	9834
+NM_198466	gene7part	0.00561	0.467	42	0.0111	7492	90
+NM_018188	gene9	1	1	22513	1	22513	22513

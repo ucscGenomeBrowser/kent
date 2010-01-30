@@ -11,7 +11,7 @@
 #include "coordCols.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chromAnn.c,v 1.15 2009/07/31 18:09:23 markd Exp $";
+static char const rcsid[] = "$Id: chromAnn.c,v 1.16 2010/01/30 01:13:59 markd Exp $";
 
 static struct chromAnnBlk* chromAnnBlkNew(struct chromAnn *ca, int start, int end)
 /* create new block object and add to chromAnn object */
@@ -510,9 +510,10 @@ rowReaderExpectAtLeast(catr->rr, catr->cols.minNumCols);
 char **rawCols = (car->opts & chromAnnSaveLines) ? rowReaderCloneColumns(catr->rr) : NULL;
 struct coordColVals colVals = coordColParseRow(&catr->cols, catr->rr);
 
-struct chromAnn *ca = chromAnnNew(colVals.chrom, colVals.strand, NULL, rawCols,
+struct chromAnn *ca = chromAnnNew(colVals.chrom, colVals.strand, colVals.name, rawCols,
                                   strVectorWrite, strVectorFree);
 chromAnnBlkNew(ca, colVals.start, colVals.end);
+coordColsValsRelease(&colVals);
 return ca;
 }
 
