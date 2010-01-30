@@ -30,6 +30,16 @@ writeOne(f, sum->sumData);
 writeOne(f, sum->sumSquares);
 }
 
+static int bbiChromInfoCmp(const void *va, const void *vb)
+/* Sort bbiChromInfo.  Unlike most of our sorts this is single rather
+ * than double indirect. */
+{
+const struct bbiChromInfo *a = (const struct bbiChromInfo *)va;
+const struct bbiChromInfo *b = (const struct bbiChromInfo *)vb;
+return strcmp(a->name, b->name);
+}
+
+
 void bbiWriteChromInfo(struct bbiChromUsage *usageList, int blockSize, FILE *f)
 /* Write out information on chromosomes to file. */
 {
@@ -51,6 +61,9 @@ for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
     chromInfoArray[i].id = usage->id;
     chromInfoArray[i].size = usage->size;
     }
+
+/* Sort so the b-Tree actually works. */
+qsort(chromInfoArray, chromCount, sizeof(chromInfoArray[0]), bbiChromInfoCmp);
 
 /* Write chromosome bPlusTree */
 int chromBlockSize = min(blockSize, chromCount);
