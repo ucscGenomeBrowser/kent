@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.63 2010/01/19 04:24:16 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.64 2010/01/30 01:13:44 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -62,9 +62,6 @@ priority 259.1
 track netHg17 override
 shortLabel $o_db Net
 priority 259.2
-
-track chainGalGal2 override
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainSelf
 shortLabel Self Chain 
