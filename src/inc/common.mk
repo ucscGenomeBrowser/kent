@@ -132,6 +132,9 @@ endif
 LOWELAB_DEFS=${LOWELAB_DEF} ${LOWELAB_WIKI_DEF}
 
 ifdef LOWELAB
+    ifeq (${SCRIPTS},/cluster/bin/scripts)
+        SCRIPTS=${HOME}/scripts
+    endif
     ifeq (${CGI_BIN},/usr/local/apache/cgi-bin)
         CGI_BIN=/www/cgi-bin
     endif
