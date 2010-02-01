@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.70 2010/02/01 07:08:25 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.71 2010/02/01 07:34:30 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -352,18 +352,6 @@ searchType psl
 shortCircuit 1
 termRegex [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
-
-track chainXenTro2 override
-priority 170
-
-track netXenTro2 override
-priority 170.1
-
-track chainBosTau4 override
-priority 229
-
-track netBosTau4 override
-priority 229.1
 
 # guinea pig
 track chainCavPor3 override
