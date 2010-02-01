@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.12 2010/01/27 01:32:57 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.13 2010/02/01 02:36:31 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -97,8 +97,9 @@ my $sth = $dbh->execute(
         "select settings, tableName from trackDb_encodeReport where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-        "Project", "Lab", "Data_Type", "Cell_Type", "Experiment_Parameters",
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+        "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
+        "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs");
@@ -118,11 +119,13 @@ while (@row = $sth->fetchrow_array()) {
     }
     $experiment{"project"} = $metadata{"grant"};
     # HACK:  to correct Wold lab (not grant)
-    $experiment{"project"} = "HudsonAlpha" if ($metadata{"grant"} eq "Wold");
+    #$experiment{"project"} = "HudsonAlpha" if ($metadata{"grant"} eq "Wold");
     foreach my $lab (keys %labs) {
         die "no grant for $lab" unless defined($labs{$lab}->{"grant"});
         if ($labs{$lab}->{"grant"} eq $metadata{"grant"}) {
             $experiment{"project"} = $labs{$lab}->{"project"};
+            $experiment{"projectPi"} = $labs{$lab}->{"grant"};
+            $experiment{"labPi"} = $labs{$lab}->{"pi"};
             last;
         }
     }
@@ -164,24 +167,28 @@ while (@row = $sth->fetchrow_array()) {
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
      $experiment{"varLabels"} = "none";
+     $experiment{"factorLabels"} = "none";
     if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
         # TODO: define explicit ordering for term type in cv.ra
         $experiment{"vars"} = "";
         $experiment{"varLabels"} = "";
+        $experiment{"factorLabels"} = "";
         foreach my $termType (sort keys %vars) {
             my $var = $vars{$termType};
             $experiment{"vars"} = $experiment{"vars"} .  $var . ";";
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
             $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
+            $experiment{"factorLabels"} = $experiment{"factorLabels"} .  $termType . "=" . $varLabel . " ";
         }
         chop $experiment{"vars"};
         chop $experiment{"varLabels"};
+        chop $experiment{"factorLabels"};
     }
 
     $experiment{"freeze"} = $metadata{"dataVersion"};
-    $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-$2/;
+    $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-20$2/;
 
     $experiment{"submitDate"} = defined($metadata{"dateResubmitted"}) ?
                 $metadata{"dateResubmitted"} : $metadata{"dateSubmitted"};
@@ -274,6 +281,7 @@ while (@row = $sth->fetchrow_array()) {
     my $cell = "none";
     my $varString = "none";
     my $varLabelString = "none";
+    my $factorLabelString = "none";
 
 # get cell type and experimental vars
     if (defined($row[2])) {
@@ -306,10 +314,12 @@ while (@row = $sth->fetchrow_array()) {
             }
             $varString = "none";
             $varLabelString = "none";
+            $factorLabelString = "none";
             # experimental params -- iterate through all tags, lookup in cv.ra, 
             if (scalar(keys %varHash) > 0) {
                 $varString = "";
                 $varLabelString = "";
+                $factorLabelString = "";
                 # alphasort vars by term type, to assure consistency
                 # TODO: define a priority order in cv.ra
                 foreach $termType (sort keys %varHash) {
@@ -318,9 +328,11 @@ while (@row = $sth->fetchrow_array()) {
                     my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                         $terms{$termType}{$var}->{"label"} : $var;
                     $varLabelString = $varLabelString . $varLabel . ";";
+                    $factorLabelString = $factorLabelString . $termType . "=" . $varLabel . " ";
                 }
                 chop $varString;
                 chop $varLabelString;
+                chop $factorLabelString;
             }
             #print STDERR "    varString:" . $varString . "\n";
             my $expKey = $lab . "+" . lc($dataType) .  "+" .
@@ -373,7 +385,9 @@ while (@row = $sth->fetchrow_array()) {
                 next if ($status ne 'loaded' && $status ne 'validated');
                 my %experiment = ();
                 $experiment{"project"} = $project;
+                $experiment{"projectPi"} = $labs{$lab}->{"grant"};
                 $experiment{"lab"} = $lab;
+                $experiment{"labPi"} = $labs{$lab}->{"pi"};
                 $experiment{"dataType"} = lc $dataType;
                 $experiment{"cell"} = $cell;
                 my %ids = ();
@@ -383,6 +397,7 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"tempStatusId"} = $id;
                 $experiment{"vars"} = $varString;
                 $experiment{"varLabels"} = $varLabelString;
+                $experiment{"factorLabels"} = $factorLabelString;
                 $experiment{"submitDate"} = $created_at;
                 # trim off time
                 $experiment{"submitDate"} =~ s/ \d\d:\d\d:\d\d//;
@@ -406,11 +421,14 @@ foreach my $key (keys %experiments) {
     my %ids = %{$experiment{"ids"}};
     print STDERR "    IDs: " . join(",", keys %ids) . " KEY:  " . $key . "\n";
     die "undefined project" unless defined($experiment{"project"});
+    die "undefined projectPi" unless defined($experiment{"projectPi"});
     die "undefined lab" unless defined($experiment{"lab"});
+    die "undefined labPi" unless defined($experiment{"labPi"});
     die "undefined dataType" unless defined($experiment{"dataType"});
     die "undefined cell" unless defined($experiment{"cell"});
     die "undefined vars" unless defined($experiment{"vars"});
     die "undefined varLabels" unless defined($experiment{"varLabels"});
+    die "undefined factorLabels" unless defined($experiment{"factorLabels"});
     die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined submitDate" unless defined($experiment{"submitDate"});
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
@@ -437,10 +455,11 @@ foreach my $key (keys %experiments) {
         $experiment{"lab"} = $labs{$lab}->{"label"};
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-                $experiment{"project"}, $experiment{"lab"}, 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+                $experiment{"project"}, $experiment{"projectPi"}, 
+                $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
-                $experiment{"varLabels"}, 
+                $experiment{"varLabels"}, $experiment{"factorLabels"}, 
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
                 join(",", keys %ids));
