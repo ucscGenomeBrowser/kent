@@ -1,4 +1,3 @@
-
 track all_est
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
@@ -41,14 +40,6 @@ track netHg17 override
 shortLabel $o_Organism Net
 priority 157.5
 visibility hide
-
-track chainMm6 override
-shortLabel $o_Organism Chain
-
-track netMm6 override
-shortLabel $o_Organism Net
-
-
 
 searchTable gold
 searchMethod exact

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.65 2010/02/01 07:34:30 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.66 2010/02/01 23:34:04 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -230,15 +230,6 @@ matrixHeader A, C, G, T
 track netTetNig1 override
 priority 132.3
 visibility dense
-
-track chainMm6 override
-shortLabel $o_Organism Chain
-priority 125.1
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netMm6 override
-shortLabel $o_Organism Net
-priority 125.2
 
 track chainXenTro1
 release beta

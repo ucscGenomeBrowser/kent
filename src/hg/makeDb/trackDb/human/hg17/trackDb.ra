@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.442 2010/02/01 22:57:55 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.443 2010/02/01 23:34:03 kuhn Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -1873,12 +1873,6 @@ type wigMaf 0.0 1.0
 summary ancestor4waySummary
 speciesOrder eutPri2 eutGli2 borEut2 
 chromosomes chr13
-
-track chainMm6 override
-priority 270.4
-
-track netMm6 override
-priority 270.5
 
 track blastzMonDom1
 shortLabel $o_Organism Blastz

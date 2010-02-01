@@ -1,2 +1,5 @@
 track chainNetHg17 override
-shortLabel $o_Organsim Chain/Net
+shortLabel $o_Organism Chain/Net
+
+track chainNetMm6 override
+shortLabel $o_Organism Chain/Net

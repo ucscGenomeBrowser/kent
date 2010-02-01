@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.37 2010/01/25 19:34:49 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.38 2010/02/01 23:34:03 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -101,12 +101,6 @@ shortLabel $o_db Net
 longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 240.5
 visibility dense
-
-track chainMm6 override
-priority 240.6
-
-track netMm6 override
-priority 240.7
 
 track chainMm5 override
 priority 124.0
