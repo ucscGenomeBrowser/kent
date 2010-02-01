@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.47 2010/01/04 19:12:27 kent Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.48 2010/02/01 18:19:41 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -148,10 +148,14 @@ function matSetMatrixCheckBoxes(state)
     $( matCBs ).each( function (i) {
         this.checked = state;
         matCbComplete(this,true);
-        matCbClick(this);  // If this is inefficient, then replace it with subCB iteration logic below
     });
-
-    //matSubCBsSelected(); // this would be a redudnant call if matCbClick() is called
+    subCDs = $("input.subCB");
+    for(var vIx=1;vIx<arguments.length;vIx++) {
+        subCDs = $( subCDs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+    }
+    $( subCDs ).attr('checked',state);
+    showOrHideSelectedSubtracks();
+    matSubCBsSelected();
     return true;
 }
 
@@ -304,7 +308,7 @@ function matChkBoxesNormalizeAll()
 
 function matCbComplete(matCB,complete)
 {
-// Makes aore removes the 3rd (indeterminate) matCB state
+// Makes or removes the 3rd (indeterminate) matCB state
     // Too many options:
     // 1) addClass()/removeClass() (which does not directly support title)
     // 2) wrap div which could contain border, color, content.  content is not on one line: size is difficult
@@ -554,7 +558,7 @@ function showConfigControls(name)
     });
 
     // Close the cfg controls in the subtracks
-    $("table[id^='subtracks.']").each( function (i) { subtrackCfgHideAll(this);} ); 
+    $("table[id^='subtracks.']").each( function (i) { subtrackCfgHideAll(this);} );
     return true;
 }
 
