@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.52 2010/02/01 07:34:28 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.53 2010/02/01 22:35:41 rhead Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -2977,8 +2977,6 @@ visibility hide
 group compGeno
 noInherit on
 priority 498
-#color 0,0,0
-#altColor 100,50,0
 color 0,0,0
 altColor 100,50,0
 type bed 3
