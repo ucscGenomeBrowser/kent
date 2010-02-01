@@ -159,7 +159,7 @@ foreach c ( $regular $random )
 end
 
 if ( $histo == "true" ) then
-  cat Xout$$ | grep chr | egrep -v "random|Un|$db" | sed "s/chr//" \
+  cat Xout$$ | grep chr | egrep -v "random|hap|Un|$db" | sed "s/chr//" \
     | sort -n -k1,1  > XgraphFile$$
   if ( $machineOut != "" ) then
     cat XgraphFile$$ | awk '{print $1, $3}' > XgraphFile2$$ 
