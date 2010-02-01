@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.10 2010/02/01 07:08:24 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.11 2010/02/01 19:46:27 rhead Exp $";
 
 track chainNetPanTro1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -31,6 +31,12 @@ chainMinScore 1000
 
 track chainNetGalGal2 override
 shortLabel $o_db Chain/Net
+
+    track chainGalGal2 override
+    shortLabel $o_db Chain
+
+    track netGalGal2 override
+    shortLabel $o_db Net
 
 track chainNetXenTro1 override
 shortLabel $o_db Chain/Net
