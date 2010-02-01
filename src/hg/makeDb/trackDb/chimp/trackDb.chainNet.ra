@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.10 2009/12/30 18:49:34 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.11 2010/02/01 22:25:34 rhead Exp $";
 
 track chainNetHg19 override
 priority 210.3
@@ -51,6 +51,12 @@ shortLabel $o_db Chain/Net
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+    track chainMonDom4 override
+    shortLabel $o_db Chain
+
+    track netMonDom4 override
+    shortLabel $o_db Net
 
 track chainNetDanRer4 override
 shortLabel Zebrafish Chain/Net
