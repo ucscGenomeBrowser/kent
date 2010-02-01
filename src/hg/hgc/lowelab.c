@@ -96,7 +96,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.42 2010/01/13 04:03:21 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.43 2010/02/01 00:58:38 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -3245,6 +3245,141 @@ void doAlignInfo(struct trackDb *tdb, char *itemName)
   alignInfoFree(&infoload);
   printTrackHtml(tdb);
 }
+
+void doCRISPRs(struct trackDb *tdb, char *crisprName)
+/* Handle the CRISPR array track. */
+{
+    char *track = tdb->tableName;
+    struct bed *crispr;
+    struct dnaSeq *sequence;
+	char tempSeq[512];
+    char query[512];
+    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlResult *sr;
+    char *dupe, *words[16];
+    char **row;
+    int wordCount;
+    int rowOffset;
+    int bedSize = 0;
+	int pairCount = 0;
+	
+    genericHeader(tdb, crisprName);
+		
+    dupe = cloneString(tdb->type);
+    wordCount = chopLine(dupe, words);
+    if (wordCount > 1)
+        bedSize = atoi(words[1]);
+    if (bedSize < 3) bedSize = 3;
+	
+    rowOffset = hOffsetPastBin(database, seqName, track);
+    safef(query, ArraySize(query), "select * from %s where name = '%s'", track, crisprName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        crispr = bedLoadN(row+rowOffset, bedSize);
+        printf("<B>Name: </B> %s<BR>\n", crisprName);
+		printf("<B>Position:</B> "
+               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+               hgTracksPathAndSettings(), database, crispr->chrom, crispr->chromStart + 1, crispr->chromEnd);
+        printf("%s:%d-%d</A><BR>\n", crispr->chrom, crispr->chromStart + 1, crispr->chromEnd);
+        printf("<B>Strand:</B> %s<BR>\n", crispr->strand);
+        printf("<B>Genomic size:</B> %d nt<BR><BR>\n", (crispr->chromEnd - crispr->chromStart));
+		printf("<B>Number of spacers:</B> %u<BR><BR>\n", crispr->blockCount - 1);
+		
+        sequence = hDnaFromSeq(database, crispr->chrom, crispr->chromStart, crispr->chromEnd, dnaUpper);
+        if (sequence != NULL)
+        {
+			/* Print table */
+			printf("<table style=\"width: 100%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
+			printf("<tbody><tr><td>\n");
+			printf("<table style=\"width: 100%%; text-align: left;\" bgcolor=\"%s\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">\n", HG_COL_INSIDE);
+			printf("<tbody>\n");
+			
+			/* Print table column heading */
+			printf("<tr style=\"vertical-align: top;\">\n");
+			printf("<td colspan=\"3\"><b>Direct Repeat</b></td>\n");
+			printf("<td colspan=\"3\"><b>Spacer</b></td>\n");
+			printf("</tr>\n");
+			printf("<tr style=\"vertical-align: top;\">\n");
+			printf("<td width=\"8%%\"><b>Start Pos</b></td>\n");
+			printf("<td width=\"36%%\"><b>Sequence</b></td>\n");
+			printf("<td width=\"4%%\"><b>Length</b></td>\n");
+			printf("<td width=\"8%%\"><b>Start Pos</b></td>\n");
+			printf("<td><b>Sequence</b></td>\n");
+			printf("<td width=\"4%%\"><b>Length</b></td>\n");
+			printf("</tr>\n");
+			
+			if (strcmp(crispr->strand, "+") == 0)
+			{
+				for (pairCount = 0; pairCount < (int) crispr->blockCount; pairCount++)
+				{
+					printf("<tr style=\"vertical-align: top;\">\n");
+					
+					memset(tempSeq, '\0', sizeof(tempSeq));
+					memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount], crispr->blockSizes[pairCount]);
+					printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + 1 + crispr->chromStarts[pairCount], tempSeq, crispr->blockSizes[pairCount]);
+					if (pairCount + 1 < crispr->blockCount)
+					{
+						memset(tempSeq, '\0', sizeof(tempSeq));
+						memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount], 
+							crispr->chromStarts[pairCount+1] - crispr->blockSizes[pairCount] - crispr->chromStarts[pairCount]);
+						printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + 1 + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount], tempSeq, 
+							   crispr->chromStarts[pairCount+1] - crispr->blockSizes[pairCount] - crispr->chromStarts[pairCount]);
+					}
+					else
+					{
+						printf("<td>&nbsp</td><td>&nbsp</td><td>&nbsp</td>\n");
+					}
+
+					printf("</tr>\n");
+				}
+			}
+            else
+			{
+				for (pairCount = ((int)crispr->blockCount - 1); pairCount >= 0; pairCount--)
+				{
+					printf("<tr style=\"vertical-align: top;\">\n");
+
+					memset(tempSeq, '\0', sizeof(tempSeq));
+					memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount], crispr->blockSizes[pairCount]);
+					reverseComplement(tempSeq, strlen(tempSeq));
+					printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount], tempSeq, crispr->blockSizes[pairCount]);
+					if (pairCount - 1 >= 0)
+					{
+						memset(tempSeq, '\0', sizeof(tempSeq));
+						memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount-1] + crispr->blockSizes[pairCount-1], 
+							   crispr->chromStarts[pairCount] - crispr->blockSizes[pairCount-1] - crispr->chromStarts[pairCount-1]);
+						reverseComplement(tempSeq, strlen(tempSeq));
+						printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + crispr->chromStarts[pairCount], tempSeq, 
+							   crispr->chromStarts[pairCount] - crispr->blockSizes[pairCount-1] - crispr->chromStarts[pairCount-1]);
+					}
+					else
+					{
+						printf("<td>&nbsp</td><td>&nbsp</td><td>&nbsp</td>\n");
+					}
+					
+					printf("</tr>\n");
+				}
+			}			
+			
+			/* Close table */
+			printf("</tbody>\n");
+			printf("</table>\n");
+			printf("</td></tr></tbody>\n");
+			printf("</table>\n");
+        }
+		
+        if (crispr->next != NULL)
+            printf("<hr>\n");
+    }
+    sqlFreeResult(&sr);
+	
+    bedFree(&crispr);
+	
+    hFreeConn(&conn);
+    printTrackHtml(tdb);
+}
+
 bool loweLabClick(char *track, char *item, struct trackDb *tdb)
 /* check if we have one of the lowelab tracks */
 {
@@ -3353,6 +3488,10 @@ else if (sameWord(track,"loweOrthologs"))
   {
     doloweOrthologs(tdb, item);
   }
+else if (sameWord(track,"CRISPRs"))
+	{
+		doCRISPRs(tdb, item);
+	}
 else
     return FALSE;
 return TRUE;
