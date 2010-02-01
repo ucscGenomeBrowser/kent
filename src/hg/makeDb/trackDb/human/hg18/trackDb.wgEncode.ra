@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.857 2010/02/01 18:37:32 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.858 2010/02/01 19:04:27 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11764,7 +11764,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
         subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel SK-N-SH_RA Hspot1
+        shortLabel SK-N-SH_RAHspot1
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 1 (in SK-N-SH_RA cells)
         subGroups view=cHot cellType=SKNSHRA rep=rep1
         type broadPeak
@@ -11772,7 +11772,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSeqHotspotsRep2SknshraV2
         subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel SK-N-SH_RA Hspot 2
+        shortLabel SK-N-SH_RAHspot2
         longLabel ENCODE UW Digital DNaseI Hotspots Rep 2 (in SK-N-SH_RA cells)
         subGroups view=cHot cellType=SKNSHRA rep=rep2
         type broadPeak
