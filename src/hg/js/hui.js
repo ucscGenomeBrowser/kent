@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.48 2010/02/01 18:19:41 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.49 2010/02/01 21:37:55 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -141,6 +141,7 @@ function matCbClick(matCB)
 function matSetMatrixCheckBoxes(state)
 {
 // matButtons:onclick Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
+    //$("body").css('cursor','wait');
     var matCBs = $("input.matCB").not(".abc");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
@@ -153,9 +154,13 @@ function matSetMatrixCheckBoxes(state)
     for(var vIx=1;vIx<arguments.length;vIx++) {
         subCDs = $( subCDs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
-    $( subCDs ).attr('checked',state);
+    $( subCDs ).each( function (i) {
+        this.checked = state;
+        matSubCBsetShadow(this);
+    });
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
+    //$("body").css('cursor','default');
     return true;
 }
 
@@ -241,7 +246,7 @@ function matSubCBsetShadow(subCB)
         shadowState = 1;
     if(subCB.disabled)
         shadowState -= 2;
-    $("input[name='boolshad."+subCB.name+"']").val(shadowState);
+    $("input[type=hidden][name='boolshad\."+subCB.name+"']").val(shadowState);
 }
 
 function matChkBoxNormalize(matCB)
