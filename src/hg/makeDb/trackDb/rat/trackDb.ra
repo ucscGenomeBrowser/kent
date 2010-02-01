@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.69 2010/01/26 05:19:04 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.70 2010/02/01 07:08:25 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -353,21 +353,11 @@ shortCircuit 1
 termRegex [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
 
-#Overrides from priority.ra
-
-
-# frog
 track chainXenTro2 override
 priority 170
 
 track netXenTro2 override
 priority 170.1
-
-track chainXenTro1 override
-priority 170.2
-
-track netXenTro1 override
-priority 170.3
 
 track chainBosTau4 override
 priority 229
