@@ -14,6 +14,19 @@ static int debug = 0;
 static char *database;
 static struct hash *geneHash = NULL;
 
+#define SPLICE_SITE "spliceSite"
+#define MISSENSE "missense"
+#define READ_THROUGH "readThrough"
+#define NONSENSE "nonsense"
+#define NONSENSE_LAST_EXON "nonsenseLastExon"
+#define SYNONYMOUS "synonymous"
+#define IN_FRAME_DEL "inFrameDel"
+#define IN_FRAME_INS "inFrameIns"
+#define FRAME_SHIFT_DEL "frameShiftDel"
+#define FRAME_SHIFT_INS "frameShiftIns"
+#define THREE_PRIME_UTR "threePrimeUtr"
+#define FIVE_PRIME_UTR "fivePrimeUtr"
+
 static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
@@ -23,8 +36,8 @@ struct bed6
     {
     struct bed6 *next;
     char *chrom;	/* Allocated in hash. */
-    int start;		/* Start (0 based) */
-    int end;		/* End (non-inclusive) */
+    unsigned start;	/* Start (0 based) */
+    unsigned end;	/* End (non-inclusive) */
     char *name;	/* Name of item */
     int score; /* Score - 0-1000 */
     char strand;
@@ -48,23 +61,32 @@ errAbort(
   "mutationClassifier - classify mutations \n"
   "usage:\n"
   "   mutationClassifier database snp.bed\n"
-  "Classifies SNPs which are in coding regions of UCSC\n"
+  "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
   "Standard single character amino acid codes are used; '*' == stop codon.\n"
   "output is bed4+ with classification code in the name field, and additonal\n"
   "annotations in subsequent fields.\n\n"
   "Mutations are classified with the following codes:\n"
-  "J:   mutation in the splice donor/acceptor sites (2 bases at beginning and ending of introns)\n"
-  "F:   frame shift in CDS\n"
-  "N:   non-synonymous SNP (nonsense or missense)\n"
-  "S:   synonymous SNP\n"
-  "?:   non-frame shift indel\n\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "%s\n"
+  "\n"
   "snp.bed should be bed4 (with SNP base in the name field).\n"
   "SNPs are assumed to be on positive strand, unless snp.bed is bed6 with\n"
-  "explicit strand field (score field is ignored).\n\n"
+  "explicit strand field (score field is ignored). SNPs should be\n"
+  "zero-length bed entries; all entries are assumed to be indels.\n"
+  "\n"
   "example:\n"
-  "     mutationClassifier hg19 snp.bed\n"
+  "     mutationClassifier hg19 snp.bed\n",
+  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS
   );
 }
 
@@ -117,8 +139,8 @@ static int myGenePredCmp(const void *va, const void *vb)
 static int bedItemsOverlap(struct bed *a, struct genePred *b)
 {
      return (!strcmp(a->chrom, b->chrom) &&
-	     a->chromEnd > b->cdsStart &&
-	     a->chromStart <= b->cdsEnd);
+	     a->chromEnd > b->txStart &&
+	     a->chromStart <= b->txEnd);
 }
 
 static int intersectBeds (struct bed *a, struct genePred *b,
@@ -303,12 +325,14 @@ static void clipGenPred(struct genePred *gp)
         printf("%s - %d: %s\n", gp->name2, (int) strlen(gp->name2), gp->name2);
 }
 
-static int transformPos(struct genePred *gp, unsigned pos)
+static int transformPos(struct genePred *gp, unsigned pos, boolean *lastExon)
 {
 // transformPos chrom:chromStart coordinates to relative CDS coordinates
 // returns -1 if pos is NOT within the CDS
 
 int i, delta = 0;
+boolean reverse = gp->strand[0] == '-';
+
 if(gp->name2 == NULL)
     {
     clipGenPred(gp);
@@ -325,6 +349,7 @@ for(i=0;i<gp->exonCount;i++)
         if(gp->strand[0] == '-')
             pos = gp->score - pos - 1;
         // assert(pos >= 0 && pos < strlen(gp->name2));
+        *lastExon = reverse ? i == 0 : (i + 1) == gp->exonCount;
         return pos;
         }
     delta += gp->exonEnds[i] - gp->exonStarts[i];
@@ -381,30 +406,24 @@ verbose(2, "number of intersects: %d\n", count);
 // sprintf(retNibName, "/hive/data/genomes/hg19/hg19.2bit");
 for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
     {
-    struct genePred *genePred = overlapB->genePred;
+    struct genePred *gp = overlapB->genePred;
     char *code = NULL;
     char additional[256];
     additional[0] = 0;
-    boolean reverse = !strcmp(overlapA->name, "-");
-    int pos = transformPos(genePred, overlapA->chromStart);
+    // boolean reverse = !strcmp(overlapA->strand, "-");
+    boolean lastExon;
+
+    int pos = transformPos(gp, overlapA->chromStart, &lastExon);
     if(pos >= 0)
         {
-        if(reverse)
+        int len = strlen(overlapA->name);
+        if(len > 1 || (overlapA->chromEnd - overlapA->chromStart))
             {
-            // deletion
-            if((overlapA->chromEnd - overlapA->chromStart) % 3)
-                code = "F";
-            else
-                code = "?";
-            }
-        else if(strlen(overlapA->name) > 1)
-            {
-            // insertion
-            int delta = strlen(overlapA->name) - (overlapA->chromEnd - overlapA->chromStart);
+            int delta = len - (overlapA->chromEnd - overlapA->chromStart);
             if(delta % 3)
-                code = "F";
+                code = FRAME_SHIFT_INS;
             else
-                code = "?";
+                code = IN_FRAME_INS;
             }
         else
             {
@@ -417,22 +436,27 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
                 codonStart = pos - 2;
             char original[4];
             char new[4];
-            strncpy(original, genePred->name2 + codonStart, 3);
-            strncpy(new, genePred->name2 + codonStart, 3);
+            strncpy(original, gp->name2 + codonStart, 3);
+            strncpy(new, gp->name2 + codonStart, 3);
             original[3] = new[3] = 0;
             new[pos % 3] = overlapA->name[0];
-            if(genePred->strand[0] == '-')
+            if(gp->strand[0] == '-')
                 complement(new + (pos % 3), 1);
             AA originalAA = lookupCodon(original);
             AA newAA = lookupCodon(new);
             if(!originalAA)
                 originalAA = '*';
-            if(!newAA)
+            if(newAA)
+                {
+                code = originalAA == newAA ? SYNONYMOUS : originalAA == '*' ? READ_THROUGH : MISSENSE;
+                }
+            else
+                {
                 newAA = '*';
+                code = lastExon ? NONSENSE_LAST_EXON : NONSENSE;
+                }
             if(debug)
                 fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
-            // add some synonymous vs. non-synonymous code?
-            code = originalAA == newAA ? "S" : "N";
             safef(additional, sizeof(additional), "%c>%c", originalAA, newAA);
             if(debug)
                 fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
@@ -440,35 +464,47 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
         }
     else
         {
-        // In intro, so check for interuption of splice junction (special case first and last exon).
-        int i;
-        for(i=0;i<genePred->exonCount;i++)
+        boolean reverse = gp->strand[0] == '-';
+        if(overlapA->chromStart < gp->cdsStart)
             {
-            int start = genePred->exonStarts[i] - overlapA->chromStart;
-            int end   = overlapA->chromEnd - genePred->exonEnds[i];
-            if (i == 0 && (end > 0 && end <= 2))
-                code = "J";
-            else if ((i == (genePred->exonCount - 1)) && (start > 0 && start <= 2))
-                code = "J";
-            else if ((start > 0 && start <= 2) || (end > 0 && end <= 2))
-                code = "J";
-            if(i > 0 && (overlapA->chromEnd + 1) >= genePred->exonStarts[i])
-                // mutation at end of intron
-                code = "J";
-            else if(i < (genePred->exonCount - 1) && (overlapA->chromStart - 1) <= genePred->exonEnds[i])
-                // mutation at beginning of intron
-                code = "J";
+            code = reverse ? THREE_PRIME_UTR : FIVE_PRIME_UTR;
+            }
+        else if(overlapA->chromStart >= gp->cdsEnd)
+            {
+            code = reverse ? FIVE_PRIME_UTR : THREE_PRIME_UTR;
+            }
+        else
+            {
+            // In intro, so check for interuption of splice junction (special case first and last exon).
+            int i;
+            for(i=0;i<gp->exonCount;i++)
+                {
+                int start = gp->exonStarts[i] - overlapA->chromStart;
+                int end   = overlapA->chromEnd - gp->exonEnds[i];
+                if (i == 0 && (end > 0 && end <= 2))
+                    code = SPLICE_SITE;
+                else if ((i == (gp->exonCount - 1)) && (start > 0 && start <= 2))
+                    code = SPLICE_SITE;
+                else if ((start > 0 && start <= 2) || (end > 0 && end <= 2))
+                    code = SPLICE_SITE;
+                if(i > 0 && (overlapA->chromEnd + 1) >= gp->exonStarts[i])
+                    // mutation at end of intron
+                    code = SPLICE_SITE;
+                else if(i < (gp->exonCount - 1) && (overlapA->chromStart - 1) <= gp->exonEnds[i])
+                    // mutation at beginning of intron
+                    code = SPLICE_SITE;
+                }
             }
         }
     if(code)
         {
-        char *geneSymbol = genePred->name;
+        char *geneSymbol = gp->name;
         struct hashEl *el;
         if((el = hashLookup(geneHash, geneSymbol)))
             {
             geneSymbol = (char *) el->val;
             }
-        printf("%s\t%d\t%d\t%s\t%s\t%s\n", overlapA->chrom, overlapA->chromStart, overlapA->chromStart + 1, code, additional, geneSymbol);
+        printf("%s\t%d\t%d\t%s\t%s\t%s\n", overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, geneSymbol, code, additional);
         }
     }
 return 0;
