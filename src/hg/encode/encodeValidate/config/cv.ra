@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.203 2010/01/29 17:51:41 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.204 2010/02/02 01:56:47 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -15,6 +15,7 @@ lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-B
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 color 153,38,0
+sex F
 tier 1
 protocol GM12878_protocol.pdf
 
@@ -31,6 +32,7 @@ lineage "The continuous cell line K-562 was established by Lozzio and Lozzio fro
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
+sex F
 tier 1
 protocol K562_protocol.pdf
 
@@ -47,6 +49,7 @@ lineage "The continuous cell line K-562 was established by Lozzio and Lozzio fro
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
+sex F
 tier 1
 protocol K562_protocol.pdf
 
@@ -63,6 +66,7 @@ karyotype cancer
 termId BTO:0000559
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
 color 189,0,157
+sex M
 tier 2
 protocol HepG2_protocol.pdf
 
@@ -79,6 +83,7 @@ karyotype cancer
 termId BTO:0000559
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
 color 189,0,157
+sex M
 tier 2
 protocol HepG2_protocol.pdf
 
@@ -95,6 +100,7 @@ karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
 color 0,119,158
+sex F
 tier 2
 protocol HeLa-S3:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 
@@ -127,6 +133,7 @@ karyotype normal
 termId BTO:0001949
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001949
 color 224,75,0
+sex M
 tier 2
 protocol HUVEC_protocol.pdf
 
@@ -143,6 +150,7 @@ karyotype normal
 termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
+sex F
 tier 2
 protocol Keratinocyte_protocol.pdf
 
@@ -159,6 +167,7 @@ karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
 color 0,107,27
+sex M
 tier 2
 protocol H1_ES_protocol.pdf
 
@@ -175,6 +184,7 @@ lineage "This line was initiated in 1972 by D.J. Giard, et al. through explant c
 karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
+sex M
 tier 3
 protocol A549_protocol.pdf
 
@@ -185,6 +195,7 @@ description Fetal buttock/thigh fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
+sex M
 tier 3
 protocol AG04449_Stam_protocol.pdf
 
@@ -195,6 +206,7 @@ description Fetal lung fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
+sex M
 tier 3
 protocol AG04450_Stam_protocol.pdf
 
@@ -205,6 +217,7 @@ description Adult human toe fibroblast
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
+sex F
 tier 3
 protocol AG09309_Stam_protocol.pdf
 
@@ -215,6 +228,7 @@ description Adult human gum tissue fibroblasts
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
+sex F
 tier 3
 protocol AG09319_Stam_protocol.pdf
 
@@ -225,6 +239,7 @@ description Adult human abdominal skin fibroblasts
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
+sex M
 tier 3
 protocol AG10803_Stam_protocol.pdf
 
@@ -237,6 +252,7 @@ vendorName Lonza
 vendorId CC-2571
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001685
+sex M
 termId BTO:0001685
 protocol AoSMC_Crawford_protocol.pdf
 
@@ -252,6 +268,7 @@ lineage
 karyotype normal
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
+sex M
 tier 3
 protocol Astrocytes_Crawford_protocol.pdf
 
@@ -265,6 +282,7 @@ vendorId CRL-2268
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2268&Template=cellBiology
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
+sex M
 tier 3
 protocol BE2-C_Myers_protocol.pdf
 
@@ -279,6 +297,7 @@ karyotype XY euploid
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
+sex M
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term BG02ES-EBD
@@ -292,6 +311,7 @@ karyotype XY euploid
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
+sex M
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term BJ
@@ -306,8 +326,10 @@ lineage "The line was established from skin taken from normal foreskin." - ATCC
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+sex M
 tier 3
 protocol BJ-tert_Stam_protocol.pdf
+
 
 term Caco-2
 tag Caco2
@@ -321,6 +343,7 @@ lineage
 karyotype cancer
 termId BTO:0000195
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195&termName=Caco-2%20cell
+sex M
 tier 3
 protocol Stam_15_protocols.pdf
 
@@ -336,6 +359,7 @@ lineage Fetal membranes were collected from women who underwent planned cesarean
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252&termName=chorion
+sex M
 tier 3
 protocol Chorion_and_decidua_Crawford_protocol.pdf
 
@@ -346,6 +370,7 @@ description Human Acute Megakaryocytic Leukemia Cells
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
+sex F
 tier 3
 protocol CMK_Stam_protocol.pdf
 
@@ -361,6 +386,7 @@ lineage Fetal membranes were collected from women who underwent planned cesarean
 karyotype unknown
 termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
+sex M
 tier 3
 protocol Chorion_and_decidua_Crawford_protocol.pdf
 
@@ -376,6 +402,7 @@ lineage
 karyotype normal
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
+sex F
 tier 3
 protocol fibroblast_Crawford_protocol.pdf
 
@@ -387,6 +414,7 @@ description normal fibroblasts taken from individuals with Parkinson's disease (
 vendorName Paul Tesar (Case Western)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
+sex M
 #protocol FibroP_Crawford_protocol.pdf
 
 term Gliobla
@@ -397,6 +425,7 @@ description (aka H54) Glioblastoma
 vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
+sex M
 tier 3
 protocol D54_Crawford_protocol.pdf
 
@@ -412,6 +441,7 @@ lineage CEPH/Utah - European Caucasion; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex F
 tier 3
 protocol Stam_15_protocols.pdf
 
@@ -424,6 +454,7 @@ vendorName Coriell
 vendorId GM10847
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -439,6 +470,7 @@ lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0001522 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
+sex M
 tier 3
 protocol GM12801_Stam_protocol.pdf
 
@@ -453,6 +485,7 @@ vendorId GM12864
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex M
 tier 3
 protocol GM12864_Stam_protocol.pdf
 
@@ -467,6 +500,7 @@ vendorId GM12865
 orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
 tier 3
 protocol GM12865_Stam_protocol.pdf
 
@@ -481,6 +515,7 @@ vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex M
 tier 3
 protocol GM12872_Stam_protocol.pdf
 
@@ -495,6 +530,7 @@ vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
 tier 3
 protocol GM12873_Stam_protocol.pdf
 
@@ -509,6 +545,7 @@ vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex M
 tier 3
 protocol GM12874_Stam_protocol.pdf
 
@@ -523,6 +560,7 @@ vendorId GM12875
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
 tier 3
 protocol GM12875_Stam_protocol.pdf
 
@@ -537,6 +575,7 @@ vendorId GM12891
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12891
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex M
 tier 3
 protocol GM12891_Crawford_protocol.pdf
 
@@ -551,6 +590,7 @@ vendorId GM12892
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12892
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
 tier 3
 protocol GM12892_Crawford_protocol.pdf
 
@@ -563,6 +603,7 @@ vendorName Coriell
 vendorId GM15510
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex M
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -575,6 +616,7 @@ vendorName Coriell
 vendorId GM18505
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -590,6 +632,7 @@ lineage International HapMap Project - Yoruba in Ibadan, Nigeria; Epstein-Barr V
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex M
 tier 3
 protocol GM18507_protocol.pdf
 
@@ -602,6 +645,7 @@ vendorName Coriell
 vendorId GM18526
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -614,6 +658,7 @@ vendorName Coriell
 vendorId GM18951
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -626,6 +671,7 @@ vendorName Coriell
 vendorId GM19099
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -638,6 +684,7 @@ vendorName Coriell
 vendorId GM19193
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
 tier 3
 protocol GM-generalized_Snyder_protocol.pdf
 
@@ -652,6 +699,7 @@ vendorId GM19238
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19238
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
 tier 3
 protocol GM19238_Crawford_protocol.pdf
 
@@ -666,6 +714,7 @@ vendorId GM19239
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19239
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex M
 tier 3
 protocol GM19239_Crawford_protocol.pdf
 
@@ -680,6 +729,7 @@ vendorId GM19240
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19240
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
 tier 3
 protocol GM19240_Crawford_protocol.pdf
 
@@ -690,6 +740,7 @@ description Undifferentiated human embryonic stem cells
 vendorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
+sex M
 tier 3
 protocol H7-hESC_Stam_protocol.pdf
 
@@ -704,6 +755,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex M
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-E
@@ -717,6 +769,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex F
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-AFP+
@@ -730,6 +783,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex F
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-AFP-
@@ -743,6 +797,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex F
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-EB
@@ -756,6 +811,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex F
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-EBD
@@ -769,6 +825,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex F
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-CM
@@ -782,6 +839,7 @@ karyotype XX euploid
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
+sex F
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
 term HAEpiC
@@ -792,6 +850,7 @@ vendorName ScienCell
 vendorId 7100
 orderUrl http://www.sciencellonline.com/site/products/7100.php
 tier 3
+sex M
 protocol HAEpiC_Stam_protocol.pdf
 
 term HAL
@@ -805,6 +864,7 @@ color 189,0,157
 vendorName Asterand, Inc.
 vendorId HAL
 orderUrl http://www.asterand.com/Asterand/
+sex M
 protocol HAL_Myers_protocol.pdf
 
 term HCF
@@ -814,6 +874,7 @@ description Human Cardiac Fibroblasts
 vendorName ScienCell
 vendorId 6300
 orderUrl http://www.sciencellonline.com/site/products/6300.php
+sex M
 tier 3
 protocol HCF_Stam_protocol.pdf
 
@@ -824,6 +885,7 @@ description Human Cardiac Myocytes
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/products/6200.php
+sex M
 tier 3
 protocol HCM_Stam_protocol.pdf
 
@@ -834,6 +896,7 @@ description Human Choroid Plexus Epithelial Cells
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/products/1310.php
+sex M
 tier 3
 protocol HCPEpiC_Stam_protocol.pdf
 
@@ -849,6 +912,7 @@ lineage endoderm
 karyotype cancer
 termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
+sex M
 tier 3
 protocol HCT-116_protocol.pdf
 
@@ -859,6 +923,7 @@ description Human Esophageal Epithelial Cells
 vendorName ScienCell
 vendorId 2700
 orderUrl http://www.sciencellonline.com/site/products/2700.php
+sex M
 tier 3
 protocol HEEpiC_Stam_protocol.pdf
 
@@ -874,6 +939,7 @@ lineage endoderm
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
+sex M
 tier 3
 protocol Stam_15_protocols.pdf
 
@@ -889,6 +955,7 @@ lineage endoderm
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
+sex M
 tier 3
 protocol HEK293b_Snyder_protocol.pdf
 
@@ -900,6 +967,7 @@ description Human Fetal Liver 11 weeks
 tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
 color 189,0,157
+sex M
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
 
 term HFL24W
@@ -910,6 +978,7 @@ description Human Fetal Liver 24 weeks
 tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 color 189,0,157
+sex M
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
 
 term HGF
@@ -924,6 +993,7 @@ lineage
 karyotype normal
 termId BTO:0000519 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519&termName=gingiva
+sex M
 tier 3
 protocol HGF_Stam_protocol.pdf
 
@@ -934,6 +1004,7 @@ description Human Iris Pigment Epithelial Cells
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/products/6560.php
+sex M
 tier 3
 protocol HIPEpiC_Stam_protocol.pdf
 
@@ -949,6 +1020,7 @@ lineage
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738&termName=HL-60%20cell
 karyotype cancer, female
+sex F
 tier 3
 protocol HL-60_Stam_protocol.pdf
 
@@ -964,6 +1036,7 @@ lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
+sex M
 tier 3
 protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
@@ -974,6 +1047,7 @@ description Human Non-Pigment Ciliary Epithelial Cells
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/products/6580.php
+sex M
 tier 3
 protocol HNPCEpiC_Stam_protocol.pdf
 
@@ -989,6 +1063,7 @@ lineage
 karyotype normal
 termId BTO:0000059 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
+sex M
 tier 3
 protocol HRCEpiC_Stam_protocol.pdf
 
@@ -1004,6 +1079,7 @@ lineage
 karyotype normal
 termId BTO:0000059 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
+sex M
 tier 3
 protocol HRE_Stam_protocol.pdf
 
@@ -1014,6 +1090,7 @@ description Human Retinal Pigment Epithelial Cells
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/products/6540.php
+sex M
 tier 3
 protocol HRPEpiC_Stam_protocol.pdf
 
@@ -1028,6 +1105,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D9
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
+sex M
 tier 3
 protocol Bernstein:HSMM_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -1042,6 +1120,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D9
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
+sex M
 tier 3
 protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -1056,6 +1135,7 @@ vendorId CCL­121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
 termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282&termName=HT-1080%20cell
+sex M
 tier 3
 protocol HT1080_Myers_protocol.pdf
 
@@ -1070,6 +1150,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype hyperdiploid female with a modal chromosome number of 47
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
+sex F
 tier 3
 protocol HTB-11_Myers_protocol.pdf
 
@@ -1085,6 +1166,7 @@ lineage "The Jurkat cell line was established from the peripheral blood of a 14 
 karyotype cancer
 termId BTO:0001948
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+sex M
 tier 3
 protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
@@ -1100,6 +1182,7 @@ lineage Genetically engineered from Human prostate epithelial cells. Multiple hu
 karyotype Diploid
 #termId BTO:0001389 (non-specific)
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+sex F
 tier 3
 protocol LHSR_Crawford_protocol.pdf
 
@@ -1116,6 +1199,7 @@ karyotype cancer
 termId BTO:0002021
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002021
 color 0,119,158
+sex M
 tier 3
 protocol Crawford:LNCaP_Crawford_protocol.pdf Farnham:LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
 
@@ -1131,6 +1215,7 @@ lineage
 karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
+sex F
 tier 3
 protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
 
@@ -1142,6 +1227,7 @@ description Medulloblastoma
 vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
+sex M
 tier 3
 protocol D721_Crawford_protocol.pdf
 
@@ -1154,6 +1240,7 @@ vendorName ScienCell
 vendorId 2200
 orderUrl http://www.sciencellonline.com/site/products/2200.php
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+sex M
 termId BTO:0000847
 protocol Melano_Crawford_protocol.pdf
 
@@ -1165,6 +1252,7 @@ description Myometrial cells (provisional)
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
+sex F
 #protocol Myometr_Crawford_protocol.pdf
 
 term NB4
@@ -1181,6 +1269,7 @@ lineage
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
+sex M
 tier 3
 protocol Snyder:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
 
@@ -1193,6 +1282,7 @@ vendorName Lonza
 vendorId CC-2541
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
+sex M
 termId BTO:0002022
 #protocol NHBE_Crawford_protocol.pdf
 
@@ -1203,6 +1293,7 @@ description Neonatal Human Dermal Fibroblasts
 vendorName Lonza
 vendorId CC-2509
 orderUrl http://www.lonza.com/group/en/products_services/products/cat4.html
+sex M
 tier 3
 protocol NHDF-neo_Stam_protocol.pdf
 
@@ -1218,6 +1309,7 @@ lineage
 karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161&termName=lung%20fibroblast%20cell%20line
+sex M
 tier 3
 protocol Bernstein:NHLF_Bernstein_protocol.pdf Stam:NHLF_Stam_protocol.pdf
 
@@ -1233,6 +1325,7 @@ lineage "The NTERA-2 cl.D1 cell line is a pluripotent human testicular embryonal
 karyotype cancer
 termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
+sex M
 tier 3
 protocol NT2-D1_protocol.pdf
 
@@ -1248,6 +1341,7 @@ lineage
 karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593&termName=osteoblast
+sex M
 tier 3
 protocol Osteoblast_Crawford_protocol.pdf
 
@@ -1263,6 +1357,7 @@ lineage "The NIH:OVCAR-3 line was established in 1982 by T.C. Hamilton, et al. f
 karyotype cancer
 termId BTO:0000812
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000812&termName=OVCAR-3%20cell
+sex F
 tier 3
 protocol Stam_15_protocols.pdf
 
@@ -1278,6 +1373,7 @@ lineage
 karyotype cancer, male
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
+sex M
 tier 3
 protocol Myers:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
 
@@ -1291,6 +1387,7 @@ vendorId
 orderUrl
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
+sex M
 tier 3
 protocol Crawford:PanIslets_Crawford_protocol.pdf Lieb:PanIslets_Lieb_protocol.pdf
 
@@ -1306,6 +1403,7 @@ lineage ectoderm
 karyotype cancer
 termId BTO:0000690 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
+sex M
 tier 3
 protocol PFSK-1_protocol.pdf
 
@@ -1320,6 +1418,7 @@ orderUrl
 lineage primary
 termId BTO:0001120 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120&termName=epithelial%20cell%20line
+sex M
 tier 3
 protocol pHTE_Crawford_protocol.pdf
 
@@ -1335,6 +1434,7 @@ lineage
 karyotype progeria
 termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+sex M
 tier 3
 protocol progeria_Crawford_protocol.pdf
 
@@ -1351,6 +1451,7 @@ karyotype
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
+sex M
 
 term SAEC
 tag SAEC
@@ -1364,6 +1465,7 @@ lineage
 karyotype normal
 termId BTO:0002022 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022&termName=bronchial%20epithelial%20cell%20line
+sex M
 tier 3
 protocol SAEC_Stam_protocol.pdf
 
@@ -1379,6 +1481,7 @@ lineage "SK-N-MC was isolated in September of l971 and was found to have moderat
 karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+sex F
 tier 3
 protocol SK-N-MC_protocol.pdf
 
@@ -1395,6 +1498,7 @@ lineage "SK-N-MC was isolated in September of l971 and was found to have moderat
 karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+sex F
 tier 3
 protocol Stam_15_protocols.pdf
 
@@ -1410,6 +1514,7 @@ lineage
 karyotype
 termId BTO:0001801 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
+sex M
 tier 3
 protocol SkMC_Stam_protocol.pdf
 
@@ -1424,6 +1529,7 @@ vendorId CRL­1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
 termId BTO:0001583
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583&termName=T98G%20cell
+sex M
 tier 3
 protocol T98G_Myers_protocol.pdf
 
@@ -1439,6 +1545,7 @@ lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithel
 karyotype unknown, presumed normal diploid
 termId BTO:0001389 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389&termName=tracheal%20epithelium
+sex M
 tier 3
 protocol TBEC_Crawford_protocol.pdf
 
@@ -1454,6 +1561,7 @@ lineage
 karyotype
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678&termName=Th1%20cell
+sex M
 tier 3
 protocol Stam_15_protocols.pdf
 
@@ -1469,6 +1577,7 @@ lineage
 karyotype
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679&termName=Th2%20cell
+sex M
 tier 3
 protocol Th2_Stam_protocol.pdf
 
@@ -1483,6 +1592,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036&termName=U-87%20cell
+sex F
 tier 3
 protocol U-87_Myers_protocol.pdf
 
@@ -1498,6 +1608,7 @@ lineage
 karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178&termName=retinoblastoma%20cell
+sex M
 tier 3
 protocol WERI-Rb-1_Stam_protocol.pdf
 
