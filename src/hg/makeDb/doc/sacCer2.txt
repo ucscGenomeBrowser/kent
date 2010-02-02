@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.15 2010/01/14 22:10:58 hiram Exp $
+#  $Id: sacCer2.txt,v 1.16 2010/02/02 18:56:32 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -442,6 +442,22 @@ done
     cd axtChain/run
     ls -d ../../sac??? | xargs -L 1 basename > species.list
     cut -f1 ../../../../../chrom.sizes > chrom.list
+    cat << '_EOF_' > chain.csh
+#!/bin/csh -ef
+set S = $1
+set C = $2
+set IN = ../../psl/${C}.${S}.psl.gz
+set OUT = ${S}/${C}.chain
+mkdir -p ${S}
+zcat ${IN} \
+| axtChain -psl -verbose=0  -minScore=1000 -linearGap=medium stdin \
+    /hive/data/genomes/sacCer2/sacCer2.2bit \
+    -faQ ../../${S} stdout \
+| chainAntiRepeat /hive/data/genomes/sacCer2/sacCer2.2bit \
+    ../../${S}.2bit stdin ${OUT}
+'_EOF_'
+    # << happy emacs
+    chmod +x chain.csh
 
     cat << '_EOF_' > template
 #LOOP
