@@ -1,0 +1,45 @@
+# Genome-wide ENCODE tracks
+
+track encMapability
+compositeTrack on
+shortLabel Mapability
+longLabel Mapability or Uniqueness of Reference Genome
+group map
+#dimensions dimensionX=win
+dragAndDrop subTracks
+priority 0
+type bigWig 0.00 1.00
+viewLimits 0:1
+autoScale off
+windowingFunction mean
+maxHeightPixels 100:32:16
+visibility hide
+wgEncode 1
+
+    track encCrgMapabilityAlign36mer
+    subTrack encMapability
+    shortLabel CRG Alignability 36
+    longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
+    color 120,0,0
+    priority 1
+
+    track encCrgMapabilityAlign50mer
+    subTrack encMapability
+    shortLabel CRG Alignability 50
+    longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
+    color 120,0,0
+    priority 2
+
+    track encCrgMapabilityAlign75mer
+    subTrack encMapability
+    shortLabel CRG Alignability 75
+    longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
+    color 120,0,0
+    priority 3
+
+    track encCrgMapabilityAlign100mer
+    subTrack encMapability
+    shortLabel CRG Alignability 100
+    longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
+    color 120,0,0
+    priority 4
