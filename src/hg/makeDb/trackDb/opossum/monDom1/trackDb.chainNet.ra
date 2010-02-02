@@ -3,3 +3,9 @@ shortLabel $o_Organism Chain/Net
 
 track chainNetMm6 override
 shortLabel $o_Organism Chain/Net
+
+	track chainMm6 override
+	shortLabel $o_Organism Chain
+
+	track netMm6 override
+	shortLabel $o_Organism Net

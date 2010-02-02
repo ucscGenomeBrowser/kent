@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.71 2010/02/01 07:34:30 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.72 2010/02/02 02:16:38 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -365,16 +365,6 @@ priority 278.2
 
 track netCavPor2 override
 priority 278.3
-
-track chainMm7 override
-priority 280.4
-
-track netMm7 override
-priority 280.5
-visibility dense
-
-
-#Overrides from visibility.ra
 
 track genieKnown override
 visibility pack

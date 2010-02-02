@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.457 2010/01/26 03:34:03 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.458 2010/02/02 02:16:37 kuhn Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -882,14 +882,6 @@ altColor 255,240,200
 spectrum on
 type chain homIni13
 otherDb homIni13
-
-track chainMm7 override
-shortLabel $o_db Chain
-priority 270.2
-
-track netMm7 override
-shortLabel $o_db Net
-priority 270.3
 
 track chainMm8
 release beta

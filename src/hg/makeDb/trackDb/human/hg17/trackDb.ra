@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.443 2010/02/01 23:34:03 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.444 2010/02/02 02:16:37 kuhn Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -1923,14 +1923,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm7
 otherDb mm7
-
-track chainMm7 override
-shortLabel $o_Organism Chain
-priority 270.2
-
-track netMm7 override
-shortLabel $o_Organism Net
-priority 270.3
 
 track chainMm7LSR
 shortLabel Mm7 Chain LSR

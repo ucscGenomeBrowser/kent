@@ -2024,14 +2024,6 @@ visibility hide
 color 20,0,50
 type bed 4 .
 
-track chainMm7 override
-shortLabel Mm7 Chain
-priority 178.11
-
-track netMm7 override
-shortLabel Mm7 Net
-priority 178.21
-
 track chainHg17 override
 shortLabel Hg17 Chain
 longLabel  Hg17 LiftOver Chain

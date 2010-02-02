@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.38 2010/02/01 23:34:03 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.39 2010/02/02 02:16:36 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -90,17 +90,6 @@ visibility hide
 spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
-
-track chainMm7 override
-shortLabel $o_db Chain 
-longLabel $o_db ($o_date/$o_db) Chained Alignments
-priority 240.4
-
-track netMm7 override
-shortLabel $o_db Net
-longLabel $o_db ($o_date/$o_db) Alignment Net
-priority 240.5
-visibility dense
 
 track chainMm5 override
 priority 124.0
