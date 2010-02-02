@@ -481,17 +481,18 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
                 {
                 int start = gp->exonStarts[i] - overlapA->chromStart;
                 int end   = overlapA->chromEnd - gp->exonEnds[i];
-                if (i == 0 && (end > 0 && end <= 2))
-                    code = SPLICE_SITE;
-                else if ((i == (gp->exonCount - 1)) && (start > 0 && start <= 2))
-                    code = SPLICE_SITE;
-                else if ((start > 0 && start <= 2) || (end > 0 && end <= 2))
-                    code = SPLICE_SITE;
-                if(i > 0 && (overlapA->chromEnd + 1) >= gp->exonStarts[i])
-                    // mutation at end of intron
-                    code = SPLICE_SITE;
-                else if(i < (gp->exonCount - 1) && (overlapA->chromStart - 1) <= gp->exonEnds[i])
-                    // mutation at beginning of intron
+                // XXXX I still think this isn't quite right (not sure if we s/d use chromEnd or chromStart).
+                if (i == 0)
+                    {
+                    if(end == 1 || end == 2)
+                        code = SPLICE_SITE;
+                    }
+                else if (i == (gp->exonCount - 1))
+                    {
+                    if(start == 1 || start == 2)
+                        code = SPLICE_SITE;
+                    }
+                else if ((start == 1 || start == 2) || (end == 1 || end == 2))
                     code = SPLICE_SITE;
                 }
             }
