@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.7 2009/10/12 06:50:48 larrym Exp $
+# $Id: HgDb.pm,v 1.8 2010/02/02 20:18:47 larrym Exp $
 
 package HgDb;
 
@@ -23,7 +23,8 @@ use Exporter;
 sub new
 {
 # $args{DB} is required
-# $args{USER}, $args{PASSWORD} and $args{HOST} are optional (and override .hg.conf values)
+# $args{PROFILE}: let's you select db profile (optional: defaults to "db").
+# $args{USER}, $args{PASSWORD} and $args{HOST} are optional (and override .hg.conf values).
     my ($class, %args) = (@_);
     my $ref = {};
     if(!defined($args{DB})) {
@@ -34,6 +35,7 @@ sub new
     if(! -e $confFile) {
         die "Cannot locate conf file: '$confFile'";
     }
+    my $profile = $args{PROFILE} || "db";
     open(CONF, $confFile);
     for (<CONF>) {
         next if /^#/;
@@ -42,7 +44,7 @@ sub new
             die "include ... syntax not currently supported";
         }
         for my $name (qw(host user password)) {
-            if(/^db\.$name\s*=\s*(.+)/) {
+            if(/^$profile\.$name\s*=\s*(.+)/) {
                 $ref->{uc($name)} = $1;
             }
         }
