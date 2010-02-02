@@ -12,7 +12,6 @@ source `which qaConfig.csh`
 #
 ################################
 
-
 set db=""
 set tableName=""
 set currDir=""
@@ -99,9 +98,27 @@ echo
 # find the trackDb.ra entry (using tdbQuery)
 
 echo " * trackDb:"
-tdbQuery -alpha "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"
+set all=`tdbQuery "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"`
+# print this output
 tdbQuery "select track,priority,visibility,release,filePos from $db" \
  | grep -w -A4 "$tableName"
+
+set strict=`tdbQuery -strict "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"`
+set alpha=`tdbQuery -alpha "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"`
+
+if ( "$all" != "$strict" ) then
+ # print strict
+ tdbQuery -strict "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"
+endif
+
+if ( "$alpha" != "$all" && "$alpha" != "$strict" ) then
+ # print alpha
+ tdbQuery -alpha "select track,priority,visibility,release,filePos from $db" \
+ | grep -w -A4 "$tableName"
+endif
 
 exit 0
