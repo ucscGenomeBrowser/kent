@@ -412,32 +412,6 @@ track chainRn3 override
 priority 286.2
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
-track chainRheMac1
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 276.2
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain rheMac1
-otherDb rheMac1
-
-track netRheMac1
-release beta
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 276.3
-visibility hide
-spectrum on
-type netAlign rheMac1 chainRheMac1
-otherDb rheMac1
-
 track chainDanRer4NoRand
 shortLabel $o_db Chain NoRand
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments No Randoms
