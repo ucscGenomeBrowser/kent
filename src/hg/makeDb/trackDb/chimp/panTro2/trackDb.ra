@@ -191,9 +191,3 @@ otherDb hg18
 track chainNetHg19 override
 priority 300.6
 
-track chainPonAbe2 override
-priority 288.1
-
-track netPonAbe2 override
-priority 288.2
-
