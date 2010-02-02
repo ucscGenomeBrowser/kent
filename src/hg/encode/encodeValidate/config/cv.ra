@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.204 2010/02/02 01:56:47 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.205 2010/02/02 18:45:11 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3485,6 +3485,7 @@ type dataType
 term TFBS-valid
 tag tfbsvalid
 type dataType
+label TfbsValid
 
 term RIP-chip
 tag rnagenechip
