@@ -40,10 +40,18 @@ pi      Elnitski
 grant   Elnitski
 project NHGRI-Elnitski
 
+# primary
 lab	NHGRI-Margulies
 pi      Margulies
 grant   Margulies
 project NHGRI-Margulies
+
+# synonym
+lab	Margulies
+pi      Margulies
+grant   Margulies
+project NHGRI-Margulies
+label	NHGRI-Margulies
 
 lab     Riken
 pi      Carninci
@@ -62,6 +70,12 @@ pi      Tenebaum
 grant   Tenenbaum
 project SUNY
 
+# primary
+lab	UMass-Dekker
+pi      Dekker
+grant   Dekker
+project UMass-Dekker
+
 lab	UMassDekker
 pi      Dekker
 grant   Dekker
@@ -79,7 +93,13 @@ pi      Lieb
 grant   Crawford
 project Duke
 
+# primary
 lab	UT-A
+pi      Iyer
+grant   Crawford
+project Duke
+
+lab	UT-Austin
 pi      Iyer
 grant   Crawford
 project Duke
@@ -89,6 +109,11 @@ pi      Stam
 grant   Stam
 project UW
 label   UW
+
+lab	Stanford
+pi      Snyder
+grant   Snyder
+project Yale
 
 lab	Yale
 pi      Snyder
@@ -113,17 +138,15 @@ label   Affymetrix
 
 # Mouse and ARRA grants
 
-# TODO: fix Conflict w/ Caltech Myers
-#lab	Caltech
-#pi	Wold
-#grant	Hardison
-#project	PSU
+lab	Caltech-Mouse
+pi	Wold
+grant	Hardison
+project	PSU
 
-# TODO: fix conflict w/ Lieb lab
-#lab	UNC
-#pi	Giddings
-#grant	Giddings
-#project	UNC
+lab	UNC-Giddings
+pi	Giddings
+grant	Giddings
+project	UNC
 
 lab	UChicago
 pi	White
