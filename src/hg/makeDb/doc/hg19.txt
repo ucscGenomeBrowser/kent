@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.76 2010/01/28 23:49:54 hartera Exp $";
+#	"$Id: hg19.txt,v 1.77 2010/02/02 20:11:44 hartera Exp $";
 
 #############################################################################
 
@@ -8170,13 +8170,12 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
-######################
 ############################################################################
-# SEGMENTAL DUPLICATIONS (2009-10-31 and 2009-11-04, hartera, DONE)
+# SEGMENTAL DUPLICATIONS (20010-02-02, hartera, in progress)
 # File emailed from Tin Louie <tinlouie at u.washington.edu>
-# in Evan Eichler's lab.
-# (2009-11-07, hartera, DONE) Re-loaded table after correcting some chromosome
-# names.  
+# in Evan Eichler's lab on 01/28/10. This is a data update since it was
+# thought that the last data set was incorrect so the pipeline had to be
+# re-run.
 # NOTE: Received e-mail from Tin Louie suggesting that the otherSize 
 # column could be dropped. It is just the size of the otherChrom and it 
 # does not seem to be used for the track display or details page. It has the
@@ -8184,10 +8183,23 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # In the future, this column could be dropped if it not useful.
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
     cd /hive/data/genomes/hg19/bed/genomicSuperDups
-   
-    wget ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.gz
+    # Remove old data
+    rm *
+    wget --timestamping \
+       ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.gz     
     gunzip hg19genomicSuperDups.gz
-    # The sed command is necessary to fix "_" used as strand.
+    # Fix incorrect chromosome names in data. Check both chrom and otherChrom.
+    # Previously, found several cases where the last letter of random was
+    # missing for the names of the random contigs. They all look good this
+    # time.
+    awk '{print $1}' hg19genomicSuperDups | sort | uniq > chroms
+    awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChroms
+    hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq > chromInfo.txt 
+    comm -23 chroms chromInfo.txt
+    comm -23 otherChroms chromInfo.txt
+    # chroms and otherChroms match chromosome names in chromInfo.
+
+    # The sed command is necessary to fix "_" used as strand to "-".
     # The awk command was necessary for some recent other species
     # genomicSuperDups that had some too-short regions.  It does not seem
     # to be necessary here, but doesn't hurt and may be useful in
@@ -8196,6 +8208,12 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed hg19 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+    # Loader says:
+Expecting 29 words line 29 of stdin got 28. Problem is that there are two tabs
+with a blank indelS field on this line so the loader, splitting on tabs, only
+reads 28 fields for this line. Same problem in other lines of the data.
+Contacted Tin to see if this can be fixed. 
+
 # Reading stdin
 # Loaded 63463 elements of size 29
 # Sorted
@@ -8204,55 +8222,6 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # Loading hg19
     # Updated details page with suggested text and an additional reference. 
     # src/hg/makeDb/trackDb/genomicSuperDups.html
-    # (2009-11-07, hartera)
-    # Fix incorrect chromosomes in data. 
-    # The script, runCheckTableCoordsDayOld, found this error in the table:
-    # hg19.genomicSuperDups has 28 records with chrom not described in
-    # chromInfo. 
-    cd /hive/data/genomes/hg19/bed/genomicSuperDup
-    awk '{print $1}' hg19genomicSuperDups | sort | uniq > chroms
-    awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChroms
-    # Found several cases where the last letter of random is missed off
-    # for the random contigs. These are not concatenated into a random chrom
-    # for hg19.  
-    hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq \
-          > chroms.chromInfo
-    # These are the contig names for random chroms that need to be corrected:
-    grep -v random chroms | grep rando | sort | uniq > chromsToCorrect
-    grep -v random otherChroms | grep rando | sort | uniq > otherChromsToCorrect
-    diff chromsToCorrect otherChromsToCorrect
-    # No difference so use chromsToCorrect file. There are 7 chrom names that 
-    # need to be corrected and they are:
-#chr11_gl000202_rando
-#chr17_gl000203_rando
-#chr17_gl000204_rando
-#chr17_gl000205_rando
-#chr17_gl000206_rando
-#chr19_gl000209_rando
-#chr21_gl000210_rando 
-    cp hg19genomicSuperDups hg19genomicSuperDups.orig
-    foreach c (`cat chromsToCorrect`)
-       perl -pi.bak -e "s/${c}/${c}m/g" hg19genomicSuperDups
-    end
-    # Check chroms and otherChroms again. 
-    awk '{print $1}' hg19genomicSuperDups | sort | uniq > chromsNew
-    awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChromsNew
-    # These look good now. 
-    # Drop the old table and re-load the corrected data.
-    hgsql -e 'drop table hg19genomicSuperDups;' hg19
-    
-    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups \
-    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
-    | hgLoadBed hg19 genomicSuperDups stdin \
-      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
-# Reading stdin
-# Loaded 63463 elements of size 29
-# Sorted
-# Creating table definition for genomicSuperDups
-# Saving bed.tab
-# Loading hg19
-    # Cleanup
-    # Remove chroms* otherChroms* *.bak
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 12/02/09 Fan).
 
