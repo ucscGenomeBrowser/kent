@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.13 2010/02/01 02:36:31 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.14 2010/02/02 18:46:40 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -39,8 +39,8 @@ use vars qw/
 # Global variables
 our $pipeline = "encpipeline_prod";
 our $pipelinePath = "/hive/groups/encode/dcc/pipeline/" . $pipeline;
-our $configPath = $pipelinePath . "/config";
-#our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeValidate" . "/config";
+#our $configPath = $pipelinePath . "/config";
+our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeValidate" . "/config";
 our $assembly = "hg18";
 
 sub usage {
@@ -114,29 +114,31 @@ while (@row = $sth->fetchrow_array()) {
     my $ref = Encode::metadataLineToHash($settings);
     my %metadata =  %{$ref};
     my %experiment = ();
-    if (!defined($metadata{"grant"})) {
-        $metadata{"grant"} = "unknown";
-    }
-    $experiment{"project"} = $metadata{"grant"};
-    # HACK:  to correct Wold lab (not grant)
-    #$experiment{"project"} = "HudsonAlpha" if ($metadata{"grant"} eq "Wold");
-    foreach my $lab (keys %labs) {
-        die "no grant for $lab" unless defined($labs{$lab}->{"grant"});
-        if ($labs{$lab}->{"grant"} eq $metadata{"grant"}) {
-            $experiment{"project"} = $labs{$lab}->{"project"};
-            $experiment{"projectPi"} = $labs{$lab}->{"grant"};
-            $experiment{"labPi"} = $labs{$lab}->{"pi"};
-            last;
-        }
-    }
-    $experiment{"lab"} = $metadata{"lab"};
-    # strip off PI name in parens
-    $experiment{"lab"} =~ s/\(\w+\)//;
+    $experiment{"project"} = "unknown";
+    $experiment{"projectPi"} = "unknown";
+    $experiment{"labPi"} = "unknown";
 
+    my $lab = "unknown";
+    if (defined($metadata{"lab"})) {
+        $lab = $metadata{"lab"};
+        # strip off PI name in parens
+        $lab =~ s/\(\w+\)//;
+    }
+    if (defined($labs{$lab})) {
+        $experiment{"labPi"} = $labs{$lab}->{"pi"};
+        $experiment{"project"} = $labs{$lab}->{"project"};
+        $experiment{"projectPi"} = $labs{$lab}->{"grant"};
+        warn "lab/project mismatch in settings $settings" 
+                unless ($metadata{"grant"} eq $experiment{"projectPi"});
+    } else {
+        warn "lab $lab not found in pi.ra, from settings $settings";
+    }
+    $experiment{"lab"} = $lab;
     # for now, force all Yale projects to be Yale lab (until metadata in projects table can match)
     #if ($metadata{"grant"} eq "Snyder") {
         #$experiment{"lab"} = "Yale";
     #}
+
     $experiment{"dataType"} = lc($metadata{"dataType"});
 
     $experiment{"cell"} = "none";
@@ -180,7 +182,7 @@ while (@row = $sth->fetchrow_array()) {
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
             $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
-            $experiment{"factorLabels"} = $experiment{"factorLabels"} .  $termType . "=" . $varLabel . " ";
+            $experiment{"factorLabels"} = $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
         }
         chop $experiment{"vars"};
         chop $experiment{"varLabels"};
@@ -328,7 +330,7 @@ while (@row = $sth->fetchrow_array()) {
                     my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                         $terms{$termType}{$var}->{"label"} : $var;
                     $varLabelString = $varLabelString . $varLabel . ";";
-                    $factorLabelString = $factorLabelString . $termType . "=" . $varLabel . " ";
+                    $factorLabelString = $factorLabelString . ucfirst($termType) . "=" . $varLabel . " ";
                 }
                 chop $varString;
                 chop $varLabelString;
