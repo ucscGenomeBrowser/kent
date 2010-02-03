@@ -698,10 +698,53 @@ a signal track and called peaks.  The aligns may be 'bed 3', peaks 'bed 5 +'
 and signal 'wig'.  These views need different controls, though all signal
 subtracks may share the same controls (based upon subgroups).  This organization
 is achieved by inserting a "view" level of tracks in between the composite level and the
-subtracks.  The view track needs to have a view tag.  Settings that are common to all tracks in 
-a view can also be put in the view level track.  In addition a specialize specialized subgroup 
-"views" needs to be put in the view or subtrack level. Example:
-    subGroup1 view Views Hmm=Sites-HMM Win=Sites-Windowing Sig=Signal_Densities Aln=Alignments
+subtracks.  Settings that are common to all tracks in a composite can be put at the
+composite level, settings that are common to all tracks in a view can be put in the view 
+level, and individual track settings can be put at the lowest level.  In addition
+the composite parent track needs to have a specialized subGroup1 setting 'view' and
+view must be contained in the subGroup setting at the lowest level.   Example:
+
+   track compositeParent
+   shortLabel Composite Sample
+   subGroup1 view Views Sig=Signal_Densities Aln=Alignments
+
+       track sigViewTrack
+       view Sig
+       shortLabel Signal Densities
+       subTrack compositeParent
+
+           track brainSignalTrack
+	   shortLabel Signals in Brain
+	   subTrack sigViewTrack
+	   subGroup view=Sig
+
+	   track liverSignalTrack
+	   shortLabe Signals in Liver
+	   subTrack sigViewTrack
+	   subGroup view=Sig
+     
+       track alnViewTrack
+       view Aln
+       shortLabel Alignments
+       subTrack compositeParent
+
+           track brainAlignmentTrack
+	   shortLabel Signals in Brain
+	   subTrack alnViewTrack
+	   subGroup view=Aln
+
+	   track liverAlignmentTrack
+	   shortLabe Signals in Liver
+	   subTrack alnViewTrack
+	   subGroup view=Aln
+     
+Note that the view level track needs to have a view tag.  There is some redundancy between 
+information in the view track and the subGroup tag of the composite parent.  Apologies.  This
+is largely so that the same sorting machinery for non-view subGroups can be reused here.  In
+particular the value of the view tag needs to be the same as the right hand in the var=value pair
+of the subGroup, and the same as the left hand side of the var=val pair in the subGroup1.
+
+Each view (Sig, Aln) will be controlled by a separate drop down
 where each view (Hmm,Win,Sig,Aln) will be controlled by a separate drop down
 (hide,dense,...) and auxilary controls.  All subtracks for a given view must
 be of the same track type.  Each subtrack of a multi-view should have all the proper settings 
