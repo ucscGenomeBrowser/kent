@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1620 2010/01/08 23:50:44 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1621 2010/02/03 18:43:38 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -292,7 +292,7 @@ if(theImgBox && curImgTrack)
     char link[512];
     safef(link,sizeof(link),"%s?%s=%u&g=%s",
         hgTrackUiName(), cartSessionVarName(),cartSessionId(cart), encodedName);
-    char title[128];
+    char title[256];
 
     safef(title,sizeof(title),"%s controls", shortLabel);
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
@@ -1034,8 +1034,8 @@ char maxRangeStr[32];
 int ymin, ymax;
 int start;
 int newy;
-char o4[128];
-char o5[128];
+char o4[256];
+char o5[256];
 struct slList *item;
 enum trackVisibility vis = track->limitedVis;
 enum trackVisibility savedVis = vis;
@@ -1238,7 +1238,7 @@ static void doLabelNextItemButtons(struct track *track, struct track *parentTrac
 int arrowWidth = insideHeight;
 int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
 int rightButtonX = insideX + insideWidth - arrowButtonWidth - 1;
-char buttonText[100];
+char buttonText[256];
 Color fillColor = lightGrayIndex();
 labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
@@ -2034,7 +2034,7 @@ if(theImgBox)
             #ifdef FLAT_TRACK_LIST
             int order = flatTrack->order;
             #else//ifndef FLAT_TRACK_LIST
-            char var[128];
+            char var[256];
             safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
             int order = cartUsualInt(cart, var,IMG_ANYORDER);
             #endif//ndef FLAT_TRACK_LIST
@@ -2711,7 +2711,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 static int getScoreFilter(char *tableName)
 /* check for score filter configuration setting */
 {
-char optionScoreStr[128];
+char optionScoreStr[256];
 
 safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tableName);
 return cartUsualInt(cart, optionScoreStr, 0);
@@ -3208,7 +3208,7 @@ struct hashEl *visEl;
 struct hashEl *visList = cartFindPrefix(cart, "hgtct.");
 for (visEl = visList; visEl != NULL; visEl = visEl->next)
     {
-    char buf[128];
+    char buf[256];
     safef(buf, sizeof buf, "browser %s %s", cartString(cart, visEl->name),
                 chopPrefix(cloneString(visEl->name)));
     slAddTail(&browserLines, slNameNew(buf));
@@ -3699,7 +3699,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
     if (withPriorityOverride)
         {
         char *groupName = NULL;
-        char cartVar[128];
+        char cartVar[256];
 
         /* belt and suspenders -- accomodate inconsistent track/trackDb
          * creation.  Note -- with code cleanup, these default variables
@@ -3820,7 +3820,7 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         superTrack->defaultGroupName = cloneString(group->name);
 
         /* handle track reordering */
-        char cartVar[128];
+        char cartVar[256];
         safef(cartVar, sizeof(cartVar), "%s.priority",track->tdb->parentName);
         float priority = (float)cartUsualDouble(cart, cartVar,
                                         track->tdb->parent->priority);
@@ -3948,7 +3948,7 @@ if ((track != NULL) && (track->nextPrevItem != NULL))
 char *collapseGroupVar(char *name)
 /* Construct cart variable name for collapsing group */
 {
-static char varName[128];
+static char varName[256];
 safef(varName, sizeof(varName),
         "%s%s_%s_%s", "hgt", "group", name, "close");
 return (cloneString(varName));

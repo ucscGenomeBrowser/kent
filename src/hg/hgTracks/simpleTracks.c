@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.122 2010/01/22 22:52:03 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.123 2010/02/03 18:43:37 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -1942,7 +1942,7 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
-char extraWhere[128] ;
+char extraWhere[256] ;
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
 if ((scoreColumn != NULL) && (cartVarExistsAnyLevel(cart, tg->tdb, FALSE, SCORE_FILTER)))
@@ -3518,7 +3518,7 @@ char **row;
 int rowOffset;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 
-char optionScoreStr[128]; /* Option -  score filter */
+char optionScoreStr[256]; /* Option -  score filter */
 safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER); // Special case where getScoreFilterClause is too much trouble
 int optionScore = cartUsualInt(cart, optionScoreStr, 0);   // Special case where CloserToHome not appropriate
 if (optionScore > 0)
@@ -10983,7 +10983,7 @@ track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;
 track->defaultPriority = tdb->priority;
-char lookUpName[128];
+char lookUpName[256];
 safef(lookUpName, sizeof(lookUpName), "%s.priority", tdb->tableName);
 tdb->priority = cartUsualDouble(cart, lookUpName, tdb->priority);
 track->priority = tdb->priority;

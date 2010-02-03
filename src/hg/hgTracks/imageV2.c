@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.19 2009/12/17 19:20:24 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.20 2010/02/03 18:43:37 angie Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -30,7 +30,7 @@ void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct car
 struct flatTracks *flatTrack;
 AllocVar(flatTrack);
 flatTrack->track = track;
-char var[128];  // The whole reason to do this is to reorder tracks/subtracks in the image!
+char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
 safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
 if(flatTrack->order >= IMG_ORDEREND)
@@ -421,7 +421,7 @@ if(slice->map != NULL && slice->map != slice->parentImg->map)
     warn("sliceAddMap() but slice already has its own map. Being replaced.");
     mapSetFree(&(slice->map));
     }
-char qualifiedName[128];
+char qualifiedName[256];
 safef(qualifiedName,sizeof(qualifiedName),"%s_%s",sliceTypeToString(slice->type),name);
 slice->map = mapSetStart(qualifiedName,slice->parentImg,linkRoot);
 return slice->map;
@@ -451,7 +451,7 @@ struct mapSet *sliceMapUpdateOrStart(struct imgSlice *slice,char *name,char *lin
 struct mapSet *map = sliceGetMap(slice,TRUE); // Must be specific to this slice
 if (map == NULL)
     return sliceMapStart(slice,name,linkRoot);
-char qualifiedName[128];
+char qualifiedName[256];
 safef(qualifiedName,sizeof(qualifiedName),"%s_%s",sliceTypeToString(slice->type),name);
 return mapSetUpdate(map,qualifiedName,slice->parentImg,linkRoot);
 }
@@ -1316,7 +1316,7 @@ if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
 boolean verbose = (hIsPrivateHost());   // Warnings for hgwdev only
 if(!imgBoxIsComplete(imgBox,verbose))
     return;
-char name[128];
+char name[256];
 int bgOffset = NO_VALUE;
 
 imgBoxTracksNormalizeOrder(imgBox);
