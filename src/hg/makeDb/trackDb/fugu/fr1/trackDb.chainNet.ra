@@ -1,5 +1,5 @@
-#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/28 21:53:10 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.2 2010/02/03 05:58:08 kuhn Exp $";
 
 track chainNetDanRer4 override
 priority 240.3
-shortLabel Zebrafish Chain/Net
+shortLabel $o_Organism Chain/Net

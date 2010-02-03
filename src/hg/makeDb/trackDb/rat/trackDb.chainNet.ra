@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.19 2010/02/03 02:37:07 rhead Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.20 2010/02/03 05:58:08 kuhn Exp $";
 
 track chainNetMm9 override
 priority 210.3
@@ -9,6 +9,12 @@ chainLinearGap loose
 track chainNetMm8 override
 priority 210.3
 shortLabel $o_db Chain/Net
+
+	track chainMm8 override
+	shortLabel $o_db Chain
+
+	track netMm8 override
+	shortLabel $o_db Net
 
 track chainNetMm7 override
 priority 210.3
@@ -104,7 +110,7 @@ shortLabel $o_db Chain/Net
 
 track chainNetDanRer4 override
 priority 600.3
-shortLabel Zebrafish Chain/Net
+shortLabel $o_Organism Chain/Net
 
 track chainNetDanRer3 override
 priority 600.3
