@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.23 2010/01/30 01:13:44 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.24 2010/02/03 17:50:41 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -116,9 +116,3 @@ spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
 
-track chainMm8 override
-priority 120
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netMm8 override
-priority 120.1
