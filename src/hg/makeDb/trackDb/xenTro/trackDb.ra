@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.27 2009/12/22 20:16:33 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.28 2010/02/03 07:02:28 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -70,32 +70,6 @@ color 65,20,100
 type psl xeno
 # url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511&XL001c18
 url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511
-
-track chainMm8
-release beta
-#replaces record chainMm8 in parent dir missing/extra release,matrix,matrixHeader
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 130.01
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain mm8
-otherDb mm8
-
-track netMm8
-release beta
-#replaces record netMm8 in parent dir missing/extra release
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 131.01
-visibility hide
-spectrum on
-type netAlign mm8 chainMm8
-otherDb mm8
 
 track chainRn4
 release beta

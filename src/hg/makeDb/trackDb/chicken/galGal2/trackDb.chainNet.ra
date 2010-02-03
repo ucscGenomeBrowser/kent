@@ -1,10 +1,9 @@
-#	"$Id: trackDb.chainNet.ra,v 1.5 2010/02/01 07:08:23 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.6 2010/02/03 07:02:22 kuhn Exp $";
 
 track chainNetRn4 override
 chainMinScore 1000
 
 track chainNetMm8 override
-shortLabel $o_Organism Chain/Net
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetHg18 override

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.33 2010/02/02 23:44:11 rhead Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.34 2010/02/03 07:02:25 kuhn Exp $";
 
 track chainNetPanTro2 override
 priority 210.3
@@ -63,6 +63,12 @@ priority 370.3
 track chainNetMm8 override
 priority 370.3
 shortLabel $o_db Chain/Net
+
+	track chainMm8 override
+	shortLabel $o_db Chain
+
+	track netMm8 override
+	shortLabel $o_db Net
 
 track chainNetMm7 override
 priority 370.3

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.71 2010/01/26 05:19:03 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.72 2010/02/03 07:02:24 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -230,7 +230,7 @@ priority 240.1
 
 track chainHg18
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 150.1
@@ -245,7 +245,7 @@ otherDb hg18
 
 track netHg18
 #replaces record netHg18 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 150.2

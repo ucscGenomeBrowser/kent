@@ -1,7 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.3 2010/02/02 00:43:40 kuhn Exp $";
-
-track chainNetMm8 override
-shortLabel $o_Organism Chain/Net
+#	"$Id: trackDb.chainNet.ra,v 1.4 2010/02/03 07:02:23 kuhn Exp $";
 
 track chainNetHg18 override
 shortLabel $o_Organism Chain/Net

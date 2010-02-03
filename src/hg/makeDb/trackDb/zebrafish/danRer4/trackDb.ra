@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.41 2010/01/25 17:43:36 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.42 2010/02/03 07:02:30 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -120,21 +120,6 @@ visibility dense
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
-
-track chainMm8 override
-priority 126.2 
-
-track netMm8
-release beta
-#replaces record netMm8 in parent dir missing/extra release
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 126.3
-visibility hide
-spectrum on
-type netAlign mm8 chainMm8
-otherDb mm8
 
 track chainFr1 override
 shortLabel $o_db Chain
