@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.136 2010/01/13 19:19:52 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.137 2010/02/03 18:48:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -379,7 +379,7 @@ if (isUpdateForm)
     {
     /* hidden variables to identify track */
     cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
-    char buf[256];
+    char buf[512];
     char *shortLabel = htmlEncode(ct->tdb->shortLabel);
     char *longLabel = htmlEncode(ct->tdb->longLabel);
     safef(buf, sizeof buf, "track name='%s' description='%s'",
@@ -778,7 +778,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
                         }
                     else
                         {
-                        char buf[128];
+                        char buf[256];
                         safef(buf, sizeof buf, "hgtct.%s", s);
                         cartSetString(cart, buf, command);
                         }
@@ -882,7 +882,7 @@ void doDeleteCustom()
 struct customTrack *ct;
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    char var[128];
+    char var[256];
     safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->tableName);
     if (cartBoolean(cart, var))
 	slRemoveEl(&ctList, ct);
@@ -898,7 +898,7 @@ struct customTrack *refreshCts = NULL;
 
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    char var[128];
+    char var[256];
     safef(var, sizeof var, "%s_%s", hgCtRefreshPrefix, ct->tdb->tableName);
     if (cartUsualBoolean(cart, var, FALSE))
 	{
