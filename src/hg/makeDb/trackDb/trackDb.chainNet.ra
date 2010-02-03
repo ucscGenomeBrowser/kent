@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.58 2010/02/02 02:16:35 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.59 2010/02/03 03:19:53 rhead Exp $";
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
@@ -1717,7 +1717,6 @@ html chainNet
     subTrack chainNetMm7
 
         track netMm7
-        release alpha
         subTrack chainNetMm7Viewnet
         subGroups view=net
         shortLabel $o_db Net
