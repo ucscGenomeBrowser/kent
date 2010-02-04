@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.123 2010/02/03 18:43:37 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.124 2010/02/04 23:31:16 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9242,8 +9242,7 @@ boolean cmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 char *display = "freq"; //cartVar?
 if (revCmplDisp)
    cmpl = !cmpl;
-if ((!zoomedToBaseLevel && tg->customInt > 50)
-    || vis == tvSquish || vis == tvDense || myItem->alleleCount > 2)
+if (vis == tvSquish || vis == tvDense || myItem->alleleCount > 2)
     {
     withIndividualLabels = TRUE; //haven't done label for this one
     bedDrawSimpleAt(tg, myItem, hvg, xOff, y, scale, font, color, vis);
