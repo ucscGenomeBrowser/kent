@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.77 2010/02/02 20:11:44 hartera Exp $";
+#	"$Id: hg19.txt,v 1.78 2010/02/04 19:25:27 hartera Exp $";
 
 #############################################################################
 
@@ -8171,7 +8171,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 ############################################################################
-# SEGMENTAL DUPLICATIONS (20010-02-02, hartera, in progress)
+# SEGMENTAL DUPLICATIONS (2010-02-02 - 2010-02-04, hartera, DONE)
 # File emailed from Tin Louie <tinlouie at u.washington.edu>
 # in Evan Eichler's lab on 01/28/10. This is a data update since it was
 # thought that the last data set was incorrect so the pipeline had to be
@@ -8180,13 +8180,23 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # column could be dropped. It is just the size of the otherChrom and it 
 # does not seem to be used for the track display or details page. It has the
 # correct description in the table schema so it is ok to keep it for now. 
-# In the future, this column could be dropped if it not useful.
+# In the future, this column could be dropped if it not useful. 
+# There are a number of columns that could be dropped as they are 
+# meaningless but decided to keep them as the code for the details page
+# expect them to be there.
+# 01/28/10 Received new data as previous run of the pipeline may have
+# produced incorrect results. 
+# 2010-02-02 Loader aborted on data since in some lines there was an empty
+# field so the loader read only 28 words instead of 29. E-mailed Tin to
+# ask for the data to be fixed. 
+# 2010-02-03 Received new data as the previous data had empty fields.
+# 2010-02-04 Loaded new data into hg19 database.
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
     cd /hive/data/genomes/hg19/bed/genomicSuperDups
     # Remove old data
     rm *
     wget --timestamping \
-       ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.gz     
+        ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.gz    
     gunzip hg19genomicSuperDups.gz
     # Fix incorrect chromosome names in data. Check both chrom and otherChrom.
     # Previously, found several cases where the last letter of random was
@@ -8208,20 +8218,26 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed hg19 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
-    # Loader says:
-Expecting 29 words line 29 of stdin got 28. Problem is that there are two tabs
-with a blank indelS field on this line so the loader, splitting on tabs, only
-reads 28 fields for this line. Same problem in other lines of the data.
-Contacted Tin to see if this can be fixed. 
-
-# Reading stdin
-# Loaded 63463 elements of size 29
+# Loaded 51549 elements of size 29
 # Sorted
 # Creating table definition for genomicSuperDups
 # Saving bed.tab
 # Loading hg19
+
+    # 2009-11-05: 
     # Updated details page with suggested text and an additional reference. 
     # src/hg/makeDb/trackDb/genomicSuperDups.html
+    # 2010-02-04: Updated the schema description as below in
+    # src/hg/lib/genomicSuperDups.sql. Kept score as it is used in older
+    # datasets e.g. on hg18 -  
+    # Suggestions by Tin Louie for the schema description:
+# I suggest that the description of those meaningless columns (on the webpage
+# 'Schema for Segmental Dups') be changed to "for future use". The meaningless
+# columns are:  score, posBasesHit, testResult, verdict, chits, ccov
+# The descriptions of other columns should be changed for clarification:
+# otherSize -- equal to otherEnd minus otherStart
+# uid -- id shared by the query & subject of a hit 
+
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 12/02/09 Fan).
 
