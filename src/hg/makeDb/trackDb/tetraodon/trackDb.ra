@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.51 2010/02/03 07:02:27 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.52 2010/02/04 04:30:46 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -141,19 +141,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno mm5
 otherDb mm5
-
-track chainMm5 override
-priority 127.2
-visibility dense
-
-track netMm5 override
-priority 127.3
-
-track chainMm9 override
-priority 128.1
-
-track netMm9 override
-priority 128.2
 
 track blastzSelf
 shortLabel Self Blastz

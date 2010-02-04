@@ -1,9 +1,5 @@
 include trackDb.chainNet.ra
 
-track chainMm9 override
-priority 232.1
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
 track chainHg18 override
 shortLabel $o_db Chain
 longLabel $o_db ($o_date/$o_db) Chained Alignments
@@ -15,7 +11,4 @@ shortLabel $o_db Net
 longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 290.2
 otherDb hg18
-
-track netMm9 override
-priority 232.2
 

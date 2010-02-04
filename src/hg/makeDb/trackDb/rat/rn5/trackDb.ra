@@ -1,14 +1,4 @@
 
-track chainMm9 override
-shortLabel Mm9 Lastz Chain
-longLabel Mm9 Lastz ($o_date/$o_db) Chained Alignments
-priority 279
-
-track netMm9 override
-shortLabel Mm9 Lastz Net
-longLabel Mm9 Lastz ($o_date/$o_db) Alignment Net
-priority 279.1
-
 track chainMm9Blastz
 shortLabel Mm9 Blastz Chain
 longLabel Mm9 Blastz ($o_date/$o_db) Chained Alignments

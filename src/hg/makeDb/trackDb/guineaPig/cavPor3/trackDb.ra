@@ -50,13 +50,6 @@ priority 10004.1
 track netRn4 override
 priority 10004.2
 
-track chainMm9 override
-priority 10006.1
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track netMm9 override
-priority 10006.2
-
 searchTable nscanGene
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]+

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.87 2010/02/02 23:46:21 hartera Exp $";
+#	"$Id: trackDb.ra,v 1.88 2010/02/04 04:30:43 kuhn Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -778,7 +778,6 @@ html hg19mammalChainNet
         otherDb echTel1
 
         track chainMm9
-    #replaces record chainMm9 in parent dir missing/extra release
         subTrack placentalChainNetViewchain on 
         subGroups view=chain species=aMm clade=aEuarch
         shortLabel $o_Organism Chain
@@ -920,7 +919,6 @@ html hg19mammalChainNet
         otherDb myoLuc1
 
         track netBosTau4
-    #replaces record netBosTau4 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet on 
         subGroups view=net species=kBosTau clade=bLaura
         shortLabel $o_Organism Net
@@ -980,7 +978,6 @@ html hg19mammalChainNet
         otherDb echTel1
 
         track netMm9
-    #replaces record netMm9 in parent dir missing/extra release
         subTrack placentalChainNetViewnet on
         subGroups view=net species=aMm clade=aEuarch
         shortLabel $o_Organism Net
@@ -1059,7 +1056,6 @@ html hg19vertChainNet
         otherDb ornAna1
 
         track chainGalGal3
-    #replaces record chainGalGal3 in parent dir missing/extra release
         subTrack vertebrateChainNetViewchain on 
         subGroups view=chain species=dGalGal clade=bDino
         shortLabel $o_Organism Chain
@@ -1178,7 +1174,6 @@ html hg19vertChainNet
         otherDb ornAna1
 
         track netGalGal3
-    #replaces record netGalGal3 in parent dir missing/extra release
         subTrack vertebrateChainNetViewnet on 
         subGroups view=net species=dGalGal clade=bDino
         shortLabel $o_Organism Net
