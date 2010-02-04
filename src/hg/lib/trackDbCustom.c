@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.75 2010/01/27 07:41:21 markd Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.76 2010/02/04 22:58:17 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -719,7 +719,7 @@ return  (setting && (   sameWord(setting,"on")
 }
 
 struct trackDb *subTdbFind(struct trackDb *parent,char *table)
-/* Return subTrack tdb if it exists in parent. */
+/* Return child tdb if it exists in parent. */
 {
 if(parent == NULL)
     return NULL;
@@ -902,7 +902,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    char *subtrackSetting = trackDbLocalSetting(tdb, "subTrack");
+    char *subtrackSetting = trackDbLocalSetting(tdb, "parent");
     if (subtrackSetting != NULL)
         {
 	char *parentName = cloneFirstWord(subtrackSetting);
@@ -914,7 +914,7 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	    }
 	else
 	    {
-	    errAbort("Parent track %s of subTrack %s doesn't exist", parentName, tdb->tableName);
+	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->tableName);
 	    }
 	freez(&parentName);
 	}
@@ -1037,5 +1037,42 @@ if (parent != NULL)
     return parent;
 else
     return tdb;
+}
+
+boolean trackDbUpdateOldTag(char **pTag, char **pVal)
+/* Look for obscolete tags and update them to new format.  Return TRUE if any update
+ * is done.  Will allocate fresh memory for new tag and val if updated. */
+{
+char *tag = *pTag;
+char *val = *pVal;
+boolean updated = FALSE;
+
+if (sameString(tag, "compositeTrack"))
+    {
+    tag = "container";
+    val = "composite";
+    }
+else if (sameString(tag, "subTrack"))
+    {
+    tag = "parent";
+    }
+else if (sameString(tag, "superTrack"))
+    {
+    if (sameWord(val, "on"))
+        {
+	tag = "container";
+	val = "folder";
+	}
+    else
+        {
+	tag = "parent";
+	}
+    }
+if (updated)
+    {
+    *pTag = cloneString(tag);
+    *pVal = cloneString(val);
+    }
+return updated;
 }
 

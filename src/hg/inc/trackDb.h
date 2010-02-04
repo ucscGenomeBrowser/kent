@@ -359,5 +359,8 @@ struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb);
 /* Look for a parent who is a composite track and return that.  Failing that
  * just return self. */
 
+boolean trackDbUpdateOldTag(char **pTag, char **pVal);
+/* Look for obscolete tags and update them to new format.  Return TRUE if any update
+ * is done.  Will allocate fresh memory for new tag and val if updated. */
 #endif /* TRACKDB_H */
 
