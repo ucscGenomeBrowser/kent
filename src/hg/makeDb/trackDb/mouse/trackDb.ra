@@ -850,10 +850,6 @@ priority 120
 track netPetMar1 override
 priority 120.1
 
-# stickleback
-track chainGasAcu1 override
-priority 136
-
 track netGasAcu1 override
 priority 136.1
 
