@@ -99,26 +99,26 @@ echo
 
 echo " * trackDb:"
 set all=`tdbQuery "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"`
+ | grep -w -A4 "track $tableName"`
 # print this output
 tdbQuery "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"
+ | grep -w -A4 "track $tableName"
 
 set strict=`tdbQuery -strict "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"`
+ | grep -w -A4 "track $tableName"`
 set alpha=`tdbQuery -alpha "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"`
+ | grep -w -A4 "track $tableName"`
 
 if ( "$all" != "$strict" ) then
  # print strict
  tdbQuery -strict "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"
+ | grep -w -A4 "track $tableName"
 endif
 
 if ( "$alpha" != "$all" && "$alpha" != "$strict" ) then
  # print alpha
  tdbQuery -alpha "select track,priority,visibility,release,filePos from $db" \
- | grep -w -A4 "$tableName"
+ | grep -w -A4 "track $tableName"
 endif
 
 exit 0
