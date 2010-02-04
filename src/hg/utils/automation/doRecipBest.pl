@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.11 2008/07/21 18:07:16 braney Exp $
+# $Id: doRecipBest.pl,v 1.12 2010/02/04 18:33:56 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -299,8 +299,15 @@ $splitRef =  (`wc -l < $HgAutomate::clusterData/$tDb/chrom.sizes`
                         <= $HgAutomate::splitThreshold);
 
 # Establish what directory we will work in.
-$buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/blastz.$qDb";
+if ($opt_buildDir) {
+    $buildDir = $opt_buildDir;
+} else {
+$buildDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/blastz.$qDb";
+if (! -d $buildDir) {
+$buildDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/lastz.$qDb";
+}
+die "can not find existing build directory:\n$buildDir\n";
+}
 
 # Do everything.
 $stepper->execute();
