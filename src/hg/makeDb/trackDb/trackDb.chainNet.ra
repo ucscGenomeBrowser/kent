@@ -1,4 +1,53 @@
-#	"$Id: trackDb.chainNet.ra,v 1.62 2010/02/04 06:18:23 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.63 2010/02/04 21:22:09 galt Exp $";
+
+track chainNetAplCal1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 655.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb aplCal1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAplCal1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    subTrack chainNetAplCal1
+    spectrum on
+
+        track chainAplCal1
+        subTrack chainNetAplCal1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        type chain aplCal1
+
+    track chainNetAplCal1Viewnet
+    shortLabel Net
+    view net
+    visibility dense
+    subTrack chainNetAplCal1
+
+        track netAplCal1
+        subTrack chainNetAplCal1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        type netAlign aplCal1 chainAplCal1
 
 # release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
