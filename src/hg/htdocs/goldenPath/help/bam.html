@@ -68,9 +68,12 @@ The typical workflow for generating a BAM custom track is this:
   <LI>Sort and create an index for the BAM:
 <PRE><TT>samtools sort my.bam my.sorted
 samtools index my.sorted.bam</TT></PRE>
-      That command generates a new file, my.sorted.bam.bai .</LI>
-  <LI>Move both the BAM file and index file (my.sorted.bam and 
-      my.sorted.bam.bai) to an http or ftp location.</LI>
+      The sort command appends <TT>.bam</TT> to <TT>my.sorted</TT>, creating a 
+      BAM file of alignments ordered by leftmost position on the reference assembly.
+      The index command generates a new file, <TT>my.sorted.bam.bai</TT>, with which 
+      genomic coordinates can quickly be translated into file offsets in <TT>my.sorted.bam</TT>.
+  <LI>Move both the BAM file and index file (<TT>my.sorted.bam</TT> and 
+      <TT>my.sorted.bam.bai</TT>) to an http or ftp location.</LI>
   <LI>Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
       using a single 
       <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
