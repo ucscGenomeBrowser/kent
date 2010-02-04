@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.25 2009/11/20 00:06:49 galt Exp $
+# $Id: makeGenomeDb.pl,v 1.26 2010/02/04 18:33:19 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -409,15 +409,15 @@ sub makeUnmasked2bit {
     $bossScript->add(<<_EOF_
 # Get sorted IDs from fasta sequence files:
 set fastaIds = `mktemp -p /tmp makeGenomeDb.fastaIds.XXXXXX`
-$fcat $fastaFiles | grep '^>' | perl -wpe 's/^>(\\S+).*/\$1/' | sort \\
+$fcat $fastaFiles | grep '^>' | sed -e 's/^>.*gb\|/>/; s/\|.*//' | perl -wpe 's/^>(\\S+).*/\$1/' | sort \\
   > \$fastaIds
 
 # Get sorted "big" (1st column) and "little" (6th column) IDs from AGP files:
 set agpBigIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
-$acat $agpFiles | awk '{print \$1;}' | sort -u \\
+$acat $agpFiles | grep -v '^#' | awk '{print \$1;}' | sort -u \\
   > \$agpBigIds
 set agpLittleIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
-$acat $agpFiles | awk '((\$5 != "N") && (\$5 != "U")) {print \$6;}' | sort -u \\
+$acat $agpFiles | grep -v '^#' | awk '((\$5 != "N") && (\$5 != "U")) {print \$6;}' | sort -u \\
   > \$agpLittleIds
 
 # Compare fasta IDs to first and sixth columns of AGP:
@@ -428,13 +428,14 @@ set diffLittleCount = `comm $sli-3 \$fastaIds \$agpLittleIds | wc -l`
 # If AGP "little" IDs match sequence IDs, or are a subset, assemble sequence with agpToFa.
 if (\$diffLittleCount == 0) then
   set agpTmp = `mktemp -p /tmp makeGenomeDb.agp.XXXXXX`
-  $acat $agpFiles > \$agpTmp
-  $fcat $fastaFiles \\
+  $acat $agpFiles | grep -v '^#' > \$agpTmp
+  $fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
   | agpToFa -simpleMultiMixed \$agpTmp all stdout stdin \\
   | faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
   rm -f \$agpTmp
 else if (\$diffBigCount == 0) then
-  faToTwoBit -noMask $fastaFiles $chrM $db.unmasked.2bit
+  $fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
+  | faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
 else
   echo "Error: IDs in fastaFiles ($fastaFiles)"
   echo "do not perfectly match IDs in either the first or sixth columns of"
@@ -451,7 +452,8 @@ _EOF_
   } else {
     # No AGP -- just make an unmasked 2bit.
     $bossScript->add(<<_EOF_
-faToTwoBit -noMask $fastaFiles $chrM $db.unmasked.2bit
+$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
+    faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
 _EOF_
     );
   }
@@ -472,7 +474,7 @@ _EOF_
 
 if (`wc -l < chrom.sizes` < 1000) then
   # Install per-chrom .agp files for download.
-  $acat $agpFiles \\
+  $acat $agpFiles | grep -v '^#' \\
   | splitFileByColumn -col=1 -ending=.agp stdin $topDir -chromDirs
 endif
 _EOF_
@@ -560,7 +562,7 @@ sub checkAgp {
 # are arbitrary, I'm not sure how to identify the pairings of AGP and fa
 # files.  So cat 'em all together and check everything at once:
 
-$acat $agpFiles | sort -k1,1 -k2n,2n > $allAgp
+$acat $agpFiles | grep -v '^#' | sort -k1,1 -k2n,2n > $allAgp
 
 set result = `checkAgpAndFa $exclude $allAgp $db.unmasked.2bit | tail -1`
 
