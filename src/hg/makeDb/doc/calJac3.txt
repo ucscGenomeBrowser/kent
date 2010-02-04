@@ -1,0 +1,62 @@
+# for emacs: -*- mode: sh; -*-
+
+#	$Id: calJac3.txt,v 1.1 2010/02/04 23:49:59 hiram Exp $
+
+# Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
+# ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
+#	Callithrix_jacchus/Callithrix_jacchus-3.2
+#	Callithrix jacchus
+
+##########################################################################
+# Download sequence (DONE - 2010-02-04 - Hiram)
+    mkdir /hive/data/genomes/calJac3
+    cd /hive/data/genomes/calJac3
+    mkdir genbank
+    cd genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Callithrix_jacchus/Callithrix_jacchus-3.2/*"
+
+    mkdir ucscChr
+    cd ucscChr
+    #	fixup the accession names to become UCSC chrom names
+zcat ../Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+    | sed -e "s/^>.*gb|\([A-Z]*[0-9]*\).1.*/>chrUn_\1/" > chrUn.fa
+
+zcat ../Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+    | sed -e "s/^\([A-Z]*[0-9]*\).1/chrUn_\1/" > chrUn.agp
+
+find ../Primary_Assembly/unlocalized_scaffolds/FASTA -type f \
+        | grep "unlocalized.scaf.fa.gz$" | head -1 | while read F
+do
+    C=`basename ${F}`
+    C=${C/.unlocalized.scaf.fa.gz}
+    zcat "${F}" | sed -e "s/^>.*gb|\([A-Z]*[0-9]*\).1.*/>${C}_\1_random/"
+done > chr_randoms.fa
+
+find ../Primary_Assembly/unlocalized_scaffolds/AGP -type f | grep ".agp.gz$" \
+| while read F
+do
+    C=`basename ${F}`
+    echo -n "${C} "
+    C=${C/.unlocalized.scaf.agp.gz}
+    echo "${C}"
+    zcat "${F}" | sed -e "s/^\([A-Z]*[0-9]*\).1/${C}_\1_random/"
+done > chr_randoms.agp
+
+AC="../Primary_Assembly/assembled_chromosomes"
+for F in ${AC}/FASTA/chr*.fa.gz
+do
+    C=`basename $F`
+    C=${C/.fa.gz}
+    echo -n "${C} "
+    H=`zcat "${F}" | head -1`
+    chrN=`echo $H | sed -e "s/.*Callithrix jacchus chromosome /chr/; s/,
+.*//"`
+    A=`echo $H | sed -e "s/. Callithrix.*//; s/.*gb.//"`
+    echo $chrN $A
+    zcat ${AC}/AGP/${chrN}.comp.agp.gz \
+        | sed -e "s/^${A}/${chrN}/" > ${chrN}.agp
+    echo ">${chrN}" > ${chrN}.fa
+    zcat ${AC}/FASTA/${chrN}.fa.gz | grep -v "^>" >> ${chrN}.fa
+done
