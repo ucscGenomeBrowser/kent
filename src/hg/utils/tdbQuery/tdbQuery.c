@@ -8,12 +8,13 @@
 #include "obscure.h"
 #include "portable.h"
 #include "errabort.h"
+#include "trackDb.h"
 #include "tdbRecord.h"
 #include "ra.h"
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.26 2010/01/04 19:12:40 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.27 2010/02/04 22:59:45 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -73,7 +74,6 @@ static struct optionSpec options[] = {
 };
 
 #define glKeyField "track"	 /* The field that has the record ID */
-#define glParentField "subTrack" /* The field that points to the parent. */
 
 struct hash *glTagTypes = NULL;	/* Hash of tagTypes file keyed by tag. */
 char glTagTypeFile[PATH_LEN];	/* File name of tagTypes.tab including dir. */
@@ -610,8 +610,7 @@ if (gotParentSomeRelease && releaseField == NULL)
      assert(parent != NULL);
      return parent;
      }
-recordWarn(rec, "%s is a subTrack of %s, but %s doesn't exist", rec->key,
-    parentField->val, parentField->val);
+recordWarn(rec, "parent %s of %s doesn't exist", parentName, rec->key);
 return NULL;
 }
 
@@ -675,10 +674,6 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
 		{
 		oldRecord->fieldList = record->fieldList;
 		oldRecord->posList = record->posList;
-		oldRecord->settingsByView = record->settingsByView;
-		oldRecord->subGroups = record->subGroups;
-		oldRecord->view = record->view;
-		oldRecord->viewHash = record->viewHash;
 		}
 	    else
 		mergeRecords(oldRecord, record, glKeyField, lm);
@@ -718,7 +713,7 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
 static void inheritFromParents(struct tdbRecord *list, char *parentField, char *noInheritField,
 	boolean alpha, struct lm *lm)
 /* Go through list.  If an element has a parent field, then fill in non-existent fields from
- * parent and from view with settings defined in parent. */
+ * parent. */
 {
 linkUpParents(list, parentField, alpha);
 
@@ -726,57 +721,6 @@ linkUpParents(list, parentField, alpha);
 struct tdbRecord *rec;
 for (rec = list; rec != NULL; rec = rec->next)
     {
-    /* First inherit from view. */
-    char *viewName = rec->view;
-    if (viewName != NULL)
-        {
-	struct slPair *view;
-	if (rec->parent == NULL)
-	     {
-	     verbose(2, "%s has view %s but no parent\n", rec->key, viewName);
-	     continue;
-	     }
-	for (view = rec->parent->settingsByView; view != NULL; view = view->next)
-	    {
-	    if (sameString(view->name, viewName))
-		break;
-	    else 
-	        {
-		if (rec->parent->viewHash != NULL)
-		    {
-		    char *alias = hashFindVal(rec->parent->viewHash, viewName);
-		    if (alias != NULL)
-			if (sameString(view->name, alias))
-			    break;
-		    }
-		}
-	    }
-	if (!clNoCompSub)
-	    {
-	    if (view != NULL)
-		{
-		struct slPair *setting;
-		for (setting = view->val; setting != NULL; setting = setting->next)
-		    {
-		    struct tdbField *oldField = tdbRecordField(rec, setting->name);
-		    if (oldField == NULL)
-			{
-			struct tdbField *newField;
-			lmAllocVar(lm, newField);
-			newField->name = lmCloneString(lm, setting->name);
-			newField->val = lmCloneString(lm, setting->val);
-			slAddTail(&rec->fieldList, newField);
-			}
-		    }
-		}
-	    else 
-		{
-		verbose(3, "view %s not in parent settingsByView of %s\n", viewName, rec->key);
-		}
-	    }
-	}
-
-    /* Then inherit from parents. */
     struct tdbRecord *parent;
     for (parent = rec->parent; parent != NULL; parent = parent->parent)
 	{
@@ -1018,14 +962,14 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
     char *db = p->db;
-    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "subTrack", clAlpha);
+    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "parent", clAlpha);
          
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
-    inheritFromParents(recordList, "subTrack", "noInherit", clAlpha, lm);
+    inheritFromParents(recordList, "parent", "noInherit", clAlpha, lm);
     recordList = filterOnRelease(recordList, clAlpha);
     verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
-    linkUpParents(recordList, "subTrack", clAlpha);
+    linkUpParents(recordList, "parent", clAlpha);
     checkDupeKeys(recordList, FALSE);
 
     overridePrioritiesAndVisibilities(recordList, p, lm);

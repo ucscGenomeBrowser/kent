@@ -30,10 +30,6 @@ struct tdbRecord
     struct tdbFilePos *posList;	/* Position of file. */
     char *db;			/* Database if any. */
     boolean override;		/* Override is in key. */
-    struct slPair *settingsByView;  /* Parsed out settingsByView field if any. */
-    struct hash *subGroups;	/* Parsed out subGroup field if any. */
-    char *view;			/* View out of the subGroups if it exists. */
-    struct hash *viewHash;	/* Hash of view subgroupN if any. */
     };
 
 struct tdbField *tdbFieldNew(char *name, char *val, struct lm *lm);
