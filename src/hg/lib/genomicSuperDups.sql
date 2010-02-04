@@ -10,18 +10,18 @@ CREATE TABLE genomicSuperDups (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Other chromosome involved
-    score int unsigned not null,	# Score from 900-1000.  1000 is best
+    score int unsigned not null,	# Score from 900-1000. 1000 is the best
     strand char(1) not null,	# Value should be + or -
     otherChrom varchar(255) not null,	# Other Human chromosome or FPC contig
     otherStart int unsigned not null,	# Start in other  sequence
     otherEnd int unsigned not null,	# End in other  sequence
-    otherSize int unsigned not null,	# Total size of other sequence
-    uid int unsigned not null,	# unique id
-    posBasesHit int unsigned not null,	# HitPositive UnCovered
-    testResult varchar(255) not null,	# HitPositive (yes or no) UnCovered (covered=0)
-    verdict varchar(255) not null,	# Real or Allele
-    chits varchar(255) not null,
-    ccov varchar(255) not null,
+    otherSize int unsigned not null,	# Total size of other sequence (otherEnd - otherStart)
+    uid int unsigned not null,	# unique id shared by the query and subject of a hit
+    posBasesHit int unsigned not null,	# For future use
+    testResult varchar(255) not null,	# For future use
+    verdict varchar(255) not null,	# For future use
+    chits varchar(255) not null, 	# For future use
+    ccov varchar(255) not null,		# For future use
     alignfile varchar(255) not null,	# alignment file path
     alignL int unsigned not null,	# spaces/positions in alignment
     indelN int unsigned not null,	# number of indels
