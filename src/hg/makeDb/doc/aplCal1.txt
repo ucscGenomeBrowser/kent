@@ -523,8 +523,28 @@ chainOne $(path1)
 
     # added to all.joiner both $gbd and $chainDest
 
+############################################################################
+# Creating the chain/net trackDb.ra entry (DONE - 2010-02-04 - Galt)
 
-#######################################################################
-#  see hg19.txt for chain to hg19 assembly
+#add simplified lastz symlink to hg19
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzAplCal1.2009-06-08/ lastz.aplCal1
+    findScores.pl hg19 aplCal1
+#looking in file:
+#  /hive/data/genomes/hg19/bed/lastz.aplCal1/axtChain/run/chain.csh
+#-scoreScheme=/scratch/data/blastz/HoxD55.q
+#matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+#-minScore=5000
+#-linearGap=loose
 
+    cd kent/src/hg/makeDb/trackDb
+    vi trackDb.chainNet.ra 
+#cloned fr2 setting,  substituted aplCal1 for fr2 and AplCal1 for Fr2
+# checked that these settings match the above output
+#matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+#chainMinScore 5000 
+#chainLinearGap loose
+
+    make DBS=hg19
+    cvs commit -m 'adding aplCal1 chain/net' trackDb.chainNet.ra
 
