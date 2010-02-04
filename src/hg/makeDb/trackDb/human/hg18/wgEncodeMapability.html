@@ -61,6 +61,14 @@ a 0.000 would represent > 2000 occurrences.  A 0 is reserved for a given 15-mer
 that is either not assembled or contains at least one N at position X.  The
 <em>UMass uniqueness</em> track was generated for the ENCODE project.
 
+<P>
+The <em>CRG Alignability</em> tracks shows how uniquely k-mer sequences align
+to a region of the genome. To generate the data, sliding windows of k-mers
+(where k is 36, 40, 50, 75 or 100 nts) of the human genome sequence were
+mapped back to the genome using the GEM mapper aligner allowing 0, 1 or 2 
+mismatches. For each window, a mapability score was computed 
+(S = 1/(number of bases of match found)).
+
 <H2>Credits</H2>
 <P>
 The <em>Broad alignability</em> track was created by the Broad Institute (contact:
@@ -100,6 +108,9 @@ in <A HREF="http://www.umassmed.edu/pgfe/faculty/Dekker.cfm?start=0&" TARGET=_BL
 at the University of Massachusetts Medical School.  Funding Support: NIH grant
 HG003143 to JD.  Keck Distinguished Young Scholar Award to JD.  This track was
 generated as part of the ENCODE project funded by the NHGRI.
+<P>
+The <em>CRG Alignability</em> track wsa created by Thomas Derrien and Paolo
+Ribeca in <A HREF="http://pasteur.crg.es/portal/page/portal/Internet/02_Research/01_Programmes/01_Bioinformatics_Genomics" TARGET=_BLANK>Roderic Guigo's lab</A> at the Centre for Genomic Regulation (CRG), Barcelona, Spain. 
 </P>
 
 <H2> Data Release Policy </H2>
