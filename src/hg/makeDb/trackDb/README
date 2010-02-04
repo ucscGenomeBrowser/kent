@@ -667,9 +667,10 @@ Composite Track ADDITIONAL OPTIONS
 MATRIX or DIMENSIONS
 --------------------
 Composite Tracks can be organized into a matrix of X and Y Dimensions of
-subtracks.  This method of organization also may include a "view" subGroup.
-The organization is achieved with a dimensions setting which refers to
-subgroups already defined. Example:
+subtracks.  This method of organization also may include a "view" subGroup,
+described in the VIEW section below. The matrix organization is achieved with
+a demension setting which refers to subgroups already defined. Example:
+    subGroup1 view View tags=Tags depth=Coverage_Depth
     subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
     subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
     dimensions dimensionX=cellType dimensionY=factor
@@ -690,7 +691,7 @@ defaults set with the following:
 This setting says that replicate 1 and protocols A and B are checked by default but
 all other replicates and protocols are unchecked by default.
 
-VIEWS or MULTI-VIEW
+VIEWS
 -------------------
 A composite track may have subtracks with similar data subtracks which have
 different types or views. For instance, ChIP-seq tracks may cover raw aligns,
@@ -745,7 +746,6 @@ particular the value of the view tag needs to be the same as the right hand in t
 of the subGroup, and the same as the left hand side of the var=val pair in the subGroup1.
 
 Each view (Sig, Aln) will be controlled by a separate drop down
-where each view (Hmm,Win,Sig,Aln) will be controlled by a separate drop down
 (hide,dense,...) and auxilary controls.  All subtracks for a given view must
 be of the same track type.  Each subtrack of a multi-view should have all the proper settings 
 for the subtrack type.
