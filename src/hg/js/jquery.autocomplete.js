@@ -145,14 +145,6 @@ $.fn.autocomplete = function(options){ return this.each(function(){
       case ESC:
         clearSuggestions();
         return false;
-    }
-    return true;
-  });
-  me.keypress(function(ev){
-    // ev.which doesn't work here - it always returns 0
-    switch(ev.keyCode){
-      case RETURN: case ESC:
-        return false;
       // up changes highlight
       case ARRUP:
         changeHighlight(ev.keyCode);
@@ -162,8 +154,8 @@ $.fn.autocomplete = function(options){ return this.each(function(){
         if(!suggestions_menu) getSuggestions(getUserInput());
         else changeHighlight(ev.keyCode);
         return false;
-     }
-     return true;
+    }
+    return true;
   });
   // handle normal characters here
   me.keyup(function(ev) {
