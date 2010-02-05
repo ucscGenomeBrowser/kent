@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.255 2010/01/27 21:44:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.256 2010/02/05 18:55:25 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4661,6 +4661,7 @@ else
     else
 	puts("Display unaligned bases with spanning chain as 'o's<BR>");
     }
+
 safef(option, sizeof option, "%s.%s", name, "codons");
 if (framesTable)
     {
@@ -4678,7 +4679,11 @@ if (framesTable)
     cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
 	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
     puts("<br>");
-    safef(buffer, sizeof(buffer), "%s.codons",name);
+    char *viewString;
+    if (subgroupFind(tdb, "view", &viewString))
+	safef(buffer, sizeof(buffer), "%s.%s.codons",name, viewString);
+    else
+	safef(buffer, sizeof(buffer), "%s.codons",name);
     cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
     printf("No codon translation<BR>");
     cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
