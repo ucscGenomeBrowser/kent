@@ -44,12 +44,6 @@ track netHg18 override
 shortLabel $o_db Net
 longLabel $o_db ($o_date) Alignment Net
 
-track chainRn4 override
-priority 10004.1
-
-track netRn4 override
-priority 10004.2
-
 searchTable nscanGene
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]+

@@ -1,32 +1,6 @@
-#	"$Id: trackDb.ra,v 1.42 2010/02/05 05:48:20 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.43 2010/02/05 07:42:02 kuhn Exp $";
 
 include trackDb.chainNet.ra
-
-track chainRn4
-release beta
-#replaces record chainRn4 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 230
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain rn4
-otherDb rn4
-
-track netRn4
-release beta
-#replaces record netRn4 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 230.1
-visibility hide
-spectrum on
-type netAlign rn4 chainRn4
-otherDb rn4
 
 track chainHg18 override
 priority 210

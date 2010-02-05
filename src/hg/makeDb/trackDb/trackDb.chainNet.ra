@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.66 2010/02/05 05:48:20 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.67 2010/02/05 07:42:01 kuhn Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -1842,9 +1842,7 @@ html chainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign mm5 chainMm5
 
-# release alpha until rn4 individual chain/net tracks phased out
 track chainNetRn4
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -1874,7 +1872,6 @@ html chainNet
     spectrum on
 
         track chainRn4
-        release alpha
         subTrack chainNetRn4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -1888,7 +1885,6 @@ html chainNet
     subTrack chainNetRn4
 
         track netRn4
-        release alpha
         subTrack chainNetRn4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

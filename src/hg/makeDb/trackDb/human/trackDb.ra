@@ -3309,13 +3309,6 @@ priority 258.2
 track netCavPor2 override
 priority 258.3
 
-# rat
-track chainRn4 override
-priority 260
-
-track netRn4 override
-priority 260.1
-
 # expression and regulation automatically ordered
 track firstEF override
 priority 0

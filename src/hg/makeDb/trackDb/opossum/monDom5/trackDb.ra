@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.31 2010/02/04 04:30:44 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.32 2010/02/05 07:42:05 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -86,13 +86,6 @@ shortLabel $o_db Net
 otherOrg hg18
 priority 225.1
 
-track chainNetCanFam2 override
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-chainMinScore 1000
-chainLinearGap loose
-priority 140
-
 track chainDanRer5 override
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -102,37 +95,6 @@ priority 109.1
 
 track netDanRer5 override
 priority 109.2
-
-track chainRn4 override
-matrixHeader A, C, G, T
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-chainMinScore 3000
-chainLinearGap medium
-priority 180
-
-track netRn4 override
-priority 180.1
-
-track chainBosTau4 override
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-chainMinScore 3000
-chainLinearGap loose
-priority 160
-
-track chainNetEquCab2 override
-chainMinScore 5000
-chainLinearGap loose
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 150
-
-track chainNetOrnAna1 override
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-chainMinScore 3000
-chainLinearGap loose
-priority 130
 
 track chainMacEug1 override
 chainMinScore 1000
