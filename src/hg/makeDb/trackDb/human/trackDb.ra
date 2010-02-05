@@ -3296,19 +3296,6 @@ priority 183
 track netAnoCar1 override
 priority 183.1
 
-# guinea pig
-track chainCavPor3 override
-priority 258
-
-track netCavPor3 override
-priority 258.1
-
-track chainCavPor2 override
-priority 258.2
-
-track netCavPor2 override
-priority 258.3
-
 # expression and regulation automatically ordered
 track firstEF override
 priority 0

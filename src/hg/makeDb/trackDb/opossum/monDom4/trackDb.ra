@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.26 2009/12/22 18:55:41 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.27 2010/02/05 23:00:22 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -73,11 +73,6 @@ altColor 128,128,128
 viewLimits 0:500
 spanList 1
 type wig 0 6572
-
-# Override the root trackDb.ra to put matrix in
-track chainCavPor3 override
-priority 198.1
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track chainSelf
 shortLabel Self Chain 

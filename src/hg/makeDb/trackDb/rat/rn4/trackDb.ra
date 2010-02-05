@@ -97,18 +97,6 @@ compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMa
 wgEncode 1
 metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rn4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rn4.bed8.gz
 
-track chainRheMac2 override
-priority 250.0
-
-track netRheMac2 override
-priority 250.1
-
-track chainCavPor3 override
-priority 10004.0
-
-track netCavPor3 override
-priority 10004.1
-
 track chainHg18 override
 shortLabel $o_db Chain
 priority 260.1

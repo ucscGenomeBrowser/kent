@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.91 2010/02/05 07:42:03 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.92 2010/02/05 23:00:20 kuhn Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -718,7 +718,6 @@ html hg19mammalChainNet
         otherDb myoLuc1
 
         track chainBosTau4
-    #replaces record chainBosTau4 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=kBosTau clade=bLaura
         shortLabel $o_Organism Chain
@@ -727,7 +726,6 @@ html hg19mammalChainNet
         otherDb bosTau4
 
         track chainCavPor3
-    #replaces record chainCavPor3 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=dCavPor clade=aEuarch
         shortLabel $o_Organism Chain
@@ -926,7 +924,6 @@ html hg19mammalChainNet
         otherDb bosTau4
 
         track netCavPor3
-    #replaces record netCavPor3 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet off
         subGroups view=net species=dCavPor clade=aEuarch
         shortLabel $o_Organism Net
@@ -1088,7 +1085,6 @@ html hg19vertChainNet
         otherDb xenTro2
 
         track chainGasAcu1
-    #replaces record chainGasAcu1 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=jGasAcu clade=eTele
         shortLabel $o_Organism Chain
@@ -1203,7 +1199,6 @@ html hg19vertChainNet
         otherDb xenTro2
 
         track netGasAcu1
-    #replaces record netGasAcu1 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=jGasAcu clade=eTele
         shortLabel $o_Organism Net

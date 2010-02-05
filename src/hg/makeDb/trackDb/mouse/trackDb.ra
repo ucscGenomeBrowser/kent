@@ -524,12 +524,6 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
-track chainCavPor3 override
-priority 283.0
-
-track netCavPor3 override
-priority 283.1
-
 searchTable cytoBand
 searchMethod exact
 searchType cytoBand
@@ -820,28 +814,9 @@ priority 179
 track netAnoCar1 override
 priority 179.1
 
-track chainCanFam1 override
-priority 220.3
-
-track netCanFam1 override
-priority 220.4
-
 # bushbaby
 track chainOtoGar1Best override
 priority 274.0
-
-track chainHg15 override
-priority 279.8
-
-track netHg15 override
-priority 279.9
-
-# guinea pig
-track chainCavPor2 override
-priority 283.2
-
-track netCavPor2 override
-priority 283.3
 
 track ensGene override
 visibility dense
