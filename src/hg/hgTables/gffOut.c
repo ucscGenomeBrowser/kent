@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.19 2010/02/05 06:48:54 angie Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.20 2010/02/05 17:41:02 angie Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -122,9 +122,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    }
 	}
     else
-        {
-	safef(txName, sizeof(txName), "tx%d\n", ++namelessIx);
-	}
+	safef(txName, sizeof(txName), "tx%d", ++namelessIx);
     if (hti->hasBlocks && hti->hasCDS && fieldCount > 4)
 	{
 	char *frames = needMem(bed->blockCount);
