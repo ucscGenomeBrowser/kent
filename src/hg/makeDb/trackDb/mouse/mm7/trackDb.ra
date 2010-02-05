@@ -1,13 +1,10 @@
-#	"$Id: trackDb.ra,v 1.61 2010/02/02 01:56:48 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.62 2010/02/05 05:48:22 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes (November, 05) Based on UniProt, RefSeq, and GenBank mRNA
-
-track chainRn3 override
-priority 260
 
 track chainOryCun1 override
 priority 259.5

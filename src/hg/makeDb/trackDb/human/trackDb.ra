@@ -3316,12 +3316,6 @@ priority 260
 track netRn4 override
 priority 260.1
 
-track chainRn3 override
-priority 260.2
-
-track netRn3 override
-priority 260.3
-
 # expression and regulation automatically ordered
 track firstEF override
 priority 0
