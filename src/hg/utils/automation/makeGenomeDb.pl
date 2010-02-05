@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.26 2010/02/04 18:33:19 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.27 2010/02/05 23:52:29 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -669,7 +669,11 @@ _EOF_
 hgsql '' -e 'create database $db'
 df -h /var/lib/mysql
 hgsql $db < \${HOME}/kent/src/hg/lib/grp.sql
-hgLoadSqlTab $db chromInfo \${HOME}/kent/src/hg/lib/chromInfo.sql \\
+cut -f1 $HgAutomate::trackBuild/chromInfo/chromInfo.tab | awk '{print length(\$0)}' | sort -nr > $HgAutomate::trackBuild/chromInfo/t.chrSize
+set chrSize = `head -1 $HgAutomate::trackBuild/chromInfo/t.chrSize`
+sed -e "s/chrom(16)/chrom(\$chrSize)/" \${HOME}/kent/src/hg/lib/chromInfo.sql > $HgAutomate::trackBuild/chromInfo/chromInfo.sql
+rm -f $HgAutomate::trackBuild/chromInfo/t.chrSize
+hgLoadSqlTab $db chromInfo $HgAutomate::trackBuild/chromInfo/chromInfo.sql \\
   $HgAutomate::trackBuild/chromInfo/chromInfo.tab
 _EOF_
   );
