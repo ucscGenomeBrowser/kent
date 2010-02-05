@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.445 2010/02/03 07:02:25 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.446 2010/02/05 00:14:55 kuhn Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -1535,12 +1535,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno tetNig1
 otherDb tetNig1
-
-track chainTetNig1 override
-priority 152.2
-
-track netTetNig1 override
-priority 152.3
 
 track indelible
 shortLabel Human Inserts

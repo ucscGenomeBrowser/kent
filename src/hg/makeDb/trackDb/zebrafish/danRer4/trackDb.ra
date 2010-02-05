@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.42 2010/02/03 07:02:30 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.43 2010/02/05 00:14:57 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -157,12 +157,6 @@ spectrum on
 type netAlign fr2 chainFr2
 otherDb fr2
 
-track chainOryLat1 override
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
-
-track netOryLat1 override
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
-
 track nscanGene override
 informant Zebrafish N-SCAN uses fugu (fr1) as the informant.
 
@@ -178,8 +172,6 @@ searchMethod prefix
 searchType psl
 termRegex [[:alnum:]]*-?[[:alnum:]\._:\-]+
 searchPriority 11
-
-#Overrides from priority.ra
 
 track ensGene override
 priority 32.8

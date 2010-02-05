@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.64 2010/02/04 22:07:26 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.65 2010/02/05 00:14:54 kuhn Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -663,9 +663,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign xenTro1 chainXenTro1
 
-# release alpha until individual oryLat2 tracks are obsolete
 track chainNetOryLat2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -694,7 +692,6 @@ html chainNet
     spectrum on
 
         track chainOryLat2
-        release alpha
         subTrack chainNetOryLat2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain 
@@ -709,7 +706,6 @@ html chainNet
     subTrack chainNetOryLat2
 
         track netOryLat2
-        release alpha
         subTrack chainNetOryLat2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -751,7 +747,7 @@ html chainNet
         release alpha
         subTrack chainNetOryLat1Viewchain
         subGroups view=chain
-        shortLabel $o_Organism Chain 
+        shortLabel $o_db Chain 
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain oryLat1
         otherDb oryLat1
@@ -766,7 +762,7 @@ html chainNet
         release alpha
         subTrack chainNetOryLat1Viewnet
         subGroups view=net
-        shortLabel $o_Organism Net
+        shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign oryLat1 chainOryLat1
         otherDb oryLat1

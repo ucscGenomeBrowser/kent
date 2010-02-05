@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.74 2010/02/04 22:07:27 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.75 2010/02/05 00:14:55 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -222,12 +222,6 @@ spectrum on
 type psl xeno danRer1
 otherDb danRer1
 
-track chainOryLat1 override
-priority 240
-
-track netOryLat1 override
-priority 240.1
-
 track chainHg18
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
@@ -253,12 +247,6 @@ visibility dense
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
-
-track chainOryLat2 override
-priority 240
-
-track netOryLat2 override
-priority 240.1
 
 track cpgIsland override
 visibility dense

@@ -395,13 +395,6 @@ track netDanRer4 override
 shortLabel $o_Organism Net
 priority 168.1
 
-track chainOryLat1 override
-priority 139
-
-track chainFr1 override
-shortLabel $o_Organism Chain
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
 track netFr1 override
 shortLabel $o_Organism Net
 
@@ -853,17 +846,6 @@ priority 120.1
 track netGasAcu1 override
 priority 136.1
 
-# medaka
-track chainOryLat2 override
-priority 138
-
-track netOryLat2 override
-priority 138.1
-
-track netOryLat1 override
-priority 139.1
-
-#lizard
 track chainAnoCar1 override
 priority 179
 

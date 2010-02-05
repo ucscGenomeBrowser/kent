@@ -3271,18 +3271,6 @@ priority 119
 track netPetMar1 override
 priority 119.1
 
-track chainOryLat2 override
-priority 120
-
-track netOryLat2 override
-priority 120.1
-
-track chainOryLat1 override
-priority 120
-
-track netOryLat1 override
-priority 120.1
-
 track chainDanRer5 override
 priority 168.0
 

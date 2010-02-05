@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.89 2010/02/04 06:18:24 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.90 2010/02/05 00:14:56 kuhn Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1117,7 +1117,6 @@ html hg19vertChainNet
         otherDb danRer6
 
         track chainTetNig1
-    #replaces record chainTetNig1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=iTetNig clade=eTele
         shortLabel $o_Organism Chain
@@ -1126,7 +1125,6 @@ html hg19vertChainNet
         otherDb tetNig1
 
         track chainOryLat2
-    #replaces record chainOryLat2 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=kOryLat clade=eTele
         shortLabel $o_Organism Chain
@@ -1234,7 +1232,6 @@ html hg19vertChainNet
         otherDb danRer6
 
         track netTetNig1
-    #replaces record netTetNig1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=iTetNig clade=eTele
         shortLabel $o_Organism Net
@@ -1243,7 +1240,6 @@ html hg19vertChainNet
         otherDb tetNig1
 
         track netOryLat2
-    #replaces record netOryLat2 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=kOryLat clade=eTele
         shortLabel $o_Organism Net
