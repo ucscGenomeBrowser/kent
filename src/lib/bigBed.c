@@ -29,9 +29,9 @@ struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom,
 /* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum
  * number of items to return, or to 0 for all items. */
 {
+struct bigBedInterval *el, *list = NULL;
 int itemCount = 0;
 bbiAttachUnzoomedCir(bbi);
-struct bigBedInterval *el, *list = NULL;
 bits32 chromId;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir, 
 	chrom, start, end, &chromId);
@@ -109,8 +109,10 @@ for (block = blockList; block != NULL; )
         }
     if (maxItems > 0 && itemCount > maxItems)
         break;
+    freez(&mergedBuf);
     }
 freeMem(uncompressBuf);
+dyStringFree(&dy);
 slFreeList(&blockList);
 slReverse(&list);
 return list;
