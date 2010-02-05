@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.16 2010/02/02 18:56:32 hiram Exp $
+#  $Id: sacCer2.txt,v 1.17 2010/02/05 06:54:06 kuhn Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -190,7 +190,7 @@ if (keepGoing) print;
     ldHgGene -gtf sacCer2 sgdGene sacCer2.sgdGene.gtf
     hgLoadBed sacCer2 sgdOther otherFeatures.bed \
         -tab -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
-    #	this perl script will fixup the fasta header lines for
+    #	this perl script will fix up the fasta header lines for
     #	the chr*.peptides.fsa files to run into hgSgdPep
     cat << '_EOF_' > filter.pl
 #!/usr/bin/env perl
@@ -206,7 +206,7 @@ while (my $line=<>) {
     if ($line =~ m/^>Annotated\|/) {
         $inAnnotation = 1;
         my (@words) = split('\s+', $line);
-        die "can not find four fields in\n'$line'" if (scalar(@words) < 4);
+        die "cannot find four fields in\n'$line'" if (scalar(@words) < 4);
         my $name = $words[3];
         $name =~ s/;.*//;
         $name =~ s#/.*##;
@@ -302,6 +302,9 @@ done
     hgsql sacCer2 -e 'load data local infile "sgdToSwissProt.txt" \
           into table sgdToSwissProt;'
     hgProtIdToGenePred sacCer2 sgdGene sgdToSwissProt name value
+
+# interesting to note that sgdTOSwissProt has one accession not
+# in sgdGene.name:  KHS1  (BK 2009-07-14)
 
 ############################################################################
 # CREATE SGD-BASED CLONE TRACK (DONE - 2009-02-10 - Hiram)
@@ -1357,7 +1360,7 @@ done
 	#site (yeastgenome.org). Most are alias' of another gene or something
 	#that was originally characterized as a separate gene but later found
 	#to be a part of another gene.
-	mysql> delete  from sgdToName where name= "YBL039W-A";
+	mysql> delete from sgdToName where name= "YBL039W-A";
 	mysql> delete from sgdToName where name= "YBL101W-A";
 	mysql> delete from sgdToName where name= "YBL101W-C";
 	mysql> delete from sgdToName where name= "YDL038C";
