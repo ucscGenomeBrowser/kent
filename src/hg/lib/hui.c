@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.256 2010/02/05 18:55:25 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.257 2010/02/05 20:08:42 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4597,6 +4597,9 @@ void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title,
 bool lowerFirstChar = TRUE;
 int i;
 char option[MAX_SP_SIZE];
+char *viewString = NULL;
+
+subgroupFind(tdb, "view", &viewString);
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
@@ -4639,7 +4642,11 @@ if (isWigMafProt)
     puts("<B>Multiple alignment amino acid-level:</B><BR>" );
 else
     puts("<B>Multiple alignment base-level:</B><BR>" );
-safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
+
+if (viewString != NULL)
+    safef(option, sizeof option, "%s.%s.%s", name, viewString, MAF_DOT_VAR);
+else
+    safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 
 if (isWigMafProt)
@@ -4647,7 +4654,10 @@ if (isWigMafProt)
 else
     puts("Display bases identical to reference as dots<BR>" );
 
-safef(option, sizeof option, "%s.%s", name, MAF_CHAIN_VAR);
+if (viewString != NULL)
+    safef(option, sizeof option, "%s.%s.%s", name, viewString, MAF_CHAIN_VAR);
+else
+    safef(option, sizeof option, "%s.%s", name, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
 
 char *irowStr = trackDbSetting(tdb, "irows");
@@ -4679,8 +4689,7 @@ if (framesTable)
     cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
 	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
     puts("<br>");
-    char *viewString;
-    if (subgroupFind(tdb, "view", &viewString))
+    if (viewString != NULL)
 	safef(buffer, sizeof(buffer), "%s.%s.codons",name, viewString);
     else
 	safef(buffer, sizeof(buffer), "%s.codons",name);
