@@ -14,7 +14,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.27 2010/02/04 22:59:45 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.28 2010/02/05 01:12:39 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -962,14 +962,14 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
     char *db = p->db;
-    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "parent", clAlpha);
+    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "subTrack", clAlpha);
          
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
-    inheritFromParents(recordList, "parent", "noInherit", clAlpha, lm);
+    inheritFromParents(recordList, "subTrack", "noInherit", clAlpha, lm);
     recordList = filterOnRelease(recordList, clAlpha);
     verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
-    linkUpParents(recordList, "parent", clAlpha);
+    linkUpParents(recordList, "subTrack", clAlpha);
     checkDupeKeys(recordList, FALSE);
 
     overridePrioritiesAndVisibilities(recordList, p, lm);
