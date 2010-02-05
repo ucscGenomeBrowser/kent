@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.124 2010/02/04 23:31:16 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.125 2010/02/05 05:44:53 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9369,8 +9369,11 @@ int pgSnpHeight (struct track *tg, enum trackVisibility vis)
 {
    int f = tl.fontHeight;
    int t = f + 1;
-   f = f*2;
-   t = t*2;
+   if (vis != tvDense)
+       {
+       f = f*2;
+       t = t*2;
+       }
    return tgFixedTotalHeightOptionalOverflow(tg,vis, t, f, FALSE);
 }
 
