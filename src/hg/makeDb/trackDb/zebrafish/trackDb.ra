@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.68 2010/02/05 00:14:57 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.69 2010/02/05 07:23:19 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -154,41 +154,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno mm5
 otherDb mm5
-
-track chainMm5 override
-priority 126.2
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netMm5 override
-priority 126.3
-
-track chainRn4
-release beta
-#replaces record chainRn4 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 127
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-type chain rn4
-otherDb rn4
-
-track netRn4
-release beta
-#replaces record netRn4 in parent dir missing/extra release,subTrack,subGroups
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 127.1
-visibility hide 
-spectrum on
-type netAlign rn4 chainRn4
-otherDb rn4
 
 track blastzFr1
 shortLabel $o_Organism Blastz
@@ -458,14 +423,6 @@ searchTable ucscRetroMrnaInfo1
 searchType bed
 searchMethod prefix
 searchPriority 3.51
-
-track chainNetTetNig2 override
-chainMinScore 2000
-chainLinearGap medium
-priority 130
-
-
-#Overrides from visibility.ra
 
 track ensGene override
 visibility pack

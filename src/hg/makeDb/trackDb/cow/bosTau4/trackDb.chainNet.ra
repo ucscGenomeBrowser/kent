@@ -1,0 +1,4 @@
+track chainNetHg18 override
+release alpha
+shortLabel $o_db Chain/Net
+

@@ -1,4 +1,8 @@
 
+track chainNetHg19 override
+priority 300.6
+
+
 track chainNetMm8 override
 shortLabel $o_db Chain/Net
 

@@ -190,6 +190,3 @@ shortLabel $o_db Net
 priority 290.2
 otherDb hg18
 
-track chainNetHg19 override
-priority 300.6
-
