@@ -5,9 +5,10 @@
 #include "obscure.h"
 #include "ra.h"
 #include "dystring.h"
+#include "trackDb.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.6 2010/02/04 22:59:45 kent Exp $";
+static char const rcsid[] = "$Id: tdbRecord.c,v 1.7 2010/02/05 00:11:18 kent Exp $";
 
 static struct tdbFilePos *tdbFilePosNew(struct lm *lm, 
     char *fileName, 		/* File name. */
@@ -54,10 +55,6 @@ struct tdbRecord *tdbRecordReadOne(struct lineFile *lf, char *key, struct lm *lm
 struct tdbField *fieldList = NULL;
 char *keyVal = NULL;
 boolean override = FALSE;
-struct slPair *settingsByView = NULL;
-struct hash *subGroups = NULL;
-char *view = NULL;
-struct hash *viewHash = NULL;
 struct dyString *dy = dyStringNew(0);
 
 if (!raSkipLeadingEmptyLines(lf,dy))
