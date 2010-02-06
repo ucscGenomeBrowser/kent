@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.862 2010/02/06 00:05:38 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.863 2010/02/06 00:47:50 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21765,6 +21765,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel GM12878 cell 1
@@ -21775,6 +21776,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75D mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=870 dateSubmitted=2010-01-04 dateUnrestricted=2010-10-04 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel GM12878 cell 1
@@ -21785,6 +21787,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75D mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=870 dateSubmitted=2010-01-04 dateUnrestricted=2010-10-04 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel GM12878 cell 2
@@ -21795,6 +21798,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75D mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=898 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel GM12878 cell 2
@@ -21805,6 +21809,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x75D mapAlgorithm=BB2 localization=cell view=Splices replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=898 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel K562 cell 1
@@ -21815,6 +21820,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75D mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=903 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel K562 cell 1
@@ -21825,6 +21831,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75D mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=903 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel K562 cell 2
@@ -21835,6 +21842,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x75D mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=904 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d.bed12.gz
 
         track wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
         shortLabel K562 cell 2
@@ -22566,6 +22574,7 @@ wgEncode 1
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1033 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d
+        colorByStrand 46,0,184 238,85,34
         release alpha
         subTrack wgEncodeCaltechRnaSeqViewzAligns off
         shortLabel H1-hESC cell 1
