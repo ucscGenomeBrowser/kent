@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.92 2010/02/05 23:00:20 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.93 2010/02/06 06:26:51 kuhn Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1058,7 +1058,6 @@ html hg19vertChainNet
         otherDb galGal3
 
         track chainTaeGut1
-    #replaces record chainTaeGut1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader,release
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=eTaeGut clade=bDino
         shortLabel $o_Organism Chain
@@ -1172,7 +1171,6 @@ html hg19vertChainNet
         otherDb galGal3
 
         track netTaeGut1
-    #replaces record netTaeGut1 in parent dir missing/extra group,priority,visibility,spectrum,release
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=eTaeGut clade=bDino
         shortLabel $o_Organism Net

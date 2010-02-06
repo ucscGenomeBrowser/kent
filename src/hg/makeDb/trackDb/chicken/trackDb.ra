@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.20 2010/02/05 23:00:18 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.21 2010/02/06 06:26:51 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -26,15 +26,7 @@ shortLabel $o_Organism Chain
 track netDanRer4 override
 shortLabel $o_Organism Net
 
-# release alpha: $o_db in shortLabel
 track chainTaeGut1 override
-release alpha
-priority 181
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-# release beta: $o_Organism in shortLabel
-track chainTaeGut1 override
-release beta
 priority 181
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
