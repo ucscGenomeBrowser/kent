@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.78 2010/02/04 19:25:27 hartera Exp $";
+#	"$Id: hg19.txt,v 1.79 2010/02/06 02:47:48 hartera Exp $";
 
 #############################################################################
 
@@ -8437,7 +8437,7 @@ TMPDIR=/scratch/tmp
 # 2010-01-28 Changed the table names to have the "enc" prefix for consistency
 # going forward with hg19 ENCODE tracks. Added trackDb entry for this 
 # ENCODE Mapability track. 
-
+# 2010-02-05 Added a 40mer sequence subtrack received on 2010-02-04.
     mkdir -p /hive/data/genomes/hg19/bed/crgMapability
     cd /hive/data/genomes/hg19/bed/crgMapability
 cat << 'EOF' > temp
@@ -8486,7 +8486,20 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome
         hgsql -e "alter table ${t} rename enc${g};" hg19
      end 
      # Added a trackDb entry for this ENCODE Mapability 
-     # track in kent/src/hg/makeDb/trackDb/human/hg19/trackDb.ra 
+     # track in kent/src/hg/makeDb/trackDb/human/hg19/trackDb.enc.ra 
      # Copied track from the hg18/trackDb.wgEncode.ra entry.  
      # use bigWigInfo to check min and max values. 
-     # This entry will be moved to a trackDb.enc.ra file in the future. 
+
+     # Added data for a 40mer subtrack - 2010-02-05
+     cd /hive/data/genomes/hg19/bed/crgMapability
+     wget --timestamping \
+http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappability-40.bw.bz2
+     bunzip2 H.sapiens.genome.hg19.main.mappability-40.bw.bz2
+     ln -s `pwd`/H.sapiens.genome.hg19.main.mappability-40.bw \
+/gbdb/hg19/bbi/crgMapabilityAlign40mer
+        hgsql hg19 -e "drop table if exists encCrgMapabilityAlign40mer; \
+     create table encCrgMapabilityAlign40mer (fileName varchar(255) not null); \
+     insert into encCrgMapabilityAlign40mer values \
+('/gbdb/hg19/bbi/crgMapabilityAlign40mer');"
+    # Added a subtrack to trackDb/human/hg19/trackDb.enc.ra to the 
+    # Mapability track.
