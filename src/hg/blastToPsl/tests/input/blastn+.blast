@@ -1,0 +1,206 @@
+BLASTN 2.2.22+
+
+
+Reference: Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb
+Miller (2000), "A greedy algorithm for aligning DNA sequences", J
+Comput Biol 2000; 7(1-2):203-14.
+
+
+
+Database: tmp/galGal3.fa
+           57 sequences; 1,100,480,441 total letters
+
+
+
+Query=  AC239425.2
+Length=147057
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  chr19                                                                172    1e-38
+  chr28                                                                121    5e-23
+  chrE64_random                                                       54.7    0.006
+
+
+> chr19
+Length=9939723
+
+ Score =  172 bits (93),  Expect = 1e-38
+ Identities = 423/574 (73%), Gaps = 55/574 (9%)
+ Strand=Plus/Plus
+
+Query  101094   CTCCTTTTCTCCAGGCTAAACATCCCCACCTCCCCCAGCCACCCCTCACAAGATC-TGTG  101152
+                ||||||||| |||| ||||||| |||||  |||  ||| | | ||||   ||  | | | 
+Sbjct  3763727  CTCCTTTTCCCCAGACTAAACAGCCCCAGTTCCTTCAGTCTCTCCTC-GTAGGCCATATT  3763785
+
+Query  101153   CT-CCAGCCCCTTCACCAG-CTCTGCTGTCCTTCTCTGGACAC-ACTCTGGCAGCTCAAT  101209
+                || |||| |||||| |||| || || || |||||| ||||| |  |||  ||| ||| ||
+Sbjct  3763786  CTCCCAG-CCCTTCCCCAGCCT-TGTTGCCCTTCTTTGGAC-CTGCTCCAGCACCTCCAT  3763842
+
+Query  101210   GTCC-TCCT-TATTGTGAGTGGCCCAAAAGTGAACACAGGATTTGAGGCGTGGCCTCACC  101267
+                |||| |  | || || | || |||||||| ||||||||| | | |||| | |||||||||
+Sbjct  3763843  GTCCTTTGTGTACTGAG-GT-GCCCAAAACTGAACACAGTACTCGAGGTGAGGCCTCACC  3763900
+
+Query  101268   AAAGCTGAA-TACAGGGGGACAATCCCTGT-CCTGGTGCTGCTGGCCACACTGCTGCTGA  101325
+                || ||  || |||||||| |  ||  || | ||| || |||||  ||||||  || ||||
+Sbjct  3763901  AATGC-CAAGTACAGGGGCAGGATGACT-TCCCTAGTACTGCTCACCACACCACTCCTGA  3763958
+
+Query  101326   TCCAGGCTGA-GATTCCATTGGCCTTCTTGGCCACCTGGGCACA--GCTGGCTCATGTCC  101382
+                |||| ||| | ||| |||||||||||||||||||||||||||||  |||||||||| | |
+Sbjct  3763959  TCCAAGCT-AGGATGCCATTGGCCTTCTTGGCCACCTGGGCACACTGCTGGCTCATATTC  3764017
+
+Query  101383   AGCTG-CTGTTGACCAG--CACC-----CCCTTTTCCC-CTGGGTGGTTTTCCAGCCCCT  101433
+                || || |||   | |||  ||||     |||||| ||  | ||  | ||| |||||| ||
+Sbjct  3764018  AGGTGACTGCCCATCAGTACACCAAGGTCCCTTT-CCATCAGGCAGCTTT-CCAGCCACT  3764075
+
+Query  101434   CTGCCCCA-GCCTTTAGTGCTGCCTGGGGTTGTTGTGACCCAAGGGCAGGAC-C-----T  101486
+                || ||||| |||| ||| | ||||||||| |||||||||| ||  ||||||| |     |
+Sbjct  3764076  CTTCCCCAAGCCTGTAGGGTTGCCTGGGGCTGTTGTGACCAAAATGCAGGACGCAACACT  3764135
+
+Query  101487   -GGCCCTGCAGAACCTCA--C-----ACCATTGGCCCCA--GC-CCAGCCTGTCCAGATC  101535
+                 ||||||   ||| ||||  |     ||| ||||||| |  |  |||| || ||||| ||
+Sbjct  3764136  TGGCCCTATTGAAACTCATACGGTTTACC-TTGGCCC-ATTGATCCAGTCTATCCAGGTC  3764193
+
+Query  101536   CCTCTGCAGAGCC-TTCCTGCCCTCCTGCAGATCAACAGTACCACACCAGCT-GGAGCTG  101593
+                |||||| ||  || ||  | |||||  ||||||||||| | || | ||| || || | ||
+Sbjct  3764194  CCTCTGTAGTTCCCTTT-TCCCCTCAGGCAGATCAACACTCCCTC-CCAACTTGGTGTTG  3764251
+
+Query  101594   TCTGCAAACTTGCTGAGGGAGGACTCAATCCCCT  101627
+                ||||||||||| ||||||| | ||||||||||||
+Sbjct  3764252  TCTGCAAACTTACTGAGGGTGCACTCAATCCCCT  3764285
+
+
+ Score =  148 bits (80),  Expect = 3e-31
+ Identities = 318/426 (74%), Gaps = 43/426 (10%)
+ Strand=Plus/Minus
+
+Query  101259  GGCCTCACCAAAGCTGAATACAGGGGGACAATCCCTGT-CCTGGTGCTGCTGGCCACACT  101317
+               ||||||||||  ||||| ||||||||||||||  || | |||| | || ||||| |||||
+Sbjct  605279  GGCCTCACCAGTGCTGAGTACAGGGGGACAATTACT-TCCCTGTTCCTACTGGCAACACT  605221
+
+Query  101318  GCTGCTGAT-CCAGGCTGAGATTCCATTGGCCTTCTTGGCCACCTGGGCACA--GCTGGC  101374
+               | | ||||| | || | | ||| |||||||||||||||||||||||||||||  ||||||
+Sbjct  605220  GTTTCTGATACAAGCCAG-GATGCCATTGGCCTTCTTGGCCACCTGGGCACACTGCTGGC  605162
+
+Query  101375  TCATGT--CCAG-CT-GCTGTTGACCAGCACCCCC--TT---TTCCC-CTGGGTGGTTTT  101424
+               || |||  |||| |  ||  |  | ||  | ||||  ||   || || ||     || ||
+Sbjct  605161  TCGTGTTGCCAGTCGAGCA-TCAATCAATATCCCCAGTTCCATTTCCTCTACACAGTCTT  605103
+
+Query  101425  CCAGCCCCTCTGCCCCA-GCCTTTAGTGCTGCCTGGGGTTGTTGTGACCCAAGGGCAGGA  101483
+               |||||| |||||||||| |||| ||| | ||||||||||||||||| || ||| ||||||
+Sbjct  605102  CCAGCCACTCTGCCCCAAGCCTGTAGCGTTGCCTGGGGTTGTTGTGGCCAAAGTGCAGGA  605043
+
+Query  101484  -CC----T--GGCCCTGCAGAACCTCA-CACCATTGGC--C--CC-AGC---CCAGCCTG  101527
+                ||    |  || | ||| |||||||| | ||||||||  |  || |||   ||| ||| 
+Sbjct  605042  TCCAGCATTTGGTCTTGCTGAACCTCATC-CCATTGGCTTCAGCCCAGCTATCCAACCTA  604984
+
+Query  101528  TCCAGATCCCTCTGCAGAG-CCTTC-CTGCCCTCCTGCAGATCAACAGTACCACACCAGC  101585
+                ||||||||||||| | || ||| | || |||||  ||||||| ||| | |||  |||||
+Sbjct  604983  CCCAGATCCCTCTGTA-AGGCCT-CACTACCCTCAGGCAGATCGACACTTCCAT-CCAGC  604927
+
+Query  101586  T-GGAG-CTGTCTGCAAACTTGCTGAGGGAGGACTCAATCCCCTTGCCCATGCCATCTCT  101643
+               | || | |  ||||||| ||| ||||||| | ||||||| ||||   ||| ||||||  |
+Sbjct  604926  TTGGTGTCA-TCTGCAAGCTTACTGAGGGTGCACTCAATGCCCTCATCCAGGCCATCAAT  604868
+
+Query  101644  AAAGAT  101649
+               ||||||
+Sbjct  604867  AAAGAT  604862
+
+
+ Score =  115 bits (62),  Expect = 3e-21
+ Identities = 225/302 (74%), Gaps = 18/302 (5%)
+ Strand=Plus/Minus
+
+Query  101094   CTCCTTTTCTCCAGGCTAAACATCCCCACCTCCCCCAGCCACCCCTCACAAGATC-TGTG  101152
+                ||||||||| |||| ||||||| |||||  |||  ||| | | |||    ||  | | | 
+Sbjct  3546156  CTCCTTTTCCCCAGACTAAACAGCCCCAGTTCCTTCAGTCTCTCCT-TGTAGGCCATATT  3546098
+
+Query  101153   CT-CCAGCCCCTTCACCAG-CTCTGCTGTCCTTCTCTGGACAC-ACTCTGGCAGCTCAAT  101209
+                || |||| |||||| |||| || || || |||||| ||||| |  |||  ||| ||| ||
+Sbjct  3546097  CTCCCAG-CCCTTCCCCAGCCT-TGTTGCCCTTCTTTGGAC-CTGCTCCAGCACCTCCAT  3546041
+
+Query  101210   GTCC-TCCT-TATTGTGAGTGGCCCAAAAGTGAACACAGGATTTGAGGCGTGGCCTCACC  101267
+                |||| |  | || || | || |||||| | ||||||||| | | |||| | |||||||||
+Sbjct  3546040  GTCCTTTGTGTACTGAG-GT-GCCCAACACTGAACACAGTACTCGAGGTGAGGCCTCACC  3545983
+
+Query  101268   AAAGCTGAATACAGGGGGACAATCCCTGT-CCTGGTGCTGCTGGCCACACTGCTGCTGAT  101326
+                || || || |||||||| |  ||  || | ||| ||||||||  ||||||   | |||||
+Sbjct  3545982  AATGCCGAGTACAGGGGCAGGATGACT-TCCCTAGTGCTGCTCACCACACCATTCCTGAT  3545924
+
+Query  101327   -CCAGGCTGAGATTCCATTGGCCTTCTTGGCCACCTGGGCACA--GCTGGCTCATGTCCA  101383
+                 | |  | | ||| |||||||||||||||||||||||||||||  |||||||||| | ||
+Sbjct  3545923  ACAACCCAG-GATACCATTGGCCTTCTTGGCCACCTGGGCACACTGCTGGCTCATATTCA  3545865
+
+Query  101384   GC  101385
+                ||
+Sbjct  3545864  GC  3545863
+
+
+> chr28
+Length=4512026
+
+ Score =  121 bits (65),  Expect = 5e-23
+ Identities = 297/403 (73%), Gaps = 39/403 (9%)
+ Strand=Plus/Minus
+
+Query  101094  CTCCT-TTTCTCCAGGCTAAACATCCCCACCTCCC-CCAGCCACCCCTCACA-AGATCTG  101150
+               ||||| |||| |||| | ||||| |||||  ||||  ||| | | ||||| |  ||  | 
+Sbjct  463258  CTCCTCTTTC-CCAGACCAAACAGCCCCA-GTCCCTTCAGTCTCTCCTCATAGGGA-ATA  463202
+
+Query  101151  TGCTCC-AGCCCCTTCACCAG-CTCTGCTGTCCTTCTCTGGACAC-ACTCTGGCAGCTCA  101207
+               | |||| || |||||| |||| || || || |||||| ||||| |  |||  ||| ||||
+Sbjct  463201  TCCTCCAAG-CCCTTCTCCAGCCT-TGTTGCCCTTCTTTGGAC-CTGCTCCAGCACCTCA  463145
+
+Query  101208  ATGTCC--TCCTTATTGTGAGTGGCCCAAAAG-TGAACACAGGATTTGAGGCGTGGCCTC  101264
+                |||||  ||| || || | || |||| |||| ||||||| | | | |||| | ||||||
+Sbjct  463144  GTGTCCTTTCCGTACTGAG-GT-GCCC-AAAGCTGAACACTGTACTCGAGGTGAGGCCTC  463088
+
+Query  101265  ACCAAAGCTGAATACAGGGGGACAATCCCTGT-CCTGGTGCTGCTGGCCACACTGCTGCT  101323
+               ||||  || ||  ||| ||| |  ||  || | |||||| |||||  |||| |   | ||
+Sbjct  463087  ACCAGGGCCGAGCACA-GGGCAGGATGACT-TCCCTGGTCCTGCTCACCACTCCATTCCT  463030
+
+Query  101324  GATCC-AGGCTGAGATTCCATTGGCCTTCTTGGCCACCTGGGCACA--GCTGGCTCATGT  101380
+               ||||| || | | ||| |||||||||||||||||||||||||||||  ||||||||||||
+Sbjct  463029  GATCCAAGCCAG-GATGCCATTGGCCTTCTTGGCCACCTGGGCACACTGCTGGCTCATGT  462971
+
+Query  101381  CCAGCTG-CTGTTGACCAG--CACC-----CCCTTTTCCC-CTGGGTGGTTTTCCAGCCC  101431
+                ||||   ||||  | |||  ||||     |||||| ||  | ||  | ||| |||||| 
+Sbjct  462970  TCAGCCAACTGTCCATCAGTACACCGAGGTCCCTTT-CCATCAGGCAGCTTT-CCAGCCA  462913
+
+Query  101432  CTC-TGCCCCA-GCCTTTAGTGCTGCCTGGGGTTGTTGTGACC  101472
+               ||| | ||||| |||| ||| ||| ||||||||||||||||||
+Sbjct  462912  CTCCT-CCCCAAGCCTGTAGGGCTACCTGGGGTTGTTGTGACC  462871
+
+
+> chrE64_random
+Length=557643
+
+ Score = 54.7 bits (29),  Expect = 0.006
+ Identities = 31/32 (96%), Gaps = 0/32 (0%)
+ Strand=Plus/Minus
+
+Query  137999  GGTCCCTTCCAGCTCAGGATATTCTATGATTC  138030
+               ||| ||||||||||||||||||||||||||||
+Sbjct  556680  GGTTCCTTCCAGCTCAGGATATTCTATGATTC  556649
+
+
+
+Lambda     K      H
+    1.33    0.621     1.12 
+
+Gapped
+Lambda     K      H
+    1.28    0.460    0.850 
+
+Effective search space used: 161794542087812
+
+
+  Database: tmp/galGal3.fa
+    Posted date:  Feb 5, 2010  11:38 PM
+  Number of letters in database: 1,100,480,441
+  Number of sequences in database:  57
+
+
+
+Matrix: blastn matrix 1 -2
+Gap Penalties: Existence: 0, Extension: 0
