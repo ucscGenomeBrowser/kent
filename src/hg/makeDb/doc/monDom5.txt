@@ -1488,10 +1488,10 @@ TMPDIR=/scratch/tmp
     #	182834626 bases of 2231332019 (8.194%) in intersection
 
 #########################################################################
-# ailMel1 Panda BLASTZ/CHAIN/NET (DONE - 2010-01-22 - Hiram)
+# ailMel1 Panda BLASTZ/CHAIN/NET (DONE - 2010-02-04 - Hiram)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22
-    cd /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22
+    mkdir /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-02-04
+    cd /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-02-04
 
     cat << '_EOF_' > DEF
 # Panda vs. Opossum
@@ -1509,7 +1509,7 @@ SEQ2_LEN=/scratch/data/ailMel1/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22
+BASE=/hive/data/genomes/monDom5/bed/lastzAilMel1.2010-02-04
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -1519,19 +1519,19 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-    #	real    293m25.573s
+    #	real    492m43.088s
     cat fb.monDom5.chainAilMel1Link.txt 
-    #	223233047 bases of 3501660299 (6.375%) in intersection
+    #	223510659 bases of 3501660299 (6.383%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.monDom5.swap
     cd /hive/data/genomes/ailMel1/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/monDom5/bed/lastzAilMel1.2010-01-22/DEF \
+	/hive/data/genomes/monDom5/bed/lastzAilMel1.2010-02-04/DEF \
 	-swap -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #	real    65m0.711s
+    #	real    69m35.464s
     cat fb.ailMel1.chainMonDom5Link.txt 
-    #	210235815 bases of 2225124764 (9.448%) in intersection
+    #	211209682 bases of 2245312831 (9.407%) in intersection
 
 #########################################################################

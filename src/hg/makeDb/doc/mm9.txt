@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.121 2010/01/25 19:16:12 hiram Exp $"
+#	"$Id: mm9.txt,v 1.122 2010/02/06 00:17:33 hiram Exp $"
 #
 
 #######################################################################
@@ -9979,9 +9979,9 @@ TMPDIR=/scratch/tmp
     #	669602734 bases of 2604023284 (25.714%) in intersection
 
 #########################################################################
-# ailMel1 Panda alignment (DONE - 2010-01-21 - Hiram)
-    mkdir /hive/data/genomes/mm9/bed/lastzAilMel1.2010-01-21
-    cd /hive/data/genomes/mm9/bed/lastzAilMel1.2010-01-21
+# ailMel1 Panda alignment (DONE - 2010-02-04 - Hiram)
+    mkdir /hive/data/genomes/mm9/bed/lastzAilMel1.2010-02-04
+    cd /hive/data/genomes/mm9/bed/lastzAilMel1.2010-02-04
 
     cat << '_EOF_' > DEF
 # Mouse vs. Panda
@@ -10010,7 +10010,7 @@ SEQ2_CHUNK=10000000
 SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/mm9/bed/lastzAilMel1.2010-01-21
+BASE=/hive/data/genomes/mm9/bed/lastzAilMel1.2010-02-04
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -10018,28 +10018,23 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #	real    49m23.409s
-    #	something failed during the cat operation, continuing:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	-continue=cat `pwd`/DEF \
-	-noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
-    #	real    79m11.840s
+    #	real    501m27.760s
     cat fb.mm9.chainAilMel1Link.txt 
-    #	748670674 bases of 2620346127 (28.571%) in intersection
+    #	749595031 bases of 2620346127 (28.607%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.mm9.swap
     cd /hive/data/genomes/ailMel1/bed/blastz.mm9.swap
     time doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm9/bed/lastzAilMel1.2010-01-21/DEF \
+	/hive/data/genomes/mm9/bed/lastzAilMel1.2010-02-04/DEF \
 	-swap -noLoadChainSplit -bigClusterHub=swarm -smallClusterHub=memk \
+	-workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    54m57.140s
     #	real    48m59.568s
     cat fb.ailMel1.chainMm9Link.txt 
-    #	736638976 bases of 2225124764 (33.106%) in intersection
+    #	739076250 bases of 2245312831 (32.916%) in intersection
 
 ############################################################################
 # susScr1 Pig BLASTZ/CHAIN/NET (WORKING - 2010-01-21 - Hiram)
