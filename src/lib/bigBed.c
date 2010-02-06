@@ -139,7 +139,7 @@ if (!isEmpty(interval->rest))
 return fieldCount;
 }
 
-struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi, 
+static struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi, 
 	char *chrom, bits32 start, bits32 end, struct lm *lm)
 /* Return intervals where the val is the depth of coverage. */
 {
