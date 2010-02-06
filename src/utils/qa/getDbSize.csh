@@ -79,11 +79,11 @@ echo
 
 # print headers
 if ( "index" == $index ) then
-  echo "db" "tables" "index" "files" | awk '{printf ("%7s %6s %5s %5s\n", $1, $2, $3, $4)}'
-  echo "======= ====== ===== =====" 
+  echo "db" "tables" "index" "files" | awk '{printf ("%7s %6s %5s %6s\n", $1, $2, $3, $4)}'
+  echo "======= ====== ===== ======" 
 else
-  echo "db" "tables" | awk '{printf ("%7s %6s %5s\n", $1, $2, $3)}'
-  echo "======= ====== =====" 
+  echo "db" "tables" | awk '{printf ("%7s %6s %6s\n", $1, $2, $3)}'
+  echo "======= ====== ======" 
 endif
 
 # do data
@@ -107,7 +107,7 @@ foreach database ( `echo $db | sed -e "s/ /\n/"` )
     set indexSize=`wget -q -O /dev/stdout "$url1$url2" \
       | awk '{total+=$9} END {printf "%0.1f", total/1000000000}'`
     echo $database $size $indexSize $gbdb\
-      | awk '{printf ("%7s %6s %5s %5s\n", $1, $2, $3, $4)}'
+      | awk '{printf ("%7s %6s %5s %6s\n", $1, $2, $3, $4)}'
     set totIndexSize=`echo $totIndexSize $indexSize | awk '{print $1+$2}'`
   else
     echo $database $size $files | awk '{printf ("%7s %6 %5ss\n", $1, $2, $3)}'
