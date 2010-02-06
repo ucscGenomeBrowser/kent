@@ -24,7 +24,14 @@
 #include "keys.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbToFaRa.c,v 1.24 2006/04/04 16:47:33 angie Exp $";
+static char const rcsid[] = "$Id: gbToFaRa.c,v 1.25 2010/02/06 05:53:35 markd Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"byOrganism", OPTION_STRING},
+    {"faInclVer", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -75,6 +82,8 @@ struct filter
 struct kvt *kvt;	/* Key/Value Table - Gets filled in as we parse through the
                          * genBank record.  Sent to expression evaluator along with
 			 * filter.keyExp after genBank record is parsed. */
+
+static boolean gFaInclVer;  // include version in fasta
 
 struct gbField *newGbField(char *readName, char *writeName, 
     boolean trackVal, boolean multiLine, int initValSize)
@@ -1454,7 +1463,7 @@ while (readGbInfo(lf))
                 }
             else
 		{
-                faWriteNext(faFile, accession, dna, dnaSize);
+                faWriteNext(faFile, (gFaInclVer ? versionField->val : accession) , dna, dnaSize);
 		}
             }
         }
@@ -1566,7 +1575,8 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
          "where filterFile is definition of which records and fields\n"
          "use /dev/null if you want no filtering.\n"
 	 "options:\n"
-	 "    -byOrganism=outputDir - Make separate files for each organism\n");
+	 "    -byOrganism=outputDir - Make separate files for each organism\n"
+	 "    -faInclVer - include version in fasta\n");
 }
 
 struct filter *makeFilter(char *fileName)
@@ -1639,12 +1649,13 @@ struct hash *uniqHash = NULL;
 struct hash *estAuthorHash = NULL;
 struct hash *orgHash = NULL;
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 6)
     usage();
 
 gOutputDir = optionVal("byOrganism", NULL);
 gByOrganism = (gOutputDir != NULL);
+gFaInclVer = optionExists("faInclVer");
 
 filterName = argv[1];
 faName = argv[2];
