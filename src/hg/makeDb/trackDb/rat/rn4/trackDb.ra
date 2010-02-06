@@ -1,3 +1,5 @@
+include trackDb.chainNet.ra
+
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
