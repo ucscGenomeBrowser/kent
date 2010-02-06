@@ -77,7 +77,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
-    stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
+    stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
     tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
