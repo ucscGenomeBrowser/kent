@@ -33,11 +33,6 @@ struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct trac
 {
 struct bbiFile *bbi = track->bbiFile;
 int maxItems = maximumTrackItems(track) + 1;
-if (bbi == NULL)
-    {
-    char *fileName = bbiNameFromTable(conn, track->mapName);
-    bbi = track->bbiFile = bigBedFileOpen(fileName);
-    }
 struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
 if (slCount(result) >= maxItems)
     {
@@ -136,4 +131,11 @@ void bigBedMethods(struct track *track, struct trackDb *tdb,
 /* Set up bigBed methods. */
 {
 complexBedMethods(track, tdb, TRUE, wordCount, words);
+if (track->bbiFile == NULL)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    char *fileName = bbiNameFromTable(conn, track->mapName);
+    hFreeConn(&conn);
+    track->bbiFile = bigBedFileOpen(fileName);
+    }
 }
