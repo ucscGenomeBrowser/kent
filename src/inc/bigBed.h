@@ -68,35 +68,5 @@ char *bigBedAutoSqlText(struct bbiFile *bbi);
 struct asObject *bigBedAs(struct bbiFile *bbi);
 /* Get autoSql object definition if any associated with file. */
 
-void bigBedFileCreate(
-	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
-	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
-	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
-	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
-	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
-				    * are the defined bed ones. */
-	char *asFileName, /* If non-null points to a .as file that describes fields. */
-	boolean clip,     /* If set silently clip out of bound coordinates. */
-	char *outName);   /* BigBed output file name. */
-/* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
-
-void bigBedFileCreateDetailed(
-	struct ppBed *pbList, 	  /* Input bed data. Must be sorted. */
-	bits64 pbCount,           /* size of input pbList */
-	double pbAverageSize,     /* average size of elements in pbList */
-	char *inName,             /* Input file name (for error message reporting) */
-	struct hash *chromHash,   /* Hash containing sizes of all chroms. */
-	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
-	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
-	bits16 definedFieldCount, /* Number of defined bed fields - 3-16 or so.  0 means all fields
-				    * are the defined bed ones. */
-	bits16 fieldCount,        /* actual field count from input data. */
-	char *asFileName,         /* If non-null points to a .as file that describes fields. */
-	struct asObject *as,      /* If non-null contains as object that describes fields. */
-	bits64 fullSize,          /* full size of ppBed on disk */
-	char *outName);            /* BigBed output file name. */
-/* create zoomed bigBed version from ppBed list. */
-
-
 #endif /* BIGBED_H */
 
