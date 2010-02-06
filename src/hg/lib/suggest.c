@@ -2,7 +2,7 @@
 
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: ";
+static char const rcsid[] = "$Id: suggest.c,v 1.3 2010/02/06 03:21:00 larrym Exp $";
 
 boolean connSupportsGeneSuggest(struct sqlConnection *conn)
 // return true if this connection has tables to support gene autocompletion
