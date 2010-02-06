@@ -2,6 +2,8 @@
 
 #include "suggest.h"
 
+static char const rcsid[] = "$Id: ";
+
 boolean connSupportsGeneSuggest(struct sqlConnection *conn)
 // return true if this connection has tables to support gene autocompletion
 {
