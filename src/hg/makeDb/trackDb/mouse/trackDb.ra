@@ -788,9 +788,6 @@ url http://biogps.gnf.org/?query=$$
 urlLabel BioGPS:
 groupings gnfMouseAtlas3Groups
 
-
-#Overrides from priority.ra
-
 # lancelet
 track chainBraFlo1 override
 priority 110
@@ -808,13 +805,6 @@ priority 120.1
 track netGasAcu1 override
 priority 136.1
 
-track chainAnoCar1 override
-priority 179
-
-track netAnoCar1 override
-priority 179.1
-
-# bushbaby
 track chainOtoGar1Best override
 priority 274.0
 
