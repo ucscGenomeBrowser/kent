@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.257 2010/02/05 20:08:42 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.258 2010/02/06 21:43:01 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3211,7 +3211,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     boolean isPrimary = FALSE;
     char *setting;
     int ix;
-    if ((setting = trackDbLocalSetting(subtrack, "subTrack")) != NULL)
+    if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
         {
         if (chopLine(cloneString(setting), words) >= 2)
             checkedCB = differentString(words[1], "off");
@@ -5664,12 +5664,12 @@ char *stView   = NULL;
 char *name     = NULL;
 char *rootName = NULL;
 // This routine should give these results: compositeName.viewName or else subtrackName.viewName or else compositeName or else subtrackName
-if(tdbIsCompositeChild(tdb) == TRUE && trackDbLocalSetting(tdb, "subTrack") != NULL)
+if(tdbIsCompositeChild(tdb) == TRUE && trackDbLocalSetting(tdb, "parent") != NULL)
     {
     if(trackDbSettingClosestToHomeOn(tdb, "configurable"))
         rootName = tdb->tableName;  // subtrackName
     else
-        rootName = firstWordInLine(cloneString(trackDbLocalSetting(tdb, "subTrack"))); // compositeName
+        rootName = firstWordInLine(cloneString(trackDbLocalSetting(tdb, "parent"))); // compositeName
     }
 if(rootName != NULL)
     {

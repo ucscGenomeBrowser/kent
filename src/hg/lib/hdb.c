@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.417 2010/01/04 19:12:29 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.418 2010/02/06 21:43:01 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3599,7 +3599,7 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb)
 struct trackDb *cTdb = NULL;
 if (sTdb != NULL)
     {
-    char *subTrackSetting = cloneString(trackDbLocalSetting(sTdb, "subTrack"));
+    char *subTrackSetting = cloneString(trackDbLocalSetting(sTdb, "parent"));
     if (subTrackSetting != NULL)
 	{
 	char *compositeName = firstWordInLine(subTrackSetting);
@@ -3734,7 +3734,7 @@ struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
 char *ret = NULL;
 if (tdb != NULL)
     {
-    ret = trackDbLocalSetting(tdb, "subTrack");
+    ret = trackDbLocalSetting(tdb, "parent");
     trackDbFree(&tdb);
     }
 hFreeConn(&conn);

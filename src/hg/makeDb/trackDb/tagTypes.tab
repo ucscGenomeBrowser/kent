@@ -177,6 +177,7 @@ pairEndsByName bam
 pairedEndUrlFormat bed
 pairwise wigMaf
 pairwiseHeight wigMaf
+parent *
 patDb expRatio
 patKey expRatio
 patTable expRatio

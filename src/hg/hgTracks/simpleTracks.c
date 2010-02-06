@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.125 2010/02/05 05:44:53 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.126 2010/02/06 21:43:01 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -8938,7 +8938,7 @@ char *setting;
 /* Get the actual subtrack tdb so we can see its subTrack setting (not
  * composite tdb's):  */
 struct trackDb *subTdb= getSubtrackTdb(subtrack);
-if ((setting = trackDbLocalSetting(subTdb, "subTrack")) != NULL)
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
     {
     if (chopLine(cloneString(setting), words) >= 2)
         if (sameString(words[1], "off"))

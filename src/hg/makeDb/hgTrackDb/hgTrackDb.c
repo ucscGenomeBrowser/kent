@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.60 2010/01/11 18:25:47 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.61 2010/02/06 21:43:02 kent Exp $";
 
 
 void usage()
@@ -177,7 +177,7 @@ while (!done)
     nonOrphanList = NULL;
     while ((tdb = slPopHead(&tdbList)) != NULL)
 	{
-	char *parentName = cloneFirstWord(trackDbLocalSetting(tdb, "subTrack"));
+	char *parentName = cloneFirstWord(trackDbLocalSetting(tdb, "parent"));
 	struct hashEl *hel = NULL;
 	if (parentName != NULL)
 	    {
@@ -739,7 +739,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	{
         if (isEmpty(td->html))
 	    {
-	    if (strict && !trackDbLocalSetting(td, "subTrack") && !trackDbLocalSetting(td, "superTrack") &&
+	    if (strict && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
 	    	!sameString(td->tableName,"cytoBandIdeo"))
 		{
 		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);

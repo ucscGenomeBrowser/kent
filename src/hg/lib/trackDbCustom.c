@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.77 2010/02/05 01:09:43 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.78 2010/02/06 21:43:02 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -903,10 +903,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-#ifdef SOON
     char *subtrackSetting = trackDbLocalSetting(tdb, "parent");
-#endif /* SOON */
-    char *subtrackSetting = trackDbLocalSetting(tdb, "subTrack");
     if (subtrackSetting != NULL)
         {
 	char *parentName = cloneFirstWord(subtrackSetting);
@@ -1051,15 +1048,17 @@ char *tag = *pTag;
 char *val = *pVal;
 boolean updated = FALSE;
 
-#ifdef SOON
 if (sameString(tag, "subTrack"))
     {
     tag = "parent";
+    updated = TRUE;
     }
+#ifdef SOON
 else if (sameString(tag, "compositeTrack"))
     {
     tag = "container";
     val = "composite";
+    updated = TRUE;
     }
 else if (sameString(tag, "superTrack"))
     {
@@ -1072,6 +1071,7 @@ else if (sameString(tag, "superTrack"))
         {
 	tag = "parent";
 	}
+    updated = TRUE;
     }
 #endif /* SOON */
 if (updated)
