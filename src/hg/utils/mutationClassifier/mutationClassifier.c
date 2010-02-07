@@ -11,7 +11,6 @@
 #include "hash.h"
 
 static int debug = 0;
-static char *database;
 static struct hash *geneHash = NULL;
 
 #define SPLICE_SITE "spliceSite"
@@ -166,23 +165,23 @@ struct genePred *curB = b;
 struct genePred *savedB = NULL;
 struct genePredStub *lastAddedB = NULL;
 
-for(curA = a; curA != NULL && curB != NULL;)
+for (curA = a; curA != NULL && curB != NULL;)
     {
-    if(debug)
+    if (debug)
         {
         fprintf(stderr, "A: %s:%d-%d\n", curA->chrom, curA->chromStart, curA->chromEnd);
         fprintf(stderr, "B: %s:%d-%d\n", curB->chrom, curB->cdsStart, curB->cdsEnd);
         }
-    if(bedItemsOverlap(curA, curB))
+    if (bedItemsOverlap(curA, curB))
         {
-        if(debug)
+        if (debug)
             {
             fprintf(stderr, "%s:%d-%d", curA->chrom, curA->chromStart, curA->chromEnd);
             }
-        if(aCommon != NULL)
+        if (aCommon != NULL)
             {
             struct bed *tmpA = shallowBedCopy(curA);
-            if(*aCommon == NULL)
+            if (*aCommon == NULL)
                 {
                 *aCommon = tmpA;
                 }
@@ -193,10 +192,10 @@ for(curA = a; curA != NULL && curB != NULL;)
             // We put newly allocated bed items at the end of the returned list so they match order in original list
             lastAddedA = tmpA;
             }
-        if(bCommon != NULL)
+        if (bCommon != NULL)
             {
             struct genePredStub *tmpB = genePredStubCopy(curB);
-            if(*bCommon == NULL)
+            if (*bCommon == NULL)
                 {
                 *bCommon = tmpB;
                 }
@@ -206,14 +205,14 @@ for(curA = a; curA != NULL && curB != NULL;)
                 }
             lastAddedB = tmpB;
             }
-        if(bCommon == NULL)
+        if (bCommon == NULL)
             {
             // see note at beginning of function
             curA = curA->next;
             }
         else
             {
-            if(savedB == NULL)
+            if (savedB == NULL)
                 savedB = curB;
             curB = curB->next;
             }
@@ -221,7 +220,7 @@ for(curA = a; curA != NULL && curB != NULL;)
         }
     else
         {
-        if(savedB)
+        if (savedB)
             {
             // curA has matched at least one entry in b; now rewind curB to look for potentially multiple matches 
             // within b in the next entry from a (see notes in hw1_analyze.h)
@@ -234,7 +233,7 @@ for(curA = a; curA != NULL && curB != NULL;)
             int diff = strcmp(curA->chrom, curB->chrom);
             if (!diff)
                 diff = curA->chromStart - curB->cdsStart;
-            if(diff < 0)
+            if (diff < 0)
                 {
                 curA = curA->next;
                 }
@@ -269,12 +268,12 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     bed->start = start;
     bed->end = end;
     bed->name = cloneString(row[3]);
-    if(wordCount >= 5)
+    if (wordCount >= 5)
         bed->score = lineFileNeedNum(lf, row, 4);
-    if(wordCount >= 6)
+    if (wordCount >= 6)
         {
         bed->strand = row[5][0];
-        if(bed->strand == '-')
+        if (bed->strand == '-')
             // we support this so we can process dbSnp data (which has reverse strand SNPs).
             complement(bed->name, strlen(bed->name)); 
         }
@@ -284,7 +283,7 @@ lineFileClose(&lf);
 return retVal;
 }
 
-static void clipGenPred(struct genePred *gp)
+static void clipGenPred(char *database, struct genePred *gp)
 {
 // Clip exonStarts/exonEnds to cdsStart/cdsEnd and then read in the whole DNA for this gene in preparation for a SNP check.
 // After this call, exonStarts/exonEnds contain only the exons used for CDS (i.e. some may be removed).
@@ -295,9 +294,9 @@ static void clipGenPred(struct genePred *gp)
     unsigned *newEnds = needMem(gp->exonCount * sizeof(unsigned));
     int newCount = 0;
     gp->name2 = cloneString("");
-    for(i=0;i<gp->exonCount;i++)
+    for (i=0;i<gp->exonCount;i++)
         {
-        if(gp->exonEnds[i] >= gp->cdsStart && gp->exonStarts[i] <= gp->cdsEnd)
+        if (gp->exonEnds[i] >= gp->cdsStart && gp->exonStarts[i] <= gp->cdsEnd)
             {
             char retNibName[HDB_MAX_PATH_STRING];
             newStarts[newCount] = max(gp->exonStarts[i], gp->cdsStart);
@@ -306,26 +305,26 @@ static void clipGenPred(struct genePred *gp)
             struct dnaSeq *dna = hFetchSeqMixed(retNibName, gp->chrom, newStarts[newCount], newEnds[newCount]);
             char *newName = needMem(strlen(gp->name2) + strlen(dna->dna) + 1);
             sprintf(newName, "%s%s", gp->name2, dna->dna);
-            free(gp->name2);
+            freeMem(gp->name2);
             gp->name2 = newName;
             newCount++;
             }
         }
     gp->exonCount = newCount;
-    free(gp->exonStarts);
-    free(gp->exonEnds);
+    freeMem(gp->exonStarts);
+    freeMem(gp->exonEnds);
     gp->exonStarts = newStarts;
     gp->exonEnds = newEnds;
-    if(gp->strand[0] == '-')
+    if (gp->strand[0] == '-')
         {
         reverseComplement(gp->name2, strlen(gp->name2));
         }
     gp->score = strlen(gp->name2);
-    if(debug)
+    if (debug)
         printf("%s - %d: %s\n", gp->name2, (int) strlen(gp->name2), gp->name2);
 }
 
-static int transformPos(struct genePred *gp, unsigned pos, boolean *lastExon)
+static int transformPos(char *database, struct genePred *gp, unsigned pos, boolean *lastExon)
 {
 // transformPos chrom:chromStart coordinates to relative CDS coordinates
 // returns -1 if pos is NOT within the CDS
@@ -333,20 +332,20 @@ static int transformPos(struct genePred *gp, unsigned pos, boolean *lastExon)
 int i, delta = 0;
 boolean reverse = gp->strand[0] == '-';
 
-if(gp->name2 == NULL)
+if (gp->name2 == NULL)
     {
-    clipGenPred(gp);
+    clipGenPred(database, gp);
     }
-for(i=0;i<gp->exonCount;i++)
+for (i=0;i<gp->exonCount;i++)
     {
-    if(pos <= gp->exonStarts[i])
+    if (pos <= gp->exonStarts[i])
         {
         return -1;
         }
-    else if(pos < gp->exonEnds[i])
+    else if (pos < gp->exonEnds[i])
         {
         pos = delta + pos - gp->exonStarts[i];
-        if(gp->strand[0] == '-')
+        if (gp->strand[0] == '-')
             pos = gp->score - pos - 1;
         // assert(pos >= 0 && pos < strlen(gp->name2));
         *lastExon = reverse ? i == 0 : (i + 1) == gp->exonCount;
@@ -357,7 +356,7 @@ for(i=0;i<gp->exonCount;i++)
 return -1;
 }
 
-struct genePred *readGenes()
+struct genePred *readGenes(char *database)
 {
 struct genePred *retVal = NULL;
 char query[256];
@@ -388,23 +387,20 @@ sqlDisconnect(&conn);
 return(retVal);
 }
 
-int main(int argc, char** argv)
+static void mutationClassifier(char *database, char *inputFile)
 {
 struct bed *overlapA = NULL;
 struct genePredStub *overlapB = NULL;
-optionInit(&argc, argv, optionSpecs);
-if(argc < 3)
-    usage();
-database = argv[1];
-struct bed6 *snps = readBedFile(argv[2]);
-verbose(2, "Hello: %d SNPs\n", slCount(snps));
-struct genePred *genes = readGenes();
+struct bed6 *snps = readBedFile(inputFile);
+
+verbose(2, " read %d mutations\n", slCount(snps));
+struct genePred *genes = readGenes(database);
 verbose(2, "Hello: %d canonical known genes\n", slCount(genes));
 int count = intersectBeds((struct bed *) snps, genes, &overlapA, &overlapB);
 verbose(2, "number of intersects: %d\n", count);
 // reading unmasked file is much faster - why?
 // sprintf(retNibName, "/hive/data/genomes/hg19/hg19.2bit");
-for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
+for (;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
     {
     struct genePred *gp = overlapB->genePred;
     char *code = NULL;
@@ -413,14 +409,14 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
     // boolean reverse = !strcmp(overlapA->strand, "-");
     boolean lastExon;
 
-    int pos = transformPos(gp, overlapA->chromStart, &lastExon);
-    if(pos >= 0)
+    int pos = transformPos(database, gp, overlapA->chromStart, &lastExon);
+    if (pos >= 0)
         {
         int len = strlen(overlapA->name);
-        if(len > 1 || (overlapA->chromEnd - overlapA->chromStart))
+        if (len > 1 || (overlapA->chromEnd - overlapA->chromStart))
             {
             int delta = len - (overlapA->chromEnd - overlapA->chromStart);
-            if(delta % 3)
+            if (delta % 3)
                 code = FRAME_SHIFT_INS;
             else
                 code = IN_FRAME_INS;
@@ -428,9 +424,9 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
         else
             {
             unsigned codonStart;
-            if((pos % 3) == 0)
+            if ((pos % 3) == 0)
                 codonStart = pos;
-            else if((pos % 3) == 1)
+            else if ((pos % 3) == 1)
                 codonStart = pos - 1;
             else
                 codonStart = pos - 2;
@@ -440,13 +436,13 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
             strncpy(new, gp->name2 + codonStart, 3);
             original[3] = new[3] = 0;
             new[pos % 3] = overlapA->name[0];
-            if(gp->strand[0] == '-')
+            if (gp->strand[0] == '-')
                 complement(new + (pos % 3), 1);
             AA originalAA = lookupCodon(original);
             AA newAA = lookupCodon(new);
-            if(!originalAA)
+            if (!originalAA)
                 originalAA = '*';
-            if(newAA)
+            if (newAA)
                 {
                 code = originalAA == newAA ? SYNONYMOUS : originalAA == '*' ? READ_THROUGH : MISSENSE;
                 }
@@ -455,21 +451,21 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
                 newAA = '*';
                 code = lastExon ? NONSENSE_LAST_EXON : NONSENSE;
                 }
-            if(debug)
+            if (debug)
                 fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
             safef(additional, sizeof(additional), "%c>%c", originalAA, newAA);
-            if(debug)
+            if (debug)
                 fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
             }
         }
     else
         {
         boolean reverse = gp->strand[0] == '-';
-        if(overlapA->chromStart < gp->cdsStart)
+        if (overlapA->chromStart < gp->cdsStart)
             {
             code = reverse ? THREE_PRIME_UTR : FIVE_PRIME_UTR;
             }
-        else if(overlapA->chromStart >= gp->cdsEnd)
+        else if (overlapA->chromStart >= gp->cdsEnd)
             {
             code = reverse ? FIVE_PRIME_UTR : THREE_PRIME_UTR;
             }
@@ -477,19 +473,19 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
             {
             // In intro, so check for interuption of splice junction (special case first and last exon).
             int i;
-            for(i=0;i<gp->exonCount;i++)
+            for (i=0;i<gp->exonCount;i++)
                 {
                 int start = gp->exonStarts[i] - overlapA->chromStart;
                 int end   = overlapA->chromEnd - gp->exonEnds[i];
                 // XXXX I still think this isn't quite right (not sure if we s/d use chromEnd or chromStart).
                 if (i == 0)
                     {
-                    if(end == 1 || end == 2)
+                    if (end == 1 || end == 2)
                         code = SPLICE_SITE;
                     }
                 else if (i == (gp->exonCount - 1))
                     {
-                    if(start == 1 || start == 2)
+                    if (start == 1 || start == 2)
                         code = SPLICE_SITE;
                     }
                 else if ((start == 1 || start == 2) || (end == 1 || end == 2))
@@ -497,16 +493,24 @@ for(;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
                 }
             }
         }
-    if(code)
+    if (code)
         {
         char *geneSymbol = gp->name;
         struct hashEl *el;
-        if((el = hashLookup(geneHash, geneSymbol)))
+        if ((el = hashLookup(geneHash, geneSymbol)))
             {
             geneSymbol = (char *) el->val;
             }
         printf("%s\t%d\t%d\t%s\t%s\t%s\n", overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, geneSymbol, code, additional);
         }
     }
+}
+
+int main(int argc, char** argv)
+{
+optionInit(&argc, argv, optionSpecs);
+if (argc < 3)
+    usage();
+mutationClassifier(argv[1], argv[2]);
 return 0;
 }
