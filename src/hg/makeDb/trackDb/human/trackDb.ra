@@ -3256,13 +3256,6 @@ priority 117
 track netCi2 override
 priority 117.1
 
-# lancelet
-track chainBraFlo1 override
-priority 118
-
-track netBraFlo1 override
-priority 118.1
-
 track chainDanRer5 override
 priority 168.0
 
@@ -3280,13 +3273,6 @@ priority 168.4
 
 track netDanRer3 override
 priority 168.5
-
-# lizard
-track chainAnoCar1 override
-priority 183
-
-track netAnoCar1 override
-priority 183.1
 
 # expression and regulation automatically ordered
 track firstEF override
