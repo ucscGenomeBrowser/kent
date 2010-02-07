@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.29 2010/02/06 06:46:49 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.30 2010/02/07 06:50:04 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -64,11 +64,4 @@ visibility hide
 spectrum on
 type netAlign fr2 chainFr2
 otherDb fr2
-
-track chainFr1 override
-priority 278.2
-
-track netFr1 override
-priority 278.3
-
 

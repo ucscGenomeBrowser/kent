@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.448 2010/02/05 07:42:03 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.449 2010/02/07 06:50:02 kuhn Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -941,14 +941,6 @@ group compGeno
 priority 191
 visibility hide
 type maf
-
-track chainFr1 override
-shortLabel $o_Organism Chain 
-priority 150.1
-
-track netFr1 override
-shortLabel $o_Organism Net
-priority 150.2
 
 track chainDanRer3 override
 shortLabel $o_Organism Chain

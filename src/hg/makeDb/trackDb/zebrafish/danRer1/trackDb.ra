@@ -24,12 +24,6 @@ shortLabel Human Net
 track blastzFr1 override
 shortLabel Fugu Blastz
 
-track chainFr1 override
-shortLabel Fugu Chain
-
-track netFr1 override
-shortLabel Fugu Net
-
 track uniGene_dr
 shortLabel UniGene
 longLabel $Organism UniGene Alignments

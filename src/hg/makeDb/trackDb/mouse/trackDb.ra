@@ -395,15 +395,6 @@ track netDanRer4 override
 shortLabel $o_Organism Net
 priority 168.1
 
-track chainFr1 override
-shortLabel $o_Organism Chain
-
-track netFr1 override
-shortLabel $o_Organism Net
-
-track chainTetNig1 override
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
 track chainDanRer4NoRand
 shortLabel $o_db Chain NoRand
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments No Randoms

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.53 2010/02/05 00:14:56 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.54 2010/02/07 06:50:04 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -116,13 +116,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno fr1
 otherDb fr1
-
-track chainFr1 override
-priority 330.2
-visibility dense
-
-track netFr1 override
-priority 330.3
 
 track chainFr2 override
 priority 140

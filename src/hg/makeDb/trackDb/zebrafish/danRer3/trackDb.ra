@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.59 2010/02/05 00:14:57 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.60 2010/02/07 06:50:04 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -105,13 +105,6 @@ visibility dense
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
-
-track chainFr1 override
-priority 130.1
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netFr1 override
-priority 130.2
 
 track chainSelf
 shortLabel Self Chain
