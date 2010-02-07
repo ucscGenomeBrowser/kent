@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.94 2010/02/06 06:46:49 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.95 2010/02/07 04:15:29 kuhn Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1125,7 +1125,6 @@ html hg19vertChainNet
         otherDb oryLat2
 
         track chainPetMar1
-    #replaces record chainPetMar1 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=mPetMar clade=fHyper
         shortLabel $o_Organism Chain
@@ -1237,7 +1236,6 @@ html hg19vertChainNet
         otherDb oryLat2
 
         track netPetMar1
-    #replaces record netPetMar1 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=mPetMar clade=fHyper
         shortLabel $o_Organism Net

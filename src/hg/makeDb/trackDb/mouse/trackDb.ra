@@ -788,22 +788,11 @@ url http://biogps.gnf.org/?query=$$
 urlLabel BioGPS:
 groupings gnfMouseAtlas3Groups
 
-# lancelet
 track chainBraFlo1 override
 priority 110
 
 track netBraFlo1 override
 priority 110.1
-
-# lamprey
-track chainPetMar1 override
-priority 120
-
-track netPetMar1 override
-priority 120.1
-
-track netGasAcu1 override
-priority 136.1
 
 track chainOtoGar1Best override
 priority 274.0

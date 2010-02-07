@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.24 2010/02/04 22:07:28 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.25 2010/02/07 04:15:30 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -29,9 +29,6 @@ visibility dense
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
-
-track chainPetMar1 override
-priority 230
 
 track chainTetNig1 override
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -67,7 +64,4 @@ priority 139.1
 
 track netDanRer4 override
 priority 139.2
-
-track netPetMar1 override
-priority 230.1
 
