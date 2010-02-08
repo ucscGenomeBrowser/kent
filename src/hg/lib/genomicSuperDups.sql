@@ -12,11 +12,11 @@ CREATE TABLE genomicSuperDups (
     name varchar(255) not null,	# Other chromosome involved
     score int unsigned not null,	# Score from 900-1000. 1000 is the best
     strand char(1) not null,	# Value should be + or -
-    otherChrom varchar(255) not null,	# Other Human chromosome or FPC contig
-    otherStart int unsigned not null,	# Start in other  sequence
-    otherEnd int unsigned not null,	# End in other  sequence
+    otherChrom varchar(255) not null,	# Other chromosome or scaffold
+    otherStart int unsigned not null,	# Start in other sequence
+    otherEnd int unsigned not null,	# End in other sequence
     otherSize int unsigned not null,	# Total size of other sequence (otherEnd - otherStart)
-    uid int unsigned not null,	# unique id shared by the query and subject of a hit
+    uid int unsigned not null,	# Unique id shared by the query and subject of a hit
     posBasesHit int unsigned not null,	# For future use
     testResult varchar(255) not null,	# For future use
     verdict varchar(255) not null,	# For future use
