@@ -7,11 +7,13 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 blastToPsl_objs = blastToPsl.o pslBuild.o
 blastXmlToPsl_objs = blastXmlToPsl.o ncbiBlast.o pslBuild.o
 
-all: ${BINDIR}/blastToPsl ${BINDIR}/blastXmlToPsl
+all: blastToPsl.build blastXmlToPsl.build
 
-${BINDIR}/%: %.o ${MYLIBS}
+compile: all
+
+%.build: %.o ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/$*${EXE} ${$*_objs} ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	${STRIP} ${DESTDIR}${BINDIR}/$*${EXE}
 
 test::
 	(cd tests && ${MAKE} test)
