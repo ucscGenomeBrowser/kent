@@ -15,7 +15,7 @@
 #include "customTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.112 2009/06/25 08:43:09 markd Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.113 2010/02/08 17:27:24 hiram Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -208,6 +208,9 @@ puts("<FORM ACTION=\"../cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 if (gotClade)
     printf("<input type=\"hidden\" name=\"clade\" value=\"%s\">\n", clade);
+else
+    printf("<input type=\"hidden\" name=\"clade\" value=\"%s\">\n", "mammal");
+
 printf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
 puts("</FORM><BR>");
