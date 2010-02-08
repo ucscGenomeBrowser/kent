@@ -1,61 +1,28 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
-L += -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L += $(MYSQLLIBS) -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = blastToPsl
-O = $A.o 
+blastToPsl_objs = blastToPsl.o pslBuild.o
+blastXmlToPsl_objs = blastXmlToPsl.o ncbiBlast.o pslBuild.o
+pslUniq_objs = pslUniq.o
 
-all: ${BINDIR}/blastToPsl ${BINDIR}/pslUniq
+all: ${BINDIR}/blastToPsl ${BINDIR}/blastXmlToPsl ${BINDIR}/pslUniq
 
-${BINDIR}/%: %
-	cp -f $< $@${EXE}
-	${STRIP} $@${EXE}
+${BINDIR}/%: %.o ${MYLIBS}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/$*${EXE} ${$*_objs} ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-blastToPsl: ${O} ${MYLIBS}
-	${CC} -o blastToPsl ${O} ${MYLIBS} ${L} 
+test::
+	(cd tests && ${MAKE} test)
 
-my: compile scoreSort blast0To8 pslUniq pslChain
-	cp -f blastToPsl $(BINDIR)
-	${STRIP} $(BINDIR)/blastToPsl${EXE}
-	mv scoreSort $(BINDIR)
-	mv blast0To8 $(BINDIR)
-	mv pslUniq $(BINDIR)
-	mv pslChain $(BINDIR)
+clean::
+	rm -f ${blastToPsl_objs} ${blastXmlToPsl_objs} ${pslUniq_objs}
 
-pslChain: pslChain.o
-	${CC} pslChain.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} pslChain
-pslUniq: pslUniq.o
-	${CC} pslUniq.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} pslUniq
-blast0To8: blast0To8.o
-	${CC} blast0To8.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} blast0To8
-
-scoreSort: scoreSort.o
-	${CC} scoreSort.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} scoreSort
-
-compile: $O 
-	${CC} $O ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
-#	${STRIP} $A${EXE}
-	chmod a+rx $A
-
-
-debug: $O
-	${CC} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
-
-test:	compile
-	cd tests && ${MAKE} test
-
-clean:
-	rm -f *.o blastToPsl scoreSort blast0To8 \
-		pslUniq pslChain
-	cd tests && ${MAKE} clean
-
-tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
+ncbiBlast.o: ncbiBlast.c ncbiBlast.h
+pslBuild.o: pslBuild.c pslBuild.h
+blastXmlToPsl.o: blastXmlToPsl.c ncbiBlast.h pslBuild.h
+${BINDIR}/blastXmlToPsl: ${blastXmlToPsl_objs}
+${BINDIR}/blastToPsl: ${blastToPsl_objs}
+${BINDIR}/pslUniq: ${pslUniq_objs}

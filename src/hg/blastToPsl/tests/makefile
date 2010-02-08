@@ -1,19 +1,45 @@
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 #blastToPsl = valgrind --tool=memcheck ../blastToPsl
-blastToPsl = ../blastToPsl
+blastToPsl = blastToPsl
+
+#blastXmlToPsl = valgrind --tool=memcheck ../blastToPsl
+blastXmlToPsl = blastXmlToPsl
 
 all:
 
-test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
+test: testBlastToPsl testBlastXmlToPsl
+
+###
+# blastToPsl
+###
+testBlastToPsl:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
 	longDbNameTest multiLineDescTest tblastxTest tblastnTest \
-	blastpPsiTest psiNoHitsTest psiBadFormatTest blastpPsiWrapTest \
+	blastpPsiTest psiNoHitsTest psiBadFormatTest blastpPsiWrapTest
 
-# blast+ not implemented yet
-#	blastn+Test
+###
+# blastXmlToPsl
+###
+testBlastXmlToPsl: mrna1Test prot1Test prot2Test
 
-#tblastnDbFirstTest megaBlastTest
+mrna1Test: mkdirs
+	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
+prot1Test: mkdirs
+	${blastXmlToPsl} -scores=output/$@.bscores input/prot1.tblastn.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
+prot2Test: mkdirs
+	${blastXmlToPsl} -scores=output/$@.bscores input/prot2.psiblast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
 
 protMrnaTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
@@ -133,14 +159,6 @@ psiBadFormatTest: mkdirs
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 	diff -u expected/$@.err output/$@.err
-
-# blast+ changes output format
-blastn+Test: mkdirs
-	${blastToPsl} -scores=output/$@.bscores input/blastn+.blast output/$@.psl >output/$@.err 2>&1
-	pslCheck -verbose=0 output/$@.psl
-	diff -u expected/$@.psl output/$@.psl
-	diff -u expected/$@.bscores output/$@.bscores
-
 
 clean::
 	rm -rf output
