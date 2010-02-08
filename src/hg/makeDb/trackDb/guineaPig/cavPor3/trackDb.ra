@@ -35,15 +35,6 @@ track nscanGene override
 visibility pack
 informant  Guinea pig N-SCAN uses human (hg18) as the informant.
 
-track chainHg18 override
-shortLabel $o_db Chain
-longLabel $o_db ($o_date) Chained Alignments
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track netHg18 override
-shortLabel $o_db Net
-longLabel $o_db ($o_date) Alignment Net
-
 searchTable nscanGene
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]+

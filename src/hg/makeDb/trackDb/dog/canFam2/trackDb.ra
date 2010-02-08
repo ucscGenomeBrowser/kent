@@ -111,11 +111,3 @@ track nscanGene override
 visibility dense
 informant Dog N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
 
-track chainHg18 override
-shortLabel $o_db Chain
-priority 255.1
-
-track netHg18 override
-shortLabel $o_db Net
-priority 255.2
-

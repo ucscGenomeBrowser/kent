@@ -1,12 +1,4 @@
-#	"$Id: trackDb.ra,v 1.9 2010/01/26 05:19:04 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.10 2010/02/08 19:28:54 rhead Exp $";
 
 include trackDb.chainNet.ra
-
-track chainHg18 override
-shortLabel $o_db Chain
-otherDb hg18
-
-track netHg18 override
-shortLabel $o_db Net
-otherDb hg18
 

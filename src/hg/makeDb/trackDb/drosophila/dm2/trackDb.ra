@@ -602,6 +602,3 @@ visibility hide
 track blastHg18KG override
 visibility hide
 
-track netHg18 override
-visibility hide
-

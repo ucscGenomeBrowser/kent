@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.7 2009/12/18 23:41:20 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.8 2010/02/08 19:28:39 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -20,12 +20,4 @@ indelPolyA on
 
 track chainOryLat1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track chainHg18 override
-shortLabel $o_db Chain
-otherDb hg18
-
-track netHg18 override
-shortLabel $o_db Net
-otherDb hg18
 

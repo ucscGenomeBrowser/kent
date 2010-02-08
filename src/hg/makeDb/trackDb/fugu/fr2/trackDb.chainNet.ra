@@ -1,4 +1,11 @@
-#	"$Id: trackDb.chainNet.ra,v 1.1 2009/12/22 19:00:04 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.2 2010/02/08 19:28:36 rhead Exp $";
 
 track chainNetHg18 override
 chainMinScore 2000
+shortLabel $o_db Chain/Net
+
+    track chainHg18 override
+    shortLabel $o_db Chain
+
+    track netHg18 override
+    shortLabel $o_db Net

@@ -124,16 +124,6 @@ spectrum on
 type rmsk
 canPack off
 
-track chainHg18 override
-shortLabel $o_db Chain
-otherDb hg18
-priority 99.1
-
-track netHg18 override
-shortLabel $o_db Net
-otherDb hg18
-priority 99.2
-
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1

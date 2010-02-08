@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.32 2010/02/05 07:42:05 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.33 2010/02/08 19:28:48 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -71,20 +71,6 @@ type bed 5 .
 track nscanGene override
 visibility pack
 informant Opossum N-SCAN uses human (hg19) as the informant.
-
-track chainHg18 override
-chainMinScore 3000
-chainLinearGap loose
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-shortLabel $o_db Chain
-otherOrg hg18
-priority 225
-
-track netHg18 override
-shortLabel $o_db Net
-otherOrg hg18
-priority 225.1
 
 track chainDanRer5 override
 matrixHeader A, C, G, T

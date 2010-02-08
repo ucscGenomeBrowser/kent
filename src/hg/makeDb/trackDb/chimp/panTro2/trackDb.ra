@@ -180,13 +180,3 @@ track nscanGene override
 visibility dense
 informant Chimp N-SCAN uses mouse (mm8) as the informant and iterative pseudogene masking.
 
-track chainHg18 override
-shortLabel $o_db Chain
-priority 290.1
-otherDb hg18
-
-track netHg18 override
-shortLabel $o_db Net
-priority 290.2
-otherDb hg18
-

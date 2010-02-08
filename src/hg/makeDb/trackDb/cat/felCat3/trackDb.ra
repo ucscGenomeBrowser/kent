@@ -36,12 +36,6 @@ visibility hide
 track nscanGene override
 informant Cat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
 
-track chainHg18 override
-shortLabel $o_db Chain
-
-track netHg18 override
-shortLabel $o_db Net
-
 searchTable nscanGene
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]

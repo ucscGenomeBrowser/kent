@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.31 2010/02/07 06:50:04 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.32 2010/02/08 19:28:53 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -70,10 +70,4 @@ color 65,20,100
 type psl xeno
 # url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511&XL001c18
 url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511
-
-track chainHg18 override
-priority 120.1
- 
-track netHg18 override
-priority 120.2
 

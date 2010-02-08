@@ -1,9 +1,2 @@
 include trackDb.chainNet.ra
 
-track chainHg18 override
-priority 220
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track netHg18 override
-priority 220.1
-

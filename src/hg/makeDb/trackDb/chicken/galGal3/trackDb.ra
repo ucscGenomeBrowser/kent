@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.21 2010/02/08 02:26:01 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.22 2010/02/08 19:28:30 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -49,14 +49,6 @@ otherDb galGal3
 
 track nscanGene override
 informant Chicken N-SCAN uses Zerba Finch (taeGut1) as the informant, updated with PASA clusters of chicken cDNAs.
-
-track chainHg18 override
-shortLabel $o_db Chain
-priority 250.1
-
-track netHg18 override
-shortLabel $o_db Net 
-priority 250.2
 
 track caCondor454
 shortLabel Condor 454 
