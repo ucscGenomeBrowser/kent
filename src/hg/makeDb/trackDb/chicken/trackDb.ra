@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.24 2010/02/07 06:50:01 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.25 2010/02/08 02:26:00 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -31,10 +31,4 @@ searchType bed
 shortCircuit 1
 termRegex snp\.[0-9]+\.[0-9]+\.[0-9]+\.[IDS]\.[1-3]
 searchPriority 20
-
-track chainFr2 override
-priority 140
-
-track netFr2 override
-priority 140.1
 

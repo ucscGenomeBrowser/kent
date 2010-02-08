@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.449 2010/02/07 06:50:02 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.450 2010/02/08 02:26:01 kuhn Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -996,19 +996,6 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno danRer1
-otherDb danRer1
-
-track chainDanRer1 override
-priority 155.2
-
-track netDanRer1
-shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 155.3
-visibility hide
-spectrum on
-type netAlign danRer1 chainDanRer1
 otherDb danRer1
 
 track blastzGalGal2

@@ -180,9 +180,3 @@ searchPriority 15
 track ensGene override
 priority 32.8
 
-track chainFr2 override
-priority 120
-
-track netFr2 override
-priority 120.1
-

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.74 2010/02/07 06:50:00 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.75 2010/02/08 02:26:00 kuhn Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -49,9 +49,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign aplCal1 chainAplCal1
 
-# release alpha until individual fr2 tracks are obsolete
 track chainNetFr2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
@@ -81,7 +79,6 @@ html chainNet
     spectrum on
 
         track chainFr2
-        release alpha
         subTrack chainNetFr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -95,7 +92,6 @@ html chainNet
     subTrack chainNetFr2
 
         track netFr2
-        release alpha
         subTrack chainNetFr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -507,9 +503,8 @@ html chainNet
         type netAlign danRer2 chainDanRer2
 
 track chainNetDanRer1
-release alpha
 compositeTrack on
-shortLabel $o_db Chain/Net
+shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
@@ -537,7 +532,6 @@ html chainNet
     spectrum on
 
         track chainDanRer1
-        release alpha
         subTrack chainNetDanRer1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -551,7 +545,6 @@ html chainNet
     subTrack chainNetDanRer1
 
         track netDanRer1
-        release alpha
         subTrack chainNetDanRer1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

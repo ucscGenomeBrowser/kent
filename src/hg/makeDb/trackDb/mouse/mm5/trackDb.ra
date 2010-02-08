@@ -80,21 +80,6 @@ spectrum on
 type psl xeno danRer1
 otherDb danRer1
 
-track chainDanRer1 override
-longLabel $O_Organism ($o_date/$o_db) Chained Alignments
-priority 160.01
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track netDanRer1
-shortLabel $o_db Net
-longLabel Zebrafish ($o_date/$o_db) Alignment Net
-group compGeno
-priority 160.11
-visibility hide
-spectrum on
-type netAlign danRer1 chainDanRer1
-otherDb danRer1
-
 track syntenyNetGalGal2
 shortLabel $o_Organism Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
