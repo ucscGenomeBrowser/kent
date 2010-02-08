@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.19 2009/12/03 21:39:51 kent Exp $
+# 	$Id: makefile,v 1.20 2010/02/08 03:13:51 markd Exp $
 
 include ../../inc/common.mk
 
@@ -29,7 +29,8 @@ DIRS = \
 	refreshNamedSessionCustomTracks \
 	refSeqGet \
 	tdbQuery \
-	wigBedToStep
+	wigBedToStep \
+	pslUniq
 
 TEST_DIRS = \
 	gff3ToGenePred \

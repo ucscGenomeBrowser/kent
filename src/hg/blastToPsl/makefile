@@ -6,9 +6,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 blastToPsl_objs = blastToPsl.o pslBuild.o
 blastXmlToPsl_objs = blastXmlToPsl.o ncbiBlast.o pslBuild.o
-pslUniq_objs = pslUniq.o
 
-all: ${BINDIR}/blastToPsl ${BINDIR}/blastXmlToPsl ${BINDIR}/pslUniq
+all: ${BINDIR}/blastToPsl ${BINDIR}/blastXmlToPsl
 
 ${BINDIR}/%: %.o ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/$*${EXE} ${$*_objs} ${MYLIBS} $L
@@ -18,11 +17,10 @@ test::
 	(cd tests && ${MAKE} test)
 
 clean::
-	rm -f ${blastToPsl_objs} ${blastXmlToPsl_objs} ${pslUniq_objs}
+	rm -f ${blastToPsl_objs} ${blastXmlToPsl_objs}
 
 ncbiBlast.o: ncbiBlast.c ncbiBlast.h
 pslBuild.o: pslBuild.c pslBuild.h
 blastXmlToPsl.o: blastXmlToPsl.c ncbiBlast.h pslBuild.h
 ${BINDIR}/blastXmlToPsl: ${blastXmlToPsl_objs}
 ${BINDIR}/blastToPsl: ${blastToPsl_objs}
-${BINDIR}/pslUniq: ${pslUniq_objs}
