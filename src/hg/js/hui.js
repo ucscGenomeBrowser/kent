@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.49 2010/02/01 21:37:55 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.50 2010/02/08 22:11:26 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -154,6 +154,10 @@ function matSetMatrixCheckBoxes(state)
     for(var vIx=1;vIx<arguments.length;vIx++) {
         subCDs = $( subCDs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
+    if(state) { // If clicking [+], further limit to only checked ABCs
+        var classes = matAbcCBclasses('unchecked');
+        subCDs = objsFilterByClasses(subCDs,false,classes);  // remove unchecked abcCB classes
+    }
     $( subCDs ).each( function (i) {
         this.checked = state;
         matSubCBsetShadow(this);
@@ -246,7 +250,7 @@ function matSubCBsetShadow(subCB)
         shadowState = 1;
     if(subCB.disabled)
         shadowState -= 2;
-    $("input[type=hidden][name='boolshad\."+subCB.name+"']").val(shadowState);
+    $("#"+subCB.name+"_4way").val(shadowState);
 }
 
 function matChkBoxNormalize(matCB)
@@ -282,33 +286,6 @@ function matChkBoxNormalize(matCB)
     }
     else
         matCbComplete(matCB,true); // If no subs match then this is determined !
-}
-
-function matChkBoxesNormalizeAll()
-{
-// document:load  Makes sure all matCBs are in one of 3 states (checked,unchecked,indeterminate) based on matching set of subCBs
-    var matCBs = $("input.matCB").not(".abc");
-    var abcCBs = $("input.matCB.abc");
-    var classes = matViewClasses('hidden');
-    if( $(abcCBs).length > 0) {
-        // Should do dim ABC first, then go back and do non-dim ABC with extra restrictions!
-        $(abcCBs).each( function (i) {
-            // do not normaize dim ABC.  These are set only by cart variables
-            if( $(this).is(':checked') == false ) {
-                var classList = $( this ).attr("class").split(" ");
-                classList = aryRemove(classList,"matCB","abc");
-                classes.push( classList );   // builds classes string filter like ".rep2.rep3" which are those mat cbs that are not checked.
-            }
-        } );
-    }
-    $(matCBs).each( function (i) { matChkBoxNormalize(this,classes); } );
-
-    // For each viewDD, enable/disable associated subtracks
-    $('select.viewDD').each( function (i) {
-        var viewClass = this.name.substring(this.name.indexOf(".") + 1,this.name.lastIndexOf("."));
-        matSubCBsEnable((this.selectedIndex > 0),viewClass);
-    });
-    matSubCBsSelected();
 }
 
 function matCbComplete(matCB,complete)
@@ -957,11 +934,14 @@ function showOrHideSelectedSubtracks(inp)
 function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
+//var start = startTiming();
+//document.body.style.cursor="wait";
     if (document.getElementsByTagName) {
-        matChkBoxesNormalizeAll();  // Note that this needs to be done when the page is first displayed.  But ideally only on clean cart!
+        matSubCBsSelected();
         showOrHideSelectedSubtracks();
-        //enableAllViewCfgLinks();
     }
+//document.body.style.cursor="default";
+//showTiming(start,"matInitializeMatrix()");
 }
 
 function multiSelectLoad(div,sizeWhenOpen)
