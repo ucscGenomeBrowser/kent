@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.26 2009/11/20 23:51:17 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.27 2010/02/08 22:07:29 tdreszer Exp $
 
 var debug = false;
 
@@ -425,6 +425,20 @@ function warn(msg)
         $( warnList ).append('<li>'+msg+'</li>');
         showWarnBox();
     }
+}
+
+function startTiming()
+{
+    var now = new Date();
+    return now.getTime();
+}
+
+function showTiming(start,whatTookSoLong)
+{
+    var now = new Date();
+    var end = (now.getTime() - start);
+    warn(whatTookSoLong+" took "+end+" msecs.");
+    return end;
 }
 
 function getHgsid()
