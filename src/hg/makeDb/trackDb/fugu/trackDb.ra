@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.75 2010/02/05 00:14:55 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.76 2010/02/08 02:50:05 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -200,15 +200,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno danRer2
 otherDb danRer2
-
-track chainDanRer2 override
-shortLabel $o_db Chain
-priority 226.2
-                                                                                
-track netDanRer2 override
-shortLabel $o_db Net
-priority 226.3
-visibility dense
 
 track blastzDanRer1
 shortLabel $o_db Blastz

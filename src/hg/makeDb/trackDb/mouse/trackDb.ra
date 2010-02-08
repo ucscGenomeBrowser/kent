@@ -425,13 +425,6 @@ priority 159.3
 track netDanRer3 override
 priority 159.4
 
-track chainDanRer2 override
-priority 160
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-                                                                                
-track netDanRer2 override
-priority 160.1
-
 track chainHg18
 release beta
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups

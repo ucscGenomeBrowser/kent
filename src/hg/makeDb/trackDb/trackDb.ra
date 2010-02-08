@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.612 2010/02/08 02:26:00 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.613 2010/02/08 02:50:04 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -2095,32 +2095,6 @@ visibility hide
 spectrum on
 type netAlign danRer3 chainDanRer3
 otherDb danRer3
-
-# release beta until composite danRer2 tracks become the default
-track chainDanRer2
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 160.3
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain danRer2
-otherDb danRer2
-
-# release beta until composite danRer2 tracks become the default
-track netDanRer2
-release beta
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 160.4
-visibility hide
-spectrum on
-type netAlign danRer2 chainDanRer2
-otherDb danRer2
 
 track chainOtoGar1Best
 shortLabel $o_Organism Best Chain
