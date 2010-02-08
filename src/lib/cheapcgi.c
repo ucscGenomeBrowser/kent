@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.130 2010/01/13 23:45:56 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.131 2010/02/08 22:08:41 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -636,10 +636,10 @@ return res;
 }
 
 char *javaScriptLiteralEncode(char *inString)
-/* Use backslash escaping on newline 
- * and quote chars, backslash and others. 
- * Intended that the encoded string will be 
- * put between quotes at a higher level and 
+/* Use backslash escaping on newline
+ * and quote chars, backslash and others.
+ * Intended that the encoded string will be
+ * put between quotes at a higher level and
  * then interpreted by Javascript. */
 {
 char c;
@@ -653,14 +653,14 @@ if (inString == NULL)
 in = inString;
 while ((c = *in++) != 0)
     {
-    if (c == '\'' 
-     || c == '\"' 
-     || c == '&' 
-     || c == '\\' 
-     || c == '\n' 
+    if (c == '\''
+     || c == '\"'
+     || c == '&'
+     || c == '\\'
+     || c == '\n'
      || c == '\r'
-     || c == '\t' 
-     || c == '\b' 
+     || c == '\t'
+     || c == '\b'
      || c == '\f'
 	)
         outSize += 2;
@@ -674,14 +674,14 @@ in = inString;
 out = outString;
 while ((c = *in++) != 0)
     {
-    if (c == '\'' 
-     || c == '\"' 
-     || c == '&' 
-     || c == '\\' 
-     || c == '\n' 
+    if (c == '\''
+     || c == '\"'
+     || c == '&'
+     || c == '\\'
+     || c == '\n'
      || c == '\r'
-     || c == '\t' 
-     || c == '\b' 
+     || c == '\t'
+     || c == '\b'
      || c == '\f'
 	)
         *out++ = '\\';
@@ -1177,12 +1177,31 @@ void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascr
 cgiMakeCheckBox2Bool(name,checked,TRUE,id,javascript);
 }
 
-void cgiMakeCheckBox2BoolWithIdAndJS(char *name, boolean checked, boolean enabled,char *id, char *javascript)
-/* Make check box supporting 2 boolean state: checke/unchecked and enabled/disabled
-   Also support ID and javascript.*/
+void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id, char *classes, char *moreHtml)
+/* Make check box - with fourWay functionality (checked/unchecked by enabled/disabled)
+ * Also makes a shadow hidden variable that supports the 2 boolean states. */
 {
-cgiMakeCheckBox2Bool(name,checked,enabled,id,javascript);
+char shadName[256], extra[256];
+
+printf("<INPUT TYPE=CHECKBOX NAME='%s'", name);
+if(id)
+    printf(" id='%s'", id);
+if(checked)
+    printf(" CHECKED");
+if(!enabled)
+    printf(" DISABLED");
+if(classes)
+    printf(" class='%s'",classes);
+if(moreHtml)
+    printf(" %s",moreHtml);
+printf(">");
+
+// The hidden var needs to hold the 4way state
+safef(shadName, sizeof(shadName), "%s%s", cgiBooleanShadowPrefix(), name);
+safef(extra, sizeof(extra), "id='%s_4way'",name);
+cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),extra); // Doesn't need enabled/checked!
 }
+
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
 /* Make hidden boolean variable. Also make a shadow hidden variable so we
@@ -1557,10 +1576,14 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
-void cgiMakeHiddenVar(char *varName, char *string)
+void cgiMakeHiddenVarWithExtra(char *varName, char *string,char *extra)
 /* Store string in hidden input for next time around. */
 {
-printf("<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">", varName, string);
+printf("<INPUT TYPE=HIDDEN NAME='%s' VALUE='%s'", varName, string);
+if(extra)
+    printf(" %s>\n",extra);
+else
+    puts(">");
 }
 
 void cgiContinueHiddenVar(char *varName)
@@ -1831,7 +1854,7 @@ void commonCssStyles()
     //printf(".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
     printf(".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN);
     printf(".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);
-    printf(".halfVis {opacity: 0.5;}\n");
+    printf(".halfVis {opacity: 0.5; filter:alpha(opacity=50;}\n");
     puts("</style>");
 }
 

@@ -213,9 +213,9 @@ void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
 /* Make check box with ID and javascript. */
 
-void cgiMakeCheckBox2BoolWithIdAndJS(char *name, boolean checked, boolean enabled,char *id, char *javascript);
-/* Make check box supporting 2 boolean state: checke/unchecked and enabled/disabled
-   Also support ID and javascript.*/
+void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id, char *classes, char *moreHtml);
+/* Make check box - with fourWay functionality (checked/unchecked by enabled/disabled
+ * Also makes a shadow hidden variable that supports the 2 boolean states. */
 
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount);
 /* Make a text area with area rowCount X columnCount and with text: intialVal. */
@@ -301,7 +301,10 @@ void cgiMakeCheckboxGroupWithVals(char *name, char *menu[], char *values[], int 
 /* Make a table of checkboxes that have the same variable name but different
  * values (same behavior as a multi-select input), with nice labels in menu[]. */
 
-void cgiMakeHiddenVar(char *varName, char *string);
+void cgiMakeHiddenVarWithExtra(char *varName, char *string, char *extra);
+/* Store string in hidden input for next time around. */
+
+#define cgiMakeHiddenVar(name,val) cgiMakeHiddenVarWithExtra((name),(val),NULL)
 /* Store string in hidden input for next time around. */
 
 void cgiContinueHiddenVar(char *varName);
@@ -418,10 +421,10 @@ void commonCssStyles();
 /* Defines a few common styles to use through CSS */
 
 char *javaScriptLiteralEncode(char *inString);
-/* Use backslash escaping on newline 
- * and quote chars, backslash and others. 
- * Intended that the encoded string will be 
- * put between quotes at a higher level and 
+/* Use backslash escaping on newline
+ * and quote chars, backslash and others.
+ * Intended that the encoded string will be
+ * put between quotes at a higher level and
  * then interpreted by Javascript. */
 
 #endif /* CHEAPCGI_H */
