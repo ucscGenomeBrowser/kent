@@ -419,12 +419,6 @@ spectrum on
 type netAlign danRer4 chainDanRer4NoRand
 otherDb danRer4
 
-track chainDanRer3 override
-priority 159.3
-                                                                                
-track netDanRer3 override
-priority 159.4
-
 track blastzHg17
 shortLabel Human Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments

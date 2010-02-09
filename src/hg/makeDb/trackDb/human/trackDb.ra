@@ -3249,12 +3249,6 @@ priority 168.2
 track netDanRer4 override
 priority 168.3
 
-track chainDanRer3 override
-priority 168.4
-
-track netDanRer3 override
-priority 168.5
-
 # expression and regulation automatically ordered
 track firstEF override
 priority 0

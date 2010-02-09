@@ -27,9 +27,6 @@ spectrum on
 type psl .
 url http://stemcell.princeton.edu/cgi-bin/clone_info.pl?sequence_id=$$
 
-track netDanRer3 override
-priority 159.2
-
 track chainSelf
 shortLabel Self Chain 
 longLabel Self Chained Alignments
