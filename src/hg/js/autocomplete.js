@@ -8,16 +8,16 @@ var suggestCache;
 function ajaxGet(getDb, cache)
 {
 // Returns jquery.autocomplete.js ajax_get function object
-// getDb should be a function which returns the relevant assembly (e.g. "hg18)
+// getDb should be a function which returns the relevant assembly (e.g. "hg18")
 // cache is an optional object used as a hash to cache responses from the server.
     suggestCache = cache;
     return function (key, cont) {
         if(suggestCache == null || suggestCache[key] == null)
         {
             $.ajax({
-                       url: "../cgi-bin/suggest",
+                       url: "../cgi-bin/hgSuggest",
                        data: "db=" + getDb() + "&prefix=" + key,
-                       // dataType: "json",  // XXXX this doesn't work under IE.
+                       // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
                        trueSuccess: handleSuggest,
                        success: catchErrorOrDispatch,
                        error: function (request, status, errorThrown) {
