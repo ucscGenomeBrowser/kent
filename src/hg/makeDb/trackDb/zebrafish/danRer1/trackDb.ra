@@ -15,12 +15,6 @@ track blastzHg17 override
 shortLabel Human Blastz
 priority 124.1
 
-track chainHg17 override
-shortLabel Human Chain
-
-track netHg17 override
-shortLabel Human Net
-
 track blastzFr1 override
 shortLabel Fugu Blastz
 

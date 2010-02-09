@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.49 2010/02/08 19:28:47 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.50 2010/02/09 02:16:13 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -75,13 +75,6 @@ shortLabel $o_Organism Chain
 
 track netDanRer4 override
 shortLabel $o_Organism Net
-
-track chainHg17 override
-priority 257
-
-track netHg17 override
-priority 258
-visibility hide
 
 track syntenicNet
 shortLabel Syntenic Nets

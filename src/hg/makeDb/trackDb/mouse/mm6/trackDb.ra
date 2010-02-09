@@ -1,3 +1,5 @@
+# chainNet tracks
+include trackDb.chainNet.ra
 
 track knownGene override
 shortLabel Known Genes

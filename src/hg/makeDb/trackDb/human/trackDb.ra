@@ -2024,12 +2024,6 @@ visibility hide
 color 20,0,50
 type bed 4 .
 
-track chainHg17 override
-shortLabel Hg17 Chain
-longLabel  Hg17 LiftOver Chain
-group map
-priority 152.2
-
 track chainHg19
 #replaces record chainHg19 in parent dir missing/extra subTrack,subGroups
 shortLabel Hg19 Chain

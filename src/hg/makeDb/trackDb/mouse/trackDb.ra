@@ -437,15 +437,6 @@ spectrum on
 type psl xeno hg17
 otherDb hg17
 
-track chainHg17 override
-shortLabel $o_Organism Chain 
-priority 279.6
-
-track netHg17 override
-shortLabel $o_Organism Net
-priority 279.7
-visibility hide
-
 track syntenyNetHg17
 shortLabel $o_Organism Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net

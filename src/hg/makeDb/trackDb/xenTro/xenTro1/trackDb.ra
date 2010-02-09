@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.44 2010/02/08 02:26:02 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.45 2010/02/09 02:16:18 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -85,13 +85,6 @@ color 150,0,0
 type bed 4 .
 searchMethod exact
 searchType bed
-
-track chainHg17 override
-priority 140
-
-track netHg17 override
-priority 141
-visibility hide
 
 searchTable uc16
 searchMethod exact

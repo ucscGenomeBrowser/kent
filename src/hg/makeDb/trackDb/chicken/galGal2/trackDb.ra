@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.77 2010/02/05 07:42:01 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.78 2010/02/09 02:16:07 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -67,12 +67,6 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 otherDb fr1
-
-track chainHg17 override
-priority 212
-
-track netHg17 override
-priority 212.1
 
 track netSyntenyHg17
 shortLabel $o_Organism Synteny

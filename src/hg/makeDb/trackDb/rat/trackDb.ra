@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.76 2010/02/08 19:28:50 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.77 2010/02/09 02:16:16 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -86,32 +86,6 @@ visibility dense
 
 track blatCi1 override
 priority 111
-
-track chainHg17
-release beta
-shortLabel $o_db Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 256.2
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain hg17
-otherDb hg17
-
-track netHg17
-release beta
-shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 256.3
-visibility hide
-spectrum on
-type netAlign hg17 chainHg17
-otherDb hg17
 
 track chainDanRer4 override
 shortLabel $o_Organism Chain

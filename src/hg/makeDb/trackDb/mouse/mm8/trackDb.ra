@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.64 2010/01/30 01:13:44 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.65 2010/02/09 02:16:13 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -54,14 +54,6 @@ sGroup_mammal rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 e
 sGroup_vertebrate galGal2 xenTro2 danRer4 tetNig1 fr1
 speciesDefaultOff oryCun1 panTro2 rheMac2 bosTau2 dasNov1 loxAfr1 echTel1 danRer4 fr1
 treeImage phylo/mm7_17way.gif
-
-track chainHg17 override
-shortLabel $o_db Chain 
-priority 259.1
-
-track netHg17 override
-shortLabel $o_db Net
-priority 259.2
 
 track chainSelf
 shortLabel Self Chain 
