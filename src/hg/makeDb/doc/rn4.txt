@@ -5076,3 +5076,30 @@ TMPDIR=/scratch/tmp
     #	693099721 bases of 2225124764 (31.149%) in intersection
 
 ############################################################################
+# tRNAs track (2010-01-15, Fan DONE)
+#
+    ssh hgwdev
+    cd /hive/data/genomes/rn4/bed
+    mkdir tRNAs
+    cd tRNAs
+
+# Get data files from /projects/lowelab/users/lowe/Browser/vertebrates/
+
+    cp -p /projects/lowelab/users/lowe/Browser/vertebrates/rn4-tRNAs.bed .
+    cp -p \
+    /projects/lowelab/users/lowe/Browser/vertebrates/rn4_tRNAs_images.tar.gz\
+    .
+
+    hgsql rn4 -e 'drop table if exists tRNAs'
+    hgLoadBed -tab rn4 tRNAs rn4-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+
+    mkdir gif
+    cd gif
+    gzip -d ../rn4_tRNAs_images.tar.gz
+    tar -xvf rn4_tRNAs_images.tar
+    mkdir /hive/data/gbdb/rn4/RNA-img
+    cp -p * /hive/data/gbdb/rn4/RNA-img
+
+#####################################################################
+
+

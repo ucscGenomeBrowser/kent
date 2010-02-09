@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.80 2010/02/09 16:10:41 hartera Exp $";
+#	"$Id: hg19.txt,v 1.81 2010/02/09 23:15:08 fanhsu Exp $";
 
 #############################################################################
 
@@ -8506,3 +8506,31 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
 ('/gbdb/hg19/bbi/crgMapabilityAlign40mer');"
     # Added a subtrack to trackDb/human/hg19/trackDb.enc.ra to the 
     # Mapability track.
+#####################################################################
+# tRNAs track (2010-01-13, Fan DONE)
+#
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed
+    mkdir tRNAs
+    cd tRNAs
+
+# Get data files from /projects/lowelab/users/lowe/Browser/vertebrates/
+
+    cp -p /projects/lowelab/users/lowe/Browser/vertebrates/hg19-tRNAs.bed .
+    cp -p \
+    /projects/lowelab/users/lowe/Browser/vertebrates/hg19_tRNAs_images.tar.gz\
+    .
+
+    hgsql hg19 -e 'drop table if exists tRNAs'
+    hgLoadBed -tab hg19 tRNAs hg19-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+
+    mkdir gif
+    cd gif
+    gzip -d ../hg19_tRNAs_images.tar.gz
+    tar -xvf hg19_tRNAs_images.tar
+    mkdir /hive/data/gbdb/hg19/RNA-img
+    cp -p * /hive/data/gbdb/hg19/RNA-img
+
+#####################################################################
+
+

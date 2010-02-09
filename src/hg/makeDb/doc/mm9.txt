@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.123 2010/02/09 19:05:39 hartera Exp $"
+#	"$Id: mm9.txt,v 1.124 2010/02/09 23:16:41 fanhsu Exp $"
 #
 
 #######################################################################
@@ -10138,3 +10138,31 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-40_
      # kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra
      # use bigWigInfo to check min and max values. Created a mapability.html
      # description page. 
+#####################################################################
+# tRNAs track (2010-01-15, Fan DONE)
+#
+    ssh hgwdev
+    cd /hive/data/genomes/mm9/bed
+    mkdir tRNAs
+    cd tRNAs
+
+# Get data files from /projects/lowelab/users/lowe/Browser/vertebrates/
+
+    cp -p /projects/lowelab/users/lowe/Browser/vertebrates/mm9-tRNAs.bed .
+    cp -p \
+    /projects/lowelab/users/lowe/Browser/vertebrates/mm9_tRNAs_images.tar.gz\
+    .
+
+    hgsql mm9 -e 'drop table if exists tRNAs'
+    hgLoadBed -tab mm9 tRNAs mm9-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+
+    mkdir gif
+    cd gif
+    gzip -d ../mm9_tRNAs_images.tar.gz
+    tar -xvf mm9_tRNAs_images.tar
+    mkdir /hive/data/gbdb/mm9/RNA-img
+    cp -p * /hive/data/gbdb/mm9/RNA-img
+
+#####################################################################
+
+
