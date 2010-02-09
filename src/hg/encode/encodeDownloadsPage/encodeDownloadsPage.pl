@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.25 2010/01/27 22:22:34 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.26 2010/02/09 19:04:45 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -97,6 +97,7 @@ sub htmlEndPage {
     local *OUT_FILE = shift;
 
     print OUT_FILE "\n<HR>\n";
+    print OUT_FILE @_;
     print OUT_FILE "</BODY></HTML>\n";
 }
 
@@ -358,7 +359,7 @@ for my $line (@fileList) {
     my %metaData;
 
     ### TODO: Developer: set sort order here; sortables must have same number of strings and '~' is lowest val printable
-    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","replicate","subId");
+    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","rank","replicate","subId");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my $typePrefix = "";
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
@@ -516,8 +517,9 @@ for my $line (@fileList) {
 }
 sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
 print OUT_FILE "</TABLE>\n";
+my $conclusion = "<i>" . scalar(@rows) . " files</i>\n";
 
-htmlEndPage(*OUT_FILE);
+htmlEndPage(*OUT_FILE,$conclusion);
 close TEXT_FILE;
 
 # create file of checksums
