@@ -3053,6 +3053,7 @@ tablesIgnored hg19
     chain_haplotypes
 
 tablesIgnored mm9
+    crgMapability%
     rest
 
 tablesIgnored $calJac
