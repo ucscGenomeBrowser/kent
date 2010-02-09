@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.78 2010/02/06 21:43:02 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.79 2010/02/09 23:27:21 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -616,8 +616,15 @@ if (origAssembly)
     {
     if (differentString(origAssembly, database))
         {
+	printf("<B>Data coordinates converted via <A TARGET=_BLANK "
+	       "HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> ");
         char *freeze = hFreezeFromDb(origAssembly);
-        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s %s%s%s<BR>\n", freeze ? freeze : "", freeze ? "(" : "", origAssembly, freeze ? ")":"");
+	if (freeze == NULL)
+	    printf("%s<BR>\n", origAssembly);
+	else if (stringIn(origAssembly, freeze))
+	    printf("%s<BR>\n", freeze);
+	else
+	    printf("%s (%s)<BR>\n", freeze, origAssembly);
         }
     }
 }

@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.222 2009/09/23 18:42:20 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.223 2010/02/09 23:27:21 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -3119,13 +3119,19 @@ void hgPositionsHelpHtml(char *organism, char *database)
 char *htmlPath = hHtmlPath(database);
 char *htmlString = NULL;
 size_t htmlStrLength = 0;
+char *freeze = hFreezeFromDb(database);
 
 if (strstrNoCase(organism, "zoo")) 
     webNewSection("About the NISC Comparative Sequencing Program Browser");
+else if (stringIn(database, freeze))
+    webNewSection("About the %s %s assembly"
+		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
+		  organism, freeze,
+		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 else
     webNewSection("About the %s %s (%s) assembly"
 		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  organism, hFreezeFromDb(database), database,
+		  organism, freeze, database,
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 if (htmlPath != NULL && fileExists(htmlPath))

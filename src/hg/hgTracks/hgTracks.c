@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1622 2010/02/09 00:11:34 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1623 2010/02/09 23:27:21 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4325,8 +4325,12 @@ if (!hideControls)
 	    }
 	else
 	    {
-	    hPrintf("%s %s on %s %s Assembly (%s)",
-		organization, browserName, organism, freezeName, database);
+	    if (stringIn(database, freezeName))
+		hPrintf("%s %s on %s %s Assembly",
+			organization, browserName, organism, freezeName);
+	    else
+		hPrintf("%s %s on %s %s Assembly (%s)",
+			organization, browserName, organism, freezeName, database);
 	    }
 	}
     hPrintf("</B></FONT><BR>\n");
@@ -5246,9 +5250,14 @@ void chromInfoPage()
 {
 char *position = cartUsualString(cart, "position", hDefaultPos(database));
 char *defaultChrom = hDefaultChrom(database);
+char *freeze = hFreezeFromDb(database);
 struct dyString *title = dyStringNew(512);
-dyStringPrintf(title, "%s %s (%s) Browser Sequences",
-           hOrganism(database), hFreezeFromDb(database), database);
+if (stringIn(database, freeze))
+    dyStringPrintf(title, "%s %s Browser Sequences",
+		   hOrganism(database), freeze);
+else
+    dyStringPrintf(title, "%s %s (%s) Browser Sequences",
+		   hOrganism(database), freeze, database);
 webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);

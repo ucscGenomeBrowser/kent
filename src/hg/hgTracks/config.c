@@ -441,9 +441,14 @@ hPrintf("</TD></TR>\n");
 
 hTableEnd();
 
+char *freeze = hFreezeFromDb(database);
 char buf[128];
-safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)",
-        organization, browserName, organism, hFreezeFromDb(database), database);
+if (stringIn(database, freeze))
+    safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s",
+	  organization, browserName, organism, freeze);
+else
+    safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)",
+	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
 cgiMakeButton(configHideAll, "hide all");
