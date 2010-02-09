@@ -290,6 +290,15 @@ identifier ncbiTaxon
      visiGene.lifeStageScheme.taxon
      visiGene.strain.taxon
 
+# tRNAs track Stuff
+
+# Databases with the CGAP SAGE track
+set tRNAsDbs hg18,hg19,mm9,rn4
+
+identifier tRNAsId
+"ID of tRNAs"
+    $tRNAsDbs.tRNAs.name
+
 # CGAP SAGE track Stuff
 
 # Databases with the CGAP SAGE track
