@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.79 2010/02/08 19:28:45 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.80 2010/02/09 18:57:17 hartera Exp $";
 
 include trackDb.chainNet.ra
 
@@ -27,6 +27,56 @@ noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 release beta
+
+track Mapability
+compositeTrack on
+shortLabel Mapability
+longLabel Mapability or Uniqueness of Reference Genome
+group map
+#dimensions dimensionX=win
+dragAndDrop subTracks
+priority 0
+type bigWig 0.00 1.00
+viewLimits 0:1
+autoScale off
+windowingFunction mean
+maxHeightPixels 100:32:16
+visibility hide
+
+    track crgMapabilityAlign36mer
+    subTrack Mapability
+    shortLabel CRG Alignability 36
+    longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
+    color 120,0,0
+    priority 1
+
+    track crgMapabilityAlign40mer
+    subTrack Mapability
+    shortLabel CRG Alignability 40
+    longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
+    color 120,0,0
+    priority 2
+    
+    track crgMapabilityAlign50mer
+    subTrack Mapability
+    shortLabel CRG Alignability 50
+    longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
+    color 120,0,0
+    priority 3
+
+    track crgMapabilityAlign75mer
+    subTrack Mapability
+    shortLabel CRG Alignability 75
+    longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
+    color 120,0,0
+    priority 4
+
+    track crgMapabilityAlign100mer
+    subTrack Mapability
+    shortLabel CRG Alignability 100
+    longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
+    color 120,0,0
+    priority 5
 
 track tRNAs
 shortLabel tRNA Genes
