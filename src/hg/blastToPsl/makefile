@@ -24,5 +24,5 @@ clean::
 ncbiBlast.o: ncbiBlast.c ncbiBlast.h
 pslBuild.o: pslBuild.c pslBuild.h
 blastXmlToPsl.o: blastXmlToPsl.c ncbiBlast.h pslBuild.h
-${BINDIR}/blastXmlToPsl: ${blastXmlToPsl_objs}
-${BINDIR}/blastToPsl: ${blastToPsl_objs}
+blastXmlToPsl.build: ${blastXmlToPsl_objs}
+blastToPsl.build: ${blastToPsl_objs}
