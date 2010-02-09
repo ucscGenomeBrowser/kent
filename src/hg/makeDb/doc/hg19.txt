@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.79 2010/02/06 02:47:48 hartera Exp $";
+#	"$Id: hg19.txt,v 1.80 2010/02/09 16:10:41 hartera Exp $";
 
 #############################################################################
 
@@ -8191,19 +8191,21 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # ask for the data to be fixed. 
 # 2010-02-03 Received new data as the previous data had empty fields.
 # 2010-02-04 Loaded new data into hg19 database.
+# 2010-02-09 Received new data on 02/08/10 as there were more errors in the
+# code that caused the data to have empty fields.
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
     cd /hive/data/genomes/hg19/bed/genomicSuperDups
     # Remove old data
     rm *
     wget --timestamping \
-        ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.gz    
-    gunzip hg19genomicSuperDups.gz
+        ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.tab.gz    
+    gunzip hg19genomicSuperDups.tab.gz
     # Fix incorrect chromosome names in data. Check both chrom and otherChrom.
     # Previously, found several cases where the last letter of random was
     # missing for the names of the random contigs. They all look good this
     # time.
-    awk '{print $1}' hg19genomicSuperDups | sort | uniq > chroms
-    awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChroms
+    awk '{print $1}' hg19genomicSuperDups.tab | sort | uniq > chroms
+    awk '{print $7}' hg19genomicSuperDups.tab | sort | uniq > otherChroms
     hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq > chromInfo.txt 
     comm -23 chroms chromInfo.txt
     comm -23 otherChroms chromInfo.txt
@@ -8214,11 +8216,12 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # genomicSuperDups that had some too-short regions.  It does not seem
     # to be necessary here, but doesn't hurt and may be useful in
     # future builds.
-    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups \
+    hgsql -e 'drop table genomicSuperDups;' hg19
+    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups.tab \
     | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed hg19 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
-# Loaded 51549 elements of size 29
+# Loaded 51599 elements of size 29
 # Sorted
 # Creating table definition for genomicSuperDups
 # Saving bed.tab
