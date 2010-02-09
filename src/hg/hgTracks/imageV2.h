@@ -4,10 +4,12 @@
 // also UNCOMMENT:
 //   IMAGEv2_DRAG_REORDER to allow dragReorder
 //   FLAT_TRACK_LIST to allow reordering of subtracks
+//   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 //   CONTEXT_MENU to allow right-click funtionality
 //   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
 #define IMAGEv2_UI
-///#define IMAGEv2_DRAG_REORDER
+//#define IMAGEv2_DRAG_REORDER
+//#define USE_NAVIGATION_LINKS
 
 // UNCOMMENT FLAT_TRACK_LIST to allow reordering of subtracks
 #ifdef IMAGEv2_DRAG_REORDER

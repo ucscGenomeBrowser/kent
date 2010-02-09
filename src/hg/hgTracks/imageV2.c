@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.20 2010/02/03 18:43:37 angie Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.21 2010/02/09 00:11:33 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -224,6 +224,63 @@ if ((item->topLeftX     < 0 || item->topLeftX     >= img->width)
 return TRUE;
 }
 
+static struct dyString *addIndent(struct dyString **dy,int indent)
+/* beginning indent for show functions */
+{
+struct dyString *myDy = (dy?*dy:NULL);
+if(dy == NULL || *dy == NULL)
+    myDy = newDyString(256);
+else
+    dyStringAppend(myDy,"<br>");
+dyStringAppend(myDy,"<code>");
+int times = indent;
+for(;times>0;times--)
+    dyStringAppend(myDy,"&nbsp;");
+return myDy;
+}
+
+static void mapItemShow(struct dyString **dy,struct mapItem *item,int indent)
+/* show the map item */
+{
+if(item)
+    {
+    struct dyString *myDy = addIndent(dy,indent);
+    dyStringPrintf(myDy,"mapItem: title:%s topX:%d topY:%d botX:%d botY:%d",
+             (item->title?item->title:""),
+            item->topLeftX,item->topLeftY,item->bottomRightX,item->bottomRightY);
+    addIndent(&myDy,indent);
+    dyStringPrintf(myDy,"&nbsp;&nbsp;linkVar:%s",
+            (item->linkVar?item->linkVar:""));
+    if(dy == NULL)
+        warn("%s",dyStringCannibalize(&myDy));
+    else
+        *dy = myDy;
+    }
+}
+
+
+static void mapShow(struct dyString **dy,struct mapSet *map,int indent)
+/* show the map */
+{
+if(map && map->items) // No map items then why bother?
+    {
+    struct dyString *myDy = addIndent(dy,indent);
+    dyStringPrintf(myDy,"map: name:%s",(map->name?map->name:""));
+    if(map->linkRoot)
+        dyStringPrintf(myDy," linkRoot:%s",map->linkRoot);
+    if(dy == NULL)
+        warn("%s",dyStringCannibalize(&myDy));
+
+    indent++;
+    struct mapItem *item = map->items;
+    for (;item != NULL; item = item->next)
+        mapItemShow(dy,item,indent);
+
+    if(dy != NULL)
+        *dy = myDy;
+    }
+}
+
 boolean mapSetIsComplete(struct mapSet *map,boolean verbose)
 /* Tests the completeness and consistency of this map (mapSet) */
 {
@@ -322,6 +379,23 @@ struct mapSet *imgGetMap(struct image *img)
 return img->map;
 }
 
+static void imgShow(struct dyString **dy,struct image *img,char *prefix,int indent)
+/* show the img */
+{
+if(img)
+    {
+    struct dyString *myDy = addIndent(dy,indent);
+    dyStringPrintf(myDy,"%simg: title:%s file:%s width:%d height:%d",(prefix?prefix:""),
+            (img->title?img->title:""),(img->file?img->file:""),img->width,img->height);
+    indent++;
+    mapShow(&myDy,img->map,indent);
+    if(dy == NULL)
+        warn("%s",dyStringCannibalize(&myDy));
+    else
+        *dy = myDy;
+    }
+}
+
 void imgFree(struct image **pImg)
 /* frees all memory assocated with an image (including a map) */
 {
@@ -353,6 +427,8 @@ return sliceUpdate(slice,type,img,title,width,height,offsetX,offsetY);
 struct imgSlice *sliceUpdate(struct imgSlice *slice,enum sliceType type,struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* updates an already created slice */
 {
+//if(width==0 || height==0)
+//    return NULL;
 slice->type      = type;
 if(img != NULL && slice->parentImg != img)
     slice->parentImg = img;
@@ -456,6 +532,30 @@ safef(qualifiedName,sizeof(qualifiedName),"%s_%s",sliceTypeToString(slice->type)
 return mapSetUpdate(map,qualifiedName,slice->parentImg,linkRoot);
 }
 
+static void sliceShow(struct dyString **dy,struct imgSlice *slice,int indent)
+/* show the slice */
+{
+if(slice)
+    {
+    struct dyString *myDy = addIndent(dy,indent);
+    dyStringPrintf(myDy,"slice(%s): title:%s width:%d height:%d offsetX:%d offsetY:%d",
+            sliceTypeToString(slice->type),(slice->title?slice->title:""),
+            slice->width,slice->height,slice->offsetX,slice->offsetY);
+    if(slice->link)
+        {
+        addIndent(&myDy,indent);
+        dyStringPrintf(myDy,"&nbsp;&nbsp;link:%s",slice->link);
+        }
+    indent++;
+    imgShow(&myDy,slice->parentImg,"parent ", indent); // Currently we just have the one image
+    mapShow(&myDy,slice->map,indent);
+    if(dy == NULL)
+        warn("%s",dyStringCannibalize(&myDy));
+    else
+        *dy = myDy;
+    }
+}
+
 boolean sliceIsConsistent(struct imgSlice *slice,boolean verbose)
 /* Test whether the slice and it's associated image and map are consistent with each other */
 {
@@ -481,11 +581,11 @@ if ( slice->width == 0
     }
 if (slice->height == 0) // FIXME: This may be a temporary solution to empty data slices
     {
-    //if (verbose)
-    //    warn("slice(%s) has an invalid height %d (image height %d)",
-    //         sliceTypeToString(slice->type),slice->height,slice->parentImg->height);
-    //return FALSE;
-    return TRUE; // This may be valid (but is sloppy) when there is no data for the slice.
+    if (verbose)
+        warn("slice(%s) has an invalid height %d (image height %d)",
+             sliceTypeToString(slice->type),slice->height,slice->parentImg->height);
+    return FALSE;
+    //return TRUE; // This may be valid (but is sloppy) when there is no data for the slice.
     }
 if (slice->parentImg && slice->height > slice->parentImg->height)
     {
@@ -511,6 +611,9 @@ if (slice->link != NULL && slice->map != NULL)
     }
 if (slice->map != NULL)
     {
+    //if(slice->map->items == NULL)
+    //    mapSetFree(&slice->map); // An empty map is ok but should be removed.
+    //else
     if(!mapSetIsComplete(slice->map,verbose))
         {
         warn("slice(%s) has bad map",sliceTypeToString(slice->type));
@@ -619,8 +722,11 @@ struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type,
 /* Adds slices to an image track.  Expected are types: stData, stButton, stSide and stCenter */
 {
 struct imgSlice *slice = sliceCreate(type,img,title,width,height,offsetX,offsetY);
-slAddHead(&(imgTrack->slices),slice);
+if(slice)
+    slAddHead(&(imgTrack->slices),slice);
 return imgTrack->slices;
+//slAddTail(&(imgTrack->slices),slice);
+//return slice;
 }
 
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type)
@@ -715,6 +821,29 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
 return count;
 }
 
+static void imgTrackShow(struct dyString **dy,struct imgTrack *imgTrack,int indent)
+/* show the imgTrack */
+{
+if(imgTrack)
+    {
+    struct dyString *myDy = addIndent(dy,indent);
+    dyStringPrintf(myDy,"imgTrack: name:%s tdb:%s%s%s order:%d vis:%s",
+            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->tableName?imgTrack->tdb->tableName:""),
+            (imgTrack->showCenterLabel?" centerLabel":""),(imgTrack->reorderable?" reorderable":""),
+            imgTrack->order,hStringFromTv(imgTrack->vis));
+    if(dy == NULL)
+        warn("%s",dyStringCannibalize(&myDy));
+
+    indent++;
+    struct imgSlice *slice = imgTrack->slices;
+    for(; slice != NULL; slice = slice->next )
+        sliceShow(dy,slice,indent);
+
+    if(dy != NULL)
+        *dy = myDy;
+    }
+}
+
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose)
 /* Tests the completeness and consistency of this imgTrack (including slices) */
 {
@@ -727,36 +856,54 @@ if (imgTrack == NULL)
 if (imgTrack->tdb == NULL && imgTrack->name == NULL)
     {
     if (verbose)
+        {
         warn("imgTrack has no tdb or name");
+        imgTrackShow(NULL,imgTrack,0);
+        }
     return FALSE;
     }
 char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->tableName);
 if (imgTrack->db == NULL)
     {
     if (verbose)
+        {
         warn("imgTrack(%s) has no db.",name);
+        imgTrackShow(NULL,imgTrack,0);
+        }
+
     return FALSE;
     }
 if (imgTrack->db == NULL)
     {
     if (verbose)
+        {
         warn("imgTrack(%s) has no chrom.",name);
+        imgTrackShow(NULL,imgTrack,0);
+        }
     return FALSE;
     }
 if (imgTrack->chromStart  >= imgTrack->chromEnd)
     {
     if (verbose)
+        {
         warn("imgTrack(%s) for %s.%s:%d-%d has bad genome range.",name,
              imgTrack->db,imgTrack->chrom,imgTrack->chromStart,imgTrack->chromEnd);
+        imgTrackShow(NULL,imgTrack,0);
+        }
     return FALSE;
     }
 if(imgTrack->slices == NULL)
     {
     if (verbose)
+        {
         warn("imgTrack(%s) has no slices.",name);
+        imgTrackShow(NULL,imgTrack,0);
+        }
     return FALSE;
     }
 // Can have no more than one of each type of slice
+if(imgTrack->slices && imgTrack->slices->type == stData)
+   slReverse(&imgTrack->slices);
 boolean found[stMaxSliceTypes] = { FALSE,FALSE,FALSE,FALSE};
 struct imgSlice *slice = imgTrack->slices;
 for(; slice != NULL; slice = slice->next )
@@ -764,8 +911,11 @@ for(; slice != NULL; slice = slice->next )
     if(found[slice->type])
         {
         if (verbose)
+            {
             warn("imgTrack(%s) found more than one slice of type %s.",
                  name,sliceTypeToString(slice->type));
+            imgTrackShow(NULL,imgTrack,0);
+            }
         return FALSE;
         }
     found[slice->type] = TRUE;
@@ -773,7 +923,10 @@ for(; slice != NULL; slice = slice->next )
     if(!sliceIsConsistent(slice,verbose))
         {
         if (verbose)
+            {
             warn("imgTrack(%s) has bad slice",name);
+            imgTrackShow(NULL,imgTrack,0);
+            }
         return FALSE;
         }
     }
@@ -781,7 +934,10 @@ for(; slice != NULL; slice = slice->next )
 //if(!found[stData])
 //    {
 //    if (verbose)
+//        {
 //        warn("imgTrack(%s) has no DATA slice.",name);
+//        imgTrackShow(NULL,imgTrack,0);
+//        }
 //    return FALSE;
 //    }
 
@@ -1055,6 +1211,32 @@ slReverse(&(imgBox->imgTracks));
 #endif//ndef IMAGEv2_DRAG_REORDER
 }
 
+void imgBoxShow(struct dyString **dy,struct imgBox *imgBox,int indent)
+/* show the imgBox */
+{
+if(imgBox)
+    {
+    struct dyString *myDy = addIndent(dy,indent);
+    dyStringPrintf(myDy,"imgBox: %s.%s:%d-%d %c width:%d basePer:%g sideLabe:%s w:%d portal:%s %d-%d w:%d",
+            (imgBox->db?imgBox->db:""),(imgBox->chrom?imgBox->chrom:""),
+            imgBox->chromStart,imgBox->chromEnd,(imgBox->plusStrand?'+':'-'),
+            imgBox->width,imgBox->basesPerPixel,(imgBox->showSideLabel?"Yes":"No"),imgBox->sideLabelWidth,
+            (imgBox->showPortal?"Yes":"No"),imgBox->portalStart,imgBox->portalEnd,imgBox->portalWidth);
+    indent++;
+    imgShow(&myDy,imgBox->images,"data ",indent);
+    imgShow(&myDy,imgBox->bgImg,"bgnd ",indent);
+    if(dy == NULL)
+        warn("%s",dyStringCannibalize(&myDy));
+
+    struct imgTrack *imgTrack = NULL;
+    for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
+        imgTrackShow(dy,imgTrack,indent);
+
+    if(dy != NULL)
+        *dy = myDy;
+    }
+}
+
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose)
 /* Tests the completeness and consistency of an imgBox. */
 {
@@ -1249,11 +1431,14 @@ else
     hPrintf("  <p id='p_%s' style='height:%dpx;",name,slice->height);
     if(slice->type==stButton)
         {
-        char *trackName = (imgTrack->name != NULL ?
-                        imgTrack->name :
-                        imgTrack->tdb->parent ?
-                        imgTrack->tdb->parent->tableName:
-                        imgTrack->tdb->tableName );
+        char *trackName = imgTrack->name;
+        if(trackName == NULL)
+            {
+            struct trackDb * tdb = imgTrack->tdb;
+            if(tdbIsCompositeChild(tdb))
+                tdb = trackDbCompositeParent(tdb);
+            trackName = tdb->tableName;
+            }
         hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
         }
     else
@@ -1320,6 +1505,8 @@ char name[256];
 int bgOffset = NO_VALUE;
 
 imgBoxTracksNormalizeOrder(imgBox);
+//if(verbose)
+//    imgBoxShow(NULL,imgBox,0);
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
 //commonCssStyles();
@@ -1368,6 +1555,8 @@ struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->tableName );
+    //if(verbose && imgTrack->order == 3)
+    //    imgTrackShow(NULL,imgTrack,0);
     hPrintf("<TR id='tr_%s'%s>\n",trackName,
         (imgTrack->reorderable?" class='trDraggable'":" class='nodrop nodrag'"));
 

@@ -364,7 +364,9 @@ extern struct slName *browserLines; /* Custom track "browser" lines. */
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
+#ifndef IMAGEv2_DRAG_REORDER
 extern boolean withPriorityOverride;    /* enable track reordering? */
+#endif//ndef IMAGEv2_DRAG_REORDER
 extern boolean revCmplDisp;             /* reverse-complement display */
 extern boolean measureTiming;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -833,7 +835,7 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* Make track group for wig - wiggle tracks. */
 
-void bigBedMethods(struct track *track, struct trackDb *tdb, 
+void bigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up bigBed methods. */
 

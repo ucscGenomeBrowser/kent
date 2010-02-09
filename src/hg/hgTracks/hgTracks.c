@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1621 2010/02/03 18:43:38 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1622 2010/02/09 00:11:34 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -65,7 +65,9 @@ boolean hasCustomTracks = FALSE;  /* whether any custom tracks are for this db*/
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
 boolean withNextItemArrows = FALSE; /* Display next feature (gene) navigation buttons near center labels? */
+#ifndef IMAGEv2_DRAG_REORDER
 boolean withPriorityOverride = FALSE;   /* Display priority for each track to allow reordering */
+#endif//ndef IMAGEv2_DRAG_REORDER
 
 int gfxBorder = hgDefaultGfxBorder; /* Width of graphics border. */
 int guidelineSpacing = 12;  /* Pixels between guidelines. */
@@ -216,23 +218,27 @@ for (group = groupList; group != NULL; group = group->next)
                     {
                     assert(tdb->parent != NULL && tdb->parent->tableName);
                     cartRemove(cart, tdb->parent->tableName);
+                    #ifndef IMAGEv2_DRAG_REORDER
                     if (withPriorityOverride)
                         {
                         safef(pname, sizeof(pname), "%s.priority",tdb->parent->tableName);
                         cartRemove(cart, pname);
                         }
+                    #endif//ndef IMAGEv2_DRAG_REORDER
                     }
 
                 track->visibility = tdb->visibility;
                 cartRemove(cart, track->mapName);
 
                 /* set the track priority back to the default value */
+                #ifndef IMAGEv2_DRAG_REORDER
                 if (withPriorityOverride)
                     {
                     safef(pname, sizeof(pname), "%s.priority",track->mapName);
                     cartRemove(cart, pname);
                     track->priority = track->defaultPriority;
                     }
+                #endif//ndef IMAGEv2_DRAG_REORDER
                 }
             else
                 {
@@ -296,7 +302,8 @@ if(theImgBox && curImgTrack)
 
     safef(title,sizeof(title),"%s controls", shortLabel);
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
-    sliceAddLink(curSlice,link,title);
+    if(curSlice)
+        sliceAddLink(curSlice,link,title);
     }
 else
     {
@@ -1537,7 +1544,7 @@ if(tdbIsCompositeChild(tdb))
 	assert(parent != NULL);
         int len = strlen(parent->tableName) + strlen(viewName) + 10;
 
-	// Create the view dropdown var name.  This needs to have the view name surrounded by dots 
+	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
 	// in the middle for the javascript to work.
 	char ddName[len];
         safef(ddName,len,"%s.%s.vis", parent->tableName,viewName);
@@ -1823,8 +1830,8 @@ int sliceOffsetX[stMaxSliceTypes];
 int sliceHeight        = 0;
 int sliceOffsetY       = 0;
 char *rulerTtl = NULL;
-if(theImgBox)  
-// theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started 
+if(theImgBox)
+// theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
     rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");
@@ -2116,7 +2123,7 @@ if (withLeftLabels && psOutput == NULL)
                 if(tdbIsCompositeChild(track->tdb))
 		    {
 		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
-                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1), 
+                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
 		    	parent->tableName, parent->shortLabel, track->mapName);
 		    }
                 else
@@ -2213,9 +2220,6 @@ if (withLeftLabels)
          if(theImgBox)
             {
             // side label slice for tracks
-            // FIXME: Notice I am treating all subtracks as indivisible from their composite
-            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
-            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -2316,9 +2320,6 @@ if (withCenterLabels)
             {
             //if (isWithCenterLabels(track))  // NOTE: Since track may not have centerlabel but subtrack may (How?), then must always make this slice!
             // center label slice of tracks
-            // FIXME: Notice I am treating all subtracks as indivisible from their composite
-            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
-            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -2333,8 +2334,6 @@ if (withCenterLabels)
             if(theImgBox)
                 {
                 // Special case: data slice of tracks
-                // FIXME: This special case allows the subtrack center label map items to be put into the data slice
-                // When subtracks are carved up into individual imgTracks, then this will not be necessary
                 sliceHeight      = trackPlusLabelHeight(track, fontHeight) - fontHeight;
                 sliceOffsetY     = y;
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
@@ -2382,9 +2381,6 @@ if (withCenterLabels)
         if(theImgBox)
             {
             // data slice of tracks
-            // FIXME: Notice I am treating all subtracks as indivisible from their composite
-            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
-            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceOffsetY     = yStart;
             sliceHeight      = yEnd - yStart - 1;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -2439,9 +2435,6 @@ if (withLeftLabels)
         if(theImgBox)
             {
             // side label slice of tracks
-            // FIXME: Notice I am treating all subtracks as indivisible from their composite
-            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
-            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -2686,7 +2679,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    if (slCount(tdb->subtracks) != 0) 
+    if (slCount(tdb->subtracks) != 0)
         {
         tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
         makeCompositeTrack(track, tdb);
@@ -3664,21 +3657,23 @@ struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
 struct grp *grp;
-char cartVar[512];
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
     {
     /* deal with group reordering */
     float priority = grp->priority;
+    #ifndef IMAGEv2_DRAG_REORDER
     if (withPriorityOverride)
         {
+        char cartVar[512];
         safef(cartVar, sizeof(cartVar), "%s.priority",grp->name);
         if (vis != -1)
             priority = (float)cartUsualDouble(cart, cartVar, grp->priority);
         if (priority == grp->priority)
             cartRemove(cart, cartVar);
         }
+    #endif//ndef IMAGEv2_DRAG_REORDER
     /* create group object; add to list and hash */
     AllocVar(group);
     group->name = cloneString(grp->name);
@@ -3695,6 +3690,7 @@ grpFreeList(&grps);
  * If necessary make up an unknown group. */
 for (track = *pTrackList; track != NULL; track = track->next)
     {
+#ifndef IMAGEv2_DRAG_REORDER
     /* handle track reordering feature -- change group assigned to track */
     if (withPriorityOverride)
         {
@@ -3745,6 +3741,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
 */
         track->priority = priority;
         }
+#endif//ndef IMAGEv2_DRAG_REORDER
 
     /* assign group object to track */
     if (track->groupName == NULL)
@@ -4337,6 +4334,7 @@ if (!hideControls)
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
+#ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
     hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
     hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
@@ -4355,6 +4353,7 @@ if (!hideControls)
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
     hWrites("<BR>\n");
+#endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
 	{
@@ -4419,6 +4418,42 @@ if (!hideControls)
 /* Make chromsome ideogram gif and map. */
 makeChromIdeoImage(&trackList, psOutput, ideoTn);
 
+#ifdef USE_NAVIGATION_LINKS
+    hPrintf("<table style='font-size:small;width:%dpx'><tr align='center'>",min(tl.picWidth, 800));
+    #ifndef IMAGEv2_DRAG_SCROLL
+    //if(!advancedJavascriptFeaturesEnabled(cart))
+        {
+        hPrintf("<td width='60'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
+        hPrintf("<td width='50'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
+        hPrintf("<td width='40'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
+        hPrintf("<td width='50'>&nbsp;</td>\n");
+        }
+    #endif//ndef IMAGEv2_DRAG_SCROLL
+    if(!advancedJavascriptFeaturesEnabled(cart))
+        {
+        hPrintf("<td width='60' ><a href='?hgt.in1=1' title='zoom out 1.5x'>&gt;&nbsp;&lt;</a>\n");
+        hPrintf("<td width='80' ><a href='?hgt.in2=1' title='zoom out 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
+        hPrintf("<td width='100'><a href='?hgt.in3=1' title='zoom out 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
+        hPrintf("<td width='50'>&nbsp;\n");
+        hPrintf("<td width='50'><a href='?hgt.inBase=1' title='zoom in to base range'>ACGT</a>\n");
+        hPrintf("<td width='50'>&nbsp;\n");
+        }
+    hPrintf("<td width='60' ><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
+    hPrintf("<td width='80' ><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
+    hPrintf("<td width='100'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
+    hPrintf("<td width='50'>&nbsp;\n");
+    #ifndef IMAGEv2_DRAG_SCROLL
+    //if(!advancedJavascriptFeaturesEnabled(cart))
+        {
+        hPrintf("<td width='40'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
+        hPrintf("<td width='50'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
+        hPrintf("<td width='60'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
+        }
+    #endif//ndef IMAGEv2_DRAG_SCROLL
+    /* use button maker that determines padding, so we can share constants */
+    hPrintf("</tr></table>\n");
+#endif//def USE_NAVIGATION_LINKS
+
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 fflush(stdout);
@@ -4435,14 +4470,14 @@ if (!hideControls)
      * go along with this trick */
     hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
         tl.picWidth, 27);
-#ifndef IMAGEv2_DRAG_SCROLL
+#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move start<BR>");
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
     hPrintf("</TD>");
-#endif//ndef IMAGEv2_DRAG_SCROLL
+#endif//ndef !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
     hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
@@ -4454,13 +4489,14 @@ if (!hideControls)
 #endif//ndef IMAGEv2_DRAG_REORDER
 #ifdef IMAGEv2_DRAG_SCROLL
     hWrites("Drag tracks left or right to new position. ");
-#else//ifndef IMAGEv2_DRAG_SCROLL
+#endif//def IMAGEv2_DRAG_SCROLL
+#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
-#endif//ndef IMAGEv2_DRAG_SCROLL
+#endif//ndef !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("</TD></TR></TABLE>\n");
     // smallBreak();
 
@@ -4977,7 +5013,9 @@ if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
     }
+#ifndef IMAGEv2_DRAG_REORDER
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
+#endif//ndef IMAGEv2_DRAG_REORDER
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
