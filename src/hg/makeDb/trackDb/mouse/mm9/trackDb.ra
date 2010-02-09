@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.80 2010/02/09 18:57:17 hartera Exp $";
+#	"$Id: trackDb.ra,v 1.81 2010/02/09 18:58:35 hartera Exp $";
 
 include trackDb.chainNet.ra
 
@@ -28,7 +28,7 @@ url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 release beta
 
-track Mapability
+track mapability
 compositeTrack on
 shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
