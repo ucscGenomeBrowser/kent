@@ -7,8 +7,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "wikiTrack.h"
+#include "errCatch.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.26 2009/01/23 22:39:53 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.27 2010/02/10 21:41:36 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -329,6 +330,7 @@ boolean wikiTrackEnabled(char *database, char **wikiUserName)
 {
 static boolean done = FALSE;
 static boolean status = FALSE;
+static boolean wikiUp = FALSE;
 static char *userName = NULL;
 
 /* do not repeat this query */
@@ -378,8 +380,22 @@ if (validDb && wikiLinkEnabled() &&
     if ( (wikiUser) &&
 	(findCookieData(cfgOption(CFG_WIKI_SESSION_COOKIE)) != NULL) )
 	{
-	    struct htmlPage *page = fetchEditPage(TEST_EMAIL_VERIFIED);
-	    char *loginExpired = stringIn(LOGIN_EXPIRED, page->fullText);
+	    struct htmlPage *page = NULL;
+	    /* protect against temporarily offline wiki site */
+	    struct errCatch *errCatch = errCatchNew();
+	    if (errCatchStart(errCatch))
+		{
+		page = fetchEditPage(TEST_EMAIL_VERIFIED);
+		}
+	    errCatchEnd(errCatch);
+	    if (! errCatch->gotError)
+		{
+		wikiUp = TRUE;
+		}
+	    errCatchFree(&errCatch);
+	    char *loginExpired = NULL;
+	    if (page)
+		loginExpired = stringIn(LOGIN_EXPIRED, page->fullText);
 	    if (loginExpired == NULL)
 		userName = wikiUser;	/* save result for next time */
 	}
@@ -392,7 +408,8 @@ if (validDb && wikiLinkEnabled() &&
 	freeMem(query);
 	}
     wikiDisconnect(&wikiConn);
-    status = TRUE; /* system is enabled */
+    if (wikiUp)
+	status = TRUE; /* system is enabled */
     }
 if (wikiUserName)
     *wikiUserName = userName;  /* returning name indicates logged in */
