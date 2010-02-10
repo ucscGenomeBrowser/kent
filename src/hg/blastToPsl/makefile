@@ -11,9 +11,13 @@ all: blastToPsl blastXmlToPsl
 
 compile: all
 
-%: %.o ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/$*${EXE} ${$*_objs} ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/$*${EXE}
+blastXmlToPsl: ${blastXmlToPsl_objs} ${MYLIBS}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/blastXmlToPsl${EXE} ${blastXmlToPsl_objs} ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/blastXmlToPsl${EXE}
+
+blastToPsl: ${blastToPsl_objs} ${MYLIBS}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/blastToPsl${EXE} ${blastToPsl_objs} ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/blastToPsl${EXE}
 
 test::
 	(cd tests && ${MAKE} test)
@@ -24,5 +28,4 @@ clean::
 ncbiBlast.o: ncbiBlast.c ncbiBlast.h
 pslBuild.o: pslBuild.c pslBuild.h
 blastXmlToPsl.o: blastXmlToPsl.c ncbiBlast.h pslBuild.h
-blastXmlToPsl: ${blastXmlToPsl_objs}
-blastToPsl: ${blastToPsl_objs}
+blastToPsl.o: blastToPsl.c pslBuild.h
