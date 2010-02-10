@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.115 2010/01/29 21:49:46 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.116 2010/02/10 20:28:05 hiram Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1697,8 +1697,8 @@ if (hash == NULL) // make sure we have a settings hash
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
-    if (*val)
-        tdb->shortLabel = cloneString(val);
+    if (*val)  /* limit shortLabel to 128 characters to avoid problems */
+        tdb->shortLabel = cloneStringZ(val,128);
     else
         tdb->shortLabel = cloneString("My Track");
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
