@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.207 2010/02/10 20:11:13 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.208 2010/02/10 20:18:09 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1442,7 +1442,7 @@ term prostate
 tag prostate
 type Cell Line
 organism Human
-description prostate tissue purchased for Gingeras project
+description prostate tissue purchased for Gingeras project (provisional)
 vendorName ATCC
 vendorId
 orderUrl http://www.atcc.org/
