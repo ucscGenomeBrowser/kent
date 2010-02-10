@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.206 2010/02/04 01:48:57 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.207 2010/02/10 20:11:13 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -410,12 +410,12 @@ term FibroP
 tag FIBROP
 type Cell Line
 organism Human
-description normal fibroblasts taken from individuals with Parkinson's disease (provisional)
+description normal fibroblasts taken from individuals with Parkinson's disease
 vendorName Paul Tesar (Case Western)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
 sex U
-#protocol FibroP_Crawford_protocol.pdf
+protocol FibroP_Crawford_protocol.pdf
 
 term Gliobla
 tag Gliobla
@@ -1248,12 +1248,12 @@ term Myometr
 tag MYOMETR
 type Cell Line
 organism Human
-description Myometrial cells (provisional)
+description Myometrial cells
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
-#protocol Myometr_Crawford_protocol.pdf
+protocol Myometr_Crawford_protocol.pdf
 
 term NB4
 tag NB4
@@ -1277,14 +1277,14 @@ term NHBE
 tag NHBE
 type Cell Line
 organism Human
-description normal human bronchial epithelial cells (provisional)
+description normal human bronchial epithelial cells
 vendorName Lonza
 vendorId CC-2541
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
 sex U
 termId BTO:0002022
-#protocol NHBE_Crawford_protocol.pdf
+protocol NHBE_Crawford_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
