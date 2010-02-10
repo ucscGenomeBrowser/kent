@@ -277,7 +277,7 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topL
    returns count of map items added, which could be 0, 1 or more than one if item spans slices
    NOTE: Precedence is given to first map item when adding items with same coordinates! */
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose);
-/* Tests the completeness and consistency of this imgTrack (not including slices) */
+/* Tests the completeness and consistency of this imgTrack (including slices) */
 void imgTrackFree(struct imgTrack **pImgTrack);
 /* frees all memory assocated with an imgTrack (including slices) */
 
@@ -330,6 +330,9 @@ struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *td
 /* Updates the imgTrack, or adds it if not found */
 void imgBoxTracksNormalizeOrder(struct imgBox *imgBox);
 /* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
+int imgBoxDropEmpties(struct imgBox *imgBox);
+/* Empty imageTracks (without slices) is not an error but they should be dropped.
+   returns remaining current track count */
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose);
 /* Tests the completeness and consistency of an imgBox. */
 void imgBoxFree(struct imgBox **pImgBox);

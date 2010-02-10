@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.21 2010/02/09 00:11:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.22 2010/02/10 00:37:56 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -418,6 +418,8 @@ struct imgSlice *sliceCreate(enum sliceType type,struct image *img,char *title,i
 /* Creates of a slice which is a portion of an image.
    A slice specific map map be added with sliceMapStart(),mapSetItemAdd() */
 {
+if (height <= 0 || width <= 0)
+    return NULL;
 struct imgSlice *slice;
 AllocVar(slice);
 slice->map       = NULL; // This is the same as defaulting to slice->parentImg->map
@@ -515,6 +517,8 @@ return slice->map;
 struct mapSet *sliceMapFindOrStart(struct imgSlice *slice,char *name,char *linkRoot)
 /* Finds the slice specific map or starts it */
 {
+if(slice==NULL)
+    return NULL;
 struct mapSet *map = sliceGetMap(slice,TRUE); // Must be specific to this slice
 if (map == NULL)
     map = sliceMapStart(slice,name,linkRoot);
@@ -1237,6 +1241,27 @@ if(imgBox)
     }
 }
 
+int imgBoxDropEmpties(struct imgBox *imgBox)
+/* Empty imageTracks (without slices) is not an error but they should be dropped.
+   returns remaining current track count */
+{
+if (imgBox == NULL)
+    return 0;
+struct imgTrack *imgTrack = imgBox->imgTracks;
+while(imgTrack != NULL)
+    {
+    if(imgTrack->slices == NULL)
+        {
+        slRemoveEl(&(imgBox->imgTracks),imgTrack);
+        imgTrackFree(&imgTrack);
+        imgTrack = imgBox->imgTracks; // start over
+        continue;
+        }
+    imgTrack = imgTrack->next;
+    }
+return slCount(imgBox->imgTracks);
+}
+
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose)
 /* Tests the completeness and consistency of an imgBox. */
 {
@@ -1287,8 +1312,8 @@ if (imgBox->imgTracks == NULL)
         warn("imgBox(%s.%s:%d-%d) has no imgTracks",imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
     return FALSE;
     }
-struct imgTrack *imgTrack = NULL;
-for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
+struct imgTrack *imgTrack = imgBox->imgTracks;
+while(imgTrack != NULL)
     {
     if(!imgTrackIsComplete(imgTrack,verbose))
         {
@@ -1305,30 +1330,16 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
     ||               imgTrack->chromStart != imgBox->chromStart
     ||               imgTrack->chromEnd   != imgBox->chromEnd
     ||               imgTrack->plusStrand != imgBox->plusStrand)
-    {
+        {
         if (verbose)
             warn("imgBox(%s.%s:%d-%d) has inconsistent imgTrack for %s.%s:%d-%d",
                   imgBox->db,  imgBox->chrom,  imgBox->chromStart,  imgBox->chromEnd,
                 imgTrack->db,imgTrack->chrom,imgTrack->chromStart,imgTrack->chromEnd);
         return FALSE;
-    }
-    // Every track must have slices
-    if (imgTrack->slices == NULL)
-        {
-        if (verbose)
-            warn("imgBox(%s.%s:%d-%d) has no slices",
-                imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
-        return FALSE;
         }
     struct imgSlice *slice = NULL;
     for (slice = imgTrack->slices; slice != NULL; slice = slice->next )
         {
-        if(!sliceIsConsistent(slice,verbose))
-            {
-            if (verbose)
-                warn("imgBox(%s.%s:%d-%d) has bad slice",imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
-            return FALSE;
-            }
         // Every slice that has an image must point to an image owned by the imgBox
         if(slice->parentImg && (slIxFromElement(imgBox->images,slice->parentImg) == -1))
             {
@@ -1339,6 +1350,7 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
             return FALSE;
             }
         }
+    imgTrack = imgTrack->next;
     }
 return TRUE;
 }
@@ -1487,7 +1499,7 @@ else if(slice->link != NULL)
 
 imageDraw(imgBox,imgTrack,slice,name,offsetX,slice->offsetY,useMap);
 if(slice->link != NULL)
-    hPrintf("</A>\n");
+    hPrintf("</A>");
 
 if(slice->parentImg)
     hPrintf("</div>");
@@ -1498,8 +1510,9 @@ void imageBoxDraw(struct imgBox *imgBox)
 {
 if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
     return;
+imgBoxDropEmpties(imgBox);
 boolean verbose = (hIsPrivateHost());   // Warnings for hgwdev only
-if(!imgBoxIsComplete(imgBox,verbose))
+if(!imgBoxIsComplete(imgBox,verbose)) // dorps empties as okay
     return;
 char name[256];
 int bgOffset = NO_VALUE;
