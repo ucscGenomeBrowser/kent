@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.223 2010/02/09 23:27:21 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.224 2010/02/10 22:54:25 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2963,6 +2963,57 @@ if (firstPos)
     }
 }
 
+static boolean searchKnownCanonical(char *db, char *term, struct hgPositions *hgp)
+/* Look for term in kgXref.geneSymbol, and if found, put knownCanonical coords and 
+ * knownGene.name in hgp. */
+{
+boolean foundIt = FALSE;
+struct sqlConnection *conn = hAllocConn(db);
+if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "knownCanonical") &&
+    sqlTableExists(conn, "kgXref"))
+    {
+    char query[512];
+    safef(query, sizeof(query), "select knownCanonical.chrom,chromStart,chromEnd,name "
+	  "from knownCanonical,knownGene,kgXref where kgXref.geneSymbol = '%s' "
+	  "and kgXref.kgId = knownGene.name and knownGene.name = knownCanonical.transcript;",
+	  term);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	singlePos(hgp, "UCSC Genes", term, "knownGene", row[3], row[3],
+		  cloneString(row[0]), atoi(row[1]), atoi(row[2]));
+	foundIt = TRUE;
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+return foundIt;
+}
+
+static boolean singleSearch(char *db, char *term, struct cart *cart, struct hgPositions *hgp)
+/* If a search type is specified in the CGI line (not cart), perform that search. 
+ * If the search is successful, fill in hgp as a single-pos result and return TRUE. */
+{
+char *search = cgiOptionalString("singleSearch");
+if (search == NULL)
+    return FALSE;
+
+cartRemove(cart, "singleSearch");
+boolean foundIt = FALSE;
+if (sameString(search, "knownCanonical"))
+    foundIt = searchKnownCanonical(db, term, hgp);
+else
+    warn("Unrecognized singleSearch=%s in URL", search);
+if (foundIt)
+    {
+    fixSinglePos(hgp);
+    if (cart != NULL)
+        cartSetString(cart, "hgFind.matches", hgp->tableList->posList->browserName);
+    }
+return foundIt;
+}
+
 struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
 /* Return table of positions that match term or NULL if none such. */
@@ -2990,6 +3041,9 @@ hgp->database = db;
 if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
+
+if (singleSearch(db, term, cart, hgp))
+    return hgp;
 
 chimpSpecialChrom(hgp, &term, hgAppNameIn);
 
