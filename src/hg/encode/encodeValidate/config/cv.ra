@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.208 2010/02/10 20:18:09 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.209 2010/02/10 20:43:55 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -186,7 +186,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 tier 3
-protocol A549_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf
 
 term AG04449
 tag AG04449
@@ -197,7 +197,7 @@ vendorName Coriell
 vendorId AG04449
 sex M
 tier 3
-protocol AG04449_Stam_protocol.pdf
+protocol Stam:AG04449_Stam_protocol.pdf
 
 term AG04450
 tag AG04450
@@ -208,7 +208,7 @@ vendorName Coriell
 vendorId AG04450
 sex M
 tier 3
-protocol AG04450_Stam_protocol.pdf
+protocol Stam:AG04450_Stam_protocol.pdf
 
 term AG09309
 tag AG09309
@@ -219,7 +219,7 @@ vendorName Coriell
 vendorId AG09309
 sex F
 tier 3
-protocol AG09309_Stam_protocol.pdf
+protocol Stam:AG09309_Stam_protocol.pdf
 
 term AG09319
 tag AG09319
@@ -230,7 +230,7 @@ vendorName Coriell
 vendorId AG09319
 sex F
 tier 3
-protocol AG09319_Stam_protocol.pdf
+protocol Stam:AG09319_Stam_protocol.pdf
 
 term AG10803
 tag AG10803
@@ -241,7 +241,7 @@ vendorName Coriell
 vendorId AG10803
 sex M
 tier 3
-protocol AG10803_Stam_protocol.pdf
+protocol Stam:AG10803_Stam_protocol.pdf
 
 term AoSMC
 tag AOSMC
@@ -254,7 +254,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001685
 sex U
 termId BTO:0001685
-protocol AoSMC_Crawford_protocol.pdf
+protocol Open_Chromatin:AoSMC_Crawford_protocol.pdf
 
 term Astrocy
 tag Astrocy
@@ -270,7 +270,7 @@ termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 sex U
 tier 3
-protocol Astrocytes_Crawford_protocol.pdf
+protocol Open_Chromatin:Astrocytes_Crawford_protocol.pdf
 
 term BE2_C
 tag BE2C
@@ -284,7 +284,7 @@ termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
 sex M
 tier 3
-protocol BE2-C_Myers_protocol.pdf
+protocol HudsonAlpha:BE2-C_Myers_protocol.pdf
 
 term BG02ES
 tag BG02ES
@@ -298,7 +298,7 @@ vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
 sex M
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term BG02ES-EBD
 tag BG02ESEBD
@@ -312,7 +312,7 @@ vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
 sex M
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term BJ
 tag BJ
@@ -328,7 +328,7 @@ termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 sex M
 tier 3
-protocol BJ-tert_Stam_protocol.pdf
+protocol Stam:BJ-tert_Stam_protocol.pdf
 
 
 term Caco-2
@@ -345,7 +345,7 @@ termId BTO:0000195
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195&termName=Caco-2%20cell
 sex M
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf
 
 term Chorion
 tag Chorion
@@ -361,7 +361,7 @@ termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252&termName=chorion
 sex U
 tier 3
-protocol Chorion_and_decidua_Crawford_protocol.pdf
+protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
 term CMK
 tag CMK
@@ -372,7 +372,7 @@ vendorName DSMZ
 vendorId ACC-392
 sex F
 tier 3
-protocol CMK_Stam_protocol.pdf
+protocol Stam:CMK_Stam_protocol.pdf
 
 term Decidua
 tag Decidua
@@ -388,7 +388,7 @@ termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
 sex F
 tier 3
-protocol Chorion_and_decidua_Crawford_protocol.pdf
+protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -404,7 +404,7 @@ termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
 sex F
 tier 3
-protocol fibroblast_Crawford_protocol.pdf
+protocol Open_Chromatin:fibroblast_Crawford_protocol.pdf
 
 term FibroP
 tag FIBROP
@@ -415,7 +415,7 @@ vendorName Paul Tesar (Case Western)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
 sex U
-protocol FibroP_Crawford_protocol.pdf
+protocol Open_Chromatin:FibroP_Crawford_protocol.pdf
 
 term Gliobla
 tag Gliobla
@@ -427,7 +427,7 @@ termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
 sex U
 tier 3
-protocol D54_Crawford_protocol.pdf
+protocol Open_Chromatin:D54_Crawford_protocol.pdf
 
 term GM06990
 tag GM06990
@@ -443,7 +443,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf
 
 term GM10847
 tag GM10847
@@ -456,7 +456,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM12801
 tag GM12801
@@ -472,7 +472,7 @@ termId BTO:0001522 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
 sex M
 tier 3
-protocol GM12801_Stam_protocol.pdf
+protocol Stam:GM12801_Stam_protocol.pdf
 
 term GM12864
 tag GM12864
@@ -487,7 +487,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol GM12864_Stam_protocol.pdf
+protocol Stam:GM12864_Stam_protocol.pdf
 
 term GM12865
 tag GM12865
@@ -502,7 +502,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol GM12865_Stam_protocol.pdf
+protocol Stam:GM12865_Stam_protocol.pdf
 
 term GM12872
 tag GM12872
@@ -517,7 +517,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol GM12872_Stam_protocol.pdf
+protocol Stam:GM12872_Stam_protocol.pdf
 
 term GM12873
 tag GM12873
@@ -532,7 +532,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol GM12873_Stam_protocol.pdf
+protocol Stam:GM12873_Stam_protocol.pdf
 
 term GM12874
 tag GM12874
@@ -547,7 +547,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol GM12874_Stam_protocol.pdf
+protocol Stam:GM12874_Stam_protocol.pdf
 
 term GM12875
 tag GM12875
@@ -562,7 +562,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol GM12875_Stam_protocol.pdf
+protocol Stam:GM12875_Stam_protocol.pdf
 
 term GM12891
 tag GM12891
@@ -577,7 +577,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol GM12891_Crawford_protocol.pdf
+protocol Open_Chromatin:GM12891_Crawford_protocol.pdf
 
 term GM12892
 tag GM12892
@@ -592,7 +592,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol GM12892_Crawford_protocol.pdf
+protocol Open_Chromatin:GM12892_Crawford_protocol.pdf
 
 term GM15510
 tag GM15510
@@ -605,7 +605,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex U
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM18505
 tag GM18505
@@ -618,7 +618,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM18507
 tag GM18507
@@ -634,7 +634,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex M
 tier 3
-protocol GM18507_protocol.pdf
+protocol Open_Chromatin:GM18507_protocol.pdf
 
 term GM18526
 tag GM18526
@@ -647,7 +647,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM18951
 tag GM18951
@@ -660,7 +660,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM19099
 tag GM19099
@@ -673,7 +673,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM19193
 tag GM19193
@@ -686,7 +686,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 
 term GM19238
 tag GM19238
@@ -701,7 +701,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol GM19238_Crawford_protocol.pdf
+protocol Open_Chromatin:GM19238_Crawford_protocol.pdf
 
 term GM19239
 tag GM19239
@@ -716,7 +716,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol GM19239_Crawford_protocol.pdf
+protocol Open_Chromatin:GM19239_Crawford_protocol.pdf
 
 term GM19240
 tag GM19240
@@ -731,7 +731,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol GM19240_Crawford_protocol.pdf
+protocol Open_Chromatin:GM19240_Crawford_protocol.pdf
 
 term H7-hESC
 tag H7es
@@ -742,7 +742,7 @@ vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
 tier 3
-protocol H7-hESC_Stam_protocol.pdf
+protocol Stam:H7-hESC_Stam_protocol.pdf
 
 term H9ES
 tag H9ES
@@ -756,7 +756,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-E
 tag H9ESE
@@ -770,7 +770,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-AFP+
 tag H9ESAFPPlus
@@ -784,7 +784,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-AFP-
 tag H9ESAFPMinus
@@ -798,7 +798,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-EB
 tag H9ESEB
@@ -812,7 +812,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-EBD
 tag H9ESEBD
@@ -826,7 +826,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term H9ES-CM
 tag H9ESCM
@@ -840,7 +840,7 @@ vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
-protocol BG02ES_and_H9ES_Myers_protocols.pdf
+protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
 term HAEpiC
 tag HAE
@@ -851,7 +851,7 @@ vendorId 7100
 orderUrl http://www.sciencellonline.com/site/products/7100.php
 tier 3
 sex U
-protocol HAEpiC_Stam_protocol.pdf
+protocol Stam:HAEpiC_Stam_protocol.pdf
 
 term HAL
 tag HAL
@@ -865,7 +865,7 @@ vendorName Asterand, Inc.
 vendorId HAL
 orderUrl http://www.asterand.com/Asterand/
 sex U
-protocol HAL_Myers_protocol.pdf
+protocol HudsonAlpha:HAL_Myers_protocol.pdf
 
 term HCF
 tag HCF
@@ -876,7 +876,7 @@ vendorId 6300
 orderUrl http://www.sciencellonline.com/site/products/6300.php
 sex U
 tier 3
-protocol HCF_Stam_protocol.pdf
+protocol Stam:HCF_Stam_protocol.pdf
 
 term HCM
 tag HCM
@@ -887,7 +887,7 @@ vendorId 6200
 orderUrl http://www.sciencellonline.com/site/products/6200.php
 sex U
 tier 3
-protocol HCM_Stam_protocol.pdf
+protocol Stam:HCM_Stam_protocol.pdf
 
 term HCPEpiC
 tag HCPE
@@ -898,7 +898,7 @@ vendorId 1310
 orderUrl http://www.sciencellonline.com/site/products/1310.php
 sex U
 tier 3
-protocol HCPEpiC_Stam_protocol.pdf
+protocol Stam:HCPEpiC_Stam_protocol.pdf
 
 term HCT-116
 tag HCT116
@@ -914,7 +914,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol HCT-116_protocol.pdf
+protocol Yale_TFSB:HCT-116_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -925,7 +925,7 @@ vendorId 2700
 orderUrl http://www.sciencellonline.com/site/products/2700.php
 sex U
 tier 3
-protocol HEEpiC_Stam_protocol.pdf
+protocol Stam:HEEpiC_Stam_protocol.pdf
 
 term HEK293
 tag HEK293
@@ -941,7 +941,7 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 sex U
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf
 
 term HEK293(b)
 tag HEK293b
@@ -957,7 +957,7 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 sex U
 tier 3
-protocol HEK293b_Snyder_protocol.pdf
+protocol Yale_TFSB:HEK293b_Snyder_protocol.pdf
 
 term HFL11W
 tag HFL11W
@@ -979,7 +979,7 @@ tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 color 189,0,157
 sex U
-protocol HFL11W_and_HFL24W_Myers_protocols.pdf
+protocol HudsonAlpha:HFL11W_and_HFL24W_Myers_protocols.pdf
 
 term HGF
 tag HGF
@@ -995,7 +995,7 @@ termId BTO:0000519 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519&termName=gingiva
 sex U
 tier 3
-protocol HGF_Stam_protocol.pdf
+protocol Stam:HGF_Stam_protocol.pdf
 
 term HIPEpiC
 tag HIPE
@@ -1006,7 +1006,7 @@ vendorId 6560
 orderUrl http://www.sciencellonline.com/site/products/6560.php
 sex U
 tier 3
-protocol HIPEpiC_Stam_protocol.pdf
+protocol Stam:HIPEpiC_Stam_protocol.pdf
 
 term HL-60
 tag HL60
@@ -1022,7 +1022,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 karyotype cancer, female
 sex F
 tier 3
-protocol HL-60_Stam_protocol.pdf
+protocol Stam:HL-60_Stam_protocol.pdf
 
 term HMEC
 tag HMEC
@@ -1038,7 +1038,7 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 sex U
 tier 3
-protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
+protocol Bernstein:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
 term HNPCEpiC
 tag HNPCE
@@ -1049,7 +1049,7 @@ vendorId 6580
 orderUrl http://www.sciencellonline.com/site/products/6580.php
 sex U
 tier 3
-protocol HNPCEpiC_Stam_protocol.pdf
+protocol Stam:HNPCEpiC_Stam_protocol.pdf
 
 term HRCEpiC
 tag HRCE
@@ -1065,7 +1065,7 @@ termId BTO:0000059 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
 sex U
 tier 3
-protocol HRCEpiC_Stam_protocol.pdf
+protocol Stam:HRCEpiC_Stam_protocol.pdf
 
 term HRE
 tag HRE
@@ -1081,7 +1081,7 @@ termId BTO:0000059 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
 sex U
 tier 3
-protocol HRE_Stam_protocol.pdf
+protocol Stam:HRE_Stam_protocol.pdf
 
 term HRPEpiC
 tag HRPE
@@ -1092,7 +1092,7 @@ vendorId 6540
 orderUrl http://www.sciencellonline.com/site/products/6540.php
 sex U
 tier 3
-protocol HRPEpiC_Stam_protocol.pdf
+protocol Stam:HRPEpiC_Stam_protocol.pdf
 
 term HSMM
 tag HSMM
@@ -1107,7 +1107,7 @@ termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
 sex U
 tier 3
-protocol Bernstein:HSMM_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Bernstein:HSMM_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -1122,7 +1122,7 @@ termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
 sex U
 tier 3
-protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -1137,7 +1137,7 @@ termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282&termName=HT-1080%20cell
 sex M
 tier 3
-protocol HT1080_Myers_protocol.pdf
+protocol HudsonAlpha:HT1080_Myers_protocol.pdf
 
 term HTB-11
 tag HTB11
@@ -1152,7 +1152,7 @@ termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
 sex F
 tier 3
-protocol HTB-11_Myers_protocol.pdf
+protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
 
 term Jurkat
 tag Jurkat
@@ -1168,7 +1168,7 @@ termId BTO:0001948
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 sex M
 tier 3
-protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
+protocol HudsonAlpha:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
 term LHSR
 tag LHSR
@@ -1184,7 +1184,7 @@ karyotype Diploid
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 sex F
 tier 3
-protocol LHSR_Crawford_protocol.pdf
+protocol Open_Chromatin:LHSR_Crawford_protocol.pdf
 
 term LNCaP
 tag LNCaP
@@ -1201,7 +1201,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 0,119,158
 sex M
 tier 3
-protocol Crawford:LNCaP_Crawford_protocol.pdf Farnham:LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
+protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFSB(Farnham):LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -1217,7 +1217,7 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 sex F
 tier 3
-protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
+protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
 
 term Medullo
 tag Medullo
@@ -1229,7 +1229,7 @@ termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
 sex U
 tier 3
-protocol D721_Crawford_protocol.pdf
+protocol Open_Chromatin:D721_Crawford_protocol.pdf
 
 term Melano
 tag MELANO
@@ -1242,7 +1242,7 @@ orderUrl http://www.sciencellonline.com/site/products/2200.php
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 sex U
 termId BTO:0000847
-protocol Melano_Crawford_protocol.pdf
+protocol Open_Chromatin:Melano_Crawford_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -1253,7 +1253,7 @@ vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, P
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
-protocol Myometr_Crawford_protocol.pdf
+protocol Open_Chromatin:Myometr_Crawford_protocol.pdf
 
 term NB4
 tag NB4
@@ -1271,7 +1271,7 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 sex U
 tier 3
-protocol Snyder:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
+protocol Yale_TFSB:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
 
 term NHBE
 tag NHBE
@@ -1284,7 +1284,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
 sex U
 termId BTO:0002022
-protocol NHBE_Crawford_protocol.pdf
+protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -1295,7 +1295,7 @@ vendorId CC-2509
 orderUrl http://www.lonza.com/group/en/products_services/products/cat4.html
 sex U
 tier 3
-protocol NHDF-neo_Stam_protocol.pdf
+protocol Stam:NHDF-neo_Stam_protocol.pdf
 
 term NHLF
 tag NHLF
@@ -1327,7 +1327,7 @@ termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
 sex M
 tier 3
-protocol NT2-D1_protocol.pdf
+protocol Yale_TFSB:NT2-D1_protocol.pdf
 
 term Osteobl
 tag Osteobl
@@ -1343,7 +1343,7 @@ termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593&termName=osteoblast
 sex U
 tier 3
-protocol Osteoblast_Crawford_protocol.pdf
+protocol Open_Chromatin:Osteoblast_Crawford_protocol.pdf
 
 term ovcar-3
 tag ovcar3
@@ -1359,7 +1359,7 @@ termId BTO:0000812
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000812&termName=OVCAR-3%20cell
 sex F
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf
 
 term PANC-1
 tag PANC1
@@ -1375,7 +1375,7 @@ termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
 sex M
 tier 3
-protocol Myers:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
+protocol HudsonAlpha:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
 
 term PanIslets
 tag PanIslets
@@ -1389,7 +1389,7 @@ termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
 sex M
 tier 3
-protocol Crawford:PanIslets_Crawford_protocol.pdf Lieb:PanIslets_Lieb_protocol.pdf
+protocol Open_Chromatin:PanIslets_Crawford_protocol.pdf Open_Chromatin(Lieb):PanIslets_Lieb_protocol.pdf
 
 term PFSK-1
 tag PFSK1
@@ -1405,7 +1405,7 @@ termId BTO:0000690 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
 sex M
 tier 3
-protocol PFSK-1_protocol.pdf
+protocol HudsonAlpha:PFSK-1_protocol.pdf
 
 term pHTE
 tag pHTE
@@ -1420,7 +1420,7 @@ termId BTO:0001120 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120&termName=epithelial%20cell%20line
 sex U
 tier 3
-protocol pHTE_Crawford_protocol.pdf
+protocol Open_Chromatin:pHTE_Crawford_protocol.pdf
 
 term ProgFib
 tag ProgFib
@@ -1436,7 +1436,7 @@ termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 sex U
 tier 3
-protocol progeria_Crawford_protocol.pdf
+protocol Open_Chromatin:progeria_Crawford_protocol.pdf
 
 term prostate
 tag prostate
@@ -1452,6 +1452,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
+#protocol ???
 
 term SAEC
 tag SAEC
@@ -1467,7 +1468,7 @@ termId BTO:0002022 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022&termName=bronchial%20epithelial%20cell%20line
 sex U
 tier 3
-protocol SAEC_Stam_protocol.pdf
+protocol Stam:SAEC_Stam_protocol.pdf
 
 term SK-N-MC
 tag SKNMC
@@ -1483,7 +1484,7 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 sex F
 tier 3
-protocol SK-N-MC_protocol.pdf
+protocol HudsonAlpha:SK-N-MC_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 term SK-N-SH_RA
@@ -1500,7 +1501,7 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 sex F
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf
 
 term SKMC
 tag SKMC
@@ -1516,7 +1517,7 @@ termId BTO:0001801 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
 sex U
 tier 3
-protocol SkMC_Stam_protocol.pdf
+protocol Stam:SkMC_Stam_protocol.pdf
 
 term T98G
 tag T98G
@@ -1531,7 +1532,7 @@ termId BTO:0001583
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583&termName=T98G%20cell
 sex M
 tier 3
-protocol T98G_Myers_protocol.pdf
+protocol HudsonAlpha:T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
@@ -1547,7 +1548,7 @@ termId BTO:0001389 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389&termName=tracheal%20epithelium
 sex M
 tier 3
-protocol TBEC_Crawford_protocol.pdf
+protocol Open_Chromatin:TBEC_Crawford_protocol.pdf
 
 term Th1
 tag Th1
@@ -1563,7 +1564,7 @@ termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678&termName=Th1%20cell
 sex U
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf
 
 term Th2
 tag Th2
@@ -1579,7 +1580,7 @@ termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679&termName=Th2%20cell
 sex U
 tier 3
-protocol Th2_Stam_protocol.pdf
+protocol Stam:Th2_Stam_protocol.pdf
 
 term U87
 tag U87
@@ -1594,7 +1595,7 @@ termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036&termName=U-87%20cell
 sex F
 tier 3
-protocol U-87_Myers_protocol.pdf
+protocol HudsonAlpha:U-87_Myers_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRb1
@@ -1610,8 +1611,10 @@ termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178&termName=retinoblastoma%20cell
 sex M
 tier 3
-protocol WERI-Rb-1_Stam_protocol.pdf
+protocol Stam:WERI-Rb-1_Stam_protocol.pdf
 
+
+### Mouse Cell Lines
 term MEL
 tag MEL
 type Cell Line
