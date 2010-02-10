@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.79 2010/02/09 23:27:21 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.80 2010/02/10 05:16:14 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -426,13 +426,42 @@ if (tdb->settingsHash == NULL)
 return tdb->settingsHash;
 }
 
+static struct hash *trackDbSettingsFromString(char *string)
+/* Return hash of key/value pairs from string.  Differs
+ * from raSettingsFromString in that it passes the key/val
+ * pair through the backwards compatability routines. */
+{
+char *dupe = cloneString(string);
+char *s = dupe, *lineEnd;
+struct hash *hash = newHash(7);
+char *key, *val;
+
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+        break;
+    lineEnd = strchr(s, '\n');
+    if (lineEnd != NULL)
+        *lineEnd++ = 0;
+    key = nextWord(&s);
+    val = skipLeadingSpaces(s);
+    trackDbUpdateOldTag(&key, &val);
+    s = lineEnd;
+    val = lmCloneString(hash->lm, val);
+    hashAdd(hash, key, val);
+    }
+freeMem(dupe);
+return hash;
+}
+
 char *trackDbLocalSetting(struct trackDb *tdb, char *name)
 /* Return setting from tdb, but *not* any of it's parents. */
 {
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = raFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
 }
 
