@@ -117,6 +117,12 @@ set ccdsDb hg18,hg17,mm8,mm9
 # Magic for tables split between chromosomes
 set split splitPrefix=chr%\_
 
+# Databases with the tRNAs track
+set tRNAsDbs hg18,hg19,mm9,rn4
+
+# Databases with the CGAP SAGE track
+set cgapSageDbs hg18,mm8
+
 # Define the shared identifiers and the fields they appear in.
 
 
@@ -292,17 +298,11 @@ identifier ncbiTaxon
 
 # tRNAs track Stuff
 
-# Databases with the tRNAs track
-set tRNAsDbs hg18,hg19,mm9,rn4
-
 identifier tRNAsId
 "ID of tRNAs"
     $tRNAsDbs.tRNAs.name
 
 # CGAP SAGE track Stuff
-
-# Databases with the CGAP SAGE track
-set cgapSageDbs hg18,mm8
 
 identifier cgapSageLibId external=CGAP
 "ID linking cgapSage and cgapSageLib tables"
