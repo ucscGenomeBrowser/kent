@@ -27,11 +27,25 @@ if (fileName == NULL)
 return fileName;
 }
 
+struct bbiFile *fetchBbiForTrack(struct track *track)
+/* Fetch bbiFile from track, opening it if it is not already open. */
+{
+struct bbiFile *bbi = track->bbiFile;
+if (bbi == NULL)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    char *fileName = bbiNameFromTable(conn, track->mapName);
+    hFreeConn(&conn);
+    bbi = track->bbiFile = bigBedFileOpen(fileName);
+    }
+return bbi;
+}
+
 struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct track *track,
 	char *chrom, int start, int end, struct lm *lm)
 /* Return list of intervals in range. */
 {
-struct bbiFile *bbi = track->bbiFile;
+struct bbiFile *bbi = fetchBbiForTrack(track);
 int maxItems = maximumTrackItems(track) + 1;
 struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
 if (slCount(result) >= maxItems)
@@ -72,14 +86,6 @@ boolean canDrawBigBedDense(struct track *tg)
  * draw. */
 {
 return tg->isBigBed;
-#ifdef OLD
-/* Unfortunately bigBed datasets are so big, that running filters on them is not so practical
- * in the dense mode. */
-if (!tg->isBigBed)
-    return FALSE;
-int scoreFilter = cartOrTdbInt(cart, tg->tdb, "scoreFilter", 0);
-return scoreFilter == 0 && trackDbSetting(tg->tdb, "colorByStrand") == NULL;
-#endif /* OLD */
 }
 
 
@@ -89,7 +95,8 @@ void bigBedDrawDense(struct track *tg, int seqStart, int seqEnd,
 /* Use big-bed summary data to quickly draw bigBed. */
 {
 struct bbiSummaryElement summary[width];
-if (bigBedSummaryArrayExtended(tg->bbiFile, chromName, seqStart, seqEnd, width, summary))
+struct bbiFile *bbi = fetchBbiForTrack(tg);
+if (bigBedSummaryArrayExtended(bbi, chromName, seqStart, seqEnd, width, summary))
     {
     char *denseCoverage = trackDbSettingClosestToHome(tg->tdb, "denseCoverage");
     if (denseCoverage != NULL)
@@ -97,7 +104,7 @@ if (bigBedSummaryArrayExtended(tg->bbiFile, chromName, seqStart, seqEnd, width, 
 	double startVal = 0, endVal = atof(denseCoverage);
 	if (endVal <= 0)
 	    {
-	    struct bbiSummaryElement sumAll = bbiTotalSummary(tg->bbiFile);
+	    struct bbiSummaryElement sumAll = bbiTotalSummary(bbi);
 	    double mean = sumAll.sumData/sumAll.validCount;
 	    double std = calcStdFromSums(sumAll.sumData, sumAll.sumSquares, sumAll.validCount);
 	    rangeFromMinMaxMeanStd(0, sumAll.maxVal, mean, std, &startVal, &endVal);
@@ -131,11 +138,4 @@ void bigBedMethods(struct track *track, struct trackDb *tdb,
 /* Set up bigBed methods. */
 {
 complexBedMethods(track, tdb, TRUE, wordCount, words);
-if (track->bbiFile == NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(database);
-    char *fileName = bbiNameFromTable(conn, track->mapName);
-    hFreeConn(&conn);
-    track->bbiFile = bigBedFileOpen(fileName);
-    }
 }
