@@ -300,7 +300,7 @@ identifier ncbiTaxon
 
 identifier tRNAsId
 "ID of tRNAs"
-    $tRNAsDbs.tRNAs.name
+    $tRNAsDbs.tRNAs.name dupeOk
 
 # CGAP SAGE track Stuff
 
