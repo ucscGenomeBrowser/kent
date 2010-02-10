@@ -292,7 +292,7 @@ identifier ncbiTaxon
 
 # tRNAs track Stuff
 
-# Databases with the CGAP SAGE track
+# Databases with the tRNAs track
 set tRNAsDbs hg18,hg19,mm9,rn4
 
 identifier tRNAsId
