@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.210 2010/02/10 20:49:47 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.211 2010/02/10 20:52:05 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1038,7 +1038,7 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 sex U
 tier 3
-protocol Broad Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
+protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
 term HNPCEpiC
 tag HNPCE
@@ -1107,7 +1107,7 @@ termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
 sex U
 tier 3
-protocol Broad Histone:HSMM_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -1122,7 +1122,7 @@ termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
 sex U
 tier 3
-protocol Broad Histone:HSMMtube_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -1311,7 +1311,7 @@ termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161&termName=lung%20fibroblast%20cell%20line
 sex U
 tier 3
-protocol Broad Histone:NHLF_Bernstein_protocol.pdf UW_Stam:NHLF_Stam_protocol.pdf
+protocol Broad_Histone:NHLF_Bernstein_protocol.pdf UW_Stam:NHLF_Stam_protocol.pdf
 
 term NT2-D1
 tag NT2D1
