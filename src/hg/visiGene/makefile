@@ -1,4 +1,4 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 # Build all directories in makeDb 
 
 all:
@@ -9,29 +9,12 @@ all:
 	    fi ;\
 	    done
 
-test::
-	cd clusterGenes && ${MAKE} test
-
 # List of directories to build
 USE_DIRS = $(DIRS)
 
 DIRS = \
-    gensat \
-    hgVisiGene \
-    jackson \
-    knownToVisiGene \
-    vgChangeContributors \
-    vgGetText \
-    vgLoadAllen \
-    vgLoadJax \
-    vgLoadMahoney \
-    vgLoadNibb \
-    vgPatchJax \
-    vgProbeTrack \
-    vgRemoveSubmission \
-    visiGeneLoad \
-    visiGeneSearch \
-    visiGeneTest 
+    microscope \
+    microscopeLoad 
 
 # Needs work to compile
 #	vgPrepImage \
