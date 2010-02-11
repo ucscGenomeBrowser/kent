@@ -142,7 +142,7 @@ mkdir -p hardMaskedFa
 foreach chrom ( `twoBitInfo $maskedSeq stdout | cut -f1` )
    twoBitToFa ${maskedSeq}:\$chrom stdout \\
       | maskOutFa stdin hard \\
-      hardMaskedFa\/\$\{chrom\}.fa
+      hardMaskedFa/\$chrom.fa
 end
 _EOF_
   );
@@ -163,7 +163,12 @@ sub doCpg {
   $bossScript->add(<<_EOF_
 mkdir -p results
 foreach chrom ( `twoBitInfo $maskedSeq stdout | cut -f1` )
-   ./cpglh.exe hardMaskedFa\/\$\{chrom\}.fa > results\/\$\{chrom\}.cpg
+    set C = `faCount hardMaskedFa/\$chrom.fa | egrep -v "^#seq|^total" | awk '{print  \$2 - \$7 }'`
+    if ( \$C > 200 ) then
+	./cpglh.exe hardMaskedFa/\$chrom.fa > results/\$chrom.cpg
+    else
+	touch results/\$chrom.cpg
+    endif
 end
 _EOF_
   );
