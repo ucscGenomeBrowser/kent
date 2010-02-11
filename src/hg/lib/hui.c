@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.259 2010/02/08 22:10:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.260 2010/02/11 18:27:04 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2200,21 +2200,24 @@ membersForAll_t *membersForAll = needMem(sizeof(membersForAll_t));
 membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
 membersForAll->dimMax=dimA;  // This can expand, depending upon ABC dimensions
 membersForAll->dimensions = dimensionSettingsGet(parentTdb);
-int ix;
-for(ix=0;ix<membersForAll->dimensions->count;ix++)
+if(membersForAll->dimensions != NULL)
     {
-    char letter = lastChar(membersForAll->dimensions->names[ix]);
-    if(letter != 'X' && letter != 'Y')
+    int ix;
+    for(ix=0;ix<membersForAll->dimensions->count;ix++)
         {
-        membersForAll->members[membersForAll->dimMax]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
-        if(cart != NULL)
-            membersForAll->checkedTags[membersForAll->dimMax] = abcMembersChecked(parentTdb,cart,membersForAll->members[membersForAll->dimMax],letter);
-        membersForAll->dimMax++;
+        char letter = lastChar(membersForAll->dimensions->names[ix]);
+        if(letter != 'X' && letter != 'Y')
+            {
+            membersForAll->members[membersForAll->dimMax]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            if(cart != NULL)
+                membersForAll->checkedTags[membersForAll->dimMax] = abcMembersChecked(parentTdb,cart,membersForAll->members[membersForAll->dimMax],letter);
+            membersForAll->dimMax++;
+            }
+        else if(letter == 'X')
+            membersForAll->members[dimX]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+        else
+            membersForAll->members[dimY]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
         }
-    else if(letter == 'X')
-        membersForAll->members[dimX]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
-    else
-        membersForAll->members[dimY]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
     }
 membersForAll->abcCount = membersForAll->dimMax - dimA;
 
