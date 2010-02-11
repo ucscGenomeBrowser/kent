@@ -801,3 +801,11 @@ Read 90337 transcripts in 284179 lines in 1 files
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 ############################################################################
+# Create cpgIslandExt (DONE - 2010-02-11 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/cpgIslands
+    cd /hive/data/genomes/tetNig2/bed/cpgIslands
+    doCpgIslands.pl -dbHost=hgwdev -workhorse=hgwdev -buildDir=`pwd` tetNig2
+    featureBits tetNig2 cpgIslandExt
+    #	22165067 bases of 302314788 (7.332%) in intersection
+
+############################################################################
