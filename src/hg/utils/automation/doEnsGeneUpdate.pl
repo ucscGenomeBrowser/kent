@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.22 2010/01/15 23:47:36 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.23 2010/02/11 23:48:34 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -205,10 +205,11 @@ sub doLoad {
   if ($identicalToPrevious ) {
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
-    (db, name, who, version, updateTime, comment, source) \\
+    (db, name, who, version, updateTime, comment, source, dateReference) \\
     VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"identical to previous version $previousEnsVersion", \\
-	"identical to previous version $previousEnsVersion" );' hgFixed
+	"identical to previous version $previousEnsVersion", \\
+	$ensVersionDateReference );' hgFixed
 _EOF_
 	  );
   } else {
@@ -303,19 +304,21 @@ _EOF_
       if ($opt_vegaGene) {
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
-    (db, name, who, version, updateTime, comment, source) \\
+    (db, name, who, version, updateTime, comment, source, dateReference) \\
     VALUES("$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
-	"$ensGtfUrl" );' hgFixed
+	"$ensGtfUrl", \\
+	$ensVersionDateReference );' hgFixed
 _EOF_
       );
       } else {
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
-    (db, name, who, version, updateTime, comment, source) \\
+    (db, name, who, version, updateTime, comment, source, dateReference) \\
     VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
-	"$ensGtfUrl" );' hgFixed
+	"$ensGtfUrl", \\
+	$ensVersionDateReference );' hgFixed
 _EOF_
       );
       }
