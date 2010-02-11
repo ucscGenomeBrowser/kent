@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.58 2010/02/09 19:40:19 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.59 2010/02/11 18:46:00 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -113,14 +113,6 @@ priority 159.3
 
 track netDanRer5 override
 priority 159.4
-
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-priority 159.1
-
-track netDanRer4 override
-shortLabel $o_Organism Net
-priority 159.2
 
 track chainSelf
 shortLabel Self Chain

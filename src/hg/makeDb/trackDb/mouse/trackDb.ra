@@ -387,14 +387,6 @@ windowingFunction mean
 spanList 1
 type wig -1.0 1.0
 
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-priority 168
-
-track netDanRer4 override
-shortLabel $o_Organism Net
-priority 168.1
-
 track chainDanRer4NoRand
 shortLabel $o_db Chain NoRand
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments No Randoms

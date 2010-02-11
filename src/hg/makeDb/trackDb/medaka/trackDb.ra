@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.27 2010/02/08 19:28:42 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.28 2010/02/11 18:45:59 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -21,10 +21,4 @@ shortCircuit 1
 termRegex contig[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
-
-track chainDanRer4 override
-priority 139.1
-
-track netDanRer4 override
-priority 139.2
 

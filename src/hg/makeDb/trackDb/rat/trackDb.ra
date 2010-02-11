@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.77 2010/02/09 02:16:16 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.78 2010/02/11 18:45:59 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -86,12 +86,6 @@ visibility dense
 
 track blatCi1 override
 priority 111
-
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-
-track netDanRer4 override
-shortLabel $o_Organism Net
 
 track agilentCgh
 shortLabel Agilent CGH

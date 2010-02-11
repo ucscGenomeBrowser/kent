@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.50 2010/02/09 02:16:13 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.51 2010/02/11 18:45:59 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -69,12 +69,6 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
-
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-
-track netDanRer4 override
-shortLabel $o_Organism Net
 
 track syntenicNet
 shortLabel Syntenic Nets

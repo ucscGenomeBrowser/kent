@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.25 2010/02/08 02:26:00 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.26 2010/02/11 18:45:57 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -19,12 +19,6 @@ priority 21
 visibility hide
 color 50,50,50
 type bed 4 +
-
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-
-track netDanRer4 override
-shortLabel $o_Organism Net
 
 searchTable bgiSnp
 searchType bed

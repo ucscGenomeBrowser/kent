@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.78 2010/02/09 19:40:19 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.79 2010/02/11 18:45:58 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -163,14 +163,6 @@ xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSTRUP[0-9]+(\.[0-9]+)?
 searchPriority 50
-
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-priority 226.5
-
-track netDanRer4 override
-shortLabel $o_Organism Net
-priority 226.6
 
 track blastzDanRer2
 shortLabel $o_Organism Blastz

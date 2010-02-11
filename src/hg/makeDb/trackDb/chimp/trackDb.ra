@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.35 2010/02/09 02:16:08 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.36 2010/02/11 18:45:58 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -10,10 +10,4 @@ group map
 priority 15
 visibility hide
 type bed 6 +
-
-track chainDanRer4 override
-shortLabel $o_Organism Chain
-
-track netDanRer4 override
-shortLabel $o_Organism Net
 
