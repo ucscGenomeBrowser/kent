@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.137 2010/02/03 18:48:58 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.138 2010/02/11 00:42:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -185,8 +185,11 @@ if (hIsGsidServer())
     puts("&nbsp;&nbsp;&nbsp;");
     puts("assembly\n");
     printAssemblyListHtml(database, onChangeDb);
-    puts("&nbsp;&nbsp;&nbsp;");
-    printf("[%s]", database);
+    if (! stringIn(database, hFreezeFromDb(database)))
+	{
+	puts("&nbsp;&nbsp;&nbsp;");
+	printf("[%s]", database);
+	}
     puts("</TD></TR></TABLE>\n");
     }
 
