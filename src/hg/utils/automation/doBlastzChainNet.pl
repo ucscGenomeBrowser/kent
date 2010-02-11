@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.30 2009/10/26 20:54:43 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.31 2010/02/11 23:47:51 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -57,6 +57,7 @@ use vars qw/
     $opt_noDbNameCheck
     $opt_inclHap
     $opt_noLoadChainSplit
+    $opt_loadChainSplit
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -119,7 +120,7 @@ print STDERR <<_EOF_
     -syntenicNet          Perform optional syntenicNet step
     -noDbNameCheck        ignore Db name format
     -inclHap              include haplotypes *_hap* in chain/net, default not
-    -noLoadChainSplit     do not load split chain tables even if chrom based
+    -loadChainSplit       load split chain tables, default is not split tables
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -287,7 +288,8 @@ sub checkOptions {
                       "syntenicNet",
                       "noDbNameCheck",
                       "inclHap",
-                      "noLoadChainSplit"
+                      "noLoadChainSplit",
+                      "loadChainSplit"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -518,7 +520,11 @@ sequence is not performed here, but later on by blastz cluster jobs.";
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 $partitionTargetCmd
+set L1 = `wc -l < $targetList`
 $partitionQueryCmd
+set L2 = `wc -l < $queryList`
+set L = `echo \$L1 \$L2 | awk '{print \$1*\$2}'`
+echo "cluster batch jobList size: \$L = \$L1 * \$L1"
 _EOF_
     );
   $bossScript->execute();
@@ -982,7 +988,7 @@ and loads the net table.";
 # Load chains:
 _EOF_
     );
-  if ((! $opt_noLoadChainSplit) && $splitRef) {
+  if ($opt_loadChainSplit && $splitRef) {
     $bossScript->add(<<_EOF_
 cd $runDir/chain
 foreach c (`awk '{print \$1;}' $defVars{SEQ1_LEN}`)
