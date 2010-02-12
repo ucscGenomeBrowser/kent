@@ -5101,5 +5101,122 @@ TMPDIR=/scratch/tmp
     cp -p * /hive/data/gbdb/rn4/RNA-img
 
 #####################################################################
+# INITIAL RGD GENES BUILD (2010-02-12, Fan, DONE)
+# 
+# NOTE: THE BUILD PIPELINE IS DEVELOPED.  SEVERAL MAJOR PROBLEMS WERE
+# DISCOVERED IN THE ORIGINAL SOURCE DATA FILE.  RGD IS LOOKING INTO THEM.
+#
+# THIS PIPELINE SHOULD BE ADJUSTED/MODIFIED AND RE-RUN AFTER RGD FIXES THOSE PROBLEMS
+# AND PROVIDES AN UPDATED VERSION OF THEIR DATA FILE.
 
+ssh hgwdev
+cd /hive/data/genomes/rn4/bed
+mkdir rgdGene
+cd rgdGene
+
+# download raw data from RGD
+wget --timestamping ftp://rgd.mcw.edu/pub/data_release/GFF/rgd_genes_gff.zip
+
+unzip rgd_genes_gff.zip
+
+cat gff/RGDgenes_chr*.gff3 >RGDgenes_all.gff3
+
+hgsql rn4 -e 'drop table rgdGeneRaw0'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw0.sql
+hgsql rn4 -e 'load data local infile "RGDgenes_all.gff3" into table rgdGeneRaw0'
+
+
+# build the rgdId.tab file 
+hgsql rn4 -N -e 'select "RGD:",seqname from rgdGeneRaw0 '|cut -f 1 >j.rgd
+hgsql rn4 -N -e 'select * from rgdGeneRaw0 '|cut -f 9 >j.0
+
+cat j.0 |sed -e 's/RGD:/\t/'|cut -f 2 >j.1
+cat j.1 |sed -e 's/,/\t/'|sed -e 's/;/\t/'|cut -f 1 >j.2
+
+paste j.rgd j.2 |sed -e 's/\t//' >rgdId.tab
+rm j.*
+
+# fix some currently known problems of RGD Genes
+
+# First, remove gene records that contains exons of different strands.
+# create two temp tables rgdGeneRaw2 and rgdGeneRaw3 
+
+cut -f 1-8 RGDgenes_all.gff3  >j.temp8
+paste j.temp8 rgdId.tab >rgdGeneRaw2.tab
+
+hgsql rn4 -e 'drop table rgdGeneRaw2'
+hgsql rn4 -e 'drop table rgdGeneRaw3'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw2.sql
+hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw3.sql
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2.tab" into table rgdGeneRaw2'
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2.tab" into table rgdGeneRaw3'
+
+# create the one line script del1 containing the following line:
+
+hgsql rn4 -N -e "delete from rgdGeneRaw2 where rgdId='${2}' and feature='exon' and seqname='${1}' and strand = '${3}'"
+
+chmod +x del1
+hgsql rn4 -N -e \
+"select 'del1', x.seqname, x.rgdId, x.strand from rgdGeneRaw2 x, rgdGeneRaw3 y where x.rgdId=y.rgdId and x.seqname=y.seqname and x.feature='exon' and y.feature='gene' and x.strand!=y.strand;" |\
+sort -u > delAll
+chmod +x delAll
+
+./delAll
+
+hgsql rn4 -N -e 'select "chr" from rgdGeneRaw2 where feature != "CDS"' >j.chr
+hgsql rn4 -N -e 'select * from rgdGeneRaw2  where feature != "CDS"' >j.1
+paste j.chr j.1 |sed -e 's/chr\t/chr/'>j.2
+
+# remove one problematic gene
+cat j.2|grep -v "RGD:3683" >rgdGeneTemp.gff
+
+ldHgGene -gtf rn4 rgdGeneTemp rgdGeneTemp.gff
+
+hgsql rn4 -N -e 'select x.*, y.start-1, y.end from rgdGeneTemp x, rgdGeneRaw2 y where x.name=y.rgdId and y.feature="CDS"' >j.0
+
+cut -f 2-6 j.0 >j.1
+
+cut -f 12-13 j.0 >j.2
+
+cut -f 9-11 j.0 >j.3
+
+#paste j.1 j.2 j.3 >rgdGene2.tab
+paste j.1 j.2 j.3 >j.10
+
+cut -f 1-3 j.10 >j.1-3
+
+cut -f 9 j.10 |sed -e 's/,/\t/'|cut -f 1 >j.start
+
+cut -f 5-10 j.10 >j.5-10
+
+paste j.1-3 j.start j.5-10 >rgdGene2.tab
+
+hgsql rn4 -e 'drop table rgdGene2'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2.sql
+
+hgsql rn4 -e 'load data local infile "rgdGene2.tab" into table rgdGene2'
+
+hgsql rn4 -e 'drop table rgdGeneTemp'
+
+rm j.*
+
+####### temp fix to make txEnd the same as last exonStart
+
+getLastExonEnd  rn4 |sed -e 's/,//' >j.out
+cut -f 1 j.out >j.1
+cut -f 1 rgdGene2.tab >j.0
+diff j.0 j.1
+
+cut -f 2 j.out >j.last
+
+cut -f 1-4  rgdGene2.tab > j.1-4
+cut -f 6-10  rgdGene2.tab > j.6-10
+
+paste j.1-4 j.last j.6-10 >rgdGene2.tab.new
+
+hgsql rn4 -e 'drop table rgdGene2'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2.sql
+
+hgsql rn4 -e 'load data local infile "rgdGene2.tab.new" into table rgdGene2'
+rm j.*
 
