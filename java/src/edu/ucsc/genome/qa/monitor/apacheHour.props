@@ -1,6 +1,0 @@
-sourceMachine genome-log.cse.ucsc.edu
-sourceDB apachelog
-sourceTable access_log
-targetMachine all
-errorCode 500
-minutes 60

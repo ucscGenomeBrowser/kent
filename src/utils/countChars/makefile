@@ -1,9 +1,0 @@
-include ../../inc/common.mk
-
-
-O = countChars.o 
-
-countChars: $O
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/countChars $O ../../lib/$(MACHTYPE)/jkweb.a 
-	${STRIP} ${BINDIR}/countChars${EXE}
-

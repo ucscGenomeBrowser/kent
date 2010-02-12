@@ -1,7 +1,0 @@
-include 'stream'
-
-stream st = openStringStream("This is a test.");
-st.write(" Ok?");
-print(st.read(5));
-print(st.read(3));
-print(st.read(100));

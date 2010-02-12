@@ -1,5 +1,0 @@
-string name = "Josephina Aracelli";
-name += " van den Lugt";
-name += "-de la Pompa";
-print(name);
-print(name.size);

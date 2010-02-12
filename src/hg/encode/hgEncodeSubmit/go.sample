@@ -1,2 +1,0 @@
-./pipeline_runner.rb yournamehere >& log/runner.log &
-mongrel_rails start -p yourPortNumberHere -d

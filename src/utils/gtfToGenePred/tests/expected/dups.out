@@ -1,4 +1,0 @@
-invalid gffGroup detected on line: chr4	mgc3_chr4.108.108.seq.masked.005.a	CDS	107637159	107637204	0.000000	-	.	gene_id "MGC3.4.1.2.1.C10.1.fa"; transcript_id "MGC3.4.1.2.1.C10.1.fa"; 
-GFF/GTF group MGC3.4.1.2.1.C10.1.fa on chr4+, this line is on chr4-, all group members must be on same seq and strand
-
-1 errors

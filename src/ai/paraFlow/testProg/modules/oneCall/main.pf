@@ -1,3 +1,0 @@
-include 'oneCall'
-
-print(add2(1,2));

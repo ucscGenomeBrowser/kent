@@ -1,8 +1,0 @@
-int a=1, b=2;
-
-b = a;
-a = 2;
-
-tree of int ti = (1.1:1, 2.2:2);
-tree of int ci = ti;
-dir of float consts = ("pi":3.14, "e":2.7);

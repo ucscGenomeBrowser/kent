@@ -1,7 +1,0 @@
-#	"$Id: trackDb.chainNet.ra,v 1.2 2010/01/06 23:21:49 hiram Exp $";
-
-track chainNetFr2 override
-chainLinearGap medium
-
-track chainNetDanRer6 override
-shortLabel $o_Organism Chain/Net
