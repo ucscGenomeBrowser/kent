@@ -1,13 +1,11 @@
 /* imageV2 - API for creating the image V2 features. */
 
-// UNCOMMENT IMAGEv2_UI to have the new imgBox (aka imgTbl)
-// also UNCOMMENT:
+// UNCOMMENT
 //   IMAGEv2_DRAG_REORDER to allow dragReorder
 //   FLAT_TRACK_LIST to allow reordering of subtracks
 //   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 //   CONTEXT_MENU to allow right-click funtionality
 //   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
-#define IMAGEv2_UI
 //#define IMAGEv2_DRAG_REORDER
 //#define USE_NAVIGATION_LINKS
 
@@ -23,7 +21,7 @@
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
 //        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
 //#define IMAGEv2_DRAG_SCROLL
-//#define IMAGEv2_DRAG_SCROLL_SZ 3
+//#define IMAGEv2_DRAG_SCROLL_SZ 1
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     //#define IMAGEv2_SHORT_MAPITEMS
 #endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
@@ -80,7 +78,6 @@ void flatTracksFree(struct flatTracks **flatTracks);
 #endif//def FLAT_TRACK_LIST
 
 
-#ifdef IMAGEv2_UI
 /////////////////////////
 // IMAGEv2
 // The new way to do images
@@ -341,25 +338,5 @@ void imgBoxFree(struct imgBox **pImgBox);
 /////////////////////// imageV2 UI API
 void imageBoxDraw(struct imgBox *imgBox);
 /* writes a entire imgBox including all tracksas HTML */
-
-#else//ifndef IMAGEv2_UI
-// Make some NO OP macros  See the ugle but effective (f?NULL:NULL)?  That eliminates an unreferenced variable warning
-#define imgBoxImageAdd(a,b,c,d,e,f)               NULL
-#define imgBoxTrackFindOrAdd(a,b,c,d,e,f)         NULL
-#define imgBoxTrackUpdateOrAdd(a,b,c,d,e,f)       (f?NULL:NULL)
-#define imgTrackSliceUpdateOrAdd(a,b,c,d,e,f,g,h) NULL
-#define sliceMapFindOrStart(a,b,c)                NULL
-#define imgTrackAddMapItem(a,b,c,d,e,f,g,h)
-#define imageBoxDraw(a)
-#define imgBoxFree(a)
-#define IMG_ANYORDER  0
-#define IMG_FIXEDPOS  0
-#define IMG_ORDER_VAR "imgOrd"
-#define stData   5
-#define stCenter 5
-#define stSide   5
-#define stButton 5
-#define stMaxSliceTypes 1
-#endif//ndef IMAGEv2_UI
 
 #endif//ndef IMAGEV2_H
