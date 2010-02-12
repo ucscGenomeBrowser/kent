@@ -2982,9 +2982,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
-# ailMel1 Panda alignment (DONE - 2010-01-19 - Hiram)
-    mkdir /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19
-    cd /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19
+# ailMel1 Panda alignment (DONE - 2010-02-04 - Hiram)
+    mkdir /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04
+    cd /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04
 
     cat << '_EOF_' > DEF
 # Dog vs. Panda
@@ -3013,35 +3013,69 @@ SEQ2_CHUNK=10000000
 SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19
+BASE=/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
 
     time doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-workhorse=hgwdev -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-bigClusterHub=swarm -smallClusterHub=memk -workhorse=hgwdev \
+	-noLoadChainSplit \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    # interrupted by storm induced power failures, finish cat step,
-    #	then continuing under tornado watch:
-    time doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-continue=chainRun -workhorse=hgwdev -noLoadChainSplit \
-	-smallClusterHub=pk -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > chain.log 2>&1 &
-    #	real    102m27.429s
+    #	real    360m31.044s
     cat fb.canFam2.chainAilMel1Link.txt 
-    #	1785774721 bases of 2384996543 (74.875%) in intersection
+    #	1791212709 bases of 2384996543 (75.103%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.canFam2.swap
     cd /hive/data/genomes/ailMel1/bed/blastz.canFam2.swap
     time doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-01-19/DEF \
+	/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04/DEF \
 	-swap -noLoadChainSplit -workhorse=hgwdev -bigClusterHub=pk \
-	-smallClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-smallClusterHub=memk -chainMinScore=3000 -chainLinearGap=medium \
 	> swap.log 2>&1 &
-    #	 real       89m3.603s
+    #	real    128m41.005s
      cat fb.ailMel1.chainCanFam2Link.txt 
-    #	1774362211 bases of 2225124764 (79.742%) in intersection
+    #	1788107935 bases of 2245312831 (79.637%) in intersection
 
 ############################################################################
+# LASTZ/CHAIN/NET Marmoset calJac3 (DONE - 2010-02-12 - Hiram)
+    #	use a screen to control this job
+    screen
+    mkdir /hive/data/genomes/canFam2/bed/lastzCalJac3.2010-02-12
+    cd /hive/data/genomes/canFam2/bed/lastzCalJac3.2010-02-12
+
+    cat << '_EOF_' > DEF
+# dog vs marmoset
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset (calJac3)
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_LIMIT=75
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam2/bed/lastzCalJac3.2010-02-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 `pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Fri Feb 12 14:42:59 PST 2010
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > do.log 2>&1 &
+    #	real    897m58.156s
+#########################################################################
