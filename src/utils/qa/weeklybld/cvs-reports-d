@@ -757,11 +757,13 @@ package require Itcl
     # empty.
     public method uniDiff {contextSize rev1 rev2 file} {
 
-        # -r 1.0 no longer accepted by new cvs diff
-        # maybe BASE work instead? (still needs -N)
-        if {$rev1 == 1.0} {
-            set rev1 "BASE"
-        }
+
+	# disabling for now
+        ## -r 1.0 no longer accepted by new cvs diff
+        ## maybe BASE work instead? (still needs -N)
+        #if {$rev1 == 1.0} {
+        #    set rev1 "BASE"
+        #}
 
         # -N required to make -r 1.0 work
         set cmd [list cvs -q diff -bB -U$contextSize -kk -N]
@@ -785,6 +787,7 @@ package require Itcl
                 if {[file size $errTmp] != 0} {
                     set errMsg [read_file $errTmp]
 		    if {[string first "obtained lock in" $errTmp] == -1} {
+			progress "error: command=[$cmd]"
 			file delete $errTmp
 			error $errMsg
 		    }
