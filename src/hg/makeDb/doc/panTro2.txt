@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.17 2009/09/20 17:16:46 markd Exp $"
+#	"$Id: panTro2.txt,v 1.18 2010/02/12 23:51:36 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -3257,4 +3257,67 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
 ############################################################################
+# calJac3 Marmoset BLASTZ/CHAIN/NET (DONE - 2010-02-11 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/panTro2/bed/lastzCalJac3.2010-02-11
+    cd /hive/data/genomes/panTro2/bed/lastzCalJac3.2010-02-11
+
+    #	same kind of parameters as used in human<->marmoset
+    cat << '_EOF_' > DEF
+# chimp vs. marmoset
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Chimp PanTro2
+SEQ1_DIR=/scratch/data/panTro2/panTro2.2bit
+SEQ1_LEN=/scratch/data/panTro2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Marmoset (calJac3)
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro2/bed/lastzCalJac3.2010-02-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-stop=partition -syntenicNet \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    311m31.090s
+    cat fb.panTro2.chainCalJac3Link.txt 
+    #	2016331285 bases of 2909485072 (69.302%) in intersection
+
+    mkdir /hive/data/genomes/calJac3/bed/blastz.panTro2.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.panTro2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro2/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    118m42.203s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	1990168262 bases of 2752505800 (72.304%) in intersection
+
+############################################################################
+

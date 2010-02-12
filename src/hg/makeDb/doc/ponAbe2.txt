@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.22 2009/09/20 17:16:46 markd Exp $"
+#	"$Id: ponAbe2.txt,v 1.23 2010/02/12 23:51:36 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -2080,4 +2080,65 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
 ############################################################################
+# calJac3 Marmoset BLASTZ/CHAIN/NET (DONE - 2010-02-11 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/ponAbe2/bed/lastzCalJac3.2010-02-11
+    cd /hive/data/genomes/ponAbe2/bed/lastzCalJac3.2010-02-11
+
+    #	same kind of parameters as used in human<->marmoset
+    cat << '_EOF_' > DEF
+# Orangutan vs. marmoset
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Orangutan PonAbe2
+SEQ1_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ1_LEN=/scratch/data/ponAbe2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Marmoset (calJac3)
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ponAbe2/bed/lastzCalJac3.2010-02-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    329m55.081s
+    cat fb.ponAbe2.chainCalJac3Link.txt 
+    #	2086557592 bases of 3093572278 (67.448%) in intersection
+
+    mkdir /hive/data/genomes/calJac3/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    146m12.301s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	1978857628 bases of 2752505800 (71.893%) in intersection
+############################################################################
+
