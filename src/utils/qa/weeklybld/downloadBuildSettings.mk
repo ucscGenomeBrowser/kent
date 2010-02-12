@@ -1,2 +1,0 @@
-USE_SSL=0
-USE_BAM=0

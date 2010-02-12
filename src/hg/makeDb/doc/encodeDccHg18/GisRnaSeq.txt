@@ -1,5 +1,0 @@
-2009-11-09
-
-- signal tracks are in "old" BigWig format.  Either have to update them to v2 
-  or possibly make that wiggles instead.
-- need text for trackDb HTML about Solexa sequencing.

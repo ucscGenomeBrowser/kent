@@ -1,5 +1,0 @@
-# gtf where one item is split across two sequences (fake data)
-chr16	mgc2_iscan_int_chr16.12.007.a	CDS	11495972	11496117	.	-	.	gene_id "MGC2.1.1.1.1.A11.1"; transcript_id "MGC2.1.1.1.1.A11.1.fa";
-chr16	mgc2_iscan_int_chr16.12.007.a	CDS	11502161	11502185	.	-	.	gene_id "MGC2.1.1.1.1.A11.1"; transcript_id "MGC2.1.1.1.1.A11.1.fa";
-chr17	mgc2_iscan_int_chr16.12.007.a	CDS	11495972	11496117	.	-	.	gene_id "MGC2.1.1.1.1.A11.1"; transcript_id "MGC2.1.1.1.1.A11.1.fa";
-chr17	mgc2_iscan_int_chr16.12.007.a	CDS	11502161	11502185	.	-	.	gene_id "MGC2.1.1.1.1.A11.1"; transcript_id "MGC2.1.1.1.1.A11.1.fa";

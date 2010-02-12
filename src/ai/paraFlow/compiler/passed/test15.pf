@@ -1,4 +1,0 @@
-dir of int numNames0 = ();
-dir of int numNames1 = ("one":1);
-dir of int numNames2 = ("one":1, "two":2);
-dir of int numNames3 = ("one":1, "two":2, "three":3);

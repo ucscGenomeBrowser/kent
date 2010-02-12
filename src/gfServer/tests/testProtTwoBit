@@ -1,4 +1,0 @@
-gfServer start -trans localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
-sleep 1
-gfServer protQuery localhost 17768 input/mCrea.pep > $1
-gfServer stop localhost 17768 > /dev/null

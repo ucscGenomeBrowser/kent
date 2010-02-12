@@ -1,4 +1,0 @@
-array of int a = (1,2,3);
-array of int aSquared = para (i in a) get i*i;
-print(a);
-print(aSquared);

@@ -1,9 +1,0 @@
-Testing namedPoint - string,int,int all initted in class
-('pos2-3',2,3)
-('willy',2,3)
-('five and something',5,3)
-('allInit',100,200)
-('some frame',1.230000,0)
-('My frame',2.550000,2)
-(1,1.000000,'1.0',1.000000,'v1')
-(0,0.000000,nil,0.000000,0)
