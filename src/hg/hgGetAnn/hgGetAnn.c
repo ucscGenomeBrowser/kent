@@ -6,8 +6,9 @@
 #include "hdb.h"
 #include "hgFind.h"
 #include "jksql.h"
+#include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.6 2008/09/03 19:18:55 markd Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.7 2010/02/12 17:56:12 angie Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -527,6 +528,7 @@ keepBin = optionExists("keepBin");
 noMatchOk = optionExists("noMatchOk");
 noRandom = optionExists("noRandom");
 
+cgiSpoof(&argc, argv);
 hgGetAnn(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
