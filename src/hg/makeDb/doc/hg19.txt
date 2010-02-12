@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.81 2010/02/09 23:15:08 fanhsu Exp $";
+#	"$Id: hg19.txt,v 1.82 2010/02/12 23:43:45 hiram Exp $";
 
 #############################################################################
 
@@ -8317,9 +8317,9 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 
 ######################################################################## 
-# ailMel1 Panda alignment (DONE - 2010-01-21 - Hiram)
-    mkdir /hive/data/genomes/hg19/bed/lastzAilMel1.2010-01-21
-    cd /hive/data/genomes/hg19/bed/lastzAilMel1.2010-01-21
+# ailMel1 Panda alignment (DONE - 2010-02-04 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
+    cd /hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
 
     cat << '_EOF_' > DEF
 # Human vs. Panda
@@ -8348,7 +8348,7 @@ SEQ2_CHUNK=10000000
 SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/hg19/bed/lastzAilMel1.2010-01-21
+BASE=/hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -8356,22 +8356,22 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #	real    150m41.538s
+    #	real    434m21.792s
     cat fb.hg19.chainAilMel1Link.txt 
-    #	1449290504 bases of 2897316137 (50.022%) in intersection
+    #	1453400264 bases of 2897316137 (50.164%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.hg19.swap
     cd /hive/data/genomes/ailMel1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/hg19/bed/lastzAilMel1.2010-01-21/DEF \
+	/hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04/DEF \
 	-swap -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    104m38.416s
+    real    124m14.393s
     cat fb.ailMel1.chainHg19Link.txt 
-    #	1403163838 bases of 2225124764 (63.060%) in intersection
+    #	1411953704 bases of 2245312831 (62.884%) in intersection
 
 #########################################################################
 # susScr1 Pig BLASTZ/CHAIN/NET (DONE - 2010-01-21 - Hiram)
@@ -8532,5 +8532,63 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
     cp -p * /hive/data/gbdb/hg19/RNA-img
 
 #####################################################################
+# calJac3 Marmoset BLASTZ/CHAIN/NET (DONE - 2010-01-21 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/hg19/bed/lastzCalJac3.2010-02-11
+    cd /hive/data/genomes/hg19/bed/lastzCalJac3.2010-02-11
 
+    cat << '_EOF_' > DEF
+# human vs. marmoset
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
 
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Marmoset (calJac3)
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzCalJac3.2010-02-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    287m24.258s
+    cat fb.hg19.chainCalJac3Link.txt 
+    #	2047068864 bases of 2897316137 (70.654%) in intersection
+
+    mkdir /hive/data/genomes/calJac3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
