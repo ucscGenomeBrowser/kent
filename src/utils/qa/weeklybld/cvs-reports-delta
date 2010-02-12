@@ -31,6 +31,7 @@ proc cnvDateTime {dateStr} {
 proc buildReports {fromTag toTag fromTagDate toTagDate branchVersion} {
     set pid [fork]
     if {$pid == 0} {
+        puts stderr [list $::CVS_REPORTS -verbose -no-update -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
         execl $::CVS_REPORTS [list -verbose -no-update -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
     } else {
         set status [wait $pid]
