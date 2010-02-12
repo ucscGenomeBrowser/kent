@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1623 2010/02/09 23:27:21 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1624 2010/02/12 21:07:35 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4196,7 +4196,6 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-#ifdef IMAGEv2_UI
 if(advancedJavascriptFeaturesEnabled(cart) && !psOutput)
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
@@ -4214,7 +4213,6 @@ if(advancedJavascriptFeaturesEnabled(cart) && !psOutput)
         }
     #endif//def IMAGEv2_DRAG_SCROLL
     }
-#endif//def IMAGEv2_UI
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -4423,35 +4421,36 @@ if (!hideControls)
 makeChromIdeoImage(&trackList, psOutput, ideoTn);
 
 #ifdef USE_NAVIGATION_LINKS
-    hPrintf("<table style='font-size:small;width:%dpx'><tr align='center'>",min(tl.picWidth, 800));
+    hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",tl.picWidth);//min(tl.picWidth, 800));
     #ifndef IMAGEv2_DRAG_SCROLL
     //if(!advancedJavascriptFeaturesEnabled(cart))
         {
-        hPrintf("<td width='60'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
-        hPrintf("<td width='50'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
-        hPrintf("<td width='40'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
-        hPrintf("<td width='50'>&nbsp;</td>\n");
+        hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
+        hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
+        hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
         }
     #endif//ndef IMAGEv2_DRAG_SCROLL
     if(!advancedJavascriptFeaturesEnabled(cart))
         {
-        hPrintf("<td width='60' ><a href='?hgt.in1=1' title='zoom out 1.5x'>&gt;&nbsp;&lt;</a>\n");
-        hPrintf("<td width='80' ><a href='?hgt.in2=1' title='zoom out 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
-        hPrintf("<td width='100'><a href='?hgt.in3=1' title='zoom out 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
-        hPrintf("<td width='50'>&nbsp;\n");
-        hPrintf("<td width='50'><a href='?hgt.inBase=1' title='zoom in to base range'>ACGT</a>\n");
-        hPrintf("<td width='50'>&nbsp;\n");
+    #ifndef IMAGEv2_DRAG_SCROLL
+        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
+    #endif//ndef IMAGEv2_DRAG_SCROLL
+        hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom out 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
+        hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom out 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
+        hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom out 1.5x'>&gt;&nbsp;&lt;</a>\n");
+        hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'><i>base</i></a>\n");
         }
-    hPrintf("<td width='60' ><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
-    hPrintf("<td width='80' ><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
-    hPrintf("<td width='100'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
-    hPrintf("<td width='50'>&nbsp;\n");
+    hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
+    hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
+    hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
+    hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
     #ifndef IMAGEv2_DRAG_SCROLL
     //if(!advancedJavascriptFeaturesEnabled(cart))
         {
-        hPrintf("<td width='40'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
-        hPrintf("<td width='50'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
-        hPrintf("<td width='60'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
+        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
+        hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
+        hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
+        hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
         }
     #endif//ndef IMAGEv2_DRAG_SCROLL
     /* use button maker that determines padding, so we can share constants */
