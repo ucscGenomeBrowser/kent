@@ -1,5 +1,6 @@
 
-var tipup = -1;
+var tipup;
+var chrom;
 
 function removetitles()
 {
@@ -156,7 +157,7 @@ function makevisible(element)
 }
 function update(event)
 {
-    if(tipup == -1)
+    if(tipup.size() == 0)
     {
         resettip(event.target);
     }
@@ -184,8 +185,9 @@ function update(event)
 function showInfo(event,output)
 {
     
-    if($(event.target).data('num') === tipup)
+    if($(event.target).not( tipup ).size() == 0)
     {
+        //console.log("||");
         $(".tooltip").css('left',0).css('top',0);
         
         $(".tooltip").html(output);
@@ -199,20 +201,24 @@ function showInfo(event,output)
     }    
     //$(this).unbind('mousemove')    
 }
-function ajaxError(XMLHttpRequest, textStatus, errorThrown)
+function ajaxtooltipError(XMLHttpRequest, textStatus, errorThrown,event)
 {
-    XMLHttpRequest.abort();
-    console.log(textStatus);
-    $("#tooltip").text(textStatus + "\n");
-    //console.log(errorThrown);
+    //XMLHttpRequest.abort();
+    //console.log(textStatus);
+    showInfo(event, "<B>Name:</B> "+$(event.target).data('title'));
+    //$("#tooltip").text("**"+$(event.target).data('title'));
+
+    //alert(textStatus + "\n");
+    //console.log(textStatus);
 }
 
 
 
 function resettip(hastip)
 {
+    $(hastip).attr("title",$(hastip).data("title"));
     //console.log("Tip gone"+tipup);
-    tipup = -1;
+    tipup = $();
     $(hastip).unbind('mousemove', update);
     $("#tooltip").hide();
     $("#tooltip").text('');
@@ -223,6 +229,7 @@ function resettip(hastip)
 
 function hidetip(event)
 {
+    
     resettip(event.target);
 }
 
@@ -233,9 +240,17 @@ function showtip(event)
     {
         
     }*/
-    resettip($(".hastip").get(tipup));
-    tipup = $(event.target).data('num');
-    $(event.target).bind("mouseleave",hidetip );
+    if(!($(event.target).is("area[href^='../cgi-bin/hgc']")))
+    {
+        
+        return;
+    }
+    //console.log($(event.target).attr("title"));
+    $(event.target).data("title",$(event.target).attr("title"));
+    $(event.target).removeAttr("title");
+    resettip(tipup);
+    tipup = $(event.target);
+    $(event.target).bind("mouseleave",hidetip);
     
     if($("input[name=showtooltips]").attr('checked') === false)
     {
@@ -243,30 +258,23 @@ function showtip(event)
     }
     //$("#tooltip").load("../cgi-bin/tooltip?"+($(event.target).attr('href').split("?"))[1],"",makevisible);
     
-    
     $.ajax({
             type: "GET",
-            url: "../cgi-bin/tooltip?"+($(event.target).attr('href').split("?"))[1],
+            url: "../cgi-bin/tooltip?c="+chrom+"&"+($(event.target).attr('href').split("?"))[1],
             dataType: "html",
             success: function(output){showInfo(event,output);},
-            error: ajaxError,
+            error: function(XMLHttpRequest, textStatus, errorThrown){ajaxtooltipError(XMLHttpRequest, textStatus, errorThrown,event);},
             cache: true
     });
-    
-    
     
 }
 $(document).ready(function() 
 {
     //NEWVERSION
-    $("area[href^='../cgi-bin/hgc']").addClass('hastip');
+    $("area").addClass('hastip');
     
-    $(".hastip").each(function(i)
-    {
-        $(this).data('title', $(this).attr('title'));
-        $(this).data('num',i);
-        $(this).removeAttr("title");
-    });
+    
+    tipup = $()
     $("body").append("<div class='tooltip' id='tooltip'></div>");
     $("#tooltip").css({
     "background": "white",
@@ -282,6 +290,9 @@ $(document).ready(function()
     "font-size": "small",
     "opacity" : "1"});
     $("#trackMap").removeAttr("title");
+    chrom = $("input[name=chromName]").val();
+    //console.log();
+
     $(".hastip").bind("mouseenter", showtip);
     
     $("input[name=hgt.toggleRevCmplDisp]").after('  <input type="submit" class="setwidth" value="auto-set width" onclick="setwidth()"/>');
