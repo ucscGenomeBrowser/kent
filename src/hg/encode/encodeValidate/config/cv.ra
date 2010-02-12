@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.211 2010/02/10 20:52:05 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.212 2010/02/12 18:58:19 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1218,6 +1218,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
+
+term MCF-10A
+tag MCF10A
+type Cell Line
+organism Human
+description mammary gland, fibrocystic disease
+vendorName ATCC
+vendorId CRL-10317
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-10317&Template=cellBiology
+lineage Caucasian
+karyotype stable, near-diploid
+termId BTO:0001939
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001939
+sex F
+tier 3
+protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
+
 
 term Medullo
 tag Medullo
