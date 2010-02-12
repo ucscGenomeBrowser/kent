@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.22 2010/02/10 00:37:56 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.23 2010/02/12 21:10:03 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -72,7 +72,6 @@ if(flatTracks && *flatTracks)
 }
 #endif//def FLAT_TRACK_LIST
 
-#ifdef IMAGEv2_UI
 /////////////////////////
 // IMAGEv2
 // The new way to do images: PLEASE REFER TO imageV2.h FOR A DETAILED DESCRIPTION
@@ -1417,26 +1416,30 @@ static void imageDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,struct img
 {
 if(slice->parentImg && slice->parentImg->file != NULL)
     {
-    hPrintf("  <IMG id='img_%s' src='%s' style='position:relative; left:-%dpx; top: -%dpx; border:0;'",
+    hPrintf("  <IMG id='img_%s' src='%s' style='left:-%dpx; top: -%dpx;'",
             name,slice->parentImg->file,offsetX,offsetY);
+    // Problem: dragScroll beyond left shows ugly leftLabel!
+    // Tried clip:rect() but this only works with position:absolute!
+    // May need to split image betweeen side label and data!!! That is a big change.
 
     if(useMap)
         hPrintf(" usemap='#map_%s'",name);
-    if(slice->type==stSide)
-        hPrintf(" class='sideLab'");
-    else if(slice->type==stCenter)
-        hPrintf(" class='centerLab'");
-    else if(slice->type==stButton)
-        hPrintf(" class='button'");
-    #ifdef IMAGEv2_DRAG_SCROLL
-    else if(slice->type==stData && imgBox->showPortal)
-        hPrintf(" class='panImg' ondrag='{return false;}'");
-    #endif //def IMAGEv2_DRAG_SCROLL
+    hPrintf(" class='sliceImg ");
+    switch (slice->type)
+        {
+        case stSide:   hPrintf("sideLab"); break;
+        case stCenter: hPrintf("cntrLab"); break;
+        case stButton: hPrintf("button");  break;
+        case stData:   hPrintf("dataImg"); break;
+        default: warn("unknown slice = %d !",slice->type); break;
+        }
+    if(slice->type==stData && imgBox->showPortal)
+        hPrintf(" panImg' ondrag='{return false;}");
     if(slice->title != NULL)
-        hPrintf(" title='%s'",slice->title);           // Adds slice wide title
+        hPrintf("' title='%s",slice->title);           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
-        hPrintf(" title='%s'",slice->parentImg->title);// Adds image wide title
-    hPrintf(">");
+        hPrintf("' title='%s",slice->parentImg->title);// Adds image wide title
+    hPrintf("'>");
     }
 else
     {
@@ -1479,12 +1482,12 @@ if(slice->parentImg)
         offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
         width=imgBox->portalWidth;
         }
-        hPrintf("  <div style='width:%dpx; height:%dpx; overflow:hidden;'",width,slice->height);
+        hPrintf("  <div style='width:%dpx; height:%dpx;' class='sliceDiv",width,slice->height);
     #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && sliceType==stData)
-        hPrintf(" class='panDiv%s'",(scrollHandle?" scroller":""));
+        hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
     #endif //def IMAGEv2_DRAG_SCROLL
-    hPrintf(">\n");
+    hPrintf("'>\n");
     }
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
 if(map)
@@ -1515,7 +1518,6 @@ boolean verbose = (hIsPrivateHost());   // Warnings for hgwdev only
 if(!imgBoxIsComplete(imgBox,verbose)) // dorps empties as okay
     return;
 char name[256];
-int bgOffset = NO_VALUE;
 
 imgBoxTracksNormalizeOrder(imgBox);
 //if(verbose)
@@ -1540,6 +1542,25 @@ hPrintf(".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // c
 hPrintf(".btnBlue {background-color:#91B3E6; border-color:#91B3E6;}\n");
 #endif//def FLAT_TRACK_LIST
 hPrintf("div.dragZoom {cursor: text;}\n");
+//#ifndef FLAT_TRACK_LIST
+hPrintf("img.button {position:relative; border:0;}\n");
+//#endif//ndef FLAT_TRACK_LIST
+hPrintf("img.sliceImg {position:relative; border:0;}\n");
+hPrintf("div.sliceDiv {overflow:hidden;}\n");
+if(imgBox->bgImg)
+    {
+    int offset = 0;
+    if(imgBox->showSideLabel && imgBox->plusStrand)
+        {
+        struct imgSlice *slice = imgTrackSliceGetByType(imgBox->imgTracks,stData);
+        if(slice)
+            offset = (slice->offsetX * -1);  // This works because the ruler has a slice
+         }
+    if(offset != 0)
+        hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;background-position:%dpx;}\n",imgBox->bgImg->file,offset);
+    else
+        hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;}\n",imgBox->bgImg->file);
+    }
 hPrintf("</style>\n");
 
 #ifdef IMAGEv2_DRAG_SCROLL
@@ -1561,8 +1582,7 @@ hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWid
 #ifdef IMAGEv2_DRAG_REORDER
 hPrintf(" class='tableWithDragAndDrop'");
 #endif//def IMAGEv2_DRAG_REORDER
-hPrintf(" style='border:1px solid blue;border-collapse:separate;");
-hPrintf("'>\n");
+hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
@@ -1589,23 +1609,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
-    hPrintf(" <TD id='td_data_%s' width=%d class='tdData'", trackName, imgBox->width);
-    if(imgBox->bgImg)
-        {
-        if(imgBox->showSideLabel && imgBox->plusStrand)
-            {
-            if(bgOffset == NO_VALUE)
-                {
-                struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,stData);
-                if(slice)
-                    bgOffset = (slice->offsetX * -1);  // This works because the ruler has a slice
-                }
-            hPrintf(" style='background-image:url(\"%s\");background-position:%dpx;'",imgBox->bgImg->file,bgOffset);
-            }
-        else
-            hPrintf(" style='background-image:url(\"%s\");'",imgBox->bgImg->file);
-        }
-    hPrintf(">\n");
+    hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
     hPrintf("  <input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
     // centerLabel
     if(imgTrack->showCenterLabel)
@@ -1638,8 +1642,3 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 hPrintf("</TABLE>\n");
 hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
 }
-
-// Nice to do:
-// 1) For composites in dense (those without a title), replace map items with toggle!  Sould we?
-
-#endif//def IMAGEv2_UI
