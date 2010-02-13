@@ -2,17 +2,13 @@
 
 // UNCOMMENT
 //   IMAGEv2_DRAG_REORDER to allow dragReorder
-//   FLAT_TRACK_LIST to allow reordering of subtracks
 //   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 //   CONTEXT_MENU to allow right-click funtionality
 //   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
+//   FLAT_TRACK_LIST to allow reordering of subtracks
+
 //#define IMAGEv2_DRAG_REORDER
 //#define USE_NAVIGATION_LINKS
-
-// UNCOMMENT FLAT_TRACK_LIST to allow reordering of subtracks
-#ifdef IMAGEv2_DRAG_REORDER
-    #define FLAT_TRACK_LIST
-#endif//def IMAGEv2_DRAG_REORDER
 
 // UNCOMMENT CONTEXT_MENU to allow right-click funtionality
 //#define CONTEXT_MENU
@@ -21,10 +17,16 @@
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
 //        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
 //#define IMAGEv2_DRAG_SCROLL
-//#define IMAGEv2_DRAG_SCROLL_SZ 1
+//#define IMAGEv2_DRAG_SCROLL_SZ 2
+
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
-    //#define IMAGEv2_SHORT_MAPITEMS
+    #define IMAGEv2_SHORT_MAPITEMS
 #endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+
+// UNCOMMENT FLAT_TRACK_LIST to allow reordering of subtracks
+#ifdef IMAGEv2_DRAG_REORDER
+    #define FLAT_TRACK_LIST
+#endif//def IMAGEv2_DRAG_REORDER
 
 // Support for guidelines as separate bg image (allowing dragScroll to move guidelines through centerLabels)
 #if defined(IMAGEv2_DRAG_REORDER) || defined(IMAGEv2_DRAG_SCROLL)

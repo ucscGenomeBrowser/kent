@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.52 2010/02/12 21:15:41 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.53 2010/02/13 00:40:00 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -781,6 +781,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
     var rightLimit  = (imgBoxPortalWidth - imgBoxWidth + leftLimit);
     var prevX       = (imgOffset + imgBoxLeftOffset)*-1;
     var portalWidth = 0;
+    panAdjustHeight(prevX);
 
 this.each(function(){
 
@@ -814,8 +815,6 @@ this.each(function(){
     function initialize(){
 
         pan.css( 'cursor', 'w-resize');
-
-        panAdjustHeight(prevX);
 
         pan.mousedown(function(e){
             if(mouseIsDown == false) {
@@ -899,6 +898,8 @@ this.each(function(){
             setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
         }
     }
+});
+
     function panUpdatePosition(newOffsetX,bounded)
     {
         // Updates the 'position/search" display with change due to panning
@@ -994,8 +995,6 @@ this.each(function(){
             }
         });
     }
-
-});
 
 };
 

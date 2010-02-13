@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.23 2010/02/12 21:10:03 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.24 2010/02/13 00:42:33 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -789,11 +789,12 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
         {
         if(imgFile == NULL)
             imgFile = slice->parentImg->file;
-        else if(differentString(imgFile,slice->parentImg->file))
-            {
-            char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
-            warn("imgTrackAddMapItem(%s) called, but not all slice images are the same for this track.",name);
-            }
+        //else if(differentString(imgFile,slice->parentImg->file))
+        //    {
+        //    char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+        //    warn("imgTrackAddMapItem(%s) called, but not all slice images are the same for this track.",name);
+        //    }
+        // Not a valid warning!  Side image and data image may be different!!!
         }
     if(topLeftX     < (slice->offsetX + slice->width-1)
     && bottomRightX > (slice->offsetX + 1)
@@ -1226,8 +1227,11 @@ if(imgBox)
             imgBox->width,imgBox->basesPerPixel,(imgBox->showSideLabel?"Yes":"No"),imgBox->sideLabelWidth,
             (imgBox->showPortal?"Yes":"No"),imgBox->portalStart,imgBox->portalEnd,imgBox->portalWidth);
     indent++;
-    imgShow(&myDy,imgBox->images,"data ",indent);
-    imgShow(&myDy,imgBox->bgImg,"bgnd ",indent);
+    struct image *img;
+    for(img=imgBox->images;img!=NULL;img=img->next)
+        imgShow(&myDy,img,"data ",indent);
+    if(imgBox->bgImg)
+        imgShow(&myDy,imgBox->bgImg,"bgnd ",indent);
     if(dy == NULL)
         warn("%s",dyStringCannibalize(&myDy));
 

@@ -46,7 +46,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1624 2010/02/12 21:07:35 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1625 2010/02/13 00:41:50 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1820,7 +1820,9 @@ pixWidth = tl.picWidth;
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 
-struct image    *theOneImg   = NULL; // No need to be global, only the map needs to be global
+struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
+struct image *theSideImg = NULL; // Because dragScroll drags off end of image, the side label gets seen. Therefore we need 2 images!!
+struct hvGfx *hvgSide = NULL;    // Strategy an extra pointer to a side image that can be built if needed
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
@@ -1991,7 +1993,10 @@ flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track l
 
 imagePixelHeight = pixHeight;
 if (psOutput)
+    {
     hvg = hvGfxOpenPostScript(pixWidth, pixHeight, psOutput);
+    hvgSide = hvg; // Always only one image
+    }
 else
     {
 #ifdef USE_PNG
@@ -2001,15 +2006,35 @@ else
     #else//ifndef IMAGEv2_BG_IMAGE
     hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
     #endif//ndef IMAGEv2_BG_IMAGE
-
-#else
+#else //ifndef
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#endif // USE_PNG
+#endif //ndef USE_PNG
+
     if(theImgBox)
         {
         // Adds one single image for all tracks (COULD: build the track by track images)
         theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
+        theSideImg = theOneImg; // Unlkess this is overwritten below, there is a single image
+        }
+    hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
+
+    if (theImgBox && theImgBox->showPortal && withLeftLabels)
+        {
+        // TODO: It would be great to make the images smaller, but keeping both the same full size for now
+        struct tempName gifTnSide;
+        #ifdef USE_PNG
+            trashDirFile(&gifTnSide, "hgt", "side", ".png");
+            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, FALSE);
+        #else //ifndef
+            trashDirFile(&gifTnSide, "hgt", "side", ".gif");
+            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, FALSE);
+        #endif //ndef USE_PNG
+
+        // Also add the side image
+        theSideImg = imgBoxImageAdd(theImgBox,gifTnSide.forHtml,NULL,pixWidth, pixHeight,FALSE);
+        hvgSide->rc = revCmplDisp;
+        initColors(hvgSide);
         }
     }
 hvg->rc = revCmplDisp;
@@ -2073,11 +2098,11 @@ if (withLeftLabels && psOutput == NULL)
             #ifdef FLAT_TRACK_LIST
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
             #else//ifndef FLAT_TRACK_LIST
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,theOneImg,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,theSideImg,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY);
             #endif//ndef FLAT_TRACK_LIST
             }
-        drawGrayButtonBox(hvg, trackTabX, y, trackTabWidth, height, TRUE);
-        mapBoxTrackUi(hvg, trackTabX, y, trackTabWidth, height,
+        drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
+        mapBoxTrackUi(hvgSide, trackTabX, y, trackTabWidth, height,
               RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
         y += height + 1;
         }
@@ -2101,10 +2126,10 @@ if (withLeftLabels && psOutput == NULL)
                 grayButtonGroup = !grayButtonGroup;
             lastGroup = track->group;
             if (grayButtonGroup)
-                drawGrayButtonBox(hvg, trackTabX, yStart, trackTabWidth,
+                drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
                             h, track->hasUi);
             else
-                drawBlueButtonBox(hvg, trackTabX, yStart, trackTabWidth,
+                drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
                             h, track->hasUi);
             if(theImgBox)
                 {
@@ -2115,7 +2140,7 @@ if (withLeftLabels && psOutput == NULL)
                 #ifdef FLAT_TRACK_LIST
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
                 #else//ifndef FLAT_TRACK_LIST
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,theOneImg,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,theSideImg,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY);
                 #endif//ndef FLAT_TRACK_LIST
                 }
             if (track->hasUi)
@@ -2123,11 +2148,11 @@ if (withLeftLabels && psOutput == NULL)
                 if(tdbIsCompositeChild(track->tdb))
 		    {
 		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
-                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
 		    	parent->tableName, parent->shortLabel, track->mapName);
 		    }
                 else
-                    mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h, track->mapName, track->shortLabel, track->mapName);
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->mapName, track->shortLabel, track->mapName);
                 }
             }
         }
@@ -2138,9 +2163,9 @@ if (withLeftLabels && psOutput == NULL)
 
 if (withLeftLabels)
     {
-    Color lightRed = hvGfxFindColorIx(hvg, 255, 180, 180);
+    Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
 
-    hvGfxBox(hvg, leftLabelX + leftLabelWidth, 0,
+    hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
         gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
     if (rulerMode != tvHide)
@@ -2151,25 +2176,25 @@ if (withLeftLabels)
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theOneImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         if (baseTitle)
             {
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, titleHeight,
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, titleHeight,
                 MG_BLACK, font, WIN_TITLE_LABEL);
             y += titleHeight;
             }
         if (baseShowPos||baseShowAsm)
             {
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, showPosHeight,
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, showPosHeight,
                 MG_BLACK, font, WIN_POS_LABEL);
             y += showPosHeight;
             }
         if (baseShowScaleBar)
             {
             y += scaleBarPad;
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, scaleBarHeight,
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, scaleBarHeight,
                 MG_BLACK, font, SCALE_BAR_LABEL);
             y += scaleBarHeight + scaleBarPad;
             }
@@ -2186,11 +2211,11 @@ if (withLeftLabels)
                 safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
                 labelWidth = mgFontStringWidth(font,rulerLabel);
                 }
-            if (hvg->rc)
+            if (hvgSide->rc)
             safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
             else
                 safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight,
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, rulerHeight,
                 MG_BLACK, font, rulerLabel);
             y += rulerHeight;
             freeMem(shortChromName);
@@ -2199,7 +2224,7 @@ if (withLeftLabels)
             {
             /* disable complement toggle for HIV because HIV is single stranded RNA */
             if (!hIsGsidServer())
-                    drawComplementArrow(hvg,leftLabelX, y,
+                    drawComplementArrow(hvgSide,leftLabelX, y,
                                         leftLabelWidth-1, baseHeight, font);
             if (zoomedToBaseLevel)
                 y += baseHeight;
@@ -2223,7 +2248,7 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theOneImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
 #ifndef FLAT_TRACK_LIST
@@ -2235,7 +2260,7 @@ if (withLeftLabels)
             for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
                 {
                 if (isSubtrackVisible(subtrack))
-                    y = doLeftLabels(subtrack, hvg, font, y);
+                    y = doLeftLabels(subtrack, hvgSide, font, y);
                 //if (track->limitedVis == tvDense)
                 //track->nextItemButtonable = FALSE;
                 }
@@ -2243,7 +2268,7 @@ if (withLeftLabels)
             }
         else
 #endif//ndef FLAT_TRACK_LIST
-            y = doLeftLabels(track, hvg, font, y);
+            y = doLeftLabels(track, hvgSide, font, y);
         }
     }
 else
@@ -2438,7 +2463,7 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theOneImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
 #ifndef FLAT_TRACK_LIST
@@ -2452,7 +2477,7 @@ if (withLeftLabels)
                 if (isSubtrackVisible(subtrack))
                     {
                     if (subtrack->drawLeftLabels != NULL)
-                        y = doOwnLeftLabels(subtrack, hvg, font, y);
+                        y = doOwnLeftLabels(subtrack, hvgSide, font, y);
                     else
                         y += trackPlusLabelHeight(subtrack, fontHeight);
                     }
@@ -2462,7 +2487,7 @@ if (withLeftLabels)
 #endif//ndef FLAT_TRACK_LIST
             {
             if (track->drawLeftLabels != NULL)
-                y = doOwnLeftLabels(track, hvg, font, y);
+                y = doOwnLeftLabels(track, hvgSide, font, y);
             else
                 y += trackPlusLabelHeight(track, fontHeight);
             }
@@ -2488,9 +2513,6 @@ for (track = trackList; track != NULL; track = track->next)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            // It is possible that some side label heights need adjusting (but I doubt it)...
-            //if (withLeftLabels)
-            //    curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theOneImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             }
         y = doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
         }
@@ -2510,6 +2532,8 @@ if(newWinWidth)
     }
 
 /* Save out picture and tell html file about it. */
+if(hvgSide != hvg)
+    hvGfxClose(&hvgSide);
 hvGfxClose(&hvg);
 if(theImgBox)
     {
