@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.14 2010/01/11 18:34:25 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.15 2010/02/13 00:18:39 angie Exp $";
 
 #include "bamFile.h"
 
@@ -42,7 +42,11 @@ bamShowTags(bam);
 puts("<BR>");
 printf("<B>Flags: </B><tt>0x%02x:</tt><BR>\n &nbsp;&nbsp;", core->flag);
 bamShowFlagsEnglish(bam);
-puts("<BR><BR>");
+puts("<BR>");
+if (bamIsRc(bam))
+    printf("<em>Note: although the read was mapped to the reverse strand of the genome, "
+	   "the sequence and CIGAR in BAM are relative to the forward strand.</em><BR>\n");
+puts("<BR>");
 char nibName[HDB_MAX_PATH_STRING];
 hNibForChrom(database, seqName, nibName);
 struct dnaSeq *genoSeq = hFetchSeq(nibName, seqName, tStart, tEnd);
@@ -54,8 +58,10 @@ ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength
 		 FALSE);
 printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
 UBYTE *quals = bamGetQueryQuals(bam, useStrand);
+int clippedQLen;
+bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 int i;
-for (i = 0;  i < core->l_qseq;  i++)
+for (i = 0;  i < clippedQLen;  i++)
     {
     if (i > 0 && (i % 24) == 0)
 	printf("</TR>\n<TR>");

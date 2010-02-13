@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.18 2010/01/11 17:52:10 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.19 2010/02/13 00:18:39 angie Exp $";
 
 char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -249,20 +249,43 @@ const bam1_core_t *core = &bam->core;
 return (core->flag & BAM_FREVERSE);
 }
 
+void bamGetSoftClipping(const bam1_t *bam, int *retLow, int *retHigh, int *retClippedQLen)
+/* If retLow is non-NULL, set it to the number of "soft-clipped" (skipped) bases at
+ * the beginning of the query sequence and quality; likewise for retHigh at end.
+ * For convenience, retClippedQLen is the original query length minus soft clipping
+ * (and the length of the query sequence that will be returned). */
+{
+unsigned int *cigarPacked = bam1_cigar(bam);
+const bam1_core_t *core = &bam->core;
+char op;
+int n = bamUnpackCigarElement(cigarPacked[0], &op);
+int low = (op == 'S') ? n : 0;
+n = bamUnpackCigarElement(cigarPacked[core->n_cigar-1], &op);
+int high = (op == 'S') ? n : 0;
+if (retLow != NULL)
+    *retLow = low;
+if (retHigh != NULL)
+    *retHigh = high;
+if (retClippedQLen != NULL)
+    *retClippedQLen = (core->l_qseq - low - high);
+}
+
 char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand)
 /* Return the nucleotide sequence encoded in bam.  The BAM format 
  * reverse-complements query sequence when the alignment is on the - strand,
  * so if useStrand is given we rev-comp it back to restore the original query 
  * sequence. */
 {
-const bam1_core_t *core = &bam->core;
-char *qSeq = needMem(core->l_qseq + 1);
-uint8_t *s = bam1_seq(bam);
+int softClipLow, softClipHigh, clippedQLen;
+bamGetSoftClipping(bam, &softClipLow, &softClipHigh, &clippedQLen);
+char *qSeq = needMem(clippedQLen+1);
+uint8_t *packedQSeq = bam1_seq(bam);
 int i;
-for (i = 0; i < core->l_qseq; i++)
-    qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
+for (i = 0; i < clippedQLen; i++)
+    qSeq[i] = bam_nt16_rev_table[bam1_seqi(packedQSeq, i+softClipLow)];
+qSeq[i] = '\0';
 if (useStrand && bamIsRc(bam))
-    reverseComplement(qSeq, core->l_qseq);
+    reverseComplement(qSeq, clippedQLen);
 return qSeq;
 }
 
@@ -274,11 +297,13 @@ int qLen = core->l_qseq;
 UBYTE *arr = needMem(qLen);
 boolean isRc = useStrand && bamIsRc(bam);
 UBYTE *qualStr = bam1_qual(bam);
+int softClipLow, softClipHigh, clippedQLen;
+bamGetSoftClipping(bam, &softClipLow, &softClipHigh, &clippedQLen);
 int i;
-for (i = 0;  i < qLen;  i++)
+for (i = 0;  i < clippedQLen;  i++)
     {
-    int offset = isRc ? (qLen - 1 - i) : i;
-    arr[offset] = (qualStr[0] == 255) ? 255 : qualStr[i];
+    int offset = isRc ? (qLen - 1 - softClipHigh - i) : (i + softClipLow);
+    arr[i] = (qualStr[0] == 255) ? 255 : qualStr[offset];
     }
 return arr;
 }
@@ -394,12 +419,12 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    tLength += n;
 	    break;
 	case 'I': // inserted in query
-	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	    break;
 	case 'D': // deleted from query
 	case 'N': // long deletion from query (intron as opposed to small del)
 	    tLength += n;
 	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;
@@ -444,13 +469,13 @@ for (i = iStart;  isRc ? (i >= 0) : (i < core->n_cigar);  i += iIncr)
 	    qStart += size;
 	    break;
 	case 'I': // inserted in query
-	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	    qStart += size;
 	    break;
 	case 'D': // deleted from query
 	case 'N': // long deletion from query (intron as opposed to small del)
 	    tStart += size;
 	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;

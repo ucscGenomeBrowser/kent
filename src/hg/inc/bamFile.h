@@ -44,6 +44,12 @@ if (opcode >= strlen(BAM_DOT_C_OPCODE_STRING))
 return n;
 }
 
+void bamGetSoftClipping(const bam1_t *bam, int *retLow, int *retHigh, int *retClippedQLen);
+/* If retLow is non-NULL, set it to the number of "soft-clipped" (skipped) bases at
+ * the beginning of the query sequence and quality; likewise for retHigh at end.
+ * For convenience, retClippedQLen is the original query length minus soft clipping
+ * (and the length of the query sequence that will be returned). */
+
 char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand);
 /* Return the nucleotide sequence encoded in bam.  The BAM format 
  * reverse-complements query sequence when the alignment is on the - strand,

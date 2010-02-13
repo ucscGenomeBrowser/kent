@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.24 2010/01/14 07:39:19 kent Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.25 2010/02/13 00:18:39 angie Exp $";
 
 struct bamTrackData
     {
@@ -51,7 +51,6 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    tLength += n;
 	    break;
 	case 'I': // inserted in query
-	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	    qPos += n;
 	    break;
 	case 'D': // deleted from query
@@ -59,6 +58,7 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    tPos += n;
 	    tLength += n;
 	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;
@@ -139,6 +139,8 @@ lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
 lf->extra = bamGetQuerySequence(bam, TRUE);
+int clippedQLen;
+bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
     sameString(btd->grayMode, BAM_GRAY_MODE_ALI_QUAL))
     {
@@ -149,7 +151,7 @@ else if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
 	 sameString(btd->grayMode, BAM_GRAY_MODE_BASE_QUAL))
     {
     UBYTE *quals = bamGetQueryQuals(bam, TRUE);
-    lf->components = expandSfQuals(lf->components, quals, lf->orientation, core->l_qseq);
+    lf->components = expandSfQuals(lf->components, quals, lf->orientation, clippedQLen);
     lf->grayIx = maxShade - 3;
     }
 else if (sameString(btd->colorMode, BAM_COLOR_MODE_TAG) && isNotEmpty(btd->userTag))
