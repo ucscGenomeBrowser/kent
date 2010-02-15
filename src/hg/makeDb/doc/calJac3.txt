@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.1 2010/02/04 23:49:59 hiram Exp $
+#	$Id: calJac3.txt,v 1.2 2010/02/15 18:08:23 braney Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -60,3 +60,169 @@ do
     echo ">${chrN}" > ${chrN}.fa
     zcat ${AC}/FASTA/${chrN}.fa.gz | grep -v "^>" >> ${chrN}.fa
 done
+
+#########################################################################
+# HUMAN (hg18) PROTEINS TRACK (working braney...)
+    # bash  if not using bash shell already
+
+    cd /cluster/data/calJac3
+    mkdir /cluster/data/calJac3/blastDb
+
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  calJac3.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  calJac3.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+    rm temp.fa less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 3275
+
+
+    mkdir -p /cluster/data/calJac3/bed/tblastn.hg18KG
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 3275 query.lst
+
+   # we want around 350000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(350000/`wc query.lst | awk '{print $1}'`\)
+
+# 36727/(350000/3275) = 343.659786
+
+   mkdir -p kgfa
+   split -l 344 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   wc kg.lst
+#   107  107 1391 kg.lst
+
+
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/calJac3/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/calJac3/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+# Completed: 100076 of 100076 jobs
+# CPU time in finished jobs:    2219419s   36990.31m   616.51h   25.69d  0.070 y
+# IO & Wait Time:                445463s    7424.39m   123.74h    5.16d  0.014 y
+# Average job time:                  27s       0.44m     0.01h    0.00d
+# Longest finished job:             319s       5.32m     0.09h    0.00d
+# Submission to last job:          2791s      46.52m     0.78h    0.03d
+
+    ssh swarm
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=12000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 254 of 254 jobs
+# CPU time in finished jobs:     590077s    9834.62m   163.91h    6.83d  0.019 y
+# IO & Wait Time:                 20749s     345.81m     5.76h    0.24d  0.001 y
+# Average job time:                2405s      40.08m     0.67h    0.03d
+# Longest finished job:           36592s     609.87m    10.16h    0.42d
+# Submission to last job:         36604s     610.07m    10.17h    0.42d
+
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+# checked: 38517 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    hgLoadPsl calJac3 blastHg18KG.psl
+
+    # check coverage
+    featureBits calJac3 blastHg18KG 
+# 18646943 bases of 332311746 (5.611%) in intersection
+
+    featureBits calJac3 blastHg18KG ensGene  -enrichment
+# blastHg18KG 5.611%, ensGene 9.520%, both 4.993%, cover 88.97%, enrich 9.35x
+
+    rm -rf blastOut
+#end tblastn
