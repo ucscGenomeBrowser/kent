@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.27 2010/02/08 22:07:29 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.28 2010/02/16 01:26:45 larrym Exp $
 
 var debug = false;
 
@@ -482,4 +482,28 @@ Rectangle.prototype.contains = function(x, y)
 // returns true if given points are in the rectangle
     var retval = x >= this.startX && x <= this.endX && y >= this.startY && y <= this.endY;
     return retval;
+}
+
+function commify (str) {
+    if(typeof(str) == "number")
+	str = str + "";
+    var n = str.length;
+    if (n <= 3) {
+	return str;
+    } else {
+	var pre = str.substring(0, n-3);
+	var post = str.substring(n-3);
+	var pre = commify(pre);
+	return pre + "," + post;
+    }
+}
+
+function getSizeFromCoordinates(position)
+{
+// Parse size out of a chr:start-end string
+    var a = /(\d+)-(\d+)/.exec(position);
+    if(a && a[1] && a[2]) {
+        return a[2] - a[1] + 1;
+    }
+    return null;
 }

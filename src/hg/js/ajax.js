@@ -80,3 +80,21 @@ function setCartVarAndRefresh(name,val)
 
     return false;
 }
+
+function catchErrorOrDispatch(obj, status)
+{
+// generic ajax success handler (handles fact that success is not always success).
+    if(status == 'success')
+        this.trueSuccess(obj, status);
+    else
+    {
+        showWarning("ajax error: " + status);
+        jQuery('body').css('cursor', '');
+    }
+}
+
+function showWarning(str)
+{
+    $("#warningText").text(str);
+    $("#warning").show();
+}
