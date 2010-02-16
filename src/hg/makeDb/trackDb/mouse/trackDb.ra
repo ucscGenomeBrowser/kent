@@ -150,14 +150,14 @@ autoScale Off
 origAssembly mm5
 
     track rikenCageCtssPlus
-    subTrack rikenCageCtss
+    parent rikenCageCtss
     shortLabel Riken CAGE +
     longLabel Riken CAGE Plus Strand - Predicted Gene Start Sites
     priority 1
     color 109,51,43
 
     track rikenCageCtssMinus
-    subTrack rikenCageCtss
+    parent rikenCageCtss
     shortLabel Riken CAGE -
     longLabel Riken CAGE Minus Strand - Predicted Gene Start Sites
     priority 2
@@ -213,21 +213,21 @@ visibility hide
 type bed 6 .
 
     track agilentCgh244a
-    subTrack agilentCgh
+    parent agilentCgh
     shortLabel Ag CGH 244a
     longLabel Agilent Microarray 244A AMADID 014693
     color 0,128,0
     priority 1
 
     track agilentCgh105a
-    subTrack agilentCgh
+    parent agilentCgh
     shortLabel Ag CGH 105a
     longLabel Agilent Microarray 105A AMADID 014698
     color 0,128,0
     priority 2
 
     track agilentCgh44k
-    subTrack agilentCgh
+    parent agilentCgh
     shortLabel Ag CGH 44k
     longLabel Agilent Microarray 44K AMADID 014950
     color 0,128,0

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.51 2010/02/11 18:45:59 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.52 2010/02/16 20:19:49 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -81,7 +81,7 @@ spectrum on
 type netAlign
 
     track synNetHg18
-    subTrack syntenicNet
+    parent syntenicNet
     shortLabel Human Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -92,7 +92,7 @@ type netAlign
     otherDb hg18
 
     track synNetPanTro2
-    subTrack syntenicNet
+    parent syntenicNet
     shortLabel Chimp Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -103,7 +103,7 @@ type netAlign
     otherDb panTro2
 
     track synNetRheMac2
-    subTrack syntenicNet
+    parent syntenicNet
     shortLabel Rhesus Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -114,7 +114,7 @@ type netAlign
     otherDb rheMac2
 
     track synNetMm9
-    subTrack syntenicNet
+    parent syntenicNet
     shortLabel Mouse Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -125,7 +125,7 @@ type netAlign
     otherDb mm9
 
     track synNetRn5
-    subTrack syntenicNet
+    parent syntenicNet
     shortLabel Rat Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -136,7 +136,7 @@ type netAlign
     otherDb rn5
 
     track synNetCanFam2
-    subTrack syntenicNet
+    parent syntenicNet
     shortLabel Dog Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno

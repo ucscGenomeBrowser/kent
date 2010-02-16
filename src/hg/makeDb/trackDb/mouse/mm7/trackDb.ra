@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.64 2010/02/09 19:40:20 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.65 2010/02/16 20:19:48 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -191,14 +191,14 @@ visibility hide
 type bed 9
 
     track picTarMiRNADog
-    subTrack picTar
+    parent picTar
     shortLabel PicTar 7 Species
     longLabel PicTar microRNA sites, 7 species conservation constraint: Mouse/Rat/Rabbit/Human/Chimp/Macaque/Dog
     color 128,0,128
     priority 1
 
     track picTarMiRNAChicken
-    subTrack picTar
+    parent picTar
     shortLabel PicTar 13 Species
     longLabel PicTar microRNA sites, 13 species conservation constraint: Mouse/Rat/Rabbit/Human/Chimp/Macaque/Dog/Cow/Armadillo/Elephant/Tenrec/Opossum/Chicken
     color 128,0,128

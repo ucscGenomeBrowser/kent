@@ -60,13 +60,13 @@ boxedCfg on
     shortLabel Best Antibody (FDR=1%)
     view best1
     visibility pack
-    subTrack bdtnpChipper
+    parent bdtnpChipper
     viewLimits 1:10
     maxHeightPixels 100:15:10
     autoScale off
 
         track bdtnpBcd2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=BCD class=ape1m view=best1
         shortLabel bcd AB 2 FDR  1%
         longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -75,7 +75,7 @@ boxedCfg on
         priority 3
 
         track bdtnpCad1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=CAD class=ape1m view=best1
         shortLabel cad AB 1 FDR  1%
         longLabel  caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -84,7 +84,7 @@ boxedCfg on
         priority 5
 
         track bdtnpGt2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=GT class=ape2g view=best1
         shortLabel gt AB 2 FDR  1%
         longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -93,7 +93,7 @@ boxedCfg on
         priority 7
 
         track bdtnpHb1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=HB class=ape2g view=best1
         shortLabel hb AB 1 FDR  1%
         longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -102,7 +102,7 @@ boxedCfg on
         priority 9
 
         track bdtnpKni2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=KNI class=ape2g view=best1
         shortLabel kni AB 2 FDR  1%
         longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -111,7 +111,7 @@ boxedCfg on
         priority 15
 
         track bdtnpKr2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=KR class=ape2g view=best1
         shortLabel Kr AB 2 FDR  1%
         longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -120,7 +120,7 @@ boxedCfg on
         priority 19
 
         track bdtnpHkb1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=HKB class=ape3t view=best1
         shortLabel hkb AB 1 FDR 1%
         longLabel huckebein (hkb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -129,7 +129,7 @@ boxedCfg on
         priority 21
 
         track bdtnpTll1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=TLL class=ape3t view=best1
         shortLabel tll AB 1 FDR 1%
         longLabel tailless (tll) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -138,7 +138,7 @@ boxedCfg on
         priority 27
 
         track bdtnpD1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=D class=ape4gl view=best1
         shortLabel D AB 1 FDR 1%
         longLabel Dichaete (D) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -148,7 +148,7 @@ boxedCfg on
 
         # Anterior-posterior pair rule: orange
         track bdtnpFtz3Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=FTZ class=app view=best1
         shortLabel ftz AB 3 FDR 1%
         longLabel fushi tarazu (ftz) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -157,7 +157,7 @@ boxedCfg on
         priority 31
 
         track bdtnpH2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=H class=app view=best1
         shortLabel h AB 2 FDR 1%
         longLabel hairy (h) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -166,7 +166,7 @@ boxedCfg on
         priority 35
 
         track bdtnpPrd1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=PRD class=app view=best1
         shortLabel prd AB 1 FDR 1%
         longLabel paired (prd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -175,7 +175,7 @@ boxedCfg on
         priority 37
 
         track bdtnpRun1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=RUN class=app view=best1
         shortLabel run AB 1 FDR 1%
         longLabel runt (run) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -184,7 +184,7 @@ boxedCfg on
         priority 41
 
         track bdtnpSlp11Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=SLP class=app view=best1
         shortLabel slp1 AB 1 FDR 1%
         longLabel sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -194,7 +194,7 @@ boxedCfg on
 
         # Dorsal-ventral: blue
         track bdtnpDa2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=DA class=dvm view=best1
         shortLabel da AB 2 FDR 1%
         longLabel daughterless (da) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -203,7 +203,7 @@ boxedCfg on
         priority 47
 
         track bdtnpDl3Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=DL class=dvm view=best1
         shortLabel dl AB 3 FDR 1%
         longLabel dorsal (dl) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -212,7 +212,7 @@ boxedCfg on
         priority 49
 
         track bdtnpMad2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=MAD class=dvz view=best1
         shortLabel mad AB 2 FDR 1%
         longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 1%
@@ -221,7 +221,7 @@ boxedCfg on
         priority 51
 
         track bdtnpMed2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=MED class=dvz view=best1
         shortLabel med AB 2 FDR 1%
         longLabel Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -230,7 +230,7 @@ boxedCfg on
         priority 53
 
         track bdtnpShn2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=SHN class=dvz view=best1
         shortLabel shn AB 2 FDR 1%
         longLabel schnurri (shn) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -239,7 +239,7 @@ boxedCfg on
         priority 55
 
         track bdtnpSna2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=SNA class=dvz view=best1
         shortLabel sna AB 2 FDR 1%
         longLabel snail (sna) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -248,7 +248,7 @@ boxedCfg on
         priority 61
 
         track bdtnpTwi2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=TWI class=dvz view=best1
         shortLabel twi AB 2 FDR 1%
         longLabel twist (twi) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -258,7 +258,7 @@ boxedCfg on
 
         # zeste: brown
         track bdtnpZ2Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=Z class=z view=best1
         shortLabel z AB 2 FDR  1%
         longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 1%
@@ -268,7 +268,7 @@ boxedCfg on
 
         # general tx factors: red
         track bdtnpPolIIFdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=POLII class=zzgen view=best1
         shortLabel PolII AB FDR  1%
         longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -277,7 +277,7 @@ boxedCfg on
         priority 69
 
         track bdtnpTFIIB1Fdr1
-        subTrack bdtnpChipperViewbest1
+        parent bdtnpChipperViewbest1
         subGroups factor=TFIIB class=zzgen view=best1
         shortLabel TFIIB AB 1 FDR 1%
         longLabel Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 1%
@@ -289,13 +289,13 @@ boxedCfg on
     shortLabel Best Antibody (FDR=25%)
     view best25
     visibility hide
-    subTrack bdtnpChipper
+    parent bdtnpChipper
     viewLimits 1:10
     maxHeightPixels 100:15:10
     autoScale off
 
         track bdtnpBcd2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=BCD class=ape1m view=best25
         shortLabel bcd AB 2 FDR 25%
         longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -304,7 +304,7 @@ boxedCfg on
         priority 4
 
         track bdtnpCad1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=CAD class=ape1m view=best25
         shortLabel cad AB 1 FDR 25%
         longLabel caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -313,7 +313,7 @@ boxedCfg on
         priority 6
 
         track bdtnpGt2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=GT class=ape2g view=best25
         shortLabel gt AB 2 FDR 25%
         longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -322,7 +322,7 @@ boxedCfg on
         priority 8
 
         track bdtnpHb1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=HB class=ape2g view=best25
         shortLabel hb AB 1 FDR 25%
         longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -331,7 +331,7 @@ boxedCfg on
         priority 10
 
         track bdtnpKni2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=KNI class=ape2g view=best25
         shortLabel kni AB 2 FDR 25%
         longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -340,7 +340,7 @@ boxedCfg on
         priority 16
 
         track bdtnpKr2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=KR class=ape2g view=best25
         shortLabel Kr AB 2 FDR 25%
         longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -349,7 +349,7 @@ boxedCfg on
         priority 20
 
         track bdtnpHkb1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=HKB class=ape3t view=best25
         shortLabel hkb AB 1 FDR 25%
         longLabel huckebein (hkb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -358,7 +358,7 @@ boxedCfg on
         priority 22
 
         track bdtnpTll1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=TLL class=ape3t view=best25
         shortLabel tll AB 1 FDR 25%
         longLabel tailless (tll) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -367,7 +367,7 @@ boxedCfg on
         priority 28
 
         track bdtnpD1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=D class=ape4gl view=best25
         shortLabel D AB 1 FDR 25%
         longLabel Dichaete (D) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -376,7 +376,7 @@ boxedCfg on
         priority 30
 
         track bdtnpFtz3Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=FTZ class=app view=best25
         shortLabel ftz AB 3 FDR 25%
         longLabel fushi tarazu (ftz) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -385,7 +385,7 @@ boxedCfg on
         priority 32
 
         track bdtnpH2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=H class=app view=best25
         shortLabel h AB 2 FDR 25%
         longLabel hairy (h) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -394,7 +394,7 @@ boxedCfg on
         priority 36
 
         track bdtnpPrd1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=PRD class=app view=best25
         shortLabel prd AB 1 FDR 25%
         longLabel paired (prd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -403,7 +403,7 @@ boxedCfg on
         priority 38
 
         track bdtnpRun1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=RUN class=app view=best25
         shortLabel run AB 1 FDR 25%
         longLabel runt (run) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -412,7 +412,7 @@ boxedCfg on
         priority 42
 
         track bdtnpSlp11Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=SLP class=app view=best25
         shortLabel slp1 AB 1 FDR 25%
         longLabel sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -421,7 +421,7 @@ boxedCfg on
         priority 46
 
         track bdtnpDa2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=DA class=dvm view=best25
         shortLabel da AB 2 FDR 25%
         longLabel daughterless (da) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -430,7 +430,7 @@ boxedCfg on
         priority 48
 
         track bdtnpDl3Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=DL class=dvm view=best25
         shortLabel dl AB 3 FDR 25%
         longLabel dorsal (dl) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -439,7 +439,7 @@ boxedCfg on
         priority 50
 
         track bdtnpMad2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=MAD class=dvz view=best25
         shortLabel mad AB 2 FDR 25%
         longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 25%
@@ -448,7 +448,7 @@ boxedCfg on
         priority 52
 
         track bdtnpMed2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=MED class=dvz view=best25
         shortLabel med AB 2 FDR 25%
         longLabel Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -457,7 +457,7 @@ boxedCfg on
         priority 54
 
         track bdtnpShn2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=SHN class=dvz view=best25
         shortLabel shn AB 2 FDR 25%
         longLabel schnurri (shn) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -466,7 +466,7 @@ boxedCfg on
         priority 56
 
         track bdtnpSna2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=SNA class=dvz view=best25
         shortLabel sna AB 2 FDR 25%
         longLabel snail (sna) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -475,7 +475,7 @@ boxedCfg on
         priority 62
 
         track bdtnpTwi2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=TWI class=dvz view=best25
         shortLabel twi AB 2 FDR 25%
         longLabel twist (twi) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -484,7 +484,7 @@ boxedCfg on
         priority 66
 
         track bdtnpZ2Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=Z class=z view=best25
         shortLabel z AB 2 FDR 25%
         longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 25%
@@ -493,7 +493,7 @@ boxedCfg on
         priority 68
 
         track bdtnpPolIIFdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=POLII class=zzgen view=best25
         shortLabel PolII AB FDR 25%
         longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -502,7 +502,7 @@ boxedCfg on
         priority 70
 
         track bdtnpTFIIB1Fdr25
-        subTrack bdtnpChipperViewbest25 off
+        parent bdtnpChipperViewbest25 off
         subGroups factor=TFIIB class=zzgen view=best25
         shortLabel TFIIB AB 1 FDR 25%
         longLabel Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 25%
@@ -514,14 +514,14 @@ boxedCfg on
     shortLabel Other Antibodies (FDR=1%)
     view other1
     visibility hide
-    subTrack bdtnpChipper
+    parent bdtnpChipper
     viewLimits 1:10
     maxHeightPixels 100:15:10
     autoScale off
 
         # Anterior-posterior early: green
         track bdtnpBcd1Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=BCD class=ape1m view=other1
         shortLabel bcd AB 1 FDR  1%
         longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -530,7 +530,7 @@ boxedCfg on
         priority 1
 
         track bdtnpHb2Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=HB class=ape2g view=other1
         shortLabel hb AB 2 FDR  1%
         longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -539,7 +539,7 @@ boxedCfg on
         priority 11
 
         track bdtnpKni1Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=KNI class=ape2g view=other1
         shortLabel kni AB 1 FDR  1%
         longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -548,7 +548,7 @@ boxedCfg on
         priority 13
 
         track bdtnpKr1Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=KR class=ape2g view=other1
         shortLabel Kr AB 1 FDR  1%
         longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -557,7 +557,7 @@ boxedCfg on
         priority 17
 
         track bdtnpHkb2Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=HKB class=ape3t view=other1
         shortLabel hkb AB 2 FDR 1%
         longLabel huckebein (hkb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -566,7 +566,7 @@ boxedCfg on
         priority 23
 
         track bdtnpHkb3Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=HKB class=ape3t view=other1
         shortLabel hkb AB 3 FDR 1%
         longLabel huckebein (hkb) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -575,7 +575,7 @@ boxedCfg on
         priority 25
 
         track bdtnpH1Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=H class=app view=other1
         shortLabel h AB 1 FDR 1%
         longLabel hairy (h) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -584,7 +584,7 @@ boxedCfg on
         priority 33
 
         track bdtnpPrd2Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=PRD class=app view=other1
         shortLabel prd AB 2 FDR 1%
         longLabel paired (prd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -593,7 +593,7 @@ boxedCfg on
         priority 39
 
         track bdtnpRun2Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=RUN class=app view=other1
         shortLabel run AB 2 FDR 1%
         longLabel runt (run) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -602,7 +602,7 @@ boxedCfg on
         priority 43
 
         track bdtnpShn3Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=SHN class=dvz view=other1
         shortLabel shn AB 3 FDR 1%
         longLabel schnurri (shn) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -611,7 +611,7 @@ boxedCfg on
         priority 57
 
         track bdtnpSna1Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=SNA class=dvz view=other1
         shortLabel sna AB 1 FDR 1%
         longLabel snail (sna) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -620,7 +620,7 @@ boxedCfg on
         priority 59
 
         track bdtnpTwi1Fdr1
-        subTrack bdtnpChipperViewother1 off
+        parent bdtnpChipperViewother1 off
         subGroups factor=TWI class=dvz view=other1
         shortLabel twi AB 1 FDR 1%
         longLabel twist (twi) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -632,13 +632,13 @@ boxedCfg on
     shortLabel Other Antibodies (FDR=25%)
     view other25
     visibility hide
-    subTrack bdtnpChipper
+    parent bdtnpChipper
     viewLimits 1:10
     maxHeightPixels 100:15:10
     autoScale off
 
         track bdtnpBcd1Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=BCD class=ape1m view=other25
         shortLabel bcd AB 1 FDR 25%
         longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -647,7 +647,7 @@ boxedCfg on
         priority 2
 
         track bdtnpHb2Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=HB class=ape2g view=other25
         shortLabel hb AB 2 FDR 25%
         longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -656,7 +656,7 @@ boxedCfg on
         priority 12
 
         track bdtnpKni1Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=KNI class=ape2g view=other25
         shortLabel kni AB 1 FDR 25%
         longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -665,7 +665,7 @@ boxedCfg on
         priority 14
 
         track bdtnpKr1Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=KR class=ape2g view=other25
         shortLabel Kr AB 1 FDR 25%
         longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -674,7 +674,7 @@ boxedCfg on
         priority 18
 
         track bdtnpHkb2Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=HKB class=ape3t view=other25
         shortLabel hkb AB 2 FDR 25%
         longLabel huckebein (hkb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -683,7 +683,7 @@ boxedCfg on
         priority 24
 
         track bdtnpHkb3Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=HKB class=ape3t view=other25
         shortLabel hkb AB 3 FDR 25%
         longLabel huckebein (hkb) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -692,7 +692,7 @@ boxedCfg on
         priority 26
 
         track bdtnpH1Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=H class=app view=other25
         shortLabel h AB 1 FDR 25%
         longLabel hairy (h) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -701,7 +701,7 @@ boxedCfg on
         priority 34
 
         track bdtnpPrd2Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=PRD class=app view=other25
         shortLabel prd AB 2 FDR 25%
         longLabel paired (prd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -710,7 +710,7 @@ boxedCfg on
         priority 40
 
         track bdtnpRun2Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=RUN class=app view=other25
         shortLabel run AB 2 FDR 25%
         longLabel runt (run) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -719,7 +719,7 @@ boxedCfg on
         priority 44
 
         track bdtnpShn3Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=SHN class=dvz view=other25
         shortLabel shn AB 3 FDR 25%
         longLabel schnurri (shn) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -728,7 +728,7 @@ boxedCfg on
         priority 58
 
         track bdtnpSna1Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=SNA class=dvz view=other25
         shortLabel sna AB 1 FDR 25%
         longLabel snail (sna) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -737,7 +737,7 @@ boxedCfg on
         priority 60
 
         track bdtnpTwi1Fdr25
-        subTrack bdtnpChipperViewother25 off
+        parent bdtnpChipperViewother25 off
         subGroups factor=TWI class=dvz view=other25
         shortLabel twi AB 1 FDR 25%
         longLabel twist (twi) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%

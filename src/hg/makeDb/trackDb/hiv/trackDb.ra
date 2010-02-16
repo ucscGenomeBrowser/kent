@@ -9,7 +9,7 @@ visibility hide
 type bed 5
     
     track posSelVax004HispanicModel2
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Hispanic Pos Sel M2
     longLabel VAX004 Hispanic Postive Selection (Model 2)
     group posSel
@@ -19,7 +19,7 @@ type bed 5
     type bed 5
 
     track posSelVax004HispanicModel8
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Hispanic Pos Sel M8
     longLabel VAX004 Hispanic Postive Selection (Model 8)
     group posSel
@@ -29,7 +29,7 @@ type bed 5
     type bed 5
 
     track posSelVax004OtherModel2
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Other Pos Sel M2
     longLabel VAX004 Other Postive Selection (Model 2)
     group posSel
@@ -39,7 +39,7 @@ type bed 5
     type bed 5
 
     track posSelVax004OtherModel8
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Other Pos Sel M8
     longLabel VAX004 Other Postive Selection (Model 8)
     group posSel
@@ -49,7 +49,7 @@ type bed 5
     type bed 5
 
     track posSelVax004WhiteModel2
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 White Pos Sel M2
     longLabel VAX004 White Postive Selection (Model 2)
     group posSel
@@ -59,7 +59,7 @@ type bed 5
     type bed 5
 
     track posSelVax004WhiteModel8
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 White Pos Sel M8
     longLabel VAX004 White Postive Selection (Model 8)
     group posSel
@@ -69,7 +69,7 @@ type bed 5
     type bed 5
 
     track posSelVax004AsianModel2
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Asian Pos Sel M2
     longLabel VAX004 Asian Postive Selection (Model 2)
     group posSel
@@ -79,7 +79,7 @@ type bed 5
     type bed 5
 
     track posSelVax004AsianModel8
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Asian Pos Sel M8
     longLabel VAX004 Asian Postive Selection (Model 8)
     group posSel
@@ -89,7 +89,7 @@ type bed 5
     type bed 5
 
     track posSelVax004BlackModel2
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Black Pos Sel M2
     longLabel VAX004 Black Postive Selection (Model 2)
     group posSel
@@ -99,7 +99,7 @@ type bed 5
     type bed 5
 
     track posSelVax004BlackModel8
-    subTrack vax004PosSelRace
+    parent vax004PosSelRace
     shortLabel VAX004 Black Pos Sel M8
     longLabel VAX004 Black Postive Selection (Model 8)
     group posSel
@@ -118,7 +118,7 @@ visibility hide
 type bed 5
     
     track posSelVax004MidwestModel2
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Midwest Pos Sel M2
     longLabel VAX004 Midwest Postive Selection (Model 2)
     group posSel
@@ -128,7 +128,7 @@ type bed 5
     type bed 5
 
     track posSelVax004MidwestModel8
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Midwest Pos Sel M8
     longLabel VAX004 Midwest Postive Selection (Model 8)
     group posSel
@@ -138,7 +138,7 @@ type bed 5
     type bed 5
 
     track posSelVax004NortheastModel2
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Northeast Pos Sel M2
     longLabel VAX004 Northeast Postive Selection (Model 2)
     group posSel
@@ -148,7 +148,7 @@ type bed 5
     type bed 5
 
     track posSelVax004NortheastModel8
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Northeast Pos Sel M8
     longLabel VAX004 Northeast Postive Selection (Model 8)
     group posSel
@@ -158,7 +158,7 @@ type bed 5
     type bed 5
 
     track posSelVax004SouthModel2
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 South Pos Sel M2
     longLabel VAX004 South Postive Selection (Model 2)
     group posSel
@@ -168,7 +168,7 @@ type bed 5
     type bed 5
 
     track posSelVax004SouthModel8
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 South Pos Sel M8
     longLabel VAX004 South Postive Selection (Model 8)
     group posSel
@@ -178,7 +178,7 @@ type bed 5
     type bed 5
 
     track posSelVax004SouthwestModel2
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Southwest Pos Sel M2
     longLabel VAX004 Southwest Postive Selection (Model 2)
     group posSel
@@ -188,7 +188,7 @@ type bed 5
     type bed 5
 
     track posSelVax004SouthwestModel8
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Southwest Pos Sel M8
     longLabel VAX004 Southwest Postive Selection (Model 8)
     group posSel
@@ -198,7 +198,7 @@ type bed 5
     type bed 5
 
     track posSelVax004WestcoastModel2
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Westcoast Pos Sel M2
     longLabel VAX004 Westcoast Postive Selection (Model 2)
     group posSel
@@ -208,7 +208,7 @@ type bed 5
     type bed 5
 
     track posSelVax004WestcoastModel8
-    subTrack vax004PosSelLoc
+    parent vax004PosSelLoc
     shortLabel VAX004 Westcoast Pos Sel M8
     longLabel VAX004 Westcoast Postive Selection (Model 8)
     group posSel
@@ -227,7 +227,7 @@ visibility hide
 type bed 5
     
     track posSelVax004vacModel2
-    subTrack vax004PosSelVac
+    parent vax004PosSelVac
     shortLabel VAX004 vac Pos Sel M2
     longLabel VAX004 Vaccine Postive Selection (Model 2)
     group posSel
@@ -237,7 +237,7 @@ type bed 5
     type bed 5
 
     track posSelVax004vacModel8
-    subTrack vax004PosSelVac
+    parent vax004PosSelVac
     shortLabel VAX004 vac Pos Sel M8
     longLabel VAX004 Vaccine Postive Selection (Model 8)
     group posSel
@@ -247,7 +247,7 @@ type bed 5
     type bed 5
 
     track posSelVax004plaModel2
-    subTrack vax004PosSelVac
+    parent vax004PosSelVac
     shortLabel VAX004 pla Pos Sel M2
     longLabel VAX004 Placebo Postive Selection (Model 2)
     group posSel
@@ -257,7 +257,7 @@ type bed 5
     type bed 5
 
     track posSelVax004plaModel8
-    subTrack vax004PosSelVac
+    parent vax004PosSelVac
     shortLabel VAX004 pla Pos Sel M8
     longLabel VAX004 Placebo Postive Selection (Model 8)
     group posSel
@@ -276,7 +276,7 @@ visibility pack
 type bed 5
 
     track posSelBModel2
-    subTrack vax003PosSel
+    parent vax003PosSel
     shortLabel VAX003 B Pos Sel M2
     longLabel VAX003 Subtype B Postive Selection (Model 2)
     group posSel
@@ -286,7 +286,7 @@ type bed 5
     type bed 5
 
     track posSelBModel8
-    subTrack vax003PosSel
+    parent vax003PosSel
     shortLabel VAX003 B Pos Sel M8
     longLabel VAX003 Subtype B Postive Selection (Model 8)
     group posSel
@@ -296,7 +296,7 @@ type bed 5
     type bed 5
 
     track posSelAEModel2
-    subTrack vax003PosSel
+    parent vax003PosSel
     shortLabel VAX003 AE Pos Sel M2
     longLabel VAX003 Subtype AE Postive Selection (Model 2)
     group posSel
@@ -306,7 +306,7 @@ type bed 5
     type bed 5
 
     track posSelAEModel8
-    subTrack vax003PosSel
+    parent vax003PosSel
     shortLabel VAX003 AE Pos Sel M8
     longLabel VAX003 Subtype AE Postive Selection (Model 8)
     group posSel
