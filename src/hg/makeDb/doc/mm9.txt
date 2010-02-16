@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.124 2010/02/09 23:16:41 fanhsu Exp $"
+#	"$Id: mm9.txt,v 1.125 2010/02/16 04:47:43 hiram Exp $"
 #
 
 #######################################################################
@@ -10032,7 +10032,6 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    54m57.140s
-    #	real    48m59.568s
     cat fb.ailMel1.chainMm9Link.txt 
     #	739076250 bases of 2245312831 (32.916%) in intersection
 
@@ -10164,5 +10163,52 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-40_
     cp -p * /hive/data/gbdb/mm9/RNA-img
 
 #####################################################################
+# LASTZ/CHAIN/NET Marmoset calJac3 (DONE - 2010-02-12 - Hiram)
+    #	use a screen to control this job
+    screen
+    mkdir /hive/data/genomes/mm9/bed/lastzCalJac3.2010-02-12
+    cd /hive/data/genomes/mm9/bed/lastzCalJac3.2010-02-12
 
+    cat << '_EOF_' > DEF
+# mouse vs marmoset
+BLASTZ_M=50
 
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset (calJac3)
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_LIMIT=75
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzCalJac3.2010-02-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 `pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    445m42.381s
+    cat fb.mm9.chainCalJac3Link.txt 
+    #	859869647 bases of 2620346127 (32.815%) in intersection
+
+    mkdir /hive/data/genomes/calJac3/bed/blastz.mm9.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzCalJac3.2010-02-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    90m38.739s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	861811978 bases of 2752505800 (31.310%) in intersection
+
+#####################################################################
