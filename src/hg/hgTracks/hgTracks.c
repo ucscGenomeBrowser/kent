@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1627 2010/02/16 02:43:50 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1628 2010/02/16 21:15:44 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -5390,6 +5390,7 @@ if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("utils.js", NULL);
+    jsIncludeFile("ajax.js", NULL);
     hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
     jsIncludeFile("jquery.autocomplete.js", NULL);
     jsIncludeFile("autocomplete.js", NULL);
@@ -5406,7 +5407,6 @@ hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />
 
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("jquery.contextmenu.js", NULL);
-jsIncludeFile("ajax.js", NULL);
 
 hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
