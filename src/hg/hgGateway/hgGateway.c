@@ -14,8 +14,11 @@
 #include "hui.h"
 #include "customTrack.h"
 #include "hgConfig.h"
+#include "jsHelper.h"
+#include "hPrint.h"
+#include "suggest.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.113 2010/02/08 17:27:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.114 2010/02/16 21:04:20 larrym Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -31,6 +34,7 @@ char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 boolean gotClade = hGotClade();
 char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+boolean supportsSuggest = assemblySupportsGeneSuggest(db);
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -48,6 +52,14 @@ char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainFo
 
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
+
+hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery.autocomplete.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("autocomplete.js", NULL);
+jsIncludeFile("hgGateway.js", NULL);
+jsIncludeFile("utils.js", NULL);
 
 puts(
 "<CENTER>"
@@ -83,7 +95,10 @@ if (gotClade)
 puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position or search term</td>\n"
+"<td align=center valign=baseline>position or search term</td>\n");
+if(supportsSuggest)
+    puts("<td align=center valign=baseline>gene</td>\n");
+puts(
 "<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
 "</tr>\n<tr>"
@@ -110,6 +125,13 @@ puts("</td>\n");
 puts("<td align=center>\n");
 cgiMakeTextVar("position", addCommasToPos(db, position), 30);
 printf("</td>\n");
+
+if(supportsSuggest)
+    {
+    puts("<td align=center>\n");
+    hWrites("<input type='text' size='5' id='suggest' />\n");
+    printf("</td>\n");
+    }
 
 cartSetString(cart, "position", position);
 cartSetString(cart, "db", db);
