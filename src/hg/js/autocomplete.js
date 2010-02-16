@@ -48,3 +48,31 @@ function handleSuggest(response, status)
         suggestCache[this.key] = response;
     this.cont(eval(response));
 }
+
+function lookupGene(db, gene)
+{
+// returns coordinates for gene (requires an exact match).
+// Warning: this function does a synchronous ajax call.
+    // first look in our local cache.
+    if(suggestCache && suggestCache[gene]) {
+        var list = eval(suggestCache[gene]);
+        for(var i=0;i<list.length;i++) {
+            if(list[i].value == gene) {
+                return list[i].id;
+            }
+        }
+    }
+    // synchronously get match from the server
+    var str = $.ajax({
+                     url: "../cgi-bin/hgSuggest",
+                     data: "exact=1&db=" + db + "&prefix=" + gene,
+                     async: false
+                 }).responseText;
+    if(str) {
+        var obj = eval(str);
+        if(obj.length == 1) {
+            return obj[0].id;
+        }
+    }
+    return null;
+}
