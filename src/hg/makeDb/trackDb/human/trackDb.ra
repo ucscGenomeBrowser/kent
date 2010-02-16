@@ -51,43 +51,43 @@ minMax 0,15
 linesAt 5,10
 
     track cccTrendPvalBd
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC Bipolar Dis
     longLabel Case Control Consortium bipolar disorder trend -log10 P-value
     priority 1
 
     track cccTrendPvalCad
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC Coronary Art
     longLabel Case Control Consortium coronary artery disease trend -log10 P-value
     priority 2
 
     track cccTrendPvalCd
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC Crohns Dis
     longLabel Case Control Consortium Crohn's disease trend -log10 P-value
     priority 3
 
     track cccTrendPvalHt
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC Hypertension
     longLabel Case Control Consortium hypertension trend -log10 P-value
     priority 4
 
     track cccTrendPvalRa
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC Rheum Arth
     longLabel Case Control Consortium rheumatoid arthritis trend -log10 P-value
     priority 5
 
     track cccTrendPvalT1d
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC T1 Diabetes
     longLabel Case Control Consortium type 1 diabetes trend -log10 P-value
     priority 6
 
     track cccTrendPvalT2d
-    parent caseControl
+    subTrack caseControl
     shortLabel CCC T2 Diabetes
     longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
     priority 7
@@ -105,13 +105,13 @@ minMax 0,5
 linesAt 1,3
 
     track nimhBipolarUs
-    parent nimhBipolar
+    subTrack nimhBipolar
     shortLabel NIMH Bipolar Us
     longLabel NIMH Bipolar disorder (US) -log10 P-value
     priority 1
 
     track nimhBipolarDe
-    parent nimhBipolar
+    subTrack nimhBipolar
     shortLabel NIMH Bipolar De
     longLabel NIMH Bipolar disorder (German) -log10 P-value
     priority 2
@@ -388,98 +388,98 @@ visibility hide
 type bed 12
 
     track burgeRnaSeqGemMapperAlignBrain
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Brain
     longLabel Burge Lab RNA-seq 32mer Reads from Brain
     color 12,12,120
     priority 1
 
     track burgeRnaSeqGemMapperAlignLiver
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Liver
     longLabel Burge Lab RNA-seq 32mer Reads from Liver
     color 12,12,120
     priority 2
 
     track burgeRnaSeqGemMapperAlignHeart
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Heart
     longLabel Burge Lab RNA-seq 32mer Reads from Heart
     color 12,12,120
     priority 3
 
     track burgeRnaSeqGemMapperAlignSkelMuscle
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Muscle
     longLabel Burge Lab RNA-seq 32mer Reads from Skeletal Muscle
     color 12,12,120
     priority 4
 
     track burgeRnaSeqGemMapperAlignColon
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Colon
     longLabel Burge Lab RNA-seq 32mer Reads from Colon
     color 12,12,120
     priority 5
 
     track burgeRnaSeqGemMapperAlignAdipose
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Adipose
     longLabel Burge Lab RNA-seq 32mer Reads from Adipose
     color 12,12,120
     priority 6
 
     track burgeRnaSeqGemMapperAlignTestes
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Testes
     longLabel Burge Lab RNA-seq 32mer Reads from Testes
     color 12,12,120
     priority 7
 
     track burgeRnaSeqGemMapperAlignLymphNode
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Lymph Node
     longLabel Burge Lab RNA-seq 32mer Reads from Lymph Node
     color 12,12,120
     priority 8
 
     track burgeRnaSeqGemMapperAlignBreast
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq Breast
     longLabel Burge Lab RNA-seq 32mer Reads from Breast
     color 12,12,120
     priority 9
 
     track burgeRnaSeqGemMapperAlignBT474
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq BT474
     longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line
     color 12,12,120
     priority 10
 
     track burgeRnaSeqGemMapperAlignHME
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq HME
     longLabel Burge Lab RNA-seq 32mer Reads from HME (Human Mammary Epithelial) Cell Line
     color 12,12,120
     priority 11
 
     track burgeRnaSeqGemMapperAlignMCF7
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq MCF7
     longLabel Burge Lab RNA-seq 32mer Reads from MCF-7 Breast Adenocarcinoma Cell Line
     color 12,12,120
     priority 12
 
     track burgeRnaSeqGemMapperAlignMB435
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq MB435
     longLabel Burge Lab RNA-seq 32mer Reads from MB-435 Cell Line
     color 12,12,120
     priority 13
 
     track burgeRnaSeqGemMapperAlignT47D
-    parent burgeRnaSeqGemMapperAlign
+    subTrack burgeRnaSeqGemMapperAlign
     shortLabel RNA-seq T47D
     longLabel Burge Lab RNA-seq 32mer Reads from T-47D Breast Ductal Carcinoma Cell Line
     color 12,12,120
@@ -821,56 +821,56 @@ maxHeightPixels 100:20:10
 type bedGraph 4
 
     track hgdpHzyAfrica
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty Africa
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpHzyBantu
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty Bantu
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Bantu pops. in Africa)
     color 224, 0, 0
     priority 2
 
     track hgdpHzyMideast
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty Mideast
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Mideast)
     color 0,0,200
     priority 3
 
     track hgdpHzyEurope
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty Europe
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Europe)
     color 240,144,0
     priority 4
 
     track hgdpHzySAsia
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty S. Asia
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (S. Asia)
     color 0,0,0
     priority 5
 
     track hgdpHzyEAsia
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty E. Asia
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (E. Asia)
     color 0,200,0
     priority 6
 
     track hgdpHzyOceania
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty Oceania
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Oceania)
     color 0,200,200
     priority 7
 
     track hgdpHzyAmericas
-    parent hgdpHzy
+    subTrack hgdpHzy
     shortLabel Hetzgty Americas
     longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Americas)
     color 224,192,0
@@ -892,49 +892,49 @@ maxHeightPixels 100:20:10
 type bedGraph 4
 
     track hgdpIhsBantu
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS Bantu
     longLabel Human Genome Diversity Project iHS (Bantu populations in Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpIhsMideast
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS Mideast
     longLabel Human Genome Diversity Project iHS (Mideast)
     color 0,0,200
     priority 2
 
     track hgdpIhsEurope
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS Europe
     longLabel Human Genome Diversity Project iHS (Europe)
     color 240,144,0
     priority 3
 
     track hgdpIhsSAsia
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS S. Asia
     longLabel Human Genome Diversity Project iHS (South Asia)
     color 0,0,0
     priority 4
 
     track hgdpIhsEAsia
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS E. Asia
     longLabel Human Genome Diversity Project iHS (East Asia)
     color 0,200,0
     priority 5
 
     track hgdpIhsOceania
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS Oceania
     longLabel Human Genome Diversity Project iHS (Oceania)
     color 0,200,200
     priority 6
 
     track hgdpIhsAmericas
-    parent hgdpIhs
+    subTrack hgdpIhs
     shortLabel iHS Americas
     longLabel Human Genome Diversity Project iHS (Americas)
     color 224,192,0
@@ -956,49 +956,49 @@ maxHeightPixels 100:20:10
 type bedGraph 4
 
     track hgdpXpehhBantu
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH Bantu
     longLabel Human Genome Diversity Project XP-EHH (Bantu populations in Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpXpehhMideast
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH Mideast
     longLabel Human Genome Diversity Project XP-EHH (Mideast)
     color 0,0,200
     priority 2
 
     track hgdpXpehhEurope
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH Europe
     longLabel Human Genome Diversity Project XP-EHH (Europe)
     color 240,144,0
     priority 3
 
     track hgdpXpehhSAsia
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH S. Asia
     longLabel Human Genome Diversity Project XP-EHH (South Asia)
     color 0,0,0
     priority 4
 
     track hgdpXpehhEAsia
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH E. Asia
     longLabel Human Genome Diversity Project XP-EHH (East Asia)
     color 0,200,0
     priority 5
 
     track hgdpXpehhOceania
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH Oceania
     longLabel Human Genome Diversity Project XP-EHH (Oceania)
     color 0,200,200
     priority 6
 
     track hgdpXpehhAmericas
-    parent hgdpXpehh
+    subTrack hgdpXpehh
     shortLabel XP-EHH Americas
     longLabel Human Genome Diversity Project XP-EHH (Americas)
     color 224,192,0
@@ -1065,55 +1065,55 @@ ncbiAccXref kiddEichlerToNcbi
 pairedEndUrlFormat http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?&cmd=retrieve&val=CENTER_NAME%%3D'ABC'%%20and%%20LIBRARY_ID%%3D'%s'%%20and%%20TRACE_NAME%%3D'%s'&retrieve=Submit
 
     track kiddEichlerDiscAbc14
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant ABC14
     longLabel HGSV Individual ABC14 (CEPH) Discordant Clone End Alignments
     priority 1
 
     track kiddEichlerDiscAbc13
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant ABC13
     longLabel HGSV Individual ABC13 (Yoruba) Discordant Clone End Alignments
     priority 2
 
     track kiddEichlerDiscAbc12
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant ABC12
     longLabel HGSV Individual ABC12 (CEPH) Discordant Clone End Alignments
     priority 3
 
     track kiddEichlerDiscAbc11
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant ABC11
     longLabel HGSV Individual ABC11 (China) Discordant Clone End Alignments
     priority 4
 
     track kiddEichlerDiscAbc10
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant ABC10
     longLabel HGSV Individual ABC10 (Yoruba) Discordant Clone End Alignments
     priority 5
 
     track kiddEichlerDiscAbc9
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant  ABC9
     longLabel HGSV Individual ABC9 (Japan) Discordant Clone End Alignments
     priority 6
 
     track kiddEichlerDiscAbc8
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant  ABC8
     longLabel HGSV Individual ABC8 (Yoruba) Discordant Clone End Alignments
     priority 7
 
     track kiddEichlerDiscAbc7
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant  ABC7
     longLabel HGSV Individual ABC7 (Yoruba) Discordant Clone End Alignments
     priority 8
 
     track kiddEichlerDiscG248
-    parent kiddEichlerDisc
+    subTrack kiddEichlerDisc
     shortLabel Discordant  G248
     longLabel HGSV Individual G248 Discordant Clone End Alignments
     priority 9
@@ -1130,55 +1130,55 @@ noScoreFilter .
 type bed 9
 
     track kiddEichlerValidAbc14
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated ABC14
     longLabel HGSV Individual ABC14 (CEPH) Validated Sites of Structural Variation
     priority 1
 
     track kiddEichlerValidAbc13
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated ABC13
     longLabel HGSV Individual ABC13 (Yoruba) Validated Sites of Structural Variation
     priority 2
 
     track kiddEichlerValidAbc12
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated ABC12
     longLabel HGSV Individual ABC12 (CEPH) Validated Sites of Structural Variation
     priority 3
 
     track kiddEichlerValidAbc11
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated ABC11
     longLabel HGSV Individual ABC11 (China) Validated Sites of Structural Variation
     priority 4
 
     track kiddEichlerValidAbc10
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated ABC10
     longLabel HGSV Individual ABC10 (Yoruba) Validated Sites of Structural Variation
     priority 5
 
     track kiddEichlerValidAbc9
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated  ABC9
     longLabel HGSV Individual ABC9 (Japan) Validated Sites of Structural Variation
     priority 6
 
     track kiddEichlerValidAbc8
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated  ABC8
     longLabel HGSV Individual ABC8 (Yoruba) Validated Sites of Structural Variation
     priority 7
 
     track kiddEichlerValidAbc7
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated  ABC7
     longLabel HGSV Individual ABC7 (Yoruba) Validated Sites of Structural Variation
     priority 8
 
     track kiddEichlerValidG248
-    parent kiddEichlerValid
+    subTrack kiddEichlerValid
     shortLabel Validated  G248
     longLabel HGSV Individual G248 Validated Sites of Structural Variation
     priority 9
@@ -1197,14 +1197,14 @@ url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 
     track jaxQtlAsIs
-    parent jaxQtlMapped
+    subTrack jaxQtlMapped
     shortLabel MGI Mouse QTL
     longLabel MGI Mouse QTLs Coarsely Mapped to $Organism
     color 200,100,0
     priority 1
 
     track jaxQtlPadded
-    parent jaxQtlMapped
+    subTrack jaxQtlMapped
     shortLabel MGI Mouse QTL Padded
     longLabel MGI Mouse QTL Peak-Score Markers Padded to 100k and Coarsely Mapped to $Organism
     color 200,100,0
@@ -1224,19 +1224,19 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 type bedGraph 4
 
     track hapmapLdHotspotYRI
-    parent hapmapLdHotspot
+    subTrack hapmapLdHotspot
     shortLabel YRI
     longLabel  Hotspots of Linkage Disequilibrium in the Yoruban HapMap (YRI)
     priority 1
 
     track hapmapLdHotspotCEU
-    parent hapmapLdHotspot
+    subTrack hapmapLdHotspot
     shortLabel CEU
     longLabel  Hotspots of Linkage Disequilibrium in the CEPH HapMap (CEU)
     priority 2
 
     track hapmapLdHotspotCJ
-    parent hapmapLdHotspot
+    subTrack hapmapLdHotspot
     shortLabel CHB + JPT
     longLabel  Hotspots of Linkage Disequilibrium in the Chinese/Japanese HapMap (CHB and JPT)
     priority 3
@@ -1251,7 +1251,7 @@ visibility hide
 type bed 4 .
 
     track tajdSnpAd
-    parent tajdSnp
+    subTrack tajdSnp
     shortLabel SNPs AD
     longLabel  SNPs from African Descent
     color 200,100,0
@@ -1259,7 +1259,7 @@ type bed 4 .
     priority 1
 
     track tajdSnpEd
-    parent tajdSnp
+    subTrack tajdSnp
     shortLabel SNPs ED
     longLabel  SNPs from European Descent
     color 200,100,0
@@ -1267,7 +1267,7 @@ type bed 4 .
     priority 3
 
     track tajdSnpXd
-    parent tajdSnp
+    subTrack tajdSnp
     shortLabel SNPs XD
     longLabel  SNPs from Chinese Descent
     color 200,100,0
@@ -1289,7 +1289,7 @@ priority 144.65
 type bedGraph 4
 
     track tajdAd
-    parent tajD
+    subTrack tajD
     shortLabel Tajima's D AD
     longLabel  Tajima's D from African Descent
     color 200,100,0
@@ -1297,7 +1297,7 @@ type bedGraph 4
     priority 2
 
     track tajdEd
-    parent tajD
+    subTrack tajD
     shortLabel Tajima's D ED
     longLabel  Tajima's D from European Descent
     color 200,100,0
@@ -1305,7 +1305,7 @@ type bedGraph 4
     priority 4
 
     track tajdXd
-    parent tajD
+    subTrack tajD
     shortLabel Tajima's D XD
     longLabel  Tajima's D from Chinese Descent
     color 200,100,0
@@ -1335,79 +1335,79 @@ type bed 6 +
 exonArrows off
 
     track hapmapSnpsASW
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs ASW
     longLabel HapMap SNPs from the ASW Population (African Ancestry in SouthWestern United States)
     priority 1
 
     track hapmapSnpsCEU
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs CEU
     longLabel HapMap SNPs from the CEU Population (Northern and Western European Ancestry in Utah, US - CEPH)
     priority 2
 
     track hapmapSnpsCHB
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs CHB
     longLabel HapMap SNPs from the CHB Population (Han Chinese in Beijing, China)
     priority 3
 
     track hapmapSnpsCHD
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs CHD
     longLabel HapMap SNPs from the CHD Population (Chinese Ancestry in Metropolitan Denver, CO, US)
     priority 4
 
     track hapmapSnpsGIH
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs GIH
     longLabel HapMap SNPs from the GIH Population (Gujarati Indians in Houston, TX, US)
     priority 5
 
     track hapmapSnpsJPT
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs JPT
     longLabel HapMap SNPs from the JPT Population (Japanese in Tokyo, Japan)
     priority 6
 
     track hapmapSnpsLWK
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs LWK
     longLabel HapMap SNPs from the LWK Population (Luhya in Webuye, Kenya)
     priority 7
 
     track hapmapSnpsMEX
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs MEX
     longLabel HapMap SNPs from the MEX Population (Mexican Ancestry in Los Angeles, CA, US)
     priority 8
 
     track hapmapSnpsMKK
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs MKK
     longLabel HapMap SNPs from the MKK Population (Masai in Kinyawa, Kenya)
     priority 9
 
     track hapmapSnpsTSI
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs TSI
     longLabel HapMap SNPs from the TSI Population (Toscani in Italia)
     priority 10
 
     track hapmapSnpsYRI
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel HapMap SNPs YRI
     longLabel HapMap SNPs from the YRI Population (Yoruba in Ibadan, Nigeria)
     priority 11
 
     track hapmapAllelesChimp
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel Chimp Alleles
     longLabel Orthologous Alleles from Chimp (panTro2)
     priority 100
 
     track hapmapAllelesMacaque
-    parent hapmapSnps
+    subTrack hapmapSnps
     shortLabel Macaque Alleles
     longLabel Orthologous Alleles from Macaque (rheMac2)
     priority 101
@@ -1503,7 +1503,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 5251.55
 viewLimits 0:272
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy A375CytosolicPolyAPlusTnFg
 
@@ -1518,7 +1518,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track FHs738LuCytosolicPolyAPlusTxn
@@ -1535,7 +1535,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 5451.35
 viewLimits 0:287
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy FHs738LuCytosolicPolyAPlusTnFg
 
@@ -1550,7 +1550,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track HepG2CytosolicPolyAPlusTxn
@@ -1567,7 +1567,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 6183.74
 viewLimits 0:282
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2CytosolicPolyAPlusTnFg
 
@@ -1582,7 +1582,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track HepG2NuclearPolyAPlusTxn
@@ -1599,7 +1599,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 4206.84
 viewLimits 0:214
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2NuclearPolyAPlusTnFg
 
@@ -1614,7 +1614,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track HepG2CytosolicPolyAMinusTxn
@@ -1631,7 +1631,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 3571.88
 viewLimits 0:85
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2CytosolicPolyAMinusTnFg
 
@@ -1646,7 +1646,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track HepG2NuclearPolyAMinusTxn
@@ -1663,7 +1663,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 2656.57
 viewLimits 0:94
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2NuclearPolyAMinusTnFg
 
@@ -1678,7 +1678,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track JurkatCytosolicPolyAPlusTxn
@@ -1695,7 +1695,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 5203.76
 viewLimits 0:253
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy JurkatCytosolicPolyAPlusTnFg
 
@@ -1710,7 +1710,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track NCCITCytosolicPolyAPlusTxn
@@ -1727,7 +1727,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 6320.77
 viewLimits 0:308
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy NCCITCytosolicPolyAPlusTnFg
 
@@ -1742,7 +1742,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track PC3CytosolicPolyAPlusTxn
@@ -1759,7 +1759,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 2993.96
 viewLimits 0:198
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy PC3CytosolicPolyAPlusTnFg
 
@@ -1774,7 +1774,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track SKNASCytosolicPolyAPlusTxn
@@ -1791,7 +1791,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 4395.02
 viewLimits 0:224
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy SKNASCytosolicPolyAPlusTnFg
 
@@ -1806,7 +1806,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 
@@ -1825,7 +1825,7 @@ gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 5939.33
 viewLimits 0:221
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 wigColorBy U87CytosolicPolyAPlusTnFg
 
@@ -1840,7 +1840,7 @@ color 35,35,175
 altColor 160,160,188
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
-parent affyTxnPhase2
+subTrack affyTxnPhase2
 noInherit on
 
 track affyU133Plus2
@@ -2141,70 +2141,70 @@ noScoreFilter .
 type bed 6 .
 
     track agilentCgh1x1m
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 1x1m
     longLabel Agilent CGH SurePrint G3 Microarray 1x1M AMADID 021529
     color 0,128,0
     priority 1
 
     track agilentHrd1x1m
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag HRD 1x1m
     longLabel Agilent High-Resolution Discovery SurePrint G3 Microarray 1x1M AMADID 023642
     color 255,128,0
     priority 2
 
     track agilentCgh2x400k
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 2x400k
     longLabel Agilent CGH SurePrint G3 Microarray 2x400K AMADID 021850
     color 0,128,0
     priority 3
 
     track agilentCgh4x180k
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 4x180k
     longLabel Agilent CGH SurePrint G3 Microarray 4x180K AMADID 022060
     color 255,128,0
     priority 4
 
     track agilentCgh8x60k
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 8x60k
     longLabel Agilent CGH SurePrint G3 Microarray 8x60K AMADID 021924
     color 0,128,0
     priority 5
 
     track agilentCnv2x400k
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CNV 2x400k
     longLabel Agilent CNV SurePrint G3 Microarray 2x400K AMADID 021365
     color 255,128,0
     priority 6
 
     track agilentCgh244a
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 1x244k
     longLabel Agilent CGH Microarray 1x244k AMADID 014693
     color 0,128,0
     priority 7
 
     track agilentCgh105a
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 2x105k
     longLabel Agilent CGH Microarray 2x105k AMADID 014698
     color 255,128,0
     priority 8
 
     track agilentCnv2x105k
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CNV 2x105k
     longLabel Agilent CNV Microarray 2x105k AMADID 022837
     color 0,128,0
     priority 9
 
     track agilentCgh44k
-    parent agilentProbes
+    subTrack agilentProbes
     shortLabel Ag CGH 4x44k
     longLabel Agilent CGH Microarray 4x44k AMADID 014950
     color 255,128,0
@@ -2264,19 +2264,19 @@ origAssembly hg16
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr20,chr21,chr22,chrX
 
     track snpRecombRateHapmap
-    parent snpRecombRate
+    subTrack snpRecombRate
     shortLabel HapMap Phase I
     longLabel Oxford Recombination Rates from HapMap Phase I Release 16c.1
     priority 1
 
     track snpRecombRateHapmapPhase2
-    parent snpRecombRate
+    subTrack snpRecombRate
     shortLabel HapMap Phase II
     longLabel Oxford Recombination Rates from HapMap Phase II Release 21
     priority 2
 
     track snpRecombRatePerlegen
-    parent snpRecombRate
+    subTrack snpRecombRate
     shortLabel Perlegen
     longLabel Oxford Recombination Rates from Perlegen Data
     priority 3
@@ -2292,13 +2292,13 @@ type bed 3 .
 origAssembly hg16
 
     track snpRecombHotspotHapmap
-    parent snpRecombHotspot
+    subTrack snpRecombHotspot
     shortLabel HapMap
     longLabel Oxford Recombination Hotspots from HapMap Phase I Release 16c.1
     priority 1
 
     track snpRecombHotspotPerlegen
-    parent snpRecombHotspot
+    subTrack snpRecombHotspot
     shortLabel Perlegen
     longLabel Oxford Recombination Hotspots from Perlegen Data
     priority 2
@@ -2333,7 +2333,7 @@ spectrum on
 type netAlign
 
     track netSyntenyPanTro2
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel $o_Organism Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2344,7 +2344,7 @@ type netAlign
     otherDb panTro2
 
     track netSyntenyPonAbe2
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel $o_Organism Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2355,7 +2355,7 @@ type netAlign
     otherDb ponAbe2
 
     track netSyntenyRheMac2
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel $o_Organism Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2366,7 +2366,7 @@ type netAlign
     otherDb rheMac2
 
     track netSyntenyMm8
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Mouse Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2377,7 +2377,7 @@ type netAlign
     otherDb mm8
 
     track netSyntenyRn4
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Rat Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2388,7 +2388,7 @@ type netAlign
     otherDb rn4
 
     track netSyntenyCanFam2
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Dog Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2399,7 +2399,7 @@ type netAlign
     otherDb canFam2
 
     track netSyntenyEquCab1
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Horse Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2410,7 +2410,7 @@ type netAlign
     otherDb equCab1
 
     track netSyntenyMonDom4
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Opossum Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2421,7 +2421,7 @@ type netAlign
     otherDb monDom4
 
     track netSyntenyBosTau2
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Cow Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -2442,7 +2442,7 @@ spectrum on
 type netAlign
 
     track netRBestGorGor1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2453,7 +2453,7 @@ type netAlign
     otherDb gorGor1
 
     track netRBestCalJac1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2464,7 +2464,7 @@ type netAlign
     otherDb calJac1
 
     track netRBestTarSyr1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2475,7 +2475,7 @@ type netAlign
     otherDb tarSyr1
 
     track netRBestOtoGar1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2486,7 +2486,7 @@ type netAlign
     otherDb otoGar1
 
     track netRBestMicMur1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2497,7 +2497,7 @@ type netAlign
     otherDb micMur1
 
     track netRBestTupBel1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2508,7 +2508,7 @@ type netAlign
     otherDb tupBel1
 
     track netRBestOryCun1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel Rabbit RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2519,7 +2519,7 @@ type netAlign
     otherDb oryCun1
 
     track netRBestCavPor2
-    parent rBestNet
+    subTrack rBestNet
     shortLabel Guineapig RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2530,7 +2530,7 @@ type netAlign
     otherDb cavPor2
 
     track netRBestEchTel1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel Tenrec RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2541,7 +2541,7 @@ type netAlign
     otherDb echTel1
 
     track netRBestLoxAfr1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel Elephant RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2552,7 +2552,7 @@ type netAlign
     otherDb loxAfr1
 
     track netRBestDasNov1
-    parent rBestNet
+    subTrack rBestNet
     shortLabel Armadillo RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
@@ -2583,73 +2583,73 @@ origAssembly hg17
 dataVersion Mar 2007
 
     track stanfordChipGMO6990GABP
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan GMO6690 GABP
     longLabel Stanford ChIP-chip (GMO6990 cells, GABP ChIP)
     priority 1
 
     track stanfordChipGMO6990SRF
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan GMO6690 SRF
     longLabel Stanford ChIP-chip (GMO6990 cells, SRF ChIP)
     priority 2
 
     track stanfordChipHepG2GABP
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan HepG2 GABP
     longLabel Stanford ChIP-chip (HepG2 cells, GABP ChIP)
     priority 3
 
     track stanfordChipHepG2SRF
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan HepG2 SRF
     longLabel Stanford ChIP-chip (HepG2 cells, SRF ChIP)
     priority 4
 
     track stanfordChipHeLaGABP
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan HeLa GABP
     longLabel Stanford ChIP-chip (HeLa cells, GABP ChIP)
     priority 5
 
     track stanfordChipHeLaSRF
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan HeLa SRF
     longLabel Stanford ChIP-chip (HeLa cells, SRF ChIP)
     priority 6
 
     track stanfordChipHeLaTAF
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan HeLa TAF
     longLabel Stanford ChIP-chip (HeLa cells, TAF ChIP)
     priority 7
 
     track stanfordChipK562GABP
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan K562 GABP
     longLabel Stanford ChIP-chip (K562 cells, GABP ChIP)
     priority 8
 
     track stanfordChipK562SRF
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan K562 SRF
     longLabel Stanford ChIP-chip (K562 cells, SRF ChIP)
     priority 9
 
     track stanfordChipK562TAF
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan K562 TAF
     longLabel Stanford ChIP-chip (K562 cells, TAF ChIP)
     priority 10
 
     track stanfordChipNRSFMono
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan Jurkat NRSF/REST/Mono
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Mono ChIP)
     priority 11
 
     track stanfordChipNRSFUpstate
-    parent stanfordChip
+    subTrack stanfordChip
     shortLabel Stan Jurkat NRSF/REST/Upstate
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Upstate ChIP)
     priority 12
@@ -3051,10 +3051,10 @@ dataVersion January 2009
     shortLabel Reads
     view reads
     visibility pack
-    parent fox2ClipSeqComp
+    subTrack fox2ClipSeqComp
 
         track fox2ClipSeq
-        parent fox2ClipSeqCompViewreads
+        subTrack fox2ClipSeqCompViewreads
         shortLabel FOX2 CLIP-seq
         longLabel FOX2 adaptor-trimmed CLIP-seq reads
         subGroups	view=reads
@@ -3068,11 +3068,11 @@ dataVersion January 2009
     shortLabel Density
     view density
     visibility full
-    parent fox2ClipSeqComp
+    subTrack fox2ClipSeqComp
     viewLimitsMax 0:2401
 
         track fox2ClipSeqDensityForwardStrand
-        parent fox2ClipSeqCompViewdensity
+        subTrack fox2ClipSeqCompViewdensity
         shortLabel Density Forward
         longLabel FOX2 adaptor-trimmed CLIP-seq Density Forward Strand
         subGroups	view=density
@@ -3086,7 +3086,7 @@ dataVersion January 2009
         noInherit	on
 
         track fox2ClipSeqDensityReverseStrand
-        parent fox2ClipSeqCompViewdensity
+        subTrack fox2ClipSeqCompViewdensity
         shortLabel Density Reverse
         longLabel FOX2 adaptor-trimmed CLIP-seq Density Reverse Strand
         subGroups	view=density
@@ -3103,10 +3103,10 @@ dataVersion January 2009
     shortLabel Clusters
     view clusters
     visibility pack
-    parent fox2ClipSeqComp
+    subTrack fox2ClipSeqComp
 
         track fox2ClipClusters
-        parent fox2ClipSeqCompViewclusters
+        subTrack fox2ClipSeqCompViewclusters
         shortLabel FOX2 clusters
         longLabel FOX2 binding site clusters
         subGroups   view=clusters
@@ -3141,7 +3141,7 @@ visibility hide
 type bed 4 +
 
     track pgVenter
-    parent pgSnp
+    subTrack pgSnp
     shortLabel Venter
     longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
     group varRep
@@ -3149,7 +3149,7 @@ type bed 4 +
     color 128,0,128
 
     track pgWatson
-    parent pgSnp
+    subTrack pgSnp
     shortLabel Watson
     longLabel James Watson (CSHL)
     group varRep
@@ -3157,7 +3157,7 @@ type bed 4 +
     color 153,0,0
 
     track pgYoruban3
-    parent pgSnp
+    subTrack pgSnp
     shortLabel YRI NA18507
     longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
     group varRep
@@ -3165,7 +3165,7 @@ type bed 4 +
     color 128,0,128
 
     track pgYh1
-    parent pgSnp
+    subTrack pgSnp
     shortLabel YanHuang
     longLabel Han Chinese Individual (YanHuang Project)
     group varRep
@@ -3173,7 +3173,7 @@ type bed 4 +
     color 0,128,128
 
     track pgSjk
-    parent pgSnp
+    subTrack pgSnp
     shortLabel SJK
     longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
     group varRep
@@ -3181,7 +3181,7 @@ type bed 4 +
     color 0,128,128
 
     track pgNA12878
-    parent pgSnp
+    subTrack pgSnp
     shortLabel CEU daught '2878
     longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
     group varRep
@@ -3189,7 +3189,7 @@ type bed 4 +
     color 128,64,0
 
     track pgNA12891
-    parent pgSnp
+    subTrack pgSnp
     shortLabel CEU father '2891
     longLabel CEU Trio Father NA12891 (1000 Genomes Project)
     group varRep
@@ -3197,7 +3197,7 @@ type bed 4 +
     color 128,64,0
 
     track pgNA12892
-    parent pgSnp
+    subTrack pgSnp
     shortLabel CEU mother '2892
     longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
     group varRep
@@ -3205,7 +3205,7 @@ type bed 4 +
     color 128,64,0
 
     track pgNA19240
-    parent pgSnp
+    subTrack pgSnp
     shortLabel YRI daught '9240
     longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
     group varRep

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.453 2010/02/16 20:19:46 kent Exp $";
+#	"$Id: trackDb.ra,v 1.454 2010/02/16 21:10:23 kent Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -65,14 +65,14 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
     track nscanEstGene
-    parent nscan
+    subTrack nscan
     shortLabel N-SCAN+EST
     longLabel N-SCAN+EST Gene Predictions
     color 34,139,34
     priority 1
 
     track nscanGene override
-    parent nscan
+    subTrack nscan
     color 84,119,34
     priority 2
     informant Human N-SCAN uses mouse (mm5) as the informant and iterative pseudogene masking.
@@ -91,14 +91,14 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
     track augustusHints
-    parent augustus
+    subTrack augustus
     shortLabel Augustus Hints
     longLabel Augustus Gene Predictions Using Hints
     priority 1
     color 139,0,0
 
     track augustusXRA
-    parent augustus
+    subTrack augustus
     shortLabel Augustus De Novo
     longLabel Augustus De Novo Gene Predictions
     priority 2
@@ -156,14 +156,14 @@ visibility hide
 type bed 9
 
     track picTarMiRNA4Way
-    parent picTar
+    subTrack picTar
     shortLabel PicTar 4 Species
     longLabel PicTar microRNA Sites, 4 Species Conservation Constraint: Human/Mouse/Rat/Dog
     color 128,0,128
     priority 1
 
     track picTarMiRNA5Way
-    parent picTar
+    subTrack picTar
     shortLabel PicTar 5 Species
     longLabel PicTar microRNA Sites, 5 species Conservation Constraint: Human/Mouse/Rat/Dog/Chicken
     color 128,0,128
@@ -259,61 +259,61 @@ priority 0
 type bed 3 .
 
     track affyTxnPhase3FragsHDF
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HDF lRNA
     longLabel Affymetrix HDF Long RNA (Cytosolic) Fragments
     priority 1
 
     track affyTxnPhase3FragsHeLaCyto
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HeLa Cyto lRNA
     longLabel Affymetrix HeLa Long RNA (Cytosolic) Fragments
     priority 2
 
     track affyTxnPhase3FragsHeLaNuclear
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HeLa Nucl lRNA
     longLabel Affymetrix HeLa Long RNA (Nuclear) Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2Cyto
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HepG2 Cyto lRNA
     longLabel Affymetrix HepG2 Long RNA (Cytosolic) Fragments
     priority 4
 
     track affyTxnPhase3FragsHepG2Nuclear
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HepG2 Nucl lRNA
     longLabel Affymetrix HepG2 Long RNA (Nuclear) Fragments
     priority 5
 
     track affyTxnPhase3FragsJurkat
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel Jurkat lRNA
     longLabel Affymetrix Jurkat Long RNA (Cytosolic) Fragments
     priority 6
 
     track affyTxnPhase3FragsNCCIT
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel NCCIT lRNA
     longLabel Affymetrix NCCIT Long RNA (Cytosolic) Fragments
     priority 7
 
     track affyTxnPhase3FragsPC3
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel PC3 lRNA
     longLabel Affymetrix PC3 Long RNA (Cytosolic) Fragments
     priority 8
 
     track affyTxnPhase3FragsSK_N_AS
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel SK-N-AS lRNA
     longLabel Affymetrix SK-N-AS Long RNA (Cytosolic) Fragments
     priority 9
 
     track affyTxnPhase3FragsU87MG
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel U87MG lRNA
     longLabel Affymetrix U87MG Long RNA (Cytosolic) Fragments
     priority 10
@@ -333,61 +333,61 @@ type wig 0 1000
 
     track affyTxnPhase3HDF
     shortLabel HDF lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HDF Long RNA (Cytosolic) Signal
     priority 1
 
     track affyTxnPhase3HeLaCyto
     shortLabel HeLa Cyto lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HeLa Long RNA (Cytosolic) Signal
     priority 2
 
     track affyTxnPhase3HeLaNuclear
     shortLabel HeLa Nucl lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HeLa Long RNA (Nuclear) Signal
     priority 3
 
     track affyTxnPhase3HepG2Cyto
     shortLabel HepG2 Cyto lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HepG2 Long RNA (Cytosolic) Signal
     priority 4
 
     track affyTxnPhase3HepG2Nuclear
     shortLabel HepG2 Nucl lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HepG2 Long RNA (Nuclear) Signal
     priority 5
 
     track affyTxnPhase3Jurkat
     shortLabel Jurkat lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix Jurkat Long RNA (Cytosolic) Signal
     priority 6
 
     track affyTxnPhase3NCCIT
     shortLabel NCCIT lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix NCCIT Long RNA (Cytosolic) Signal
     priority 7
 
     track affyTxnPhase3PC3
     shortLabel PC3 lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PC3 Long RNA (Cytosolic) Signal
     priority 8
 
     track affyTxnPhase3SK_N_AS
     shortLabel SK-N-AS lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix SK-N-AS Long RNA (Cytosolic) Signal
     priority 9
 
     track affyTxnPhase3U87MG
     shortLabel U87MG lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix U87MG Long RNA (Cytosolic) Signal
     priority 10
 
@@ -401,25 +401,25 @@ priority 0
 type bed 3 .
 
     track affyTxnPhase3FragsHeLaTopStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HeLa + sRNA
     longLabel Affymetrix HeLa Plus Strand Short RNA (Whole Cell) Fragments
     priority 1
 
     track affyTxnPhase3FragsHeLaBottomStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HeLa - sRNA
     longLabel Affymetrix HeLa Minus Strand Short RNA (Whole Cell) Fragments
     priority 2
 
     track affyTxnPhase3FragsHepG2TopStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HepG2 + sRNA
     longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2BottomStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HepG2 - sRNA
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Fragments
     priority 4
@@ -439,25 +439,25 @@ type wig 0 1000
 
     track affyTxnPhase3HeLaTopStrand
     shortLabel HeLa + sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix Hela Plus Strand Short RNA (Whole Cell) Signal
     priority 1
 
     track affyTxnPhase3HeLaBottomStrand
     shortLabel HeLa - sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix Hela Minus Strand Short RNA (Whole Cell) Signal
     priority 2
 
     track affyTxnPhase3HepG2TopStrand
     shortLabel HepG2 + sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Signal
     priority 3
 
     track affyTxnPhase3HepG2BottomStrand
     shortLabel HepG2 - sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
 
@@ -512,14 +512,14 @@ origAssembly hg17
 dataVersion March 2007
 
     track stanfordNRSFEnriched
-    parent stanfordNRSF
+    subTrack stanfordNRSF
     shortLabel Stanf NRSF Enriched
     longLabel Stanford NRSF/REST Enriched
     priority 1
     color 0,128,0
 
     track stanfordNRSFControl
-    parent stanfordNRSF
+    subTrack stanfordNRSF
     shortLabel Stanf NRSF Control
     longLabel Stanford NRSF/REST Control
     priority 2
@@ -605,21 +605,21 @@ type bed 5 .
 
     track phastConsElements17way
     release alpha
-    parent consElements
+    subTrack consElements
     shortLabel Vertebrate Cons
     longLabel PhastCons Vertebrate Conserved Elements (5.1%, len=14,cov=.2,rho=2.8)
     priority 1
 
     track phastConsElementsPlacental_14_008_28
     release alpha
-    parent consElements
+    subTrack consElements
     shortLabel Mammal Cons
     longLabel PhastCons Placental Mammal Conserved Elements (3.8%, len=14,cov=.008, rho=2.8)
     priority 2
 
     track phastConsElementsPlacental
     release alpha
-    parent consElements
+    subTrack consElements
     shortLabel Mammal Cons 5%
     longLabel PhastCons Placental Mammal Conserved Elements (5.2%, len=14,cov=.2, rho=2.8)
     priority 3
@@ -778,49 +778,49 @@ visibility hide
 type bed 4 .
 
     track snpArrayAffy250Nsp
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy 250KNsp
     longLabel Affymetrix GeneChip Human Mapping 250K Nsp
     type bed 6 +
     priority 1
 
     track snpArrayAffy250Sty
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy 250KSty
     longLabel Affymetrix GeneChip Human Mapping 250K Sty
     type bed 6 +
     priority 2
 
     track snpArrayAffy50HindIII
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy 50KHindIII
     longLabel Affymetrix GeneChip Human Mapping 50K HindIII
     type bed 6 +
     priority 3
 
     track snpArrayAffy50XbaI
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy 50KXbaI
     longLabel Affymetrix GeneChip Human Mapping 50K XbaI
     type bed 6 +
     priority 4
 
     track snpArrayAffy10
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy 10K
     longLabel Affymetrix GeneChip Human Mapping 10K
     type bed 6 +
     priority 5
 
     track snpArrayAffy10v2
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy 10Kv2
     longLabel Affymetrix GeneChip Human Mapping 10K v2 
     type bed 6 +
     priority 6
 
     track snpArrayIllumina300
-    parent snpArray
+    subTrack snpArray
     shortLabel Illumina 300K
     longLabel Illumina HumanHap300 BeadChip
     type bed 4 .
@@ -862,7 +862,7 @@ visibility hide
 type bed 4 +
 
     track cnpSharp
-    parent cnp 
+    subTrack cnp 
     shortLabel Sharp CNPs 
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
     noInherit on
@@ -870,7 +870,7 @@ type bed 4 +
     priority 1
 
     track cnpIafrate
-    parent cnp
+    subTrack cnp
     shortLabel Iafrate CNPs 
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
     noInherit on
@@ -878,7 +878,7 @@ type bed 4 +
     priority 2
 
     track cnpSebat
-    parent cnp
+    subTrack cnp
     shortLabel Sebat CNPs 
     longLabel Copy Number Polymorphisms from ROMA (Sebat)
     noInherit on
@@ -886,7 +886,7 @@ type bed 4 +
     priority 3
 
     track cnpFosmid
-    parent cnp
+    subTrack cnp
     shortLabel Tuzun Fosmids
     longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
@@ -894,7 +894,7 @@ type bed 4 +
     priority 4
 
     track delMccarroll
-    parent cnp
+    subTrack cnp
     shortLabel McCarroll Dels
     longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
@@ -902,7 +902,7 @@ type bed 4 +
     priority 5
 
     track delConrad
-    parent cnp
+    subTrack cnp
     shortLabel Conrad Dels
     longLabel Deletions from Genotype Analysis (Conrad)
     noInherit on
@@ -910,7 +910,7 @@ type bed 4 +
     priority 6
 
     track delHinds
-    parent cnp
+    subTrack cnp
     shortLabel Hinds Dels
     longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
@@ -918,7 +918,7 @@ type bed 4 +
     priority 7
 
     track cnpRedon
-    parent cnp
+    subTrack cnp
     shortLabel Redon CNPs
     longLabel Copy Number Polymorphisms from SNP and BAC microarrays (Redon) 
     noInherit on
@@ -926,7 +926,7 @@ type bed 4 +
     priority 8
 
     track cnpWong
-    parent cnp
+    subTrack cnp
     shortLabel Wong CNPs 
     longLabel Copy Number Polymorphisms (Wong)
     noInherit on
@@ -1238,31 +1238,31 @@ dataVersion HapMap release 20
 type bed 4 +
 
     track hapmapLdYri
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI)
     priority 1
 
     track hapmapLdCeu
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD CEU
     longLabel Linkage Disequilibrium for the CEPH (CEU)
     priority 2
 
     track hapmapLdChb
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD CHB
     longLabel Linkage Disequilibrium for the Han Chinese (CHB)
     priority 3
 
     track hapmapLdJpt
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD JPT
     longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT)
     priority 4
 
     track hapmapLdChbJpt
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD JPT+CHB
     longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB)
     priority 5
@@ -1366,7 +1366,7 @@ thickDrawItem on
 type bed 6 .
 
     track dbRIPAlu 
-    parent retroposons 
+    subTrack retroposons 
     shortLabel Polymorphic Alu 
     longLabel Alu Retrotransposon Insertion Polymorphisms in Humans
     color 0,0,0
@@ -1374,7 +1374,7 @@ type bed 6 .
     priority 1 
 
     track dbRIPL1 
-    parent retroposons 
+    subTrack retroposons 
     shortLabel Polymorphic L1 
     longLabel L1 Retrotransposon Insertion Polymorphisms in Humans
     color 0,0,0
@@ -1382,7 +1382,7 @@ type bed 6 .
     priority 2 
 
     track dbRIPSVA 
-    parent retroposons 
+    subTrack retroposons 
     shortLabel Polymorphic SVA 
     longLabel SVA Retrotransposon Insertion Polymorphisms in Humans
     color 0,0,0
@@ -1878,28 +1878,28 @@ group genes
 priority 75
  
     track transmapSeg 
-    parent seg 
+    subTrack seg 
     shortLabel TransMap 
     longLabel TransMap Novel SEGs 
     color 34,139,34 
     priority 1 
  
     track exoniphySeg 
-    parent seg 
+    subTrack seg 
     shortLabel ExoniPhy 
     longLabel ExoniPhy Novel SEGs 
     color 173,17,162 
     priority 2 
  
     track nscanGeneSeg 
-    parent seg 
+    subTrack seg 
     shortLabel N-SCAN 
     longLabel N-SCAN Novel SEGs 
     color 84,119,34 
     priority 3 
  
     track twinscanSeg 
-    parent seg 
+    subTrack seg 
     shortLabel Twinscan 
     longLabel Twinscan Novel SEGs 
     color 0,100,100 
@@ -1907,7 +1907,7 @@ priority 75
     priority 4 
  
     track ensGeneSeg 
-    parent seg 
+    subTrack seg 
     shortLabel Ensembl 
     longLabel Ensembl Novel SEGs 
     color 150,0,0 
@@ -1916,21 +1916,21 @@ priority 75
     priority 5 
  
     track sgpGeneSeg 
-    parent seg 
+    subTrack seg 
     shortLabel SGP  
     longLabel SGP Novel SEGs 
     color 0,90,100 
     priority 6 
  
     track multipleSeg 
-    parent seg 
+    subTrack seg 
     shortLabel Multiple 
     longLabel Novel SEGs Predicted by Multiple Methods (Loci) 
     color 0,0,0 
     priority 7 
 
     track bestSeg  
-    parent seg  
+    subTrack seg  
     shortLabel Best  
     longLabel Novel SEGs Passing All Filters (Loci)  
     color 0,0,0  

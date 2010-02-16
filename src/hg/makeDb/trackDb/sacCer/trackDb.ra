@@ -152,10 +152,10 @@ dragAndDrop subTracks
     shortLabel Tag Counts
     view Counts
     visibility full
-    parent uwFootprints
+    subTrack uwFootprints
 
          track uwFootprintsTagCounts
-         parent uwFootprintsViewCounts
+         subTrack uwFootprintsViewCounts
          subGroups view=Counts
          shortLabel Tag Counts
          longLabel UW Footprints Tag Counts
@@ -171,10 +171,10 @@ dragAndDrop subTracks
     shortLabel Mappability
     view Map
     visibility dense
-    parent uwFootprints
+    subTrack uwFootprints
 
          track uwFootprintsMappability
-         parent uwFootprintsViewMap
+         subTrack uwFootprintsViewMap
          subGroups view=Map
          shortLabel Mappability
          longLabel UW Footprints Mappability
@@ -188,10 +188,10 @@ dragAndDrop subTracks
     shortLabel Footprints
     view Print
     visibility pack
-    parent uwFootprints
+    subTrack uwFootprints
 
          track uwFootprintsPrints
-         parent uwFootprintsViewPrint
+         subTrack uwFootprintsViewPrint
          subGroups view=Print
          shortLabel Footprints
          longLabel UW Protein-binding Footprints

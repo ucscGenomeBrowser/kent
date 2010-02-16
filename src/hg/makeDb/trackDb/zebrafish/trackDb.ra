@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.72 2010/02/16 20:19:50 kent Exp $";
+#	"$Id: trackDb.ra,v 1.73 2010/02/16 21:10:26 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -21,14 +21,14 @@ type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
     track vegaGene
-    parent vegaGeneZfish
+    subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
     color 12,12,120
     priority 1
     
     track vegaPseudoGene
-    parent vegaGeneZfish
+    subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
     color 12,12,120
@@ -48,13 +48,13 @@ type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
     track vegaGene
-    parent vegaGeneZfish
+    subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
     priority 1
     
     track vegaPseudoGene
-    parent vegaGeneZfish
+    subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
     priority 2

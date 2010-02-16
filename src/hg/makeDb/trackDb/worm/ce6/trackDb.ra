@@ -127,14 +127,14 @@ compositeTrack on
 origAssembly ce4
 
 	track monoNucleosomesSense
-	parent nucleosomeDensity
+	subTrack nucleosomeDensity
 	shortLabel NSome Core +Covg
 	longLabel Coverage of mononucleosomal fragments, sense strand reads
 	color 0,72,255
 	priority 1
 
 	track monoNucleosomesAntiSense
-	parent nucleosomeDensity
+	subTrack nucleosomeDensity
 	shortLabel NSome Core -Covg
 	longLabel Coverage of mononucleosomal fragments, antisense strand reads
 	color 0,170,37
@@ -156,14 +156,14 @@ compositeTrack on
 origAssembly ce4
 
 	track nucleosomeControlSenseCoverage
-	parent nucleosomeControlCoverage
+	subTrack nucleosomeControlCoverage
 	shortLabel Cntl MNase +Covg
 	longLabel Micrococcal nuclease control coverage, sense strand reads
 	color 255,132,0
 	priority 1
 
 	track nucleosomeControlAntisenseCoverage
-	parent nucleosomeControlCoverage
+	subTrack nucleosomeControlCoverage
 	shortLabel Cntl MNase -Covg
 	longLabel Micrococcal nuclease control coverage, antisense strand reads
 	color 200,80,0
@@ -181,19 +181,19 @@ compositeTrack on
 origAssembly ce4
 
 	track nucleosomeControl
-	parent nucleosome
+	subTrack nucleosome
 	shortLabel Control
 	longLabel mononucleosome control
 	priority 1
 
 	track nucleosomeFragmentsSense
-	parent nucleosome
+	subTrack nucleosome
 	shortLabel fragments +
 	longLabel mononucleosomal fragments, sense strand reads
 	priority 2
 
 	track nucleosomeFragmentsAntisense
-	parent nucleosome
+	subTrack nucleosome
 	shortLabel fragments -
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 3
@@ -227,10 +227,10 @@ type bed 3
     shortLabel Exon
     view exon
     visibility pack
-    parent fireLabCdnaRnaSeq
+    subTrack fireLabCdnaRnaSeq
 
 	    track potentialExonJunction
-	    parent fireLabCdnaRnaSeqViewexon
+	    subTrack fireLabCdnaRnaSeqViewexon
 	    subGroups view=exon
 	    shortLabel Exon Junction
 	    longLabel Potential exon Junction
@@ -245,10 +245,10 @@ type bed 3
     shortLabel RNA seq
     view rnaseq
     visibility full
-    parent fireLabCdnaRnaSeq
+    subTrack fireLabCdnaRnaSeq
 
 	    track cDnaRnaSeq
-	    parent fireLabCdnaRnaSeqViewrnaseq
+	    subTrack fireLabCdnaRnaSeqViewrnaseq
 	    subGroups view=rnaseq
 	    shortLabel RNA-Seq
 	    longLabel non cDNA RNA-Seq
@@ -302,12 +302,12 @@ configurable on
     track algBindingViewmutant
     shortLabel Mutant
     view mutant
-    parent algBinding
+    subTrack algBinding
     visibility full
     viewLimits 0:250
 
 	    track mt1Reverse
-	    parent algBindingViewmutant
+	    subTrack algBindingViewmutant
 	    subGroups view=mutant
 	    shortLabel Mutant 1 R
 	    longLabel Mutant Experiment 1 reverse strand
@@ -317,7 +317,7 @@ configurable on
 	    priority 1
 
 	    track mt1Forward
-	    parent algBindingViewmutant
+	    subTrack algBindingViewmutant
 	    subGroups view=mutant
 	    shortLabel Mutant 1 F
 	    longLabel Mutant Experiment 1 forward strand
@@ -327,7 +327,7 @@ configurable on
 	    priority 2
 
 	    track mt2Reverse
-	    parent algBindingViewmutant
+	    subTrack algBindingViewmutant
 	    subGroups view=mutant
 	    shortLabel Mutant 2 R
 	    longLabel Mutant Experiment 2 reverse strand
@@ -337,7 +337,7 @@ configurable on
 	    priority 3
 
 	    track mt2Forward
-	    parent algBindingViewmutant
+	    subTrack algBindingViewmutant
 	    subGroups view=mutant
 	    shortLabel Mutant 2 F
 	    longLabel Mutant Experiment 2 forward strand
@@ -347,7 +347,7 @@ configurable on
 	    priority 4
 
 	    track mt3Reverse
-	    parent algBindingViewmutant
+	    subTrack algBindingViewmutant
 	    subGroups view=mutant
 	    shortLabel Mutant 3 R
 	    longLabel Mutant Experiment 3 reverse strand
@@ -357,7 +357,7 @@ configurable on
 	    priority 5
 
 	    track mt3Forward
-	    parent algBindingViewmutant
+	    subTrack algBindingViewmutant
 	    subGroups view=mutant
 	    shortLabel Mutant 3 F
 	    longLabel Mutant Experiment 3 forward strand
@@ -369,12 +369,12 @@ configurable on
     track algBindingViewwild
     shortLabel Wild type
     view wild
-    parent algBinding
+    subTrack algBinding
     visibility full
     viewLimits 0:250
 
 	    track wt1Reverse
-	    parent algBindingViewwild
+	    subTrack algBindingViewwild
 	    subGroups view=wild
 	    shortLabel WildT 1 R
 	    longLabel Wild type Experiment 1 reverse strand
@@ -384,7 +384,7 @@ configurable on
 	    priority 7
 
 	    track wt1Forward
-	    parent algBindingViewwild
+	    subTrack algBindingViewwild
 	    subGroups view=wild
 	    shortLabel WildT 1 F
 	    longLabel Wild type Experiment 1 forward strand
@@ -394,7 +394,7 @@ configurable on
 	    priority 8
 
 	    track wt2Reverse
-	    parent algBindingViewwild
+	    subTrack algBindingViewwild
 	    subGroups view=wild
 	    shortLabel WildT 2 R
 	    longLabel Wild type Experiment 2 reverse strand
@@ -404,7 +404,7 @@ configurable on
 	    priority 9
 
 	    track wt2Forward
-	    parent algBindingViewwild
+	    subTrack algBindingViewwild
 	    subGroups view=wild
 	    shortLabel WildT 2 F
 	    longLabel Wild type Experiment 2 forward strand
@@ -414,7 +414,7 @@ configurable on
 	    priority 10
 
 	    track wt3Reverse
-	    parent algBindingViewwild
+	    subTrack algBindingViewwild
 	    subGroups view=wild
 	    shortLabel WildT 3 R
 	    longLabel Wild type Experiment 3 reverse strand
@@ -424,7 +424,7 @@ configurable on
 	    priority 11
 
 	    track wt3Forward
-	    parent algBindingViewwild
+	    subTrack algBindingViewwild
 	    subGroups view=wild
 	    shortLabel WildT 3 F
 	    longLabel Wild type Experiment 3 forward strand
@@ -436,11 +436,11 @@ configurable on
     track algBindingViewsites
     shortLabel Sites
     view sites
-    parent algBinding
+    subTrack algBinding
     visibility pack
 
 	    track algBindSites
-	    parent algBindingViewsites
+	    subTrack algBindingViewsites
 	    subGroups view=sites
 	    shortLabel Binding Sites
 	    longLabel ALG-1 binding sites in larval stage 4 worms
@@ -448,7 +448,7 @@ configurable on
 	    priority 13
 
 	    track algBindGenic
-	    parent algBindingViewsites
+	    subTrack algBindingViewsites
 	    subGroups view=sites
 	    shortLabel Genic regions
 	    longLabel Reannotated genic regions based on data from L3 and L4 RNAseq from Hillier et al

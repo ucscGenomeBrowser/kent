@@ -215,14 +215,14 @@ autoScale Off
 compositeTrack on
 
 	track monoNucleosomesSense
-	parent nucleosomeDensity
+	subTrack nucleosomeDensity
 	shortLabel NSome Core +Covg
 	longLabel Coverage of mononucleosomal fragments, sense strand reads
 	color 0,72,255
 	priority 1
 
 	track monoNucleosomesAntiSense
-	parent nucleosomeDensity
+	subTrack nucleosomeDensity
 	shortLabel NSome Core -Covg
 	longLabel Coverage of mononucleosomal fragments, antisense strand reads
 	color 0,170,37
@@ -243,14 +243,14 @@ autoScale Off
 compositeTrack on
 
 	track nucleosomeControlSenseCoverage
-	parent nucleosomeControlCoverage
+	subTrack nucleosomeControlCoverage
 	shortLabel Cntl MNase +Covg
 	longLabel Micrococcal nuclease control coverage, sense strand reads
 	color 255,132,0
 	priority 1
 
 	track nucleosomeControlAntisenseCoverage
-	parent nucleosomeControlCoverage
+	subTrack nucleosomeControlCoverage
 	shortLabel Cntl MNase -Covg
 	longLabel Micrococcal nuclease control coverage, antisense strand reads
 	color 200,80,0
@@ -267,19 +267,19 @@ itemRgb on
 compositeTrack on
 
 	track nucleosomeControl
-	parent nucleosome
+	subTrack nucleosome
 	shortLabel Control
 	longLabel mononucleosome control
 	priority 1
 
 	track nucleosomeFragmentsSense
-	parent nucleosome
+	subTrack nucleosome
 	shortLabel fragments +
 	longLabel mononucleosomal fragments, sense strand reads
 	priority 2
 
 	track nucleosomeFragmentsAntisense
-	parent nucleosome
+	subTrack nucleosome
 	shortLabel fragments -
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 3

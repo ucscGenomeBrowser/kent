@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.467 2010/02/16 20:19:47 kent Exp $";
+#	"$Id: trackDb.ra,v 1.468 2010/02/16 21:10:23 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -24,13 +24,13 @@ type wig 0.0 2.87
 viewLimits .2:1.6
 
     track phyloP28wayPlacMammal
-    parent phyloPCons28way
+    subTrack phyloPCons28way
     shortLabel Mammal Cons
     longLabel Placental Mammal Basewise Conservation by PhyloP
     priority 1
 
     track phyloP28way
-    parent phyloPCons28way
+    subTrack phyloPCons28way
     shortLabel Vertebrate Cons
     longLabel Vertebrate Basewise Conservation by PhyloP
     priority 2
@@ -52,13 +52,13 @@ altColor 0,90,10
 type wig 0.0 1.0
 
     track phastCons28wayHq
-    parent phastConsHq
+    subTrack phastConsHq
     shortLabel Vertebrate
     longLabel Vertebrate HQ PhastCons Conservation (18 species)
     priority 2
 
     track phastCons28wayHqPlacMammal
-    parent phastConsHq
+    subTrack phastConsHq
     shortLabel Plac Mammal
     longLabel Placental Mammal HQ PhastCons Conservation (8 species)
     priority 1
@@ -101,14 +101,14 @@ showTopScorers 200
 type bed 5 .
 
     track phastConsElements28wayPlacMammal
-    parent mostConserved28way
+    subTrack mostConserved28way
     shortLabel Mammal
     longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
     color 100,50,170
     priority 1
 
     track phastConsElements28way
-    parent mostConserved28way
+    subTrack mostConserved28way
     shortLabel Vertebrate
     longLabel PhastCons Vertebrate Conserved Elements, 28-way Multiz Alignment
     color 170,100,50
@@ -265,37 +265,37 @@ type bed 6 +
 exonArrows off
 
     track hapmapSnpsCEUPhaseII
-    parent hapmapSnpsPhaseII
+    subTrack hapmapSnpsPhaseII
     shortLabel HM r22 SNPs CEU
     longLabel Outdated HapMap SNPs from the CEU Population (Northern and Western European Ancestry in Utah, US - CEPH)
     priority 2
 
     track hapmapSnpsCHBPhaseII
-    parent hapmapSnpsPhaseII
+    subTrack hapmapSnpsPhaseII
     shortLabel HM r22 SNPs CHB
     longLabel Outdated HapMap SNPs from the CHB Population (Han Chinese in Beijing, China)
     priority 3
 
     track hapmapSnpsJPTPhaseII
-    parent hapmapSnpsPhaseII
+    subTrack hapmapSnpsPhaseII
     shortLabel HM r22 SNPs JPT
     longLabel Outdated HapMap SNPs from the JPT Population (Japanese in Tokyo, Japan)
     priority 6
 
     track hapmapSnpsYRIPhaseII
-    parent hapmapSnpsPhaseII
+    subTrack hapmapSnpsPhaseII
     shortLabel HM r22 SNPs YRI
     longLabel Outdated HapMap SNPs from the YRI Population (Yoruba in Ibadan, Nigeria)
     priority 11
 
     track hapmapAllelesChimpPhaseII
-    parent hapmapSnpsPhaseII
+    subTrack hapmapSnpsPhaseII
     shortLabel Chimp Alleles
     longLabel Outdated HapMap SNPs Orthologous Alleles from Chimp (panTro2)
     priority 100
 
     track hapmapAllelesMacaquePhaseII
-    parent hapmapSnpsPhaseII
+    subTrack hapmapSnpsPhaseII
     shortLabel Macaque Alleles
     longLabel Outdated HapMap SNPs Orthologous Alleles from Macaque (rheMac2)
     priority 101
@@ -313,19 +313,19 @@ dataVersion HapMap release 22
 type ld2
 
     track hapmapLdYri
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel Unphased YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI) from unphased genotypes
     priority 1
 
     track hapmapLdCeu
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel Unphased CEU
     longLabel Linkage Disequilibrium for the CEPH (CEU) from unphased genotypes
     priority 2
 
     track hapmapLdChbJpt
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel Unph JPT+CHB
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from unphased genotypes
     priority 5
@@ -343,19 +343,19 @@ dataVersion HapMap release 22
 type ld2
 
     track hapmapLdPhYri
-    parent hapmapLdPh
+    subTrack hapmapLdPh
     shortLabel Phased YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
     priority 1
 
     track hapmapLdPhCeu
-    parent hapmapLdPh
+    subTrack hapmapLdPh
     shortLabel Phased CEU
     longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
     priority 2
 
     track hapmapLdPhChbJpt
-    parent hapmapLdPh
+    subTrack hapmapLdPh
     shortLabel Ph JPT+CHB
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
@@ -440,7 +440,7 @@ visibility hide
 type bed 4 +
 
     track pgYoruban2
-    parent pgSnpHgwdev
+    subTrack pgSnpHgwdev
     shortLabel YRI '8507, SOLiD
     longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
     group varRep
@@ -459,21 +459,21 @@ color 0,153,0
 type bed 4 +
 
     track pgPopYRI
-    parent pgPop
+    subTrack pgPop
     shortLabel YRI variants
     longLabel YRI variants from the 1000 genomes low coverage data
     group varRep
     priority 1
 
     track pgPopCEU
-    parent pgPop
+    subTrack pgPop
     shortLabel CEU variants
     longLabel CEU variants from the 1000 genomes low coverage data
     group varRep
     priority 2
 
     track pgPopJPTCHB
-    parent pgPop
+    subTrack pgPop
     shortLabel JPTCHB variants
     longLabel JPT and CHB variants from the 1000 genomes low coverage data
     group varRep
@@ -494,21 +494,21 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
     track augustusHints
-    parent augustus
+    subTrack augustus
     shortLabel Augustus Hints
     longLabel Augustus Gene Predictions Using Hints
     priority 1
     color 139,0,0
 
     track augustusXRA
-    parent augustus
+    subTrack augustus
     shortLabel Augustus De Novo
     longLabel Augustus De Novo Gene Predictions
     priority 2
     color 180,0,0
 
     track augustusAbinitio
-    parent augustus
+    subTrack augustus
     shortLabel Augustus Ab Initio
     longLabel Augustus Ab Initio Gene Predictions
     priority 3
@@ -541,14 +541,14 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
     track nscanPasaGene
-    parent nscan
+    subTrack nscan
     shortLabel N-SCAN PASA-EST
     longLabel N-SCAN PASA-EST Gene Predictions
     color 34,139,34
     priority 1
 
     track nscanGene
-    parent record nscanGene in parent dir missing/extra group,visibility,type,baseColorUseCds,baseColorDefault,informant
+    subTrack record nscanGene in parent dir missing/extra group,visibility,type,baseColorUseCds,baseColorDefault,informant
     subTrack nscan
     shortLabel N-SCAN
     longLabel N-SCAN Gene Predictions
@@ -765,7 +765,7 @@ visibility hide
 type bed 4 +
 
     track delConrad2
-    parent cnp
+    subTrack cnp
     shortLabel Conrad Dels
     longLabel Deletions from Genotype Analysis (Conrad)
     noInherit on
@@ -773,7 +773,7 @@ type bed 4 +
     priority 1
 
     track delHinds2
-    parent cnp
+    subTrack cnp
     shortLabel Hinds Dels
     longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
@@ -781,7 +781,7 @@ type bed 4 +
     priority 2
 
     track cnpIafrate2
-    parent cnp
+    subTrack cnp
     shortLabel Iafrate CNPs
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
     noInherit on
@@ -789,7 +789,7 @@ type bed 4 +
     priority 3
 
     track cnpLocke
-    parent cnp
+    subTrack cnp
     shortLabel Locke CNPs
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Locke)
     noInherit on
@@ -797,7 +797,7 @@ type bed 4 +
     priority 4
 
     track delMccarroll
-    parent cnp
+    subTrack cnp
     shortLabel McCarroll Dels
     longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
@@ -805,7 +805,7 @@ type bed 4 +
     priority 5
 
     track cnpRedon
-    parent cnp
+    subTrack cnp
     shortLabel Redon CNPs
     longLabel Copy Number Polymorphisms from SNP and BAC microarrays (Redon)
     noInherit on
@@ -813,7 +813,7 @@ type bed 4 +
     priority 6
 
     track cnpSebat2
-    parent cnp
+    subTrack cnp
     shortLabel Sebat CNPs
     longLabel Copy Number Polymorphisms from ROMA (Sebat)
     noInherit on
@@ -821,7 +821,7 @@ type bed 4 +
     priority 7
 
     track cnpSharp2
-    parent cnp
+    subTrack cnp
     shortLabel Sharp CNPs
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
     noInherit on
@@ -829,7 +829,7 @@ type bed 4 +
     priority 8
 
     track cnpTuzun
-    parent cnp
+    subTrack cnp
     shortLabel Tuzun Fosmids
     longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
@@ -915,14 +915,14 @@ visibility hide
 type bed 8 .
 
     track polyaDb
-    parent polyA
+    subTrack polyA
     shortLabel PolyA_DB
     longLabel Reported Poly(A) Sites from PolyA_DB
     color 51,153,51
     priority 1
 
     track polyaPredict
-    parent polyA
+    subTrack polyA
     shortLabel Poly(A) SVM
     longLabel Predicted Poly(A) Sites Using an SVM
     color 102,0,153
@@ -948,7 +948,7 @@ allButtonPair on
     shortLabel Clusters
     view SIG
     visibility full
-    parent fantomCageGraphTop
+    subTrack fantomCageGraphTop
     viewLimits 0.0:1.0
     minLimit 0
     maxLimit 1
@@ -957,7 +957,7 @@ allButtonPair on
     maxHeightPixels 128:32:16
 
         track FantomCageForwardPowerLawGraph
-        parent fantomCageGraphTopViewSIG
+        subTrack fantomCageGraphTopViewSIG
         shortLabel Fantom 4 + CAGE
         longLabel  Forward Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -969,7 +969,7 @@ allButtonPair on
         color 43,51,109
 
         track FantomCageReversePowerLawGraph
-        parent fantomCageGraphTopViewSIG
+        subTrack fantomCageGraphTopViewSIG
         shortLabel Fantom 4 - CAGE
         longLabel  Reverse Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -984,10 +984,10 @@ allButtonPair on
     shortLabel Reads
     view BED
     visibility squish
-    parent fantomCageGraphTop
+    subTrack fantomCageGraphTop
 
         track FantomCageBedForward
-        parent fantomCageGraphTopViewBED
+        subTrack fantomCageGraphTopViewBED
         shortLabel Fantom (+) CAGE
         longLabel Fantom/Riken CAGE Reads Forward
         subGroups view=BED
@@ -999,7 +999,7 @@ allButtonPair on
         type bed 12 .
 
         track FantomCageBedReverse
-        parent fantomCageGraphTopViewBED
+        subTrack fantomCageGraphTopViewBED
         shortLabel Fantom (-) CAGE
         longLabel Fantom/Riken CAGE Reads Reverse
         subGroups view=BED
@@ -1060,21 +1060,21 @@ autoScale off
 origAssembly hg16
 
     track uppsalaChipH3acSignal
-    parent uppsalaChipSignal
+    subTrack uppsalaChipSignal
     shortLabel UU H3ac Signal
     longLabel Uppsala University ChIP-chip Signal (H3ac)
     color 150,50,50
     priority 1
 
     track uppsalaChipUsf1Signal
-    parent uppsalaChipSignal
+    subTrack uppsalaChipSignal
     shortLabel UU Usf1 Signal
     longLabel Uppsala University ChIP-chip Signal (Usf1)
     color 50,50,150
     priority 2
 
     track uppsalaChipUsf2Signal
-    parent uppsalaChipSignal
+    subTrack uppsalaChipSignal
     shortLabel UU Usf2 Signal
     longLabel Uppsala University ChIP-chip Signal (Usf2)
     color 50,150,50
@@ -1090,21 +1090,21 @@ priority 300
 type bed 3
 
     track uppsalaChipH3acSites
-    parent uppsalaChipSites
+    subTrack uppsalaChipSites
     shortLabel UU H3ac Sites
     longLabel Uppsala University ChIP-chip Sites (H3ac)
     color 150,50,50
     priority 1
 
     track uppsalaChipUsf1Sites
-    parent uppsalaChipSites
+    subTrack uppsalaChipSites
     shortLabel UU Usf1 Sites
     longLabel Uppsala University ChIP-chip Sites (Usf1)
     color 50,50,150
     priority 2
 
     track uppsalaChipUsf2Sites
-    parent uppsalaChipSites
+    subTrack uppsalaChipSites
     shortLabel UU Usf2 Sites
     longLabel Uppsala University ChIP-chip Sites (Usf2)
     color 50,150,50
@@ -1120,14 +1120,14 @@ priority 0
 type bed 3 .
 
     track eioJcviNASNeg
-    parent eioJcviNAS
+    subTrack eioJcviNAS
     shortLabel EIO/JCVI CD34- NAS
     longLabel CD34- cells Nuclease Accessible sites
     priority 2
     color 100,30,250
 
     track eioJcviNASPos
-    parent eioJcviNAS
+    subTrack eioJcviNAS
     shortLabel EIO/JCVI CD34+ NAS
     longLabel CD34+ cells Nuclease Accessible sites
     priority 1
@@ -1152,61 +1152,61 @@ origAssembly hg17
 type bed 3 .
 
     track affyTxnPhase3FragsHDF
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HDF lRNA
     longLabel Affymetrix HDF Long RNA (Cytosolic) Fragments
     priority 1
 
     track affyTxnPhase3FragsHeLaCyto
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HeLa Cyto lRNA
     longLabel Affymetrix HeLa Long RNA (Cytosolic) Fragments
     priority 2
 
     track affyTxnPhase3FragsHeLaNuclear
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HeLa Nucl lRNA
     longLabel Affymetrix HeLa Long RNA (Nuclear) Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2Cyto
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HepG2 Cyto lRNA
     longLabel Affymetrix HepG2 Long RNA (Cytosolic) Fragments
     priority 4
 
     track affyTxnPhase3FragsHepG2Nuclear
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel HepG2 Nucl lRNA
     longLabel Affymetrix HepG2 Long RNA (Nuclear) Fragments
     priority 5
 
     track affyTxnPhase3FragsJurkat
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel Jurkat lRNA
     longLabel Affymetrix Jurkat Long RNA (Cytosolic) Fragments
     priority 6
 
     track affyTxnPhase3FragsNCCIT
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel NCCIT lRNA
     longLabel Affymetrix NCCIT Long RNA (Cytosolic) Fragments
     priority 7
 
     track affyTxnPhase3FragsPC3
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel PC3 lRNA
     longLabel Affymetrix PC3 Long RNA (Cytosolic) Fragments
     priority 8
 
     track affyTxnPhase3FragsSK_N_AS
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel SK-N-AS lRNA
     longLabel Affymetrix SK-N-AS Long RNA (Cytosolic) Fragments
     priority 9
 
     track affyTxnPhase3FragsU87MG
-    parent affyTxnPhase3FragsL
+    subTrack affyTxnPhase3FragsL
     shortLabel U87MG lRNA
     longLabel Affymetrix U87MG Long RNA (Cytosolic) Fragments
     priority 10
@@ -1227,61 +1227,61 @@ type wig 0 1000
 
     track affyTxnPhase3HDF
     shortLabel HDF lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HDF Long RNA (Cytosolic) Signal
     priority 1
 
     track affyTxnPhase3HeLaCyto
     shortLabel HeLa Cyto lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HeLa Long RNA (Cytosolic) Signal
     priority 2
 
     track affyTxnPhase3HeLaNuclear
     shortLabel HeLa Nucl lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HeLa Long RNA (Nuclear) Signal
     priority 3
 
     track affyTxnPhase3HepG2Cyto
     shortLabel HepG2 Cyto lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HepG2 Long RNA (Cytosolic) Signal
     priority 4
 
     track affyTxnPhase3HepG2Nuclear
     shortLabel HepG2 Nucl lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix HepG2 Long RNA (Nuclear) Signal
     priority 5
 
     track affyTxnPhase3Jurkat
     shortLabel Jurkat lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix Jurkat Long RNA (Cytosolic) Signal
     priority 6
 
     track affyTxnPhase3NCCIT
     shortLabel NCCIT lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix NCCIT Long RNA (Cytosolic) Signal
     priority 7
 
     track affyTxnPhase3PC3
     shortLabel PC3 lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PC3 Long RNA (Cytosolic) Signal
     priority 8
 
     track affyTxnPhase3SK_N_AS
     shortLabel SK-N-AS lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix SK-N-AS Long RNA (Cytosolic) Signal
     priority 9
 
     track affyTxnPhase3U87MG
     shortLabel U87MG lRNA
-    parent affyTxnPhase3L
+    subTrack affyTxnPhase3L
     longLabel Affymetrix U87MG Long RNA (Cytosolic) Signal
     priority 10
 
@@ -1296,25 +1296,25 @@ origAssembly hg17
 type bed 3 .
 
     track affyTxnPhase3FragsHeLaTopStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HeLa + sRNA
     longLabel Affymetrix HeLa Plus Strand Short RNA (Whole Cell) Fragments
     priority 1
 
     track affyTxnPhase3FragsHeLaBottomStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HeLa - sRNA
     longLabel Affymetrix HeLa Minus Strand Short RNA (Whole Cell) Fragments
     priority 2
 
     track affyTxnPhase3FragsHepG2TopStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HepG2 + sRNA
     longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2BottomStrand
-    parent affyTxnPhase3FragsS
+    subTrack affyTxnPhase3FragsS
     shortLabel HepG2 - sRNA
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Fragments
     priority 4
@@ -1335,25 +1335,25 @@ type wig 0 1000
 
     track affyTxnPhase3HeLaTopStrand
     shortLabel HeLa + sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix Hela Plus Strand Short RNA (Whole Cell) Signal
     priority 1
 
     track affyTxnPhase3HeLaBottomStrand
     shortLabel HeLa - sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix Hela Minus Strand Short RNA (Whole Cell) Signal
     priority 2
 
     track affyTxnPhase3HepG2TopStrand
     shortLabel HepG2 + sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Signal
     priority 3
 
     track affyTxnPhase3HepG2BottomStrand
     shortLabel HepG2 - sRNA
-    parent affyTxnPhase3S
+    subTrack affyTxnPhase3S
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
 
@@ -1382,14 +1382,14 @@ origAssembly hg17
 dataVersion March 2007
 
     track stanfordNRSFEnrichedOverlaps
-    parent stanfordNRSFOverlaps
+    subTrack stanfordNRSFOverlaps
     shortLabel Stanf NRSF
     longLabel Stanford NRSF/REST Enriched Counts
     priority 1
     color 0,128,0
 
     track stanfordNRSFControlOverlaps
-    parent stanfordNRSFOverlaps
+    subTrack stanfordNRSFOverlaps
     shortLabel Stanf Control
     longLabel Stanford NRSF/REST Control Counts
     priority 2
@@ -1408,14 +1408,14 @@ origAssembly hg17
 dataVersion March 2007
 
     track stanfordNRSFEnriched
-    parent stanfordNRSF
+    subTrack stanfordNRSF
     shortLabel Stanf NRSF
     longLabel Stanford NRSF/REST Enriched Tags
     priority 1
     color 0,128,0
 
     track stanfordNRSFControl
-    parent stanfordNRSF
+    subTrack stanfordNRSF
     shortLabel Stanf Control
     longLabel Stanford NRSF/REST Control Tags
     priority 2
@@ -1503,84 +1503,84 @@ visibility dense
 type bed 4 .
 
     track snpArrayAffy6
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy SNP 6.0
     longLabel Affymetrix SNP 6.0
     type bed 6 +
     priority 1
 
     track snpArrayAffy6SV
-    parent snpArray
+    subTrack snpArray
     shortLabel Affy SNP 6.0 SV
     longLabel Affymetrix SNP 6.0 Structural Variation
     type bed 6 +
     priority 2
 
     track snpArrayAffy5
-    parent snpArray off
+    subTrack snpArray off
     shortLabel Affy SNP 5.0
     longLabel Affymetrix SNP 5.0
     type bed 6 +
     priority 3
 
     track snpArrayAffy250Nsp
-    parent snpArray off
+    subTrack snpArray off
     shortLabel Affy 250KNsp
     longLabel Affymetrix GeneChip Human Mapping 250K Nsp
     type bed 6 +
     priority 4
 
     track snpArrayAffy250Sty
-    parent snpArray off
+    subTrack snpArray off
     shortLabel Affy 250KSty
     longLabel Affymetrix GeneChip Human Mapping 250K Sty
     type bed 6 +
     priority 5
 
     track snpArrayIllumina650
-    parent snpArray off
+    subTrack snpArray off
     shortLabel Illumina 650
     longLabel Illumina Human Hap 650v3
     type bed 6 +
     priority 6
 
     track snpArrayIllumina550
-    parent snpArray off
+    subTrack snpArray off
     shortLabel Illumina 550
     longLabel Illumina Human Hap 550v3
     type bed 6 +
     priority 7
 
     track snpArrayIllumina300
-    parent snpArray off
+    subTrack snpArray off
     shortLabel Illumina 300
     longLabel Illumina Human Hap 300v3
     type bed 6 +
     priority 8
 
     track snpArrayIllumina1M
-    parent snpArray
+    subTrack snpArray
     shortLabel Illumina 1M-Duo
     longLabel Illumina Human1M-Duo
     type bed 6 +
     priority 9
 
     track snpArrayIlluminaHumanCytoSNP_12
-    parent snpArray
+    subTrack snpArray
     shortLabel Illumina Cyto-12
     longLabel Illumina Human CytoSNP-12
     type bed 6 +
     priority 10
 
     track snpArrayIlluminaHuman660W_Quad
-    parent snpArray
+    subTrack snpArray
     shortLabel Illumina 660W-Q
     longLabel Illumina Human 660W-Quad
     type bed 6 +
     priority 11
 
     track snpArrayIlluminaHumanOmni1_Quad
-    parent snpArray
+    subTrack snpArray
     shortLabel Illumina Omni1-Q
     longLabel Illumina Human Omni1-Quad
     type bed 6 +
@@ -1598,7 +1598,7 @@ subGroup1 specRec Species_reckoned_with ch=chimp or=orangutan
 type wig
 
     track divChimpRpd
-    parent divMKAR
+    subTrack divMKAR
     shortLabel log2 r_pd
     longLabel log2 (r_pd) divergence from chimp
     subGroups specRec=ch
@@ -1607,14 +1607,14 @@ type wig
     priority 1
 
     track divChimpFet
-    parent divMKAR
+    subTrack divMKAR
     shortLabel -log10 p-value
     longLabel -log10 (p-value) divergence from chimp
     subGroups specRec=ch
     priority 2
 
     track divChimpFdr
-    parent divMKAR
+    subTrack divMKAR
     shortLabel -log10 FDR
     longLabel -log10 (FDR) divergence from chimp
     subGroups specRec=ch
@@ -1627,7 +1627,7 @@ type wig
     priority 3
 
     track divChimpRpd129
-    parent divMKAR
+    subTrack divMKAR
     shortLabel dbSNP129 log2 r_pd
     longLabel dbSNP129 log2 (r_pd) divergence from chimp
     subGroups specRec=ch
@@ -1636,14 +1636,14 @@ type wig
     priority 7
 
     track divChimpFet129
-    parent divMKAR
+    subTrack divMKAR
     shortLabel dbSNP129 -log10 p-value
     longLabel dbSNP129 -log10 (p-value) divergence from chimp
     subGroups specRec=ch
     priority 8
 
     track divChimpFdr129
-    parent divMKAR
+    subTrack divMKAR
     shortLabel dbSNP129 -log10 FDR
     longLabel dbSNP129 -log10 (FDR) divergence from chimp
     subGroups specRec=ch
@@ -1656,7 +1656,7 @@ type wig
     priority 9
 
     track divChimpRpdPg8
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pgSnp8 log2 r_pd
     longLabel 8 Personal Genomes log2 (r_pd) divergence from chimp
     subGroups specRec=ch
@@ -1665,14 +1665,14 @@ type wig
     priority 10
 
     track divChimpFetPg8
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pgSnp8 -log10 p-value
     longLabel 8 Personal Genomes -log10 (p-value) divergence from chimp
     subGroups specRec=ch
     priority 11
 
     track divChimpFdrPg8
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pgSnp8 -log10 FDR
     longLabel 8 Personal Genomes -log10 (FDR) divergence from chimp
     subGroups specRec=ch
@@ -1685,7 +1685,7 @@ type wig
     priority 12
 
     track divChimpRpdPg8plus
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pg8+ log2 r_pd
     longLabel 8+ Personal Genomes log2 (r_pd) divergence from chimp
     subGroups specRec=ch
@@ -1694,14 +1694,14 @@ type wig
     priority 13
 
     track divChimpFetPg8plus
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pg8+ -log10 p-value
     longLabel 8+ Personal Genomes -log10 (p-value) divergence from chimp
     subGroups specRec=ch
     priority 14
 
     track divChimpFdrPg8plus
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pg8+ -log10 FDR
     longLabel 8+ Personal Genomes -log10 (FDR) divergence from chimp
     subGroups specRec=ch
@@ -1714,7 +1714,7 @@ type wig
     priority 15
 
     track divOrangRpdPg8plus
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pg8+ log2 r_pd
     longLabel 8+ Personal Genomes log2 (r_pd) divergence from orangutan
     subGroups specRec=or
@@ -1723,14 +1723,14 @@ type wig
     priority 16
 
     track divOrangFetPg8plus
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pg8+ -log10 p-value
     longLabel 8+ Personal Genomes -log10 (p-value) divergence from orangutan
     subGroups specRec=or
     priority 17
 
     track divOrangFdrPg8plus
-    parent divMKAR
+    subTrack divMKAR
     shortLabel pg8+ -log10 FDR
     longLabel 8+ Personal Genomes -log10 (FDR) divergence from orangutan
     subGroups specRec=or
@@ -2221,13 +2221,13 @@ type bed 6 .
 chromosomes chr22
 
     track omiciaAuto
-    parent omicia
+    subTrack omicia
     shortLabel Omicia OMIM
     longLabel Omicia OMIM mapping, Early Access R1, April 2007
     priority 1
 
     track omiciaHand
-    parent omicia
+    subTrack omicia
     shortLabel Omicia OMIM Hand-Curation
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
@@ -2383,7 +2383,7 @@ urlLabel Vega Transcript:
 url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
 
     track vegaGene
-    parent record vegaGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
+    subTrack record vegaGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     subTrack vegaGeneComposite
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
@@ -2391,7 +2391,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     color 0,50,225
 
     track vegaPseudoGene
-    parent record vegaPseudoGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
+    subTrack record vegaPseudoGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     subTrack vegaGeneComposite
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
@@ -2541,10 +2541,10 @@ chromosomes chr1
     shortLabel Sites
     view PK
     visibility pack
-    parent zhaoLabNucleosome
+    subTrack zhaoLabNucleosome
 
         track zhaoLabActivatedNucleosomeFwd
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel ActiveNucleosome
         longLabel Activated nucleosome forward strand
         subGroups FAC=NUC STRAND=FWD ACT=ACTV view=PK
@@ -2555,7 +2555,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabActivatedNucleosomeRev
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel ActiveNucleosome
         longLabel Activated nucleosome reverse strand
         subGroups FAC=NUC STRAND=RWD ACT=ACTV view=PK
@@ -2566,7 +2566,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingNucleosomeFwd
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel RestingNucleosome
         longLabel Resting nucleosome forward strand
         subGroups FAC=NUC STRAND=FWD ACT=REST view=PK
@@ -2577,7 +2577,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingNucleosomeRev
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel RestingNucleosome
         longLabel Resting nucleosome reverse strand
         subGroups FAC=NUC STRAND=RWD ACT=REST view=PK
@@ -2588,7 +2588,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingH3Fwd
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel RestingHistoneH3
         longLabel Resting histone H3 forward strand
         subGroups FAC=H3 STRAND=FWD ACT=REST view=PK
@@ -2599,7 +2599,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingH3Rev
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel RestingNucleosome
         longLabel Resting histone H3 reverse strand
         subGroups FAC=H3 STRAND=RWD ACT=REST view=PK
@@ -2610,7 +2610,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabActiveUnphosPolII
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel Active Unphosphor PolII
         longLabel Activated Unphosphorylated Pol II
         subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=PK
@@ -2621,7 +2621,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingUnphosPolII
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel Resting Unphosphor PolII
         longLabel Resting Unphosphorylated Pol II
         subGroups FAC=POL2U STRAND=DBL ACT=REST view=PK
@@ -2632,7 +2632,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabActiveSer5PhosPolII
-        parent zhaoLabNucleosomeViewPK
+        subTrack zhaoLabNucleosomeViewPK
         shortLabel Active Ser5 PolII
         longLabel Activated Ser5 Phosphorylated Pol II
         subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=PK
@@ -2646,12 +2646,12 @@ chromosomes chr1
     shortLabel Density
     view SIG
     visibility full
-    parent zhaoLabNucleosome
+    subTrack zhaoLabNucleosome
     viewLimits 0:10520
     viewLimitsMax 0:10520
 
         track zhaoLabActivatedNucleosomeFwdWig
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel ActiveNucleosome
         longLabel Density graph, activated nucleosome forward strand
         subGroups FAC=NUC STRAND=FWD ACT=ACTV view=SIG
@@ -2667,7 +2667,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabActivatedNucleosomeRevWig
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel ActiveNucleosome
         longLabel Density graph, activated nucleosome reverse strand
         subGroups FAC=NUC STRAND=RWD ACT=ACTV view=SIG
@@ -2683,7 +2683,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingNucleosomeFwdWig
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel RestingNucleosome
         longLabel Density graph, resting nucleosome forward strand
         subGroups FAC=NUC STRAND=FWD ACT=REST view=SIG
@@ -2699,7 +2699,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingNucleosomeRevWig
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel RestingNucleosome
         longLabel Density graph, resting nucleosome reverse strand
         subGroups FAC=NUC STRAND=RWD ACT=REST view=SIG
@@ -2715,7 +2715,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingH3FwdWig
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel RestingHistoneH3
         longLabel Density graph, resting histone H3 forward strand
         subGroups FAC=H3 STRAND=FWD ACT=REST view=SIG
@@ -2731,7 +2731,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingH3RevWig
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel RestingNucleosome
         longLabel Density graph, resting histone H3 reverse strand
         subGroups FAC=H3 STRAND=RWD ACT=REST view=SIG
@@ -2747,7 +2747,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabActiveUnphosPolIIBedGraph
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel density Active Unphosphor PolII
         longLabel Density graph, activated Unphosphorylated Pol II
         subGroups FAC=POL2U STRAND=DBL ACT=ACTV view=SIG
@@ -2762,7 +2762,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabRestingUnphosPolIIBedGraph
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel density Resting Unphosphor PolII
         longLabel Density graph, resting Unphosphorylated Pol II
         subGroups FAC=POL2U STRAND=DBL ACT=REST view=SIG
@@ -2777,7 +2777,7 @@ chromosomes chr1
         noInherit	on
 
         track zhaoLabActiveSer5PhosPolIIBedGraph
-        parent zhaoLabNucleosomeViewSIG
+        subTrack zhaoLabNucleosomeViewSIG
         shortLabel density Active Ser5 PolII
         longLabel Density graph, activated Ser5 Phosphorylated Pol II
         subGroups FAC=POL2S STRAND=DBL ACT=ACTV view=SIG
@@ -2810,11 +2810,11 @@ type bed 3
     track barskiChIPseqViewSIG
     shortLabel Signal
     view SIG
-    parent barskiChIPseq
+    subTrack barskiChIPseq
     viewLimitsMax 0:319
 
         track barskiChIPseqH3K4me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K04 METH=m1
         shortLabel Barski H3K4me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me1)
@@ -2831,7 +2831,7 @@ type bed 3
         priority 1
 
         track barskiChIPseqH3K4me2
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K04 METH=m2
         shortLabel Barski H3K4me2
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me2)
@@ -2848,7 +2848,7 @@ type bed 3
         priority 2
 
         track barskiChIPseqH3K4me3
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K04 METH=m3
         shortLabel Barski H3K4me3
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K4me3)
@@ -2865,7 +2865,7 @@ type bed 3
         priority 3
 
         track barskiChIPseqH3K9me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K09 METH=m1
         shortLabel Barski H3K9me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me1)
@@ -2882,7 +2882,7 @@ type bed 3
         priority 4
 
         track barskiChIPseqH3K9me2
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K09 METH=m2
         shortLabel Barski H3K9me2
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me2)
@@ -2899,7 +2899,7 @@ type bed 3
         priority 5
 
         track barskiChIPseqH3K9me3
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K09 METH=m3
         shortLabel Barski H3K9me3
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K9me3)
@@ -2916,7 +2916,7 @@ type bed 3
         priority 6
 
         track barskiChIPseqH3K27me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K27 METH=m1
         shortLabel Barski H3K27me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me1)
@@ -2933,7 +2933,7 @@ type bed 3
         priority 7
 
         track barskiChIPseqH3K27me2
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K27 METH=m2
         shortLabel Barski H3K27me2
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me2)
@@ -2950,7 +2950,7 @@ type bed 3
         priority 8
 
         track barskiChIPseqH3K27me3
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K27 METH=m3
         shortLabel Barski H3K27me3
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K27me3)
@@ -2967,7 +2967,7 @@ type bed 3
         priority 9
 
         track barskiChIPseqH3K36me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K36 METH=m1
         shortLabel Barski H3K36me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me1)
@@ -2977,7 +2977,7 @@ type bed 3
         priority 10
 
         track barskiChIPseqH3K36me3
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K36 METH=m3
         shortLabel Barski H3K36me3
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K36me3)
@@ -2994,7 +2994,7 @@ type bed 3
         priority 11
 
         track barskiChIPseqH3K79me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K79 METH=m1
         shortLabel Barski H3K79me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me1)
@@ -3011,7 +3011,7 @@ type bed 3
         priority 12
 
         track barskiChIPseqH3K79me2
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K79 METH=m2
         shortLabel Barski H3K79me2
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me2)
@@ -3028,7 +3028,7 @@ type bed 3
         priority 13
 
         track barskiChIPseqH3K79me3
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3K79 METH=m3
         shortLabel Barski H3K79me3
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3K79me3)
@@ -3045,7 +3045,7 @@ type bed 3
         priority 14
 
         track barskiChIPseqH3R2me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3R2 METH=m1
         shortLabel Barski H3R2me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me1)
@@ -3062,7 +3062,7 @@ type bed 3
         priority 15
 
         track barskiChIPseqH3R2me2
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H3R2 METH=m2
         shortLabel Barski H3R2me2
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H3R2me2)
@@ -3079,7 +3079,7 @@ type bed 3
         priority 16
 
         track barskiChIPseqH4K20me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H4K20 METH=m1
         shortLabel Barski H4K20me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me1)
@@ -3096,7 +3096,7 @@ type bed 3
         priority 17
 
         track barskiChIPseqH4K20me3
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H4K20 METH=m3
         shortLabel Barski H4K20me3
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4K20me3)
@@ -3113,7 +3113,7 @@ type bed 3
         priority 18
 
         track barskiChIPseqH4R3me2
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H4R3 METH=m1
         shortLabel Barski H4R3me2
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H4R3me2)
@@ -3130,7 +3130,7 @@ type bed 3
         priority 19
 
         track barskiChIPseqH2BK5me1
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H2BK5 METH=m1
         shortLabel Barski H2BK5me1
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2BK5me1)
@@ -3147,7 +3147,7 @@ type bed 3
         priority 20
 
         track barskiChIPseqH2AZ
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=H2AZ  METH=NA
         shortLabel Barski H2AZ
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. H2AZ)
@@ -3164,7 +3164,7 @@ type bed 3
         priority 21
 
         track barskiChIPseqPolII
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=PolII METH=NA
         shortLabel Barski PolII
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. PolII)
@@ -3181,7 +3181,7 @@ type bed 3
         priority 22
 
         track barskiChIPseqCTCF
-        parent barskiChIPseqViewSIG
+        subTrack barskiChIPseqViewSIG
         subGroups view=SIG AB=CTCF METH=NA
         shortLabel Barski CTCF
         longLabel Barski et al. 2007 Chromatin Methylation (ChIP-Seq ab. CTCF)
@@ -3215,10 +3215,10 @@ priority 103.29
     view align
     visibility pack
     viewUi on
-    parent cons44way
+    subTrack cons44way
 
     track multiz44way
-    parent cons44wayViewalign on
+    subTrack cons44wayViewalign on
     shortLabel Multiz Align
     longLabel Multiz Alignments of 44 Vertebrates
     subGroups view=align clade=vert
@@ -3244,13 +3244,13 @@ priority 103.29
     shortLabel Basewise Conservation (phyloP)
     view phyloP
     visibility full
-    parent cons44way
+    subTrack cons44way
     viewLimits -.3:2
     viewLimitsMax -15.41:7.13
 
         # PhyloP conservation
         track phyloP44wayPrimate
-        parent cons44wayViewphyloP off
+        subTrack cons44wayViewphyloP off
         subGroups view=phyloP clade=primate
         shortLabel Primate Cons
         longLabel Primate Basewise Conservation by PhyloP
@@ -3267,7 +3267,7 @@ priority 103.29
         priority 1
 
         track phyloP44wayPlacMammal
-        parent cons44wayViewphyloP on
+        subTrack cons44wayViewphyloP on
         subGroups view=phyloP clade=mammal
         shortLabel Mammal Cons
         longLabel Placental Mammal Basewise Conservation by PhyloP
@@ -3284,7 +3284,7 @@ priority 103.29
         priority 3
 
         track phyloP44wayAll
-        parent cons44wayViewphyloP off
+        subTrack cons44wayViewphyloP off
         subGroups view=phyloP clade=vert
         shortLabel Vertebrate Cons
         longLabel Vertebrate Basewise Conservation by PhyloP
@@ -3302,7 +3302,7 @@ priority 103.29
 
         # PhyloP V2 conservation (chrX-specific tree)
         track phyloP44wayPrimates_v2
-        parent cons44wayViewphyloP off
+        subTrack cons44wayViewphyloP off
         subGroups view=phyloP clade=primate
         shortLabel Primate Cons2
         longLabel Primate Basewise Conservation by PhyloP V2
@@ -3319,7 +3319,7 @@ priority 103.29
         priority 5
 
         track phyloP44wayPlacental_v2
-        parent cons44wayViewphyloP on
+        subTrack cons44wayViewphyloP on
         subGroups view=phyloP clade=mammal
         shortLabel Mammal Cons2
         longLabel Placental Mammal Basewise Conservation by PhyloP V2
@@ -3336,7 +3336,7 @@ priority 103.29
         priority 6
 
         track phyloP44way_v2
-        parent cons44wayViewphyloP off
+        subTrack cons44wayViewphyloP off
         subGroups view=phyloP clade=vert
         shortLabel Vertebrate Cons2
         longLabel Vertebrate Basewise Conservation by PhyloP V2
@@ -3356,11 +3356,11 @@ priority 103.29
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility hide
-    parent cons44way
+    subTrack cons44way
 
         # phastCons conservation
         track phastCons44wayPrimates
-        parent cons44wayViewphastcons off
+        subTrack cons44wayViewphastcons off
         subGroups view=phastcons clade=primate
         shortLabel Primate Cons
         longLabel Primate Conservation by PhastCons
@@ -3376,7 +3376,7 @@ priority 103.29
         priority 10
 
         track phastCons44wayPlacental
-        parent cons44wayViewphastcons on
+        subTrack cons44wayViewphastcons on
         subGroups view=phastcons clade=mammal
         shortLabel Mammal Cons
         longLabel Placental Mammal Conservation by PhastCons
@@ -3392,7 +3392,7 @@ priority 103.29
         priority 12
 
         track phastCons44way
-        parent cons44wayViewphastcons off
+        subTrack cons44wayViewphastcons off
         subGroups view=phastcons clade=vert
         shortLabel Vertebrate Cons
         longLabel Vertebrate Conservation by PhastCons
@@ -3411,11 +3411,11 @@ priority 103.29
     shortLabel Conserved Elements
     view elements
     visibility hide
-    parent cons44way
+    subTrack cons44way
 
         # Conserved Elements (Most Conserved)
         track phastConsElements44wayPrimates
-        parent cons44wayViewelements off
+        subTrack cons44wayViewelements off
         subGroups view=elements clade=primate
         shortLabel Primate El
         longLabel Primate Conserved Elements
@@ -3425,7 +3425,7 @@ priority 103.29
         priority 20
 
         track phastConsElements44wayPlacental
-        parent cons44wayViewelements on
+        subTrack cons44wayViewelements on
         subGroups view=elements clade=mammal
         shortLabel Mammal El
         longLabel Placental Mammal Conserved Elements
@@ -3435,7 +3435,7 @@ priority 103.29
         priority 22
 
         track phastConsElements44way
-        parent cons44wayViewelements off
+        subTrack cons44wayViewelements off
         subGroups view=elements clade=vert
         shortLabel Vertebrate El
         longLabel Vertebrate Conserved Elements
@@ -3460,7 +3460,7 @@ group compGeno
 priority 103.292
 
     track phyloP44wayPrimatesLs_v2
-    parent phyloPConsLs44way
+    subTrack phyloPConsLs44way
     shortLabel Primates V2
     longLabel Primates V2
     type wig -9.28 3.91
@@ -3475,7 +3475,7 @@ priority 103.292
     priority 1
 
     track phyloP44wayGliresLs_v2
-    parent phyloPConsLs44way
+    subTrack phyloPConsLs44way
     shortLabel Glires V2
     longLabel Glires (Rodent, Rabbit and Pika) V2
     type wig -6.99 5.95
@@ -3489,7 +3489,7 @@ priority 103.292
     priority 2
 
     track phyloP44wayPrimateLs
-    parent phyloPConsLs44way
+    subTrack phyloPConsLs44way
     shortLabel Primates
     longLabel Primates
     type wig -9.28 3.91
@@ -3504,7 +3504,7 @@ priority 103.292
     priority 3
 
     track phyloP44wayGlireLs
-    parent phyloPConsLs44way
+    subTrack phyloPConsLs44way
     shortLabel Glires
     longLabel Glires (Rodent, Rabbit and Pika)
     type wig -6.99 5.95
@@ -3532,13 +3532,13 @@ priority 110
     shortLabel Basewise Conservation
     view scores
     visibility full
-    parent ensembl31wayGerp
+    subTrack ensembl31wayGerp
 
     track ensembl31wayGerpViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    parent ensembl31wayGerp
+    subTrack ensembl31wayGerp
 
         #track ensembl31wayGerpScores
         #subTrack ensembl31wayGerp on
@@ -3557,7 +3557,7 @@ priority 110
         #type wig 0.0 1.0
 
         track ensembl31wayGerpElements
-        parent ensembl31wayGerpViewelements on
+        subTrack ensembl31wayGerpViewelements on
         subGroups view=elements
         shortLabel GERP Elements
         longLabel GERP Conserved Elements for 31-Mammal Ensembl PECAN Alignments
@@ -3590,12 +3590,12 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 maxWindowToDraw 200000
 
     track bamNA12878
-    parent oneKGHighCovSeq on
+    subTrack oneKGHighCovSeq on
     shortLabel NA12878 Slx BAM
     longLabel 1000Genomes NA12878 Solexa aligned reads
 
     track bamNA12891
-    parent oneKGHighCovSeq on
+    subTrack oneKGHighCovSeq on
     shortLabel NA12891 Slx BAM
     longLabel 1000Genomes NA12891 Solexa aligned reads
 
@@ -3640,7 +3640,7 @@ allButtonPair on
     shortLabel Clusters
     view SIG
     visibility full
-    parent fantom4CageGraphTop
+    subTrack fantom4CageGraphTop
     viewLimits 0.0:50.0
     minLimit 0
     maxLimit 50
@@ -3649,7 +3649,7 @@ allButtonPair on
     maxHeightPixels 128:32:16
 
         track Fantom4CageLevel1Forward
-        parent fantom4CageGraphTopViewSIG
+        subTrack fantom4CageGraphTopViewSIG
         shortLabel Level 1 Forward
         longLabel  Level 1 Forward Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -3661,7 +3661,7 @@ allButtonPair on
         color 30,25,110
 
         track Fantom4CageLevel1Reverse
-        parent fantom4CageGraphTopViewSIG
+        subTrack fantom4CageGraphTopViewSIG
         shortLabel Level 1 Reverse
         longLabel  Level 1 Reverse Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -3673,7 +3673,7 @@ allButtonPair on
         color 170,35,45
 
         track Fantom4CageLevel2Forward
-        parent fantom4CageGraphTopViewSIG
+        subTrack fantom4CageGraphTopViewSIG
         shortLabel Level 2 Forward
         longLabel  Level 2 Forward Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -3685,7 +3685,7 @@ allButtonPair on
         color 50,50,170
 
         track Fantom4CageLevel2Reverse
-        parent fantom4CageGraphTopViewSIG
+        subTrack fantom4CageGraphTopViewSIG
         shortLabel Level 2 Reverse
         longLabel  Level 2 Reverse Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -3697,7 +3697,7 @@ allButtonPair on
         color 170,40,70
 
         track Fantom4CageLevel3Forward
-        parent fantom4CageGraphTopViewSIG
+        subTrack fantom4CageGraphTopViewSIG
         shortLabel Level 3 Forward
         longLabel  Level 3 Forward Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -3709,7 +3709,7 @@ allButtonPair on
         color 75,75,225
 
         track Fantom4CageLevel3Reverse
-        parent fantom4CageGraphTopViewSIG
+        subTrack fantom4CageGraphTopViewSIG
         shortLabel Level 3 Reverse
         longLabel  Level 3 Reverse Fantom/Riken 4 CAGE
         subGroups view=SIG
@@ -3724,10 +3724,10 @@ allButtonPair on
     shortLabel Reads
     view BED
     visibility squish
-    parent fantom4CageGraphTop
+    subTrack fantom4CageGraphTop
 
         track FantomCageReadForward
-        parent fantom4CageGraphTopViewBED
+        subTrack fantom4CageGraphTopViewBED
         shortLabel Fantom (+) CAGE
         longLabel Fantom/Riken CAGE Reads Forward
         subGroups view=BED
@@ -3739,7 +3739,7 @@ allButtonPair on
         type bed 12 .
 
         track FantomCageReadReverse
-        parent fantom4CageGraphTopViewBED
+        subTrack fantom4CageGraphTopViewBED
         shortLabel Fantom (-) CAGE
         longLabel Fantom/Riken CAGE Reads Reverse
         subGroups view=BED

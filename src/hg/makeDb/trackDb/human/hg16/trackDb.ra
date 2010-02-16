@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.587 2010/02/16 20:19:46 kent Exp $";
+#	"$Id: trackDb.ra,v 1.588 2010/02/16 21:10:22 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -474,25 +474,25 @@ dataVersion HapMap release 19
 type bed 4 +
 
     track hapmapLdYri
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI)
     priority 1
 
     track hapmapLdCeu
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD CEU
     longLabel Linkage Disequilibrium for the CEPH (CEU)
     priority 2
 
     track hapmapLdChb
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD CHB
     longLabel Linkage Disequilibrium for the Han Chinese (CHB)
     priority 3
 
     track hapmapLdJpt
-    parent hapmapLd
+    subTrack hapmapLd
     shortLabel LD JPT
     longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT)
     priority 4
@@ -510,7 +510,7 @@ visibility hide
 type bed 4 +
 
     track cnpSharp
-    parent cnp 
+    subTrack cnp 
     shortLabel Sharp CNPs 
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
     noInherit on
@@ -518,7 +518,7 @@ type bed 4 +
     priority 1
 
     track cnpIafrate
-    parent cnp
+    subTrack cnp
     shortLabel Iafrate CNPs 
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
     noInherit on
@@ -526,7 +526,7 @@ type bed 4 +
     priority 2
 
     track cnpSebat
-    parent cnp
+    subTrack cnp
     shortLabel Sebat CNPs 
     longLabel Copy Number Polymorphisms from ROMA (Sebat)
     noInherit on
@@ -534,7 +534,7 @@ type bed 4 +
     priority 3
 
     track cnpFosmid
-    parent cnp
+    subTrack cnp
     shortLabel Tuzun Fosmids
     longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
@@ -542,7 +542,7 @@ type bed 4 +
     priority 4
 
     track delMccarroll
-    parent cnp
+    subTrack cnp
     shortLabel McCarroll Dels
     longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
@@ -550,7 +550,7 @@ type bed 4 +
     priority 5
 
     track delConrad
-    parent cnp
+    subTrack cnp
     shortLabel Conrad Dels
     longLabel Deletions from Genotype Analysis (Conrad)
     noInherit on
@@ -558,7 +558,7 @@ type bed 4 +
     priority 6
 
     track delHinds
-    parent cnp
+    subTrack cnp
     shortLabel Hinds Dels
     longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on

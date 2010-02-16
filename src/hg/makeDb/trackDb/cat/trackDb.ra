@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.12 2010/02/16 20:19:44 kent Exp $";
+#	"$Id: trackDb.ra,v 1.13 2010/02/16 21:10:20 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -13,7 +13,7 @@ spectrum on
 type netAlign
 
     track netSyntenyHg18
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Human Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -24,7 +24,7 @@ type netAlign
     otherDb hg18
 
     track netSyntenyMm8
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Mouse Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
@@ -35,7 +35,7 @@ type netAlign
     otherDb mm8
 
     track netSyntenyCanFam2
-    parent syntenicNet
+    subTrack syntenicNet
     shortLabel Dog Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
