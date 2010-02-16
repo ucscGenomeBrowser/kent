@@ -45,8 +45,9 @@
 #include "encode.h"
 #include "agpFrag.h"
 #include "imageV2.h"
+#include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1626 2010/02/13 01:27:58 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1627 2010/02/16 02:43:50 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4423,10 +4424,13 @@ if (!hideControls)
 	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
+	if(dragZooming && assemblySupportsGeneSuggest(database))
+            hWrites(" gene <input type='text' size='8' id='suggest'/>\n");
 	hWrites(" ");
-	hButton("hgt.jump", "jump");
+	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
+	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
         //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
 	if (survey && sameWord(survey, "on"))
@@ -5386,8 +5390,12 @@ if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("utils.js", NULL);
+    hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
+    jsIncludeFile("jquery.autocomplete.js", NULL);
+    jsIncludeFile("autocomplete.js", NULL);
     }
 jsIncludeFile("hgTracks.js", NULL);
+
 #ifdef LOWELAB
 jsIncludeFile("lowetooltip.js", NULL);
 #endif
@@ -5402,7 +5410,7 @@ jsIncludeFile("ajax.js", NULL);
 
 hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
-hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong>Alert:  </strong><span id='warningText'></span> (click to hide)</p></div>\n");
+hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
 #endif
 
 if (cartVarExists(cart, "chromInfoPage"))
