@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.468 2010/02/16 21:10:23 kent Exp $";
+#	"$Id: trackDb.ra,v 1.469 2010/02/16 23:39:39 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -548,7 +548,7 @@ baseColorDefault genomicCodons
     priority 1
 
     track nscanGene
-    subTrack record nscanGene in parent dir missing/extra group,visibility,type,baseColorUseCds,baseColorDefault,informant
+    #replaces record nscanGene in parent dir missing/extra group,visibility,type,baseColorUseCds,baseColorDefault,informant
     subTrack nscan
     shortLabel N-SCAN
     longLabel N-SCAN Gene Predictions
@@ -2383,7 +2383,7 @@ urlLabel Vega Transcript:
 url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
 
     track vegaGene
-    subTrack record vegaGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
+    #replaces record vegaGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     subTrack vegaGeneComposite
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
@@ -2391,7 +2391,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     color 0,50,225
 
     track vegaPseudoGene
-    subTrack record vegaPseudoGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
+    #replaces record vegaPseudoGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     subTrack vegaGeneComposite
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments

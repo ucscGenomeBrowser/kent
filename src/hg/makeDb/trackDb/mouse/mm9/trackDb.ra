@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.84 2010/02/16 21:10:25 kent Exp $";
+#	"$Id: trackDb.ra,v 1.85 2010/02/16 23:39:40 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -295,7 +295,7 @@ type bed 5 .
     priority 2
 
     track phastConsElements30way
-    subTrack record phastConsElements30way in parent dir missing/extra group,visibility,exonArrows,showTopScorers,type
+    #replaces record phastConsElements30way in parent dir missing/extra group,visibility,exonArrows,showTopScorers,type
     subTrack mostConserved30way
     shortLabel Vertebrate
     longLabel PhastCons Vertebrate Conserved Elements, 30-way Multiz Alignment

@@ -80,7 +80,7 @@ expStep 0.2
 groupings affyZonWildTypeGroups
     
     track affyZonWildType
-    subTrack record affyZonWildType in parent dir missing/extra group,visibility,type,expScale,expStep,groupings
+    #replaces record affyZonWildType in parent dir missing/extra group,visibility,type,expScale,expStep,groupings
     subTrack affyConsensusAndTargetZonWildType
     shortLabel WT Array Cons
     longLabel Zon Lab Expression for Wild Type Zfish (Consensus Seq.)

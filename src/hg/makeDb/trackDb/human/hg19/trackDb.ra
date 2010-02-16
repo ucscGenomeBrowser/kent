@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.98 2010/02/16 21:10:23 kent Exp $";
+#	"$Id: trackDb.ra,v 1.99 2010/02/16 23:39:40 kent Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -416,7 +416,7 @@ html hg19primateChainNet
     spectrum on
 
         track chainPanTro2
-    subTrack record chainPanTro2 in parent dir missing/extra release
+    #replaces record chainPanTro2 in parent dir missing/extra release
         subTrack primateChainNetViewchain on
         subGroups view=chain species=aPanTro clade=aHom
         shortLabel $o_Organism Chain
@@ -425,7 +425,7 @@ html hg19primateChainNet
         otherDb panTro2
 
         track chainGorGor1
-    subTrack record chainGorGor1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
+    #replaces record chainGorGor1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
         subTrack primateChainNetViewchain off
         subGroups view=chain species=bGorGor clade=aHom
         shortLabel $o_Organism Chain
@@ -434,7 +434,7 @@ html hg19primateChainNet
         otherDb gorGor1
 
         track chainPonAbe2
-    subTrack record chainPonAbe2 in parent dir missing/extra release
+    #replaces record chainPonAbe2 in parent dir missing/extra release
         subTrack primateChainNetViewchain off
         subGroups view=chain species=cPonAbe clade=aHom
         shortLabel $o_Organism Chain
@@ -443,7 +443,7 @@ html hg19primateChainNet
         otherDb ponAbe2
 
         track chainRheMac2
-    subTrack record chainRheMac2 in parent dir missing/extra release
+    #replaces record chainRheMac2 in parent dir missing/extra release
         subTrack primateChainNetViewchain off
         subGroups view=chain species=dRheMac clade=bCerco
         shortLabel $o_Organism Chain
@@ -460,7 +460,7 @@ html hg19primateChainNet
         otherDb papHam1
 
         track chainCalJac1
-    subTrack record chainCalJac1 in parent dir missing/extra group,priority,visibility,color,altColor,matrixHeader,matrix,spectrum
+    #replaces record chainCalJac1 in parent dir missing/extra group,priority,visibility,color,altColor,matrixHeader,matrix,spectrum
         subTrack primateChainNetViewchain off
         subGroups view=chain species=fCalJac clade=cHaplo
         shortLabel $o_Organism Chain
@@ -485,7 +485,7 @@ html hg19primateChainNet
         otherDb micMur1
 
         track chainOtoGar1
-    subTrack record chainOtoGar1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
+    #replaces record chainOtoGar1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
         subTrack primateChainNetViewchain off
         subGroups view=chain species=hOtoGar clade=dStrep
         shortLabel $o_Organism Chain
@@ -500,7 +500,7 @@ html hg19primateChainNet
     subTrack primateChainNet
 
         track netPanTro2
-    subTrack record netPanTro2 in parent dir missing/extra release
+    #replaces record netPanTro2 in parent dir missing/extra release
         subTrack primateChainNetViewnet on 
         subGroups view=net species=aPanTro clade=aHom
         shortLabel $o_Organism Net
@@ -509,7 +509,7 @@ html hg19primateChainNet
         otherDb panTro2
 
         track netGorGor1
-    subTrack record netGorGor1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netGorGor1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet off
         subGroups view=net species=bGorGor clade=aHom
         shortLabel $o_Organism Net
@@ -518,7 +518,7 @@ html hg19primateChainNet
         otherDb gorGor1
 
         track netPonAbe2
-    subTrack record netPonAbe2 in parent dir missing/extra release
+    #replaces record netPonAbe2 in parent dir missing/extra release
         subTrack primateChainNetViewnet on 
         subGroups view=net species=cPonAbe clade=aHom
         shortLabel $o_Organism Net
@@ -527,7 +527,7 @@ html hg19primateChainNet
         otherDb ponAbe2
 
         track netRheMac2
-    subTrack record netRheMac2 in parent dir missing/extra release
+    #replaces record netRheMac2 in parent dir missing/extra release
         subTrack primateChainNetViewnet on 
         subGroups view=net species=dRheMac clade=bCerco
         shortLabel $o_Organism Net
@@ -544,7 +544,7 @@ html hg19primateChainNet
         otherDb papHam1
 
         track netCalJac1
-    subTrack record netCalJac1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netCalJac1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet on 
         subGroups view=net species=fCalJac clade=cHaplo
         shortLabel $o_Organism Net
@@ -569,7 +569,7 @@ html hg19primateChainNet
         otherDb micMur1
 
         track netOtoGar1
-    subTrack record netOtoGar1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netOtoGar1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet on
         subGroups view=net species=hOtoGar clade=dStrep
         shortLabel $o_Organism Net
@@ -609,7 +609,7 @@ html hg19mammalChainNet
     spectrum on
 
         track chainEquCab2
-    subTrack record chainEquCab2 in parent dir missing/extra priority
+    #replaces record chainEquCab2 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=lEquCab clade=bLaura
         shortLabel $o_Organism Chain
@@ -618,7 +618,7 @@ html hg19mammalChainNet
         otherDb equCab2
 
         track chainTupBel1
-    subTrack record chainTupBel1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
+    #replaces record chainTupBel1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=hTupBel clade=aEuarch
         shortLabel $o_Organism Chain
@@ -675,7 +675,7 @@ html hg19mammalChainNet
         otherDb loxAfr3
 
         track chainFelCat3
-    subTrack record chainFelCat3 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
+    #replaces record chainFelCat3 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=mFelCat clade=bLaura
         shortLabel $o_Organism Chain
@@ -684,7 +684,7 @@ html hg19mammalChainNet
         otherDb felCat3
 
         track chainCanFam2
-    subTrack record chainCanFam2 in parent dir missing/extra priority
+    #replaces record chainCanFam2 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=nCanFam clade=bLaura
         shortLabel $o_Organism Chain
@@ -701,7 +701,7 @@ html hg19mammalChainNet
         otherDb dasNov2
 
         track chainOryCun1
-    subTrack record chainOryCun1 in parent dir missing/extra priority
+    #replaces record chainOryCun1 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=fOryCun clade=aEuarch
         shortLabel $o_Organism Chain
@@ -758,7 +758,7 @@ html hg19mammalChainNet
         otherDb ochPri2
 
         track chainEriEur1
-    subTrack record chainEriEur1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
+    #replaces record chainEriEur1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=qEriEur clade=bLaura
         shortLabel $o_Organism Chain
@@ -767,7 +767,7 @@ html hg19mammalChainNet
         otherDb eriEur1
 
         track chainEchTel1
-    subTrack record chainEchTel1 in parent dir missing/extra priority
+    #replaces record chainEchTel1 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=wEchTel clade=dAfro
         shortLabel $o_Organism Chain
@@ -792,7 +792,7 @@ html hg19mammalChainNet
         otherDb rn4
 
         track chainSorAra1
-    subTrack record chainSorAra1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
+    #replaces record chainSorAra1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=rSorAra clade=bLaura
         shortLabel $o_Organism Chain
@@ -807,7 +807,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet
 
         track netEquCab2
-    subTrack record netEquCab2 in parent dir missing/extra priority
+    #replaces record netEquCab2 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet off
         subGroups view=net species=lEquCab clade=bLaura
         shortLabel $o_Organism Net
@@ -816,7 +816,7 @@ html hg19mammalChainNet
         otherDb equCab2
 
         track netTupBel1
-    subTrack record netTupBel1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netTupBel1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
         subGroups view=net species=hTupBel clade=aEuarch
         shortLabel $o_Organism Net
@@ -873,7 +873,7 @@ html hg19mammalChainNet
         otherDb loxAfr3
 
         track netFelCat3
-    subTrack record netFelCat3 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netFelCat3 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
         subGroups view=net species=mFelCat clade=bLaura
         shortLabel $o_Organism Net
@@ -882,7 +882,7 @@ html hg19mammalChainNet
         otherDb felCat3
 
         track netCanFam2
-    subTrack record netCanFam2 in parent dir missing/extra priority
+    #replaces record netCanFam2 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet on 
         subGroups view=net species=nCanFam clade=bLaura
         shortLabel $o_Organism Net
@@ -899,7 +899,7 @@ html hg19mammalChainNet
         otherDb dasNov2
 
         track netOryCun1
-    subTrack record netOryCun1 in parent dir missing/extra priority
+    #replaces record netOryCun1 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet off
         subGroups view=net species=fOryCun clade=aEuarch
         shortLabel $o_Organism Net
@@ -956,7 +956,7 @@ html hg19mammalChainNet
         otherDb ochPri2
 
         track netEriEur1
-    subTrack record netEriEur1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netEriEur1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
         subGroups view=net species=qEriEur clade=bLaura
         shortLabel $o_Organism Net
@@ -965,7 +965,7 @@ html hg19mammalChainNet
         otherDb eriEur1
 
         track netEchTel1
-    subTrack record netEchTel1 in parent dir missing/extra priority
+    #replaces record netEchTel1 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet off
         subGroups view=net species=wEchTel clade=dAfro
         shortLabel $o_Organism Net
@@ -990,7 +990,7 @@ html hg19mammalChainNet
         otherDb rn4
 
         track netSorAra1
-    subTrack record netSorAra1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netSorAra1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
         subGroups view=net species=rSorAra clade=bLaura
         shortLabel $o_Organism Net
@@ -1028,7 +1028,7 @@ html hg19vertChainNet
     spectrum on
 
         track chainMacEug1
-    subTrack record chainMacEug1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
+    #replaces record chainMacEug1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=aMacEug clade=aMammal
         shortLabel $o_Organism Chain
@@ -1074,7 +1074,7 @@ html hg19vertChainNet
         otherDb anoCar1
 
         track chainXenTro2
-    subTrack record chainXenTro2 in parent dir missing/extra priority
+    #replaces record chainXenTro2 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=gXenTro clade=dAmph
         shortLabel $o_Organism Chain
@@ -1099,7 +1099,7 @@ html hg19vertChainNet
         otherDb fr2
 
         track chainDanRer6
-    subTrack record chainDanRer5 in parent dir missing/extra priority
+    #replaces record chainDanRer5 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=lDanRer clade=eTele
         shortLabel $o_Organism Chain
@@ -1138,7 +1138,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet
 
         track netMacEug1
-    subTrack record netMacEug1 in parent dir missing/extra group,priority,visibility,spectrum
+    #replaces record netMacEug1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=aMacEug clade=aMammal
         shortLabel $o_Organism Net
@@ -1184,7 +1184,7 @@ html hg19vertChainNet
         otherDb anoCar1
 
         track netXenTro2
-    subTrack record netXenTro2 in parent dir missing/extra priority
+    #replaces record netXenTro2 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewnet on 
         subGroups view=net species=gXenTro clade=dAmph
         shortLabel $o_Organism Net
@@ -1209,7 +1209,7 @@ html hg19vertChainNet
         otherDb fr2
 
         track netDanRer6
-    subTrack record netDanRer5 in parent dir missing/extra priority
+    #replaces record netDanRer5 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewnet on 
         subGroups view=net species=lDanRer clade=eTele
         shortLabel $o_Organism Net
