@@ -1,12 +1,14 @@
-setenv BRANCHNN 224
-setenv TODAY 2010-02-02       # v224 final
-setenv LASTWEEK 2010-01-19    # v223 final
+setenv BRANCHNN 225
+setenv TODAY 2010-02-16       # v225 final
+setenv LASTWEEK 2010-02-02    # v224 final
 setenv REVIEWDAY 2010-02-10      # v225 preview
 setenv LASTREVIEWDAY 2010-01-26  # v224 preview
 
+setenv GWEEKLYBLD /cluster/bin/build/buildrepo/src/utils/qa/weeklybld
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 titan
 
+setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/scratch/kentrepo.git
 setenv CVSROOT /projects/compbio/cvsroot
 setenv CVS_RSH ssh
 
@@ -22,9 +24,11 @@ setenv USE_BAM 1
 
 if ( "$HOST" == "$BOX32" ) then
     setenv BUILDDIR /scratch/releaseBuild
+    setenv GBUILDDIR /scratch/gReleaseBuild
 endif
 if ( "$HOST" == "hgwbeta" ) then
     setenv BUILDDIR /data/releaseBuild
+    setenv GBUILDDIR /data/gReleaseBuild
 endif
 if ( "$HOST" == "hgwdev" ) then
     setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
