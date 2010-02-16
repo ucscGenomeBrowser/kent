@@ -1041,4 +1041,336 @@ by a single Makefile. This is available from:
     ln -s /cluster/data/danRer6/goldenPath/chromosomes \
       /usr/local/apache/htdocs/goldenPath/danRer6/chromosomes
 
+
+#########################################################################
+## 6-Way Multiz (WORKING - 2010-02-01 - Galt)
+    ssh hgwdev
+    mkdir /cluster/data/danRer6/bed/multiz6way
+    cd /cluster/data/danRer6/bed/multiz6way
+
+    wget -O 46way.nh http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
+
+# ((Zebrafish,
+# (Stickleback,
+# Tetraodon)),
+# (X_tropicalis,
+# (Mouse,
+# Human))) 
+
+
+    #	All distances remain as specified in the 46way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but danRer6,gasAcu1,tetNig2,xenTro2,mm9,hg19 46way.nh > 6way.nh
+
+#(((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,((tetNig2:0.416610,gasAcu1:0.372371):0.322824,danRer6:0.731166):0.155214);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for /usr/local/apache/htdocs/images/phylo/danRer6_6way.gif
+    #   See below, I redo this on species names.
+    wget -O /usr/local/apache/htdocs/images/phylo/danRer6_6way.gif \
+'http://genome.ucsc.edu/cgi-bin/phyloGif?hgsid=151159276&phyloGif_width=200&phyloGif_height=320&boolshad.phyloGif_branchLengths=0&boolshad.phyloGif_lengthLegend=0&boolshad.phyloGif_branchLabels=0&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&phyloGif_underscores=on&boolshad.phyloGif_underscores=0&boolshad.phyloGif_htmlPage=0&phyloGif_tree=(((Human%3A0.131183%2CMouse%3A0.352605)%3A0.525173%2CX.tropicalis%3A0.852482)%3A0.300396%2C((Tetraodon%3A0.416610%2CStickleback%3A0.372371)%3A0.322824%2CZebrafish%3A0.731166)%3A0.155214)%3B%0D%0A&phyloGif_submit=submit'
+
+    /cluster/bin/phast/all_dists 6way.nh > 6way.distances.txt
+    #	Use this output to create the table below
+    grep -i danRer6 6way.distances.txt | sort -k3,3n
+
+#gasAcu1 danRer6 1.426361
+#tetNig2 danRer6 1.470600
+#hg19    danRer6 1.843132
+#xenTro2 danRer6 2.039258
+#mm9     danRer6 2.064554
+
+
+# hiram says these should already have been created 
+# and are in the build dirs already.
+
+featureBits danRer6 chainGasAcu1Link
+#147479454 bases of 1506896106 (9.787%) in intersection
+featureBits gasAcu1 chainDanRer6Link
+#114451338 bases of 446627861 (25.626%) in intersection
+
+featureBits danRer6 chainTetNig2Link
+#93349443 bases of 1506896106 (6.195%) in intersection
+featureBits tetNig2 chainDanRer6Link
+#70626082 bases of 302314788 (23.362%) in intersection
+
+featureBits danRer6 chainHg19Link
+#96424507 bases of 1506896106 (6.399%) in intersection
+featureBits hg19 chainDanRer6Link
+#88391631 bases of 2897316137 (3.051%) in intersection
+
+featureBits danRer6 chainXenTro2Link
+#100078259 bases of 1506896106 (6.641%) in intersection
+featureBits xenTro2 chainDanRer6Link
+#92089833 bases of 1359412157 (6.774%) in intersection
+
+featureBits danRer6 chainMm9Link
+#77099032 bases of 1506896106 (5.116%) in intersection
+featureBits mm9 chainDanRer6Link
+#73444297 bases of 2620346127 (2.803%) in intersection
+
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+
+#                         featureBits chainLink measures
+#                                           chainDanRer6Link  chain linearGap
+#    distance                    on danRer6  on other     minScore
+#  1  1.43 - stickleback gasAcu1   (% 9.79) (% 25.63)       2000     loose
+#  2  1.47 - tetraodon tetNig2     (% 6.20) (% 23.36)       2000     loose
+#  3  1.84 - human hg19            (% 6.40) (%  3.05)       2000     loose
+#  4  2.04 - xenopus xenTro2       (% 6.64) (%  6.77)       2000     loose
+#  5  2.06 - mouse mm9             (% 5.12) (%  2.80)       2000     loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # fix missing symlinks
+    cd /hive/data/genomes/danRer6/bed/
+    ln -s lastzMm9.2009-12-17/ lastz.mm9
+    ln -s lastzXenTro2.2009-12-22/ lastz.xenTro2
+    ln -s blastz.hg19.swap/ lastz.hg19
+    ln -s blastz.tetNig2.swap/ lastz.tetNig2
+
+    cd /hive/data/genomes/danRer6/bed/multiz6way
+
+    #	bash shell syntax here ...
+    export H=/cluster/data/danRer6/bed
+    mkdir mafLinks
+    for G in gasAcu1 tetNig2 hg19 xenTro2 mm9
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/lastz.${G}/mafNet ]; then
+	echo "missing directory lastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    # location for cluster run
+    #/hive/data/genomes/danRer6/bed/multiz6way/mafLinks/ 
+
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	6way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+
+    # this one is simple enough that it doesn't need a cluster run.
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = danRer6
+set binDir = /hive/data/genomes/danRer6/bed/multiz6way/penn
+rm -fr tmp
+mkdir -p tmp
+cd tmp
+foreach s (`cat ../species.lst`)
+    if ($s != $db) then
+        zcat ../mafLinks/$s/$db.$s.net.maf > $db.$s.sing.maf
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=. E=$db "`cat ../tree.nh`" $db.*.sing.maf ../multiz6way.maf
+cd ..
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+    screen
+    ./autoMultiz > & autoMultiz.log
+    # took 3 hours, log shows no errors.
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/bed/multiz6way
+    mkdir /gbdb/danRer6/multiz6way
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/multiz6way.maf \
+	/gbdb/danRer6/multiz6way
+    time nice hgLoadMaf danRer6 multiz6way
+    #	Loaded 2228353 mafs in 1 files from /gbdb/danRer6/multiz6way
+    #	43 sec
+
+    time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 danRer6 multiz6waySummary multiz6way.maf
+    #	Created 786724 summary blocks from 4850023 components 
+    #		and 2228353 mafs from multiz6way.maf
+    #	49 sec
+
+    wc -l multiz6way*.tab
+    #  2228353 multiz6way.tab
+    #   786724 multiz6waySummary.tab
+    #  3015077 total
+    rm multiz6way*.tab
+
+    #	Create tree image for details page
+    #	You can get a better image from the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    cp 6way.nh treeImage.nh
+    #	Edit treeImage.nh to make the names as desired
+
+# (
+# (zebrafish,(tetraodon,stickleback)),
+# (X._tropicalis,(mouse,human))
+# );
+
+    #	Submit this treeImage.nh to the phyloGif program
+
+    # Organism Image
+    pushd $HOME/browser/images/phylo
+    wget -O danRer6_6way.gif \
+	'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?hgsid=1831836&phyloGif_width=200&phyloGif_height=320&boolshad.phyloGif_branchLengths=0&boolshad.phyloGif_lengthLegend=0&boolshad.phyloGif_branchLabels=0&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&phyloGif_underscores=on&boolshad.phyloGif_underscores=0&boolshad.phyloGif_htmlPage=0&phyloGif_tree=(%0D%0A(zebrafish%2C(tetraodon%2Cstickleback))%2C%0D%0A(X._tropicalis%2C(mouse%2Chuman))%0D%0A)%3B&phyloGif_submit=submit'
+    #  check this .jpg file into the browser doc source tree images directory
+    cvs add -kb danRer6_6way.gif 
+    cvs commit -m 'organism tree for danRer6 6way' danRer6_6way.gif 
+    cp -p danRer6_6way.gif /usr/local/apache/htdocs/images/phylo/
+    popd
+
+
 ############################################################################
+# GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2010-02-08 - Galt)
+
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer6/bed/multiz6way/anno
+    cd /hive/data/genomes/danRer6/bed/multiz6way/anno
+    screen
+    mafAddIRows ../multiz6way.maf /hive/data/genomes/danRer6/danRer6.2bit multiz6way.maf
+    # 5 mins
+
+    # Load into database
+    rm /gbdb/danRer6/multiz6way/multiz6way.maf   # remove old symlink
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/anno/multiz6way.maf \
+	/gbdb/danRer6/multiz6way
+    time nice hgLoadMaf danRer6 multiz6way
+
+    #	Loaded 2644222 mafs in 1 files from /gbdb/danRer6/multiz6way
+    #	2 mins 
+
+    time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 danRer6 multiz6waySummary multiz6way.maf
+    #	Created 786724 summary blocks from 4850023 components 
+    #   and 2644222 mafs from multiz6way.maf
+    #   1 mins
+
+    wc -l multiz6way*.tab
+    #  2644222 multiz6way.tab
+    #   786724 multiz6waySummary.tab
+    #  3430946 total
+    rm multiz6way*.tab
+
+
+#########################################################################
+# Adding automatic generation of upstream files (DONE - 2010-02-09 - Galt)
+    # edit src/hg/makeDb/genbank/etc/genbank.conf to add:
+danRer6.upstreamGeneTbl = refGene
+danRer6.upstreamMaf = multiz6way /hive/data/genomes/danRer6/bed/multiz6way/species.lst
+
+#########################################################################
+# MULTIZ6WAY DOWNLOADABLES (DONE - 2010-02-09 - Galt)
+
+    # create some downloads
+    mkdir -p /hive/data/genomes/danRer6/bed/multiz6way/downloads/maf
+    cd /hive/data/genomes/danRer6/bed/multiz6way/downloads/maf
+    time cp -p ../../anno/*.maf .
+    # 1 mins
+    time gzip --rsyncable *.maf
+    # 11 mins
+    time md5sum *.gz > md5sum.txt
+    # 1 mins
+
+    mkdir -p /usr/local/apache/htdocs/goldenPath/danRer6/multiz6way/maf
+    cd /usr/local/apache/htdocs/goldenPath/danRer6/multiz6way/maf
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/downloads/maf/* .
+
+#############################################################################
+## create upstream refGene maf files
+    cd /hive/data/genomes/danRer6/bed/multiz6way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits danRer6 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags danRer6 multiz6way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/danRer6/bed/multiz6way/species.lst \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+    cd /usr/local/apache/htdocs/goldenPath/danRer6/multiz6way/maf
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/downloads/maf/up*.gz .
+    md5sum up*.gz >> md5sum.txt
+
+
+#######################################################################
+# MULTIZ6WAY MAF FRAMES (DONE - 2010-02-16 - galt)
+    ssh hgwdev
+    mkdir /cluster/data/danRer6/bed/multiz6way/frames
+    cd /cluster/data/danRer6/bed/multiz6way/frames
+    mkdir genes
+
+#danRer6 refGene
+#gasAcu1 ensGene
+#tetNig2 ensGene
+#hg19    knownGene
+#xenTro2 refGene
+#mm9     knownGene
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using refGene for danRer6 xenTro2
+    # using ensGene for gasAcu1 and tetNig2
+    # bash syntax
+    bash
+    for qDB in danRer6 xenTro2 gasAcu1 tetNig2
+    do
+      if [ $qDB = "gasAcu1" -o $qDB = "tetNig2" ]; then
+        geneTbl=ensGene
+      else
+	geneTbl=refGene
+      fi
+      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    # using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+        geneTbl=knownGene
+      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    ###
+    exit # end bash shell
+    
+    ssh hgwdev
+    cd /cluster/data/danRer6/bed/multiz6way/frames
+    cat ../anno/multiz6way.maf | nice genePredToMafFrames danRer6 stdin stdout danRer6 genes/danRer6.gp.gz gasAcu1 genes/gasAcu1.gp.gz tetNig2 genes/tetNig2.gp.gz hg19 genes/hg19.gp.gz mm9 genes/mm9.gp.gz xenTro2 genes/xenTro2.gp.gz | gzip > multiz6way.mafFrames.gz
+
+    ssh hgwdev
+    cd /cluster/data/danRer6/bed/multiz6way/frames
+    nice hgLoadMafFrames danRer6 multiz6wayFrames multiz6way.mafFrames.gz
+
+
