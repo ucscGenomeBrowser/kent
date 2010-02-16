@@ -586,7 +586,7 @@ COMPOSITE TRACKS
 Tracks that are somehow related can be grouped in a single "composite track",
 using the "compositeTrack on" setting.  The track name for the
 composite track is a placeholder, that is referenced in entries for the
-subtracks.  The subtracks have a "subTrack" setting that references
+subtracks.  The subtracks have a "parent" setting that references
 the composite track name.  The composite track entry contains all
 normal settings for the common track type if there is one.
 
@@ -712,31 +712,31 @@ view must be contained in the subGroup setting at the lowest level.   Example:
        track sigViewTrack
        view Sig
        shortLabel Signal Densities
-       subTrack compositeParent
+       parent compositeParent
 
            track brainSignalTrack
 	   shortLabel Signals in Brain
-	   subTrack sigViewTrack
+	   parent sigViewTrack
 	   subGroup view=Sig
 
 	   track liverSignalTrack
 	   shortLabe Signals in Liver
-	   subTrack sigViewTrack
+	   parent sigViewTrack
 	   subGroup view=Sig
      
        track alnViewTrack
        view Aln
        shortLabel Alignments
-       subTrack compositeParent
+       parent compositeParent
 
            track brainAlignmentTrack
 	   shortLabel Signals in Brain
-	   subTrack alnViewTrack
+	   parent alnViewTrack
 	   subGroup view=Aln
 
 	   track liverAlignmentTrack
 	   shortLabe Signals in Liver
-	   subTrack alnViewTrack
+	   parent alnViewTrack
 	   subGroup view=Aln
      
 Note that the view level track needs to have a view tag.  There is some redundancy between 
@@ -892,12 +892,12 @@ type bed 3
     shortLabel Sites-HMM
     view Hmm
     visibility pack
-    subTrack broadChromatinChIPSeq
+    parent broadChromatinChIPSeq
 
         track broadStemChipHmmSitesH3K4me3Es
         shortLabel H3K4me3-ES HMM
         longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
-        subTrack broadChromatinChIPSeqViewHmm
+        parent broadChromatinChIPSeqViewHmm
         subGroups factor=K04 cellType=ES view=Hmm
         type bed 3
         color 25,25,150
@@ -909,12 +909,12 @@ type bed 3
     view Win
     viewUi on
     visibility pack
-    subTrack broadChromatinChIPSeq
+    parent broadChromatinChIPSeq
 
         track broadStemChipWinSitesH3K4me3Es
         shortLabel H3K4me3-ES Win
         longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
-        subTrack broadChromatinChIPSeqViewWin
+        parent broadChromatinChIPSeqViewWin
         subGroups factor=K04 cellType=ES view=Win
         type bed 5 +
         useScore 1
@@ -926,12 +926,12 @@ type bed 3
     shortLabel Signal Densities
     view Sig
     visibility full
-    subTrack broadChromatinChIPSeq
+    parent broadChromatinChIPSeq
 
         track broadStemChipSignalH3K4Es
         shortLabel H3K4me3-ES Sig
         longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
-        subTrack broadChromatinChIPSeqViewSig
+        parent broadChromatinChIPSeqViewSig
         subGroups factor=K04 cellType=ES view=Sig
         type wig 0 35
         yLineOnOff On
@@ -943,12 +943,12 @@ type bed 3
     shortLabel Sites Alignments
     view Aln
     visibility hide
-    subTrack broadChromatinChIPSeq
+    parent broadChromatinChIPSeq
 
         track broadStemChipAlignmentsH3K4Me3Es
         shortLabel H3K4me3-ES Align
         longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
-        subTrack broadChromatinChIPSeqViewAln
+        parent broadChromatinChIPSeqViewAln
         subGroups factor=K04 cellType=ES view=Aln
         type bed 9 +
         useScore 1
