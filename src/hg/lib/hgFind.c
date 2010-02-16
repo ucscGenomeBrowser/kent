@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.224 2010/02/10 22:54:25 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.225 2010/02/16 21:16:53 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2973,10 +2973,8 @@ if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "knownCanonical") 
     sqlTableExists(conn, "kgXref"))
     {
     char query[512];
-    safef(query, sizeof(query), "select knownCanonical.chrom,chromStart,chromEnd,name "
-	  "from knownCanonical,knownGene,kgXref where kgXref.geneSymbol = '%s' "
-	  "and kgXref.kgId = knownGene.name and knownGene.name = knownCanonical.transcript;",
-	  term);
+    safef(query, sizeof(query), "select chrom,chromStart,chromEnd,kgID from knownCanonical,kgXref "
+	  "where kgXref.geneSymbol = '%s' and kgXref.kgId = knownCanonical.transcript;", term);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)
