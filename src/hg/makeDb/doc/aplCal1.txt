@@ -100,8 +100,14 @@ cat chrom.sizes | awk '{sum+=$2;print sum,$0}'
 # same total
 
 # Organism Image
-wget -O /usr/local/apache/htdocs/images/Aplysia_californica.jpg \
+pushd $HOME/browser/images
+wget -O Aplysia_californica.jpg \
  'http://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Aplysia_californica.jpg/250px-Aplysia_californica.jpg'
+#  check this .jpg file into the browser doc source tree images directory
+cvs add -kb Aplysia_californica.jpg 
+cvs commit -m 'organism image for Aplysia' Aplysia_californica.jpg 
+cp -p Aplysia_californica.jpg  /usr/local/apache/htdocs/images/
+popd
 
 # Edit and check-in templates for description.html, gold.html, gap.html, aplCal1/trackDb.ra
 
