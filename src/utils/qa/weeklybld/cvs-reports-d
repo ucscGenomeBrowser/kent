@@ -1,6 +1,27 @@
 #!/bin/sh
 # Start Tcl from a cluster bin directory \
 exec /cluster/bin/tcl/`uname -m`/bin/tclsh8.4 $0 ${1+"$@"}
+
+# FIXME: branch to attempt to fix problems with doing diffs between branches.
+# The problem is not full understood and this program might become obsolete.
+# Changes were already made, but it still doesn't work right.  Problems
+# relates to files being added on a branch and then merged into trunk to
+# diffing -r 1.0 works for files added on the trunck, but breaks on branches.
+#
+# This will reproduce:
+#
+## 
+## inFileFilt='-file blastToPsl.c'
+## inDir=../../../hg/blastToPsl
+## outdir=outdir
+## from=v221_branch
+## to=review
+## rm -rf $outdir
+## mkdir $outdir
+## 
+## ./cvs-reports-d -verbose -debug -from $from -to $to $inFileFilt $inDir $outdir
+## 
+
 ##
 # Program to generate reports from CVS log.
 ##
@@ -90,7 +111,6 @@ package require Itcl
 
     # Parse the cvs log header. `RCS file:' has already been read.
     private method parseCvsLogHeader {chan} {
-
         set parsingTags 0
         set inDescription 0
         while {1} {
@@ -472,17 +492,13 @@ package require Itcl
         }
     }
 
-    # find the previous revision, or 1.0 if none
+    # find the previous revision, or {} if none
     public method getPrevRev {rev} {
         set parts [split $rev .]
         set lastIdx [expr [llength $parts]-1]
         set last [lvarpop parts $lastIdx]
         if {$last == 1} {
             set prevRev [getRevisionParent $rev]
-            if {[lempty $prevRev]} {
-                # will generate diff for original commit
-                set prevRev 1.0
-            }
         } else {
             set prevRev [join [concat $parts [expr $last-1]] .]
         }
@@ -506,6 +522,7 @@ package require Itcl
     # Returns: {rev dateTime author state comment}
     public method getRevision {revSpec} {
         set rev [translateRevision $revSpec]
+        puts stderr "getRevision $revSpec => $rev"
         if {![info exists fRevisionTable($rev)]} {
             error "invalid revision specification: \"$revSpec\""
         }
@@ -752,53 +769,52 @@ package require Itcl
         }
     }
 
-    # do unified context diff on a file, requires a working directory
-    # rev1 of 1.0 for a new file, rev maybe a file or date.  rev2 maybe
-    # empty.
-    public method uniDiff {contextSize rev1 rev2 file} {
-
-
-	# disabling for now
-        ## -r 1.0 no longer accepted by new cvs diff
-        ## maybe BASE work instead? (still needs -N)
-        #if {$rev1 == 1.0} {
-        #    set rev1 "BASE"
-        #}
-
-        # -N required to make -r 1.0 work
-        set cmd [list cvs -q diff -bB -U$contextSize -kk -N]
-        lappend cmd [getRevFlag $rev1] $rev1
-        if {![lempty $rev2]} {
-            lappend cmd [getRevFlag $rev2] $rev2
-        }
-        lappend cmd $file
+    # run cvs uniDiff, doing neccessary error checking.  A pain, since the
+    # only way to determine if an error occured vs diff exit 1 is to check
+    # stderr.
+    public method runUniDiff {cmd} {
+        set errTmp /var/tmp/err.[pid].tmp
         try_eval {
             workDirEval {
-                # only way to determine if an error occured vs diff exit 1
-                # is to check stderr
-                set errTmp /var/tmp/err.[pid].tmp
                 catch {
                     lappend cmd 2> $errTmp
                     cvsExec $cmd
                 } diff
                 if {![file exists $errTmp]} {
                     error $diff
-                }
-                if {[file size $errTmp] != 0} {
+                } elseif {[file size $errTmp] != 0} {
                     set errMsg [read_file $errTmp]
-		    if {[string first "obtained lock in" $errTmp] == -1} {
-			progress "error: command=[$cmd]"
-			file delete $errTmp
+		    if {[string first "obtained lock in" $errMsg] == -1} {
 			error $errMsg
 		    }
                 }
-                file delete $errTmp
             }
+            regsub {child process exited abnormally$} $diff {} diff
         } {
             throwError $cmd
+        } {
+            file delete $errTmp  ;# finally
         }
-        regsub {child process exited abnormally$} $diff {} diff
         return $diff
+    }
+
+    # do unified context diff on a file, requires a working directory
+    # rev1 of 1.0 for a new file, rev maybe a file or date.  rev2 maybe
+    # empty.
+    public method uniDiff {contextSize rev1 rev2 file} {
+        if {[lempty $rev1] && [lempty $rev2]} {
+            error "uniDiff: both rev1 and rev2 empty for $file"
+        }
+        # -N required to make -r 1.0 work
+        set cmd [list cvs -q diff -bB -U$contextSize -kk -N]
+        if {![lempty $rev1]} {
+            lappend cmd [getRevFlag $rev1] $rev1
+        }
+        if {![lempty $rev2]} {
+            lappend cmd [getRevFlag $rev2] $rev2
+        }
+        lappend cmd $file
+        return [runUniDiff $cmd]
     }
 }
 
@@ -1196,6 +1212,8 @@ proc isSameBranch {fileInfo fromTag toTag} {
 # Code will lose stuff if fromTag is not branch point of toTag or if
 # fromTag and toTag are on different branches.  Check if tags are ok
 proc checkRevTags {fileInfo fromTag toTag} {
+    puts stderr [$fileInfo toString]
+    puts stderr [list   checkRevTags [$fileInfo getRCSFile]  $fromTag => [$fileInfo hasRevision $fromTag]  $toTag => [$fileInfo hasRevision $toTag]]
     # only check if file contans revision, and fromTag doesn't specify the base
     if {![lempty $fromTag] && [$fileInfo hasRevision $fromTag] && [$fileInfo hasRevision $toTag]} {
         if {!([isRevParent $fileInfo $fromTag $toTag] || [isSameBranch $fileInfo $fromTag $toTag])} {
