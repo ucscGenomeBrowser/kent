@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.61 2010/02/06 21:43:02 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.62 2010/02/16 23:37:32 braney Exp $";
 
 
 void usage()
@@ -364,6 +364,7 @@ for (td = tdbList; td != NULL; td = tdNext)
         AllocVar(sgd);
 	sgd->compositeTdb = td;
 
+	verbose(3,"getting subgroups for %s\n", td->tableName);
 	for(i=1; ; i++)
 	    {
 	    safef(subGroupName, sizeof(subGroupName), "subGroup%d", i);
@@ -382,6 +383,7 @@ for (td = tdbList; td != NULL; td = tdNext)
 		}
 	    if (sgd->nameHash == NULL)
 		sgd->nameHash = newHash(3);
+	    verbose(3,"   adding group %s\n", sgName);
 	    hashAdd(sgd->nameHash, sgName, subGroupHash);
 	    }
 	hashAdd(compositeHash, td->tableName, sgd);
@@ -395,6 +397,7 @@ static void checkOneSubGroups(char *compositeName,
 {
 char *subGroups = trackDbSetting(td, "subGroups");
 
+verbose(2, "   checkOne %s %s\n", compositeName, td->tableName);
 if (subGroups && (sgd->nameHash == NULL))
     {
     errAbort("subTrack %s has groups not defined in parent %s\n",
@@ -445,21 +448,25 @@ static void verifySubTracks(struct trackDb *tdbList, struct hash *compositeHash)
 /* Verify subGroup relelated settings in subtracks, assisted by compositeHash */
 {
 struct trackDb *tdb;
+
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    struct trackDb *parent = tdb->parent;
-    if (parent && parent->subtracks)  /* Second part of if is to escape superTrack system. */
+    struct slRef *child;
+    struct slRef *childList = trackDbListGetRefsToDescendantLeaves(
+	tdb->subtracks);
+
+    verbose(2,"verifying %s child %p\n",tdb->tableName, childList);
+    for (child = childList; child != NULL; child = child->next)
 	{
+	struct trackDb *childTdb = child->val;
+	verbose(2, "  checking child %s\n",childTdb->tableName);
+
 	/* Look for some ancestor in composite hash and set sgd to it. */
-	struct subGroupData *sgd = NULL;
-	for (;parent != NULL; parent = parent->parent)
-	    {
-	    sgd = hashFindVal(compositeHash, parent->tableName);
-	    if (sgd != NULL)
-	        break;
-	    }
+	struct subGroupData *sgd =  hashFindVal(compositeHash, tdb->tableName);
+	verbose(2, "looking for %s in compositeHash got %p\n", 
+	    tdb->tableName, sgd);
 	assert(sgd != NULL);	
-	checkOneSubGroups(parent->tableName, tdb, sgd);
+	checkOneSubGroups(tdb->tableName, childTdb, sgd);
 	}
     }
 }
