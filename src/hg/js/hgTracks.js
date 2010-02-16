@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.53 2010/02/13 00:40:00 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.54 2010/02/16 01:28:14 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -22,26 +22,12 @@ var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
 var selectedMenuItem;       // currently choosen context menu item (via context menu).
 var browser;                // browser ("msie", "safari" etc.)
 
-function commify (str) {
-    if(typeof(str) == "number")
-	str = str + "";
-    var n = str.length;
-    if (n <= 3) {
-	return str;
-    } else {
-	var pre = str.substring(0, n-3);
-	var post = str.substring(n-3);
-	var pre = commify(pre);
-	return pre + "," + post;
-    }
-}
-
 function initVars(img)
 {
 // There are various entry points, so we call initVars in several places to make sure this variables get updated.
     if(!originalPosition) {
         // remember initial position and size so we can restore it if user cancels
-        originalPosition = $('#positionHidden').val() || getPosition();
+        originalPosition = getOriginalPosition();
         originalSize = $('#size').text();
         originalCursor = jQuery('body').css('cursor');
     }
@@ -76,19 +62,34 @@ function setPositionByCoordinates(chrom, start, end)
     return newPosition;
 }
 
-function getPosition()
+function getPositionElement()
 {
-// Return current value of position box
+// Return position box object
     var tags = document.getElementsByName("position");
     // There are multiple tags with name == "position" (the visible position text input
     // and a hidden with id='positionHidden'); we return value of visible element.
     for (var i = 0; i < tags.length; i++) {
 	    var ele = tags[i];
             if(ele.id != "positionHidden") {
-	        return ele.value;
+	        return ele;
             }
     }
     return null;
+}
+
+function getPosition()
+{
+// Return current value of position box
+    var ele = getPositionElement();
+    if(ele != null) {
+	return ele.value;
+    }
+    return null;
+}
+
+function getOriginalPosition()
+{
+    return originalPosition || getPosition();
 }
 
 function setPosition(position, size)
@@ -107,6 +108,11 @@ function setPosition(position, size)
     if(size) {
         $('#size').text(size);
     }
+}
+
+function getDb()
+{
+    return document.getElementsByName("db")[0].value;
 }
 
 function checkPosition(img, selection)
@@ -1005,7 +1011,7 @@ function blockTheMap(e)
     blockUseMap=true;
 }
 
-// wait for jStore to prepare the storage engine (this token reload code is currently dead code).
+// wait for jStore to prepare the storage engine (this token reload code is experimental and currently dead).
 jQuery.jStore && jQuery.jStore.ready(function(engine) {
     // alert(engine.jri);
     // wait for the storage engine to be ready.
@@ -1026,8 +1032,28 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
 
 $(document).ready(function()
 {
+    if(jQuery.fn.autocomplete && $('input#suggest')) {
+        var db = getDb();
+        $('input#suggest').autocomplete({
+                                            delay: 500,
+                                            minchars: 1,
+                                            ajax_get: ajaxGet(function () {return db;}, new Object),
+                                            callback: function (obj) {
+                                                setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
+                                                // jQuery('body').css('cursor', 'wait');
+                                                // document.TrackHeaderForm.submit();
+                                            }
+                                        });
+        
+        // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
+        // working, which is a major annoyance.
+        // $('input#suggest').focus();
+    }
+    initVars();
+    
     if(jQuery.jStore) {
-        if(0) {
+        // Experimental (currently dead) code to handle "user hits back button" problem.
+        if(false) {
             jQuery.extend(jQuery.jStore.defaults, {
                               project: 'hgTracks',
                               engine: 'flash',
@@ -1235,8 +1261,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
         return;
     }
-    if(cmd == 'selectWholeGene') {
-            // bring whole gene into view
+    if(cmd == 'selectWholeGene' || cmd == 'getDna') {
+            // bring whole gene into view or redirect to DNA screen.
             var href = selectedMenuItem.href;
             var chromStart, chromEnd;
             var a = /hgg_chrom=(\w+)&/.exec(href);
@@ -1267,24 +1293,30 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             if(chrom == null || chromStart == null || chromEnd == null) {
                 showWarning("couldn't parse out genomic coordinates");
             } else {
-                var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
-                if(browser == "safari" || imageV2) {
-                    // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
-                    // See comments below on safari problems.
-                    jQuery('body').css('cursor', 'wait');
-                    document.TrackForm.submit();
+                if(cmd == 'getDna')
+                {
+                    // start coordinate seems to be off by one (+1).
+                    window.location = "../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd;
                 } else {
-                    jQuery('body').css('cursor', '');
-                    $.ajax({
-                               type: "GET",
-                               url: "../cgi-bin/hgTracks",
-                               data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
-                               dataType: "html",
-                               trueSuccess: handleUpdateTrackMap,
-                               success: catchErrorOrDispatch,
-                               cmd: cmd,
-                               cache: false
-                           });
+                    var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
+                    if(browser == "safari" || imageV2) {
+                        // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
+                        // See comments below on safari problems.
+                        jQuery('body').css('cursor', 'wait');
+                        document.TrackForm.submit();
+                    } else {
+                        jQuery('body').css('cursor', '');
+                        $.ajax({
+                                   type: "GET",
+                                   url: "../cgi-bin/hgTracks",
+                                   data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
+                                   dataType: "html",
+                                   trueSuccess: handleUpdateTrackMap,
+                                   success: catchErrorOrDispatch,
+                                   cmd: cmd,
+                                   cache: false
+                               });
+                    }
                 }
             }
     } else if (cmd == 'hgTrackUi') {
@@ -1437,6 +1469,7 @@ function loadContextMenu(img)
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
                         o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                        o["Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
                         o["Open Link in New Window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                     } else {
                         o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi"); return true; }};
@@ -1445,22 +1478,26 @@ function loadContextMenu(img)
                 }
             }
             if(!done) {
-                var str = "drag-and-zoom mode";
-                var o = new Object();
-                if(autoHideSetting) {
-                    str += selectedImg;
-                    // menu[str].className = 'context-menu-checked-item';
+                if(false) {
+                    // Currently toggling b/n drag-and-zoom mode and hilite mode is disabled b/c we don't know how to keep hilite mode from disabling the
+                    // context menus.
+                    var o = new Object();
+                    var str = "drag-and-zoom mode";
+                    if(autoHideSetting) {
+                        str += selectedImg;
+                        // menu[str].className = 'context-menu-checked-item';
+                    }
+                    o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "dragZoomMode"); return true; }};
+                    menu.push(o);
+                    o = new Object();
+                    // console.dir(ele);
+                    str = "hilight mode";
+                    if(!autoHideSetting) {
+                        str += selectedImg;
+                    }
+                    o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hilightMode"); return true; }};
+                    menu.push(o);
                 }
-                o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "dragZoomMode"); return true; }};
-                menu.push(o);
-                o = new Object();
-                // console.dir(ele);
-                str = "hilight mode";
-                if(!autoHideSetting) {
-                    str += selectedImg;
-                }
-                o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hilightMode"); return true; }};
-                menu.push(o);
                 menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
             return menu;
@@ -1503,27 +1540,10 @@ function parseMap(ele, reset)
     return mapItems;
 }
 
-function showWarning(str)
-{
-    $("#warningText").text(str);
-    $("#warning").show();
-}
-
-function catchErrorOrDispatch(obj,status)
-{
-    if(obj.err)
-    {
-        showWarning(obj.err);
-        jQuery('body').css('cursor', '');
-    }
-    else
-        this.trueSuccess(obj,status);
-}
-
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-    $('#hgTrackUiDialog').html(response);
+    $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -1664,4 +1684,23 @@ function handleViewImg(response, status)
         }
     }
     showWarning("Couldn't parse out img src");
+}
+
+function jumpButtonOnClick()
+{
+// onClick handler for the "jump" button.
+// Handles situation where user types a gene name into the gene box and immediately hits the jump button,
+// expecting the browser to jump to that gene.
+    var gene = $('#suggest').val();
+    if(gene && gene.length > 0 && getOriginalPosition() == getPosition()) {
+        var db = getDb();
+        pos = lookupGene(db, gene);
+        if(pos) {
+            setPosition(pos, null);
+        } else {
+            // turn this into a full text search.
+            setPosition(gene, null);
+        }
+    }
+    return true;
 }
