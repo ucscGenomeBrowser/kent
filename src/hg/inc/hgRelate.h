@@ -40,26 +40,30 @@ HGID hgNextId(void);
 /* Get next unique id.  (Should only be called after hgStartUpdate). */
 
 FILE *hgCreateTabFile(char *tmpDir, char *tableName);
-/* Open a tab file with name corresponding to tableName in tmpDir. */
+/* Open a tab file with name corresponding to tableName in tmpDir.  If tmpDir is NULL,
+ * use TMPDIR environment, or "/var/tmp" */
 
 int hgUnlinkTabFile(char *tmpDir, char *tableName);
-/* Unlink tab file */
+/* Unlink tab file.   If tmpDir is NULL, use TMPDIR environment, or "/var/tmp" */
 
 void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                    FILE **tabFh);
-/* Load tab delimited file corresponding to tableName. close fh if not NULL */
+/* Load tab delimited file corresponding to tableName. close fh if not NULL.
+ * If tmpDir is NULL, use TMPDIR environment, or "/var/tmp"*/
 
 void hgLoadNamedTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                         char *fileName, FILE **tabFh);
-/* Load named tab delimited file corresponding to tableName. close fh if not NULL */
+/* Load named tab delimited file corresponding to tableName. close fh if not
+ * NULL If tmpDir is NULL, use TMPDIR environment, or "/var/tmp"*/
 
 void hgLoadTabFileOpts(struct sqlConnection *conn, char *tmpDir, char *tableName,
                        unsigned options, FILE **tabFh);
 /* Load tab delimited file corresponding to tableName. close tabFh if not NULL
- * Options are those supported by sqlLoadTabFile */
+ * If tmpDir is NULL, use TMPDIR environment, or "/var/tmp". Options are those
+ * supported by sqlLoadTabFile */
 
 void hgRemoveTabFile(char *tmpDir, char *tableName);
-/* Remove file. */
+/* Remove file.* If tmpDir is NULL, use TMPDIR environment, or "/var/tmp" */
 
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName);
 /* get the maximum value of the id column in a table or zero if empry  */

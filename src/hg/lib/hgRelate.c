@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.25 2008/10/11 20:17:35 markd Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.26 2010/02/17 08:53:20 markd Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -170,13 +170,23 @@ sqlDisconnect(pConn);
 }
 
 static void getTabFile(char *tmpDir, char *tableName, char path[PATH_LEN])
-/* generate path to tab file */
+/* generate path to tab file.  If tmpDir is NULL, use TMPDIR environment, or
+ * "/var/tmp".  tmpDir NULL also include pid in file name */
 {
-safef(path, PATH_LEN, "%s/%s.tab", tmpDir, tableName);
+boolean inclPid = (tmpDir == NULL);
+if (tmpDir == NULL)
+    tmpDir = getenv("TMPDIR");
+if (tmpDir == NULL)
+    tmpDir = "/var/tmp";
+if (inclPid)
+    safef(path, PATH_LEN, "%s/%s.tab", tmpDir, tableName);
+else
+    safef(path, PATH_LEN, "%s/%s.%d.tab", tmpDir, tableName, getpid());
 }
 
 FILE *hgCreateTabFile(char *tmpDir, char *tableName)
-/* Open a tab file with name corresponding to tableName in tmpDir. */
+/* Open a tab file with name corresponding to tableName in tmpDir.  If tmpDir is NULL,
+ * use TMPDIR environment, or "/var/tmp" */
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
@@ -184,7 +194,7 @@ return mustOpen(path, "w");
 }
 
 int hgUnlinkTabFile(char *tmpDir, char *tableName)
-/* Unlink tab file */
+/* Unlink tab file.   If tmpDir is NULL, use TMPDIR environment, or "/var/tmp" */
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
@@ -193,7 +203,8 @@ return unlink(path);
 
 void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                    FILE **tabFh)
-/* Load tab delimited file corresponding to tableName. close fh if not NULL */
+/* Load tab delimited file corresponding to tableName. close fh if not NULL.
+ * If tmpDir is NULL, use TMPDIR environment, or "/var/tmp"*/
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
@@ -203,7 +214,8 @@ sqlLoadTabFile(conn, path, tableName, SQL_TAB_FILE_WARN_ON_ERROR);
 
 void hgLoadNamedTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                         char *fileName, FILE **tabFh)
-/* Load named tab delimited file corresponding to tableName. close fh if not NULL */
+/* Load named tab delimited file corresponding to tableName. close fh if not
+ * NULL If tmpDir is NULL, use TMPDIR environment, or "/var/tmp"*/
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, fileName, path);
@@ -214,7 +226,8 @@ sqlLoadTabFile(conn, path, tableName, SQL_TAB_FILE_WARN_ON_ERROR);
 void hgLoadTabFileOpts(struct sqlConnection *conn, char *tmpDir, char *tableName,
                        unsigned options, FILE **tabFh)
 /* Load tab delimited file corresponding to tableName. close tabFh if not NULL
- * Options are those supported by sqlLoadTabFile */
+ * If tmpDir is NULL, use TMPDIR environment, or "/var/tmp". Options are those
+ * supported by sqlLoadTabFile */
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
@@ -223,7 +236,7 @@ sqlLoadTabFile(conn, path, tableName, options);
 }
 
 void hgRemoveTabFile(char *tmpDir, char *tableName)
-/* Remove file. */
+/* Remove file.* If tmpDir is NULL, use TMPDIR environment, or "/var/tmp" */
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
