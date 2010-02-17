@@ -618,12 +618,6 @@ shortCircuit 1
 searchPriority 20
 termPrefix rikenTC:
 
-searchTable jaxQTL
-searchType bed
-searchMethod fuzzy
-termRegex [[:alpha:]0-9]+
-searchPriority 50
-
 searchTable jaxQtl
 searchType bed
 searchMethod fuzzy
