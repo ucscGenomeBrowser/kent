@@ -1,4 +1,4 @@
-1# Build all directories in makeDb 
+# Build all directories in makeDb 
 
 include ../../inc/common.mk
 
