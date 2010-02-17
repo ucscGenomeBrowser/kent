@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.31 2010/02/11 23:47:51 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.32 2010/02/17 21:55:58 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -247,7 +247,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $splitRef, $inclHap);
+my ($swapDir, $splitRef, $inclHap, $secondsStart, $secondsEnd);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -524,7 +524,7 @@ set L1 = `wc -l < $targetList`
 $partitionQueryCmd
 set L2 = `wc -l < $queryList`
 set L = `echo \$L1 \$L2 | awk '{print \$1*\$2}'`
-echo "cluster batch jobList size: \$L = \$L1 * \$L1"
+echo "cluster batch jobList size: \$L = \$L1 * \$L2"
 _EOF_
     );
   $bossScript->execute();
@@ -1507,6 +1507,8 @@ _EOF_
 &checkOptions();
 
 &usage(1) if (scalar(@ARGV) != 1);
+$secondsStart = `date "+%s"`;
+chomp $secondsStart;
 ($DEF) = @ARGV;
 
 $inclHap = "";
@@ -1572,8 +1574,14 @@ if ($opt_swap &&
 
 $stepper->execute();
 
+$secondsEnd = `date "+%s"`;
+chomp $secondsEnd;
+my $elapsedSeconds = $secondsEnd - $secondsStart;
+my $elapsedMinutes = int($elapsedSeconds/60);
+$elapsedSeconds -= $elapsedMinutes * 60;
+
 HgAutomate::verbose(1,
-	"\n *** All done!\n");
+	"\n *** All done !  Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 HgAutomate::verbose(1,
 	" *** Make sure that goldenPath/$tDb/vs$QDb/README.txt is accurate.\n")
   if ($stepper->stepPrecedes('load', $stepper->getStopStep()));
