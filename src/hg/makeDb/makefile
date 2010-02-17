@@ -1,4 +1,4 @@
-# Build all directories in makeDb 
+1# Build all directories in makeDb 
 
 include ../../inc/common.mk
 
@@ -20,6 +20,7 @@ DIRS = \
 	hgGcPercent \
 	hgGeneBands \
 	hgGenericMicroarray \
+	hgPar \
 	hgGoldGapGl \
 	hgKgGetText \
 	hgKgMrna \
