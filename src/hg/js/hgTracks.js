@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.54 2010/02/16 01:28:14 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.55 2010/02/17 21:40:26 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -112,7 +112,10 @@ function setPosition(position, size)
 
 function getDb()
 {
-    return document.getElementsByName("db")[0].value;
+    var db = document.getElementsByName("db");
+    if(db == undefined || db.length == 0)
+        return "";
+    return db[0].value;
 }
 
 function checkPosition(img, selection)
@@ -1044,13 +1047,13 @@ $(document).ready(function()
                                                 // document.TrackHeaderForm.submit();
                                             }
                                         });
-        
+
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
         // $('input#suggest').focus();
     }
     initVars();
-    
+
     if(jQuery.jStore) {
         // Experimental (currently dead) code to handle "user hits back button" problem.
         if(false) {
