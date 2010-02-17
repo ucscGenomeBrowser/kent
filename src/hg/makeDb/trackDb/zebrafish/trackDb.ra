@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.74 2010/02/16 23:39:41 kent Exp $";
+#	"$Id: trackDb.ra,v 1.75 2010/02/17 01:51:31 braney Exp $";
 
 include trackDb.chainNet.ra
 
@@ -21,6 +21,7 @@ type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
     track vegaGene
+    release alpha
     subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
@@ -28,6 +29,7 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     priority 1
     
     track vegaPseudoGene
+    release alpha
     subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
@@ -48,12 +50,14 @@ type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
     track vegaGene
+    release beta
     subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
     priority 1
     
     track vegaPseudoGene
+    release beta
     subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
