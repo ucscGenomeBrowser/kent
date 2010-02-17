@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.80 2010/02/11 18:45:57 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.81 2010/02/17 00:28:07 rhead Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -2689,7 +2689,6 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign canFam2 chainCanFam2
 
-# release alpha until felCat3 individual tracks phased out
 track chainNetFelCat3
 compositeTrack on
 shortLabel $o_Organism Chain/Net
