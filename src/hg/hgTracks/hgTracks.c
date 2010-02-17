@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1629 2010/02/17 19:13:53 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1630 2010/02/17 20:20:36 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4458,9 +4458,9 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
         hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom out 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
-    hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom out 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
-    hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom out 1.5x'>&gt;&nbsp;&lt;</a>\n");
+    hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom in 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
+    hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom in 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
+    hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom in 1.5x'>&gt;&nbsp;&lt;</a>\n");
     hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'><i>base</i></a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
@@ -4497,9 +4497,9 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
 #ifdef USE_NAVIGATION_LINKS
-    hPrintf("<a href='?hgt.dinkLL=1' title='dink left side to the left'>&lt;</a>\n");
+    hPrintf("<a href='?hgt.dinkLL=1' title='move window start position to the left'>&lt;</a>\n");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hPrintf("<a href='?hgt.dinkLR=1' title='dink left side to the right'>&gt;</a>\n");
+    hPrintf("<a href='?hgt.dinkLR=1' title='move window start position to the right'>&gt;</a>\n");
 #else//ifndef USE_NAVIGATION_LINKS
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -4525,9 +4525,9 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
 #ifdef USE_NAVIGATION_LINKS
-    hPrintf("<a href='?hgt.dinkRL=1' title='dink right side to the left'>&lt;</a>\n");
+    hPrintf("<a href='?hgt.dinkRL=1' title='move window end position to the left'>&lt;</a>\n");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hPrintf("<a href='?hgt.dinkRR=1' title='dink right side to the right'>&gt;</a>\n");
+    hPrintf("<a href='?hgt.dinkRR=1' title='move window end position to the right'>&gt;</a>\n");
 #else//ifndef USE_NAVIGATION_LINKS
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
