@@ -3320,13 +3320,6 @@ priority 109
 track netDm2 override
 priority 109.1
 
-# urchin
-track chainStrPur2 override
-priority 110
-
-track netStrPur2 override
-priority 110.1
-
 track chainCi2 override
 priority 117
 
