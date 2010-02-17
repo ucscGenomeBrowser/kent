@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1628 2010/02/16 21:15:44 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1629 2010/02/17 19:13:53 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4450,38 +4450,31 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
 
 #ifdef USE_NAVIGATION_LINKS
     hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",tl.picWidth);//min(tl.picWidth, 800));
+    hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
+    hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
     #ifdef IMAGEv2_DRAG_SCROLL
     if(!advancedJavascriptFeaturesEnabled(cart))
-    #endif//ndef IMAGEv2_DRAG_SCROLL
-        {
-        hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
-        hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
+    #endif//def IMAGEv2_DRAG_SCROLL
         hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
-        }
-    if(!advancedJavascriptFeaturesEnabled(cart))
-        {
-//    #ifndef IMAGEv2_DRAG_SCROLL
-        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-//    #endif//ndef IMAGEv2_DRAG_SCROLL
-        hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom out 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
-        hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom out 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
-        hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom out 1.5x'>&gt;&nbsp;&lt;</a>\n");
-        hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'><i>base</i></a>\n");
-        }
+
+    hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
+    hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom out 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
+    hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom out 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
+    hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom out 1.5x'>&gt;&nbsp;&lt;</a>\n");
+    hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'><i>base</i></a>\n");
+
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
     hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
     hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
     hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
+        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
     #ifdef IMAGEv2_DRAG_SCROLL
     if(!advancedJavascriptFeaturesEnabled(cart))
     #endif//ndef IMAGEv2_DRAG_SCROLL
-        {
-        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
         hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
-        hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
-        hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
-        }
-    /* use button maker that determines padding, so we can share constants */
+
+    hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
+    hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
     hPrintf("</tr></table>\n");
 #endif//def USE_NAVIGATION_LINKS
 
@@ -4501,14 +4494,19 @@ if (!hideControls)
      * go along with this trick */
     hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
         tl.picWidth, 27);
-#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
-    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
+#ifdef USE_NAVIGATION_LINKS
+    hPrintf("<a href='?hgt.dinkLL=1' title='dink left side to the left'>&lt;</a>\n");
+    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+    hPrintf("<a href='?hgt.dinkLR=1' title='dink left side to the right'>&gt;</a>\n");
+#else//ifndef USE_NAVIGATION_LINKS
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
+#endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TD>");
-#endif//ndef !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
+    hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
     hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
@@ -4521,13 +4519,20 @@ if (!hideControls)
 #ifdef IMAGEv2_DRAG_SCROLL
     hWrites("Drag tracks left or right to new position. ");
 #endif//def IMAGEv2_DRAG_SCROLL
-#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
-    hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+//#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
+    hPrintf("</TD>");
+    hPrintf("<td width='30'>&nbsp;</td>\n");
+    hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
+#ifdef USE_NAVIGATION_LINKS
+    hPrintf("<a href='?hgt.dinkRL=1' title='dink right side to the left'>&lt;</a>\n");
+    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+    hPrintf("<a href='?hgt.dinkRR=1' title='dink right side to the right'>&gt;</a>\n");
+#else//ifndef USE_NAVIGATION_LINKS
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
-#endif//ndef !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
+#endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TD></TR></TABLE>\n");
     // smallBreak();
 
