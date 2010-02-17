@@ -12,9 +12,12 @@
 #include "rql.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteSubtrackToParent.c,v 1.1 2010/02/16 20:02:14 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteSubtrackToParent.c,v 1.2 2010/02/17 20:16:44 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
+
+char *newTag = "parent";
+char *oldTag = "subTrack";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +38,22 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+char *firstTagInText(char *text)
+/* Return the location of tag in text - skipping blank and comment lines and white-space */
+{
+char *s = text;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s[0] == '#')
+        {
+	s = strchr(s, '\n');
+	}
+    else
+        break;
+    }
+return s;
+}
 static void rewriteOneFile(char *inFile, char *outFile)
 /* Rewrite file. */
 {
@@ -46,12 +65,12 @@ while (raSkipLeadingEmptyLines(lf, dy))
     char *name, *val;
     while (raNextTagVal(lf, &name, &val, dy))
         {
-	if (sameString("subTrack", name))
+	if (sameString(oldTag, name))
 	    {
 	    char *s = dy->string;
-	    char *e = skipLeadingSpaces(dy->string);
+	    char *e = firstTagInText(dy->string);
 	    mustWrite(f, s, e-s);
-	    fputs("parent", f);
+	    fputs(newTag, f);
 	    s = skipToSpaces(e);
 	    fputs(s, f);
 	    }
