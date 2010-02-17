@@ -1289,7 +1289,7 @@ visibility hide
 priority 151
 type bed 4 .
 otherDb mm8
-otherDbTable jaxQTL
+otherDbTable jaxQtl
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 
