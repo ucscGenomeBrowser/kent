@@ -381,109 +381,52 @@ track burgeRnaSeqGemMapperAlign
 compositeTrack on
 shortLabel Burge RNA-seq
 longLabel Burge lab RNA-seq aligned by GEM Mapper
-dragAndDrop subTracks
 group expression
+subGroup1 view Views RawSignal=Raw_Signal Alignments=Alignments
+#subGroup2 cellType Cell_Type BT474=BT474 HME=HME MB435=MB435 MCF7=MCF7 T47D=T47D adipose=Adipose brain=Brain breast=Breast colon=Colon heart=Heart liver=Liver lymphNode=LymphNode skelMuscle=SkelMuscle testes=Testes
+subGroup2 cellType Cell_Type breast=Breast
+sortOrder view=+ cellType=+
+dimensions dimensionX=cellType
 priority 0
+dragAndDrop subTracks
 visibility hide
+noInherit on
 type bed 12
 
-    track burgeRnaSeqGemMapperAlignBrain
+    track burgeRnaSeqGemMapperAlignViewRawSignal
+    shortLabel All Raw Signal
+    view RawSignal
+    visibility dense
     subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Brain
-    longLabel Burge Lab RNA-seq 32mer Reads from Brain
-    color 12,12,120
-    priority 1
+    maxHeightPixels 100:24:16
+    windowingFunction maximum
+    transformFunc NONE
+    autoScale on
+    viewLimits 0:200
 
-    track burgeRnaSeqGemMapperAlignLiver
+        track burgeRnaSeqGemMapperAlignBrainAllRawSignal
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
+        shortLabel RNA-seq Brain Sig
+        longLabel Burge Lab RNA-seq 32mer Reads from Brain, Raw Signal
+        color 12,12,120
+        subGroups view=RawSignal cellType=brain
+        configurable on 
+        type bedGraph 4
+    
+    track burgeRnaSeqGemMapperAlignViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility hide
     subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Liver
-    longLabel Burge Lab RNA-seq 32mer Reads from Liver
-    color 12,12,120
-    priority 2
 
-    track burgeRnaSeqGemMapperAlignHeart
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Heart
-    longLabel Burge Lab RNA-seq 32mer Reads from Heart
-    color 12,12,120
-    priority 3
-
-    track burgeRnaSeqGemMapperAlignSkelMuscle
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Muscle
-    longLabel Burge Lab RNA-seq 32mer Reads from Skeletal Muscle
-    color 12,12,120
-    priority 4
-
-    track burgeRnaSeqGemMapperAlignColon
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Colon
-    longLabel Burge Lab RNA-seq 32mer Reads from Colon
-    color 12,12,120
-    priority 5
-
-    track burgeRnaSeqGemMapperAlignAdipose
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Adipose
-    longLabel Burge Lab RNA-seq 32mer Reads from Adipose
-    color 12,12,120
-    priority 6
-
-    track burgeRnaSeqGemMapperAlignTestes
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Testes
-    longLabel Burge Lab RNA-seq 32mer Reads from Testes
-    color 12,12,120
-    priority 7
-
-    track burgeRnaSeqGemMapperAlignLymphNode
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Lymph Node
-    longLabel Burge Lab RNA-seq 32mer Reads from Lymph Node
-    color 12,12,120
-    priority 8
-
-    track burgeRnaSeqGemMapperAlignBreast
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq Breast
-    longLabel Burge Lab RNA-seq 32mer Reads from Breast
-    color 12,12,120
-    priority 9
-
-    track burgeRnaSeqGemMapperAlignBT474
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq BT474
-    longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line
-    color 12,12,120
-    priority 10
-
-    track burgeRnaSeqGemMapperAlignHME
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq HME
-    longLabel Burge Lab RNA-seq 32mer Reads from HME (Human Mammary Epithelial) Cell Line
-    color 12,12,120
-    priority 11
-
-    track burgeRnaSeqGemMapperAlignMCF7
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq MCF7
-    longLabel Burge Lab RNA-seq 32mer Reads from MCF-7 Breast Adenocarcinoma Cell Line
-    color 12,12,120
-    priority 12
-
-    track burgeRnaSeqGemMapperAlignMB435
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq MB435
-    longLabel Burge Lab RNA-seq 32mer Reads from MB-435 Cell Line
-    color 12,12,120
-    priority 13
-
-    track burgeRnaSeqGemMapperAlignT47D
-    subTrack burgeRnaSeqGemMapperAlign
-    shortLabel RNA-seq T47D
-    longLabel Burge Lab RNA-seq 32mer Reads from T-47D Breast Ductal Carcinoma Cell Line
-    color 12,12,120
-    priority 14
+        track burgeRnaSeqGemMapperAlignBrain
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments
+        shortLabel RNA-seq Brain
+        longLabel Burge Lab RNA-seq 32mer Reads from Brain
+        color 12,12,120
+        subGroups view=Alignments cellType=brain
+        configurable on 
+        type bed 12
 
 track gladHumES
 shortLabel Gstone Arrays
