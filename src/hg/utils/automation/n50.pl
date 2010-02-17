@@ -2,7 +2,7 @@
 # n50.pl - calculate N50 values for a two column file
 
 
-# $Id: n50.pl,v 1.2 2009/08/07 18:16:48 hiram Exp $
+# $Id: n50.pl,v 1.3 2010/02/17 06:48:42 hiram Exp $
 
 use strict;
 use warnings;
@@ -17,6 +17,7 @@ if ($argc < 1) {
     exit 255;
 }
 
+my $ix = 0;
 while (my $sizeFile = shift) {
     my $sizeCount = 0;
 
@@ -28,8 +29,9 @@ while (my $sizeFile = shift) {
 	    next if ($line =~ m/^\s*#/);
 	    ++$sizeCount;
 	    chomp ($line);
-	    my ($name, $size) = split('\s+', $line);
-	    $sizes{$name} = $size;
+	    my ($name, $size, $rest) = split('\s+', $line, 3);
+	    my $key = sprintf("%s_X_%d", $name, $ix++);
+	    $sizes{$key} = $size;
 	}
     } else {
 	printf STDERR "#\treading: $sizeFile\n";
@@ -38,8 +40,9 @@ while (my $sizeFile = shift) {
 	    next if ($line =~ m/^\s*#/);
 	    ++$sizeCount;
 	    chomp ($line);
-	    my ($name, $size) = split('\s+', $line);
-	    $sizes{$name} = $size;
+	    my ($name, $size, $rest) = split('\s+', $line, 3);
+	    my $key = sprintf("%s_X_%d", $name, $ix++);
+	    $sizes{$key} = $size;
 	}
 	close (FH);
     }
@@ -62,11 +65,15 @@ while (my $sizeFile = shift) {
 	++$contigCount;
 	$totalSize += $sizes{$key};
 	if ($totalSize > $n50Size) {
+	    my $prevName = $prevContig;
+	    $prevName =~ s/_X_[0-9]+//;
+	    my $origName = $key;
+	    $origName =~ s/_X_[0-9]+//;
 	    printf "# cumulative\tN50 count\tcontig\tcontig size\n";
 	    printf "%d\t%d\t%s\t%d\n",
-		$totalSize-$sizes{$key},$contigCount-1,$prevContig, $prevSize;
+		$totalSize-$sizes{$key},$contigCount-1,$prevName, $prevSize;
 	    printf "%d one half size\n", $n50Size;
-	    printf "%d\t%d\t%s\t%d\n", $totalSize, $contigCount, $key, $sizes{$key};
+	    printf "%d\t%d\t%s\t%d\n", $totalSize, $contigCount, $origName, $sizes{$key};
 	    last;
 	}
 	$prevContig = $key;
