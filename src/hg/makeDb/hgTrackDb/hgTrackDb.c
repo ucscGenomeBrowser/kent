@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.62 2010/02/16 23:37:32 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.63 2010/02/17 03:08:39 braney Exp $";
 
 
 void usage()
@@ -149,12 +149,19 @@ static struct trackDb * pruneRelease(struct trackDb *tdbList)
  * can be inherited from parents. */
 struct trackDb *tdb;
 struct trackDb *relList = NULL;
+struct hash *haveHash = hashNew(3);
+
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     char *rel = trackDbSetting(tdb, "release");
     if (rel == NULL || sameString(rel, release))
 	{
 	/* Remove release tags in remaining tracks, since its purpose is served. */
+	struct hashEl *hel;
+	if ((hel = hashLookup(haveHash, tdb->tableName)) != NULL)
+	    errAbort("found two copies of table %s: one with release %s, the other %s\n", 
+		tdb->tableName, (char *)hel->val, release);
+	hashAdd(haveHash, tdb->tableName, rel);
 	hashRemove(tdb->settingsHash, "release");
 	slAddHead(&relList, tdb);
 	}
@@ -162,6 +169,8 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
 	verbose(3,"pruneRelease: removing '%s', release: '%s' != '%s'\n",
 	    tdb->tableName, rel, release);
     }
+
+freeHash(&haveHash);
 return relList;
 }
 
