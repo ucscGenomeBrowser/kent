@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.16 2010/02/16 22:18:38 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.17 2010/02/17 19:35:48 angie Exp $";
 
 #include "bamFile.h"
 
@@ -206,7 +206,6 @@ if (isPaired)
 	singleBamDetails(bam);
 	}
     }
-printTrackUiLink(tdb);
 }
 
 #endif//def USE_BAM

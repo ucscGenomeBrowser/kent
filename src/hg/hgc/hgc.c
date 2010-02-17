@@ -225,7 +225,7 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1595 2010/01/28 00:20:16 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1596 2010/02/17 19:35:49 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18245,7 +18245,6 @@ else if (ct->dbTrack && startsWith("bedGraph", ct->dbTrackType))
            "View table schema</A></P>\n",
            database, ct->tdb->grp, ct->tdb->tableName, ct->tdb->tableName,
            seqName, winStart+1, winEnd);
-    printTrackUiLink(ct->tdb);
     }
 else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     {
@@ -18328,6 +18327,7 @@ else
     printCustomUrl(ct->tdb, itemName, TRUE);
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
+printTrackUiLink(ct->tdb);
 if (ct->dbTrack)
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
