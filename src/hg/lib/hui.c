@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.260 2010/02/11 18:27:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.261 2010/02/17 21:39:16 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3197,7 +3197,7 @@ if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
         fourState = 1;
     }
 safef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
-return cartCgiUsualInt(cart, objName, fourState);
+return cartUsualInt(cart, objName, fourState);
 }
 #define fourStateChecked(fourState) ((fourState) == 1 || (fourState) == -1)
 #define fourStateEnabled(fourState) ((fourState) >= 0)
