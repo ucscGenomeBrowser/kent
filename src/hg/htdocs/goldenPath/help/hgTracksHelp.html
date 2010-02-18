@@ -415,12 +415,18 @@ display conventions:<BR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><A NAME="PSLDisplay"></A><B>Pat space layout (PSL) alignment 
 	tracks:</B> 
-	Aligning regions (usually exons) are shown as black blocks. In dense display 
+	Aligning regions (usually exons when the query is cDNA) are shown as black blocks. In dense display 
 	mode, the degree of darkness corresponds to the number of features aligning to 
-	the region or the degree of quality of the match. In full display mode, the aligning regions are connected by lines 
+	the region or the degree of quality of the match. In pack or full display mode, 
+	the aligning regions are connected by lines 
 	representing gaps in the alignment (typically spliced-out introns), with arrowheads indicating 
-	the direction of transcription, which is determined by looking at the
-	splice sites. In situations where no gap lines are 
+	the orientation of the alignment, pointing right if the query sequence was aligned
+	to the forward strand of the genome and left if aligned to the reverse strand.  
+	Two parallel lines are drawn over double-sided alignment gaps, which skip over
+        unalignable sequence in both target and query.  
+	For alignments of ESTs, the arrows may be reversed to show the apparent 
+	direction of transcription deduced from splice junction sequences.
+	In situations where no gap lines are 
 	visible, the arrowheads are displayed on the block itself. 
 	To prevent display problems, the Genome Browser imposes an upper 
 	limit on the number of alignments that can be viewed simultaneously 
@@ -428,7 +434,9 @@ display conventions:<BR>
 	displays the best several hundred alignments in a condensed display
 	mode, then lists the number of undisplayed alignments in the last 
 	row of the track. In this situation, try zooming in to display 
-	more entries or to return the track to full display mode. </TD></TR>
+	more entries or to return the track to full display mode. 
+	For some PSL tracks, <A HREF="hgCodonColoringMrna.html">extra coloring</A> 
+	to indicate mismatching bases and query-only gaps may be available.</TD></TR>
 
 <A NAME="ChainDisplay"></A>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>&quot;Chain&quot; tracks 
