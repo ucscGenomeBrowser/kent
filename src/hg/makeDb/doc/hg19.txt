@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.82 2010/02/12 23:43:45 hiram Exp $";
+#	"$Id: hg19.txt,v 1.83 2010/02/18 18:53:25 markd Exp $";
 
 #############################################################################
 
@@ -8592,3 +8592,11 @@ TMPDIR=/scratch/tmp
     #	2030475813 bases of 2752505800 (73.768%) in intersection
 
 #####################################################################
+# PAR track (2010-02-18, markd DONE)
+
+  cd /hive/data/genomes/hg19/bed/par/
+  # create hg19.par using the documented coordinates
+  hgPar hg19 hg19.par par
+#####################################################################
+
+

@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.397 2010/02/09 23:12:28 fanhsu Exp $
+# $Id: hg18.txt,v 1.398 2010/02/18 18:53:24 markd Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.397 2010/02/09 23:12:28 fanhsu Exp $
+# $Id: hg18.txt,v 1.398 2010/02/18 18:53:24 markd Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29367,6 +29367,12 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
     mkdir /hive/data/gbdb/hg18/RNA-img
     cp -p * /hive/data/gbdb/hg18/RNA-img
 
+#####################################################################
+# PAR track (2010-02-18, markd DONE)
+
+  cd /hive/data/genomes/hg18/bed/par/
+  # create hg18.par using the documented coordinates
+  hgPar hg18 hg18.par par
 #####################################################################
 
 
