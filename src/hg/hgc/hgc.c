@@ -226,7 +226,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1598 2010/02/18 20:16:43 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1599 2010/02/18 20:52:39 braney Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2284,7 +2284,7 @@ if(sameString(tdb->type,"genePred")
 && startsWith("ENCODE Gencode",tdb->longLabel)
 && startsWith("ENST",geneName))
     {
-#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
+#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
     puts("<LI>\n");
     printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
     puts("</LI>\n");
