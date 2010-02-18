@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.65 2010/02/03 23:16:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.66 2010/02/18 21:11:07 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -221,14 +221,14 @@ htmlWarnBoxSetUpAlready=TRUE;
 // Remember what worked nicely on FF3.0:
 //      "var app=navigator.appName.substr(0,9); "
 //      "if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display=''; warnBox.style.width='auto';}"
-fprintf(f, "<center>"
+fprintf(f, "<script type='text/javascript'>\n");
+fprintf(f, "document.write(\"<center>"
             "<div id='warnBox' style='display:none; background-color:Beige; "
               "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
               "text-align:left;'>"
             "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL>"
             "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'>&nbsp;OK&nbsp;</button></CENTER>"
-            "</div></center>\n");
-fprintf(f, "<script type='text/javascript'>\n");
+            "</div></center>\");\n");
 fprintf(f,"function showWarnBox() {"
             "var warnBox=document.getElementById('warnBox');"
             "warnBox.style.display=''; warnBox.style.width='65%%';"
@@ -251,7 +251,7 @@ va_list argscp;
 va_copy(argscp, args);
 #ifdef WARNBOX_IN_USE
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
-char warning[2048];
+char warning[512];
 vsnprintf(warning,sizeof(warning),format, args);
 // NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
 if( strSwapStrs(warning, sizeof(warning),"'","&#39;") == -1) // Sheild single quotes
