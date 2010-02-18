@@ -224,8 +224,9 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 #include "gwasCatalog.h"
+#include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1596 2010/02/17 19:35:49 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1597 2010/02/18 06:01:44 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22867,6 +22868,10 @@ else if (startsWith("hgdpGeo", track))
 else if (startsWith("gwasCatalog", track))
     {
     doGwasCatalog(tdb, item);
+    }
+else if (sameString("par", track))
+    {
+    doParDetails(tdb, item);
     }
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
