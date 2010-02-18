@@ -36,6 +36,7 @@ static struct optionSpec optionSpecs[] =
     {"localNearBest", OPTION_FLOAT},
     {"globalNearBest", OPTION_FLOAT},
     {"ignoreNs", OPTION_BOOLEAN},
+    {"ignoreIntrons", OPTION_BOOLEAN},
     {"minId", OPTION_FLOAT},
     {"minCover", OPTION_FLOAT},
     {"minSpan", OPTION_FLOAT},
@@ -174,10 +175,8 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     /* don't included poly-A length. */
-    struct psl *psl = aln->psl;
-    int alnSize = ((psl->match + psl->repMatch + aln->adjMisMatch) - aln->alnPolyAT);
-    if (!aln->drop && (alnSize < gMinAlnSize))
-        cDnaAlignDrop(aln, &cdna->stats->minAlnSizeDropCnts, "min align size %d", alnSize);
+    if (!aln->drop && (aln->adjAlnSize < gMinAlnSize))
+        cDnaAlignDrop(aln, &cdna->stats->minAlnSizeDropCnts, "min align size %d", aln->adjAlnSize);
     }
 }
 
@@ -551,6 +550,8 @@ if (optionExists("usePolyTHead"))
     gCDnaOpts |= cDnaUsePolyTHead;
 if (optionExists("ignoreNs"))
     gCDnaOpts |= cDnaIgnoreNs;
+if (optionExists("ignoreIntrons"))
+    gCDnaOpts |= cDnaIgnoreIntrons;
 gMinId = optionFrac("minId", gMinId);
 gMinCover = optionFrac("minCover", gMinCover);
 gMinSpan = optionFrac("minSpan", gMinSpan);

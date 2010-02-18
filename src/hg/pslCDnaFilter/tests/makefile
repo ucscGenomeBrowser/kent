@@ -8,7 +8,7 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
-	weirdOverlappedFilter
+	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -83,9 +83,18 @@ hapLocalXenoTest:
 
 
 # filter weird overlapping
-weirdOverlappedFilter:
+weirdOverlappedFilterTest:
 	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
 	    filtArgs='-filterWeirdOverlapped'
+
+# -ignoreIntrons tests, carefully crafted from same alignment so that one with
+# faked intron scores slighly lower without intron bonus
+noIgnoreIntronsTest:
+	${MAKE} doFilterSave name=$@ inPsl=ignoreIntrons.psl filtArgs='-maxAligns=1'
+
+ignoreIntronsTest:
+	${MAKE} doFilterSave name=$@ inPsl=ignoreIntrons.psl filtArgs='-maxAligns=1 -ignoreIntrons'
+
 
 ####
 # Recursive targets.  Results are sorted to allow consistent comparisons, as

@@ -11,9 +11,11 @@ struct polyASize;
 enum cDnaOpts
 /* bit set of options to control scoring */
 {
-    cDnaUsePolyTHead = 0x01,  /* use poly-T head if longer than poly-A tail (as in 3' ESTs),
-                               * otherwise just use poly-A tail */
-    cDnaIgnoreNs     = 0x02   /* don't include Ns while calculating the score and coverage.*/
+    cDnaUsePolyTHead    = 0x01,  /* use poly-T head if longer than poly-A tail (as in 3' ESTs),
+                                  * otherwise just use poly-A tail */
+    cDnaIgnoreNs        = 0x02,  /* don't include Ns while calculating the score and coverage.*/
+    cDnaRepeatMisMatch  = 0x04,  /* count all repeats as mismatches */
+    cDnaIgnoreIntrons   = 0x08   /* don't favor apparent introns in scoring */
 };
 
 struct cDnaAlign
@@ -23,8 +25,8 @@ struct cDnaAlign
     struct cDnaQuery *cdna;  /* query object for alignment */
     struct psl *psl;         /* alignment */
     int alnId;               /* number id to identify this alignment */
-    int adjMisMatch;         /* number of misMatches; includes Ns unless the
-                              * are ignored */
+    int adjAlnSize;          /* number of bases considered aligned after polyAT and ingore N
+                              * adjustments */
     float ident;             /* fraction ident */
     float cover;             /* fraction of cDNA aligned, excluding polyA if
                               * it is available */
