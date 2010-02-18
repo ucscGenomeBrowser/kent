@@ -1348,7 +1348,403 @@ grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1027/out/fileDb.
 grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1054/out/fileDb.ra | grep parentTable >> fileDb.ra
 encodeDownloadsPage.pl index.html .
 
+
+hg18.wgEncodeUwDGFSignalGm06990 has 1 records with end > chromSize.
+hg18.wgEncodeUwDGFSignalK562 has 1 records with end > chromSize.
+update wgEncodeUwDGFSignalGm06990 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeUwDGFSignalK562 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+
+# At the freeze:
+select id,name,status,user_id,created_at from projects where status = "displayed" and name like "UWCh%" and created_at > date('2009-11-01') order by name;
++-----+----------------------------------------+-----------+---------+---------------------+
+| id  | name                                   | status    | user_id | created_at          |
++-----+----------------------------------------+-----------+---------+---------------------+
+| 982 | UwChIPSeq-GM12864-DS10988-CTCF-1 jan10 | displayed |      21 | 2010-01-11 15:30:31 | 
+| 983 | UwChIPSeq-GM12864-DS11499-CTCF-2 jan10 | displayed |      21 | 2010-01-11 15:30:47 | 
+| 984 | UwChIPSeq-GM12865-DS10991-CTCF-2 jan10 | displayed |      21 | 2010-01-11 15:31:06 | 
+| 985 | UwChIPSeq-GM12865-DS11502-CTCF-1 jan10 | displayed |      21 | 2010-01-11 15:31:20 | 
+| 986 | UwChIPSeq-GM12872-DS10989-CTCF-1 jan10 | displayed |      21 | 2010-01-11 15:31:32 | 
+| 987 | UwChIPSeq-GM12872-DS11500-CTCF-2 jan10 | displayed |      21 | 2010-01-11 15:32:49 | 
+| 988 | UwChIPSeq-GM12873-DS10990-CTCF-1 jan10 | displayed |      21 | 2010-01-11 15:33:10 | 
+| 989 | UwChIPSeq-GM12873-DS11501-CTCF-2 jan10 | displayed |      21 | 2010-01-11 15:43:42 | 
+| 990 | UwChIPSeq-GM12874-DS10992-CTCF-2 jan10 | displayed |      21 | 2010-01-11 15:44:05 | 
+| 991 | UwChIPSeq-GM12874-DS11503-CTCF-1 jan10 | displayed |      21 | 2010-01-11 15:44:34 | 
+| 992 | UwChIPSeq-GM12875-DS10993-CTCF-1 jan10 | displayed |      21 | 2010-01-11 15:44:44 | 
+| 993 | UwChIPSeq-GM12875-DS11899-CTCF-2 jan10 | displayed |      21 | 2010-01-11 15:45:01 | 
++-----+----------------------------------------+-----------+---------+---------------------+
+12 rows 
+select id,name,status,user_id,created_at from projects where status = "displayed" and name like "UWDG%" and created_at > date('2009-11-01') order by name;
++------+----------------------------+-----------+---------+---------------------+
+| id   | name                       | status    | user_id | created_at          |
++------+----------------------------+-----------+---------+---------------------+
+| 1054 | UwDgf-GM06990-DS7748 jan10 | displayed |      21 | 2010-01-14 07:43:04 | 
+| 1027 | UwDgf-K562-DS9767 jan10    | displayed |      21 | 2010-01-13 08:25:47 | 
++------+----------------------------+-----------+---------+---------------------+
+2 rows
+select id,name,status,user_id,created_at from projects where status = "displayed" and name like "UWDn%" and created_at > date('2009-11-01') order by name;
++-----+--------------------------------------+-----------+---------+---------------------+
+| id  | name                                 | status    | user_id | created_at          |
++-----+--------------------------------------+-----------+---------+---------------------+
+| 896 | UwDnaseSeq-AG04449-DS12319-1 jan10   | displayed |      21 | 2010-01-05 16:28:34 | 
+| 906 | UwDnaseSeq-AG04449-DS12329-2 jan10   | displayed |      21 | 2010-01-07 12:37:57 | 
+| 907 | UwDnaseSeq-AG04450-DS12255-2 jan10   | displayed |      21 | 2010-01-07 12:38:16 | 
+| 908 | UwDnaseSeq-AG04450-DS12270-1 jan10   | displayed |      21 | 2010-01-07 12:38:33 | 
+| 909 | UwDnaseSeq-AG09309-DS12352-1 jan10   | displayed |      21 | 2010-01-07 15:01:03 | 
+| 910 | UwDnaseSeq-AG09309-DS12357-2 jan10   | displayed |      21 | 2010-01-07 15:01:28 | 
+| 911 | UwDnaseSeq-AG09319-DS12286-2 jan10   | displayed |      21 | 2010-01-07 15:02:27 | 
+| 912 | UwDnaseSeq-AG09319-DS12291-1 jan10   | displayed |      21 | 2010-01-07 15:02:44 | 
+| 915 | UwDnaseSeq-AG10803-DS12374-2 jan10   | displayed |      21 | 2010-01-07 19:07:40 | 
+| 935 | UwDnaseSeq-AG10803-DS12384-1 jan10   | displayed |      21 | 2010-01-08 13:41:30 | 
+| 916 | UwDnaseSeq-CMK-DS12393-1 jan10       | displayed |      21 | 2010-01-07 19:08:31 | 
+| 961 | UwDnaseSeq-GM12865-DS12436-1 jan10   | displayed |      21 | 2010-01-09 17:20:39 | 
+| 962 | UwDnaseSeq-GM12865-DS12442-2 jan10   | displayed |      21 | 2010-01-09 17:20:55 | 
+| 917 | UwDnaseSeq-H7-hESC-DS11909-1 jan10   | displayed |      21 | 2010-01-07 19:08:45 | 
+| 918 | UwDnaseSeq-HAEpiC-DS12663-1 jan10    | displayed |      21 | 2010-01-07 19:09:02 | 
+| 919 | UwDnaseSeq-HAEpiC-DS12673-2 jan10    | displayed |      21 | 2010-01-07 19:09:21 | 
+| 921 | UwDnaseSeq-HCF-DS12491-2 jan10       | displayed |      21 | 2010-01-07 20:37:07 | 
+| 944 | UwDnaseSeq-HCF-DS12501-1 jan10       | displayed |      21 | 2010-01-08 19:35:53 | 
+| 948 | UwDnaseSeq-HCM-DS12589-2 jan10       | displayed |      21 | 2010-01-08 20:04:51 | 
+| 949 | UwDnaseSeq-HCM-DS12599-1 jan10       | displayed |      21 | 2010-01-08 22:02:24 | 
+| 922 | UwDnaseSeq-HCPEpiC-DS12447-1 jan10   | displayed |      21 | 2010-01-07 20:37:25 | 
+| 923 | UwDnaseSeq-HCPEpiC-DS12457-2 jan10   | displayed |      21 | 2010-01-07 20:37:42 | 
+| 963 | UwDnaseSeq-HEEpiC-DS12763-1 jan10    | displayed |      21 | 2010-01-09 17:21:36 | 
+| 924 | UwDnaseSeq-HEEpiC-DS12768-2 jan10    | displayed |      21 | 2010-01-07 20:49:36 | 
+| 925 | UwDnaseSeq-HIPEpiC-DS12694-1 jan10   | displayed |      21 | 2010-01-07 20:49:52 | 
+| 964 | UwDnaseSeq-HIPEpiC-DS12699-2 jan10   | displayed |      21 | 2010-01-09 17:21:48 | 
+| 926 | UwDnaseSeq-HNPCEpiC-DS12467-1 jan10  | displayed |      21 | 2010-01-07 22:51:38 | 
+| 927 | UwDnaseSeq-HNPCEpiC-DS12471-2 jan10  | displayed |      21 | 2010-01-07 23:50:35 | 
+| 929 | UwDnaseSeq-HRPEpiC-DS12568-2 jan10   | displayed |      21 | 2010-01-08 07:19:37 | 
+| 930 | UwDnaseSeq-HRPEpiC-DS12583-1 jan10   | displayed |      21 | 2010-01-08 07:19:59 | 
+| 965 | UwDnaseSeq-Jurkat-DS12659-1 jan10    | displayed |      21 | 2010-01-09 17:22:00 | 
+| 931 | UwDnaseSeq-Jurkat-G1-DS12737-1 jan10 | displayed |      21 | 2010-01-08 07:22:17 | 
+| 966 | UwDnaseSeq-MCF-7-DS12619-2 jan10     | displayed |      21 | 2010-01-09 17:22:11 | 
+| 932 | UwDnaseSeq-NB4-DS12538-2 jan10       | displayed |      21 | 2010-01-08 07:24:19 | 
+| 936 | UwDnaseSeq-NB4-DS12543-1 jan10       | displayed |      21 | 2010-01-08 14:08:40 | 
+| 938 | UwDnaseSeq-NHDF-neo-DS11918-2 jan10  | displayed |      21 | 2010-01-08 18:27:57 | 
+| 937 | UwDnaseSeq-NHDF-neo-DS11923-1 jan10  | displayed |      21 | 2010-01-08 14:34:19 | 
+| 967 | UwDnaseSeq-NHLF-DS12829-1 jan10      | displayed |      21 | 2010-01-09 17:22:22 | 
+| 968 | UwDnaseSeq-NHLF-DS12834-2 jan10      | displayed |      21 | 2010-01-09 17:22:44 | 
++-----+--------------------------------------+-----------+---------+---------------------+
+39 rows 
+
 NOTES for calls:
 1) ChIP methods description.  In particular, text to "Display Conventions and Configuration"
 2) Missing Jurkat Rep2
 
+Issue from UW:
+1) (DNase/ChIP/DGF) On the track selection page, they should put after
+'Peaks" the text: '(FDR 0.5%)'.  This should also appear in the track
+label for the peaks, to make it absolutely clear that these are peaks at
+a very stringent FDR.
+(Note that when we upgrade to HG19, we are going to convert to FDR 1%
+instead of 0.5% peaks)
+RESOLVED: labVersion and longLabel
+
+2) (DNase) We need to change the cell type labels to what the cell types
+actually are.  E.g., 'Pulm. Fibro.' or 'Toe Fibrol. instead of AGxyz.  
+We should find out what is the character limit for this.  Then, we
+should put a table below on the track description page that gives the
+correspondence between the cell type names and the number codes.  We
+should do this only for primary cells; leave the cell line names like
+MCF7 as is.  (I am generating a table of the cell names descriptors and
+send that to Tim on Monday)
+PARTIALLY RESOLVED: Added to matrix title, not longLabel.  
+  They will give a tighter set of "terms" and I will consider revising. 
+ 
+3) UCSC needs to assign a color scheme (random is OK) to our cell types
+that are all now black.
+THEY WILL PROVIDE COLORS
+
+4) (ChIP) Create separate sections for CTCF and Histone mod Chip-Seq data.
+TO BE DONE (when other TFSB data comes in?)
+
+5) (DNase)  GM12878 replicate order needs to be switched (rep1 -> rep2 ,
+rep2 -> rep1). I'd mentioned previously that one of these samples had
+been phase sorted, that is not 100% correct, so for now we'd like to
+keep phasing meta-information about these blank.
+RESOLVED: new metadata term "rank" and change UI labeling
+
+6) (exon)  John has asked if it would be possible to have an alternate
+signal or "wig/bedGraph" view of the exon array data (using the the
+intensity value column from the data sumbitted).
+BRIAN's TODO
+
+7) (DNase)  Jurkat replicates.  It seems John has some reservations
+about including sorted and unsorted replicates, we will work this out
+amongst ourselves prior to the meeting I just wanted to make you aware
+that there are potentially some changes for this.
+RESOLVED: NO CHANGE
+
+8) Request to break up DGF into 2 tracks: "Digital Footprinting" and "Deep Sequencing"
+TO BE DONE: Will mock up both in current composite (or deep sequencing added to DNaseI)
+
+# Edit trackDb.wgEncode.ra to add "rank" and set DNaseI GM12878 rep2 to rank 1st
+make alpha DBS=hg18
+cd downloads for both UW Chip and UW DNase
+cp fileDb.ra fileDb.ra.2010-02-02
+# edit fileDb.ra to add rank (and for DNase swap GM12878 ranks)
+# add rank to encodeDownloadsPage.pl sort order
+encodeDownloadsPage.pl index.html .
+
+
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 396 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 506 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 507 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 509 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 510 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 511 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 512 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 513 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 514 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 515 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 592 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 625 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 627 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 631 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 632 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 637 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 735 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 736 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 737 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 754 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 755 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  896 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  906 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  907 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  908 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  909 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  910 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  911 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  912 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  915 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  916 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  917 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  918 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  919 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  921 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  922 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  923 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  924 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  925 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  926 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  927 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  929 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  930 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  931 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  932 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  935 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  936 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  937 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  938 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  944 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  948 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  949 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  961 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  962 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  963 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  964 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  965 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  966 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  967 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  968 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  982 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  983 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  984 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  985 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  986 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  987 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  988 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  989 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  990 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  991 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  992 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  993 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1027 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1054 approved
+
+2010-02-17 Getting UW Chip back into QA
+=======================================
+# Problems with reset to default.  fixed in code
+# Probelms with hotSpot settings.  Fixed in trackDb
+# update files list "uwChIPseq.release1.notes.txt
+#   create "F" category of "Added" tables and files
+cd {downloadsDir}
+mkdir hold
+mv wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz hold/
+mv wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz hold/
+mv wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz hold/
+mv wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz hold/
+mv wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz hold/
+mv wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz hold/
+mv wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz    hold/
+mv wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz    hold/
+mv wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz hold/
+mv wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz hold/
+
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/982/tags/GM12864-DS10988.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/985/tags/GM12865-DS11502.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/986/tags/GM12872-DS10989.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/988/tags/GM12873-DS10990.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/991/tags/GM12874-DS11503.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/992/tags/GM12875-DS10993.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/983/tags/GM12864-DS11499.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/984/tags/GM12865-DS10991.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/987/tags/GM12872-DS11500.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/989/tags/GM12873-DS11501.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/990/tags/GM12874-DS10992.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/993/tags/GM12875-DS11899.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/982/hotspots/GM12864-DS10988.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/985/hotspots/GM12865-DS11502.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/986/hotspots/GM12872-DS10989.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/988/hotspots/GM12873-DS10990.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/991/hotspots/GM12874-DS11503.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/992/hotspots/GM12875-DS10993.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/983/hotspots/GM12864-DS11499.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/984/hotspots/GM12865-DS10991.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/987/hotspots/GM12872-DS11500.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/989/hotspots/GM12873-DS11501.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/990/hotspots/GM12874-DS10992.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/993/hotspots/GM12875-DS11899.hotspot.twopass.merge150.wgt10.zgt2.hg18.bed.gz wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/982/peaks/GM12864-DS10988.peaks.fdr.005.hg18.bed.gz wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/985/peaks/GM12865-DS11502.peaks.fdr.005.hg18.bed.gz wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/986/peaks/GM12872-DS10989.peaks.fdr.005.hg18.bed.gz wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/988/peaks/GM12873-DS10990.peaks.fdr.005.hg18.bed.gz wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/991/peaks/GM12874-DS11503.peaks.fdr.005.hg18.bed.gz wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/992/peaks/GM12875-DS10993.peaks.fdr.005.hg18.bed.gz wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/982/fastq/GM12864-DS10988.UWStam_090608_SOLEXA-1GA-2_0006_FC427K4_2.fastq.gz wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/985/fastq/GM12865-DS11502.UWStam_090831_SOLEXA-1GA-1_0020_FC42KUG_3.fastq.gz wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/986/fastq/GM12872-DS10989.UWStam_090608_SOLEXA-1GA-2_0006_FC427K4_3.fastq.gz wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/988/fastq/GM12873-DS10990.UWStam_090608_SOLEXA-1GA-2_0006_FC427K4_4.fastq.gz wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/991/fastq/GM12874-DS11503.UWStam_090831_SOLEXA-1GA-1_0020_FC42KUG_4.fastq.gz wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/992/fastq/GM12875-DS10993.UWStam_090608_SOLEXA-1GA-2_0006_FC427K4_7.fastq.gz wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/983/fastq/GM12864-DS11499.UWStam_090810_SOLEXA-1GA-1_0013_FC42BE1_4.fastq.gz wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/984/fastq/GM12865-DS10991.UWStam_090608_SOLEXA-1GA-2_0006_FC427K4_5.fastq.gz wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/987/fastq/GM12872-DS11500.UWStam_090831_SOLEXA-1GA-1_0020_FC42KUG_1.fastq.gz wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/989/fastq/GM12873-DS11501.UWStam_090831_SOLEXA-1GA-1_0020_FC42KUG_2.fastq.gz wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/990/fastq/GM12874-DS10992.UWStam_090608_SOLEXA-1GA-2_0006_FC427K4_6.fastq.gz wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/993/fastq/GM12875-DS11899.UWStam_090905_SOLEXA-1GA-2_0021_FC42LOR_2.fastq.gz wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/982/rawSignal/GM12864-DS10988.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/985/rawSignal/GM12865-DS11502.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/986/rawSignal/GM12872-DS10989.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/988/rawSignal/GM12873-DS10990.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/991/rawSignal/GM12874-DS11503.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/992/rawSignal/GM12875-DS10993.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/983/rawSignal/GM12864-DS11499.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/984/rawSignal/GM12865-DS10991.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/987/rawSignal/GM12872-DS11500.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/989/rawSignal/GM12873-DS11501.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/990/rawSignal/GM12874-DS10992.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/993/rawSignal/GM12875-DS11899.75.20.filtered-density.36.hg18.wig.gz wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz        
+rm -rf hold
+
+cd release1/
+ln ../wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
+ln ../wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz
+ln ../wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
+ln ../wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz
+ln ../wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
+ln ../wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
+ln ../wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz
+ln ../wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
+ln ../wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
+cp ../index.html .
+cp ../files.txt . 
+cp ../md5sum.txt .
+
+### Need to figure out what is wrong with these and "gzip: stdout: Broken pipe" (possibly the same issue)
+-rw-rw-r-- 2       4030 protein   91818790 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep1Gm12801Ctcf.tagAlign.gz
+-rw-rw-r-- 2       4030 protein  183393291 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
+-rw-rw-r-- 2       4030 protein  146282491 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep1Hl60Ctcf.tagAlign.gz
+-rw-rw-r-- 2       4030 protein  188617281 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep1Werirb1Ctcf.tagAlign.gz
+-rw-rw-r-- 2       4030 protein  121758326 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep2Werirb1Ctcf.tagAlign.gz

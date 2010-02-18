@@ -2813,3 +2813,308 @@ encodeDonwlasPage.pl index.html
 /cluster/data/encode/pipeline/bin/encodeStatus.pl ...
   
 ### 2010-01-20 Melissa reports that she has all the Open Chromatin submissions displayed!
+
+
+## At the freeze:
+select id,name,status, created_at from projects where user_id = 17 and created_at > date('2009-12-01');
++-----+-------------------------------------------+-----------+---------------------+
+| id  | name                                      | status    | created_at          |
++-----+-------------------------------------------+-----------+---------------------+
+| 939 | DNCT Duke DNaseHS AoSMC SFM 20100108      | displayed | 2010-01-08 18:31:51 | 
+| 881 | DNCT Duke DNaseHS Chorion 20091227        | displayed | 2009-12-27 17:35:57 | 
+| 857 | DNCT Duke DNaseHS Fibrobla 20091220       | displayed | 2009-12-20 05:57:18 | 
+| 960 | DNCT Duke DNaseHS FibroP 20100109         | displayed | 2010-01-09 16:56:29 | 
+| 850 | DNCT Duke DNaseHS GM18507 20091218        | displayed | 2009-12-18 19:28:40 | 
+| 877 | DNCT Duke DNaseHS H9ES 20091223           | displayed | 2009-12-23 19:15:10 | 
+| 836 | DNCT Duke DNaseHS HeLa-S3 IFNa4h 20091217 | displayed | 2009-12-18 05:37:27 | 
+| 848 | DNCT Duke DNaseHS LHSR 20091218           | displayed | 2009-12-18 13:42:02 | 
+| 851 | DNCT Duke DNaseHS LHSR androgen 20091218  | displayed | 2009-12-18 19:55:55 | 
+| 849 | DNCT Duke DNaseHS MCF-7 20091218          | displayed | 2009-12-18 14:13:22 | 
+| 831 | DNCT Duke DNaseHS Medullo 20091216        | displayed | 2009-12-16 14:44:25 | 
+| 953 | DNCT Duke DNaseHS Melano 20100108         | displayed | 2010-01-09 04:08:55 | 
+| 855 | DNCT Duke DNaseHS Myoblast 20091219       | displayed | 2009-12-19 20:22:04 | 
+| 940 | DNCT Duke DNaseHS Myometr 20100108        | displayed | 2010-01-08 18:32:45 | 
+| 856 | DNCT Duke DNaseHS Myotube 20091219        | displayed | 2009-12-19 20:56:33 | 
+| 835 | DNCT Duke DNaseHS PanIslets 20091217      | displayed | 2009-12-17 11:19:05 | 
+| 834 | DNCT Duke DNaseHS ProgFib 20091217        | displayed | 2009-12-17 06:02:07 | 
+| 852 | DNCT UNC FAIRE-Seq GM18507 20091219       | displayed | 2009-12-19 15:55:20 | 
+| 847 | DNCT UNC FAIRE-Seq GM19239 20091218       | displayed | 2009-12-18 13:41:10 | 
+| 858 | DNCT UNC FAIRE-Seq HelaS3 IFNA 20091219   | displayed | 2009-12-20 06:35:34 | 
+| 859 | DNCT UNC FAIRE-Seq HelaS3 IFNG 20091219   | displayed | 2009-12-20 06:40:12 | 
+| 873 | DNCT UNC FAIRE-Seq LHSR 20091222          | displayed | 2009-12-22 18:03:01 | 
+| 874 | DNCT UNC FAIRE-Seq LHSR androgen 20091222 | displayed | 2009-12-23 04:17:48 | 
+| 955 | DNCT UNC FAIRE-Seq NHBE 20100108          | displayed | 2010-01-09 04:10:55 | 
+| 882 | DNCT UTA c-Myc H1_hESC 20091227           | displayed | 2009-12-27 18:06:21 | 
+| 883 | DNCT UTA c-Myc MCF-7 20091227             | displayed | 2009-12-28 07:16:35 | 
+| 884 | DNCT UTA CTCF MCF-7 20091227              | displayed | 2009-12-28 07:17:18 | 
+| 886 | DNCT UTA CTCF ProgFib 20100101            | displayed | 2010-01-02 07:57:08 | 
+| 866 | DNCT UTA Input MCF-7 20091222             | displayed | 2009-12-22 12:23:16 | 
+| 871 | DNCT UTA Input ProgFib 20091222           | displayed | 2009-12-22 17:53:14 | 
+| 868 | DNCT UTA PolII GM12878 20091222           | displayed | 2009-12-22 16:28:37 | 
+| 885 | DNCT UTA PolII HeLa-S3 20091228           | displayed | 2009-12-28 07:17:58 | 
+| 969 | DNCT UTA PolII ProgFib 20100109           | displayed | 2010-01-10 07:31:02 | 
+| 829 | DNCT_DukeExonArrays_20091216              | displayed | 2009-12-16 13:33:25 | 
++-----+-------------------------------------------+-----------+---------------------+
+34 rows
+
+### Phone call on Monday:
+# Issues:
+1) Inconsistent short label: fixed
+2) "zinba" peaks for FAIRE:  On hold!
+3) Version Sep 2009 peaks: Needed by DAC!
+4) Minor display issues: Terry will send list
+5) Three cell protocols just submitted for approval!
+
+# Need to submit/version some older peaks
+Create sub dirs as me
+1097 DNCT Duke DNaseHS V2 Peaks 20100128
+1098 DNCT Duke DNaseHS V3 Peaks 20100128
+1099 DNCT UNC FAIRE-Seq V2 Peaks 20100128
+1100 DNCT UNC FAIRE-Seq V3 Peaks 20100128
+1101 DNCT UTA ChIP V2 Peaks 20100128
+1102 DNCT UTA ChIP V3 Peaks 20100128
+mv ftp'd archives into 1098 1100, 1102
+cd 1097
+tar -xzf 001_NewPeaks_DAF_DDF &
+cd ../1098
+tar -xzf 001_Duke_Peaks_V3.tgz &
+cd ../1100
+tar -xzf 001_UNC_Peaks_V3.tgz &
+cd ../1102
+tar -xzf 001_UTA_Peaks_V3.tgz &
+cd ../1097
+mv DukeDNaseSeqPeaksOnlyV3.* ../1098
+mv UncFAIREseqPeaksOnlyV2.D* ../1099
+mv UncFAIREseqPeaksOnlyV3.D* ../1100
+mv UtaChIPseqPeaksOnlyV2.D* ../1101 
+mv UtaChIPseqPeaksOnlyV3.D* ../1102
+mkdir DNaseHS
+cd ../1098
+mv DNaseHS/GM12891_DNaseHS.pk ../1097/DNaseHS/
+mv DNaseHS/GM12892_DNaseHS.pk ../1097/DNaseHS/
+mv DNaseHS/GM19238_DNaseHS.pk ../1097/DNaseHS/
+mv DNaseHS/GM19239_DNaseHS.pk ../1097/DNaseHS/
+mv DNaseHS/GM19240_DNaseHS.pk ../1097/DNaseHS/
+cd ../1099
+mkdir FAIRE
+mv ../1100/FAIRE/HUVEC_FAIRE.pk FAIRE/
+mv ../1100/FAIRE/NHEK_FAIRE.pk FAIRE/
+mv ../1100/FAIRE/H1ES_FAIRE.pk FAIRE/
+cd ../1101
+mkdir ChIP
+mv ../1102/ChIP/HUVEC_CTCF.pk .
+mv ../1102/ChIP/H1ES_CTCF.pk .
+mv ../1102/ChIP/GM12891_CTCF.pk .
+mv ../1102/ChIP/GM12892_CTCF.pk .
+mv ../1102/ChIP/GM19238_CTCF.pk .
+mv ../1102/ChIP/GM19239_CTCF.pk .
+mv ../1102/ChIP/GM19240_CTCF.pk .
+mv ../1102/ChIP/GM12878_cMyc.pk .
+mv ../1102/ChIP/HUVEC_cMyc.pk .
+mv ../1102/ChIP/K562_PolII.pk .
+mv ../1102/ChIP/HepG2_PolII.pk .
+mv ../1102/ChIP/HUVEC_PolII.pk .
+mv ../1102/ChIP/H1ES_PolII.pk .
+
+# Submitted
+# edit trackDb entries for tags, composite, etc.
+e ../1097/out/trackDb.ra ../1098/out/trackDb.ra ../1099/out/trackDb.ra ../1100/out/trackDb.ra ../1101/out/trackDb.ra ../1102/out/trackDb.ra
+
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1097/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1098/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1099/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1100/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1101/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb -test=tmp.ra /hive/groups/encode/dcc/pipeline/encpipeline_prod/1102/out/trackDb.ra trackDb.wgEncode.ra
+# edit trackDb.wgEncode.ra to remove older versions!
+### Can't get make DBS=hg18 to work: tdbQuery -check rejects 2 OpenChromatins!
+tdbQuery -check 'select count(*) from hg18' -root=/cluster/home/tdreszer/kent/src/hg/makeDb/trackDb
+wgEncodeDukeDNaseSeqPeaksGm12878V2 is a subTrack of wgEncodeChromatinMapViewPeaks, but wgEncodeChromatinMapViewPeaks doesn't exist
+in track wgEncodeDukeDNaseSeqPeaksGm12878V2 stanza starting line 1894 of /cluster/home/tdreszer/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
+wgEncodeUncFAIREseqPeaksGm12878V2 is a subTrack of wgEncodeChromatinMapViewPeaks, but wgEncodeChromatinMapViewPeaks doesn't exist
+...
+### Solved by putting the alpha composite BEFORE the beta composite.  However, tdbQuery still has a bug.
+# however, the tdbQuery bug should be solved by the same changes required to fix the problem requiring 2 composites!
+
+cvs ci
+make alpha DBS=hg18
+
+# remove older versions from downloadsDir
+mv wgEncodeDukeDNaseSeqPeaksHuvec       versioned
+mv wgEncodeDukeDNaseSeqPeaksNhek        versioned
+mv wgEncodeDukeDNaseSeqPeaksH1hesc      versioned
+mv wgEncodeDukeDNaseSeqPeaksGm12891     versioned
+mv wgEncodeDukeDNaseSeqPeaksGm12892     versioned
+mv wgEncodeDukeDNaseSeqPeaksGm19238     versioned
+mv wgEncodeDukeDNaseSeqPeaksGm19239     versioned
+mv wgEncodeDukeDNaseSeqPeaksGm19240     versioned
+mv wgEncodeDukeDNaseSeqPeaksGm12878V2   versioned
+mv wgEncodeDukeDNaseSeqPeaksK562V2      versioned
+mv wgEncodeDukeDNaseSeqPeaksHepg2V2     versioned
+mv wgEncodeDukeDNaseSeqPeaksHelas3V2    versioned
+mv wgEncodeUncFAIREseqPeaksHuvec        versioned
+mv wgEncodeUncFAIREseqPeaksNhek         versioned
+mv wgEncodeUncFAIREseqPeaksH1hesc       versioned
+mv wgEncodeUncFAIREseqPeaksGm12878V2    versioned
+mv wgEncodeUncFAIREseqPeaksK562V2       versioned
+mv wgEncodeUncFAIREseqPeaksHepg2V2      versioned
+mv wgEncodeUncFAIREseqPeaksHelas3V2     versioned
+mv wgEncodeUtaChIPseqPeaksHuvecCtcf     versioned
+mv wgEncodeUtaChIPseqPeaksNhekCtcf      versioned
+mv wgEncodeUtaChIPseqPeaksH1hescCtcf    versioned
+mv wgEncodeUtaChIPseqPeaksGm12891Ctcf   versioned
+mv wgEncodeUtaChIPseqPeaksGm12892Ctcf   versioned
+mv wgEncodeUtaChIPseqPeaksGm19238Ctcf   versioned
+mv wgEncodeUtaChIPseqPeaksGm19239Ctcf   versioned
+mv wgEncodeUtaChIPseqPeaksGm19240Ctcf   versioned
+mv wgEncodeUtaChIPseqPeaksGm12878Cmyc   versioned
+mv wgEncodeUtaChIPseqPeaksHuvecCmyc     versioned
+mv wgEncodeUtaChIPseqPeaksK562Pol2      versioned
+mv wgEncodeUtaChIPseqPeaksHepg2Pol2     versioned
+mv wgEncodeUtaChIPseqPeaksHuvecPol2     versioned
+mv wgEncodeUtaChIPseqPeaksH1hescPol2    versioned
+mv wgEncodeUtaChIPseqPeaksGm12878CtcfV2 versioned
+mv wgEncodeUtaChIPseqPeaksK562CtcfV2    versioned
+mv wgEncodeUtaChIPseqPeaksHepg2CtcfV2   versioned
+mv wgEncodeUtaChIPseqPeaksHelas3CtcfV2  versioned
+mv wgEncodeUtaChIPseqPeaksK562CmycV2    versioned
+mv wgEncodeUtaChIPseqPeaksHepg2CmycV2   versioned
+mv wgEncodeUtaChIPseqPeaksHelas3CmycV2  versioned
+
+
+## No need: all are peaks: grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1097/out/fileDbCombined.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+
+update projects set user_id = 17 where id in (1097,1098,1099,1100,1101,1102);
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1097 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1098 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1099 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1100 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1101 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1102 displayed
+
+## Finishing up freeze:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 829 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 831 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 834 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 835 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 836 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 847 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 848 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 849 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 850 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 851 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 852 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 855 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 856 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 857 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 858 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 859 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 866 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 868 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 871 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 873 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 874 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 877 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 881 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 882 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 883 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 884 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 885 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 886 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 939 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 940 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 953 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 955 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 960 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 969 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1097 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1098 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1099 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1100 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1101 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1102 approved
+
+# 2010-02-09 Clean up old peaks files from downloads dir.
+ll wgEncodeDukeDNaseSeqPeaksGm12878V2.narrowPeak.gz     wgEncodeDukeDNaseSeqPeaksGm12878V3.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksGm12891.narrowPeak.gz       wgEncodeDukeDNaseSeqPeaksGm12891V2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksGm12892.narrowPeak.gz       wgEncodeDukeDNaseSeqPeaksGm12892V2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksGm19238.narrowPeak.gz       wgEncodeDukeDNaseSeqPeaksGm19238V2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksGm19239.narrowPeak.gz       wgEncodeDukeDNaseSeqPeaksGm19239V2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksGm19240.narrowPeak.gz       wgEncodeDukeDNaseSeqPeaksGm19240V2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksH1hesc.narrowPeak.gz        wgEncodeDukeDNaseSeqPeaksH1hescV2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksHelas3V2.narrowPeak.gz      wgEncodeDukeDNaseSeqPeaksHelas3V3.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksHepg2V2.narrowPeak.gz       wgEncodeDukeDNaseSeqPeaksHepg2V3.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksHuvec.narrowPeak.gz         wgEncodeDukeDNaseSeqPeaksHuvecV2.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksK562V2.narrowPeak.gz        wgEncodeDukeDNaseSeqPeaksK562V3.narrowPeak.gz
+ll wgEncodeDukeDNaseSeqPeaksNhek.narrowPeak.gz          wgEncodeDukeDNaseSeqPeaksNhekV2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksGm12878V2.narrowPeak.gz      wgEncodeUncFAIREseqPeaksGm12878V3.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksH1hesc.narrowPeak.gz         wgEncodeUncFAIREseqPeaksH1hescV2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz       wgEncodeUncFAIREseqPeaksHelas3V3.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksHepg2V2.narrowPeak.gz        wgEncodeUncFAIREseqPeaksHepg2V3.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksHuvec.narrowPeak.gz          wgEncodeUncFAIREseqPeaksHuvecV2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz         wgEncodeUncFAIREseqPeaksK562V3.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz           wgEncodeUncFAIREseqPeaksNhekV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm12878Cmyc.narrowPeak.gz     wgEncodeUtaChIPseqPeaksGm12878CmycV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm12878CtcfV2.narrowPeak.gz   wgEncodeUtaChIPseqPeaksGm12878CtcfV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm12891Ctcf.narrowPeak.gz     wgEncodeUtaChIPseqPeaksGm12891CtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm12892Ctcf.narrowPeak.gz     wgEncodeUtaChIPseqPeaksGm12892CtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm19238Ctcf.narrowPeak.gz     wgEncodeUtaChIPseqPeaksGm19238CtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm19239Ctcf.narrowPeak.gz     wgEncodeUtaChIPseqPeaksGm19239CtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksGm19240Ctcf.narrowPeak.gz     wgEncodeUtaChIPseqPeaksGm19240CtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksH1hescCtcf.narrowPeak.gz      wgEncodeUtaChIPseqPeaksH1hescCtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksH1hescPol2.narrowPeak.gz      wgEncodeUtaChIPseqPeaksH1hescPol2V2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHelas3CmycV2.narrowPeak.gz    wgEncodeUtaChIPseqPeaksHelas3CmycV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHelas3CtcfV2.narrowPeak.gz    wgEncodeUtaChIPseqPeaksHelas3CtcfV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHepg2CmycV2.narrowPeak.gz     wgEncodeUtaChIPseqPeaksHepg2CmycV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHepg2CtcfV2.narrowPeak.gz     wgEncodeUtaChIPseqPeaksHepg2CtcfV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHepg2Pol2.narrowPeak.gz       wgEncodeUtaChIPseqPeaksHepg2Pol2V2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHuvecCmyc.narrowPeak.gz       wgEncodeUtaChIPseqPeaksHuvecCmycV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHuvecCtcf.narrowPeak.gz       wgEncodeUtaChIPseqPeaksHuvecCtcfV2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksHuvecPol2.narrowPeak.gz       wgEncodeUtaChIPseqPeaksHuvecPol2V2.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksK562CmycV2.narrowPeak.gz      wgEncodeUtaChIPseqPeaksK562CmycV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksK562CtcfV2.narrowPeak.gz      wgEncodeUtaChIPseqPeaksK562CtcfV3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksK562Pol2.narrowPeak.gz        wgEncodeUtaChIPseqPeaksK562Pol2V3.narrowPeak.gz
+ll wgEncodeUtaChIPseqPeaksNhekCtcf.narrowPeak.gz        wgEncodeUtaChIPseqPeaksNhekCtcfV2.narrowPeak.gz
+
+rm wgEncodeDukeDNaseSeqPeaksGm12878V2.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksGm12891.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksGm12892.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksGm19238.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksGm19239.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksGm19240.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksH1hesc.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksHelas3V2.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksHepg2V2.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksHuvec.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksK562V2.narrowPeak.gz
+rm wgEncodeDukeDNaseSeqPeaksNhek.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksGm12878V2.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksH1hesc.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksHepg2V2.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksHuvec.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm12878Cmyc.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm12878CtcfV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm12891Ctcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm12892Ctcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm19238Ctcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm19239Ctcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksGm19240Ctcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksH1hescCtcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksH1hescPol2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHelas3CmycV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHelas3CtcfV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHepg2CmycV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHepg2CtcfV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHepg2Pol2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHuvecCmyc.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHuvecCtcf.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksHuvecPol2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksK562CmycV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksK562CtcfV2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksK562Pol2.narrowPeak.gz
+rm wgEncodeUtaChIPseqPeaksNhekCtcf.narrowPeak.gz

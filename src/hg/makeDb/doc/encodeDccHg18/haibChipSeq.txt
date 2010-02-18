@@ -705,3 +705,456 @@ encodeDownloadsPage.pl index.html
 # all looks well.
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 783 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 798 displayed
+
+2009-12-14 A few more loaded in
+===============================
+# 801,802,803,804,813
+# Had to play with prot ant treat subGroups to get this to work.
+cp fileDb.ra fileDb.ra.2009-12-14
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/801/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/802/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/803/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/804/out/fileDb.ra | grep parentTable >> tmp.txt
+# check tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 801 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 802 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 803 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 804 displayed
+
+# test doEncodeValidate change for setting up name, subGroups and for validating cv terms 
+~/bin/scripts/doEncodeValidate.pl -quick -skipAutoCreation x /cluster/data/encode/pipeline/encpipeline_prod/813
+doEncodeValidate.pl -quick -skipAutoCreation x /cluster/data/encode/pipeline/encpipeline_prod/814
+
+2010-01-11 Jan 2010 freeze
+==========================
+| 781 | HudsonAlpha_ChIP-seq_HeLa_GABPa-Nov09      | loaded |       8 | 
+| 782 | HudsonAlpha_ChIP-seq_HeLa_TAFIIp250-Nov09  | loaded |       8 | 
+| 795 | HAIB_Chipseq_p300_GM12878-Nov09            | loaded |       8 | 
+| 806 | HudsonAlpha_Chipseq_GM12878_Pax5-N19_Dec09 | loaded |       8 | 
+| 807 | HudsonAlpha_Chipseq_K562_TAF1_Dec09        | loaded |       8 | 
+| 809 | HudsonAlpha_Chipseq_A549_Pol2_Dex_Dec09    | loaded |       8 | 
+| 812 | HudsonAlpha_Chipseq_GM12878_Bcl3_Dec09     | loaded |       8 | 
+| 813 | HudsonAlpha_ChIPSeq_A549_Pol2_1hEtOH_Dec09 | loaded |       8 | 
+| 814 | HudsonAlpha_Chipseq_hESC_NRSF_Dec09        | loaded |       8 | 
+| 830 | HudsonAlpha_Chipseq_GM12878_Sp1            | loaded |       8 | 
+| 832 | HudsonAlpha_Chipseq_ZBTB33_HepG2           | loaded |       8 | 
+| 833 | HudsonAlpha_ChIPSeq_H1-hESC_Taf1           | loaded |       8 | 
+| 867 | HAIB_Chipseq_HepG2_FosL2                   | loaded |       8 | 
+| 876 | HAIB_Chipseq_HepG2_HEY1_Dec09              | loaded |       8 | 
+| 878 | HAIB_Chipseq_HepG2_RXRA_Dec09              | loaded |       8 | 
+| 879 | HAIB_Chipseq_H1-hESC_Pol2_Dec09            | loaded |       8 | 
+| 899 | HudsonAlpha_Chipseq_A549_CTCF_Jan10        | loaded |       8 | 
+| 913 | HudsonAlpha_ChipSeq_USF1_A549_Dex_Jan10    | loaded |       8 | 
+| 920 | HudsonAlpha_Chipseq_Pol2-4H8_GM12878_Jan10 | loaded |       8 | 
+| 958 | HudsonAlpha_Chipseq_Pol2-4H8_hESC_Jan10    | loaded |       8 | 
+| 973 | HudsonAlpha_ChIP-seq_GM12891_SPI1_Jan10    | loaded |       8 | 
+
+# edit all the trackDbs
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/781/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/782/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/795/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/806/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/807/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/809/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/812/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/813/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/814/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/830/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/832/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/833/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/867/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/876/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/878/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/879/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/899/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/913/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/920/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/958/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/973/out/trackDb.ra trackDb.wgEncode.ra
+# examine tracks in my browser
+cvs ci
+make alpha hg18
+
+cp fileDb.ra fileDb.ra.2010-01-13
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/781/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/782/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/795/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/806/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/807/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/809/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/812/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/813/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/814/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/830/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/832/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/833/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/867/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/876/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/878/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/879/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/899/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/913/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/920/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/958/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/973/out/fileDb.ra | grep parentTable >> tmp.txt
+# check tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 781 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 782 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 795 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 806 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 807 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 809 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 812 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 813 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 814 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 830 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 832 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 833 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 867 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 876 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 878 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 879 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 899 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 913 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 920 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 958 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 973 displayed
+
+|  901 | HudsonAlpha__Chipseq_A549_USF1_Jan10        | loaded |       8 | 
+|  976 | HAIB_Chipseq_pol2-4H8-GM12891               | loaded |       8 | 
+|  977 | HudsonAlpha_Chipseq_pol2WG-GM12891_Jan10    | loaded |       8 | 
+|  978 | HudsonAlpha_Chipseq_Oct2_GM12891_Jan10      | loaded |       8 | 
+|  979 | HudsonAlpha_ChIP-seq_GM12891_TAF1_Jan10     | loaded |       8 | 
+|  980 | HudsonAlpha_ChIP-seq_GM12892_Pol2_Jan10     | loaded |       8 | 
+|  981 | HudsonAlpha_ChIP-seq_GM12892_Pol2-4H8_Jan10 | loaded |       8 | 
+|  994 | HudsonAlpha_ChIP-seq_GM12892_TAF1_Jan10     | loaded |       8 | 
+| 1003 | HudsonAlpha_Chipseq_CTCF_A549_EtOH_Jan10    | loaded |       8 | 
+
+# edit the trackDb.ra templates
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/901/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/976/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/977/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/978/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/979/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/980/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/981/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/994/out/trackDb.ra trackDb.wgEncode.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/1003/out/trackDb.ra trackDb.wgEncode.ra
+
+# examine tracks in my browser
+cvs ci
+make alpha hg18
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/901/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/976/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/977/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/978/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/979/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/980/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/981/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/994/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1003/out/fileDb.ra | grep parentTable >> tmp.txt
+# check tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 901 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 976 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 977 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 978 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 979 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 980 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 981 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 994 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1003 displayed
+
+# after the freeze:
+select id,name,status,user_id from projects where status = "loaded" and user_id = 8 order by id;
++------+---------------------------------------+--------+---------+
+| id   | name                                  | status | user_id |
++------+---------------------------------------+--------+---------+
+|  880 | HAIB FASTQ_Submissions_Dec09          | loaded |       8 | 
+| 1028 | HudsonAlpha_Chipseq_Jurkat_Pol2_Jan10 | loaded |       8 | 
+| 1060 | HudsonAlpha_Chipseq_Dec1_HepG2_Jan10  | loaded |       8 | 
++------+---------------------------------------+--------+---------+
+3 rows in set (0.00 sec)
+
+### Melissa is taking the lead here.
+
+# Melissa marked as displayed, but not yet!
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1060 loaded
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1060 displayed
+
+### One fastq does not match any experiments currently on site!
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=POU2F2 protocol=PCR1x treatment=None view=RawData replicate=2 labVersion=SL648 dataVersion="ENCODE Jan 2010 Freeze" subId=880 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeHudsonalphaChipSeq parentTable=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pou2f2Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1060/out/fileDb.ra | grep parentTable >> fileDb.ra
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1028/out/fileDb.ra | grep parentTable >> fileDb.ra
+
+### In downloads dir but missing metadata:
+### A549Pol2 Misnamed files
+2010-09-10	wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xPol2.tagAlign.gz	  	248M	  2009-12-10  	type=tagAlign
+2010-09-10	wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xPol2.tagAlign.gz	  	264M	  2009-12-10  	type=tagAlign
+2010-09-10	wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xPol2.broadPeak.gz	  		442K	  2009-12-10  	type=broadPeak
+2010-09-10	wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2xPol2.broadPeak.gz	  		589K	  2009-12-10  	type=broadPeak
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xPol2.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xPol2.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xPol2.broadPeak.gz wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2x.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2xPol2.broadPeak.gz wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2x.broadPeak.gz
+
+# GM12878 Sp1 Duplicate submission, remove older files
+2010-09-16	wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1xSp1.tagAlign.gz	  	596M	  2009-12-16  	type=tagAlign
+2010-09-16	wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1xSp1.tagAlign.gz	  	354M	  2009-12-16  	type=tagAlign
+2010-09-16	wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1xSp1.broadPeak.gz	  		313K	  2009-12-16  	type=broadPeak
+2010-09-16	wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1xSp1.broadPeak.gz	  		358K	  2009-12-16  	type=broadPeak
+-rw-rw-r-- 2 qateam protein  624092588 Dec 18 12:19 wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  624092588 Dec 16 23:37 wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1xSp1.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  370328567 Dec 18 12:27 wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  370328567 Dec 16 23:44 wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1xSp1.tagAlign.gz
+-rw-rw-r-- 2 qateam protein     320330 Dec 18 12:08 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein     320330 Dec 16 23:49 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1xSp1.broadPeak.gz
+-rw-rw-r-- 2 qateam protein     366122 Dec 18 12:19 wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein     366122 Dec 16 23:40 wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1xSp1.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1xSp1.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1xSp1.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1xSp1.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1xSp1.broadPeak.gz
+
+# H1-hESC/TAF1 Duplicate submission, remove older files
+2010-09-18	wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1xTaf1.tagAlign.gz	  	301M	  2009-12-18  	type=tagAlign
+2010-09-18	wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1xTaf1.tagAlign.gz	  	281M	  2009-12-18  	type=tagAlign
+2010-09-18	wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1xTaf1.broadPeak.gz	  		335K	  2009-12-18  	type=broadPeak
+2010-09-18	wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1xTaf1.broadPeak.gz	  		296K	  2009-12-18  	type=broadPeak
+-rw-rw-r-- 2 qateam protein 315011830 Dec 18 15:27 wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 315011830 Dec 18 13:49 wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1xTaf1.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 294440048 Dec 18 15:19 wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 294440048 Dec 18 14:01 wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1xTaf1.tagAlign.gz
+-rw-rw-r-- 2 qateam protein    342186 Dec 18 15:16 wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein    342186 Dec 18 13:54 wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1xTaf1.broadPeak.gz
+-rw-rw-r-- 2 qateam protein    302834 Dec 18 15:16 wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein    302834 Dec 18 13:54 wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1xTaf1.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1xTaf1.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1xTaf1.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1xTaf1.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1xTaf1.broadPeak.gz
+
+# HepG2/ZBTB33 Duplicate submission, remove older files
+2010-09-16	wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz	314M	  2009-12-16  	type=tagAlign
+2010-09-16	wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz  369M	  2009-12-16  	type=tagAlign
+2010-09-16	wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz	 	 25K	  2009-12-16  	type=broadPeak
+2010-09-16	wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz	 	 22K	  2009-12-16  	type=broadPeak
+-rw-rw-r-- 2 qateam protein  328481915 Dec 18 10:50 wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  328481915 Dec 16 21:11 wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  386066263 Dec 18 10:47 wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  386066263 Dec 16 21:14 wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz
+-rw-rw-r-- 2 qateam protein      25389 Dec 18 10:50 wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein      25389 Dec 16 21:04 wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz
+-rw-rw-r-- 2 qateam protein      22128 Dec 18 10:43 wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein      22128 Dec 16 21:04 wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz
+
+### A549Pol2 Duplicate submission, remove older files
+  2010-09-10	wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2x.tagAlign.gz	  248M	  2009-12-10  	type=tagAlign
+  2010-09-10	wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2x.tagAlign.gz	  264M	  2009-12-10  	type=tagAlign
+  2010-09-10	wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2x.broadPeak.gz	  442K	  2009-12-10  	type=broadPeak
+  2010-09-10	wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2x.broadPeak.gz	  589K	  2009-12-10  	type=broadPeak
+-rw-rw-r-- 2 qateam protein 259073963 Dec 10 19:30 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 259073963 Dec 15 12:41 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xEtoh02.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 276381814 Dec 10 19:33 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2x.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 276381814 Dec 15 12:37 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xEtoh02.tagAlign.gz
+-rw-rw-r-- 2 qateam protein    451785 Dec 10 19:35 wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein    451785 Dec 15 12:38 wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xEtoh02.broadPeak.gz
+-rw-rw-r-- 2 qateam protein    602710 Dec 10 19:35 wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2x.broadPeak.gz
+-rw-rw-r-- 2 qateam protein    602710 Dec 15 12:45 wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2xEtoh02.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2x.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2x.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2x.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2x.broadPeak.gz
+
+### A549Gr mess:
+2010-09-02	wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Gr.tagAlign.gz	  			  	372M	  2009-12-02  	type=tagAlign
+2010-09-02	wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Gr.tagAlign.gz	  				280M	  2009-12-02  	type=tagAlign
+2010-09-02	wgEncodeHudsonalphaChipSeqPeaksRep1A549Gr.broadPeak.gz	  					 18K	  2009-12-02  	type=broadPeak
+2010-09-02	wgEncodeHudsonalphaChipSeqPeaksRep2A549Gr.broadPeak.gz	  					9.9K	  2009-12-02  	type=broadPeak
+# two tables and 6 files:
+| wgEncodeHudsonalphaChipSeqPeaksA549Gr              | 
+| wgEncodeHudsonalphaChipSeqRawSignalA549Gr          | 
+-rw-rw-r-- 2 qateam protein 505760278 Nov 19 18:24 wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 389122231 Dec  2 12:45 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Gr.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 292935687 Dec  2 12:35 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Gr.tagAlign.gz
+-rw-rw-r-- 2 qateam protein    329720 Nov 19 18:33 wgEncodeHudsonalphaChipSeqPeaksA549Gr.broadPeak.gz
+-rw-rw-r-- 2 qateam protein     18309 Dec  2 12:38 wgEncodeHudsonalphaChipSeqPeaksRep1A549Gr.broadPeak.gz
+-rw-rw-r-- 2 qateam protein     10064 Dec  2 12:42 wgEncodeHudsonalphaChipSeqPeaksRep2A549Gr.broadPeak.gz
+The rep1 and rep2 were submitted more recently.  But were they a mistake that were resubmitted with a treatment?
+-rw-rw-r-- 2 qateam protein  389122231 Dec  2 12:45 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Gr.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  389122231 Dec  9 13:49 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex500pm.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  292935687 Dec  2 12:35 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Gr.tagAlign.gz
+-rw-rw-r-- 2 qateam protein  292935687 Dec  9 13:42 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex500pm.tagAlign.gz
+-rw-rw-r-- 2 qateam protein      18309 Dec  2 12:38 wgEncodeHudsonalphaChipSeqPeaksRep1A549Gr.broadPeak.gz
+-rw-rw-r-- 2 qateam protein      18309 Dec  9 13:42 wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex500pm.broadPeak.gz
+-rw-rw-r-- 2 qateam protein      10064 Dec  2 12:42 wgEncodeHudsonalphaChipSeqPeaksRep2A549Gr.broadPeak.gz
+-rw-rw-r-- 2 qateam protein      10064 Dec  9 13:49 wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex500pm.broadPeak.gz
+# Duplicates!!!
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Gr.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Gr.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep1A549Gr.broadPeak.gz
+rm wgEncodeHudsonalphaChipSeqPeaksRep2A549Gr.broadPeak.gz
+
+### Problems with A549 Control
+2010-09-10	wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xControl.tagAlign.gz	217M	  2009-12-10  	type=tagAlign
+# 4 tables, 5 files
+| wgEncodeHudsonalphaChipSeqRawSignalA549Control                | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa   | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02 | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02 | 
+-rw-rw-r-- 2 qateam protein 542465567 Nov 19 18:29 wgEncodeHudsonalphaChipSeqAlignmentsA549Control.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 308638987 Jan  6 17:48 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xDexa.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 214030331 Jan 12 15:06 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xEtoh02.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 227337165 Dec 10 19:37 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xControl.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 227337165 Dec 15 12:47 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xEtoh02.tagAlign.gz
+### Looks like Dec submission was meant to be Rep2A549Control or RepA549ControlPcr2x, but no table in either case!
+-rw-rw-r-- 2 qateam protein 227337165 Dec 10 19:37 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xControl.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 227337165 Dec 15 12:47 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xEtoh02.tagAlign.gz
+### Duplicate!
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xControl.tagAlign.gz
+
+encodeDownloadsPage.pl index.html .
+
+### STILL in downloads dir but missing metadata:
+
+### GM12878/POU2F2 awaiting word from HA: fastq submitted but no corresponding high level data
+2010-07-23	wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz	  		1.1G	  2009-10-23  	type=fastq
+### ### Not yet resolved! 
+
+### go ahead and mark as displayed even though that one file is not yet resolved!
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 880 displayed
+
+# At the freeze:
+select id,name,status,user_id,created_at from projects where status = "displayed" and user_id = 8 and created_at > date('2009-11-01') order by name;
++------+---------------------------------------------+-----------+---------+---------------------+
+| id   | name                                        | status    | user_id | created_at          |
++------+---------------------------------------------+-----------+---------+---------------------+
+|  880 | HAIB FASTQ_Submissions_Dec09                | displayed |       8 | 2009-12-26 18:09:38 | 
+|  768 | HAIBChIPseq_RawData_Oct09                   | displayed |       8 | 2009-11-05 14:04:35 | 
+|  879 | HAIB_Chipseq_H1-hESC_Pol2_Dec09             | displayed |       8 | 2009-12-24 12:14:31 | 
+|  867 | HAIB_Chipseq_HepG2_FosL2                    | displayed |       8 | 2009-12-22 12:54:34 | 
+|  876 | HAIB_Chipseq_HepG2_HEY1_Dec09               | displayed |       8 | 2009-12-23 15:13:11 | 
+|  878 | HAIB_Chipseq_HepG2_RXRA_Dec09               | displayed |       8 | 2009-12-24 12:13:45 | 
+|  795 | HAIB_Chipseq_p300_GM12878-Nov09             | displayed |       8 | 2009-11-25 12:52:24 | 
+|  976 | HAIB_Chipseq_pol2-4H8-GM12891               | displayed |       8 | 2010-01-11 11:59:03 | 
+|  783 | HudsonAlpha_ChIP-seq_GM12878_Bcl11a-Nov09   | displayed |       8 | 2009-11-16 22:09:28 | 
+|  973 | HudsonAlpha_ChIP-seq_GM12891_SPI1_Jan10     | displayed |       8 | 2010-01-10 18:09:47 | 
+|  979 | HudsonAlpha_ChIP-seq_GM12891_TAF1_Jan10     | displayed |       8 | 2010-01-11 14:46:00 | 
+|  981 | HudsonAlpha_ChIP-seq_GM12892_Pol2-4H8_Jan10 | displayed |       8 | 2010-01-11 15:11:28 | 
+|  980 | HudsonAlpha_ChIP-seq_GM12892_Pol2_Jan10     | displayed |       8 | 2010-01-11 14:46:41 | 
+|  994 | HudsonAlpha_ChIP-seq_GM12892_TAF1_Jan10     | displayed |       8 | 2010-01-11 17:11:54 | 
+|  781 | HudsonAlpha_ChIP-seq_HeLa_GABPa-Nov09       | displayed |       8 | 2009-11-16 20:08:25 | 
+|  782 | HudsonAlpha_ChIP-seq_HeLa_TAFIIp250-Nov09   | displayed |       8 | 2009-11-16 20:32:17 | 
+|  776 | HudsonAlpha_ChIP-seq_HepG2_GABPa-Nov09      | displayed |       8 | 2009-11-13 10:15:42 | 
+|  780 | HudsonAlpha_ChIP-seq_HepG2_TAF250-Nov09     | displayed |       8 | 2009-11-16 19:35:43 | 
+|  899 | HudsonAlpha_Chipseq_A549_CTCF_Jan10         | displayed |       8 | 2010-01-06 11:53:06 | 
+|  803 | HudsonAlpha_Chipseq_A549_GR_500pMDex_Dec09  | displayed |       8 | 2009-12-02 11:13:44 | 
+|  802 | HudsonAlpha_Chipseq_A549_GR_50nMDex_Dec09   | displayed |       8 | 2009-12-02 10:43:37 | 
+|  801 | Hudsonalpha_Chipseq_A549_GR_5nMDex_09Dec    | displayed |       8 | 2009-12-02 07:19:56 | 
+|  813 | HudsonAlpha_ChIPSeq_A549_Pol2_1hEtOH_Dec09  | displayed |       8 | 2009-12-10 16:15:29 | 
+|  809 | HudsonAlpha_Chipseq_A549_Pol2_Dex_Dec09     | displayed |       8 | 2009-12-07 14:08:57 | 
+| 1003 | HudsonAlpha_Chipseq_CTCF_A549_EtOH_Jan10    | displayed |       8 | 2010-01-12 14:49:38 | 
+| 1060 | HudsonAlpha_Chipseq_Dec1_HepG2_Jan10        | displayed |       8 | 2010-01-14 19:53:42 | 
+|  812 | HudsonAlpha_Chipseq_GM12878_Bcl3_Dec09      | displayed |       8 | 2009-12-10 09:49:04 | 
+|  806 | HudsonAlpha_Chipseq_GM12878_Pax5-N19_Dec09  | displayed |       8 | 2009-12-04 09:16:57 | 
+|  804 | HudsonAlpha_Chipseq_GM12878_Pax5_c20_Dec09  | displayed |       8 | 2009-12-02 12:04:43 | 
+|  830 | HudsonAlpha_Chipseq_GM12878_Sp1             | displayed |       8 | 2009-12-16 14:14:20 | 
+|  833 | HudsonAlpha_ChIPSeq_H1-hESC_Taf1            | displayed |       8 | 2009-12-16 19:02:20 | 
+|  814 | HudsonAlpha_Chipseq_hESC_NRSF_Dec09         | displayed |       8 | 2009-12-15 11:09:32 | 
+| 1028 | HudsonAlpha_Chipseq_Jurkat_Pol2_Jan10       | displayed |       8 | 2010-01-13 08:35:53 | 
+|  807 | HudsonAlpha_Chipseq_K562_TAF1_Dec09         | displayed |       8 | 2009-12-04 11:23:23 | 
+|  978 | HudsonAlpha_Chipseq_Oct2_GM12891_Jan10      | displayed |       8 | 2010-01-11 13:49:51 | 
+|  920 | HudsonAlpha_Chipseq_Pol2-4H8_GM12878_Jan10  | displayed |       8 | 2010-01-07 20:08:24 | 
+|  958 | HudsonAlpha_Chipseq_Pol2-4H8_hESC_Jan10     | displayed |       8 | 2010-01-09 12:52:19 | 
+|  977 | HudsonAlpha_Chipseq_pol2WG-GM12891_Jan10    | displayed |       8 | 2010-01-11 12:42:59 | 
+|  913 | HudsonAlpha_ChipSeq_USF1_A549_Dex_Jan10     | displayed |       8 | 2010-01-07 16:17:53 | 
+|  798 | HudsonAlpha_Chipseq_ZBTB33_GM12878-Nov09    | displayed |       8 | 2009-11-30 10:12:58 | 
+|  832 | HudsonAlpha_Chipseq_ZBTB33_HepG2            | displayed |       8 | 2009-12-16 15:17:46 | 
+|  774 | HudsonAlpha_GR_ChIP-seq                     | displayed |       8 | 2009-11-10 10:56:22 | 
+|  901 | HudsonAlpha__Chipseq_A549_USF1_Jan10        | displayed |       8 | 2010-01-06 12:58:14 | 
++------+---------------------------------------------+-----------+---------+---------------------+
+43 rows (removed methyl and RNAseqs)
+
+### Problem with GM12878/POU2F2  Turns out Oct2 is actually POU2F2
+Edit trackDb.wgEncode.ra OCT >> POU2F2; Oct-2 POU2F2; treatment=None removed
+make alpha DBS-hg18
+Edit donwloads dir fileDb.ra;  Oct-2 POU2F2; add 1 missing fastq and set dates to match; treatment=None removed
+encodeDownlaodsPage.pl index.html .
+
+### Post call problems:
+Do something about light grey bed items (low score) gray scale range: Done
+Add treatment into longLabels: Done
+Solicited default wiggle settings.
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  259 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  260 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  261 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  262 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  268 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  422 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  432 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  433 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  434 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  435 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  436 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  437 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  438 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  741 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  756 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  759 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  768 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  774 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  776 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  780 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  781 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  782 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  783 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  795 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  798 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  801 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  802 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  803 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  804 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  806 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  807 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  809 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  812 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  813 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  814 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  830 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  832 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  833 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  867 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  876 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  878 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  879 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  880 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  899 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  901 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  913 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  920 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  958 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  973 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  976 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  977 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  978 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  979 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  980 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  981 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  994 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1003 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1028 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1060 approved

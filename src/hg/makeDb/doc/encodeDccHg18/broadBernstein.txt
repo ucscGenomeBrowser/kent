@@ -1652,3 +1652,42 @@ make alpha DBS=hg18
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 816 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 817 displayed
 
+## At the freeze:
+select id,name,status,user_id,created_at from projects where status = "displayed" and name like "Broad%" and created_at > date('2009-11-01') order by name;
++-----+----------------------------+-----------+---------+---------------------+
+| id  | name                       | status    | user_id | created_at          |
++-----+----------------------------+-----------+---------+---------------------+
+| 816 | BroadChipSeq_H1_H3K36me3   | displayed |      34 | 2009-12-16 08:20:35 | 
+| 817 | BroadChipSeq_H1_H3K4me2    | displayed |      34 | 2009-12-16 08:37:58 | 
+| 815 | BroadChipSeq_H1_H3K9ac     | displayed |      34 | 2009-12-16 06:28:45 | 
+| 826 | BroadChipSeq_HSMM_CTCF     | displayed |      34 | 2009-12-16 08:44:21 | 
+| 822 | BroadChipSeq_HSMM_H3K27ac  | displayed |      34 | 2009-12-16 08:41:44 | 
+| 823 | BroadChipSeq_HSMM_H3K27me3 | displayed |      34 | 2009-12-16 08:42:36 | 
+| 819 | BroadChipSeq_HSMM_H3K36me3 | displayed |      34 | 2009-12-16 08:39:18 | 
+| 821 | BroadChipSeq_HSMM_H3K4me1  | displayed |      34 | 2009-12-16 08:40:59 | 
+| 825 | BroadChipSeq_HSMM_H3K4me2  | displayed |      34 | 2009-12-16 08:43:37 | 
+| 828 | BroadChipSeq_HSMM_H3K4me3  | displayed |      34 | 2009-12-16 08:45:20 | 
+| 824 | BroadChipSeq_HSMM_H3K9ac   | displayed |      34 | 2009-12-16 08:43:09 | 
+| 820 | BroadChipSeq_HSMM_H4K20me1 | displayed |      34 | 2009-12-16 08:40:07 | 
+| 827 | BroadChipSeq_HSMM_WCE      | displayed |      34 | 2009-12-16 08:44:54 | 
+| 818 | BroadChipSeq_NHLF_CTCF     | displayed |      34 | 2009-12-16 08:38:40 | 
++-----+----------------------------+-----------+---------+---------------------+
+14 rows
+
+### Post call issues?
+None!
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 815 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 816 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 817 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 818 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 819 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 820 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 821 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 822 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 823 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 824 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 825 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 826 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 827 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 828 approved

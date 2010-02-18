@@ -4365,4 +4365,596 @@ encodeDownloadsPage.pl index.html .
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 1090 displayed
 
+hg18.wgEncodeYaleChIPseqSignalGm10847Input has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm10847MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm10847NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm10847Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm10847Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Nfkb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Rad21 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Tr4 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Yy1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Zzz3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891Mouseigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892Nfkb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18505MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18505Nfkb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18505NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18505Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526Nfkb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18951NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18951Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19099MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19099Nfkb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19099NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19193MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19193Nfkb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19193NfkbMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19193Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Baf155 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Baf155Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Baf170 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Baf170Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Bdp1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Brf2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Brg1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Brg1Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3E2f1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Ini1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Ini1Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Jund has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Mouseigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Rabigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHelas3Rpc155 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2CebpbForskln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2ControlForskln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2ControlInsln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2ErraForskln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2Hsf1Forskln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2Pgc1aForskln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2Srebp1aInsln has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHuvecCjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHuvecMax has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHuvecPol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Atf3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Brf2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Brg1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Brg1Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng30Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ini1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ini1Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Mouseigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562MusiggMusigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Nelfe has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Pol2Musigg has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Stat1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Stat1Ifng30 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Tfiiic has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562bSetdb1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalMcf7Input has 1 records with end > chromSize.
+
+update wgEncodeYaleChIPseqSignalGm12891Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm12892MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm12892NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm12892Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm15510MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm15510NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm15510Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18505MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18505NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18505Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18526MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18526NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18526Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18951NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18951Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19099MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19099NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19193MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19193NfkbMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19193Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Baf155Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Baf170Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Bdp1 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Brf2 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Brg1Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3E2f1 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Ini1Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Jund y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+# error, doesn't exist
+update wgEncodeYaleChIPseqSignalHelas3Mouseigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+# error, doesn't exist
+update wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Rabigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Rpc155 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2CebpbForskln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2ControlForskln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2ControlInsln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2ErraForskln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2Hsf1Forskln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2Pgc1aForskln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHepg2Srebp1aInsln y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHuvecCjun y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHuvecMax y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHuvecPol2 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Atf3 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Brf2 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Brg1Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Ifng30Pol2 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Ini1Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562MusiggMusigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Nelfe y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Pol2Musigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Stat1 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+# error, doesn't exist
+update wgEncodeYaleChIPseqSignalK562Stat1Ifng30 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Tfiiic y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562bSetdb1 y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalMcf7Input y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+
+# created cleanUp.txt in downloads dir
+hgsql hg18 < cleanUp.txt > cleanUp.log &
+psg 6905
+tdreszer  6905 32116  0 17:25 pts/15   00:00:00     mysql -u hgcat -px xxxxxxxxx -hlocalhost -A hg18
+top
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                
+ 8177 mysql     15   0 4995m 3.3g 3828 S  183  1.3   1287:36 mysqld                                                 
+# I think it is running but I don't see any output.
+
+# error on missing table.  edit cleanUp.txt and
+hgsql hg18 < cleanUp.txt > cleanUp.log &
+psg 24689
+tdreszer 24689 32116  0 18:10 pts/15   00:00:00     mysql -u hgcat -px xxxxxxxxx -hlocalhost -A hg18
+
+# error on missing table.  edit cleanUp.txt and
+hgsql hg18 < cleanUp.txt > cleanUp.log &
+psg 30066
+tdreszer 30066 32116  0 19:37 pts/15   00:00:00     mysql -u hgcat -px xxxxxxxxx -hlocalhost -A hg18
+[1]+  Done                    hgsql hg18 < cleanUp.txt > cleanUp.log
+
+
+## At the freeze:
+select id,name,status,user_id,created_at from projects where status = "displayed" and user_id = 6 and created_at > date('2009-12-01') order by name;
++------+--------------------------------+-----------+---------+---------------------+
+| id   | name                           | status    | user_id | created_at          |
++------+--------------------------------+-----------+---------+---------------------+
+|  861 | YDH_GM10847_IgG_Control        | displayed |       6 | 2009-12-20 20:42:24 | 
+| 1050 | YDH_GM10847_IgG_NFKB           | displayed |       6 | 2010-01-13 23:58:01 | 
+|  862 | YDH_GM10847_IgG_Pol2           | displayed |       6 | 2009-12-20 20:42:33 | 
+|  956 | YDH_GM12878_IgG_Control        | displayed |       6 | 2010-01-09 11:02:38 | 
+|  943 | YDH_GM12878_IgG_NFKB           | displayed |       6 | 2010-01-08 19:33:23 | 
+|  957 | YDH_GM12878_IgG_Pol2           | displayed |       6 | 2010-01-09 12:43:01 | 
+| 1076 | YDH_GM12878_Rad21              | displayed |       6 | 2010-01-15 09:54:47 | 
+|  900 | YDH_GM12878_TR4                | displayed |       6 | 2010-01-06 12:18:31 | 
+|  853 | YDH_GM12878_YY1                | displayed |       6 | 2009-12-19 17:45:56 | 
+|  933 | YDH_GM12878_ZZZ3               | displayed |       6 | 2010-01-08 08:19:09 | 
+|  863 | YDH_GM12891_IgG_Control        | displayed |       6 | 2009-12-20 21:36:36 | 
+| 1051 | YDH_GM12891_IgG_NFKB           | displayed |       6 | 2010-01-13 23:58:13 | 
+|  865 | YDH_GM12891_IgG_Pol2           | displayed |       6 | 2009-12-22 08:47:06 | 
+|  959 | YDH_GM12892_IgG_Control        | displayed |       6 | 2010-01-09 13:34:23 | 
+|  941 | YDH_GM12892_IgG_NFKB           | displayed |       6 | 2010-01-08 19:29:02 | 
+| 1008 | YDH_GM12892_IgG_Pol2           | displayed |       6 | 2010-01-12 17:38:28 | 
+|  996 | YDH_GM15510_IgG_Control        | displayed |       6 | 2010-01-11 19:56:53 | 
+| 1052 | YDH_GM15510_IgG_NFKB           | displayed |       6 | 2010-01-13 23:58:26 | 
+|  997 | YDH_GM15510_IgG_Pol2           | displayed |       6 | 2010-01-11 19:57:02 | 
+|  945 | YDH_GM18505_IgG_NFKB           | displayed |       6 | 2010-01-08 19:48:25 | 
+| 1016 | YDH_GM18505_IgG_Pol2           | displayed |       6 | 2010-01-13 03:11:16 | 
+| 1025 | YDH_GM18526_IgG_Control        | displayed |       6 | 2010-01-13 07:49:24 | 
+|  942 | YDH_GM18526_IgG_NFKB           | displayed |       6 | 2010-01-08 19:30:22 | 
+| 1024 | YDH_GM18526_IgG_Pol2           | displayed |       6 | 2010-01-13 07:38:50 | 
+| 1044 | YDH_GM18951_IgG_Control        | displayed |       6 | 2010-01-13 23:15:38 | 
+| 1053 | YDH_GM18951_IgG_NFKB           | displayed |       6 | 2010-01-13 23:58:37 | 
+| 1029 | YDH_GM18951_IgG_Pol2           | displayed |       6 | 2010-01-13 11:52:57 | 
+| 1045 | YDH_GM19099_IgG_Control        | displayed |       6 | 2010-01-13 23:15:58 | 
+|  946 | YDH_GM19099_IgG_NFKB           | displayed |       6 | 2010-01-08 19:48:47 | 
+| 1046 | YDH_GM19099_IgG_Pol2           | displayed |       6 | 2010-01-13 23:16:09 | 
+| 1047 | YDH_GM19193_IgG_Control        | displayed |       6 | 2010-01-13 23:16:28 | 
+|  947 | YDH_GM19193_IgG_NFKB           | displayed |       6 | 2010-01-08 19:49:49 | 
+| 1048 | YDH_GM19193_IgG_Pol2           | displayed |       6 | 2010-01-13 23:16:47 | 
+| 1078 | YDH_HeLa-S3_Bdp1               | displayed |       6 | 2010-01-15 13:13:41 | 
+| 1086 | YDH_HeLa-S3_Brf1               | displayed |       6 | 2010-01-15 16:39:05 | 
+| 1087 | YDH_HeLa-S3_Brf2               | displayed |       6 | 2010-01-15 16:39:16 | 
+|  928 | YDH_HeLa-S3_E2F1               | displayed |       6 | 2010-01-08 04:23:27 | 
+|  888 | YDH_HeLa-S3_IgG_BAF155         | displayed |       6 | 2010-01-05 12:54:58 | 
+|  890 | YDH_HeLa-S3_IgG_BAF170         | displayed |       6 | 2010-01-05 12:55:48 | 
+|  891 | YDH_HeLa-S3_IgG_Brg1           | displayed |       6 | 2010-01-05 12:56:06 | 
+|  892 | YDH_HeLa-S3_IgG_Ini1           | displayed |       6 | 2010-01-05 12:56:20 | 
+|  999 | YDH_HeLa-S3_IgG_Nrf1           | displayed |       6 | 2010-01-12 06:39:47 | 
+| 1031 | YDH_HeLa-S3_IgG_Rabbit_c-Jun   | displayed |       6 | 2010-01-13 12:52:46 | 
+| 1030 | YDH_HeLa-S3_IgG_Rabbit_Control | displayed |       6 | 2010-01-13 12:52:27 | 
+| 1032 | YDH_HeLa-S3_IgG_Rabbit_JunD    | displayed |       6 | 2010-01-13 12:53:07 | 
+| 1082 | YDH_HeLa-S3_RPC155             | displayed |       6 | 2010-01-15 15:19:58 | 
+| 1077 | YDH_HeLa-S3_TFIIIC             | displayed |       6 | 2010-01-15 12:13:48 | 
+| 1062 | YDH_HepG2_Forskolin_CEBPB      | displayed |       6 | 2010-01-14 21:03:30 | 
+|  995 | YDH_HUVEC_Jun                  | displayed |       6 | 2010-01-11 17:20:20 | 
+| 1085 | YDH_HUVEC_Max                  | displayed |       6 | 2010-01-15 16:38:48 | 
+|  950 | YDH_HUVEC_Pol2                 | displayed |       6 | 2010-01-08 22:51:27 | 
+| 1088 | YDH_K562b_MNase_SetDB1         | displayed |       6 | 2010-01-15 16:40:28 | 
+|  860 | YDH_K562b_ZNF274               | displayed |       6 | 2009-12-20 20:02:55 | 
+|  951 | YDH_K562_ATF3                  | displayed |       6 | 2010-01-08 23:27:47 | 
+| 1083 | YDH_K562_Brf2                  | displayed |       6 | 2010-01-15 15:29:52 | 
+|  975 | YDH_K562_GTF2B                 | displayed |       6 | 2010-01-11 11:54:17 | 
+|  974 | YDH_K562_IFNg30_Pol2           | displayed |       6 | 2010-01-11 08:56:39 | 
+| 1058 | YDH_K562_IFNg30_STAT1          | displayed |       6 | 2010-01-14 18:29:56 | 
+| 1059 | YDH_K562_IFNg6h_STAT1          | displayed |       6 | 2010-01-14 19:32:38 | 
+|  893 | YDH_K562_IgG_Brg1              | displayed |       6 | 2010-01-05 13:31:54 | 
+|  864 | YDH_K562_IgG_Control           | displayed |       6 | 2009-12-21 14:27:16 | 
+|  894 | YDH_K562_IgG_Ini1              | displayed |       6 | 2010-01-05 13:32:13 | 
+|  895 | YDH_K562_IgG_Pol2              | displayed |       6 | 2010-01-05 13:32:22 | 
+|  952 | YDH_K562_NELFe                 | displayed |       6 | 2010-01-08 23:28:03 | 
+| 1081 | YDH_K562_TFIIIC                | displayed |       6 | 2010-01-15 15:07:40 | 
+| 1090 | YDH_MCF-7_Input                | displayed |       6 | 2010-01-21 13:13:23 | 
+| 1020 | YHD_GM18505_IgG_Control        | displayed |       6 | 2010-01-13 07:15:07 | 
+| 1066 | YHD_HepG2_Forskolin_Control    | displayed |       6 | 2010-01-14 21:17:40 | 
+| 1063 | YHD_HepG2_Forskolin_ERRA       | displayed |       6 | 2010-01-14 21:15:31 | 
+| 1067 | YHD_HepG2_Forskolin_GRp20      | displayed |       6 | 2010-01-14 21:18:02 | 
+| 1068 | YHD_HepG2_Forskolin_HNF4A      | displayed |       6 | 2010-01-14 21:18:21 | 
+| 1069 | YHD_HepG2_Forskolin_HSF1       | displayed |       6 | 2010-01-14 21:18:49 | 
+| 1071 | YHD_HepG2_Forskolin_PGC1A      | displayed |       6 | 2010-01-14 21:19:35 | 
+| 1072 | YHD_HepG2_Forskolin_Pol2       | displayed |       6 | 2010-01-14 21:19:56 | 
+| 1070 | YHD_HepG2_Insulin_Control      | displayed |       6 | 2010-01-14 21:19:10 | 
+| 1073 | YHD_HepG2_Insulin_SREBP1       | displayed |       6 | 2010-01-14 21:20:30 | 
++------+--------------------------------+-----------+---------+---------------------+
+76 rows
+
+
+### Post call problems:
+1) ZZZ3 described as ZZ3 in cv.ra FIXED
+2) NF-YB is decribed as NF-YA in cv.ra FIXED
+3) TFIIIC needt to be converted to TFIIIC-110 in cv.ra and metadata  FIXED
+4) SREBP1A becomes SREBP1 FIXED
+5) Need new treatment pravastatin DONE
+6) HepG2/SREBP1 becomes HepG2/SREBP1/pravastatin DONE
+7) Need to move 3 more from HepG2 to HepG2/pravastatin
+8) Need to move HepG2/input to HepG2/input/pravastatin
+9) Leaves 14 datasetts in question:
+GM12878/Rad21/rabIgGb  Formerly paired with standard Input
+GM12878/NFKB/rabIgG   Formerly paired with musIgG, but rabbit is the appropriate choice
+GM10847/NFKB/rabIgG   "
+GM12891/NFKB/rabIgG   "
+GM12892/NFKB/rabIgG   "
+GM15510/NFKB/rabIgG   "
+GM18505/NFKB/rabIgG   "
+GM18526/NFKB/rabIgG   "
+GM18951/NFKB/rabIgG   "
+GM19099/NFKB/rabIgG   "
+GM19193/NFKB/rabIgG   "
+HUVEC/c-Jun  No Input for HUVEC ever submitted
+HUVEC/Max  No Input for HUVEC ever submitted
+HUVEC/Pol2  No Input for HUVEC ever submitted
+
+### GMs will be paired with iGGmus: edit trackDb and fileDb metadata
+### HUVEC must be revoked
+### Duplicate fastqs!
+ll wgEncodeYaleChIPseq*Gm12878Pol2Musigg.fastq.*
+-rw-rw-r-- 1 qateam protein 170335911 Jan 12 14:57 wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2Musigg.fastq.gz
+-rw-rw-r-- 1 qateam protein 188279133 Jan 12 14:33 wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2Musigg.fastq.gz
+-rw-rw-r-- 1 qateam protein 167890919 Jan 12 15:08 wgEncodeYaleChIPseqRawDataRep3Gm12878Pol2Musigg.fastq.gz
+-rw-rw-r-- 1 qateam protein 167890919 Jan 12 14:36 wgEncodeYaleChIPseqRawDataRep4Gm12878Pol2Musigg.fastq.gz
+-rw-rw-r-- 1 qateam protein 167890919 Jan 12 14:54 wgEncodeYaleChIPseqRawDataRep5Gm12878Pol2Musigg.fastq.gz
+-rw-rw-r-- 1 qateam protein 167890919 Jan 12 15:05 wgEncodeYaleChIPseqRawDataRep6Gm12878Pol2Musigg.fastq.gz
+-rw-rw-r-- 1 qateam protein 167890919 Jan 12 15:06 wgEncodeYaleChIPseqRawDataRep7Gm12878Pol2Musigg.fastq.gz
+zdiff wgEncodeYaleChIPseqRawDataRep3Gm12878Pol2Musigg.fastq.gz wgEncodeYaleChIPseqRawDataRep4Gm12878Pol2Musigg.fastq.gz
+>> identical
+m *.DDF
+files   view    cell    antibody        protocol        replicate       labVersion
+data/GM12878_IgG_Pol2_sequence_rep1*.fastq      RawData GM12878 Pol2    Mouse_IgG       1       Illumina 
+data/GM12878_IgG_Pol2_sequence_rep2*.fastq      RawData GM12878 Pol2    Mouse_IgG       2       Illumina 
+data/GM12878_IgG_Pol2_sequence_rep3*.fastq      RawData GM12878 Pol2    Mouse_IgG       3       Illumina 
+data/GM12878_IgG_Pol2_sequence_rep3*.fastq      RawData GM12878 Pol2    Mouse_IgG       4       Illumina 
+data/GM12878_IgG_Pol2_sequence_rep3*.fastq      RawData GM12878 Pol2    Mouse_IgG       5       Data pair
+data/GM12878_IgG_Pol2_sequence_rep3*.fastq      RawData GM12878 Pol2    Mouse_IgG       6       Illumina 
+data/GM12878_IgG_Pol2_sequence_rep3*.fastq      RawData GM12878 Pol2    Mouse_IgG       7       Illumina 
+ls data/*sequence_*
+data/GM12878_IgG_Pol2_sequence_rep1_FC30V1RHM_20081223_s_5.fastq
+data/GM12878_IgG_Pol2_sequence_rep2_FC30V1RHM_20081223_s_6.fastq
+data/GM12878_IgG_Pol2_sequence_rep3_FC30V1RHM_20081223_s_8.fastq
+data/GM12878_IgG_Pol2_sequence_rep4_FC30WBTHM_20090123_s_6.fastq
+data/GM12878_IgG_Pol2_sequence_rep5_FC42PUHM_20090706_s_3.fastq
+data/GM12878_IgG_Pol2_sequence_rep6_laneA_FC201BPAA_032708_s_7.fastq
+data/GM12878_IgG_Pol2_sequence_rep6_laneB_FC201BPAA_032708_s_8.fastq
+data/GM12878_IgG_Pol2_sequence_rep7_laneA_FC20698AA_031908_s_5.fastq
+data/GM12878_IgG_Pol2_sequence_rep7_laneB_FC20698AA_031908_s_6.fastq
+
+/bin/gzip -c data/GM12878_IgG_Pol2_sequence_rep4_FC30WBTHM_20090123_s_6.fastq > /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep4Gm12878Pol2Musigg.fastq.gz
+/bin/gzip -c data/GM12878_IgG_Pol2_sequence_rep5_FC42PUHM_20090706_s_3.fastq > /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep5Gm12878Pol2Musigg.fastq.gz
+
+cp  data/GM12878_IgG_Pol2_sequence_rep6_laneA_FC201BPAA_032708_s_7.fastq wgEncodeYaleChIPseqRawDataRep6Gm12878Pol2Musigg.fastq
+cat data/GM12878_IgG_Pol2_sequence_rep6_laneB_FC201BPAA_032708_s_8.fastq >> wgEncodeYaleChIPseqRawDataRep6Gm12878Pol2Musigg.fastq
+/bin/gzip wgEncodeYaleChIPseqRawDataRep6Gm12878Pol2Musigg.fastq
+mv wgEncodeYaleChIPseqRawDataRep6Gm12878Pol2Musigg.fastq.gz /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/
+
+cp data/GM12878_IgG_Pol2_sequence_rep7_laneA_FC20698AA_031908_s_5.fastq wgEncodeYaleChIPseqRawDataRep7Gm12878Pol2Musigg.fastq
+cat data/GM12878_IgG_Pol2_sequence_rep7_laneB_FC20698AA_031908_s_6.fastq >> wgEncodeYaleChIPseqRawDataRep7Gm12878Pol2Musigg.fastq
+/bin/gzip wgEncodeYaleChIPseqRawDataRep7Gm12878Pol2Musigg.fastq
+mv wgEncodeYaleChIPseqRawDataRep7Gm12878Pol2Musigg.fastq.gz /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/
+
+# Fixed that but now I am suspicious!
+ll | sort -n -k 5 > tmp.txt
+uniq --skip-fields=4 -w 7 --all-repeated=separate tmp.txt > tmp2.txt
+# This works with fastq, tagAligns and some bedGraphs.  Not peaks...
+grep Peak tmp.txt | uniq --skip-fields=4 -w 9 --all-repeated=separate | h
+
+-rw-rw-r-- 1 qateam   protein     926529 Jan  5 18:47 wgEncodeYaleChIPseqPeaksHelas3Baf155.narrowPeak.gz
+-rw-rw-r-- 1 qateam   protein     926529 Jan 12 23:05 wgEncodeYaleChIPseqPeaksHelas3Baf155Musigg.narrowPeak.gz
+
+-rw-rw-r-- 1 qateam   protein  125883138 Jan  5 18:53 wgEncodeYaleChIPseqSignalGm12891Mouseigg.bedGraph4.gz
+-rw-rw-r-- 1 qateam   protein  125883138 Jan 12 23:18 wgEncodeYaleChIPseqSignalGm12891MusiggMusigg.bedGraph4.gz
+
+-rw-rw-r-- 1 qateam   protein  133051817 Jan  5 11:14 wgEncodeYaleChIPseqSignalGm10847Input.bedGraph4.gz
+-rw-rw-r-- 1 qateam   protein  133051821 Jan 12 21:01 wgEncodeYaleChIPseqSignalGm10847MusiggMusigg.bedGraph4.gz
+
+-rw-rw-r-- 1 qateam   protein  137235542 Jan  5 18:49 wgEncodeYaleChIPseqAlignmentsRep1Gm12891Mouseigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  137235542 Jan 12 23:11 wgEncodeYaleChIPseqAlignmentsRep1Gm12891MusiggMusigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  142489318 Jan  5 18:54 wgEncodeYaleChIPseqAlignmentsRep2Gm12891Mouseigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  142489318 Jan 12 23:10 wgEncodeYaleChIPseqAlignmentsRep2Gm12891MusiggMusigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  145708360 Jan  5 11:09 wgEncodeYaleChIPseqAlignmentsRep1Gm10847Input.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  145708364 Jan 12 21:02 wgEncodeYaleChIPseqAlignmentsRep1Gm10847MusiggMusigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  147122984 Jan  5 11:07 wgEncodeYaleChIPseqAlignmentsRep2Gm10847Input.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  147122988 Jan 12 20:55 wgEncodeYaleChIPseqAlignmentsRep2Gm10847MusiggMusigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  189491929 Jan 12 16:49 wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbMusigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  189496685 Jan 13 17:20 wgEncodeYaleChIPseqAlignmentsRep1Gm18505Pol2Musigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  207201999 Jan  5 18:29 wgEncodeYaleChIPseqAlignmentsRep2Helas3Baf155.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  207201999 Jan 12 22:55 wgEncodeYaleChIPseqAlignmentsRep2Helas3Baf155Musigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  217684278 Jan  5 18:47 wgEncodeYaleChIPseqAlignmentsRep1Helas3Baf155.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  217684278 Jan 12 23:01 wgEncodeYaleChIPseqAlignmentsRep1Helas3Baf155Musigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  226757984 Jan  5 11:10 wgEncodeYaleChIPseqRawDataRep1Gm10847Input.fastq.gz
+-rw-rw-r-- 1 qateam   protein  226757988 Jan 12 20:56 wgEncodeYaleChIPseqRawDataRep1Gm10847MusiggMusigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  229908100 Jan  5 11:06 wgEncodeYaleChIPseqRawDataRep2Gm10847Input.fastq.gz
+-rw-rw-r-- 1 qateam   protein  229908104 Jan 12 21:04 wgEncodeYaleChIPseqRawDataRep2Gm10847MusiggMusigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  245108337 Jan  5 18:45 wgEncodeYaleChIPseqAlignmentsRep3Helas3Baf155.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  245108337 Jan 12 22:43 wgEncodeYaleChIPseqAlignmentsRep3Helas3Baf155Musigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  277154901 Jan 12 16:50 wgEncodeYaleChIPseqAlignmentsRep1K562Brg1Musigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  277154903 Jan 12 18:29 wgEncodeYaleChIPseqAlignmentsRep1Helas3Brg1Musigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  320435111 Jan  5 20:13 wgEncodeYaleChIPseqSignalK562Mouseigg.bedGraph4.gz
+-rw-rw-r-- 1 qateam   protein  320435111 Jan 12 22:05 wgEncodeYaleChIPseqSignalK562MusiggMusigg.bedGraph4.gz
+
+-rw-rw-r-- 1 qateam   protein  337083295 Jan  5 18:39 wgEncodeYaleChIPseqSignalHelas3Baf155.bedGraph4.gz
+-rw-rw-r-- 1 qateam   protein  337083295 Jan 12 22:53 wgEncodeYaleChIPseqSignalHelas3Baf155Musigg.bedGraph4.gz
+
+-rw-rw-r-- 1 qateam   protein  340449586 Jan  5 19:55 wgEncodeYaleChIPseqAlignmentsRep2K562Mouseigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  340449590 Jan 12 22:06 wgEncodeYaleChIPseqAlignmentsRep2K562MusiggMusigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  340515577 Jan  5 20:13 wgEncodeYaleChIPseqAlignmentsRep1K562Mouseigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  340515581 Jan 12 21:41 wgEncodeYaleChIPseqAlignmentsRep1K562MusiggMusigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  345738258 Jan 12 16:58 wgEncodeYaleChIPseqAlignmentsRep2K562Brg1Musigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  345738260 Jan 12 18:26 wgEncodeYaleChIPseqAlignmentsRep2Helas3Brg1Musigg.tagAlign.gz
+
+-rw-rw-r-- 1 qateam   protein  423373151 Jan  5 18:58 wgEncodeYaleChIPseqRawDataRep2Gm12891Mouseigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  423373151 Jan 12 23:14 wgEncodeYaleChIPseqRawDataRep2Gm12891MusiggMusigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  424432011 Jan  5 19:01 wgEncodeYaleChIPseqRawDataRep1Gm12891Mouseigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  424432011 Jan 12 23:08 wgEncodeYaleChIPseqRawDataRep1Gm12891MusiggMusigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  445134984 Jan 12 16:54 wgEncodeYaleChIPseqRawDataRep1K562Brg1Musigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  445134986 Jan 12 18:21 wgEncodeYaleChIPseqRawDataRep1Helas3Brg1Musigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  480704394 Jan  5 18:22 wgEncodeYaleChIPseqRawDataRep2Helas3Baf155.fastq.gz
+-rw-rw-r-- 1 qateam   protein  480704394 Jan 12 22:41 wgEncodeYaleChIPseqRawDataRep2Helas3Baf155Musigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  495842330 Jan  5 18:42 wgEncodeYaleChIPseqRawDataRep1Helas3Baf155.fastq.gz
+-rw-rw-r-- 1 qateam   protein  495842330 Jan 12 22:59 wgEncodeYaleChIPseqRawDataRep1Helas3Baf155Musigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  509759928 Jan  5 19:59 wgEncodeYaleChIPseqRawDataRep1K562Mouseigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  509759932 Jan 12 21:51 wgEncodeYaleChIPseqRawDataRep1K562MusiggMusigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  512145606 Jan 12 17:13 wgEncodeYaleChIPseqRawDataRep2K562Brg1Musigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  512145608 Jan 12 18:42 wgEncodeYaleChIPseqRawDataRep2Helas3Brg1Musigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  548636590 Jan  5 20:17 wgEncodeYaleChIPseqRawDataRep2K562Mouseigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  548636594 Jan 12 21:45 wgEncodeYaleChIPseqRawDataRep2K562MusiggMusigg.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  564079048 Jan  5 18:27 wgEncodeYaleChIPseqRawDataRep3Helas3Baf155.fastq.gz
+-rw-rw-r-- 1 qateam   protein  564079048 Jan 12 23:05 wgEncodeYaleChIPseqRawDataRep3Helas3Baf155Musigg.fastq.gz
+
+========= Fix:
+rm wgEncodeYaleChIPseqPeaksHelas3Baf155.narrowPeak.gz
+rm wgEncodeYaleChIPseqSignalGm12891Mouseigg.bedGraph4.gz
+rm wgEncodeYaleChIPseqSignalGm10847Input.bedGraph4.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm12891Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm12891Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Gm10847Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Gm10847Input.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2Helas3Baf155.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1Helas3Baf155.tagAlign.gz
+rm wgEncodeYaleChIPseqRawDataRep1Gm10847Input.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep2Gm10847Input.fastq.gz
+rm wgEncodeYaleChIPseqAlignmentsRep3Helas3Baf155.tagAlign.gz
+rm wgEncodeYaleChIPseqSignalK562Mouseigg.bedGraph4.gz
+rm wgEncodeYaleChIPseqSignalHelas3Baf155.bedGraph4.gz
+rm wgEncodeYaleChIPseqAlignmentsRep2K562Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqAlignmentsRep1K562Mouseigg.tagAlign.gz
+rm wgEncodeYaleChIPseqRawDataRep2Gm12891Mouseigg.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep1Gm12891Mouseigg.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep2Helas3Baf155.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep1Helas3Baf155.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep1K562Mouseigg.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep2K562Mouseigg.fastq.gz
+rm wgEncodeYaleChIPseqRawDataRep3Helas3Baf155.fastq.gz
+
+-rw-rw-r-- 1 qateam   protein  189491929 Jan 12 16:49 wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbMusigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  189496685 Jan 13 17:20 wgEncodeYaleChIPseqAlignmentsRep1Gm18505Pol2Musigg.tagAlign.gz
+zdiff wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm18505Pol2Musigg.tagAlign.gz | h
+>> Lots of diffs
+
+-rw-rw-r-- 1 qateam   protein  277154901 Jan 12 16:50 wgEncodeYaleChIPseqAlignmentsRep1K562Brg1Musigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  277154903 Jan 12 18:29 wgEncodeYaleChIPseqAlignmentsRep1Helas3Brg1Musigg.tagAlign.gz
+zdiff wgEncodeYaleChIPseqAlignmentsRep1K562Brg1Musigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Helas3Brg1Musigg.tagAlign.gz | h
+>> EYE-dentical
+
+-rw-rw-r-- 1 qateam   protein  345738258 Jan 12 16:58 wgEncodeYaleChIPseqAlignmentsRep2K562Brg1Musigg.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein  345738260 Jan 12 18:26 wgEncodeYaleChIPseqAlignmentsRep2Helas3Brg1Musigg.tagAlign.gz
+zdiff wgEncodeYaleChIPseqAlignmentsRep2K562Brg1Musigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Helas3Brg1Musigg.tagAlign.gz | h
+>> EYE-dentical
+
+-rw-rw-r-- 1 qateam   protein  445134984 Jan 12 16:54 wgEncodeYaleChIPseqRawDataRep1K562Brg1Musigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  445134986 Jan 12 18:21 wgEncodeYaleChIPseqRawDataRep1Helas3Brg1Musigg.fastq.gz
+zdiff wgEncodeYaleChIPseqRawDataRep1K562Brg1Musigg.fastq.gz wgEncodeYaleChIPseqRawDataRep1Helas3Brg1Musigg.fastq.gz | h
+>> EYE-dentical
+
+-rw-rw-r-- 1 qateam   protein  512145606 Jan 12 17:13 wgEncodeYaleChIPseqRawDataRep2K562Brg1Musigg.fastq.gz
+-rw-rw-r-- 1 qateam   protein  512145608 Jan 12 18:42 wgEncodeYaleChIPseqRawDataRep2Helas3Brg1Musigg.fastq.gz
+zdiff wgEncodeYaleChIPseqRawDataRep2K562Brg1Musigg.fastq.gz wgEncodeYaleChIPseqRawDataRep2Helas3Brg1Musigg.fastq.gz | h
+>> EYE-dentical
+
+### There is a real problem here!
+../893/data
+K562_IgG_Brg1.wig
+K562_IgG_Brg1_narrowPeak.bed
+K562_IgG_Brg1_sequence_rep1_laneA_FC30AKR_20080917_s_1.fastq
+K562_IgG_Brg1_sequence_rep1_laneB_FC30AKT_20080924_s_2.fastq
+K562_IgG_Brg1_sequence_rep1_laneC_FC30V3HHM_20090120_s_7.fastq
+K562_IgG_Brg1_sequence_rep2_laneA_FC30AKR_20080917_s_2.fastq
+K562_IgG_Brg1_sequence_rep2_laneB_FC30AKT_20080924_s_3.fastq
+K562_IgG_Brg1_sequence_rep2_laneC_FC30B3N_20080928_s_6.fastq
+K562_IgG_Brg1_sequence_rep2_laneD_FC30V1JHM_20090121_s_2.fastq
+K562_IgG_Brg1_tagAlign_rep1_laneA_FC30AKR_20080917_s_1.bed
+K562_IgG_Brg1_tagAlign_rep1_laneB_FC30AKT_20080924_s_2.bed
+K562_IgG_Brg1_tagAlign_rep1_laneC_FC30V3HHM_20090120_s_7.bed
+K562_IgG_Brg1_tagAlign_rep2_laneA_FC30AKR_20080917_s_2.bed
+K562_IgG_Brg1_tagAlign_rep2_laneB_FC30AKT_20080924_s_3.bed
+K562_IgG_Brg1_tagAlign_rep2_laneC_FC30B3N_20080928_s_6.bed
+K562_IgG_Brg1_tagAlign_rep2_laneD_FC30V1JHM_20090121_s_2.bed
+[hgwdev:tdreszer 891> ls ../891/data
+HeLa-S3_IgG_Brg1.wig
+HeLa-S3_IgG_Brg1_narrowPeak.bed
+HeLa-S3_IgG_Brg1_sequence_rep1_laneA_FC30AKR_20080917_s_1.fastq
+HeLa-S3_IgG_Brg1_sequence_rep1_laneB_FC30AKT_20080924_s_2.fastq
+HeLa-S3_IgG_Brg1_sequence_rep1_laneC_FC30V3HHM_20090120_s_7.fastq
+HeLa-S3_IgG_Brg1_sequence_rep2_laneA_FC30AKR_20080917_s_2.fastq
+HeLa-S3_IgG_Brg1_sequence_rep2_laneB_FC30AKT_20080924_s_3.fastq
+HeLa-S3_IgG_Brg1_sequence_rep2_laneC_FC30B3N_20080928_s_6.fastq
+HeLa-S3_IgG_Brg1_sequence_rep2_laneD_FC30V1JHM_20090121_s_2.fastq
+HeLa-S3_IgG_Brg1_tagAlign_rep1_laneA_FC30AKR_20080917_s_1.bed
+HeLa-S3_IgG_Brg1_tagAlign_rep1_laneB_FC30AKT_20080924_s_2.bed
+HeLa-S3_IgG_Brg1_tagAlign_rep1_laneC_FC30V3HHM_20090120_s_7.bed
+HeLa-S3_IgG_Brg1_tagAlign_rep2_laneA_FC30AKR_20080917_s_2.bed
+HeLa-S3_IgG_Brg1_tagAlign_rep2_laneB_FC30AKT_20080924_s_3.bed
+HeLa-S3_IgG_Brg1_tagAlign_rep2_laneC_FC30B3N_20080928_s_6.bed
+HeLa-S3_IgG_Brg1_tagAlign_rep2_laneD_FC30V1JHM_20090121_s_2.bed
+
+### Helas3Brg1Musigg is revoked!
+mv *Helas3Brg1Musigg* revokedJan2010/
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  633 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  634 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  669 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  739 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  757 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  787 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  853 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  860 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  861 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  862 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  863 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  864 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  865 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  888 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  890 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  892 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  893 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  894 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  895 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  900 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  928 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  933 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  941 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  942 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  943 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  945 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  946 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  947 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  951 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  952 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  956 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  957 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  959 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  974 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  975 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  996 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  997 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  999 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1008 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1016 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1020 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1024 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1025 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1029 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1030 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1031 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1032 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1044 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1045 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1046 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1047 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1048 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1050 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1051 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1052 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1053 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1058 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1059 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1062 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1063 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1066 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1067 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1068 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1069 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1070 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1071 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1072 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1073 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1076 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1077 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1078 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1081 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1082 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1083 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1086 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1087 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1088 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1090 approved
+
+### Officailly revoked
+update projects set status = "revoked" where id in (891,950,995,1085);
+|  891 | YDH_HeLa-S3_IgG_Brg1 | revoked |       6 | 2010-01-05 12:56:06 | 
+|  950 | YDH_HUVEC_Pol2       | revoked |       6 | 2010-01-08 22:51:27 | 
+|  995 | YDH_HUVEC_Jun        | revoked |       6 | 2010-01-11 17:20:20 | 
+| 1085 | YDH_HUVEC_Max        | revoked |       6 | 2010-01-15 16:38:48 | 
+### NOTE: Have tables/files for HUVEC and will revert to displayed/approved when input is available.
+### NOTE: When Yale can resubmit HeLa-S3/Brg1/IgG-mus, then change from revoked -> loaded and then unload!
 
