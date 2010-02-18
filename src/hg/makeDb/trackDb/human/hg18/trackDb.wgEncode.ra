@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.868 2010/02/18 20:17:15 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.869 2010/02/18 21:55:50 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -23765,12 +23765,12 @@ noInherit on
         type bed 12
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=Jurkat rnaExtract=longPolyA readType=1x25 mapAlgorithm=bow10 treatment=None localization=cell view=RPKM replicate=2 labVersion=SL317 dataVersion="ENCODE Jan 2010 Freeze" subId=1084 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25 fileName=wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25.bed12.gz
 
-# Orchid tracks (wranger: braney)
-track wgEncodeMarguliesOrchidChai
+# Chai tracks (wrangler: braney)
+track wgEncodeMarguliesChai
 compositeTrack on
-shortLabel BU Orchid/Chai
-longLabel ENCODE BU Orchid/Chai
-group regulation
+shortLabel Margulies Chai
+longLabel ENCODE Margulies Chai
+group compGeno
 subGroup1 view Views Signal=Signal ConsSig=ConsSig ConsBed=ConsBed
 #subGroup2 cellType Cell_Line GM12878=GM12878
 #subGroup1 cellType Cell_Line GM12878=GM12878
@@ -23784,17 +23784,17 @@ type bed 3
 wgEncode 1
 noInherit on
 
-    track wgEncodeMarguliesOrchidConsBedView
+    track wgEncodeMarguliesChaiConsBedView
     shortLabel ConsBed
     view ConsBed
     configurable on
     visibility full
-    subTrack wgEncodeMarguliesOrchidChai
+    subTrack wgEncodeMarguliesChai
     type bed 3
     noInherit on
 
-	track wgEncodeMarguliesOrchidConsBedRep1Gm12878
-	subTrack wgEncodeMarguliesOrchidConsBedView
+	track wgEncodeMarguliesChaiConsBedRep1Gm12878
+	subTrack wgEncodeMarguliesChaiConsBedView
         shortLabel Chai FDR bed
         longLabel Chai FDR bed
         subGroups view=ConsBed
@@ -23803,18 +23803,18 @@ noInherit on
         noScoreFilter on
 	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
 
-    track wgEncodeMarguliesOrchidConsSigView
+    track wgEncodeMarguliesChaiConsSigView
     shortLabel ConsSig
     view ConsSig
     visibility full
-    subTrack wgEncodeMarguliesOrchidChai
+    subTrack wgEncodeMarguliesChai
     maxHeightPixels 100:24:16
     windowingFunction maximum
     autoScale on
 
-	track wgEncodeMarguliesOrchidConsSigRep1Gm12878
+	track wgEncodeMarguliesChaiConsSigRep1Gm12878
 	release alpha
-	subTrack wgEncodeMarguliesOrchidConsSigView
+	subTrack wgEncodeMarguliesChaiConsSigView
 	shortLabel Chai
 	longLabel Chai
 	subGroups view=ConsSig
@@ -23824,18 +23824,38 @@ noInherit on
 	color 153,38,0
 	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
 
-    track wgEncodeMarguliesOrchidSignalView
+
+# Orchid tracks (wranger: braney)
+track wgEncodeBuOrchid
+compositeTrack on
+shortLabel BU Orchid
+longLabel ENCODE BU Orchid
+group map
+subGroup1 view Views Signal=Signal 
+#subGroup2 cellType Cell_Line GM12878=GM12878
+#subGroup1 cellType Cell_Line GM12878=GM12878
+#dimensions dimensionX=cellType
+sortOrder view=+
+controlledVocabulary encode/cv.ra cellType
+dragAndDrop subTracks
+#visibilityViewDefaults  Signal=full
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+
+    track wgEncodeBuOrchidSignalView
     shortLabel Signal
     view Signal
     visibility full
-    subTrack wgEncodeMarguliesOrchidChai
+    subTrack wgEncodeBuOrchid
     maxHeightPixels 100:24:16
     windowingFunction maximum
     autoScale on
 
-	track wgEncodeMarguliesOrchidSignalRep1Gm12878
+	track wgEncodeBuOrchidSignalRep1Gm12878
 	release alpha
-	subTrack wgEncodeMarguliesOrchidSignalView
+	subTrack wgEncodeBuOrchidSignalView
 	shortLabel Orchid v1
 	longLabel Orchid v1
 	subGroups view=Signal
@@ -23845,9 +23865,9 @@ noInherit on
 	color 153,38,0
 	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
 
-	track wgEncodeMarguliesOrchidSignalRep2Gm12878
+	track wgEncodeBuOrchidSignalRep2Gm12878
 	release alpha
-	subTrack wgEncodeMarguliesOrchidSignalView
+	subTrack wgEncodeBuOrchidSignalView
 	shortLabel Orchid v2
 	longLabel Orchid v2
 	subGroups view=Signal
