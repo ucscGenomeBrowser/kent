@@ -2,13 +2,13 @@
 #include "common.h"
 #include "linefile.h"
 #include "options.h"
-#include "psl.h"
+#include "basicBed.h"
 #include "parSpec.h"
 #include "hdb.h"
 #include "hgRelate.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgPar.c,v 1.1 2010/02/17 08:54:21 markd Exp $";
+static char const rcsid[] = "$Id: hgPar.c,v 1.2 2010/02/18 06:03:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,8 +23,8 @@ errAbort(
   "   name chromA startA endA chromB startB endB\n"
   "\n"
   "Size of regions must be the same.  Order of chromosomes is not important/\n"
-  "Name is something like 'par1', 'par2'.  The resulting table is in PSL\n"
-  "format with a record for each chromosome\n"
+  "Name is something like 'PAR1', 'PAR2'.  The resulting table is in bed4\n"
+  "format, with the name linking the chroms.\n"
   );
 }
 
@@ -33,65 +33,121 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 
-static struct psl *mkParPsl(char *qName, unsigned qSize, int qStart, int qEnd,
-                            char *tName, unsigned tSize, int tStart, int tEnd)
-/* create one of the PAR psls */
+/* SQL to create the table; no bin column since table is tiny  */
+static char *createSql =
+    "CREATE TABLE %s ("
+    "    chrom varchar(255) not null,"
+    "    chromStart int unsigned not null,"
+    "    chromEnd int unsigned not null,"
+    "    name varchar(255) not null,"
+    "    INDEX(chrom,chromStart),"
+    "    INDEX(name)"
+    ");";
+
+static void checkSpecNamesUniq(struct parSpec *parSpecs)
+/* check that par names are unique */
 {
-if ((qEnd - qStart) != (tEnd - tStart))
-    errAbort("size of PAR locations must be the same: %s:%d-%d and %s:%d-%d",
-             qName, qStart, qEnd, tName, tStart, tEnd);
-struct psl* psl = pslNew(qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd,
-                         "+", 1, 0);
-psl->match = qEnd - qStart;
-psl->blockCount = 1;
-psl->blockSizes[0] = qEnd - qStart;
-psl->qStarts[0] = qStart;
-psl->tStarts[0] = tStart;
-return psl;
+struct parSpec *ps1, *ps2;
+for (ps1 = parSpecs; ps1 != NULL; ps1 = ps1->next)
+    {
+    for (ps2 = ps1->next; ps2 != NULL; ps2 = ps2->next)
+        if (sameString(ps1->name, ps2->name))
+            errAbort("PAR names number be unique, found duplicate of %s", ps1->name);
+    }
 }
 
-static struct psl *convertParSpec(struct sqlConnection *conn, struct parSpec *parSpec)
-/* convert a parSpec object two PSLs. */
+static void checkChromCoords(char *db, char *name, char *chrom, int start, int end)
+/* check that bounds of a PAR are valid  */
 {
-int chromASize = hChromSize(sqlGetDatabase(conn), parSpec->chromA);
-int chromBSize = hChromSize(sqlGetDatabase(conn), parSpec->chromB);
-
-return slCat(mkParPsl(parSpec->chromA, chromASize, parSpec->startA, parSpec->endA,
-                      parSpec->chromB, chromBSize, parSpec->startB, parSpec->endB),
-             mkParPsl(parSpec->chromB, chromBSize, parSpec->startB, parSpec->endB,
-                      parSpec->chromA, chromASize, parSpec->startA, parSpec->endA));
+if (start >= end)
+    errAbort("zero or negative PAR length: %s %s:%d-%d", name, chrom, start, end);
+if ((start < 0) || (end > hChromSize(db, chrom)))
+    errAbort(" PAR out of chromosome bounds: %s %s:%d-%d", name, chrom, start, end);
 }
 
-static void loadTable(struct psl *psls, struct sqlConnection *conn, char *parTable)
+static void checkSpecCoords(char *db, struct parSpec *parSpec)
+/* checks coordinates within a spec */
+{
+if ((parSpec->endA - parSpec->startA) != (parSpec->endB - parSpec->startB))
+    errAbort("size of PAR locations must be the same: %s", parSpec->name);
+checkChromCoords(db, parSpec->name, parSpec->chromA, parSpec->startA, parSpec->endA);
+checkChromCoords(db, parSpec->name, parSpec->chromB, parSpec->startB, parSpec->endB);
+}
+
+static void checkSpecs(char *db, struct parSpec *parSpecs)
+/* check the specifications */
+{
+checkSpecNamesUniq(parSpecs);
+struct parSpec *ps;
+for (ps = parSpecs; ps != NULL; ps = ps->next)
+    checkSpecCoords(db, ps);
+}
+
+static struct bed4 *mkParBed(char *name, char *chrom, int start, int end)
+/* create one of the PAR bed4 */
+{
+struct bed4 *bed;
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+bed->name = cloneString(name);
+return bed;
+}
+
+static struct psl *convertParSpec(struct parSpec *parSpec)
+/* convert a parSpec object two BEDs. */
+{
+return slCat(mkParBed(parSpec->name, parSpec->chromA, parSpec->startA, parSpec->endA),
+             mkParBed(parSpec->name, parSpec->chromB, parSpec->startB, parSpec->endB));
+}
+
+static void writeBeds(struct bed4 *beds, FILE *fh)
+/* write bed to a file */
+{
+struct bed4 *bed;
+for (bed = beds; bed != NULL; bed = bed->next)
+    bedTabOutN((struct bed*)bed, 4, fh);
+}
+
+static void writeTable(struct bed4 *beds, char *parFile)
+/* write table to a file */
+{
+FILE *fh = mustOpen(parFile, "w");
+writeBeds(beds, fh);
+carefulClose(&fh);
+}
+
+static void loadTable(struct bed4 *beds, char *db, char *parTable)
 /* create and load table */
 {
-char *sqlCmd = pslGetCreateSql(parTable, PSL_TNAMEIX,  hGetMinIndexLength(sqlGetDatabase(conn)));
+struct sqlConnection *conn = sqlConnect(db);
+char sqlCmd[256];
+safef(sqlCmd, sizeof(sqlCmd), createSql, parTable);
 sqlRemakeTable(conn, parTable, sqlCmd);
+
 FILE *tabFh = hgCreateTabFile(NULL, parTable);
-struct psl *psl;
-for (psl = psls; psl != NULL; psl = psl->next)
-    pslTabOut(psl, tabFh);
+writeBeds(beds, tabFh);
 hgLoadTabFile(conn, NULL, parTable, &tabFh);
 hgUnlinkTabFile(NULL, parTable);
+sqlDisconnect(&conn);
 }
 
 static void hgPar(char *db, char *parSpecFile, char *parTable, boolean fileOutput)
 /* hgPar - create PAR track. */
 {
-struct sqlConnection *conn = sqlConnect(db);
 struct parSpec *parSpec, *parSpecs = parSpecLoadAll(parSpecFile);
-struct psl *psls = NULL;
+checkSpecs(db, parSpecs);
 
+struct bed4 *beds = NULL;
 for (parSpec = parSpecs; parSpec != NULL; parSpec = parSpec->next)
-    psls = slCat(psls, convertParSpec(conn, parSpec));
+    beds = slCat(beds, convertParSpec(parSpec));
 
-slSort(&psls, pslCmpTarget);
+slSort(&beds, bedCmp);
 if (fileOutput)
-    pslWriteAll(psls, parTable, FALSE);
+    writeTable(beds, parTable);
 else
-    loadTable(psls, conn, parTable);
-
-sqlDisconnect(&conn);
+    loadTable(beds, db, parTable);
 }
 
 int main(int argc, char *argv[])
