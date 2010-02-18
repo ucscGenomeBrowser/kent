@@ -1,5 +1,5 @@
-This is a second release of the "ENCODE Open Chromatin track"
-The composite track is wgEncodeChromatinMap
+This is the first release of the "ENCODE UW Histone track"
+The composite track is wgEncodeUwChIPSeq
 
 Categories of tables and files('):
 A) Untouched - are on public browser and shall remain
@@ -16,6 +16,8 @@ D) Versioned (replacing) - are only currently on test but will need to
    different name)
    N/A, 1st release
 E) New - are only currently on test but will need to be pushed to the RR.
+
+F) Added - These were added for the Jan 2010 freeze while this track was in QA
 
 
 E) New tables:
@@ -878,3 +880,112 @@ new wibs (hgwdev and alpha):
    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wib
 
      count: 107
+
+
+F) Added tables:
+    wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf
+    wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf
+    wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf
+    wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf
+    wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf
+    wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf
+    wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf
+    wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf
+    wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf
+    wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf
+    wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf
+    wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf
+    wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf
+    wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf
+    wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf
+    wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf
+    wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf
+    wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf
+    wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
+    wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
+    wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
+    wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
+    wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
+    wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
+    wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
+    wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
+    wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
+    wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
+    wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
+    wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
+     count: 54
+
+F') Added files:
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/
+    NOT yet on RR: (but to be put in htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
+     count: 54
+
+F'') Added wibs (hgwdev and alpha):
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wib
+    /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wib
+     count: 12
