@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.867 2010/02/17 21:49:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.868 2010/02/18 20:17:15 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -20504,9 +20504,9 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
         color 189,0,157
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 antibody=BHLHE40 protocol=PCR1x type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL1169 dataVersion="ENCODE Jan 2010 Freeze" subId=1060 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x.wig.gz
 
-#  GENCODE genes (wrangler: tdreszer, soon Brian)
+#  GENCODE genes (wrangler: braney )
 
-track wgEncodeGencode
+track wgEncodeSangerGencode
 release alpha
 compositeTrack on
 shortLabel Gencode Genes
@@ -20571,7 +20571,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeManualV3
     release alpha
-    subTrack wgEncodeGencode
+    subTrack wgEncodeSangerGencode
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct 2009)
     type genePred
@@ -20583,7 +20583,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeAutoV3
     release alpha
-    subTrack wgEncodeGencode
+    subTrack wgEncodeSangerGencode
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct 2009)
     type genePred
@@ -20595,7 +20595,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodePolyaV3
     release alpha
-    subTrack wgEncodeGencode off
+    subTrack wgEncodeSangerGencode off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
     type genePred
