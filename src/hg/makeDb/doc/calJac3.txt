@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.3 2010/02/16 04:54:18 hiram Exp $
+#	$Id: calJac3.txt,v 1.4 2010/02/18 22:15:04 hiram Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -604,3 +604,268 @@ chainOne $(path1)
 #end tblastn
 
 ##############################################################################
+# papHam1 Baboon LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15
+    cd /hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15
+
+    cat << '_EOF_' > DEF
+# baboon vs. marmoset
+# same paramters as human hg19 vs marmoset calJac3
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Baboon papHam1
+SEQ2_DIR=/scratch/data/papHam1/papHam1.2bit
+SEQ2_LEN=/scratch/data/papHam1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Mon Feb 15 21:49:52 PST 2010
+    #	real    287m24.258s
+    cat fb.calJac3.chainPapHam1Link.txt 
+    #	2047068864 bases of 2897316137 (70.654%) in intersection
+
+    mkdir /hive/data/genomes/papHam1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/papHam1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.papHam1.chainCalJac3Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+##############################################################################
+# tarSyr1 Tarsier LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-15
+    cd /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-15
+
+    cat << '_EOF_' > DEF
+# tarsier vs. marmoset
+# same paramters as human hg19 vs marmoset calJac3
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Tarsier tarSyr1
+SEQ2_DIR=/scratch/data/tarSyr1/tarSyr1.2bit
+SEQ2_LEN=/scratch/data/tarSyr1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Mon Feb 15 22:00:23 PST 2010
+    #	real    287m24.258s
+    cat fb.calJac3.chainTarSyr1Link.txt 
+    #	2047068864 bases of 2897316137 (70.654%) in intersection
+
+    mkdir /hive/data/genomes/tarSyr1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/tarSyr1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.tarSyr1.chainCalJac3Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
+# micMur1 Mouse lemur LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+# Mouse lemur ( Microcebus murinus)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-15
+    cd /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-15
+
+    cat << '_EOF_' > DEF
+# mouse lemur vs. marmoset
+# same paramters as human hg19 vs marmoset calJac3
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse lemur micMur1
+SEQ2_DIR=/hive/data/genomes/micMur1/micMur1.2bit
+SEQ2_LEN=/hive/data/genomes/micMur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+BASE=/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
+XXX - running Wed Feb 17 13:57:47 PST 2010
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	failed first kluster job, finished manually
+    #	real    287m24.258s
+    cat fb.calJac3.chainMicMur1Link.txt 
+    #	2047068864 bases of 2897316137 (70.654%) in intersection
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-continue=cat `pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+XXX - running Wed Feb 17 10:36:56 PST 2010
+
+    mkdir /hive/data/genomes/micMur1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/micMur1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.micMur1.chainCalJac3Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
+# otoGar1 Bushbaby LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-15
+    cd /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-15
+
+    cat << '_EOF_' > DEF
+# bushbaby vs. marmoset
+# same paramters as human hg19 vs marmoset calJac3
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Bushbaby otoGar1
+SEQ2_DIR=/scratch/data/otoGar1/otoGar1.rmsk.2bit
+SEQ2_LEN=/scratch/data/otoGar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+BASE=/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
+XXX - running Wed Feb 17 13:57:47 PST 2010
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	failed first kluster job, finished manually
+    #	real    287m24.258s
+    cat fb.calJac3.chainOtoGar1Link.txt 
+    #	2047068864 bases of 2897316137 (70.654%) in intersection
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-continue=cat `pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+XXX - running Wed Feb 17 10:36:21 PST 2010
+
+    mkdir /hive/data/genomes/otoGar1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/otoGar1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.otoGar1.chainCalJac3Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
