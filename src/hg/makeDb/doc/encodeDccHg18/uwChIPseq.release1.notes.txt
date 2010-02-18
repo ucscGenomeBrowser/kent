@@ -973,7 +973,30 @@ F') Added files:
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
-     count: 54
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsK562Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12801Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHelas3Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHepg2Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsSknshraInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12872Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12873Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12864Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHl60Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHmecInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsWerirb1Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12874Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12865Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsCaco2Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHreInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12875Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsSaecInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm12878Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHuvecInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsGm06990Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsNhekInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsBjInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsHek293Input.tagAlign.gz
+     count: 77
 
 F'') Added wibs (hgwdev and alpha):
     /gbdb/hg18/wib/wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wib
