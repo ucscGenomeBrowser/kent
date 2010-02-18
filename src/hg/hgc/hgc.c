@@ -226,7 +226,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1597 2010/02/18 06:01:44 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1598 2010/02/18 20:16:43 braney Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2284,7 +2284,7 @@ if(sameString(tdb->type,"genePred")
 && startsWith("ENCODE Gencode",tdb->longLabel)
 && startsWith("ENST",geneName))
     {
-#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id."
+#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
     puts("<LI>\n");
     printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
     puts("</LI>\n");
@@ -2332,7 +2332,7 @@ puts("<LI>\n");
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
 /* ugly hack to put out a correct message describing the mRNA */
 if (sameString(mrnaClick, "htcGeneMrna"))
-    printf("%s</A> from genomic sequence.\n", mrnaDescription);
+    printf("%s</A> from genomic sequences\n", mrnaDescription);
 else
     printf("%s</A> may be different from the genomic sequence.\n",
            mrnaDescription);
