@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.83 2010/02/18 18:53:25 markd Exp $";
+#	"$Id: hg19.txt,v 1.84 2010/02/18 20:29:50 hartera Exp $";
 
 #############################################################################
 
@@ -7277,7 +7277,14 @@ see doc/builds.txt for specific details.
 # /hive/data/genomes/hg18/bed.
 # 2010-01-04, hartera. Change the data to BED format and re-loaded tables. BED
 # is more appropriate for this data type.
-
+# The data is too dense in places (feedback from QA) so it would be more
+# appropriate to have a Signal track as for the ENCODE RNA-seq data tracks. 
+# 2010-02-09, hartera. Create bedGraph Signal subtracks for each tissue/cell
+# using reads/per million mapped reads as the data value.
+# 2010-02-17, hartera. Updated trackDb.ra entry to include views.
+# 2010-02-18, hartera. Loaded the bedGraph tables for the Raw Signal
+# subtracks.
+ 
    mkdir /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
 
@@ -7376,6 +7383,29 @@ done
    # Changed track type in trackDb/human/trackDb.ra to bed 12 and 
    # then did make alpha in trackDb directory.
 
+   # 2010-02-09. Add a Signal track so it is easier to view the data in 
+   # regions where there is a high density of reads. 
+   cd /hive/data/genomes/hg19/bed/burgeRnaSeqGemMapperAlign
+   # Use bedItemOverlapCount to get counts of overlapping items for each base.
+   # Need to sort the bed files and then get the number of reads mapped for
+   # that tissue. Divide the counts by the number of million mapped reads to 
+   # get the number of reads per million mapped reads as the data value. 
+   foreach f (`ls *.bed`)
+      echo $f
+      set g=$f:r
+      sort $f | bedItemOverlapCount hg19 stdin > ${f}.count
+      set size=`hgsql -Ne "select count(distinct name) from ${g};" hg19`
+      awk -v size=${size} 'BEGIN {OFS="\t"} {print $1,$2,$3,($4 / (size/1000000));}' ${f}.count > ${g}.bedGraph
+   end
+   # (2010-02-18, hartera)
+   # Load the bedGraph tables into the database as Raw Signal tracks.
+   foreach f (`ls *.bedGraph`)
+      echo $f
+      set g=$f:r 
+      hgLoadBed -bedGraph=4 hg19 ${g}AllRawSignal $f >>& loadSignal.log
+   end
+  # trackDb/human/trackDb.ra entry was updated to include views for Raw Signal
+  # and Alignment subtracks (2010-02-17)
 ##########################################################################
 # BUILD ALLEN BRAIN TRACK (DONE 09/30/09 kent)
 
@@ -8592,11 +8622,3 @@ TMPDIR=/scratch/tmp
     #	2030475813 bases of 2752505800 (73.768%) in intersection
 
 #####################################################################
-# PAR track (2010-02-18, markd DONE)
-
-  cd /hive/data/genomes/hg19/bed/par/
-  # create hg19.par using the documented coordinates
-  hgPar hg19 hg19.par par
-#####################################################################
-
-

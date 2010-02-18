@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.398 2010/02/18 18:53:24 markd Exp $
+# $Id: hg18.txt,v 1.399 2010/02/18 20:28:39 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.398 2010/02/18 18:53:24 markd Exp $
+# $Id: hg18.txt,v 1.399 2010/02/18 20:28:39 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28930,6 +28930,11 @@ see doc/builds.txt for specific details.
 # /hive/data/genomes/hg18/bed.
 # 2010-01-04, hartera. Change the data to BED format and re-loaded tables. BED
 # is more appropriate for this data type.
+# The data is too dense in places (feedback from QA) so it would be more
+# appropriate to have a Signal track as for the ENCODE RNA-seq data tracks. 
+# 2010-02-09, hartera. Create bedGraph Signal subtracks for each tissue/cell
+# using reads/per million mapped reads as the data value.
+# 2010-02-17, hartera. Updated trackDb.ra entry to include views.
 
    mkdir /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg18/burgeRnaSeqGemMapperAlign
@@ -29026,7 +29031,31 @@ done
    end
    # Changed track type in trackDb/human/trackDb.ra to bed 12 and 
    # then did make alpha in trackDb directory.
- 
+
+   # 2010-02-09. Add a Signal track so it is easier to view the data in 
+   # regions where there is a high density of reads. 
+   cd /hive/data/genomes/hg18/bed/burgeRnaSeqGemMapperAlign
+   # Use bedItemOverlapCount to get counts of overlapping items for each base.
+   # Need to sort the bed files and then get the number of reads mapped for
+   # that tissue. Divide the counts by the number of million mapped reads to
+   # get reads per million mapped reads as the data value. 
+   foreach f (`ls *.bed`)
+      echo $f
+      set g=$f:r
+      sort $f | bedItemOverlapCount hg18 stdin > ${f}.count
+      set size=`hgsql -Ne "select count(distinct name) from ${g};" hg18`
+      awk -v size=${size} 'BEGIN {OFS="\t"} {print $1,$2,$3,($4 / (size/1000000));}' ${f}.count > ${g}.bedGraph
+   end
+   # Load the bedGraph tables into the database as Raw Signal tracks.
+   foreach f (`ls *.bedGraph`)
+      echo $f
+      set g=$f:r 
+      hgLoadBed -bedGraph=4 hg18 ${g}AllRawSignal $f >>& load.log
+   end
+   # 2010-02-17
+   # trackDb.ra entry in trackDb/human was updated to include views for the
+   # Raw Signal and Alignment subtracks.
+
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
@@ -29342,6 +29371,7 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
      # Added a trackDb entry for this subtrack of the ENCODE Mapability 
      # track in kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
      # use bigWigInfo to check min and max values. 
+      
 #####################################################################
 # tRNAs track (2010-01-12, Fan DONE)
 #
@@ -29374,5 +29404,4 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
   # create hg18.par using the documented coordinates
   hgPar hg18 hg18.par par
 #####################################################################
-
 
