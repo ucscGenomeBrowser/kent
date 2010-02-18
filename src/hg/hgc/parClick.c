@@ -34,23 +34,23 @@ if (dif == 0)
 return dif;
 }
 
-static struct bed *getClickedPar(struct bed **pars)
-/* find par record that was clicked on, removing it from the list */
+static struct bed *getClickedPar(char *item, struct bed **pars)
+/* find par record that was clicked on, removing it from the list d*/
 {
 struct bed *clickedPar = NULL, *otherPars = NULL, *par;
 while ((par = slPopHead(pars)) != NULL)
     {
-    if (sameString(par->chrom, seqName) && positiveRangeIntersection(par->chromStart, par->chromEnd, winStart, winEnd))
+    if (sameString(par->chrom, seqName) && sameString(par->name, item) && positiveRangeIntersection(par->chromStart, par->chromEnd, winStart, winEnd))
         {
         if (clickedPar != NULL)
-            errAbort("multiple par rows overlapping %s:%d-%d", seqName, winStart, winEnd);
+            errAbort("multiple par rows named %s overlapping %s:%d-%d", item, seqName, winStart, winEnd);
         clickedPar = par;
         }
     else
         slAddHead(&otherPars, par);
     }
 if (clickedPar == NULL)
-    errAbort("no par row overlapping %s:%d-%d", seqName, winStart, winEnd);
+    errAbort("no par row %s overlapping %s:%d-%d", item, seqName, winStart, winEnd);
 *pars = otherPars;
 return clickedPar;
 }
@@ -122,7 +122,7 @@ struct bed *pars = loadParTable(tdb);
 if (slCount(pars) & 1)
     errAbort("par items not paired in %s", tdb->tableName);
 
-struct bed *clickedPar = getClickedPar(&pars);
+struct bed *clickedPar = getClickedPar(name, &pars);
 struct bed *homPar = getHomologousPar(clickedPar, &pars);
 slSort(&pars, parCmp);
 
