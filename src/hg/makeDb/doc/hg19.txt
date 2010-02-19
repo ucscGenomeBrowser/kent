@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.84 2010/02/18 20:29:50 hartera Exp $";
+#	"$Id: hg19.txt,v 1.85 2010/02/19 22:14:31 hartera Exp $";
 
 #############################################################################
 
@@ -8223,6 +8223,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # 2010-02-04 Loaded new data into hg19 database.
 # 2010-02-09 Received new data on 02/08/10 as there were more errors in the
 # code that caused the data to have empty fields.
+# 2010-02-19 Changed the posBasesHit column values to match those for hg18.
+# In hg18, they are all 1000, but this is meaningless. 
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
     cd /hive/data/genomes/hg19/bed/genomicSuperDups
     # Remove old data
@@ -8270,6 +8272,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # The descriptions of other columns should be changed for clarification:
 # otherSize -- equal to otherEnd minus otherStart
 # uid -- id shared by the query & subject of a hit 
+     # 2010-02-19 Changed the posBasesHit column to be 1000. Checked with 
+     # data provider about doing this so that the values are the same as for
+     # those in the hg18 table.
+     hgsql -e 'update genomicSuperDups set posBasesHit = 1000;' hg19
 
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 12/02/09 Fan).
