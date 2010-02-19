@@ -102,6 +102,7 @@ install:
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
+	cp -p --remove-destination printMan.csh            ${SCRIPTS}
 	cp -p --remove-destination qaConfig.csh            ${SCRIPTS}
 	cp -p --remove-destination qaConfig.bash           ${SCRIPTS}
 	cp -p --remove-destination qaEncodeTracks.csh      ${SCRIPTS}
