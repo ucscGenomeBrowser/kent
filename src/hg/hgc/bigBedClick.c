@@ -9,7 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.8 2010/02/19 00:22:30 angie Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.9 2010/02/19 23:24:34 angie Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -54,16 +54,17 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 if (bbMatch != NULL)
     {
-    int extraFields = 0;
+    int seq1Seq2Fields = 0;
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
-    char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
-    if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
-	extraFields = 2;
-    char *fields[bedSize+extraFields];
+    boolean seq1Seq2 = sameOk(trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE), "seq1Seq2");
+    if (seq1Seq2 && bedSize == 6)
+	seq1Seq2Fields = 2;
+    char *fields[bedSize+seq1Seq2Fields];
     char startBuf[16], endBuf[16];
     char *rest = cloneString(bbMatch->rest);
-    int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields, bedSize+extraFields); 
-    if (bbFieldCount != bedSize+extraFields)
+    int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields,
+					   bedSize+seq1Seq2Fields); 
+    if (bbFieldCount != bedSize+seq1Seq2Fields)
         {
 	errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)", 
 		bedSize, fileName, bbFieldCount);
@@ -72,12 +73,25 @@ if (bbMatch != NULL)
     if (bedSize >= 4)
 	printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);
+
     // display seq1 and seq2 
-    if (bedSize+extraFields == 8 && setting && sameString(setting, "seq1Seq2"))
-        printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr><tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
-    else if (bedSize+extraFields > 6) // we have more fields to print
-	printf("Full bed record:<BR><PRE><TT>%s\t%u\t%u\t%s\n</TT></PRE>\n",
-		chrom, bb->start, bb->end, rest);
+    if (seq1Seq2 && bedSize+seq1Seq2Fields == 8)
+        printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr>"
+	       "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
+    else
+	{
+	char *restFields[256];
+	int restCount = chopTabs(rest, restFields);
+	int restBedFields = bedSize - 3;
+	if (restCount > restBedFields)
+	    {
+	    int i;
+	    printf("<B>Non-BED fields:</B> ");
+	    for (i = restBedFields;  i < restCount;  i++)
+		printf("%s%s", (i > 0 ? "\t" : ""), restFields[i]);
+	    printf("<BR>\n");
+	    }
+	}
     }
 else
     {
