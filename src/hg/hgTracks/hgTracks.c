@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1630 2010/02/17 20:20:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1631 2010/02/19 02:22:41 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4425,7 +4425,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	if(dragZooming && assemblySupportsGeneSuggest(database))
-            hWrites(" gene <input type='text' size='8' id='suggest'/>\n");
+            hWrites(" gene <input type='text' size='8' name='hgt.ignoreme' id='suggest'>\n");
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");
@@ -5509,7 +5509,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
                         "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
                         "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
                         "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
-                        "hgt.collapseGroups", "hgt.expandGroups",
+                        "hgt.collapseGroups", "hgt.expandGroups", "hgt.ignoreme",
                         "hgt.jump", "hgt.refresh",
 #ifdef CONTEXT_MENU
                         "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
