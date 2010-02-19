@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.869 2010/02/18 21:55:50 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.870 2010/02/19 00:05:12 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -7787,6 +7787,7 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
+dataVersion through the ENCODE Jan 2010 Freeze
 noInherit on
 
     track wgEncodeUwChIPSeqViewaPeaks
