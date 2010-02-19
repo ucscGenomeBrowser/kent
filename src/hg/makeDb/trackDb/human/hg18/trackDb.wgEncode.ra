@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.870 2010/02/19 00:05:12 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.871 2010/02/19 17:15:48 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5603,6 +5603,7 @@ wgEncode 1
 # Mapability - Cross lab special track (wrangler: tdreszer)
 
 track wgEncodeMapability
+release alpha
 compositeTrack on
 shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
@@ -5619,6 +5620,7 @@ noInherit on
 wgEncode 1
 
     track wgEncodeMapabilityViewALN
+    release alpha
     shortLabel Broad Alignability
     view ALN
     visibility hide
@@ -5629,6 +5631,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeBroadMapabilityAlign36mer
+        release alpha
         subTrack wgEncodeMapabilityViewALN
         shortLabel Broad Align 36
         longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
@@ -5638,6 +5641,8 @@ wgEncode 1
         metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
     track wgEncodeMapabilityViewDUNIQ
+    release alpha
+    subTrack wgEncodeMapabilityViewALN
     shortLabel Duke Uniqueness
     view DUNIQ
     visibility full
@@ -5649,6 +5654,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeDukeUniqueness20bp
+        release alpha
         subTrack wgEncodeMapabilityViewDUNIQ off
         shortLabel Duke Uniq 20
         longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
@@ -5659,6 +5665,7 @@ wgEncode 1
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
         track wgEncodeDukeUniqueness24bp
+        release alpha
         subTrack wgEncodeMapabilityViewDUNIQ off
         shortLabel Duke Uniq 24
         longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
@@ -5669,6 +5676,7 @@ wgEncode 1
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
         track wgEncodeDukeUniqueness35bp
+        release alpha
         subTrack wgEncodeMapabilityViewDUNIQ
         shortLabel Duke Uniq 35
         longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
@@ -5679,6 +5687,7 @@ wgEncode 1
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
     track wgEncodeMapabilityViewRUNIQ
+    release alpha
     shortLabel Rosetta Uniqueness
     view RUNIQ
     visibility hide
@@ -5693,6 +5702,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track uniqueness
+        release alpha
         subTrack wgEncodeMapabilityViewRUNIQ
         shortLabel Rosetta Uniq 35
         longLabel Mapability - Rosetta Uniqueness 35-mer Alignment (BWA/MAQ, unique alignment=37)
@@ -5704,6 +5714,7 @@ wgEncode 1
         type bedGraph 4
 
     track wgEncodeMapabilityViewUUNIQ
+    release alpha
     shortLabel UMass Uniqueness
     view UUNIQ
     visibility full
@@ -5714,6 +5725,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeUmassMapabilityUniq15
+        release alpha
         subTrack wgEncodeMapabilityViewUUNIQ
         shortLabel Umass Uniq 15
         longLabel Mapability - ENCODE UMass Uniqueness at 15bp
@@ -5723,11 +5735,13 @@ wgEncode 1
         metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeMapabilityViewXR
+    release alpha
     shortLabel Duke Excluded Regions
     view XR
     subTrack wgEncodeMapability
 
         track wgEncodeDukeRegionsExcluded
+        release alpha
         subTrack wgEncodeMapabilityViewXR
         shortLabel Excluded Regions
         longLabel Mapability - ENCODE Duke Excluded Regions
@@ -5737,6 +5751,7 @@ wgEncode 1
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
     track wgEncodeMapabilityViewCRGMAP
+    release alpha
     shortLabel CRG GEM Alignability
     view CRGMAP
     visibility hide
@@ -5747,6 +5762,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeCrgMapabilityAlign36mer
+        release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 36
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
@@ -5755,6 +5771,7 @@ wgEncode 1
         color 120,0,0
 
         track wgEncodeCrgMapabilityAlign40mer
+        release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 40
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
@@ -5763,6 +5780,7 @@ wgEncode 1
         color 120,0,0
 
         track wgEncodeCrgMapabilityAlign50mer
+        release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 50
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
@@ -5771,6 +5789,7 @@ wgEncode 1
         color 120,0,0
 
         track wgEncodeCrgMapabilityAlign75mer
+        release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 75
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
@@ -5779,6 +5798,212 @@ wgEncode 1
         color 120,0,0
 
         track wgEncodeCrgMapabilityAlign100mer
+        release alpha
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 100
+        longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w100
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+track wgEncodeMapability
+release beta
+compositeTrack on
+shortLabel Mapability
+longLabel Mapability or Uniqueness of Reference Genome
+group map
+subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
+subGroup2 win Sequence_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
+#dimensions dimensionX=win
+allButtonPair on
+sortOrder view=+ win=+
+dragAndDrop subTracks
+priority 0
+type bed 3
+html wgEncodeMapabilityOld
+noInherit on
+wgEncode 1
+
+    track wgEncodeMapabilityViewALN
+    release beta
+    shortLabel Broad Alignability
+    view ALN
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeBroadMapabilityAlign36mer
+        release beta
+        subTrack wgEncodeMapabilityViewALN
+        shortLabel Broad Align 36
+        longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
+        subGroups view=ALN win=w036
+        type wig 0.00 1.00
+        color 133,0,173
+        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
+
+    track wgEncodeMapabilityViewDUNIQ
+    release beta
+    subTrack wgEncodeMapabilityViewALN
+    shortLabel Duke Uniqueness
+    view DUNIQ
+    visibility full
+    subTrack wgEncodeMapability
+    configurable on
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeDukeUniqueness20bp
+        release beta
+        subTrack wgEncodeMapabilityViewDUNIQ off
+        shortLabel Duke Uniq 20
+        longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
+        type wig 0.00 1.00
+        subGroups view=DUNIQ win=w020
+        spanList 1
+        color 153,38,0
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
+
+        track wgEncodeDukeUniqueness24bp
+        release beta
+        subTrack wgEncodeMapabilityViewDUNIQ off
+        shortLabel Duke Uniq 24
+        longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
+        type wig 0.00 1.00
+        subGroups view=DUNIQ win=w024
+        spanList 1
+        color 153,38,0
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
+
+        track wgEncodeDukeUniqueness35bp
+        release beta
+        subTrack wgEncodeMapabilityViewDUNIQ
+        shortLabel Duke Uniq 35
+        longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
+        type wig 0.00 1.00
+        subGroups view=DUNIQ win=w035
+        spanList 1
+        color 153,38,0
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
+
+    track wgEncodeMapabilityViewRUNIQ
+    release beta
+    shortLabel Rosetta Uniqueness
+    view RUNIQ
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:37
+    minLimit 0
+    maxLimit 37
+    gridDefault on
+    yLineOnOff on
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track uniqueness
+        release beta
+        subTrack wgEncodeMapabilityViewRUNIQ
+        shortLabel Rosetta Uniq 35
+        longLabel Mapability - Rosetta Uniqueness 35-mer Alignment (BWA/MAQ, unique alignment=37)
+        subGroups view=RUNIQ win=w035
+        #viewLimits 0:37
+        #minLimit 0
+        #maxLimit 37
+        color 100,50,150
+        type bedGraph 4
+
+    track wgEncodeMapabilityViewUUNIQ
+    release beta
+    shortLabel UMass Uniqueness
+    view UUNIQ
+    visibility full
+    subTrack wgEncodeMapability
+    viewLimits 0.1:0.55
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeUmassMapabilityUniq15
+        release beta
+        subTrack wgEncodeMapabilityViewUUNIQ
+        shortLabel Umass Uniq 15
+        longLabel Mapability - ENCODE UMass Uniqueness at 15bp
+        subGroups view=UUNIQ win=w015
+        type wig 0.00 1.00
+        color 46,0,184
+        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
+
+    track wgEncodeMapabilityViewXR
+    release beta
+    shortLabel Duke Excluded Regions
+    view XR
+    subTrack wgEncodeMapability
+
+        track wgEncodeDukeRegionsExcluded
+        release beta
+        subTrack wgEncodeMapabilityViewXR
+        shortLabel Excluded Regions
+        longLabel Mapability - ENCODE Duke Excluded Regions
+        subGroups view=XR win=zNA
+        type bed 6
+        noScoreFilter on
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+
+    track wgEncodeMapabilityViewCRGMAP
+    release beta
+    shortLabel CRG GEM Alignability
+    view CRGMAP
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeCrgMapabilityAlign36mer
+        release beta
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 36
+        longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w036
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track wgEncodeCrgMapabilityAlign40mer
+        release beta
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 40
+        longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w040
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track wgEncodeCrgMapabilityAlign50mer
+        release beta
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 50
+        longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w050
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track wgEncodeCrgMapabilityAlign75mer
+        release beta
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Alignability 75
+        longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w075
+        type bigWig 0.00 1.00
+        color 120,0,0
+
+        track wgEncodeCrgMapabilityAlign100mer
+        release beta
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Alignability 100
         longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
