@@ -410,7 +410,7 @@ D) Versioned:
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Nb4V2.wib ( /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Nb4.wib )
 
 E) New tables:
-    E.a) New tables: 114
+    E.a) New tables (excluding versioned): 114
     wgEncodeUwDnaseSeqHotspotsRep1Ag04449
     wgEncodeUwDnaseSeqHotspotsRep1Ag04450
     wgEncodeUwDnaseSeqHotspotsRep1Ag09309
@@ -526,7 +526,7 @@ E) New tables:
     wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo
     wgEncodeUwDnaseSeqRawSignalRep2Nhlf
 
-    E.b) New files: 191
+    E.b) New files (excluding versioned): 191
         current location on alpha:
         /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/release3/
         NOT yet on RR: (but to be put in htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/)
@@ -722,7 +722,7 @@ E) New tables:
     wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Nhlf.wig.gz
 
-    E.c) new wibs (hgwdev and alpha): 38
+    E.c) new wibs (excluding versioned): 38
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Ag04449.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Ag04450.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Ag09309.wib
