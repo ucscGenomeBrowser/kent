@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.27 2010/02/05 23:52:29 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.28 2010/02/19 23:15:51 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -79,7 +79,13 @@ assemblyDate Mmm. YYYY
     center.
 
 assemblyLabel XXXXXX
-  - The sequencing center's label or version identifier for this release.
+  - The detailed/long form of the sequencing center's label or version
+    identifier for this release (e.g. 'Genome Center at Washington University,
+    St. Louis, Genus_species 1.2.3').
+
+assemblyShortLabel XXXXXX
+  - The abbreviated form of the sequencing center's label or version identifier
+    for this release (e.g. 'WUGSC 1.2.3').
 
 orderKey NN
   - A priority number (for the central database's dbDb.orderKey column)
@@ -179,7 +185,7 @@ use vars qw/
     /;
 
 # Required config parameters:
-my ($db, $scientificName, $assemblyDate, $assemblyLabel, $orderKey,
+my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
@@ -248,6 +254,7 @@ sub parseConfig {
   $scientificName = &requireVar('scientificName', \%config);
   $assemblyDate = &requireVar('assemblyDate', \%config);
   $assemblyLabel = &requireVar('assemblyLabel', \%config);
+  $assemblyShortLabel = &requireVar('assemblyShortLabel', \%config);
   $orderKey = &requireVar('orderKey', \%config);
   $mitoAcc = &requireVar('mitoAcc', \%config);
   $fastaFiles = &requireVar('fastaFiles', \%config);
@@ -390,7 +397,7 @@ sub makeUnmasked2bit {
   my $acat = "cat";
   my $fcat = "cat";
   my $sli = "";
-  if ($subsetLittleIds eq "Y") {
+  if (defined $subsetLittleIds && $subsetLittleIds eq "Y") {
     $sli = "-1 ";  
   }
   foreach my $file (`ls $fastaFiles 2> /dev/null`) {
@@ -840,7 +847,7 @@ INSERT INTO dbDb
      defaultPos, active, orderKey, genome, scientificName,
      htmlPath, hgNearOk, hgPbOk, sourceName, taxId)
 VALUES
-    ("$db", "$assemblyDate", "$HgAutomate::gbdb/$db", "$genome",
+    ("$db", "$assemblyDate ($assemblyShortLabel/$db)", "$HgAutomate::gbdb/$db", "$genome",
      "$defaultPos", 1, $orderKey, "$genome", "$scientificName",
      "$HgAutomate::gbdb/$db/html/description.html", 0, 0, "$assemblyLabel",
     $taxId);
@@ -1073,10 +1080,13 @@ _EOF_
   close($fh);
 
   $fh = &HgAutomate::mustOpen(">$topDir/html/gap.html");
+  my $em = $commonName ? "" : "<em>";
+  my $noEm = $commonName ? "" : "</em>";
   if ($gotAgp) {
     print $fh <<_EOF_
 <H2>Description</H2>
-This track depicts gaps in the assembly.
+This track depicts gaps in the draft assembly ($assemblyDate, $assemblyLabel)
+of the $em\$organism$noEm genome.
 
   *** Developer: remove this statement if no future assemblies are expected:
 
@@ -1143,7 +1153,8 @@ _EOF_
   } else {
     print $fh <<_EOF_
 <H2>Description</H2>
-This track depicts gaps in the assembly.
+This track depicts gaps in the draft assembly ($assemblyDate, $assemblyLabel)
+of the $em\$organism$noEm genome.
 
   *** Developer: remove this statement if no future assemblies are expected:
 
@@ -1184,13 +1195,12 @@ _EOF_
   close($fh);
 
   $fh = &HgAutomate::mustOpen(">$topDir/html/gold.html");
-  my $em = $commonName ? "" : "<em>";
-  my $noEm = $commonName ? "" : "</em>";
   if ($gotAgp) {
     print $fh <<_EOF_
 <H2>Description</H2>
 <P>
-This track shows the draft assembly of the $em\$organism$noEm genome.  
+This track shows the draft assembly ($assemblyDate, $assemblyLabel)
+of the $em\$organism$noEm genome.
 
   *** Developer: check if this is accurate:
 
@@ -1216,7 +1226,8 @@ _EOF_
     print $fh <<_EOF_
 <H2>Description</H2>
 <P>
-This track shows the draft assembly of the $em\$organism$noEm genome.  
+This track shows the draft assembly ($assemblyDate, $assemblyLabel)
+of the $em\$organism$noEm genome.
 
   *** Developer: check if this is accurate:
 
