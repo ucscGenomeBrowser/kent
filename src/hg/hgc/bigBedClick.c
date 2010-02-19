@@ -9,7 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.7 2009/08/12 21:20:26 galt Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.8 2010/02/19 00:22:30 angie Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -69,6 +69,8 @@ if (bbMatch != NULL)
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
+    if (bedSize >= 4)
+	printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);
     // display seq1 and seq2 
     if (bedSize+extraFields == 8 && setting && sameString(setting, "seq1Seq2"))
