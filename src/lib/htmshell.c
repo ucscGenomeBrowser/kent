@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.66 2010/02/18 21:11:07 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.67 2010/02/19 07:17:10 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -226,10 +226,12 @@ fprintf(f, "document.write(\"<center>"
             "<div id='warnBox' style='display:none; background-color:Beige; "
               "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
               "text-align:left;'>"
-            "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL>"
-            "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'>&nbsp;OK&nbsp;</button></CENTER>"
+            "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER>"
+	    "<UL id='warnList'></UL>"
+            "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>"
             "</div></center>\");\n");
 fprintf(f,"function showWarnBox() {"
+            "document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';"
             "var warnBox=document.getElementById('warnBox');"
             "warnBox.style.display=''; warnBox.style.width='65%%';"
             "document.getElementById('warnHead').innerHTML='Error(s):';"
@@ -251,7 +253,7 @@ va_list argscp;
 va_copy(argscp, args);
 #ifdef WARNBOX_IN_USE
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
-char warning[512];
+char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
 // NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
 if( strSwapStrs(warning, sizeof(warning),"'","&#39;") == -1) // Sheild single quotes
