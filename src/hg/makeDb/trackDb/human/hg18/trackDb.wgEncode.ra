@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.873 2010/02/19 18:41:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.874 2010/02/19 21:15:21 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11152,6 +11152,7 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=MCF-7 view=Peaks rank=1st replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=592 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep1Mcf7 fileName=wgEncodeUwDnaseSeqPeaksRep1Mcf7.narrowPeak.gz
 
         track wgEncodeUwDnaseSeqPeaksRep1Nb4
+        release beta
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NB4 Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in NB4 cells)
@@ -11838,6 +11839,7 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=MCF-7 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=592 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Mcf7 fileName=wgEncodeUwDnaseSeqHotspotsRep1Mcf7.broadPeak.gz
 
         track wgEncodeUwDnaseSeqHotspotsRep1Nb4
+        release beta
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NB4 1
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in NB4 cells)
@@ -12526,6 +12528,7 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=MCF-7 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=592 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Mcf7 fileName=wgEncodeUwDnaseSeqRawSignalRep1Mcf7.wig.gz
 
         track wgEncodeUwDnaseSeqRawSignalRep1Nb4
+        release beta
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NB4 Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in NB4 cells)
