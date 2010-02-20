@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.874 2010/02/19 21:15:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.875 2010/02/20 00:10:54 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -10912,7 +10912,8 @@ controlledVocabulary encode/cv.ra cellType=cell
 #settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:100,minLimit=1,maxLimit=127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3 +
-dataVersion through the ENCODE Jan 2010 Freeze
+#dataVersion through the ENCODE Jan 2010 Freeze
+dataVersion through the ENCODE Sep 2009 Freeze
 wgEncode 1
 
     track wgEncodeUwDnaseSeqViewaPeaks
