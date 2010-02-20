@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.22 2009/10/06 16:51:43 angie Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.23 2010/02/20 07:12:50 markd Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -46,14 +46,17 @@ return FALSE;
 #endif
 }
 
-static void checkConfigPerms(char *filename, int depth)
-/* get that we are either a CGI or that the config file is only readable by 
- * the user, or doesn't exist.  Specifying HGDB_CONF also disables perms
- * check to make debugging and having CGIs run loaders easier */
+static void checkConfigPerms(char *filename)
+/* Check that that config files starting with "." are only readable by the
+ * user or don't exist. */
 {
+char *p = strrchr(filename, '/');
+if (p != NULL)
+    p++;
+else
+    p = filename;  // no dir in path
 struct stat statBuf;
-if ((!isBrowserCgi()) && isEmpty(getenv("HGDB_CONF")) && depth == 0
-    && (stat(filename, &statBuf) == 0))
+if ((p[0] == '.') && (stat(filename, &statBuf) == 0))
     {
     if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
         errAbort("config file %s allows group or other access, must only allow user access",
@@ -158,7 +161,7 @@ else
 static void parseConfigFile(char *filename, int depth)
 /* open and parse a config file */
 {
-checkConfigPerms(filename, depth);
+checkConfigPerms(filename);
 struct lineFile *lf = lineFileOpen(filename, TRUE);
 char *line;
 while(lineFileNext(lf, &line, NULL))
