@@ -107,4 +107,104 @@ taxId 9595
 
     rm /gbdb/gorGor2/gorGor2.2bit
     ln -s `pwd`/gorGor2.2bit /gbdb/gorGor2/gorGor2.2bit
+
+########################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2010-02-20 - Hiram)
+    #	verify all gaps are defined in AGP
+    mkdir /hive/data/genomes/gorGor2/bed/allGaps
+    cd /hive/data/genomes/gorGor2/bed/allGaps
+    time findMotif -strand=+ -motif="gattacagattaca" -verbose=4 \
+	../../gorGor2.2bit > findMotif.txt 2>&1 &
+    #	less than 1 minute
+    grep "^#GAP" findMotif.txt | sed -e "s/#GAP //" \
+	| sort -k1,1 -k2,2n > allGaps.bed
+    awk '{print $3-$2}' allGaps.bed | ave stdin
+    #	total 206104414.000000
+    featureBits -countGaps gorGor2 gap
+    #	206081866 bases of 3035791622 (6.788%) in intersection
+    #	there appear to be more N's than defined in gaps, let's add them
+    #	to the gap table
+
+    time featureBits gorGor2 -not gap -bed=notGap.bed
+    #	0m28.556s
+    time featureBits gorGor2 allGaps.bed notGap.bed -bed=new.gaps.bed
+XXX - running Sat Feb 20 15:06:15 PST 2010
+    #	what is the last index in the existing gap table:
+    hgsql -N -e "select ix from gap;" gorGor2 | sort -n | tail -1
+    #	3998
+    #	each scaffold has its parts renumbered from 1, thus, there
+    #	are many more gaps than 3998.  All 3998 means is that is the
+    #	highest number of gaps on chr4_48641019_10247101
+    cat << '_EOF_' > mkGap.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" gorGor2 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.gap
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad gorGor2 otherGap other.gap
+    #	Loaded 19438
+    #	adding this many:
+    wc -l bed.tab
+    #	19438
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" gorGor2
+    #	3998
+    hgsql gorGor2 -e 'load data local infile "bed.tab" into table gap;'
+    #	original number of gaps:
+    grep fragment ../../gorGor2.agp | wc -l
+    #	407798
+    # +  19438
+    # = 427236
+    #	result count:
+    hgsql -e "select count(*) from gap;" gorGor2
+    #	427236
+    #	OK.
+
+##########################################################################
+# MAKE 11.OOC FILES FOR BLAT (DONE - 2010-02-20 - Hiram)
+    # numerator is gorGor2 gapless bases "real" as reported by faSize 
+    # denominator is hg17 gapless bases as reported by featureBits,
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2829687208 / 2897310462 \) \* 1024
+    #	( 2829687208 / 2897310462 ) * 1024 = 1000.099830
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    cd /hive/data/genomes/gorGor2
+    blat gorGor2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/gorGor2.11.ooc -repMatch=1000
+    #	Wrote 29650 overused 11-mers to jkStuff/gorGor2.11.ooc
+
+    mkdir /hive/data/staging/data/gorGor2
+    cp -p gorGor2.2bit chrom.sizes jkStuff/gorGor2.11.ooc \
+	/hive/data/staging/data/gorGor2
+
+    #	check if there are any non-bridged gaps to contend with:
+    time gapToLift -bedFile=jkStuff/nonBridgedGaps.bed gorGor2 \
+	jkStuff/gorGor2.nonBridged.lft
+    #	real    0m28.560s
+    wc -l chrom.sizes
+    #	58049
+    wc -l jkStuff/nonBridgedGaps.bed
+    #	58049
+    #	there are no non-bridged gaps, this bed file is the whole genome
+    awk '{print $3}' jkStuff/nonBridgedGaps.bed | ave stdin
+    #	total 3035791622.000000
+    ave -col=2 chrom.sizes
+    #	total 3035791622.000000
 ##########################################################################
