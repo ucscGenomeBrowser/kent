@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.26 2010/02/09 19:04:45 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.27 2010/02/22 18:04:19 kate Exp $
 
 use warnings;
 use strict;
@@ -532,7 +532,7 @@ if (defined $opt_checksum) {
 }
 
 chdir $downloadsDir;
-chmod 0664, $indexHtml;
+chmod 0775, $indexHtml;
 chmod 0664, $checksumFile;
 chmod 0664, $textFile;
 
