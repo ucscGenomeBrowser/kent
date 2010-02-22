@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.261 2010/02/17 21:39:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.262 2010/02/22 21:01:42 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3638,9 +3638,9 @@ wiggleGridDropDown(option, horizontalGrid);
 printf("&nbsp;&nbsp;&nbsp;at y =");
 snprintf(option, sizeof(option), "%s.%s", name, YLINEMARK );
 cgiMakeDoubleVarWithLimits(option, yLineMark, "Indicator at Y", 0, tDbMinY, tDbMaxY);
-printf("</td><td align=left>");
 snprintf(option, sizeof(option), "%s.%s", name, YLINEONOFF );
 wiggleYLineMarkDropDown(option, yLineMarkOnOff);
+printf("</td>");
 if(boxed)
     puts("</TD></TR></TABLE>");
 else
