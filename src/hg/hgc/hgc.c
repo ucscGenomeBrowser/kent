@@ -226,7 +226,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1599 2010/02/18 20:52:39 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1600 2010/02/22 23:28:29 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9228,6 +9228,129 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doRgdGene2(struct trackDb *tdb, char *rgdGeneId)
+/* Process click on a RGD gene. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *sqlRnaName = rgdGeneId;
+char *rgdId = NULL;
+char *chp;
+char *GeneID, *Name, *note;
+char *rgdPathwayId;
+char *rgdPathwayName;
+
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rgdGeneId, '\''))
+    sqlRnaName = replaceChars(rgdGeneId, "'", "''");
+
+cartWebStart(cart, database, "%s", tdb->longLabel);
+
+chp = strstr(rgdGeneId, ":");
+if (chp != NULL)
+    {
+    chp++;
+    rgdId = strdup(chp);
+    }
+else
+    {
+    errAbort("Couldn't find %s.", rgdGeneId);
+    }
+
+safef(query, sizeof(query), "select GeneID, Name, note from rgdGeneXref where rgdGeneId = '%s'", rgdGeneId);
+
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in rgdGeneXref table - database inconsistency.", rgdGeneId);
+GeneID = cloneString(row[0]);
+Name   = cloneString(row[1]);
+note   = cloneString(row[2]);
+
+sqlFreeResult(&sr);
+
+printf("<H2>Gene %s</H2>\n", Name);
+printf("<B>RGD Gene Report: </B> <A HREF=\"");
+printf("%s%s", tdb->url, rgdId);
+printf("\" TARGET=_blank>RGD:%s</A>", rgdId);
+
+printf("<BR><B>GeneID: </B> %s ", GeneID);
+printf("<BR><B>Gene Name: </B> %s ", Name);
+printf("<BR><B>Note: </B> %s ", note);
+
+safef(query, sizeof(query), "select extAC from rgdGeneXref2 where rgdGeneId = '%s' and extDB='IMAGE'", rgdGeneId);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    char *image;
+    image = cloneString(row[0]);
+    printf("<BR><B>IMAGE Clone: </B>");
+    printf("<A HREF=\"");
+    printf("%s%s", "http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=", image);
+    printf("\" TARGET=_blank> %s</A>", image);
+    row = sqlNextRow(sr);
+    while (row != NULL)
+	{
+	image = cloneString(row[0]);
+	printf(", <A HREF=\"");
+	printf("%s%s", "http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=", image);
+	printf("\" TARGET=_blank>%s</A>", image);
+        row = sqlNextRow(sr);
+	}
+    }
+sqlFreeResult(&sr);
+
+safef(query, sizeof(query), "select extAC from rgdGeneXref2 where rgdGeneId = '%s' and extDB='MGC'", rgdGeneId);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    char *mgc;
+    mgc = cloneString(row[0]);
+    printf("<BR><B>MGC: </B>");
+    printf("<A HREF=\"");
+    printf("%s%s", "http://mgc.nci.nih.gov/Genes/CloneList?ORG=Rn&LIST=", mgc);
+    printf("\" TARGET=_blank> %s</A>", mgc);
+    row = sqlNextRow(sr);
+    while (row != NULL)
+	{
+	mgc = cloneString(row[0]);
+	printf(", <A HREF=\"");
+	printf("%s%s", "http://mgc.nci.nih.gov/Genes/CloneList?ORG=Rn&LIST=", mgc);
+	printf("\" TARGET=_blank>%s</A>", mgc);
+        row = sqlNextRow(sr);
+	}
+    }
+sqlFreeResult(&sr);
+
+htmlHorizontalLine();
+printf("<H3>RGD Pathway(s)</H3>\n");
+safef(query, sizeof(query), 
+"select p.rgdPathwayId, p.name from rgdGenePathway g, rgdPathway p where g.rgdGeneId = '%s' and g.rgdPathwayId=p.rgdPathwayId", rgdGeneId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in rgdGenePathway table - database inconsistency.", rgdGeneId);
+printf("<UL>");
+while (row != NULL)
+    {
+    rgdPathwayId   = cloneString(row[0]);
+    rgdPathwayName = cloneString(row[1]);
+    printf("<LI><B>%s</B><BR>", rgdPathwayName);
+    row = sqlNextRow(sr);
+    }
+sqlFreeResult(&sr);
+printf("</UL>");
+printf("<A HREF=\"");
+printf("%s%s%s", "http://rgd.mcw.edu/tools/genes/gene_ont_view.cgi?id=", rgdId, "#Pathway");
+printf("\" TARGET=_blank> %s</A> </H3>", "Click here for more RGD pathway details related to this gene...");
+
+htmlHorizontalLine();
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 char *getRefSeqCdsCompleteness(struct sqlConnection *conn, char *acc)
 /* get description of RefSeq CDS completeness or NULL if not available */
 {
@@ -22023,6 +22146,10 @@ else if (sameWord(track, "omimAv"))
 else if (sameWord(track, "rgdGene"))
     {
     doRgdGene(tdb, item);
+    }
+else if (sameWord(track, "rgdGene2"))
+    {
+    doRgdGene2(tdb, item);
     }
 else if (sameWord(track, "rgdEst"))
     {
