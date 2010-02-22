@@ -4,7 +4,7 @@
 #include "hgTables.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.15 2008/10/16 15:58:12 ann Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.16 2010/02/22 16:45:38 braney Exp $";
 
 boolean isPalCompatible(struct sqlConnection *conn,
     struct trackDb *track, char *table)
@@ -49,7 +49,6 @@ if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
 /* get rid of pesky cookies that would bring us back here */
 cartRemove(cart, hgtaDoPal);
 cartRemove(cart, hgtaDoPalOut);
-cartSaveSession(cart);
 
 if (anyIntersection() && intersectionIsBpWise())
     errAbort("Can't do CDS FASTA output when bit-wise intersection is on. "
