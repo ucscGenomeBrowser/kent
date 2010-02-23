@@ -220,7 +220,7 @@ void doKgMethod();
 void doWikiTrack(struct sqlConnection *conn);
 /* Put up wiki track editing controls */
 
-void doTxInfoDescription(struct sqlConnection *conn);
+void doTxInfoDescription();
 /* Put up info on fields in txInfo table. */
 
 void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName);

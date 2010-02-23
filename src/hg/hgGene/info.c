@@ -9,9 +9,9 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: info.c,v 1.4 2008/09/19 20:21:31 kuhn Exp $";
+static char const rcsid[] = "$Id: info.c,v 1.5 2010/02/23 23:03:37 kent Exp $";
 
-void doTxInfoDescription(struct sqlConnection *conn)
+void doTxInfoDescription()
 /* Put up info on fields in txInfo table. */
 {
 cartWebStart(cart, database, "Gene Model Information Table Fields");
