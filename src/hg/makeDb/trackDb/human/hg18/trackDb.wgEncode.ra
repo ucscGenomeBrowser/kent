@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.877 2010/02/23 01:28:08 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.878 2010/02/23 16:48:18 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5641,7 +5641,6 @@ wgEncode 1
 
     track wgEncodeMapabilityViewDUNIQ
     release alpha
-    subTrack wgEncodeMapabilityViewALN
     shortLabel Duke Uniqueness
     view DUNIQ
     visibility full
@@ -5846,7 +5845,6 @@ wgEncode 1
 
     track wgEncodeMapabilityViewDUNIQ
     release beta
-    subTrack wgEncodeMapabilityViewALN
     shortLabel Duke Uniqueness
     view DUNIQ
     visibility full
