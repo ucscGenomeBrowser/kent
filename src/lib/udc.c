@@ -31,7 +31,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.32 2010/01/05 17:32:07 angie Exp $";
+static char const rcsid[] = "$Id: udc.c,v 1.33 2010/02/23 22:04:07 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -742,14 +742,18 @@ file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
 file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 }
 
-static long long int udcSizeFromBitmap(char *bitmapFileName)
+static long long int udcSizeAndModTimeFromBitmap(char *bitmapFileName, time_t *retTime)
 /* Look up the file size from the local cache bitmap file, or -1 if there
- * is no cache for url. */
+ * is no cache for url. If retTime is non-null, store the remote update time in it. */
 {
 long long int ret = -1;
 struct udcBitmap *bits = udcBitmapOpen(bitmapFileName);
 if (bits != NULL)
+    {
     ret = bits->fileSize;
+    if (retTime)
+	*retTime = bits->remoteUpdate;
+    }
 else
     warn("Can't open bitmap file %s: %s\n", bitmapFileName, strerror(errno));
 udcBitmapClose(&bits);
@@ -814,8 +818,7 @@ else
     udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
     if (useCacheInfo)
 	{
-	file->updateTime = fileModTime(file->bitmapFileName);
-	file->size = udcSizeFromBitmap(file->bitmapFileName);
+	file->size = udcSizeAndModTimeFromBitmap(file->bitmapFileName, &(file->updateTime));
 	}
     else
 	{
@@ -954,7 +957,7 @@ struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
 for (sl = slList;  sl != NULL;  sl = sl->next)
     if (endsWith(sl->name, bitmapName))
 	{
-	ret = udcSizeFromBitmap(sl->name);
+	ret = udcSizeAndModTimeFromBitmap(sl->name, NULL);
 	break;
 	}
 slNameFreeList(&slList);
