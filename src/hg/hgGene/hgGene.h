@@ -214,7 +214,7 @@ char *aliasString(char *id, struct sqlConnection *conn);
 
 /* -------- Commands ---------- */
 
-void doKgMethod(struct sqlConnection *conn);
+void doKgMethod();
 /* Present KG Method, Credits, and Data Use Restrictions. */
 
 void doWikiTrack(struct sqlConnection *conn);

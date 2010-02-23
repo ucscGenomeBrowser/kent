@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.117 2009/08/25 22:49:39 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.118 2010/02/23 20:35:36 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -567,37 +567,13 @@ if (gp == NULL)
 return gp;
 }
 
-void doKgMethod(struct sqlConnection *conn)
+void doKgMethod()
 /* display knownGene.html content (UCSC Known Genes 
  * Method, Credits, and Data Use Restrictions) */
 {
-struct trackDb *tdb, *tdb2;
-
 cartWebStart(cart, database, "Methods, Credits, and Use Restrictions");
-
-/* default is knownGene */
-tdb = hTrackDbForTrack(database, "knownGene");
-
-/* deal with special genomes that do not have knownGene */
-if (sameWord(genome, "D. melanogaster"))
-    {
-    tdb = hTrackDbForTrack(database, "bdgpGene");
-    }
-if (sameWord(genome, "C. elegans"))
-    {
-    tdb = hTrackDbForTrack(database, "sangerGene");
-    }
-if (sameWord(genome, "S. cerevisiae"))
-    {
-    tdb = hTrackDbForTrack(database, "sgdGene");
-    }
-if (sameWord(genome, "Danio rerio"))
-    {
-    tdb = hTrackDbForTrack(database, "ensGene");
-    }
-tdb2 = hTrackDbForTrack(database, genomeSetting("knownGene"));
-hPrintf("%s", tdb2->html);
-
+struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
+hPrintf("%s", tdb->html);
 cartWebEnd();
 }
 
@@ -605,57 +581,60 @@ void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
-struct sqlConnection *conn = NULL;
 cart = theCart;
-char *geneName = cartUsualString(cart, hggGene, NULL);
-if (isEmpty(geneName))
-    {
-    // Silly googlebots.
-    hUserAbort("Error: the hgg_gene parameter is missing from the cart and the CGI params.");
-    }
 getDbAndGenome(cart, &database, &genome, oldVars);
-
-/* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
-
-conn = hAllocConn(database);
 getGenomeSettings();
-curGeneId = findGeneId(conn, geneName);
-getGenePosition(conn);
-curGenePred = getCurGenePred(conn);
-curGeneName = getGeneName(curGeneId, conn);
-spConn = hAllocConn(UNIPROT_DB_NAME);
-swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
-
-/* Check command variables, and do the ones that
- * don't want to put up the hot link bar etc. */
-if (cartVarExists(cart, hggDoGetMrnaSeq))
-    doGetMrnaSeq(conn, curGeneId, curGeneName);
-else if (cartVarExists(cart, hggDoKgMethod))
-    doKgMethod(conn);
-else if (cartVarExists(cart, hggDoWikiTrack))
-    doWikiTrack(conn);
-else if (cartVarExists(cart, hggDoTxInfoDescription))
-    doTxInfoDescription(conn);
-else if (cartVarExists(cart, hggDoGetProteinSeq))
-    doGetProteinSeq(conn, curGeneId, curGeneName);
-else if (cartVarExists(cart, hggDoRnaFoldDisplay))
-    doRnaFoldDisplay(conn, curGeneId, curGeneName);
-else if (cartVarExists(cart, hggDoOtherProteinSeq))
-    doOtherProteinSeq(conn, curGeneName);
-else if (cartVarExists(cart, hggDoOtherProteinAli))
-    doOtherProteinAli(conn, curGeneId, curGeneName);
+if (cartVarExists(cart, hggDoKgMethod))
+    doKgMethod();
 else
     {
-    /* Default case - start fancy web page. */
-    cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index", 
-    	genome, curGeneName, curGeneId);
-    webMain(conn);
-    cartWebEnd();
+    struct sqlConnection *conn = NULL;
+    char *geneName = cartUsualString(cart, hggGene, NULL);
+    if (isEmpty(geneName))
+	{
+	// Silly googlebots.
+	hUserAbort("Error: the hgg_gene parameter is missing from the cart and the CGI params.");
+	}
+
+    /* if kgProtMap2 table exists, this means we are doing KG III */
+    if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
+
+    conn = hAllocConn(database);
+    curGeneId = findGeneId(conn, geneName);
+    getGenePosition(conn);
+    curGenePred = getCurGenePred(conn);
+    curGeneName = getGeneName(curGeneId, conn);
+    spConn = hAllocConn(UNIPROT_DB_NAME);
+    swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
+
+    /* Check command variables, and do the ones that
+     * don't want to put up the hot link bar etc. */
+    if (cartVarExists(cart, hggDoGetMrnaSeq))
+	doGetMrnaSeq(conn, curGeneId, curGeneName);
+    else if (cartVarExists(cart, hggDoWikiTrack))
+	doWikiTrack(conn);
+    else if (cartVarExists(cart, hggDoTxInfoDescription))
+	doTxInfoDescription(conn);
+    else if (cartVarExists(cart, hggDoGetProteinSeq))
+	doGetProteinSeq(conn, curGeneId, curGeneName);
+    else if (cartVarExists(cart, hggDoRnaFoldDisplay))
+	doRnaFoldDisplay(conn, curGeneId, curGeneName);
+    else if (cartVarExists(cart, hggDoOtherProteinSeq))
+	doOtherProteinSeq(conn, curGeneName);
+    else if (cartVarExists(cart, hggDoOtherProteinAli))
+	doOtherProteinAli(conn, curGeneId, curGeneName);
+    else
+	{
+	/* Default case - start fancy web page. */
+	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index", 
+	    genome, curGeneName, curGeneId);
+	webMain(conn);
+	cartWebEnd();
+	}
+    hFreeConn(&spConn);
+    hFreeConn(&conn);
     }
 cartRemovePrefix(cart, hggDoPrefix);
-hFreeConn(&spConn);
-hFreeConn(&conn);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
