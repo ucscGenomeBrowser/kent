@@ -129,7 +129,7 @@ taxId 9595
     time featureBits gorGor2 -not gap -bed=notGap.bed
     #	0m28.556s
     time featureBits gorGor2 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running Sat Feb 20 15:06:15 PST 2010
+    #	real    246m8.539s
     #	what is the last index in the existing gap table:
     hgsql -N -e "select ix from gap;" gorGor2 | sort -n | tail -1
     #	3998
@@ -208,3 +208,55 @@ close (FH);
     ave -col=2 chrom.sizes
     #	total 3035791622.000000
 ##########################################################################
+# GENBANK AUTO UPDATE (DONE - 2009-09-25 - Hiram)
+    #	add the following to genbank/etc/genbank.conf just before
+    #	the chimp panTro1
+# Gorilla
+gorGor2.serverGenome = /hive/data/genomes/gorGor2/gorGor2.2bit
+gorGor2.clusterGenome = /scratch/data/gorGor2/gorGor2.2bit
+gorGor2.ooc = /hive/data/genomes/gorGor2/jkStuff/gorGor2.11.ooc
+gorGor2.lift = no
+gorGor2.perChromTables = no
+gorGor2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+gorGor2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+gorGor2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+gorGor2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+gorGor2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+gorGor2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+gorGor2.downloadDir = gorGor2
+gorGor2.refseq.mrna.native.load  = yes
+gorGor2.refseq.mrna.xeno.load = yes
+gorGor2.refseq.mrna.xeno.loadDesc  = yes
+
+    # Edit src/lib/gbGenome.c to add new species.  With this line:
+    #	static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
+
+    cvs ci -m "adding names for gorilla species" src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time nice -n +19 bin/gbAlignStep -initial gorGor2 &
+    #	logFile: var/build/logs/2010.02.22-08:38:02.gorGor2.initalign.log
+    #	real    421m51.236s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad gorGor2
+    #	logFile: var/dbload/hgwdev/logs/2010.02.22-18:08:15.dbload.log
+    #	real    15m40.078s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add gorGor2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added gorGor2 - Gorilla Gorilla" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+    #	done - 2010-02-22 - Hiram
+
+############################################################################
