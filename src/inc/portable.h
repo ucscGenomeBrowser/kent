@@ -144,5 +144,8 @@ unsigned long fileModTime(char *pathName);
 boolean isPipe(int fd);
 /* determine in an open file is a pipe  */
 
+void touchFile(char *fileName);
+/* If file exists, set its access and mod times to now.  If it doesn't exist, create it. */
+
 #endif /* PORTABLE_H */
 

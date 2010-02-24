@@ -13,9 +13,10 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 #include <regex.h>
+#include <utime.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.44 2009/11/22 00:18:04 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.45 2010/02/24 00:51:00 angie Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -610,4 +611,22 @@ va_list args;
 va_start(args, format);
 vaDumpStack(format, args);
 va_end(args);
+}
+
+void touchFile(char *fileName)
+/* If file exists, set its access and mod times to now.  If it doesn't exist, create it. */
+{
+if (fileExists(fileName))
+    {
+    struct utimbuf ut;
+    ut.actime = ut.modtime = clock1();
+    int ret = utime(fileName, &ut);
+    if (ret != 0)
+	errnoAbort("utime(%s, clock1()) failed", fileName);
+    }
+else
+    {
+    FILE *f = mustOpen(fileName, "w");
+    carefulClose(&f);
+    }
 }
