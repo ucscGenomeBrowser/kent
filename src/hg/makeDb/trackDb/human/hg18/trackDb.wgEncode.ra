@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.880 2010/02/24 18:52:27 pauline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.881 2010/02/24 18:56:33 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21494,7 +21494,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel GM12 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell)
@@ -21504,7 +21503,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell)
@@ -21644,7 +21642,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel GM12 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in GM12878 cell)
@@ -21654,7 +21651,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in K562 cell)
@@ -21794,7 +21790,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel GM12 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in GM12878 cell)
@@ -21804,7 +21799,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in K562 cell)
@@ -21955,7 +21949,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel GM12 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in GM12878 cell)
@@ -21965,7 +21958,6 @@ noInherit on
         metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in K562 cell)
