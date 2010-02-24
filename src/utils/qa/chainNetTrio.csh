@@ -27,6 +27,7 @@ endif
 # just in case
 set table=`echo $table | perl -wpe '$_ = ucfirst($_)'`
 
+
 set split=`getSplit.csh $db chain$table hgwdev`
 if ( $status ) then
   echo "\n\n $split \n"
@@ -45,5 +46,7 @@ else
   nice net.csh    $db net$table        >& $db.net.$table
 endif
 
+echo "\nThe script has finished.  You should now check the output in these"
+echo " three files: $db.chain.$table, $db.chain2.$table, $db.net.$table\n"
 
-
+exit 0
