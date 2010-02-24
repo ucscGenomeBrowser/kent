@@ -32,13 +32,13 @@ endif
     HG_INC+=${PNGINCL}
 endif
 
-# libbam: disabled by default
+# libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default
 ifeq (${USE_BAM},)
     USE_BAM=0
 endif
 ifeq (${USE_BAM},1)
     ifeq (${SAMDIR},)
-      SAMDIR = /hive/data/outside/samtools/samtools/${MACHTYPE}
+      SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
     endif
     ifeq (${SAMINC},)
         SAMINC = ${SAMDIR}
@@ -49,6 +49,9 @@ ifeq (${USE_BAM},1)
     HG_INC += -I${SAMINC}
     L+=${SAMLIB}
     HG_DEFS+=-DUSE_BAM
+endif
+ifeq (${KNETFILE_HOOKS},1)
+    HG_DEFS+=-DKNETFILE_HOOKS
 endif
 
 # libfuse: disabled by default

@@ -13,8 +13,12 @@
 #include "hgTracks.h"
 #include "cds.h"
 #include "bamFile.h"
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
+#include "knetUdc.h"
+#include "udc.h"
+#endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.25 2010/02/13 00:18:39 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.26 2010/02/24 01:10:25 angie Exp $";
 
 struct bamTrackData
     {
@@ -526,6 +530,12 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
+knetUdcInstall();
+if (udcCacheTimeout() < 300)
+    udcSetCacheTimeout(300);
+#endif//def USE_BAM && KNETFILE_HOOKS
+
 track->canPack = TRUE;
 boolean compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_PAIR_ENDS_BY_NAME);
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
