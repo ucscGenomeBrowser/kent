@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.9 2009/11/24 00:18:43 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.10 2010/02/25 23:34:02 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -16,8 +16,6 @@ set scratchDir = /hive/scratch
 set db = hg19
 set xdb = mm9
 set Xdb = Mm9
-set xBlastTab = mmBlastTab
-set rnBlastTab = rnBlastTab
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp090821
@@ -28,6 +26,17 @@ set fishDb = danRer5
 set flyDb = dm3
 set wormDb = ce6
 set yeastDb = sacCer2
+
+# Blast tables
+set rnBlastTab = rnBlastTab
+if ($db =~ hg* ) then
+    set blastTab = hgBlastTab
+    set xBlastTab = mmBlastTab
+endif
+if ($db =~ mm* ) then
+    set blastTab = mmBlastTab
+    set xBlastTab = hgBlastTab
+endif
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
@@ -650,12 +659,6 @@ cat run.time
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
 rm -r raw
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 # Fixup UniProt links in picks file.  This is a little circuitious.  In the future may
 # avoid using the picks file for the protein link, and rely on protein/protein blat
 # to do the assignment.  The current use of the uniProt protein/ucscGenes mrna alignments
@@ -834,6 +837,7 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
+
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
@@ -873,14 +877,17 @@ hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
 
+# Set up links to liftover chains for synteny filters.
+if (! -e /gbdb/$tempDb/liftOver) then
+    mkdir -p /gbdb/$tempDb/liftOver
+    ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
+	/gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
+    ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
+	/gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+endif
+
 # Remove non-syntenic hits for mouse and rat
 # Takes a few minutes
-mkdir -p /gbdb/$tempDb/liftOver
-ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
-    /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
-ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
-    /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
-
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
 synBlastp.csh $tempDb $ratDb
@@ -896,7 +903,6 @@ cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
-hgLoadBlastTab $fishDb tfBlastTab $bToA/recipBest.tab
 
 # Us vs. fly
 cd $dir/hgNearBlastp
@@ -906,7 +912,6 @@ cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
-hgLoadBlastTab $flyDb tfBlastTab $bToA/recipBest.tab
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -916,7 +921,6 @@ cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
-hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
@@ -926,7 +930,6 @@ cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
-hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
 
 # Clean up
@@ -1254,4 +1257,28 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-#
+# Make blat/PCR target for UCSC genes 
+# This part is in hg19.txt rather than here.
+
+# Finally, need to wait until after testing, but update databases in other organisms
+# with blastTabs
+
+# Load blastTabs
+cd $dir/hgNearBlastp
+hgLoadBlastTab $xdb $blastTab run.$xdb.$tempDb/out/*.tab
+hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab
+hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
+hgLoadBlastTab $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
+hgLoadBlastTab $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
+hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+# Do synteny on mouse/human/rat
+synBlastp.csh $xdb $db
+synBlastp.csh $ratDb $db
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
