@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.3 2010/02/23 04:34:14 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.4 2010/02/25 01:00:32 antonio Exp $";
 
 track chainNetFr2 override
 chainLinearGap medium
@@ -6,6 +6,9 @@ visibility dense
 
 track chainNetGasAcu1 override
 visibility dense
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 2000
+chainLinearGap medium
 
 track chainNetDanRer6 override
 shortLabel $o_Organism Chain/Net
