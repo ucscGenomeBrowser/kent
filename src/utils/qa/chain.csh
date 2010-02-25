@@ -265,6 +265,7 @@ if ( $split == "unsplit" ) then
     echo 'all qStrands are either "+" or "-"'
     echo
   endif
+  # header
   echo "posStrand negStrand" \
     | gawk '{ printf("%8s %8s \n", $1, $2) }'
   echo "--------- ---------" \
@@ -273,7 +274,7 @@ if ( $split == "unsplit" ) then
     FROM chain${Org} WHERE qStrand LIKE '+'" $db`
   set negStrands = `hgsql -N -e "SELECT COUNT(*) \
     FROM chain${Org} WHERE qStrand LIKE '-'" $db`
-  echo $chrom $posStrands $negStrands \
+  echo $posStrands $negStrands \
     | gawk '{ printf("%8s %8s \n", $1, $2) }'
 else
   echo "chrom posStrand negStrand" \
