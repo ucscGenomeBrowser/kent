@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.26 2010/02/17 08:53:20 markd Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.27 2010/02/25 04:08:52 markd Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -179,9 +179,9 @@ if (tmpDir == NULL)
 if (tmpDir == NULL)
     tmpDir = "/var/tmp";
 if (inclPid)
-    safef(path, PATH_LEN, "%s/%s.tab", tmpDir, tableName);
-else
     safef(path, PATH_LEN, "%s/%s.%d.tab", tmpDir, tableName, getpid());
+else
+    safef(path, PATH_LEN, "%s/%s.tab", tmpDir, tableName);
 }
 
 FILE *hgCreateTabFile(char *tmpDir, char *tableName)
