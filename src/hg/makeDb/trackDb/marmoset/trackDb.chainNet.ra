@@ -1,4 +1,7 @@
-#	"$Id: trackDb.chainNet.ra,v 1.8 2010/02/15 02:56:39 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.9 2010/02/25 05:03:51 hiram Exp $";
+
+track chainNetPapHam1 override
+priority 210.3
 
 track chainNetRheMac2 override
 priority 220.3
@@ -6,6 +9,9 @@ priority 220.3
 track chainNetPonAbe2 override
 priority 230.3
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetGorGor2 override
+priority 240.3
 
 track chainNetPanTro2 override
 priority 250.3
@@ -21,6 +27,15 @@ priority 260.3
 shortLabel $o_db Chain/Net
 visibility dense
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetTarSyr1 override
+priority 270.3
+
+track chainNetOtoGar1 override
+priority 280.3
+
+track chainNetMicMur1 override
+priority 290.3
 
 track chainNetMm9 override
 priority 370.3
