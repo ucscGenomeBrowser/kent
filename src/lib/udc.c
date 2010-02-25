@@ -31,7 +31,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.34 2010/02/24 00:55:09 angie Exp $";
+static char const rcsid[] = "$Id: udc.c,v 1.35 2010/02/25 22:55:55 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -599,13 +599,13 @@ if (bits != NULL)
     version = bits->version;
     if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size)
 	{
+	verbose(2, "removing stale version (%lld! = %lld or %lld! = %lld), new version %d\n",
+		bits->remoteUpdate, (long long)file->updateTime, bits->fileSize, file->size,
+		version);
         udcBitmapClose(&bits);
 	remove(file->bitmapFileName);
 	remove(file->sparseFileName);
 	++version;
-	verbose(2, "removing stale version (%lld! = %lld or %lld! = %lld), new version %d\n",
-		bits->remoteUpdate, (long long)file->updateTime, bits->fileSize, file->size,
-		version);
 	}
     }
 else
@@ -828,10 +828,7 @@ else
 	// update cache file mod times, so if we're caching we won't do this again
 	// until the timeout has expired again:
 	if (udcCacheTimeout() > 0 && fileExists(file->bitmapFileName))
-	    {
 	    touchFile(file->bitmapFileName);
-	    touchFile(file->sparseFileName);
-	    }
 	}
 
     /* Make directory. */
@@ -982,10 +979,13 @@ struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
 if (slList == NULL)
     return now;
 for (sl = slList;  sl != NULL;  sl = sl->next)
-    if (fileExists(sl->name))
-	oldestTime = min(fileModTime(sl->name), oldestTime);
-    else
-	return now;
+    if (endsWith(sl->name, bitmapName))
+	{
+	if (fileExists(sl->name))
+	    oldestTime = min(fileModTime(sl->name), oldestTime);
+	else
+	    return now;
+	}
 return (now - oldestTime);
 }
 
