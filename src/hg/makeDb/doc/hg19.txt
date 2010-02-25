@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.85 2010/02/19 22:14:31 hartera Exp $";
+#	"$Id: hg19.txt,v 1.86 2010/02/25 23:47:50 kent Exp $";
 
 #############################################################################
 
@@ -8627,4 +8627,46 @@ TMPDIR=/scratch/tmp
     cat fb.calJac3.chainHg19Link.txt 
     #	2030475813 bases of 2752505800 (73.768%) in intersection
 
-#####################################################################
+#############################################################################
+# MAKE PCR TARGET FOR UCSC GENES (Done Feb 26, 2010 -Jim)
+    ssh hgwdev
+    mkdir /cluster/data/hg19/bed/mrnaPcr
+    cd /cluster/data/hg19/bed/mrnaPcr
+    # First, get consistent FA and PSL for UCSC Genes.
+    # Initially I tried to use files from /cluster/data/hg19/bed/ucsc.10/:
+    # subColumn 10 /cluster/data/hg19/bed/ucsc.10/rnaToGenome.psl
+    #   /cluster/data/hg19/bed/ucsc.10/txToAcc.tab ucscGenes.hg19.psl
+    # /cluster/data/hg19/bed/ucsc.10/ucscGenes.fa
+    # But the psl was not from exactly the same seq's as in the fa.
+    # Jim's suggestion: use sequenceForBed to get genomic-translated
+    # sequences, and then genePredToFakePsl.  sequenceToBed must be
+    # run on hgwdev.
+    genePredToBed /cluster/data/hg19/bed/ucsc.12/ucscGenes.gp > ucscGenes.bed
+    hgsql hg19 -NBe 'select kgId,geneSymbol from kgXref' \
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
+      > idSub.txt
+    subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
+    sequenceForBed -keepName -db=hg19 -bedIn=ucscGenesIdSubbed.bed \
+      -fastaOut=stdout \
+    | faToTwoBit stdin kgTargetSeq.2bit
+    cut -f 1-10 /cluster/data/hg19/bed/ucsc.12/ucscGenes.gp \
+    | genePredToFakePsl hg19 stdin kgTargetAli.psl /dev/null
+
+    # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
+    cd /cluster/data/hg19/bed/mrnaPcr
+    hgLoadPsl hg19 kgTargetAli.psl
+    mkdir /gbdb/hg19/targetDb
+    ln -s /cluster/data/hg19/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/hg19/targetDb/
+
+    # Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
+    # /gbdb/hg19/targetDb/kgTargetSeq.2bit .
+
+    ssh hgwdev
+    # Add records to hgcentraltest blatServers and targetDb:
+    hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("hg19Kg", "blat12", 17807, 0, 1);'
+    hgsql hgcentraltest -e \
+      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \
+         "hg19", "kgTargetAli", "", "", \
+         "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+
