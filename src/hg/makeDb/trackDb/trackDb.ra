@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.619 2010/02/18 18:45:25 markd Exp $";
+#	"$Id: trackDb.ra,v 1.620 2010/02/25 05:18:35 markd Exp $";
 
 include trackDb.chainNet.ra
 
@@ -2375,7 +2375,6 @@ searchPriority 8
 searchTable par
 searchMethod exact
 searchType bed
-shortCircuit 1
 termRegex PAR[0-2]?
 searchPriority 8
 
