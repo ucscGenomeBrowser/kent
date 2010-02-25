@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.19 2010/02/13 00:18:39 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.20 2010/02/25 22:05:02 angie Exp $";
 
 char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -150,6 +150,7 @@ if (udcFuseRoot != NULL && afterProtocol != NULL)
 return cloneString(fileOrUrl);
 }
 
+#ifndef KNETFILE_HOOKS
 static char *getSamDir()
 /* Return the name of a trash dir for samtools to run in (it creates files in current dir)
  * and make sure the directory exists. */
@@ -165,6 +166,7 @@ if (samDir == NULL)
     }
 return samDir;
 }
+#endif//ndef KNETFILE_HOOKS
 
 boolean bamFileExists(char *fileOrUrl)
 /* Return TRUE if we can successfully open the bam file and its index file. */
@@ -173,14 +175,18 @@ char *bamFileName = samtoolsFileName(fileOrUrl);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh != NULL)
     {
+#ifndef KNETFILE_HOOKS
     // When file is an URL, this caches the index file in addition to validating:
     // Since samtools's url-handling code saves the .bai file to the current directory,
     // chdir to a trash directory before calling bam_index_load, then chdir back.
     char *runDir = getCurrentDir();
     char *samDir = getSamDir();
     setCurrentDir(samDir);
+#endif//ndef KNETFILE_HOOKS
     bam_index_t *idx = bam_index_load(bamFileName);
+#ifndef KNETFILE_HOOKS
     setCurrentDir(runDir);
+#endif//ndef KNETFILE_HOOKS
     samclose(fh);
     if (idx == NULL)
 	{
@@ -226,19 +232,26 @@ if (ret != 0)
     // If the bam file does not cover the current chromosome, OK
     return;
 
+#ifndef KNETFILE_HOOKS
 // Since samtools' url-handling code saves the .bai file to the current directory,
 // chdir to a trash directory before calling bam_index_load, then chdir back.
 char *runDir = getCurrentDir();
 char *samDir = getSamDir();
 setCurrentDir(samDir);
+#endif//ndef KNETFILE_HOOKS
 bam_index_t *idx = bam_index_load(bamFileName);
+#ifndef KNETFILE_HOOKS
 setCurrentDir(runDir);
+#endif//ndef KNETFILE_HOOKS
 if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
-ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
-if (ret != 0)
-    warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
-free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
+else
+    {
+    ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
+    if (ret != 0)
+	warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+    free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
+    }
 samclose(fh);
 }
 
