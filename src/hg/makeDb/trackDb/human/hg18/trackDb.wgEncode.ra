@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.883 2010/02/26 01:00:25 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.884 2010/02/26 18:25:12 ann Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -20076,7 +20076,6 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 #  GENCODE genes (wrangler: braney )
 
 track wgEncodeSangerGencode
-release alpha
 compositeTrack on
 shortLabel Gencode Genes
 longLabel ENCODE Gencode Gene Annotations
@@ -20139,7 +20138,6 @@ gClass_2way_consensus_pseudogene 85,34,170
 filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_non_coding,Havana_nonsense,Havana_polyA,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Ensembl_coding,Ensembl_non_coding,Ensembl_processed_pseudogene,Ensembl_unprocessed_pseudogene,Ensembl_pseudogene,Ensembl_RNA,2way_consensus_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,IG_C_gene,IG_D_gene,IG_J_gene,IG_pseudogene,IG_V_gene,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,TR_pseudogene,unitary_pseudogene,unprocessed_pseudogene
 
     track wgEncodeGencodeManualV3
-    release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct 2009)
@@ -20151,7 +20149,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
-    release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct 2009)
@@ -20163,7 +20160,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencodePolyaV3
-    release alpha
     subTrack wgEncodeSangerGencode off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
@@ -20171,9 +20167,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 4
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
 
-# NOTE: search specs should eventually replace the Rel2 version!  But is there a "release alpha" for these?
 searchName wgEncodeGencodeManualV3
-release alpha
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
@@ -20182,7 +20176,6 @@ termRegex ENST[0-9]+
 searchPriority 2.2
 
 searchName wgEncodeGencodeManualV3Otter
-release alpha
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
@@ -20193,7 +20186,6 @@ xrefTable wgEncodeGencodeClassesV3
 xrefQuery select name,ottTranscriptId from %s where ottTranscriptId = '%s'
 
 searchName wgEncodeGencodeAutoV3
-release alpha
 searchTable wgEncodeGencodeAutoV3
 searchMethod exact
 searchType genePred
@@ -20201,7 +20193,6 @@ termRegex ENST[0-9]+
 searchPriority 2.3
 
 searchName wgEncodeGencodeManualV3Gene
-release alpha
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
@@ -20210,123 +20201,12 @@ searchPriority 2.4
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeAutoV3Gene
-release alpha
 searchTable wgEncodeGencodeAutoV3
 searchMethod exact
 searchType genePred
 #termRegex [a-z][a-z0-9][0-9]+
 searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
-
-track wgEncodeSangerGencode
-release beta
-compositeTrack on
-shortLabel Gencode Genes
-longLabel ENCODE Gencode Gene Annotations
-group genes
-visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
-dragAndDrop subTracks
-priority 34.3
-#visibility pack
-color 12,12,120
-type genePred
-hgGene on
-hgsid on
-baseColorUseCds given
-baseColorDefault genomicCodons
-wgEncode 1
-cdsDrawDefault genomic\ codons
-#itemClassTbl wgEncodeGencodeClasses
-itemClassTbl wgEncodeGencodeClassesRel2
-geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_RNA Ensembl_pseudogene
-gClass_Validated_coding 0,0,255
-gClass_Validated_processed 51,153,255
-gClass_Validated_processed_pseudogene 85,34,170
-gClass_Validated_unprocessed_pseudogene 102,17,255
-gClass_Validated_pseudogene 153,102,255
-gClass_Havana_coding 153,51,0
-gClass_Havana_non_coding 254,154,46
-gClass_Havana_nonsense 223,116,1
-gClass_Havana_polyA 0,0,0
-gClass_Havana_processed_pseudogene 153,0,102
-gClass_Havana_unprocessed_pseudogene 180,4,174
-gClass_Havana_pseudogene 255,51,255
-gClass_Havana_TEC 102,102,102
-gClass_Ensembl_coding 223,1,1
-gClass_Ensembl_pseudogene 153,0,102
-gClass_Ensembl_RNA 254,46,46
-filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_nonsense,Havana_non_coding,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Havana_polyA,Ensembl_coding,Ensembl_RNA,Ensembl_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,C_segment,IG_gene,IG_pseudogene,J_segment,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,non_coding,nonsense_mediated_decay,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,V_segment,unitary_pseudogene,unprocessed_pseudogene
-
-    track wgEncodeGencodeManualRel2
-    release beta
-    subTrack wgEncodeSangerGencode
-    shortLabel Gencode Manual
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
-    #accession 2008-10-01
-    type genePred
-    priority 1
-    url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
-    urlLabel Vega Transcript:
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode freezeDate="GENCODE January 2009 Freeze" level=1-2 annotation=Manual dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-28 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
-
-    track wgEncodeGencodeAutoRel2
-    release beta
-    subTrack wgEncodeSangerGencode
-    shortLabel Gencode Auto
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
-    #accession 2008-10-01
-    type genePred
-    priority 2
-    #url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$ ### can't do this because tRNAs do not have Ensembl ids
-    #urlLabel Ensembl Transcript:
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode freezeDate="GENCODE January 2009 Freeze" level=3 annotation=Automatic dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-28 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
-
-    track wgEncodeGencodePolyaRel2
-    release beta
-    subTrack wgEncodeSangerGencode off
-    shortLabel Gencode PolyA
-    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
-    #accession 2008-10-01
-    type genePred
-    priority 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode freezeDate="GENCODE January 2009 Freeze" level=3 annotation=Automatic_polyA dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-03-05 dateUnrestricted=2009-12-05 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
-
-# NOTE: Rel2 search specs should be replaced by the V3 version!  But is there a "release beta" for these?
-searchName wgEncodeGencodeManual
-release beta
-searchTable wgEncodeGencodeManualRel2
-searchMethod exact
-searchType genePred
-termRegex OTTHUMT[0-9]+
-searchPriority 2.2
-
-searchName wgEncodeGencodeAuto
-release beta
-searchTable wgEncodeGencodeAutoRel2
-searchMethod exact
-searchType genePred
-termRegex ENST[0-9]+
-searchPriority 2.3
-
-searchName wgEncodeGencodeManualGene
-release beta
-searchTable wgEncodeGencodeManualRel2
-searchMethod exact
-searchType genePred
-#termRegex [a-z][a-z0-9][0-9]+
-searchPriority 2.4
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
-searchName wgEncodeGencodeAutoGene
-release beta
-searchTable wgEncodeGencodeAutoRel2
-searchMethod exact
-searchType genePred
-#termRegex [a-z][a-z0-9][0-9]+
-searchPriority 2.5
-query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
-
 
 # HudsonAlpha Methyl27 (wrangler: braney)
 
