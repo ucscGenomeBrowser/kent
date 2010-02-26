@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.55 2010/02/17 21:40:26 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.56 2010/02/26 07:34:01 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -114,7 +114,7 @@ function getDb()
 {
     var db = document.getElementsByName("db");
     if(db == undefined || db.length == 0)
-        return "";
+        return undef;
     return db[0].value;
 }
 
@@ -885,6 +885,7 @@ this.each(function(){
             $(document).unbind('mouseup',panMouseUp);
             mouseIsDown = false;
 
+            // Talk to tim about this.
             if(beyondImage) {
                 // FIXME:
                 // 1) When dragging beyondImage, side label is seen. Only solution may be 2 images!
@@ -1035,8 +1036,8 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
 
 $(document).ready(function()
 {
-    if(jQuery.fn.autocomplete && $('input#suggest')) {
-        var db = getDb();
+    var db = getDb();
+    if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         $('input#suggest').autocomplete({
                                             delay: 500,
                                             minchars: 1,
@@ -1147,6 +1148,19 @@ function rulerModeToggle (ele)
     obj.setOptions({autoHide : autoHideSetting});
 }
 
+function makeMapItem(id)
+{
+    // XXXX get title from json
+    var title;
+    var rec = trackDbJson[id];
+    if(rec) {
+        title = rec.shortLabel;
+    } else {
+        title = id;
+    }
+    return {id: id, title: "configure " + title};
+}
+
 function findMapItem(e)
 {
 // Find mapItem for given event; returns item object or null if none found.
@@ -1175,22 +1189,25 @@ function findMapItem(e)
         y = e.pageY - e.target.offsetTop;
     }
     if(e.target.tagName.toUpperCase() == "P") {
+        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is true.
         var a = /p_btn_(.*)/.exec(e.target.id);
         if(a && a[1]) {
-            // XXXX get title from json
             var id = a[1];
-            var title;
-            var rec = trackDbJson[id];
-            if(rec) {
-                title = rec.shortLabel;
-            } else {
-                title = id;
-            }
-            return {id: id, title: "configure " + title};
+            return makeMapItem(id);
+        } else {
+            return null;
+        }
+    } else if(e.target.tagName.toUpperCase() == "IMG") {
+        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is false.
+        var a = /img_btn_(.*)/.exec(e.target.id);
+        if(a && a[1]) {
+            var id = a[1];
+            return makeMapItem(id);
         } else {
             return null;
         }
     }
+    
     var retval = -1;
     // console.log(e.target.tagName + "; " + e.target.id);
     for(var i=0;i<mapItems.length;i++)
@@ -1326,7 +1343,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // data: ?
         jQuery('body').css('cursor', 'wait');
         $.ajax({
-                   type: "POST",
+                   type: "GET",
                    url: "../cgi-bin/hgTrackUi?ajax=1&g=" + selectedMenuItem.id + "&hgsid=" + getHgsid(),
                    dataType: "html",
                    trueSuccess: handleTrackUi,
@@ -1383,6 +1400,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             $('#tr_' + id).remove();
             loadImgAreaSelect(false);
         } else if (browser == "safari") {
+            // XXXX How about "Chrome"?
             // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
             // though if you look in the DOM the changes are there); so we have to do a full form submission when the
             // user changes visibility settings.
@@ -1473,7 +1491,7 @@ function loadContextMenu(img)
                         var title = selectedMenuItem.title || "feature";
                         o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
                         o["Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
-                        o["Open Link in New Window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
+                        o["Open details page in new window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                     } else {
                         o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi"); return true; }};
                     }
@@ -1546,6 +1564,7 @@ function parseMap(ele, reset)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
+
     $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
@@ -1695,8 +1714,8 @@ function jumpButtonOnClick()
 // Handles situation where user types a gene name into the gene box and immediately hits the jump button,
 // expecting the browser to jump to that gene.
     var gene = $('#suggest').val();
-    if(gene && gene.length > 0 && getOriginalPosition() == getPosition()) {
-        var db = getDb();
+    var db = getDb();
+    if(gene && db && gene.length > 0 && (getOriginalPosition() == getPosition() || getPosition().length == 0)) {
         pos = lookupGene(db, gene);
         if(pos) {
             setPosition(pos, null);
