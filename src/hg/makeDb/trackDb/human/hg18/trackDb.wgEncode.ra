@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.882 2010/02/25 23:32:08 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.883 2010/02/26 01:00:25 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -19817,7 +19817,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
         longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (Control in A549/EtOH_0.02pct cells)
         subGroups view=zRaw factor=zCTRL cellType=A549 prot=PCR2x treat=EtOH02 rep=rep2
         type wig 1.00 2842.00
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=Input protocol=PCR2x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=2 labVersion=SL307 dataVersion="ENCODE Jan 2010 Freeze" subId=813 dateSubmitted=2009-12-15 dateUnrestricted=2010-09-15 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02.wig.gz
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=Input protocol=PCR2x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=1 labVersion=SL307 dataVersion="ENCODE Jan 2010 Freeze" subId=813 dateSubmitted=2009-12-15 dateUnrestricted=2010-09-15 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02.wig.gz
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2Pcr2xEtoh02
         release alpha
