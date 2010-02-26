@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.83 2010/02/24 23:49:35 hiram Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.84 2010/02/26 00:45:43 antonio Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -35,6 +35,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain aplCal1
+        html chainNet
 
     track chainNetAplCal1Viewnet
     shortLabel Net
@@ -48,6 +49,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign aplCal1 chainAplCal1
+        html chainNet
 
 track chainNetFr2
 compositeTrack on
@@ -84,6 +86,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain fr2
+        html chainNet
 
     track chainNetFr2Viewnet
     shortLabel Net
@@ -97,6 +100,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign fr2 chainFr2
+        html chainNet
 
 track chainNetFr1
 compositeTrack on
@@ -133,6 +137,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain fr1
+        html chainNet
 
     track chainNetFr1Viewnet
     shortLabel Net
@@ -146,6 +151,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign fr1 chainFr1
+        html chainNet
 
 track chainNetTetNig2
 compositeTrack on
@@ -182,6 +188,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain tetNig2
+        html chainNet
 
     track chainNetTetNig2Viewnet
     shortLabel Net
@@ -195,6 +202,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign tetNig2 chainTetNig2
+        html chainNet
 
 track chainNetTetNig1
 compositeTrack on
@@ -231,6 +239,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain tetNig1
+        html chainNet
 
     track chainNetTetNig1Viewnet
     shortLabel Net
@@ -244,6 +253,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign tetNig1 chainTetNig1
+        html chainNet
 
 track chainNetDanRer6
 compositeTrack on
@@ -280,6 +290,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain danRer6
+        html chainNet
 
     track chainNetDanRer6Viewnet
     shortLabel Net
@@ -293,6 +304,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign danRer6 chainDanRer6
+        html chainNet
 
 track chainNetDanRer5
 release alpha
@@ -331,6 +343,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain danRer5
+        html chainNet
 
     track chainNetDanRer5Viewnet
     shortLabel Net
@@ -345,6 +358,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign danRer5 chainDanRer5
+        html chainNet
 
 track chainNetDanRer4
 compositeTrack on
@@ -381,6 +395,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain danRer4
+        html chainNet
 
     track chainNetDanRer4Viewnet
     shortLabel Net
@@ -394,6 +409,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign danRer4 chainDanRer4
+        html chainNet
 
 track chainNetDanRer3
 compositeTrack on
@@ -430,6 +446,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain danRer3
+        html chainNet
 
     track chainNetDanRer3Viewnet
     shortLabel Net
@@ -443,6 +460,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign danRer3 chainDanRer3
+        html chainNet
 
 track chainNetDanRer2
 compositeTrack on
@@ -479,6 +497,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain danRer2
+        html chainNet
 
     track chainNetDanRer2Viewnet
     shortLabel Net
@@ -492,6 +511,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign danRer2 chainDanRer2
+        html chainNet
 
 track chainNetDanRer1
 compositeTrack on
@@ -528,6 +548,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain danRer1
+        html chainNet
 
     track chainNetDanRer1Viewnet
     shortLabel Net
@@ -541,6 +562,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign danRer1 chainDanRer1
+        html chainNet
 
 track chainNetXenTro2
 compositeTrack on
@@ -577,6 +599,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain xenTro2
+        html chainNet
 
     track chainNetXenTro2Viewnet
     shortLabel Net
@@ -590,6 +613,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign xenTro2 chainXenTro2
+        html chainNet
 
 track chainNetXenTro1
 compositeTrack on
@@ -626,6 +650,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain xenTro1
+        html chainNet
 
     track chainNetXenTro1Viewnet
     shortLabel Net
@@ -639,6 +664,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign xenTro1 chainXenTro1
+        html chainNet
 
 track chainNetOryLat2
 compositeTrack on
@@ -675,6 +701,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain oryLat2
         otherDb oryLat2
+        html chainNet
 
     track chainNetOryLat2Viewnet
     shortLabel Net
@@ -689,6 +716,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign oryLat2 chainOryLat2
         otherDb oryLat2
+        html chainNet
 
 # release alpha since oryLat1 is obsolete
 track chainNetOryLat1
@@ -728,6 +756,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain oryLat1
         otherDb oryLat1
+        html chainNet
 
     track chainNetOryLat1Viewnet
     shortLabel Net
@@ -743,6 +772,7 @@ html chainNet
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign oryLat1 chainOryLat1
         otherDb oryLat1
+        html chainNet
 
 track chainNetGasAcu1
 compositeTrack on
@@ -779,6 +809,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain gasAcu1
+        html chainNet
 
     track chainNetGasAcu1Viewnet
     shortLabel Net
@@ -792,6 +823,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign gasAcu1 chainGasAcu1
+        html chainNet
 
 track chainNetGalGal3
 compositeTrack on
@@ -828,6 +860,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain galGal3
+        html chainNet
 
     track chainNetGalGal3Viewnet
     shortLabel Net
@@ -841,6 +874,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign galGal3 chainGalGal3
+        html chainNet
 
 track chainNetGalGal2
 compositeTrack on
@@ -877,6 +911,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain galGal2
+        html chainNet
 
     track chainNetGalGal2Viewnet
     shortLabel Net
@@ -890,6 +925,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign galGal2 chainGalGal2
+        html chainNet
 
 track chainNetTaeGut1
 compositeTrack on
@@ -926,6 +962,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain taeGut1
+        html chainNet
 
     track chainNetTaeGut1Viewnet
     shortLabel Net
@@ -939,6 +976,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign taeGut1 chainTaeGut1
+        html chainNet
 
 track chainNetOrnAna1
 compositeTrack on
@@ -975,6 +1013,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain ornAna1
+        html chainNet
 
     track chainNetOrnAna1Viewnet
     shortLabel Net
@@ -988,6 +1027,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign ornAna1 chainOrnAna1
+        html chainNet
 
 track chainNetAnoCar1
 compositeTrack on
@@ -1024,6 +1064,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain anoCar1
+        html chainNet
 
     track chainNetAnoCar1Viewnet
     shortLabel Net
@@ -1037,6 +1078,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign anoCar1 chainAnoCar1
+        html chainNet
 
 track chainNetPetMar1
 compositeTrack on
@@ -1073,6 +1115,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain petMar1
+        html chainNet
 
     track chainNetPetMar1Viewnet
     shortLabel Net
@@ -1086,6 +1129,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign petMar1 chainPetMar1
+        html chainNet
 
 track chainNetBraFlo1
 compositeTrack on
@@ -1122,6 +1166,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain braFlo1
+        html chainNet
 
     track chainNetBraFlo1Viewnet
     shortLabel Net
@@ -1135,6 +1180,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign braFlo1 chainBraFlo1
+        html chainNet
 
 track chainNetStrPur2
 compositeTrack on
@@ -1171,6 +1217,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain strPur2
+        html chainNet
 
     track chainNetStrPur2Viewnet
     shortLabel Net
@@ -1184,6 +1231,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign strPur2 chainStrPur2
+        html chainNet
 
 track chainNetMacEug1
 compositeTrack on
@@ -1215,6 +1263,7 @@ html chainNet
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain macEug1
+    html chainNet
 
     track netMacEug1
     subTrack chainNetMacEug1
@@ -1222,6 +1271,7 @@ html chainNet
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign macEug1 chainMacEug1
+    html chainNet
 
 track chainNetLoxAfr3
 compositeTrack on
@@ -1258,6 +1308,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain loxAfr3
+        html chainNet
 
     track chainNetLoxAfr3Viewnet
     shortLabel Net
@@ -1271,6 +1322,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign loxAfr3 chainLoxAfr3
+        html chainNet
 
 track chainNetLoxAfr2
 compositeTrack on
@@ -1307,6 +1359,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain loxAfr2
+        html chainNet
 
     track chainNetLoxAfr2Viewnet
     shortLabel Net
@@ -1320,6 +1373,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign loxAfr2 chainLoxAfr2
+        html chainNet
 
 track chainNetLoxAfr1
 compositeTrack on
@@ -1356,6 +1410,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain loxAfr1
+        html chainNet
 
     track chainNetLoxAfr1Viewnet
     shortLabel Net
@@ -1369,6 +1424,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign loxAfr1 chainLoxAfr1
+        html chainNet
 
 track chainNetMonDom1
 compositeTrack on
@@ -1405,6 +1461,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain monDom1
+        html chainNet
 
     track chainNetMonDom1Viewnet
     shortLabel Net
@@ -1418,6 +1475,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign monDom1 chainMonDom1
+        html chainNet
 
 track chainNetMonDom4
 compositeTrack on
@@ -1454,6 +1512,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain monDom4
+        html chainNet
 
     track chainNetMonDom4Viewnet
     shortLabel Net
@@ -1467,6 +1526,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign monDom4 chainMonDom4
+        html chainNet
 
 track chainNetMonDom5
 compositeTrack on
@@ -1503,6 +1563,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain monDom5
+        html chainNet
 
     track chainNetMonDom5Viewnet
     shortLabel Net
@@ -1516,6 +1577,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign monDom5 chainMonDom5
+        html chainNet
 
 track chainNetEriEur1
 compositeTrack on
@@ -1552,6 +1614,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain eriEur1
+        html chainNet
 
     track chainNetEriEur1Viewnet
     shortLabel Net
@@ -1565,6 +1628,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign eriEur1 chainEriEur1
+        html chainNet
 
 track chainNetSorAra1
 compositeTrack on
@@ -1601,6 +1665,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain sorAra1
+        html chainNet
 
     track chainNetSorAra1Viewnet
     shortLabel Net
@@ -1614,6 +1679,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign sorAra1 chainSorAra1
+        html chainNet
 
 track chainNetMm9
 compositeTrack on
@@ -1650,6 +1716,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain mm9
+        html chainNet
 
     track chainNetMm9Viewnet
     shortLabel Net
@@ -1663,6 +1730,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign mm9 chainMm9
+        html chainNet
 
 track chainNetMm8
 compositeTrack on
@@ -1699,6 +1767,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain mm8
+        html chainNet
 
     track chainNetMm8Viewnet
     shortLabel Net
@@ -1712,6 +1781,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign mm8 chainMm8
+        html chainNet
 
 track chainNetMm7
 compositeTrack on
@@ -1748,6 +1818,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain mm7
+        html chainNet
 
     track chainNetMm7Viewnet
     shortLabel Net
@@ -1761,6 +1832,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign mm7 chainMm7
+        html chainNet
 
 track chainNetMm6
 compositeTrack on
@@ -1797,6 +1869,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain mm6
+        html chainNet
 
     track chainNetMm6Viewnet
     shortLabel Net
@@ -1810,6 +1883,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign mm6 chainMm6
+        html chainNet
 
 track chainNetMm5
 release alpha
@@ -1843,6 +1917,7 @@ html chainNet
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain mm5
+    html chainNet
 
     track netMm5
     release alpha
@@ -1851,6 +1926,7 @@ html chainNet
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign mm5 chainMm5
+    html chainNet
 
 track chainNetRn4
 compositeTrack on
@@ -1887,6 +1963,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain rn4
+        html chainNet
 
     track chainNetRn4Viewnet
     shortLabel Net
@@ -1900,6 +1977,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign rn4 chainRn4
+        html chainNet
 
 track chainNetRn3
 compositeTrack on
@@ -1936,6 +2014,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain rn3
+        html chainNet
 
     track chainNetRn3Viewnet
     shortLabel Net
@@ -1949,6 +2028,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign rn3 chainRn3
+        html chainNet
 
 track chainNetCavPor3
 compositeTrack on
@@ -1985,6 +2065,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain cavPor3
+        html chainNet
 
     track chainNetCavPor3Viewnet
     shortLabel Net
@@ -1998,6 +2079,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign cavPor3 chainCavPor3
+        html chainNet
 
 # release alpha until cavPor2 individual chain/net tracks phased out
 track chainNetCavPor2
@@ -2037,6 +2119,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain cavPor2
+        html chainNet
 
     track chainNetCavPor2Viewnet
     shortLabel Net
@@ -2051,6 +2134,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign cavPor2 chainCavPor2
+        html chainNet
 
 track chainNetOryCun2
 compositeTrack on
@@ -2087,6 +2171,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain oryCun2
+        html chainNet
 
     track chainNetOryCun2Viewnet
     shortLabel Net
@@ -2100,6 +2185,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign oryCun2 chainOryCun2
+        html chainNet
 
 track chainNetOryCun1
 compositeTrack on
@@ -2136,6 +2222,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain oryCun1
+        html chainNet
 
     track chainNetOryCun1Viewnet
     shortLabel Net
@@ -2149,6 +2236,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign oryCun1 chainOryCun1
+        html chainNet
 
 track chainNetEquCab2
 compositeTrack on
@@ -2185,6 +2273,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain equCab2
+        html chainNet
 
     track chainNetEquCab2Viewnet
     shortLabel Net
@@ -2198,6 +2287,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign equCab2 chainEquCab2
+        html chainNet
 
 track chainNetEquCab1
 compositeTrack on
@@ -2234,6 +2324,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain equCab1
+        html chainNet
 
     track chainNetEquCab1Viewnet
     shortLabel Net
@@ -2247,6 +2338,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign equCab1 chainEquCab1
+        html chainNet
 
 track chainNetEchTel1
 compositeTrack on
@@ -2283,6 +2375,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain echTel1
+        html chainNet
 
     track chainNetEchTel1Viewnet
     shortLabel Net
@@ -2296,6 +2389,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign echTel1 chainEchTel1
+        html chainNet
 
 track chainNetDasNov2
 compositeTrack on
@@ -2332,6 +2426,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain dasNov2
+        html chainNet
 
     track chainNetDasNov2Viewnet
     shortLabel Net
@@ -2345,6 +2440,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign dasNov2 chainDasNov2
+        html chainNet
 
 track chainNetDasNov1
 compositeTrack on
@@ -2381,6 +2477,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain dasNov1
+        html chainNet
 
     track chainNetDasNov1Viewnet
     shortLabel Net
@@ -2394,6 +2491,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign dasNov1 chainDasNov1
+        html chainNet
 
 track chainNetSusScr1
 compositeTrack on
@@ -2430,6 +2528,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain susScr1
+        html chainNet
 
     track chainNetSusScr1Viewnet
     shortLabel Net
@@ -2443,6 +2542,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign susScr1 chainSusScr1
+        html chainNet
 
 track chainNetBosTau4
 compositeTrack on
@@ -2479,6 +2579,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain bosTau4
+        html chainNet
 
     track chainNetBosTau4Viewnet
     shortLabel Net
@@ -2492,6 +2593,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign bosTau4 chainBosTau4
+        html chainNet
 
 track chainNetBosTau3
 compositeTrack on
@@ -2528,6 +2630,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain bosTau3
+        html chainNet
 
     track chainNetBosTau3Viewnet
     shortLabel Net
@@ -2541,6 +2644,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign bosTau3 chainBosTau3
+        html chainNet
 
 track chainNetBosTau2
 compositeTrack on
@@ -2577,6 +2681,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain bosTau2
+        html chainNet
 
     track chainNetBosTau2Viewnet
     shortLabel Net
@@ -2590,6 +2695,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign bosTau2 chainBosTau2
+        html chainNet
 
 track chainNetBosTau1
 compositeTrack on
@@ -2626,6 +2732,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain bosTau1
+        html chainNet
 
     track chainNetBosTau1Viewnet
     shortLabel Net
@@ -2639,6 +2746,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign bosTau1 chainBosTau1
+        html chainNet
 
 track chainNetAilMel1
 compositeTrack on
@@ -2675,6 +2783,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain ailMel1
+        html chainNet
 
     track chainNetAilMel1Viewnet
     shortLabel Net
@@ -2688,6 +2797,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign ailMel1 chainAilMel1
+        html chainNet
 
 track chainNetCanFam2
 compositeTrack on
@@ -2724,6 +2834,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain canFam2
+        html chainNet
 
     track chainNetCanFam2Viewnet
     shortLabel Net
@@ -2737,6 +2848,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign canFam2 chainCanFam2
+        html chainNet
 
 track chainNetFelCat3
 compositeTrack on
@@ -2773,6 +2885,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain felCat3
+        html chainNet
 
     track chainNetFelCat3Viewnet
     shortLabel Net
@@ -2786,6 +2899,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
         type netAlign felCat3 chainFelCat3
+        html chainNet
 
 track chainNetMicMur1
 compositeTrack on
@@ -2821,6 +2935,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain MicMur1
+        html chainNet
 
     track chainNetMicMur1Viewnet
     shortLabel Net
@@ -2834,6 +2949,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign MicMur1 chainMicMur1
+        html chainNet
 
 track chainNetTarSyr1
 compositeTrack on
@@ -2869,6 +2985,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain tarSyr1
+        html chainNet
 
     track chainNetTarSyr1Viewnet
     shortLabel Net
@@ -2882,6 +2999,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign tarSyr1 chainTarSyr1
+        html chainNet
 
 track chainNetVenter
 compositeTrack on
@@ -2965,6 +3083,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain hg18
+        html chainNet
 
     track chainNetHg18Viewnet
     shortLabel Net
@@ -2978,6 +3097,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign hg18 chainHg18
+        html chainNet
 
 track chainNetHg19
 compositeTrack on
@@ -3013,6 +3133,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain hg19
+        html chainNet
 
     track chainNetHg19Viewnet
     shortLabel Net
@@ -3026,6 +3147,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign hg19 chainHg19
+        html chainNet
 
 track chainNetHg17
 compositeTrack on
@@ -3061,6 +3183,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain hg17
+        html chainNet
 
     track chainNetHg17Viewnet
     shortLabel Net
@@ -3074,6 +3197,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign hg17 chainHg17
+        html chainNet
 
 track chainNetPanTro2
 compositeTrack on
@@ -3109,6 +3233,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain panTro2
+        html chainNet
 
     track chainNetPanTro2Viewnet
     shortLabel Net
@@ -3122,6 +3247,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign panTro2 chainPanTro2
+        html chainNet
 
 track chainNetPanTro1
 compositeTrack on
@@ -3157,6 +3283,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain panTro1
+        html chainNet
 
     track chainNetPanTro1Viewnet
     shortLabel Net
@@ -3170,6 +3297,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign panTro1 chainPanTro1
+        html chainNet
 
 track chainNetGorGor2
 compositeTrack on
@@ -3205,6 +3333,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain gorGor2
+        html chainNet
 
     track chainNetGorGor2Viewnet
     shortLabel Net
@@ -3218,6 +3347,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign gorGor2 chainGorGor2
+        html chainNet
 
 track chainNetGorGor1
 compositeTrack on
@@ -3253,6 +3383,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain gorGor1
+        html chainNet
 
     track chainNetGorGor1Viewnet
     shortLabel Net
@@ -3266,6 +3397,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign gorGor1 chainGorGor1
+        html chainNet
 
 track chainNetPonAbe2
 compositeTrack on
@@ -3301,6 +3433,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain ponAbe2
+        html chainNet
 
     track chainNetPonAbe2Viewnet
     shortLabel Net
@@ -3314,6 +3447,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign ponAbe2 chainPonAbe2
+        html chainNet
 
 track chainNetTupBel1
 compositeTrack on
@@ -3349,6 +3483,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain tupBel1
+        html chainNet
 
     track chainNetTupBel1Viewnet
     shortLabel Net
@@ -3362,6 +3497,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign tupBel1 chainTupBel1
+        html chainNet
 
 track chainNetOtoGar1
 compositeTrack on
@@ -3397,6 +3533,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain otoGar1
+        html chainNet
 
     track chainNetOtoGar1Viewnet
     shortLabel Net
@@ -3410,6 +3547,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign otoGar1 chainOtoGar1
+        html chainNet
 
 track chainNetCalJac3
 compositeTrack on
@@ -3445,6 +3583,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain calJac3
+        html chainNet
 
     track chainNetCalJac3Viewnet
     shortLabel Net
@@ -3458,6 +3597,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign calJac3 chainCalJac3
+        html chainNet
 
 track chainNetCalJac1
 compositeTrack on
@@ -3493,6 +3633,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain calJac1
+        html chainNet
 
     track chainNetCalJac1Viewnet
     shortLabel Net
@@ -3506,6 +3647,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign calJac1 chainCalJac1
+        html chainNet
 
 track chainNetPapHam1
 compositeTrack on
@@ -3541,6 +3683,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain papHam1
+        html chainNet
 
     track chainNetPapHam1Viewnet
     shortLabel Net
@@ -3554,6 +3697,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign papHam1 chainPapHam1
+        html chainNet
 
 track chainNetRheMac2
 compositeTrack on
@@ -3589,6 +3733,7 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain rheMac2
+        html chainNet
 
     track chainNetRheMac2Viewnet
     shortLabel Net
@@ -3602,6 +3747,7 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign rheMac2 chainRheMac2
+        html chainNet
 
 track chainNetRheMac1
 compositeTrack on
@@ -3637,6 +3783,7 @@ html chainNet
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
         type chain rheMac1
+        html chainNet
 
     track chainNetRheMac1Viewnet
     shortLabel Net
@@ -3650,6 +3797,7 @@ html chainNet
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date/$o_db) Alignment net
         type netAlign rheMac1 chainRheMac1
+        html chainNet
 
 track chainNetPoodle
 compositeTrack on
