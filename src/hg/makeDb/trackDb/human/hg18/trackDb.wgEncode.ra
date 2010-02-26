@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.885 2010/02/26 21:23:28 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.886 2010/02/26 23:14:02 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -19031,28 +19031,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 5801.00
         color 189,0,157
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 protocol=PCR1x antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=432 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Usf1.tagAlign.gz
-
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Control
-        release alpha
-        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel HepG2 Control Raw 1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP rep=rep1 prot=PCR1x treat=aNONE
-        type wig 1.00 701.00
-       #type wig 1.00 4716.00
-        color 189,0,157
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 protocol=PCR1x antibody=Input type=wig fragLength=225 view=RawSignal replicate=1 labVersion=1 dataVersion="ENCODE Jan 2010 Freeze" subId=776 dateResubmitted=2009-11-13 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Control.wig.gz
-
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Control
-        release alpha
-        subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel HepG2 Control Raw 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP rep=rep2 prot=PCR1x treat=aNONE
-        type wig 1.00 969.00
-       #type wig 1.00 5083.00
-        color 189,0,157
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 protocol=PCR1x antibody=Input type=wig fragLength=225 view=RawSignal replicate=2 labVersion=2 dataVersion="ENCODE Jan 2010 Freeze" subId=776 dateResubmitted=2009-11-13 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Control.wig.gz
 
         track wgEncodeHudsonalphaChipSeqRawSignalA549Gr
         release alpha
