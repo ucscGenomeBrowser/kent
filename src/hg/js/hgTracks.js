@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.56 2010/02/26 07:34:01 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.57 2010/02/26 07:51:07 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -1150,7 +1150,7 @@ function rulerModeToggle (ele)
 
 function makeMapItem(id)
 {
-    // XXXX get title from json
+    // Create a dummy mapItem on the fly (for objects that don't have corresponding entry in the map).
     var title;
     var rec = trackDbJson[id];
     if(rec) {
@@ -1188,6 +1188,7 @@ function findMapItem(e)
         x = e.pageX - e.target.offsetLeft;
         y = e.pageY - e.target.offsetTop;
     }
+    
     if(e.target.tagName.toUpperCase() == "P") {
         // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is true.
         var a = /p_btn_(.*)/.exec(e.target.id);
@@ -1203,9 +1204,8 @@ function findMapItem(e)
         if(a && a[1]) {
             var id = a[1];
             return makeMapItem(id);
-        } else {
-            return null;
         }
+        // else fall-through (under msie).
     }
     
     var retval = -1;
@@ -1349,7 +1349,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    trueSuccess: handleTrackUi,
                    success: catchErrorOrDispatch,
                    cmd: selectedMenuItem,
-                   cache: true
+                   cache: false
                });
     } else if (cmd == 'dragZoomMode') {
         autoHideSetting = true;
