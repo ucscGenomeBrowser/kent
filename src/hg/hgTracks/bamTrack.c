@@ -18,7 +18,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.26 2010/02/24 01:10:25 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.27 2010/02/26 06:54:57 angie Exp $";
 
 struct bamTrackData
     {
@@ -330,6 +330,17 @@ if (ret == 0)
 return ret;
 }
 
+static int linkedFeaturesCmpScore(const void *va, const void *vb)
+/* Help sort linkedFeatures by score (descending), then by starting pos. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+int ret = b->score - a->score;
+if (ret == 0)
+    ret = a->start - b->start;
+return ret;
+}
+
 void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
@@ -378,6 +389,9 @@ if (tg->visibility != tvDense)
 	slSort(&(tg->items), linkedFeaturesSeriesCmp);
     else if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
 	slSort(&(tg->items), linkedFeaturesCmpOri);
+    else if (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
+	     sameString(grayMode, BAM_GRAY_MODE_ALI_QUAL))
+	slSort(&(tg->items), linkedFeaturesCmpScore);
     else
 	slSort(&(tg->items), linkedFeaturesCmpStart);
     if (slCount(tg->items) > MAX_ITEMS_FOR_MAPBOX)
@@ -526,6 +540,13 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
     }
 }
 
+static void dontDrawLeftLabels(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+			       int xOff, int yOff, int width, int height, boolean withCenterLabels,
+			       MgFont *font, Color color, enum trackVisibility vis)
+/* Allow left labels to be inhibited by tdb and/or cart. */
+{
+}
+
 
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
@@ -541,6 +562,9 @@ boolean compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_PAIR_ENDS_BY_NAM
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
 			 BAM_PAIR_ENDS_BY_NAME,
 			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
+char *tdbShowNames = trackDbSettingClosestToHome(track->tdb, BAM_SHOW_NAMES);
+boolean showNames = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
+						  BAM_SHOW_NAMES, !sameOk(tdbShowNames, "off"));
 char *colorMode = cartOrTdbString(cart, track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *userTag = cartOrTdbString(cart, track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
@@ -566,6 +590,12 @@ else
     track->loadItems = bamLoadItems;
     track->drawItemAt = bamDrawAt;
     }
+if (!showNames)
+    {
+    track->drawName = TRUE; // ironic, but this is how to suppress item labels in pack mode.
+    track->drawLeftLabels = dontDrawLeftLabels;
+    }
+
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;

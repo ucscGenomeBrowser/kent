@@ -567,6 +567,7 @@ void wiggleGridDropDown(char *var, char *curVal);
 /*** BAM alignment track coloring code: ***/
 // tdbSettings / cart var suffixes and default values:
 #define BAM_PAIR_ENDS_BY_NAME "pairEndsByName"
+#define BAM_SHOW_NAMES "showNames"
 #define BAM_MIN_ALI_QUAL "minAliQual"
 #define BAM_MIN_ALI_QUAL_DEFAULT "0"
 
