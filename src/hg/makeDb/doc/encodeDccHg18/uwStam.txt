@@ -1748,3 +1748,154 @@ cp ../md5sum.txt .
 -rw-rw-r-- 2       4030 protein  146282491 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep1Hl60Ctcf.tagAlign.gz
 -rw-rw-r-- 2       4030 protein  188617281 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep1Werirb1Ctcf.tagAlign.gz
 -rw-rw-r-- 2       4030 protein  121758326 Aug  7  2009 wgEncodeUwChIPSeqAlignmentsRep2Werirb1Ctcf.tagAlign.gz
+
+# No problem with 4030s  
+# No problem with gzip errors: this is a side affect of validateFiles finding errors then jumping out beofre full zcat
+
+### The Inputs have finally arrived: sibId=1107
+mkdir hold/
+mv wgEncodeUwChIPSeqAlignmentsK562Ctcf.tagAlign.gz    hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12801Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsHelas3Ctcf.tagAlign.gz  hold/
+mv wgEncodeUwChIPSeqAlignmentsHepg2Ctcf.tagAlign.gz   hold/
+mv wgEncodeUwChIPSeqAlignmentsSknshraCtcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12872Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12873Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12864Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsHl60Ctcf.tagAlign.gz    hold/
+mv wgEncodeUwChIPSeqAlignmentsHmecCtcf.tagAlign.gz    hold/
+mv wgEncodeUwChIPSeqAlignmentsWerirb1Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12874Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12865Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsCaco2Ctcf.tagAlign.gz   hold/
+mv wgEncodeUwChIPSeqAlignmentsHreCtcf.tagAlign.gz     hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12875Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsSaecCtcf.tagAlign.gz    hold/
+mv wgEncodeUwChIPSeqAlignmentsGm12878Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsHuvecCtcf.tagAlign.gz   hold/
+mv wgEncodeUwChIPSeqAlignmentsGm06990Ctcf.tagAlign.gz hold/
+mv wgEncodeUwChIPSeqAlignmentsNhekCtcf.tagAlign.gz    hold/
+mv wgEncodeUwChIPSeqAlignmentsBjCtcf.tagAlign.gz      hold/
+mv wgEncodeUwChIPSeqAlignmentsHek293Ctcf.tagAlign.gz  hold/
+
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/K562-DS11488.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsK562Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12801-DS13665.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12801Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/Hela-DS11540.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHelas3Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/HepG2-DS13599.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHepg2Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/SKNSH-DS11605.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsSknshraCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12872-DS13585.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12872Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12873-DS13586.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12873Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12864-DS13587.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12864Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/HL60-DS13664.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHl60Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/HMEC-DS13600.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHmecCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/WERI-DS11888.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsWerirb1Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12874-DS13588.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12874Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12865-DS13590.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12865Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/CACO2-DS13597.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsCaco2Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/HRE-DS11549.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHreCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12875-DS13589.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12875Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/SAEC-DS11550.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsSaecCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM12878-DS11883.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm12878Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/HUVEC-DS11470.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHuvecCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/GM06990-DS11497.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsGm06990Ctcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/NHEK-DS11542.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsNhekCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/BJ-DS11544.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsBjCtcf.tagAlign.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/tags/HEK293T-DS13603.uniques.36.hg18.bed.gz wgEncodeUwChIPSeqAlignmentsHek293Ctcf.tagAlign.gz
+
+# Oops!  The ddf said ctcf but this is input!
+mv wgEncodeUwChIPSeqAlignmentsK562Ctcf.tagAlign.gz     wgEncodeUwChIPSeqAlignmentsK562Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12801Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12801Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHelas3Ctcf.tagAlign.gz   wgEncodeUwChIPSeqAlignmentsHelas3Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHepg2Ctcf.tagAlign.gz    wgEncodeUwChIPSeqAlignmentsHepg2Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsSknshraCtcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsSknshraInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12872Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12872Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12873Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12873Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12864Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12864Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHl60Ctcf.tagAlign.gz     wgEncodeUwChIPSeqAlignmentsHl60Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHmecCtcf.tagAlign.gz     wgEncodeUwChIPSeqAlignmentsHmecInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsWerirb1Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsWerirb1Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12874Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12874Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12865Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12865Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsCaco2Ctcf.tagAlign.gz    wgEncodeUwChIPSeqAlignmentsCaco2Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHreCtcf.tagAlign.gz      wgEncodeUwChIPSeqAlignmentsHreInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12875Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12875Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsSaecCtcf.tagAlign.gz     wgEncodeUwChIPSeqAlignmentsSaecInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm12878Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm12878Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHuvecCtcf.tagAlign.gz    wgEncodeUwChIPSeqAlignmentsHuvecInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsGm06990Ctcf.tagAlign.gz  wgEncodeUwChIPSeqAlignmentsGm06990Input.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsNhekCtcf.tagAlign.gz     wgEncodeUwChIPSeqAlignmentsNhekInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsBjCtcf.tagAlign.gz       wgEncodeUwChIPSeqAlignmentsBjInput.tagAlign.gz
+mv wgEncodeUwChIPSeqAlignmentsHek293Ctcf.tagAlign.gz   wgEncodeUwChIPSeqAlignmentsHek293Input.tagAlign.gz
+
+cd release1
+ln ../wgEncodeUwChIPSeqAlignmentsK562Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12801Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHelas3Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHepg2Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsSknshraInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12872Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12873Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12864Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHl60Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHmecInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsWerirb1Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12874Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12865Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsCaco2Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHreInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12875Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsSaecInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm12878Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHuvecInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsGm06990Input.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsNhekInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsBjInput.tagAlign.gz .
+ln ../wgEncodeUwChIPSeqAlignmentsHek293Input.tagAlign.gz .
+cd ..
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1107/out/fileDb.ra | grep parentTable > tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+encodeDownloadsPage.pl -checksum index.html . &
+cp index.html release1/
+cp fileDb.ra release1/
+cp files.txt release1/
+cp md5sum.txt release1/
+cp preamble.html release1/
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1107 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1107 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 982 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 983 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 984 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 985 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 986 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 987 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 988 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 989 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 990 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 991 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 992 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 993 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1107 reviewing
+
+2010-02-19 Getting ready for UW DNase release 3
+===============================================
+Edit trackDb.wgEncode.ra and wgEncodeUwDnaseSeq.html for release notes, versioning and dataVersion
+cd {downloadsDir}
+mkdir release3
+cp index.html release3
+cp preamble.html release3
+cp fileDb.ra release3
+cp files.txt release3
+cp md5sum.txt release3
+cd release3/
+ln ../*.gz .
+
+### NOTE: spent time fixing all the symlinks which had propgated to release1 and release 2 directories
+
+Make uwDnaseSeq.release3.notes.txt
+Make pushQ entry covering 114 new tables, 191 new files and 38 new wibs; plus 3 versioned tables, 5 versioned files and 1 versioned wib
+
+
