@@ -14,7 +14,7 @@ C) Replaced - are on public browser but will be replaced by something
 D) Versioned (replacing) - are only currently on test but will need to
    be pushed to RR as replacements for existing datasets (with a
    different name)
-   7 tables, 11 files, 6 wibs
+   8 tables, 12 files, 6 wibs
 E) New - are only currently on test but will need to be pushed to the RR.
    316 tables, 447 files, 172 wibs
 F) Additional items of note
@@ -148,26 +148,28 @@ C) Replaced
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib
 
 D) Versioned:
-    D.a) Versioned tables (replacing): 7
+    D.a) Versioned tables (replacing): 8
     wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 ( wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control )
-    wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2   ( wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii )
+    wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1      ( wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii )
     wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2    ( wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control )
     wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control but I don't see this table on the RR )
-    wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2   ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii but I don't see this table on the RR )
+    wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1      ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii but I don't see this table on the RR )
     wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2    ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control but I don't see this table on the RR )
-    wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2       ( wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii )
+    wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1          ( wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii )
+    wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1          ( would replace wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii but I don't see this table on the RR )
 
-    D.b) Versioned files (replacing): 11
+    D.b) Versioned files (replacing): 12
         current location on alpha:
         /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHusdonalphaChipSeq/release2/
         NOT yet on RR: (but to be put in htdocs/goldenPath/hg18/encodeDCC/wgEncodeHusdonalphaChipSeq/)
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
-    wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878TafiiV2.tagAlign.gz
+    wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Taf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
-    wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878TafiiV2.tagAlign.gz
+    wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
-    wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2.broadPeak.gz
+    wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1.broadPeak.gz
+    wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf2.broadPeak.gz
     wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlV2.fastq.gz
     wgEncodeHudsonalphaChipSeqRawDataRep1K562ControlV2.fastq.gz
     wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlV2.fastq.gz
@@ -175,10 +177,10 @@ D) Versioned:
 
     D.c) Versioned wibs (replacing): 6
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib ( wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib )
-    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib   ( wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib )
+    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib      ( wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib )
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib    ( wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib )
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib but I don't think its on the RR )
-    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib   ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii.wib but I don't think its on the RR )
+    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib      ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii.wib but I don't think its on the RR )
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib    ( would replace wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib but I don't think its on the RR )
 
 E) New tables:
