@@ -414,4 +414,6 @@ E) New tables:
 
 F) Additional items:
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/release2/index.html
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/release2/files.txt
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/release2/md5sum.txt
 trackDb table ( o course )
