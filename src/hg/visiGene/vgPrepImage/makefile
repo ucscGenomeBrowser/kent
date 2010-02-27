@@ -27,7 +27,7 @@ ${A}: $O ${MYLIBS}
 	${LINK} ${COPT} -o ${BINDIR}/${A} $O ${MYLIBS} $L
 	strip ${BINDIR}/${A}
 
-install:
+install: ${BINDIR}/${A}
 	cp ${BINDIR}/${A} /cluster/bin/${MACHTYPE}/
 
 example:

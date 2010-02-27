@@ -6,7 +6,7 @@ wormAli.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkOwnLib.a ../lib/$(MACHTYPE)/jkweb.a -lm
 	mv ${AOUT} wormAli.exe
 
-install:	
+install: wormAli.exe	
 	chmod g-w wormAli.exe
 	chmod a+rx wormAli.exe
-	mv wormAli.exe $(HOME)/.html/cgi-bin
+	mv wormAli.exe ${CGI_BIN}/

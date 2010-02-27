@@ -14,5 +14,5 @@ compile: $A
 $A: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $A $O $(MYLIBS) $L
 
-install:
+install: compile
 	mv $A ${BINDIR}/$A

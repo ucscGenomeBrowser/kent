@@ -6,7 +6,7 @@ primeMate.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
 	mv ${AOUT} primeMate.exe
 
-install:	
+install: primeMate.exe	
 	chmod a+rx primeMate.exe
 	chmod g-w primeMate.exe
-	mv primeMate.exe $(HOME)/.html/cgi-bin
+	mv primeMate.exe ${CGI_BIN}/

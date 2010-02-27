@@ -6,7 +6,7 @@ getgene.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
 	mv ${AOUT} getgene.exe
 
-install:	
+install: getgene.exe	
 	chmod a+rx getgene.exe
 	chmod g-w getgene.exe
-	mv getgene.exe $(HOME)/.html/cgi-bin
+	mv getgene.exe ${CGI_BIN}/

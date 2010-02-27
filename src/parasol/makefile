@@ -11,7 +11,7 @@ all:
 	cd paraTestJob && ${MAKE}
 	cd parasol && ${MAKE}
 
-install:
+install: all
 	cp bin/para* bin/gensub2 ${BINDIR}
 	cp bin/para* bin/gensub2 /cluster/bin/${MACHTYPE}
 
