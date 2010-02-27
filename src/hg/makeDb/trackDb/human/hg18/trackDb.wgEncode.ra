@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.886 2010/02/26 23:14:02 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.887 2010/02/27 00:22:57 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16818,7 +16818,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR2x antibody=SRF view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf.narrowPeak.gz
 
-        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel GM12878 TAF1 Pk 1
@@ -16826,27 +16826,17 @@ dataVersion through the ENCODE Jan 2010 Freeze
         subGroups view=Peaks factor=TAF1 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 view=Peaks replicate=1 labVersion="originally rep #3" softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" submittedDataVersion="V2 - PCR1x" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2.broadPeak.gz
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 view=Peaks replicate=1 softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" subId=125 dateSubmitted=2008-12-10 dateUnrestricted=2009-08-10 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1.broadPeak.gz
 
-        #track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2
-        #release alpha
-        #subTrack wgEncodeHudsonalphaChipSeq off
-        #shortLabel GM12878 TAF1 Raw 2
-        #longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (TAF1 in GM12878 cells)
-        #subGroups view=zRaw factor=TAF1 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
-        #type wig 1.00 8483.00
-        #color 153,38,0
-        #metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" submittedDataVersion="V2 - PCR1x" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878TafiiV2.tagAlign.gz
-
-        track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii
-        release beta
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1
+        release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewPeaks
-        shortLabel GM12878 TAF1 Pk 1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in GM12878 cells)
-        subGroups view=Peaks factor=TAF1 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel GM12878 TAF1 Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in GM12878 cells)
+        subGroups view=Peaks factor=TAF1 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 view=Peaks replicate=1 labVersion="originally rep #3" softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii.broadPeak.gz
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 view=Peaks replicate=2 labVersion="originally rep #3" softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" submittedDataVersion="V2 - PCR1x" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1.broadPeak.gz
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tcf12
         release alpha
@@ -18408,7 +18398,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR2x antibody=SRF type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Srf.tagAlign.gz
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel GM12878 TAF1 Raw 1
@@ -18416,17 +18406,17 @@ dataVersion through the ENCODE Jan 2010 Freeze
         subGroups view=zRaw factor=TAF1 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
         type wig 1.00 8352.00
         color 153,38,0
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion="originally rep #3" dataVersion="ENCODE July 2009 Freeze" submittedDataVersion="V2 - PCR1x" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878TafiiV2.tagAlign.gz
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion="originally rep #3" dataVersion="ENCODE July 2009 Freeze" submittedDataVersion="V2 - PCR1x" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Taf1.tagAlign.gz
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii
-        release beta
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1
+        release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw
-        shortLabel GM12878 TAF1 Raw 1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (TAF1 in GM12878 cells)
-        subGroups view=zRaw factor=TAF1 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel GM12878 TAF1 Raw 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (TAF1 in GM12878 cells)
+        subGroups view=zRaw factor=TAF1 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
         type wig 1.00 8352.00
         color 153,38,0
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion="originally rep #3" dataVersion="ENCODE July 2009 Freeze" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Tafii.tagAlign.gz
+        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=TAF1 type=wig fragLength=225 view=RawSignal replicate=2 labVersion="originally rep #3" dataVersion="ENCODE July 2009 Freeze" submittedDataVersion="V2 - PCR1x" subId=422 dateSubmitted=2009-07-20 dateUnrestricted=2010-04-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
         release alpha
