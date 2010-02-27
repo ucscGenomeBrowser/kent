@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.122 2010/02/27 00:39:58 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.123 2010/02/27 00:57:47 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2614,6 +2614,9 @@ int errCount = 0;
 off_t totalTable = 0;
 off_t totalGbdb = 0;
 off_t totalGoldenPath = 0;
+int tableCount = 0;
+int gbdbCount = 0;
+int goldenCount = 0;
 int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
@@ -2764,6 +2767,7 @@ for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 			long long tableSize = pq_getTableSize(q->currLoc,db,tbl,&errCount);
 			totalsize += tableSize;
 			totalTable += tableSize;
+			++tableCount;
 			}
 		    }
 		}
@@ -2892,9 +2896,15 @@ if (!sameString(q->files,""))
 			sprintLongWithCommas(nicenumber, size);
 			printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 			if (startsWith("/gbdb/", pathName))
+			    {
 			    totalGbdb+=size;
+			    ++gbdbCount;
+			    }
 			if (stringIn("/goldenPath/", pathName))
+			    {
     			    totalGoldenPath+=size;
+			    ++goldenCount;
+			    }
 			}
 		    }
 		else
@@ -2934,9 +2944,15 @@ if (!sameString(q->files,""))
 			    {
     			    totalsize+=fi->size;
 			    if (startsWith("/gbdb/", filePath))
+				{
+				++gbdbCount;
 				totalGbdb+=fi->size;
+				}
     			    if (stringIn("/goldenPath/", filePath))
+				{
+				++goldenCount;
 				totalGoldenPath+=fi->size;
+				}
     			    sprintLongWithCommas(nicenumber, fi->size);
     			    printf("<tr><td>%s<td/><td>%s</td></tr>\n",fi->name,nicenumber);
 			    }
@@ -2956,7 +2972,9 @@ if (totalTable > 0)
     mySprintWithCommas(nicenumber, sizeof(nicenumber), totalTable);
     printf(" Total size of tables: %s ",nicenumber);
     sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalTable);
-    printf("&nbsp; ( %s ) <br>\n",nicenumber);
+    printf("&nbsp; ( %s ) ",nicenumber);
+    mySprintWithCommas(nicenumber, sizeof(nicenumber), tableCount);
+    printf("&nbsp; ( %s tables ) <br>\n", nicenumber);
     }
 
 if (totalGbdb > 0)
@@ -2965,7 +2983,9 @@ if (totalGbdb > 0)
     mySprintWithCommas(nicenumber, sizeof(nicenumber), totalGbdb);
     printf(" Total size of /gbdb/ files: %s ",nicenumber);
     sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalGbdb);
-    printf("&nbsp; ( %s ) <br>\n",nicenumber);
+    printf("&nbsp; ( %s ) ",nicenumber);
+    mySprintWithCommas(nicenumber, sizeof(nicenumber), gbdbCount);
+    printf("&nbsp; ( %s gbdb files ) <br>\n", nicenumber);
     }
 
 if (totalGoldenPath > 0)
@@ -2974,7 +2994,9 @@ if (totalGoldenPath > 0)
     mySprintWithCommas(nicenumber, sizeof(nicenumber), totalGoldenPath);
     printf(" Total size of .../goldenPath/ files: %s ",nicenumber);
     sprintWithGreekByte(nicenumber, sizeof(nicenumber), totalGoldenPath);
-    printf("&nbsp; ( %s ) <br>\n",nicenumber);
+    printf("&nbsp; ( %s ) ",nicenumber);
+    mySprintWithCommas(nicenumber, sizeof(nicenumber), goldenCount);
+    printf("&nbsp; ( %s goldenPath files ) <br>\n", nicenumber);
     }
 
 printf(" <br>\n");
