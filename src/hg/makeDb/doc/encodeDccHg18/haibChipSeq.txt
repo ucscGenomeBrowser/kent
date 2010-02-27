@@ -1158,3 +1158,464 @@ Solicited default wiggle settings.
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 1003 approved
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 1028 approved
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 1060 approved
+
+
+2010-02-22 Prepare release2 for pushQ
+=====================================
+cd {downloadsDir}/release2
+ln ../*.gz .
+mkdir mystery
+mv S*.gz myystery
+ls mystery/
+SL1051.fastq.gz  SL1206.fastq.gz  SL611.fastq.gz  SL736.fastq.gz  SL911.fastq.gz
+SL1059.fastq.gz  SL1207.fastq.gz  SL629.fastq.gz  SL738.fastq.gz  SL918.fastq.gz
+SL1077.fastq.gz  SL275.fastq.gz   SL630.fastq.gz  SL748.fastq.gz  SL920.fastq.gz
+SL1078.fastq.gz  SL514.fastq.gz   SL631.fastq.gz  SL749.fastq.gz  SL921.fastq.gz
+SL1079.fastq.gz  SL523.fastq.gz   SL634.fastq.gz  SL802.fastq.gz  SL922.fastq.gz
+SL1080.fastq.gz  SL551.fastq.gz   SL635.fastq.gz  SL817.fastq.gz  SL944.fastq.gz
+SL116.fastq.gz   SL564.fastq.gz   SL636.fastq.gz  SL818.fastq.gz  SL945.fastq.gz
+SL1169.fastq.gz  SL582.fastq.gz   SL637.fastq.gz  SL847.fastq.gz  SL946.fastq.gz
+SL117.fastq.gz   SL588.fastq.gz   SL648.fastq.gz  SL908.fastq.gz  SL948.fastq.gz
+SL1204.fastq.gz  SL590.fastq.gz   SL649.fastq.gz  SL909.fastq.gz  SL977.fastq.gz
+SL1205.fastq.gz  SL610.fastq.gz   SL706.fastq.gz  SL910.fastq.gz  SL979.fastq.gz
+# come back to this mystery
+ls -1 *.gz | sort > ../tmp2.txt
+cd ..
+ls -1 *.gz | sort > tmp.txt
+diff tmp.txt tmp2.txt
+# Some files in release2 which should not be there!
+> wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Gr.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Gr.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep1A549Gr.broadPeak.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep2A549Gr.broadPeak.gz
+# replaced by ones with protocol Pcr1 and treatments Dex..
+
+> wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xPol2.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xPol2.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xPol2.broadPeak.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2xPol2.broadPeak.gz
+# replaced by ones with Treatment Etoh02
+
+> wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1xSp1.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1xSp1.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1xSp1.broadPeak.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1xSp1.broadPeak.gz
+# replaced by ones with Treatment Sp1 removed
+
+> wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1xZbtb33.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1xZbtb33.broadPeak.gz
+# replaced by ones with Treatment Zbtb33 removed
+
+> wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1xTaf1.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1xTaf1.tagAlign.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1xTaf1.broadPeak.gz
+> wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1xTaf1.broadPeak.gz
+# replaced by ones with Treatment Taf1 removed
+
+> wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xControl.tagAlign.gz
+# replaced by ones with Treatment Etoh02
+# first moved all to mystery/ then when satisfied that they were actually replaced, removed them entirely
+
+diff tmp.txt tmp2.txt
+# They are the same!
+cp index.html release2/
+cp files.txt release2/
+cp md5sum.txt release2/
+
+# still all those release2/mystery/SL*.fastq.gz
+# Confirmed all are duplicated in downloads dir and properly named there.  Must be detritus from failed fastq load.
+
+## Now making files list haibTfsbRelease2Lists.txt
+
+### Big mess!  Stuff is missing from release1 dir!  Stuff is missing from downloads dir.
+
+Where is: 
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
+wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
+wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
+wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
+wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
+wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf
+wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
+wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
+wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
+wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
+wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
+wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
+wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
+All are missing!   All are declared as narrowPeaks, while broadPeaks is what is used later.  All tagAligns are there.
+Gm12878/Taf narrowPeaks are fine (in release1 and versioned).  
+Controls have no peaks but tagAligns are fine and have been replaced (NOT VERSIONED!)
+
+### Fix improperly versioned controls.  Don't bother changing wib which have already been overwritten!
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control.tagAlign.gz    wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control.tagAlign.gz    wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Control.fastq.gz       wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlV2.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Control.fastq.gz          wgEncodeHudsonalphaChipSeqRawDataRep1K562ControlV2.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Control.fastq.gz       wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlV2.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Control.fastq.gz          wgEncodeHudsonalphaChipSeqRawDataRep2K562ControlV2.fastq.gz
+
+cd release2/
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control.tagAlign.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Control.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1K562Control.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Control.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep2K562Control.fastq.gz
+
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz    .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz    .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlV2.fastq.gz       .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562ControlV2.fastq.gz          .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlV2.fastq.gz       .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562ControlV2.fastq.gz          .
+   
+
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2;
+
+### Fix missing peaks
+# found them in subId dirs.
+cp, gzip, cd release1/ ln
+edit trackDb
+make alpha DBS=hg18
+encodeDownloadsPage.pl
+
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/7/data/FoxP2_PFSK-1_SL13_peakcalls.narrowPeak /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2.narrowPeaks
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/7/data/FoxP2_PFSK-1_SL14_peakcalls.narrowPeak /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2.narrowPeaks
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/7/data/FoxP2_SK-N-MC_SL144_peakcalls.narrowPeak /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2.narrowPeaks
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/7/data/FoxP2_SK-N-MC_SL167_peakcalls.narrowPeak /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2.narrowPeaks
+gzip *.narrowPeaks
+cd release2/
+ln ../wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2.narrowPeaks.gz .                 
+ln ../wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2.narrowPeaks.gz .
+ln ../wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2.narrowPeaks.gz .
+ln ../wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2.narrowPeaks.gz .
+cd ..
+
+### Fixed a bunch of metadata problems in fileDb.ra and a couple in trackDb.wgEncode.ra
+
+
+Missing:
+### All of replicate 1 but only tags for replicate 2
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2.broadPeak.gz                  cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=422;
+wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878TafiiV2.tagAlign.gz              cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=422;
+wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Taf1Pcr1x.fastq.gz                  cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=880;
+wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878TafiiV2.tagAlign.gz              cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=422;
+
+### Replicate 2 but no replicate one!
+wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Srf.broadPeak.gz                        cell=HepG2; antibody=SRF; protocol=PCR1x; subId=432;
+wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Srf.tagAlign.gz                    cell=HepG2; antibody=SRF; protocol=PCR1x; subId=432;
+
+### Replicate 1 only
+wgEncodeHudsonalphaChipSeqPeaksA549Gr.broadPeak.gz                                      cell=A549; antibody=GR; protocol=PCR1x; Peaks; replicate=1; subId=774;
+wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz                                  cell=A549; antibody=GR; protocol=PCR1x; Alignments; subId=774;
+
+### Now resume with making files lists
+cd release2/
+rm *.gz
+ln ../*.gz .
+ls -l *.gz | wl
+cp ../index.html .
+cp ../fileDb.ra .
+cp ../preamble.html .
+cp ../files.txt .
+cd release1/
+ls ../tmp1.txt
+cd ../release2/
+ls ../tmp2.txt
+diff -w tmp1.txt tmp2.txt | grep "<" > tmpOld.txt
+diff -w tmp1.txt tmp2.txt | grep ">" > tmpNew.txt
+e tmpOld.txt tmpNew.txt tmp2.txt
+# remove leading '> '
+diff -w tmp2.txt tmpNew.txt | grep "<" > tmpSame.txt
+
+# New and old were easy.  What about replaced or obsoleted or ...
+
+# fix wib mismatches
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf    limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf    limit 1;
+wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control        | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control_436.wib
+wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf           | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf_436.wib
+wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control        | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control_436.wib
+wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf           | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf_436.wib
+
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf    set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf    set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf.wib";
+
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control_436.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf_436.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control_436.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf_436.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf.wib
+cd /gbdb/hg18/wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control_436.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf_436.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control_436.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf_436.wib
+
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf.wib
+
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2    limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2    limit 1;
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib 
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2    | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib 
+wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib 
+wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2    | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib 
+
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2    set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2    set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib";
+
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+cd /gbdb/hg18/wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib
+
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib    wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib    wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+### Big problems remain!!!
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib
+   ls: /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib: No such file or directory
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x    | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+   ls: /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib: No such file or directory
+wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib
+   ls: /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib: No such file or directory
+wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x    | /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+   ls: /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib: No such file or directory
+
+   ls /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib
+   ls /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+   ls /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib
+   ls /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+
+   ls /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+
+# Should be 4 but i have six:
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib   Is this pcr1 as it should be???
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib  Is this pcr2 as it should be???
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib  What is this??
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib
+
+ll /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib  -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib     -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib  -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib     -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+ll wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+# Nothing is the same!
+-rw-rw-r-- 2 braney protein 1667635612 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+-rw-rw-r-- 2 braney protein 2061259610 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib
+-rw-rw-r-- 2 qateam protein 1354570971 Oct 27 10:58 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+-rw-rw-r-- 2 braney protein 1473572093 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+-rw-rw-r-- 2 braney protein 2376731710 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib
+-rw-rw-r-- 2 qateam protein 1198698265 Oct 27 11:46 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+ll wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+-rw-rw-r-- 2 braney protein 1667635612 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+-rw-rw-r-- 2 braney protein 2061259610 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib
+-rw-rw-r-- 2 qateam protein 1354570971 Oct 27 10:58 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+-rw-rw-r-- 2 braney protein 1473572093 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+-rw-rw-r-- 2 braney protein 2376731710 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib
+-rw-rw-r-- 2 qateam protein 1198698265 Oct 27 11:46 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+# according to the trackDb subId=262 is the pcr2x!  Since these are the larger, I will take them
+[hgwdev:tdreszer gbdb> mkdir old
+[hgwdev:tdreszer gbdb> mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib old/
+[hgwdev:tdreszer gbdb> mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib old/
+[hgwdev:tdreszer gbdb> mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib -rw-rw-r-- 2 braney protein 1667635612 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+[hgwdev:tdreszer gbdb> mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+[hgwdev:tdreszer gbdb> mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+[hgwdev:tdreszer gbdb> ll wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+-rw-rw-r-- 2 braney protein 2061259610 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+-rw-rw-r-- 2 qateam protein 1354570971 Oct 27 10:58 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+-rw-rw-r-- 2 braney protein 2376731710 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+-rw-rw-r-- 2 qateam protein 1198698265 Oct 27 11:46 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+# changed mind.  Take the most recent!!!
+ll --full-time wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+-rw-rw-r-- 2 braney protein 2061259610 2009-07-15 11:46:56.578743000 -0700 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+-rw-rw-r-- 2 braney protein 2376731710 2009-07-15 11:43:35.806545000 -0700 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+[hgwdev:tdreszer gbdb> ll --full-time old/wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+-rw-rw-r-- 2 braney protein 1667635612 2009-07-15 11:54:27.672486000 -0700 old/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+-rw-rw-r-- 2 braney protein 1473572093 2009-07-15 12:06:55.399755000 -0700 old/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib old/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x_262.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib old/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x_262.wib
+mv old/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+mv old/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+ll wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+-rw-rw-r-- 2 braney protein 1667635612 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+-rw-rw-r-- 2 qateam protein 1354570971 Oct 27 10:58 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+-rw-rw-r-- 2 braney protein 1473572093 Jul 15  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+-rw-rw-r-- 2 qateam protein 1198698265 Oct 27 11:46 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+# and GM?
+ll --full-time wgEncodeHudsonalphaChipSeqRawSignal*Gm12878Control*.wib
+-rw-rw-r-- 2 braney protein 2057866586 2009-07-15 12:00:38.060813000 -0700 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr2x.wib
+-rw-rw-r-- 2 qateam protein  716907221 2009-10-27 11:47:25.538722000 -0700 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
+-rw-rw-r-- 2 braney protein 2147927459 2009-07-15 12:03:50.256338000 -0700 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr2x.wib
+-rw-rw-r-- 2 qateam protein  634188096 2009-10-27 10:59:31.332059000 -0700 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib
+
+# okay now patch gbdb properly
+cd /gbdb/hg18/wib/
+ll wgEncodeHudsonalphaChipSeqRawSignal*Gm12878Control*.wib
+lrwxrwxrwx 1 braney   protein 143 Feb 25 14:34 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr2x.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
+lrwxrwxrwx 1 braney   protein 143 Feb 25 14:34 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr2x.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib
+ll wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+lrwxrwxrwx 1 braney   protein 140 Feb 25 14:34 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+lrwxrwxrwx 1 braney   protein 139 Feb 25 14:34 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib
+lrwxrwxrwx 1 tdreszer protein 136 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+lrwxrwxrwx 1 braney   protein 140 Feb 25 14:34 wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+lrwxrwxrwx 1 braney   protein 139 Feb 25 14:34 wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib
+lrwxrwxrwx 1 tdreszer protein 136 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2_262.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2_262.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr2x.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr2x.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+
+ll wgEncodeHudsonalphaChipSeqRawSignal*Gm12878Control*.wib
+lrwxrwxrwx 1 tdreszer protein 142 Feb 26 12:05 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
+lrwxrwxrwx 1 tdreszer protein 142 Feb 26 12:05 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib
+ll wgEncodeHudsonalphaChipSeqRawSignal*K562Control*.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 12:05 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
+lrwxrwxrwx 1 tdreszer protein 136 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 12:05 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib
+lrwxrwxrwx 1 tdreszer protein 136 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2.wib
+
+# and final confirmation
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x limit 1;
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x limit 1;
+
+### Finally at thios point all wibs should be fine and the full list of tables and files should be complete.
+# What remains to get HAIB TFSB in QA?
+# Check the 3 wierdnesses (copied lines from above):
+### All of replicate 1 but only tags for replicate 2
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2.broadPeak.gz                  cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=422;
+wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878TafiiV2.tagAlign.gz              cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=422;
+wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Taf1Pcr1x.fastq.gz                  cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=880;
+wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878TafiiV2.tagAlign.gz              cell=GM12878; antibody=TAF1; protocol=PCR1x; subId=422;
+
+### Replicate 2 but no replicate one!
+wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Srf.broadPeak.gz                        cell=HepG2; antibody=SRF; protocol=PCR1x; subId=432;
+wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Srf.tagAlign.gz                    cell=HepG2; antibody=SRF; protocol=PCR1x; subId=432;
+
+### Replicate 1 only
+wgEncodeHudsonalphaChipSeqPeaksA549Gr.broadPeak.gz                                      cell=A549; antibody=GR; protocol=PCR1x; Peaks; replicate=1; subId=774;
+wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz                                  cell=A549; antibody=GR; protocol=PCR1x; Alignments; subId=774;
+
+# Okay the Gm12878 TAF dilemma is that the newer "V2" was meant to be rep2 and the plade rep1
+Currently the old subID=125 table does not exist
+
+# Now bring in the peaks from 125
+/cluster/bin/x86_64/hgLoadBed -noNameIx -sqlTable=/cluster/bin/sqlCreate/narrowPeak.sql -renameSqlTable -fillInScore=signalValue  hg18 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1 SL288_TAF250_GM12878_Rep1_peakcalls.narrowPeak
+show tables like "wgEncodeHud%Gm12878%Taf%";
+| wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1        | 
+| wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2     | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2 | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2 | 
+
+rename table wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2 to wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2 to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2 to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1;
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1"; 
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1"; 
+show tables like "wgEncodeHud%Gm12878%Taf%";
+| wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1     | 
+| wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1     | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1 | 
+| wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1 |
+cd {downloadDir} 
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878TafiiV2.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Taf1.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878TafiiV2.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2.broadPeak.gz wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1.broadPeak.gz
+ln release1/wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii.narrowPeak.gz .
+ll wgEncodeHud*Gm12878*Taf*.gz-rw-rw-r-- 2 qateam protein 328254336 Jul 21  2009 wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Taf1.tagAlign.gz
+-rw-rw-r-- 2 qateam protein 445130648 Jul 21  2009 wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
+-rw-rw-r-- 2 larrym protein     32995 Dec 11  2008 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii.narrowPeak.gz
+-rw-rw-r-- 2 qateam protein     75070 Jul 21  2009 wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1.broadPeak.gz
+-rw-rw-r-- 3 qateam protein 883963837 Dec 23 12:02 wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Taf1Pcr1x.fastq.gz
+
+lrwxrwxrwx 1 braney protein 137 Feb 25 14:34 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib
+lrwxrwxrwx 1 braney protein 137 Feb 25 14:34 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib
+lrwxrwxrwx 1 braney protein 139 Feb 25 14:34 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii_422.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii_422.wib
+
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii_422.wib
+ll wgEncodeHud*Gm12878*Taf*.wib
+-rw-rw-r-- 2 qateam protein 2101647574 Jul 21  2009 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib
+-rw-rw-r-- 2 qateam protein 2386275390 Jul 21  2009 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib
+
+cd /gbdb/hg18/wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii_422.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib 
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib
+ll wgEncodeHud*Gm12878*Taf*.wib
+lrwxrwxrwx 1 tdreszer protein 134 Feb 26 16:05 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib
+lrwxrwxrwx 1 tdreszer protein 134 Feb 26 16:05 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib
+
+# Now patch trackDb.wgEncode.ra
+
+### problems left:
+1) HepG2/SRF with rep 2 only.
+2) A549/GR/None with rep 1 only
+3) A549/GR/* with screwy input associations.  May have to add input variable to ALL metadata.
