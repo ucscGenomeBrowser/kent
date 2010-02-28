@@ -2,10 +2,11 @@
 
 # Copy files to javascript directory; make versioned soft-links as appropriate (and delete obsolete ones too).
 
-# $Id: cpJsFiles.pl,v 1.3 2009/08/13 16:25:31 markd Exp $
+# $Id: cpJsFiles.pl,v 1.4 2010/02/28 00:08:14 larrym Exp $
 
 use strict;
 
+use Cwd;
 use Getopt::Long;
 
 sub usage
@@ -39,15 +40,19 @@ for (`ls $destDir`) {
     push(@destFiles, $_);
 }
 
+# To avoid screwing up mirrors who run "rsync --links", we chdir into the javascript directory and make non-absolute softlinks there.
+my $cwd = getcwd();
+chdir($destDir) || die "Couldn't chdir into '$destDir'; err: $!";
+
 for my $file (@ARGV)
 {
     if(!$exclude{$file}) {
-        my @stat = stat($file) or die "Couldn't stat '$file'; err: $!";
+        my @stat = stat("$cwd/$file") or die "Couldn't stat '$file'; err: $!";
         my $mtime = $stat[9];
         
         # update destination file as appropriate
         my $update = 0;
-        my $destFile = "$destDir/$file";
+        my $destFile = $file;
         if(-e $destFile) {
             my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
             $update = ($destStat[9] < $mtime);
@@ -58,32 +63,31 @@ for my $file (@ARGV)
             if (-e $destFile) {
                 unlink($destFile) || die "Couldn't unlink $destFile'; err: $!";
             }
-            !system("cp -p $file $destFile") || die "Couldn't cp $file to $destFile: err: $!";
+            !system("cp -p $cwd/$file $destFile") || die "Couldn't cp $cwd/file to $destFile: err: $!";
         }
 
         if($file =~ /(.+)\.js$/) {
             my $prefix = $1;
             # make sure time is right, in case file; file might have been newer,
             # speculation that cp -p silently failed if user doesn't own destDir
-            @stat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
+            @stat = stat($destFile) or die "Couldn't stat '$destFile'; err: $!";
             $mtime = $stat[9];
 
             my $softLink = $file;
             $softLink =~ s/\.js$/-$mtime.js/;
-
             # Delete obsolete symlinks
             for my $f (@destFiles) {
-                if($f =~ /$prefix-(\d+)\.js/) {
+                if($f =~ /^$prefix-(\d+)\.js$/) {
                     if($f ne $softLink) {
                         print STDERR "Deleting old soft-link $f\n" if($debug);
-                        unlink("$destDir/$f") || die "Couldn't unlink '$destDir/$softLink'; err: $!";
+                        unlink($f) || die "Couldn't unlink obsolete softlink '$softLink'; err: $!";
                     }
                 }
             }
             # create new symlink
-            if(!(-l "$destDir/$softLink")) {
-                print STDERR "ln -s $destDir/$softLink\n" if($debug);
-                !system("ln -s $destDir/$file $destDir/$softLink") || die "Couldn't ln -s $file; err: $!";
+            if(!(-l "$softLink")) {
+                print STDERR "ln -s $softLink\n" if($debug);
+                !system("ln -s $file $softLink") || die "Couldn't ln -s $file; err: $!";
             }
         }
     }
