@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.57 2010/02/26 07:51:07 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.58 2010/02/28 00:11:07 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -246,6 +246,10 @@ $(window).load(function () {
         }
         });
     // jQuery load function with stuff to support drag selection in track img
+    if(browser == "safari" && navigator.userAgent.indexOf("Chrome") != -1) {
+        // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
+        browser = "chrome";
+    }
     loadImgAreaSelect(true);
 
     if($('#hgTrackUiDialog'))
@@ -1395,12 +1399,14 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // Now change the track image
         if(imageV2 && cmd == 'hide')
         {
-            // Tell remote cart what happened (to keep them in sync with us).
+            // Hide local display of this track and update server side cart.
             setCartVar(id, cmd);
             $('#tr_' + id).remove();
             loadImgAreaSelect(false);
-        } else if (browser == "safari") {
-            // XXXX How about "Chrome"?
+        } else if (false && browser == "safari") {
+            // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
+            // Chrome 5.0.335.1.); I'm leaving this dead code here for now in case this problem re-appears.
+            // 
             // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
             // though if you look in the DOM the changes are there); so we have to do a full form submission when the
             // user changes visibility settings.
