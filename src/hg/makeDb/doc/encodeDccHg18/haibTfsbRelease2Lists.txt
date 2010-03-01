@@ -169,7 +169,7 @@ D) Versioned:
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
     wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1.broadPeak.gz
-    wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf2.broadPeak.gz
+    wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1.broadPeak.gz
     wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlV2.fastq.gz
     wgEncodeHudsonalphaChipSeqRawDataRep1K562ControlV2.fastq.gz
     wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlV2.fastq.gz
