@@ -189,6 +189,7 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqRawSignalA549Gr
     wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa
     wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02
+    wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02
     wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
     wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
     wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm
@@ -273,7 +274,6 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf
     wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
     wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
-    wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02
     wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
     wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
     wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm
@@ -510,6 +510,7 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xDexa.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xEtoh02.tagAlign.gz
+    wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr2xEtoh02.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xDexa.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xEtoh02.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex500pm.tagAlign.gz
@@ -594,7 +595,6 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshraNrsf.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Control.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Nrsf.tagAlign.gz
-    wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xEtoh02.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xDexa.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xEtoh02.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex500pm.tagAlign.gz
@@ -959,6 +959,7 @@ E) New tables:
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalA549Gr.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02.wib
+    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm.wib
@@ -1043,7 +1044,6 @@ E) New tables:
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf.wib
-    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm.wib
