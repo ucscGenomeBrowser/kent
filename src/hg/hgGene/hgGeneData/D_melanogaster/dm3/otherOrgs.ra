@@ -1,5 +1,5 @@
 name human
-db hg18
+db hg19
 
 name zebrafish
 db danRer3
