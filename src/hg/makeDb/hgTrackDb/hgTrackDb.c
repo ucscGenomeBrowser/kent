@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.63 2010/02/17 03:08:39 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.64 2010/03/01 01:04:54 braney Exp $";
 
 
 void usage()
@@ -40,7 +40,7 @@ errAbort(
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n"
-  "  -release=alpha|beta - Include trackDb entries with this release only.\n"
+  "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything\n"
   );
@@ -58,7 +58,14 @@ static struct optionSpec optionSpecs[] = {
 };
 
 static char *raName = "trackDb.ra";
+
 static char *release = "alpha";
+
+#define	RELEASE_ALPHA  (1 << 0)
+#define	RELEASE_BETA   (1 << 1)
+#define	RELEASE_PUBLIC (1 << 2)
+unsigned releaseBit = RELEASE_ALPHA;
+
 static bool showSettings = FALSE;
 
 static boolean hasNonAsciiChars(char *text)
@@ -142,6 +149,37 @@ slReverse(&newList);
 return newList;
 }
 
+unsigned buildReleaseBits(struct trackDb *tdb, char *rel)
+/* unpack the comma separated list of possible release tags */
+{
+
+if (rel == NULL)
+    return RELEASE_ALPHA |  RELEASE_BETA |  RELEASE_PUBLIC;
+
+unsigned bits = 0;
+while(rel)
+    {
+    char *end = strchr(rel, ',');
+
+    if (end)
+	*end++ = 0;
+    rel = trimSpaces(rel);
+
+    if (sameString(rel, "alpha"))
+	bits |= RELEASE_ALPHA;
+    else if (sameString(rel, "beta"))
+	bits |= RELEASE_BETA;
+    else if (sameString(rel, "public"))
+	bits |= RELEASE_PUBLIC;
+    else
+	errAbort("tracks must have a release combination of alpha, beta, and public");
+
+    rel = end;
+    }
+
+return bits;
+}
+
 static struct trackDb * pruneRelease(struct trackDb *tdbList)
 /* Prune out alternate track entries for another release */
 {
@@ -154,13 +192,16 @@ struct hash *haveHash = hashNew(3);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     char *rel = trackDbSetting(tdb, "release");
-    if (rel == NULL || sameString(rel, release))
+    unsigned trackRelBits = buildReleaseBits(tdb, rel);
+
+    if (trackRelBits & releaseBit)
 	{
-	/* Remove release tags in remaining tracks, since its purpose is served. */
+	/* we want to include this track, check to see if we already have it */
 	struct hashEl *hel;
 	if ((hel = hashLookup(haveHash, tdb->tableName)) != NULL)
 	    errAbort("found two copies of table %s: one with release %s, the other %s\n", 
 		tdb->tableName, (char *)hel->val, release);
+
 	hashAdd(haveHash, tdb->tableName, rel);
 	hashRemove(tdb->settingsHash, "release");
 	slAddHead(&relList, tdb);
@@ -791,6 +832,23 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
     }
 }
 
+unsigned getReleaseBit(char *release)
+/* make sure that the tag is a legal release */
+{
+if (sameString(release, "alpha"))
+    return RELEASE_ALPHA;
+
+if (sameString(release, "beta"))
+    return RELEASE_BETA;
+
+if (sameString(release, "public"))
+    return RELEASE_PUBLIC;
+
+errAbort("release must be alpha, beta, or public");
+
+return 0;  /* make compiler happy */
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -802,6 +860,7 @@ showSettings = optionExists("settings");
 if (strchr(raName, '/') != NULL)
     errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
+releaseBit = getReleaseBit(release);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
           optionVal("visibility", NULL), optionVal("priority", NULL),
