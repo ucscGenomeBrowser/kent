@@ -1,4 +1,3 @@
-
 track wgEncodeRikenCage
 release alpha
 compositeTrack on
@@ -158,7 +157,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel HUVEC cyto pA- + 
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in HUVEC cytosol)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in HUVEC cytosol)
         subGroups view=1-PlusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 224,75,0
@@ -168,8 +167,8 @@ wgEncode 1
         track wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
-        shortLabel H1 cell pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in H1-hESC cell)
+        shortLabel H1 cell pA- +%
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in H1-hESC cell)
         subGroups view=1-PlusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 0,107,27
@@ -180,7 +179,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel GM128 nlos tot +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total RNA in GM12878 nucleolus)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in GM12878 nucleolus)
         subGroups view=1-PlusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 153,38,0
@@ -191,7 +190,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel NHEK cyto pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in NHEK cytosol)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in NHEK cytosol)
         subGroups view=1-PlusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         colorByStrand 46,0,184 238,85,34
@@ -202,7 +201,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel HepG2 cyto pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in HepG2 cytosol)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in HepG2 cytosol)
         subGroups view=1-PlusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
@@ -213,7 +212,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel HepG2 nucl pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in HepG2 nucleus)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in HepG2 nucleus)
         subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
@@ -224,7 +223,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel HepG2 nlos pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in HepG2 nucleolus)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in HepG2 nucleolus)
         subGroups view=1-PlusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
@@ -235,7 +234,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
         shortLabel NHEK nucl pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA RNA in NHEK nucleus)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in NHEK nucleus)
         subGroups view=1-PlusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
@@ -390,7 +389,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel HUVEC cyto pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA RNA in HUVEC cytosol)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in HUVEC cytosol)
         subGroups view=3-MinusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 224,75,0
@@ -401,7 +400,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel H1 cell pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA RNA in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in H1-hESC cell)
         subGroups view=3-MinusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 0,107,27
@@ -412,7 +411,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel GM128 nlos tot -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total RNA in GM12878 nucleolus)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in GM12878 nucleolus)
         subGroups view=3-MinusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 153,38,0
@@ -423,7 +422,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel NHEK cyto pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA RNA in NHEK cytosol)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in NHEK cytosol)
         subGroups view=3-MinusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
@@ -434,7 +433,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel HepG2 cyto pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA RNA in HepG2 cytosol)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in HepG2 cytosol)
         subGroups view=3-MinusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
@@ -445,7 +444,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel HepG2 nucl pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA RNA in HepG2 nucleus)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in HepG2 nucleus)
         subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
@@ -456,7 +455,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel HepG2 nlos tot -  
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total RNA in HepG2 nucleolus)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in HepG2 nucleolus)
         subGroups view=3-MinusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
@@ -467,7 +466,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView3-MinusClusters off
         shortLabel NHEK nucl pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA RNA in NHEK nucleus)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in NHEK nucleus)
         subGroups view=3-MinusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
@@ -675,7 +674,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel HUVEC cyto pA- A
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA RNA in HUVEC cytosol)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in HUVEC cytosol)
         subGroups view=5-Alignments cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bigBed 6
         color 224,75,0
@@ -686,7 +685,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel GM128 nucl tot A
-        longLabel ENCODE RIKEN CAGE Tags (total RNA in GM12878 nucleolus)
+        longLabel ENCODE RIKEN CAGE Tags (Total RNA in GM12878 nucleolus)
         subGroups view=5-Alignments cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bigBed 6
         accession Nexalign
@@ -698,7 +697,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel NHEK cyto pA- A
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA RNA in NHEK cytosol)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in NHEK cytosol)
         subGroups view=5-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bigBed 6
         color 179,0,134
@@ -709,7 +708,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel NHEK nucl pA- A
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA RNA in NHEK nucleus)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in NHEK nucleus)
         subGroups view=5-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bigBed 6
         color 179,0,134
@@ -720,7 +719,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel H1 cell pA- A
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA RNA in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in H1-hESC cell)
         subGroups view=5-Alignments cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bigBed 6
         color 0,107,27
@@ -731,7 +730,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel HepG2 cyto pA- A
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA RNA in HepG2 cytosol)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in HepG2 cytosol)
         subGroups view=5-Alignments cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bigBed 6
         color 189,0,157
@@ -742,7 +741,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel HepG2 nucl pA- A
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA RNA in HepG2 nucleus)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in HepG2 nucleus)
         subGroups view=5-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bigBed 6
         color 189,0,157
@@ -753,7 +752,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeRikenCageView5-Alignments off
         shortLabel HepG2 nlos tot A
-        longLabel ENCODE RIKEN CAGE Tags (total RNA in HepG2 nucleolus)
+        longLabel ENCODE RIKEN CAGE Tags (Total RNA in HepG2 nucleolus)
         subGroups view=5-Alignments cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bigBed 6
         color 189,0,157
