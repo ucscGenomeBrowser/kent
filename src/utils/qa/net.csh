@@ -16,6 +16,7 @@ set db=""
 set chromNum=""
 set trackname=""
 set currDir=$cwd
+set maxNumChroms=100
 
 if ($2 == "") then
   # no command line args
@@ -117,7 +118,7 @@ foreach chrom (`cat $db.chromlist$$`)
   endif
 end
 
-if ( `egrep . chromlist$$` < 100 ) then
+if ( `cat $db.chromlist$$ | wc -l` < $maxNumChroms ) then
   set chromNum="small"
 endif
 
