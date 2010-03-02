@@ -73,7 +73,7 @@ hgsql -t -e "SELECT tableName, priority FROM trackDb \
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check level for html and trackDb entry:"
 echo
-findLevel.csh $db chain$Org
+findLevel $db chain$Org
 
 # -------------------------------------------------
 # get chroms from chromInfo:

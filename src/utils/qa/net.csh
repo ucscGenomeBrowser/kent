@@ -47,7 +47,7 @@ echo "Org: $Org"
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check level for html and trackDb entry:"
 echo
-findLevel.csh $db net$Org
+findLevel $db net$Org
 
 # -------------------------------------------------
 # check updateTimes:
