@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.262 2010/02/22 21:01:42 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.263 2010/03/02 17:38:25 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5273,6 +5273,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
             boolean alreadySet=FALSE;
             if(membersForAll->checkedTags[ix] != NULL)
                 alreadySet=(NULL!=findWordByDelimiter(membersForAll->members[ix]->names[aIx],',',membersForAll->checkedTags[ix]));
+            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->tableName,membersForAll->members[ix]->names[aIx], 'A' + (ix - dimA));
             safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",membersForAll->members[ix]->names[aIx]);
             // TODO Set classes properly (if needed!!!)  The class abc works but what about a b or c?
             cgiMakeCheckBoxJS(objName,alreadySet,javascript);
