@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.28 2010/02/19 23:15:51 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.29 2010/03/02 19:13:54 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -268,6 +268,7 @@ sub parseConfig {
   $genomeCladePriority = &optionalVar('genomeCladePriority', \%config);
   # Optional variables.
   $commonName = &optionalVar('commonName', \%config);
+  $commonName =~ s/^(\w)(.*)/\u$1\L$2/;  # Capitalize only the first word
   $agpFiles = &optionalVar('agpFiles', \%config);
   $qualFiles = &optionalVar('qualFiles', \%config);
   $mitoSize = &optionalVar('mitoSize', \%config);
