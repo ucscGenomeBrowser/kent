@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.400 2010/03/01 21:05:25 angie Exp $
+# $Id: hg18.txt,v 1.401 2010/03/02 23:04:52 chinhli Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.400 2010/03/01 21:05:25 angie Exp $
+# $Id: hg18.txt,v 1.401 2010/03/02 23:04:52 chinhli Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29383,4 +29383,103 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
   # create hg18.par using the documented coordinates
   hgPar hg18 hg18.par par
 #####################################################################
+# HH-Inv(7.0)
+    mkdir /hive/data/genomes/hg18/bed/hinv7.0
+    cd /hive/data/genomes/hg18/bed/hinv7.0
+    cat << '_EOF_' > hinvToBed.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $chr="";
+my $start="";
+my $end="";
+my %accNoDups;
+my $invId = "";
+my $invIdVer = "";
+my $accNo = "";
+my $strand = "";
+my $cai = 0;
+open (FH, "zcat FCDNA.gz|") or die "can not zcat FCDNA.gz";
+while (my $line = <FH>) {
+    my ($id, $tag, $rest) = split('\s+', $line, 3);
+    if ($line =~ m/^CDNA_H-INVITATIONAL-ID:/ ) {
+	$invId = $tag;
+    } elsif ($line =~ m/^CDNA_H-INVITATIONAL-ID-VERSION:/ ) {
+	$invIdVer = $tag;
+    } elsif ($line =~ m/^CDNA_CHROMOSOME-NUMBER:/ ) {
+	$chr = $tag;
+    } elsif ($line =~ m/^CDNA_STRAND:/ ) {
+	$strand = $tag;
+    } elsif ($line =~ m/^PREDICTED-ORF_CAI:/ ) {
+	$cai = int($tag * 1000);
+    } elsif ($line =~ m/^CDNA_START:/ ) {
+	$start = $tag;
+    } elsif ($line =~ m/^CDNA_END:/ ) {
+	$end = $tag;
+    } elsif ($line =~ m/^CDNA_ACCESSION-NO:/ ) {
+	$accNo = $tag;
+    } elsif ($line =~ m/CDNA_CLUSTER-ID:/ ) {
+	if (length($accNo) > 0) {
+	    next if ($chr eq "UM");
+	    if (length($start) < 1 || length($end) < 1) {
+		printf STDERR "no start,end ? chr%s\t%s\n", $chr, $invIdVer;
+	    } else {
+		die "have accession but no ID ?" if (length($invId) < 1);
+		$invIdVer =~ s/\.[0-9]+$//;
+		printf "chr%s\t%d\t%d\t%s\t%d\t%s\n",
+			$chr, $start, $end, $invIdVer, $cai, $strand;
+	    }
+	}
+	$accNo = "";
+	$invId = "";
+	$invIdVer = "";
+	$chr = "";
+	$start = "";
+	$end = "";
+	$cai = 0;
+	$strand = "";
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    ln -s /hive/data/outside/hinv/H-InvDB_7.0/FCDNA.gz .
+    chmod +x hinvToBed.pl
+    time ./hinvToBed.pl | grep -v chr6_hla_hap | sort -k1.1 -k2.2n > hinv7.0.bed
+    # zcat: FCDNA.gz: decompression OK, trailing garbage ignored
+    # real    3m1.060s
+    # user    3m14.142s
+    # sys     0m10.961s
+    # verify the new table does not exist
+    hgsql -e "show tables" hg18 | grep -i hinv
+    hgLoadBed -verbose=2  hg18 HInvGeneMrnaBed hinv7.0.bed
+    # Reading hinv7.0.bed
+    # Loaded 217721 elements of size 4
+    hgsql -e "show tables" hg18 | grep -i hinv
+    # HInv
+    # HInvGeneMrna
+    # HInvGeneMrnaBed
+    # knownToHInv
+    # knownXToHInv
+    # check the coverage
+    featureBits hg18 HInvGeneMrnaBed
+    # 1350541623 bases of 2881515245 (46.869%) in intersection
+    # exon only
+    featureBits hg18 HInvGeneMrna   
+    # 82136473 bases of 2881515245 (2.850%) in intersection
+    # measure exon and intron to compare
+    hgsql -N -e "select tName, tStart, tEnd, qName, strand from HInvGeneMrna;" \
+       hg18 > hinvGeneMrna.bed
+    # 988629029 bases of 2881515245 (34.309%) in intersection
+
+    featureBits hg18 HInvGeneMrnaBed -countGaps gap
+    # 4523138 bases of 3107677273 (0.146%) in intersection
+
+
+
+hgsql -e "show tables" hg18 | grep -i hinv
+#####################################################################
+
 

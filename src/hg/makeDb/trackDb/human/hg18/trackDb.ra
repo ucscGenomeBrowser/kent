@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.469 2010/02/16 23:39:39 kent Exp $";
+#	"$Id: trackDb.ra,v 1.470 2010/03/02 23:01:58 chinhli Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -3749,4 +3749,14 @@ allButtonPair on
         exonArrows off
         bedFilter on
         type bed 12 .
+
+track HInvGeneMrnaBed
+shortLabel H-Inv(7.0)
+longLabel H-Invitational(7.0) Genes mRNA Alignments
+group rna
+priority 67.6
+visibility hide
+color 0,100,100
+html ../HInvGeneMrna
+type bed 6
 
