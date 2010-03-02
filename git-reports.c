@@ -9,7 +9,9 @@
 
 static char const rcsid[] = "$Id: git-reports.c,v 1.1 2010/03/02 08:43:07 galt Exp $";
 
-//struct hash *cidHash = NULL;
+
+struct hash *userHash = NULL;
+struct slName *users = NULL;
 
 char *startTag = NULL;
 char *endTag = NULL;
@@ -134,12 +136,13 @@ while (lineFileNext(lf, &line, &lineSize))
 	    f->path = cloneString(line);
 	    slAddHead(&files, f);
 	    }
+	slReverse(&files);
 	}
-
 
     commit->files = files;
 
     slAddHead(&commits, commit);
+    slReverse(&commits);
     }
 lineFileClose(&lf);
 
@@ -152,7 +155,21 @@ return commits;
 void gitReports()
 /* generate code-review reports from git repo */
 {
-struct commit *commits = getCommits();
+/* read the commits */
+struct commit *commits = getCommits(), *c = NULL;
+/* make the user list */
+for(c = commits; c; c = c->next)
+    {
+    
+    if (!hashLookup(userHash, c->author))
+	{
+	hashStore(userHash, c->author);
+	struct slName *name = newSlName(c->author);
+	slAddHead(&users, name);
+	}
+    }
+slReverse(&users);
+
 }
 
 int main(int argc, char *argv[])
@@ -173,12 +190,11 @@ title = argv[5];
 repoDir = argv[6];
 outDir = argv[7];
 
+userHash = hashNew(5);
+
 gitReports();
 
-//cidHash = hashNew(5);
-
-
-//hashFree(&cidHash);
+hashFree(&userHash);
 printf("Done.\n");
 return 0;
 }
