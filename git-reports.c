@@ -168,7 +168,13 @@ for(c = commits; c; c = c->next)
 	slAddHead(&users, name);
 	}
     }
-slReverse(&users);
+slNameSort(&users);
+
+struct slName*u;
+for(u = users; u; u = u->next)
+    {
+    printf("user: %s\n", u->name);
+    }
 
 }
 
