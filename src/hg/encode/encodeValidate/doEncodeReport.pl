@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.14 2010/02/02 18:46:40 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.15 2010/03/02 06:19:25 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -97,12 +97,12 @@ my $sth = $dbh->execute(
         "select settings, tableName from trackDb_encodeReport where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
-        "Status", "Submission_IDs");
+        "Status", "Submission_IDs", "Treatment");
 while (@row = $sth->fetchrow_array()) {
     my $settings = $row[0];
     my $tableName = $row[1];
@@ -170,6 +170,7 @@ while (@row = $sth->fetchrow_array()) {
      $experiment{"vars"} = "none";
      $experiment{"varLabels"} = "none";
      $experiment{"factorLabels"} = "none";
+     $experiment{"treatment"} = "none";
     if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
         # TODO: define explicit ordering for term type in cv.ra
@@ -182,7 +183,12 @@ while (@row = $sth->fetchrow_array()) {
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
             $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
-            $experiment{"factorLabels"} = $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
+            # special handling of treatment for NHGRI -- it has it's own column
+            if ($termType eq "treatment") {
+                $experiment{"treatment"} = $varLabel;
+            } else {
+                $experiment{"factorLabels"} = $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
+            }
         }
         chop $experiment{"vars"};
         chop $experiment{"varLabels"};
@@ -284,6 +290,7 @@ while (@row = $sth->fetchrow_array()) {
     my $varString = "none";
     my $varLabelString = "none";
     my $factorLabelString = "none";
+    my $treatment = "none";
 
 # get cell type and experimental vars
     if (defined($row[2])) {
@@ -317,6 +324,7 @@ while (@row = $sth->fetchrow_array()) {
             $varString = "none";
             $varLabelString = "none";
             $factorLabelString = "none";
+            $treatment = "none";
             # experimental params -- iterate through all tags, lookup in cv.ra, 
             if (scalar(keys %varHash) > 0) {
                 $varString = "";
@@ -330,7 +338,13 @@ while (@row = $sth->fetchrow_array()) {
                     my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                         $terms{$termType}{$var}->{"label"} : $var;
                     $varLabelString = $varLabelString . $varLabel . ";";
-                    $factorLabelString = $factorLabelString . ucfirst($termType) . "=" . $varLabel . " ";
+
+                    # special handling of treatment for NHGRI -- it has it's own column
+                    if ($termType eq "treatment") {
+                        $treatment = $varLabel;
+                    } else {
+                        $factorLabelString = $factorLabelString . ucfirst($termType) . "=" . $varLabel . " ";
+                    }
                 }
                 chop $varString;
                 chop $varLabelString;
@@ -400,6 +414,7 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"vars"} = $varString;
                 $experiment{"varLabels"} = $varLabelString;
                 $experiment{"factorLabels"} = $factorLabelString;
+                $experiment{"treatment"} = $treatment;
                 $experiment{"submitDate"} = $created_at;
                 # trim off time
                 $experiment{"submitDate"} =~ s/ \d\d:\d\d:\d\d//;
@@ -431,6 +446,7 @@ foreach my $key (keys %experiments) {
     die "undefined vars" unless defined($experiment{"vars"});
     die "undefined varLabels" unless defined($experiment{"varLabels"});
     die "undefined factorLabels" unless defined($experiment{"factorLabels"});
+    die "undefined treatment" unless defined($experiment{"treatment"});
     die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined submitDate" unless defined($experiment{"submitDate"});
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
@@ -457,14 +473,15 @@ foreach my $key (keys %experiments) {
         $experiment{"lab"} = $labs{$lab}->{"label"};
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
                 $experiment{"varLabels"}, $experiment{"factorLabels"}, 
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
-                join(",", keys %ids));
+                join(",", keys %ids),
+                $experiment{"treatment"});
 }
 
 exit 0;
