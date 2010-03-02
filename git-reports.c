@@ -199,6 +199,18 @@ for(u = users; u; u = u->next)
     if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
 	errnoAbort("unable to mkdir %s", path);
 
+    /* create user/name/context dir */
+    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u->name, "context");
+    if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+	errnoAbort("unable to mkdir %s", path);
+
+    /* create user/name/full dir */
+    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u->name, "full");
+    if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+	errnoAbort("unable to mkdir %s", path);
+
+    
+
     }
 
 }
