@@ -1,0 +1,111 @@
+#!/bin/bash
+# quit if something within the script fails
+set -beEu -o pipefail
+source `which qaConfig.bash`
+
+################################
+#  
+#  09-26-2007
+#  Ann Zweig
+#
+#  findLevel
+#  find out which level in the trackDb directory
+#  a track is on, and which level the corresponding
+#  .html file is on.
+#
+#  02-25-2010
+#  Brooke Rhead
+#  Changed to a bash script to simplify dealing with stderr
+#  and stdout.
+#
+################################
+
+db=""
+tableName=""
+currDir=""
+
+# get arguments or print usage
+if [ $# -ne 2 ] 
+then
+  echo -e "
+  searches trackDb hierarchy for your table and corresponding .html file
+  also returns the value of the priority and visibility entries
+  and the .ra file location for each\n
+    usage:  database tableName\n" >&2
+  exit 1
+else
+  db="$1"
+  tableName="$2"
+fi
+
+# make sure this is a valid database name
+if ! tdbQuery "select db from $db limit 1" | grep -q $db
+then
+  echo -e "\n ERROR: Invalid database name.  Try again.\n" >&2
+  exit 1
+fi
+
+# check for trackDb dir at $USER root
+if ! file ~/trackDb | grep -q 'symbolic link'
+then
+  echo -e "\n  ERROR: `basename $0` presumes you have a symlink
+  to trackDb in your home dir\n" >&2
+  exit 1
+fi
+echo
+
+###########################################
+# find the level of the associated .html file
+# start at the assembly level
+cd ~/trackDb/*/$db
+currDir=""
+
+if [ -e $tableName.html ]
+then # the .html file is found at the assembly level
+  currDir=`pwd -P`
+else
+  cd ..
+  if [ -e $tableName.html ]
+  then # the .html file is found at the organism level
+    currDir=`pwd -P`
+  else
+    cd ..
+    if [ -e $tableName.html ]
+    then # the .html file is found at the top level
+      currDir=`pwd -P`
+    fi
+  fi
+fi
+
+if [ "$currDir" == "" ]
+then
+  echo -e " * the $tableName.html file does not exist at any level\n"
+else
+  echo -e " * html file: $currDir/$tableName.html\n"
+fi
+
+###########################################
+# find the trackDb.ra entry (using tdbQuery)
+
+echo " * trackDb:"
+all=`tdbQuery "select track,priority,visibility,release,filePos from \
+     $db where track='$tableName'" 2> /dev/null`
+
+strict=`tdbQuery -strict "select track,priority,visibility,release,filePos from \
+        $db where track='$tableName'" 2> /dev/null`
+
+alpha=`tdbQuery -alpha "select track,priority,visibility,release,filePos from \
+       $db where track='$tableName'" 2> /dev/null`
+
+# always print "all"; only print strict or alpha if they differ from all
+echo -e "$all\n"
+if [ "$all" != "$strict" ]
+then
+  echo -e "$strict\n"
+fi
+if [ "$alpha" != "$all" ] && [ "$alpha" != "$strict" ] 
+then
+  echo -e "$alpha\n"
+fi
+
+exit 0
