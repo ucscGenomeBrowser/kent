@@ -1,12 +1,6 @@
-#	"$Id: trackDb.ra,v 1.28 2010/02/11 18:45:59 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.29 2010/03/02 21:23:48 kuhn Exp $";
 
 include trackDb.chainNet.ra
-
-track chainDanRer5 override
-priority 140.3
-
-track netDanRer5 override
-priority 140.4
 
 searchTable gold
 searchMethod exact

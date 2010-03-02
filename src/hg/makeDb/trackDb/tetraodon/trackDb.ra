@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.59 2010/02/11 18:46:00 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.60 2010/03/02 21:23:48 kuhn Exp $";
 
 include trackDb.chainNet.ra
 
@@ -107,12 +107,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno tetNig1
 otherDb tetNig1
-
-track chainDanRer5 override
-priority 159.3
-
-track netDanRer5 override
-priority 159.4
 
 track chainSelf
 shortLabel Self Chain

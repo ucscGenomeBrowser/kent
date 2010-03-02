@@ -3326,12 +3326,6 @@ priority 117
 track netCi2 override
 priority 117.1
 
-track chainDanRer5 override
-priority 168.0
-
-track netDanRer5 override
-priority 168.1
-
 # expression and regulation automatically ordered
 track firstEF override
 priority 0
