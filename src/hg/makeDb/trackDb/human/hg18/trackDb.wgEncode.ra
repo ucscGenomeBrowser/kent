@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.893 2010/03/02 19:43:55 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.894 2010/03/02 20:01:16 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12412,7 +12412,7 @@ longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hot_Spots zRawSig=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> BJ=BJ Caco2=Caco-2 GM06990=GM06990 HGF=HGF HL60=HL-60 HMEC=HMEC HRE=HRE HRCEpiC=HRCEpiC Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
-subGroup3 rep Replicate rep1=1 rep2=2
+subGroup3 rank Rank 1st=1st 2nd=2nd
 dimensions dimensionY=cellType dimensionX=rank
 sortOrder cellType=+ rep=+ view=+
 dragAndDrop subTracks
