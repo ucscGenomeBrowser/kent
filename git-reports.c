@@ -176,14 +176,29 @@ slNameSort(&users);
 /* create prefix dir */
 char path[256];
 safef(path, sizeof(path), "%s/%s", outDir, outPrefix);
-if (mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
     errnoAbort("unable to mkdir %s", path);
 
+/* create file dir */
+safef(path, sizeof(path), "%s/%s/%s", outDir, outPrefix, "file");
+if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+    errnoAbort("unable to mkdir %s", path);
+
+/* create user dir */
+safef(path, sizeof(path), "%s/%s/%s", outDir, outPrefix, "user");
+if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+    errnoAbort("unable to mkdir %s", path);
 
 struct slName*u;
 for(u = users; u; u = u->next)
     {
     printf("user: %s\n", u->name);
+
+    /* create user/name dir */
+    safef(path, sizeof(path), "%s/%s/%s/%s", outDir, outPrefix, "user", u->name);
+    if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+	errnoAbort("unable to mkdir %s", path);
+
     }
 
 }
