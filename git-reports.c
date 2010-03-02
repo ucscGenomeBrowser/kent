@@ -20,6 +20,7 @@ char *endDate = NULL;
 char *title = NULL;
 char *repoDir = NULL;
 char *outDir = NULL;
+char *outPrefix = NULL;
 
 char gitCmd[1024];
 
@@ -48,12 +49,14 @@ errAbort(
     "git-reports - produce source code reports useful for code-review on git repository \n"
     "\n"
     "Usage:\n"
-    "    git-reports startTag endTag startDate endDate title repoDir outDir\n"
+    "    git-reports startTag endTag startDate endDate title repoDir outDir outPrefix\n"
     "where "
     " startTag and endTag are repository tags marking the beginning and end of the git range\n"
     " startDate and endDate and title are just strings that get printed on the report\n"
+    " title is usually the branch number, e.g. v225\n"
     " repoDir is where the git repository\n"
     " outDir is the output directory.\n"
+    " outPrefix is typically \"branch\" or \"review\" directory.\n"
     "  --help - this help screen\n",
     msg);
 }
@@ -181,7 +184,7 @@ for(u = users; u; u = u->next)
 int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
-if (argc != 8)
+if (argc != 9)
     usage("wrong number of args");
 if (optionExists("-help"))
     usage("help");
@@ -195,6 +198,7 @@ endDate = argv[4];
 title = argv[5];
 repoDir = argv[6];
 outDir = argv[7];
+outPrefix = argv[8];
 
 userHash = hashNew(5);
 
