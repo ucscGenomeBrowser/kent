@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.891 2010/03/02 18:50:50 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.892 2010/03/02 19:07:43 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -19931,6 +19931,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 protocol=PCR1x antibody=SIX5 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=4 dataVersion="ENCODE Sep 2009 Freeze" subId=741 dateSubmitted=2009-10-26 dateUnrestricted=2010-07-26 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Six5 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Six5.tagAlign.gz
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
+        release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel K562 SRF Rw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (SRF in K562 cells, using PCR2x)
@@ -19941,6 +19942,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 protocol=PCR2x antibody=SRF type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Srf.tagAlign.gz
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
+        release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SRF Rw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (SRF in K562 cells, using PCR2x)
