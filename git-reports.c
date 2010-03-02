@@ -173,6 +173,13 @@ for(c = commits; c; c = c->next)
     }
 slNameSort(&users);
 
+/* create prefix dir */
+char path[256];
+safef(path, sizeof(path), "%s/%s", outDir, outPrefix);
+if (mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+    errnoAbort("unable to mkdir %s", path);
+
+
 struct slName*u;
 for(u = users; u; u = u->next)
     {
