@@ -57,6 +57,7 @@ install:
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination findKgTableSet.csh      ${SCRIPTS}
 	cp -p --remove-destination findLevel.csh           ${SCRIPTS}
+	cp -p --remove-destination findLevel               ${SCRIPTS}
 	cp -p --remove-destination findMtNets.csh          ${SCRIPTS}
 	cp -p --remove-destination findNewTables.csh       ${SCRIPTS}
 	cp -p --remove-destination findOrg.csh             ${SCRIPTS}
