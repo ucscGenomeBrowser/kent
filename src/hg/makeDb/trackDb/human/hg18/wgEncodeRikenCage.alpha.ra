@@ -167,7 +167,7 @@ wgEncode 1
         track wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
-        shortLabel H1 cell pA- +%
+        shortLabel H1 cell pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in H1-hESC cell)
         subGroups view=1-PlusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
@@ -222,8 +222,8 @@ wgEncode 1
         track wgEncodeRikenCagePlusClustersHepg2NucleolusTotal
         release alpha
         subTrack wgEncodeRikenCageView1-PlusClusters off
-        shortLabel HepG2 nlos pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in HepG2 nucleolus)
+        shortLabel HepG2 nlos tot +
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in HepG2 nucleolus)
         subGroups view=1-PlusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
