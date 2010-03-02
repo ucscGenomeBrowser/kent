@@ -5,11 +5,11 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "hash.h"
+#include "linefile.h"
 
 static char const rcsid[] = "$Id: git-reports.c,v 1.1 2010/03/02 08:43:07 galt Exp $";
 
 //struct hash *cidHash = NULL;
-//struct dyString *dy = NULL;
 
 char *startTag = NULL;
 char *endTag = NULL;
@@ -20,6 +20,23 @@ char *repoDir = NULL;
 char *outDir = NULL;
 
 char gitCmd[1024];
+
+
+struct files
+    {
+    char type;
+    char *path;
+    };
+
+struct commit 
+    {
+    struct commit *next;
+    char *commitId;
+    char *author;
+    char *date;
+    char *comment;
+    struct files *files;
+    };
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -46,7 +63,7 @@ static struct optionSpec options[] =
 };
 
 
-void getCommits()
+struct commit* getCommits()
 /* get all commits from startTag to endTag */
 {
 safef(gitCmd,sizeof(gitCmd), ""
@@ -54,14 +71,88 @@ safef(gitCmd,sizeof(gitCmd), ""
 "git log origin/%s..origin/%s --name-status > commits.tmp"
 , repoDir, startTag, endTag);
 system(gitCmd);
+// TODO error handling
+struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);
+int lineSize;
+char *line;
+struct commit *commits = NULL, *commit = NULL;
+struct files *files = NULL, *f = NULL;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    boolean isMerge = FALSE;
+    char *w = nextWord(&line);
+    AllocVar(commit);
+    if (!sameString("commit", w))
+	errAbort("expected keyword commit parsing commits.tmp\n");
+    commit->commitId = cloneString(nextWord(&line));
 
+    lineFileNext(lf, &line, &lineSize);
+    w = nextWord(&line);
+    if (sameString("Merge:", w))
+	{
+	isMerge = TRUE;
+	lineFileNext(lf, &line, &lineSize);
+	w = nextWord(&line);
+	}
+    if (!sameString("Author:", w))
+	errAbort("expected keyword Author: parsing commits.tmp\n");
+    commit->author = cloneString(nextWord(&line));
+
+    lineFileNext(lf, &line, &lineSize);
+    w = nextWord(&line);
+    if (!sameString("Date:", w))
+	errAbort("expected keyword Date: parsing commits.tmp\n");
+    commit->date = cloneString(nextWord(&line));
+
+    lineFileNext(lf, &line, &lineSize);
+    if (!sameString("", line))
+	errAbort("expected blank line parsing commits.tmp\n");
+
+    /* collect the comment-lines */
+    struct dyString *dy = NULL;
+    dy = dyStringNew(0);
+    while (lineFileNext(lf, &line, &lineSize))
+	{
+	if (sameString("", line))
+	    break;
+	w = skipLeadingSpaces(line);
+	dyStringPrintf(dy, "%s\n", w);
+	}
+    commit->comment = cloneString(dy->string);
+    freeDyString(&dy);
+
+    if (!isMerge)
+	{
+	/* collect the files-list */
+	while (lineFileNext(lf, &line, &lineSize))
+	    {
+	    if (sameString("", line))
+		break;
+	    AllocVar(f);
+	    w = nextWord(&line);
+	    f->type = w[0];
+	    f->path = cloneString(line);
+	    slAddHead(&files, f);
+	    }
+	}
+
+
+    commit->files = files;
+
+    slAddHead(&commits, commit);
+    }
+lineFileClose(&lf);
+
+
+unlink("commits.tmp");
+return commits;
 }
 
 
 void gitReports()
 /* generate code-review reports from git repo */
 {
-getCommits();
+struct commit *commits = getCommits();
 }
 
 int main(int argc, char *argv[])
@@ -85,11 +176,9 @@ outDir = argv[7];
 gitReports();
 
 //cidHash = hashNew(5);
-//dy = dyStringNew(0);
 
 
 //hashFree(&cidHash);
-//freeDyString(&dy);
 printf("Done.\n");
 return 0;
 }
