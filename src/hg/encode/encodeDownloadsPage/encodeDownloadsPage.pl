@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.27 2010/02/22 18:04:19 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.28 2010/03/02 21:57:08 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -69,7 +69,8 @@ sub htmlStartPage {
     print OUT_FILE "  <TITLE>Index of $dirs[-1]</TITLE>\n";
     print OUT_FILE " </HEAD>\n";
     print OUT_FILE " <BODY>\n";
-    print OUT_FILE "<IMG SRC=\"/icons/back.gif\" ALT=\"[DIR]\"> <A HREF=\"../\">Parent Directory</A><BR>\n\n";
+#   print OUT_FILE "<IMG SRC='http://<!--#echo var=\"BROWSER_HOST\" -->/icons/back.gif' ALT='[DIR]'> <A HREF='javascript:history.back();'>Parent Directory</A><BR>\n\n";
+    print OUT_FILE "<IMG SRC='http://<!--#echo var=\"BROWSER_HOST\" -->/icons/back.gif' ALT='[DIR]'> <A HREF='../'>Parent Directory</A><BR>\n\n";
 # The following doesn't do any good because we want to sort, not drag and drop!
 #    # my ($second, $minute, $hour, $dayOfMonth, $month, $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime();
 #    my (undef, $minute, $hour, $dayOfMonth, undef, undef, undef, $dayOfYear, undef) = localtime();
