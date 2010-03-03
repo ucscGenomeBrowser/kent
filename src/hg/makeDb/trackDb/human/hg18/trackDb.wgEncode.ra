@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.898 2010/03/03 21:47:43 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.899 2010/03/03 21:52:31 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -24093,7 +24093,7 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12878 replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
-    subTrack wgEncodeHudsonalphaMethylSeq off
+    subTrack wgEncodeHudsonalphaMethylSeq 
     shortLabel GM12878 2
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in GM12878 cells)
     subGroups cellType=GM12878 replicate=2
@@ -24115,7 +24115,7 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=K562 replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1K562 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1K562.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2K562
-    subTrack wgEncodeHudsonalphaMethylSeq off
+    subTrack wgEncodeHudsonalphaMethylSeq 
     shortLabel K562 2
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in K562 cells)
     subGroups cellType=K562 replicate=2
