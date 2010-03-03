@@ -16,6 +16,9 @@ pwd
 echo "trackDb Make strict. [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/makeDb/trackDb
 make strict >& make.strict.log
+/bin/egrep -i "html missing" make.strict.log > warning.txt
+/bin/egrep -iv "html missing" make.strict.log > make.strict.log2
+mv make.strict.log2 make.strict.log
 set res = `/bin/egrep -i "error|warn" make.strict.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
@@ -25,7 +28,6 @@ if ( "$wc" != "0" ) then
    exit 1
 endif
 
-/bin/egrep -i "html missing" make.strict.log > warning.txt
 set wc = `cat warning.txt | wc -w`
 if ( "$wc" != "0" ) then
     echo "trackDb strict html non-fatal errs found:"
