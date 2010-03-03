@@ -8,7 +8,7 @@
 #include "knetUdc.h"
 #include "knetfile.h"
 
-static char const rcsid[] = "$Id: knetUdc.c,v 1.1 2010/02/24 01:10:24 angie Exp $";
+static char const rcsid[] = "$Id: knetUdc.c,v 1.1.2.1 2010/03/03 02:15:08 galt Exp $";
 
 struct knetFile_s {
     struct udcFile *udcf;
@@ -24,7 +24,7 @@ if (!sameOk((char *)mode, "r"))
     errAbort("mode passed to kuOpen must be 'r' not '%s'", mode);
 AllocVar(kf);
 kf->udcf = udcFileOpen((char *)filename, udcCacheDir);
-verbose(2, "kuOpen: returning %lld\n", (long long)(kf->udcf));
+verbose(2, "kuOpen: returning %lu\n", (unsigned long)(kf->udcf));
 return kf;
 }
 
@@ -38,7 +38,7 @@ return NULL;
 static off_t kuRead(knetFile *fp, void *buf, off_t len)
 /* Read len bytes into buf, return amount actually read. */
 {
-verbose(2, "udcRead(%lld, buf, %lld)\n", (long long)(fp->udcf), (long long)len);
+verbose(2, "udcRead(%lu, buf, %lld)\n", (unsigned long)(fp->udcf), (long long)len);
 return (off_t)udcRead(fp->udcf, buf, (int)len);
 }
 
@@ -54,7 +54,7 @@ else if (whence == SEEK_CUR)
     offset = off+ udcTell(fp->udcf);
 else
     return -1;
-verbose(2, "udcSeek(%lld, %lld)\n", (long long)(fp->udcf), offset);
+verbose(2, "udcSeek(%lu, %lld)\n", (unsigned long)(fp->udcf), offset);
 udcSeek(fp->udcf, offset);
 return 0;
 }
@@ -62,14 +62,14 @@ return 0;
 static off_t kuTell(knetFile *fp)
 /* Tell current offset in file. */
 {
-verbose(2, "udcTell(%lld)\n", (long long)(fp->udcf));
+verbose(2, "udcTell(%lu)\n", (unsigned long)(fp->udcf));
 return udcTell(fp->udcf);
 }
 
 static int kuClose(knetFile *fp)
 /* Close and free fp->udcf. */
 {
-verbose(2, "udcClose(%lld)\n", (long long)(fp->udcf));
+verbose(2, "udcClose(%lu)\n", (unsigned long)(fp->udcf));
 udcFileClose(&(fp->udcf));
 return 0;
 }
