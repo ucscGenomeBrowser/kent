@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1631 2010/02/19 02:22:41 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1632 2010/03/03 19:30:02 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3163,6 +3163,9 @@ else if (sameString(type, "bam"))
     hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
     hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
     hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+    hashAdd(tdb->settingsHash, INDEL_DOUBLE_INSERT, cloneString("on"));
+    hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
+    hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 #endif//def USE_BAM

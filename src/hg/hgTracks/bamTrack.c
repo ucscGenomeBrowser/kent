@@ -18,7 +18,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.27 2010/02/26 06:54:57 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.28 2010/03/03 19:30:04 angie Exp $";
 
 struct bamTrackData
     {
@@ -29,6 +29,74 @@ struct bamTrackData
     char *grayMode;
     char *userTag;
     };
+
+struct psl *pslFromBam(const bam1_t *bam)
+/* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
+ * no scoring info) */
+{
+const bam1_core_t *core = &bam->core;
+struct psl *psl;
+AllocVar(psl);
+boolean isRc = (core->flag & BAM_FREVERSE);
+psl->strand[0] = isRc ? '-' : '+';
+psl->qName = cloneString(bam1_qname(bam));
+psl->tName = cloneString(chromName);
+unsigned blockCount = 0;
+unsigned *blockSizes, *qStarts, *tStarts;
+AllocArray(blockSizes, core->n_cigar);
+AllocArray(qStarts, core->n_cigar);
+AllocArray(tStarts, core->n_cigar);
+int tPos = core->pos, qPos = 0, qLength = 0;
+unsigned int *cigar = bam1_cigar(bam);
+int i;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigar[i], &op);
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+	    blockSizes[blockCount] = n;
+	    qStarts[blockCount] = qPos;
+	    tStarts[blockCount] = tPos;
+	    blockCount++;
+	    tPos += n;
+	    qPos += n;
+	    qLength += n;
+	    break;
+	case 'I': // inserted in query
+	    qPos += n;
+	    qLength += n;
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    tPos += n;
+	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	    qPos += n;
+	    qLength += n;
+	    break;
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("pslFromBam: unrecognized CIGAR op %c -- update me", op);
+	}
+    }
+psl->tSize = hChromSize(database, chromName);
+psl->tStart = tStarts[0];
+psl->tEnd = tStarts[blockCount-1] + blockSizes[blockCount-1];
+psl->qSize = qLength;
+psl->qStart = qStarts[0];
+psl->qEnd = qStarts[blockCount-1] + blockSizes[blockCount-1];
+if (isRc)
+    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
+psl->blockCount = blockCount;
+psl->blockSizes = blockSizes;
+psl->qStarts = qStarts;
+psl->tStarts = tStarts;
+return psl;
+}
 
 struct simpleFeature *sfFromNumericCigar(const bam1_t *bam, int *retLength)
 /* Translate BAM's numeric CIGAR encoding into a list of simpleFeatures, 
@@ -72,6 +140,7 @@ for (i = 0;  i < core->n_cigar;  i++)
     }
 if (retLength != NULL)
     *retLength = tLength;
+slReverse(&sfList);
 return sfList;
 }
 
@@ -92,7 +161,7 @@ static struct simpleFeature *expandSfQuals(struct simpleFeature *blocksIn, UBYTE
 /* Chop up blocksIn into one sf per query base, with sf->grayIx set according to
  * base quality score. */
 {
-struct simpleFeature *sf, *blocksOut = NULL;
+struct simpleFeature *sf, *blocksOut = NULL, *tail = NULL;
 for (sf = blocksIn;  sf != NULL;  sf = sf->next)
     {
     struct simpleFeature *newSf;
@@ -107,10 +176,15 @@ for (sf = blocksIn;  sf != NULL;  sf = sf->next)
 	int offset = (orientation < 0) ? (qLen - i - 1) : i;
 	// hardcode min & max for now; if user demand, make into tdb/cart vars.
 	newSf->grayIx = shadeTransform(0, 40, quals[offset]);
-	slAddHead(&blocksOut, newSf);
+	if (blocksOut == NULL)
+	    blocksOut = tail = newSf;
+	else
+	    {
+	    tail->next = newSf;
+	    tail = tail->next;
+	    }
 	}
     }
-slReverse(&blocksOut);
 return blocksOut;
 }
 
@@ -142,7 +216,8 @@ int length;
 lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
-lf->extra = bamGetQuerySequence(bam, TRUE);
+lf->extra = bamGetQuerySequence(bam, FALSE); // cds.c reverses if psl != NULL
+lf->original = pslFromBam(bam);
 int clippedQLen;
 bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
@@ -435,7 +510,7 @@ boolean exonArrows = (tg->exonArrows &&
 struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
-struct psl *psl = NULL;
+struct psl *psl = (struct psl *)(lf->original);
 char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
@@ -495,7 +570,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		     barbColor, TRUE);
 	}
     }
-if (indelShowDoubleInsert)
+if (indelShowDoubleInsert && psl)
     {
     int intronGap = 0;
     if (vis != tvDense)
@@ -507,7 +582,7 @@ if (vis != tvDense)
     /* If highlighting differences between aligned sequence and genome when
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
-    if (indelShowQueryInsert || indelShowPolyA)
+    if ((indelShowQueryInsert || indelShowPolyA) && psl)
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart,
 				 drawOpt, indelShowQueryInsert, indelShowPolyA);
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart, drawOpt);

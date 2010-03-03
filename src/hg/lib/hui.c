@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.263 2010/03/02 17:38:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.264 2010/03/03 19:30:02 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -948,7 +948,7 @@ return baseColorDrawOptStringToEnum(stringVal);
 static boolean indelAppropriate(struct trackDb *tdb)
 /* Return true if it makes sense to offer indel display options for tdb. */
 {
-return (tdb && startsWith("psl", tdb->type) &&
+return (tdb && (startsWith("psl", tdb->type) || sameString("bam", tdb->type)) &&
 	(cfgOptionDefault("browser.indelOptions", NULL) != NULL));
 }
 

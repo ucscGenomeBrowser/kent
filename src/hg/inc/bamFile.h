@@ -73,8 +73,9 @@ int bamGetTargetLength(const bam1_t *bam);
  * bam's packed-int CIGAR representation. */
 
 struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
-			 boolean useStrand);
-/* Convert from bam to ffAli format. */
+			 boolean useStrand, char **retQSeq);
+/* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
+ * query sequence into which ffAli needle pointers point. */
 
 bam1_t *bamClone(const bam1_t *bam);
 /* Return a newly allocated copy of bam. */

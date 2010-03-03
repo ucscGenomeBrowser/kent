@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.20 2010/02/25 22:05:02 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.21 2010/03/03 19:30:02 angie Exp $";
 
 char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -289,16 +289,16 @@ char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand)
  * so if useStrand is given we rev-comp it back to restore the original query 
  * sequence. */
 {
-int softClipLow, softClipHigh, clippedQLen;
-bamGetSoftClipping(bam, &softClipLow, &softClipHigh, &clippedQLen);
-char *qSeq = needMem(clippedQLen+1);
+const bam1_core_t *core = &bam->core;
+int qLen = core->l_qseq;
+char *qSeq = needMem(qLen+1);
 uint8_t *packedQSeq = bam1_seq(bam);
 int i;
-for (i = 0; i < clippedQLen; i++)
-    qSeq[i] = bam_nt16_rev_table[bam1_seqi(packedQSeq, i+softClipLow)];
+for (i = 0; i < qLen; i++)
+    qSeq[i] = bam_nt16_rev_table[bam1_seqi(packedQSeq, i)];
 qSeq[i] = '\0';
 if (useStrand && bamIsRc(bam))
-    reverseComplement(qSeq, clippedQLen);
+    reverseComplement(qSeq, qLen);
 return qSeq;
 }
 
@@ -310,12 +310,10 @@ int qLen = core->l_qseq;
 UBYTE *arr = needMem(qLen);
 boolean isRc = useStrand && bamIsRc(bam);
 UBYTE *qualStr = bam1_qual(bam);
-int softClipLow, softClipHigh, clippedQLen;
-bamGetSoftClipping(bam, &softClipLow, &softClipHigh, &clippedQLen);
 int i;
-for (i = 0;  i < clippedQLen;  i++)
+for (i = 0;  i < core->l_qseq;  i++)
     {
-    int offset = isRc ? (qLen - 1 - softClipHigh - i) : (i + softClipLow);
+    int offset = isRc ? (qLen - 1 - i) : i;
     arr[i] = (qualStr[0] == 255) ? 255 : qualStr[offset];
     }
 return arr;
@@ -449,13 +447,16 @@ return tLength;
 }
 
 struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
-			 boolean useStrand)
-/* Convert from bam to ffAli format.  (Adapted from psl.c's pslToFfAli.) */
+			 boolean useStrand, char **retQSeq)
+/* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
+ * query sequence into which ffAli needle pointers point. (Adapted from psl.c's pslToFfAli.) */
 {
 struct ffAli *ffList = NULL, *ff;
 const bam1_core_t *core = &bam->core;
 boolean isRc = useStrand && bamIsRc(bam);
 DNA *needle = (DNA *)bamGetQuerySequence(bam, useStrand);
+if (retQSeq)
+    *retQSeq = needle;
 if (isRc)
     reverseComplement(target->dna, target->size);
 DNA *haystack = target->dna;
@@ -482,13 +483,13 @@ for (i = iStart;  isRc ? (i >= 0) : (i < core->n_cigar);  i += iIncr)
 	    qStart += size;
 	    break;
 	case 'I': // inserted in query
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	    qStart += size;
 	    break;
 	case 'D': // deleted from query
 	case 'N': // long deletion from query (intron as opposed to small del)
 	    tStart += size;
 	    break;
-	case 'S': // skipped query bases at beginning or end ("soft clipping")
 	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;

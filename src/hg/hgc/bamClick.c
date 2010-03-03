@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.17 2010/02/17 19:35:48 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.18 2010/03/03 19:30:04 angie Exp $";
 
 #include "bamFile.h"
 
@@ -50,18 +50,16 @@ puts("<BR>");
 char nibName[HDB_MAX_PATH_STRING];
 hNibForChrom(database, seqName, nibName);
 struct dnaSeq *genoSeq = hFetchSeq(nibName, seqName, tStart, tEnd);
-struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand);
-char *qSeq = ffa->nStart;
+char *qSeq = NULL;
+struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
 printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
        seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
 ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
 		 FALSE);
 printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
 UBYTE *quals = bamGetQueryQuals(bam, useStrand);
-int clippedQLen;
-bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 int i;
-for (i = 0;  i < clippedQLen;  i++)
+for (i = 0;  i < core->l_qseq;  i++)
     {
     if (i > 0 && (i % 24) == 0)
 	printf("</TR>\n<TR>");
@@ -85,6 +83,11 @@ if (useStrand && bamIsRc(rightBam))
 if ((rightStart > leftStart && leftStart + leftLen > rightStart) ||
     (leftStart > rightStart && rightStart+rightLen > leftStart))
     {
+    int leftClipLow, rightClipLow;
+    bamGetSoftClipping(leftBam, &leftClipLow, NULL, NULL);
+    bamGetSoftClipping(rightBam, &rightClipLow, NULL, NULL);
+    leftStart -= leftClipLow;
+    rightStart -= rightClipLow;
     printf("<B>Note: End read alignments overlap:</B><BR>\n<PRE><TT>");
     int i = leftStart - rightStart;
     while (i-- > 0)
@@ -113,9 +116,9 @@ if (leftBam && rightBam)
     puts("<P>");
     }
 showOverlap(leftBam, rightBam);
-printf("<TABLE><TR><TD><H4>Left end read</H4>\n");
+printf("<TABLE><TR><TD valign=top><H4>Left end read</H4>\n");
 singleBamDetails(leftBam);
-printf("</TD><TD><H4>Right end read</H4>\n");
+printf("</TD><TD valign=top><H4>Right end read</H4>\n");
 singleBamDetails(rightBam);
 printf("</TD></TR></TABLE>\n");
 }
