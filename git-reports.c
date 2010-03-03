@@ -30,6 +30,7 @@ struct files
     struct files *next;
     char type;
     char *path;
+    int linesChanged;
     };
 
 struct commit 
@@ -174,6 +175,45 @@ unlink("commits.tmp");
 return commits;
 }
 
+int makeHtml(char *diffPath, char *path, char *commitId)
+/* Make a color-coded html diff 
+ * Return the number of lines changed */
+{
+int linesChanged = 0;
+char *ext = strrchr(diffPath,'.');
+*ext = 0;
+char htmlPath[1024];
+safef(htmlPath, sizeof(htmlPath), "%s.html", diffPath);
+*ext = '.';
+
+FILE *h = mustOpen(htmlPath, "w");
+struct lineFile *lf = lineFileOpen(diffPath, TRUE);
+int lineSize;
+char *line;
+boolean inBody = FALSE;
+fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] == '-')
+	fprintf(h, "<span style=\"background-color:yellow\">%s</span>\n", line);
+    else if (line[0] == '+')
+	fprintf(h, "<span style=\"background-color:cyan\">%s</span>\n", line);
+    else
+	fprintf(h, "<span style=\"background-color:white\">%s</span>\n", line);
+	
+    if (line[0] == '@')
+	inBody = TRUE;
+
+    }
+
+lineFileClose(&lf);
+fprintf(h, "</pre>\n</body>\n</html>\n");
+fclose(h);
+
+return linesChanged;
+}
+
+
 void doUser(char *u, struct commit *commits)
 /* process one user */
 {
@@ -201,7 +241,7 @@ for(c = commits; c; c = c->next)
 		}
 
             // context unified
-	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.diff", outDir, outPrefix, "user", u, "context", f->path);
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff", outDir, outPrefix, "user", u, "context", f->path, c->commitId);
 	    uglyf("path=%s\n", path);
 
 	    safef(gitCmd,sizeof(gitCmd), ""
@@ -211,8 +251,10 @@ for(c = commits; c; c = c->next)
 	    system(gitCmd);
 	    // TODO error handling
 
+	    int linesChanged = makeHtml(path, f->path, c->commitId);
+
             // full text (up to 10,000 lines)
-	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.diff", outDir, outPrefix, "user", u, "full", f->path);
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff", outDir, outPrefix, "user", u, "full", f->path, c->commitId);
 	    uglyf("path=%s\n", path);
 
 	    safef(gitCmd,sizeof(gitCmd), ""
@@ -221,6 +263,8 @@ for(c = commits; c; c = c->next)
 	    uglyf("gitCmd=%s\n", gitCmd);
 	    system(gitCmd);
 	    // TODO error handling
+
+	    makeHtml(path, f->path, c->commitId);
 
 	    //git show --unified=10000 11a20b6cd113d75d84549eb642b7f2ac7a2594fe src/utils/qa/weeklybld/buildEnv.csh
 
@@ -285,6 +329,8 @@ for(u = users; u; u = u->next)
     if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
 	errnoAbort("unable to mkdir %s", path);
 
+    // DEBUG REMOVE
+    if (sameString(u->name, "galt"))
     /* make user's reports */
     doUser(u->name, commits);    
 
