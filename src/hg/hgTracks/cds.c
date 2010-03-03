@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.104 2009/11/17 20:17:57 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.105 2010/03/03 23:25:07 angie Exp $";
 
 Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
 /* Find a color which is a percentless 'lighter' shade of color */
@@ -1432,7 +1432,7 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
                                 zoomedToCodonLevel, winStart, maxPixels, TRUE);
     }
 else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
-	 drawOpt != baseColorDrawGenomicCodons)
+	 drawOpt != baseColorDrawGenomicCodons && drawOpt != baseColorDrawOff)
     {
     drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
 		    color, chromName, s, e, sf, psl, mrnaSeq, lf,
