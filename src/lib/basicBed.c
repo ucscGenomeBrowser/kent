@@ -18,7 +18,7 @@
 #include "binRange.h"
 #include "basicBed.h"
 
-static char const rcsid[] = "$Id: basicBed.c,v 1.2 2009/06/29 20:29:44 kent Exp $";
+static char const rcsid[] = "$Id: basicBed.c,v 1.3 2010/03/03 07:52:22 markd Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -435,26 +435,17 @@ struct bed *bedLoadAll(char *fileName)
 {
 struct bed *list = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int numFields = 0;
-char *line = NULL;
-/* First peek to see how many columns in the bed file. */
-lineFileNextReal(lf, &line);
+char *line, *row[bedKnownFields];
 
-/* If there is something in the file then read it. If file
-   is empty return NULL. */
-if(line != NULL) 
+while (lineFileNext(lf, &line, NULL))
     {
-    numFields = chopByWhite(line, NULL, 0);
-    lineFileClose(&lf);
-    if(numFields < 4) /* Minimum number of fields. */
-	errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d",
-		 fileName, numFields);
-    /* Now load them up with that number of fields. */
-    list = bedLoadNAll(fileName, numFields);
+    int numFields = chopByWhite(line, row, ArraySize(row));
+    if (numFields < 4)
+	errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d", fileName, numFields);
+    slAddHead(&list, bedLoadN(row, numFields));
     }
-else
-    lineFileClose(&lf);
-
+lineFileClose(&lf);
+slReverse(&list);
 return list;
 }
 
