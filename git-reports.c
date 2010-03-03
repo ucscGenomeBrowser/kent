@@ -6,6 +6,7 @@
 #include "errabort.h"
 #include "hash.h"
 #include "linefile.h"
+#include "htmshell.h"
 
 static char const rcsid[] = "$Id: git-reports.c,v 1.1 2010/03/02 08:43:07 galt Exp $";
 
@@ -109,7 +110,7 @@ while (lineFileNext(lf, &line, &lineSize))
     w = nextWord(&line);
     if (!sameString("Date:", w))
 	errAbort("expected keyword Date: parsing commits.tmp\n");
-    commit->date = cloneString(nextWord(&line));
+    commit->date = cloneString(line);
 
     lineFileNext(lf, &line, &lineSize);
     if (!sameString("", line))
@@ -175,30 +176,27 @@ unlink("commits.tmp");
 return commits;
 }
 
-int makeHtml(char *diffPath, char *path, char *commitId)
+int makeHtml(char *diffPath, char *htmlPath, char *path, char *commitId)
 /* Make a color-coded html diff 
  * Return the number of lines changed */
 {
 int linesChanged = 0;
-char *ext = strrchr(diffPath,'.');
-*ext = 0;
-char htmlPath[1024];
-safef(htmlPath, sizeof(htmlPath), "%s.html", diffPath);
-*ext = '.';
 
 FILE *h = mustOpen(htmlPath, "w");
 struct lineFile *lf = lineFileOpen(diffPath, TRUE);
 int lineSize;
 char *line;
+char *xline = NULL;
 boolean inBody = FALSE;
 boolean inBlock = TRUE;
 int blockP = 0, blockN = 0;
 fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
 while (lineFileNext(lf, &line, &lineSize))
     {
+    xline = htmlEncode(line);	
     if (line[0] == '-')
 	{
-	fprintf(h, "<span style=\"background-color:yellow\">%s</span>\n", line);
+	fprintf(h, "<span style=\"background-color:yellow\">%s</span>\n", xline);
 	if (inBody)
 	    {
 	    inBlock = TRUE;
@@ -207,7 +205,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     else if (line[0] == '+')
 	{
-	fprintf(h, "<span style=\"background-color:cyan\">%s</span>\n", line);
+	fprintf(h, "<span style=\"background-color:cyan\">%s</span>\n", xline);
 	if (inBody)
 	    {
 	    inBlock = TRUE;
@@ -216,7 +214,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     else
 	{
-	fprintf(h, "<span style=\"background-color:white\">%s</span>\n", line);
+	fprintf(h, "<span style=\"background-color:white\">%s</span>\n", xline);
 	if (inBody)
 	    {
 	    if (inBlock)
@@ -235,12 +233,13 @@ while (lineFileNext(lf, &line, &lineSize))
     if (line[0] == '@')
 	inBody = TRUE;
 
+    freeMem(xline);
+
     }
 
 lineFileClose(&lf);
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
-
 return linesChanged;
 }
 
@@ -248,12 +247,29 @@ return linesChanged;
 void doUser(char *u, struct commit *commits)
 /* process one user */
 {
+
+
+char userPath[1024];
+safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index.html", outDir, outPrefix, "user", u);
+
+FILE *h = mustOpen(userPath, "w");
+fprintf(h, "<html>\n<head>\n<title>%s Commits View</title>\n</head>\n</body>\n<pre>\n", u);
+fprintf(h, "<h1>Commits for %s</h1>\n", u);
+
+
+char *cDiff = NULL, *cHtml = NULL, *fDiff = NULL, *fHtml = NULL;
+char *relativePath = NULL;
+char *commonPath = NULL;
+
 struct commit *c = NULL;
 struct files *f = NULL;
 for(c = commits; c; c = c->next)
     {
     if (sameString(c->author, u))
 	{
+	fprintf(h, "%s\n", c->commitId);
+	fprintf(h, "%s\n", c->date);
+	fprintf(h, "%s\n", c->comment);
 	for(f = c->files; f; f = f->next)
 	    {
 	    char path[1024];
@@ -272,37 +288,93 @@ for(c = commits; c; c = c->next)
 		}
 
             // context unified
-	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff", outDir, outPrefix, "user", u, "context", f->path, c->commitId);
-	    uglyf("path=%s\n", path);
+	    safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
+	    relativePath = cloneString(path);
 
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, relativePath);
+	    commonPath = cloneString(path);
+
+	    safef(path, sizeof(path), "%s.html", commonPath);
+	    cHtml = cloneString(path);
+
+	    safef(path, sizeof(path), "%s.diff", commonPath);
+	    cDiff = cloneString(path);
+
+	    uglyf("path=%s\n", path);
 	    safef(gitCmd,sizeof(gitCmd), ""
 	    "git show %s %s > %s"
-	    , c->commitId, f->path, path);
+	    , c->commitId, f->path, cDiff);
 	    uglyf("gitCmd=%s\n", gitCmd);
 	    system(gitCmd);
 	    // TODO error handling
 
-	    f->linesChanged = makeHtml(path, f->path, c->commitId);
+
+	    // make context html page
+	    f->linesChanged = makeHtml(cDiff, cHtml, f->path, c->commitId);
+
+	    freeMem(cDiff);
+	    freeMem(cHtml);
+	    safef(path, sizeof(path), "%s.html", relativePath);
+	    cHtml = cloneString(path);
+	    safef(path, sizeof(path), "%s.diff", relativePath);
+	    cDiff = cloneString(path);
+
+
 
             // full text (up to 10,000 lines)
-	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff", outDir, outPrefix, "user", u, "full", f->path, c->commitId);
-	    uglyf("path=%s\n", path);
+	    freeMem(relativePath);
+	    safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
+	    relativePath = cloneString(path);
+
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, relativePath);
+	    freeMem(commonPath);
+	    commonPath = cloneString(path);
+
+	    safef(path, sizeof(path), "%s.html", commonPath);
+	    fHtml = cloneString(path);
+
+	    safef(path, sizeof(path), "%s.diff", commonPath);
+	    fDiff = cloneString(path);
 
 	    safef(gitCmd,sizeof(gitCmd), ""
 	    "git show --unified=10000 %s %s > %s"
-	    , c->commitId, f->path, path);
+	    , c->commitId, f->path, fDiff);
 	    uglyf("gitCmd=%s\n", gitCmd);
 	    system(gitCmd);
 	    // TODO error handling
 
-	    makeHtml(path, f->path, c->commitId);
-
 	    //git show --unified=10000 11a20b6cd113d75d84549eb642b7f2ac7a2594fe src/utils/qa/weeklybld/buildEnv.csh
 
+	    // make full html page
+	    makeHtml(fDiff, fHtml, f->path, c->commitId);
+
+	    freeMem(fDiff);
+	    freeMem(fHtml);
+	    safef(path, sizeof(path), "%s.html", relativePath);
+	    fHtml = cloneString(path);
+	    safef(path, sizeof(path), "%s.diff", relativePath);
+	    fDiff = cloneString(path);
+
+	    // make file view links
+	    fprintf(h, "  %s - lines changed %d, "
+		"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
+		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>\n"
+		, f->path, f->linesChanged
+		, cHtml, cDiff, fHtml, fDiff);
+
+	    freeMem(relativePath);
+	    freeMem(commonPath);
+	    freeMem(cDiff);
+	    freeMem(cHtml);
+	    freeMem(fDiff);
+	    freeMem(fHtml);
 
 	    }
+	fprintf(h, "\n");
 	}
     }
+fprintf(h, "</pre>\n</body>\n</html>\n");
+fclose(h);
 }
 
 
