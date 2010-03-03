@@ -27,6 +27,7 @@ char gitCmd[1024];
 
 struct files
     {
+    struct files *next;
     char type;
     char *path;
     };
@@ -54,8 +55,8 @@ errAbort(
     " startTag and endTag are repository tags marking the beginning and end of the git range\n"
     " startDate and endDate and title are just strings that get printed on the report\n"
     " title is usually the branch number, e.g. v225\n"
-    " repoDir is where the git repository\n"
-    " outDir is the output directory.\n"
+    " repoDir is where the git repository (use absolute path)\n"
+    " outDir is the output directory (use absolute path).\n"
     " outPrefix is typically \"branch\" or \"review\" directory.\n"
     "  --help - this help screen\n",
     msg);
@@ -72,9 +73,8 @@ struct commit* getCommits()
 /* get all commits from startTag to endTag */
 {
 safef(gitCmd,sizeof(gitCmd), ""
-"GIT_DIR=%s/.git "
 "git log origin/%s..origin/%s --name-status > commits.tmp"
-, repoDir, startTag, endTag);
+, startTag, endTag);
 system(gitCmd);
 // TODO error handling
 struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);
@@ -82,6 +82,7 @@ int lineSize;
 char *line;
 struct commit *commits = NULL, *commit = NULL;
 struct files *files = NULL, *f = NULL;
+char *sep = "";
 while (lineFileNext(lf, &line, &lineSize))
     {
     boolean isMerge = FALSE;
@@ -116,12 +117,15 @@ while (lineFileNext(lf, &line, &lineSize))
     /* collect the comment-lines */
     struct dyString *dy = NULL;
     dy = dyStringNew(0);
+    sep = "";
+    files = NULL;
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	if (sameString("", line))
 	    break;
 	w = skipLeadingSpaces(line);
-	dyStringPrintf(dy, "%s\n", w);
+	dyStringPrintf(dy, "%s%s", w, sep);
+	sep = "\n";
 	}
     commit->comment = cloneString(dy->string);
     freeDyString(&dy);
@@ -145,13 +149,85 @@ while (lineFileNext(lf, &line, &lineSize))
     commit->files = files;
 
     slAddHead(&commits, commit);
-    slReverse(&commits);
+
+    verbose(2, 
+ "commitId: %s\n"
+ "author: %s\n"
+ "date: %s\n"
+ "comment: [%s]\n"
+ "file(s): \n"
+, commit->commitId
+, commit->author
+, commit->date
+, commit->comment);
+
+    for (f=commit->files; f; f = f->next)
+    	verbose(2, "%s\n", f->path);
+    verbose(2, "------------\n");
+
     }
 lineFileClose(&lf);
+slReverse(&commits);
 
 
 unlink("commits.tmp");
 return commits;
+}
+
+void doUser(char *u, struct commit *commits)
+/* process one user */
+{
+struct commit *c = NULL;
+struct files *f = NULL;
+for(c = commits; c; c = c->next)
+    {
+    if (sameString(c->author, u))
+	{
+	for(f = c->files; f; f = f->next)
+	    {
+	    char path[1024];
+	    char *r = strrchr(f->path, '/');
+	    if (r)
+		{
+		*r = 0;
+		/* make internal levels of subdirs */
+		safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, "context", f->path);
+		uglyf("path=%s\n", path);
+		system(path);
+		safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, "full", f->path);
+		uglyf("path=%s\n", path);
+		system(path);
+		*r = '/';
+		}
+
+            // context unified
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.diff", outDir, outPrefix, "user", u, "context", f->path);
+	    uglyf("path=%s\n", path);
+
+	    safef(gitCmd,sizeof(gitCmd), ""
+	    "git show %s %s > %s"
+	    , c->commitId, f->path, path);
+	    uglyf("gitCmd=%s\n", gitCmd);
+	    system(gitCmd);
+	    // TODO error handling
+
+            // full text (up to 10,000 lines)
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.diff", outDir, outPrefix, "user", u, "full", f->path);
+	    uglyf("path=%s\n", path);
+
+	    safef(gitCmd,sizeof(gitCmd), ""
+	    "git show --unified=10000 %s %s > %s"
+	    , c->commitId, f->path, path);
+	    uglyf("gitCmd=%s\n", gitCmd);
+	    system(gitCmd);
+	    // TODO error handling
+
+	    //git show --unified=10000 11a20b6cd113d75d84549eb642b7f2ac7a2594fe src/utils/qa/weeklybld/buildEnv.csh
+
+
+	    }
+	}
+    }
 }
 
 
@@ -209,7 +285,8 @@ for(u = users; u; u = u->next)
     if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
 	errnoAbort("unable to mkdir %s", path);
 
-    
+    /* make user's reports */
+    doUser(u->name, commits);    
 
     }
 
@@ -235,6 +312,8 @@ outDir = argv[7];
 outPrefix = argv[8];
 
 userHash = hashNew(5);
+
+chdir(repoDir);
 
 gitReports();
 
