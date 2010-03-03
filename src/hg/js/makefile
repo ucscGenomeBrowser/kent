@@ -7,7 +7,7 @@ CVSUP = cvs -q update
 JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js jquery.autocomplete.js
 JS_FILES=ajax.js autocomplete.js hgGateway.js hgTracks.js hui.js utils.js ${JQUERY_FILES}
 ifdef LOWELAB
-    JS_FILES += lowetooltip.js
+    JS_FILES += lowetooltip.js loweautocomplete.js
 endif
 
 user:
