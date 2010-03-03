@@ -6,7 +6,7 @@
 #include "cheapcgi.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgSuggest.c,v 1.2 2010/02/10 06:23:00 larrym Exp $";
+static char const rcsid[] = "$Id: hgSuggest.c,v 1.3 2010/03/03 23:52:24 galt Exp $";
 
 static void fail(char *msg)
 {
@@ -71,7 +71,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         count++;
         dyStringPrintf(str, "%s{\"value\": \"%s\", \"id\": \"%s:%d-%s\"}", count == 1 ? "" : ",\n",
                        row[0], row[1], atoi(row[2])+1, row[3]);
-        safef(previous, sizeof(previous), row[0]);
+        safef(previous, sizeof(previous), "%s", row[0]);
         }
     }
 dyStringPrintf(str, "\n]\n");
