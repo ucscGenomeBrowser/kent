@@ -244,7 +244,7 @@ return linesChanged;
 }
 
 
-void doUser(char *u, struct commit *commits)
+void doUser(char *u, struct commit *commits, int *saveUlc, int *saveUfc)
 /* process one user */
 {
 
@@ -256,6 +256,8 @@ FILE *h = mustOpen(userPath, "w");
 fprintf(h, "<html>\n<head>\n<title>%s Commits View</title>\n</head>\n</body>\n<pre>\n", u);
 fprintf(h, "<h1>Commits for %s</h1>\n", u);
 
+int userLinesChanged = 0;
+int userFileCount = 0;   // TODO do we want to not count the same file twice?
 
 char *cDiff = NULL, *cHtml = NULL, *fDiff = NULL, *fHtml = NULL;
 char *relativePath = NULL;
@@ -311,6 +313,8 @@ for(c = commits; c; c = c->next)
 
 	    // make context html page
 	    f->linesChanged = makeHtml(cDiff, cHtml, f->path, c->commitId);
+	    userLinesChanged += f->linesChanged;
+	    ++userFileCount;   // TODO do we want to not count the same file twice?
 
 	    freeMem(cDiff);
 	    freeMem(cHtml);
@@ -375,12 +379,20 @@ for(c = commits; c; c = c->next)
     }
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
+*saveUlc = userLinesChanged;
+*saveUfc = userFileCount;
 }
 
 
 void gitReports()
 /* generate code-review reports from git repo */
 {
+int totalChangedLines = 0;
+int totalChangedFiles = 0;
+
+int userChangedLines = 0;
+int userChangedFiles = 0;
+
 /* read the commits */
 struct commit *commits = getCommits(), *c = NULL;
 /* make the user list */
@@ -433,9 +445,13 @@ for(u = users; u; u = u->next)
 	errnoAbort("unable to mkdir %s", path);
 
     // DEBUG REMOVE
-    if (sameString(u->name, "galt"))
+    //if (sameString(u->name, "galt"))
     /* make user's reports */
-    doUser(u->name, commits);    
+    doUser(u->name, commits, &userChangedLines, &userChangedFiles);
+
+    totalChangedLines += userChangedLines;
+    totalChangedFiles += userChangedFiles;  
+    // TODO do we have to worry about counting the same file more than once?
 
     }
 
