@@ -191,15 +191,46 @@ struct lineFile *lf = lineFileOpen(diffPath, TRUE);
 int lineSize;
 char *line;
 boolean inBody = FALSE;
+boolean inBlock = TRUE;
+int blockP = 0, blockN = 0;
 fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
 while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '-')
+	{
 	fprintf(h, "<span style=\"background-color:yellow\">%s</span>\n", line);
+	if (inBody)
+	    {
+	    inBlock = TRUE;
+	    ++blockN;
+	    }
+	}
     else if (line[0] == '+')
+	{
 	fprintf(h, "<span style=\"background-color:cyan\">%s</span>\n", line);
+	if (inBody)
+	    {
+	    inBlock = TRUE;
+	    ++blockP;
+	    }
+	}
     else
+	{
 	fprintf(h, "<span style=\"background-color:white\">%s</span>\n", line);
+	if (inBody)
+	    {
+	    if (inBlock)
+		{
+		inBlock = FALSE;
+		if (blockP >= blockN)
+		    linesChanged += blockP;
+		else
+		    linesChanged += blockN;
+		blockP = 0;
+		blockN = 0;
+		}
+	    }
+	}
 	
     if (line[0] == '@')
 	inBody = TRUE;
@@ -251,7 +282,7 @@ for(c = commits; c; c = c->next)
 	    system(gitCmd);
 	    // TODO error handling
 
-	    int linesChanged = makeHtml(path, f->path, c->commitId);
+	    f->linesChanged = makeHtml(path, f->path, c->commitId);
 
             // full text (up to 10,000 lines)
 	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff", outDir, outPrefix, "user", u, "full", f->path, c->commitId);
