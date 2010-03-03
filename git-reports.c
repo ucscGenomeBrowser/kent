@@ -253,8 +253,14 @@ char userPath[1024];
 safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index.html", outDir, outPrefix, "user", u);
 
 FILE *h = mustOpen(userPath, "w");
-fprintf(h, "<html>\n<head>\n<title>%s Commits View</title>\n</head>\n</body>\n<pre>\n", u);
-fprintf(h, "<h1>Commits for %s</h1>\n", u);
+fprintf(h, "<html>\n<head>\n<title>%s Commits View</title>\n</head>\n</body>\n", u);
+fprintf(h, "<h2>Commits for %s</h2>\n", u);
+
+//switch to grouped by file view, user index
+fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+
+fprintf(h, "<pre>\n");
+
 
 int userLinesChanged = 0;
 int userFileCount = 0;   // TODO do we want to not count the same file twice?
@@ -424,6 +430,20 @@ safef(path, sizeof(path), "%s/%s/%s", outDir, outPrefix, "user");
 if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
     errnoAbort("unable to mkdir %s", path);
 
+
+char usersPath[1024];
+safef(usersPath, sizeof(usersPath), "%s/%s/%s/index.html", outDir, outPrefix, "user");
+
+FILE *h = mustOpen(usersPath, "w");
+fprintf(h, "<html>\n<head>\n<title>Git Changes By User</title>\n</head>\n</body>\n");
+fprintf(h, "<h2>Git Changes By User</h2>\n");
+
+fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+
+fprintf(h, "<pre>\n");
+
+
+
 struct slName*u;
 for(u = users; u; u = u->next)
     {
@@ -444,10 +464,17 @@ for(u = users; u; u = u->next)
     if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
 	errnoAbort("unable to mkdir %s", path);
 
+    userChangedLines = 0;
+    userChangedFiles = 0;
+
     // DEBUG REMOVE
     //if (sameString(u->name, "galt"))
     /* make user's reports */
     doUser(u->name, commits, &userChangedLines, &userChangedFiles);
+
+    char relPath[1024];
+    safef(relPath, sizeof(relPath), "%s/index.html", u->name);
+    fprintf(h, "  <A href=\"%s\">%s</A> - changed lines: %d, files: %d\n", relPath, u->name, userChangedLines, userChangedFiles);
 
     totalChangedLines += userChangedLines;
     totalChangedFiles += userChangedFiles;  
@@ -455,6 +482,10 @@ for(u = users; u; u = u->next)
 
     }
 
+fprintf(h, "\n  lines changed: %d\n  files changed: %d\n", totalChangedLines, totalChangedFiles);
+
+fprintf(h, "</pre>\n</body>\n</html>\n");
+fclose(h);
 }
 
 int main(int argc, char *argv[])
