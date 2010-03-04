@@ -457,38 +457,38 @@ void doUserFiles(char *u, struct commit *commits)
 /* process one user's files-view (or all if u is NULL) */
 {
 
-// TODO handle u is NULL
 // http://hgwdev.cse.ucsc.edu/cvs-reports/branch/user/galt/index-by-file.html
+// if u is NULL
+// http://hgwdev.cse.ucsc.edu/cvs-reports/branch/file/index.html
 char userPath[1024];
-safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index-by-file.html", outDir, outPrefix, "user", u);
+if (u)
+    safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index-by-file.html", outDir, outPrefix, "user", u);
+else
+    safef(userPath, sizeof(userPath), "%s/%s/%s/index.html", outDir, outPrefix, "file");
 
 FILE *h = mustOpen(userPath, "w");
-fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
-fprintf(h, "<h2>Files for %s</h2>\n", u);
+if (u)
+    {
+    fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
+    fprintf(h, "<h2>Files for %s</h2>\n", u);
+    fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
+    }
+else
+    fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
 
-fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
 fprintf(h, "<pre>\n");
 
 
-int userLinesChanged = 0;
-int userFileCount = 0;
+int totalLinesChanged = 0;
+int totalFileCount = 0;   // TODO should this count duplicates or not
 
 char *cDiff = NULL, *cHtml = NULL, *fDiff = NULL, *fHtml = NULL;
 char *relativePath = NULL;
 
 struct commit *c = NULL;
 struct files *f = NULL;
-
-/*
-struct comFile
-    {
-    struct comFile *next;
-    struct files *f;
-    struct commit *commit;
-    }
-*/
 
 struct comFile *comFiles = NULL, *cf = NULL;
 
@@ -526,7 +526,10 @@ for(cf = comFiles; cf; cf = cf->next)
     char path[1024];
 
     // context unified
-    safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
+    if (u)
+	safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
+    else
+	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "context", f->path, c->commitId);
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     cHtml = cloneString(path);
@@ -537,7 +540,10 @@ for(cf = comFiles; cf; cf = cf->next)
 
     // full text (up to 10,000 lines)
     freeMem(relativePath);
-    safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
+    if (u)
+	safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
+    else
+	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "context", f->path, c->commitId);
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     fHtml = cloneString(path);
@@ -561,16 +567,17 @@ for(cf = comFiles; cf; cf = cf->next)
     freeMem(fDiff);
     freeMem(fHtml);
 
-    userLinesChanged += f->linesChanged;
-    ++userFileCount;
+    totalLinesChanged += f->linesChanged;
+    ++totalFileCount;
 
     fprintf(h, "\n");
     }
-fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
+if (u)
+    fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
+else
+    fprintf(h, "\n  lines changed: %d\n  files changed: %d\n", totalLinesChanged, totalFileCount);
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
-//*saveUlc = userLinesChanged;
-//*saveUfc = userFileCount;
 }
 
 
@@ -653,7 +660,7 @@ for(u = users; u; u = u->next)
     userChangedFiles = 0;
 
     // DEBUG REMOVE
-    if (sameString(u->name, "galt"))
+    //if (sameString(u->name, "galt"))
     /* make user's reports */
     doUserCommits(u->name, commits, &userChangedLines, &userChangedFiles);
 
@@ -673,6 +680,10 @@ fprintf(h, "\n  lines changed: %d\n  files changed: %d\n", totalChangedLines, to
 
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
+
+// make index of all files view
+doUserFiles(NULL, commits);
+
 }
 
 int main(int argc, char *argv[])
