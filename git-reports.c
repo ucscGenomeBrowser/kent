@@ -45,6 +45,14 @@ struct commit
     struct files *files;
     };
 
+
+struct comFile
+    {
+    struct comFile *next;
+    struct files *f;
+    struct commit *commit;
+    };
+
 void usage(char *msg)
 /* Explain usage and exit. */
 {
@@ -264,8 +272,8 @@ return linesChanged;
 }
 
 
-void doUser(char *u, struct commit *commits, int *saveUlc, int *saveUfc)
-/* process one user */
+void doUserCommits(char *u, struct commit *commits, int *saveUlc, int *saveUfc)
+/* process one user, commit-view */
 {
 
 
@@ -430,6 +438,141 @@ fclose(h);
 }
 
 
+
+
+int slComFileCmp(const void *va, const void *vb)
+/* Compare two slNames. */
+{
+const struct comFile *a = *((struct comFile **)va);
+const struct comFile *b = *((struct comFile **)vb);
+int result = strcmp(a->f->path, b->f->path);
+if (result == 0)
+    result = a->commit->commitNumber - b->commit->commitNumber;
+return result;
+}
+
+
+void doUserFiles(char *u, struct commit *commits)
+/* process one user's files-view (or all if u is NULL) */
+{
+
+// TODO handle u is NULL
+// http://hgwdev.cse.ucsc.edu/cvs-reports/branch/user/galt/index-by-file.html
+char userPath[1024];
+safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index-by-file.html", outDir, outPrefix, "user", u);
+
+FILE *h = mustOpen(userPath, "w");
+fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
+fprintf(h, "<h2>Files for %s</h2>\n", u);
+
+//switch to grouped by file view, user index
+fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+
+fprintf(h, "<pre>\n");
+
+
+int userLinesChanged = 0;
+int userFileCount = 0;
+
+char *cDiff = NULL, *cHtml = NULL, *fDiff = NULL, *fHtml = NULL;
+char *relativePath = NULL;
+
+struct commit *c = NULL;
+struct files *f = NULL;
+
+/*
+struct comFile
+    {
+    struct comFile *next;
+    struct files *f;
+    struct commit *commit;
+    }
+*/
+
+struct comFile *comFiles = NULL, *cf = NULL;
+
+// pre-filter for u if u is not NULL  
+for(c = commits; c; c = c->next)
+    {
+    if (!u || (u && sameString(c->author, u)))
+	{
+	for(f = c->files; f; f = f->next)
+	    {
+	    AllocVar(cf);
+	    cf->f = f;
+	    cf->commit = c;
+	    slAddHead(&comFiles, cf);
+	    }
+	}
+    }
+// sort by file path, and then by reverse commitNumber
+//  so that newest commit is on top.
+slSort(&comFiles, slComFileCmp);
+
+char *lastPath = "";
+
+for(cf = comFiles; cf; cf = cf->next)
+    {
+    c = cf->commit;
+    f = cf->f;
+ 
+    if (!sameString(f->path, lastPath))
+	{
+	lastPath = f->path;
+	fprintf(h, "%s\n", f->path);
+	}
+
+    char path[1024];
+
+    // context unified
+    safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
+    relativePath = cloneString(path);
+    safef(path, sizeof(path), "%s.html", relativePath);
+    cHtml = cloneString(path);
+    safef(path, sizeof(path), "%s.diff", relativePath);
+    cDiff = cloneString(path);
+
+
+
+    // full text (up to 10,000 lines)
+    freeMem(relativePath);
+    safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
+    relativePath = cloneString(path);
+    safef(path, sizeof(path), "%s.html", relativePath);
+    fHtml = cloneString(path);
+    safef(path, sizeof(path), "%s.diff", relativePath);
+    fDiff = cloneString(path);
+
+    // make file view links
+    fprintf(h, "  %s - lines changed %d, "
+	"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
+	"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>\n"
+	, c->commitId, f->linesChanged
+	, cHtml, cDiff, fHtml, fDiff);
+
+    //fprintf(h, "  %s\n", c->commitId);
+    //fprintf(h, "  %s\n", c->date);
+    fprintf(h, "    %s\n", c->comment);
+
+    freeMem(relativePath);
+    freeMem(cDiff);
+    freeMem(cHtml);
+    freeMem(fDiff);
+    freeMem(fHtml);
+
+    userLinesChanged += f->linesChanged;
+    ++userFileCount;
+
+    fprintf(h, "\n");
+    }
+fprintf(h, "</pre>\n</body>\n</html>\n");
+fclose(h);
+//*saveUlc = userLinesChanged;
+//*saveUfc = userFileCount;
+}
+
+
+
 void gitReports()
 /* generate code-review reports from git repo */
 {
@@ -510,7 +653,9 @@ for(u = users; u; u = u->next)
     // DEBUG REMOVE
     if (sameString(u->name, "galt"))
     /* make user's reports */
-    doUser(u->name, commits, &userChangedLines, &userChangedFiles);
+    doUserCommits(u->name, commits, &userChangedLines, &userChangedFiles);
+
+    doUserFiles(u->name, commits);
 
     char relPath[1024];
     safef(relPath, sizeof(relPath), "%s/index.html", u->name);
