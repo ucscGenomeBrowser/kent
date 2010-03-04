@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.100 2010/03/03 19:58:28 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.101 2010/03/04 17:21:37 ann Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1107,13 +1107,13 @@ html hg19vertChainNet
         type chain danRer6
         otherDb danRer6
 
-        track chainTetNig2
+        track chainTetNig1
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=iTetNig clade=eTele
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-        type chain tetNig2
-        otherDb tetNig2
+        type chain tetNig1
+        otherDb tetNig1
 
         track chainOryLat2
         subTrack vertebrateChainNetViewchain off
@@ -1217,13 +1217,13 @@ html hg19vertChainNet
         type netAlign danRer6 chainDanRer6
         otherDb danRer6
 
-        track netTetNig2
+        track netTetNig1
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=iTetNig clade=eTele
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date/$o_db) Alignment Net
-        type netAlign tetNig2 chainTetNig2
-        otherDb tetNig2
+        type netAlign tetNig1 chainTetNig1
+        otherDb tetNig1
 
         track netOryLat2
         subTrack vertebrateChainNetViewnet off
