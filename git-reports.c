@@ -196,7 +196,7 @@ while (lineFileNext(lf, &line, &lineSize))
     xline = htmlEncode(line);	
     if (line[0] == '-')
 	{
-	fprintf(h, "<span style=\"background-color:yellow\">%s</span>\n", xline);
+	fprintf(h, "<span style=\"background-color:#FF9999\">%s</span>\n", xline);
 	if (inBody)
 	    {
 	    inBlock = TRUE;
@@ -205,7 +205,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     else if (line[0] == '+')
 	{
-	fprintf(h, "<span style=\"background-color:cyan\">%s</span>\n", xline);
+	fprintf(h, "<span style=\"background-color:#99FF99\">%s</span>\n", xline);
 	if (inBody)
 	    {
 	    inBlock = TRUE;
@@ -214,7 +214,10 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     else
 	{
-	fprintf(h, "<span style=\"background-color:white\">%s</span>\n", xline);
+	if (line[0] == '@')
+	    fprintf(h, "<span style=\"background-color:#FFFF99\">%s</span>\n", xline);
+	else
+	    fprintf(h, "%s\n", xline);
 	if (inBody)
 	    {
 	    if (inBlock)
@@ -235,6 +238,20 @@ while (lineFileNext(lf, &line, &lineSize))
 
     freeMem(xline);
 
+    }
+// what if there is no last trailing line to end the last block?
+if (inBody)
+    {
+    if (inBlock)
+	{
+	inBlock = FALSE;
+	if (blockP >= blockN)
+	    linesChanged += blockP;
+	else
+	    linesChanged += blockN;
+	blockP = 0;
+	blockN = 0;
+	}
     }
 
 lineFileClose(&lf);
@@ -309,12 +326,23 @@ for(c = commits; c; c = c->next)
 	    cDiff = cloneString(path);
 
 	    uglyf("path=%s\n", path);
-	    safef(gitCmd,sizeof(gitCmd), ""
-	    "git show %s %s > %s"
-	    , c->commitId, f->path, cDiff);
+	    safef(gitCmd,sizeof(gitCmd), 
+		"git show %s %s > %s"
+		, c->commitId, f->path, cDiff);
 	    uglyf("gitCmd=%s\n", gitCmd);
 	    system(gitCmd);
 	    // TODO error handling
+
+	    
+	    // we need a lame work-around with this version of git
+            // because there is odd and varying unwanted context text after @@ --- @@ in diff output
+	    safef(gitCmd,sizeof(gitCmd), ""
+		"sed -i -e 's/\\(^@@ .* @@\\).*/\\1/' %s",
+		cDiff);
+	    uglyf("sedCmd=%s\n", gitCmd);
+	    system(gitCmd);
+	    // TODO error handling
+	    
 
 
 	    // make context html page
@@ -354,6 +382,15 @@ for(c = commits; c; c = c->next)
 	    // TODO error handling
 
 	    //git show --unified=10000 11a20b6cd113d75d84549eb642b7f2ac7a2594fe src/utils/qa/weeklybld/buildEnv.csh
+
+	    // we need a lame work-around with this version of git
+            // because there is odd and varying unwanted context text after @@ --- @@ in diff output
+	    safef(gitCmd,sizeof(gitCmd), ""
+		"sed -i -e 's/\\(^@@ .* @@\\).*/\\1/' %s",
+		fDiff);
+	    uglyf("sedCmd=%s\n", gitCmd);
+	    system(gitCmd);
+	    // TODO error handling
 
 	    // make full html page
 	    makeHtml(fDiff, fHtml, f->path, c->commitId);
@@ -468,7 +505,7 @@ for(u = users; u; u = u->next)
     userChangedFiles = 0;
 
     // DEBUG REMOVE
-    //if (sameString(u->name, "galt"))
+    if (sameString(u->name, "galt"))
     /* make user's reports */
     doUser(u->name, commits, &userChangedLines, &userChangedFiles);
 
