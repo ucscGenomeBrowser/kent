@@ -37,6 +37,7 @@ struct files
 struct commit 
     {
     struct commit *next;
+    int commitNumber;    // used for sorting fileviews
     char *commitId;
     char *author;
     char *date;
@@ -74,6 +75,7 @@ static struct optionSpec options[] =
 struct commit* getCommits()
 /* get all commits from startTag to endTag */
 {
+int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
 "git log origin/%s..origin/%s --name-status > commits.tmp"
 , startTag, endTag);
@@ -93,6 +95,7 @@ while (lineFileNext(lf, &line, &lineSize))
     if (!sameString("commit", w))
 	errAbort("expected keyword commit parsing commits.tmp\n");
     commit->commitId = cloneString(nextWord(&line));
+    commit->commitNumber = ++numCommits;
 
     lineFileNext(lf, &line, &lineSize);
     w = nextWord(&line);
