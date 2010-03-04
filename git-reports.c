@@ -175,7 +175,15 @@ while (lineFileNext(lf, &line, &lineSize))
 , commit->comment);
 
     for (f=commit->files; f; f = f->next)
-    	verbose(2, "%s\n", f->path);
+	{
+    	verbose(2, "%c %s\n", f->type, f->path);
+
+	// anything other than M?
+	if (f->type != 'M')
+	    verbose(2, "special type: %c %s\n", f->type, f->path);
+	}
+
+
     verbose(2, "------------\n");
 
     }
@@ -272,6 +280,74 @@ return linesChanged;
 }
 
 
+void makeDiffAndSplit(struct commit *c, char *u, char *path, boolean full)
+/* Generate a full diff and then split it up into its parts.
+ * This was motivated because no other way to show deleted files
+ * since they are not in repo and git paths must actually exist
+ * in working repo dir.  However leaving off the path produces
+ * a diff with everything we want, we just have to split it up. */
+{
+safef(gitCmd,sizeof(gitCmd), 
+    "git diff -b -w --no-prefix%s %s^ %s > makeDiff.tmp"  // TODO get proper temp file name
+    , full ? " --unified=10000" : ""    // should be good enough for most files
+    , c->commitId, c->commitId);
+uglyf("gitCmd=%s\n", gitCmd);
+system(gitCmd);
+// TODO error handling
+
+// now parse it and split it into separate files with the right path.
+struct lineFile *lf = lineFileOpen("makeDiff.tmp", TRUE);
+int lineSize;
+char *line;
+FILE *h = NULL;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (startsWith("diff --git ", line))
+	{
+	if (h)
+	    {
+	    fclose(h);
+	    h = NULL;
+	    }
+	//uglyf("line=%s\n", line); // DELETE THIS LINE
+	char *fpath = line + strlen("diff --git ");
+	fpath = strchr(fpath, ' ');
+	++fpath;   // now we should be pointing to the world
+
+	//uglyf("fpath=%s\n", fpath);
+
+	char path[1024];
+	char *r = strrchr(fpath, '/');
+	if (r)
+	    {
+	    *r = 0;
+	    /* make internal levels of subdirs */
+	    safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, full ? "full" : "context", fpath);
+	    uglyf("path=%s\n", path);
+	    system(path);
+	    *r = '/';
+	    }
+	safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
+	    , outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
+
+	h = mustOpen(path, "w");
+	fprintf(h, "%s\n", c->commitId);
+	fprintf(h, "%s\n", c->author);
+	fprintf(h, "%s\n", c->date);
+	fprintf(h, "%s\n", c->comment);
+	}
+    fprintf(h, "%s\n", line);
+    }
+if (h)
+    {
+    fclose(h);
+    h = NULL;
+    }
+lineFileClose(&lf);
+unlink("makeDiff.tmp"); 
+}
+
+
 void doUserCommits(char *u, struct commit *commits, int *saveUlc, int *saveUfc)
 /* process one user, commit-view */
 {
@@ -309,19 +385,6 @@ for(c = commits; c; c = c->next)
 	for(f = c->files; f; f = f->next)
 	    {
 	    char path[1024];
-	    char *r = strrchr(f->path, '/');
-	    if (r)
-		{
-		*r = 0;
-		/* make internal levels of subdirs */
-		safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, "context", f->path);
-		uglyf("path=%s\n", path);
-		system(path);
-		safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, "full", f->path);
-		uglyf("path=%s\n", path);
-		system(path);
-		*r = '/';
-		}
 
             // context unified
 	    safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
@@ -336,15 +399,9 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.diff", commonPath);
 	    cDiff = cloneString(path);
 
-	    uglyf("path=%s\n", path);
-	    safef(gitCmd,sizeof(gitCmd), 
-		"git show %s %s > %s"
-		, c->commitId, f->path, cDiff);
-	    uglyf("gitCmd=%s\n", gitCmd);
-	    system(gitCmd);
-	    // TODO error handling
-
-	    
+	    makeDiffAndSplit(c, u, f->path, FALSE);
+	   
+	    // TODO check do we still need this hack, or is the diff behaving?	
 	    // we need a lame work-around with this version of git
             // because there is odd and varying unwanted context text after @@ --- @@ in diff output
 	    safef(gitCmd,sizeof(gitCmd), ""
@@ -354,8 +411,6 @@ for(c = commits; c; c = c->next)
 	    system(gitCmd);
 	    // TODO error handling
 	    
-
-
 	    // make context html page
 	    f->linesChanged = makeHtml(cDiff, cHtml, f->path, c->commitId);
 	    userLinesChanged += f->linesChanged;
@@ -385,12 +440,7 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.diff", commonPath);
 	    fDiff = cloneString(path);
 
-	    safef(gitCmd,sizeof(gitCmd), ""
-	    "git show --unified=10000 %s %s > %s"
-	    , c->commitId, f->path, fDiff);
-	    uglyf("gitCmd=%s\n", gitCmd);
-	    system(gitCmd);
-	    // TODO error handling
+	    makeDiffAndSplit(c, u, f->path, TRUE);
 
 	    //git show --unified=10000 11a20b6cd113d75d84549eb642b7f2ac7a2594fe src/utils/qa/weeklybld/buildEnv.csh
 
