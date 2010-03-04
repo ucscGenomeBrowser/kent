@@ -1,9 +1,17 @@
 This is a third release of the "ENCODE UW DNase track"
 The composite track is wgEncodeUwDnaseSeq
 
+NOTE: A special case exists for the Jurkat cell line. Rep1 is being demoted to Rep2. 
+Ordinarily such a change would be a case for "Versioning".  However, this change is 
+equivalent to updating the metadata and future changes of this type for UW will be 
+handled by metadata.  To avoid confusion, Jurkat is being treated as all new, even
+though some data will be overwritten since the Sept release.  No data currently on 
+the RR for Jurkat will be lost.
+
 Categories of tables and files:
 A) Untouched - are on public browser and shall remain
-   114 tables, 190 files, 38 wibs
+   111 tables, 186 files, 37 wibs
+   * Special case for Jurkat Rep1 on release 2 which will be overwritten
 B) Elmininated - are currently on RR but will no longer be needed and
    should not be referenced by the public site
    See "Replced" and remove 3 tables, 0 files, 1 wibs
@@ -16,11 +24,12 @@ D) Versioned (replacing) - are only currently on test but will need to
    different name)
    3 tables, 5 files, 1 wibs
 E) New - are only currently on test but will need to be pushed to the RR.
-   114 tables, 191 files, 38 wibs
+   117 tables, 195 files, 39 wibs
+   * Special case for Jurkat Rep1 on release 2 which will be overwritten
 F) Additional items of note
 
 A) Untouched
-  A.a) Untouched tables: 114
+  A.a) Untouched tables: 111
     wgEncodeUwDnaseSeqHotspotsRep1Bjtert
     wgEncodeUwDnaseSeqHotspotsRep1Caco2
     wgEncodeUwDnaseSeqHotspotsRep1Gm06990
@@ -53,7 +62,6 @@ A) Untouched
     wgEncodeUwDnaseSeqHotspotsRep2Hl60
     wgEncodeUwDnaseSeqHotspotsRep2Hrcepic
     wgEncodeUwDnaseSeqHotspotsRep2Hre
-    wgEncodeUwDnaseSeqHotspotsRep2Jurkat
     wgEncodeUwDnaseSeqHotspotsRep2K562
     wgEncodeUwDnaseSeqHotspotsRep2Panc1
     wgEncodeUwDnaseSeqHotspotsRep2Saec
@@ -91,7 +99,6 @@ A) Untouched
     wgEncodeUwDnaseSeqPeaksRep2Hl60
     wgEncodeUwDnaseSeqPeaksRep2Hrcepic
     wgEncodeUwDnaseSeqPeaksRep2Hre
-    wgEncodeUwDnaseSeqPeaksRep2Jurkat
     wgEncodeUwDnaseSeqPeaksRep2K562
     wgEncodeUwDnaseSeqPeaksRep2Panc1
     wgEncodeUwDnaseSeqPeaksRep2Saec
@@ -129,14 +136,13 @@ A) Untouched
     wgEncodeUwDnaseSeqRawSignalRep2Hl60
     wgEncodeUwDnaseSeqRawSignalRep2Hrcepic
     wgEncodeUwDnaseSeqRawSignalRep2Hre
-    wgEncodeUwDnaseSeqRawSignalRep2Jurkat
     wgEncodeUwDnaseSeqRawSignalRep2K562
     wgEncodeUwDnaseSeqRawSignalRep2Panc1
     wgEncodeUwDnaseSeqRawSignalRep2Saec
     wgEncodeUwDnaseSeqRawSignalRep2Skmc
     wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 
-  A.b) Untouched files: 190
+  A.b) Untouched files: 186
     wgEncodeUwDnaseSeqAlignmentsRep1Bjtert.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep1Caco2.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep1Gm06990.tagAlign.gz
@@ -169,7 +175,6 @@ A) Untouched
     wgEncodeUwDnaseSeqAlignmentsRep2Hl60.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Hrcepic.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Hre.tagAlign.gz
-    wgEncodeUwDnaseSeqAlignmentsRep2Jurkat.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2K562.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Panc1.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Saec.tagAlign.gz
@@ -207,7 +212,6 @@ A) Untouched
     wgEncodeUwDnaseSeqHotspotsRep2Hl60.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Hrcepic.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Hre.broadPeak.gz
-    wgEncodeUwDnaseSeqHotspotsRep2Jurkat.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2K562.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Panc1.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Saec.broadPeak.gz
@@ -246,7 +250,6 @@ A) Untouched
     wgEncodeUwDnaseSeqPeaksRep2Hl60.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Hrcepic.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Hre.narrowPeak.gz
-    wgEncodeUwDnaseSeqPeaksRep2Jurkat.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2K562.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Panc1.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Saec.narrowPeak.gz
@@ -321,7 +324,6 @@ A) Untouched
     wgEncodeUwDnaseSeqRawSignalRep2Hl60.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Hrcepic.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Hre.wig.gz
-    wgEncodeUwDnaseSeqRawSignalRep2Jurkat.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2K562.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Panc1.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Saec.wig.gz
@@ -361,7 +363,6 @@ A) Untouched
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Hl60.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Hrcepic.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Hre.wib
-    /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Jurkat.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2K562.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Panc1.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Saec.wib
@@ -410,7 +411,7 @@ D) Versioned:
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Nb4V2.wib ( /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Nb4.wib )
 
 E) New tables:
-    E.a) New tables (excluding versioned): 114
+    E.a) New tables (excluding versioned): 117
     wgEncodeUwDnaseSeqHotspotsRep1Ag04449
     wgEncodeUwDnaseSeqHotspotsRep1Ag04450
     wgEncodeUwDnaseSeqHotspotsRep1Ag09309
@@ -445,6 +446,7 @@ E) New tables:
     wgEncodeUwDnaseSeqHotspotsRep2Hipe
     wgEncodeUwDnaseSeqHotspotsRep2Hnpce
     wgEncodeUwDnaseSeqHotspotsRep2Hrpe
+    wgEncodeUwDnaseSeqHotspotsRep2Jurkat
     wgEncodeUwDnaseSeqHotspotsRep2Mcf7
     wgEncodeUwDnaseSeqHotspotsRep2Nb4
     wgEncodeUwDnaseSeqHotspotsRep2Nhdfneo
@@ -483,6 +485,7 @@ E) New tables:
     wgEncodeUwDnaseSeqPeaksRep2Hipe
     wgEncodeUwDnaseSeqPeaksRep2Hnpce
     wgEncodeUwDnaseSeqPeaksRep2Hrpe
+    wgEncodeUwDnaseSeqPeaksRep2Jurkat
     wgEncodeUwDnaseSeqPeaksRep2Mcf7
     wgEncodeUwDnaseSeqPeaksRep2Nb4
     wgEncodeUwDnaseSeqPeaksRep2Nhdfneo
@@ -521,12 +524,13 @@ E) New tables:
     wgEncodeUwDnaseSeqRawSignalRep2Hipe
     wgEncodeUwDnaseSeqRawSignalRep2Hnpce
     wgEncodeUwDnaseSeqRawSignalRep2Hrpe
+    wgEncodeUwDnaseSeqRawSignalRep2Jurkat
     wgEncodeUwDnaseSeqRawSignalRep2Mcf7
     wgEncodeUwDnaseSeqRawSignalRep2Nb4
     wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo
     wgEncodeUwDnaseSeqRawSignalRep2Nhlf
 
-    E.b) New files (excluding versioned): 191
+    E.b) New files (excluding versioned): 195
         current location on alpha:
         /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/release3/
         NOT yet on RR: (but to be put in htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwDnaseSeq/)
@@ -564,6 +568,7 @@ E) New tables:
     wgEncodeUwDnaseSeqAlignmentsRep2Hipe.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Hnpce.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Hrpe.tagAlign.gz
+    wgEncodeUwDnaseSeqAlignmentsRep2Jurkat.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Mcf7.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Nb4.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep2Nhdfneo.tagAlign.gz
@@ -602,6 +607,7 @@ E) New tables:
     wgEncodeUwDnaseSeqHotspotsRep2Hipe.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Hnpce.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Hrpe.broadPeak.gz
+    wgEncodeUwDnaseSeqHotspotsRep2Jurkat.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Mcf7.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Nb4.broadPeak.gz
     wgEncodeUwDnaseSeqHotspotsRep2Nhdfneo.broadPeak.gz
@@ -640,6 +646,7 @@ E) New tables:
     wgEncodeUwDnaseSeqPeaksRep2Hipe.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Hnpce.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Hrpe.narrowPeak.gz
+    wgEncodeUwDnaseSeqPeaksRep2Jurkat.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Mcf7.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Nb4.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep2Nhdfneo.narrowPeak.gz
@@ -717,12 +724,13 @@ E) New tables:
     wgEncodeUwDnaseSeqRawSignalRep2Hipe.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Hnpce.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Hrpe.wig.gz
+    wgEncodeUwDnaseSeqRawSignalRep2Jurkat.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Mcf7.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Nb4.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2Nhlf.wig.gz
 
-    E.c) new wibs (excluding versioned): 38
+    E.c) new wibs (excluding versioned): 39
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Ag04449.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Ag04450.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Ag09309.wib
@@ -757,6 +765,7 @@ E) New tables:
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Hipe.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Hnpce.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Hrpe.wib
+    /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Jurkat.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Mcf7.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Nb4.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo.wib
