@@ -142,7 +142,7 @@ A) Untouched
     wgEncodeUwDnaseSeqRawSignalRep2Skmc
     wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 
-  A.b) Untouched files: 186
+  A.b) Untouched files: 185
     wgEncodeUwDnaseSeqAlignmentsRep1Bjtert.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep1Caco2.tagAlign.gz
     wgEncodeUwDnaseSeqAlignmentsRep1Gm06990.tagAlign.gz
@@ -232,7 +232,6 @@ A) Untouched
     wgEncodeUwDnaseSeqPeaksRep1Huvec.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep1K562.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep1Mcf7.narrowPeak.gz
-    wgEncodeUwDnaseSeqPeaksRep1Nb4.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep1Nhek.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep1Panc1.narrowPeak.gz
     wgEncodeUwDnaseSeqPeaksRep1Saec.narrowPeak.gz
@@ -330,7 +329,7 @@ A) Untouched
     wgEncodeUwDnaseSeqRawSignalRep2Skmc.wig.gz
     wgEncodeUwDnaseSeqRawSignalRep2SknshraV2.wig.gz
 
-  A.c) Untouched wibs: 38
+  A.c) Untouched wibs: 37
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Bjtert.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Caco2.wib
     /gbdb/hg18/wib/wgEncodeUwDnaseSeqRawSignalRep1Gm06990.wib
@@ -384,7 +383,7 @@ C) Replaced
   C.b) Replaced files: 5
     wgEncodeUwDnaseSeqAlignmentsRep1Nb4.tagAlign.gz
     wgEncodeUwDnaseSeqHotspotsRep1Nb4.broadPeak.gz
-	wgEncodeUwDnaseSeqPeaksRep1Nb4.narrowPeak.gz
+    wgEncodeUwDnaseSeqPeaksRep1Nb4.narrowPeak.gz
     wgEncodeUwDnaseSeqRawDataRep1Nb4.fastq.gz
     wgEncodeUwDnaseSeqRawSignalRep1Nb4.wig.gz
 
