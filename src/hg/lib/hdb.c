@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.418 2010/02/06 21:43:01 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.419 2010/03/04 05:53:14 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4348,7 +4348,7 @@ else
 return buffer;
 }
 
-static struct grp* loadGrps(struct sqlConnection *conn, char *confName, char *defaultTbl)
+static struct grp* loadGrps(char *db, char *confName, char *defaultTbl)
 /* load all of the grp rows from a table.  The table name is first looked up
  * in hg.conf with confName. If not there, use defaultTbl.  If the table
  * doesn't exist, return NULL */
@@ -4366,9 +4366,11 @@ slReverse(&tables);
 for (table = tables; table != NULL; table = table->next)
     {
     struct grp *oneTable = NULL;
-    if (sqlTableExists(conn, table->name))
+    char *actualTableName = NULL;
+    struct sqlConnection *conn = hAllocConnProfileTbl(db, table->name, &actualTableName);
+    if (sqlTableExists(conn, actualTableName))
 	{
-	safef(query, sizeof(query), "select * from %s", table->name);
+	safef(query, sizeof(query), "select * from %s", actualTableName);
 	oneTable = grpLoadByQuery(conn, query);
 	}
     slUniqify(&oneTable, grpCmpName, grpFree);
@@ -4384,10 +4386,8 @@ struct grp* hLoadGrps(char *db)
 /* load the grp tables using the list configured in hg.conf, returning a list
  * sorted by priority. */
 {
-struct sqlConnection *conn = hAllocConn(db);
-struct grp *grps = loadGrps(conn, "db.grp", "grp");
+struct grp *grps = loadGrps(db, "db.grp", "grp");
 slSort(&grps, grpCmpPriority);
-hFreeConn(&conn);
 return grps;
 }
 
