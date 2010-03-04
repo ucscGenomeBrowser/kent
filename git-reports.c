@@ -431,6 +431,7 @@ for(c = commits; c; c = c->next)
 	fprintf(h, "\n");
 	}
     }
+fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
 *saveUlc = userLinesChanged;
@@ -565,6 +566,7 @@ for(cf = comFiles; cf; cf = cf->next)
 
     fprintf(h, "\n");
     }
+fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
 //*saveUlc = userLinesChanged;
