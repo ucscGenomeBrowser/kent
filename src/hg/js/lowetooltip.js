@@ -33,7 +33,8 @@ function changetitles()
 function setwidth()
 {
    var windwidth = $(window).width() + $(window).scrollLeft() - 20;
-   $("#map").prev().before('<input name="pix" type="hidden" value="'+windwidth+'"/>');
+   $("input[name=pix]").val(windwidth);
+   //$("#map").prev().before('<input name="pix" type="hidden" value="'+windwidth+'"/>');
     
 }
 function basictracks()
