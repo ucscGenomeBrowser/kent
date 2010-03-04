@@ -284,7 +284,7 @@ FILE *h = mustOpen(userPath, "w");
 fprintf(h, "<html>\n<head>\n<title>%s Commits View</title>\n</head>\n</body>\n", u);
 fprintf(h, "<h2>Commits for %s</h2>\n", u);
 
-//switch to grouped by file view, user index
+fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
 fprintf(h, "<pre>\n");
@@ -465,7 +465,7 @@ FILE *h = mustOpen(userPath, "w");
 fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
 fprintf(h, "<h2>Files for %s</h2>\n", u);
 
-//switch to grouped by file view, user index
+fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
 fprintf(h, "<pre>\n");
