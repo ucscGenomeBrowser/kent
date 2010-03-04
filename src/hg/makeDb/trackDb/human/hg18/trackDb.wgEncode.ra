@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.901 2010/03/04 23:48:29 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.902 2010/03/04 23:56:03 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21026,7 +21026,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel Jurkat Pol2 Pk 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in Jurkat cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in Jurkat cells)
         subGroups view=Peaks factor=POL2 cellType=JURKAT prot=PCR2x treat=aNONE rep=rep2
         type broadPeak
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Pol2 protocol=PCR2x view=Peaks replicate=2 labVersion=SL187 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2JurkatPol2Pcr2x fileName=wgEncodeHudsonalphaChipSeqPeaksRep2JurkatPol2Pcr2x.broadPeak.gz
@@ -21035,7 +21035,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel Jurkat Pol2 Pk 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in Jurkat cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in Jurkat cells)
         subGroups view=Peaks factor=POL2 cellType=JURKAT prot=PCR2x treat=aNONE  rep=rep1
         type broadPeak
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Pol2 protocol=PCR2x view=Peaks replicate=1 labVersion=SL127 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x fileName=wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x.broadPeak.gz
@@ -21044,7 +21044,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 BHLHE40 Pk 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Rep 2 (BHLHE40 in HepG2 cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BHLHE40 in HepG2 cells)
         subGroups view=Peaks factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 189,0,157
@@ -21054,7 +21054,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 BHLHE40 Pk 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Rep 1 (BHLHE40 in HepG2 cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BHLHE40 in HepG2 cells)
         subGroups view=Peaks factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 189,0,157
@@ -22914,7 +22914,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Pol2 Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in Jurkat cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in Jurkat cells)
         subGroups view=zRaw factor=POL2 cellType=JURKAT prot=PCR2x treat=aNONE  rep=rep1
         type wig 1.00 14367.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Pol2 protocol=PCR2x type=wig fragLength=225 view=zRaw replicate=1 labVersion=SL127 dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x.wig.gz
@@ -22923,7 +22923,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Control Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 2 (Control in Jurkat cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Control in Jurkat cells)
         subGroups view=zRaw factor=zCTRL2 cellType=JURKAT prot=PCR2x treat=aNONE rep=rep2
         type wig 1.00 4154.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Input protocol=PCR2x type=wig fragLength=225 view=zRaw replicate=2 labVersion=SL4 dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x.wig.gz
@@ -22932,7 +22932,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Pol2 Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in Jurkat cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in Jurkat cells)
         subGroups view=zRaw factor=POL2 cellType=JURKAT prot=PCR2x treat=aNONE rep=rep2
         type wig 1.00 8790.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Pol2 protocol=PCR2x type=wig fragLength=225 view=zRaw replicate=2 labVersion=SL187 dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x.wig.gz
@@ -22941,7 +22941,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Control Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 1 (Control in Jurkat cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Control in Jurkat cells)
         subGroups view=zRaw factor=zCTRL2 cellType=JURKAT prot=PCR2x treat=aNONE rep=rep1
         type wig 1.00 4154.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=Jurkat antibody=Input protocol=PCR2x type=wig fragLength=225 view=zRaw replicate=1 labVersion=SL4 dataVersion="ENCODE Jan 2010 Freeze" subId=1028 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x.wig.gz
@@ -22950,7 +22950,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 BHLHE40 Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 1 (BHLHE40 in HepG2 cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (BHLHE40 in HepG2 cells)
         subGroups view=zRaw factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 12805.00
         color 189,0,157
@@ -22960,7 +22960,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 BHLHE40 Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 2 (BHLHE40 in HepG2 cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (BHLHE40 in HepG2 cells)
         subGroups view=zRaw factor=BHLHE40 cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 14511.00
         color 189,0,157
@@ -22970,7 +22970,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 1 (GR in A549/EtOH_0.02pct cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (GR in A549/EtOH_0.02pct cells)
         subGroups view=zRaw factor=GR cellType=A549 prot=PCR1x treat=EtOH02 rep=rep1
         type wig 1.00 12187.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=GR protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=1 labVersion=1 softwareVersion=1 dataVersion="ENCODE Jan 2010 Freeze" subId=801 dateSubmitted=2010-03-01 dateUnrestricted=2010-12-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02.wig.gz
@@ -22979,7 +22979,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         release alpha
         subTrack wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Rep 2 (GR in A549/EtOH_0.02pct cells)
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (GR in A549/EtOH_0.02pct cells)
         subGroups view=zRaw factor=GR cellType=A549 prot=PCR1x treat=EtOH02 rep=rep2
         type wig 1.00 12715.00
         metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=A549 antibody=GR protocol=PCR1x treatment=EtOH_0.02pct type=wig fragLength=225 view=RawSignal replicate=2 labVersion=2 dataVersion="ENCODE Jan 2010 Freeze" subId=801 dateSubmitted=2010-03-01 dateUnrestricted=2010-12-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02.wig.gz
