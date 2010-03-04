@@ -627,8 +627,8 @@ char usersPath[1024];
 safef(usersPath, sizeof(usersPath), "%s/%s/%s/index.html", outDir, outPrefix, "user");
 
 FILE *h = mustOpen(usersPath, "w");
-fprintf(h, "<html>\n<head>\n<title>Git Changes By User</title>\n</head>\n</body>\n");
-fprintf(h, "<h2>Git Changes By User</h2>\n");
+fprintf(h, "<html>\n<head>\n<title>Changes By User</title>\n</head>\n</body>\n");
+fprintf(h, "<h2>Changes By User</h2>\n");
 
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
