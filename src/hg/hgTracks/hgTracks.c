@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1632 2010/03/03 19:30:02 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1633 2010/03/04 21:24:08 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -292,29 +292,24 @@ static void mapBoxTrackUi(struct hvGfx *hvg, int x, int y, int width,
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 x = hvGfxAdjXW(hvg, x, width);
-char *encodedName = cgiEncode(name);
+char *url = trackUrl(name, chromName);
 
 if(theImgBox && curImgTrack)
     {
-    char link[512];
-    safef(link,sizeof(link),"%s?%s=%u&g=%s",
-        hgTrackUiName(), cartSessionVarName(),cartSessionId(cart), encodedName);
     char title[256];
-
     safef(title,sizeof(title),"%s controls", shortLabel);
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
     if(curSlice)
-        sliceAddLink(curSlice,link,title);
+        sliceAddLink(curSlice,url,title);
     }
 else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), cartSessionVarName(),
-                            cartSessionId(cart), chromName, encodedName);
+    hPrintf("HREF=\"%s\"", url);
     mapStatusMessage("%s controls", shortLabel);
     hPrintf(">\n");
     }
-freeMem(encodedName);
+freeMem(url);
 }
 
 static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -343,6 +338,19 @@ else
         mapStatusMessage("%s", message);
     hPrintf(">\n");
     }
+}
+
+char *trackUrl(char *mapName, char *chromName)
+{
+/* Return hgTrackUi url; chromName is optional. */
+char *encodedMapName = cgiEncode(mapName);
+char buf[2048];
+if(chromName == NULL)
+    safef(buf, sizeof(buf), "%s?%s=%u&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
+else
+    safef(buf, sizeof(buf), "%s?%s=%u&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+freeMem(encodedMapName);
+return(cloneString(buf));
 }
 
 void smallBreak()
@@ -4135,7 +4143,7 @@ static void trackJson(struct dyString *trackDbJson, struct track *track, int cou
 if(count)
     dyStringAppend(trackDbJson, "\n,");
 dyStringPrintf(trackDbJson, "\t%s: {", track->mapName);
-if(tdbIsSuperTrackChild(track->tdb))
+if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
     dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->tableName);
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                track->shortLabel, track->longLabel, track->canPack, track->limitedVis);
@@ -4159,8 +4167,8 @@ long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
 #ifdef CONTEXT_MENU
 struct dyString *trackDbJson = newDyString(1000);
-int trackDbJsonCount = 0;
-dyStringAppend(trackDbJson, "<script>var trackDbJson = {\n");
+int trackDbJsonCount = 1;
+dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
 #endif
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
@@ -4182,7 +4190,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
 hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
 if (!psOutput) cartSaveSession(cart);
-clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
+clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -4406,7 +4414,7 @@ if (!hideControls)
 	    freeDyString(&trackGroupsHidden1);
 	    freeDyString(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
-	clearButtonJavascript = "document.TrackForm.position.value=''";
+	clearButtonJavascript = "document.TrackForm.position.value=''; document.getElementById('suggest').value='';";
 	hPrintf("<CENTER>");
 	}
 
@@ -4428,7 +4436,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	if(dragZooming && assemblySupportsGeneSuggest(database))
-            hWrites(" gene <input type='text' size='8' name='hgt.ignoreme' id='suggest'>\n");
+            hWrites(" gene <input type='text' size='8' name='hgt.suggest' id='suggest'>\n");
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");
@@ -4566,6 +4574,11 @@ if (!hideControls)
         hPrintf(" ");
 	}
 
+#ifdef TRACK_SEARCH
+    hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
+    hPrintf(" ");
+#endif
+
     hButton("hgt.refresh", "refresh");
 
     hPrintf("<BR>\n");
@@ -4652,11 +4665,10 @@ if (!hideControls)
 	    if (!showedRuler && isFirstNotCtGroup &&
 			differentString(group->name, "user"))
 		{
+		char *url = trackUrl(RULER_TRACK_NAME, chromName);
 		showedRuler = TRUE;
 		myControlGridStartCell(cg, isOpen, group->name);
-		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
-		cartSessionVarName(), cartSessionId(cart),
-		chromName, RULER_TRACK_NAME);
+		hPrintf("<A HREF=\"%s\">", url);
 		hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
 		hPrintf("</A>");
 		hDropListClassWithStyle("ruler", rulerMenu,
@@ -4664,6 +4676,7 @@ if (!hideControls)
 			rulerMode == tvHide ? "hiddenText" : "normalText",
 			TV_DROPDOWN_STYLE);
 		controlGridEndCell(cg);
+		freeMem(url);
 		}
 	    if (differentString(group->name, "user"))
 		isFirstNotCtGroup = FALSE;
@@ -4682,14 +4695,12 @@ if (!hideControls)
 		myControlGridStartCell(cg, isOpen, group->name);
 		if (track->hasUi)
 		    {
-		    char *encodedMapName = cgiEncode(track->mapName);
+		    char *url = trackUrl(track->mapName, chromName);
 		    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
 		    if(trackDbSetting(track->tdb, "wgEncode") != NULL)
 			hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
-		    hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\" title=\"%s\">", hgTrackUiName(),
-			    cartSessionVarName(), cartSessionId(cart),
-			    chromName, encodedMapName, longLabel);
-		    freeMem(encodedMapName);
+		    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, longLabel);
+		    freeMem(url);
 		    freeMem(longLabel);
 		    }
 		hPrintf(" %s", track->shortLabel);
@@ -5483,6 +5494,13 @@ else if (cartVarExists(cart, configShowEncodeGroups))
             collapseGroup(grp->name, FALSE);
     configPageSetTrackVis(-2);
     }
+#ifdef TRACK_SEARCH
+else if (cartVarExists(cart, searchTracks))
+    {
+    cartRemove(cart, searchTracks);
+    doSearchTracks(groupList);
+    }
+#endif
 else
     {
     tracksDisplay();
@@ -5512,10 +5530,13 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
                         "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
                         "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
                         "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
-                        "hgt.collapseGroups", "hgt.expandGroups", "hgt.ignoreme",
+                        "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
                         "hgt.jump", "hgt.refresh",
 #ifdef CONTEXT_MENU
                         "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
+#endif
+#ifdef TRACK_SEARCH
+                        searchTracks,
 #endif
             NULL };
 

@@ -51,6 +51,8 @@
 #define MAXPIXELS 14000
 #endif
 
+#define TRACK_SEARCH
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -1179,6 +1181,9 @@ boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
 
 char *bbiNameFromTable(struct sqlConnection *conn, char *table);
 /* Return file name from little track table. */
+
+char *trackUrl(char *mapName, char *chromName);
+/* Return hgTrackUi url; chromName is optional. */
 
 #endif /* HGTRACKS_H */
 
