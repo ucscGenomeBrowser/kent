@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.18 2010/03/03 19:30:04 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.19 2010/03/04 05:14:13 angie Exp $";
 
 #include "bamFile.h"
 
@@ -179,7 +179,11 @@ if (isCustomTrack(tdb->tableName))
 	errAbort("doBamDetails: can't find bigDataUrl for custom track %s", tdb->tableName);
     }
 else
-    fileName = bamFileNameFromTable(database, tdb->tableName, seqName);
+    {
+    struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+    fileName = bamFileNameFromTable(conn, tdb->tableName, seqName);
+    hFreeConn(&conn);
+    }
 bamFetch(fileName, position, oneBam, &btd);
 if (isPaired)
     {

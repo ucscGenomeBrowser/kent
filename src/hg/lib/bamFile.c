@@ -9,14 +9,13 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.21 2010/03/03 19:30:02 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.22 2010/03/04 05:14:13 angie Exp $";
 
-char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
+char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
  * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
  * bam file might have '1' not 'chr1'). */
 {
-struct sqlConnection *conn = hAllocConn(db);
 boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
 if (checkSeqName && bamSeqName == NULL)
     errAbort("bamFileNameFromTable: table %s has seqName column, but NULL seqName passed in",
@@ -45,7 +44,6 @@ if (fileName == NULL)
     else
 	errAbort("Missing fileName in %s table", table);
     }
-hFreeConn(&conn);
 return fileName;
 }
 

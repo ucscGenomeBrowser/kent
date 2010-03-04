@@ -10,7 +10,7 @@
 #include "bam.h"
 #include "sam.h"
 
-char *bamFileNameFromTable(char *db, char *table, char *bamSeqName);
+char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName);
 /* Return file name from table.  If table has a seqName column, then grab the 
  * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
  * bam file might have '1' not 'chr1'). */

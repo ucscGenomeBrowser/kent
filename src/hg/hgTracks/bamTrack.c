@@ -18,7 +18,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.28 2010/03/03 19:30:04 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.29 2010/03/04 05:14:13 angie Exp $";
 
 struct bamTrackData
     {
@@ -434,7 +434,11 @@ if (tg->customPt)
 	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->mapName);
     }
 else
-    fileName = bamFileNameFromTable(database, tg->mapName, chromName);
+    {
+    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+    fileName = bamFileNameFromTable(conn, tg->mapName, chromName);
+    hFreeConn(&conn);
+    }
 
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
