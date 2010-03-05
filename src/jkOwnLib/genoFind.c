@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.26 2009/10/08 18:09:38 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.27 2010/03/05 00:30:25 kent Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -903,6 +903,20 @@ gfZeroOverused(gf);
 return gf;
 }
 
+static void checkUniqueNames(bioSeq *seqList)
+/* Check that each sequence has a unique name. */
+{
+struct hash *hash = hashNew(18);
+bioSeq *seq;
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    if (hashLookup(hash, seq->name))
+        errAbort("Error: sequence name %s is repeated in the database, all names must be unique.",
+		seq->name);
+    hashAdd(hash, seq->name, NULL);
+    }
+hashFree(&hash);
+}
 
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
@@ -911,6 +925,7 @@ struct genoFind *gfIndexSeq(bioSeq *seqList,
 /* Make index for all seqs in list.  For DNA sequences upper case bits will
  * be unindexed. */
 {
+checkUniqueNames(seqList);
 struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, stepSize, maxPat, 
 				oocFile, isPep, allowOneMismatch);
 if (stepSize == 0)
