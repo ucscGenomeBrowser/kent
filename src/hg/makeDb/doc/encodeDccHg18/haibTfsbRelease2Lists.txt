@@ -6,7 +6,7 @@ A) Untouched - are on public browser and shall remain
    32 tables, 34 files, 16 wibs
 B) Elmininated - are currently on RR but will no longer be needed and
    should not be referenced by the public site
-   See "Replced" and remove ? tables, 0 files, ? wibs
+   See "Replaced" and remove 4 tables, 0 files, 3 wibs
 C) Replaced - are on public browser but will be replaced by something
    with another name (nothing should be replace by something with the
    same name)
@@ -109,9 +109,9 @@ A) Untouched
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf.wib
 
 B) Elmininated
-    C.a) Eliminated tables: ? ( See "Replaced" and remove those )
+    C.a) Eliminated tables: 4 ( See "Replaced" and remove those )
     C.a) Eliminated files: 0 (do NOT remove replaced files)
-    C.a) Eliminated wibs: ? ( See "Replaced" and remove those )
+    C.a) Eliminated wibs: 3 ( See "Replaced" and remove those )
 
 C) Replaced
   C.a) Replaced tables: 4 ( should be removed from RR )
@@ -250,6 +250,7 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Pol2
     wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x
     wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Sin3ak20
+    wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
     wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1
     wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1
     wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
@@ -331,7 +332,6 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Pol2
     wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x
     wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20
-    wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Srf
     wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1
     wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1
     wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
@@ -411,6 +411,7 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Pol2
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2RxraPcr1x
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Sin3ak20
+    wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Taf1
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Usf1
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1x
@@ -482,7 +483,6 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Pol2
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2RxraPcr1x
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Sin3ak20
-    wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Srf
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Taf1
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Usf1
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1x
@@ -571,6 +571,7 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Pol2.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2RxraPcr1x.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Sin3ak20.tagAlign.gz
+    wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Srf.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Taf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Usf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1x.tagAlign.gz
@@ -652,7 +653,6 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Pol2.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2RxraPcr1x.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Sin3ak20.tagAlign.gz
-    wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Srf.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Taf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Usf1.tagAlign.gz
     wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1x.tagAlign.gz
@@ -732,6 +732,7 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Pol2.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2RxraPcr1x.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Sin3ak20.broadPeak.gz
+    wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Taf1.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Usf1.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1x.broadPeak.gz
@@ -803,7 +804,6 @@ E) New tables:
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Pol2.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2RxraPcr1x.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Sin3ak20.broadPeak.gz
-    wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Srf.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Taf1.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Usf1.broadPeak.gz
     wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1x.broadPeak.gz
@@ -1020,6 +1020,7 @@ E) New tables:
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Pol2.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Sin3ak20.wib
+    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x.wib
@@ -1101,7 +1102,6 @@ E) New tables:
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Pol2.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20.wib
-    /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Srf.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1.wib
     /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x.wib
