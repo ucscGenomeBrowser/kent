@@ -96,7 +96,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.43 2010/02/01 00:58:38 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.44 2010/03/05 00:13:40 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2854,11 +2854,11 @@ void doWiki(char *track, struct trackDb *tdb, char *itemName)
   {
     strand[0] = itemName[strlen(itemName)-1];
     strand[1] = 0;
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowedev.cse.ucsc.edu/%s/index.php/BED:%s:%s:%d-%d:%s\"</META>", wiki, database, seqName, winStart, winEnd, strand);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
   }
   else
   {
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowedev.cse.ucsc.edu/%s/index.php/BED:%s:%s:%s\"</META>", wiki, database, seqName, itemName);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
   }
 
   printf("</HEAD>");
