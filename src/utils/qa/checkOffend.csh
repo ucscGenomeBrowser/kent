@@ -31,6 +31,7 @@ set end=""
 
 set chr=`getChromFieldName.csh $db $track`
 if ($status) then
+  echo "\nERROR: not a chromosome-based table.\n"
   exit 1
 endif
 
