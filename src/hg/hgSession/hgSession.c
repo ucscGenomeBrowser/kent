@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.52 2009/09/23 18:42:17 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.53 2010/03/05 22:26:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -216,7 +216,7 @@ static char *getSetting(char *settings, char *name)
 if (isEmpty(settings))
     return NULL;
 struct hash *settingsHash = raFromString(settings);
-char *val = hashFindVal(settingsHash, name);
+char *val = cloneString(hashFindVal(settingsHash, name));
 hashFree(&settingsHash);
 return val;
 }
