@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.213 2010/02/12 23:08:31 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.214 2010/03/05 22:06:39 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3234,30 +3234,10 @@ tag Input
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
 
-term UCDavis
-tag UCD
-type control
-description Control signal (specific to UC Davis) which may be subtracted from experimental raw signal before peaks are called.
-
 term Large_Fragment
 tag LargeFragment
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
-
-term MNase
-tag MNase
-type control
-description Control signal from MNase digested DNA.
-
-term IgG-mus
-tag IGGmus
-type control
-description Control signal from Normal Mouse IgG ChIP-seq.
-
-term IgG-rab
-tag IGGrab
-type control
-description Control signal from normal Rabbit IgG ChIP-seq.
 
 term Naked_DNA
 tag NakedDNA
@@ -3273,6 +3253,33 @@ term None
 tag None
 description No special treatment or protocol applies
 type control
+
+
+### Inputs
+term std
+tag std
+type input
+description Standard input signal for most experiments.
+
+term IgG-mus
+tag IGGmus
+type input
+description Input signal from Normal Mouse IgG ChIP-seq.
+
+term IgG-rab
+tag IGGrab
+type input
+description Input signal from normal Rabbit IgG ChIP-seq.
+
+term MNase
+tag MNase
+type input
+description Input signal from MNase digested DNA.
+
+term UCDavis
+tag UCD
+type input
+description Input signal (specific to UC Davis) which may be subtracted from experimental raw signal before peaks are called.
 
 
 ### Treatments
