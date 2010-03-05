@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.902 2010/03/04 23:56:03 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.903 2010/03/05 06:09:46 pauline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -23012,7 +23012,7 @@ priority 0
 nextItemButton on
 wgEncode 1
 dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
-html wgEncodeHudsonalphaChipSeqRelease2
+html wgEncodeHudsonalphaChipSeqRelease1
 
     track wgEncodeHudsonalphaChipSeqViewPeaks
     release beta
