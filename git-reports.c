@@ -473,8 +473,9 @@ for(c = commits; c; c = c->next)
 	fprintf(h, "\n");
 	}
     }
+fprintf(h, "</pre>\n");
 fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
-fprintf(h, "</pre>\n</body>\n</html>\n");
+fprintf(h, "</body>\n</html>\n");
 fclose(h);
 *saveUlc = userLinesChanged;
 *saveUfc = userFileCount;
@@ -618,10 +619,16 @@ for(cf = comFiles; cf; cf = cf->next)
     fprintf(h, "\n");
     }
 if (u)
+    {
+    fprintf(h, "</pre>\n");
     fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
+    }
 else
+    {
     fprintf(h, "\n  lines changed: %d\n  files changed: %d\n", totalLinesChanged, totalFileCount);
-fprintf(h, "</pre>\n</body>\n</html>\n");
+    fprintf(h, "</pre>\n");
+    }
+fprintf(h, "</body>\n</html>\n");
 fclose(h);
 }
 
