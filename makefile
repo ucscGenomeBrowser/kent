@@ -24,7 +24,9 @@ $(EXE): $O
 	
 
 test: $(EXE)
-	$(EXE) v223_branch v224_branch 2010-01-05 2010-01-19 v224 /cluster/bin/build/buildrepo /cluster/home/galt/public_html/git-reports review
+	rm -fr ${HOME}/public_html/git-reports
+	mkdir ${HOME}/public_html/git-reports
+	$(EXE) v223_branch v224_branch 2010-01-05 2010-01-19 v224 /cluster/bin/build/buildrepo ${HOME}/public_html/git-reports branch
 	# note can use -verbose=2
 
 backup:
