@@ -25,7 +25,6 @@ $(EXE): $O
 
 test: $(EXE)
 	$(EXE) v223_branch v224_branch 2010-01-05 2010-01-19 v224 /cluster/bin/build/buildrepo /cluster/home/galt/public_html/git-reports review
-	#$(EXE) -verbose=2 v223_branch v224_branch 2010-01-05 2010-01-19 v224 /cluster/bin/build/buildrepo /cluster/home/galt/public_html/git-reports review
 	# note can use -verbose=2
 
 backup:

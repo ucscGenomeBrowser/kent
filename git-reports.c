@@ -7,6 +7,7 @@
 #include "hash.h"
 #include "linefile.h"
 #include "htmshell.h"
+#include "portable.h"
 
 static char const rcsid[] = "$Id: git-reports.c,v 1.1 2010/03/02 08:43:07 galt Exp $";
 
@@ -24,7 +25,7 @@ char *outDir = NULL;
 char *outPrefix = NULL;
 
 char gitCmd[1024];
-
+char *tempMakeDiffName = NULL;
 
 struct files
     {
@@ -81,7 +82,7 @@ static struct optionSpec options[] =
 
 
 struct commit* getCommits()
-/* get all commits from startTag to endTag */
+/* Get all commits from startTag to endTag */
 {
 int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
@@ -280,7 +281,7 @@ return linesChanged;
 }
 
 
-void makeDiffAndSplit(struct commit *c, char *u, char *path, boolean full)
+void makeDiffAndSplit(struct commit *c, char *u, boolean full)
 /* Generate a full diff and then split it up into its parts.
  * This was motivated because no other way to show deleted files
  * since they are not in repo and git paths must actually exist
@@ -288,15 +289,17 @@ void makeDiffAndSplit(struct commit *c, char *u, char *path, boolean full)
  * a diff with everything we want, we just have to split it up. */
 {
 safef(gitCmd,sizeof(gitCmd), 
-    "git diff -b -w --no-prefix%s %s^ %s > makeDiff.tmp"  // TODO get proper temp file name
+    "git diff -b -w --no-prefix%s %s^ %s > %s"  // TODO get proper temp file name
     , full ? " --unified=10000" : ""    // should be good enough for most files
-    , c->commitId, c->commitId);
+    , c->commitId, c->commitId, tempMakeDiffName);
+
 uglyf("gitCmd=%s\n", gitCmd);
 system(gitCmd);
 // TODO error handling
 
+
 // now parse it and split it into separate files with the right path.
-struct lineFile *lf = lineFileOpen("makeDiff.tmp", TRUE);
+struct lineFile *lf = lineFileOpen(tempMakeDiffName, TRUE);
 int lineSize;
 char *line;
 FILE *h = NULL;
@@ -336,6 +339,15 @@ while (lineFileNext(lf, &line, &lineSize))
 	fprintf(h, "%s\n", c->date);
 	fprintf(h, "%s\n", c->comment);
 	}
+    else if (startsWith("@@", line))
+	{
+	char *end = strchr(line+2, '@');
+	*(end+2) = 0;  // chop the weird unwanted context string from here following e.g. 
+        //@@ -99,7 +99,9 @@ echo
+        // converts to
+        //@@ -99,7 +99,9 @@
+	// saves 17 seconds over the more expensive sed command
+	}
     fprintf(h, "%s\n", line);
     }
 if (h)
@@ -344,7 +356,6 @@ if (h)
     h = NULL;
     }
 lineFileClose(&lf);
-unlink("makeDiff.tmp"); 
 }
 
 
@@ -357,7 +368,7 @@ char userPath[1024];
 safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index.html", outDir, outPrefix, "user", u);
 
 FILE *h = mustOpen(userPath, "w");
-fprintf(h, "<html>\n<head>\n<title>%s Commits View</title>\n</head>\n</body>\n", u);
+fprintf(h, "<html>\n<head>\n<title>Commits for %s</title>\n</head>\n</body>\n", u);
 fprintf(h, "<h2>Commits for %s</h2>\n", u);
 
 fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
@@ -382,6 +393,8 @@ for(c = commits; c; c = c->next)
 	fprintf(h, "%s\n", c->commitId);
 	fprintf(h, "%s\n", c->date);
 	fprintf(h, "%s\n", c->comment);
+	makeDiffAndSplit(c, u, FALSE);
+	makeDiffAndSplit(c, u, TRUE);
 	for(f = c->files; f; f = f->next)
 	    {
 	    char path[1024];
@@ -399,20 +412,9 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.diff", commonPath);
 	    cDiff = cloneString(path);
 
-	    makeDiffAndSplit(c, u, f->path, FALSE);
-	   
-	    // TODO check do we still need this hack, or is the diff behaving?	
-	    // we need a lame work-around with this version of git
-            // because there is odd and varying unwanted context text after @@ --- @@ in diff output
-	    safef(gitCmd,sizeof(gitCmd), ""
-		"sed -i -e 's/\\(^@@ .* @@\\).*/\\1/' %s",
-		cDiff);
-	    uglyf("sedCmd=%s\n", gitCmd);
-	    system(gitCmd);
-	    // TODO error handling
-	    
 	    // make context html page
 	    f->linesChanged = makeHtml(cDiff, cHtml, f->path, c->commitId);
+
 	    userLinesChanged += f->linesChanged;
 	    ++userFileCount;   // TODO do we want to not count the same file twice?
 
@@ -440,18 +442,8 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.diff", commonPath);
 	    fDiff = cloneString(path);
 
-	    makeDiffAndSplit(c, u, f->path, TRUE);
 
 	    //git show --unified=10000 11a20b6cd113d75d84549eb642b7f2ac7a2594fe src/utils/qa/weeklybld/buildEnv.csh
-
-	    // we need a lame work-around with this version of git
-            // because there is odd and varying unwanted context text after @@ --- @@ in diff output
-	    safef(gitCmd,sizeof(gitCmd), ""
-		"sed -i -e 's/\\(^@@ .* @@\\).*/\\1/' %s",
-		fDiff);
-	    uglyf("sedCmd=%s\n", gitCmd);
-	    system(gitCmd);
-	    // TODO error handling
 
 	    // make full html page
 	    makeHtml(fDiff, fHtml, f->path, c->commitId);
@@ -519,12 +511,15 @@ else
 FILE *h = mustOpen(userPath, "w");
 if (u)
     {
-    fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
-    fprintf(h, "<h2>Files for %s</h2>\n", u);
+    fprintf(h, "<html>\n<head>\n<title>File Changes for %s</title>\n</head>\n</body>\n", u);
+    fprintf(h, "<h2>File Changes for %s</h2>\n", u);
     fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
     }
 else
-    fprintf(h, "<html>\n<head>\n<title>%s Files View</title>\n</head>\n</body>\n", u);
+    {
+    fprintf(h, "<html>\n<head>\n<title>All File Changes</title>\n</head>\n</body>\n");
+    fprintf(h, "<h2>All File Changes</h2>\n");
+    }
 
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
@@ -631,15 +626,39 @@ fclose(h);
 }
 
 
+void doMainIndex()
+/* Create simple main index page */
+{
+char path[256];
+safef(path, sizeof(path), "%s/%s/index.html", outDir, outPrefix);
+
+FILE *h = mustOpen(path, "w");
+fprintf(h, "<html>\n<head>\n<title>Source Code Changes</title>\n</head>\n</body>\n");
+fprintf(h, "<h2>%s %s Changes</h2>\n", title, outPrefix);
+
+fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+
+fprintf(h, "<pre>\n");
+
+fprintf(h, "  <A href=\"user/index.html\">Changes by User</A>\n");
+fprintf(h, "\n");
+fprintf(h, "  <A href=\"file/index.html\">All File Changes</A>\n");
+
+fprintf(h, "</pre>\n</body>\n</html>\n");
+fclose(h);
+
+}
 
 void gitReports()
-/* generate code-review reports from git repo */
+/* Generate code-review reports from git repo */
 {
 int totalChangedLines = 0;
 int totalChangedFiles = 0;
 
 int userChangedLines = 0;
 int userChangedFiles = 0;
+
+tempMakeDiffName = cloneString(rTempName("/tmp", "makeDiff", ".tmp"));
 
 /* read the commits */
 struct commit *commits = getCommits(), *c = NULL;
@@ -734,6 +753,12 @@ fclose(h);
 // make index of all files view
 doUserFiles(NULL, commits);
 
+// make main index page
+doMainIndex();
+
+// tidying up
+unlink(tempMakeDiffName);
+freez(&tempMakeDiffName);
 }
 
 int main(int argc, char *argv[])
