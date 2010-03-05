@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.88 2010/03/05 17:44:58 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.89 2010/03/05 17:52:06 chinhli Exp $";
 
 #############################################################################
 
@@ -8674,89 +8674,4 @@ TMPDIR=/scratch/tmp
          "hg19", "kgTargetAli", "", "", \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
-############################################################################
-# H-INVITATIONAL GENE ANNOTATION DATABASE (Working 2010-0226, chin)
-    #http://h-invitational.jp/hinv/ahg-db/index.jsp
-    # Create knownGene table to reference HINV gene ID's
-    #  for link on knownGenes details page
-    # Also, create an HINV gene track
-
-    # download CDNA file H-InvDB_7.0  (Feb 16, 2010) -- got release # from downloads page).
-    #  ftp://ftp.ddbj.nig.ac.jp/mirror_database/hinv/jbirc_ff/annotation/
-   mkdir /cluster/data/hinv/H-InvDB_7.0
-   cd /cluster/data/hinv/H-InvDB_7.0
-   wget --timestamp \
-ftp://ftp.ddbj.nig.ac.jp/mirror_database/hinv/jbirc_ff/annotation/FCDNA.gz
-
-    # set up assembly work area
-    mkdir /cluster/data/hg19/bed/hinv
-    cd /cluster/data/hg19/bed/hinv
-
-    # extract H-INV ID's and Genbank accessions of mRNAs
-    zcat /cluster/data/hinv/H-InvDB_7.0/FCDNA.gz \
-      |  awk '/CDNA_ACCESSION-NO:/ {print $2}' > accessions.txt
-    zcat /cluster/data/hinv/H-InvDB_7.0/FCDNA.gz \
-      | awk '/CDNA_H-INVITATIONAL-ID:/ {print $2}'  > ids.txt
-    paste accessions.txt ids.txt > queries.txt
-    wc -l ids.txt
-xxx need to ask which version of invitation id to use
-    #   56419 ids.txt
-
-    # create PSL file from alignments for these mRNA's, extracted from the
-    #       table of all aligned mRNA's
-    hgsql hg19 -s -e "SELECT * FROM all_mrna"  | cut -f 2- > all_mrna.tab
-
-    ssh kkstore02
-    cd /cluster/data/hg19/bed/hinv
-    pslReps /dev/null stdout /dev/null | cat - all_mrna.tab > all_mrna.psl
-
-    # using pslReps to generate the PSL file header
-    pslSelect -queryPairs=queries.txt all_mrna.psl hinv_mrna.psl
-
-    # NEXT TIME, LOAD HInvGeneMrna TABLE AFTER HInv TABLE IS LOADED TO AVOID
-    # joinerCheck TO COMPLAIN.
-    # load track of mrna alignments
-    ssh hgwdev
-    cd /cluster/data/hg19/bed/hinv
-    hgLoadPsl hg19 -table=HInvGeneMrna hinv_mrna.psl
-    hgsql hg19 -s -e \
-        "select distinct(qName) from HInvGeneMrna order by qName" > hg19.mrna
-    hgsql hg17 -s -e \
-        "select distinct(qName) from HInvGeneMrna order by qName" > hg17.mrna
-    wc -l hg*.mrna
-        # 41023 hg17.mrna
-        # 54974 hg19.mrna
-
-    comm -1 -3 *.mrna > hg19.aligned
-    wc -l hg19.aligned
-        # 14758 (transcripts newly aligned in hg19)
-    comm -2 -3 *.mrna > hg17.aligned
-    wc -l hg17.aligned
-        # 807 (transcripts no longer aligned in hg19)
-    comm -2 -3 ids.txt hg19.mrna > hg19.notaligned
-    wc -l hg19.notaligned
-        # 1445 (transcripts not aligned in hg19 -- checking on why...)
-
-    # also make a table with various useful items for each transcript
-    ssh hgwdev
-    hgsql hg19 < ~/kent/src/hg/lib/HInv.sql
-    cd /cluster/data/hg19/bed/hinv
-    /cluster/data/hinv/hinvToTable.pl < /cluster/data/hinv/2005-02-02/FCDNA.2.2 > HInv.tab
-    echo 'load data local infile "HInv.tab" into table HInv' | hgsql hg19
-    hgsql hg17 -s -e "select count(*) from HInv"
-        # 41118
-    hgsql hg19 -s -e "select count(*) from HInv"
-        # 56419
-
-    # !!! DO THIS AFTER KG IS BUILD !!!
-    # DONE (4/13/06 Fan).
-    # create table for knownGenes detail page
-    ssh hgwdev
-    cd /cluster/data/hg19/bed/hinv
-    hgMapToGene hg19 HInvGeneMrna knownGene knownToHInv
-
-# QA NOTE (3-6-2006): did a mytouch to update the time for the HInvGeneMrna table
-# (because joinerCheck was complaining during -times check):
-# sudo mytouch hg19 HInvGeneMrna 200602031600.00
-# touch -t 200602031600.00 /var/lib/mysql/hg19/HInvGeneMrna.MYD
-
+#######################################################################
