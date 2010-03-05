@@ -51,7 +51,7 @@
 #define MAXPIXELS 14000
 #endif
 
-#define TRACK_SEARCH
+// #define TRACK_SEARCH
 
 struct track
 /* Structure that displays of tracks. The central data structure
