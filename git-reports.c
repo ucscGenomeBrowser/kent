@@ -1,4 +1,11 @@
-/* git-reports.c for creating git equivalent of cvs-reports. */
+/* git-reports.c for creating git equivalent of cvs-reports.
+ * 
+ *  Copyright Galt Barber 2010.   
+ * 
+ *  Anyone is free to use it.
+ *  Just include me in your credits.
+ *  Likewise cvs-reports was created by Mark Diekhans.
+ */
 
 #include "common.h"
 #include "options.h"
