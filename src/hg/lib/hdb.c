@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.419 2010/03/04 05:53:14 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.420 2010/03/05 21:42:21 hiram Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -334,7 +334,7 @@ char *result = NULL;
 
 if (NULL == genome)
     {
-    genome = DEFAULT_GENOME;
+    genome = cfgOptionDefault("defaultGenome", DEFAULT_GENOME);
     }
 
 /* Get proper default from defaultDb table */
@@ -439,7 +439,8 @@ return db;
 char *hDefaultDb()
 /* Return the default db if all else fails */
 {
-return hDefaultDbForGenome(DEFAULT_GENOME);
+char *genome = cfgOptionDefault("defaultGenome", DEFAULT_GENOME);
+return hDefaultDbForGenome(genome);
 }
 
 char *hDefaultChrom(char *db)
