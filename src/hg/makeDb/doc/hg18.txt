@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.401 2010/03/02 23:04:52 chinhli Exp $
+# $Id: hg18.txt,v 1.402 2010/03/05 17:44:57 chinhli Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.401 2010/03/02 23:04:52 chinhli Exp $
+# $Id: hg18.txt,v 1.402 2010/03/05 17:44:57 chinhli Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29383,6 +29383,19 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
   # create hg18.par using the documented coordinates
   hgPar hg18 hg18.par par
 #####################################################################
+# H-INVITATIONAL GENE ANNOTATION DATABASE (Working 2010-0226, chin)
+    #http://h-invitational.jp/hinv/ahg-db/index.jsp
+    # Create knownGene table to reference HINV gene ID's
+    #  for link on knownGenes details page
+    # Also, create an HINV gene track
+
+    # download CDNA file H-InvDB_7.0  (Feb 16, 2010) -- got release # from downloads page).
+    #  ftp://ftp.ddbj.nig.ac.jp/mirror_database/hinv/jbirc_ff/annotation/
+   mkdir /cluster/data/hinv/H-InvDB_7.0
+   cd /cluster/data/hinv/H-InvDB_7.0
+   wget --timestamp \
+ftp://ftp.ddbj.nig.ac.jp/mirror_database/hinv/jbirc_ff/annotation/FCDNA.gz
+
 # HH-Inv(7.0)
     mkdir /hive/data/genomes/hg18/bed/hinv7.0
     cd /hive/data/genomes/hg18/bed/hinv7.0
@@ -29479,7 +29492,6 @@ close (FH);
 
 
 
-hgsql -e "show tables" hg18 | grep -i hinv
-#####################################################################
 
+# stop here pending answer for seraching with newest version id 
 
