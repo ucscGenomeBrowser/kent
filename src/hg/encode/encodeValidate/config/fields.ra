@@ -56,6 +56,11 @@ file ddf
 type string
 required no
 
+field input
+file ddf
+type string
+required no
+
 field dafVersion
 file dafHeader
 type string
