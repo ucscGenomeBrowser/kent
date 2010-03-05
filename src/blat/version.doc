@@ -6,7 +6,8 @@
      o (in 34x4) Made it convert u's to t's for RNA sequence stuff.
      o (in 34x5) Made gfServer calculate repMatch based on stepSize/tileSize combination the way blat does
        rather than just being good for stepSize 11.
-     o (in 34x?) Fixed negative strand pcr psl output
+     o (in 34x6) Fixed negative strand pcr psl output
+     o (in 34x7) Made it check and error out if the same name is reused in the target database.
      
 
 34:
