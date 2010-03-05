@@ -1,0 +1,105 @@
+# for emacs: -*- mode: sh; -*-
+
+#       $Id: felCatV17e.txt,v 1.1 2010/03/05 18:26:54 chinhli Exp $
+
+# Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
+# ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
+#       Callithrix_jacchus/Callithrix_jacchus-3.2
+#       Callithrix jacchus
+
+##########################################################################
+# Download sequence (DONE - 2010-02-04 - Hiram)
+    mkdir /hive/data/genomes/felCatV17e
+    cd /hive/data/genomes/felCatV17e
+    mkdir genbank
+    cd genbank
+wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Felis_catus/catChrV17e/*"
+    # FINISHED --09:05:15--
+    # Downloaded: 151 files, 1.3G in 7m 42s (2.98 MB/s)
+
+    mkdir ucscChr
+    cd ucscChr
+    #   fixup the accession names to become UCSC chrom names
+
+S=Primary_Assembly/assembled_chromosomes
+cut -f1 ${S}/chr2acc  | while read C
+do
+    ACC=`grep "${C}" ${S}/chr2acc | cut -f2`
+    echo "${ACC} -> chr${C}"
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/" | gzip > ucscChr/chr${C}.agp.gz
+done
+
+S=Primary_Assembly/assembled_chromosomes
+cut -f1 ${S}/chr2acc  | while read C
+do
+    ACC=`grep "${C}" ${S}/chr2acc | cut -f2`
+    echo "${ACC} -> chr${C}"
+    echo ">chr${C}" > ucscChr/chr${C}.fa
+    zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
+    gzip ucscChr/chr${C}.fa &
+done
+   # Check them with faSize 
+   faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
+   # 2872644707 bases (1165972091 N's 1706672616 real 1706672616 upper 0
+   #       lower) in 19 sequences in 19 files
+   faSize ucscChr/chr*.fa.gz
+   # 2872644707 bases (1165972091 N's 1706672616 real 1706672616 upper 0
+   #        lower) in 19 sequences in 19 files
+
+
+   # For unplaced scalfolds, named them as chrUn_xxxxxxxx
+   # and put it into chrUn.* files 
+zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > ucscChr/chrUn.agp
+zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
+        | sed -e "s/^/chrUn_/" >> ucscChr/chrUn.agp
+
+gzip ucscChr/chrUn.agp &
+
+S=Primary_Assembly/unplaced_scaffolds
+zcat ${S}/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##" | gzip > ucscChr/chrUn.fa.gz
+
+   # Check them with faSize 
+   faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz 
+   # 287642232 bases (3696852 N's 283945380 real 283945380 upper 0 
+   #       lower) in 104034 sequences in 1 files
+   faSize ucscChr/chrUn.fa.gz
+   # 287642232 bases (3696852 N's 283945380 real 283945380 upper 0
+   #        lower) in 104034 sequences in 1 files
+
+
+##########################################################################
+# Initial genome build (DONE - 2009-12-17 - Hiram)
+    cd /hive/data/genomes/felCatV17e
+
+    cat << '_EOF_' > felCatV17e.config.ra
+# Config parameters for makeGenomeDb.pl:
+db felCatV17e
+clade mammal
+genomeCladePriority 16
+scientificName Felis catus
+commonName Cat
+assemblyDate Dec. 2008
+assemblyLabel NHGRI/Genome Technology Branch (NCBI project 10703, accession ACBE0100000)
+assemblyShortLabel NHGRI/GTB V17e
+orderKey 216
+mitoAcc NC_001700
+fastaFiles /hive/data/genomes/felCatV17e/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/felCatV17e/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir cat
+taxId 9685
+'_EOF_'
+
+
+makeGenomeDb.pl -stop seq felCatV17e.config.ra > seq.log 2>&1 &
+time makeGenomeDb.pl -continue=agp -stop=agp felCatV17e.config.ra > agp.log 2>&1 &
+#       real    0m50.486s
+time makeGenomeDb.pl -continue=db -stop=db felCatV17e.config.ra > db.log 2>&1 &
+#real    7m50.591s
+
+time makeGenomeDb.pl -continue=dbDb -stop=dbDb felCatV17e.config.ra > dbDb.log 2>&1 &
+
