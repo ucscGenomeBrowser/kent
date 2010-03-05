@@ -879,3 +879,13 @@ E) New tables:
     /gbdb/hg18/wib/wgEncodeBroadChipSeqSignalHsmmH4k20me1.wib
     /gbdb/hg18/wib/wgEncodeBroadChipSeqSignalNhlfCtcf.wib
 
+F) Additional items:
+   current location on alpha:
+     /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeBroadChipSeq/release3/
+   must be placed on the RR in (overwritting any existing copy):
+     {...}/goldenPath/encodeDCC/wgEncodeBroadChipSeq/
+    index.html
+    files.txt
+    md5sum.txt
+
+trackDb table ( o course )
