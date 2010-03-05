@@ -38,6 +38,14 @@ else
   tableName="$2"
 fi
 
+# check for kent source dir at $USER root
+if ! [ -d ~/kent/src/hg/makeDb/trackDb/ ]
+then
+  echo -e "\n  ERROR: `basename $0` presumes you have the kent source
+  source tree in your home dir, in a dir called \"kent\"\n" >&2
+  exit 1
+fi
+
 # make sure this is a valid database name
 if ! tdbQuery "select db from $db limit 1" | grep -q $db
 then
@@ -45,19 +53,12 @@ then
   exit 1
 fi
 
-# check for trackDb dir at $USER root
-if ! file ~/trackDb | grep -q 'symbolic link'
-then
-  echo -e "\n  ERROR: `basename $0` presumes you have a symlink
-  to trackDb in your home dir\n" >&2
-  exit 1
-fi
 echo
 
 ###########################################
 # find the level of the associated .html file
 # start at the assembly level
-cd ~/trackDb/*/$db
+cd ~/kent/src/hg/makeDb/trackDb/
 currDir=""
 
 if [ -e $tableName.html ]
