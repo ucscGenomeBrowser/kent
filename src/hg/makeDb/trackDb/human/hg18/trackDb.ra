@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.470 2010/03/02 23:01:58 chinhli Exp $";
+#	"$Id: trackDb.ra,v 1.471 2010/03/05 17:29:13 chinhli Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -3758,5 +3758,6 @@ priority 67.6
 visibility hide
 color 0,100,100
 html ../HInvGeneMrna
+url http://www.jbirc.jbic.or.jp/hinv/soup/pub_Detail.pl?acc_id=$$
 type bed 6
 
