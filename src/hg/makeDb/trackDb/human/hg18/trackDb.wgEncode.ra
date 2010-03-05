@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.903 2010/03/05 06:09:46 pauline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.904 2010/03/05 19:36:48 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5923,6 +5923,7 @@ useScore 0
 priority 0
 type bed 3
 wgEncode 1
+html wgEncodeChromatinMapRelease2
 
     track wgEncodeChromatinMapViewPeaks
     release beta
