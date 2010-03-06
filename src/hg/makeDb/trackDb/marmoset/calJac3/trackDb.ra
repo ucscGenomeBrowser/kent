@@ -74,3 +74,40 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track multiz13way
+shortLabel Conservation
+longLabel 8-Way Multiz Alignment & Conservation 
+group compGeno
+priority 103.4
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons13way
+spanList 1
+autoScale Off
+windowingFunction mean
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz13wayFrames
+# irows on
+summary multiz13waySummary
+speciesCodonDefault calJac1
+speciesGroups Primates Vertebrate
+sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
+sGroup_Vertebrate mm9 canFam2 monDom5
+itemFirstCharCase noChange
+treeImage phylo/calJac1_13way.gif
+
+track phastConsElements13way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 8-way Vertebrate Multiz Alignment
+color 170,100,50
+group compGeno
+priority 104.2
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
