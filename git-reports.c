@@ -381,7 +381,7 @@ fprintf(h, "<h2>Commits for %s</h2>\n", u);
 fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
-fprintf(h, "<pre>\n");
+fprintf(h, "<ul>\n");
 
 
 int userLinesChanged = 0;
@@ -397,9 +397,15 @@ for(c = commits; c; c = c->next)
     {
     if (sameString(c->author, u))
 	{
-	fprintf(h, "%s\n", c->commitId);
-	fprintf(h, "%s\n", c->date);
-	fprintf(h, "%s\n", c->comment);
+	//fprintf(h, "%s\n", c->commitId);
+	//fprintf(h, "%s\n", c->date);
+
+	char *cc = htmlEncode(c->comment);
+	char *ccc = replaceChars(cc, "\n", "<br>\n");
+	fprintf(h, "<li>%s\n", ccc);
+	freeMem(cc);
+	freeMem(ccc);
+
 	makeDiffAndSplit(c, u, FALSE);
 	makeDiffAndSplit(c, u, TRUE);
 	for(f = c->files; f; f = f->next)
@@ -462,10 +468,10 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.diff", relativePath);
 	    fDiff = cloneString(path);
 
-	    // make file view links
-	    fprintf(h, "  %s - lines changed %d, "
+	    // make file diff links
+	    fprintf(h, "<ul><li>  %s - lines changed %d, "
 		"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
-		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>\n"
+		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A></li></ul>\n"
 		, f->path, f->linesChanged
 		, cHtml, cDiff, fHtml, fDiff);
 
@@ -480,7 +486,7 @@ for(c = commits; c; c = c->next)
 	fprintf(h, "\n");
 	}
     }
-fprintf(h, "</pre>\n");
+fprintf(h, "</ul>\n");
 fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
 fprintf(h, "</body>\n</html>\n");
 fclose(h);
@@ -531,7 +537,7 @@ else
 
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
-fprintf(h, "<pre>\n");
+fprintf(h, "<ul>\n");
 
 
 int totalLinesChanged = 0;
@@ -564,6 +570,7 @@ for(c = commits; c; c = c->next)
 slSort(&comFiles, slComFileCmp);
 
 char *lastPath = "";
+char *closure = "";
 
 for(cf = comFiles; cf; cf = cf->next)
     {
@@ -572,9 +579,12 @@ for(cf = comFiles; cf; cf = cf->next)
  
     if (!sameString(f->path, lastPath))
 	{
+	fprintf(h, "%s", closure);
 	lastPath = f->path;
-	fprintf(h, "%s\n", f->path);
+	fprintf(h, "<li>%s\n", f->path);
+    	closure = "</li>\n";
 	}
+
 
     char path[1024];
 
@@ -604,15 +614,22 @@ for(cf = comFiles; cf; cf = cf->next)
     fDiff = cloneString(path);
 
     // make file view links
-    fprintf(h, "  %s - lines changed %d, "
+    fprintf(h, "<ul><li>");
+    //fprintf(h, "  %s - ", c->commitId);
+    fprintf(h, "  lines changed %d, "
 	"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
-	"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>\n"
-	, c->commitId, f->linesChanged
+	"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A><br>\n"
+	, f->linesChanged
 	, cHtml, cDiff, fHtml, fDiff);
 
     //fprintf(h, "  %s\n", c->commitId);
     //fprintf(h, "  %s\n", c->date);
-    fprintf(h, "    %s\n", c->comment);
+    char *cc = htmlEncode(c->comment);
+    char *ccc = replaceChars(cc, "\n", "<br>\n");
+    fprintf(h, "    %s\n", ccc);
+    freeMem(cc);
+    freeMem(ccc);
+    fprintf(h, "</li></ul>\n");
 
     freeMem(relativePath);
     freeMem(cDiff);
@@ -625,15 +642,18 @@ for(cf = comFiles; cf; cf = cf->next)
 
     fprintf(h, "\n");
     }
+fprintf(h, "%s", closure);
+fprintf(h, "</ul>\n");
 if (u)
     {
-    fprintf(h, "</pre>\n");
     fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
     }
 else
     {
-    fprintf(h, "\n  lines changed: %d\n  files changed: %d\n", totalLinesChanged, totalFileCount);
-    fprintf(h, "</pre>\n");
+    fprintf(h, "<ul>\n");
+    fprintf(h, "<li>  lines changed: %d</li>\n", totalLinesChanged);
+    fprintf(h, "<li>  files changed: %d</li>\n", totalFileCount);
+    fprintf(h, "</ul>\n");
     }
 fprintf(h, "</body>\n</html>\n");
 fclose(h);
