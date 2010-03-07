@@ -50,17 +50,6 @@ otherDb dm2
 track chainDm1 override
 shortLabel D. mel. Chain ($o_db)
 
-track netDm1
-#replaces record netDm1 in parent dir missing/extra release
-shortLabel D. mel. Net ($o_db)
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 134
-visibility dense
-spectrum on
-type netAlign dm1 chainDm1
-otherDb dm1
-
 track chainDm2 override
 priority 133
 
