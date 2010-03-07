@@ -14,7 +14,7 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.29 2010/02/06 21:43:03 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.30 2010/03/07 01:32:42 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
@@ -23,8 +23,6 @@ static boolean clAlpha = FALSE;		/* If set include release alphas, exclude relea
 static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 static char *clRewrite = NULL;		/* Rewrite to given directory. */
 static boolean clNoCompSub = FALSE;	/* If set don't do subtrack inheritence of fields. */
-
-boolean uglyOne;
 
 void usage()
 /* Explain usage and exit. */
@@ -281,6 +279,19 @@ else
     }
 }
 
+boolean compatibleReleases(char *a, char *b)
+/* Return TRUE if either a or b is null, or if a and b are the same. */
+{
+return a == NULL || b == NULL || sameString(a, b);
+}
+
+boolean sameKeyCompatibleRelease(struct tdbRecord *a, struct tdbRecord *b)
+/* Return TRUE if a and b have the same key and compatible releases. */
+{
+return sameString(a->key, b->key) && 
+	compatibleReleases(tdbRecordFieldVal(a, "release"), tdbRecordFieldVal(b, "release"));
+}
+
 struct tdbRecord *filterOnRelease(struct tdbRecord *list, boolean alpha)
 /* Return release-filtered version of list. */
 {
@@ -356,22 +367,12 @@ for (record = recordList; record != NULL; record = record->next)
 		doAbort = FALSE;
 		char *oldRelease = findFieldValInSelfOrParents(oldRecord, "release");
 		char *newRelease = findFieldValInSelfOrParents(record, "release");
-		if (oldRelease == NULL || newRelease == NULL)
-		    doAbort = TRUE;
-		else
-		    {
-		    if (sameString(oldRelease, newRelease))
-		       doAbort = TRUE;
-		    }
+		doAbort = compatibleReleases(oldRelease, newRelease);
 		}
 	    if (doAbort)
 		{
-		char *oldRelease = NULL;
-		struct tdbField *oldField = tdbRecordField(oldRecord, "release");
-		if (oldField) oldRelease = oldField->val;
-		char *newRelease = NULL;
-		struct tdbField *newField = tdbRecordField(record, "release");
-		if (newField) newRelease = newField->val;
+		char *oldRelease = tdbRecordFieldVal(oldRecord, "release");
+		char *newRelease = tdbRecordFieldVal(record, "release");
 		if (newRelease == NULL && oldRelease != NULL)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
@@ -485,70 +486,6 @@ for (field = record->fieldList; field != NULL; field = field->next)
 old->posList = slCat(old->posList, record->posList);
 }
 
-static void overrideFieldFromFile(struct tdbRecord *recordList, 
-	char *raFile, char *fieldName, struct lm *lm)
-/* Look for raFile in assembly and organism directories in that order.  Use the first
- * file that you find to override the given field inside of recordList. */
-{
-/* Build up hash of recordList. */
-struct hash *hash = hashNew(0);
-struct tdbRecord *record;
-for (record = recordList; record != NULL; record = record->next)
-    hashAdd(hash, record->key, record);
-
-struct lineFile *lf = lineFileOpen(raFile, TRUE);
-while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
-    {
-    struct tdbRecord *oldRecord = hashFindVal(hash, record->key);
-    if (oldRecord == NULL)
-        {
-	continue;
-	}
-    if (slCount(record->fieldList) != 2)
-        {
-	errAbort("Expecting just two fields, track and %s, got %d in record starting line %d of %s",
-		fieldName, slCount(record->fieldList), tdbRecordLineIx(record), lf->fileName);
-	}
-    struct tdbField *field = tdbRecordField(record, fieldName);
-    if (field == NULL)
-        {
-	errAbort("Missing %s tag in record starting line %d of %s", fieldName,
-		tdbRecordLineIx(record), lf->fileName);
-	}
-    mergeRecords(oldRecord, record, glKeyField, lm);
-    }
-lineFileClose(&lf);
-hashFree(&hash);
-}
-
-static void overrideFieldFromFileOnPath(struct tdbRecord *recordList, struct dbPath *p,
-	char *raFile, char *field, struct lm *lm)
-/* Look for raFile in assembly and organism directories in that order.  Use the first
- * file that you find to override the given field inside of recordList. */
-{
-/* Find raFile. */
-char path[PATH_LEN];
-safef(path, sizeof(path), "%s/%s", p->dir, raFile);
-if (!fileExists(path))
-    {
-    char orgDir[PATH_LEN];
-    splitPath(p->dir, orgDir, NULL, NULL);
-    safef(path, sizeof(path), "%s%s", orgDir, raFile);
-    if (!fileExists(path))
-        return;		/* Nothing to do. */
-    }
-
-overrideFieldFromFile(recordList, path, field, lm);
-}
-
-static void overridePrioritiesAndVisibilities(struct tdbRecord *recordList, struct dbPath *p,
-	struct lm *lm)
-/* Look for visibility.ra and priority.ra files and layer them onto recordList. */
-{
-overrideFieldFromFileOnPath(recordList, p, "visibility.ra", "visibility", lm);
-overrideFieldFromFileOnPath(recordList, p, "priority.ra", "priority", lm);
-}
-
 static int parentChildFileDistance(struct tdbRecord *parent, struct tdbRecord *child)
 /* Return distance of two records.  If they're in different files the
  * distance gets pretty big.  Would be flaky on records split across
@@ -566,11 +503,12 @@ return distance;
 }
 
 static struct tdbRecord *findParent(struct tdbRecord *rec, 
-	char *parentFieldName, struct hash *hash, boolean alpha)
+	char *parentFieldName, struct hash *hash)
 /* Find parent record if possible.  This is a bit complicated by wanting to
  * match parents and children from the same release if possible.  Our
- * strategy is to just ignore records from the wrond release. */
+ * strategy is to just ignore records from the wrong release. */
 {
+char *release = tdbRecordFieldVal(rec, "release");
 if (clNoCompSub)
     return NULL;
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
@@ -589,28 +527,20 @@ for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
     {
     gotParentSomeRelease = TRUE;
     struct tdbRecord *parent = hel->val;
-    int distance = parentChildFileDistance(parent, rec);
-    if (distance < closestDistance)
+    if (compatibleReleases(release, tdbRecordFieldVal(parent, "release")))
 	{
-	closestParent = parent;
-	closestDistance = distance;
+	int distance = parentChildFileDistance(parent, rec);
+	if (distance < closestDistance)
+	    {
+	    closestParent = parent;
+	    closestDistance = distance;
+	    }
 	}
     }
 if (closestParent != NULL)
     return closestParent;
 
-/* If we haven't matched so far, it could be that the release tag is set in the parent
- * but not in us, and the parent is not our release parent.  In this case we go ahead
- * and return the out-of-release parent, so we can inherit the out-of-release release
- * tag, so we get filtered out! */
-struct tdbField *releaseField = tdbRecordField(rec, "release");
-if (gotParentSomeRelease && releaseField == NULL)
-     {
-     struct tdbRecord *parent = hashFindVal(hash, parentName);
-     assert(parent != NULL);
-     return parent;
-     }
-recordWarn(rec, "parent %s of %s doesn't exist", parentName, rec->key);
+recordWarn(rec, "parent %s of %s release %s doesn't exist", parentName, rec->key, naForNull(release));
 return NULL;
 }
 
@@ -634,7 +564,7 @@ for (rec = list; rec != NULL; rec = rec->next)
 /* Scan through linking up parents. */
 for (rec = list; rec != NULL; rec = rec->next)
     {
-    struct tdbRecord *parent = findParent(rec, parentField, hash, alpha);
+    struct tdbRecord *parent = findParent(rec, parentField, hash);
     if (parent != NULL)
 	{
 	rec->parent = parent;
@@ -668,7 +598,7 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
 	nextRecord = record->next;
 	char *key = record->key;
 	struct tdbRecord *oldRecord = hashFindVal(recordHash, key);
-	if (oldRecord != NULL)
+	if (oldRecord != NULL && sameKeyCompatibleRelease(record, oldRecord))
 	    {
 	    if (!record->override)
 		{
@@ -971,8 +901,6 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
     linkUpParents(recordList, "parent", clAlpha);
     checkDupeKeys(recordList, FALSE);
-
-    overridePrioritiesAndVisibilities(recordList, p, lm);
 
     if (clCheck)
         doRecordChecks(recordList, lm);

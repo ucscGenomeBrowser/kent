@@ -8,7 +8,7 @@
 #include "trackDb.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.7 2010/02/05 00:11:18 kent Exp $";
+static char const rcsid[] = "$Id: tdbRecord.c,v 1.8 2010/03/07 01:32:42 kent Exp $";
 
 static struct tdbFilePos *tdbFilePosNew(struct lm *lm, 
     char *fileName, 		/* File name. */
@@ -36,6 +36,16 @@ for (field = record->fieldList; field != NULL; field = field->next)
         return field;
     }
 return NULL;
+}
+
+char *tdbRecordFieldVal(struct tdbRecord *record, char *fieldName)
+/* Return value of named field if it exists, otherwise NULL */
+{
+struct tdbField *field = tdbRecordField(record, fieldName);
+if (field != NULL)
+    return field->val;
+else
+    return NULL;
 }
 
 struct tdbField *tdbFieldNew(char *name, char *val, struct lm *lm)

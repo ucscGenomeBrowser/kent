@@ -38,6 +38,9 @@ struct tdbField *tdbFieldNew(char *name, char *val, struct lm *lm);
 struct tdbField *tdbRecordField(struct tdbRecord *ra, char *fieldName);
 /* Return named field if it exists, otherwise NULL */
 
+char *tdbRecordFieldVal(struct tdbRecord *record, char *fieldName);
+/* Return value of named field if it exists, otherwise NULL */
+
 struct tdbRecord *tdbRecordReadOne(struct lineFile *lf, char *key, struct lm *lm);
 /* Read next record from file. Returns NULL at end of file. */
 
