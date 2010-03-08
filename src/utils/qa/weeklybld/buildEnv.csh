@@ -32,9 +32,10 @@ if ( "$HOST" == "hgwbeta" ) then
 endif
 if ( "$HOST" == "hgwdev" ) then
     setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
+    # see also paths in kent/java/build.xml
     setenv JAVABUILD /scratch/javaBuild
     setenv JAVA_HOME /usr/java/default
-    setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/home/heather/transfer/jtidy.jar:/usr/share/java/rhino.jar:/cluster/home/heather/archive/mysql-connector-java-3.0.16-ga-bin.jar
+    setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/bin/java/jtidy.jar:/usr/share/java/rhino.jar:/cluster/bin/java/mysql-connector-java-3.0.16-ga-bin.jar
     # java and ant wont run on hgwdev now without setting max memory
     setenv _JAVA_OPTIONS "-Xmx1024m"
 endif
