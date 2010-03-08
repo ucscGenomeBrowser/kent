@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.471 2010/03/05 17:29:13 chinhli Exp $";
+#	"$Id: trackDb.ra,v 1.472 2010/03/08 19:09:47 giardine Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -430,21 +430,39 @@ color 0,20,150
 type bed 6 +
 nextItemButton on
 
-track pgSnpHgwdev
-compositeTrack on
-shortLabel GenomeVarsHgwdev
-longLabel Personal Genome Variants - Hgwdev only
-group varRep
-priority 500.01
-visibility hide
-type bed 4 +
+track pgSnpHgwdev override
+
+    track pgKb1Comb override
+    subTrack pgSnpHgwdev
+    pgSiftPredTab pgKb1Sift
+    pgPolyphenPredTab pgPolyKb1
+
+    track pgNb1 override
+    subTrack pgSnpHgwdev
+    pgSiftPredTab pgNb1Sift
+    pgPolyphenPredTab pgPolyNb1
+
+    track pgMd8 override
+    subTrack pgSnpHgwdev
+    pgSiftPredTab pgMd8Sift
+    pgPolyphenPredTab pgPolyMd8
+
+    track pgTk1 override
+    subTrack pgSnpHgwdev
+    pgSiftPredTab pgTk1Sift
+    pgPolyphenPredTab pgPolyTk1
+
+    track pgAbtSolid override
+    subTrack pgSnpHgwdev
+    pgSiftPredTab pgAbtSift
+    pgPolyphenPredTab pgPolyAbt
 
     track pgYoruban2
     subTrack pgSnpHgwdev
     shortLabel YRI '8507, SOLiD
     longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
     group varRep
-    priority 4
+    priority 20
     color 128,0,128
 
 
