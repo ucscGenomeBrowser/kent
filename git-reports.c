@@ -87,6 +87,13 @@ static struct optionSpec options[] =
     {NULL, 0},
 };
 
+void runShell(char *cmd)
+/* Run a command and do simple error-checking */
+{
+int exitCode = system(cmd);
+if (exitCode != 0)
+    errAbort("system command [%s] failed with exitCode %d", cmd, exitCode);
+}
 
 struct commit* getCommits()
 /* Get all commits from startTag to endTag */
@@ -95,8 +102,7 @@ int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
 "git log origin/%s..origin/%s --name-status > commits.tmp"
 , startTag, endTag);
-system(gitCmd);
-// TODO error handling
+runShell(gitCmd);
 struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);
 int lineSize;
 char *line;
@@ -296,13 +302,11 @@ void makeDiffAndSplit(struct commit *c, char *u, boolean full)
  * a diff with everything we want, we just have to split it up. */
 {
 safef(gitCmd,sizeof(gitCmd), 
-    "git diff -b -w --no-prefix%s %s^ %s > %s"  // TODO get proper temp file name
-    , full ? " --unified=10000" : ""    // should be good enough for most files
+    "git diff -b -w --no-prefix%s %s^ %s > %s"
+    , full ? " --unified=10000" : ""
     , c->commitId, c->commitId, tempMakeDiffName);
 
-uglyf("gitCmd=%s\n", gitCmd);
-system(gitCmd);
-// TODO error handling
+runShell(gitCmd);
 
 
 // now parse it and split it into separate files with the right path.
@@ -319,12 +323,9 @@ while (lineFileNext(lf, &line, &lineSize))
 	    fclose(h);
 	    h = NULL;
 	    }
-	//uglyf("line=%s\n", line); // DELETE THIS LINE
 	char *fpath = line + strlen("diff --git ");
 	fpath = strchr(fpath, ' ');
 	++fpath;   // now we should be pointing to the world
-
-	//uglyf("fpath=%s\n", fpath);
 
 	char path[1024];
 	char *r = strrchr(fpath, '/');
@@ -333,8 +334,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	    *r = 0;
 	    /* make internal levels of subdirs */
 	    safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, full ? "full" : "context", fpath);
-	    uglyf("path=%s\n", path);
-	    system(path);
+	    runShell(path);
 	    *r = '/';
 	    }
 	safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
@@ -385,7 +385,7 @@ fprintf(h, "<ul>\n");
 
 
 int userLinesChanged = 0;
-int userFileCount = 0;   // TODO do we want to not count the same file twice?
+int userFileCount = 0;
 
 char *cDiff = NULL, *cHtml = NULL, *fDiff = NULL, *fHtml = NULL;
 char *relativePath = NULL;
@@ -429,7 +429,7 @@ for(c = commits; c; c = c->next)
 	    f->linesChanged = makeHtml(cDiff, cHtml, f->path, c->commitId);
 
 	    userLinesChanged += f->linesChanged;
-	    ++userFileCount;   // TODO do we want to not count the same file twice?
+	    ++userFileCount;
 
 	    freeMem(cDiff);
 	    freeMem(cHtml);
@@ -541,7 +541,7 @@ fprintf(h, "<ul>\n");
 
 
 int totalLinesChanged = 0;
-int totalFileCount = 0;   // TODO should this count duplicates or not
+int totalFileCount = 0;
 
 char *cDiff = NULL, *cHtml = NULL, *fDiff = NULL, *fHtml = NULL;
 char *relativePath = NULL;
@@ -615,7 +615,6 @@ for(cf = comFiles; cf; cf = cf->next)
 
     // make file view links
     fprintf(h, "<ul><li>");
-    //fprintf(h, "  %s - ", c->commitId);
     fprintf(h, "  lines changed %d, "
 	"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
 	"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A><br>\n"
@@ -762,8 +761,6 @@ for(u = users; u; u = u->next)
     userChangedLines = 0;
     userChangedFiles = 0;
 
-    // DEBUG REMOVE
-    //if (sameString(u->name, "galt"))
     /* make user's reports */
     doUserCommits(u->name, commits, &userChangedLines, &userChangedFiles);
 
@@ -775,7 +772,6 @@ for(u = users; u; u = u->next)
 
     totalChangedLines += userChangedLines;
     totalChangedFiles += userChangedFiles;  
-    // TODO do we have to worry about counting the same file more than once?
 
     }
 
@@ -802,8 +798,6 @@ if (argc != 9)
     usage("wrong number of args");
 if (optionExists("-help"))
     usage("help");
-//if (optionExists("altHeader") && optionExists("autoBoundary"))
-// altHeader  = optionVal("altHeader",altHeader);
 
 startTag = argv[1];
 endTag = argv[2];
