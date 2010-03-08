@@ -3283,6 +3283,140 @@ type bed 4 +
     priority 11
     color 128,64,0
 
+track pgSnpHgwdev
+compositeTrack on
+shortLabel GenomeVarsHgwdev
+longLabel Personal Genome Variants - Hgwdev only
+group varRep
+priority 500.01
+visibility hide
+type bed 4 +
+
+    track pgKb1Illum
+    subTrack pgSnpHgwdev off
+    shortLabel KB1
+    longLabel KB1 Genome Variants, Illumina 23.2X
+    priority 1
+
+    track pgKb1454
+    subTrack pgSnpHgwdev off
+    shortLabel KB1
+    longLabel KB1 Genome Variants, 454
+    priority 2
+
+    track pgKb1Indel
+    subTrack pgSnpHgwdev
+    shortLabel KB1 indels
+    longLabel KB1 indels from 454 and Illumina
+    priority 3
+
+    track pgKb1Comb
+    subTrack pgSnpHgwdev
+    shortLabel KB1
+    longLabel KB1 Genome Variants, combination of 454, Illumina, and genotyping
+    priority 4
+    pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd
+    visibility pack
+
+    track pgNb1
+    subTrack pgSnpHgwdev
+    shortLabel NB1
+    longLabel NB1 Genome Variants (all SNPs, 2X genome plus 16x exome)
+    visibility pack
+    pgDbLink pgNb1PhenCode pgNb1Snpedia pgNb1Hgmd
+    priority 5
+
+    track pgNb1Indel
+    subTrack pgSnpHgwdev
+    shortLabel NB1 indels
+    longLabel NB1 Genome Variants indels
+    visibility pack
+    priority 6
+
+    track pgMd8
+    subTrack pgSnpHgwdev
+    shortLabel MD8
+    longLabel MD8 Genome Variants (all SNPs, 16x exome)
+    visibility pack
+    pgDbLink pgMd8PhenCode pgMd8Snpedia pgNb1Hgmd
+    priority 7
+
+    track pgMd8Indel
+    subTrack pgSnpHgwdev
+    shortLabel MD8 indels
+    longLabel MD8 Genome Variants indels
+    visibility pack
+    priority 8
+
+    track pgTk1
+    subTrack pgSnpHgwdev
+    shortLabel TK1
+    longLabel TK1 Genome Variants (all SNPs, 16x exome)
+    visibility pack
+    pgDbLink pgTk1PhenCode pgTk1Snpedia pgTk1Hgmd
+    priority 9
+
+    track pgTk1Indel
+    subTrack pgSnpHgwdev
+    shortLabel TK1 indels
+    longLabel TK1 Genome Variants indels
+    visibility pack
+    priority 10
+
+    track pgAbtSolid
+    subTrack pgSnpHgwdev
+    shortLabel ABT
+    longLabel ABT Genome Variants, SOLiD
+    visibility pack
+    pgDbLink pgAbtPhenCode pgAbtSnpedia pgAbtHgmd
+    priority 11
+
+    track pgAbt454
+    subTrack pgSnpHgwdev off
+    shortLabel ABT exome
+    longLabel ABT Genome Variants, 454 exome
+    visibility hide
+    priority 12
+
+    track pgAbt454indels
+    subTrack pgSnpHgwdev off
+    shortLabel ABT exome indels
+    longLabel ABT Genome Variants, 454 exome indels
+    visibility hide
+    priority 13
+
+    track pgAbtIllum
+    subTrack pgSnpHgwdev off
+    shortLabel ABT Illum
+    longLabel ABT Genome Variants, Illumina 7.2X
+    visibility hide
+    priority 14
+
+    track pgAk1
+    subTrack pgSnpHgwdev
+    shortLabel AK1
+    longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
+    color 0,128,64
+    priority 50
+
+    track pgQuake
+    subTrack pgSnpHgwdev
+    shortLabel S. Quake
+    longLabel Stephen Quake (Stanford)
+    priority 51
+
+    track pgSaqqaq
+    subTrack pgSnpHgwdev
+    shortLabel Saqqaq
+    longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
+    priority 55
+
+    track pgSaqqaqHc
+    subTrack pgSnpHgwdev off
+    shortLabel Saqqaq hc
+    longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
+    priority 56
+
 
 #Overrides from priority.ra
 
