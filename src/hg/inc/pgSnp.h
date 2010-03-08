@@ -6,6 +6,7 @@
 #define PGSNP_H
 
 #include "jksql.h"
+#include "trackDb.h"
 #define PGSNP_NUM_COLS 8
 
 #ifndef BED_H
@@ -110,6 +111,9 @@ struct pgCodon *fetchCodons (char *db, struct bed *gene, unsigned chrStart, unsi
 
 void printSeqCodDisplay (char *db, struct pgSnp *item);
 /* print the display of sequence changes for a coding variant */
+
+void printPgDbLink(char *db, struct trackDb *tdb, struct pgSnp *item);
+/* print the links to phenotype and other databases for pgSnps */
 
 #endif /* PGSNP_H */
 
