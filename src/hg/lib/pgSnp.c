@@ -9,8 +9,9 @@
 #include "pgSnp.h"
 #include "hdb.h"
 #include "dnaseq.h"
+#include "pgPhenoAssoc.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.7 2010/01/22 23:44:59 angie Exp $";
+static char const rcsid[] = "$Id: pgSnp.c,v 1.8 2010/03/08 17:45:41 giardine Exp $";
 
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
@@ -587,5 +588,38 @@ printf("<table border=\"1\"><caption>Amino acid properties</caption><tr><td>&nbs
 //else 
     printf("<tr><td>hydropathy</td><td>%1.1f</td><td>%1.1f</td></tr></table>\n", hyd1, hyd2);
 printf("<br>");
+}
+
+void printPgDbLink(char *db, struct trackDb *tdb, struct pgSnp *item)
+/* print the links to phenotype and other databases for pgSnps */
+{
+struct pgPhenoAssoc *el;
+struct sqlResult *sr;
+char **row;
+char query[512];
+struct sqlConnection *conn = hAllocConn(db);
+char *dbList[8];
+int tot = 0, i = 0, first = 1;
+char *tabs = trackDbSetting(tdb, "pgDbLink");
+if (tabs == NULL)
+    return;
+tot = chopByWhite(tabs, dbList, ArraySize(dbList));
+for(i=0;i<tot;i++)
+    {
+    safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, srcUrl from %s where chrom = '%s' and chromStart = %d and chromEnd = %d",
+    dbList[i], item->chrom, item->chromStart, item->chromEnd);
+
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        if (first == 1)
+             {
+             printf("<br><b>Links to phenotype databases</b><br>\n");
+             first = 0;
+             }
+        el = pgPhenoAssocLoad(row);
+        printf("<a href=\"%s\">%s</a></br>\n", el->srcUrl, el->name);
+        }
+    }
 }
 
