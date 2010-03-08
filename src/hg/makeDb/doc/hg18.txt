@@ -27419,6 +27419,12 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     ln -s /hive/data/genomes/hg18/bigZips/chromOut.RM3.2.7.zip \
       /usr/local/apache/htdocs/goldenPath/hg18/bigZips/
 
+#############################################################################
+# GENOME VARIANTS - adding AK1, Saqqaq(Eskimo), Quake, Tutu, + Bushmen
+# also adding phenotype information for those from PSU
+# Mar 8, 2010
+Load from exports from PSU Browser.
+Merge needed code changes from PSU Browser for phenotype.
 
 #############################################################################
 # GENOME VARIANTS - 1000 GENOMES (DONE 1/7/2009 giardine, adapted from an email to angie)
@@ -28318,7 +28324,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.402 2010/03/05 17:44:57 chinhli Exp $
+# $Id: hg18.txt,v 1.403 2010/03/08 19:16:10 giardine Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28372,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.402 2010/03/05 17:44:57 chinhli Exp $
+# $Id: hg18.txt,v 1.403 2010/03/08 19:16:10 giardine Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
