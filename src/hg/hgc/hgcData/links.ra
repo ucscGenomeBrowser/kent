@@ -851,7 +851,7 @@ needsEncoded yes
 
 name dbPEX
 label dbPEX
-url http://www.dbpex.org/search.php?select_db=%s
+url http://www.dbpex.org/variants.php?select_db=%s
 acc yes
 
 name IPNMDB
