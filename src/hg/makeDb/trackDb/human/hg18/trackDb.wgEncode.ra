@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.910 2010/03/08 19:42:02 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.911 2010/03/08 19:50:18 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -17787,18 +17787,6 @@ wgEncode 1
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=BAF170 input=IgG-mus view=Peaks labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=890 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Baf170Musigg fileName=wgEncodeYaleChIPseqPeaksHelas3Baf170Musigg.narrowPeak.gz
 
-        ####### Revoked for Jan 2010 Freeze #######
-        #track wgEncodeYaleChIPseqPeaksHelas3Brg1Musigg
-        #release alpha
-        #subTrack wgEncodeYaleChIPseqViewPeaks off
-        #shortLabel HeLa-S3 Brg1 Pk
-        #longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in HeLa-S3 cells)
-        #subGroups view=Peaks factor=BRG1mig cellType=t2HeLa
-        #type narrowPeak
-        #color 0,119,158
-        #metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Brg1 input=IgG-mus view=Peaks labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=891 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Brg1Musigg fileName=wgEncodeYaleChIPseqPeaksHelas3Brg1Musigg.narrowPeak.gz
-        ####### Revoked for Jan 2010 Freeze #######
-
         track wgEncodeYaleChIPseqPeaksK562Ifng30Pol2
         release alpha
         subTrack wgEncodeYaleChIPseqViewPeaks off
@@ -19392,18 +19380,6 @@ wgEncode 1
         color 0,119,158
         metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=BAF170 input=IgG-mus view=Signal labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=890 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Baf170Musigg fileName=wgEncodeYaleChIPseqSignalHelas3Baf170Musigg.bedGraph4.gz
 
-        ####### Revoked for Jan 2010 Freeze #######
-        #track wgEncodeYaleChIPseqSignalHelas3Brg1Musigg
-        #release alpha
-        #subTrack wgEncodeYaleChIPseqViewSignal off
-        #shortLabel HeLa-S3 Brg1 Sig
-        #longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in HeLa-S3 cells)
-        #subGroups view=Signal factor=BRG1mig cellType=t2HeLa
-        #type bedGraph 4
-        #color 0,119,158
-        #metadata project=wgEncode grant=Snyder lab=Stanford(Snyder) dataType=ChIPseq cell=HeLa-S3 antibody=Brg1 input=IgG-mus view=Signal labVersion="Data paired with IgG_Control." dataVersion="ENCODE Jan 2010 Freeze" subId=891 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-12 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Brg1Musigg fileName=wgEncodeYaleChIPseqSignalHelas3Brg1Musigg.bedGraph4.gz
-        ####### Revoked for Jan 2010 Freeze #######
-
         track wgEncodeYaleChIPseqSignalK562Ifng30Pol2
         release alpha
         subTrack wgEncodeYaleChIPseqViewSignal off
@@ -19727,6 +19703,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 dataVersion through the ENCODE Sep 2009 Freeze
 wgEncode 1
+html wgEncodeYaleChIPseqRelease2
 
     track wgEncodeYaleChIPseqViewPeaks
     release beta
