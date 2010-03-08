@@ -483,7 +483,7 @@ for(c = commits; c; c = c->next)
 	    freeMem(fHtml);
 
 	    }
-	fprintf(h, "\n");
+	fprintf(h, "</li>\n");
 	}
     }
 fprintf(h, "</ul>\n");
