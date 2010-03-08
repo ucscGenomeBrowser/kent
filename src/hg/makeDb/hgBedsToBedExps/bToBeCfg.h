@@ -15,7 +15,7 @@ struct bToBeCfg
     char *source;	/* Cell line, tissue, etc. */
     char *sourceId;	/* Short ID (one letter usually) for source */
     char *dataSource;	/* Either 'file' or a database name */
-    char *dataType;	/* Either 'bedScore' or 'bedGraph' */
+    int scoreCol;	/* Score column Index */
     float multiplier;	/* Multiply by this to get score close to 0-1 range. */
     char *dataTable;	/* File name or table name */
     };

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "bToBeCfg.h"
 
-static char const rcsid[] = "$Id: bToBeCfg.c,v 1.1 2007/11/26 00:18:44 kent Exp $";
+static char const rcsid[] = "$Id: bToBeCfg.c,v 1.2 2010/03/08 23:35:38 kent Exp $";
 
 void bToBeCfgStaticLoad(char **row, struct bToBeCfg *ret)
 /* Load a row from bToBeCfg table into ret.  The contents of ret will
@@ -19,7 +19,7 @@ ret->factor = row[0];
 ret->source = row[1];
 ret->sourceId = row[2];
 ret->dataSource = row[3];
-ret->dataType = row[4];
+ret->scoreCol = sqlSigned(row[4]);
 ret->multiplier = sqlFloat(row[5]);
 ret->dataTable = row[6];
 }
@@ -35,7 +35,7 @@ ret->factor = cloneString(row[0]);
 ret->source = cloneString(row[1]);
 ret->sourceId = cloneString(row[2]);
 ret->dataSource = cloneString(row[3]);
-ret->dataType = cloneString(row[4]);
+ret->scoreCol = sqlSigned(row[4]);
 ret->multiplier = sqlFloat(row[5]);
 ret->dataTable = cloneString(row[6]);
 return ret;
@@ -90,7 +90,7 @@ ret->factor = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
 ret->sourceId = sqlStringComma(&s);
 ret->dataSource = sqlStringComma(&s);
-ret->dataType = sqlStringComma(&s);
+ret->scoreCol = sqlSignedComma(&s);
 ret->multiplier = sqlFloatComma(&s);
 ret->dataTable = sqlStringComma(&s);
 *pS = s;
@@ -108,7 +108,6 @@ freeMem(el->factor);
 freeMem(el->source);
 freeMem(el->sourceId);
 freeMem(el->dataSource);
-freeMem(el->dataType);
 freeMem(el->dataTable);
 freez(pEl);
 }
@@ -145,9 +144,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->dataSource);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->dataType);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%d", el->scoreCol);
 fputc(sep,f);
 fprintf(f, "%g", el->multiplier);
 fputc(sep,f);

@@ -9,7 +9,7 @@ CREATE TABLE bToBeCfg (
     source varchar(255) not null,	# Cell line, tissue, etc.
     sourceId varchar(255) not null,	# Short ID (one letter usually) for source
     dataSource varchar(255) not null,	# Either 'file' or a database name
-    dataType varchar(255) not null,	# Either 'bedScore' or 'bedGraph'
+    scoreCol int not null,	# Score column Index
     multiplier float not null,	# Multiply by this to get score close to 0-1 range.
     dataTable varchar(255) not null,	# File name or table name
               #Indices

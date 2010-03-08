@@ -8,7 +8,7 @@
 #include "bedGraph.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.2 2007/11/26 15:50:44 kent Exp $";
+static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.3 2010/03/08 23:35:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,7 +18,7 @@ errAbort(
   "usage:\n"
   "   hgBedsToBedExps in.cfg out.bed out.exps\n"
   "where in.cfg is a tab separated file that describes the beds.  The columns are\n"
-  "   <factor> <cell line> <cell letter> <db/file> <data type> <file/table>\n"
+  "   <factor> <cell line> <cell letter> <db/file> <data type> <multiplier> <file/table>\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -144,25 +144,10 @@ if (sameString(cfg->dataSource, "file"))
 	else
 	    lineFileExpectWords(lf, neededSize, gotSize);
 	AllocVar(bg);
-	if (sameString(cfg->dataType, "bedGraph"))
-	    {
-	    bg->chrom = cloneString(row[0]);
-	    bg->chromStart = lineFileNeedNum(lf, row, 1);
-	    bg->chromEnd = lineFileNeedNum(lf, row, 2);
-	    bg->dataValue = lineFileNeedDouble(lf, row, 3);
-	    }
-	else if (sameString(cfg->dataType, "bedScore"))
-	    {
-	    bg->chrom = cloneString(row[0]);
-	    bg->chromStart = lineFileNeedNum(lf, row, 1);
-	    bg->chromEnd = lineFileNeedNum(lf, row, 2);
-	    bg->dataValue = lineFileNeedNum(lf, row, 4) * 0.001;
-	    }
-	else
-	    {
-	    errAbort("Unknown data type %s", cfg->dataType);
-	    }
-	bg->dataValue *= cfg->multiplier;
+	bg->chrom = cloneString(row[0]);
+	bg->chromStart = lineFileNeedNum(lf, row, 1);
+	bg->chromEnd = lineFileNeedNum(lf, row, 2);
+	bg->dataValue = lineFileNeedDouble(lf, row, cfg->scoreCol) * cfg->multiplier;
 	slAddHead(&bgList, bg);
 	}
     }
@@ -260,6 +245,8 @@ for (cfg = factor->sourceList; cfg != NULL; cfg = cfg->next)
 	newRange->val = site;
 	for (oldRange = rangeList; oldRange != NULL; oldRange = oldRange->next)
 	    {
+	    newRange->start = min(newRange->start, oldRange->start);
+	    newRange->end = max(newRange->end, oldRange->end);
 	    newRange->val = slCat(oldRange->val, newRange->val);
 	    rbTreeRemove(chromTree, oldRange);
 	    }
@@ -283,14 +270,8 @@ rbTreeFreeList(&chromList);
 void hgBedsToBedExps(char *inCfg, char *outBed, char *outExp)
 /* hgBedsToBedExps - Convert multiple bed files to a single bedExp.. */
 {
-/* Load up input configuration and do a little error checking. */
+/* Load up input configuration . */
 struct bToBeCfg *cfg, *cfgList = bToBeCfgLoadAll(inCfg);
-for (cfg = cfgList; cfg != NULL; cfg = cfg->next)
-    {
-    if (!sameString(cfg->dataType, "bedGraph") &&
-        !sameString(cfg->dataType, "bedScore"))
-        errAbort("Unrecognized data type %s", cfg->dataType);
-    }
 verbose(1, "Loaded %d records from %s\n", slCount(cfgList), inCfg);
 
 /* Find and output all sources used. */
