@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.515 2010/02/26 06:54:56 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.516 2010/03/08 19:47:41 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2180,8 +2180,8 @@ void bamUi(struct trackDb *tdb, struct customTrack *ct)
 char cartVarName[1024];
 puts("<BR>");
 printf("<B>Display read names:</B>\n");
-char *tdbShowNames = trackDbSettingClosestToHome(tdb, BAM_SHOW_NAMES);
-safef(cartVarName, sizeof(cartVarName), "%s." BAM_SHOW_NAMES, tdb->tableName);
+char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
+safef(cartVarName, sizeof(cartVarName), "%s.%s", tdb->tableName, BAM_SHOW_NAMES);
 cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
 boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
 puts("<BR>");
