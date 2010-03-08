@@ -192,8 +192,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	{
     	verbose(2, "%c %s\n", f->type, f->path);
 
-	// anything other than M?
-	if (f->type != 'M')
+	// anything other than M or A?
+	if (f->type != 'M' && f->type != 'A' )
 	    verbose(2, "special type: %c %s\n", f->type, f->path);
 	}
 
@@ -220,62 +220,61 @@ struct lineFile *lf = lineFileOpen(diffPath, TRUE);
 int lineSize;
 char *line;
 char *xline = NULL;
+char fmtString[256];
 boolean inBody = FALSE;
 boolean inBlock = TRUE;
 int blockP = 0, blockN = 0;
 fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
-while (lineFileNext(lf, &line, &lineSize))
+boolean hasMore = TRUE;
+while (hasMore)
     {
-    xline = htmlEncode(line);	
-    if (line[0] == '-')
+    boolean checkEob = FALSE;
+    hasMore = lineFileNext(lf, &line, &lineSize);
+    if (hasMore)
 	{
-	fprintf(h, "<span style=\"background-color:#FF9999\">%s</span>\n", xline);
-	if (inBody)
+	char *color = NULL;
+	xline = htmlEncode(line);	
+	if (line[0] == '-')
 	    {
-	    inBlock = TRUE;
-	    ++blockN;
+	    color = "#FF9999";  /* deleted text light red */
+	    if (inBody)
+		{
+		inBlock = TRUE;
+		++blockN;
+		}
 	    }
-	}
-    else if (line[0] == '+')
-	{
-	fprintf(h, "<span style=\"background-color:#99FF99\">%s</span>\n", xline);
-	if (inBody)
+	else if (line[0] == '+')
 	    {
-	    inBlock = TRUE;
-	    ++blockP;
+	    color = "#99FF99";  /* added text light green */
+	    if (inBody)
+		{
+		inBlock = TRUE;
+		++blockP;
+		}
 	    }
+	else
+	    {
+	    if (line[0] == '@')
+		color = "#FFFF99";  /* diff control text light yellow (red+green) */
+	    checkEob = TRUE;
+	    }
+	if (color)
+	    safef(fmtString, sizeof(fmtString), "<span style=\"background-color:%s\">%%s</span>\n", color);
+	else
+	    safef(fmtString, sizeof(fmtString), "%%s\n");
+	fprintf(h, fmtString, xline);
+	
+	if (line[0] == '@')
+	    inBody = TRUE;
+
+	freeMem(xline);
 	}
     else
 	{
-	if (line[0] == '@')
-	    fprintf(h, "<span style=\"background-color:#FFFF99\">%s</span>\n", xline);
-	else
-	    fprintf(h, "%s\n", xline);
-	if (inBody)
-	    {
-	    if (inBlock)
-		{
-		inBlock = FALSE;
-		if (blockP >= blockN)
-		    linesChanged += blockP;
-		else
-		    linesChanged += blockN;
-		blockP = 0;
-		blockN = 0;
-		}
-	    }
+	checkEob = TRUE;
 	}
-	
-    if (line[0] == '@')
-	inBody = TRUE;
 
-    freeMem(xline);
-
-    }
-// what if there is no last trailing line to end the last block?
-if (inBody)
-    {
-    if (inBlock)
+    if (checkEob && inBlock)
 	{
 	inBlock = FALSE;
 	if (blockP >= blockN)
@@ -285,6 +284,7 @@ if (inBody)
 	blockP = 0;
 	blockN = 0;
 	}
+
     }
 
 lineFileClose(&lf);
@@ -350,7 +350,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	{
 	char *end = strchr(line+2, '@');
 	*(end+2) = 0;  // chop the weird unwanted context string from here following e.g. 
-        //@@ -99,7 +99,9 @@ echo
+        //@@ -99,7 +99,9 @@ weird unwanted context string here
         // converts to
         //@@ -99,7 +99,9 @@
 	// saves 17 seconds over the more expensive sed command
@@ -376,10 +376,10 @@ safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index.html", outDir, outPrefix, "
 
 FILE *h = mustOpen(userPath, "w");
 fprintf(h, "<html>\n<head>\n<title>Commits for %s</title>\n</head>\n</body>\n", u);
-fprintf(h, "<h2>Commits for %s</h2>\n", u);
+fprintf(h, "<h1>Commits for %s</h1>\n", u);
 
 fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
-fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+fprintf(h, "<h3>%s to %s (%s to %s) %s</h3>\n", startTag, endTag, startDate, endDate, title);
 
 fprintf(h, "<ul>\n");
 
@@ -469,7 +469,7 @@ for(c = commits; c; c = c->next)
 	    fDiff = cloneString(path);
 
 	    // make file diff links
-	    fprintf(h, "<ul><li>  %s - lines changed %d, "
+	    fprintf(h, "<ul><li> %s - lines changed %d, "
 		"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
 		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A></li></ul>\n"
 		, f->path, f->linesChanged
@@ -526,16 +526,16 @@ FILE *h = mustOpen(userPath, "w");
 if (u)
     {
     fprintf(h, "<html>\n<head>\n<title>File Changes for %s</title>\n</head>\n</body>\n", u);
-    fprintf(h, "<h2>File Changes for %s</h2>\n", u);
+    fprintf(h, "<h1>File Changes for %s</h1>\n", u);
     fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
     }
 else
     {
     fprintf(h, "<html>\n<head>\n<title>All File Changes</title>\n</head>\n</body>\n");
-    fprintf(h, "<h2>All File Changes</h2>\n");
+    fprintf(h, "<h1>All File Changes</h1>\n");
     }
 
-fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+fprintf(h, "<h3>%s to %s (%s to %s) %s</h3>\n", startTag, endTag, startDate, endDate, title);
 
 fprintf(h, "<ul>\n");
 
@@ -615,7 +615,7 @@ for(cf = comFiles; cf; cf = cf->next)
 
     // make file view links
     fprintf(h, "<ul><li>");
-    fprintf(h, "  lines changed %d, "
+    fprintf(h, " lines changed %d, "
 	"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
 	"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A><br>\n"
 	, f->linesChanged
@@ -650,8 +650,8 @@ if (u)
 else
     {
     fprintf(h, "<ul>\n");
-    fprintf(h, "<li>  lines changed: %d</li>\n", totalLinesChanged);
-    fprintf(h, "<li>  files changed: %d</li>\n", totalFileCount);
+    fprintf(h, "<li> lines changed: %d</li>\n", totalLinesChanged);
+    fprintf(h, "<li> files changed: %d</li>\n", totalFileCount);
     fprintf(h, "</ul>\n");
     }
 fprintf(h, "</body>\n</html>\n");
@@ -667,19 +667,26 @@ safef(path, sizeof(path), "%s/%s/index.html", outDir, outPrefix);
 
 FILE *h = mustOpen(path, "w");
 fprintf(h, "<html>\n<head>\n<title>Source Code Changes</title>\n</head>\n</body>\n");
-fprintf(h, "<h2>%s %s Changes</h2>\n", title, outPrefix);
+fprintf(h, "<h1>%s %s Changes</h1>\n", title, outPrefix);
 
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
-fprintf(h, "<pre>\n");
+fprintf(h, "<ul>\n");
 
-fprintf(h, "  <A href=\"user/index.html\">Changes by User</A>\n");
+fprintf(h, "<li> <A href=\"user/index.html\">Changes by User</A></li>\n");
 fprintf(h, "\n");
-fprintf(h, "  <A href=\"file/index.html\">All File Changes</A>\n");
+fprintf(h, "<li> <A href=\"file/index.html\">All File Changes</A></li>\n");
 
-fprintf(h, "</pre>\n</body>\n</html>\n");
+fprintf(h, "</ul>\n</body>\n</html>\n");
 fclose(h);
 
+}
+
+void makeMyDir(char *path)
+/* Make a single dir if it does not already exit */
+{
+if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+    errnoAbort("unable to mkdir %s", path);
 }
 
 void gitReports()
@@ -711,18 +718,15 @@ slNameSort(&users);
 /* create prefix dir */
 char path[256];
 safef(path, sizeof(path), "%s/%s", outDir, outPrefix);
-if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
-    errnoAbort("unable to mkdir %s", path);
+makeMyDir(path);
 
 /* create file dir */
 safef(path, sizeof(path), "%s/%s/%s", outDir, outPrefix, "file");
-if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
-    errnoAbort("unable to mkdir %s", path);
+makeMyDir(path);
 
 /* create user dir */
 safef(path, sizeof(path), "%s/%s/%s", outDir, outPrefix, "user");
-if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
-    errnoAbort("unable to mkdir %s", path);
+makeMyDir(path);
 
 
 char usersPath[1024];
@@ -730,11 +734,11 @@ safef(usersPath, sizeof(usersPath), "%s/%s/%s/index.html", outDir, outPrefix, "u
 
 FILE *h = mustOpen(usersPath, "w");
 fprintf(h, "<html>\n<head>\n<title>Changes By User</title>\n</head>\n</body>\n");
-fprintf(h, "<h2>Changes By User</h2>\n");
+fprintf(h, "<h1>Changes By User</h1>\n");
 
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
-fprintf(h, "<pre>\n");
+fprintf(h, "<ul>\n");
 
 
 
@@ -745,18 +749,15 @@ for(u = users; u; u = u->next)
 
     /* create user/name dir */
     safef(path, sizeof(path), "%s/%s/%s/%s", outDir, outPrefix, "user", u->name);
-    if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
-	errnoAbort("unable to mkdir %s", path);
+    makeMyDir(path);
 
     /* create user/name/context dir */
     safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u->name, "context");
-    if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
-	errnoAbort("unable to mkdir %s", path);
+    makeMyDir(path);
 
     /* create user/name/full dir */
     safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u->name, "full");
-    if (!fileExists(path) && mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
-	errnoAbort("unable to mkdir %s", path);
+    makeMyDir(path);
 
     userChangedLines = 0;
     userChangedFiles = 0;
@@ -768,16 +769,27 @@ for(u = users; u; u = u->next)
 
     char relPath[1024];
     safef(relPath, sizeof(relPath), "%s/index.html", u->name);
-    fprintf(h, "  <A href=\"%s\">%s</A> - changed lines: %d, files: %d\n", relPath, u->name, userChangedLines, userChangedFiles);
+    fprintf(h, "<li> <A href=\"%s\">%s</A> - changed lines: %d, files: %d</li>\n", relPath, u->name, userChangedLines, userChangedFiles);
 
     totalChangedLines += userChangedLines;
     totalChangedFiles += userChangedFiles;  
 
     }
 
-fprintf(h, "\n  lines changed: %d\n  files changed: %d\n", totalChangedLines, totalChangedFiles);
+fprintf(h, "</ul>\n");
+if (u)
+    {
+    fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
+    }
+else
+    {
+    fprintf(h, "<ul>\n");
+    fprintf(h, "<li>  lines changed: %d</li>\n", totalChangedLines);
+    fprintf(h, "<li>  files changed: %d</li>\n", totalChangedFiles);
+    fprintf(h, "</ul>\n");
+    }
+fprintf(h, "</body>\n</html>\n");
 
-fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
 
 // make index of all files view
