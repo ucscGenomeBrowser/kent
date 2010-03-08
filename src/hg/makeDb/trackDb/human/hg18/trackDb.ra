@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.472 2010/03/08 19:09:47 giardine Exp $";
+#	"$Id: trackDb.ra,v 1.473 2010/03/08 23:37:28 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -1909,6 +1909,15 @@ priority 1110
 visibility hide
 type factorSource
 sourceTable jkTestChipExps
+
+track jkTestYaleData
+shortLabel Yale Unified TF
+longLabel Test of Unified Yale Factor/Source Type Display
+group x
+priority 1111
+visibility hide
+type factorSource
+sourceTable jkTestYaleExps
 
 track jkgInputRefSeq
 shortLabel RefSeq Input
