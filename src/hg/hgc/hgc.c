@@ -201,6 +201,9 @@
 #include "oreganno.h"
 #include "oregannoUi.h"
 #include "pgSnp.h"
+#include "pgPhenoAssoc.h"
+#include "pgSiftPred.h"
+#include "pgPolyphenPred.h"
 #include "ec.h"
 #include "transMapClick.h"
 #include "retroClick.h"
@@ -226,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1600 2010/02/22 23:28:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1601 2010/03/08 18:18:54 giardine Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21304,24 +21307,39 @@ if ((row = sqlNextRow(sr)) != NULL)
     char *freq[8];
     char *score[8];
     char *name = cloneString(el->name);
-    char *fr = cloneString(el->alleleFreq);
-    char *sc = cloneString(el->alleleScores);
+    char *fr = NULL;
+    char *sc = NULL;
+    char *siftTab = trackDbSetting(tdb, "pgSiftPredTab");
+    char *polyTab = trackDbSetting(tdb, "pgPolyphenPredTab");
     int i = 0;
     printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
     printf("Alleles are relative to forward strand of reference genome:<br>\n");
     printf("<table border=1 cellpadding=3><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
     chopByChar(name, '/', all, el->alleleCount);
-    chopByChar(fr, ',', freq, el->alleleCount);
-    chopByChar(sc, ',', score, el->alleleCount);
+    if (differentString(el->alleleFreq, ""))
+        {
+        fr = cloneString(el->alleleFreq);
+        chopByChar(fr, ',', freq, el->alleleCount);
+        }
+    if (el->alleleScores != NULL)
+        {
+        sc = cloneString(el->alleleScores);
+        chopByChar(sc, ',', score, el->alleleCount);
+        }
     for (i=0; i < el->alleleCount; i++)
         {
-        if (sameString(freq[i], "0"))
+        if (sameString(el->alleleFreq, "") || sameString(freq[i], "0"))
             freq[i] = "not available";
-        if (sameString(sc, ""))
+        if (sc == NULL || sameString(sc, ""))
             score[i] = "not available";
         printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", all[i], freq[i], score[i]);
         }
     printf("</table>");
+    printPgDbLink(database, tdb, el);
+    if (siftTab != NULL)
+        printPgSiftPred(database, siftTab, el);
+    if (polyTab != NULL)
+        printPgPolyphenPred(database, polyTab, el);
     printSeqCodDisplay(database, el);
     }
 sqlFreeResult(&sr);
@@ -22926,6 +22944,21 @@ else if (sameString("pgVenter", track) ||
          sameString("hbPgTest", track) ||
          sameString("hbPgWild", track) ||
 	 sameString("pgYh1", track) ||
+         sameString("pgKb1", track) ||
+         sameString("pgNb1", track) || sameString("pgNb1Indel", track) ||
+         sameString("pgTk1", track) || sameString("pgTk1Indel", track) ||
+         sameString("pgMd8", track) || sameString("pgMd8Indel", track) ||
+         sameString("pgKb1Illum", track) ||
+         sameString("pgKb1454", track) || sameString("pgKb1Indel", track) ||
+         sameString("pgKb1Comb", track) ||
+         sameString("pgAbtSolid", track) ||
+         sameString("pgAbt", track) || sameString("pgAbt454", track) ||
+         sameString("pgAbt454indels", track) ||
+         sameString("pgAbtIllum", track) ||
+         sameString("pgAk1", track) ||
+         sameString("pgQuake", track) ||
+         sameString("pgSaqqaq", track) ||
+         sameString("pgSaqqaqHc", track) ||
          sameString("pgTest", track) )
     {
     doPgSnp(tdb, item);
