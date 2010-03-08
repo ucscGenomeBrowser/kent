@@ -9,7 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.9 2010/02/19 23:24:34 angie Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.10 2010/03/08 23:25:56 angie Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -78,7 +78,7 @@ if (bbMatch != NULL)
     if (seq1Seq2 && bedSize+seq1Seq2Fields == 8)
         printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr>"
 	       "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
-    else
+    else if (isNotEmpty(rest))
 	{
 	char *restFields[256];
 	int restCount = chopTabs(rest, restFields);
