@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.909 2010/03/08 19:14:46 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.910 2010/03/08 19:42:02 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16701,7 +16701,7 @@ sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-dataVersion through the ENCODE Sep 2009 Freeze
+dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
 
     track wgEncodeYaleChIPseqViewPeaks
@@ -17978,6 +17978,16 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         metadata project=wgEncode grant=Snyder lab=Harvard(Struhl) dataType=ChIPseq cell=K562 antibody=TFIIIC-110 input=std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=1081 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Tfiiic fileName=wgEncodeYaleChIPseqPeaksK562Tfiiic.narrowPeak.gz
+
+        track wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa-S3 Brg1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRG1mig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Brg1 input=IgG-mus treatment=None view=Peaks labVersion=PeakSeq1.0 dataVersion="post ENCODE Jan 2010 Freeze" subId=1119 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus fileName=wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus.narrowPeak.gz
 
     track wgEncodeYaleChIPseqViewSignal
     release alpha
@@ -19683,6 +19693,16 @@ wgEncode 1
         type bedGraph 4
         color 224,75,0
         metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HUVEC antibody=Input input=std treatment=None view=Signal labVersion=PeakSeq1.0 dataVersion="post ENCODE Jan 2010 Freeze" subId=1118 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHuvecInputStd fileName=wgEncodeYaleChIPseqSignalHuvecInputStd.bedGraph4.gz
+
+        track wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus
+        release alpha
+        subTrack wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa-S3 Brg1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Signal factor=BRG1mig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+        metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Brg1 input=IgG-mus treatment=None view=Signal labVersion=PeakSeq1.0 dataVersion="post ENCODE Jan 2010 Freeze" subId=1119 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus fileName=wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus.bedGraph4.gz
 
 
 # Yale ChIP-seq (wrangler: tdreszer)
