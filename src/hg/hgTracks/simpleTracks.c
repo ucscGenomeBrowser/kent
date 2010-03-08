@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.126 2010/02/06 21:43:01 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.127 2010/03/08 18:09:20 giardine Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9411,11 +9411,12 @@ char *freq[8];
 struct dyString *ds = newDyString(255);
 int i = 0;
 chopByChar(nameCopy, '/', all, el->alleleCount);
-chopByChar(cntCopy, ',', freq, el->alleleCount);
+if (differentString(el->alleleFreq, ""))
+    chopByChar(cntCopy, ',', freq, el->alleleCount);
 
 for (i=0; i < el->alleleCount; i++)
     {
-    if (sameString(freq[i], "0"))
+    if (sameString(el->alleleFreq, "") || sameString(freq[i], "0"))
         freq[i] = "?";
     dyStringPrintf(ds, "%s:%s ", all[i], freq[i]);
     }
