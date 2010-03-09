@@ -124,7 +124,8 @@ strict: clean
 checkbeta:
 	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
-beta: checkbeta clean strict
+# not sure if anyone actually uses the target below. It used to be "beta".
+buildBeta: checkbeta clean strict
 
 encodeReport:
 	${CVS} -q up -d -P .
