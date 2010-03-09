@@ -54,15 +54,6 @@ ifeq (${KNETFILE_HOOKS},1)
     HG_DEFS+=-DKNETFILE_HOOKS
 endif
 
-# libfuse: disabled by default
-ifeq (${USE_FUSE},)
-    USE_FUSE=0
-endif
-ifeq (${USE_FUSE},1)
-    L+=-lfuse
-    HG_DEFS+=-DUSE_FUSE
-endif
-
 ifeq (${HG_WARN},)
   ifeq (darwin,$(findstring darwin,${OSTYPE}))
       HG_WARN = -Wall -Wno-unused-variable -Wno-long-double
