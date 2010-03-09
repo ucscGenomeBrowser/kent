@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.127 2010/03/08 18:09:20 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.128 2010/03/09 00:18:37 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -721,7 +721,13 @@ if (x < xEnd)
         // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
             if(x < insideX && xEnd > insideX)
-                warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, xEnd, yEnd, link);
+                {
+                if((insideX - x) < (xEnd - insideX))
+                    x = insideX;
+                else
+                    xEnd = insideX-1;
+                //warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  insideX:%d  link:[%s]",track,x, y, xEnd, yEnd, insideX, link);
+                }
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
@@ -10912,7 +10918,7 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
 	/* install parent's track handler */
 	/* TODO JK - rework.  The gencode tracks currently depend on this, wgEncodeGencode in particular,
-	 * but it seems very dangerous in general.  What if the subtracks already have their own handler? 
+	 * but it seems very dangerous in general.  What if the subtracks already have their own handler?
 	 * Waiting to fix until after viewInTheMiddle branch merge since preferred fix involves
 	 * edits to trackDb.ra files - that is putting in an explicit setting when you want
 	 * this behavior rather than relying on absence of an overloaded setting. */
