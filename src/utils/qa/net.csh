@@ -46,6 +46,10 @@ echo "Org: $Org"
 
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check level for html and trackDb entry:"
+echo "(note that all net (and chain) tracks should now be using the one"
+echo "chainNet.html at the top level. So, you can disregard the fact that"
+echo "this test shows no net$Org.html file. However the trackDb location"
+echo "is still relevant."
 echo
 findLevel $db net$Org
 
