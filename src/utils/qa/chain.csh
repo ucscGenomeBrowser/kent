@@ -72,7 +72,7 @@ hgsql -t -e "SELECT tableName, priority FROM trackDb \
 
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check level for html and trackDb entry:"
-echo "(note that all chain (and net) tracks should now be using the one"
+echo "NOTE: all vertebrate chain (and net) tracks should now be using the one"
 echo "chainNet.html at the top level. So, you can disregard the fact that"
 echo "this test shows no chain$Org.html file. However the trackDb location"
 echo "is still relevant."
