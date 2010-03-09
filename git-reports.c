@@ -302,9 +302,11 @@ void makeDiffAndSplit(struct commit *c, char *u, boolean full)
  * a diff with everything we want, we just have to split it up. */
 {
 safef(gitCmd,sizeof(gitCmd), 
-    "git diff -b -w --no-prefix%s %s^ %s > %s"
+    "git diff -b -w --no-prefix%s %s^! > %s"  
     , full ? " --unified=10000" : ""
-    , c->commitId, c->commitId, tempMakeDiffName);
+    , c->commitId, tempMakeDiffName);
+//git shorthand: x^! is equiv to range x^ x, 
+//  i.e. just the one commit and nothing more.
 
 runShell(gitCmd);
 
