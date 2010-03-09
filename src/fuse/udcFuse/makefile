@@ -1,4 +1,5 @@
 include ../../inc/common.mk
+include ../fuse.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}

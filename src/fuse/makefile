@@ -1,4 +1,5 @@
 include ../inc/common.mk
+include ./fuse.mk
 
 FUSE_DIRS = \
 	udcFuse
