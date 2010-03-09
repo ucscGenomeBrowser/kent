@@ -58,7 +58,7 @@ echo
 ###########################################
 # find the level of the associated .html file
 # start at the assembly level
-cd ~/kent/src/hg/makeDb/trackDb/
+cd ~/kent/src/hg/makeDb/trackDb/*/$db
 currDir=""
 
 if [ -e $tableName.html ]
