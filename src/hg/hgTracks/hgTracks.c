@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1633 2010/03/04 21:24:08 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1634 2010/03/09 00:15:35 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -5405,10 +5405,10 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     }
 
 jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
 if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
-    jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
     jsIncludeFile("jquery.autocomplete.js", NULL);
