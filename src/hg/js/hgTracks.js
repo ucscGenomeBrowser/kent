@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.58 2010/02/28 00:11:07 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.59 2010/03/09 00:22:29 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -114,7 +114,7 @@ function getDb()
 {
     var db = document.getElementsByName("db");
     if(db == undefined || db.length == 0)
-        return undef;
+        return undefined;
     return db[0].value;
 }
 
@@ -1038,6 +1038,30 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
     });
 });
 
+function postToSaveSettings(obj)
+{
+    if(blockUseMap==true) {
+        return false;
+    }
+    if(obj.href == undefined) // called directly with obj and from callback without obj
+        obj = this;
+    if( obj.href.match('#') || obj.target.length > 0) {
+        //alert("Matched # or has target");
+        return true;
+    }
+    var thisForm=$(obj).parents('form');
+    if(thisForm == undefined || $(thisForm).length == 0)
+        thisForm=$("FORM");
+    if($(thisForm).length > 1)
+        thisForm=$(thisForm)[0];
+    if(thisForm != undefined && $(thisForm).length == 1) {
+        //alert("posting form:"+$(thisForm).attr('name'));
+        return postTheForm($(thisForm).attr('name'),this.href);
+    }
+
+    return true;
+}
+
 $(document).ready(function()
 {
     var db = getDb();
@@ -1073,22 +1097,9 @@ $(document).ready(function()
 
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     if($("FORM").length > 0) {
-        $('a,area').not("[href*='#']").not("[target]").click(function(i) {
-            if(blockUseMap==true) {
-                return false;
-            }
-            var thisForm=$(this).parents('form');
-            if(thisForm == undefined || $(thisForm).length == 0)
-                thisForm=$("FORM");
-            if($(thisForm).length > 1)
-                thisForm=$(thisForm)[0];
-            if(thisForm != undefined && $(thisForm).length == 1) {
-                //warn("posting form:"+$(thisForm).attr('name'));
-                return postTheForm($(thisForm).attr('name'),this.href);
-            }
-
-            return true;
-        });
+        var allLinks = $('a');
+        $( allLinks ).unbind('click');
+        $( allLinks ).click( postToSaveSettings );
     }
     if($('#pdfLink').length == 1) {
         $('#pdfLink').click(function(i) {
@@ -1192,7 +1203,7 @@ function findMapItem(e)
         x = e.pageX - e.target.offsetLeft;
         y = e.pageY - e.target.offsetTop;
     }
-    
+
     if(e.target.tagName.toUpperCase() == "P") {
         // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is true.
         var a = /p_btn_(.*)/.exec(e.target.id);
@@ -1211,7 +1222,7 @@ function findMapItem(e)
         }
         // else fall-through (under msie).
     }
-    
+
     var retval = -1;
     // console.log(e.target.tagName + "; " + e.target.id);
     for(var i=0;i<mapItems.length;i++)
@@ -1406,7 +1417,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         } else if (false && browser == "safari") {
             // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
             // Chrome 5.0.335.1.); I'm leaving this dead code here for now in case this problem re-appears.
-            // 
+            //
             // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
             // though if you look in the DOM the changes are there); so we have to do a full form submission when the
             // user changes visibility settings.

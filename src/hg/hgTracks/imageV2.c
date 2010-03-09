@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.24 2010/02/13 00:42:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.25 2010/03/09 00:19:56 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1395,7 +1395,7 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onclick='postToSaveSettings(this);'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
@@ -1405,7 +1405,7 @@ for(;item!=NULL;item=item->next)
     else
         warn("map item has no url!");
 
-    if(item->title != NULL)
+    if(item->title != NULL && strlen(item->title) > 0)
         hPrintf(" TITLE='%s'", item->title );
     if(item->id != NULL)
         hPrintf(" id='%s'", item->id);
