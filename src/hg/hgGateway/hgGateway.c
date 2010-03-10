@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.114 2010/02/16 21:04:20 larrym Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.115 2010/03/10 00:19:06 larrym Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -129,7 +129,7 @@ printf("</td>\n");
 if(supportsSuggest)
     {
     puts("<td align=center>\n");
-    hWrites("<input type='text' size='5' id='suggest' />\n");
+    hWrites("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n");
     printf("</td>\n");
     }
 
@@ -146,7 +146,10 @@ puts("<td align=center>\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
 puts("</td>\n");
 puts("<td align=center>");
-cgiMakeButton("Submit", "submit");
+if(supportsSuggest)
+    hButtonWithOnClick("Submit", "submit", NULL, "submitButtonOnClick()");
+else
+    cgiMakeButton("Submit", "submit");
 puts(
 "</td>\n"
 "</tr></table>\n"
@@ -198,7 +201,10 @@ puts("</FORM></TD>");
 puts("<TD VALIGN=\"TOP\">");
 puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-cgiMakeOnClickButton("document.mainForm.position.value=''","clear position");
+if(supportsSuggest)
+    cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('suggest').value='';", "clear position");
+else
+    cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
 puts("</FORM></TD>");
 
 puts("</TR>");
