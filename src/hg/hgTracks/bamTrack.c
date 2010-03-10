@@ -18,7 +18,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.29 2010/03/04 05:14:13 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.30 2010/03/10 05:07:57 angie Exp $";
 
 struct bamTrackData
     {
@@ -619,11 +619,20 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
     }
 }
 
-static void dontDrawLeftLabels(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+static void maybeDrawLeftLabels(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
 			       int xOff, int yOff, int width, int height, boolean withCenterLabels,
 			       MgFont *font, Color color, enum trackVisibility vis)
-/* Allow left labels to be inhibited by tdb and/or cart. */
+/* If this is invoked, we are hiding item labels.  In full mode, that means no left labels.
+ * In dense mode, we do need the left label to show shortLabel. */
 {
+if (tg->limitedVis == tvDense)
+    {
+    int fontHeight = mgFontLineHeight(font);
+    if (isWithCenterLabels(tg))
+	yOff += fontHeight;
+    hvGfxTextRight(hvg, xOff, yOff, width, tg->lineHeight, color, font, tg->shortLabel);
+    }
+return;
 }
 
 
@@ -641,7 +650,7 @@ boolean compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_PAIR_ENDS_BY_NAM
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
 			 BAM_PAIR_ENDS_BY_NAME,
 			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
-char *tdbShowNames = trackDbSettingClosestToHome(track->tdb, BAM_SHOW_NAMES);
+char *tdbShowNames = trackDbSetting(track->tdb, BAM_SHOW_NAMES);
 boolean showNames = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
 						  BAM_SHOW_NAMES, !sameOk(tdbShowNames, "off"));
 char *colorMode = cartOrTdbString(cart, track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
@@ -672,7 +681,7 @@ else
 if (!showNames)
     {
     track->drawName = TRUE; // ironic, but this is how to suppress item labels in pack mode.
-    track->drawLeftLabels = dontDrawLeftLabels;
+    track->drawLeftLabels = maybeDrawLeftLabels;
     }
 
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
