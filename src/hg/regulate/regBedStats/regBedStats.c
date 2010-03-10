@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: regBedStats.c,v 1.1 2010/03/10 19:41:55 kent Exp $";
+static char const rcsid[] = "$Id: regBedStats.c,v 1.2 2010/03/10 19:45:19 kent Exp $";
 
 int chromColIx = 0, startColIx=1, endColIx=2, scoreColIx=4;
 
@@ -34,41 +34,6 @@ static struct optionSpec options[] = {
    {"scoreColIx", OPTION_INT},
    {NULL, 0},
 };
-
-void doubleBoxWhiskerCalc(int count, double *array, double *retMin, 
-	double *retQ1, double *retMedian, double *retQ3, double *retMax)
-/* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
-{
-double median;
-doubleSort(count, array);
-*retMin = array[0];
-*retQ1 = array[(count+2)/4];
-int halfCount = count>>1;
-if ((count&1) == 1)
-    *retMedian = array[halfCount];
-else
-    {
-    *retMedian = (array[halfCount] + array[halfCount-1]) * 0.5;
-    }
-*retQ3 = array[(3*count+2)/4];
-*retMax = array[count-1];
-}
-
-void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin, 
-	double *retQ1, double *retMedian, double *retQ3, double *retMax)
-/* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
-{
-int i,count = slCount(list);
-struct slDouble *el;
-double *array, minVal, q1, median, q3, maxVal;
-if (count == 0)
-    errAbort("Can't take do slDoubleBoxWhiskerCalc of empty list");
-AllocArray(array,count);
-for (i=0, el=list; i<count; ++i, el=el->next)
-    array[i] = el->val;
-doubleBoxWhiskerCalc(count, array, retMin, retQ1, retMedian, retQ3, retMax);
-freeMem(array);
-}
 
 void printStats(FILE *f, struct slDouble *list)
 /* Print out stats on list: ave +-std min 1/4 median 3/4 max */
