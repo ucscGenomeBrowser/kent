@@ -18,35 +18,35 @@ wgEncode 1
 
     track encCrgMapabilityAlign36mer
     subTrack encMapability
-    shortLabel CRG Alignability 36
+    shortLabel CRG Align 36
     longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
     color 120,0,0
     priority 1
 
     track encCrgMapabilityAlign40mer
     subTrack encMapability
-    shortLabel CRG Alignability 40
+    shortLabel CRG Align 40
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
     color 120,0,0
     priority 2
     
     track encCrgMapabilityAlign50mer
     subTrack encMapability
-    shortLabel CRG Alignability 50
+    shortLabel CRG Align 50
     longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
     color 120,0,0
     priority 3
 
     track encCrgMapabilityAlign75mer
     subTrack encMapability
-    shortLabel CRG Alignability 75
+    shortLabel CRG Align 75
     longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
     color 120,0,0
     priority 4
 
     track encCrgMapabilityAlign100mer
     subTrack encMapability
-    shortLabel CRG Alignability 100
+    shortLabel CRG Align 100
     longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
     color 120,0,0
     priority 5
