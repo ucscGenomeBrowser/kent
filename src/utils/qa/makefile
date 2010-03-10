@@ -35,6 +35,7 @@ install:
 	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}
 	cp -p --remove-destination commTrio.csh            ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
+	cp -p --remove-destination comparePublic.csh       ${SCRIPTS}
 	cp -p --remove-destination compareTableLists.csh   ${SCRIPTS}
 	cp -p --remove-destination compareTableToFile.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbAll.csh   ${SCRIPTS}
