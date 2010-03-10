@@ -1,0 +1,6 @@
+This is release 2 of the Mapability track for hg18. Five substracks were added 
+to show alignability data from CRG created using the GEM mapper aligner. 
+This set of tracks is from an ENCODE lab but only partially funded by ENCODE
+and therefore no metadata is included on the track configuration page for 
+this track. Documentation for building the track is in 
+kent/src/hg/makeDb/doc/hg18.txt.
