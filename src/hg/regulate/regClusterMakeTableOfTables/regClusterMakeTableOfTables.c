@@ -7,9 +7,7 @@
 #include "sqlNum.h"
 #include "hmmStats.h"
 
-static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.1 2010/03/08 23:35:08 kent Exp $";
-
-boolean clTwo = FALSE;
+static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.2 2010/03/10 19:46:34 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,13 +16,10 @@ errAbort(
   "regClusterMakeTableOfTables - Make up a table of tables for regCluster program\n"
   "usage:\n"
   "   regClusterMakeTableOfTables fileListFile output\n"
-  "options:\n"
-  "   -two - assume name is camelCased with two things\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {"two", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -75,27 +70,6 @@ for (el = list->next; el != NULL; el = el->next)
 return commonSize;
 }
 
-void camelParseTwo(char *in, char **retA, char **retB)
-/* Parse out CamelCased in into a and b.  */
-{
-char *s = in;
-char *aStart = s;
-char *bStart = NULL;
-char c;
-while ((c = *(++s)) != 0)
-    {
-    if (isupper(c))
-        {
-	bStart = s;
-	break;
-        }
-    }
-if (bStart == NULL)
-   errAbort("Couldn't find start of second word in %s", in);
-*retA = cloneStringZ(aStart, bStart - aStart);
-*retB = cloneString(bStart);
-}
-
 double calcNormScoreFactor(char *fileName, int scoreCol)
 /* Figure out what to multiply things by to get a nice browser score (0-1000) */
 {
@@ -115,7 +89,7 @@ while (lineFileRow(lf, row))
     sumSquares += x*x;
     n += 1;
     }
-
+lineFileClose(&lf);
 double std = calcStdFromSums(sum, sumSquares, n);
 double mean = sum/n;
 double highEnd = mean + std;
@@ -137,14 +111,7 @@ for (in = inList; in != NULL; in = in->next)
     char *s = in->name;
     int len = strlen(s);
     char *midString = cloneStringZ(s+commonPrefix, len - commonPrefix - commonSuffix);
-    if (clTwo)
-        {
-	char *a, *b;
-	camelParseTwo(midString, &a, &b);
-	fprintf(f, "%s\t%s\n", a, b);
-	}
-    else
-	fprintf(f, "%s\n", midString);
+    fprintf(f, "%s\n", midString);
     freez(&midString);
     }
 carefulClose(&f);
@@ -156,7 +123,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-clTwo = optionExists("two");
 regClusterMakeTableOfTables(argv[1], argv[2]);
 return 0;
 }
