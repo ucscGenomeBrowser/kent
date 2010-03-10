@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.144 2010/03/10 19:44:59 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.145 2010/03/10 22:12:33 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -461,7 +461,6 @@ void doubleBoxWhiskerCalc(int count, double *array, double *retMin,
 	double *retQ1, double *retMedian, double *retQ3, double *retMax)
 /* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
 {
-double median;
 doubleSort(count, array);
 *retMin = array[0];
 *retQ1 = array[(count+2)/4];
@@ -521,7 +520,7 @@ void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin,
 {
 int i,count = slCount(list);
 struct slDouble *el;
-double *array, minVal, q1, median, q3, maxVal;
+double *array;
 if (count == 0)
     errAbort("Can't take do slDoubleBoxWhiskerCalc of empty list");
 AllocArray(array,count);
