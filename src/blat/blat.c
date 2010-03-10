@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.115 2009/10/09 19:35:06 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.116 2010/03/10 19:21:46 galt Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -688,7 +688,7 @@ switch (qType)
 	break;
     }
 if ((tIsProtLike ^ qIsProtLike) != 0)
-    errAbort("d and q must both be either protein or dna");
+    errAbort("t and q must both be either protein or dna");
 
 /* Set default tile size for protein-based comparisons. */
 if (tIsProtLike)
