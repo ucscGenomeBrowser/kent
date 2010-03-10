@@ -31,7 +31,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.35 2010/02/25 22:55:55 angie Exp $";
+static char const rcsid[] = "$Id: udc.c,v 1.36 2010/03/10 23:44:05 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -132,9 +132,10 @@ if (total < size)
 
 static int connInfoGetSocket(struct connInfo *ci, char *url, bits64 offset, int size)
 /* If ci has an open socket and the given offset matches ci's current offset,
- * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci. */
+ * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci,
+ * or return -1 if there is an error opening a new one. */
 {
-if (ci != NULL && ci->socket != 0 && ci->offset != offset)
+if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     {
     bits64 skipSize = (offset - ci->offset);
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
@@ -147,13 +148,13 @@ if (ci != NULL && ci->socket != 0 && ci->offset != offset)
 	{
 	verbose(2, "Offset mismatch (ci %lld != new %lld), reopening.\n", ci->offset, offset);
 	mustCloseFd(&(ci->socket));
-	if (ci->ctrlSocket != 0)
+	if (ci->ctrlSocket > 0)
 	    mustCloseFd(&(ci->ctrlSocket));
 	ZeroVar(ci);
 	}
     }
 int sd;
-if (ci == NULL || ci->socket == 0)
+if (ci == NULL || ci->socket <= 0)
     {
     char rangeUrl[2048];
     if (ci == NULL)
@@ -168,12 +169,14 @@ if (ci == NULL || ci->socket == 0)
 	sd = ci->socket = netUrlOpenSockets(rangeUrl, &(ci->ctrlSocket));
 	ci->offset = offset;
 	}
+    if (sd < 0)
+	return -1;
     if (startsWith("http", url))
 	{
 	char *newUrl = NULL;
 	int newSd = 0;
 	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
-	    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+	    return -1;
 	if (newUrl)  // not sure redirection will work with byte ranges as it is now
 	    {
 	    freeMem(newUrl); 
@@ -185,8 +188,6 @@ if (ci == NULL || ci->socket == 0)
     }
 else
     sd = ci->socket;
-if (sd < 0)
-    errnoAbort("Couldn't open %s", url);   // do we really want errAbort here?
 return sd;
 }
 
@@ -327,6 +328,8 @@ else
     errAbort("Invalid protocol in url [%s] in udcDataViaFtp, only http, https, or ftp supported",
 	     url); 
 int sd = connInfoGetSocket(ci, url, offset, size);
+if (sd < 0)
+    errAbort("Can't get data socket for %s", url);
 int rd = 0, total = 0, remaining = size;
 char *buf = (char *)buffer;
 while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))

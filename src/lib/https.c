@@ -1,3 +1,4 @@
+/* Connect via https. */
 
 #ifdef USE_SSL
 
@@ -10,8 +11,8 @@
 #include "common.h"
 #include "errabort.h"
 
-int netMustConnectHttps(char *hostName, int port)
-/* Start https connection with server or die. */
+int netConnectHttps(char *hostName, int port)
+/* Return socket for https connection with server or -1 if error. */
 {
 
 fflush(stdin);
@@ -25,7 +26,7 @@ socketpair(AF_UNIX, SOCK_STREAM, 0, sv);
 int pid = fork();
 
 if (pid < 0)
-    errnoAbort("can't fork in netMustConnectHttps");
+    errnoAbort("can't fork in netConnectHttps");
 if (pid == 0)
     {
     /* child */
@@ -178,14 +179,11 @@ return sv[0];
 #include "common.h"
 #include "errabort.h"
 
-int netMustConnectHttps(char *hostName, int port)
+int netConnectHttps(char *hostName, int port)
 /* Start https connection with server or die. */
 {
-
-errnoAbort("No openssl available in netMustConnectHttps for %s : %d", hostName, port);
-
+errAbort("No openssl available in netConnectHttps for %s : %d", hostName, port);
 return -1;   /* will never get to here, make compiler happy */
-
 }
 
 #endif

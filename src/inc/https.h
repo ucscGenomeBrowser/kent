@@ -1,4 +1,9 @@
+/* Connect via https. */
 
-int netMustConnectHttps(char *hostName, int port);
-/* Start https connection with server or die. */
+#ifndef NET_HTTPS_H
+#define NET_HTTPS_H
 
+int netConnectHttps(char *hostName, int port);
+/* Return socket for https connection with server or -1 if error. */
+
+#endif//ndef NET_HTTPS_H

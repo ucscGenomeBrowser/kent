@@ -7,16 +7,11 @@
 #ifndef NET_H
 #define NET_H
 
-#ifndef LINEFILE_H
 #include "linefile.h"
-#endif /* LINEFILE_H */
-
-#ifndef DYSTRING_H
 #include "dystring.h"
-#endif /* DYSTRING_H */
 
 int netConnect(char *hostName, int port);
-/* Start connection with a server having resolved port. */
+/* Start connection with a server having resolved port. Return < 0 if error. */
 
 int netMustConnect(char *hostName, int port);
 /* Start connection with server or die. */
@@ -125,11 +120,12 @@ void netParseUrl(char *url, struct netParsedUrl *parsed);
  */
 
 int netUrlOpen(char *url);
-/* Return socket descriptor (low-level file handle) for read()ing url data. 
- * Just close(result) when done. */
+/* Return socket descriptor (low-level file handle) for read()ing url data,
+ * or -1 if error.  Just close(result) when done. */
 
 int netUrlOpenSockets(char *url, int *retCtrlSocket);
-/* Return socket descriptor (low-level file handle) for read()ing url data. 
+/* Return socket descriptor (low-level file handle) for read()ing url data,
+ * or -1 if error. 
  * If retCtrlSocket is non-NULL and url is FTP, set *retCtrlSocket
  * to the FTP control socket which is left open for a persistent connection.
  * close(result) (and close(*retCtrlSocket) if applicable) when done. */
@@ -175,7 +171,8 @@ int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *o
  * too.  Typically the "method" will be "GET" or "POST"
  * and the agent will be the name of your program or
  * library. optionalHeader may be NULL or contain
- * additional header lines such as cookie info. */
+ * additional header lines such as cookie info.
+ * Return data socket, or -1 if error.*/
 
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
 		       void (*responseCB)(void *userData, char *req,

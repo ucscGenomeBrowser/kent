@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.78 2009/12/18 22:48:27 angie Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.79 2010/03/10 23:41:17 angie Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -50,7 +50,7 @@ if ((sd = netStreamSocket()) < 0)
     return sd;
 if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)
    {
-   warn("Couldn't connect to %s %d", hostName, port);
+   errnoWarn("Couldn't connect to %s %d", hostName, port);
    close(sd);
    return err;
    }
@@ -409,7 +409,7 @@ for (;;)
     }
 }
 
-void sendFtpCommandOnly(int sd, char *cmd)
+static void sendFtpCommandOnly(int sd, char *cmd)
 /* send command to ftp server */
 {   
 mustWriteFd(sd, cmd, strlen(cmd));
@@ -417,23 +417,23 @@ mustWriteFd(sd, cmd, strlen(cmd));
 
 #define NET_FTP_TIMEOUT 1000000
 
-struct dyString *receiveFtpReply(int sd, char *cmd, boolean seeResult)
+static boolean receiveFtpReply(int sd, char *cmd, struct dyString **retReply)
 /* send command to ftp server and check resulting reply code, 
-   give error if not desired reply */
+ * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {
-struct dyString *rs = NULL;
-int reply = 0;
-char buf[4*1024];
-int readSize;
 char *startLastLine = NULL;
-
-rs = newDyString(4*1024);
+struct dyString *rs = newDyString(4*1024);
 while (1)
     {
+    int readSize = 0;
     while (1)
 	{
+	char buf[4*1024];
 	if (!readReadyWait(sd, NET_FTP_TIMEOUT))
-	    errAbort("ftp server response timed out > %d microsec", NET_FTP_TIMEOUT);
+	    {
+	    warn("ftp server response timed out > %d microsec", NET_FTP_TIMEOUT);
+	    return FALSE;
+	    }
 	if ((readSize = read(sd, buf, sizeof(buf))) == 0)
 	    break;
 
@@ -462,28 +462,31 @@ while (1)
     if (readSize == 0)
 	break;  // EOF
     /* must be some text info we can't use, ignore it till we get status code */
-
     }
 
-reply = atoi(startLastLine);
-
+int reply = atoi(startLastLine);
 if ((reply < 200) || (reply > 399))
-    errAbort("ftp server error on cmd=[%s] response=[%s]\n",cmd,rs->string);
+    {
+    warn("ftp server error on cmd=[%s] response=[%s]\n",cmd,rs->string);
+    return FALSE;
+    }
     
-if (!seeResult) dyStringFree(&rs);
-
-return rs;
+if (retReply)
+    *retReply = rs;
+else
+    dyStringFree(&rs);
+return TRUE;
 }
 
-struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult)
+static boolean sendFtpCommand(int sd, char *cmd, struct dyString **retReply)
 /* send command to ftp server and check resulting reply code, 
-   give error if not desired reply */
+ * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {   
 sendFtpCommandOnly(sd, cmd);
-return receiveFtpReply(sd, cmd, seeResult);
+return receiveFtpReply(sd, cmd, retReply);
 }
 
-int parsePasvPort(char *rs)
+static int parsePasvPort(char *rs)
 /* parse PASV reply to get the port and return it */
 {
 char *words[7];
@@ -501,7 +504,7 @@ return result;
 }    
 
 
-long long parseFtpSIZE(char *rs)
+static long long parseFtpSIZE(char *rs)
 /* parse reply to SIZE and return it */
 {
 char *words[3];
@@ -516,7 +519,7 @@ return result;
 }    
 
 
-time_t parseFtpMDTM(char *rs)
+static time_t parseFtpMDTM(char *rs)
 /* parse reply to MDTM and return it
  * 200 YYYYMMDDhhmmss */
 {
@@ -566,22 +569,37 @@ return t;
 
 
 static int openFtpControlSocket(char *host, int port, char *user, char *password)
-/* Open a socket to host,port; authenticate anonymous ftp; set type to I; return socket desc. */
+/* Open a socket to host,port; authenticate anonymous ftp; set type to I; 
+ * return socket desc or -1 if there was an error. */
 {
-int sd = netMustConnect(host, port);
+int sd = netConnect(host, port);
+if (sd < 0)
+    return -1;
 
 /* First read the welcome msg */
 if (readReadyWait(sd, NET_FTP_TIMEOUT))
-    sendFtpCommand(sd, "", FALSE);
+    sendFtpCommand(sd, "", NULL);
 
 char cmd[256];
 safef(cmd,sizeof(cmd),"USER %s\r\n", user);
-sendFtpCommand(sd, cmd, FALSE);
+if (!sendFtpCommand(sd, cmd, NULL))
+    {
+    close(sd);
+    return -1;
+    }
 
 safef(cmd,sizeof(cmd),"PASS %s\r\n", password);
-sendFtpCommand(sd, cmd, FALSE);
+if (!sendFtpCommand(sd, cmd, NULL))
+    {
+    close(sd);
+    return -1;
+    }
 
-sendFtpCommand(sd, "TYPE I\r\n", FALSE);
+if (!sendFtpCommand(sd, "TYPE I\r\n", NULL))
+    {
+    close(sd);
+    return -1;
+    }
 /* 200 Type set to I */
 /* (send the data as binary, so can support compressed files) */
 return sd;
@@ -605,15 +623,26 @@ if (sameString(npu.file,"/"))
     }
 
 int sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+if (sd < 0)
+    return FALSE;
 char cmd[256];
 safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
-struct dyString *rs = sendFtpCommand(sd, cmd, TRUE);
+struct dyString *rs = NULL;
+if (!sendFtpCommand(sd, cmd, &rs))
+    {
+    close(sd);
+    return FALSE;
+    }
 *retSize = parseFtpSIZE(rs->string);
 /* 200 12345 */
 dyStringFree(&rs);
 
 safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
-rs = sendFtpCommand(sd, cmd, TRUE);
+if (!sendFtpCommand(sd, cmd, &rs))
+    {
+    close(sd);
+    return FALSE;
+    }
 *retTime = parseFtpMDTM(rs->string);
 /* 200 YYYYMMDDhhmmss */
 dyStringFree(&rs);
@@ -666,8 +695,9 @@ close(sd);
 close(sdata);
 }
 
-int netGetOpenFtpSockets(char *url, int *retCtrlSd)
-/* Return a socket descriptor for url data (url can end in ";byterange:start-end".
+static int netGetOpenFtpSockets(char *url, int *retCtrlSd)
+/* Return a socket descriptor for url data (url can end in ";byterange:start-end",
+ * or -1 if error.
  * If retCtrlSd is non-null, keep the control socket alive and set *retCtrlSd.
  * Otherwise, create a pipe and fork to keep control socket alive in the child 
  * process until we are done fetching data. */
@@ -680,33 +710,62 @@ netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "ftp"))
     errAbort("netGetOpenFtpSockets: url (%s) is not for ftp.", url);
 int sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+if (sd == -1)
+    return -1;
 
-struct dyString *rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
+struct dyString *rs = NULL;
+if (!sendFtpCommand(sd, "PASV\r\n", &rs))
+    {
+    close(sd);
+    return -1;
+    }
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
 if (npu.byteRangeStart != -1)
     {
     safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
-    sendFtpCommand(sd, cmd, FALSE);
+    if (!sendFtpCommand(sd, cmd, NULL))
+	{
+	close(sd);
+	return -1;
+	}
     }
 
 safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
-sendFtpCommandOnly(sd, cmd);  
+sendFtpCommandOnly(sd, cmd);
 
-int sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
+int sdata = netConnect(npu.host, parsePasvPort(rs->string));
+dyStringFree(&rs);
+if (sdata < 0)
+    {
+    close(sd);
+    return -1;
+    }
 
 int secondsWaited = 0;
 while (TRUE)
     {
     if (secondsWaited >= 10)
-	errAbort("ftp server error on cmd=[%s] timed-out waiting for data or error\n", cmd);
+	{
+	warn("ftp server error on cmd=[%s] timed-out waiting for data or error\n", cmd);
+	close(sd);
+	close(sdata);
+	return -1;
+	}
     if (readReadyWait(sdata, NET_FTP_TIMEOUT))
 	break;   // we have some data
     if (readReadyWait(sd, 0)) /* wait in microsec */
-	receiveFtpReply(sd, cmd, FALSE);  // this can see an error like bad filename
+	{
+	// this can see an error like bad filename
+	if (!receiveFtpReply(sd, cmd, NULL))
+	    {
+	    close(sd);
+	    close(sdata);
+	    return -1;
+	    }
+	}
     ++secondsWaited;
     }
-dyStringFree(&rs);
 
 if (retCtrlSd != NULL)
     {
@@ -724,10 +783,10 @@ else
     /* make a pipe (fds go in pipefd[0] and pipefd[1])  */
     int pipefd[2];
     if (pipe(pipefd) != 0)
-	errAbort("netGetOpenFtp: failed to create pipe: %s", strerror(errno));
+	errAbort("netGetOpenFtpSockets: failed to create pipe: %s", strerror(errno));
     int pid = fork();
     if (pid < 0)
-	errnoAbort("can't fork in netGetOpenFtp");
+	errnoAbort("can't fork in netGetOpenFtpSockets");
     if (pid == 0)
 	{
 	/* child */
@@ -745,40 +804,36 @@ else
     }
 }
 
-int netGetOpenFtp(char *url)
-/* Return a socket descriptor for url data (url can end in ";byterange:start-end". */
-{
-return netGetOpenFtpSockets(url, NULL);
-}
-
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
-/* Parse URL, connect to associated server on port,
- * and send most of the request to the server.  If
- * specified in the url send user name and password
- * too.  Typically the "method" will be "GET" or "POST"
+/* Parse URL, connect to associated server on port, and send most of
+ * the request to the server.  If specified in the url send user name
+ * and password too.  Typically the "method" will be "GET" or "POST"
  * and the agent will be the name of your program or
- * library. optionalHeader may be NULL or contain
- * additional header lines such as cookie info. */
+ * library. optionalHeader may be NULL or contain additional header
+ * lines such as cookie info. 
+ * Return data socket, or -1 if error.*/
 {
 struct netParsedUrl npu;
 struct dyString *dy = newDyString(512);
-int sd;
+int sd = -1;
 
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
 if (sameString(npu.protocol, "http"))
     {
-    sd = netMustConnect(npu.host, atoi(npu.port));
+    sd = netConnect(npu.host, atoi(npu.port));
     }
 else if (sameString(npu.protocol, "https"))
     {
-    sd = netMustConnectHttps(npu.host, atoi(npu.port));
+    sd = netConnectHttps(npu.host, atoi(npu.port));
     }
 else
     {
     errAbort("netHttpConnect: url (%s) is not for http.", url);
     return -1;  /* never gets here, fixes compiler complaint */
     }
+if (sd < 0)
+    return -1;
 
 /* Ask remote server for a file. */
 dyStringPrintf(dy, "%s %s %s\r\n", method, npu.file, protocol);
@@ -821,7 +876,6 @@ mustWriteFd(sd, dy->string, dy->stringSize);
 dyStringFree(&dy);
 return sd;
 }
-
 
 
 int netOpenHttpExt(char *url, char *method, char *optionalHeader)
@@ -880,7 +934,8 @@ return status;
 }
 
 int netUrlOpenSockets(char *url, int *retCtrlSocket)
-/* Return socket descriptor (low-level file handle) for read()ing url data. 
+/* Return socket descriptor (low-level file handle) for read()ing url data,
+ * or -1 if error. 
  * If retCtrlSocket is non-NULL and url is FTP, set *retCtrlSocket
  * to the FTP control socket which is left open for a persistent connection.
  * close(result) (and close(*retCtrlSocket) if applicable) when done. */
@@ -895,8 +950,8 @@ return -1;
 }
 
 int netUrlOpen(char *url)
-/* Return socket descriptor (low-level file handle) for read()ing url data. 
- * Just close(result) when done. */
+/* Return socket descriptor (low-level file handle) for read()ing url data,
+ * or -1 if error.  Just close(result) when done. */
 {
 return netUrlOpenSockets(url, NULL);
 }
@@ -918,6 +973,8 @@ struct dyString *netSlurpUrl(char *url)
 /* Go grab all of URL and return it as dynamic string. */
 {
 int sd = netUrlOpen(url);
+if (sd < 0)
+    errAbort("netSlurpUrl: failed to open socket for [%s]", url);
 struct dyString *dy = netSlurpFile(sd);
 close(sd);
 return dy;
@@ -1048,6 +1105,11 @@ while (TRUE)
 	    {
 	    *redirectedSd = sd;
 	    *redirectedUrl = url;
+	    }
+	else
+	    {
+	    *redirectedSd = -1;
+	    *redirectedUrl = NULL;
 	    }
 	return TRUE;
 	}
