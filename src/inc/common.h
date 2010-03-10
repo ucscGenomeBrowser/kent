@@ -453,6 +453,10 @@ double doubleMedian(int count, double *array);
 /* Return median value in array.  This will sort
  * the array as a side effect. */
 
+void doubleBoxWhiskerCalc(int count, double *array, double *retMin, 
+	double *retQ1, double *retMedian, double *retQ3, double *retMax);
+/* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
+
 struct slDouble
 /* List of double-precision numbers. */
     {
@@ -469,6 +473,10 @@ int slDoubleCmp(const void *va, const void *vb);
 
 double slDoubleMedian(struct slDouble *list);
 /* Return median value on list. */
+
+void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin, 
+	double *retQ1, double *retMedian, double *retQ3, double *retMax);
+/* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
 
 void intSort(int count, int *array);
 /* Sort an array of ints. */
