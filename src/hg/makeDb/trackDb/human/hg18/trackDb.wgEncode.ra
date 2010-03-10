@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.914 2010/03/10 18:28:24 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.915 2010/03/10 19:29:48 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -7470,7 +7470,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign36mer
         release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 36
+        shortLabel CRG Align 36
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
@@ -7479,7 +7479,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign40mer
         release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 40
+        shortLabel CRG Align 40
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
@@ -7488,7 +7488,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign50mer
         release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 50
+        shortLabel CRG Align 50
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
@@ -7497,7 +7497,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign75mer
         release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 75
+        shortLabel CRG Align 75
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
@@ -7506,7 +7506,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign100mer
         release alpha
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 100
+        shortLabel CRG Align 100
         longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w100
         type bigWig 0.00 1.00
@@ -7674,7 +7674,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign36mer
         release beta
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 36
+        shortLabel CRG Align 36
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
@@ -7683,7 +7683,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign40mer
         release beta
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 40
+        shortLabel CRG Align 40
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
@@ -7692,7 +7692,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign50mer
         release beta
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 50
+        shortLabel CRG Align 50
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
@@ -7701,7 +7701,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign75mer
         release beta
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 75
+        shortLabel CRG Align 75
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
@@ -7710,7 +7710,7 @@ wgEncode 1
         track wgEncodeCrgMapabilityAlign100mer
         release beta
         subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Alignability 100
+        shortLabel CRG Align 100
         longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w100
         type bigWig 0.00 1.00
