@@ -8,7 +8,7 @@
 #include "knetUdc.h"
 #include "knetfile.h"
 
-static char const rcsid[] = "$Id: knetUdc.c,v 1.2 2010/03/03 02:19:44 galt Exp $";
+static char const rcsid[] = "$Id: knetUdc.c,v 1.3 2010/03/10 23:52:06 angie Exp $";
 
 struct knetFile_s {
     struct udcFile *udcf;
@@ -19,11 +19,14 @@ static char *udcCacheDir = NULL;
 static knetFile *kuOpen(const char *filename, const char *mode)
 /* Open the given filename with mode which must be "r". */
 {
-knetFile *kf = NULL;
 if (!sameOk((char *)mode, "r"))
     errAbort("mode passed to kuOpen must be 'r' not '%s'", mode);
+struct udcFile *udcf = udcFileMayOpen((char *)filename, udcCacheDir);
+if (udcf == NULL)
+    return NULL;
+knetFile *kf = NULL;
 AllocVar(kf);
-kf->udcf = udcFileOpen((char *)filename, udcCacheDir);
+kf->udcf = udcf;
 verbose(2, "kuOpen: returning %lu\n", (unsigned long)(kf->udcf));
 return kf;
 }
