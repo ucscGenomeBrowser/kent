@@ -16,3 +16,8 @@ compile:: ${O}
 
 clean::
 	rm -f ${A} ${O}
+
+test:
+	cd tests/needBreak; regCluster -weakLevel=0.3 in.tab out.cluster out.bed
+	diff tests/needBreak/expected.cluster tests/needBreak/out.cluster
+	diff tests/needBreak/expected.bed tests/needBreak/out.bed
