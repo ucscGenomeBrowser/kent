@@ -1234,3 +1234,8 @@ cat > getGenes.csh << 'EOF'
     # 43
     hgLoadBed hg18 encodeTbaBinConsDec07 BinCons.bed
     
+#############################################################################
+#  CRG MAPABILITY (2010-01-19 - 2010-01-28, hartera, DONE)
+#  See kent/src/hg/makeDb/doc/hg18.txt for documentation on the addition of 
+#  CRG alignability subtracks for sequence k-mers of 36,40,50,75 and 100
+#  nucleotides. 
