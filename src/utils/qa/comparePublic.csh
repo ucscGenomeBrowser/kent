@@ -38,7 +38,9 @@ endif
 
 #  get files of tables and compare: 
 # beta public:
-hgsql -N -h $sqlbeta -e "SELECT tableName $field2 FROM trackDb_public" $db | sort  > $db.public
+hgsql -N -h $sqlbeta -e "SELECT tableName $field2 FROM trackDb_public" $db | sort  > $db.public1
+cp $db.public1 $db.public2
+hgsql -N -h $sqlbeta -e "SELECT tableName $field2 FROM trackDb" $db | sort  > $db.beta
 
 # build url for RR TB query:
 set url1="http://genome.ucsc.edu/cgi-bin/hgTables?db=$db"
@@ -52,10 +54,17 @@ set url="$url1$url2$url3$url4$url5$url6"
 
 wget -q -O /dev/stdout "$url" | grep -v "#tableName" > $db.rr
 echo
-commTrio.csh $db.public $db.rr $rm
+commTrio.csh $db.public1 $db.beta $rm
+echo
+commTrio.csh $db.public2 $db.rr $rm
+
+
 
 if ( $rm == 'rm' ) then
   rm -f $db.public
   rm -f $db.rr
 endif
+
+
+
 
