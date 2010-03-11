@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.131 2010/02/08 22:08:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.132 2010/03/11 03:59:06 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1854,7 +1854,7 @@ void commonCssStyles()
     //printf(".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
     printf(".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN);
     printf(".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);
-    printf(".halfVis {opacity: 0.5; filter:alpha(opacity=50;}\n");
+    printf(".halfVis {opacity: 0.5; filter:alpha(opacity=50);}\n");
     puts("</style>");
 }
 
