@@ -18,7 +18,7 @@ enum encodePeakType peakType;
 char **row;
 char *db;
 char *table = tdb->tableName;
-char *chrom = cgiString("c");
+char *chrom = cartString(cart,"c");
 int start = cgiInt("o");
 int end = cgiInt("t");
 int rowOffset;
@@ -28,7 +28,7 @@ if (ct)
     db = CUSTOM_TRASH;
     table = ct->dbTableName;
     }
-else 
+else
     db = database;
 conn = hAllocConn(db);
 peakType = encodePeakInferTypeFromTable(db, table, tdb->type);
@@ -63,7 +63,7 @@ while((row = sqlNextRow(sr)) != NULL)
     /* Strand, score */
     if (rowPastOffset[5][0] != '.')
 	    printf("<B>Strand:</B> %c<BR>\n", rowPastOffset[5][0]);
-    printf("<B>Score:</B> %d<BR>\n", sqlUnsigned(rowPastOffset[4]));       
+    printf("<B>Score:</B> %d<BR>\n", sqlUnsigned(rowPastOffset[4]));
     /* signalVal, pVal */
     if (peakType != gappedPeak)
 	{
@@ -82,7 +82,7 @@ while((row = sqlNextRow(sr)) != NULL)
     if (pValue >= 0)
 	printf("<B>P-value (-log10):</B> %.3f<BR>\n", pValue);
     if (qValue >= 0)
-	printf("<B>Q-value (FDR): </B> %.3f<BR>\n", qValue);	
+	printf("<B>Q-value (FDR): </B> %.3f<BR>\n", qValue);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -90,7 +90,7 @@ hFreeConn(&conn);
 
 int encodeFiveCInterCmp(const void *va, const void *vb)
 /* reverse sort on bed nine's reserved field which in this */
-/* case is the where the strength of the interaction is stored */ 
+/* case is the where the strength of the interaction is stored */
 {
 const struct bed *a = *((struct bed **)va);
 const struct bed *b = *((struct bed **)vb);
@@ -103,7 +103,7 @@ void doEncodeFiveC(struct sqlConnection *conn, struct trackDb *tdb)
 char *interTable = trackDbRequiredSetting(tdb, "interTable");
 char *interTableKind = trackDbRequiredSetting(tdb, "interTableKind");
 char **row;
-char *chrom = cgiString("c");
+char *chrom = cartString(cart,"c");
 int start = cgiInt("o");
 int end = cgiInt("t");
 int rowOffset;
@@ -138,7 +138,7 @@ for (inter = interList; inter != NULL; inter = inter->next)
     webPrintLinkCell(s);
     if (start > inter->thickStart)
 	distance = inter->thickEnd - start;
-    else 
+    else
 	distance = inter->thickStart - end;
     safef(s, sizeof(s), "%d", distance);
     webPrintLinkCell(s);
