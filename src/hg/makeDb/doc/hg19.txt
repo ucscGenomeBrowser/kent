@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.89 2010/03/05 17:52:06 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.90 2010/03/11 00:52:22 fanhsu Exp $";
 
 #############################################################################
 
@@ -8548,6 +8548,7 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
     # Mapability track.
 #####################################################################
 # tRNAs track (2010-01-13, Fan DONE)
+# tRNAs track (2010-03-10, Fan RE-BUILT WITH UPDATED DATA FROM TODD LOWE)
 #
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed
@@ -8558,7 +8559,7 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
 
     cp -p /projects/lowelab/users/lowe/Browser/vertebrates/hg19-tRNAs.bed .
     cp -p \
-    /projects/lowelab/users/lowe/Browser/vertebrates/hg19_tRNAs_images.tar.gz\
+    /projects/lowelab/users/lowe/Browser/vertebrates/hg19_tRNAs_images.tar\
     .
 
     hgsql hg19 -e 'drop table if exists tRNAs'
@@ -8566,8 +8567,9 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
 
     mkdir gif
     cd gif
-    gzip -d ../hg19_tRNAs_images.tar.gz
-    tar -xvf hg19_tRNAs_images.tar
+    tar -xvf ../hg19_tRNAs_images.tar
+    mv image/* .
+    rmdir image
     mkdir /hive/data/gbdb/hg19/RNA-img
     cp -p * /hive/data/gbdb/hg19/RNA-img
 
