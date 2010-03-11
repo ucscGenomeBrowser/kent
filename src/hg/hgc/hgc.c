@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1601 2010/03/08 18:18:54 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1602 2010/03/11 00:56:00 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10424,7 +10424,6 @@ char **row;
 int wordCount;
 int rowOffset;
 
-char* chrom = cartString(cart, "c");
 int start   = cartInt(cart, "o");
 int end     = cartInt(cart, "t");
 
@@ -10434,43 +10433,56 @@ wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, track);
 safef(query, ArraySize(query), 
-"select * from %s where chrom = '%s' and name = '%s' and chromStart=%d and chromEnd=%d", 
-track, chrom, trnaName, start, end);
+"select * from %s where name = '%s' and chromStart=%d and chromEnd=%d", 
+track, trnaName, start, end);
 
 sr = sqlGetResult(conn, query);
+
+/* use TABLE to align image with other info side by side */
+printf("<TABLE>");
 while ((row = sqlNextRow(sr)) != NULL)
-  {
+    {
+    printf("<TR>");
+    printf("<TD valign=top>");
+    
     trna = tRNAsLoad(row+rowOffset);
 
-    printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
-       database,database,trna->chrom,trna->name,trna->name);
-    
-    printf("<B>tRNA name: </B>%s.%s<BR>\n",chrom,trna->name);
+    printf("<B>tRNA name: </B>%s<BR>\n",trna->name);
     printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
     printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
     printf("<B>tRNAscan-SE score: </B> %.2f bits<BR>\n",trna->trnaScore);
     printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
-    if (!sameString(trna->genomeUrl, ""))
-    {
-        printf("<B>Summary of all genomic tRNA predictions:</B> "
-                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->genomeUrl);
-        printf("<B>tRNA alignments:</B> "
-                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->trnaUrl);
-    }
-    printf("<BR><B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
+    printf("<B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
     printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
        hgTracksPathAndSettings(), database, trna->chrom, trna->chromStart+1, trna->chromEnd);
     printf("%s:%d-%d</A><BR>\n", trna->chrom, trna->chromStart+1, trna->chromEnd);
     printf("<B>Strand:</B> %s<BR>\n", trna->strand);
+    if (!sameString(trna->genomeUrl, ""))
+    	{
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View Summary of all genomic tRNA predictions</A><BR>\n"
+	       , trna->genomeUrl);
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View tRNA alignments</A><BR>\n", trna->trnaUrl);
+	}
 
     if (trna->next != NULL)
       printf("<hr>\n");
-  }
- sqlFreeResult(&sr);
- hFreeConn(&conn);
- printTrackHtml(tdb);
- tRNAsFree(&trna);
+    
+    printf("</TD>");
+    
+    printf("<TD>");
+    printf("<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+       database,database,trna->name,trna->name);
+    printf("</TD>");
+    
+    printf("</TR>");
+    }
+  
+printf("</TABLE>");
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+tRNAsFree(&trna);
 }
 
 void doVegaGeneZfish(struct trackDb *tdb, char *name)
