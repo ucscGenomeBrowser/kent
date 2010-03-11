@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.59 2010/03/09 00:22:29 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.60 2010/03/11 02:30:02 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -1056,7 +1056,7 @@ function postToSaveSettings(obj)
         thisForm=$(thisForm)[0];
     if(thisForm != undefined && $(thisForm).length == 1) {
         //alert("posting form:"+$(thisForm).attr('name'));
-        return postTheForm($(thisForm).attr('name'),this.href);
+        return postTheForm($(thisForm).attr('name'),obj.href);
     }
 
     return true;
