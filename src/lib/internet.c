@@ -3,7 +3,7 @@
 #include "common.h"
 #include "internet.h"
 
-static char const rcsid[] = "$Id: internet.c,v 1.10 2005/04/10 14:41:23 markd Exp $";
+static char const rcsid[] = "$Id: internet.c,v 1.11 2010/03/11 17:54:35 angie Exp $";
 
 boolean internetIsDottedQuad(char *s)
 /* Returns TRUE if it looks like s is a dotted quad. */
@@ -38,7 +38,7 @@ else
     hostent = gethostbyname(hostName);
     if (hostent == NULL)
 	{
-	warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
+	warn("Couldn't find host %s.", hostName);
 	return 0;
 	}
     memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
