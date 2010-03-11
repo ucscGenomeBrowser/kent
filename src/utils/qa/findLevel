@@ -23,6 +23,7 @@ source `which qaConfig.bash`
 db=""
 tableName=""
 currDir=""
+error=""
 
 # get arguments or print usage
 if [ $# -ne 2 ] 
@@ -47,9 +48,9 @@ then
 fi
 
 # make sure this is a valid database name
-if ! tdbQuery "select db from $db limit 1" | grep -q $db
+if ! hgsql -Ne "show databases" | grep -qw $db
 then
-  echo -e "\n ERROR: Invalid database name.  Try again.\n" >&2
+  echo -e "\nERROR: database $db not found.  Try running on hgwdev?\n" >&2
   exit 1
 fi
 
@@ -90,13 +91,13 @@ fi
 
 echo " * trackDb:"
 all=`tdbQuery "select track,priority,visibility,release,filePos from \
-     $db where track='$tableName'" 2> /dev/null`
+     $db where track='$tableName'" 2> /dev/null` || error=yes
 
 strict=`tdbQuery -strict "select track,priority,visibility,release,filePos from \
-        $db where track='$tableName'" 2> /dev/null`
+        $db where track='$tableName'" 2> /dev/null` || error=yes
 
 alpha=`tdbQuery -alpha "select track,priority,visibility,release,filePos from \
-       $db where track='$tableName'" 2> /dev/null`
+       $db where track='$tableName'" 2> /dev/null` || error=yes
 
 # always print "all"; only print strict or alpha if they differ from all
 echo -e "$all\n"
@@ -107,6 +108,13 @@ fi
 if [ "$alpha" != "$all" ] && [ "$alpha" != "$strict" ] 
 then
   echo -e "$alpha\n"
+fi
+
+# if tdbQuery is only giving errors, $all will be empty and nothing printed
+if [ "$error" = "yes" ]
+then
+  echo -e "\nERROR: tdbQuery returned only errors\n" >&2
+  exit 1
 fi
 
 exit 0
