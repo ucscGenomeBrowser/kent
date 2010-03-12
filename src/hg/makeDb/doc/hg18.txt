@@ -28324,7 +28324,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.403 2010/03/08 19:16:10 giardine Exp $
+# $Id: hg18.txt,v 1.404 2010/03/12 16:50:16 fanhsu Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28372,7 +28372,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.403 2010/03/08 19:16:10 giardine Exp $
+# $Id: hg18.txt,v 1.404 2010/03/12 16:50:16 fanhsu Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29358,7 +29358,7 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
      # use bigWigInfo to check min and max values. 
       
 #####################################################################
-# tRNAs track (2010-01-12, Fan DONE)
+# tRNAs track (2010-03-12, Fan RE-BUILT)
 #
     ssh hgwdev
     cd /hive/data/genomes/gs.19/build36/bed
@@ -29369,17 +29369,18 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
 
     cp -p /projects/lowelab/users/lowe/Browser/vertebrates/hg18-tRNAs.bed .
     cp -p \
-    /projects/lowelab/users/lowe/Browser/vertebrates/hg18_tRNAs_images.tar.gz\
-    .
+    /projects/lowelab/users/lowe/Browser/vertebrates/hg18_tRNAs_images.tar .
 
     hgsql hg18 -e 'drop table if exists tRNAs'
     hgLoadBed -tab hg18 tRNAs hg18-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
 
     mkdir gif
     cd gif
-    gzip -d ../hg18_tRNAs_images.tar.gz
-    tar -xvf hg18_tRNAs_images.tar
+    tar -xvf ../hg18_tRNAs_images.tar
+    mv images/*.gif .
+    rm -rf images
     mkdir /hive/data/gbdb/hg18/RNA-img
+    rm /hive/data/gbdb/hg18/RNA-img/*
     cp -p * /hive/data/gbdb/hg18/RNA-img
 
 #####################################################################
