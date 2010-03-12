@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.101 2010/03/04 17:21:37 ann Exp $";
+#	"$Id: trackDb.ra,v 1.102 2010/03/12 16:18:45 fanhsu Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1505,6 +1505,14 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
 searchPriority 50
+
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
 
 searchTable ctgPos
 searchMethod exact
