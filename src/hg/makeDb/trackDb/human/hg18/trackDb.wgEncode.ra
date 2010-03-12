@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.918 2010/03/12 00:52:20 kayla Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.919 2010/03/12 19:07:24 pauline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -9013,7 +9013,6 @@ noInherit on
     pValueFilterLimits 0:324
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12874 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12874 cells)
@@ -9022,7 +9021,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12874 antibody=CTCF fragLength=350 view=Peaks rank=1st replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=991 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12875 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12875 cells)
@@ -9058,7 +9056,6 @@ noInherit on
         #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12874 antibody=CTCF fragLength=350 view=Peaks rank=2nd replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=990 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2Gm12874Ctcf fileName=wgEncodeUwChIPSeqPeaksRep2Gm12874Ctcf.narrowPeak.gz
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12873 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12873 cells)
@@ -9067,7 +9064,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12873 antibody=CTCF fragLength=350 view=Peaks rank=1st replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=988 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12865 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12865 cells)
@@ -9076,7 +9072,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12865 antibody=CTCF fragLength=350 view=Peaks rank=1st replicate=1 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=985 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12872 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12872 cells)
@@ -9094,7 +9089,6 @@ noInherit on
         #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12872 antibody=CTCF fragLength=350 view=Peaks rank=2nd replicate=2 labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=987 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep2Gm12872Ctcf fileName=wgEncodeUwChIPSeqPeaksRep2Gm12872Ctcf.narrowPeak.gz
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12864 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12864 cells)
@@ -9601,7 +9595,6 @@ noInherit on
     pValueFilterLimits 0:324
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12874 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12874 cells)
@@ -9610,7 +9603,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12874 antibody=CTCF fragLength=350 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=991 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12875 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12875 cells)
@@ -9619,7 +9611,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12875 antibody=CTCF fragLength=350 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=992 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12875 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12875 cells)
@@ -9628,7 +9619,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12875 antibody=CTCF fragLength=350 view=Hotspots rank=2nd replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=993 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12873 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12873 cells)
@@ -9637,7 +9627,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12873 antibody=CTCF fragLength=350 view=Hotspots rank=2nd replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=989 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12874 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12874 cells)
@@ -9646,7 +9635,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12874 antibody=CTCF fragLength=350 view=Hotspots rank=2nd replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=990 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12873 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12873 cells)
@@ -9655,7 +9643,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12873 antibody=CTCF fragLength=350 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=988 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12865 CTCF 1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12865 cells)
@@ -9664,7 +9651,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12865 antibody=CTCF fragLength=350 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=985 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12872 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12872 cells)
@@ -9673,7 +9659,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12872 antibody=CTCF fragLength=350 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=986 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12872 CTCF 2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12872 cells)
@@ -9682,7 +9667,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12872 antibody=CTCF fragLength=350 view=Hotspots rank=2nd replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=987 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12864 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12864 cells)
@@ -9691,7 +9675,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12864 antibody=CTCF fragLength=350 view=Hotspots rank=1st replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=982 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12864 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12864 cells)
@@ -9700,7 +9683,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12864 antibody=CTCF fragLength=350 view=Hotspots rank=2nd replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=983 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12865 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12865 cells)
@@ -10618,7 +10600,6 @@ noInherit on
     windowingFunction mean
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12874 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12874 cells)
@@ -10627,7 +10608,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12874 antibody=CTCF fragLength=350 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=991 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12875 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12875 cells)
@@ -10636,7 +10616,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12875 antibody=CTCF fragLength=350 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=992 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12875 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12875 cells)
@@ -10645,7 +10624,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12875 antibody=CTCF fragLength=350 view=RawSignal rank=2nd replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=993 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12873 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12873 cells)
@@ -10654,7 +10632,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12873 antibody=CTCF fragLength=350 view=RawSignal rank=2nd replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=989 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12874 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12874 cells)
@@ -10663,7 +10640,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12874 antibody=CTCF fragLength=350 view=RawSignal rank=2nd replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=990 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12873 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12873 cells)
@@ -10672,7 +10648,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12873 antibody=CTCF fragLength=350 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=988 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12865 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12865 cells)
@@ -10681,7 +10656,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12865 antibody=CTCF fragLength=350 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=985 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12872 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12872 cells)
@@ -10690,7 +10664,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12872 antibody=CTCF fragLength=350 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=986 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12872 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12872 cells)
@@ -10699,7 +10672,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12872 antibody=CTCF fragLength=350 view=RawSignal rank=2nd replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=987 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12864 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12864 cells)
@@ -10708,7 +10680,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12864 antibody=CTCF fragLength=350 view=RawSignal rank=1st replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=982 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12864 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12864 cells)
@@ -10717,7 +10688,6 @@ noInherit on
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=GM12864 antibody=CTCF fragLength=350 view=RawSignal rank=2nd replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=983 dateSubmitted=2010-01-11 dateUnrestricted=2010-10-11 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
-        release alpha
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12865 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12865 cells)
