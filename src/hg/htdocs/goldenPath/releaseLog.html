@@ -112,6 +112,7 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <li><a CLASS="toc" HREF="#danRer5">Zebrafish July 2007 (Zv7/danRer5) (danRer5)</a></li>
 <li><a CLASS="toc" HREF="#danRer4">Zebrafish Mar. 2006 (Zv6/danRer4) (danRer4)</a></li>
 <li><a CLASS="toc" HREF="#danRer3">Zebrafish May 2005 (Zv5/danRer3) (danRer3)</a></li>
+<li><a CLASS="toc" HREF="#tetNig2">Tetraodon Mar. 2007 (Genoscope 8.0/tetNig2) (tetNig2)</a></li>
 <li><a CLASS="toc" HREF="#tetNig1">Tetraodon Feb. 2004 (Genoscope 7/tetNig1) (tetNig1)</a></li>
 <li><a CLASS="toc" HREF="#fr2">Fugu Oct. 2004 (JGI 4.0/fr2) (fr2)</a></li>
 <li><a CLASS="toc" HREF="#fr1">Fugu Aug. 2002 (JGI 3.0/fr1) (fr1)</a></li>
@@ -160,7 +161,7 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 11 Mar 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 12 Mar 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -185,6 +186,21 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <TD nowrap><FONT color="#006666"><B>Assembly</B></FONT></TD>
 <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT></TD>
 </TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeUwDnaseSeq" target=_blank>UW DNaseI HS (release 3)</a></td>
+<td>hg18</td>
+<td>11 Mar 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+Initial tetNig2 release (using Genoscope Tetraodon v8.0 (NCBI project 12350, CAAE01000000)): Scaffolds, Gap, GC Percent, TransMap Genes, Ensembl Genes, Genoscope GAZE Genes, Human Proteins, mRNAs, other mRNAs, CpG Islands, Interrupted Rpts, Simple Repeats, Window Masker, Chains & Nets: Human, Mouse, Fugu, Stickleback, Medaka, Zebrafish</td>
+<td>tetNig2</td>
+<td>11 Mar 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeUwChIPSeq" target=_blank>ENCODE ChIP-seq from Univ. Washington</a></td>
+<td>hg18</td>
+<td>11 Mar 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 Human Chain/Net  composite tracks</td>
 <td>danRer6</td>
@@ -219,21 +235,6 @@ Zebrafish Chain/Net  composite tracks</td>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaMethylSeq" target=_blank>ENCODE HudsonAlpha Methyl-seq</a></td>
 <td>hg18</td>
 <td>05 Mar 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies (data update)</a></td>
-<td>hg18 hg19</td>
-<td>03 Mar 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="http://genome.ucsc.edu/cgi-bin/hgPcr?org=Human&db=hg19" target=_blank>UCSC In-Silico PCR (update: PCR can be run against UCSC Genes for hg19)</a></td>
-<td>hg19</td>
-<td>01 Mar 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeSangerGencode" target=_blank>ENCODE Gencode Gene Annotations</a></td>
-<td>hg18</td>
-<td>26 Feb 2010</td>
 </tr>
 </table>
 
@@ -402,6 +403,14 @@ Initial hg19 release (using GRCh37 Genome Reference Consortium Human Reference 3
 <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
     <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeUwDnaseSeq" target=_blank>UW DNaseI HS (release 3)</a></td>
+<td>11 Mar 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeUwChIPSeq" target=_blank>ENCODE ChIP-seq from Univ. Washington</a></td>
+<td>11 Mar 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaMethylSeq" target=_blank>ENCODE HudsonAlpha Methyl-seq</a></td>
 <td>05 Mar 2010</td>
@@ -7129,6 +7138,33 @@ liftOver file: danRer3 to danRer2</td>
 <TR valign=top><TD align=left>
 Zebrafish (Danio rerio) Initial Release (danRer3, May 2005, Zv5): Scaffolds, Contigs, Gap, BAC End Pairs/Singles, GC Percent, Short Match, Restr Enzymes, RefSeq Genes, ZGC Genes, Ensembl Genes, Zebrafish mRNAs, Spliced ESTs, Zebrafish ESTs, Other mRNAs, TIGR Gene Index, Affy Zebrafish, 5-way Conservation, Most Conserved, Human Proteins (hg17), Human Chain/Net (hg18), Mouse Chain/Net/LiftOver (mm7), Fugu Chain/Net/LiftOver (fr1), Tetraodone Chain/Net/LiftOver (tetNig1), Repeat Masker, Simple Repeats, Self Chain. Downloads: bigZips, database, comparatives, chromosomes, liftOvers.</td>
 <td>17 Feb 2006</td>
+</tr>
+</table>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	</TD></TR></TABLE>
+	</TD></TR></TABLE>
+	
+<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
+<BR>
+
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="#FFFEE8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
+		<FONT SIZE="4"><b>&nbsp; 
+<A NAME=tetNig2></A>Tetraodon Mar. 2007 (Genoscope 8.0/tetNig2) (tetNig2, Genoscope Tetraodon v8.0 (NCBI project 12350, CAAE01000000))	</b></FONT></TD></TR></TABLE>
+	<TABLE BGCOLOR="#FFFEE8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+
+<TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
+<TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
+    <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
+</TD></TR>
+<TR valign=top><TD align=left>
+Initial tetNig2 release (using Genoscope Tetraodon v8.0 (NCBI project 12350, CAAE01000000)): Scaffolds, Gap, GC Percent, TransMap Genes, Ensembl Genes, Genoscope GAZE Genes, Human Proteins, mRNAs, other mRNAs, CpG Islands, Interrupted Rpts, Simple Repeats, Window Masker, Chains & Nets: Human, Mouse, Fugu, Stickleback, Medaka, Zebrafish</td>
+<td>11 Mar 2010</td>
 </tr>
 </table>
 
