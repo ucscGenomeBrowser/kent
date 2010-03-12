@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.919 2010/03/12 19:07:24 pauline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.920 2010/03/12 19:25:42 pauline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -9424,7 +9424,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqPeaksRep1HuvecH3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
-        shortLabel HVEC H3K27me3 P1
+        shortLabel HUVEC H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HUVEC rank=1st
         type narrowPeak
@@ -9434,7 +9434,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
-        shortLabel HVEC H3K36me3 P1
+        shortLabel HUVEC H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HUVEC rank=1st
         type narrowPeak
@@ -10268,7 +10268,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqHotspotsRep1HuvecH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
-        shortLabel HVEC H3K27me3 H1
+        shortLabel HUVEC H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in HUVEC cells)
         subGroups view=cHot factor=H3K27me3 cellType=HUVEC rank=1st
         type broadPeak
@@ -10278,7 +10278,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
-        shortLabel HVEC H3K27me3 H2
+        shortLabel HUVEC H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in HUVEC cells)
         subGroups view=cHot factor=H3K27me3 cellType=HUVEC rank=2nd
         type broadPeak
@@ -10287,7 +10287,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
-        shortLabel HVEC H3K36me3 H1
+        shortLabel HUVEC H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in HUVEC cells)
         subGroups view=cHot factor=H3K36me3 cellType=HUVEC rank=1st
         type broadPeak
@@ -10296,7 +10296,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
-        shortLabel HVEC H3K36me3 H2
+        shortLabel HUVEC H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in HUVEC cells)
         subGroups view=cHot factor=H3K36me3 cellType=HUVEC rank=2nd
         type broadPeak
@@ -11273,7 +11273,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
-        shortLabel HVEC H3K27me3 S1
+        shortLabel HUVEC H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in HUVEC cells)
         subGroups view=zRawSig factor=H3K27me3 cellType=HUVEC rank=1st
         type wig 1.00 3861.00
@@ -11283,7 +11283,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
-        shortLabel HVEC H3K27me3 S2
+        shortLabel HUVEC H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in HUVEC cells)
         subGroups view=zRawSig factor=H3K27me3 cellType=HUVEC rank=2nd
         type wig 1.00 3857.00
@@ -11292,7 +11292,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
-        shortLabel HVEC H3K36me3 S1
+        shortLabel HUVEC H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in HUVEC cells)
         subGroups view=zRawSig factor=H3K36me3 cellType=HUVEC rank=1st
         type wig 1.00 5075.00
@@ -11301,7 +11301,7 @@ noInherit on
 
         track wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
-        shortLabel HVEC H3K36me3 S2
+        shortLabel HUVEC H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in HUVEC cells)
         subGroups view=zRawSig factor=H3K36me3 cellType=HUVEC rank=2nd
         type wig 1.00 5116.00
