@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.85 2010/02/16 23:39:40 kent Exp $";
+#	"$Id: trackDb.ra,v 1.86 2010/03/12 17:04:57 fanhsu Exp $";
 
 include trackDb.chainNet.ra
 
@@ -549,6 +549,14 @@ searchTable NIAGene
 searchMethod fuzzy
 searchType psl
 searchPriority 50
+
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
 
 searchName REST
 searchTable REST
