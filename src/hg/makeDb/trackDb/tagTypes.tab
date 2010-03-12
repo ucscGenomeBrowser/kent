@@ -181,6 +181,9 @@ parent *
 patDb expRatio
 patKey expRatio
 patTable expRatio
+pgDbLink bed
+pgPolyphenPredTab bed
+pgSiftPredTab bed
 pred psl
 priority *
 private bed
