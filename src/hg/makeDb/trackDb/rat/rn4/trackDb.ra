@@ -128,6 +128,14 @@ query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
 termRegex ENSRNOP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
+
 searchName snp125Short
 searchTable snp125
 searchMethod exact
