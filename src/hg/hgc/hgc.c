@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1602 2010/03/11 00:56:00 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1603 2010/03/12 18:55:07 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10448,7 +10448,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     trna = tRNAsLoad(row+rowOffset);
 
     printf("<B>tRNA name: </B>%s<BR>\n",trna->name);
-    printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
+    printf("<B>tRNA isotype: </B> %s<BR>\n",trna->aa);
     printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
     printf("<B>tRNAscan-SE score: </B> %.2f bits<BR>\n",trna->trnaScore);
     printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
@@ -10460,7 +10460,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", trna->strand);
     if (!sameString(trna->genomeUrl, ""))
     	{
-        printf("<BR><A HREF=\"%s\" TARGET=_blank>View Summary of all genomic tRNA predictions</A><BR>\n"
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View summary of all genomic tRNA predictions</A><BR>\n"
 	       , trna->genomeUrl);
         printf("<BR><A HREF=\"%s\" TARGET=_blank>View tRNA alignments</A><BR>\n", trna->trnaUrl);
 	}
