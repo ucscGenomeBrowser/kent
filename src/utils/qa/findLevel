@@ -23,7 +23,7 @@ source `which qaConfig.bash`
 db=""
 tableName=""
 currDir=""
-error=""
+error="no"
 
 # get arguments or print usage
 if [ $# -ne 2 ] 
@@ -88,32 +88,32 @@ fi
 
 ###########################################
 # find the trackDb.ra entry (using tdbQuery)
-
+# the tdbQuery default is -release=alpha
 echo " * trackDb:"
-all=`tdbQuery "select track,priority,visibility,release,filePos from \
+alpha=`tdbQuery "select track,release,priority,visibility,filePos from \
      $db where track='$tableName'" 2> /dev/null` || error=yes
 
-strict=`tdbQuery -strict "select track,priority,visibility,release,filePos from \
+beta=`tdbQuery -release=beta "select track,release,priority,visibility,filePos from \
         $db where track='$tableName'" 2> /dev/null` || error=yes
 
-alpha=`tdbQuery -alpha "select track,priority,visibility,release,filePos from \
+public=`tdbQuery -release=public "select track,release,priority,visibility,filePos from \
        $db where track='$tableName'" 2> /dev/null` || error=yes
 
-# always print "all"; only print strict or alpha if they differ from all
-echo -e "$all\n"
-if [ "$all" != "$strict" ]
+# always print "alpha"; only print beta or public if they differ from alpha
+echo -e "$alpha\n"
+if [ "$alpha" != "$beta" ]
 then
-  echo -e "$strict\n"
+  echo -e "$beta\n"
 fi
-if [ "$alpha" != "$all" ] && [ "$alpha" != "$strict" ] 
+if [ "$alpha" != "$public" ] && [ "$beta" != "$public" ] 
 then
-  echo -e "$alpha\n"
+  echo -e "$public\n"
 fi
 
-# if tdbQuery is only giving errors, $all will be empty and nothing printed
+# if tdbQuery is only giving errors, variables will be empty and nothing printed
 if [ "$error" = "yes" ]
 then
-  echo -e "\nERROR: tdbQuery returned only errors\n" >&2
+  echo -e "\nERROR: tdbQuery returned errors\n" >&2
   exit 1
 fi
 
