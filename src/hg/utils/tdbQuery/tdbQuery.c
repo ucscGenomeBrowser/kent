@@ -14,12 +14,18 @@
 #include "hdb.h"  /* Just for strict option. */
 #include "rql.h"
 
-static char const rcsid[] = "$Id: tdbQuery.c,v 1.30 2010/03/07 01:32:42 kent Exp $";
+static char const rcsid[] = "$Id: tdbQuery.c,v 1.31 2010/03/13 01:28:10 braney Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 static boolean clCheck = FALSE;		/* If set perform lots of checks on input. */
 static boolean clStrict = FALSE;	/* If set only return tracks with actual tables. */
-static boolean clAlpha = FALSE;		/* If set include release alphas, exclude release beta. */
+
+#define	RELEASE_ALPHA  (1 << 0)
+#define	RELEASE_BETA   (1 << 1)
+#define	RELEASE_PUBLIC (1 << 2)
+static char *release = "alpha";
+static unsigned releaseBit = RELEASE_ALPHA;
+
 static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 static char *clRewrite = NULL;		/* Rewrite to given directory. */
 static boolean clNoCompSub = FALSE;	/* If set don't do subtrack inheritence of fields. */
@@ -53,9 +59,12 @@ errAbort(
 "there's problems.\n"
 "   -strict\n"
 "Mimic -strict option on hgTrackDb. Suppresses tracks where corresponding table does not exist.\n"
-"   -alpha Do checking on release alpha (and not release beta) tracks\n"
-"   -noBlank  Don't print out blank lines separating records"
-"   -noCompSub Subtracks don't inherit fields from parents\n"
+"   -release=alpha|beta|public\n"
+"Include trackDb entries with this release tag only. Default is alpha.\n"
+"   -noBlank\n"
+"Don't print out blank lines separating records\n"
+"   -noCompSub\n"
+"Subtracks don't inherit fields from parents\n"
 );
 }
 
@@ -64,7 +73,7 @@ static struct optionSpec options[] = {
    {"root", OPTION_STRING},
    {"check", OPTION_BOOLEAN},
    {"strict", OPTION_BOOLEAN},
-   {"alpha", OPTION_BOOLEAN},
+   {"release", OPTION_STRING},
    {"noBlank", OPTION_BOOLEAN},
    {"rewrite", OPTION_STRING},
    {"noCompSub", OPTION_BOOLEAN},
@@ -259,24 +268,55 @@ for (p=list; p != NULL; p = p->next)
 return p;
 }
 
-boolean recordMatchesRelease(struct tdbRecord *record, boolean alpha)
-/* Return TRUE if record is compatible with release.  Pass alpha TRUE for
- * alpha release, else will do beta release.  Records with no release
- * tag are compatible with either release. */
+unsigned buildReleaseBits(struct tdbRecord *record, char *rel)
+/* unpack the comma separated list of possible release tags */
 {
-struct tdbField *releaseField = tdbRecordField(record, "release");
-if (releaseField == NULL)
-    return TRUE;
-char *release = releaseField->val;
-if (sameString(release, "alpha"))
-    return alpha;
-else if (sameString(release, "beta"))
-    return !alpha;
-else
+
+if (rel == NULL)
+    return RELEASE_ALPHA |  RELEASE_BETA |  RELEASE_PUBLIC;
+
+unsigned bits = 0;
+while(rel)
     {
-    recordAbort(record, "Unrecognized release value %s", release);
-    return FALSE;
+    char *end = strchr(rel, ',');
+
+    if (end)
+	*end = 0;
+    rel = trimSpaces(rel);
+
+    if (sameString(rel, "alpha"))
+	bits |= RELEASE_ALPHA;
+    else if (sameString(rel, "beta"))
+	bits |= RELEASE_BETA;
+    else if (sameString(rel, "public"))
+	bits |= RELEASE_PUBLIC;
+    else
+	errAbort("Tracks must have a release combination of alpha, beta, and public on line %d of %s",
+		tdbRecordLineIx(record), tdbRecordFileName(record));
+
+    if (end)
+	*end++ = ',';
+    rel = end;
     }
+
+return bits;
+}
+
+boolean recordMatchesRelease( struct tdbRecord *record, unsigned currentReleaseBit)
+/* Return TRUE if record is compatible with release. */
+{
+unsigned bits;
+char *release = NULL;
+struct tdbField *releaseField = tdbRecordField(record, "release");
+
+if (releaseField != NULL)
+    release = releaseField->val;
+
+bits = buildReleaseBits(record, release);
+if (bits & currentReleaseBit)
+    return TRUE;
+
+return FALSE;
 }
 
 boolean compatibleReleases(char *a, char *b)
@@ -292,7 +332,7 @@ return sameString(a->key, b->key) &&
 	compatibleReleases(tdbRecordFieldVal(a, "release"), tdbRecordFieldVal(b, "release"));
 }
 
-struct tdbRecord *filterOnRelease(struct tdbRecord *list, boolean alpha)
+struct tdbRecord *filterOnRelease( struct tdbRecord *list, unsigned currentReleaseBit)
 /* Return release-filtered version of list. */
 {
 struct tdbRecord *newList = NULL;
@@ -300,7 +340,7 @@ struct tdbRecord *record, *next;
 for (record = list; record != NULL; record = next)
     {
     next = record->next;
-    if (recordMatchesRelease(record, alpha))
+    if (recordMatchesRelease(record, currentReleaseBit))
         {
 	slAddHead(&newList, record);
 	}
@@ -544,7 +584,7 @@ recordWarn(rec, "parent %s of %s release %s doesn't exist", parentName, rec->key
 return NULL;
 }
 
-static void linkUpParents(struct tdbRecord *list, char *parentField, boolean alpha)
+static void linkUpParents(struct tdbRecord *list, char *parentField, unsigned currentReleaseBit)
 /* Link up records according to parent/child relationships. */
 {
 /* Zero out children, parent, and older sibling fields, since going to recalculate
@@ -578,7 +618,7 @@ hashFree(&hash);
 
 
 struct tdbRecord *tdbsForDbPath(struct dbPath *p, struct lm *lm, 
-	char *parentField, boolean alpha)
+	char *parentField, unsigned currentReleaseBit)
 /* Assemble recordList for given database.  This looks at the root/organism/assembly
  * levels.  It returns a list of records. */
 {
@@ -590,7 +630,7 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     char *fileName = fileLevel->name;
     struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
     verbose(2, "Read %d records starting from %s\n", slCount(fileRecords), fileName);
-    linkUpParents(fileRecords, parentField, alpha);
+    linkUpParents(fileRecords, parentField, currentReleaseBit);
     checkDupeKeys(fileRecords, TRUE);
     struct tdbRecord *record, *nextRecord;
     for (record = fileRecords; record != NULL; record = nextRecord)
@@ -641,11 +681,11 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
 
 
 static void inheritFromParents(struct tdbRecord *list, char *parentField, char *noInheritField,
-	boolean alpha, struct lm *lm)
+	unsigned currentReleaseBit, struct lm *lm)
 /* Go through list.  If an element has a parent field, then fill in non-existent fields from
  * parent. */
 {
-linkUpParents(list, parentField, alpha);
+linkUpParents(list, parentField, currentReleaseBit);
 
 /* Scan through doing inheritance. */
 struct tdbRecord *rec;
@@ -892,14 +932,14 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     struct lm *lm = lmInit(0);
     struct dbPath *p = dbOrder->val;
     char *db = p->db;
-    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "parent", clAlpha);
+    struct tdbRecord *recordList = tdbsForDbPath(p, lm, "parent", releaseBit);
          
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
-    inheritFromParents(recordList, "parent", "noInherit", clAlpha, lm);
-    recordList = filterOnRelease(recordList, clAlpha);
+    inheritFromParents(recordList, "parent", "noInherit", releaseBit, lm);
+    recordList = filterOnRelease(recordList, releaseBit);
     verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
-    linkUpParents(recordList, "parent", clAlpha);
+    linkUpParents(recordList, "parent", releaseBit);
     checkDupeKeys(recordList, FALSE);
 
     if (clCheck)
@@ -1152,6 +1192,23 @@ for (org = orgList; org != NULL; org = org->next)
     }
 }
 
+unsigned getReleaseBit(char *release)
+/* make sure that the tag is a legal release */
+{
+if (sameString(release, "alpha"))
+    return RELEASE_ALPHA;
+
+if (sameString(release, "beta"))
+    return RELEASE_BETA;
+
+if (sameString(release, "public"))
+    return RELEASE_PUBLIC;
+
+errAbort("release must be alpha, beta, or public");
+
+return 0;  /* make compiler happy */
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -1159,7 +1216,8 @@ optionInit(&argc, argv, options);
 clRoot = simplifyPathToDir(optionVal("root", clRoot));
 clCheck = optionExists("check");
 clStrict = optionExists("strict");
-clAlpha = optionExists("alpha");
+release = optionVal("release", release);
+releaseBit = getReleaseBit(release);
 clNoBlank = optionExists("noBlank");
 clRewrite = optionVal("rewrite", clRewrite);
 clNoCompSub = optionExists("noCompSub");
