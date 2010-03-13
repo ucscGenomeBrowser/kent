@@ -49,3 +49,9 @@ INLINE int tdbRecordLineIx(struct tdbRecord *record)
 {
 return record->posList->startLineIx;
 }
+
+INLINE char * tdbRecordFileName(struct tdbRecord *record)
+/* Return fileName of record */
+{
+return record->posList->fileName;
+}
