@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.920 2010/03/12 19:25:42 pauline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.921 2010/03/13 01:11:13 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8784,6 +8784,7 @@ wgEncode 1
     longLabel ENCODE UW Affy All-Exon Array Signal Replicate 2 (in HeLa-S3 cells)
     subGroups cellType=2HELA rep=rep2
     type broadPeak
+    color 0,102,136
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HeLa-S3 view=SimpleSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=530 submittedDataVersion=V2 dateResubmitted=2009-09-21 dateSubmitted=2009-06-29 dateUnrestricted=2010-03-29 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Helas3V2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Helas3V2.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2
