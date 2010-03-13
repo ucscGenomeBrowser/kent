@@ -16,7 +16,7 @@
 #include <utime.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.45 2010/02/24 00:51:00 angie Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.46 2010/03/13 23:01:50 hiram Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -326,6 +326,7 @@ char *s = strchr(host, '.');
 if (s != NULL)
      *s = 0;
 subChar(host, '-', '_');
+subChar(host, ':', '_');
 static char name[PATH_LEN];
 safef(name, sizeof(name), "%s_%s_%x_%x",
 	base, host, pid, num);
