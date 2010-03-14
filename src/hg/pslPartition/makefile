@@ -12,3 +12,6 @@ ${BINDIR}/pslPartition: $O $(MYLIBS)
 
 test:
 	(cd tests && ${MAKE} test)
+
+clean::
+	rm -f pslPartition ${O}
