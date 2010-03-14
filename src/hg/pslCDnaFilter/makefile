@@ -30,7 +30,7 @@ test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O pslCDnaFilter usage.msg
+	rm -f $O pslCDnaFilter usage.msg algo.msg
 	cd tests && ${MAKE} clean
 
 savebak:
