@@ -46,11 +46,12 @@ set table="knownGene"
 if ($#argv == 0 || $#argv > 2) then
   # no command line args
   echo
-  echo "  runs test suite on Known Genes track."
-  echo "  suggest KG java run in Trackchecking first."
-  echo
-  echo "    usage:  database [oldDb] (if fresh assembly for existing organism)"
-  echo
+  echo "  Runs test suite on Known Genes track."
+  echo "  Before running this script run HGGeneCheck in the same"
+  echo "  directory where you intend to run knownGene.csh ."
+  echo "  Note that this script generates many output files."
+  echo "  
+  echo "    usage:  database1 [database2] Checks db1 on dev and db2 on beta." 
   exit
 else
   set db=$argv[1]
@@ -63,7 +64,7 @@ else
 endif
 
 
-echo "using $db "
+echo "using $db for dev db"
 echo "using $oldDb for beta db "
 set curr_dir=$cwd
 
