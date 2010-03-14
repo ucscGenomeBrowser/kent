@@ -10,3 +10,6 @@ dynAlign: $(O)
 	
 push:	
 	mv ${AOUT} ${CGI_BIN}-${USER}/dynAlign.exe
+
+clean::
+	rm -f "{O}" "${AOUT}"
