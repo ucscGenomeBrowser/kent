@@ -5,7 +5,7 @@ source `which qaConfig.csh`
 # to do:  see that cgapBiocDesc has unique entries
 
 # --------------------------------------------
-#  run KGGeneCheck.java on dev:
+#  run HGGeneCheck.java on dev:
 
 #### echo
 #### echo " --------------------------------------------"
@@ -17,21 +17,23 @@ source `which qaConfig.csh`
 #### table all /
 #### zoomCount 4" > $db.props
 ###
-#### echo "run KGGeneCheck: \
-####   nohup nice HGGeneCheck $db.props > & $db.KGrobot.out & "
+#### echo "run HGGeneCheck: \
+####   nohup nice HGGeneCheck $db.props > & $db.HGrobot.out & "
 #### echo
-echo " --------------------------------------------"
+#echo " --------------------------------------------"
 
 ###############################################
 # 
 #  03-09-04
 #  Robert Kuhn
 #
-#  Runs through the checks on Known Genes.  
-#  Requires KG java run in Trackchecking first.
-#  -----------
-#  run HGGeneCheck.java on dev 
-#  /cluster/home/heather/TrackChecking/KGGeneCheck.java
+#  This script runs through a number of checks on the Known Genes tables.  
+#  You need to run HGGeneCheck first. Also you need to have 3 files 
+#  (kgTables, gsTables, and pbTables) that list the tables involved one
+#  directory above the directory where you choose to run knownGene.csh.
+#  
+#  run HGGeneCheck.java on dev: 
+#  nohup nice HGGeneCheck $db.props > & $db.HGrobot.out &
 # 
 ###############################################
 
@@ -868,8 +870,8 @@ echo
 
 echo
 echo " -------------------------------------------------"
-echo "    Once the new UCSC Genes is released on RR, 
-          update .../htdocs/knownGeneLists.html"
+echo "    Once the new UCSC Genes is released on RR, "
+echo "         update .../htdocs/knownGeneLists.html"
 echo " -------------------------------------------------"
 echo "\n here are files for /usr/local/apache/htdocs/knownGeneList/$db"
 echo
