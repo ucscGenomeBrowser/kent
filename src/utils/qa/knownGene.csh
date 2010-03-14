@@ -50,7 +50,7 @@ if ($#argv == 0 || $#argv > 2) then
   echo "  Before running this script run HGGeneCheck in the same"
   echo "  directory where you intend to run knownGene.csh ."
   echo "  Note that this script generates many output files."
-  echo "  
+  echo "  "
   echo "    usage:  database1 [database2] Checks db1 on dev and db2 on beta." 
   exit
 else
