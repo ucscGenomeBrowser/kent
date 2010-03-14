@@ -70,3 +70,6 @@ DIRS = \
 all: $(USE_DIRS:%=%.all)
 %.all:
 	( cd $* && echo $* && $(MAKE) )
+
+clean::
+	cd hgTomRough && ${MAKE} clean
