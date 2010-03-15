@@ -6,7 +6,8 @@ DIRS = \
 	hgEncodeDataVersions \
 	mkEncodeFrameset \
 	hgEncodeVocab \
-	validateFiles
+	validateFiles \
+        encodeMkChangeNotes
 
 # broken
 	#ldGencodeIntron \

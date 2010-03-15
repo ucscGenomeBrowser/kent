@@ -10,20 +10,22 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.4 2008/10/08 00:06:46 mikep Exp $
+# $Id: doEncodeUnload.pl,v 1.5 2010/03/15 22:21:53 krish Exp $
 
 use warnings;
 use strict;
 
 use Getopt::Long;
+use Cwd;
 use File::Basename;
 
 use lib "/cluster/bin/scripts";
 use Encode;
+use RAFile;
 use HgDb;
 use HgAutomate;
 
-use vars qw/$opt_verbose/;
+use vars qw/$opt_verbose $opt_configDir/;
 my $PROG = basename $0;
 
 sub usage
@@ -60,7 +62,9 @@ sub unloadWig
 
 # Change dir to submission directory obtained from command-line
 
-GetOptions("verbose=i") || usage();
+my $wd = cwd();
+
+GetOptions("configDir=s", "verbose=i") || usage();
 $opt_verbose = 1 if (!defined $opt_verbose);
 if(@ARGV != 2) {
     usage();
@@ -68,6 +72,16 @@ if(@ARGV != 2) {
 
 my $submitType = $ARGV[0];	# currently not used
 my $submitDir = $ARGV[1];	# directory where data files are
+my $configPath;
+if (defined $opt_configDir) {
+    if ($opt_configDir =~ /^\//) {
+        $configPath = $opt_configDir;
+    } else {
+        $configPath = "$wd/$opt_configDir";
+    }
+} else {
+    $configPath = "$submitDir/../config"
+}
 
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
@@ -91,12 +105,19 @@ if(!(-e $unloadRa)) {
 
 HgAutomate::verbose(2, "Unloading project in directory $submitDir\n");
 
+my $grants = Encode::getGrants($configPath);
+my $fields = Encode::getFields($configPath);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $downloadDir = Encode::downloadDir($daf);
+
 # Unload resources listed in unload.ra
 my %ra = RAFile::readRaFile($unloadRa, 'tablename');
 my $db;
 for my $key (keys %ra) {
     my $h = $ra{$key};
     my $tablename = $h->{tablename} . $tableSuffix;
+    my $files = $h->{files};
+    my @files = split(/\s+/, $files);
 
     my $str = "\nkeyword: $key\n";
     for my $field (qw(tablename type assembly files)) {
@@ -124,6 +145,17 @@ for my $key (keys %ra) {
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }
+
+    # delete the download files
+    my $target = "$downloadDir/$tablename.$type.gz";
+    if(@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
+        $target = "$downloadDir/raw/$tablename.$type.gz";
+        if (! -d "$downloadDir/raw") {
+            mkdir "$downloadDir/raw" or die "Could not create dir [$downloadDir/raw] error: [$!]\n";
+            }
+    }
+    $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
+    unlink $target;
 }
 
 exit(0);
