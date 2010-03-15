@@ -86,7 +86,7 @@ echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** Check table INDEX ***"
 echo "(Only prints the INDEX if there are fewer than two indices."
 echo "Presumably, these two will include bin and something else."
-echo "Note that bbi tables will have no index.)"
+echo "Note that bbi, bigBed and bigWig tables will have no index.)"
 foreach table ( $tables )
  set num=`hgsql -N -e "SHOW INDEX FROM $table" $db | wc -l`
  if ( $num < 2 ) then
