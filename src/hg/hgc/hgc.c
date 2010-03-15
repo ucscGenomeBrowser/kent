@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1603 2010/03/12 18:55:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1604 2010/03/15 21:19:29 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10471,7 +10471,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</TD>");
     
     printf("<TD>");
-    printf("<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+    printf("<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure is not available for %s'>\n",
        database,database,trna->name,trna->name);
     printf("</TD>");
     
