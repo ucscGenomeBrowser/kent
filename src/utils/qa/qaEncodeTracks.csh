@@ -108,7 +108,7 @@ echo "*** MAX length of shortLabel should be 16 ***"
 echo "(Only prints if shortLabel is greater than 16 characters, or if"
 echo "it can't find a shortLabel at all)"
 foreach table ( $tables )
- set num=`cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" \
+ set num=`cat ~/trackDb/human/$db/trackDb.wgEncode.ra | grep -A10 "track $table" \
   | grep -m 1 shortLabel \
   | sed -e 's/shortLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m`
  if ( $maxShortLabel < $num || 0 == $num ) then
@@ -126,7 +126,7 @@ echo "*** MAX length of longLabel should be 80 ***"
 echo "(Only prints if longLabel is greater than 80 characters, or if"
 echo "it can't find a longLabel at all)"
 foreach table ( $tables )
- set num=`cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" \
+ set num=`cat ~/trackDb/human/$db/trackDb.wgEncode.ra | grep -A10 "track $table" \
   | grep -m 1 longLabel \
   | sed -e 's/longLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m`
  if ( $maxLongLabel < $num || 0 == $num ) then
