@@ -1,4 +1,4 @@
-machine hgwbeta.cse.ucsc.edu
+machine mysqlbeta.cse.ucsc.edu
 quick true
 dbSpec hg16
 table refGene
