@@ -5,12 +5,16 @@ grant	Myers
 lab	Test
 dataType	ChipSeq
 variables	cell, antibody
-assembly	hg18
+assembly	hg19
 medianFragmentLength	225
 fragmentLengthRange	150-300
-dafVersion      1.1
+dafVersion      2.0
+compositeSuffix TestChipSeq
+#dafVersion      1.1
+#dataVersion     2
+#dataVersionComment     Changing file format
 group regulation
-validationSettings allowReloads;validateFiles.tagAlign:mismatches=3
+validationSettings allowReloads;validateFiles.tagAlign:mismatches=100
 
 # Track/view definition
 view             Peaks
