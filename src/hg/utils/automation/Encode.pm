@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.56 2010/03/15 04:20:12 kate Exp $
+# $Id: Encode.pm,v 1.57 2010/03/15 04:33:55 kate Exp $
 
 package Encode;
 
@@ -337,7 +337,7 @@ sub parseDaf
         die "NOTICE:\n\n" .
                 "ENCODE pipeline 2.0 beta testing is in progress." . 
                 "Your wrangler will complete this submission and provide you" .
-                " with a version 2.0 DAF file to use future submissions.";
+                " with a version 2.0 DAF file to use for future submissions.\n";
         #die "ERROR(s) in DAF '$dafFile':\n\n" .
                 #"DAF version '$daf{dafVersion}' does not match current version: $dafVersion\n");
     }
