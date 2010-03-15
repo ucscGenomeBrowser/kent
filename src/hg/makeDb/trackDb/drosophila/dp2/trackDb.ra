@@ -29,7 +29,7 @@ indelPolyA on
 
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
-longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to D.pseudoobscura
+longLabel $o_Organism ($o_date) BDGP Genes Mapped to D.pseudoobscura
 group genes
 priority 45.5
 visibility pack

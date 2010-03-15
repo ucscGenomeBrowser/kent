@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.474 2010/03/12 16:56:50 fanhsu Exp $";
+#	"$Id: trackDb.ra,v 1.475 2010/03/15 21:42:28 ann Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -620,7 +620,7 @@ matrixHeader A, C, G, T
 
 track chainEchTel1 override
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 251.1
 visibility hide
@@ -633,7 +633,7 @@ otherDb echTel1
 
 track netEchTel1 override
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 251.2
 visibility hide
@@ -643,7 +643,7 @@ otherDb echTel1
 
 track chainDasNov1 override
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 255.1
 visibility hide
@@ -656,7 +656,7 @@ otherDb dasNov1
 
 track netDasNov1 override
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 255.2
 visibility hide
@@ -666,7 +666,7 @@ otherDb dasNov1
 
 track netEquCab1 override
 shortLabel  $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 visibility hide
 spectrum on
@@ -675,7 +675,7 @@ otherDb equCab1
 
 track chainOrnAna0
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 256.5
 visibility hide
@@ -689,7 +689,7 @@ otherDb ornAna0
 
 track chainOryCun1 override
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 259.5
 visibility hide
@@ -703,7 +703,7 @@ otherDb oryCun1
 
 track netOryCun1 override
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 259.6
 visibility hide
@@ -725,7 +725,7 @@ otherDb ponAbe0
 
 track netHomIni13
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 301
 visibility hide
@@ -747,7 +747,7 @@ otherDb homNea0
 
 track chainHomIni13
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 300
 visibility hide
@@ -759,7 +759,7 @@ otherDb homIni13
 
 track chainMapHomIni14
 shortLabel $o_Organism Map
-longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+longLabel $o_Organism ($o_date) Mapping Chain
 group x
 priority 300
 visibility hide
@@ -771,7 +771,7 @@ otherDb homIni14
 
 track chainMapHomIni13
 shortLabel $o_Organism Map
-longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+longLabel $o_Organism ($o_date) Mapping Chain
 group x
 priority 300
 visibility hide
@@ -1784,7 +1784,7 @@ speciesOrder mm8 rn4 canFam2
 
 track chainMm8WM
 shortLabel Mm8 Chain WM
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments - Window Masker masked
+longLabel $o_Organism ($o_date) Chained Alignments - Window Masker masked
 group x
 priority 270
 visibility hide
@@ -1798,7 +1798,7 @@ otherDb mm8
 
 track netMm8WM
 shortLabel Mm8 Net WM
-longLabel $o_Organism ($o_date/$o_db) Alignment Net - Window Masker masked
+longLabel $o_Organism ($o_date) Alignment Net - Window Masker masked
 group x
 priority 270.1
 visibility hide
@@ -1840,7 +1840,7 @@ type bed 6
 
 track chainHomPan20
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 300
 visibility hide

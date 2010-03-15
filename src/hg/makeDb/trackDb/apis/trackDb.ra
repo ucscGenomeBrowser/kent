@@ -7,7 +7,7 @@ visibility dense
 
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
-longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to $Organism
+longLabel $o_Organism ($o_date) BDGP Genes Mapped to $Organism
 group genes
 priority 45.5
 visibility pack

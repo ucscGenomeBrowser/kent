@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.14 2010/02/16 23:39:38 kent Exp $";
+#	"$Id: trackDb.ra,v 1.15 2010/03/15 21:42:25 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -15,7 +15,7 @@ type netAlign
     track netSyntenyHg18
     subTrack syntenicNet
     shortLabel Human Syntenic Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.1
     visibility hide
@@ -26,7 +26,7 @@ type netAlign
     track netSyntenyMm8
     subTrack syntenicNet
     shortLabel Mouse Syntenic Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.2
     visibility hide
@@ -37,7 +37,7 @@ type netAlign
     track netSyntenyCanFam2
     subTrack syntenicNet
     shortLabel Dog Syntenic Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.3
     visibility hide

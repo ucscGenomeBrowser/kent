@@ -51,7 +51,7 @@ type genePred
 
 track wabaCbr
 shortLabel Briggsae Waba
-longLabel $o_Organism ($o_date/$o_db) Waba Alignments
+longLabel $o_Organism ($o_date) Waba Alignments
 group compGeno
 priority 120
 visibility dense
@@ -74,7 +74,7 @@ otherDb fr1
 
 track blastzCb1
 shortLabel Briggsae Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz 
+longLabel $o_Organism ($o_date) Blastz 
 group compGeno
 priority 124
 visibility hide
@@ -86,7 +86,7 @@ otherDb cb1
 
 track chainCb1
 shortLabel Briggsae Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 125
 visibility hide
@@ -98,7 +98,7 @@ otherDb cb1
 
 track netCb1
 shortLabel Briggsae Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 126
 visibility hide
@@ -108,7 +108,7 @@ otherDb cb1
 
 track syntenyNetCb1
 shortLabel Briggsae Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 126.1
 visibility hide
@@ -118,7 +118,7 @@ otherDb cb1
 
 track blastzBestCb1
 shortLabel Cb1 Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 128
 visibility hide
@@ -189,7 +189,7 @@ longLabel Twinscan Gene Predictions Using briggsae/elegans Homology
 
 track axtNetCb1
 shortLabel Briggase Aligns
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
+longLabel $o_Organism ($o_date) Blastz Alignments from Net
 group compGeno
 priority 127
 visibility dense

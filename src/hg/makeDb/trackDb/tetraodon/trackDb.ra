@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.60 2010/03/02 21:23:48 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.61 2010/03/15 21:42:31 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -52,7 +52,7 @@ indelQueryInsert on
 
 track ecoresHg17
 shortLabel $o_Organism Ecores
-longLabel Tetraodon($db)/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel Tetraodon($db)/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 120.1
 visibility hide
@@ -62,7 +62,7 @@ otherDb hg17
 
 track blastzHg17
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 124.1
 visibility hide
@@ -74,7 +74,7 @@ otherDb hg17
 
 track blastzFr1
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 330.1
 visibility hide
@@ -86,7 +86,7 @@ otherDb fr1
 
 track blastzMm5
 shortLabel $o_db Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 127.1
 visibility hide

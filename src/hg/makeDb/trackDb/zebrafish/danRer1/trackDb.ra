@@ -29,7 +29,7 @@ url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
 
 track tblastnHg16KGPep
 shortLabel Human tBLASTn
-longLabel $o_Organism ($o_date/$o_db) KnownGenePep tBLASTn
+longLabel $o_Organism ($o_date) KnownGenePep tBLASTn
 group compGeno
 priority 121
 visibility hide

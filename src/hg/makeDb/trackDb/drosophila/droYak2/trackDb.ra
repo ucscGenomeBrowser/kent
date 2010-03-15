@@ -1,6 +1,6 @@
 track blastDm2FB override
 shortLabel D. mel. Proteins
-longLabel $o_Organism ($o_date/$o_db) Proteins
+longLabel $o_Organism ($o_date) Proteins
 visibility pack 
 otherDb dm2
 

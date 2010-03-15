@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.589 2010/02/16 23:39:39 kent Exp $";
+#	"$Id: trackDb.ra,v 1.590 2010/03/15 21:42:28 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -111,7 +111,7 @@ type bed 12 .
 
 track blastzMm3
 shortLabel Mm3 Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
+longLabel $o_Organism ($o_date) Blastz All Alignments
 group compGeno
 priority 189.1
 visibility hide
@@ -123,7 +123,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Mm3 Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 189.2
 visibility hide
@@ -135,7 +135,7 @@ otherDb mm3
 
 track blastzTightMm3
 shortLabel Mm3 Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 189.3
 visibility hide
@@ -151,7 +151,7 @@ priority 189.4
 
 track netMm3
 shortLabel Mm3 Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 189.5
 visibility hide
@@ -161,7 +161,7 @@ otherDb mm3
 
 track syntenyNetMm3
 shortLabel Mm3 Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 189.6
 visibility hide
@@ -171,7 +171,7 @@ otherDb mm3
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 173
 visibility hide
@@ -183,7 +183,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 174
 visibility hide
@@ -195,7 +195,7 @@ otherDb rn3
 
 track blastzTightRn3
 shortLabel Rat Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 175
 visibility hide
@@ -207,7 +207,7 @@ otherDb rn3
 
 track syntenyRn3
 shortLabel Rat Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 178
 visibility hide
@@ -218,7 +218,7 @@ otherDb rn3
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 179
 visibility hide
@@ -244,7 +244,7 @@ type maf
 
 track chainCanFam1 override
 shortLabel Dog Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 195.1
 visibility hide
@@ -256,7 +256,7 @@ otherDb canFam1
 
 track netCanFam1 override
 shortLabel Dog Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 195.2
 visibility hide
@@ -266,7 +266,7 @@ otherDb canFam1
 
 track syntenyNetCanFam1
 shortLabel Dog Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 195.3
 visibility hide
@@ -280,7 +280,7 @@ priority 200
 
 track rBestChainPanTro1
 shortLabel Chimp Recip Chain 
-longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Chained Alignments
+longLabel $o_Organism ($o_date) Reciprocal Best Chained Alignments
 group compGeno
 priority 291.0
 visibility hide
@@ -410,11 +410,11 @@ longLabel Human/Mouse/Rat Evolutionary Conservation Score
 
 track ratChain override
 shortLabel Rat Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 priority 170
 
 track ratNet override
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 
 track mouseSyn override
 priority 180
@@ -423,7 +423,7 @@ track mouseSynWhd override
 priority 181
 
 track syntenyRat override
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 priority 172
 otherDb rn3
 
@@ -699,7 +699,7 @@ otherDb hg16
 
 track blastzMm5
 shortLabel Mouse Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
+longLabel $o_Organism ($o_date) Blastz All Alignments
 group compGeno
 priority 182
 visibility hide
@@ -711,7 +711,7 @@ otherDb mm5
 
 track blastzBestMm5
 shortLabel Mouse Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 183
 visibility hide
@@ -723,7 +723,7 @@ otherDb mm5
 
 track blastzTightMm5
 shortLabel Mouse Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 184
 visibility hide
@@ -743,7 +743,7 @@ priority 186
 
 track syntenyMm5
 shortLabel Mm5 Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 187
 visibility hide
@@ -754,7 +754,7 @@ otherDb mm5
 
 track syntenyNetMm5
 shortLabel Mm5 Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 188
 visibility hide
@@ -764,7 +764,7 @@ otherDb mm5
 
 track blastzMm4
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
+longLabel $o_Organism ($o_date) Blastz All Alignments
 group compGeno
 priority 182
 visibility hide
@@ -776,7 +776,7 @@ otherDb mm4
 
 track blastzBestMm4
 shortLabel $o_Organism Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 183
 visibility hide
@@ -788,7 +788,7 @@ otherDb mm4
 
 track blastzTightMm4
 shortLabel $o_Organism Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 184
 visibility hide
@@ -804,7 +804,7 @@ priority 185
 
 track netMm4
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 186
 visibility hide
@@ -814,7 +814,7 @@ otherDb mm4
 
 track syntenyMm4
 shortLabel $o_Organism Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 187
 visibility hide
@@ -825,7 +825,7 @@ otherDb mm4
 
 track syntenyNetMm4
 shortLabel $o_Organism Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 188
 visibility hide
@@ -1055,7 +1055,7 @@ spanList 5
 
 track netSyntenyGalGal2
 shortLabel Chicken Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
+longLabel $o_Organism ($o_date) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 162
 visibility hide
@@ -1066,7 +1066,7 @@ otherDb galGal2
 
 track blastzBestGalGal2
 shortLabel Chicken Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome
 group compGeno
 priority 163
 visibility hide
@@ -1078,7 +1078,7 @@ otherDb galGal2
 
 track netSyntenyFr1
 shortLabel Fugu Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
+longLabel $o_Organism ($o_date) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 150.3
 visibility hide

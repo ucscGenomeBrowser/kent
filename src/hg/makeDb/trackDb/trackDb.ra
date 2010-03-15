@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.622 2010/03/15 18:15:20 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.623 2010/03/15 21:42:23 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -1349,7 +1349,7 @@ type psl xeno
 
 track blatFr1
 shortLabel Fugu Blat
-longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
+longLabel $o_Organism ($o_date) Translated Blat Alignments
 group compGeno
 priority 139.7
 visibility hide
@@ -1902,7 +1902,7 @@ blastRef hg16.blastKGRef00
 track chainDm1
 release beta,public
 shortLabel D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility hide
@@ -1915,7 +1915,7 @@ otherDb dm1
 track netDm1
 release beta,public
 shortLabel D. mel. Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 134
 visibility dense
@@ -1926,7 +1926,7 @@ otherDb dm1
 track chainDm1
 release alpha
 shortLabel (dm1) D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133.91
 visibility hide
@@ -1939,7 +1939,7 @@ otherDb dm1
 track netDm1
 release alpha
 shortLabel (dm1) D. mel. Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 133.92
 visibility dense
@@ -1949,7 +1949,7 @@ otherDb dm1
 
 track chainDm2
 shortLabel D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133.81
 visibility hide
@@ -1961,7 +1961,7 @@ otherDb dm2
 
 track netDm2
 shortLabel D. mel. Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 133.82
 visibility hide
@@ -1972,7 +1972,7 @@ otherDb dm2
 # release alpha: $o_db in shortLabel
 track chainDm3
 shortLabel ($o_db) D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133.71
 visibility hide
@@ -1988,7 +1988,7 @@ release alpha
 # release alpha: $o_db in shortLabel
 track netDm3
 shortLabel ($o_db) D. mel. Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 133.72
 visibility hide
@@ -2000,7 +2000,7 @@ release alpha
 # release beta,public: no $o_db in shortLabel
 track chainDm3
 shortLabel D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133.71
 visibility hide
@@ -2016,7 +2016,7 @@ release beta,public
 # release beta,public: no $o_db in shortLabel
 track netDm3
 shortLabel D. mel. Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 133.72
 visibility hide
@@ -2027,7 +2027,7 @@ release beta,public
 
 track chainOtoGar1Best
 shortLabel $o_Organism Best Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments Recip Best
+longLabel $o_Organism ($o_date) Chained Alignments Recip Best
 group compGeno
 priority 274.1
 visibility hide
@@ -2039,7 +2039,7 @@ otherDb otoGar1
 
 track chainCanHg12
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 200 
 visibility hide
@@ -2051,7 +2051,7 @@ otherDb canHg12
 
 track chainBorEut13
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 200 
 visibility hide
@@ -2063,7 +2063,7 @@ otherDb borEut13
 
 track chainHg15
 shortLabel $o_Organism Chain Hg15
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 250
 visibility dense
@@ -2075,7 +2075,7 @@ otherDb hg15
 
 track chainHg16
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 250
 visibility hide
@@ -2087,7 +2087,7 @@ otherDb hg16
 
 track chainCi2
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 209
 visibility hide
@@ -2099,7 +2099,7 @@ otherDb ci2
 
 track netCi2
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 209.1
 visibility hide

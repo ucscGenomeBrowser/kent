@@ -69,7 +69,7 @@ treeImage phylo/danRer2_6way.gif
 
 track blastHg17KG override
 shortLabel $o_Organism Proteins
-longLabel $o_Organism ($o_date/$o_db) proteins mapped by chained tBLASTn
+longLabel $o_Organism ($o_date) proteins mapped by chained tBLASTn
 priority 201
 visibility squish
 otherDb hg17

@@ -1,12 +1,12 @@
 
 track chainHg16 override
 shortLabel Human Chain 
-longLabel Chained $o_Organism ($o_date/$o_db) Alignments
+longLabel Chained $o_Organism ($o_date) Alignments
 priority 125
 
 track netHg16
 shortLabel Human Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 126
 visibility dense

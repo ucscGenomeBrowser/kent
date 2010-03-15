@@ -21,7 +21,7 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 
 track wabaCbr
 shortLabel Briggsae Waba
-longLabel $o_Organism ($o_date/$o_db) Waba Alignments
+longLabel $o_Organism ($o_date) Waba Alignments
 group compGeno
 priority 120
 visibility dense
@@ -31,7 +31,7 @@ otherDb cb1
 
 track blatCi
 shortLabel C. intestinalis Blat
-longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
+longLabel $o_Organism ($o_date) Translated Blat Alignments
 group compGeno
 priority 113
 visibility hide
@@ -43,7 +43,7 @@ otherDb cb1
 
 track blastzCb1
 shortLabel Briggsae Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz 
+longLabel $o_Organism ($o_date) Blastz 
 group compGeno
 priority 159
 visibility hide
@@ -55,7 +55,7 @@ otherDb cb1
 
 track cb1Chain
 shortLabel Briggsae Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 125
 visibility hide
@@ -67,7 +67,7 @@ otherDb cb1
 
 track netCb1
 shortLabel Briggsae Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 126
 visibility hide
@@ -77,7 +77,7 @@ otherDb cb1
 
 track axtNetCb1
 shortLabel Briggsae Aligns
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
+longLabel $o_Organism ($o_date) Blastz Alignments from Net
 group compGeno
 priority 127
 visibility dense

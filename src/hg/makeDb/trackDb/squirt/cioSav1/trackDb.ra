@@ -86,7 +86,7 @@ otherDb ci1
 
 track netCi1
 shortLabel C.intestinalis Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 134
 visibility dense
@@ -96,7 +96,7 @@ otherDb ci1
 
 track netSyntenyCi1
 shortLabel C.intestinalis Synteny
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 124.2
 visibility hide

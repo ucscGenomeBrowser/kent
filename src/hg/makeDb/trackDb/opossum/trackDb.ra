@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.54 2010/02/16 23:39:41 kent Exp $";
+#	"$Id: trackDb.ra,v 1.55 2010/03/15 21:42:30 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -83,7 +83,7 @@ type netAlign
     track synNetHg18
     subTrack syntenicNet
     shortLabel Human Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.1
     visibility hide
@@ -94,7 +94,7 @@ type netAlign
     track synNetPanTro2
     subTrack syntenicNet
     shortLabel Chimp Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.2
     visibility hide
@@ -105,7 +105,7 @@ type netAlign
     track synNetRheMac2
     subTrack syntenicNet
     shortLabel Rhesus Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.3
     visibility hide
@@ -116,7 +116,7 @@ type netAlign
     track synNetMm9
     subTrack syntenicNet
     shortLabel Mouse Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.4
     visibility hide
@@ -127,7 +127,7 @@ type netAlign
     track synNetRn5
     subTrack syntenicNet
     shortLabel Rat Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.5
     visibility hide
@@ -138,7 +138,7 @@ type netAlign
     track synNetCanFam2
     subTrack syntenicNet
     shortLabel Dog Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 300.6
     visibility hide

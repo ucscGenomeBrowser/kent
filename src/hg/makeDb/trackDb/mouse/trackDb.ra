@@ -389,7 +389,7 @@ type wig -1.0 1.0
 
 track chainDanRer4NoRand
 shortLabel $o_db Chain NoRand
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments No Randoms
+longLabel $o_Organism ($o_date) Chained Alignments No Randoms
 group compGeno
 priority 159.04
 visibility hide
@@ -403,7 +403,7 @@ otherDb danRer4
                                                                                 
 track netDanRer4NoRand
 shortLabel $o_db Net NoRand
-longLabel $o_Organism ($o_date/$o_db) Alignment Net No Randoms
+longLabel $o_Organism ($o_date) Alignment Net No Randoms
 group compGeno
 priority 159.05
 visibility hide
@@ -413,7 +413,7 @@ otherDb danRer4
 
 track blastzHg17
 shortLabel Human Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 279.3
 visibility hide
@@ -425,7 +425,7 @@ otherDb hg17
 
 track syntenyNetHg17
 shortLabel $o_Organism Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 279.6
 visibility hide
@@ -439,7 +439,7 @@ priority 279.7
 
 track netHg16
 shortLabel Hg16 Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 279.8
 visibility hide
@@ -449,7 +449,7 @@ otherDb hg16
 
 track syntenyNetRn3
 shortLabel $o_Organism Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 280.5
 visibility hide

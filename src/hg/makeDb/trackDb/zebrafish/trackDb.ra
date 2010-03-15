@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.78 2010/03/15 18:15:21 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.79 2010/03/15 21:42:33 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -122,14 +122,14 @@ type psl .
 
 track blastHg16KG override
 shortLabel $o_Organism Proteins
-longLabel $o_Organism ($o_date/$o_db) Proteins
+longLabel $o_Organism ($o_date) Proteins
 priority 202
 visibility pack
 otherDb hg16
 
 track blastzHg17
 shortLabel  $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 124.0
 visibility hide
@@ -141,7 +141,7 @@ otherDb hg17
 
 track blastzMm5
 shortLabel  $o_db Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 126.1
 visibility hide
@@ -153,7 +153,7 @@ otherDb mm5
 
 track blastzFr1
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 130.1
 visibility hide
@@ -165,7 +165,7 @@ otherDb fr1
 
 track blastzTetNig1
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 132.1
 visibility hide
@@ -179,7 +179,7 @@ track chainXenTro1
 release beta,public
 #replaces record chainXenTro1 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 170
 visibility hide

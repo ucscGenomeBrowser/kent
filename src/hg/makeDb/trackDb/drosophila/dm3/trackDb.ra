@@ -53,7 +53,7 @@ symbolTable flyBase2004Xref
 
 track flyBaseLiftGene
 shortLabel FlyBase 4.2 Genes
-longLabel $o_Organism ($o_date/$o_db) FlyBase 4.2 Genes Mapped to Release 5 ($date/$db)
+longLabel $o_Organism ($o_date) FlyBase 4.2 Genes Mapped to Release 5 ($date/$db)
 group genes
 priority 45.5
 visibility hide
@@ -63,7 +63,7 @@ otherDb dm2
 
 track flyBaseLiftNoncoding
 shortLabel FB 4.2 Noncoding
-longLabel $o_Organism ($o_date/$o_db) FlyBase 4.2 Noncoding Genes Mapped to Release 5 ($date/$db)
+longLabel $o_Organism ($o_date) FlyBase 4.2 Noncoding Genes Mapped to Release 5 ($date/$db)
 group genes
 priority 45.5
 visibility hide

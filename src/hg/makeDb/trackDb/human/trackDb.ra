@@ -796,7 +796,7 @@ type sample 0 8
 
 track ecoresTetNig1
 shortLabel Tetraodon Ecores
-longLabel Human($db)/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel Human($db)/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 151.1
 visibility hide
@@ -845,7 +845,7 @@ type bed 5 .
 
 track chimpSimpleDiff
 shortLabel Chimp Diff
-longLabel $o_Organism ($o_date/$o_db) Simple Differences in Regions of High Quality Sequence
+longLabel $o_Organism ($o_date) Simple Differences in Regions of High Quality Sequence
 group compGeno
 priority 206
 visibility hide
@@ -2078,7 +2078,7 @@ type psl xeno
 
 track tblastGalGal2
 shortLabel tblastGalGal2
-longLabel $o_Organism ($o_date/$o_db) tblastn Hit/hg16 knownGene Exon
+longLabel $o_Organism ($o_date) tblastn Hit/hg16 knownGene Exon
 group x
 spectrum on
 priority 158
@@ -2406,7 +2406,7 @@ type netAlign
     track netSyntenyPanTro2
     subTrack syntenicNet
     shortLabel $o_Organism Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 1
     visibility hide
@@ -2417,7 +2417,7 @@ type netAlign
     track netSyntenyPonAbe2
     subTrack syntenicNet
     shortLabel $o_Organism Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 2
     visibility hide
@@ -2428,7 +2428,7 @@ type netAlign
     track netSyntenyRheMac2
     subTrack syntenicNet
     shortLabel $o_Organism Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 3
     visibility hide
@@ -2439,7 +2439,7 @@ type netAlign
     track netSyntenyMm8
     subTrack syntenicNet
     shortLabel Mouse Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 4
     visibility hide
@@ -2450,7 +2450,7 @@ type netAlign
     track netSyntenyRn4
     subTrack syntenicNet
     shortLabel Rat Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 5
     visibility hide
@@ -2461,7 +2461,7 @@ type netAlign
     track netSyntenyCanFam2
     subTrack syntenicNet
     shortLabel Dog Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 6
     visibility hide
@@ -2472,7 +2472,7 @@ type netAlign
     track netSyntenyEquCab1
     subTrack syntenicNet
     shortLabel Horse Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 7
     visibility hide
@@ -2483,7 +2483,7 @@ type netAlign
     track netSyntenyMonDom4
     subTrack syntenicNet
     shortLabel Opossum Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 9
     visibility hide
@@ -2494,7 +2494,7 @@ type netAlign
     track netSyntenyBosTau2
     subTrack syntenicNet
     shortLabel Cow Syn Net
-    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
     group compGeno
     priority 8
     visibility hide
@@ -2515,7 +2515,7 @@ type netAlign
     track netRBestGorGor1
     subTrack rBestNet
     shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 1
     visibility hide
@@ -2526,7 +2526,7 @@ type netAlign
     track netRBestCalJac1
     subTrack rBestNet
     shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 2
     visibility hide
@@ -2537,7 +2537,7 @@ type netAlign
     track netRBestTarSyr1
     subTrack rBestNet
     shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 3
     visibility hide
@@ -2548,7 +2548,7 @@ type netAlign
     track netRBestOtoGar1
     subTrack rBestNet
     shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 4
     visibility hide
@@ -2559,7 +2559,7 @@ type netAlign
     track netRBestMicMur1
     subTrack rBestNet
     shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 5
     visibility hide
@@ -2570,7 +2570,7 @@ type netAlign
     track netRBestTupBel1
     subTrack rBestNet
     shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 6
     visibility hide
@@ -2581,7 +2581,7 @@ type netAlign
     track netRBestOryCun1
     subTrack rBestNet
     shortLabel Rabbit RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 301.7
     visibility hide
@@ -2592,7 +2592,7 @@ type netAlign
     track netRBestCavPor2
     subTrack rBestNet
     shortLabel Guineapig RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 301.9
     visibility hide
@@ -2603,7 +2603,7 @@ type netAlign
     track netRBestEchTel1
     subTrack rBestNet
     shortLabel Tenrec RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 301.11
     visibility hide
@@ -2614,7 +2614,7 @@ type netAlign
     track netRBestLoxAfr1
     subTrack rBestNet
     shortLabel Elephant RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 301.13
     visibility hide
@@ -2625,7 +2625,7 @@ type netAlign
     track netRBestDasNov1
     subTrack rBestNet
     shortLabel Armadillo RBest Net
-    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
     group compGeno
     priority 301.15
     visibility hide

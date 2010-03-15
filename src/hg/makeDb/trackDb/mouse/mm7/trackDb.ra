@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.67 2010/02/16 23:39:40 kent Exp $";
+#	"$Id: trackDb.ra,v 1.68 2010/03/15 21:42:30 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -14,7 +14,7 @@ priority 259.6
 
 track chainHg17noLSR
 shortLabel $o_Organism Chain noLSR
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
+longLabel $o_Organism ($o_date) Chained Alignments WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
 group compGeno
 priority 259.01
 visibility hide
@@ -26,7 +26,7 @@ otherDb hg17
 
 track netHg17noLSR
 shortLabel $o_Organism Net noLSR
-longLabel $o_Organism ($o_date/$o_db) Alignment Net WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
+longLabel $o_Organism ($o_date) Alignment Net WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
 group compGeno
 priority 259.11
 visibility hide

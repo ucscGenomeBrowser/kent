@@ -83,7 +83,7 @@ type psl .
 
 track blastzTightRat
 shortLabel Tight Rat 
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -147,7 +147,7 @@ otherDb mm2
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 127
 visibility hide
@@ -159,7 +159,7 @@ otherDb hg12
 
 track blastzTightHuman
 shortLabel Tight Human
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
@@ -171,7 +171,7 @@ otherDb hg12
 
 track blastzMmHg
 shortLabel Blastz Human
-longLabel $o_Organism ($o_date/$o_db) Merged Blastz Freeze Alignments
+longLabel $o_Organism ($o_date) Merged Blastz Freeze Alignments
 group compGeno
 priority 131
 visibility hide
@@ -183,7 +183,7 @@ otherDb hg10
 
 track blatHuman
 shortLabel Human Blat
-longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
+longLabel $o_Organism ($o_date) Translated Blat Alignments
 group compGeno
 priority 122
 visibility hide

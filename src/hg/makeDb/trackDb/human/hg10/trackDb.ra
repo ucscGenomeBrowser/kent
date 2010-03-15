@@ -13,7 +13,7 @@ colorChromDefault off
 
 track blastzBestMouse
 shortLabel Best Mouse 
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 126
 visibility dense
@@ -25,7 +25,7 @@ otherDb mm2
 
 track blastzMm2
 shortLabel Blastz Mouse
-longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
+longLabel $o_Organism ($o_date) All Blastz Alignments
 group compGeno
 priority 130
 visibility hide
@@ -37,7 +37,7 @@ otherDb mm2
 
 track blatMus
 shortLabel Mouse Blat
-longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
+longLabel $o_Organism ($o_date) Translated Blat Alignments
 group compGeno
 priority 120
 visibility hide

@@ -150,7 +150,7 @@ speciesOrder eutGli1 eutPri1 hg17
 track chainMonDom4
 #replaces record chainMonDom4 in parent dir missing/extra release,subTrack,subGroups
 shortLabel Opossum Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense
@@ -163,7 +163,7 @@ otherDb monDom4
 track chainGalGal2
 #replaces record chainGalGal2 in parent dir missing/extra matrix,matrixHeader
 shortLabel Chicken Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense
@@ -175,7 +175,7 @@ otherDb galGal2
 
 track chainMapHg18
 shortLabel Human Map
-longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+longLabel $o_Organism ($o_date) Mapping Chain
 group other
 priority 133
 visibility dense
@@ -187,7 +187,7 @@ otherDb hg18
 
 track chainMapPriMat13
 shortLabel $o_Organism Map
-longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+longLabel $o_Organism ($o_date) Mapping Chain
 group other
 priority 134
 visibility hide
@@ -199,7 +199,7 @@ otherDb priMat13
 
 track chainPriMat13
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 134
 visibility hide
@@ -211,7 +211,7 @@ otherDb priMat13
 
 track chainMapPanTro2
 shortLabel $o_Organism Map
-longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+longLabel $o_Organism ($o_date) Mapping Chain
 group other
 priority 134
 visibility hide
@@ -224,7 +224,7 @@ otherDb panTro2
 track chainPanTro2
 #replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 134
 visibility hide
@@ -235,11 +235,11 @@ type chain panTro2
 otherDb panTro2
 
 track chainBosTau1 override
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date) Chained Blastz Alignments
 priority 138
 
 track chainCanFam1 override
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date) Chained Blastz Alignments
 priority 139
 
 track netHg17 override
@@ -248,7 +248,7 @@ priority 134
 
 track netSyntenyHg17
 shortLabel Human Synteny
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 135
 visibility hide
@@ -326,7 +326,7 @@ otherDb eutPri1
 track chainCanFam2
 #replaces record chainCanFam2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 167.1
 visibility hide
@@ -341,7 +341,7 @@ priority 167.1
 
 track chainRheMac1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 167.1
 visibility hide

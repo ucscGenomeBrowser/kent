@@ -1,7 +1,7 @@
 
 track blastzCe1
 shortLabel Ce1 Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz 
+longLabel $o_Organism ($o_date) Blastz 
 group compGeno
 priority 156.2
 visibility hide
@@ -13,7 +13,7 @@ otherDb ce1
 
 track ce1Chain
 shortLabel Ce1 Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 156.1
 visibility hide
@@ -76,7 +76,7 @@ altColor 0,50,50
 
 track blastzCe2
 shortLabel Elegans Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz 
+longLabel $o_Organism ($o_date) Blastz 
 group compGeno
 priority 155.2
 visibility dense
@@ -88,7 +88,7 @@ otherDb ce2
 
 track chainCe2
 shortLabel Elegans Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 155.1
 visibility dense

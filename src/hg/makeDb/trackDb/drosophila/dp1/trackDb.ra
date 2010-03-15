@@ -40,7 +40,7 @@ url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=
 
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
-longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to D.pseudoobscura
+longLabel $o_Organism ($o_date) BDGP Genes Mapped to D.pseudoobscura
 group genes
 priority 45.5
 visibility pack
@@ -50,7 +50,7 @@ otherDb dm1
 
 track axtNetDm1
 shortLabel D. mel. Aligns
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
+longLabel $o_Organism ($o_date) Blastz Alignments from Net
 group compGeno
 priority 135
 visibility dense

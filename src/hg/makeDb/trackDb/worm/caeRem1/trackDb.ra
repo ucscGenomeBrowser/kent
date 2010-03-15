@@ -1,6 +1,6 @@
 track chainCe3
 shortLabel Elegans Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 127
 visibility hide
@@ -12,7 +12,7 @@ otherDb ce3
 
 track netCe3
 shortLabel Elegans Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 128
 visibility hide

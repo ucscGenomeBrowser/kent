@@ -63,7 +63,7 @@ indelQueryInsert on
 
 track chainOverHomIni13
 shortLabel $o_Organism Over
-longLabel $o_Organism ($o_date/$o_db) Over
+longLabel $o_Organism ($o_date) Over
 group compGeno
 priority 400
 visibility hide
@@ -113,7 +113,7 @@ type bed 5 .
 
 track chainHomIni13
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 400
 visibility hide
@@ -125,7 +125,7 @@ otherDb homIni13
 
 track chainMapHomIni13
 shortLabel $o_Organism Map
-longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+longLabel $o_Organism ($o_date) Mapping Chain
 group x
 priority 400
 visibility hide

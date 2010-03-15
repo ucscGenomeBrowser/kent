@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.40 2009/12/22 18:55:36 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.41 2010/03/15 21:42:25 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -48,7 +48,7 @@ priority 145.6
 
 track netHg16
 shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Net 
+longLabel $o_Organism ($o_date) Net 
 group compGeno
 priority 145.7
 visibility dense
@@ -58,7 +58,7 @@ otherDb hg16
 
 track axtNetHg16
 shortLabel Human Best
-longLabel $o_Organism ($o_date/$o_db) Best Alignments from Net
+longLabel $o_Organism ($o_date) Best Alignments from Net
 group compGeno
 priority 145.8
 visibility hide
@@ -69,7 +69,7 @@ otherDb hg16
 
 track humanDels
 shortLabel Human Deletions
-longLabel Deletions in $o_Organism ($o_date/$o_db) Relative to Chimp
+longLabel Deletions in $o_Organism ($o_date) Relative to Chimp
 group compGeno
 priority 147
 visibility hide

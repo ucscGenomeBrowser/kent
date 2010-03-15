@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.80 2010/03/15 18:15:20 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.81 2010/03/15 21:42:27 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -74,13 +74,13 @@ visibility dense
 
 track blatTetra override
 shortLabel $o_Organism BLAT
-longLabel $o_Organism ($o_date/$o_db) Translated BLAT Alignments
+longLabel $o_Organism ($o_date) Translated BLAT Alignments
 priority 227
 otherDb tetNig1
 
 track blatHg16
 shortLabel $o_Organism BLAT
-longLabel $o_Organism ($o_date/$o_db) Translated BLAT Alignments
+longLabel $o_Organism ($o_date) Translated BLAT Alignments
 group compGeno
 priority 130
 visibility dense
@@ -101,7 +101,7 @@ type maf
 
 track ecoresMm3
 shortLabel Mouse Ecores
-longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel Fugu/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 209
 visibility hide
@@ -112,7 +112,7 @@ otherDb mm3
 
 track ecoresRn3
 shortLabel Rat Ecores
-longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel Fugu/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 225.2
 visibility hide
@@ -123,7 +123,7 @@ otherDb rn3
 
 track ecoresHg16
 shortLabel Human Ecores
-longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel Fugu/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 125.3
 visibility hide
@@ -166,7 +166,7 @@ searchPriority 50
 
 track blastzDanRer2
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 226.1
 visibility hide
@@ -178,7 +178,7 @@ otherDb danRer2
 
 track blastzDanRer1
 shortLabel $o_db Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 226.0
 visibility hide

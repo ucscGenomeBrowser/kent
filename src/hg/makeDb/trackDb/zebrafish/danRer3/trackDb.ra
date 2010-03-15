@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.61 2010/02/08 19:28:55 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.62 2010/03/15 21:42:34 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -118,7 +118,7 @@ searchPriority 11
 
 track blastHg17KG override
 shortLabel $o_Organism Proteins
-longLabel $o_Organism ($o_date/$o_db) proteins mapped by chained tBLASTn
+longLabel $o_Organism ($o_date) proteins mapped by chained tBLASTn
 priority 201
 visibility squish
 pred hg17.blastKGPep02

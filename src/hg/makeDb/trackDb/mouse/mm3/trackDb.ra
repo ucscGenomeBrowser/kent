@@ -32,15 +32,15 @@ otherDb mm3
 
 track ratChain override
 shortLabel Rat Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 
 track ratNet override
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 priority 134.5
 
 track mm3Rn2L
 shortLabel Rat Cons
-longLabel Mouse/$o_Organism ($o_date/$o_db) Conservation Score
+longLabel Mouse/$o_Organism ($o_date) Conservation Score
 group compGeno
 priority 139
 visibility full
@@ -51,7 +51,7 @@ otherDb rn2
 
 track blastzTightRat
 shortLabel Rat Tight 
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -63,7 +63,7 @@ otherDb rn2
 
 track blastzBestRat
 shortLabel Rat Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -75,7 +75,7 @@ otherDb rn2
 
 track blastzRat
 shortLabel Rat Blastz
-longLabel $o_Organism ($o_date/$o_db) Merged Blastz Alignments
+longLabel $o_Organism ($o_date) Merged Blastz Alignments
 group compGeno
 priority 142
 visibility dense
@@ -87,7 +87,7 @@ otherDb rn2
 
 track blastzTightHuman
 shortLabel Human Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
@@ -99,7 +99,7 @@ otherDb hg15
 
 track humanChain
 shortLabel Human Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 125
 visibility hide
@@ -143,7 +143,7 @@ type genePred
 
 track humanNet
 shortLabel Human Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 126
 visibility hide
@@ -152,12 +152,12 @@ type netAlign hg15 humanChain
 otherDb hg15
 
 track syntenyHuman override
-longLabel Mouse/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel Mouse/$o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 otherDb hg15
 
 track blastzBestHuman
 shortLabel Human Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 127.5
 visibility hide
@@ -169,7 +169,7 @@ otherDb hg15
 
 track blastzHuman
 shortLabel Human Blastz
-longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
+longLabel $o_Organism ($o_date) All Blastz Alignments
 group compGeno
 priority 128
 visibility hide

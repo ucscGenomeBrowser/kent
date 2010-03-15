@@ -55,7 +55,7 @@ otherDb canHg10
 
 track chainDasNov1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 255.1
 visibility hide

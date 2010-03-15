@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.78 2010/02/09 02:16:07 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.79 2010/03/15 21:42:25 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -58,7 +58,7 @@ type bed 5 .
 track blatFr1
 #replaces record blatFr1 in parent dir missing/extra colorChromDefault
 shortLabel $o_Organism Blat
-longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
+longLabel $o_Organism ($o_date) Translated Blat Alignments
 group compGeno
 priority 110
 visibility dense
@@ -70,7 +70,7 @@ otherDb fr1
 
 track netSyntenyHg17
 shortLabel $o_Organism Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
+longLabel $o_Organism ($o_date) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 212.2
 visibility hide
@@ -85,7 +85,7 @@ priority 212.0
 
 track netHg16
 shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 212.1
 visibility hide
@@ -95,7 +95,7 @@ otherDb hg16
 
 track netSyntenyHg16
 shortLabel $o_db Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
+longLabel $o_Organism ($o_date) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 212.2
 visibility hide
@@ -106,7 +106,7 @@ otherDb hg16
 
 track blastzBestHg16
 shortLabel $o_db AxtBest
-longLabel $o_Organism ($o_date/$o_db) Blastz AxtBest
+longLabel $o_Organism ($o_date) Blastz AxtBest
 group compGeno
 priority 212.3
 visibility hide
@@ -262,7 +262,7 @@ blastRef hg17.blastKGRef01
 
 track ecoresTetraodon
 shortLabel Tetraodon Ecores
-longLabel $o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel $o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 149.9
 visibility hide

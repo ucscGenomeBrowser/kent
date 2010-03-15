@@ -64,7 +64,7 @@ visibility full
 
 track syntenyMouse
 shortLabel Mouse Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 188
 visibility hide
@@ -80,7 +80,7 @@ otherDb rn1
 
 track blastzMm
 shortLabel Blastz Mouse
-longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
+longLabel $o_Organism ($o_date) All Blastz Alignments
 group compGeno
 priority 185
 visibility hide
@@ -92,7 +92,7 @@ otherDb mm3
 
 track axtBestMm3
 shortLabel Human/Mouse
-longLabel $o_Organism ($o_date/$o_db) Blastz Score-Based Wiggle Track
+longLabel $o_Organism ($o_date) Blastz Score-Based Wiggle Track
 group compGeno
 priority 182
 visibility full
@@ -103,7 +103,7 @@ otherDb mm3
 
 track blastzBestMouse
 shortLabel Best Mouse
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 183
 visibility hide
@@ -115,7 +115,7 @@ otherDb mm3
 
 track blastzTightMouse
 shortLabel Tight Mouse
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 181
 visibility hide
@@ -127,7 +127,7 @@ otherDb mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 186
 visibility hide
@@ -139,7 +139,7 @@ otherDb mm3
 
 track mouseNet
 shortLabel Mouse Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 187
 visibility hide
@@ -233,7 +233,7 @@ otherDb hg13
 
 track aarMm2
 shortLabel Ancient Repeats
-longLabel $o_Organism ($o_date/$o_db) Aligned Ancient Repeats
+longLabel $o_Organism ($o_date) Aligned Ancient Repeats
 group x
 priority 159
 visibility hide

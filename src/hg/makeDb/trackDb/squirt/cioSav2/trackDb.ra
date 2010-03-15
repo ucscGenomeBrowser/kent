@@ -84,7 +84,7 @@ otherDb cioSav1
 
 track netCioSav1
 shortLabel C. savignyi Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 134
 visibility dense
@@ -94,7 +94,7 @@ otherDb cioSav1
 
 track netSyntenyCioSav1
 shortLabel C. savignyi Synteny
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 124.2
 visibility hide
@@ -142,7 +142,7 @@ type psl xeno
 
 track blastzCioSav1
 shortLabel Savignyi Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 173
 visibility hide

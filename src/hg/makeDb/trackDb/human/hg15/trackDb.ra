@@ -111,7 +111,7 @@ type genePred
 
 track mm3MrnaOrthoMap
 shortLabel Mouse mRNA orthoMap
-longLabel Mouse $o_Organism ($o_date/$o_db) mRNA synteny mapping (blastz)
+longLabel Mouse $o_Organism ($o_date) mRNA synteny mapping (blastz)
 group compGeno
 priority 180.98
 visibility hide 
@@ -121,7 +121,7 @@ otherDb mm3
 
 track axtBestMm3
 shortLabel Human/Mouse
-longLabel Human/$o_Organism ($o_date/$o_db) Blastz Score Based Wiggle Track
+longLabel Human/$o_Organism ($o_date) Blastz Score Based Wiggle Track
 group compGeno
 priority 183
 visibility hide
@@ -131,7 +131,7 @@ type axt mm3
 
 track hg15Mm3L
 shortLabel Mouse Cons
-longLabel Human/$o_Organism ($o_date/$o_db) Evolutionary Conservation Score (std units)
+longLabel Human/$o_Organism ($o_date) Evolutionary Conservation Score (std units)
 group compGeno
 color 175,150,128
 altColor 175,150,128
@@ -142,7 +142,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Best Mouse
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 184
 visibility hide
@@ -154,7 +154,7 @@ otherDb mm3
 
 track blastzTightMm3
 shortLabel Tight Mouse
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 181
 visibility hide
@@ -166,7 +166,7 @@ otherDb mm3
 
 track blastzMm3
 shortLabel Mouse Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
+longLabel $o_Organism ($o_date) Blastz All Alignments
 group compGeno
 priority 185
 visibility hide
@@ -178,7 +178,7 @@ otherDb mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 186
 visibility hide
@@ -190,7 +190,7 @@ otherDb mm3
 
 track mouseChain2
 shortLabel Mouse Chain2 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments to fix broken chains 
+longLabel $o_Organism ($o_date) Chained Alignments to fix broken chains 
 group compGeno
 priority 186.1
 visibility hide
@@ -202,7 +202,7 @@ otherDb mm3
 
 track mouseNet
 shortLabel Mouse Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 187
 visibility dense
@@ -212,7 +212,7 @@ otherDb mm3
 
 track mouseSynNet
 shortLabel Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 188
 visibility hide
@@ -222,7 +222,7 @@ otherDb mm3
 
 track syntenyMouse
 shortLabel Mouse Synteny
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 189
 visibility hide
@@ -233,7 +233,7 @@ otherDb mm3
 
 track blastzTightRn2
 shortLabel Tight Rat 
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 174
 visibility hide
@@ -244,13 +244,13 @@ type psl xeno rn2
 otherDb rn2
 
 track syntenyRat override
-longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 priority 175
 otherDb rn2
 
 track blastzBestRn2
 shortLabel Best Rat
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 176
 visibility hide
@@ -262,7 +262,7 @@ otherDb rn2
 
 track blastzRn2
 shortLabel Rat Blastz
-longLabel $o_Organism ($o_date/$o_db) Merged Blastz Alignments
+longLabel $o_Organism ($o_date) Merged Blastz Alignments
 group compGeno
 priority 177
 visibility hide
@@ -345,7 +345,7 @@ longLabel UniGene Hs 160 Alignments and SAGEmap Info
 
 track blastzCe1
 shortLabel Worm Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 119
 visibility hide
@@ -357,7 +357,7 @@ otherDb ce1
 
 track wormChain
 shortLabel Worm Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 119.5
 visibility hide

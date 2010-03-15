@@ -62,7 +62,7 @@ idXref refLink mrnaAcc name
 
 track chainPriPac1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 122
 visibility hide
@@ -76,7 +76,7 @@ otherDb priPac1
 
 track netPriPac1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 123
 visibility dense
@@ -117,7 +117,7 @@ html chainNet
         subTrack caeJap2ChainNetViewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeJap2
 
     track caeJap2ChainNetViewnet
@@ -130,12 +130,12 @@ html chainNet
         subTrack caeJap2ChainNetViewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeJap2 chainCaeJap2
 
 track chainCaeJap1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 124
 visibility hide
@@ -149,7 +149,7 @@ otherDb caeJap1
 
 track netCaeJap1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 125
 visibility dense
@@ -192,7 +192,7 @@ html chainNet
         subTrack cb3ChainNetViewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain cb3
 
     track cb3ChainNetViewnet
@@ -206,13 +206,13 @@ html chainNet
         subTrack cb3ChainNetViewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cb3 chainCb3
 
 track chainCb3
 release beta,public
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 126
 visibility hide
@@ -227,7 +227,7 @@ otherDb cb3
 track netCb3
 release beta,public
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 127
 visibility dense
@@ -270,7 +270,7 @@ html chainNet
         subTrack caeRem3ChainNetViewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caeRem3
 
     track caeRem3ChainNetViewnet
@@ -284,13 +284,13 @@ html chainNet
         subTrack caeRem3ChainNetViewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caeRem3 chainCaeRem3
 
 track chainCaeRem3
 release beta,public
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 128
 visibility hide
@@ -305,7 +305,7 @@ otherDb caeRem3
 track netCaeRem3
 release beta,public
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 129
 visibility dense
@@ -315,7 +315,7 @@ otherDb caeRem3
 
 track chainCaeRem2
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 128
 visibility hide
@@ -329,7 +329,7 @@ otherDb caeRem2
 
 track netCaeRem2
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 129
 visibility dense
@@ -372,7 +372,7 @@ html chainNet
         subTrack caePb2ChainNetViewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain caePb2
 
     track caePb2ChainNetViewnet
@@ -386,13 +386,13 @@ html chainNet
         subTrack caePb2ChainNetViewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign caePb2 chainCaePb2
 
 track chainCaePb2
 release beta,public
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 130
 visibility hide
@@ -407,7 +407,7 @@ otherDb caePb2
 track netCaePb2
 release beta,public
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 131
 visibility dense
@@ -417,7 +417,7 @@ otherDb caePb2
 
 track chainCaePb1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 130
 visibility hide
@@ -431,7 +431,7 @@ otherDb caePb1
 
 track netCaePb1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 131
 visibility dense
@@ -472,7 +472,7 @@ html chainNet
         subTrack ce7ChainNetViewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ce7
 
     track ce7ChainNetViewnet
@@ -485,12 +485,12 @@ html chainNet
         subTrack ce7ChainNetViewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ce7 chainCe7
 
 track chainCe6
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 131
 visibility hide
@@ -504,7 +504,7 @@ otherDb ce6
 
 track netCe6
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 132
 visibility dense
@@ -514,7 +514,7 @@ otherDb ce6
 
 track chainCe4
 shortLabel $o_db Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 131
 visibility hide
@@ -528,7 +528,7 @@ otherDb ce4
 
 track netCe4
 shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 132
 visibility dense

@@ -24,7 +24,7 @@ altColor 0,50,50
 
 track blastzHg16
 shortLabel Human Blastz
-longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
+longLabel $o_Organism ($o_date) All Blastz Alignments
 group compGeno
 priority 114
 visibility hide
@@ -44,7 +44,7 @@ priority 116
 
 track blastzBestHg16
 shortLabel Human Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 117
 visibility hide
@@ -56,7 +56,7 @@ otherDb hg16
 
 track blastzTightHg16
 shortLabel Human Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 117.5
 visibility hide
@@ -68,7 +68,7 @@ otherDb hg16
 
 track syntenyHg16
 shortLabel Human Synteny
-longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 117
 visibility hide
@@ -79,7 +79,7 @@ otherDb hg16
 
 track syntenyNetHg16
 shortLabel Human Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 118
 visibility hide
@@ -89,7 +89,7 @@ otherDb hg16
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
+longLabel $o_Organism ($o_date) All Blastz Alignments
 group compGeno
 priority 259.9
 visibility hide
@@ -101,7 +101,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 259.95
 visibility hide
@@ -113,7 +113,7 @@ otherDb rn3
 
 track blastzTightRn3
 shortLabel Rat Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 259.96
 visibility hide
@@ -125,7 +125,7 @@ otherDb rn3
 
 track syntenyRn3
 shortLabel Rat Synteny
-longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 260.11
 visibility hide

@@ -63,13 +63,13 @@ type genePred .
 
 track blastDm1FB override
 shortLabel D. mel. Proteins (dm1)
-longLabel $o_Organism ($o_date/$o_db) Proteins
+longLabel $o_Organism ($o_date) Proteins
 visibility pack
 otherDb dm1
 
 track blastDm2FB override
 shortLabel D. mel. Proteins
-longLabel $o_Organism ($o_date/$o_db) Proteins
+longLabel $o_Organism ($o_date) Proteins
 otherDb dm2
 
 

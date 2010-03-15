@@ -2,7 +2,7 @@
 track chainPonAbe2
 #replaces record chainPonAbe2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel Orang Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense
@@ -14,7 +14,7 @@ otherDb ponAbe2
 
 track chainHomPan20
 shortLabel Chimp/Human 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense

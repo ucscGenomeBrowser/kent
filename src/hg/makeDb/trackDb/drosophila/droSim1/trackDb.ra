@@ -43,12 +43,12 @@ type bed 5 .
 
 track blastDm1FB override
 shortLabel D. mel. Proteins (dm1)
-longLabel $o_Organism ($o_date/$o_db) Proteins
+longLabel $o_Organism ($o_date) Proteins
 otherDb dm1
 
 track blastDm2FB override
 shortLabel D. mel. Proteins
-longLabel $o_Organism ($o_date/$o_db) Proteins
+longLabel $o_Organism ($o_date) Proteins
 otherDb dm2
 
 track chainDm2 override
@@ -61,7 +61,7 @@ visibility dense
 track chainDp3
 #replaces record chainDp3 in parent dir missing/extra matrix,matrixHeader
 shortLabel D. pseudo. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 143.1
 visibility hide

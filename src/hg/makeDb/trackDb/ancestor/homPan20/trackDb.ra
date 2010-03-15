@@ -2,7 +2,7 @@
 track chainHg18
 #replaces record chainHg18 in parent dir missing/extra release,subTrack,subGroups
 shortLabel Human Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense
@@ -15,7 +15,7 @@ otherDb hg18
 track chainPanTro2
 #replaces record chainPanTro2 in parent dir missing/extra release,subTrack,subGroups
 shortLabel Chimp Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense
@@ -27,7 +27,7 @@ otherDb panTro2
 
 track chainHomIni20
 shortLabel Hominidae ancestor
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 133
 visibility dense

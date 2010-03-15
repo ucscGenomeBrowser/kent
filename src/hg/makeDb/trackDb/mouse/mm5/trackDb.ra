@@ -46,7 +46,7 @@ otherDb mm5
 
 track blastzTetNig1
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 149.9
 visibility hide
@@ -58,7 +58,7 @@ otherDb tetNig1
 
 track blastzDanRer2
 shortLabel $o_Organism Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 159.9
 visibility hide
@@ -70,7 +70,7 @@ otherDb danRer2
 
 track blastzDanRer1
 shortLabel $o_db Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group compGeno
 priority 159.9
 visibility hide
@@ -82,7 +82,7 @@ otherDb danRer1
 
 track syntenyNetGalGal2
 shortLabel $o_Organism Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 188.2
 visibility hide
@@ -92,7 +92,7 @@ otherDb galGal2
 
 track syntenyNetCanFam1
 shortLabel Dog Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 230.15
 visibility hide
@@ -105,7 +105,7 @@ priority 258.9
 
 track blastzBestHg17
 shortLabel Human Best
-longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
 group compGeno
 priority 258.95
 visibility hide
@@ -117,7 +117,7 @@ otherDb hg17
 
 track blastzTightHg17
 shortLabel Human Tight
-longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 258.96
 visibility hide
@@ -129,7 +129,7 @@ otherDb hg17
 
 track ensRatMusHg17
 shortLabel Human Synteny
-longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
 priority 259.15
 group compGeno
 visibility hide
@@ -143,7 +143,7 @@ visibility dense
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
+longLabel $o_Organism ($o_date) All Blastz Alignments
 group compGeno
 priority 193.0
 visibility hide
@@ -155,7 +155,7 @@ otherDb rn3
 
 track blastzMm3X
 shortLabel Mouse3X Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group x
 priority 191.0
 visibility hide
@@ -167,7 +167,7 @@ otherDb mm3X
 
 track blastzMm2X
 shortLabel Mouse2X Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $o_Organism ($o_date) Blastz Alignments
 group x
 priority 191.0
 visibility hide

@@ -16,7 +16,7 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 
 track chainCb2
 shortLabel Briggsae Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 125
 visibility hide
@@ -28,7 +28,7 @@ otherDb cb2
 
 track netCb2
 shortLabel Briggsae Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 126
 visibility hide
@@ -38,7 +38,7 @@ otherDb cb2
 
 track chainCaeRem1
 shortLabel Remanei Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 127
 visibility hide
@@ -50,7 +50,7 @@ otherDb caeRem1
 
 track netCaeRem1
 shortLabel Remanei Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
 priority 128
 visibility hide

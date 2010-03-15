@@ -1,9 +1,9 @@
-#	"$Id: trackDb.chainNet.ra,v 1.85 2010/03/02 21:23:47 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.86 2010/03/15 21:42:23 ann Exp $";
 
 track chainNetAplCal1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -33,7 +33,7 @@ html chainNet
         subTrack chainNetAplCal1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain aplCal1
         html chainNet
 
@@ -47,14 +47,14 @@ html chainNet
         subTrack chainNetAplCal1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign aplCal1 chainAplCal1
         html chainNet
 
 track chainNetFr2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -84,7 +84,7 @@ html chainNet
         subTrack chainNetFr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain fr2
         html chainNet
 
@@ -98,14 +98,14 @@ html chainNet
         subTrack chainNetFr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign fr2 chainFr2
         html chainNet
 
 track chainNetFr1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -135,7 +135,7 @@ html chainNet
         subTrack chainNetFr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain fr1
         html chainNet
 
@@ -149,14 +149,14 @@ html chainNet
         subTrack chainNetFr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign fr1 chainFr1
         html chainNet
 
 track chainNetTetNig2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -186,7 +186,7 @@ html chainNet
         subTrack chainNetTetNig2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain tetNig2
         html chainNet
 
@@ -200,14 +200,14 @@ html chainNet
         subTrack chainNetTetNig2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tetNig2 chainTetNig2
         html chainNet
 
 track chainNetTetNig1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -237,7 +237,7 @@ html chainNet
         subTrack chainNetTetNig1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain tetNig1
         html chainNet
 
@@ -251,14 +251,14 @@ html chainNet
         subTrack chainNetTetNig1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tetNig1 chainTetNig1
         html chainNet
 
 track chainNetDanRer6
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -288,7 +288,7 @@ html chainNet
         subTrack chainNetDanRer6Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer6
         html chainNet
 
@@ -302,14 +302,14 @@ html chainNet
         subTrack chainNetDanRer6Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer6 chainDanRer6
         html chainNet
 
 track chainNetDanRer5
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -339,7 +339,7 @@ html chainNet
         subTrack chainNetDanRer5Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer5
         html chainNet
 
@@ -353,14 +353,14 @@ html chainNet
         subTrack chainNetDanRer5Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer5 chainDanRer5
         html chainNet
 
 track chainNetDanRer4
 compositeTrack on
 shortLabel $o_Organism  Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -390,7 +390,7 @@ html chainNet
         subTrack chainNetDanRer4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer4
         html chainNet
 
@@ -404,14 +404,14 @@ html chainNet
         subTrack chainNetDanRer4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer4 chainDanRer4
         html chainNet
 
 track chainNetDanRer3
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -441,7 +441,7 @@ html chainNet
         subTrack chainNetDanRer3Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer3
         html chainNet
 
@@ -455,14 +455,14 @@ html chainNet
         subTrack chainNetDanRer3Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer3 chainDanRer3
         html chainNet
 
 track chainNetDanRer2
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -492,7 +492,7 @@ html chainNet
         subTrack chainNetDanRer2Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer2
         html chainNet
 
@@ -506,14 +506,14 @@ html chainNet
         subTrack chainNetDanRer2Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer2 chainDanRer2
         html chainNet
 
 track chainNetDanRer1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -543,7 +543,7 @@ html chainNet
         subTrack chainNetDanRer1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer1
         html chainNet
 
@@ -557,14 +557,14 @@ html chainNet
         subTrack chainNetDanRer1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer1 chainDanRer1
         html chainNet
 
 track chainNetXenTro2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -594,7 +594,7 @@ html chainNet
         subTrack chainNetXenTro2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain xenTro2
         html chainNet
 
@@ -608,14 +608,14 @@ html chainNet
         subTrack chainNetXenTro2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign xenTro2 chainXenTro2
         html chainNet
 
 track chainNetXenTro1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -645,7 +645,7 @@ html chainNet
         subTrack chainNetXenTro1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain xenTro1
         html chainNet
 
@@ -659,14 +659,14 @@ html chainNet
         subTrack chainNetXenTro1Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign xenTro1 chainXenTro1
         html chainNet
 
 track chainNetOryLat2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -695,7 +695,7 @@ html chainNet
         subTrack chainNetOryLat2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain 
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryLat2
         otherDb oryLat2
         html chainNet
@@ -710,7 +710,7 @@ html chainNet
         subTrack chainNetOryLat2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oryLat2 chainOryLat2
         otherDb oryLat2
         html chainNet
@@ -720,7 +720,7 @@ track chainNetOryLat1
 release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -750,7 +750,7 @@ html chainNet
         subTrack chainNetOryLat1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain 
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryLat1
         otherDb oryLat1
         html chainNet
@@ -766,7 +766,7 @@ html chainNet
         subTrack chainNetOryLat1Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oryLat1 chainOryLat1
         otherDb oryLat1
         html chainNet
@@ -774,7 +774,7 @@ html chainNet
 track chainNetGasAcu1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -804,7 +804,7 @@ html chainNet
         subTrack chainNetGasAcu1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain gasAcu1
         html chainNet
 
@@ -818,14 +818,14 @@ html chainNet
         subTrack chainNetGasAcu1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign gasAcu1 chainGasAcu1
         html chainNet
 
 track chainNetGalGal3
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -855,7 +855,7 @@ html chainNet
         subTrack chainNetGalGal3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain galGal3
         html chainNet
 
@@ -869,14 +869,14 @@ html chainNet
         subTrack chainNetGalGal3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign galGal3 chainGalGal3
         html chainNet
 
 track chainNetGalGal2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -906,7 +906,7 @@ html chainNet
         subTrack chainNetGalGal2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain galGal2
         html chainNet
 
@@ -920,14 +920,14 @@ html chainNet
         subTrack chainNetGalGal2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign galGal2 chainGalGal2
         html chainNet
 
 track chainNetTaeGut1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -957,7 +957,7 @@ html chainNet
         subTrack chainNetTaeGut1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain taeGut1
         html chainNet
 
@@ -971,14 +971,14 @@ html chainNet
         subTrack chainNetTaeGut1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign taeGut1 chainTaeGut1
         html chainNet
 
 track chainNetOrnAna1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1008,7 +1008,7 @@ html chainNet
         subTrack chainNetOrnAna1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ornAna1
         html chainNet
 
@@ -1022,14 +1022,14 @@ html chainNet
         subTrack chainNetOrnAna1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ornAna1 chainOrnAna1
         html chainNet
 
 track chainNetAnoCar1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1059,7 +1059,7 @@ html chainNet
         subTrack chainNetAnoCar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain anoCar1
         html chainNet
 
@@ -1073,14 +1073,14 @@ html chainNet
         subTrack chainNetAnoCar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign anoCar1 chainAnoCar1
         html chainNet
 
 track chainNetPetMar1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1110,7 +1110,7 @@ html chainNet
         subTrack chainNetPetMar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain petMar1
         html chainNet
 
@@ -1124,14 +1124,14 @@ html chainNet
         subTrack chainNetPetMar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar1 chainPetMar1
         html chainNet
 
 track chainNetBraFlo1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1161,7 +1161,7 @@ html chainNet
         subTrack chainNetBraFlo1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain braFlo1
         html chainNet
 
@@ -1175,14 +1175,14 @@ html chainNet
         subTrack chainNetBraFlo1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign braFlo1 chainBraFlo1
         html chainNet
 
 track chainNetStrPur2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1212,7 +1212,7 @@ html chainNet
         subTrack chainNetStrPur2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain strPur2
         html chainNet
 
@@ -1226,14 +1226,14 @@ html chainNet
         subTrack chainNetStrPur2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign strPur2 chainStrPur2
         html chainNet
 
 track chainNetMacEug1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1258,7 +1258,7 @@ html chainNet
     subTrack chainNetMacEug1
     subGroups view=chain
     shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    longLabel $o_Organism ($o_date) Chained Alignments
     type chain macEug1
     html chainNet
 
@@ -1266,14 +1266,14 @@ html chainNet
     subTrack chainNetMacEug1
     subGroups view=net
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    longLabel $o_Organism ($o_date) Alignment Net
     type netAlign macEug1 chainMacEug1
     html chainNet
 
 track chainNetLoxAfr3
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1303,7 +1303,7 @@ html chainNet
         subTrack chainNetLoxAfr3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr3
         html chainNet
 
@@ -1317,14 +1317,14 @@ html chainNet
         subTrack chainNetLoxAfr3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr3 chainLoxAfr3
         html chainNet
 
 track chainNetLoxAfr2
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1354,7 +1354,7 @@ html chainNet
         subTrack chainNetLoxAfr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr2
         html chainNet
 
@@ -1368,14 +1368,14 @@ html chainNet
         subTrack chainNetLoxAfr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr2 chainLoxAfr2
         html chainNet
 
 track chainNetLoxAfr1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1405,7 +1405,7 @@ html chainNet
         subTrack chainNetLoxAfr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr1
         html chainNet
 
@@ -1419,14 +1419,14 @@ html chainNet
         subTrack chainNetLoxAfr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr1 chainLoxAfr1
         html chainNet
 
 track chainNetMonDom1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1456,7 +1456,7 @@ html chainNet
         subTrack chainNetMonDom1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain monDom1
         html chainNet
 
@@ -1470,14 +1470,14 @@ html chainNet
         subTrack chainNetMonDom1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign monDom1 chainMonDom1
         html chainNet
 
 track chainNetMonDom4
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1507,7 +1507,7 @@ html chainNet
         subTrack chainNetMonDom4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain monDom4
         html chainNet
 
@@ -1521,14 +1521,14 @@ html chainNet
         subTrack chainNetMonDom4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign monDom4 chainMonDom4
         html chainNet
 
 track chainNetMonDom5
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1558,7 +1558,7 @@ html chainNet
         subTrack chainNetMonDom5Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain monDom5
         html chainNet
 
@@ -1572,14 +1572,14 @@ html chainNet
         subTrack chainNetMonDom5Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign monDom5 chainMonDom5
         html chainNet
 
 track chainNetEriEur1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1609,7 +1609,7 @@ html chainNet
         subTrack chainNetEriEur1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain eriEur1
         html chainNet
 
@@ -1623,14 +1623,14 @@ html chainNet
         subTrack chainNetEriEur1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign eriEur1 chainEriEur1
         html chainNet
 
 track chainNetSorAra1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1660,7 +1660,7 @@ html chainNet
         subTrack chainNetSorAra1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain sorAra1
         html chainNet
 
@@ -1674,14 +1674,14 @@ html chainNet
         subTrack chainNetSorAra1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign sorAra1 chainSorAra1
         html chainNet
 
 track chainNetMm9
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1711,7 +1711,7 @@ html chainNet
         subTrack chainNetMm9Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm9
         html chainNet
 
@@ -1725,14 +1725,14 @@ html chainNet
         subTrack chainNetMm9Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm9 chainMm9
         html chainNet
 
 track chainNetMm8
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1762,7 +1762,7 @@ html chainNet
         subTrack chainNetMm8Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm8
         html chainNet
 
@@ -1776,14 +1776,14 @@ html chainNet
         subTrack chainNetMm8Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm8 chainMm8
         html chainNet
 
 track chainNetMm7
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1813,7 +1813,7 @@ html chainNet
         subTrack chainNetMm7Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm7
         html chainNet
 
@@ -1827,14 +1827,14 @@ html chainNet
         subTrack chainNetMm7Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm7 chainMm7
         html chainNet
 
 track chainNetMm6
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1864,7 +1864,7 @@ html chainNet
         subTrack chainNetMm6Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm6
         html chainNet
 
@@ -1878,7 +1878,7 @@ html chainNet
         subTrack chainNetMm6Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm6 chainMm6
         html chainNet
 
@@ -1886,7 +1886,7 @@ track chainNetMm5
 release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1912,7 +1912,7 @@ html chainNet
     subTrack chainNetMm5
     subGroups view=chain
     shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    longLabel $o_Organism ($o_date) Chained Alignments
     type chain mm5
     html chainNet
 
@@ -1921,14 +1921,14 @@ html chainNet
     subTrack chainNetMm5
     subGroups view=net
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    longLabel $o_Organism ($o_date) Alignment Net
     type netAlign mm5 chainMm5
     html chainNet
 
 track chainNetRn4
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -1958,7 +1958,7 @@ html chainNet
         subTrack chainNetRn4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn4
         html chainNet
 
@@ -1972,14 +1972,14 @@ html chainNet
         subTrack chainNetRn4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn4 chainRn4
         html chainNet
 
 track chainNetRn3
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2009,7 +2009,7 @@ html chainNet
         subTrack chainNetRn3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn3
         html chainNet
 
@@ -2023,14 +2023,14 @@ html chainNet
         subTrack chainNetRn3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn3 chainRn3
         html chainNet
 
 track chainNetCavPor3
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2060,7 +2060,7 @@ html chainNet
         subTrack chainNetCavPor3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain cavPor3
         html chainNet
 
@@ -2074,7 +2074,7 @@ html chainNet
         subTrack chainNetCavPor3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cavPor3 chainCavPor3
         html chainNet
 
@@ -2083,7 +2083,7 @@ track chainNetCavPor2
 release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2114,7 +2114,7 @@ html chainNet
         subTrack chainNetCavPor2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain cavPor2
         html chainNet
 
@@ -2129,14 +2129,14 @@ html chainNet
         subTrack chainNetCavPor2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cavPor2 chainCavPor2
         html chainNet
 
 track chainNetOryCun2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2166,7 +2166,7 @@ html chainNet
         subTrack chainNetOryCun2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryCun2
         html chainNet
 
@@ -2180,14 +2180,14 @@ html chainNet
         subTrack chainNetOryCun2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oryCun2 chainOryCun2
         html chainNet
 
 track chainNetOryCun1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2217,7 +2217,7 @@ html chainNet
         subTrack chainNetOryCun1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryCun1
         html chainNet
 
@@ -2231,14 +2231,14 @@ html chainNet
         subTrack chainNetOryCun1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oryCun1 chainOryCun1
         html chainNet
 
 track chainNetEquCab2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2268,7 +2268,7 @@ html chainNet
         subTrack chainNetEquCab2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain equCab2
         html chainNet
 
@@ -2282,14 +2282,14 @@ html chainNet
         subTrack chainNetEquCab2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign equCab2 chainEquCab2
         html chainNet
 
 track chainNetEquCab1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2319,7 +2319,7 @@ html chainNet
         subTrack chainNetEquCab1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain equCab1
         html chainNet
 
@@ -2333,14 +2333,14 @@ html chainNet
         subTrack chainNetEquCab1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign equCab1 chainEquCab1
         html chainNet
 
 track chainNetEchTel1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2370,7 +2370,7 @@ html chainNet
         subTrack chainNetEchTel1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain echTel1
         html chainNet
 
@@ -2384,14 +2384,14 @@ html chainNet
         subTrack chainNetEchTel1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign echTel1 chainEchTel1
         html chainNet
 
 track chainNetDasNov2
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2421,7 +2421,7 @@ html chainNet
         subTrack chainNetDasNov2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain dasNov2
         html chainNet
 
@@ -2435,14 +2435,14 @@ html chainNet
         subTrack chainNetDasNov2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dasNov2 chainDasNov2
         html chainNet
 
 track chainNetDasNov1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2472,7 +2472,7 @@ html chainNet
         subTrack chainNetDasNov1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain dasNov1
         html chainNet
 
@@ -2486,14 +2486,14 @@ html chainNet
         subTrack chainNetDasNov1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dasNov1 chainDasNov1
         html chainNet
 
 track chainNetSusScr1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2523,7 +2523,7 @@ html chainNet
         subTrack chainNetSusScr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain susScr1
         html chainNet
 
@@ -2537,14 +2537,14 @@ html chainNet
         subTrack chainNetSusScr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign susScr1 chainSusScr1
         html chainNet
 
 track chainNetBosTau4
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2574,7 +2574,7 @@ html chainNet
         subTrack chainNetBosTau4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau4
         html chainNet
 
@@ -2588,14 +2588,14 @@ html chainNet
         subTrack chainNetBosTau4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau4 chainBosTau4
         html chainNet
 
 track chainNetBosTau3
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2625,7 +2625,7 @@ html chainNet
         subTrack chainNetBosTau3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau3
         html chainNet
 
@@ -2639,14 +2639,14 @@ html chainNet
         subTrack chainNetBosTau3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau3 chainBosTau3
         html chainNet
 
 track chainNetBosTau2
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2676,7 +2676,7 @@ html chainNet
         subTrack chainNetBosTau2Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau2
         html chainNet
 
@@ -2690,14 +2690,14 @@ html chainNet
         subTrack chainNetBosTau2Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau2 chainBosTau2
         html chainNet
 
 track chainNetBosTau1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2727,7 +2727,7 @@ html chainNet
         subTrack chainNetBosTau1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau1
         html chainNet
 
@@ -2741,14 +2741,14 @@ html chainNet
         subTrack chainNetBosTau1Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau1 chainBosTau1
         html chainNet
 
 track chainNetAilMel1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2778,7 +2778,7 @@ html chainNet
         subTrack chainNetAilMel1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ailMel1
         html chainNet
 
@@ -2792,14 +2792,14 @@ html chainNet
         subTrack chainNetAilMel1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ailMel1 chainAilMel1
         html chainNet
 
 track chainNetCanFam2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2829,7 +2829,7 @@ html chainNet
         subTrack chainNetCanFam2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFam2
         html chainNet
 
@@ -2843,14 +2843,14 @@ html chainNet
         subTrack chainNetCanFam2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam2 chainCanFam2
         html chainNet
 
 track chainNetFelCat3
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2880,7 +2880,7 @@ html chainNet
         subTrack chainNetFelCat3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain felCat3
         html chainNet
 
@@ -2894,14 +2894,14 @@ html chainNet
         subTrack chainNetFelCat3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat3 chainFelCat3
         html chainNet
 
 track chainNetMicMur1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2930,7 +2930,7 @@ html chainNet
         subTrack chainNetMicMur1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain MicMur1
         html chainNet
 
@@ -2944,14 +2944,14 @@ html chainNet
         subTrack chainNetMicMur1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign MicMur1 chainMicMur1
         html chainNet
 
 track chainNetTarSyr1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2980,7 +2980,7 @@ html chainNet
         subTrack chainNetTarSyr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain tarSyr1
         html chainNet
 
@@ -2994,7 +2994,7 @@ html chainNet
         subTrack chainNetTarSyr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign tarSyr1 chainTarSyr1
         html chainNet
 
@@ -3024,7 +3024,7 @@ sortOrder view=+
         subTrack chainNetVenterViewchain off
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         color 0,0,0
         altColor 100,50,0
         matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -3042,14 +3042,14 @@ sortOrder view=+
         subTrack chainNetVenterViewnet off
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign venter1 chainVenter1
         otherDb venter1
 
 track chainNetHg18
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3078,7 +3078,7 @@ html chainNet
         subTrack chainNetHg18Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg18
         html chainNet
 
@@ -3092,14 +3092,14 @@ html chainNet
         subTrack chainNetHg18Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign hg18 chainHg18
         html chainNet
 
 track chainNetHg19
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3128,7 +3128,7 @@ html chainNet
         subTrack chainNetHg19Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg19
         html chainNet
 
@@ -3142,14 +3142,14 @@ html chainNet
         subTrack chainNetHg19Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign hg19 chainHg19
         html chainNet
 
 track chainNetHg17
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3178,7 +3178,7 @@ html chainNet
         subTrack chainNetHg17Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg17
         html chainNet
 
@@ -3192,14 +3192,14 @@ html chainNet
         subTrack chainNetHg17Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign hg17 chainHg17
         html chainNet
 
 track chainNetPanTro2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3228,7 +3228,7 @@ html chainNet
         subTrack chainNetPanTro2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain panTro2
         html chainNet
 
@@ -3242,14 +3242,14 @@ html chainNet
         subTrack chainNetPanTro2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign panTro2 chainPanTro2
         html chainNet
 
 track chainNetPanTro1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3278,7 +3278,7 @@ html chainNet
         subTrack chainNetPanTro1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain panTro1
         html chainNet
 
@@ -3292,14 +3292,14 @@ html chainNet
         subTrack chainNetPanTro1Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign panTro1 chainPanTro1
         html chainNet
 
 track chainNetGorGor2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3328,7 +3328,7 @@ html chainNet
         subTrack chainNetGorGor2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain gorGor2
         html chainNet
 
@@ -3342,14 +3342,14 @@ html chainNet
         subTrack chainNetGorGor2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign gorGor2 chainGorGor2
         html chainNet
 
 track chainNetGorGor1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3378,7 +3378,7 @@ html chainNet
         subTrack chainNetGorGor1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain gorGor1
         html chainNet
 
@@ -3392,14 +3392,14 @@ html chainNet
         subTrack chainNetGorGor1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign gorGor1 chainGorGor1
         html chainNet
 
 track chainNetPonAbe2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3428,7 +3428,7 @@ html chainNet
         subTrack chainNetPonAbe2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ponAbe2
         html chainNet
 
@@ -3442,14 +3442,14 @@ html chainNet
         subTrack chainNetPonAbe2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign ponAbe2 chainPonAbe2
         html chainNet
 
 track chainNetTupBel1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3478,7 +3478,7 @@ html chainNet
         subTrack chainNetTupBel1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain tupBel1
         html chainNet
 
@@ -3492,14 +3492,14 @@ html chainNet
         subTrack chainNetTupBel1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign tupBel1 chainTupBel1
         html chainNet
 
 track chainNetOtoGar1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3528,7 +3528,7 @@ html chainNet
         subTrack chainNetOtoGar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain otoGar1
         html chainNet
 
@@ -3542,14 +3542,14 @@ html chainNet
         subTrack chainNetOtoGar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign otoGar1 chainOtoGar1
         html chainNet
 
 track chainNetCalJac3
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3578,7 +3578,7 @@ html chainNet
         subTrack chainNetCalJac3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain calJac3
         html chainNet
 
@@ -3592,14 +3592,14 @@ html chainNet
         subTrack chainNetCalJac3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign calJac3 chainCalJac3
         html chainNet
 
 track chainNetCalJac1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3628,7 +3628,7 @@ html chainNet
         subTrack chainNetCalJac1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain calJac1
         html chainNet
 
@@ -3642,14 +3642,14 @@ html chainNet
         subTrack chainNetCalJac1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign calJac1 chainCalJac1
         html chainNet
 
 track chainNetPapHam1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3678,7 +3678,7 @@ html chainNet
         subTrack chainNetPapHam1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain papHam1
         html chainNet
 
@@ -3692,14 +3692,14 @@ html chainNet
         subTrack chainNetPapHam1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign papHam1 chainPapHam1
         html chainNet
 
 track chainNetRheMac2
 compositeTrack on
 shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3728,7 +3728,7 @@ html chainNet
         subTrack chainNetRheMac2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rheMac2
         html chainNet
 
@@ -3742,14 +3742,14 @@ html chainNet
         subTrack chainNetRheMac2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign rheMac2 chainRheMac2
         html chainNet
 
 track chainNetRheMac1
 compositeTrack on
 shortLabel $o_db Chain/Net
-longLabel $o_Organism ($o_date/$o_db), Chain and Net Alignments
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3778,7 +3778,7 @@ html chainNet
         subTrack chainNetRheMac1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rheMac1
         html chainNet
 
@@ -3792,7 +3792,7 @@ html chainNet
         subTrack chainNetRheMac1Viewnet
         subGroups view=net
         shortLabel $o_db Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment net
+        longLabel $o_Organism ($o_date) Alignment net
         type netAlign rheMac1 chainRheMac1
         html chainNet
 
@@ -3822,7 +3822,7 @@ sortOrder view=+
         subTrack chainNetPoodleViewchain off
         subGroups view=chain
         shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         color 0,0,0
         altColor 100,50,0
         matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -3840,7 +3840,7 @@ sortOrder view=+
         subTrack chainNetPoodleViewnet off
         subGroups view=net
         shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date/$o_db) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFamPoodle1 chainCanFamPoodle1
         otherDb canFamPoodle1
 

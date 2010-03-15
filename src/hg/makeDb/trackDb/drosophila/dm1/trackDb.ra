@@ -154,7 +154,7 @@ priority 106.02
 
 track anophelesEcores
 shortLabel Anopheles Ecores
-longLabel $Organism/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel $Organism/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
 priority 132.05
 visibility dense

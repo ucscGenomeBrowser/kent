@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.68 2010/02/16 23:39:40 kent Exp $";
+#	"$Id: trackDb.ra,v 1.69 2010/03/15 21:42:30 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -97,7 +97,7 @@ type altGraphX
 
 track chainHg18WM
 shortLabel Hg18 Chain WM
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments - Window Masker masked
+longLabel $o_Organism ($o_date) Chained Alignments - Window Masker masked
 group x
 priority 259
 visibility hide
@@ -111,7 +111,7 @@ otherDb hg18
 
 track netHg18WM
 shortLabel Hg18 Net WM
-longLabel $o_Organism ($o_date/$o_db) Alignment Net - Window Masker masked
+longLabel $o_Organism ($o_date) Alignment Net - Window Masker masked
 group x
 priority 259.1
 visibility hide

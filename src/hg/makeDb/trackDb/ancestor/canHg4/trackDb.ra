@@ -113,7 +113,7 @@ priority 134
 track chainRheMac1
 shortLabel Macaque Chain 
 # subTrack chains
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 135
 visibility dense
@@ -134,11 +134,11 @@ priority 137
 visibility dense
 
 track chainBosTau1 override
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date) Chained Blastz Alignments
 priority 138
 
 track chainCanFam1 override
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date) Chained Blastz Alignments
 priority 139
 
 track netHg17 override
@@ -147,7 +147,7 @@ priority 134
 
 track netSyntenyHg17
 shortLabel Human Synteny
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 135
 visibility hide

@@ -1,7 +1,7 @@
 
 track chainMm9Blastz
 shortLabel Mm9 Blastz Chain
-longLabel Mm9 Blastz ($o_date/$o_db) Chained Alignments
+longLabel Mm9 Blastz ($o_date) Chained Alignments
 group compGeno
 priority 279.9
 visibility hide
@@ -15,7 +15,7 @@ otherDb mm9
 
 track netMm9Blastz
 shortLabel Mm9 Blastz Net
-longLabel Mm9 Blastz Net ($o_date/$o_db) Alignment Net
+longLabel Mm9 Blastz Net ($o_date) Alignment Net
 group compGeno
 priority 279.91
 visibility hide

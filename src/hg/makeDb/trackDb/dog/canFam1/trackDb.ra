@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.40 2010/02/09 02:16:10 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.41 2010/03/15 21:42:25 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -99,7 +99,7 @@ type psl xeno
  
 track netSyntenyMm5
 shortLabel Mouse Synteny
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 124.2
 visibility hide
@@ -110,7 +110,7 @@ otherDb mm5
 
 track netSyntenyHg17
 shortLabel Human Synteny
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 127
 visibility hide

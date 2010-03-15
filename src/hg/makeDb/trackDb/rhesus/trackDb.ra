@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.23 2010/02/05 07:42:05 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.24 2010/03/15 21:42:31 ann Exp $";
 
 include trackDb.chainNet.ra
 
@@ -33,7 +33,7 @@ indelPolyA on
 
 track netSyntenyCanFam2
 shortLabel $o_Organism Syn Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
 group compGeno
 priority 230.1
 visibility hide
