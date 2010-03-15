@@ -1,5 +1,7 @@
 # Fields (columns) in ENCODE metadata files (DAF and DDF)
-# file should be "dafHeader", "viewList" or "ddf"
+# file should be "dafHeader", "dafList" or "ddf"
+
+# DDF fields
 
 field files
 file ddf
@@ -61,6 +63,8 @@ file ddf
 type string
 required no
 
+# required DAF header fields
+
 field dafVersion
 file dafHeader
 type string
@@ -85,6 +89,22 @@ field dataType
 file dafHeader
 type string
 required yes
+
+field validationSettings
+file dafHeader
+type string
+required yes
+
+# In v.1, composite name was: wgEncode<lab><dataType>
+# In v.2, composite name is: enc<compositeNameSuffix>
+# Generally, composites should still include lab and dataType
+
+field compositeSuffix
+file dafHeader
+type string
+required yes
+
+# optional DAF header fields
 
 field variables
 file dafHeader
@@ -111,15 +131,17 @@ file dafHeader
 type int
 required no
 
-field validationSettings
-file dafHeader
-type string
-required yes
-
 field group
 file dafHeader
 type string
 required no
+
+field noAutoCreate
+file dafHeader
+type bool
+required no
+
+# DAF list fields
 
 field longLabelPrefix
 file dafList
@@ -149,11 +171,6 @@ required yes
 field order
 file dafList
 type int
-required no
-
-field noAutoCreate
-file dafHeader
-type bool
 required no
 
 field downloadOnly
