@@ -97,6 +97,8 @@ def main(argv=None):
         help="the name of the composite track by default this is the name of the current directory", metavar="N")
     parser.add_option("-n", "--name", dest="name",
         help="the English name of track", metavar="N", default="Untitled")
+    parser.add_option("--files", dest="files_path", help="dump list of new files to F", metavar="F")
+    parser.add_option("--tables", dest="tables_path", help="dump list of new tablesto F", metavar="F")
 
     global options
     (options, args) = parser.parse_args()
@@ -160,7 +162,7 @@ def main(argv=None):
             unchanged_tables_list.append(name)
             unchanged_files_list.append(f)
             unchanged_wibs_list.append(wib_path)
-        elif type == "narrowPeak":
+        elif type == "narrowPeak" or type.startswith("bedGraph"):
             if not table_exists(database, name):
                 raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
             unchanged_tables_list.append(name)
@@ -184,7 +186,7 @@ def main(argv=None):
             removed_tables_list.append(name)
             removed_files_list.append(f)
             removed_wibs_list.append(wib_path)
-        elif type == "narrowPeak":
+        elif type == "narrowPeak" or type.startswith("bedGraph"):
             if not table_exists(database, name):
                 raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
             removed_tables_list.append(name)
@@ -208,7 +210,7 @@ def main(argv=None):
             new_tables_list.append(name)
             new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
             new_wibs_list.append(wib_path)
-        elif type == "narrowPeak":
+        elif type == "narrowPeak" or type.startswith("bedGraph"):
             if not table_exists(database, name):
                 raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
             new_tables_list.append(name)
@@ -231,8 +233,29 @@ def main(argv=None):
         print >>sys.stderr, "  new files: %d" % len(new_files_list)
         print >>sys.stderr, "  new wibs: %d" % len(new_wibs_list)
 
+    # if asked, save the list of new files
+    if options.files_path:
+        new_files_file = open(options.files_path, "w")
+        new_files_list.sort()
+        for i in new_files_list:
+            print >>new_files_file, i
+        print >>new_files_file
+        new_wibs_list.sort()
+        for i in new_wibs_list:
+            print >>new_files_file, i
+        new_files_file.close()
+
+    # if asked, generate list of new tables
+    if options.tables_path:
+        new_tables_file = open(options.tables_path, "w")
+        new_tables_list.sort()
+        for i in new_tables_list:
+            print >>new_tables_file, i
+        print >>new_tables_file
+        new_tables_file.close()
+
     # generate the header
-    print "# Generated with %s %s" % (os.path.basename(sys.argv[0]), options.get_version())
+    print "# generated with %s" % parser.get_version()
     print "This is a %s of the \"%s\"" % (current_release_dir, options.name)
     print "The composite track is %s" % options.track_name
     print """
@@ -248,22 +271,23 @@ D) Additional items of note
     print "A) Untouched Tables (%d):" % len(unchanged_tables_list)
     unchanged_tables_list.sort()
     for i in unchanged_tables_list:
-        print "    %s" %i
+        print i
+    print
 
     print "A') Untouched Files (%d downloadables, %d wibs):" % (len(unchanged_files_list),
                                                            len(unchanged_wibs_list))
-    print "   current location on alpha:"
-    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
-    print "   on RR:"
-    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print "    current location on alpha:"
+    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "    on RR:"
+    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
     print
     unchanged_files_list.sort()
     for i in unchanged_files_list:
-        print "    %s" %i
+        print i
     print
     unchanged_wibs_list.sort()
     for i in unchanged_wibs_list:
-        print "    %s" %i
+        print i
 
     print
 
@@ -271,25 +295,26 @@ D) Additional items of note
     print "B) Deprecated tables (%d):" % len(removed_tables_list)
     removed_tables_list.sort()
     for i in removed_tables_list:
-        print "    %s" %i
+        print i
+    print
 
     print "B') Deprecated files (%d downloadables, %d wibs):" %(len(removed_files_list),
                                                                 len(removed_wibs_list))
-    print "   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
-    print "   This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
-    print "   current location on alpha:"
-    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, prev_release_dir)
-    print "   on RR:"
-    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print "    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
+    print "    This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
+    print "    current location on alpha:"
+    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, prev_release_dir)
+    print "    on RR:"
+    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
     print
 
     removed_files_list.sort()
     for i in removed_files_list:
-        print "    %s" %i
+        print i
     print
     removed_wibs_list.sort()
     for i in removed_wibs_list:
-        print "    %s" %i
+        print i
 
     print
 
@@ -297,35 +322,36 @@ D) Additional items of note
     print "C) New tables (%d):" % len(new_tables_list)
     new_tables_list.sort()
     for i in new_tables_list:
-        print "    %s" %i
+        print i
+    print
 
     print "C') New files (%d downloadables, %d wibs):" % (len(new_files_list),
                                                          len(new_wibs_list))
-    print "   current location on alpha:"
-    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
-    print "   NOT on RR but must be placed in:"
-    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print "    current location on alpha:"
+    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "    NOT on RR but must be placed in:"
+    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
     print
 
     new_files_list.sort()
     for i in new_files_list:
-        print "    %s" %i
+        print i
     print
     new_wibs_list.sort()
     for i in new_wibs_list:
-        print "    %s" %i
+        print i
 
     print
 
     print "D) Additional items:"
-    print "   current location on alpha:"
-    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
-    print "   should be placed on the RR in (overwritting any existing copy):"
-    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print "    current location on alpha:"
+    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "    should be placed on the RR in (overwritting any existing copy):"
+    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
     print
-    print "    index.html"
-    print "    files.txt"
-    print "    md5sum.txt"
+    print "index.html"
+    print "files.txt"
+    print "md5sum.txt"
 
 #### Module ####################################################################
 
