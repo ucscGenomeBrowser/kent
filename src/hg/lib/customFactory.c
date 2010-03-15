@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.116 2010/02/10 20:28:05 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.117 2010/03/15 20:49:42 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1476,7 +1476,7 @@ static struct customTrack *bigWigLoader(struct customFactory *fac,
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
-    errAbort("Missing bigDataUrl setting from track of type=bigWig");
+    errAbort("Missing bigDataUrl setting from track of type=bigWig.  Please check for case and spelling and that there is no new-line between the 'track' and the 'bigDataUrl' if you think the bigDataUrl is there.");
 
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
