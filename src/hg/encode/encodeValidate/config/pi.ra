@@ -2,139 +2,140 @@ lab	Broad
 pi	Bernstein
 grant	Bernstein
 project Broad
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	Caltech
 pi      Wold
 grant   Myers
 project HudsonAlpha
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	Cshl
 pi      Gingeras
 grant   Gingeras
 project Transcriptome
 label   CSHL
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	Duke
 pi      Crawford
 grant   Crawford
 project Duke
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	Gis
 pi      Ruan
 grant   Gingeras
 project Transcriptome
 label   GIS
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	Helicos
 pi      Kapranov
 grant   Gingeras
 project Transcriptome
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	HudsonAlpha
 pi      Myers
 grant   Myers
 project HudsonAlpha
+wranglerEmail   tdreszer@soe.ucsc.edu
 
-lab	NHGRI
+lab	NHGRI-Elnitski
 pi      Elnitski
 grant   Elnitski
 project NHGRI-Elnitski
+wranglerEmail   tdreszer@soe.ucsc.edu
 
-# primary
 lab	NHGRI-Margulies
 pi      Margulies
 grant   Margulies
 project NHGRI-Margulies
-
-# synonym
-lab	Margulies
-pi      Margulies
-grant   Margulies
-project NHGRI-Margulies
-label	NHGRI-Margulies
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab     Riken
 pi      Carninci
 grant   Gingeras
 project Transcriptome
 label   RIKEN
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	Sanger
 pi      Hubbard
 grant   Hubbard
 project Gencode
 label   Gencode
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	SunyAlbany
 pi      Tenenbaum
 grant   Tenenbaum
 project SUNY
+wranglerEmail   braney@soe.ucsc.edu
 
-# primary
 lab	UMass-Dekker
 pi      Dekker
 grant   Dekker
 project UMass-Dekker
-
-lab	UMassDekker
-pi      Dekker
-grant   Dekker
-project UMass-Dekker
-label   UMass-Dekker
+wranglerEmail   kate@soe.ucsc.edu
 
 lab	UMassHA
 pi      Weng
 grant   Weng
 project UMass-Weng
 label   UMass-Weng
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	UNC
 pi      Lieb
 grant   Crawford
 project Duke
+wranglerEmail   tdreszer@soe.ucsc.edu
 
-# primary
 lab	UT-A
 pi      Iyer
 grant   Crawford
 project Duke
-
-lab	UT-Austin
-pi      Iyer
-grant   Crawford
-project Duke
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab     Uw
 pi      Stam
 grant   Stam
 project UW
 label   UW
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	Stanford
 pi      Snyder
 grant   Snyder
 project Yale
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	Yale
 pi      Snyder
 grant   Snyder
 project Yale
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	Harvard
 pi      Weissman
 grant   Snyder
 project Yale
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	UCD
 pi      Farnham
 grant   Snyder
 project Yale
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	Affy
 pi	Gingeras
 grant	Gingeras
 project	Transcriptome
 label   Affymetrix
+wranglerEmail   braney@soe.ucsc.edu
 
 # Mouse and ARRA grants
 
@@ -142,19 +143,39 @@ lab	Caltech-Mouse
 pi	Wold
 grant	Hardison
 project	PSU
+wranglerEmail   braney@soe.ucsc.edu
 
 lab	UNC-Giddings
 pi	Giddings
 grant	Giddings
 project	UNC
+wranglerEmail   cline@soe.ucsc.edu
 
 lab	UChicago
 pi	White
 grant	White
 project	UChicago
+wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab	LICR
 pi	Ren
 grant	Ren
 project	LICR
+wranglerEmail   tdreszer@soe.ucsc.edu
+
+# New Production grant
+
+lab     BU
+pi      Tullius
+grant   Tullius
+project Orchid
+wranglerEmail   braney@soe.ucsc.edu
+
+# Tech development
+
+lab     GIS-Chia
+pi      Ruan
+grant   Ruan
+project Chia
+wranglerEmail   kent@soe.ucsc.edu
 
