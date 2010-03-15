@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.117 2010/03/15 20:49:42 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.118 2010/03/15 21:32:49 angie Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1570,31 +1570,30 @@ static struct customTrack *bamLoader(struct customFactory *fac, struct hash *chr
 {
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+struct dyString *dyErr = dyStringNew(0);
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bam (%s)", track->tdb->shortLabel);
 if (doExtraChecking)
     {
-    
     /* protect against temporary network error */
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
 	if (!bamFileExists(bigDataUrl))
 	    {
-	    char errMsg[1024];
-            safef(errMsg, sizeof(errMsg), "Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
-		 track->tdb->shortLabel, bigDataUrl, bigDataUrl);
-	    track->networkErrMsg = cloneString(errMsg);
+            dyStringPrintf(dyErr,
+		       "Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
+			   track->tdb->shortLabel, bigDataUrl, bigDataUrl);
 	    }
 	}
     errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	{
-	track->networkErrMsg = cloneString(errCatch->message->string);
-	}
+    if (isNotEmpty(errCatch->message->string))
+	dyStringPrintf(dyErr, ": %s", errCatch->message->string);
     errCatchFree(&errCatch);
     
     }
+if (isNotEmpty(dyErr->string))
+    track->networkErrMsg = dyStringCannibalize(&dyErr);
 return track;
 }
 
