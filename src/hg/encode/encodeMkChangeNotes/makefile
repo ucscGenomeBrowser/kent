@@ -1,0 +1,20 @@
+# Build encode loader
+
+include ../../../inc/common.mk
+
+SCRIPT_FILES = \
+	encodeMkChangeNotes
+
+all:
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
+
+alpha: scripts
+
+install: 
+	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts
+
+scripts:
+	@for F in ${SCRIPT_FILES}; do \
+	    chmod +x $$F; \
+            cp -upv $$F ${SCRIPTS}; \
+	done

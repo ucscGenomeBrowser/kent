@@ -1,0 +1,333 @@
+#!/bin/env python
+
+import sys
+import optparse
+import os
+import re
+import subprocess
+import md5
+
+# NOTES:
+#   fullpath name to ALL files
+#
+
+#### Classes ###################################################################
+
+#### Functions #################################################################
+
+def get_file_set(path, regexp):
+    """return a set of the files in the path matching a regexp"""
+    expression = re.compile(regexp)
+    file_set = set()
+    for file in os.listdir(path):
+        if expression.match(file):
+            file_set.add(file)
+    return file_set
+
+def table_exists(database, table):
+    """check if a table exists in a database"""
+    if "\"" in table:
+        raise ValueError, "table name contains a \""
+    command = "hgsql %s -e \"DESC %s;\"" % (database, table)
+    proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE,stderr=subprocess.PIPE)
+    proc.communicate()
+    status_code = proc.returncode;
+    return status_code == 0
+
+def parse_version(name):
+    """parse out a the version in name like tableNameV4"""
+    expression = re.compile("(.*)V([0-9]+)$")
+    match = expression.match(name)
+    if match == None:
+        return name, 1
+    else:
+        return match.group(1), int(match.group(2))
+
+def prev_version(name, version):
+    """return the prev version of a name/version pair"""
+    if version == 1:
+        raise ValueError, "there is no previous version of table %s" % name
+    else:
+        return "%sV%d" % (name, version - 1)
+
+def next_version(name, version):
+    """return the next version of a name/version pair"""
+    return "%sV%d" % (name, version + 1)
+
+def get_wib_pathname(database, table_name):
+    """extract the wib pathaname of a wiggle table"""
+    query = "SELECT file FROM %s LIMIT 1;" % table_name
+    command = "hgsql %s --skip-column-names -e \"%s;\"" % (database, query)
+    proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
+                                                 stdin=subprocess.PIPE,
+                                                 stderr=subprocess.PIPE)
+    name = proc.communicate()[0].rstrip()
+    status_code = proc.returncode;
+    if status_code == 0:
+        return name
+    else:
+        return None
+
+def same_file(x, y):
+    """checks if two files are the same with various definitions of same"""
+    if os.path.samefile(x, y):
+        return True     # same inode
+    else:
+        if os.path.getsize(x) != os.path.getsize(y):
+            return False    # different sizes
+        else:   # now check md5s of the two files
+            md5_x = md5.new()
+            md5_x.update(open(x).read())
+            md5_y = md5.new()
+            md5_y.update(open(y).read())
+            return md5_x.digest() == md5_y.digest()
+
+#### Main ######################################################################
+
+def main(argv=None):
+    """ Generate a human readable file describing the changes between two
+        releases of an ENCODE track.
+    """
+    if argv is None: argv = sys.argv
+    # parse the args
+    parser = optparse.OptionParser(usage="Usage: %prog [options] database current_release prev_release",
+        version="%prog 0.9")
+    parser.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False)
+    parser.add_option("-t", "--track-name", dest="track_name",
+        help="the name of the composite track by default this is the name of the current directory", metavar="N")
+    parser.add_option("-n", "--name", dest="name",
+        help="the English name of track", metavar="N", default="Untitled")
+
+    global options
+    (options, args) = parser.parse_args()
+
+    # output a usage message
+    if len(args) != 3:
+        parser.print_help()
+        sys.exit(10)
+
+    if options.track_name == None:
+        options.track_name = os.path.basename(os.getcwd())
+
+    # get the positional args
+    database = args[0]
+    current_release_dir = args[1]
+    prev_release_dir = args[2]
+
+    # generate the list of files
+    current_files = get_file_set(current_release_dir, ".*\.gz$")
+    if prev_release_dir == "-":
+        prev_files = set()
+    else:
+        prev_files = get_file_set(prev_release_dir, ".*\.gz$")
+
+    # form the three derived sets
+    removed_files = prev_files - current_files
+    unchanged_files = current_files & prev_files
+    new_files = current_files - prev_files
+
+    # the list of files that we'll be printing
+    unchanged_tables_list = []
+    unchanged_files_list  = []
+    unchanged_wibs_list  = []
+    removed_tables_list = []
+    removed_files_list  = []
+    removed_wibs_list  = []
+    new_tables_list = []
+    new_files_list  = []
+    new_wibs_list  = []
+
+    # process the list of unchanged files
+    for f in unchanged_files:
+        name, type, extension = f.split(".")
+        assert extension == "gz"
+
+        # we don't deal with revisions yet
+        stem, version = parse_version(name)
+        if next_version(stem, version) in new_files:
+            raise ValueError, "Unimplemented: newer version of %s found, can't deal with this yet" % name
+        # check to make sure the files are really the same
+        if not same_file(os.path.join(current_release_dir, f), os.path.join(prev_release_dir, f)):
+            raise ValueError, "file %s in %s and %s don't appear to be the same" \
+                % (name, current_release_dir, prev_release_dir)
+
+        if type == "wig":
+            wib_path = get_wib_pathname(database, name)
+            if not os.path.exists(wib_path):
+                raise ValueError, "could not find %s wib file for wig %s" % (wib_path, f)
+            if not table_exists(database, name):
+                raise ValueError, "table %s does not exist, from filetype %s" % (name, type)
+            unchanged_tables_list.append(name)
+            unchanged_files_list.append(f)
+            unchanged_wibs_list.append(wib_path)
+        elif type == "narrowPeak":
+            if not table_exists(database, name):
+                raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
+            unchanged_tables_list.append(name)
+            unchanged_files_list.append(f)
+        elif type == "tagAlign" or type == "fastq":
+            unchanged_files_list.append(f)
+        else:
+            raise ValueError, "unknown type %s" % type
+
+    # process the list of removed files
+    for f in removed_files:
+        name, type, extension = f.split(".")
+        assert extension == "gz"
+
+        if type == "wig":
+            wib_path = get_wib_pathname(database, name)
+            if not os.path.exists(wib_path):
+                raise ValueError, "could not find %s wib file for wig %s" % (wib_path, f)
+            if not table_exists(database, name):
+                raise ValueError, "table %s does not exist, from filetype %s" % (name, type)
+            removed_tables_list.append(name)
+            removed_files_list.append(f)
+            removed_wibs_list.append(wib_path)
+        elif type == "narrowPeak":
+            if not table_exists(database, name):
+                raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
+            removed_tables_list.append(name)
+            removed_files_list.append(f)
+        elif type == "tagAlign" or type == "fastq":
+            removed_files_list.append(f)
+        else:
+            raise ValueError, "unknown type %s" % type
+
+    # process the list of new files
+    for f in new_files:
+        name, type, extension = f.split(".")
+        assert extension == "gz"
+
+        if type == "wig":
+            wib_path = get_wib_pathname(database, name)
+            if not os.path.exists(wib_path):
+                raise ValueError, "could not find %s wib file for wig %s" % (wib_path, f)
+            if not table_exists(database, name):
+                raise ValueError, "table %s does not exist, from filetype %s" % (name, type)
+            new_tables_list.append(name)
+            new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
+            new_wibs_list.append(wib_path)
+        elif type == "narrowPeak":
+            if not table_exists(database, name):
+                raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
+            new_tables_list.append(name)
+            new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
+        elif type == "tagAlign" or type == "fastq":
+            new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
+        else:
+            raise ValueError, "unknown type %s" % type
+
+    # output some basic stats
+    if options.verbose:
+        print >>sys.stderr, "Counts:"
+        print >>sys.stderr, "  unchanged tables: %d" % len(unchanged_tables_list)
+        print >>sys.stderr, "  unchanged files: %d" % len(unchanged_files_list)
+        print >>sys.stderr, "  unchanged wibs: %d" % len(unchanged_wibs_list)
+        print >>sys.stderr, "  removed tables: %d" % len(removed_tables_list)
+        print >>sys.stderr, "  removed files: %d" % len(removed_files_list)
+        print >>sys.stderr, "  removed wibs: %d" % len(removed_wibs_list)
+        print >>sys.stderr, "  new tables: %d" % len(new_tables_list)
+        print >>sys.stderr, "  new files: %d" % len(new_files_list)
+        print >>sys.stderr, "  new wibs: %d" % len(new_wibs_list)
+
+    # generate the header
+    print "# Generated with %s %s" % (os.path.basename(sys.argv[0]), options.get_version())
+    print "This is a %s of the \"%s\"" % (current_release_dir, options.name)
+    print "The composite track is %s" % options.track_name
+    print """
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+"""
+    # untouched list
+    print "A) Untouched Tables (%d):" % len(unchanged_tables_list)
+    unchanged_tables_list.sort()
+    for i in unchanged_tables_list:
+        print "    %s" %i
+
+    print "A') Untouched Files (%d downloadables, %d wibs):" % (len(unchanged_files_list),
+                                                           len(unchanged_wibs_list))
+    print "   current location on alpha:"
+    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "   on RR:"
+    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print
+    unchanged_files_list.sort()
+    for i in unchanged_files_list:
+        print "    %s" %i
+    print
+    unchanged_wibs_list.sort()
+    for i in unchanged_wibs_list:
+        print "    %s" %i
+
+    print
+
+    # eliminated list
+    print "B) Deprecated tables (%d):" % len(removed_tables_list)
+    removed_tables_list.sort()
+    for i in removed_tables_list:
+        print "    %s" %i
+
+    print "B') Deprecated files (%d downloadables, %d wibs):" %(len(removed_files_list),
+                                                                len(removed_wibs_list))
+    print "   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
+    print "   This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
+    print "   current location on alpha:"
+    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, prev_release_dir)
+    print "   on RR:"
+    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print
+
+    removed_files_list.sort()
+    for i in removed_files_list:
+        print "    %s" %i
+    print
+    removed_wibs_list.sort()
+    for i in removed_wibs_list:
+        print "    %s" %i
+
+    print
+
+    # new list
+    print "C) New tables (%d):" % len(new_tables_list)
+    new_tables_list.sort()
+    for i in new_tables_list:
+        print "    %s" %i
+
+    print "C') New files (%d downloadables, %d wibs):" % (len(new_files_list),
+                                                         len(new_wibs_list))
+    print "   current location on alpha:"
+    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "   NOT on RR but must be placed in:"
+    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print
+
+    new_files_list.sort()
+    for i in new_files_list:
+        print "    %s" %i
+    print
+    new_wibs_list.sort()
+    for i in new_wibs_list:
+        print "    %s" %i
+
+    print
+
+    print "D) Additional items:"
+    print "   current location on alpha:"
+    print "     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "   should be placed on the RR in (overwritting any existing copy):"
+    print "     {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print
+    print "    index.html"
+    print "    files.txt"
+    print "    md5sum.txt"
+
+#### Module ####################################################################
+
+if __name__ == "__main__":
+    sys.exit(main())
