@@ -78,6 +78,5 @@ all: ${USE_DIRS:%=%.all}
 %.all:
 	( cd $* && echo $* && ${MAKE} )
 
-clean:: ${USE_DIRS:%=%.clean}
-%.clean:
-	(cd $* && ${MAKE} clean)
+clean::
+	cd simpleChain && ${MAKE} clean
