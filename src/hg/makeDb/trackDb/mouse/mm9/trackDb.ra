@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.86 2010/03/12 17:04:57 fanhsu Exp $";
+#	"$Id: trackDb.ra,v 1.87 2010/03/15 18:15:24 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -26,7 +26,7 @@ type bed 6 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
-release beta
+release beta,public
 
 track mapability
 compositeTrack on
@@ -124,7 +124,7 @@ type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail:
 baseColorUseCds none
-release beta
+release beta,public
 
 track jaxPhenotypeLift
 shortLabel MGI Pheno LiftO
@@ -150,7 +150,7 @@ type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s):
-release beta
+release beta,public
 
 track jaxAlleleLift
 shortLabel MGI Allele LiftO
@@ -178,7 +178,7 @@ type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele:
-release beta
+release beta,public
 
 track chainSelf
 shortLabel Self Chain

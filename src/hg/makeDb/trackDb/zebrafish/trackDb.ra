@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.77 2010/02/18 22:03:53 hartera Exp $";
+#	"$Id: trackDb.ra,v 1.78 2010/03/15 18:15:21 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -37,7 +37,7 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     priority 2
 
 track vegaGeneZfish
-release beta
+release beta,public
 compositeTrack on
 shortLabel Vega Genes 
 longLabel Vega Annotations 
@@ -49,7 +49,7 @@ type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
     track vegaGene
-    release beta
+    release beta,public
     subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
@@ -57,7 +57,7 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     priority 1
     
     track vegaPseudoGene
-    release beta
+    release beta,public
     subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
@@ -176,7 +176,7 @@ type psl xeno tetNig1
 otherDb tetNig1
 
 track chainXenTro1
-release beta
+release beta,public
 #replaces record chainXenTro1 in parent dir missing/extra matrixHeader
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

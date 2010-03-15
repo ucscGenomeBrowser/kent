@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.455 2010/02/16 23:39:39 kent Exp $";
+#	"$Id: trackDb.ra,v 1.456 2010/03/15 18:15:21 rhead Exp $";
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -526,7 +526,7 @@ dataVersion March 2007
     color 0,128,0
 
 track multiz17way
-release beta
+release beta,public
 wiggle phastCons17way
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
@@ -581,7 +581,7 @@ speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
 treeImage phylo/hg17_17way.gif
 
 track phastConsElements17way
-release beta 
+release beta,public 
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
 group compGeno

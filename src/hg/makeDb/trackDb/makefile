@@ -116,9 +116,13 @@ alpha: clean
 	${CVS} -q up -d -P .
 	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
 
-strict: clean
+beta: clean
 	${CVS} -q up -d -P .
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
+
+public: clean
+	${CVS} -q up -d -P .
+	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

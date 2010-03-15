@@ -18,7 +18,7 @@ colorChromDefault off
 type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
-release beta
+release beta,public
 
 track blastHg17KG
 shortLabel Human  Proteins

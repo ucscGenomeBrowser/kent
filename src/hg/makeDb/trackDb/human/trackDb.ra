@@ -1095,7 +1095,7 @@ color 150,0,150
 type bed 4 +
 
 track gvPos
-release beta
+release beta,public
 html gvPosOld
 shortLabel Locus Variants
 longLabel Compilation of $Organism Variants from LSDBs

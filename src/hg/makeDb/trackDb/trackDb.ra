@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.621 2010/03/02 21:23:47 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.622 2010/03/15 18:15:20 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -1900,7 +1900,7 @@ pred hg16.blastKGPep00
 blastRef hg16.blastKGRef00
 
 track chainDm1
-release beta
+release beta,public
 shortLabel D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -1913,7 +1913,7 @@ type chain dm1
 otherDb dm1
 
 track netDm1
-release beta
+release beta,public
 shortLabel D. mel. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -1997,7 +1997,7 @@ type netAlign dm3 chainDm3
 otherDb dm3
 release alpha
 
-# release beta: no $o_db in shortLabel
+# release beta,public: no $o_db in shortLabel
 track chainDm3
 shortLabel D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -2011,9 +2011,9 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 type chain dm3
 otherDb dm3
-release beta
+release beta,public
 
-# release beta: no $o_db in shortLabel
+# release beta,public: no $o_db in shortLabel
 track netDm3
 shortLabel D. mel. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -2023,7 +2023,7 @@ visibility hide
 spectrum on
 type netAlign dm3 chainDm3
 otherDb dm3
-release beta
+release beta,public
 
 track chainOtoGar1Best
 shortLabel $o_Organism Best Chain
