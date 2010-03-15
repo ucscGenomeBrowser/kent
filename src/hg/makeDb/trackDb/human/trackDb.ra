@@ -471,6 +471,7 @@ type bed 12
     subTrack burgeRnaSeqGemMapperAlign
     color 12,12,120
     type bed 12
+    maxWindowToDraw 50000000
 
         track burgeRnaSeqGemMapperAlignBrain
         subTrack burgeRnaSeqGemMapperAlignViewAlignments on
