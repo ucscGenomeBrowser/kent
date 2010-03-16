@@ -39,8 +39,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 221,17,153
-        #color 0,100,140
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
@@ -51,7 +49,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
@@ -62,7 +59,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
@@ -73,7 +69,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562CytosolLongpolya fileName=wgEncodeRikenCagePlusClustersK562CytosolLongpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
@@ -84,7 +79,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleusLongpolya fileName=wgEncodeRikenCagePlusClustersK562NucleusLongpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
@@ -95,7 +89,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562NucleolusTotal
@@ -106,7 +99,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleolusTotal fileName=wgEncodeRikenCagePlusClustersK562NucleolusTotal.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
@@ -117,7 +109,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=40-nucleoplasm rnaExtract=total
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCagePlusClustersK562NucleoplasmTotal.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersK562ChromatinTotal
@@ -128,7 +119,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=K562 localization=50-chromatin rnaExtract=total
         type bedGraph 4
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562ChromatinTotal fileName=wgEncodeRikenCagePlusClustersK562ChromatinTotal.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
@@ -139,7 +129,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 153,38,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
@@ -150,7 +139,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 153,38,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya
@@ -161,7 +149,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 224,75,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HUVEC rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1023 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya
@@ -172,7 +159,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 0,107,27
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=H1-hESC rnaExtract=longNonPolyA localization=cell view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1022 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersGm12878NucleolusTotal
@@ -183,7 +169,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 153,38,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1021 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878NucleolusTotal fileName=wgEncodeRikenCagePlusClustersGm12878NucleolusTotal.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya
@@ -193,7 +178,6 @@ wgEncode 1
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in NHEK cytosol)
         subGroups view=1-PlusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
-        colorByStrand 46,0,184 238,85,34
         color 179,0,134
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya.bedGraph4.gz
 
@@ -205,7 +189,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHepg2CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersHepg2CytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya
@@ -216,7 +199,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersHepg2NucleolusTotal
@@ -227,7 +209,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersHepg2NucleolusTotal fileName=wgEncodeRikenCagePlusClustersHepg2NucleolusTotal.bedGraph4.gz
 
         track wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya
@@ -238,7 +219,6 @@ wgEncode 1
         subGroups view=1-PlusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1096 dateSubmitted=2010-01-27 dateUnrestricted=2010-10-27 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageView3-MinusClusters
@@ -262,7 +242,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 221,17,153
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
@@ -274,7 +253,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
@@ -286,7 +264,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
@@ -298,7 +275,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
@@ -310,7 +286,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya
@@ -322,7 +297,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562NucleolusTotal
@@ -334,7 +308,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleolusTotal fileName=wgEncodeRikenCageMinusClustersK562NucleolusTotal.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
@@ -346,7 +319,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersK562ChromatinTotal
@@ -358,7 +330,6 @@ wgEncode 1
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562ChromatinTotal fileName=wgEncodeRikenCageMinusClustersK562ChromatinTotal.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
@@ -370,7 +341,6 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
         #color 34,136,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
@@ -382,7 +352,6 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
         #color 34,136,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya
@@ -393,7 +362,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 224,75,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HUVEC rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1023 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya
@@ -404,7 +372,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 0,107,27
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=H1-hESC rnaExtract=longNonPolyA localization=cell view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1022 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersGm12878NucleolusTotal
@@ -415,7 +382,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 153,38,0
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1021 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleolusTotal fileName=wgEncodeRikenCageMinusClustersGm12878NucleolusTotal.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya
@@ -426,7 +392,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1018 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya
@@ -437,7 +402,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya
@@ -448,7 +412,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersHepg2NucleolusTotal
@@ -459,7 +422,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=HepG2 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1019 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersHepg2NucleolusTotal fileName=wgEncodeRikenCageMinusClustersHepg2NucleolusTotal.bedGraph4.gz
 
         track wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya
@@ -470,7 +432,6 @@ wgEncode 1
         subGroups view=3-MinusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
-        colorByStrand 46,0,184 238,85,34
         metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Jan 2010 Freeze" subId=1096 dateSubmitted=2010-01-27 dateUnrestricted=2010-10-27 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageView5-Alignments
