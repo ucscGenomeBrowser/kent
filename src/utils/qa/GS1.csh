@@ -61,7 +61,7 @@ if ( $betaDb != "" ) then
   echo "\n note: time comparison against other db is irrelevant.|n"
 endif
 
-~/bin/updateTimes.csh $db $tablelist 
+updateTimes.csh $db $tablelist 
 
 
 # -------------------------------------------------
