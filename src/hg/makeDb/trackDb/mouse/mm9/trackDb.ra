@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.88 2010/03/15 20:44:38 hartera Exp $";
+#	"$Id: trackDb.ra,v 1.89 2010/03/16 15:45:24 katrina Exp $";
 
 include trackDb.chainNet.ra
 
@@ -87,6 +87,7 @@ visibility hide
 color 0,20,150
 type bed 6 +
 nextItemButton on
+noScoreFilter .
 
 track NIAGene
 shortLabel NIA Gene Index

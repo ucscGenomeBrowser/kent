@@ -39,6 +39,7 @@ visibility hide
 color 0,20,150
 type bed 6 +
 nextItemButton on
+noScoreFilter .
 
 track phastConsElements9way
 shortLabel Most Conserved
