@@ -7,8 +7,12 @@
 #include "hdb.h"
 #include "bamFile.h"
 #include "hgc.h"
+#ifdef KNETFILE_HOOKS
+#include "knetUdc.h"
+#include "udc.h"
+#endif//def KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.19 2010/03/04 05:14:13 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.20 2010/03/16 06:58:22 angie Exp $";
 
 #include "bamFile.h"
 
@@ -162,6 +166,12 @@ if (item == NULL)
     errAbort("doBamDetails: NULL item name");
 int start = cartInt(cart, "o");
 // TODO: libify tdb settings table_pairEndsByName, stripPrefix and pairSearchRange
+
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
+knetUdcInstall();
+if (udcCacheTimeout() < 300)
+    udcSetCacheTimeout(300);
+#endif//def USE_BAM && KNETFILE_HOOKS
 
 char varName[1024];
 safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->tableName);

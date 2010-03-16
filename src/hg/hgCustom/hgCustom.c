@@ -14,8 +14,12 @@
 #include "customFactory.h"
 #include "portable.h"
 #include "errCatch.h"
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
+#include "knetUdc.h"
+#include "udc.h"
+#endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.139 2010/03/04 23:06:07 ann Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.140 2010/03/16 06:55:49 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1003,6 +1007,12 @@ getDbAndGenome(cart, &database, &organism, oldVars);
 
 setUdcCacheDir();
 customFactoryEnableExtraChecking(TRUE);
+
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
+knetUdcInstall();
+if (udcCacheTimeout() < 300)
+    udcSetCacheTimeout(300);
+#endif//def USE_BAM && KNETFILE_HOOKS
 
 if (sameString(initialDb, "0"))
     {
