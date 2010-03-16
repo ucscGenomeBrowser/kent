@@ -1,7 +1,7 @@
 
 udcCache means URL-Data-Cache
 
-BBI files use the udcCach.
+BBI files use the udcCache.
 BBI means Big Binary Indexed and includes
 file types such as BigBed (.bb) and BigWig (.bw).
 
