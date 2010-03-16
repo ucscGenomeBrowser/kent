@@ -15,10 +15,12 @@ set db=""
 set first=""
 set second=""
 set third=""
+set fourth=""
 
 if ( $#argv != 2 ) then
   echo
   echo "  gets update times for three machines for tables in list." 
+  echo "  if table is trackDb, trackDb_public will also be checked."
   echo "  warning:  not in real time for RR.  uses overnight dump." 
   echo
   echo "    usage:  database tablelist "
@@ -66,14 +68,26 @@ foreach table ($tables)
     continue
   endif
 
-  set third=`getRRtableStatus.csh $db $table Update_time`
+  if ( "$table" == "trackDb" ) then
+    set third=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'trackDb_public'"' $db \
+      | awk '{print $14, $15}'`
+    if ( $status ) then
+      echo "."
+      continue
+    endif
+  endif
+
+  set fourth=`getRRtableStatus.csh $db $table Update_time`
   if ( $status ) then
-    set third=""
+    set fourth=""
   endif
 
   echo "."$first
   echo "."$second
+  if ( "$table" == "trackDb" ) then
+    echo "."$third "(trackDb_public)"
+  endif
   echo
-  echo "."$third
+  echo "."$fourth
 end
 echo
