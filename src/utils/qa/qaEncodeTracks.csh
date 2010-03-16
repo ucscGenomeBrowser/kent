@@ -108,9 +108,8 @@ echo "*** MAX length of shortLabel should be 16 ***"
 echo "(Only prints if shortLabel is greater than 16 characters, or if"
 echo "it can't find a shortLabel at all)"
 foreach table ( $tables )
- set num=`cat ~/trackDb/human/$db/trackDb.wgEncode.ra | grep -A10 "track $table" \
-  | grep -m 1 shortLabel \
-  | sed -e 's/shortLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m`
+ set num=`tdbQuery "select shortLabel from $db where track = '$table'" \
+  | sed -e 's/shortLabel //' | wc -c`
  if ( $maxShortLabel < $num || 0 == $num ) then
   if ( 0 == $num ) then
    echo "ERROR: can't find a shortLabel for $table"
@@ -126,9 +125,8 @@ echo "*** MAX length of longLabel should be 80 ***"
 echo "(Only prints if longLabel is greater than 80 characters, or if"
 echo "it can't find a longLabel at all)"
 foreach table ( $tables )
- set num=`cat ~/trackDb/human/$db/trackDb.wgEncode.ra | grep -A10 "track $table" \
-  | grep -m 1 longLabel \
-  | sed -e 's/longLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m`
+ set num=`tdbQuery "select longLabel from $db where track = '$table'" \
+  | sed -e 's/longLabel //' | wc -c`
  if ( $maxLongLabel < $num || 0 == $num ) then
   if ( 0 == $num ) then
    echo "ERROR: can't find a longLabel for $table"
