@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.127 2010/03/12 17:03:25 fanhsu Exp $"
+#	"$Id: mm9.txt,v 1.128 2010/03/16 05:58:17 angie Exp $"
 #
 
 #######################################################################
@@ -8232,12 +8232,13 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
-# JAX/MGI TRACKS (DONE 8/20/09 angie)
+# JAX/MGI TRACKS (IN PROGRESS 3/12/10  angie)
+# Previously done 8/20/09 in /hive/data/genomes/mm9/bed/jax/2009_08 (pushed)
 # Previously done 6/11/09 in /hive/data/genomes/mm9/bed/jax/2009_06 (pushed)
 # Previously done 4/24/09 in /hive/data/genomes/mm9/bed/jax/2009_04 (not pushed)
 # Previously done 9/24/08 in /cluster/data/mm9/bed/jax/2008_09
-    mkdir -p /hive/data/genomes/mm9/bed/jax/2009_08
-    cd /hive/data/genomes/mm9/bed/jax/2009_08
+    mkdir -p /hive/data/genomes/mm9/bed/jax/2010_03
+    cd /hive/data/genomes/mm9/bed/jax/2010_03
     wget ftp://ftp.informatics.jax.org/pub/gbrowse/\*
     wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
 
@@ -8612,18 +8613,19 @@ rm bed.tab
 
 
 #########################################################################
-# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 12/8/09 angie)
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/12/10 angie)
+# done 12/8/09 w/files emailed from Carol 12/7
 # done 7/24/09 w/files emailed from Carol 7/24
 # done 5/7/09 w/files emailed from Carol Bult 5/7
 # done 2/12/09 w/files emailed from Carol Bult 2/12
 # done 10/21/08 w/files emailed from Carol Bult 10/18
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/komp/2009_12
-    cd /hive/data/genomes/mm9/bed/komp/2009_12
-    # Save files emailed from Carol Bult 12/7 as 
-    # 20091204_ikmc.gff.gz
+    mkdir -p /hive/data/genomes/mm9/bed/komp/2010_03
+    cd /hive/data/genomes/mm9/bed/komp/2010_03
+    # Save files emailed from Carol Bult 3/12 as 
+    # 20100312_ikmc.gff.gz
     # Make bed12 with itemRgb:
-    zcat 20091204_ikmc.gff.gz \
+    zcat 20100312_ikmc.gff.gz \
     | perl -we \
       'while (<>) { \
          s/\r?\n$//; \
@@ -8658,10 +8660,10 @@ rm bed.tab
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
     | sort -k 1,1 -k 2n,2n > komp.bed
-#Got 36359 genes.
+#Got 40093 genes.
     # No stderr empty-coord warnings this time (no unmapped items).
     # Make an alias-style table with associated info (MGI ID and status):
-    zcat 20091204_ikmc.gff.gz \
+    zcat 20100312_ikmc.gff.gz \
     | perl -wpe 's/\r?\n$//; @w = split("\t"); \
       if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
       if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
@@ -8670,12 +8672,13 @@ rm bed.tab
       $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
     | sort -u > kompExtra.tab
     wc -l kompExtra.tab
-#36359 kompExtra.tab
+#40093 kompExtra.tab
     # Load 'em up:
     hgLoadBed mm9 komp komp.bed
 #Loaded 32185 elements of size 12
     hgLoadSqlTab mm9 kompExtra $HOME/kent/src/hg/lib/genericAlias.sql kompExtra.tab
     checkTableCoords -verbose=2 mm9 komp
+#mm9.komp item Eif2s1_42274 chr12:79973648-79983000: blocks 3 and 4 overlap.
 #mm9.komp item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
 #mm9.komp item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
 #mm9.komp item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
@@ -8687,25 +8690,27 @@ rm bed.tab
     # Sanger about them.  Here's how to check it ourselves next time:
     hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from komp \
                   where chromEnd - chromStart > 1000000 order by length desc;'
-#+----------------------+----------+
-#| name                 | length   |
-#+----------------------+----------+
-#| Ankrd22_67616        | 51920750 | 
-#| Ptprd_VG12763        |  2270723 | 
-#| Macrod2_VG12650      |  1997658 | 
-#| A430089I19Rik_71812  |  1814706 | 
-#| 1700049E17Rik2_68957 |  1596021 | 
-#| Pcdh15_VG15967       |  1550393 | 
-#| Gpc5_VG15750         |  1431812 | 
-#| Lrrc4c_VG10110       |  1313498 | 
-#| Agbl4_VG16439        |  1266664 | 
-#| Prkg1_VG15918        |  1197272 | 
-#| Ptprt_VG10147        |  1139158 | 
-#| Ccl21b_67667         |  1019106 | 
-#+----------------------+----------+
+#+----------------------+-----------+
+#| name                 | length    |
+#+----------------------+-----------+
+#| Chrac1_77013         | 100321422 | 
+#| Ankrd22_67616        |  51920750 | 
+#| Sp140_77012          |   2457682 | 
+#| Ptprd_VG12763        |   2270723 | 
+#| A430089I19Rik_71812  |   1814706 | 
+#| 1700049E17Rik2_68957 |   1596021 | 
+#| Pcdh15_VG15967       |   1550393 | 
+#| Gpc5_VG15750         |   1431812 | 
+#| Agbl4_VG16439        |   1266664 | 
+#| Prkg1_VG15918        |   1197272 | 
+#| Rnaset2b_77193       |   1153790 | 
+#| Ptprt_VG10147        |   1139158 | 
+#| Nrxn1_VG16178        |   1056424 | 
+#| Ccl21b_67667         |   1019106 | 
+#+----------------------+-----------+
 
     runJoiner.csh mm9 komp
-# mm9.kompExtra.name - hits 36359 of 36359 ok
+# mm9.kompExtra.name - hits 40093 of 40093 ok
 
 
 #########################################################################
