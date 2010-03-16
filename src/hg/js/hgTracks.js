@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.60 2010/03/11 02:30:02 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.61 2010/03/16 00:41:17 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -1038,6 +1038,11 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
     });
 });
 
+function mapClk(obj)
+{
+    return postToSaveSettings(obj);
+}
+
 function postToSaveSettings(obj)
 {
     if(blockUseMap==true) {
@@ -1046,19 +1051,18 @@ function postToSaveSettings(obj)
     if(obj.href == undefined) // called directly with obj and from callback without obj
         obj = this;
     if( obj.href.match('#') || obj.target.length > 0) {
-        //alert("Matched # or has target");
+        //alert("Matched # ["+obj.href+"] or has target:"+obj.target);
         return true;
     }
     var thisForm=$(obj).parents('form');
     if(thisForm == undefined || $(thisForm).length == 0)
         thisForm=$("FORM");
-    if($(thisForm).length > 1)
+    if($(thisForm).length > 1 )
         thisForm=$(thisForm)[0];
     if(thisForm != undefined && $(thisForm).length == 1) {
         //alert("posting form:"+$(thisForm).attr('name'));
         return postTheForm($(thisForm).attr('name'),obj.href);
     }
-
     return true;
 }
 
@@ -1153,6 +1157,12 @@ $(document).ready(function()
         if($('.cytoBand').length > 1) {
             $('img#chrom').chromDrag();
         }
+    }
+
+    {
+        var pos = $("input[name='position']");
+        if( pos != undefined)
+            $( pos ).focus();
     }
 });
 
