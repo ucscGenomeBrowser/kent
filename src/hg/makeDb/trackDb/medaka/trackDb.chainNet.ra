@@ -1,15 +1,15 @@
-#	"$Id: trackDb.chainNet.ra,v 1.11 2010/03/12 19:22:35 ann Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.12 2010/03/16 21:33:40 antonio Exp $";
 
 track chainNetGasAcu1 override
 priority 210.3
 
 track chainNetFr2 override
-priority 220.3
+priority 230.3
 chainMinScore 3000
 chainLinearGap medium
 
 track chainNetTetNig2 override
-priority 230.3
+priority 220.3
 chainMinScore 3000
 chainLinearGap medium
 
@@ -46,13 +46,13 @@ shortLabel $o_db Chain/Net
         shortLabel $o_db Chain
 
 track chainNetMm9 override
-priority 530.3
+priority 260
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track chainNetHg19 override
-priority 640.3
+priority 250
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
@@ -71,6 +71,6 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
     shortLabel $o_db Net
 
 track chainNetPetMar1 override
-priority 650.3
+priority 270
 chainMinScore 3000
 chainLinearGap medium
