@@ -22,6 +22,7 @@ wgEncode 1
     longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
     color 120,0,0
     priority 1
+    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=encMapability tableName=encCrgMapabilityAlign36mer fileName=crgMapabilityAlign36mer.bw.gz
 
     track encCrgMapabilityAlign40mer
     subTrack encMapability
@@ -29,6 +30,7 @@ wgEncode 1
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
     color 120,0,0
     priority 2
+    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=encMapability tableName=encCrgMapabilityAlign40mer fileName=crgMapabilityAlign40mer.bw.gz
     
     track encCrgMapabilityAlign50mer
     subTrack encMapability
@@ -36,6 +38,7 @@ wgEncode 1
     longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
     color 120,0,0
     priority 3
+    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=encMapability tableName=encCrgMapabilityAlign50mer fileName=crgMapabilityAlign50mer.bw.gz
 
     track encCrgMapabilityAlign75mer
     subTrack encMapability
@@ -43,6 +46,7 @@ wgEncode 1
     longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
     color 120,0,0
     priority 4
+    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=encMapability tableName=encCrgMapabilityAlign75mer fileName=crgMapabilityAlign75mer.bw.gz
 
     track encCrgMapabilityAlign100mer
     subTrack encMapability
@@ -50,6 +54,7 @@ wgEncode 1
     longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
     color 120,0,0
     priority 5
+    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=encMapability tableName=encCrgMapabilityAlign100mer fileName=crgMapabilityAlign100mer.bw.gz
 
 #  GENCODE genes (wrangler: braney )
 
