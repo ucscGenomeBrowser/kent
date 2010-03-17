@@ -9,7 +9,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafSplit.c,v 1.5 2009/01/16 05:40:49 hiram Exp $";
+static char const rcsid[] = "$Id: mafSplit.c,v 1.6 2010/03/17 00:42:39 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -274,7 +274,7 @@ while (1)
         struct mafAli *subset = mafSubset(full, mc->src, mc->start, splitPos);
         mafWrite(f, subset);
         mafAliFree(&subset);
-        maf = mafSubset(full, mc->src, splitPos + 1, mc->start + mc->size);
+        maf = mafSubset(full, mc->src, splitPos , mc->start + mc->size);
         mafAliFree(&full);
         }
     mafWriteEnd(f);
