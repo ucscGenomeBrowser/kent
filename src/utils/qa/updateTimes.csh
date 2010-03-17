@@ -56,35 +56,38 @@ foreach table ($tables)
 
   set first=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
     | awk '{print $14, $15}'`
-  if ( "$first" == ""  ) then # put some spaces in so labels line up
-      set first="                   "
+  if ( $status ) then
+    echo "."
+    continue
   endif
 
   set second=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
     | awk '{print $14, $15}'`
-  if ( "$second" == "" ) then
-      set second="                   "
+  if ( $status ) then
+    echo "."
+    continue
   endif
 
   if ( "$table" == "trackDb" ) then
     set third=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'trackDb_public'"' $db \
       | awk '{print $14, $15}'`
-    if ( "$third" == "" ) then
-      set third="                   "
+    if ( $status ) then
+      echo "."
+      continue
     endif
   endif
 
   set fourth=`getRRtableStatus.csh $db $table Update_time`
-  if ( $status ) then #check status here because contents could be error msg 
-    set fourth="                   "
+  if ( $status ) then
+    set fourth=""
   endif
 
-  echo ".$first $HOST"
-  echo ".$second $sqlbeta"
+  echo "."$first
+  echo "."$second
   if ( "$table" == "trackDb" ) then
-    echo ".$third $sqlbeta (trackDb_public)"
+    echo "."$third "(trackDb_public)"
   endif
   echo
-  echo ".$fourth RR"
+  echo "."$fourth
 end
 echo
