@@ -116,10 +116,15 @@ def main(argv=None):
     current_release_dir = args[1]
     prev_release_dir = args[2]
 
+    # some re we will be using
+    normal_processed = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph|bed\d+)$")
+    not_processed = re.compile("^(tagAlign|fastq|fasta|rpkm|bowtie|psl)$")
+
     # generate the list of files
     current_files = get_file_set(current_release_dir, ".*\.gz$")
     if prev_release_dir == "-":
         prev_files = set()
+        prev_release_dir = ""
     else:
         prev_files = get_file_set(prev_release_dir, ".*\.gz$")
 
@@ -127,6 +132,9 @@ def main(argv=None):
     removed_files = prev_files - current_files
     unchanged_files = current_files & prev_files
     new_files = current_files - prev_files
+
+    # warnings
+    warnings = []
 
     # the list of files that we'll be printing
     unchanged_tables_list = []
@@ -150,27 +158,34 @@ def main(argv=None):
             raise ValueError, "Unimplemented: newer version of %s found, can't deal with this yet" % name
         # check to make sure the files are really the same
         if not same_file(os.path.join(current_release_dir, f), os.path.join(prev_release_dir, f)):
-            raise ValueError, "file %s in %s and %s don't appear to be the same" \
-                % (name, current_release_dir, prev_release_dir)
-
+            warn = "file %s in %s and %s don't appear to be the same (type=%s)" % \
+                (name, current_release_dir, prev_release_dir, type)
+            warnings.append(warn)
+            print >>sys.stderr, warn
         if type == "wig":
             wib_path = get_wib_pathname(database, name)
             if not os.path.exists(wib_path):
-                raise ValueError, "could not find %s wib file for wig %s" % (wib_path, f)
+                warn = "could not find %s wib file for wig %s" % (wib_path, f)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             if not table_exists(database, name):
-                raise ValueError, "table %s does not exist, from filetype %s" % (name, type)
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             unchanged_tables_list.append(name)
             unchanged_files_list.append(f)
             unchanged_wibs_list.append(wib_path)
-        elif type == "narrowPeak" or type.startswith("bedGraph"):
+        elif normal_processed.match(type):
             if not table_exists(database, name):
-                raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             unchanged_tables_list.append(name)
             unchanged_files_list.append(f)
-        elif type == "tagAlign" or type == "fastq":
+        elif not_processed.match(type):
             unchanged_files_list.append(f)
         else:
-            raise ValueError, "unknown type %s" % type
+            raise ValueError, "unknown type %s of file %s" % (type, f)
 
     # process the list of removed files
     for f in removed_files:
@@ -180,21 +195,27 @@ def main(argv=None):
         if type == "wig":
             wib_path = get_wib_pathname(database, name)
             if not os.path.exists(wib_path):
-                raise ValueError, "could not find %s wib file for wig %s" % (wib_path, f)
+                warn = "could not find %s wib file for wig %s" % (wib_path, f)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             if not table_exists(database, name):
-                raise ValueError, "table %s does not exist, from filetype %s" % (name, type)
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             removed_tables_list.append(name)
             removed_files_list.append(f)
             removed_wibs_list.append(wib_path)
-        elif type == "narrowPeak" or type.startswith("bedGraph"):
+        elif normal_processed.match(type):
             if not table_exists(database, name):
-                raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             removed_tables_list.append(name)
             removed_files_list.append(f)
-        elif type == "tagAlign" or type == "fastq":
+        elif not_processed.match(type):
             removed_files_list.append(f)
         else:
-            raise ValueError, "unknown type %s" % type
+            raise ValueError, "unknown type %s of file %s" % (type, f)
 
     # process the list of new files
     for f in new_files:
@@ -204,21 +225,27 @@ def main(argv=None):
         if type == "wig":
             wib_path = get_wib_pathname(database, name)
             if not os.path.exists(wib_path):
-                raise ValueError, "could not find %s wib file for wig %s" % (wib_path, f)
+                warn = "could not find %s wib file for wig %s" % (wib_path, f)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             if not table_exists(database, name):
-                raise ValueError, "table %s does not exist, from filetype %s" % (name, type)
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             new_tables_list.append(name)
-            new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
+            new_files_list.append(f)
             new_wibs_list.append(wib_path)
-        elif type == "narrowPeak" or type.startswith("bedGraph"):
+        elif normal_processed.match(type):
             if not table_exists(database, name):
-                raise ValueError,  "table %s does not exist, from filetype %s" % (name, type)
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
             new_tables_list.append(name)
-            new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
-        elif type == "tagAlign" or type == "fastq":
-            new_files_list.append(os.path.join("/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC", options.track_name, current_release_dir, f))
+            new_files_list.append(f)
+        elif not_processed.match(type):
+            new_files_list.append(f)
         else:
-            raise ValueError, "unknown type %s" % type
+            raise ValueError, "unknown type %s of file %s" % (type, f)
 
     # output some basic stats
     if options.verbose:
@@ -258,6 +285,16 @@ def main(argv=None):
     print "# generated with %s" % parser.get_version()
     print "This is a %s of the \"%s\"" % (current_release_dir, options.name)
     print "The composite track is %s" % options.track_name
+    
+    if len(warnings) > 0:
+        warn_header = "# WARNINGS "
+        print warn_header, "#" * len(warn_header)
+        c = 1
+        for w in warnings:
+            print  "%0d - %s" % (c, w)
+            c += 1
+        print "#" * 60
+
     print """
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
