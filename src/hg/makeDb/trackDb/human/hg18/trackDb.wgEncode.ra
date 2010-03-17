@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.923 2010/03/16 21:35:41 hartera Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.924 2010/03/17 16:14:30 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -7346,7 +7346,7 @@ wgEncode 1
         subGroups view=ALN win=w036
         type wig 0.00 1.00
         color 133,0,173
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
+        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
     track wgEncodeMapabilityViewDUNIQ
     release alpha
@@ -7369,7 +7369,7 @@ wgEncode 1
         subGroups view=DUNIQ win=w020
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
         track wgEncodeDukeUniqueness24bp
         release alpha
@@ -7380,7 +7380,7 @@ wgEncode 1
         subGroups view=DUNIQ win=w024
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
         track wgEncodeDukeUniqueness35bp
         release alpha
@@ -7391,7 +7391,7 @@ wgEncode 1
         subGroups view=DUNIQ win=w035
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
     track wgEncodeMapabilityViewRUNIQ
     release alpha
@@ -7439,7 +7439,7 @@ wgEncode 1
         subGroups view=UUNIQ win=w015
         type wig 0.00 1.00
         color 46,0,184
-        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
+        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeMapabilityViewXR
     release alpha
@@ -7455,7 +7455,7 @@ wgEncode 1
         subGroups view=XR win=zNA
         type bed 6
         noScoreFilter on
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
     track wgEncodeMapabilityViewCRGMAP
     release alpha
@@ -7550,7 +7550,7 @@ wgEncode 1
         subGroups view=ALN win=w036
         type wig 0.00 1.00
         color 133,0,173
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
+        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
     track wgEncodeMapabilityViewDUNIQ
     release beta,public
@@ -7573,7 +7573,7 @@ wgEncode 1
         subGroups view=DUNIQ win=w020
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
         track wgEncodeDukeUniqueness24bp
         release beta,public
@@ -7584,7 +7584,7 @@ wgEncode 1
         subGroups view=DUNIQ win=w024
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
         track wgEncodeDukeUniqueness35bp
         release beta,public
@@ -7595,7 +7595,7 @@ wgEncode 1
         subGroups view=DUNIQ win=w035
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
     track wgEncodeMapabilityViewRUNIQ
     release beta,public
@@ -7643,7 +7643,7 @@ wgEncode 1
         subGroups view=UUNIQ win=w015
         type wig 0.00 1.00
         color 46,0,184
-        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
+        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeMapabilityViewXR
     release beta,public
@@ -7659,7 +7659,7 @@ wgEncode 1
         subGroups view=XR win=zNA
         type bed 6
         noScoreFilter on
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
     track wgEncodeMapabilityViewCRGMAP
     release beta,public
