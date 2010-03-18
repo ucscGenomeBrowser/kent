@@ -1,4 +1,4 @@
-/* metaTblUpdate - Adds, updates or removes metadata obkjects and variables from the metaTbl. */
+/* metaTblUpdate - Adds, updates or removes metadata objects and variables from the metaTbl. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -14,7 +14,10 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.1 2010/03/18 01:56:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.2 2010/03/18 23:37:24 tdreszer Exp $";
+
+#define DB_DEFAULT      "hg19"
+#define OBJTYPE_DEFAULT "table"
 
 void usage()
 /* Explain usage and exit. */
@@ -38,17 +41,17 @@ errAbort(
   "   metaTblUpdate [-db=] [-table=] [-obj= [-type=] [-delete] [-var=] [-binary] [-val=]]\n"
   "                       [-replace] [fileName]\n\n"
   "Options:\n"
-  "    -db database to load metadata to.  Default is 'hg19'.\n"
-  "    -table table to load metadata to.  Default is 'metaTbl'.\n"
+  "    -db      Database to load metadata to.  Default is '" DB_DEFAULT "'.\n"
+  "    -table   Table to load metadata to.  Default is '" METATBL_DEFAULT_NAME "'.\n"
   "  if file not provided, then -obj must be provided\n"
-  "    -obj={objName}     means Load from command line:\n"
-  "       -type={objType} needed if adding new obj, otherwise ignored\n"
-  "       -delete         a specific var or entire obj (if -var not provided) otherwise add or update\n"
-  "       -var={varName}  provide variable name (if no -var then must be -remove to remove obj)\n"
+  "    -obj={objName}     Means Load from command line:\n"
+  "       -type={objType} Used if adding new obj, otherwise ignored.  Default is '" OBJTYPE_DEFAULT "'.\n"
+  "       -delete         Remove a specific var or entire obj (if -var not provided) otherwise add or update\n"
+  "       -var={varName}  Provide variable name (if no -var then must be -remove to remove obj)\n"
   "       -binary         NOT YET IMPLEMENTED.  This var has a binary val and -val={file}\n"
-  "       -val={value}    (enclosed in quotes if necessary. If -var and no -val then must be -remove\n"
-  "    [file] File containing formatted metadata lines.  Ignored if -obj param provided:\n"
-  "      -replace means remove all old variables for an object before adding new variables\n"
+  "       -val={value}    (Enclosed in \"quotes if necessary\".) If -var and no -val then must be -remove\n"
+  "    [file]       File containing formatted metadata lines.  Ignored if -obj param provided:\n"
+  "      -replace   Means remove all old variables for an object before adding new variables\n"
   );
 }
 
@@ -65,9 +68,6 @@ static struct optionSpec optionSpecs[] = {
     {NULL,      0}
 };
 
-#define DB_DEFAULT      "hg19"
-#define TBL_DEFAULT     "metaTbl"
-#define OBJTYPE_DEFAULT "table"
 
 int main(int argc, char *argv[])
 // Process command line.
@@ -76,7 +76,7 @@ struct metaObj * metaObjs = NULL;
 
 optionInit(&argc, argv, optionSpecs);
 char *db    = optionVal("db",   DB_DEFAULT);
-char *table = optionVal("table",TBL_DEFAULT);
+char *table = optionVal("table",METATBL_DEFAULT_NAME);
 boolean replace = FALSE;
 
 if(optionExists("obj"))
@@ -84,28 +84,19 @@ if(optionExists("obj"))
     if(argc > 1)
         usage(); // Must not have submitted formatted file also
 
-    AllocVar(metaObjs);
+    if(optionExists("delete") && optionExists("var") && optionExists("val"))
+        usage();
 
-    metaObjs->objName = cloneString(optionVal("obj",  NULL));
-    metaObjs->objType = metaObjTypeStringToEnum(optionVal("type", OBJTYPE_DEFAULT));
+    if (!optionExists("delete") && (!optionExists("var") || !optionExists("val")))
+        usage();
+
+    metaObjs = metaObjCreate(optionVal("obj",  NULL),
+                             optionVal("type", OBJTYPE_DEFAULT),
+                             optionVal("var", NULL),
+                            (optionExists("binary") ? "binary" : "txt"), // FIXME: don't know how to deal with binary yet
+                             optionVal("val", NULL));
 
     metaObjs->deleteThis = optionExists("delete");
-
-    if(optionExists("var"))
-        {
-        struct metaVar * metaVar;
-        AllocVar(metaVar);
-
-        metaVar->var     = cloneString(optionVal("var", NULL));
-        metaVar->varType = (optionExists("binary") ? vtBinary : vtTxt);
-        metaVar->val     = cloneString(optionVal("val", NULL));
-        metaObjs->vars = metaVar; // Only one
-
-        if (!metaObjs->deleteThis && metaVar->val == NULL)
-            usage();
-        }
-    else if (!metaObjs->deleteThis)
-            usage();
 
     verbose(2, "metadata %s %s %s%s%s%s\n",
         metaObjs->objName,metaObjTypeEnumToString(metaObjs->objType),
