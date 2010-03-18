@@ -93,9 +93,13 @@ echo
 commTrio.csh $db.public1 $db.beta $rm | grep -v removed
 commTrio.csh $db.public2 $db.rr $rm
 
+echo "$db.public2 $db.rr $rm"
+
 if ( $rm == 'rm' ) then
-  rm -f $db.public
+  rm -f $db.public1 
+  rm -f $db.public2 
   rm -f $db.rr
+  rm -f $db.beta
 endif
 
 
