@@ -1,7 +1,7 @@
 #
 #	browserEnvironment.txt
 #
-#	$Id: browserEnvironment.txt,v 1.1 2010/03/18 18:40:13 hiram Exp $
+#	$Id: browserEnvironment.txt,v 1.2 2010/03/18 23:18:59 hiram Exp $
 #
 #	example UCSC genome mirror site definition file
 #	copy this file to start the definitions for your local site.
@@ -12,6 +12,8 @@
 
 #	kentSrc - location where you want your master kent source tree to live
 export kentSrc="/scratch/tmp/kent"
+#	LOGDIR - location to keep log files of script activities:
+export LOGDIR="/scratch/tmp/browserLogs"
 #	GOLD - where to download goldenPath/database/ directories
 export GOLD="/scratch/tmp/goldenPath"
 # GBDB - You will need a symlink /gbdb -> to this directory with gbdb downloads
