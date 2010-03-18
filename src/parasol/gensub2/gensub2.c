@@ -46,9 +46,17 @@ errAbort(
   "The following options can change this:\n"
   "    -group1 - write elements in order Aa Ab Ac Ba Bb Bc Ca Cb Cc\n"
   "    -group2 - write elements in order Aa Ba Ca Ab Bb Cb Ac Bc Cc\n"
+  "template file syntax help for check statement: {check 'when' 'what' <file>}\n"
+  " where 'when' is either 'in' or 'out'\n"
+  " and 'what' is one of: 'exists' 'exists+' 'line' 'line+'\n"
+  " 'exists' means file exists, may be zero size\n"
+  " 'exists+' means file exists and is non-zero size\n"
+  " 'line' means file may have 0 or more lines of ascii data and is properly\n"
+  "        line-feed terminated\n"
+  " 'line+' means file is 1 or more lines of ascii data and is properly\n"
+  "        line-feed terminated"
   , version
   );
-	      
 }
 
 struct slName *getLastDirs(char *pathToParse)
