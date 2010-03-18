@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1634 2010/03/09 00:15:35 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1635 2010/03/18 00:51:26 kate Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4423,6 +4423,7 @@ if (!hideControls)
 	{
 	char buf[256];
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
 	    char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
 	    if (containsStringNoCase(database, "zoo"))
 		{
@@ -4444,8 +4445,8 @@ if (!hideControls)
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
         //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
-	if (survey && sameWord(survey, "on"))
-	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
+	if (survey && differentWord(survey, "off"))
+	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);

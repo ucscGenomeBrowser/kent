@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.115 2010/03/10 00:19:06 larrym Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.116 2010/03/18 00:51:28 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -34,6 +34,7 @@ char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 boolean gotClade = hGotClade();
 char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
+char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
 boolean supportsSuggest = assemblySupportsGeneSuggest(db);
 
 /* JavaScript to copy input data on the change genome button to a hidden form
@@ -161,8 +162,8 @@ puts(
 
 #define SURVEY 1
 #ifdef SURVEY
-if (survey && sameWord(survey, "on"))
-    puts("&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>");
+if (survey && differentWord(survey, "off"))
+    printf("&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></FONT>", survey, surveyLabel ? surveyLabel : "Take survey");
 #endif
 
 puts(
