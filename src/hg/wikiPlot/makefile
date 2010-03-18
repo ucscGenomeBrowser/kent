@@ -1,15 +1,16 @@
 include ../../inc/common.mk
+include ../../inc/cgi_build_rules.mk
 
 
-L += $(MYSQLLIBS) -lm 
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L += ${MYSQLLIBS} -lm
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
+A = wikiPlot
 O = wikiPlot.o
 
-wikiPlot: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $L
-	mv ${AOUT} wikiPlot
-	${STRIP} wikiPlot${EXE}
-	chmod a+rx wikiPlot
-	mv wikiPlot $(HGCGI)
+%.o: %.c
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+
+compile: $O
+	${CC} -o $A $O ${MYLIBS} ${L}

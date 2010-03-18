@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: wikiPlot.c,v 1.8 2009/08/19 23:25:19 angie Exp $";
+static char const rcsid[] = "$Id: wikiPlot.c,v 1.9 2010/03/18 18:34:24 hiram Exp $";
 
 /* Variables that can be overridden by CGI. */
 char *contigDir = "/projects/hg3/gs.7/oo.29/19/ctg18433";
@@ -78,7 +78,7 @@ void readGold(char *fileName, struct clonePos **retList, struct hash **retHash)
 /* Read .agp/gold formatted file */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *words[12];
+char *words[12];
 struct clonePos *cpList = NULL, *cp;
 struct hash *hash = newHash(0);
 int wordCount;
@@ -118,10 +118,9 @@ void readGl(char *fileName, struct clonePos **retList, struct hash **retHash)
 /* Read gl formatted files. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *row[3];
+char *row[3];
 struct clonePos *cpList = NULL, *cp;
 struct hash *hash = newHash(0);
-int wordCount;
 
 while (lineFileRow(lf, row))
     {
@@ -199,7 +198,7 @@ void readDat(char *fileName, struct clonePos **retList, struct hash **retHash,
 /* Read in one of Terry Furey's dat files. */ 
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *row[3];
+char *row[3];
 struct clonePos *cpList = NULL, *cp;
 struct hash *hash = newHash(0);
 
