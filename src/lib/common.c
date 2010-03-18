@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.145 2010/03/10 22:12:33 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.146 2010/03/18 01:52:09 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -457,7 +457,7 @@ else
 return median;
 }
 
-void doubleBoxWhiskerCalc(int count, double *array, double *retMin, 
+void doubleBoxWhiskerCalc(int count, double *array, double *retMin,
 	double *retQ1, double *retMedian, double *retQ3, double *retMax)
 /* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
 {
@@ -514,7 +514,7 @@ freeMem(array);
 return median;
 }
 
-void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin, 
+void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin,
 	double *retQ1, double *retMedian, double *retQ3, double *retMax)
 /* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
 {
@@ -1516,6 +1516,80 @@ for (;;)
 return recordCount;
 }
 
+int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize)
+/* Like chopString, but specialized for white space separators.
+ * Further, any doubleQuotes (") are respected.
+ * If doubleQuote is encloses whole string, then they are removed:
+ *   "Fred and Ethyl" results in word [Fred and Ethyl]
+ * If doubleQuotes exist inside string they are retained:
+ *   Fred "and Ethyl" results in word [Fred "and Ethyl"]
+ * Special note "" is a valid, though empty word. */
+{
+int recordCount = 0;
+char c;
+char *quoteBegins = NULL;
+boolean quoting = FALSE;
+for (;;)
+    {
+    if (outArray != NULL && recordCount >= outSize)
+        break;
+
+    /* Skip initial separators. */
+    while (isspace(*in)) ++in;
+    if (*in == 0)
+        break;
+
+    /* Store start of word and look for end of word. */
+    if (outArray != NULL)
+        {
+        outArray[recordCount] = in;
+        if((*in == '"'))
+            quoteBegins = (in+1);
+        else
+            quoteBegins = NULL;
+        }
+    recordCount += 1;
+    quoting = FALSE;
+    for (;;)
+        {
+        if ((c = *in) == 0)
+            break;
+        if(quoting)
+            {
+            if(c == '"')
+                {
+                quoting = FALSE;
+                if(quoteBegins != NULL) // implies out array
+                    {
+                    if((c = *(in+1) == 0 )|| isspace(c)) // whole word is quoted.
+                        {
+                        outArray[recordCount-1] = quoteBegins; // Fix beginning of word
+                        quoteBegins = NULL;
+                        break;
+                        }
+                    }
+                }
+            }
+        else
+            {
+            quoting = (c == '"');
+            if (isspace(c))
+                break;
+            }
+        ++in;
+        }
+    if (*in == 0)
+        break;
+
+    /* Tag end of word with zero. */
+    if (outArray != NULL)
+        *in = 0;
+    /* And skip over the zero. */
+    in += 1;
+    }
+    return recordCount;
+}
+
 int chopByChar(char *in, char chopper, char *outArray[], int outSize)
 /* Chop based on a single character. */
 {
@@ -1695,7 +1769,7 @@ if (endFirstWord == NULL)
 else
     return cloneStringZ(startFirstWord, endFirstWord - startFirstWord);
 }
-    
+
 char *lastWordInLine(char *line)
 /* Returns last word in line if any (white space separated).
  * Returns NULL if string is empty.  Removes any terminating white space
@@ -2192,9 +2266,9 @@ slReverse(&newList);
 return newList;
 }
 
-void fileOffsetSizeFindGap(struct fileOffsetSize *list, 
+void fileOffsetSizeFindGap(struct fileOffsetSize *list,
 	struct fileOffsetSize **pBeforeGap, struct fileOffsetSize **pAfterGap)
-/* Starting at list, find all items that don't have a gap between them and the previous item.  
+/* Starting at list, find all items that don't have a gap between them and the previous item.
  * Return at gap, or at end of list, returning pointers to the items before and after the gap. */
 {
 struct fileOffsetSize *pt, *next;
@@ -2217,7 +2291,7 @@ void mustSystem(char *cmd)
 if (cmd == NULL) // don't allow (system() supports testing for shell this way)
     errAbort("mustSystem: called with NULL command.");
 int status = system(cmd);
-if (status == -1) 
+if (status == -1)
     errnoAbort("error starting command: %s", cmd);
 else if (WIFSIGNALED(status))
     errAbort("command terminated by signal %d: %s", WTERMSIG(status), cmd);

@@ -453,7 +453,7 @@ double doubleMedian(int count, double *array);
 /* Return median value in array.  This will sort
  * the array as a side effect. */
 
-void doubleBoxWhiskerCalc(int count, double *array, double *retMin, 
+void doubleBoxWhiskerCalc(int count, double *array, double *retMin,
 	double *retQ1, double *retMedian, double *retQ3, double *retMax);
 /* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
 
@@ -474,7 +474,7 @@ int slDoubleCmp(const void *va, const void *vb);
 double slDoubleMedian(struct slDouble *list);
 /* Return median value on list. */
 
-void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin, 
+void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin,
 	double *retQ1, double *retMedian, double *retQ3, double *retMax);
 /* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
 
@@ -813,6 +813,15 @@ int chopByWhite(char *in, char *outArray[], int outSize);
 #define chopLine(line, words) chopByWhite(line, words, ArraySize(words))
 /* Chop line by white space. */
 
+int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize);
+/* Like chopString, but specialized for white space separators.
+ * Further, any doubleQuotes (") are respected.
+ * If doubleQuote encloses whole string, then they are removed:
+ *   "Fred and Ethyl" results in word [Fred and Ethyl]
+ * If doubleQuotes exist inside string they are retained:
+ *   Fred "and Ethyl" results in word [Fred "and Ethyl"]
+ * Special note "" is a valid, though empty word. */
+
 int chopByChar(char *in, char chopper, char *outArray[], int outSize);
 /* Chop based on a single character. */
 
@@ -1044,9 +1053,9 @@ struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList);
 /* Returns a new list which is inList transformed to have adjacent blocks
  * merged.  Best to use this with a sorted list. */
 
-void fileOffsetSizeFindGap(struct fileOffsetSize *list, 
+void fileOffsetSizeFindGap(struct fileOffsetSize *list,
 	struct fileOffsetSize **pBeforeGap, struct fileOffsetSize **pAfterGap);
-/* Starting at list, find all items that don't have a gap between them and the previous item.  
+/* Starting at list, find all items that don't have a gap between them and the previous item.
  * Return at gap, or at end of list, returning pointers to the items before and after the gap. */
 
 void mustSystem(char *cmd);
