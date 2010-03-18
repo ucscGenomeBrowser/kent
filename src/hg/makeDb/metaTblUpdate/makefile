@@ -4,16 +4,28 @@ L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = metaTblUpdate.o
-A = metaTblUpdate
+UPDATE_A = metaTblUpdate
+PRINT_A = metaTblPrint
+UPDATE_O = ${UPDATE_A}.o
+PRINT_O = ${PRINT_A}.o
 
-metaTblUpdate: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${A}${EXE}
+all: metaTblUpdate metaTblPrint
 
-compile:	${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
+metaTblUpdate: ${UPDATE_O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${UPDATE_A} ${UPDATE_O} ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${UPDATE_A}${EXE}
 
-clean:
-	rm -f $O
+metaTblPrint: ${PRINT_O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${PRINT_A} ${PRINT_O} ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${PRINT_A}${EXE}
+
+lib:
+	cd ${MYLIBDIR} && ${MAKE}
+
+compile: ${UPDATE_O} ${PRINT_O}  ../../../lib/${MACHTYPE}/jkweb.a
+	${CC} ${COPT} -o ${UPDATE_A} ${UPDATE_O} ${MYLIBS} $L
+	${CC} ${COPT} -o ${PRINT_A} ${PRINT_O} ${MYLIBS} $L
+
+clean::
+	rm -f ${UPDATE_A} ${PRINT_A} ${UPDATE_O} ${PRINT_O}
 
