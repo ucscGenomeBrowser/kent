@@ -3,17 +3,17 @@
  * for personal, academic, and non-profit purposes.  Commercial use          *
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
-/* jksql.h - Stuff to manage interface with SQL database. 
+/* jksql.h - Stuff to manage interface with SQL database.
  *
- * To use - first open a connection, then pass a SQL query to 
+ * To use - first open a connection, then pass a SQL query to
  * sqlGetResult, then use sqlNextRow to examine result row by
  * row. The returned row is just an array of strings.  Use
  * sqlUnsigned, sqlSigned, and atof to convert numeric results
- * to normal form. 
+ * to normal form.
  *
- * These routines will all print an error message and abort if 
- * there's a problem, cleaning up open connections, etc. on abort 
- * (or on program exit).  Do a pushAbortHandler if you want to 
+ * These routines will all print an error message and abort if
+ * there's a problem, cleaning up open connections, etc. on abort
+ * (or on program exit).  Do a pushAbortHandler if you want to
  * catch the aborts.  The error messages from bad SQL syntax
  * are actually pretty good (they're just passed on from
  * mySQL). */
@@ -37,7 +37,7 @@ struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
 
 struct sqlConnection *sqlMayConnect(char *database);
-/* Connect to database on default host as default user. 
+/* Connect to database on default host as default user.
  * Return NULL (don't abort) on failure. */
 
 struct sqlConnection *sqlConnectProfile(char *profileName, char *database);
@@ -46,7 +46,7 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database);
  * user, and password variables in .hg.conf.  For the default profile of "db",
  * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
  * override.
- */ 
+ */
 
 struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database);
 /* Connect to profile or database using the specified profile. Can specify
@@ -54,7 +54,7 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database);
  * user, and password variables in .hg.conf.  For the default profile of "db",
  * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
  * override.  Return NULL if connection fails.
- */ 
+ */
 
 struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
                                        char *database);
@@ -161,6 +161,9 @@ boolean sqlRowExists(struct sqlConnection *conn,
 	char *table, char *field, char *key);
 /* Return TRUE if row where field = key is in table. */
 
+int sqlRowCount(struct sqlConnection *conn, char *queryTblAndCondition);
+/* Return count of rows that match condition. The queryTblAndCondition
+ * should contain everying after "select count(*) FROM " */
 
 /* Options to sqlLoadTabFile */
 
@@ -172,8 +175,8 @@ boolean sqlRowExists(struct sqlConnection *conn,
                                            returned rather than abort */
 #define SQL_TAB_FILE_CONCURRENT    0x10  /* optimize for allowing concurrent
                                           * access to the table. */
-#define SQL_TAB_TRANSACTION_SAFE   0x20  /* Don't use speed optimizations that 
-                                          * implicitly commit the current transaction. 
+#define SQL_TAB_TRANSACTION_SAFE   0x20  /* Don't use speed optimizations that
+                                          * implicitly commit the current transaction.
 					  * For example "alter table" */
 #define SQL_TAB_REPLACE            0x40  /* Replace entries with duplicate
                                           * unique keys instead of generating an
@@ -186,14 +189,14 @@ void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
  * sqlIsRemote() returns true. */
 
 struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigned int *errorNo, char **error);
-/* Returns NULL if it had an error.  
- * Otherwise returns a structure that you can do sqlRow() on.  
- * If there was an error, *errorNo will be set to the mysql error number, 
+/* Returns NULL if it had an error.
+ * Otherwise returns a structure that you can do sqlRow() on.
+ * If there was an error, *errorNo will be set to the mysql error number,
  * and *error will be set to the mysql error string, which MUST NOT be freed. */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
-/* (Returns NULL if result was empty. : 
- *     old info, only applies with mysql_store_result not mysql_use_result)  
+/* (Returns NULL if result was empty. :
+ *     old info, only applies with mysql_store_result not mysql_use_result)
  * Otherwise returns a structure that you can do sqlRow() on. */
 
 char *sqlEscapeTabFileString2(char *to, const char *from);
@@ -201,7 +204,7 @@ char *sqlEscapeTabFileString2(char *to, const char *from);
  * must be 2*strlen(from)+1 */
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
-/* Query database. 
+/* Query database.
  * old comment: If result empty squawk and die.
  *    This only applied back when sqlGetResult was using mysql_store_result.
  * These days, with mysql_use_result, we cannot know ahead of time
@@ -231,7 +234,7 @@ boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
 /* Check all tables in space delimited string exist. */
 
 boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
-/* Return TRUE if table (which can include SQL wildcards) exists. 
+/* Return TRUE if table (which can include SQL wildcards) exists.
  * A bit slower than sqlTableExists. */
 
 boolean sqlTableOk(struct sqlConnection *sc, char *table);
@@ -239,17 +242,17 @@ boolean sqlTableOk(struct sqlConnection *sc, char *table);
 
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
- * for cases where you are just looking up one small thing.  
+ * for cases where you are just looking up one small thing.
  * Returns NULL if query comes up empty. */
 
-char *sqlNeedQuickQuery(struct sqlConnection *sc, char *query, 
+char *sqlNeedQuickQuery(struct sqlConnection *sc, char *query,
 	char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
- * for cases where you are just looking up one small thing.  
+ * for cases where you are just looking up one small thing.
  * Prints error message and aborts if query comes up empty. */
 
 int sqlQuickNum(struct sqlConnection *conn, char *query);
-/* Get numerical result from simple query. Returns 0 
+/* Get numerical result from simple query. Returns 0
  * if query returns no result. */
 
 int sqlNeedQuickNum(struct sqlConnection *conn, char *query);
@@ -276,7 +279,7 @@ struct slName *sqlQuickList(struct sqlConnection *conn, char *query);
  * Do a slFreeList on result when done. */
 
 struct hash *sqlQuickHash(struct sqlConnection *conn, char *query);
-/* Return a hash filled with results of two column query. 
+/* Return a hash filled with results of two column query.
  * The first column is the key, the second the value. */
 
 struct slInt *sqlQuickNumList(struct sqlConnection *conn, char *query);
@@ -298,7 +301,7 @@ void sqlGetLock(struct sqlConnection *sc, char *name);
 void sqlReleaseLock(struct sqlConnection *sc, char *name);
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
 
-void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList, 
+void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList,
 	boolean isWrite);
 /* Hard lock given table list.  Unlock with sqlHardUnlockAll. */
 
@@ -312,7 +315,7 @@ void sqlHardUnlockAll(struct sqlConnection *sc);
 /* Unlock any hard locked tables. */
 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
-/* Create table from query if it doesn't exist already. 
+/* Create table from query if it doesn't exist already.
  * Returns FALSE if didn't make table. */
 
 void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create);
@@ -326,7 +329,7 @@ char **sqlNextRow(struct sqlResult *sr);
  * will then return a NULL row. */
 
 char* sqlFieldName(struct sqlResult *sr);
-/* repeated calls to this function returns the names of the fields 
+/* repeated calls to this function returns the names of the fields
  * the given result */
 
 int sqlFieldColumn(struct sqlResult *sr, char *colName);
@@ -337,7 +340,7 @@ int sqlTableSize(struct sqlConnection *conn, char *table);
 /* Find number of rows in table. */
 
 int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field);
-/* Returns index of field in a row from table, or -1 if it 
+/* Returns index of field in a row from table, or -1 if it
  * doesn't exist. */
 
 struct slName *sqlFieldNames(struct sqlConnection *conn, char *table);
@@ -350,11 +353,11 @@ void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
 
 void sqlWarn(struct sqlConnection *sc, char *format, ...);
-/* Printf formatted error message that adds on sql 
+/* Printf formatted error message that adds on sql
  * error message. */
 
 void sqlAbort(struct sqlConnection  *sc, char *format, ...);
-/* Printf formatted error message that adds on sql 
+/* Printf formatted error message that adds on sql
  * error message and abort. */
 
 void sqlCleanupAll(void);
@@ -396,7 +399,7 @@ void sqlMonitorDisable(void);
 /* Disable tracing or profiling of SQL queries. */
 
 int sqlDateToUnixTime(char *sqlDate);
-/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
+/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time
  * (seconds since midnight 1/1/1970 in UNIX). */
 
 char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
@@ -494,7 +497,7 @@ int sqlMinorVersion(struct sqlConnection *conn);
 
 char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
 /* Return a name for a temporary table. Name will start with
- * prefix.  This call doesn't actually  make table.  (So you should 
+ * prefix.  This call doesn't actually  make table.  (So you should
  * make table before next call to insure uniqueness.)  However the
  * table name encorperates the host, pid, and time, which helps insure
  * uniqueness between different processes at least.  FreeMem the result

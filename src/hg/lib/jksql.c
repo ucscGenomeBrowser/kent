@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.138 2009/10/16 00:06:02 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.139 2010/03/18 01:50:29 tdreszer Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -449,7 +449,7 @@ if (monitorFlags & JKSQL_PROF)
 
 monitorFlags = 0;
 sqlTotalTime = 0;  /* allow reenabling */
-sqlTotalQueries = 0; 
+sqlTotalQueries = 0;
 }
 
 void sqlFreeResult(struct sqlResult **pRes)
@@ -623,7 +623,7 @@ for (table = tableList; table != NULL; table = table->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	safef(fullName, sizeof(fullName), "%s.%s.%s", 
+	safef(fullName, sizeof(fullName), "%s.%s.%s",
 	    database, table->name, row[0]);
 	hashAdd(hash, fullName, NULL);
 	}
@@ -711,11 +711,11 @@ if (mysql_real_connect(
     {
     monitorLeave();
     if (abort)
-	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
+	errAbort("Couldn't connect to database %s on %s as %s.\n%s",
 	    database, host, user, mysql_error(conn));
     else if (sqlParanoid)
 	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
-		"mysql: %s  pid=%ld\n", 
+		"mysql: %s  pid=%ld\n",
 		database, host, user, mysql_error(conn), (long)getpid());
     return NULL;
     }
@@ -763,7 +763,7 @@ return conn;
 }
 
 struct sqlConnection *sqlMayConnect(char *database)
-/* Connect to database on default host as default user. 
+/* Connect to database on default host as default user.
  * Return NULL (don't abort) on failure. */
 {
 return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
@@ -781,7 +781,7 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  * user, and password variables in .hg.conf.  For the default profile of "db",
  * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
  * override.
- */ 
+ */
 {
 struct sqlProfile* sp = sqlProfileMustGet(profileName, database);
 return sqlConnectRemote(sp->host, sp->user, sp->password, database);
@@ -793,7 +793,7 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
  * user, and password variables in .hg.conf.  For the default profile of "db",
  * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
  * override.  Return NULL if connection fails.
- */ 
+ */
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
 return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
@@ -810,7 +810,7 @@ warn("mySQL error %d: %s", mysql_errno(conn), mysql_error(conn));
 }
 
 void sqlWarn(struct sqlConnection *sc, char *format, ...)
-/* Printf formatted error message that adds on sql 
+/* Printf formatted error message that adds on sql
  * error message. */
 {
 va_list args;
@@ -820,7 +820,7 @@ va_end(args);
 }
 
 void sqlAbort(struct sqlConnection  *sc, char *format, ...)
-/* Printf formatted error message that adds on sql 
+/* Printf formatted error message that adds on sql
  * error message and abort. */
 {
 va_list args;
@@ -832,9 +832,9 @@ noWarnAbort();
 
 typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
 
-static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc, 
+static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
 	char *query, ResGetter *getter, boolean abort)
-/* Returns NULL if result was empty and getter==mysql_use_result.  
+/* Returns NULL if result was empty and getter==mysql_use_result.
  * Otherwise returns a structure that you can do sqlRow() on.
  * Watch out for subtle differences between mysql_store_result and mysql_use_result.
  * We seem to be only using mysql_use_result these days,
@@ -849,7 +849,7 @@ MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
 
-++sqlTotalQueries; 
+++sqlTotalQueries;
 
 if (monitorFlags & JKSQL_TRACE)
     monitorPrintQuery(sc, query);
@@ -908,7 +908,7 @@ void sqlGetLock(struct sqlConnection *sc, char *name)
 char query[256];
 struct sqlResult *res;
 char **row = NULL;
-                                                                                
+
 safef(query, sizeof(query), "select get_lock('%s', 1000)", name);
 res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
@@ -927,7 +927,7 @@ void sqlReleaseLock(struct sqlConnection *sc, char *name)
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
 {
 char query[256];
-                                                                                
+
 safef(query, sizeof(query), "select release_lock('%s')", name);
 sqlUpdate(sc, query);
 }
@@ -942,7 +942,7 @@ if (sc->hasHardLock)
     }
 }
 
-void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList, 
+void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList,
 	boolean isWrite)
 /* Hard lock given table list.  Unlock with sqlHardUnlockAll. */
 {
@@ -980,7 +980,7 @@ struct slName *tableList =  sqlListTables(sc);
 sqlHardLockTables(sc, tableList, isWrite);
 slFreeList(&tableList);
 }
-                                                                                
+
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
 /* Create table from query if it doesn't exist already.
  * Returns FALSE if didn't make table. */
@@ -1057,7 +1057,7 @@ return ok;
 }
 
 boolean sqlTableWildExists(struct sqlConnection *sc, char *table)
-/* Return TRUE if table (which can include SQL wildcards) exists. 
+/* Return TRUE if table (which can include SQL wildcards) exists.
  * A bit slower than sqlTableExists. */
 {
 char query[512];
@@ -1097,9 +1097,9 @@ return row;
 
 
 struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigned int *errorNo, char **error)
-/* Returns NULL if it had an error.  
- * Otherwise returns a structure that you can do sqlRow() on.  
- * If there was an error, *errorNo will be set to the mysql error number, 
+/* Returns NULL if it had an error.
+ * Otherwise returns a structure that you can do sqlRow() on.
+ * If there was an error, *errorNo will be set to the mysql error number,
  * and *error will be set to the mysql error string, which MUST NOT be freed. */
 {
 struct sqlResult *sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE);
@@ -1123,15 +1123,15 @@ return sr;
 
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
-/* (Returns NULL if result was empty. : 
- *     old info, only applies with mysql_store_result not mysql_use_result)  
+/* (Returns NULL if result was empty. :
+ *     old info, only applies with mysql_store_result not mysql_use_result)
  * Otherwise returns a structure that you can do sqlRow() on. */
 {
 return sqlUseOrStore(sc,query,mysql_use_result, TRUE);
 }
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query)
-/* Query database. 
+/* Query database.
  * old comment: If result empty squawk and die.
  *    This only applied back when sqlGetResult was using mysql_store_result.
  * These days, with mysql_use_result, we cannot know ahead of time
@@ -1352,6 +1352,15 @@ safef(query, sizeof(query), "select count(*) from %s where %s = '%s'",
 return sqlQuickNum(conn, query) > 0;
 }
 
+int sqlRowCount(struct sqlConnection *conn, char *queryTblAndCondition)
+/* Return count of rows that match condition. The queryTblAndCondition
+ * should contain everying after "select count(*) FROM " */
+{
+char query[256];
+safef(query, sizeof(query), "select count(*) from %s",queryTblAndCondition);
+return sqlQuickNum(conn, query);
+}
+
 
 struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query)
 /* Returns NULL if result was empty.  Otherwise returns a structure
@@ -1372,7 +1381,7 @@ return row;
 }
 
 char* sqlFieldName(struct sqlResult *sr)
-/* repeated calls to this function returns the names of the fields 
+/* repeated calls to this function returns the names of the fields
  * the given result */
 {
 MYSQL_FIELD *field;
@@ -1445,7 +1454,7 @@ return count;
 
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize)
 /* Does query and returns first field in first row.  Meant
- * for cases where you are just looking up one small thing.  
+ * for cases where you are just looking up one small thing.
  * Returns NULL if query comes up empty. */
 {
 struct sqlResult *sr;
@@ -1464,10 +1473,10 @@ sqlFreeResult(&sr);
 return ret;
 }
 
-char *sqlNeedQuickQuery(struct sqlConnection *sc, char *query, 
+char *sqlNeedQuickQuery(struct sqlConnection *sc, char *query,
 	char *buf, int bufSize)
 /* Does query and returns first field in first row.  Meant
- * for cases where you are just looking up one small thing.  
+ * for cases where you are just looking up one small thing.
  * Prints error message and aborts if query comes up empty. */
 {
 char *s = sqlQuickQuery(sc, query, buf, bufSize);
@@ -1576,7 +1585,7 @@ return list;
 }
 
 struct hash *sqlQuickHash(struct sqlConnection *conn, char *query)
-/* Return a hash filled with results of two column query. 
+/* Return a hash filled with results of two column query.
  * The first column is the key, the second the value. */
 {
 struct hash *hash = hashNew(16);
@@ -1635,7 +1644,7 @@ return sqlQuickNum(conn, query);
 }
 
 int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field)
-/* Returns index of field in a row from table, or -1 if it 
+/* Returns index of field in a row from table, or -1 if it
  * doesn't exist. */
 {
 char query[256];
@@ -1794,7 +1803,7 @@ static void sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
 /* set the connect cache and connect to the specified database */
 {
 if (mysql_select_db(scce->conn->conn, database) != 0)
-    errAbort("Couldn't set connection database to %s\n%s", 
+    errAbort("Couldn't set connection database to %s\n%s",
              database, mysql_error(scce->conn->conn));
 }
 
@@ -1834,7 +1843,7 @@ else
     conn = sqlConnProfile(profile, database, abort);
 if (conn != NULL)
     return sqlConnCacheAdd(cache, profile, conn);
-else 
+else
     {
     assert(!abort);
     return NULL;
@@ -1845,7 +1854,7 @@ static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
                                                  char *profileName,
                                                  char *database,
                                                  boolean abort)
-/* Allocate a cached connection. errAbort if too many open connections.  
+/* Allocate a cached connection. errAbort if too many open connections.
  * errAbort if abort and connection fails. */
 {
 // obtain profile
@@ -1934,7 +1943,7 @@ char *sqlEscapeString2(char *to, const char* from)
  * must be 2*strlen(from)+1 */
 {
 mysql_escape_string(to, from, strlen(from));
-return to; 
+return to;
 }
 
 char *sqlEscapeString(const char* from)
@@ -1975,8 +1984,8 @@ while (*fp != '\0')
         }
     fp++;
     }
-*tp = '\0'; 
-return to; 
+*tp = '\0';
+return to;
 }
 
 char *sqlEscapeTabFileString(const char *from)
@@ -2080,7 +2089,7 @@ return retVal;
 }
 
 int sqlDateToUnixTime(char *sqlDate)
-/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
+/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time
  * (seconds since midnight 1/1/1970 in UNIX). */
 {
 struct tm *tm = NULL;
@@ -2215,7 +2224,7 @@ else
 sqlFreeResult(&sr);
 return version;
 }
-    
+
 int sqlMajorVersion(struct sqlConnection *conn)
 /* Return major version of database. */
 {
@@ -2285,7 +2294,7 @@ for (i = 0; enumDef[i] != NULL; i++)
     if (enumDef[i+1] == NULL)
         len--;  /* last entry hash close paren */
     if ((enumDef[i][0] != '\'') || (enumDef[i][len-1] != '\''))
-        errAbort("can't find quotes in %s column %s enum value: %s", 
+        errAbort("can't find quotes in %s column %s enum value: %s",
                  table, colName, enumDef[i]);
     enumDef[i][len-1] = '\0';
     enumDef[i]++;
@@ -2302,10 +2311,10 @@ char query[256], **row;
 struct sqlResult *sr;
 struct slName *list = NULL, *el;
 char seedString[256] = "";
-/* The randomized-order, distinct-ing query can take a very long time on 
- * very large tables.  So create a smaller temporary table and use that. 
- * The temporary table is visible only to the current connection, so 
- * doesn't have to be very uniquely named, and will disappear when the 
+/* The randomized-order, distinct-ing query can take a very long time on
+ * very large tables.  So create a smaller temporary table and use that.
+ * The temporary table is visible only to the current connection, so
+ * doesn't have to be very uniquely named, and will disappear when the
  * connection is closed. */
 safef(query, sizeof(query),
       "create temporary table tmp%s select %s from %s limit 100000",
@@ -2314,7 +2323,7 @@ sqlUpdate(conn, query);
 if (seed != -1)
     safef(seedString,sizeof(seedString),"%d",seed);
 safef(query, sizeof(query), "select distinct %s from tmp%s "
-      "order by rand(%s) limit %d", 
+      "order by rand(%s) limit %d",
       field, table, seedString, count);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2387,7 +2396,7 @@ if (fi != NULL)
     {
     freeMem(fi->field);
     freeMem(fi->type);
-    freeMem(fi->key); 
+    freeMem(fi->key);
     freeMem(fi->defaultVal);
     freeMem(fi->extra);
     freeMem(fi);
@@ -2478,7 +2487,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (isFa)
 	    sep = "\n";
 	}
-    fprintf(f,"\n");	    
+    fprintf(f,"\n");
     ++count;
     }
 sqlFreeResult(&sr);
@@ -2488,7 +2497,7 @@ return count;
 
 char *sqlTempTableName(struct sqlConnection *conn, char *prefix)
 /* Return a name for a temporary table. Name will start with
- * prefix.  This call doesn't actually  make table.  (So you should 
+ * prefix.  This call doesn't actually  make table.  (So you should
  * make table before next call to insure uniqueness.)  However the
  * table name encorperates the host, pid, and time, which helps insure
  * uniqueness between different processes at least.  FreeMem the result
