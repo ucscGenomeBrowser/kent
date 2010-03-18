@@ -425,7 +425,9 @@ Some settings used by various tracks:
     o origAssembly - prints out a message on the details page, indicating
         that the data was lifted from this assembly (used chiefly by ENCODE)
     o release <alpha | beta | public> - restricts inclusion of a trackDb entry
-        in the database.
+        in the  table.  When a make is done in the trackDb directory, the
+        hgTrackDb and tdbQuery tools parse the release tag status in response
+        to the "-release=" option in the makefile target.
 	- Tracks marked 'release alpha' are included when 'make alpha' (or 'make')
         is used. The alpha setting is used to avoid inadvertently changing the
         configuration of an existing public track when it is undergoing further
