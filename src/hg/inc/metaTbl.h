@@ -87,6 +87,9 @@ void metaTblOutput(struct metaTbl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#define METATBL_DEFAULT_NAME "metaTbl"
+
+
 enum metaObjType
 // metadata Obects are only certain declared types
     {
@@ -141,10 +144,10 @@ struct metaLimbVal
     struct hash* objHash;     // if NOT NULL: hash of objects  (val str to leafObj struct)
     };
 
-struct metaRootVar
+struct metaByVar
 // When searching metadata var->val->object this is the top struct
     {
-    struct metaRootVar* next; // Next in singly linked list of variables
+    struct metaByVar* next;   // Next in singly linked list of variables
     char *var;                // Metadata variable name.
     enum metaVarType varType; // txt | binary
     struct metaLimbVal* vals; // list of values associated with this var
@@ -163,31 +166,62 @@ enum metaVarType metaVarTypeStringToEnum(char *varType);
 char *metaVarTypeEnumToString(enum metaVarType varType);
 // Convert metadata varType enum string
 
+
+struct metaObj *metadataLineParse(char *line);
+/* Parses a single formatted metadata line into metaObj for updates or queries. */
+
+struct metaObj *metaObjCreate(char *obj,char *type,char *var, char *varType,char *val);
+/* Creates a singular metaObj query object based on obj and all other optional params. */
+
+struct metaByVar *metaByVarsLineParse(char *line);
+/* Parses a line of "var1=val1 var2=val2 into a metaByVar object for queries. */
+
+struct metaByVar*metaByVarCreate(char *var, char *varType,char *val);
+/* Creates a singular var=val pair struct for metadata queries. */
+
+
 struct metaObj *metaObjsLoadFromFormattedFile(char *fileName);
 // Load all metaObjs from a file containing metadata formatted lines
 
 int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
-struct metaObj *metaObjsLoadAllFromTbl(struct sqlConnection *conn,char *tableName);
-// Load all metaObjs from a table (default metaTbl).  Will build varHash.
 
-struct metaObj *metaObjLoadFromTbl(struct sqlConnection *conn,char *tableName,char *objName);
-// Load a metaObj from a table (default metaTbl).  Will build varHash.
+struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaObj *metaObj);
+// Query the metadata table by obj and optional vars and vals in metaObj struct.  If metaObj is NULL query all.
+// Retruns new metaObj struct fully populated and sorted in obj,var order.
+#define metaObjsQueryAll(conn,table) metaObjQuery((conn),(table),NULL)
 
-struct metaObj *metaObjVarLoadFromTbl(struct sqlConnection *conn,char *tableName,char *objName,char *varName);
-// Load a single metadata obj/var pair from a table (default metaTbl).  No objHash build
+struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName);
+// Query a single metadata object and optional var from a table (default metaTbl).
 
-struct metaRootVar *metaRootVarsLoadAllFromTbl(struct sqlConnection *conn,char *tableName);
-// Load all metaVars from a table (default metaTbl) for searching var->val->obj.  Will build objHash.
 
-struct metaRootVar *metaRootVarLoadFromTbl(struct sqlConnection *conn,char *tableName,char *varName);
-// Load a metaVar from a table (default metaTbl) for searching val->obj.  Will build objHash
+struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars);
+// Query the metadata table by vars and vals in metaByVar struct.  If metaByVar is NULL query all.
+// Retruns new metaByVar struct fully populated and sorted in var,val,obj order.
+#define metaByVarsQueryAll(conn,table) metaByVarsQuery((conn),(table),NULL)
+
+struct metaByVar *metaByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val);
+// Query a single metadata variable and optional val from a table (default metaTbl) for searching val->obj.
+
+
+void metaObjPrint(struct metaObj *metaObjs,boolean printLong);
+// prints objs and var=val pairs as formatted metadata lines or long view
+
+void metaByVarPrint(struct metaByVar *metaByVars,boolean printLong);
+// prints var=val pairs and objs that go with them single lines or long view
+
+int metaObjCount(struct metaObj *metaObjs);
+// returns the count of vars belonging to this obj or objs;
+
+int metaByVarCount(struct metaByVar *metaByVars);
+// returns the count of objs belonging to this set of vars;
+
 
 void metaObjsFree(struct metaObj **metaObjsPtr);
 // Frees one or more metadata objects and any contained metaVars.  Will free any hashes as well.
 
-void metaRootVarsFree(struct metaRootVar **metaRootVarsPtr);
+void metaByVarsFree(struct metaByVar **metaByVarsPtr);
 // Frees one or more metadata vars and any contained vals and objs.  Will free any hashes as well.
 
 #endif /* METATBL_H */

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.1 2010/03/18 01:48:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.2 2010/03/18 23:36:05 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -212,9 +212,6 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#define METATBL_DEFAULT_NAME "metaTbl"
-
-
 enum metaObjType metaObjTypeStringToEnum(char *objType)
 // Convert metadata objType string to enum
 {
@@ -258,7 +255,7 @@ switch (varType)
 }
 
 struct metaObj *metadataLineParse(char *line)
-/* Parses a single formatted metadata line. */
+/* Parses a single formatted metadata line into metaObj for updates or queries. */
 {
 char *words[256]; // A lot!
 int thisWord = 0;
@@ -383,6 +380,110 @@ if(metaObj->objType == otUnknown) // NOTE: defaulting to table
 return metaObj;
 }
 
+struct metaObj *metaObjCreate(char *obj,char *type,char *var, char *varType,char *val)
+/* Creates a singular metaObj query object based on obj and all other optional params. */
+{
+struct metaObj *metaObj = NULL;
+
+    if(obj == NULL)
+        errAbort("Need obj to create metaObj query object.\n");
+
+    AllocVar(metaObj);
+    metaObj->objName = cloneString(obj);
+    metaObj->objType = (type==NULL?otUnknown:metaObjTypeStringToEnum(type));
+
+    if(var != NULL)
+        {
+        struct metaVar * metaVar;
+        AllocVar(metaVar);
+
+        metaVar->var     = cloneString(var);
+        metaVar->varType = (varType==NULL?vtUnknown:metaVarTypeStringToEnum(varType));
+        if(val != NULL)
+            metaVar->val     = cloneString(val);
+        metaObj->vars = metaVar; // Only one
+        }
+return metaObj;
+}
+
+struct metaByVar *metaByVarsLineParse(char *line)
+/* Parses a line of "var1=val1 var2=val2 into a metaByVar object for queries. */
+{
+char *words[256]; // A lot!
+int thisWord = 0;
+struct metaByVar   *metaByVars = NULL;
+struct metaByVar   *rootVar = NULL;
+struct metaLimbVal *limbVal = NULL;
+char *cloneLine = cloneString(line);
+struct hash* varHash;     // There must not be multiple occurrances of the same var
+
+    // initial chop and determine if this looks like metadata
+    int count = chopByWhiteRespectDoubleQuotes(cloneLine,words,ArraySize(words));
+
+    verbose(3, "metaByVarsLineParse() word count:%d\n\t%s\n",count,line);
+    // Get objName and figure out if this is a delete line
+    varHash = hashNew(0);
+
+    // All words are expected to be var=val pairs!
+    for(thisWord=0;thisWord<count;thisWord++)
+        {
+        if(strchr(words[thisWord], '=') == NULL)
+            {
+            errAbort("Expected 'var=val' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",words[thisWord],line);
+            //metaObjsFree(&metaObj);
+            //return NULL;
+            }
+        AllocVar(rootVar);
+        char *var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
+        char *val = cloneString(words[thisWord]);
+        struct metaByVar *oldVar = (struct metaByVar *)hashFindVal(varHash, var);
+        if(oldVar)
+            {  // FIXME: Could build this for 'or' queries!
+            verbose(1, "The same variable appears twice: %s=%s and %s=%s.  Ignoring second value.\n",
+                oldVar->var,oldVar->vals->val,var,val);
+            freeMem(var);
+            freeMem(val);
+            }
+        else
+            {
+            AllocVar(rootVar);
+            rootVar->var = var;
+            AllocVar(limbVal);
+            limbVal->val = val;
+            rootVar->vals = limbVal;
+            hashAdd(varHash, rootVar->var, rootVar);
+            slAddHead(&metaByVars,rootVar);
+            }
+        }
+    slReverse(&metaByVars);
+    verbose(2, "metaByVarsLineParse() first: %s=%s\n",metaByVars->var,metaByVars->vals->val);
+return metaByVars;
+}
+
+struct metaByVar*metaByVarCreate(char *var, char *varType,char *val)
+/* Creates a singular var=val pair struct for metadata queries. */
+{
+struct metaByVar *metaByVar = NULL;
+
+    if(var == NULL)
+        errAbort("Need variable to create metaByVar query object.\n");
+
+    AllocVar(metaByVar);
+    metaByVar->var = cloneString(var);
+    metaByVar->varType = (varType==NULL?vtUnknown:metaVarTypeStringToEnum(varType));
+
+    if(val != NULL)
+        {
+        struct metaLimbVal * limbVal;
+        AllocVar(limbVal);
+
+        limbVal->val    = cloneString(val);
+        metaByVar->vals = limbVal; // Only one
+        }
+
+return metaByVar;
+}
+
 struct metaObj *metaObjsLoadFromFormattedFile(char *fileName)
 // Load all metaObjs from a file containing metadata formatted lines
 {
@@ -449,11 +550,11 @@ slReverse(&metaObjs);
 return metaObjs;
 }
 
-static struct metaRootVar *metaRootVarsLoadFromMemory(struct metaTbl **metaTblPtr,boolean buildHashes)
+static struct metaByVar *metaByVarsLoadFromMemory(struct metaTbl **metaTblPtr,boolean buildHashes)
 // Load all metaVars from in memorys metaTbl struct, cannibalize strings.  Expects sorted order.
 {
-struct metaRootVar *rootVars = NULL;
-struct metaRootVar *rootVar  = NULL;
+struct metaByVar *rootVars = NULL;
+struct metaByVar *rootVar  = NULL;
 struct metaLimbVal *limbVal  = NULL;
 struct metaLeafObj *leafObj;
 struct metaTbl *thisRow;
@@ -588,7 +689,7 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
         // Be sure to check for var existence first, then update
         if (!replace)
             {
-            struct metaObj *objExists = metaObjVarLoadFromTbl(conn,tableName,metaObj->objName,metaVar->var);
+            struct metaObj *objExists = metaObjQueryByObj(conn,tableName,metaObj->objName,metaVar->var);
             if(objExists)
                 {
                 if(differentString(metaVar->val,objExists->vars->val)
@@ -621,70 +722,212 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
 return count;
 }
 
-struct metaObj *metaObjsLoadAllFromTbl(struct sqlConnection *conn,char *tableName)
-// Load all metaObjs from a table (default metaTbl).  Will build varHash.
+struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaObj *metaObj)
+// Query the metadata table by obj and optional vars and vals in metaObj struct.  If metaObj is NULL query all.
+// Retruns new metaObj struct fully populated and sorted in obj,var order.
 {
-    char query[256];
-    if(tableName == NULL)
-        tableName = METATBL_DEFAULT_NAME;
-    safef(query, sizeof(query),
-        "select objName,objType,var,varType,val from %s order by objName, var",
-        tableName);
-    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, query);
-    return metaObjsLoadFromMemory(&metaTbl,TRUE);
+//  select obj,var,val where (var= [and val=]) or ([var= and] val=) order by obj,var
+    boolean buildHash = TRUE;
+    struct dyString *dy = newDyString(4096);
+    if(table == NULL)
+        table = METATBL_DEFAULT_NAME;
+    dyStringPrintf(dy, "select objName,objType,var,varType,val from %s", table);
+    if(metaObj != NULL && metaObj->objName != NULL)
+        {
+        dyStringPrintf(dy, " where objName = '%s'", metaObj->objName);
+
+        struct metaVar *metaVar;
+        for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+            {
+            if(metaVar==metaObj->vars)
+                dyStringPrintf(dy, " and (");
+            else
+                dyStringPrintf(dy, " or ");
+            if(metaVar->var != NULL && metaVar->val != NULL)
+                dyStringPrintf(dy, "(var = '%s' and val = '%s')", metaVar->var, sqlEscapeString(metaVar->val));
+            else if(metaVar->var != NULL)
+                    dyStringPrintf(dy, "var = '%s'", metaVar->var);
+            else if(metaVar->val != NULL)
+                    dyStringPrintf(dy, "val = '%s'", sqlEscapeString(metaVar->val));
+            else
+                errAbort("metaObjQuery has empty metaVar struct.\n");
+            buildHash = FALSE;  // too few variables
+            }
+        if(metaObj->vars != NULL)
+            dyStringPrintf(dy, ")");
+        }
+    dyStringPrintf(dy, " order by objName, var");
+
+    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
+    return metaObjsLoadFromMemory(&metaTbl,buildHash);
 }
 
-struct metaObj *metaObjLoadFromTbl(struct sqlConnection *conn,char *tableName,char *objName)
-// Load a metaObj from a table (default metaTbl).  Will build varHash.
+struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName)
+// Query a single metadata object and optional var from a table (default metaTbl).
 {
-    char query[256];
-    if(tableName == NULL)
-        tableName = METATBL_DEFAULT_NAME;
-    safef(query, sizeof(query),
-        "select objName,objType,var,varType,val from %s where objName = '%s' order by var",
-        tableName,objName);
-    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, query);
-    return metaObjsLoadFromMemory(&metaTbl,TRUE);
+if(objName == NULL)
+    return metaObjQuery(conn,table,NULL);
+
+struct metaObj *queryObj  = metaObjCreate(objName,NULL,varName,NULL,NULL);
+struct metaObj *resultObj = metaObjQuery(conn,table,queryObj);
+metaObjsFree(&queryObj);
+return resultObj;
 }
 
-struct metaObj *metaObjVarLoadFromTbl(struct sqlConnection *conn,char *tableName,char *objName,char *varName)
-// Load a single metadata obj/var pair from a table (default metaTbl).  No objHash build
+struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars)
+// Query the metadata table by vars and vals in metaByVar struct.  If metaByVar is NULL query all.
+// Retruns new metaByVar struct fully populated and sorted in var,val,obj order.
 {
-    char query[256];
-    if(tableName == NULL)
-        tableName = METATBL_DEFAULT_NAME;
-    safef(query, sizeof(query),
-        "select objName,objType,var,varType,val from %s where objName = '%s' and var = '%s'",
-        tableName,objName,varName);
-    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, query);
-    return metaObjsLoadFromMemory(&metaTbl,FALSE);  // No need for has with one var!
+//  select var,val,obj where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
+    struct dyString *dy = newDyString(4096);
+    if(table == NULL)
+        table = METATBL_DEFAULT_NAME;
+    dyStringPrintf(dy, "select distinct objName,objType,var,varType,val from %s", table);
+
+    struct metaByVar *rootVar;
+    for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
+        {
+        if(rootVar==metaByVars)
+            dyStringPrintf(dy, " where ");
+        else
+            dyStringPrintf(dy, " or ");
+        dyStringPrintf(dy, "(var = '%s'", rootVar->var);
+
+        struct metaLimbVal *limbVal;
+        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+            {
+            if(limbVal==rootVar->vals)
+                dyStringPrintf(dy, " and val in (");
+            else
+                dyStringPrintf(dy, ",");
+            dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
+            }
+        if(rootVar->vals != NULL)
+            dyStringPrintf(dy, ")");
+        dyStringPrintf(dy, ")");
+        }
+    dyStringPrintf(dy, " order by var, val, objName");
+
+    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
+    return metaByVarsLoadFromMemory(&metaTbl,TRUE);
 }
 
-struct metaRootVar *metaRootVarsLoadAllFromTbl(struct sqlConnection *conn,char *tableName)
-// Load all metaVars from a table (default metaTbl) for searching var->val->obj.  Will build objHash.
+struct metaByVar *metaByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val)
+// Query a single metadata variable and optional val from a table (default metaTbl) for searching val->obj.
 {
-    char query[256];
-    if(tableName == NULL)
-        tableName = METATBL_DEFAULT_NAME;
-    safef(query, sizeof(query),
-        "select objName,objType,var,varType,val from %s order by var, val, objName",
-        tableName);
-    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, query);
-    return metaRootVarsLoadFromMemory(&metaTbl,TRUE);
+if(varName == NULL)
+    return metaByVarsQuery(conn,table,NULL);
+
+struct metaByVar *queryVar  = metaByVarCreate(varName,NULL,val);
+struct metaByVar *resultVar = metaByVarsQuery(conn,table,queryVar);
+metaByVarsFree(&queryVar);
+return resultVar;
 }
 
-struct metaRootVar *metaRootVarLoadFromTbl(struct sqlConnection *conn,char *tableName,char *varName)
-// Load a metaVar from a table (default metaTbl) for searching val->obj.  Will build objHash
+void metaObjPrint(struct metaObj *metaObjs,boolean printLong)
+// prints objs and var=val pairs as formatted metadata lines or long view
 {
-    char query[256];
-    if(tableName == NULL)
-        tableName = METATBL_DEFAULT_NAME;
-    safef(query, sizeof(query),
-        "select objName,objType,var,val from %s where var = '%s' order by val, objName",
-        tableName,varName);
-    struct metaTbl *metaTbl = metaTblLoadByQuery(conn, query);
-    return metaRootVarsLoadFromMemory(&metaTbl,TRUE);
+struct metaObj *metaObj = NULL;
+for(metaObj=metaObjs;metaObj!=NULL;metaObj=metaObj->next)
+    {
+    if(metaObj->objName == NULL)
+        continue;
+
+    printf("metadata %s %s%s",metaObj->objName,
+        metaObjTypeEnumToString(metaObj->objType),(printLong?"\n\t":" "));
+
+    struct metaVar *metaVar = NULL;
+    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+        {
+        if(metaVar->var != NULL && metaVar->val != NULL)
+            {
+            printf("%s=",metaVar->var);
+            if(metaVar->varType == vtBinary)
+                printf("binary%s",(printLong?"\n\t":" "));
+            else
+                printf("%s%s",metaVar->val,(printLong?"\n\t":" "));
+            }
+        }
+    printf("\n");
+    }
 }
+
+void metaByVarPrint(struct metaByVar *metaByVars,boolean printLong)
+// prints var=val pairs and objs that go with them single lines or long view
+{
+struct metaByVar *rootVar = NULL;
+for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
+    {
+    if(rootVar->var == NULL)
+        continue;
+    struct metaLimbVal *limbVal = NULL;
+    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        {
+        if(limbVal->val == NULL)
+            continue;
+
+        printf("metaVariable %s=",rootVar->var);
+        if(rootVar->varType == vtBinary)
+            printf("binary%s",(printLong?"\n\t":" "));
+        else
+            printf("%s%s",limbVal->val,(printLong?"\n\t":" "));
+
+        struct metaLeafObj *leafObj = NULL;
+        for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+            {
+            if(leafObj->objName != NULL)
+                printf("%s%s",leafObj->objName,(printLong?"\n\t":" "));
+            }
+        }
+    printf("\n");
+    }
+}
+
+
+int metaObjCount(struct metaObj *metaObjs)
+// returns the count of vars belonging to this obj or objs;
+{
+int count = 0;
+struct metaObj *metaObj = NULL;
+for(metaObj=metaObjs;metaObj!=NULL;metaObj=metaObj->next)
+    {
+    if(metaObj->objName == NULL)
+        continue;
+    struct metaVar *metaVar = NULL;
+    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+        {
+        if(metaVar->var != NULL && metaVar->val != NULL)
+            count++;
+        }
+    }
+return count;
+}
+
+int metaByVarCount(struct metaByVar *metaByVars)
+// returns the count of objs belonging to this set of vars;
+{
+int count = 0;
+struct metaByVar *rootVar = NULL;
+for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
+    {
+    if(rootVar->var == NULL)
+        continue;
+    struct metaLimbVal *limbVal = NULL;
+    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        {
+        if(limbVal->val == NULL)
+            continue;
+        struct metaLeafObj *leafObj = NULL;
+        for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+            {
+            if(leafObj->objName != NULL)
+                count++;
+            }
+        }
+    }
+return count;
+}
+
 
 void metaObjsFree(struct metaObj **metaObjsPtr)
 // Frees one or more metadata objects and any contained metaVars.  Will free any hashes as well.
@@ -719,14 +962,14 @@ if(metaObjsPtr != NULL && *metaObjsPtr != NULL)
     }
 }
 
-void metaRootVarsFree(struct metaRootVar **metaRootVarsPtr)
+void metaByVarsFree(struct metaByVar **metaByVarsPtr)
 // Frees one or more metadata vars and any contained vals and objs.  Will free any hashes as well.
 {
-if(metaRootVarsPtr != NULL && *metaRootVarsPtr != NULL)
+if(metaByVarsPtr != NULL && *metaByVarsPtr != NULL)
     {
     // free all roots
-    struct metaRootVar *rootVar = NULL;
-    while((rootVar = slPopHead(metaRootVarsPtr)) != NULL)
+    struct metaByVar *rootVar = NULL;
+    while((rootVar = slPopHead(metaByVarsPtr)) != NULL)
         {
         // Free hash first (shared memory)
         if(rootVar->valHash != NULL)
@@ -758,7 +1001,7 @@ if(metaRootVarsPtr != NULL && *metaRootVarsPtr != NULL)
             freeMem(rootVar->var);
         freeMem(rootVar);
         }
-    freez(metaRootVarsPtr);
+    freez(metaByVarsPtr);
     }
 }
 
