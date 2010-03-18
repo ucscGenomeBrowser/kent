@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.420 2010/03/05 21:42:21 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.421 2010/03/18 23:55:31 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3477,7 +3477,11 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         addTrackIfDataAccessible(db, tdb, chrom, privateHost, &newList);
 	}
     }
-slReverse(&newList);
+/* remove slReverse to fix problem with menus in hgTables 
+ * being in the opposite order.  Used to be that pruneEmpties
+ * ended up flipping the list
+ */
+// slReverse(&newList);
 return newList;
 }
 
