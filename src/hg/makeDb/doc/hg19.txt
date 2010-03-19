@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.90 2010/03/11 00:52:22 fanhsu Exp $";
+#	"$Id: hg19.txt,v 1.91 2010/03/19 00:23:08 hartera Exp $";
 
 #############################################################################
 
@@ -8481,6 +8481,9 @@ TMPDIR=/scratch/tmp
 # going forward with hg19 ENCODE tracks. Added trackDb entry for this 
 # ENCODE Mapability track. 
 # 2010-02-05 Added a 40mer sequence subtrack received on 2010-02-04.
+# 2010-03-16 - 2010-03-18. Added metadata to trackDb for the subtracks and
+# added downloads for the bigWig data files.
+
     mkdir -p /hive/data/genomes/hg19/bed/crgMapability
     cd /hive/data/genomes/hg19/bed/crgMapability
 cat << 'EOF' > temp
@@ -8546,6 +8549,44 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
 ('/gbdb/hg19/bbi/crgMapabilityAlign40mer');"
     # Added a subtrack to trackDb/human/hg19/trackDb.enc.ra to the 
     # Mapability track.
+
+    # 2010-03-16 - 2010-03-18
+    # Added metadata to the trackDb entries for the subtracks and 
+    # added downloads for these data files.
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/encMapability
+    cd /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/encMapability
+    cp -p /gbdb/hg19/bbi/crg*.bw .
+    gzip crg*.bw
+    # Copied over hg18/encodeDCC/wgEncodeMapability/preamble.html 
+    # and edited it to only mention the CRG dataset. 
+    # Run encodeDownloadsPage.pl to generate the index page for downloads.
+    # It does not capture all the information probably because the subtrack
+    # name is different to the downloads name so change the file names and 
+    # re-load the tables and make the downloads. 
+    cd /hive/data/genomes/hg19/bed/crgMapability
+    foreach f (`ls *.bw`)
+       echo $f
+       set g=`echo $f | cut -d "-" -f2`
+       set num=`echo $g | cut -d "." -f1`
+       set mer=`echo "${num}mer"`
+       set of=`echo "crgMapabilityAlign${mer}.bw"`
+       set nf=`echo "encCrgMapabilityAlign${mer}.bw"`
+       echo $nf
+       rm /gbdb/hg19/bbi/${of}
+       ln -s `pwd`/${f} /gbdb/hg19/bbi/${nf}
+       hgsql hg19 -e "drop table if exists encCrgMapabilityAlign${mer}; \
+     create table encCrgMapabilityAlign${mer} (fileName varchar(255) not null); \
+     insert into encCrgMapabilityAlign${mer} values ('/gbdb/hg19/bbi/${nf}');"
+     end
+     
+     cd /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/encMapability
+     rm crg*
+     cp -p /gbdb/hg19/bbi/encCrg*.bw .
+     gzip encCrg*.bw
+     # Then run encodeDownloadsPages.pl
+     /cluster/home/hartera/bin/encodeDownloadsPage.pl -db=hg19 -checksum \
+          -preamble=preamble.html index.html . 
+
 #####################################################################
 # tRNAs track (2010-01-13, Fan DONE)
 # tRNAs track (2010-03-10, Fan RE-BUILT WITH UPDATED DATA FROM TODD LOWE)

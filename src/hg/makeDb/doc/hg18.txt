@@ -28324,7 +28324,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.404 2010/03/12 16:50:16 fanhsu Exp $
+# $Id: hg18.txt,v 1.405 2010/03/19 00:23:03 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28372,7 +28372,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.404 2010/03/12 16:50:16 fanhsu Exp $
+# $Id: hg18.txt,v 1.405 2010/03/19 00:23:03 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29305,6 +29305,8 @@ see doc/builds.txt for specific details.
 # 2010-01-26 Loaded tables and added data to /gbdb/
 # 2010-01-28 Changed the table names to have wgEncode prefix for consistency. 
 # Added trackDb entry for the subtracks to the ENCODE Mapability track entry.
+# 2010-03-16 - 2010-03-18. Added metadata to trackDb for the subtracks and#
+# added downloads for the bigWig data files.
  
      mkdir -p /hive/data/genomes/hg18/bed/crgMapability
      cd /hive/data/genomes/hg18/bed/crgMapability
@@ -29356,7 +29358,43 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
      # Added a trackDb entry for this subtrack of the ENCODE Mapability 
      # track in kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra
      # use bigWigInfo to check min and max values. 
-      
+
+     # 2010-03-16 - 2010-03-18
+     # Added metadata to the trackDb entries for the subtracks and     
+     # added downloads for these data files.
+     cd /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeMapability
+     cp -p /gbdb/hg18/bbi/crg*.bw
+     gzip crg*.bw
+     # Edited the preamble.html in 
+     # hg18/encodeDCC/wgEncodeMapability/ to include the CRG dataset.
+     # Run encodeDownloadsPage.pl to generate the index page for downloads.
+     # It does not capture all the information probably because the subtrack
+     # name is different to the downloads name so change the file names and 
+     # re-load the tables and make the downloads. 
+     cd /hive/data/genomes/hg18/bed/crgMapability
+     foreach f (`ls *.bw`)
+        echo $f
+        set g=`echo $f | cut -d "-" -f2`
+        set num=`echo $g | cut -d "." -f1`
+        set mer=`echo "${num}mer"`
+        set of=`echo "crgMapabilityAlign${mer}.bw"`
+        set nf=`echo "wgEncodeCrgMapabilityAlign${mer}.bw"`
+        echo $nf
+        rm /gbdb/hg18/bbi/${of}
+        ln -s `pwd`/${f} /gbdb/hg18/bbi/${nf}
+        hgsql hg18 -e "drop table if exists wgEncodeCrgMapabilityAlign${mer}; \
+     create table wgEncodeCrgMapabilityAlign${mer} (fileName varchar(255) not null); \
+     insert into wgEncodeCrgMapabilityAlign${mer} values ('/gbdb/hg18/bbi/${nf}');"
+     end
+  
+     cd /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeMapability
+     rm crg*
+     cp -p /gbdb/hg18/bbi/wgEncodeCrg*.bw .
+     gzip wgEncodeCrg*.bw
+     # Then run encodeDownloadsPages.pl
+     /cluster/home/hartera/bin/encodeDownloadsPage.pl -checksum \
+          -preamble=preamble.html index.html . 
+           
 #####################################################################
 # tRNAs track (2010-03-12, Fan RE-BUILT)
 #
