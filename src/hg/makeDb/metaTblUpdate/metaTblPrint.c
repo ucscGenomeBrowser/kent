@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblPrint.c,v 1.1 2010/03/18 23:37:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblPrint.c,v 1.2 2010/03/19 17:38:09 tdreszer Exp $";
 
 #define DB_DEFAULT      "hg19"
 #define OBJTYPE_DEFAULT "table"
@@ -24,47 +24,58 @@ void usage()
 {
 errAbort(
   "metaTblPrint - Prints metadata objects and variables from the metaTbl.\n\n"
-  "There are two basic views of the data: by objects and by variables.  Unless a variable but "
-  "no object is requested the default view is by object.  Each line of output will contain "
+  "There are two basic views of the data: by objects and by variables.  Unless a single variable "
+  "and no object is requested the default view is by object.  Each line of output will contain "
   "object and all it's var=val pairs as 'formatted metadata' line.  In var view, a single line "
   "per var=val and then a space seprated list of each obj(type) follows.  Long view will place "
   "each object and var=val on a separate line with tab indentation.  Alternatively, count will "
   "return a count of unique obj var=val combinations. It is also possible to select a "
   "combination of vars by entering a string of var=val pairs.\n\n"
   "usage:\n"
-  "   metaTblPrint [-db=] [-table=] [-long/-count]\n"
+  "   metaTblPrint [-db=] [-table=] [-long/-countObjs/-countVarss/-countVals]\n"
   "                [-all [-byVar]]\n"
   "                [-obj=] [-var= [-val=]]]\n"
   "                [-var= [-val=]]\n"
-  "                [-vars=\"var1=val1 var2=val2...\"]\n\n"
+  "                [-vars=\"var1=val1 var2=val2...\" [-byVar]]\n\n"
   "Options:\n"
   "    -db      Database to query.  Default is '" DB_DEFAULT "'.\n"
   "    -table   Table to query.  Default is '" METATBL_DEFAULT_NAME "'.\n"
   "    -long    Print each obj, var=val as separate line.\n"
-  "    -count   Just print count of unique obj var=val combinations.\n"
+  "    -countObjs   Just print count of objects returned in the query.\n"
+  "    -countVars   Just print count of variables returned in the query.\n"
+  "    -countVals   Just print count of values returned in the query.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
   "      -byVar   Print which objects belong to which var=val pairs.\n"
   "    -obj={objName}  Request a single object.  The request can be further narrowed by var and val.\n"
   "    -var={varName}  Request a single variable.  The request can be further narrowed by val.\n"
-  "    -vars={var=val...}  Request a combination of var=val pairs.  Example:\n"
-  "       -vars=\"grant=Snyder cell=GM12878 antibody=CTCF\" will return all objs\n"
-  "             that satify those constraints.\n"
+  "    -vars={var=val...}  Request a combination of var=val pairs.\n"
+  "Examples:\n"
+  "  metaTblPrint -vars=\"grant=Snyder cell=GM12878 antibody=CTCF\"\n"
+  "               Return all objs that satify ALL of the constraints.\n"
+  "  metaTblPrint -byVar -vars=\"grant=Snyder cell=GM12878 antibody=CTCF\"\n"
+  "               Return each var=val pair and ANY objects that have any constraint.\n"
+  "  metaTblPrint -db=hg18 -obj=wgEncodeUncFAIREseqPeaksPanislets\n"
+  "               Return the formatted metadata line for the one object.\n"
+  "  metaTblPrint -countObjs -var=treatment\n"
+  "               Return the count of objects which have a declared treatment.\n"
   );
 }
 
 static struct optionSpec optionSpecs[] = {
-    {"db",      OPTION_STRING}, // default "hg19"
-    {"table",   OPTION_STRING}, // default "metaTbl"
-    {"long",    OPTION_BOOLEAN},// long format
-    {"count",   OPTION_BOOLEAN},// returns only count of unique obj var=val combinations
-    {"all",     OPTION_BOOLEAN},// query entire table
-    {"byVar",   OPTION_BOOLEAN},// With -all prints from var perspective
-    {"obj",     OPTION_STRING}, // objName or objId
-    {"var",     OPTION_STRING}, // variable
-    {"val",     OPTION_STRING}, // value
-    {"vals",     OPTION_STRING},// var1=val1 var2=val2...
-    {NULL,      0}
+    {"db",       OPTION_STRING}, // default "hg19"
+    {"table",    OPTION_STRING}, // default "metaTbl"
+    {"long",     OPTION_BOOLEAN},// long format
+    {"countObjs",OPTION_BOOLEAN},// returns only count of objects
+    {"countVars",OPTION_BOOLEAN},// returns only count of variables
+    {"countVals",OPTION_BOOLEAN},// returns only count of values
+    {"all",      OPTION_BOOLEAN},// query entire table
+    {"byVar",    OPTION_BOOLEAN},// With -all prints from var perspective
+    {"obj",      OPTION_STRING}, // objName or objId
+    {"var",      OPTION_STRING}, // variable
+    {"val",      OPTION_STRING}, // value
+    {"vars",     OPTION_STRING},// var1=val1 var2=val2...
+    {NULL,       0}
 };
 
 int main(int argc, char *argv[])
@@ -72,15 +83,18 @@ int main(int argc, char *argv[])
 {
 struct metaObj   * metaObjs   = NULL;
 struct metaByVar * metaByVars = NULL;
+int objsCnt=0, varsCnt=0,valsCnt=0;
 
 optionInit(&argc, argv, optionSpecs);
 char *db    = optionVal("db",   DB_DEFAULT);
 char *table = optionVal("table",METATBL_DEFAULT_NAME);
 boolean printLong = optionExists("long");
-boolean printCount = optionExists("count");
+boolean cntObjs = optionExists("countObjs");
+boolean cntVars = optionExists("countVars");
+boolean cntVals = optionExists("countVals");
 boolean byVar = FALSE;
 
-if(printLong && printCount)
+if(printLong && (cntObjs || cntVars || cntVals))
     usage();
 
 boolean all = optionExists("all");
@@ -104,7 +118,7 @@ else if(optionExists("var"))
     }
 else if(optionExists("vars"))
     {
-    byVar = TRUE;
+    byVar = optionExists("byVar");
     metaByVars = metaByVarsLineParse(optionVal("vars", NULL));
     }
 else
@@ -113,33 +127,67 @@ else
 struct sqlConnection *conn = sqlConnect(db);
 if(byVar)
     {
+    if(metaByVars == NULL) // assertable
+        usage();
+
+    // Requested a single var
     struct metaByVar * queryResults = metaByVarsQuery(conn,table,metaByVars);
     if(queryResults == NULL)
         verbose(1, "No metadata met your selection criteria\n");
     else
         {
-        if(printCount)
-            printf("%d\n",metaByVarCount(queryResults));
-        else
-            metaByVarPrint(queryResults,printLong); // FIXME: write
+        objsCnt=metaByVarCount(queryResults,FALSE,FALSE);
+        varsCnt=metaByVarCount(queryResults,TRUE ,FALSE);
+        valsCnt=metaByVarCount(queryResults,FALSE,TRUE );
+        if(!cntObjs && !cntVars && !cntVals)
+            metaByVarPrint(queryResults,printLong);
         metaByVarsFree(&queryResults);
         }
     }
 else
     {
-    struct metaObj * queryResults = metaObjQuery(conn,table,metaObjs);
+    struct metaObj * queryResults = NULL;
+    if(metaByVars != NULL)
+        {
+        // Requested a set of var=val pairs and looking for the unique list of objects that have all of them!
+        queryResults = metaObjsQueryByVars(conn,table,metaByVars);
+        }
+    else
+        {
+        // Requested a single obj
+        queryResults = metaObjQuery(conn,table,metaObjs);
+        }
+
     if(queryResults == NULL)
         verbose(1, "No metadata met your selection criteria\n");
     else
         {
-        if(printCount)
-            printf("%d\n",metaObjCount(queryResults));
-        else
-            metaObjPrint(queryResults,printLong); // FIXME: write
+        objsCnt=metaObjCount(queryResults,TRUE);
+        varsCnt=metaObjCount(queryResults,FALSE);
+        valsCnt=varsCnt;
+        if(!cntObjs && !cntVars && !cntVals)
+            metaObjPrint(queryResults,printLong);
         metaObjsFree(&queryResults);
         }
     }
 sqlDisconnect(&conn);
+
+if(cntObjs || cntVars || cntVals)
+    {
+    if(cntObjs)
+        printf("%d objects\n",objsCnt);
+    if(cntVars)
+        printf("%d variable\n",varsCnt);
+    if(cntVals)
+        printf("%d values\n",valsCnt);
+    }
+else if( varsCnt>0 || valsCnt>0 || objsCnt>0 )
+    {
+    if(byVar)
+        verbose(1,"vars:%d  vals:%d  objects:%d\n",varsCnt,valsCnt,objsCnt);
+    else
+        verbose(1,"objects:%d  vars:%d\n",objsCnt,varsCnt);
+    }
 
 if(metaObjs)
     metaObjsFree(&metaObjs);
