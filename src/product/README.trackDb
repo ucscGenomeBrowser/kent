@@ -90,6 +90,14 @@ definitions, add to the specification in your cgi-bin/hg.conf file:
 
 db.trackDb=trackDb_localTracks,trackDb
 
+Beware of the specified order of the tables if there are tracks
+by the same name in each table.  Any definitions for tracks
+in trackDb_localTracks will override any definitions for the
+same named tracks in trackDb.  You could thus override the
+standard definitions for tracks from the trackDb table.
+Your usual case will be that your tracks are unique to your
+local installation.
+
 ========================================================================
 Extra Credit:
 
@@ -121,4 +129,4 @@ binary every time, thus always picking up any potentially new
 library.
 
 ====================================================================
-This file last updated: $Date: 2010/03/19 21:33:41 $
+This file last updated: $Date: 2010/03/19 22:33:38 $
