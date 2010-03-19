@@ -1,5 +1,5 @@
 #
-#	$Id: README,v 1.1.2.1 2010/03/19 20:32:17 hiram Exp $
+#	$Id: README,v 1.1.2.2 2010/03/19 23:14:39 hiram Exp $
 #
 
 Included here are some scripts to help with the job of constructing
@@ -33,6 +33,27 @@ required to operate that genome browser with all annotation tracks
 available.  The sizes of the larger databases are becoming more
 that 1 Tb.
 
+The update race condition ==========================================
+
+There is a tricky coordination problem that must be considered.
+The updates of the MySQL text dumps in goldenPath/*/database/ are
+uncoordinated with when your database tables were last loaded.
+An attempt to coordinate this situation is included with the
+tagGoldenPath.sh script and the loadUpdateGoldenPath.sh script.
+If you know that all the databases are loaded completely from your existing
+set of goldenPath/*/database/ file, you can use the tagGoldenPath.sh
+script to tag those database/ directories with a lastTimeStamp of
+the newest file existing there.  When an update rsync takes place,
+any new files will be newer than that lastTimeStamp.  The
+loadUpdateGoldenPath.sh script will load or reload only the
+new files since the lastTimeStamp.  If that load is successful,
+then the tagGoldenPath.sh can be run and a new lastTimeStamp will
+be established.  As long as the loading and reloading are successful,
+there will be no difficulty with this coordination.  In the worst case,
+if database tables and download dumps are unknown to be in sync
+or not, a full reload of the database should be undertaken.  A full
+reload of a database can consume a number of hours.
+
 Brief description of these scripts.  Run them with no arguments
 to view their full help messages:
 
@@ -61,3 +82,8 @@ to view their full help messages:
 	the local /gbdb/ hierarchy
 11. fetchFullGoldenPath.sh - rsync fetch of all files for a given database
 	into the local goldenPath/ database MySQL text dump directory
+12. tagGoldenPath.sh - after everything is loaded successfully in
+	goldenPath/*/database this script will touch a lastUpdate file
+	to be used by loadUpdateGoldenPath.sh
+13. loadUpdateGoldenPath.sh - after goldenPath/*/database download are updated,
+	this script will load any new tables since the last timeStamp
