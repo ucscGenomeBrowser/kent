@@ -1,7 +1,7 @@
-#	"$Id: trackDb.chainNet.ra,v 1.14 2010/03/16 22:26:39 vanessa Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.15 2010/03/19 18:22:57 antonio Exp $";
 
 track chainNetPonAbe2 override
-priority 245.3
+priority 220.3
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetPanTro2 override
@@ -10,7 +10,7 @@ chainMinScore 5000
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetHg19 override
-priority 217.3
+priority 250.3
 chainMinScore 5000
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 
@@ -39,7 +39,7 @@ chainLinearGap medium
     shortLabel $o_db Net
 
 track chainNetCalJac3 override
-priority 215.3
+priority 260.3
 
 track chainNetCalJac1 override
 priority 215.3

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.6 2010/02/05 07:42:04 kuhn Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.7 2010/03/19 18:15:09 antonio Exp $";
 
 track chainNetPonAbe2 override
 chainMinScore 1000
@@ -17,26 +17,26 @@ chainMinScore 3000
 chainLinearGap loose
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 120
+
 
 track chainNetEquCab2 override
 chainMinScore 5000
 chainLinearGap loose
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 150
+
 
 track chainNetOrnAna1 override
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chainMinScore 3000
 chainLinearGap loose
-priority 130
+
 
 track chainNetCanFam2 override
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chainMinScore 1000
 chainLinearGap loose
-priority 140
+
 
