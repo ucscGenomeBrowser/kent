@@ -109,7 +109,7 @@ echo "(Only prints if shortLabel is greater than 16 characters, or if"
 echo "it can't find a shortLabel at all)"
 foreach table ( $tables )
  set num=`tdbQuery "select shortLabel from $db where track = '$table'" \
-  | sed -e 's/shortLabel //' | wc -c`
+  | sed -e 's/shortLabel //' | sed -e '/^[ ]*$/d' | awk '{print length}'`
  if ( $maxShortLabel < $num || 0 == $num ) then
   if ( 0 == $num ) then
    echo "ERROR: can't find a shortLabel for $table"
@@ -126,7 +126,7 @@ echo "(Only prints if longLabel is greater than 80 characters, or if"
 echo "it can't find a longLabel at all)"
 foreach table ( $tables )
  set num=`tdbQuery "select longLabel from $db where track = '$table'" \
-  | sed -e 's/longLabel //' | wc -c`
+  | sed -e 's/longLabel //' | sed -e '/^[ ]*$/d' | awk '{print length}'`
  if ( $maxLongLabel < $num || 0 == $num ) then
   if ( 0 == $num ) then
    echo "ERROR: can't find a longLabel for $table"
