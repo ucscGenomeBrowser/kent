@@ -87,6 +87,7 @@ void metaTblOutput(struct metaTbl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#define METATBL_DEFAULT_DB   "hg19"
 #define METATBL_DEFAULT_NAME "metaTbl"
 
 
@@ -186,28 +187,28 @@ struct metaObj *metaObjsLoadFromFormattedFile(char *fileName);
 
 
 // -------------- Updating the DB --------------
-int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace);
+int metaObjsSetToDb(char * db,char *tableName,struct metaObj *metaObjs,boolean replace);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
 
 // ------------------ Querys -------------------
-struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaObj *metaObj);
+struct metaObj *metaObjQuery(char * db,char *table,struct metaObj *metaObj);
 // Query the metadata table by obj and optional vars and vals in metaObj struct.  If metaObj is NULL query all.
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 #define metaObjsQueryAll(conn,table) metaObjQuery((conn),(table),NULL)
 
-struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName);
+struct metaObj *metaObjQueryByObj(char * db,char *table,char *objName,char *varName);
 // Query a single metadata object and optional var from a table (default metaTbl).
 
-struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars);
+struct metaByVar *metaByVarsQuery(char * db,char *table,struct metaByVar *metaByVars);
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ANY conditions.
 // Returns new metaByVar struct fully populated and sorted in var,val,obj order.
 #define metaByVarsQueryAll(conn,table) metaByVarsQuery((conn),(table),NULL)
 
-struct metaByVar *metaByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val);
+struct metaByVar *metaByVarQueryByVar(char * db,char *table,char *varName,char *val);
 // Query a single metadata variable and optional val from a table (default metaTbl) for searching val->obj.
 
-struct metaObj *metaObjsQueryByVars(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars);
+struct metaObj *metaObjsQueryByVars(char * db,char *table,struct metaByVar *metaByVars);
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 
@@ -224,6 +225,20 @@ int metaObjCount(struct metaObj *metaObjs, boolean objs);
 
 int metaByVarCount(struct metaByVar *metaByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
+
+
+// ----------------- Utilities -----------------
+boolean metaObjContains(struct metaObj *metaObj, char *var, char *val);
+// Returns TRUE if object contains var, val or both
+
+boolean metaByVarContains(struct metaByVar *metaByVar, char *val, char *obj);
+// Returns TRUE if var contains val, obj or both
+
+void metaObjReorderVars(struct metaObj *metaObjs, char *vars,boolean back);
+// Reorders vars list based upon list of vars "cell antibody treatment".  Send to front or back.
+
+void metaObjRemoveVars(struct metaObj *metaObjs, char *vars);
+// Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 
 
 // --------------- Free at last ----------------
