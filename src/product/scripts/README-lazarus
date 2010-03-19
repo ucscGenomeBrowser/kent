@@ -1,0 +1,63 @@
+#
+#	$Id: README-lazarus,v 1.1.2.1 2010/03/19 20:32:17 hiram Exp $
+#
+
+Included here are some scripts to help with the job of constructing
+and maintaining a mirror site for the UCSC Genome Browser.
+
+These scripts are helpful and useful, but they are not the entire
+story.
+
+They expect that commands for rsync, cvs, and mysql, for example,
+are installed on your system.  Instructions for the installation
+of MySQL and the Apache WEB server are not included here.
+Those products have excellent How-To resources on the internet.
+
+You must copy and edit the specification file:
+
+	browserEnvironment.txt
+
+to determine where the various objects are going to exist on
+your system.  The examples in that file are sending files to
+/scratch/tmp/ which is probably not very useful.  You can copy
+this file to a file name of your choice and edit that file.
+The pathname to that file will be used with these scripts so
+they understand how to function in your environment.
+
+The difference between "full" and "minimal" in the scripts.
+A "minimal" set of files for a given UCSC genome database are
+sufficient to get a genome browser up and running with no
+extra tracks.  This genome browser will have no annotations.
+The "full" set of files for a given genome browser are all files
+required to operate that genome browser with all annotation tracks
+available.  The sizes of the larger databases are becoming more
+that 1 Tb.
+
+Brief description of these scripts.  Run them with no arguments
+to view their full help messages:
+
+1. activeDbList.sh - using MySQL commands to the public UCSC MySQL
+	server, will fetch a list of active databases.  Lists of
+	databases can be used with some of the fetch and load scripts.
+2. minimal.db.list.txt - a list of active databases as of mid-March 2010
+3. kentSrcUpdate.sh - fetches and/or updates a local copy of the 'kent'
+	source tree and builds that source tree with resulting binaries
+	into directories of your specification in your copy of the
+	browserEnvironment.txt file.  Requires the use of the
+	beta.cvsup.pl script.
+4. beta.cvsup.pl - used by kentSrcUpdate.sh to run a 'cvs up' command on
+	an existing 'kent' source tree.
+5. fetchHgCentral.sh - fetches a copy of the hgcentral.sql definition of
+	the hgcentral database
+6. updateHtml.sh - rsync fetch the static HTML hierarchy of
+	the UCSC Genome Browser into your specified documentRoot
+7. fetchMinimalGbdb.sh - rsync fetch of a minimal set of files in the /gbdb/
+	hierarchy to operate a genome browser with the smallest set of files
+8. fetchMinimalGoldenPath.sh - rsync fetch of a minimal set of files in the
+	goldenPath/ hierarchy to be used to load a genome datase
+9. loadDb.sh - can perform an initial load of a database from the
+	goldenPath/ database MySQL text dumps
+10. fetchFullGbdb.sh - rsync fetch of all files for a given database into
+	the local /gbdb/ hierarchy
+11. fetchFullGoldenPath.sh - rsync fetch of all files for a given database
+	into the local goldenPath/ database MySQL text dump directory
