@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.2 2010/03/18 23:37:24 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.3 2010/03/19 17:36:50 tdreszer Exp $";
 
 #define DB_DEFAULT      "hg19"
 #define OBJTYPE_DEFAULT "table"
