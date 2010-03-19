@@ -424,22 +424,23 @@ Some settings used by various tracks:
         (used chiefly by ENCODE)
     o origAssembly - prints out a message on the details page, indicating
         that the data was lifted from this assembly (used chiefly by ENCODE)
-    o release <alpha | beta | public> - restricts inclusion of a trackDb entry
-        in the  table.  When a make is done in the trackDb directory, the
-        hgTrackDb and tdbQuery tools parse the release tag status in response
-        to the "-release=" option in the makefile target.
-	- Tracks marked 'release alpha' are included when 'make alpha' (or 'make')
+    o release tag[,tag]*  where tag is public, beta, or alpha 
+        - restricts inclusion of a trackDb entry in the  table.  When a make
+        is done in the trackDb directory, the hgTrackDb and tdbQuery tools
+        parse the release tag status in response to the "-release=" option in
+        the makefile target.
+	Tracks marked 'release alpha' are included when 'make alpha' (or 'make')
         is used. The alpha setting is used to avoid inadvertently changing the
         configuration of an existing public track when it is undergoing further
-        development.  It provides a temporary development-only version of the
-        trackDb. 
-        - TrackDb.ra entries marked 'release beta' are included in the trackDb
+        development.  It provides a temporary, development-only version of the
+        trackDb entry. 
+        TrackDb.ra entries marked 'release beta' are included in the trackDb
         table with 'make beta'.  This setting is for tracks that are staged for
         release by Q/A.
-        - Entries marked 'release public' are included with 'make public'.  The
+        Entries marked 'release public' are included with 'make public'.  The
         public setting marks tracks that are already published or are about to
         be published.
-        - Entries marked 'release alpha,beta,public' have the same behavior as
+        Entries marked 'release alpha,beta,public' have the same behavior as
         those with no release tag.
         To initiate changes to an existing public track, a developer should
         mark the existing trackDb entry (the public server version) with the
