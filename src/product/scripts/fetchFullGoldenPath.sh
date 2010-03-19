@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: fetchFullGoldenPath.sh,v 1.1 2010/03/18 23:40:17 hiram Exp $
+#	$Id: fetchFullGoldenPath.sh,v 1.2 2010/03/19 16:19:34 hiram Exp $
 #
 usage() {
     echo "usage: fetchFullGoldenPath.sh <browserEnvironment.txt> <db.Ids>"
@@ -48,8 +48,8 @@ time0=`date "+%s"`
 echo -n "starting at: "
 date -u
 mkdir -p ${GOLD}/${DB}/database
-rsync -rltgoDz --partial --stats \
-    rsync://hgdownload.cse.ucsc.edu/goldenPath/${DB}/database/ \
+${RSYNC} --partial --stats \
+    ${HGDOWNLOAD}/goldenPath/${DB}/database/ \
      ${GOLD}/${DB}/database/
 time1=`date "+%s"`
 elapsedTime=`echo $time1 $time0 | awk '{print $1-$2}'`

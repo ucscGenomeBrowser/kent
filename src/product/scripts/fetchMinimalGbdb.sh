@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: fetchMinimalGbdb.sh,v 1.1 2010/03/18 23:24:18 hiram Exp $
+#	$Id: fetchMinimalGbdb.sh,v 1.2 2010/03/19 16:19:34 hiram Exp $
 #
 usage() {
     echo "usage: fetchMinimalGbdb.sh <browserEnvironment.txt> <db.Ids>"
@@ -49,15 +49,15 @@ echo -n "starting at: "
 date -u
 mkdir -p ${GBDB}/${DB}/
 echo "#  checking for ${DB}.2bit file"
-rsync -rltgoDz --partial --stats \
-    rsync://hgdownload.cse.ucsc.edu/gbdb/${DB}/${DB}.2bit \
+${RSYNC} --partial --stats \
+    ${HGDOWNLOAD}/gbdb/${DB}/${DB}.2bit \
      ${GBDB}/${DB}/${DB}.2bit
 echo "#  checking for ${DB}/nib/ directory"
-rsync -rltgoDz --partial --stats \
-    rsync://hgdownload.cse.ucsc.edu/gbdb/${DB}/nib/ ${GBDB}/${DB}/nib/
+${RSYNC} --partial --stats \
+    ${HGDOWNLOAD}/gbdb/${DB}/nib/ ${GBDB}/${DB}/nib/
 echo "#  checking for ${DB}/html/ directory"
-rsync -rltgoDz --partial --stats \
-    rsync://hgdownload.cse.ucsc.edu/gbdb/${DB}/html/ ${GBDB}/${DB}/html/
+${RSYNC} --partial --stats \
+    ${HGDOWNLOAD}/gbdb/${DB}/html/ ${GBDB}/${DB}/html/
 time1=`date "+%s"`
 elapsedTime=`echo $time1 $time0 | awk '{print $1-$2}'`
 echo -n "finished at: "

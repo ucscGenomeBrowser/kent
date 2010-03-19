@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: fetchFullGbdb.sh,v 1.1 2010/03/18 23:34:09 hiram Exp $
+#	$Id: fetchFullGbdb.sh,v 1.2 2010/03/19 16:19:34 hiram Exp $
 #
 usage() {
     echo "usage: fetchFullGbdb.sh <browserEnvironment.txt> <db.Ids>"
@@ -47,8 +47,8 @@ echo "working on ${GBDB}/$DB"
 time0=`date "+%s"`
 echo -n "starting at: "
 date -u
-rsync -rltgoDz --partial --stats \
-	rsync://hgdownload.cse.ucsc.edu/gbdb/${DB}/ ${GBDB}/${DB}/
+${RSYNC} --partial --stats \
+	${HGDOWNLOAD}/gbdb/${DB}/ ${GBDB}/${DB}/
 time1=`date "+%s"`
 elapsedTime=`echo $time1 $time0 | awk '{print $1-$2}'`
 echo -n "finished at: "

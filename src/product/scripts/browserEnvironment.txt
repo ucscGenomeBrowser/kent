@@ -1,7 +1,7 @@
 #
 #	browserEnvironment.txt
 #
-#	$Id: browserEnvironment.txt,v 1.2 2010/03/18 23:18:59 hiram Exp $
+#	$Id: browserEnvironment.txt,v 1.3 2010/03/19 16:19:34 hiram Exp $
 #
 #	example UCSC genome mirror site definition file
 #	copy this file to start the definitions for your local site.
@@ -10,6 +10,13 @@
 #	and loading database tables.
 #
 
+#       rsync command used to fetch from hgdownload.cse.ucsc.edu
+#	Note the explicit arguments for mirroring in an attempt to work-around
+#	the UCSC permissions on directories and files which are not
+#	consistent for 'group' rwx permissions.
+export RSYNC="rsync -rltgoDz"
+#	rsync location at UCSC to fetch files
+export HGDOWNLOAD="rsync://hgdownload.cse.ucsc.edu"
 #	kentSrc - location where you want your master kent source tree to live
 export kentSrc="/scratch/tmp/kent"
 #	LOGDIR - location to keep log files of script activities:
