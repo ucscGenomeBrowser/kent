@@ -6,7 +6,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.2 2010/03/19 02:24:35 markd Exp $";
+static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.3 2010/03/19 06:04:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +48,26 @@ vfprintf(stderr, format, args);
 va_end(args);
 fputc('\n', stderr);
 convertErrCnt++;
+}
+
+static char *mkAnnAddrKey(struct gff3Ann *ann)
+/* create a key for a gff3Ann from its address.  WARNING: static return */
+{
+static char buf[64];
+safef(buf, sizeof(buf), "%lld", (long long)ann);
+return buf;
+}
+
+static boolean isProcessed(struct hash *processed, struct gff3Ann *ann)
+/* has an ann record be processed? */
+{
+return hashLookup(processed, mkAnnAddrKey(ann)) != NULL;
+}
+
+static void recProcessed(struct hash *processed, struct gff3Ann *ann)
+/* add an ann record to processed hash */
+{
+hashAdd(processed, mkAnnAddrKey(ann), ann);
 }
 
 static struct gff3File *loadGff3(char *inGff3File)
@@ -174,7 +194,8 @@ return TRUE;
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
 /* process a mRNA node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
-hashStore(processed, mrna->id);
+recProcessed(processed, mrna);
+
 // allow for only having CDS children
 struct gff3AnnRef *exons = getChildFeatures(mrna, gff3FeatExon);
 struct gff3AnnRef *cdsBlks = getChildFeatures(mrna, gff3FeatCDS);
@@ -190,7 +211,7 @@ if (!addCdsFrame(gp, cdsBlks))
 
 // output before checking so it can be examined
 genePredTabOut(gp, gpFh);
-if (genePredCheck("GFF3 converted to genePred", stderr, -1, gp) != 0)
+if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
     {
     cnvError("conversion failed");
     genePredFree(&gp);
@@ -205,12 +226,12 @@ slFreeList(&cdsBlks);
 static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
 /* process a gene node in the tree.  Stop process if maximum errors reached */
 {
-hashStore(processed, gene->id);
+recProcessed(processed, gene);
 
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
-    if (sameString(child->ann->type, gff3FeatMRna) && (hashLookup(processed, child->ann->id) == NULL))
+    if (sameString(child->ann->type, gff3FeatMRna) && !isProcessed(processed, child->ann))
         {
         processMRna(gpFh, gene, child->ann, processed);
         if (convertErrCnt > maxConvertErrs)
@@ -222,7 +243,7 @@ for (child = gene->children; child != NULL; child = child->next)
 static void processRoot(FILE *gpFh, struct gff3Ann *node, struct hash *processed)
 /* process a root node in the tree */
 {
-hashStore(processed, node->id);
+recProcessed(processed, node);
 
 if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
@@ -233,14 +254,14 @@ else if (sameString(node->type, gff3FeatMRna))
 static void gff3ToGenePred(char *inGff3File, char *outGpFile)
 /* gff3ToGenePred - convert a GFF3 file to a genePred file. */
 {
-// hash of nodes record ids, prevents dup processing due to dup parents
+// hash of nodes ptrs, prevents dup processing due to dup parents
 struct hash *processed = hashNew(12);
 struct gff3File *gff3File = loadGff3(inGff3File);
 FILE *gpFh = mustOpen(outGpFile, "w");
 struct gff3AnnRef *root;
 for (root = gff3File->roots; root != NULL; root = root->next)
     {
-    if (hashLookup(processed, root->ann->id) == NULL)
+    if (!isProcessed(processed, root->ann))
         {
         processRoot(gpFh, root->ann, processed);
         if (convertErrCnt > maxConvertErrs)

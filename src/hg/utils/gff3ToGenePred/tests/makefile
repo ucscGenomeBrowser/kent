@@ -4,7 +4,7 @@ gff3ToGenePred = ${BINDIR}/gff3ToGenePred
 
 all::
 
-test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest multCdsOutOfExonTest
+test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest multCdsOutOfExonTest noIdTest
 
 
 geneMRnaTest: mkout
@@ -24,6 +24,10 @@ multCdsOutOfExonTest: mkout
 	if ! ${gff3ToGenePred} input/multCdsOutOfExon.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else echo "Error: comand should have failed" >&2; false ; fi
 	diff expected/$@.out output/$@.out
 
+# some records without ID or Parent attrs
+noIdTest: mkout
+	${gff3ToGenePred} input/noId.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 mkout:
 	@mkdir -p output
 
