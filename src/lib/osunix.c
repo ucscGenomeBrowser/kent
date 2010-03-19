@@ -16,7 +16,7 @@
 #include <utime.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.46 2010/03/13 23:01:50 hiram Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.47 2010/03/19 19:11:24 angie Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -614,8 +614,10 @@ vaDumpStack(format, args);
 va_end(args);
 }
 
-void touchFile(char *fileName)
-/* If file exists, set its access and mod times to now.  If it doesn't exist, create it. */
+boolean maybeTouchFile(char *fileName)
+/* If file exists, set its access and mod times to now.  If it doesn't exist, create it.
+ * Return FALSE if we have a problem doing so (e.g. when qateam is gdb'ing and code tries 
+ * to touch some file owned by www). */
 {
 if (fileExists(fileName))
     {
@@ -623,11 +625,18 @@ if (fileExists(fileName))
     ut.actime = ut.modtime = clock1();
     int ret = utime(fileName, &ut);
     if (ret != 0)
-	errnoAbort("utime(%s, clock1()) failed", fileName);
+	{
+	warn("utime(%s) failed (ownership?)", fileName);
+	return FALSE;
+	}
     }
 else
     {
-    FILE *f = mustOpen(fileName, "w");
-    carefulClose(&f);
+    FILE *f = fopen(fileName, "w");
+    if (f == NULL)
+	return FALSE;
+    else
+	carefulClose(&f);
     }
+return TRUE;
 }
