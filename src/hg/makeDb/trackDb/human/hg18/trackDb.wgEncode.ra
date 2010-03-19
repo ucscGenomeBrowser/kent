@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.926 2010/03/19 17:20:50 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.927 2010/03/19 19:30:28 krish Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3628,7 +3628,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqPeaksPanislets
         release alpha,beta
         subTrack wgEncodeChromatinMapViewPeaks off
-        shortLabel PanIslets DNase Pk
+        shortLabel PanIs DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in PanIslets cells)
         subGroups view=Peaks EXP=DNase cellType=PANI
         type narrowPeak
@@ -3710,7 +3710,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqPeaksHsmmt
         release alpha,beta
         subTrack wgEncodeChromatinMapViewPeaks off
-        shortLabel HSMMtube DNase Pk
+        shortLabel HSMMt DNase Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HSMMtube cells)
         subGroups view=Peaks EXP=DNase cellType=HSMMt
         type narrowPeak
@@ -4819,7 +4819,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqSignalPanislets
         release alpha,beta
         subTrack wgEncodeChromatinMapViewSIG off
-        shortLabel PanIslets DNase FD
+        shortLabel PanIs DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in PanIslets cells)
         subGroups view=SIG EXP=DNase cellType=PANI
         type wig 0.00 1.48
@@ -4910,7 +4910,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqSignalHsmmt
         release alpha,beta
         subTrack wgEncodeChromatinMapViewSIG off
-        shortLabel HSMMtube DNase FD
+        shortLabel HSMMt DNase FD
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HSMMtube cells)
         subGroups view=SIG EXP=DNase cellType=HSMMt
         type wig 0.00 1.21
@@ -4962,7 +4962,7 @@ wgEncode 1
         track wgEncodeUtaustinChIPseqSignalProgfib
         release alpha,beta
         subTrack wgEncodeChromatinMapViewSIG off
-        shortLabel ProgFib Input Sig
+        shortLabel ProgFib Input
         longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in ProgFib cells)
         subGroups view=SIG EXP=zCTRL cellType=PROG
         type wig 0.00 2.31
@@ -5610,7 +5610,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqBaseOverlapSignalPanislets
         release alpha,beta
         subTrack wgEncodeChromatinMapViewSIGBO off
-        shortLabel PanIslets DNase BO
+        shortLabel PanIs DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in PanIslets cells)
         subGroups view=SIGBO EXP=DNase cellType=PANI
         type wig 0.00 176.00
@@ -5701,7 +5701,7 @@ wgEncode 1
         track wgEncodeDukeDNaseSeqBaseOverlapSignalHsmmt
         release alpha,beta
         subTrack wgEncodeChromatinMapViewSIGBO off
-        shortLabel HSMMtube DNase BO
+        shortLabel HSMMt DNase BO
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HSMMtube cells)
         subGroups view=SIGBO EXP=DNase cellType=HSMMt
         type wig 0.00 227.00
