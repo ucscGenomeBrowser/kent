@@ -5,8 +5,8 @@ Creating tracks in the browser.
 A track needs two items to make it exist in the browser:
 
 1.  A database table with the track data
-2.  An entry in the database table: trackDb
-	(built from track specifications in a trackDb.ra file)
+2.  An entry in a database table: trackDb_localTracks
+	(built from track specifications in your trackDb.ra file)
 
 Almost all of the database tables have specific loader
 programs to load the track data.  The loader programs
@@ -46,10 +46,6 @@ For our purposes here, we need for example, for BED format tracks:
 2. hgTrackDb
 3. hgFindSpec
 
-The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
-hgFindSpec tables in the database.  These tables are built by running
-a make in the source tree in src/hg/makeDb/trackDb/
-
 To build the three loaders mentioned, go to the three directories:
 src/hg/makeDb/hgTrackDb/
 src/hg/makeDb/hgFindSpec/
@@ -62,36 +58,45 @@ be a symlink to some binary directory that is in your PATH
 and you have write permission to.
 
 With those three loader programs built, you can now load BED
-format tracks, and build the trackDb table from the hierarchy
-of trackDb.ra files in src/hg/makeDb/trackDb/
-as described in: src/hg/makeDb/trackDb/README
+format tracks, and build the trackDb_localTracks table as
+mentioned next.
 
-Please note the different make targets in the trackDb/makefile.
-Specifically the two targets: 'update' and 'alpha'
+The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
+hgFindSpec tables in the database.  Older instructions used to mention
+using the trackDb file hierarchy in the source tree.  This is no longer
+necessary and is not recommended.  You can certainly obtain example
+trackDb entries from the source tree hierarchy: src/hg/makeDb/trackDb/
+in any of the *.ra files.  And you will need to refer to the README
+file in that directory for information about options you can use with
+each track type.  To work independently of the UCSC source tree,
+establish your own trackDb.ra files outside the UCSC source tree.  Then,
+to load them into the database, run the hgTrackDb command with this
+simple makefile:
+	
+trackDbSql=/path/to/kent/source/tree/src/hg/lib/trackDb.sql
+DB=hg19
 
-A 'make' with no arguments, or a target of 'update' will create
-the trackDb and hgFindSpec tables named: trackDb_${USER} and
-hgFindSpec_${USER}.  A 'make' with the target of 'alpha' will
-create the two tables with their names of: 'trackDb' and hgFindSpec'.
-You probably want to use the 'alpha' target since the tables
-with names _${USER} suffix are for specialized purposes used
-in-house at UCSC.  The extra complication of the 'alpha' target
-is that it wants to do a 'cvs update' each time it is run.
-It is a good idea to keep your source tree up to date with the
-UCSC cvs repository, but in practice you probably do not want
-an update each time you rebuild your trackDb tables.  In this case,
-comment out the line: cvs up -d -P .
-immediately following the 'alpha:' target
+all::
+	hgTrackDb . ${DB} trackDb_localTracks ${trackDbSql}
 
-Also, a make in this trackDb directory wants to do all assemblies
-that exist at UCSC.  You are most likely working on a subset
-of these, and often only one.  In this case, limit the list
-of assemblies with the extra argument DBS=...
-for example to rebuild just the hg17.trackDb:
+The DB= specification is your database of interest, this example: hg19
+This loads your local specific table trackDb_localTracks in the database.
+This name trackDb_localTracks is not special, just different than
+the ordinary trackDb table.  It should have some meaning to anyone
+in your environment.
 
-$ make alpha DBS=hg17
+To direct the genome browser to this table to use as extra trackDb
+definitions, add to the specification in your cgi-bin/hg.conf file:
 
+db.trackDb=trackDb_localTracks,trackDb
+
+========================================================================
 Extra Credit:
+
+See also: new assistant scripts as of March 2010 in the ./scripts/
+	directory here to fetch and build the source tree.
+
+Older instructions about building the source tree remain valid:
 
 If you really do want to build all the utilities and all database
 loaders, perform the following 'make' commands in your source tree:
@@ -116,5 +121,4 @@ binary every time, thus always picking up any potentially new
 library.
 
 ====================================================================
-This file last updated: $Date: 2006/12/07 23:56:46 $
-
+This file last updated: $Date: 2010/03/19 21:33:41 $
