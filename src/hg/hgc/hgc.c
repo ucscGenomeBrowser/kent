@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1604 2010/03/15 21:19:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1605 2010/03/19 18:38:15 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -10442,6 +10442,10 @@ sr = sqlGetResult(conn, query);
 printf("<TABLE>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    char imgFileName[512];
+    char encodedName[255];
+    char *chp1, *chp2;
+    int i, len;
     printf("<TR>");
     printf("<TD valign=top>");
     
@@ -10471,8 +10475,41 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</TD>");
     
     printf("<TD>");
-    printf("<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure is not available for %s'>\n",
-       database,database,trna->name,trna->name);
+
+    /* encode '?' in tRNA name into "%3F" */
+    len = strlen(trna->name);
+    chp1 = trna->name;
+    chp2 = encodedName;
+    for (i=0; i<len; i++)
+    	{
+	if (*chp1 == '?')
+	    {
+	    *chp2 = '%';
+	    chp2++; *chp2 = '3';
+	    chp2++; *chp2 = 'F';
+	    }
+	else
+	   {
+	   *chp2 = *chp1;
+	   }
+	chp1++;
+	chp2++;
+	}
+    *chp2 = '\0';
+    
+    sprintf(imgFileName, "../htdocs/RNA-img/%s/%s-%s.gif", database,database,trna->name);
+    if (fileExists(imgFileName))
+    	{
+    	printf(
+	"<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+        database,database,encodedName,trna->name);
+        }
+    else
+    	{
+    	printf(
+	"<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure is not available for %s'>\n",
+        database,database,trna->name,trna->name);
+	}
     printf("</TD>");
     
     printf("</TR>");
