@@ -6,7 +6,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.1 2009/08/12 07:48:06 markd Exp $";
+static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.2 2010/03/19 02:24:35 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,9 @@ errAbort(
   "   - top-level mRNA records\n"
   "   - mRNA records can contain exon and CDS, or only CDS, or only\n"
   "     exon for non--coding.\n"
+  "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
+  "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
+  "annotation.  Up to 50 conversion errors are reported before aborting.\n"
   );
 }
 
@@ -32,13 +35,27 @@ static struct optionSpec options[] = {
 };
 static boolean honorStartStopCodons = FALSE;
 static int maxParseErrs = 50;  // maximum number of errors during parse
+static int maxConvertErrs = 50;  // maximum number of errors during conversion
+static int convertErrCnt = 0;  // number of convert errors
+
+
+static void cnvError(char *format, ...)
+/* print a convert error */
+{
+va_list args;
+va_start(args, format);
+vfprintf(stderr, format, args);
+va_end(args);
+fputc('\n', stderr);
+convertErrCnt++;
+}
 
 static struct gff3File *loadGff3(char *inGff3File)
 /* load GFF3 into memory */
 {
 struct gff3File *gff3File = gff3FileOpen(inGff3File, maxParseErrs, NULL);
 if (gff3File->errCnt > 0)
-    errAbort("errors parsing GFF3 file: %s", inGff3File); 
+    errAbort("%d errors parsing GFF3 file: %s", gff3File->errCnt, inGff3File); 
 return gff3File;
 }
 
@@ -68,10 +85,13 @@ return feats;
 }
 
 static struct genePred *makeGenePred(struct gff3Ann *gene, struct gff3Ann *mrna, struct gff3AnnRef *exons, struct gff3AnnRef *cdsBlks)
-/* construct the empty genePred */
+/* construct the empty genePred, return NULL on a failure. */
 {
 if (exons == NULL)
-    errAbort("no exons defined for mRNA %s", mrna->id);
+    {
+    cnvError("no exons defined for mRNA %s", mrna->id);
+    return NULL;
+    }
 
 int txStart = exons->ann->start;
 int txEnd = ((struct gff3AnnRef*)slLastEl(exons))->ann->end;
@@ -79,7 +99,10 @@ int cdsStart = (cdsBlks == NULL) ? txEnd : cdsBlks->ann->start;
 int cdsEnd = (cdsBlks == NULL) ? txEnd : ((struct gff3AnnRef*)slLastEl(cdsBlks))->ann->end;
 
 if ((mrna->strand == NULL) || (mrna->strand[0] == '?'))
-    errAbort("invalid strand for mRNA %s", mrna->id);
+    {
+    cnvError("invalid strand for mRNA %s", mrna->id);
+    return NULL;
+    }
 
 struct genePred *gp = genePredNew(mrna->id, mrna->seqid, mrna->strand[0],
                                   txStart, txEnd, cdsStart, cdsEnd,
@@ -122,31 +145,34 @@ for (exon = exons; exon != NULL; exon = exon->next)
 }
 
 static int findCdsExon(struct genePred *gp, struct gff3Ann *cds, int iExon)
-/* search for the exon containing the CDS, starting with iExon+1 */
+/* search for the exon containing the CDS, starting with iExon+1, return -1 on error */
 {
 for (iExon++; iExon < gp->exonCount; iExon++)
     {
     if ((gp->exonStarts[iExon] <= cds->start) && (cds->end <= gp->exonEnds[iExon]))
         return iExon;
     }
-errAbort("no exon in %s contains CDS %d-%d", gp->name, cds->start, cds->end);
+cnvError("no exon in %s contains CDS %d-%d", gp->name, cds->start, cds->end);
 return -1;
 }
 
-static void addCdsFrame(struct genePred *gp, struct gff3AnnRef *cdsBlks)
-/* assign frame based on CDS regions */
+static boolean addCdsFrame(struct genePred *gp, struct gff3AnnRef *cdsBlks)
+/* assign frame based on CDS regions.  Return FALSE error */
 {
 struct gff3AnnRef *cds;
 int iExon = -1; // caches current position
 for (cds = cdsBlks; cds != NULL; cds = cds->next)
     {
     iExon = findCdsExon(gp, cds->ann, iExon);
+    if (iExon < 0)
+        return FALSE; // error
     gp->exonFrames[iExon] = gff3PhaseToFrame(cds->ann->phase);
     }
+return TRUE;
 }
 
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
-/* process a mRNA node in the tree; gene can be NULL */
+/* process a mRNA node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
 hashStore(processed, mrna->id);
 // allow for only having CDS children
@@ -155,13 +181,21 @@ struct gff3AnnRef *cdsBlks = getChildFeatures(mrna, gff3FeatCDS);
 struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsBlks;
 
 struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
+if (gp == NULL)
+    return; // error
+
 addExons(gp, useExons);
-addCdsFrame(gp, cdsBlks);
+if (!addCdsFrame(gp, cdsBlks))
+    return; // error
 
 // output before checking so it can be examined
 genePredTabOut(gp, gpFh);
 if (genePredCheck("GFF3 converted to genePred", stderr, -1, gp) != 0)
-    errAbort("conversion failed");
+    {
+    cnvError("conversion failed");
+    genePredFree(&gp);
+    return; // error
+    }
 
 genePredFree(&gp);
 slFreeList(&exons);
@@ -169,7 +203,7 @@ slFreeList(&cdsBlks);
 }
 
 static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
-/* process a gene node in the tree */
+/* process a gene node in the tree.  Stop process if maximum errors reached */
 {
 hashStore(processed, gene->id);
 
@@ -177,7 +211,11 @@ struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
     if (sameString(child->ann->type, gff3FeatMRna) && (hashLookup(processed, child->ann->id) == NULL))
+        {
         processMRna(gpFh, gene, child->ann, processed);
+        if (convertErrCnt > maxConvertErrs)
+            break;
+        }
     }
 }
 
@@ -203,12 +241,17 @@ struct gff3AnnRef *root;
 for (root = gff3File->roots; root != NULL; root = root->next)
     {
     if (hashLookup(processed, root->ann->id) == NULL)
+        {
         processRoot(gpFh, root->ann, processed);
+        if (convertErrCnt > maxConvertErrs)
+            break;
+        }
     }
-    
 carefulClose(&gpFh);
+if (convertErrCnt > 0)
+    errAbort("%d errors converting GFF3 file: %s", convertErrCnt, inGff3File); 
 
-#if 1  // free memory for leak debugging if 1
+#if 0  // free memory for leak debugging if 1
 gff3FileFree(&gff3File);
 hashFree(&processed);
 #endif
