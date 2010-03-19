@@ -22,8 +22,9 @@
 #include "udc.h"
 #include "customTrack.h"
 #include "encode/encodePeak.h"
+#include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.264 2010/03/03 19:30:02 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.265 2010/03/19 21:23:51 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -87,7 +88,7 @@ if (hTableOrSplitExists(db, tdb->tableName))
 return FALSE;
 }
 
-boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
+static boolean metadataInTdbToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
 /* If metadata exists, create a link that will allow toggling it's display */
 {
 metadata_t *metadata = metadataSettingGet(tdb);
@@ -127,6 +128,51 @@ if(metadata != NULL)
 return FALSE;
 }
 
+static boolean metadataToggle(char *db,struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
+/* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
+{
+struct metaObj *metaObj = metaObjQueryByObj(db,NULL,tdb->tableName,NULL);
+if(metaObj != NULL && metaObj->vars != NULL)
+    {
+    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
+           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
+    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
+    if(showLongLabel)
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+
+    metaObjRemoveVars(metaObj,"composite project tableName"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+    // FIXME: Leaving tableName out as s clear difference between netaTbl and trackDb setting.  Could add back in if desired.
+    metaObjReorderVars(metaObj,"grant lab dataType cell treatment antibody protocol input view",FALSE); // Bring to front
+    metaObjReorderVars(metaObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
+    struct metaVar *metaVar;
+    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+        {
+        if(sameString(metaVar->var,"fileName"))
+            {
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metaVar->var);
+            makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), metaVar->val);
+            printf("</td></tr>");
+            }
+        else
+            {
+            // If antibody and metadata contains input={sameValue} then just print input
+            if(sameString(metaVar->var,"antibody") && metaObjContains(metaObj,"input",metaVar->val))
+                continue;
+
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metaVar->var,metaVar->val);
+            }
+        }
+    printf("</table>--></div>");
+    metaObjsFree(&metaObj);
+    return TRUE;
+    }
+else
+    return metadataInTdbToggle(tdb,title,embeddedInText,showLongLabel); // FIXME: This should be removed when all metadata is in metaTbl!!!
+
+return FALSE;
+}
+
 void extraUiLinks(char *db,struct trackDb *tdb)
 /* Show downlaods, schema and metadata links where appropriate */
 {
@@ -157,7 +203,7 @@ if(downloadLink)
         printf(",");
     }
 if (metadataLink)
-    metadataToggle(tdb,"metadata", TRUE, TRUE);
+    metadataToggle(db,tdb,"metadata", TRUE, TRUE);
 
 if(moreThanOne)
     printf("</td></tr></table>");
@@ -3432,7 +3478,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-            metadataToggle(subtrack,"...",TRUE,FALSE);
+            metadataToggle(db,subtrack,"...",TRUE,FALSE);
             printf("</div>");
 
             if(cType != cfgNone)

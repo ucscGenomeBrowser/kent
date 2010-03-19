@@ -1095,9 +1095,6 @@ boolean makeDownloadsLink(struct trackDb *tdb);
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 // Make a table schema link (if appropriate and then returns TRUE)
 
-boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel);
-/* If metadata exists, create a link that will allow toggling it's display */
-
 void extraUiLinks(char *db,struct trackDb *tdb);
 /* Show downlaods, schema and metadata links where appropriate */
 
