@@ -6,9 +6,10 @@
 #include "jksql.h"
 #include "twoBit.h"
 #include "dnaseq.h"
+#include "bamFile.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.34 2009/12/17 18:46:57 tdreszer Exp $";
-static char *version = "$Revision: 1.34 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.35 2010/03/19 23:16:37 braney Exp $";
+static char *version = "$Revision: 1.35 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -65,8 +66,6 @@ errAbort(
   "         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)\n"
   "         csqual    : Colorspace quality (see link below)\n"
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
-  "         SAM       : Sequence Alignment/Map\n"
-  "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
   "         BAM       : Binary Alignment/Map\n"
   "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
   "\n"
@@ -1055,16 +1054,55 @@ while (lineFileNext(lf, &seqName, NULL))
 return errs;
 }
 
-int validateSAM(struct lineFile *lf, char *file)
+int parseBamRecord(const bam1_t *bam, void *data)
+/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
+ * into a linkedFeatures item, and add it to tg->items. */
 {
-int errs = 0;
-
-return errs;
+return 0;
 }
 
 int validateBAM(struct lineFile *lf, char *file)
 {
+if (chrHash == NULL)
+    errAbort("BAM validation requires the -chromInfo or -chromDb option\n");
+
 int errs = 0;
+samfile_t *fh = samopen(file, "rb", NULL);
+
+if (fh == NULL)
+    errAbort("Aborting... Cannot open BAM file: %s\n", file);
+
+bam_header_t *head = fh->header;
+
+if (head == NULL)
+    errAbort("Aborting... Bad BAM header in file: %s\n", file);
+
+int ii;
+
+for(ii=0; ii < head->n_targets; ii++)
+    {
+    unsigned *size;
+
+    if ( (size = hashFindVal(chrHash, head->target_name[ii])) == NULL)
+	{
+	printf("BAM contains invalid chromosome name: %s\n", 
+	    head->target_name[ii]);
+	errs++;
+	}
+    else
+	{
+	if (*size != head->target_len[ii])
+	    {
+	    printf("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+		head->target_name[ii],
+		*size, head->target_len[ii]);
+	    errs++;
+	    }
+	}
+    }
+
+if (errs)
+    errAbort("Aborting... %d errors found in BAM file\n", errs);
 
 return errs;
 }
@@ -1097,6 +1135,22 @@ while (lineFileNext(lf, &row, &size))
     printf("size=%d [%s]\n", size, row);
 printf("done.\n");
 return 0;
+}
+
+static struct chromInfo *chromInfoLoadFile(char *fileName) 
+{
+struct chromInfo *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = chromInfoLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 int main(int argc, char *argv[])
@@ -1145,7 +1199,7 @@ if ( (chromDb = optionVal("chromDb", NULL)) != NULL)
     }
 else if ( (chromInfo=optionVal("chromInfo", NULL)) != NULL)
     {
-    if (!(ci = chromInfoLoadAll(chromInfo)))
+    if (!(ci = chromInfoLoadFile(chromInfo)))
 	errAbort("could not load chromInfo file %s\n", chromInfo);
     chrHash = chromHash(ci);
     chromInfoFree(&ci);
@@ -1162,7 +1216,6 @@ hashAdd(funcs, "broadPeak",      &validateBroadPeak);
 hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
-hashAdd(funcs, "SAM",            &validateSAM);
 hashAdd(funcs, "BAM",            &validateBAM);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
