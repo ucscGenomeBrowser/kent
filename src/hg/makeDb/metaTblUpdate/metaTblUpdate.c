@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.3 2010/03/19 17:36:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.4 2010/03/19 21:25:15 tdreszer Exp $";
 
 #define DB_DEFAULT      "hg19"
 #define OBJTYPE_DEFAULT "table"
@@ -120,13 +120,10 @@ else // Must be submitting formatted file
 if(metaObjs == NULL)
     usage();
 
-struct sqlConnection *conn = sqlConnect(db);
-
-int count = metaObjsSetToDb(conn,table,metaObjs,replace);
+int count = metaObjsSetToDb(db,table,metaObjs,replace);
 
 verbose(1, "Affected %d row(s) in %s.%s\n", count,db,table);
 
 metaObjsFree(&metaObjs);
-sqlDisconnect(&conn);
 return 0;
 }

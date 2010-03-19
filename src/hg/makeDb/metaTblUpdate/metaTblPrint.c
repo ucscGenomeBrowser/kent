@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblPrint.c,v 1.2 2010/03/19 17:38:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblPrint.c,v 1.3 2010/03/19 21:25:26 tdreszer Exp $";
 
 #define DB_DEFAULT      "hg19"
 #define OBJTYPE_DEFAULT "table"
@@ -124,14 +124,13 @@ else if(optionExists("vars"))
 else
     usage();
 
-struct sqlConnection *conn = sqlConnect(db);
 if(byVar)
     {
     if(metaByVars == NULL) // assertable
         usage();
 
     // Requested a single var
-    struct metaByVar * queryResults = metaByVarsQuery(conn,table,metaByVars);
+    struct metaByVar * queryResults = metaByVarsQuery(db,table,metaByVars);
     if(queryResults == NULL)
         verbose(1, "No metadata met your selection criteria\n");
     else
@@ -150,12 +149,12 @@ else
     if(metaByVars != NULL)
         {
         // Requested a set of var=val pairs and looking for the unique list of objects that have all of them!
-        queryResults = metaObjsQueryByVars(conn,table,metaByVars);
+        queryResults = metaObjsQueryByVars(db,table,metaByVars);
         }
     else
         {
         // Requested a single obj
-        queryResults = metaObjQuery(conn,table,metaObjs);
+        queryResults = metaObjQuery(db,table,metaObjs);
         }
 
     if(queryResults == NULL)
@@ -170,7 +169,6 @@ else
         metaObjsFree(&queryResults);
         }
     }
-sqlDisconnect(&conn);
 
 if(cntObjs || cntVars || cntVals)
     {
