@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	$Id: beta.cvsup.pl,v 1.1 2010/03/18 18:40:13 hiram Exp $
+#	$Id: beta.cvsup.pl,v 1.2 2010/03/19 16:12:01 hiram Exp $
 #
 # beta.cvsup.pl - do a cvs update on -rbeta branch, report results concisely
 #
@@ -10,10 +10,10 @@ use strict;
 
 sub usage() {
     printf STDERR "beta.cvsup.pl - run the cvs command:\n";
-    printf STDERR "    cvs up -rbeta -d -P <source tree items>\n";
-    printf STDERR "on the specified <source tree items>\n";
-    printf STDERR "usage: beta.cvsup.pl <source tree items>\n";
-    printf STDERR "where <source tree items> is usually simply .\n";
+    printf STDERR "    cvs up -rbeta -d -P <source tree directory>\n";
+    printf STDERR "on the specified <source tree directory>\n";
+    printf STDERR "usage: beta.cvsup.pl <source tree directory>\n";
+    printf STDERR "where <source tree directory> is usually simply .\n";
     printf STDERR "to update the current directory.  The output to stdout\n";
     printf STDERR "is a convenient summary of what changed in the source\n";
     printf STDERR "tree during the update.\n";
@@ -64,6 +64,7 @@ open(CVSUP, "$cvscmd 2>&1 |") ||
 
 my $date = `date`;
 chop($date);
+printf "in directory: %s", `pwd`;
 print "Updating $cvsdir at $date\n\n";
 
 # Pick out the interesting lines of output
