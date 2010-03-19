@@ -31,7 +31,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.36 2010/03/10 23:44:05 angie Exp $";
+static char const rcsid[] = "$Id: udc.c,v 1.37 2010/03/19 19:16:37 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -600,11 +600,13 @@ struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
 if (bits != NULL)
     {
     version = bits->version;
-    if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size)
+    if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size ||
+	!fileExists(file->sparseFileName))
 	{
-	verbose(2, "removing stale version (%lld! = %lld or %lld! = %lld), new version %d\n",
+	verbose(2, "removing stale version (%lld! = %lld or %lld! = %lld or %s doesn't exist), "
+		"new version %d\n",
 		bits->remoteUpdate, (long long)file->updateTime, bits->fileSize, file->size,
-		version);
+		file->sparseFileName, version);
         udcBitmapClose(&bits);
 	remove(file->bitmapFileName);
 	remove(file->sparseFileName);
@@ -831,7 +833,7 @@ else
 	// update cache file mod times, so if we're caching we won't do this again
 	// until the timeout has expired again:
 	if (udcCacheTimeout() > 0 && fileExists(file->bitmapFileName))
-	    touchFile(file->bitmapFileName);
+	    (void)maybeTouchFile(file->bitmapFileName);
 	}
 
     /* Make directory. */
