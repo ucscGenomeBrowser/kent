@@ -6,7 +6,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.3 2010/03/19 06:04:18 markd Exp $";
+static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.4 2010/03/20 15:43:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,6 +42,7 @@ static int convertErrCnt = 0;  // number of convert errors
 static void cnvError(char *format, ...)
 /* print a convert error */
 {
+fputs("Error: ", stderr);
 va_list args;
 va_start(args, format);
 vfprintf(stderr, format, args);
@@ -213,7 +214,7 @@ if (!addCdsFrame(gp, cdsBlks))
 genePredTabOut(gp, gpFh);
 if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
     {
-    cnvError("conversion failed");
+    cnvError("discarding invalid genePred created for: %s", gp->name);
     genePredFree(&gp);
     return; // error
     }
@@ -234,7 +235,7 @@ for (child = gene->children; child != NULL; child = child->next)
     if (sameString(child->ann->type, gff3FeatMRna) && !isProcessed(processed, child->ann))
         {
         processMRna(gpFh, gene, child->ann, processed);
-        if (convertErrCnt > maxConvertErrs)
+        if (convertErrCnt >= maxConvertErrs)
             break;
         }
     }
@@ -264,7 +265,7 @@ for (root = gff3File->roots; root != NULL; root = root->next)
     if (!isProcessed(processed, root->ann))
         {
         processRoot(gpFh, root->ann, processed);
-        if (convertErrCnt > maxConvertErrs)
+        if (convertErrCnt >= maxConvertErrs)
             break;
         }
     }
