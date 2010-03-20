@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.28 2010/03/02 21:57:08 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.29 2010/03/20 00:15:36 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -363,6 +363,7 @@ for my $line (@fileList) {
     my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","rank","replicate","subId");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my $typePrefix = "";
+
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
     if($results) {
         my ($type) = split(/\s+/, $results);    # White space
@@ -371,7 +372,26 @@ for my $line (@fileList) {
     if(!$metaData{type}) {
         $metaData{type} = $dataType;
     }
-    $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
+
+    # Use the metaTbl for metadata
+    my $queryResults = $db->execute("select var,val from $database.metaTbl where objName = '$tableName'");
+    if($queryResults) {
+        my @pairVars;
+        push @pairVars, "metadata";
+        while(my @row = $queryResults->fetchrow_array()) {
+
+            # FIXME: When trackDb metadata is no longer used, this routine should be replaced with more direct metaData loading
+            #$metaData{$row[0]} = $row[1];
+            push @pairVars, join('=',$row[0],$row[1] );
+            #my $onePair = join('=',$row[0],$row[1] );
+            #push @pairVars, $onePair;
+        }
+        $results = join(' ',@pairVars );
+    }
+
+    if(!$results) {
+        $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
+    }
     if(!$results) {
         ### TODO: This needs to be replaced with a select from a fileDb table
         if(stat("fileDb.ra")) {
