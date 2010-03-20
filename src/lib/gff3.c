@@ -307,8 +307,19 @@ if (!sameString(words[5], "."))
     }
 g3a->strand = parseStrand(g3a, words[6]);
 g3a->phase = parsePhase(g3a, words[7]);
-if (sameString(g3a->type, "CDS") && (g3a->phase < 0))
-    gff3AnnErr(g3a, "CDS feature must have phase");
+if (sameString(g3a->type, "CDS"))
+    {
+    if (g3a->phase < 0)
+        gff3AnnErr(g3a, "CDS feature must have phase");
+    }
+else
+    {
+#if 0 // spec unclear; bug report filed
+    // spec currently doesn't restrict phase, unclear if it's allowed on start/stop codon features
+    if (g3a->phase >= 0)
+        gff3AnnErr(g3a, "phase only allowed on CDS features");
+#endif
+    }
 }
 
 static struct slName *parseAttrVals(struct gff3Ann *g3a, char *attr, char *valsStr)
@@ -346,11 +357,14 @@ static void parseAttrVal(struct gff3Ann *g3a, char *attrValsStr)
 char *eq = strchr(attrValsStr, '=');
 if ((eq == NULL) || (eq == attrValsStr))
     gff3AnnErr(g3a, "expected name=value: %s", attrValsStr);
-char *attr = attrValsStr;
-char *vals = eq+1;
-*eq = '\0';
-unescapeStr(g3a, attr, attr);
-addAttrVals(g3a, attr, vals);
+else
+    {
+    char *attr = attrValsStr;
+    char *vals = eq+1;
+    *eq = '\0';
+    unescapeStr(g3a, attr, attr);
+    addAttrVals(g3a, attr, vals);
+    }
 }
 
 static void parseAttrs(struct gff3Ann *g3a, char *attrsCol)
@@ -793,7 +807,11 @@ g3f->lf = lineFileOpen(g3f->fileName, TRUE);
 parseHeader(g3f);
 char *line;
 while (lineFileNext(g3f->lf, &line, NULL))
+    {
     parseLine(g3f, line);
+    if (g3f->errCnt >= g3f->maxErr)
+        break;
+    }
 lineFileClose(&g3f->lf);
 slReverse(&g3f->anns);
 }
@@ -842,7 +860,11 @@ static void resolveFile(struct gff3File *g3f)
 {
 struct gff3Ann *g3a;
 for (g3a = g3f->anns; g3a != NULL; g3a = g3a->next)
+    {
     resolveAnn(g3a);
+    if (g3f->errCnt >= g3f->maxErr)
+        break;
+    }
 // reorder just for test reproducibility
 slReverse(&g3f->seqRegions);
 slReverse(&g3f->featureOntologies);
@@ -873,7 +895,8 @@ g3f->fileName = gff3FileCloneStr(g3f, fileName);
 g3f->errFh = (errFh != NULL) ? errFh : stderr;
 g3f->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 parseFile(g3f);
-resolveFile(g3f);
+if (g3f->errCnt < g3f->maxErr)
+    resolveFile(g3f);
 if (g3f->errCnt > 0)
     errAbort("GFF3: %d parser errors", g3f->errCnt);
 return g3f;
