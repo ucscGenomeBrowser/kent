@@ -93,10 +93,11 @@
 #include "arCOGs.h"
 #include "arcogdesc.h"
 #include "megablastInfo.h"
+#include "geneTree.h"
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.44 2010/03/05 00:13:40 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.45 2010/03/21 01:02:55 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -114,6 +115,7 @@ static char *aspectNames[3] = {
     "Cellular Component",
 };
 int aspectIx;
+int termCount = 0;
 
 if (sqlTableExists(goConn,"goaPart") &&
     sqlTableExists(goConn,"term"))
@@ -130,22 +132,24 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
     sr = sqlGetResult(goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *goID = row[0];
-    char *goTermName = row[1];
-    if (!hasFirst)
+		char *goID = row[0];
+		char *goTermName = row[1];
+		if (!hasFirst)
         {
-        printf("<B>%s:</B><BR>", aspectNames[aspectIx]);
-        hasFirst = TRUE;
+		    printf("<B>%s:</B><BR>", aspectNames[aspectIx]);
+		    hasFirst = TRUE;
         }
         printf("<A HREF = \"");
-    printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
-    printf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+		printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+		printf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+		termCount++;
     }
     if (hasFirst)
         printf("<BR>");
     sqlFreeResult(&sr);
     }
-sqlDisconnect(&goConn);
+	if (termCount == 0) printf("Not available<BR>\n");
+	sqlDisconnect(&goConn);
 }
 
 void keggOtherGenes(struct sqlConnection *conn, char *geneId,
@@ -240,6 +244,43 @@ float computeGCContent(char* dna, int length)
     return percent;
 }
 
+int getGeneTree(struct sqlConnection *conn, char *geneId, char *treeFileName)
+{
+	int success = 0;
+	char query[256];
+	char *geneTreeTable = "geneTree";
+	struct sqlResult *sr;
+	char **row;
+	struct geneTree *genetree;
+	
+	if (!hTableExists(database, geneTreeTable))
+		return 0;
+	safef(query, sizeof(query),
+		"select * from %s where name = '%s'", geneTreeTable, geneId);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	{
+		genetree = geneTreeLoad(row);
+		if (!fileExists(treeFileName))
+		{
+			FILE *f;
+			f = fopen(treeFileName, "w");
+			if (f != NULL)
+			{
+				fprintf(f, "%s\n", genetree->tree);
+				fclose(f);
+				success = 1;
+			}
+		}
+		else
+			success = 1;
+	}
+	sqlFreeResult(&sr);
+	geneTreeFree(&genetree);
+	
+	return success;
+}
+
 void doRefSeq(struct trackDb *tdb, char *item,
              char *pepTable, char *extraTable)
 /* Handle click on gene track. */
@@ -247,6 +288,7 @@ void doRefSeq(struct trackDb *tdb, char *item,
 struct minGeneInfo ginfo;
 char query[256];
 char query2[256];
+char *gi = NULL;
 struct sqlResult *sr, *sr2;
 struct dnaSeq *sequence;
 char **row, **row2;
@@ -268,6 +310,16 @@ char *pdb = hPdbFromGdb(database);
 struct genePred *gpList = NULL, *gp = NULL;
 char tableName[64];
 boolean hasBin;
+int itemCount = 0;
+
+char treeFileName[256];
+char treeTmpPsFileName[256];
+char treePsFileName[256];
+char treePngFileName[256];
+char treePdfFileName[256];
+char command[512];
+char buffer[512];
+char searchTerm[256];
 
 char pepTableName[64];
 char extraTableName[64];
@@ -290,12 +342,13 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 if (extraTableName != NULL && hTableExists(database, extraTableName))
-    {
+{
     sprintf(query, "select * from %s where name = '%s'", extraTableName, item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
-    minGeneInfoStaticLoad(row, &ginfo);
+		minGeneInfoStaticLoad(row, &ginfo);
+		gi = cloneString(ginfo.gi);
         if (ginfo.gene != NULL && differentString(ginfo.gene,"none"))
             printf("<B>Gene: </B>%s<BR>\n", ginfo.gene);
         if (ginfo.product != NULL && differentString(ginfo.product,"none"))
@@ -305,7 +358,7 @@ if (extraTableName != NULL && hTableExists(database, extraTableName))
         if (ginfo.protein != NULL && differentString(ginfo.protein,"none"))
             printf("<B>Protein: </B>%s<BR>\n", ginfo.protein);
         if (ginfo.ec != NULL && differentString(ginfo.ec,"none"))
-            {
+        {
             printf("<B>EC (Enzyme Commission) number:</B> "
                "<A HREF=\"http://us.expasy.org/enzyme/%s\" "
            "TARGET=_BLANK>%s</A>\n", ginfo.ec, ginfo.ec);
@@ -314,71 +367,103 @@ if (extraTableName != NULL && hTableExists(database, extraTableName))
             medlineLinkedTermLine("EC PubMed Search", ginfo.ec, ginfo.ec, "EC/RN Number");
             printf(" <B>Brenda : </B> <A HREF=\"http://www.brenda.uni-koeln.de/php/result_flat.php4?ecno=%s&organism=\" "
            "TARGET=_BLANK>%s</A><BR>\n", ginfo.ec, ginfo.ec);
-            }
+        }
     }
     sqlFreeResult(&sr);
-    }
+}
 /* lookup swissprot acc */
 spAcc = uniProtFindPrimAccFromGene(item, database);
 if (spAcc != NULL)
-    {
+{
     printf("<B>UniProtKB:</B> ");
     printf("<A HREF=");
     printf(uniprotFormat, spAcc);
     if (spAcc == NULL)
-        {
-        printf(" TARGET=_blank>%s</A></B><BR>\n", item);
-        }
-    else
-        {
-        printf(" TARGET=_blank>%s</A></B><BR>\n", spAcc);
-        }
-    }
-/* ncbi blast hits */
-    hits = chopString(ginfo.gi,":",giwords,sizeof(giwords));
-    if (hits > 0)
-        {
-    printf("<B>NCBI Blast Hits:</B> "
-           "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
-           "TARGET=_BLANK>%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
-           (hits == 2) ? giwords[1] : giwords[0]);
-    }
-/* cog description */
-if (hTableExists(database, "COG"))
     {
+        printf(" TARGET=_blank>%s</A></B><BR>\n", item);
+    }
+    else
+    {
+        printf(" TARGET=_blank>%s</A></B><BR>\n", spAcc);
+    }
+}
+
+/* print table of contents */
+printf("<br><hr style=\"width: 100%%; height: 2px;\"><font size=\"+1\">\n");
+printf("<b>[<a href=\"#positions\">Positions and Sequence</a>]&nbsp;&nbsp;&nbsp;\n"); 
+printf("[<a href=\"#COG\">COG</a>]&nbsp;&nbsp;&nbsp;\n");
+printf("[<a href=\"#GO\">Gene Ontology</a>]&nbsp;&nbsp;&nbsp;\n"); 
+printf("[<a href=\"#domain\">Protein Domain and Structure Infomation</a>]&nbsp;&nbsp;&nbsp;\n"); 
+printf("[<a href=\"#pathway\">Pathway</a>]&nbsp;&nbsp;&nbsp;\n"); 
+printf("[<a href=\"#homology\">Gene Homology</a>]</b></font> <br>\n");
+printf("<hr style=\"width: 100%%; height: 2px;\"><br>\n");
+
+/* Positions and sequence */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"positions\"></a><b>Positions and Sequence</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
+hFindSplitTable(database, seqName, table, tableName, &hasBin);
+safef(query, sizeof(query), "name = \"%s\"", item);
+gpList = genePredReaderLoadQuery(conn, tableName, query);
+for (gp = gpList; gp != NULL; gp = gp->next)
+{
+    sequence = hDnaFromSeq(database, gp->chrom, gp->txStart, gp->txEnd, dnaUpper);
+    if (sequence != NULL)
+        printf("<B>GC content:</B> %0.2f%%<BR>\n", computeGCContent(sequence->dna, sequence->size));
+}
+geneShowPosAndLinks(item, item, tdb, pepTableName, "htcTranslatedProtein",
+            "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+genePredFreeList(&gpList);
+
+printf("</td></tr></tbody></table><br>\n");
+
+/* COG */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"COG\"></a><b>COG</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
+/* cog description */
+itemCount = 0;
+if (hTableExists(database, "COG"))
+{
     sprintf(query, "select * from COG where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
     COG = COGLoad(row);
     if(COG!=NULL)
-        {
-            length=chopString(COG->COG, "," , temparray, 999);
+    {
+        length=chopString(COG->COG, "," , temparray, 999);
         for(x=0; x<length; x++)
         {
-        conn2 = hAllocConn(database);
-        sprintf(query2, "select * from COGXra where name = '%s'", temparray[x]);
+	        conn2 = hAllocConn(database);
+	        sprintf(query2, "select * from COGXra where name = '%s'", temparray[x]);
                 sr2 = sqlGetResult(conn2, query2);
-        while ((row2 = sqlNextRow(sr2)) != NULL)
-                {
-            COGXra=COGXraLoad(row2);
-            if(COGXra!=NULL)
-              printf("<B>COG:</B> "
+	        while ((row2 = sqlNextRow(sr2)) != NULL)
+            {
+	            COGXra=COGXraLoad(row2);
+	            if(COGXra!=NULL)
+	              printf("<B>COG:</B> "
                  "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?%s\" "
                  ">%s</A>&nbsp; "
                  "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?fun=%s\" "
                  ">Code %s</A>&nbsp;\n",
                  COGXra->name, COGXra->name, COG->code,COG->code);
-            printf(" %s<BR><BR>\n", COGXra->info);
+	            printf(" %s<BR>\n", COGXra->info);
+				itemCount++;
             }
             sqlFreeResult(&sr2);
             hFreeConn(&conn2);
             }
-         }
-     }
-            sqlFreeResult(&sr);
-            //hFreeConn(&conn2);
+        }
     }
+    sqlFreeResult(&sr);
+    //hFreeConn(&conn2);
+}
+
 if (hTableExists(database, "arCOGs"))
 {
     struct arCOGs *infoload = NULL;
@@ -403,7 +488,8 @@ if (hTableExists(database, "arCOGs"))
                 if(description!=NULL)
                 {
                     printf("<B>arCOG:</B> %s Code %s",infoload->name, description->code);
-                    printf("  %s<BR/><BR/>\n", description->description);
+                    printf("  %s<BR/>\n", description->description);
+					itemCount++;
                 }
             }
             sqlFreeResult(&sr2);
@@ -411,10 +497,29 @@ if (hTableExists(database, "arCOGs"))
          }
      }
 }
+if (itemCount == 0) printf("Not available\n");
+printf("</td></tr></tbody></table><br>\n");
+
+/* GO */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"GO\"></a><b>Gene Ontology</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
+/* print go terms */
+goPrint( conn, item, spAcc);
+printf("</td></tr></tbody></table><br>\n");
+
+/* Protein domain and structure information */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"domain\"></a><b>Protein Domain and Structure Information</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
 /* interpro domains */
 list = spExtDbAcc1List(spConn, spAcc, "InterPro");
 if (list != NULL)
-    {
+{
     char query[256], **row, **row2;
     struct sqlResult *sr, *sr2;
     printf("<B>InterPro Domains: </B> ");
@@ -444,21 +549,21 @@ if (list != NULL)
                     printf("%s</A> - %s <BR>\n", row[0], row2[0]);
                     }
                 sqlFreeResult(&sr2);
-                }
+            }
             else
-                {
+            {
                 printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
                 printf("%s</A> - %s<BR>\n", row[0], row[1]);
-                }
+            }
     }
     printf("<BR>\n");
     slFreeList(&list);
-    }
+}
 
 /* pfam domains */
 list = spExtDbAcc1List(spConn, spAcc, "Pfam");
 if (list != NULL)
-    {
+{
     printf("<B>Pfam Domains:</B><BR>");
     for (el = list; el != NULL; el = el->next)
     {
@@ -487,11 +592,11 @@ if (list != NULL)
     }
     slFreeList(&list);
     printf("<BR>\n");
-    }
+}
 
 list = spExtDbAcc1List(spConn, spAcc, "PDB");
 if (list != NULL)
-    {
+{
     char query[256], **row;
     struct sqlResult *sr;
     int column = 0, maxColumn=4, rowCount=0;
@@ -519,7 +624,7 @@ if (list != NULL)
     printf("<TD>");
     printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
     if (rowCount < 1)
-        printf("<IMG SRC=\"http://www.rcsb.org/pdb/cgi/pdbImage.cgi/%sx150.jpg\"><BR>", row[0]);
+        printf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_bio_r_80.jpg\"><BR>", row[0]);
     printf("%s</A> - %s<BR>\n", row[0], row[1]);
     printf("</TD>");
     }
@@ -527,18 +632,7 @@ if (list != NULL)
     printf("<BR>\n");
     slFreeList(&list);
     }
-
-/* kegg pathway links */
-if (keggCount(conn, item) > 0)
-    {
-    keggLink(conn, item, table, "<B>Kegg Pathway: </b><BR>");
-    }
-/* Do SAM-T02 sub-section */
-//doSamT02(spAcc, database);
-
-/* print go terms */
-goPrint( conn, item, spAcc);
-
+	
 /* Do modBase link. */
     {
     printf("<B>ModBase Predicted Comparative 3D Structure on ");
@@ -566,22 +660,112 @@ goPrint( conn, item, spAcc);
         "be asked to log onto ModBase the first time you click on the "
         "pictures. It is simplest after logging in to just click on "
         "the picture again to get to the specific info on that model.</I><p>");
-    }
+}
+printf("</td></tr></tbody></table><br>\n");
 
-hFindSplitTable(database, seqName, table, tableName, &hasBin);
-safef(query, sizeof(query), "name = \"%s\"", item);
-gpList = genePredReaderLoadQuery(conn, tableName, query);
-for (gp = gpList; gp != NULL; gp = gp->next)
+/* Pathway */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"pathway\"></a><b>Pathway</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
+/* kegg pathway links */
+if (keggCount(conn, item) > 0)
 {
-    sequence = hDnaFromSeq(database, gp->chrom, gp->txStart, gp->txEnd, dnaUpper);
-    if (sequence != NULL)
-        printf("<B>GC content:</B> %0.2f%%<BR>\n", computeGCContent(sequence->dna, sequence->size));
+    keggLink(conn, item, table, "<B>Kegg Pathway: </b><BR>");
+}
+else
+	printf("Not available\n");
+printf("</td></tr></tbody></table><br>\n");
+
+/* Do SAM-T02 sub-section */
+//doSamT02(spAcc, database);
+
+/* Gene Homology */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"homology\"></a><b>Gene Homology</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
+/* ncbi blast hits */
+hits = chopString(gi,":",giwords,sizeof(giwords));
+if (hits > 0)
+{
+	printf("<B>NCBI Blast Hits:</B> "
+	   "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
+	   "TARGET=_BLANK>%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
+	   (hits == 2) ? giwords[1] : giwords[0]);
 }
 
-geneShowPosAndLinks(item, item, tdb, pepTableName, "htcTranslatedProtein",
-            "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+/* Gene tree */
+safef(treeFileName, sizeof(treeFileName), "../trash/geneTree/geneTree_%s.txt", item);
+if (getGeneTree(conn, item, treeFileName))
+{
+	safef(treeTmpPsFileName, sizeof(treeTmpPsFileName), "../trash/geneTree/tmp_geneTree_%s.ps", item);
+	safef(treePsFileName, sizeof(treePsFileName), "../trash/geneTree/geneTree_%s.ps", item);
+	safef(treePngFileName, sizeof(treePngFileName), "../trash/geneTree/geneTree_%s.png", item);
+	safef(treePdfFileName, sizeof(treePdfFileName), "../trash/geneTree/geneTree_%s.pdf", item);
+	safef(searchTerm, sizeof(searchTerm), ".%s) show\n", item);
+	
+	if (!fileExists(treePsFileName))
+	{
+		safef(command, sizeof(command), "../bin/draw_tree -b %s | grep -v translate | sed '5 i 10 530 translate' | sed '6 i 0.33 0.33 scale' | sed 's/findfont 12/findfont 24/' > %s",
+			  treeFileName, treeTmpPsFileName);
+		mustSystem(command);
+		
+		FILE *fi = mustOpen(treeTmpPsFileName, "r");
+		FILE *fo = mustOpen(treePsFileName, "w");
+		if ((fi != NULL) && (fo != NULL))
+		{
+			mustGetLine(fi, buffer, 512);
+			while (!sameWord(buffer, ""))
+			{
+				if (endsWith(buffer, searchTerm))
+				{
+					fprintf(fo, "255 0 0 setrgbcolor\n");
+					fprintf(fo, "%s", buffer); 
+					fprintf(fo, "0 0 0 setrgbcolor\n"); 
+				}
+				else
+					fprintf(fo, "%s", buffer); 
+				mustGetLine(fi, buffer, 512);
+			}
+			fclose(fo);
+			fclose(fi);
+		}
+		safef(command, sizeof(command), "rm -f %s", treeTmpPsFileName);
+		mustSystem(command);
+	}
 
-genePredFreeList(&gpList);
+	if (!fileExists(treePngFileName))
+	{
+		safef(command, sizeof(command), "pstoimg -scale 0.4 -aaliastext -type png -density 300 -out %s %s",
+			  treePngFileName, treePsFileName);
+		mustSystem(command);
+	}
+
+	if (!fileExists(treePdfFileName))
+	{
+		safef(command, sizeof(command), "ps2pdf %s %s",
+			  treePsFileName, treePdfFileName);
+		mustSystem(command);
+	}
+
+	printf("<BR><B>Phylogenetic tree with homologous genes:</B> View as \n");
+	printf("<A HREF=\"%s\" TARGET=_BLANK>Postscript</A>&nbsp;\n", treePsFileName);
+	printf("<A HREF=\"%s\" TARGET=_BLANK>PNG</A>&nbsp;\n", treePngFileName);
+	printf("<A HREF=\"%s\" TARGET=_BLANK>PDF</A>&nbsp;\n", treePdfFileName);
+	printf("<A HREF=\"%s\" TARGET=_BLANK>Text</A>&nbsp;<BR>\n", treeFileName);
+	
+	printf("<BR>Homologous genes of this protein were retrieved by BLASTP. ");
+	printf("The alignments of the protein sequences, made by <A HREF=\"http://www.drive5.com/muscle/\" TARGET=_BLANK>MUSCLE</A>, ");
+	printf("were used to construct the phylogenetic tree. This maximum likelihood tree was computed by using ");
+	printf("<A HREF=\"http://www.atgc-montpellier.fr/phyml/\" TARGET=_BLANK>PHYML</A> with the Jones Taylor Thornton model of sequence evolution, ");
+	printf("by including a Gamma-correction (eight categories of evolutionary rates, ");
+	printf("an estimated alpha-parameter and an estimated proportion of invariant sites).<BR>");
+}
+
+printf("</td></tr></tbody></table><br>\n");
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
