@@ -7,9 +7,11 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 #include "bamFile.h"
+#include "bbiFile.h"
+#include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.35 2010/03/19 23:16:37 braney Exp $";
-static char *version = "$Revision: 1.35 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.36 2010/03/21 18:03:25 braney Exp $";
+static char *version = "$Revision: 1.36 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -68,6 +70,8 @@ errAbort(
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
   "         BAM       : Binary Alignment/Map\n"
   "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
+  "         bigWig    : Big Wig\n"
+  "                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
   "\n"
   "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names\n"
   "                                  and sizes\n"
@@ -1061,6 +1065,54 @@ int parseBamRecord(const bam1_t *bam, void *data)
 return 0;
 }
 
+int validateBigWig(struct lineFile *lf, char *file)
+{
+if (chrHash == NULL)
+    errAbort("BAM validation requires the -chromInfo or -chromDb option\n");
+
+int errs = 0;
+struct bbiFile *bbiFile;
+bbiFile = bigWigFileOpen(file);
+
+if (bbiFile == NULL)
+    errAbort("Aborting... Cannot open bigWig file: %s\n", file);
+
+
+struct bbiChromInfo *bbiChroms = bbiChromList(bbiFile);
+
+if (bbiChroms == NULL)
+    errAbort("Aborting... cannot get bigWig chromosome list in file: %s\n", file);
+
+struct bbiChromInfo *chroms = bbiChroms;
+for(; chroms; chroms = chroms->next)
+    {
+    unsigned *size;
+
+    if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
+	{
+	printf("bigWig contains invalid chromosome name: %s\n", 
+	    chroms->name);
+	errs++;
+	}
+    else
+	{
+	if (*size != chroms->size)
+	    {
+	    printf("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+		chroms->name,
+		*size, chroms->size);
+	    errs++;
+	    }
+	}
+    }
+
+
+if (errs)
+    errAbort("Aborting... %d errors found in bigWig file\n", errs);
+
+return errs;
+}
+
 int validateBAM(struct lineFile *lf, char *file)
 {
 if (chrHash == NULL)
@@ -1217,6 +1269,7 @@ hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
 hashAdd(funcs, "BAM",            &validateBAM);
+hashAdd(funcs, "bigWig",         &validateBigWig);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
