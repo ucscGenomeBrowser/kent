@@ -7,7 +7,7 @@ shortLabel Caltech RNA-seq
 longLabel ENCODE Caltech RNA-seq Map Algorithm
 group expression
 #subGroup1 view Views Splices=Splice_Sites Aligns=Alignments_Unpaired Paired=Alignments_Paired RawSignal=Raw_Signal
-subGroup1 view Views RawSignal=Raw_Signal Splices=Splice_Sites zAligns=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal 
+subGroup1 view Views PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal RawSignal=Raw_Signal Splices=Splice_Sites Aligns=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1hESC HeLaS3=HeLaS3 HepG2=HepG2 HUVEC=HUVEC K562=K562 NHEK=NHEK
 subGroup3 localization Localization 0-cell=Cell
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
@@ -863,19 +863,19 @@ release alpha
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=1x75D mapAlgorithm=BB2 localization=cell view=Splices replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1034 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R1x75d fileName=wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R1x75d.bed12.gz
 
-    track wgEncodeCaltechRnaSeqViewzAligns
+    track wgEncodeCaltechRnaSeqViewAligns
 release alpha
     shortLabel Alignments
-    view zAligns
+    view Aligns
     visibility hide
     subTrack wgEncodeCaltechRnaSeq
 
         track wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U GM128 2x75 AL2
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 2 2x75 Alignments (PolyA+ RNA using BB1)
-        subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         # itemRgb on
         color 153,38,0
@@ -883,10 +883,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U K562  2x75 AL2
         longLabel ENCODE Caltech RNA-seq K562 Replicate 2 2x75 Alignments (PolyA+ RNA using BB1)
-        subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         # itemRgb on
         color 46,0,184
@@ -894,32 +894,32 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U K562  1x32 AL1
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-seq K562 Replicate 1 1x32 Alignments (PolyA+ RNA using bow098)
-        subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U K562  1x32 AL2
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-seq K562 Replicate 2 1x32 Alignments (PolyA+ RNA using bow098)
-        subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns
+        subTrack wgEncodeCaltechRnaSeqViewAligns
         shortLabel U K562  2x75 AL1
         longLabel ENCODE Caltech RNA-seq K562 Replicate 1 2x75 Alignments (PolyA+ RNA using BB1)
-        subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         # itemRgb on
         color 46,0,184
@@ -927,34 +927,34 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U GM128 1x32 AL1
         # itemRgb on
         color 153,38,0
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 1 1x32 Alignments (PolyA+ RNA using bow098)
-        subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U GM128 1x32 AL2
         # itemRgb on
         color 153,38,0
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 2 1x32 Alignments (PolyA+ RNA using bow098)
-        subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns
+        subTrack wgEncodeCaltechRnaSeqViewAligns
         shortLabel U GM128 2x75 AL1
         # itemRgb on
         color 153,38,0
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 1 2x75 Alignments (PolyA+ RNA using BB1)
-        subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 ### For the future to replace dimensions:
@@ -965,10 +965,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D GM128 1x75 AL1
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 1 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         colorByStrand 46,0,184 238,85,34
         color 153,38,0
@@ -976,10 +976,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D GM128 1x75 AL2
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 2 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 153,38,0
         colorByStrand 46,0,184 238,85,34
@@ -987,10 +987,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D K562  1x75 AL1
         longLabel ENCODE Caltech RNA-seq K562 Replicate 1 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         colorByStrand 46,0,184 238,85,34
         color 46,0,184
@@ -998,10 +998,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D K562  1x75 AL2
         longLabel ENCODE Caltech RNA-seq K562 Replicate 2 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 46,0,184
         colorByStrand 46,0,184 238,85,34
@@ -1009,30 +1009,30 @@ release alpha
 
         track wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HepG2 2x75 AL2
         longLabel ENCODE Caltech RNA-seq Replicate 2 HepG2 2x75 Paired Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 189,0,157
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=897 dateSubmitted=2010-01-06 dateUnrestricted=2010-10-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HepG2 2x75 AL1
         longLabel ENCODE Caltech RNA-seq HepG2 Replicate 1 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 189,0,157
-        metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=zAligns replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=998 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75.bed12.gz
+        metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Aligns replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=998 dateSubmitted=2010-01-12 dateUnrestricted=2010-10-11 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep2H1hescCellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D H1ESC 1x75 AL2
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 2 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 0,107,27
@@ -1040,20 +1040,20 @@ release alpha
 
         track wgEncodeCaltechRnaSeqPairedRep3H1hescCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U H1ESC 2x75 AL3
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 3 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=3 insertLength=ilunk
+        subGroups view=Aligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=3 insertLength=ilunk
         type bed 12
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Aligns replicate=3 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1043 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep3H1hescCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep3H1hescCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep1NhekCellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D NHEK  1x75 AL1
         longLabel ENCODE Caltech RNA-seq NHEK Replicate 1 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=NHEK localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=NHEK localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 179,0,134
@@ -1061,60 +1061,60 @@ release alpha
 
         track wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HepG2 1x32 AL2
         longLabel ENCODE Caltech RNA-seq HepG2 Replicate 2 1x32 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 189,0,157
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng32a localization=cell view=Alignments replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1080 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32 fileName=wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HepG2 1x32 AL1
         longLabel ENCODE Caltech RNA-seq HepG2 Replicate 1 1x32 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 189,0,157
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HepG2 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng32a localization=cell view=Alignments replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1079 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-15 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32 fileName=wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U H1ESC 2x75 AL4
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 4 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=4 insertLength=ilunk
+        subGroups view=Aligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=4 insertLength=ilunk
         type bed 12
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Alignments replicate=4 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1064 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U H1ESC 2x75 AL1
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 1 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=H1hESC insertLength=il400 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1
+        subGroups view=Aligns cellType=H1hESC insertLength=il400 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1
         type bed 12
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA insertLength=400 readType=2x75 mapAlgorithm=erng32a localization=cell view=Alignments replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1061 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400 fileName=wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U GM128 2x75 AL2
         longLabel ENCODE Caltech RNA-seq GM12878 Replicate 2 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=GM12878 insertLength=il400 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2
+        subGroups view=Aligns cellType=GM12878 insertLength=il400 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2
         type bed 12
         color 153,38,0
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA insertLength=400 readType=2x75 mapAlgorithm=erng32a localization=cell view=Alignments replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1057 dateSubmitted=2010-01-15 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400 fileName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep2HuvecCellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HUVEC 1x75 AL2
         longLabel ENCODE Caltech RNA-seq HUVEC Replicate 2 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 224,75,0
@@ -1122,10 +1122,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep2Hepg2CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HepG2 1x75 AL2
         longLabel ENCODE Caltech RNA-seq HepG2 Replicate 2 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 189,0,157
@@ -1133,10 +1133,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep1Hepg2CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HepG2 1x75 AL1
         longLabel ENCODE Caltech RNA-seq HepG2 Replicate 1 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 189,0,157
@@ -1144,70 +1144,70 @@ release alpha
 
         track wgEncodeCaltechRnaSeqPairedRep1Helas3CellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HeLa3 2x75 AL1
         longLabel ENCODE Caltech RNA-seq HeLa-S3 Replicate 1 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HeLaS3 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HeLaS3 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 0,119,158
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HeLa-S3 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1004 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-12 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Helas3CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Helas3CellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep2Helas3CellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HeLa3 2x75 AL2
         longLabel ENCODE Caltech RNA-seq HeLa-S3 Replicate 2 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HeLaS3 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HeLaS3 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 0,119,158
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HeLa-S3 rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1005 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-12 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Helas3CellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep2Helas3CellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1NhekCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U NHEK  2x75 AL1
         longLabel ENCODE Caltech RNA-seq NHEK Replicate 1 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=NHEK localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=NHEK localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 179,0,134
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=NHEK rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1010 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-12 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1NhekCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1NhekCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep2HuvecCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HUVEC 2x75 AL2
         longLabel ENCODE Caltech RNA-seq HUVEC Replicate 2 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HUVEC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HUVEC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 224,75,0
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HUVEC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1009 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-12 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2HuvecCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep2HuvecCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1HuvecCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HUVEC 2x75 AL1
         longLabel ENCODE Caltech RNA-seq HUVEC Replicate 1 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=HUVEC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HUVEC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 224,75,0
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=HUVEC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1006 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-12 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1HuvecCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1HuvecCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U H1ESC 2x75 AL1
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 1 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1026 dateSubmitted=2010-01-13 dateUnrestricted=2010-10-13 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75.bed12.gz
 
         track wgEncodeCaltechRnaSeqAlignsRep1Helas3CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HeLa3 1x75 AL1
         longLabel ENCODE Caltech RNA-seq HeLa-S3 Alignments Replicate 1 1x75 Strand-Specific (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 0,119,158
@@ -1215,10 +1215,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep1HuvecCellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HUVEC 1x75 AL1
         longLabel ENCODE Caltech RNA-seq HUVEC Replicate 1 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 224,75,0
@@ -1226,10 +1226,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqAlignsRep2Helas3CellPapBb2R1x75d
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HeLa3 1x75 AL2
         longLabel ENCODE Caltech RNA-seq HeLa-S3 Replicate 2 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
         color 0,119,158
@@ -1237,10 +1237,10 @@ release alpha
 
         track wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75
 release alpha
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U H1ESC 2x75 AL2
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 2 2x75 Alignments (PolyA+ RNA using erng32a)
-        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
+        subGroups view=Aligns cellType=H1hESC localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=2x75 mapAlgorithm=erng32a localization=cell view=Paired replicate=2 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1033 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75 fileName=wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75.bed12.gz
@@ -1248,10 +1248,10 @@ release alpha
         track wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d
 release alpha
         colorByStrand 46,0,184 238,85,34
-        subTrack wgEncodeCaltechRnaSeqViewzAligns off
+        subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D H1ESC 1x75 AL1
         longLabel ENCODE Caltech RNA-seq H1-hESC Replicate 1 1x75 Strand-Specific Alignments (PolyA+ RNA using BB2)
-        subGroups view=zAligns cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
+        subGroups view=Aligns cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
         color 0,107,27
         metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA readType=1x75D mapAlgorithm=BB2 localization=cell view=Aligns replicate=1 labVersion=ERANGE3.2.0alpha dataVersion="ENCODE Jan 2010 Freeze" subId=1034 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d fileName=wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d.bed12.gz
