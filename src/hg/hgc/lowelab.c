@@ -97,7 +97,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.45 2010/03/21 01:02:55 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.46 2010/03/21 02:53:18 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -394,8 +394,8 @@ printf("<b>[<a href=\"#positions\">Positions and Sequence</a>]&nbsp;&nbsp;&nbsp;
 printf("[<a href=\"#COG\">COG</a>]&nbsp;&nbsp;&nbsp;\n");
 printf("[<a href=\"#GO\">Gene Ontology</a>]&nbsp;&nbsp;&nbsp;\n"); 
 printf("[<a href=\"#domain\">Protein Domain and Structure Infomation</a>]&nbsp;&nbsp;&nbsp;\n"); 
-printf("[<a href=\"#pathway\">Pathway</a>]&nbsp;&nbsp;&nbsp;\n"); 
-printf("[<a href=\"#homology\">Gene Homology</a>]</b></font> <br>\n");
+printf("[<a href=\"#homology\">Gene Homology</a>]&nbsp;&nbsp;&nbsp;\n");
+printf("[<a href=\"#pathway\">Pathway</a>]</b></font> <br>\n"); 
 printf("<hr style=\"width: 100%%; height: 2px;\"><br>\n");
 
 /* Positions and sequence */
@@ -663,24 +663,6 @@ if (list != NULL)
 }
 printf("</td></tr></tbody></table><br>\n");
 
-/* Pathway */
-printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
-printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
-printf("<a name=\"pathway\"></a><b>Pathway</b><br></td></tr>\n");
-printf("<tr><td>\n");
-
-/* kegg pathway links */
-if (keggCount(conn, item) > 0)
-{
-    keggLink(conn, item, table, "<B>Kegg Pathway: </b><BR>");
-}
-else
-	printf("Not available\n");
-printf("</td></tr></tbody></table><br>\n");
-
-/* Do SAM-T02 sub-section */
-//doSamT02(spAcc, database);
-
 /* Gene Homology */
 printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
 printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
@@ -766,6 +748,24 @@ if (getGeneTree(conn, item, treeFileName))
 }
 
 printf("</td></tr></tbody></table><br>\n");
+
+/* Pathway */
+printf("<table style=\"text-align: left; width: 99%%;\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n");
+printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
+printf("<a name=\"pathway\"></a><b>Pathway</b><br></td></tr>\n");
+printf("<tr><td>\n");
+
+/* kegg pathway links */
+if (keggCount(conn, item) > 0)
+{
+    keggLink(conn, item, table, "<B>Kegg Pathway: </b><BR>");
+}
+else
+	printf("Not available\n");
+printf("</td></tr></tbody></table><br>\n");
+
+/* Do SAM-T02 sub-section */
+//doSamT02(spAcc, database);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
