@@ -1,5 +1,5 @@
 #
-#	$Id: README-lazarus,v 1.1.2.2 2010/03/19 23:14:39 hiram Exp $
+#	$Id: README-lazarus,v 1.1.2.3 2010/03/22 19:10:06 hiram Exp $
 #
 
 Included here are some scripts to help with the job of constructing
@@ -34,6 +34,14 @@ available.  The sizes of the larger databases are becoming more
 that 1 Tb.
 
 The update race condition ==========================================
+
+This problem can be avoided if you rsync the MySQL binary data
+files directly into your MySQL database.  There isn't a script
+provided here to do this since it is just a periodic rsync.
+That can be a simple several line shell script.
+
+If you instead need to fetch the goldenPath database text
+dumps and load them, please note the following discussion.
 
 There is a tricky coordination problem that must be considered.
 The updates of the MySQL text dumps in goldenPath/*/database/ are

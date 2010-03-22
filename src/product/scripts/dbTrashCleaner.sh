@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	$Id: dbTrashCleaner.sh,v 1.1.2.1 2010/03/22 18:32:53 hiram Exp $
+#	$Id: dbTrashCleaner.sh,v 1.1.2.2 2010/03/22 19:10:06 hiram Exp $
 #
 usage() {
     echo "usage: dbTrashCleaner.sh <browserEnvironment.txt>"
@@ -55,4 +55,4 @@ HGDB_CONF=$HOME/.hg.conf
 export HGDB_CONF
 
 # 72 hour cleaning policy on customTrash tables:
-${KENTBIN}/$MACHTYPE/dbTrash -age=72 -drop -verbose=2 > ${LOGFILE} 2>&1
+${BINDIR}/dbTrash -age=72 -drop -verbose=2 > ${LOGFILE} 2>&1
