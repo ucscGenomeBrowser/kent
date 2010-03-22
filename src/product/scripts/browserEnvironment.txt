@@ -1,13 +1,13 @@
 #
 #	browserEnvironment.txt
 #
-#	$Id: browserEnvironment.txt,v 1.3 2010/03/19 16:19:34 hiram Exp $
+#	$Id: browserEnvironment.txt,v 1.4 2010/03/22 19:10:06 hiram Exp $
 #
 #	example UCSC genome mirror site definition file
-#	copy this file to start the definitions for your local site.
-#	This file is used as an argument to the scripts for building
-#	the source tree and fetching /gbdb/ and goldenPath/ files from UCSC
-#	and loading database tables.
+#	copy this file to a local named file to start the definitions for your
+#	local site.  This file is used as an argument to the scripts for
+#	building the source tree and fetching /gbdb/ and goldenPath/ files from
+#	UCSC and loading database tables.
 #
 
 #       rsync command used to fetch from hgdownload.cse.ucsc.edu
@@ -21,6 +21,11 @@ export HGDOWNLOAD="rsync://hgdownload.cse.ucsc.edu"
 export kentSrc="/scratch/tmp/kent"
 #	LOGDIR - location to keep log files of script activities:
 export LOGDIR="/scratch/tmp/browserLogs"
+#	TRASHDIR - the full path to your "trash" directory
+#	*BEWARE* this TRASHDIR specification is used by the trashCleaner.sh
+#	script to remove files in this directory.  It needs to be correct.
+#	It must be an absolute path starting with / and it must end in /trash
+export TRASHDIR="/scratch/tmp/trash"
 #	GOLD - where to download goldenPath/database/ directories
 export GOLD="/scratch/tmp/goldenPath"
 # GBDB - You will need a symlink /gbdb -> to this directory with gbdb downloads
@@ -39,8 +44,10 @@ export CVS_RSH=ssh
 # Set KENTBIN to a directory where you want the results of the kent
 #	source tree build.  *NOTE* This will also require a symlink
 #	in your HOME directory: $HOME/bin/$MACHTYPE -> $KENTBIN/$MACHTYPE
+#	as the source tree often places resulting binaries in
+#	$HOME/bin/$MACHTYPE
 export KENTBIN="/scratch/tmp/bin"
-# Adding these to your path will enable finding up all the kent commands
+# Adding these to your path will enable finding all the kent commands
 export PATH=$KENTBIN/$MACHTYPE:$KENTBIN/:$PATH
 # where to find the hgsql command for database operations
 export HGSQL="$KENTBIN/$MACHTYPE/hgsql"
@@ -51,7 +58,8 @@ export MYSQLINC="/usr/include/mysql"
 # If your mysql is SSL enabled, use the -lssl:
 # export MYSQLLIBS="/usr/lib64/mysql/libmysqlclient.a -lssl -lz"
 
-# if you want to set USE_BAM, you will need the samtools:
+# if you want to set USE_BAM, you will need the samtools.  See also:
+#	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 # export SAMDIR=/scratch/tmp/samtools-0.1.7a
 # export SAMINC=$SAMDIR
 # export SAMLIB=/scratch/tmp/samtools/lib/libbam.a
@@ -65,6 +73,7 @@ export ENCODE_PIPELINE_BIN=${BINDIR}
 export AUTH_MACHINE="hgwdev"
 export AUTH_USER="hiram"
 
+#	verify this machine and user are correct
 export MACHINE_NAME=`uname -n | sed -e 's/\..*//'`
 if [ "X${AUTH_MACHINE}Y" != "X${MACHINE_NAME}Y" ]; then
     echo "ERROR: must be run on ${AUTH_MACHINE}, this machine is: ${MACHINE_NAME}"
