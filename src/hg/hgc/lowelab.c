@@ -97,7 +97,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.46 2010/03/21 02:53:18 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.47 2010/03/22 04:18:14 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -244,6 +244,172 @@ float computeGCContent(char* dna, int length)
     return percent;
 }
 
+int selfBlastpHitCount(struct sqlConnection *conn, char *geneId)
+/* Count up number of hits. */
+{
+char query[512];
+char *blastpHitsTable = "blastpHits";
+if (!hTableExists(database, blastpHitsTable))
+    return 0;
+safef(query, sizeof(query),
+    "select count(*) from %s where query = '%s' and target like '%s:%%' and target != '%s:%s'",
+	blastpHitsTable, geneId, database, database, geneId);
+return sqlQuickNum(conn, query);
+}
+
+struct blastTab* loadSelfBlastpHits(struct sqlConnection *conn, char* queryName, int self)
+/* Load all blastp hits in the same genome of the given query gene into a list */
+{
+    char query[512];
+    struct sqlResult *srBlastpHits = NULL;
+    struct blastTab *list = NULL;
+    struct blastTab *blastpHits;
+    char **row;
+    char blastpHitsTable[] = "blastpHits";
+
+    if (hTableExists(database, blastpHitsTable))
+    {
+		if (self)
+		{
+			sprintf(query, "select * from %s where query = '%s' and target like '%s:%%'",
+					blastpHitsTable, queryName, database);
+		}
+		else
+		{
+			sprintf(query, "select * from %s where query = '%s' and target like '%s:%%' and target != '%s:%s'",
+					blastpHitsTable, queryName, database, database, queryName);			
+		}
+        srBlastpHits = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(srBlastpHits)) != NULL)
+        {
+            blastpHits = blastTabLoad(row);
+            slAddTail(&list, blastpHits);
+        }
+    }
+    if (srBlastpHits != NULL)
+        sqlFreeResult(&srBlastpHits);
+    return list;
+}
+
+void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsList)
+/* Print self homologs in refseq */
+{
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    char refSeq[50];
+    char xraTable[50];
+    char product[255];
+    struct blastTab *blastpHits;
+    struct minGeneInfo *ginfo;
+    char *blastpTarget[2];
+    char **buffer = NULL;
+    boolean findTable = FALSE;
+    unsigned int cdsStart = 0;
+    unsigned int cdsEnd = 0;
+
+    printf("<br>\n");
+    printf("<b>Homologs within genome</b><BR>\n");
+
+    /* Print table */
+    printf("<table style=\"width: 60%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
+    printf("<tbody><tr><td>\n");
+    printf("<table style=\"width: 100%%; text-align: left;\" bgcolor=\"%s\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">\n", HG_COL_INSIDE);
+    printf("<tbody>\n");
+
+    /* Print table column heading */
+    printf("<tr style=\"vertical-align: top;\">\n");
+    printf("<td width=\"20%%\"><b>Gene</b></td>\n");
+    printf("<td><b>Product</b></td>\n");
+    printf("<td width=\"30%%\"><b>BlastP E-value</b></td>\n");
+    printf("</tr>\n");
+
+    blastpHits = blastpHitsList;
+    while (blastpHits != NULL)
+    {
+        parseDelimitedString(blastpHits->target, ':', blastpTarget, 2);
+
+		if (hTableExists(blastpTarget[0], "lookup"))
+		{
+			sprintf(query, "select lookupValue from %s.lookup where lookupCode = 'annotRev'", blastpTarget[0]);
+			sr = sqlGetResult(conn, query);
+			if ((row = sqlNextRow(sr)) != NULL)
+			{
+				strcpy(refSeq, row[0]);
+				findTable = TRUE;
+				sqlFreeResult(&sr);
+			}
+		}
+		else if (hTableExists(blastpTarget[0], "refSeq"))
+		{
+			strcpy(refSeq, "refSeq");
+			findTable = TRUE;
+		}
+		if (findTable)
+		{
+			sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+					refSeq, blastpTarget[1]);
+			sr = sqlGetResult(conn, query);
+			if ((row = sqlNextRow(sr)) != NULL)
+			{
+				cdsStart = strtoul(row[1], buffer, 10);
+				cdsEnd = strtoul(row[2], buffer, 10);
+		        printf("<tr style=\"vertical-align: top;\">\n");
+				printf("<td><a href=\"hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
+					   row[0], cdsStart, cdsEnd, blastpTarget[0], blastpTarget[1]);				
+			}
+			else
+				printf("<td>%s</td>\n", blastpTarget[1]);
+			sqlFreeResult(&sr);
+		}
+		else
+			printf("<td>%s</td>\n", blastpTarget[1]);
+
+		if (hTableExists(blastpTarget[0], "lookup"))
+		{
+			sprintf(query, "select lookupValue from %s.lookup where lookupCode = 'annotRevXra'", blastpTarget[0]);
+			sr = sqlGetResult(conn, query);
+			if ((row = sqlNextRow(sr)) != NULL)
+			{
+				strcpy(xraTable, row[0]);
+				sqlFreeResult(&sr);
+			}
+			else
+				strcpy(product, "N/A");
+
+			sprintf(query, "select product from %s where name = '%s'", xraTable, blastpTarget[1]);
+			sr = sqlGetResult(conn, query);
+			if ((row = sqlNextRow(sr)) != NULL)
+			{
+				strcpy(product, row[0]);
+				sqlFreeResult(&sr);
+			}
+			else
+				strcpy(product, "N/A");
+		}
+		else
+		{
+			ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+			if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
+				strcpy(product, ginfo->product);
+			else
+				strcpy(product, "N/A");
+		}
+		printf("<td>%s</td>\n", product);
+		printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
+		printf("</tr>\n");
+
+        free(blastpTarget[0]);
+        free(blastpTarget[1]);
+        blastpHits = blastpHits->next;
+    }
+    /* Close table */
+    printf("</tbody>\n");
+    printf("</table>\n");
+    printf("</td></tr></tbody>\n");
+    printf("</table>\n");
+}
+
 int getGeneTree(struct sqlConnection *conn, char *geneId, char *treeFileName)
 {
 	int success = 0;
@@ -320,6 +486,8 @@ char treePdfFileName[256];
 char command[512];
 char buffer[512];
 char searchTerm[256];
+
+struct blastTab *blastpHitsList;
 
 char pepTableName[64];
 char extraTableName[64];
@@ -747,6 +915,12 @@ if (getGeneTree(conn, item, treeFileName))
 	printf("an estimated alpha-parameter and an estimated proportion of invariant sites).<BR>");
 }
 
+/* Self Homologs */
+if (selfBlastpHitCount(conn, item) > 0)
+{
+	blastpHitsList = loadSelfBlastpHits(conn, item, 0);
+	printSelfHomologs(conn, blastpHitsList);
+}
 printf("</td></tr></tbody></table><br>\n");
 
 /* Pathway */
@@ -2426,6 +2600,47 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     printTrackHtml(tdb);
 }
 
+void doSelfHomologs(struct trackDb *tdb, char *targetName)
+/* Handle the Self Homologs tracks. */
+{
+    char queryName[50];
+    char queryTable[50];
+    unsigned int querySeqLength = 0;
+    struct sqlConnection *conn = hAllocConn(database);
+    struct bed *blastpTrack;
+    struct blastTab *blastpHitsList;
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+
+    cartWebStart(cart, database, "%s", "Homologs Within Genome by BlastP Search");
+
+    blastpTrack = getBlastpTrackRecord(conn, tdb, targetName);
+
+    if (hTableExists(database, "lookup"))
+    {
+        sprintf(query, "select lookupValue from lookup where lookupCode = 'annotRev'");
+        sr = sqlGetResult(conn, query);
+        if ((row = sqlNextRow(sr)) != NULL)
+        {
+            strcpy(queryTable, row[0]);
+            sqlFreeResult(&sr);
+        }
+    }
+    else
+        strcpy(queryTable, "refSeq");
+    printQueryGeneInfo(conn, blastpTrack, queryName, &querySeqLength, queryTable);
+
+    blastpHitsList = loadSelfBlastpHits(conn, queryName, 1);
+
+    printBlastpResult(conn, blastpHitsList, querySeqLength);
+
+    printf("<BR>Note: All measurements are counted by the number of amino acids.<BR>\n");
+    printf("<hr>\n");
+    hFreeConn(&conn);
+    printTrackHtml(tdb);
+}
+
 void printQuerySequenceInfo(struct sqlConnection *conn, struct bed *blastxTrack, char *queryName, unsigned int *querySeqLength, char *queryTable)
 /* Get and print blastx query sequence info */
 {
@@ -3671,6 +3886,10 @@ else if (sameWord(track,"megablastInfo") || sameWord(track,"vecScreenInfo"))
 else if (sameWord(track,"loweOrthologs"))
   {
     doloweOrthologs(tdb, item);
+  }
+else if (sameWord(track,"selfHomologs"))
+  {
+    doSelfHomologs(tdb, item);
   }
 else if (sameWord(track,"CRISPRs"))
 	{
