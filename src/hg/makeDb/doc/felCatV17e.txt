@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.2 2010/03/16 19:34:59 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.3 2010/03/22 16:55:46 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -162,6 +162,7 @@ hgsql -e "select type from gap;" felCatV17e | sort | uniq -c
     # 500126 fragment
     #	1 type
 
+mv felCatV17e.comp.agp felCatV17e.agp
 
 
 ##########################################################################
@@ -212,7 +213,7 @@ hgsql -e "select type from gap;" felCatV17e | sort | uniq -c
 
 ########################################################################
 # Marking *all* gaps - they are not all in the AGP file
-#       (Working - 2010-03-15 - Chin)
+#       (DONE - 2010-03-16 - Chin)
     mkdir /hive/data/genomes/felCatV17e/bed/allGaps
     cd /hive/data/genomes/felCatV17e/bed/allGaps
 
@@ -230,7 +231,6 @@ hgsql -e "select type from gap;" felCatV17e | sort | uniq -c
     hgsql -N -e "select ix from gap;" felCatV17e | sort -n | tail -1
     #   101050
 
-#### here here 03/16
     cat << '_EOF_' > mkGap.pl
 #!/usr/bin/env perl
 
@@ -269,4 +269,204 @@ close (FH);
     hgsql -e "select count(*) from gap;" felCatV17e
     #   501801
     # == 500507 + 1294
+
+#########################################################################
+# MAKE 11.OOC FILES FOR BLAT (DONE - 2010-02-03 - Chin)
+    cat faSize.felCatV17e.2bit.txt 
+    #  3160303948 bases (1169668943 N's 1990635005 real 1182766163 upper 
+    #       807868842 lower) in 104054 sequences in 1 files
+    #       %25.56 masked total, %40.58 masked real
+
+    # numerator is felCatV17e gapless bases "real" as reported by faSize 
+    # denominator is hg17 gapless bases as reported by featureBits,
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1990635005 /  2897310462 \) \* 1024
+    #  ( 1990635005 / 2897310462 ) * 1024 = 703.552578
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/felCatV17e
+    blat felCatV17e.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/felCatV17e.11.ooc -repMatch=700
+    #   Wrote 23033 overused 11-mers to jkStuff/felCatV17e.11.ooc
+
+    mkdir /hive/data/staging/data/felCatV17e
+    cp -p felCatV17e.2bit chrom.sizes jkStuff/felCatV17e.11.ooc \
+        /hive/data/staging/data/felCatV17e
+
+    gapToLift -bedFile=jkStuff/nonBridgedGaps.bed felCatV17e \
+        jkStuff/felCatV17e.nonBridged.lft
+
+    # Ask the admin to copy the 
+    #  /hive/data/staging/data/felCatV17e directory
+    #  to cluster nodes:   /scratch/data/felCatV17e
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-12-23 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+# 
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("felCatV17e", "blat4", "17778", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("felCatV17e", "blat4", "17779", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+############################################################################
+# chrA2:64650765-64656835
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="chrA2:64650765-64656835" where 
+  name="felCatV17e";' \
+        hgcentraltest
+############################################################################
+# genbank run DONE - 2010-03-16 - Chin )
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    # edit etc/genbank.conf to add this section just before calJac1:
+# Marmoset
+felCatV17e.serverGenome = /hive/data/genomes/felCatV17e/felCatV17e.2bit
+felCatV17e.clusterGenome = /scratch/data/felCatV17e/felCatV17e.2bit
+felCatV17e.ooc = /scratch/data/felCatV17e/felCatV17e.11.ooc
+felCatV17e.lift = no
+felCatV17e.perChromTables = no
+felCatV17e.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+felCatV17e.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+felCatV17e.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+felCatV17e.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+felCatV17e.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+felCatV17e.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+felCatV17e.downloadDir = felCatV17e
+felCatV17e.refseq.mrna.native.load  = yes
+felCatV17e.refseq.mrna.xeno.load = yes
+felCatV17e.refseq.mrna.xeno.loadDesc  = yes
+
+    cvs ci -m "adding felCatV17e" etc/genbank.conf
+    make etc-update
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial  felCatV17e &
+    #   tail var/build/logs/2010.03.17-10:43:18.felCatV17e.initalign.log
+    #      gbAlignInstall: complete: real=3.63
+    #      genbank 2010.03.17-16:33:21 felCatV17e.initalign: finish
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad felCatV17e &
+    #   logFile: 
+    #     tail var/dbload/hgwdev/logs/2010.03.18-15:03:58.dbload.log
+    #  real    31m56.710s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add felCatV17e to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Adding felCatV17e - Cat - Felis catus" \
+        etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+    #   DONE  - 2010-03-17 - Chin
+
+
+############################################################################
+# running cpgIsland business (DONE - 2010-03-17 - Chin)
+    mkdir /hive/data/genomes/felCatV17e/bed/cpgIsland
+    cd /hive/data/genomes/felCatV17e/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    #   needed to fixup this source, adding include to readseq.c:
+#include "string.h"
+    #   and to cpg_lh.c:
+#include "unistd.h"
+#include "stdlib.h"
+    # and fixing a declaration in cpg_lh.c
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../felCatV17e.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/felCatV17e/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(path1) {check out exists results/$(path1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   the faCount business is to make sure there is enough sequence to
+    #   work with in the fasta.  cpglh.exe does not like files with too many
+    #   N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+
+# in jobList:
+# .....
+# ./runOne chrD3 {check out exists results/chrD3.cpg}
+# wc -l jobList 
+# .....
+# 104054 jobList
+# Completed: 104054 of 104054 jobs
+# CPU time in finished jobs:        214s       3.57m     0.06h    0.00d  0.000 y
+# IO & Wait Time:                935922s   15598.69m   259.98h   10.83d  0.030 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:             174s       2.90m     0.05h    0.00d
+# Submission to last job:          1136s      18.93m     0.32h    0.01d
+
+XXXX
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    cd /hive/data/genomes/felCatV17e/bed/cpgIsland
+    hgLoadBed felCatV17e cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    # Reading cpgIsland.bed
+    # Loaded 57950 elements of size 10
+    # Sorted
+    # Creating table definition for cpgIslandExt
+    # Saving bed.tab
+    # Loading felCatV17e
+
+    # check iy with featureBits felCatV17e cpgIslandExt
+    #  36646772 bases of 1990635005 (1.841%) in intersection
+
+
+    #   cleanup
+    rm -fr hardMaskedFa
+
 
