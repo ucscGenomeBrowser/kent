@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: nibTwo.c,v 1.5 2006/03/10 17:43:37 angie Exp $";
+static char const rcsid[] = "$Id: nibTwo.c,v 1.6 2010/03/23 17:09:47 markd Exp $";
 
 struct nibTwoCache *nibTwoCacheNew(char *pathName)
 /* Get something that will more or less transparently get sequence from 
@@ -110,5 +110,14 @@ else
     seq = nibLoadAllMasked(NIB_MASK_MIXED, path);
     }
 return seq;
+}
+
+int nibTwoGetSize(struct nibTwoCache *ntc, char *seqName)
+/* Return size of sequence. */
+{
+if (ntc->isTwoBit)
+    return twoBitSeqSize(ntc->tbf, seqName);
+else
+    return nibInfoFromCache(ntc->nibHash, ntc->pathName, seqName)->size;
 }
 

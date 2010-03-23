@@ -48,5 +48,8 @@ struct dnaSeq *nibTwoLoadOne(char *pathName, char *seqName);
 /* Return sequence from a directory full of nibs or a .2bit file. 
  * The sequence will have repeats in lower case. */
 
+int nibTwoGetSize(struct nibTwoCache *ntc, char *seqName);
+/* Return size of sequence. */
+
 #endif /* NIBTWO_H */
 
