@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.215 2010/03/23 00:11:01 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.216 2010/03/23 20:59:09 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1310,7 +1310,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage mammary gland Derived from metastatic site: pleural effusion
 karyotype Cancer: The cell line is aneuploid female (modal number = 64, range = 52 to 68), with chromosome counts in the near-triploid range. Normal chromosomes N8 and N15 were absent.
 termId BTO:0000815
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000815
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000815
 sex F
 tier 3
 protocol Yale_TFBS(Struhl):MDA-MB-231_Struhl_protocol.pdf
