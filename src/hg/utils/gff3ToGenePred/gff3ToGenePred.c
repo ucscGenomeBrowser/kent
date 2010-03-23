@@ -6,7 +6,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.4 2010/03/20 15:43:18 markd Exp $";
+static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.5 2010/03/23 21:51:36 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,7 +55,7 @@ static char *mkAnnAddrKey(struct gff3Ann *ann)
 /* create a key for a gff3Ann from its address.  WARNING: static return */
 {
 static char buf[64];
-safef(buf, sizeof(buf), "%lld", (long long)ann);
+safef(buf, sizeof(buf), "%lu", (unsigned long)ann);
 return buf;
 }
 
