@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.214 2010/01/13 00:26:32 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.215 2010/03/23 16:27:17 braney Exp $
 
 use warnings;
 use strict;
@@ -288,9 +288,9 @@ our %formatCheckers = (
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
-    SAM => \&validateSAM,
     BAM => \&validateBAM,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
+    bigWig => \&validateBigWig,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -744,6 +744,23 @@ sub validateSAM
     }
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateSAM") if $opt_timing;
+    return ();
+}
+
+sub validateBigWig
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateBigWig") if $opt_timing;
+    HgAutomate::verbose(2, "validateBigWig($path,$file,$type)\n");
+    my $paramList = validationSettings("validateFiles","bigWig");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=bigWig -chromDb=$daf->{assembly} $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateBigWig : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateBigWig for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateBigWig") if $opt_timing;
     return ();
 }
 
