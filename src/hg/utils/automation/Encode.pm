@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.58 2010/03/22 23:28:22 krish Exp $
+# $Id: Encode.pm,v 1.59 2010/03/23 20:22:12 kate Exp $
 
 package Encode;
 
@@ -386,7 +386,9 @@ sub parseDaf
 sub compositeTrackName
 {
     my ($daf) = @_;
-    return $compositePrefix . $daf->{compositeSuffix};
+    return $compositePrefix . 
+        $daf->{compositeSuffix} . 
+        (defined($daf->{dataAgreementSuffix}) ? $daf->{dataAgreementSuffix} : "");
 }
 
 sub downloadDir

@@ -104,6 +104,16 @@ file dafHeader
 type string
 required yes
 
+# Use this for composites that include multiple data types
+# (e.g. Open Chromatin) or multiple labs (e.g. Duke)
+# In these cases, there will be multiple data agreements
+# folded into a shared composite.  The dataAgreementSuffix
+# is used to generate table and filenames that distinguish
+field dataAgreementSuffix
+file dafHeader
+type string
+required no
+
 # optional DAF header fields
 
 field variables
