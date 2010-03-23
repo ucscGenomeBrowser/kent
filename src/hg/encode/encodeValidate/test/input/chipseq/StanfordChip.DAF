@@ -19,7 +19,7 @@ validationSettings allowReloads;validateFiles.tagAlign:mismatches=100
 # Track/view definition
 view             Peaks
 longLabelPrefix  HudsonAlpha ChIP-Seq Peaks
-type             narrowPeak
+type             broadPeak
 hasReplicates    no
 required         yes
 
@@ -27,7 +27,7 @@ view             Signal
 longLabelPrefix  HudsonAlpha ChIP-Seq Signal
 type             wig
 hasReplicates    no
-required         yes
+required         no
 
 view             RawSignal
 longLabelPrefix  HudsonAlpha ChIP-Seq Raw Signal
