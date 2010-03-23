@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.214 2010/03/05 22:06:39 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.215 2010/03/23 00:11:01 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -330,6 +330,54 @@ sex M
 tier 3
 protocol UW_Stam:BJ-tert_Stam_protocol.pdf
 
+term BJ-5ta
+tag BJ5ta
+type Cell Line
+organism Human
+description Skin Fibroblast
+vendorName ATCC
+vendorId CRL-4001
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
+lineage hTERT/BJ fibroblasts expressing T antigens of SV40 virus
+karyotype normal
+termId BTO:0001255 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+sex M
+tier 3
+protocol Yale_TFBS(Struhl):BJ-tert-T_Struhl_protocol.pdf
+
+term BJ-HRas
+tag BJHRas
+type Cell Line
+organism Human
+description Skin Fibroblast
+vendorName Struhl laboratory
+vendorId BJ-HRas
+orderUrl https://struhl.med.harvard.edu/
+lineage hTERT/BJ fibroblasts expressing T antigens of SV40 virus and H-RasV12
+karyotype normal
+termId BTO:0001255 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+sex M
+tier 3
+protocol Yale_TFBS(Struhl):BJ-tert-HRas_Struhl_protocol.pdf
+
+
+term BJ-T
+tag BJT
+type Cell Line
+organism Human
+description Skin Fibroblast
+vendorName Struhl laboratory
+vendorId BJ-T
+orderUrl https://struhl.med.harvard.edu/
+lineage Foreskin fibroblasts
+karyotype normal
+termId BTO:0001255 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+sex M
+tier 3
+protocol Yale_TFBS(Struhl):BJ-5ta_Struhl_protocol.pdf
 
 term Caco-2
 tag Caco2
@@ -1234,6 +1282,38 @@ protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Far
 #sex F
 #tier 3
 #protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
+
+term MCF10A-Er-Src
+tag MCF10AES
+type Cell Line
+organism Human
+description mammary gland, non-tumorigenic epithelial, inducible cell line
+vendorName Struhl laboratory
+vendorId MCF10A-Er-Src
+orderUrl https://struhl.med.harvard.edu/
+lineage derived from the MCF-10A parental cells and contain ER-Src, a derivative of the Src kinase oncoprotein (v-Src) that is fused to the ligand-binding domain of the estrogen receptor (ER)
+karyotype stable and near-diploid
+termId BTO:0001939
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001939
+sex F
+tier 3
+protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
+
+term MDA-MB-231
+tag MDA
+type Cell Line
+organism Human
+description breast adenocarcinoma; epithelial cell line	 
+vendorName ATCC
+vendorId HTB-26
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-26&Template=cellBiology
+lineage mammary gland Derived from metastatic site: pleural effusion
+karyotype Cancer: The cell line is aneuploid female (modal number = 64, range = 52 to 68), with chromosome counts in the near-triploid range. Normal chromosomes N8 and N15 were absent.
+termId BTO:0000815
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000815
+sex F
+tier 3
+protocol Yale_TFBS(Struhl):MDA-MB-231_Struhl_protocol.pdf
 
 
 term Medullo
