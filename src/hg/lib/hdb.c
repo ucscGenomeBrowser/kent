@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.422 2010/03/19 17:53:10 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.423 2010/03/23 00:57:01 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3333,7 +3333,6 @@ if ((exists = sqlTableExists(conn, tbl)))
         }
     }
 
-slReverse(tdbList);
 hFreeConn(&conn);
 return exists;
 }
@@ -3527,13 +3526,15 @@ struct trackDb *hTrackDb(char *db, char *chrom)
  * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
  * the supertrack trackDb subtrack fields are not set here (would be
- * incompatible with the returned list) */
+ * incompatible with the returned list).
+ * Returns list sorted by priority */
 {
 struct trackDb *tdbList = loadTrackDb(db, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
 trackDbCompositeMarkup(NULL, tdbList);
 rInheritFields(tdbList);
+slSort(&tdbList, trackDbCmp);
 return tdbList;
 }
 
