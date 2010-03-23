@@ -4,7 +4,7 @@
 #include "hgConfig.h"
 #include "sqlProg.h"
 
-static char const rcsid[] = "$Id: hgsql.c,v 1.10 2008/03/01 07:55:20 jzhu Exp $";
+static char const rcsid[] = "$Id: hgsql.c,v 1.11 2010/03/23 23:19:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,7 +32,7 @@ sqlExecProg("mysql", progArgs, argc, argv);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc <= 1)
+if (argc < 1)
     usage();
 hgsql(argc-1, argv+1);
 return 0;  /* never reaches here */
