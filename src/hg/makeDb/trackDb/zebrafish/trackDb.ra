@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.79 2010/03/15 21:42:33 ann Exp $";
+#	"$Id: trackDb.ra,v 1.80 2010/03/23 21:40:03 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -9,7 +9,6 @@ longLabel Zebrafish Gene Collection Full ORF mRNAs
 visibility pack
 
 track vegaGeneZfish
-release alpha
 compositeTrack on
 shortLabel Vega Genes 
 longLabel Vega Annotations 
@@ -21,7 +20,6 @@ type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
     track vegaGene
-    release alpha
     subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
@@ -29,35 +27,6 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     priority 1
     
     track vegaPseudoGene
-    release alpha
-    subTrack vegaGeneZfish
-    shortLabel Vega Pseudogenes
-    longLabel Vega Annotated Pseudogenes
-    color 155,0,125
-    priority 2
-
-track vegaGeneZfish
-release beta,public
-compositeTrack on
-shortLabel Vega Genes 
-longLabel Vega Annotations 
-group genes
-priority 37
-visibility hide
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25,chrUn_random
-type genePred
-url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
-    
-    track vegaGene
-    release beta,public
-    subTrack vegaGeneZfish
-    shortLabel Vega Genes
-    longLabel Vega Gene Annotations
-    color 12,12,120
-    priority 1
-    
-    track vegaPseudoGene
-    release beta,public
     subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
