@@ -5,11 +5,11 @@
 #include "options.h"
 #include "dnaseq.h"
 #include "chain.h"
-#include "nib.h"
+#include "nibTwo.h"
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.6 2005/08/29 17:52:34 kate Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.7 2010/03/23 17:10:49 markd Exp $";
 
 int maxGap = 100;
 int maxChain = BIGNUM;
@@ -23,7 +23,7 @@ void usage()
 errAbort(
   "chainToAxt - Convert from chain to axt file\n"
   "usage:\n"
-  "   chainToAxt in.chain tNibDir qNibDir out.axt\n"
+  "   chainToAxt in.chain tNibDirOr2bit qNibDirOr2bit out.axt\n"
   "options:\n"
   "   -maxGap=maximum gap sized allowed without breaking, default %d\n"
   "   -maxChain=maximum chain size allowed without breaking, default %d\n"
@@ -43,16 +43,9 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct dnaSeq *nibInfoLoadSeq(struct nibInfo *nib, int start, int size)
-/* Load in a sequence in mixed case from nib file. */
-{
-return nibLdPartMasked(NIB_MASK_MIXED, nib->fileName, nib->f, nib->size, 
-	start, size);
-}
-
-struct dnaSeq *nibInfoLoadStrand(struct nibInfo *nib, int start, int end,
-	char strand)
-/* Load in a mixed case sequence from nib file, from reverse strand if
+struct dnaSeq *loadSeqStrand(struct nibTwoCache *ntc, char *seqName, int start, int end,
+                             char strand)
+/* Load in a mixed case sequence,  from reverse strand if
  * strand is '-'. */
 {
 struct dnaSeq *seq;
@@ -60,13 +53,13 @@ int size = end - start;
 assert(size >= 0);
 if (strand == '-')
     {
-    reverseIntRange(&start, &end, nib->size);
-    seq = nibInfoLoadSeq(nib, start, size);
+    reverseIntRange(&start, &end, nibTwoGetSize(ntc, seqName));
+    seq = nibTwoCacheSeqPartExt(ntc, seqName, start, size, TRUE, NULL);
     reverseComplement(seq->dna, seq->size);
     }
 else
     {
-    seq = nibInfoLoadSeq(nib, start, size);
+    seq = nibTwoCacheSeqPartExt(ntc, seqName, start, size, TRUE, NULL);
     }
 return seq;
 }
@@ -104,42 +97,44 @@ fprintf(f, "%s\t%d\t%d\t", axt->tName, axt->tStart, axt->tEnd);
 fprintf(f, "%s\t%d\t%c\n", axt->qName, idPpt, axt->qStrand);
 }
 
-void doIt(char *inName, char *tNibDir, char *qNibDir, char *outName)
+static void doAChain(struct chain *chain, struct nibTwoCache *tSeqCache, struct nibTwoCache *qSeqCache,
+                     FILE *f)
+/* Convert one chain to an axt. */
+{
+struct dnaSeq *qSeq = loadSeqStrand(qSeqCache, chain->qName, chain->qStart, chain->qEnd, chain->qStrand);
+struct dnaSeq *tSeq = loadSeqStrand(tSeqCache, chain->tName, chain->tStart, chain->tEnd, '+');
+struct axt *axtList= chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart, maxGap, BIGNUM);
+struct axt *axt = NULL;
+
+for (axt = axtList; axt != NULL; axt = axt->next)
+    {
+    double idRatio = axtIdRatio(axt);
+    if (minIdRatio <= idRatio)
+        {
+        if (bedOut)
+            bedWriteAxt(axt, chain->qSize, chain->tSize, idRatio, f);
+        else
+            axtWrite(axt, f);
+        }
+    }
+axtFreeList(&axtList);
+freeDnaSeq(&qSeq);
+freeDnaSeq(&tSeq);
+}
+
+void doIt(char *inName, char *tNibDirOr2bit, char *qNibDirOr2bit, char *outName)
 /* chainToAxt - Convert from chain to axt file. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
+struct nibTwoCache *tSeqCache = nibTwoCacheNew(tNibDirOr2bit);
+struct nibTwoCache *qSeqCache = nibTwoCacheNew(qNibDirOr2bit);
 struct chain *chain = NULL;
-struct axt *axtList = NULL, *axt = NULL;
-struct dnaSeq *qSeq = NULL, *tSeq = NULL;
-struct hash *nibHash = hashNew(0);
 FILE *f = mustOpen(outName, "w");
-struct nibInfo *qNib = NULL, *tNib = NULL;
 
 while ((chain = chainRead(lf)) != NULL)
     {
     if (chain->score >= minScore)
-	{
-	qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
-	tNib = nibInfoFromCache(nibHash, tNibDir, chain->tName);
-	qSeq = nibInfoLoadStrand(qNib, chain->qStart, chain->qEnd, chain->qStrand);
-	tSeq = nibInfoLoadStrand(tNib, chain->tStart, chain->tEnd, '+');
-	axtList = chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart,
-	    maxGap, BIGNUM);
-	for (axt = axtList; axt != NULL; axt = axt->next)
-	    {
-	    double idRatio = axtIdRatio(axt);
-	    if (minIdRatio <= idRatio)
-		{
-		if (bedOut)
-		    bedWriteAxt(axt, chain->qSize, chain->tSize, idRatio, f);
-		else
-		    axtWrite(axt, f);
-		}
-	    }
-	axtFreeList(&axtList);
-	freeDnaSeq(&qSeq);
-	freeDnaSeq(&tSeq);
-	}
+        doAChain(chain, tSeqCache, qSeqCache, f);
     chainFree(&chain);
     }
 lineFileClose(&lf);
