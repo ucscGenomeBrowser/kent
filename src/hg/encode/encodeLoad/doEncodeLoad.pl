@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.72 2010/03/15 22:21:53 krish Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.73 2010/03/23 03:56:31 krish Exp $
 
 # Usage:
 #
@@ -131,9 +131,9 @@ sub loadGene
 
 sub loadWig
 {
-    my ($assembly, $tableName, $fileList, $pushQ) = @_;
+    my ($assembly, $tableName, $gbdbDir, $fileList, $pushQ) = @_;
 
-    HgAutomate::verbose(2, "loadWig ($assembly, $tableName, $fileList, $pushQ)\n");
+    HgAutomate::verbose(2, "loadWig ($assembly, $tableName, $gbdbDir, $fileList, $pushQ)\n");
     if(!$opt_skipLoad) {
         my $catCmd = makeCatCmd("loadWig", $fileList);
         my @cmds = ($catCmd, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin stdout $tableName.wib", "/cluster/bin/x86_64/hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
@@ -243,8 +243,8 @@ sub loadBedFromSchema
 sub loadBigBed
 {
 # Load bigBed using a .as file
-    my ($assembly, $tableName, $fileList, $sqlTable, $pushQ, $configPath) = @_;
-    HgAutomate::verbose(2, "loadBigBed ($assembly, $tableName, $fileList, $sqlTable, $pushQ)\n");
+    my ($assembly, $tableName, $gbdbDir, $fileList, $sqlTable, $pushQ, $configPath) = @_;
+    HgAutomate::verbose(2, "loadBigBed ($assembly, $tableName, $gbdbDir, $fileList, $sqlTable, $pushQ)\n");
 
     if(!$opt_skipLoad) {
         if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
@@ -254,16 +254,16 @@ sub loadBigBed
 	    die "BigBed must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
 	# Create bigBed binary file
-        my @cmds = ( "/cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as $fileList $configPath/${assembly}_chromInfo.txt ${tableName}.bb");
+        my @cmds = ( "/cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as $fileList $configPath/${assembly}_chromInfo.txt ${gbdbDir}/${tableName}.bb");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
             die("ERROR: File(s) '$fileList' failed bedToBigBed:\n" . $safe->stderr() . "\n");
         } else {
-            print "$fileList created as bigBed ${tableName}.bb\n";
+            print "$fileList created as bigBed ${gbdbDir}/${tableName}.bb\n";
         }
 	# symlink bigBed binary file into gbdb bbi directory
-        @cmds = ( "ln -sf ${submitPath}/${tableName}.bb /gbdb/${assembly}/bbi/");
+        @cmds = ( "ln -sf ${gbdbDir}/${tableName}.bb /gbdb/${assembly}/bbi/");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
@@ -322,7 +322,7 @@ if (defined $opt_configDir) {
 } else {
     $configPath = "$submitDir/../config"
 }
-print $configPath, "\n";
+HgAutomate::verbose(1, "Using config path $configPath\n");
 
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
@@ -369,7 +369,13 @@ if(!$opt_skipLoad) {
     if(!(-e $unloader)) {
         die "Can't find unloader ($unloader)\n";
     }
-    if(system("$unloader -configDir $configPath $submitType $submitPath")) {
+    my $unloader_cmd;
+    if (defined $opt_configDir) {
+        $unloader_cmd = "$unloader -configDir $opt_configDir $submitType $submitPath";
+    } else {
+        $unloader_cmd = "$unloader $submitType $submitPath";
+    }
+    if(system("$unloader_cmd")) {
         die "unload script failed\n";
     }
 
@@ -450,7 +456,7 @@ for my $key (keys %ra) {
         #} else {
             $hgdownload = 1;
         #}
-        loadWig($assembly, $tablename, $files, $pushQ);
+        loadWig($assembly, $tablename, $gbdbDir, $files, $pushQ);
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
         $hgdownload = @files;
@@ -458,7 +464,7 @@ for my $key (keys %ra) {
         loadBedFromSchema($assembly, $tablename, $files, $sql, $pushQ);
         $hgdownload = @files;
     } elsif ($bigBedTypes{$type}) {
-        loadBigBed($assembly, $tablename, $files, $type, $pushQ, $configPath);
+        loadBigBed($assembly, $tablename, $gbdbDir, $files, $type, $pushQ, $configPath);
         $hgdownload = @files;
     } elsif ($type =~ /^bed (3|4|5|6|8|9|12)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
@@ -489,7 +495,7 @@ for my $key (keys %ra) {
             HgAutomate::verbose(2, "One file: srcFile=[$srcFile]\n");
             if(Encode::isZipped($srcFile)) {
                 HgAutomate::verbose(2, "soft-linking $srcFile => $target\n");
-                !system("/bin/ln -s $srcFile $target") || die "link failed: $?\n";
+                !system("/bin/ln $srcFile $target") || die "link failed: $?\n";
             } else {
                 HgAutomate::verbose(2, "copying/zipping $srcFile => $target\n");
                 !system("/bin/gzip -c $srcFile > $target") || die "gzip: $?\n";
@@ -610,9 +616,9 @@ END
 # XXXX Let wrangler add to the README.txt? Otherwise, we inevitably will add redundant
 # entries when reloading.
 
-my $lines = Encode::readFile("out/README.txt");
-print README join("\n", @{$lines});
-print README "\n";
-close(README);
+#my $lines = Encode::readFile("out/README.txt");
+#print README join("\n", @{$lines});
+#print README "\n";
+#close(README);
 
 exit(0);

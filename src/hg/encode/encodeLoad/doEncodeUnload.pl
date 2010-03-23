@@ -10,7 +10,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.5 2010/03/15 22:21:53 krish Exp $
+# $Id: doEncodeUnload.pl,v 1.6 2010/03/23 03:56:31 krish Exp $
 
 use warnings;
 use strict;
@@ -95,6 +95,11 @@ if(dirname($submitDir) =~ /_(.*)/) {
     $tableSuffix = "_" . basename($submitDir);;
 }
 
+my $grants = Encode::getGrants($configPath);
+my $fields = Encode::getFields($configPath);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $downloadDir = Encode::downloadDir($daf);
+
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";
 
 my $unloadRa = 'out/unload.ra';
@@ -104,11 +109,6 @@ if(!(-e $unloadRa)) {
 }
 
 HgAutomate::verbose(2, "Unloading project in directory $submitDir\n");
-
-my $grants = Encode::getGrants($configPath);
-my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
-my $downloadDir = Encode::downloadDir($daf);
 
 # Unload resources listed in unload.ra
 my %ra = RAFile::readRaFile($unloadRa, 'tablename');
