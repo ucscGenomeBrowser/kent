@@ -190,3 +190,43 @@ searchType genePred
 #termRegex [a-z][a-z0-9][0-9]+
 searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+# HAIB Methyl RRBS (wrangler: braney)
+track encHaibMethylRrbs
+compositeTrack on
+shortLabel HudsonAlpha MethylRrbs
+longLabel ENCODE HudsonAlpha Myers MethylRrbs
+group regulation
+subGroup1 cellType Cell_Line GM12878=GM12878
+subGroup2 rep replicate rep1=rep1 rep2=rep2
+dimensions dimensionX=cellType dimensionY=rep
+sortOrder cellType=+ 
+controlledVocabulary encode/cv.ra cellType
+dragAndDrop subTracks
+# visibilityViewDefaults  Sites=hide
+priority 0
+type bed 3
+wgEncode 1
+itemRgb on
+noInherit on
+
+    track encHaibMethylRrbsSitesRep1Gm12878
+    release alpha
+    subTrack encHaibMethylRrbs
+    shortLabel GM12878 1
+    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM12878 cells)
+    subGroups cellType=GM12878 rep=rep1
+    type bed 9
+    color 153,38,0
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylRrbs cell=GM12878 view=Sites replicate=1 dataVersion="ENCODE June 2010 Freeze" subId=1124 dateSubmitted=2010-03-23 dateUnrestricted=2010-12-23 composite=encHaibMethylRrbs tableName=encHaibMethylRrbsSitesRep1Gm12878 fileName=encHaibMethylRrbsSitesRep1Gm12878.bed9.gz
+
+    track encHaibMethylRrbsSitesRep2Gm12878
+    release alpha
+    subTrack encHaibMethylRrbs
+    shortLabel GM12878 2
+    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM12878 cells)
+    subGroups cellType=GM12878 rep=rep2
+    type bed 9
+    color 153,38,0
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylRrbs cell=GM12878 view=Sites replicate=2 dataVersion="ENCODE June 2010 Freeze" subId=1124 dateSubmitted=2010-03-23 dateUnrestricted=2010-12-23 composite=encHaibMethylRrbs tableName=encHaibMethylRrbsSitesRep2Gm12878 fileName=encHaibMethylRrbsSitesRep2Gm12878.bed9.gz
+
