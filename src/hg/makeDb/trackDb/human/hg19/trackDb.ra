@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.105 2010/03/16 15:42:12 katrina Exp $";
+#	"$Id: trackDb.ra,v 1.106 2010/03/24 17:16:58 kuhn Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1450,9 +1450,6 @@ priority 103.29
         color 170,100,50
         type bed 5 .
         priority 23
-
-track agilentProbes override
-group regulation
 
 track snp130 override
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
