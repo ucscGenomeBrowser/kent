@@ -1,4 +1,4 @@
-# Data Agreement File for UNC (Duke) FAIRE-Seq project  $Revision: 1.3 $
+# Data Agreement File for UNC (Duke) FAIRE-Seq project  $Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,8 +9,8 @@ dafVersion       2.0
 grant            Crawford
 lab              UNC
 dataType         FaireSeq
-compositeSuffix  UncFaireSeq
-dataAgreementSuffix UncFaire
+compositeSuffix  OpenChrom
+dataAgreementSuffix Faire
 group            regulation
 variables        cell
 assembly         hg19
