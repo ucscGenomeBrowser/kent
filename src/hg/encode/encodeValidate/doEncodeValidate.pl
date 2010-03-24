@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.216 2010/03/24 02:50:02 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.217 2010/03/24 03:16:26 kate Exp $
 
 use warnings;
 use strict;
@@ -1072,6 +1072,7 @@ sub printCompositeTdbSettings {
                     for my $pair (@pairs) {
                         my ($var, $term) = split('=', $pair);
                         if ($var eq $variable) {
+                            next if ($term eq "None");
                             die "'$term' is not a registered '$cvTypeVar' term\n" unless defined($terms{$cvTypeVar}->{$term}) ;
                             my $tag = $terms{$cvTypeVar}->{$term}->{'tag'};
                             if (!defined($tags{$tag})) {
@@ -1082,7 +1083,7 @@ sub printCompositeTdbSettings {
                         }
                     }
                 }
-                print OUT_FILE $setting . "\n";     # "subGroup2\cellTyle Cell_Line ???\n;
+                print OUT_FILE $setting . "\n";     # "subGroup2\cellType Cell_Line ???\n;
             }
         }
         $setting = $sortOrder . "view=+";
@@ -1691,12 +1692,7 @@ foreach my $ddfLine (@ddfLines) {
     }
     # Construct table name from track name and variables
     my $tableName = "$compositeTrack";
-    #if($Encode::dafVersion le "1.0") {
-        $tableName .= $view;
-        if(defined($replicate)) {
-            $tableName .= "Rep$replicate";
-        }
-    #}
+
     if(!defined($daf->{TRACKS}{$view}{shortLabelPrefix})) {
         $daf->{TRACKS}{$view}{shortLabelPrefix} = "";
     }
@@ -1803,12 +1799,12 @@ foreach my $ddfLine (@ddfLines) {
             $subGroups .= " rep=rep$replicate"; # UGLY special casing
         }
     }
-    #if($Encode::dafVersion gt "1.0") {
-    #    $tableName .= "$view";
-    #    if(defined($replicate)) {
-    #        $tableName .= "Rep$replicate";
-    #    }
-    #}
+
+    # Add view and replicate to tablename
+    $tableName .= $view;
+    if(defined($replicate)) {
+        $tableName .= "Rep$replicate";
+    }
 
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars; to be
     # safe, we strip non-alphanumerics.
