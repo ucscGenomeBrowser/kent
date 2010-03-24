@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.216 2010/03/23 20:59:09 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.217 2010/03/24 20:37:05 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -340,7 +340,7 @@ vendorId CRL-4001
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
 lineage hTERT/BJ fibroblasts expressing T antigens of SV40 virus
 karyotype normal
-termId BTO:0001255 
+termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 sex M
 tier 3
@@ -356,7 +356,7 @@ vendorId BJ-HRas
 orderUrl https://struhl.med.harvard.edu/
 lineage hTERT/BJ fibroblasts expressing T antigens of SV40 virus and H-RasV12
 karyotype normal
-termId BTO:0001255 
+termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 sex M
 tier 3
@@ -373,7 +373,7 @@ vendorId BJ-T
 orderUrl https://struhl.med.harvard.edu/
 lineage Foreskin fibroblasts
 karyotype normal
-termId BTO:0001255 
+termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 sex M
 tier 3
@@ -1303,7 +1303,7 @@ term MDA-MB-231
 tag MDA
 type Cell Line
 organism Human
-description breast adenocarcinoma; epithelial cell line	 
+description breast adenocarcinoma; epithelial cell line
 vendorName ATCC
 vendorId HTB-26
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-26&Template=cellBiology
@@ -1753,6 +1753,7 @@ orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
 lab Farnham
 targetId GeneCard:GC06M010503
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A&search=TFAP2A_id=GC06M010503
+validation missing
 
 term AP-2gamma
 tag AP2gamma
@@ -1765,6 +1766,7 @@ orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
 targetId GeneCard:GC20P054637
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C&search=TFAP2C_id=GC20P054637
+validation missing
 
 term ATF3
 tag ATF3
@@ -1777,6 +1779,7 @@ vendorId sc-188
 lab Struhl
 targetId GeneCard:GC01P210805
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P210805
+validation missing
 
 term BAF155
 tag BAF155
@@ -1789,6 +1792,7 @@ vendorId sc-10756
 lab Snyder
 targetId GeneCard:GC03M047602
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC03M047602
+validation missing
 
 term BAF170
 tag BAF170
@@ -1801,6 +1805,7 @@ vendorId sc-10757
 lab Snyder
 targetId GeneCard:GC12M054843
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M054843
+validation missing
 
 term BATF
 tag BATF
@@ -1813,6 +1818,7 @@ orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 lab Myers
 targetId GeneCard:GC14P075058
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BATF
+validation missing
 
 term BCL11A
 tag BCL11A
@@ -1825,6 +1831,7 @@ orderUrl http://www.abcam.com/Ctip1-antibody-18B12DE6-ab19489.html
 lab Myers
 targetId GeneCard:GC02M060589
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
+validation missing
 
 term BCL3
 tag BCL3
@@ -1837,6 +1844,7 @@ orderUrl http://www.scbt.com/datasheet-185-bcl-3-c-14-antibody.html
 lab Myers
 targetId GeneCard:GC19P049943
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
+validation missing
 
 term BDP1
 tag BDP1
@@ -1849,6 +1857,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GC05P070787
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P070787
+validation missing
 
 term BHLHE40
 tag BHLHE40
@@ -1861,6 +1870,7 @@ orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
 targetId GeneCard:GC19M047286
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
+validation missing
 
 term BRF1
 tag BRF1
@@ -1873,6 +1883,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GC14M104746
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
+validation missing
 
 term BRF2
 tag BRF2
@@ -1885,6 +1896,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard: GC08M037820
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2&search=Brf2
+validation missing
 
 term Brg1
 tag BRG1
@@ -1897,6 +1909,7 @@ vendorId 16189
 lab Snyder
 targetId GeneCard:GC19P010932
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19P010932
+validation missing
 
 term c-Fos
 tag cFOS
@@ -1909,6 +1922,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=7202
 lab Snyder
 targetId GeneCard:GC14P074815
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14P074815
+validation missing
 
 term c-Myc
 tag cMYC
@@ -1922,6 +1936,7 @@ lab Iyer, Snyder
 lots H0107
 targetId GeneCard:GC08P128817
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08P128817
+validation missing
 
 term c-Jun
 tag cJUN
@@ -1934,6 +1949,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1694
 lab Snyder
 targetId GeneCard:GC01M058958
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
+validation missing
 
 term CEBPB
 tag CEBPB
@@ -1944,6 +1960,7 @@ orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-150
 lab Snyder
+validation missing
 
 term CTCF
 tag CTCF
@@ -1958,6 +1975,7 @@ lab Bernstein, Iyer
 lots 1350637, DAM1472197
 targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+validation missing
 
 term CtBP1
 tag CTBP1
@@ -1970,6 +1988,7 @@ vendorId 612042
 lab Farnham
 targetId GeneCard:GC04M001195
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1&search=ctbp1=GC04M001195
+validation missing
 
 term CtBP2
 tag CTBP2
@@ -1982,6 +2001,7 @@ vendorId 612044
 lab Farnham
 targetId GeneCard:GC10M126666
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
+validation missing
 
 term E2F1
 tag E2F1
@@ -1994,6 +2014,7 @@ vendorId 05-379
 lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1
+validation missing
 
 term E2F4
 tag E2F4
@@ -2006,6 +2027,7 @@ orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 lab Farnham
 targetId GeneCard:GC16P065783
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P065783
+validation missing
 
 term E2F6
 tag E2F6
@@ -2018,6 +2040,7 @@ orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
 lab Farnham
 targetId GeneCard:GC02M011536
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M011536
+validation missing
 
 term EBF
 tag EBF
@@ -2030,6 +2053,7 @@ orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
 lab Myers
 targetId GeneCard:GC05M158059
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
+validation missing
 
 term Egr-1
 tag EGR1
@@ -2042,6 +2066,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=110
 lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1&search=Egr-1
+validation missing
 
 term ERRA
 tag ERRA
@@ -2052,6 +2077,7 @@ orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-66882
 lab Snyder
+validation missing
 
 term FOSL2
 tag FOSL2
@@ -2064,6 +2090,7 @@ orderUrl http://www.scbt.com/datasheet-604-fra-2-q-20-antibody.html
 lab Myers
 targetId GeneCard:GC02P028527
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
+validation missing
 
 term FOXP2
 tag FOXP2
@@ -2076,6 +2103,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=16046
 lab Myers
 targetId GeneCard:GC07P113482
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC07P113482
+validation missing
 
 term GABP
 tag GABP
@@ -2089,6 +2117,7 @@ targetId
 targetUrl
 lab Myers / Wold
 lots F1804
+validation missing
 
 term GATA-1
 tag GATA1
@@ -2101,6 +2130,7 @@ orderUrl
 targetId GeneCard:GC0XP048529
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=GC0XP048529
 lab Farnham
+validation missing
 
 term GATA-2
 tag GATA2
@@ -2113,6 +2143,7 @@ orderUrl
 targetId GeneCard:GC03M129680
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
 lab Farnham
+validation missing
 
 term GR
 tag GR
@@ -2126,6 +2157,7 @@ lab Myers
 lots A2508, E1908
 targetId GeneCard:GC04M149219
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
+validation missing
 
 term GRp20
 tag GRP20
@@ -2136,6 +2168,7 @@ orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-1002
 lab Snyder
+validation missing
 
 term GTF2B
 tag GTF2B
@@ -2148,6 +2181,7 @@ vendorId sc-225
 lab Struhl
 targetId GeneCard:GC01M089030
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M089030
+validation missing
 
 term H3K4me1
 tag H3K4me1
@@ -2161,6 +2195,7 @@ lab Bernstein
 lots 383111
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K4me2
 tag H3K4me2
@@ -2174,6 +2209,7 @@ lab Bernstein
 lots 56293
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K4me3
 tag H3K4me3
@@ -2190,6 +2226,7 @@ lab Bernstein
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K9ac
 tag H3K9ac
@@ -2203,6 +2240,7 @@ lab Bernstein
 lots 455103
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K9me1
 tag H3K9me1
@@ -2216,6 +2254,7 @@ lab Bernstein
 lots 104560
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K9me3
 tag H3K9me3
@@ -2228,6 +2267,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=8898
 lab Farnham
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K27ac
 tag H3K27ac
@@ -2241,6 +2281,7 @@ lab Bernstein
 lots 31456
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K27me3
 tag H3K27me3
@@ -2254,6 +2295,7 @@ lab Bernstein
 lots DAM1387952
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H3K36me3
 tag H3K36me3
@@ -2267,6 +2309,7 @@ lab Bernstein
 lots 136353
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
 
 term H4K20me1
 tag H4K20me1
@@ -2280,6 +2323,7 @@ lab Bernstein
 lots 104513
 targetId GeneCard:GC01P148070
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P148070
+validation missing
 
 term HA-E2F1
 tag HAE2F1
@@ -2292,6 +2336,7 @@ vendorId MMS-101P
 lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
+validation missing
 
 term HEY1
 tag HEY1
@@ -2304,6 +2349,7 @@ orderUrl http://www.scbt.com/datasheet-16424-hrt1-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC08M080838
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
+validation missing
 
 term HNF4A
 tag HNF4A
@@ -2314,6 +2360,7 @@ orderUrl http://www.scbt.com/datasheet-6556-hnf-4alpha-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-6556
 lab Snyder
+validation missing
 
 term HSF1
 tag HSF1
@@ -2324,6 +2371,7 @@ orderUrl http://www.scbt.com/datasheet-9144-hsf1-h-311-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-9144
 lab Snyder
+validation missing
 
 term Ini1
 tag INI1
@@ -2336,6 +2384,7 @@ vendorId sc-17796
 lab Snyder
 targetId GeneCard:GC22P022453
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC22P022453
+validation missing
 
 term IRF4
 tag IRF4
@@ -2348,18 +2397,20 @@ orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
 lab Myers
 targetId GeneCard:GC06P000336
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
+validation missing
 
 term JunD
 tag JUND
 type Antibody
 antibodyDescription rabbit polyclonal IgG
-targetDescription TBD
+targetDescription The protein encoded by this intronless gene is a member of the JUN family, and a functional component of the AP1 transcription factor complex. It has been proposed to protect cells from p53-dependent senescence and apoptosis. Alternate translation initiation site usage results in the production of different isoforms. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-74
 orderUrl http://www.scbt.com/product.php?datasheet=74
 lab Snyder
 targetId GeneCard:GC19M018254
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M018254
+validation missing
 
 term KAP1
 tag KAP1
@@ -2372,6 +2423,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=10483
 lab Farnham
 targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
+validation missing
 
 term Max
 tag MAX
@@ -2384,6 +2436,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=197
 lab Snyder
 targetId GeneCard:GC14M064542
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
+validation missing
 
 term NELFe
 tag NELFE
@@ -2396,6 +2449,7 @@ vendorId sc-32912
 lab Struhl
 targetId GeneCard:GC06M032027
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC06M032027
+validation missing
 
 term NF-E2
 tag NFE2
@@ -2409,6 +2463,7 @@ lab Snyder
 lots D1703
 targetId GeneCard:GC12M052972
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
+validation missing
 
 term NFKB
 tag NFKB
@@ -2421,6 +2476,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:GC04P103641
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1&search=NF-kappa-B
+validation missing
 
 term NF-YA
 tag NFYA
@@ -2433,6 +2489,7 @@ orderUrl
 lab Struhl
 targetId GeneCard:GC06P041148
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
+validation missing
 
 term NF-YB
 tag NFYB
@@ -2445,6 +2502,7 @@ orderUrl
 lab Struhl
 targetId GeneCard:GC12M103013
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
+validation missing
 
 term Nrf1
 tag NRF1
@@ -2457,6 +2515,7 @@ orderUrl http://www.abcam.com/NRF1-antibody-ab55744.html
 lab Snyder
 targetId GeneCard:GC07P129038
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1&search=nrf1
+validation missing
 
 term Nrf2
 tag NRF2
@@ -2467,6 +2526,7 @@ orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-22810
 lab Snyder
+validation missing
 
 term NRSF
 tag NRSF
@@ -2478,6 +2538,7 @@ vendorId
 orderUrl
 lab Myers / Wold
 lots 20070905JV
+validation missing
 
 term Oct-2
 tag OCT2
@@ -2488,6 +2549,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-233
 orderUrl  http://www.scbt.com/product.php?datasheet=233
 lab Myers
+validation missing
 
 term p300
 tag P300
@@ -2498,6 +2560,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-585
 orderUrl  http://www.scbt.com/product.php?datasheet=585
 lab Myers
+validation missing
 
 term PAX5-C20
 tag PAX5C20
@@ -2510,6 +2573,7 @@ orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+validation missing
 
 term PAX5-N19
 tag PAX5N19
@@ -2522,6 +2586,7 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+validation missing
 
 term Pbx3
 tag PBX3
@@ -2532,6 +2597,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-891
 orderUrl  http://www.scbt.com/product.php?datasheet=891
 lab Myers
+validation missing
 
 term PGC1A
 tag PGC1A
@@ -2544,6 +2610,7 @@ vendorId sc-13067
 lab Snyder
 targetId GeneCard:GC04M023544
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC04M023544]
+validation missing
 
 term Pol2
 tag POL2
@@ -2555,6 +2622,7 @@ vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
+validation missing
 
 term Pol2(b)
 tag POL2B
@@ -2566,6 +2634,7 @@ vendorName Covance
 vendorId MMS-128P
 lab Bernstein
 lots 147337002
+validation missing
 
 term Pol2-4H8
 tag POL24H8
@@ -2578,6 +2647,7 @@ orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-
 lab Myers
 targetId GeneCard:GC17P007329
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
+validation missing
 
 term Pol3
 tag POL3
@@ -2588,6 +2658,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-21754
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 lab Snyder
+validation missing
 
 term POU2F2
 tag POU2F2
@@ -2600,6 +2671,7 @@ orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC19M047286
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
+validation missing
 
 term PU.1
 tag PU1
@@ -2610,6 +2682,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-22805
 orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
+validation missing
 
 term Rad21
 tag RAD21
@@ -2622,6 +2695,7 @@ vendorId ab992
 lab Snyder
 targetId GeneCard:GC08M117927
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08M117927
+validation missing
 
 term RPC155
 tag RPC155
@@ -2634,6 +2708,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GC10M079405
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10M079405
+validation missing
 
 term RXRA
 tag RXRA
@@ -2646,6 +2721,7 @@ orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 lab Myers
 targetId GeneCard:GC09P136358
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
+validation missing
 
 term SETDB1
 tag SETDB1
@@ -2658,6 +2734,7 @@ orderUrl http://www.ptglab.com/data/image/pdf/E__web_pdf_11231-1-AP.pdf
 lab Farnham
 targetId GeneCard:GC01P149165
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1&search=setdb1
+validation missing
 
 term Sin3Ak-20
 tag SIN3AK20
@@ -2668,6 +2745,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-994
 orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
+validation missing
 
 term SIRT6
 tag SIRT6
@@ -2680,6 +2758,7 @@ orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 lab Struhl
 targetId GeneCard:GC19M004125
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M004125
+validation missing
 
 term SIX5
 tag SIX5
@@ -2692,6 +2771,7 @@ orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 lab Myers
 targetId GeneCard:GC19M050959
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
+validation missing
 
 term SP1
 tag SP1
@@ -2704,6 +2784,7 @@ orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 lab Myers
 targetId GeneCard:GC12P052060
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
+validation missing
 
 term SREBP1
 tag SREBP1
@@ -2714,6 +2795,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-8984
 orderUrl http://www.scbt.com/product.php?datasheet=8984
 lab Snyder
+validation missing
 
 term SREBP2
 tag SREBP2
@@ -2724,6 +2806,7 @@ vendorName 	 Cayman Chemical
 vendorId 10007663
 orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
 lab Snyder
+validation missing
 
 term SRF
 tag SRF
@@ -2737,6 +2820,7 @@ lab Myers / Wold
 lots F3006 L2005 H2604
 targetId GeneCard:GC06P043247
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC06P043247
+validation missing
 
 term STAT1
 tag STAT1
@@ -2750,6 +2834,7 @@ lab Snyder
 lots G2406 and K2106
 targetId GeneCard:GC02M191542
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M191542
+validation missing
 
 term STAT2
 tag STAT2
@@ -2762,6 +2847,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=476
 lab Snyder
 targetId GeneCard:GC12M055021
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M055021
+validation missing
 
 term SUZ12
 tag SUZ12
@@ -2774,6 +2860,7 @@ orderUrl
 lab Farnham
 targetId GeneCard:GC17P027289
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12&search=suz12
+validation missing
 
 term TAF1
 tag TAF1
@@ -2786,6 +2873,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=735
 geneId 6872
 lab Myers / Wold
 lots K0905 F2706
+validation missing
 
 #term TAF-II
 #type Antibody
@@ -2796,6 +2884,7 @@ lots K0905 F2706
 #orderUrl http://www.scbt.com/product.php?datasheet=735
 #lab Myers / Wold
 #lots K0905 F2706
+#validation missing
 
 term TCF12
 tag TCF12
@@ -2808,6 +2897,7 @@ orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
 targetId GeneCard:GC15P054998
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
+validation missing
 
 term TCF3
 tag TCF3
@@ -2820,6 +2910,7 @@ orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
 lab Myers
 targetId GeneCard:GC19M001560
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
+validation missing
 
 term TCF4
 tag TCF4
@@ -2832,6 +2923,7 @@ orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham/Myers
 targetId GeneCard:GC18M051045
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC18M051045
+validation missing
 
 term TCF7L2
 tag TCF7L2
@@ -2844,6 +2936,7 @@ orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:GC10P114700
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10P114700
+validation missing
 
 term TFIIIC-110
 tag TF3C110
@@ -2854,6 +2947,7 @@ vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
 vendorId 4286
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
+validation missing
 
 term TR4
 tag TR4
@@ -2864,6 +2958,7 @@ vendorName Donated by Dr. J.D.Engel, University of Michigan
 lab Farnham
 targetId GeneCard:GC03P014964
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
+validation missing
 
 term USF-1
 tag USF1
@@ -2876,6 +2971,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
 targetId GeneCard:GC01M159275
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M159275
+validation missing
 
 term XRCC4
 tag XRCC4
@@ -2888,6 +2984,7 @@ vendorId ab1451
 lab Snyder
 targetId GeneCard:GC05P082409
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P082409
+validation missing
 
 term YY1
 tag YY1
@@ -2900,6 +2997,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:GC14P099774
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
+validation missing
 
 term ZBTB33
 tag ZBTB33
@@ -2912,6 +3010,7 @@ orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 lab Myers
 targetId GeneCard:GC0XP119268
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
+validation missing
 
 term ZNF263
 tag ZNF263
@@ -2924,6 +3023,7 @@ orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
 lab Farnham
 targetId GeneCard:GC16P003273
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P003273
+validation missing
 
 term ZNF274
 tag ZNF274
@@ -2937,6 +3037,7 @@ lab Farnham
 lots 060729QCS1
 targetId GeneCard:GC19P063386
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
+validation missing
 
 term ZZZ3
 tag ZZZ3
@@ -2949,6 +3050,7 @@ lab Struhl
 Lots NP_056349
 targetId GeneCard:GC01M077742
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
+validation missing
 
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
