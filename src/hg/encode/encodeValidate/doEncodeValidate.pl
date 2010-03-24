@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.215 2010/03/23 16:27:17 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.216 2010/03/24 02:50:02 kate Exp $
 
 use warnings;
 use strict;
@@ -1071,8 +1071,9 @@ sub printCompositeTdbSettings {
                     my @pairs = split(';', $key);
                     for my $pair (@pairs) {
                         my ($var, $term) = split('=', $pair);
-                        my $tag = $terms{$cvTypeVar}->{$term}->{'tag'};
                         if ($var eq $variable) {
+                            die "'$term' is not a registered '$cvTypeVar' term\n" unless defined($terms{$cvTypeVar}->{$term}) ;
+                            my $tag = $terms{$cvTypeVar}->{$term}->{'tag'};
                             if (!defined($tags{$tag})) {
                                 # suppress dups, requested by Brian
                                 $setting = "$setting $tag=$term";
