@@ -1,4 +1,4 @@
-# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
+# Data Agreement File for Yale ChipSeq project  $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -10,6 +10,7 @@ grant             Snyder
 lab               Stanford
 dataType          ChipSeq
 compositeSuffix   StanfordChipSeq
+group             regulation
 variables         cell, antibody, treatment, input
 assembly          hg19
 

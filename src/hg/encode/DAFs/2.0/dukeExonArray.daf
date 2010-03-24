@@ -10,6 +10,7 @@ grant            Crawford
 lab              Duke
 dataType         ExonArray
 compositeSuffix  DukeExonArray
+group            expression
 variables        cell,treatment
 assembly         hg19
 

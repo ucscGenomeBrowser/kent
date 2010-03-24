@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.1 $
+# Data Agreement File for RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,7 +9,8 @@ dafVersion        2.0
 grant             Gingeras
 lab               Helicos
 dataType          RnaSeq
-compositeSuffix   helicosRnaSeq
+compositeSuffix   HelicosRnaSeq
+group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
 

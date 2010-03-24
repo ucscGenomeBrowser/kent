@@ -10,6 +10,7 @@ grant             Stam
 lab               UW
 dataType          ExonArray
 compositeSuffix   UwExonArray
+group             expression
 variables         cell
 assembly          hg19
 

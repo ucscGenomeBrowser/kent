@@ -1,4 +1,4 @@
-# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.1 $
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.2 $
 
 dafVersion        2.0
 
@@ -7,6 +7,7 @@ grant             Myers
 lab               HudsonAlpha
 dataType          ChipSeq
 compositeSuffix   HaibChipSeq
+group             regulation
 variables         cell, antibody, protocol, treatment
 assembly          hg19
 medianFragmentLength 225

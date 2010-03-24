@@ -1,5 +1,5 @@
 # Data Agreement File for Weng Lab TFBS Validation
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -11,6 +11,7 @@ grant             Weng
 lab               UMass-Weng
 dataType          TfbsValid
 compositeSuffix   UMassWengTfbsValid
+group             regulation
 variables         cell
 assembly          hg19
 

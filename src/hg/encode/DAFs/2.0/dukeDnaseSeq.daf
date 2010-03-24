@@ -1,4 +1,4 @@
-# Data Agreement File for Duke DNase-Seq project  $Revision: 1.1 $
+# Data Agreement File for Duke DNase-Seq project  $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,7 +9,8 @@ dafVersion       2.0
 grant            Crawford
 lab              Duke
 dataType         DNaseSeq
-compmositeSuffix ChromatinMap
+compositeSuffix  OpenChrom
+group            regulation
 variables        cell
 assembly         hg19
 

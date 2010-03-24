@@ -1,4 +1,4 @@
-# Data Agreement File for University of Washington, DNAse validation studies $Revision: 1.1 $
+# Data Agreement File for University of Washington, DNAse validation studies $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -10,6 +10,7 @@ grant             Stam
 lab               UW
 dataType          DnaseValid
 compositeSuffix   UwDnaseValid
+group             regulation
 assembly          hg19
 variables         cell
 

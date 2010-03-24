@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.1 $
+# Data Agreement File for RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -10,6 +10,7 @@ grant             Gingeras
 lab               GIS
 dataType          RnaSeq
 compositeSuffix   GisRnaSeq
+group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
 

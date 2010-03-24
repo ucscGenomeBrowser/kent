@@ -1,4 +1,4 @@
-# Data Agreement File for Myers RNA-seq project $Revision: 1.1 $
+# Data Agreement File for Myers RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -10,6 +10,7 @@ grant             Myers
 lab               HudsonAlpha
 dataType          RnaSeq
 compositeSuffix   HaibRnaSeq
+group             expression
 variables         cell, localization, rnaExtract, mapAlgorithm, readType, treatment
 assembly          hg19
 

@@ -10,6 +10,7 @@ grant             Elnitski
 lab               NHGRI-Elnitski
 dataType          Neg-Reg
 compositeSuffix   NhgriElnitskiNegReg
+group             regulation
 variables         cell, promoter
 assembly          hg18
 
