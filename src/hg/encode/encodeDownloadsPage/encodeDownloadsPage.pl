@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.29 2010/03/20 00:15:36 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.30 2010/03/24 00:59:42 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -31,6 +31,7 @@ use vars qw/
     $opt_db
     $opt_verbose
     $opt_checksum
+    $opt_noMetaTbl
     /;
 
 our $checksumFile = "md5sum.txt";
@@ -45,6 +46,7 @@ Creates an HTML page and README text file listing the downloads in the current d
 options:
     -help               Displays this usage info
     -checksum           Generate checksum file
+    -noMetaTbl	        Don't use metaTbl.  Instead, use the old trackDb/fileDb.ra methods
     -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
     -db=hg18            Use a database other than the default hg18 (For aquiring releaseDate and metadata from trackDb)
     -fileType=mask	    mask for file types included (default '*.gz')
@@ -282,10 +284,11 @@ my $ok = GetOptions("fileType=s",
                     "db=s",
                     "verbose=i",
                     "checksum",
+                    "noMetaTbl",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
-my $fileMask = "*.gz";
+my $fileMask = "*.gz *.bb *.bw *.bam";
    $fileMask = $opt_fileType if(defined $opt_fileType);
 
 my $preamble = "preamble.html";
@@ -299,7 +302,8 @@ my $downloadsDir = cwd();
 $downloadsDir = $ARGV[1] if (scalar(@ARGV) > 1);
 
 # Now find some files
-my @fileList = `ls -hogL  --time-style=long-iso $downloadsDir/$fileMask 2> /dev/null`;
+#my @fileList = `ls -hogL  --time-style=long-iso $downloadsDir/$fileMask 2> /dev/null`;
+my @fileList = `cd $downloadsDir;ls -hogL  --time-style=long-iso $fileMask 2> /dev/null`;
 # -rw-rw-r--  1 101M 2008-10-27 14:34 /usr/local/apache/htdocs/goldenPath/hg18/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Pol2.wig.gz
 if(length(@fileList) == 0) {
     die ("ERROR; No files were found in \'$downloadsDir\' that match \'$fileMask\'.\n");
@@ -360,7 +364,13 @@ for my $line (@fileList) {
     my %metaData;
 
     ### TODO: Developer: set sort order here; sortables must have same number of strings and '~' is lowest val printable
-    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","rank","replicate","subId");
+    #my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","rank","replicate","subId");
+    # Complete sort order, (I hope)
+    my @sortFields = ("species","assembly","dataType","cell","rnaExtract","localization","phase","treatment","antibody","protocol","ripAntibody",
+                      "ripTgtProtein","restrictionEnzyme","promoter","input","control","replicate","submitteDataVersion","subId","dataVersion",
+                      "dateSubmitted","dateResubmitted","dateReloaded","dateUnrestricted","project","grant","lab","labVersion","softwareVersion",
+                      "mapAlgorithm","fragSize","fragLength","medianFragmentLength","fragmentLengthRange","chromStart","view","type","composite",
+                      "tableName","parentTable","fileName","accession");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my $typePrefix = "";
 
@@ -374,19 +384,23 @@ for my $line (@fileList) {
     }
 
     # Use the metaTbl for metadata
-    my $queryResults = $db->execute("select var,val from $database.metaTbl where objName = '$tableName'");
-    if($queryResults) {
-        my @pairVars;
-        push @pairVars, "metadata";
-        while(my @row = $queryResults->fetchrow_array()) {
+    if (!defined $opt_noMetaTbl) {
+        my $queryResults = $db->execute("select var,val from $database.metaTbl where objName = '$tableName'");
+        if($queryResults) {
+            my @pairVars;
+            push @pairVars, "metadata";
+            while(my @row = $queryResults->fetchrow_array()) {
 
-            # FIXME: When trackDb metadata is no longer used, this routine should be replaced with more direct metaData loading
-            #$metaData{$row[0]} = $row[1];
-            push @pairVars, join('=',$row[0],$row[1] );
-            #my $onePair = join('=',$row[0],$row[1] );
-            #push @pairVars, $onePair;
+                # FIXME: When trackDb metadata is no longer used, this routine should be replaced with more direct metaData loading
+                #$metaData{$row[0]} = $row[1];
+                push @pairVars, join('=',$row[0],$row[1] );
+                #my $onePair = join('=',$row[0],$row[1] );
+                #push @pairVars, $onePair;
+            }
+            $results = join(' ',@pairVars );
         }
-        $results = join(' ',@pairVars );
+    } else {
+        $results = "";
     }
 
     if(!$results) {
