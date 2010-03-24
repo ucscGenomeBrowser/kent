@@ -24,7 +24,7 @@
  *    TODO:  tags=a,b,c    : Display rows for listed terms, using tags as identifiers.  Must use with 'type'.
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.30 2010/02/10 20:03:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.31 2010/03/24 20:35:48 tdreszer Exp $";
 
 //options that apply to all vocab types
 
@@ -44,6 +44,51 @@ if(!fileExists(filePath))
 return filePath;
 }
 
+void documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
+/* Compare controlled vocab based on term value */
+{
+char *s;
+if(title == NULL)
+    title = docTerm;
+
+// add links to protocol doc if it exists
+char docUrl[PATH_LEN];
+char docFile[PATH_LEN];
+// parse setting
+s = hashFindVal(ra,docTerm);
+if(s != NULL && differentWord(s,"missing"))
+    {
+    char *docSetting = cloneString(s);
+    char *settings=docSetting;
+    while((s = nextWord(&settings)) != NULL)
+        {
+        char *docTitle = NULL;
+        char *fileName = NULL;
+        if(strchr(s,':')) // lab Specific setting
+            {
+            docTitle = strSwapChar(s,':',0);
+            fileName = docTitle + strlen(docTitle) + 1;
+            }
+        else
+            {
+            docTitle = title;
+            fileName = s;
+            }
+        safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
+        safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
+        //if (fileExists(documentFile))
+            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+        }
+    freeMem(docSetting);
+    }
+else if(genericDoc)
+    { // generate a standard name
+    safef(docUrl,  sizeof(docUrl),  "%s%s_protocol.pdf", dir, term);
+    safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
+    if (fileExists(docFile))
+        printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,title);
+    }
+}
 
 int termCmp(const void *va, const void *vb)
 /* Compare controlled vocab based on term value */
@@ -59,7 +104,7 @@ void doTypeHeader(char *type)
 {
 if (sameString(type,"Antibody"))
     {
-    puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Lots</TH><TH>Target Link</TH>");
+    puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH>");
     }
 else if (sameString(type,"ripAntibody"))
     {
@@ -124,6 +169,11 @@ if (sameString(type,"Antibody"))
 
     s = hashFindVal(ra, "lab");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
+    // add links to protocol doc if it exists
+    printf("  <TD>");
+    documentLink(ra,term,"validation","/ENCODE/protocols/antibody/",NULL,FALSE);
+    printf("  &nbsp;</TD>\n");
 
     s = hashFindVal(ra, "lots");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
@@ -244,46 +294,9 @@ else if (sameString(type,"Cell Line"))
     s = hashFindVal(ra, "sex");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 
-#define PROTOCOL_DIR "/ENCODE/protocols/cell/"
-#define PROTOCOL_TITLE "protocol"
     // add links to protocol doc if it exists
     printf("  <TD>");
-    char protocolUrl[PATH_LEN];
-    char protocolFile[PATH_LEN];
-    // parse Protocol setting
-    s = hashFindVal(ra,"protocol");
-    if(s != NULL)
-        {
-        char *protocolSetting = cloneString(s);
-        char *settings=protocolSetting;
-        while((s = nextWord(&settings)) != NULL)
-            {
-            char *title = NULL;
-            char *fileName = NULL;
-            if(strchr(s,':')) // lab Specific setting
-                {
-                title = strSwapChar(s,':',0);
-                fileName = title + strlen(title) + 1;
-                }
-            else
-                {
-                title = PROTOCOL_TITLE;
-                fileName = s;
-                }
-            safef(protocolUrl, sizeof(protocolUrl), "%s%s", PROTOCOL_DIR, fileName);
-            safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
-            if (fileExists(protocolFile))
-                printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", protocolUrl,title);
-            }
-        freeMem(protocolSetting);
-        }
-    else
-        { // generate a standard name
-        safef(protocolUrl, sizeof(protocolUrl), "%s%s_protocol.pdf", PROTOCOL_DIR, term);
-        safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
-        if (fileExists(protocolFile))
-            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", protocolUrl,PROTOCOL_TITLE);
-        }
+    documentLink(ra,term,"protocol","/ENCODE/protocols/cell/",NULL,TRUE);
     printf("  &nbsp;</TD>\n");
 
     s = hashFindVal(ra, "vendorName");
