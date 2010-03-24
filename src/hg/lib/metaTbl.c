@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.4 2010/03/19 21:22:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.5 2010/03/24 17:37:12 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -678,6 +678,8 @@ int count = 0;
         tableName = METATBL_DEFAULT_NAME;
 
 struct sqlConnection *conn = sqlConnect(db);
+    if(!sqlTableExists(conn,tableName))
+        errAbort("metaObjsSetToDb attempting to update non-existent table.\n");
 
 for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
     {
@@ -816,6 +818,12 @@ struct metaObj *metaObjQuery(char * db,char *table,struct metaObj *metaObj)
     verbose(2, "Query: %s\n",dyStringContents(dy));
 
     struct sqlConnection *conn = sqlConnect(db);
+    if(!sqlTableExists(conn,table))
+        {
+        dyStringFree(&dy);
+        return NULL;
+        }
+
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
     sqlDisconnect(&conn);
     verbose(2, "rows returned: %d\n",slCount(metaTbl));
@@ -874,6 +882,11 @@ struct metaByVar *metaByVarsQuery(char * db,char *table,struct metaByVar *metaBy
     verbose(2, "Query: %s\n",dyStringContents(dy));
 
     struct sqlConnection *conn = sqlConnect(db);
+    if(!sqlTableExists(conn,table))
+        {
+        dyStringFree(&dy);
+        return NULL;
+        }
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
     sqlDisconnect(&conn);
     verbose(2, "rows returned: %d\n",slCount(metaTbl));
@@ -932,6 +945,11 @@ struct metaObj *metaObjsQueryByVars(char * db,char *table,struct metaByVar *meta
     verbose(2, "Query: %s\n",dyStringContents(dy));
 
     struct sqlConnection *conn = sqlConnect(db);
+    if(!sqlTableExists(conn,table))
+        {
+        dyStringFree(&dy);
+        return NULL;
+        }
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
     sqlDisconnect(&conn);
     verbose(2, "rows returned: %d\n",slCount(metaTbl));
@@ -982,20 +1000,17 @@ for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
         if(limbVal->val == NULL)
             continue;
 
-        printf("metaVariable %s=",rootVar->var);
-        if(rootVar->varType == vtBinary)
-            printf("binary%s",(printLong?"\n\t":" "));
-        else
-            printf("%s%s",limbVal->val,(printLong?"\n\t":" "));
+        printf("metaVariable %s=%s",rootVar->var,
+            (rootVar->varType == vtBinary?"binary":limbVal->val));
 
         struct metaLeafObj *leafObj = NULL;
         for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
             {
             if(leafObj->objName != NULL)
-                printf("%s%s",leafObj->objName,(printLong?"\n\t":" "));
+                printf("%s%s%s",(printLong?"\n\t":" "),leafObj->objName,(printLong?"\n":""));
             }
+        printf("\n");
         }
-    printf("\n");
     }
 }
 
