@@ -58,7 +58,7 @@ while((row = sqlNextRow(sr)) != NULL)
 	{
 	int peak = sqlSigned(rowPastOffset[9]);
 	if (peak > -1)
-	    printf("<B>Point peak:</B> %d<BR>\n", start + peak + 1); // one based
+	    printf("<B>Peak point:</B> %d<BR>\n", start + peak + 1); // one based
 	}
     /* Strand, score */
     if (rowPastOffset[5][0] != '.')
