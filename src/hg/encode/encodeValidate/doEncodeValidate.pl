@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.217 2010/03/24 03:16:26 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.218 2010/03/24 21:39:03 kate Exp $
 
 use warnings;
 use strict;
@@ -1073,8 +1073,16 @@ sub printCompositeTdbSettings {
                         my ($var, $term) = split('=', $pair);
                         if ($var eq $variable) {
                             next if ($term eq "None");
-                            die "'$term' is not a registered '$cvTypeVar' term\n" unless defined($terms{$cvTypeVar}->{$term}) ;
-                            my $tag = $terms{$cvTypeVar}->{$term}->{'tag'};
+                            my $tag;
+                            if (defined($terms{$cvTypeVar}->{$term})) {
+                                $tag=$terms{$cvTypeVar}->{$term}->{"tag"};
+                            } else {
+                                if (defined($terms{"control"}->{$term})) {
+                                    $tag=$terms{"control"}->{$term}->{"tag"};
+                                } else {
+                                    die "'$term' is not a registered '$cvTypeVar' term\n";
+                                }
+                            }
                             if (!defined($tags{$tag})) {
                                 # suppress dups, requested by Brian
                                 $setting = "$setting $tag=$term";
@@ -1646,13 +1654,23 @@ if(!$opt_skipOutput && !$compositeExists) {
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
 
+# use pi.ra file to map pi/lab/institution/grant/project for metadata line
+my $labRef = Encode::getLabs($configPath);
+my %labs = %{$labRef};
+
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
     my $diePrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     my $view = $ddfLine->{view};
     my $type = $daf->{TRACKS}{$view}{type} || die "Missing DAF entry for view '$view'\n";
     my $sql = $daf->{TRACKS}{$view}{sql};
-    my $metadata = "project=wgEncode grant=$daf->{grant} lab=$daf->{lab} dataType=$daf->{dataType}";
+    my $lab = $daf->{lab};
+    my $metadata = "project=wgEncode grant=$daf->{grant} lab=$lab";
+    if (defined($labs{$lab}) && $labs{$lab}->{pi} ne $labs{$lab}->{grant}) {
+        # add co-PI name
+        $metadata .= "($labs{$lab}->{pi})";
+    }
+    $metadata .= " dataType=$daf->{dataType}";
     $metadata .= " cell=$ddfLine->{cell}" if $ddfLine->{cell}; # force some order
     $metadata .= " antibody=$ddfLine->{antibody}" if $ddfLine->{antibody};
     for my $key (keys %{$ddfLine}) {
