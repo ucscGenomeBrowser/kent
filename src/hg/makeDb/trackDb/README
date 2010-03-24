@@ -284,6 +284,17 @@ The format of the type fields:
     Additional general settings that may be useful to speed up display for extremely
     dense data e.g. next-gen sequencing reads: maxWindowToDraw, chromosomes (see below)
 
+20. type factorSource
+    This type is used for transcription factors on multiple cell lines.  It displays
+    the transcription factor on the left label, and the cell lines the factor is
+    present in as one letter per cell line on the right.  The main table format is
+    bed 15, the same as used for microarray expression.  There is a second table 
+    required that describes the cell lines.  This is specified with the tag:
+	sourceTable <tableName>
+    Use the program hgBedsToBedExp to create the tables from a collection of
+    (simpler) bed's one for each txn factor/cell combination.
+    
+    
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
