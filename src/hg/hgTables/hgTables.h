@@ -113,7 +113,7 @@ void nbSpaces(int count);
 boolean anyCompression();
 /*  Check if any compressed file output has been requested */
 
-void initGroupsTracksTables(struct sqlConnection *conn);
+void initGroupsTracksTables();
 /* Get list of groups that actually have something in them. */
 
 struct region *getRegions();
@@ -137,8 +137,7 @@ void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
 /* If *pTable includes database, overrider *pDb with it, using
  * buf to hold string. */
 
-struct grp *makeGroupList(struct sqlConnection *conn,
-	struct trackDb *trackList, boolean allTablesOk);
+struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk);
 /* Get list of groups that actually have something in them. */
 
 struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);

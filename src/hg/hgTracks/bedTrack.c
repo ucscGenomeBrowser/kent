@@ -87,8 +87,7 @@ if (tg->isBigBed)
     if (scoreFilter != NULL || tg->visibility != tvDense)
 	{
 	struct lm *lm = lmInit(0);
-	struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, tg,
-							       chromName, winStart, winEnd, lm);
+	struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
 	char *bedRow[32];
 	char startBuf[16], endBuf[16];
 	int minScore = 0;
@@ -186,10 +185,10 @@ return lf;
 void loadBed9(struct track *tg)
 /* Convert bed 9 info in window to linked feature.  (to handle itemRgb)*/
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct trackDb *tdb = tg->tdb;
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
-struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
@@ -198,7 +197,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     {
-    bigBedAddLinkedFeaturesFrom(conn, tg, chromName, winStart, winEnd,
+    bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
 else
@@ -248,7 +247,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     {
-    bigBedAddLinkedFeaturesFrom(conn, tg, chromName, winStart, winEnd,
+    bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }
 else
@@ -449,7 +448,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     {
-    bigBedAddLinkedFeaturesFrom(conn, tg, chromName, winStart, winEnd,
+    bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 12, &lfList);
     }
 else

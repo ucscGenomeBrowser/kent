@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.20 2009/02/04 23:57:03 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.21 2010/03/25 17:46:01 angie Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -73,7 +73,7 @@ else
 #endif /* GBROWSE */
     {
     tableName = tg->mapName;
-    conn = hAllocConn(database);
+    conn = hAllocConnTrack(database, tg->tdb);
     }
 
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL,

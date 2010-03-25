@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.188 2010/01/04 19:12:22 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.189 2010/03/25 17:41:25 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -785,8 +785,7 @@ if (track == NULL)
 return track;
 }
 
-struct grp *makeGroupList(struct sqlConnection *conn,
-	struct trackDb *trackList, boolean allTablesOk)
+struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
 struct grp *groupsAll, *groupList = NULL, *group;
@@ -964,7 +963,7 @@ hashFree(&uniqHash);
 return nameList;
 }
 
-static char *findSelectedTable(struct sqlConnection *conn, struct trackDb *track, char *var)
+static char *findSelectedTable(struct trackDb *track, char *var)
 /* Find selected table.  Default to main track table if none
  * found. */
 {
@@ -1042,7 +1041,7 @@ else if (track != NULL)
  * use the first field. */
 if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     {
-    struct sqlConnection *conn = hAllocConn(db);
+    struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
     if (fieldList == NULL)
         errAbort("getIdField: Can't find fields of table %s", table);
@@ -1458,7 +1457,7 @@ sqlFreeResult(&sr);
 removeMetaData();
 }
 
-void dispatch(struct sqlConnection *conn);
+void dispatch();
 
 void doTopSubmit(struct sqlConnection *conn)
 /* Respond to submit button on top level page.
@@ -1568,12 +1567,12 @@ else
     errAbort("Don't know how to handle %s output yet", output);
 }
 
-void dispatch(struct sqlConnection *conn)
+void dispatch()
 /* Scan for 'do' variables and dispatch to appropriate page-generator.
  * By default head to the main page. */
 {
 struct hashEl *varList;
-
+struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 /* only allows view table schema function for CGB or GSID servers for the time being */
 if (hIsCgbServer() || hIsGsidServer())
     {
@@ -1718,16 +1717,16 @@ cartRemovePrefix(cart, hgtaDo);
 
 char *excludeVars[] = {"Submit", "submit", NULL};
 
-void initGroupsTracksTables(struct sqlConnection *conn)
+void initGroupsTracksTables()
 /* Get list of groups that actually have something in them. */
 {
 fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(conn, fullTrackList, allowAllTables());
+fullGroupList = makeGroupList(fullTrackList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;
-curTable    = findSelectedTable(conn, curTrack, hgtaTable);
+curTable    = findSelectedTable(curTrack, hgtaTable);
 if (curTrack == NULL)
     {
     struct trackDb *tdb  = hTrackDbForTrack(database, curTable);
@@ -1745,7 +1744,6 @@ void hgTables()
  * Here we set up cart and some global variables, dispatch the command,
  * and put away the cart when it is done. */
 {
-struct sqlConnection *conn = NULL;
 char *clade = NULL;
 
 oldVars = hashNew(10);
@@ -1758,15 +1756,14 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
-conn = hAllocConn(database);
 
 setUdcCacheDir();
 
 if (lookupPosition())
     {
     /* Init track and group lists and figure out what page to put up. */
-    initGroupsTracksTables(conn);
-    dispatch(conn);
+    initGroupsTracksTables();
+    dispatch();
     }
 
 /* Save variables. */

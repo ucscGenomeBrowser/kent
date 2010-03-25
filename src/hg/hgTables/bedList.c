@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.68 2009/05/20 20:59:55 mikep Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.69 2010/03/25 17:41:25 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -212,7 +212,8 @@ struct bed *getRegionAsBed(
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 {
 char *fields = NULL;
-struct sqlConnection *conn = sqlConnect(db);
+struct trackDb *tdb = hTrackDbForTrack(db, table);
+struct sqlConnection *conn = tdb ? hAllocConnTrack(db, tdb) : hAllocConn(db);
 struct sqlResult *sr;
 struct hTableInfo *hti;
 struct bed *bedList=NULL, *bed;
@@ -789,7 +790,7 @@ boolean gotResults = doGetBedOrCt(conn, TRUE, FALSE, FALSE);
 if (gotResults)
     {
     flushCustomTracks();
-    initGroupsTracksTables(conn);
+    initGroupsTracksTables();
     doMainPage(conn);
     }
 }

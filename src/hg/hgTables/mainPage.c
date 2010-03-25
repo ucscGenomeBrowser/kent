@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.146 2010/01/26 00:36:22 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.147 2010/03/25 17:41:25 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -109,7 +109,7 @@ struct grp *showGroupField(char *groupVar, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk)
 /* Show group control. Returns selected group. */
 {
-struct grp *group, *groupList = makeGroupList(conn, fullTrackList, allTablesOk);
+struct grp *group, *groupList = makeGroupList(fullTrackList, allTablesOk);
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
@@ -788,7 +788,7 @@ if (correlateTrackTableOK(tdb, curTable))
     hPrintf("<TR><TD><B>correlation:</B>\n");
     if (differentWord(table2,"none") && strlen(table2))
         {
-        struct grp *groupList = makeGroupList(conn, fullTrackList, TRUE);
+        struct grp *groupList = makeGroupList(fullTrackList, TRUE);
         struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
         struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,hgtaCorrelateTrack);
         if (tdbIsComposite(tdb2))

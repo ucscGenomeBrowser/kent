@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.42 2009/06/05 21:59:00 angie Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.43 2010/03/25 17:41:25 angie Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -581,7 +581,7 @@ getCustomTracks();
 if (theCtList)
     removeNamedCustom(&theCtList, curTable);
 customTracksSaveCart(database, cart, theCtList);
-initGroupsTracksTables(conn);
+initGroupsTracksTables();
 doMainPage(conn);
 }
 

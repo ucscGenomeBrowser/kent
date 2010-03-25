@@ -623,11 +623,11 @@ struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
 
-struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct track *track,
+struct bigBedInterval *bigBedSelectRange(struct track *track,
 	char *chrom, int start, int end, struct lm *lm);
 /* Return list of intervals in range. */
 
-void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track,
+void bigBedAddLinkedFeaturesFrom(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList);
 /* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert

@@ -7,6 +7,7 @@
 #include "linefile.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "bedCart.h"
 #include "hgTracks.h"
 #include "hmmstats.h"
 #include "localmem.h"
@@ -27,13 +28,13 @@ if (fileName == NULL)
 return fileName;
 }
 
-struct bbiFile *fetchBbiForTrack(struct track *track)
+static struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
 {
 struct bbiFile *bbi = track->bbiFile;
 if (bbi == NULL)
     {
-    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlConnection *conn = hAllocConnTrack(database, track->tdb);
     char *fileName = bbiNameFromTable(conn, track->mapName);
     hFreeConn(&conn);
     bbi = track->bbiFile = bigBedFileOpen(fileName);
@@ -41,7 +42,7 @@ if (bbi == NULL)
 return bbi;
 }
 
-struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct track *track,
+struct bigBedInterval *bigBedSelectRange(struct track *track,
 	char *chrom, int start, int end, struct lm *lm)
 /* Return list of intervals in range. */
 {
@@ -57,7 +58,7 @@ if (slCount(result) >= maxItems)
 return result;
 }
 
-void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track,
+void bigBedAddLinkedFeaturesFrom(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList)
 /* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
@@ -65,7 +66,7 @@ void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track
 {
 struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
-struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, track, chrom, start, end, lm);
+struct bigBedInterval *bb, *bbList = bigBedSelectRange(track, chrom, start, end, lm);
 char *bedRow[32];
 char startBuf[16], endBuf[16];
 
