@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1606 2010/03/25 17:23:14 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1607 2010/03/25 17:53:34 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21518,7 +21518,9 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 genericHeader(tdb, item);
-char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", "kompExtra");
+char defaultExtra[HDB_MAX_TABLE_STRING];
+safef(defaultExtra, sizeof(defaultExtra), "%sExtra", tdb->tableName);
+char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", defaultExtra);
 boolean gotExtra = sqlTableExists(conn, extraTable);
 if (gotExtra)
     {
@@ -23046,7 +23048,7 @@ else if (sameString("igtc", track))
     {
     doIgtc(tdb, item);
     }
-else if (startsWith("komp", track))
+else if (startsWith("komp", track) || startsWith("ikmc", track))
     {
     doKomp(tdb, item);
     }
