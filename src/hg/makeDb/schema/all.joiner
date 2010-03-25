@@ -1601,6 +1601,11 @@ identifier kompName
     $mm.komp.name dupeOk
     $mm.kompExtra.name
 
+identifier ikmcName
+"IKMC (knockoutmouse.org) gene name"
+    $mm.ikmc.name dupeOk
+    $mm.ikmcExtra.name
+
 
 # "Biological" Gene Names
 
