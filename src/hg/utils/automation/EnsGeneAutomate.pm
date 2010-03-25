@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.20 2009/10/27 21:20:10 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.21 2010/03/25 22:46:26 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -51,6 +51,7 @@ $verToDate[52] = "dec2008";
 $verToDate[54] = "may2009";
 $verToDate[55] = "jul2009";
 $verToDate[56] = "sep2009";
+$verToDate[57] = "mar2010";
 
 #	older versions for archive purposes, there are different
 #	directory structures for these, thus, the full path name
@@ -1222,9 +1223,177 @@ my %ensGeneFtpMySqlFileNames_56 = (
 'xenTro2' => 'xenopus_tropicalis_core_56_41n',
 );
 
-my @versionList = qw( 56 55 54 52 51 50 49 48 47 46 35 );
+# key is UCSC db name, result is FTP file name under the gtf directory
+my %ensGeneGtfFileNames_57 = (
+'anoCar1' => 'anolis_carolinensis/Anolis_carolinensis.AnoCar1.0.57.gtf.gz',
+'bosTau4' => 'bos_taurus/Bos_taurus.Btau_4.0.57.gtf.gz',
+'ce7' => 'caenorhabditis_elegans/Caenorhabditis_elegans.WS200.57.gtf.gz',
+'calJac3' => 'callithrix_jacchus/Callithrix_jacchus.calJac3.57.gtf.gz',
+'canFam2' => 'canis_familiaris/Canis_familiaris.BROADD2.57.gtf.gz',
+'cavPor3' => 'cavia_porcellus/Cavia_porcellus.cavPor3.57.gtf.gz',
+'choHof1' => 'choloepus_hoffmanni/Choloepus_hoffmanni.choHof1.57.gtf.gz',
+'ci2' => 'ciona_intestinalis/Ciona_intestinalis.JGI2.57.gtf.gz',
+'cioSav2' => 'ciona_savignyi/Ciona_savignyi.CSAV2.0.57.gtf.gz',
+'danRer6' => 'danio_rerio/Danio_rerio.Zv8.57.gtf.gz',
+'dasNov2' => 'dasypus_novemcinctus/Dasypus_novemcinctus.dasNov2.57.gtf.gz',
+'dipOrd1' => 'dipodomys_ordii/Dipodomys_ordii.dipOrd1.57.gtf.gz',
+'dm5' => 'drosophila_melanogaster/Drosophila_melanogaster.BDGP5.13.57.gtf.gz',
+'echTel1' => 'echinops_telfairi/Echinops_telfairi.TENREC.57.gtf.gz',
+'equCab2' => 'equus_caballus/Equus_caballus.EquCab2.57.gtf.gz',
+'eriEur1' => 'erinaceus_europaeus/Erinaceus_europaeus.HEDGEHOG.57.gtf.gz',
+'felCat3' => 'felis_catus/Felis_catus.CAT.57.gtf.gz',
+'galGal3' => 'gallus_gallus/Gallus_gallus.WASHUC2.57.gtf.gz',
+'gasAcu1' => 'gasterosteus_aculeatus/Gasterosteus_aculeatus.BROADS1.57.gtf.gz',
+'gorGor3' => 'gorilla_gorilla/Gorilla_gorilla.gorGor3.57.gtf.gz',
+'hg19' => 'homo_sapiens/Homo_sapiens.GRCh37.57.gtf.gz',
+'loxAfr3' => 'loxodonta_africana/Loxodonta_africana.loxAfr3.57.gtf.gz',
+'rheMac2' => 'macaca_mulatta/Macaca_mulatta.MMUL_1.57.gtf.gz',
+'macEug1' => 'macropus_eugenii/Macropus_eugenii.Meug_1.0.57.gtf.gz',
+'melGal1' => 'meleagris_gallopavo/Meleagris_gallopavo.UMD2.57.gtf.gz',
+'micMur1' => 'microcebus_murinus/Microcebus_murinus.micMur1.57.gtf.gz',
+'monDom5' => 'monodelphis_domestica/Monodelphis_domestica.BROADO5.57.gtf.gz',
+'mm9' => 'mus_musculus/Mus_musculus.NCBIM37.57.gtf.gz',
+'myoLuc1' => 'myotis_lucifugus/Myotis_lucifugus.MICROBAT1.57.gtf.gz',
+'ochPri2' => 'ochotona_princeps/Ochotona_princeps.pika.57.gtf.gz',
+'ornAna1' => 'ornithorhynchus_anatinus/Ornithorhynchus_anatinus.OANA5.57.gtf.gz',
+'oryCun2' => 'oryctolagus_cuniculus/Oryctolagus_cuniculus.oryCun2.57.gtf.gz',
+'oryLat2' => 'oryzias_latipes/Oryzias_latipes.MEDAKA1.57.gtf.gz',
+'otoGar1' => 'otolemur_garnettii/Otolemur_garnettii.BUSHBABY1.57.gtf.gz',
+'panTro2' => 'pan_troglodytes/Pan_troglodytes.CHIMP2.1.57.gtf.gz',
+'ponAbe2' => 'pongo_pygmaeus/Pongo_pygmaeus.PPYG2.57.gtf.gz',
+'proCap1' => 'procavia_capensis/Procavia_capensis.proCap1.57.gtf.gz',
+'pteVam1' => 'pteropus_vampyrus/Pteropus_vampyrus.pteVam1.57.gtf.gz',
+'rn4' => 'rattus_norvegicus/Rattus_norvegicus.RGSC3.4.57.gtf.gz',
+'sacCer2' => 'saccharomyces_cerevisiae/Saccharomyces_cerevisiae.SGD1.01.57.gtf.gz',
+'sorAra1' => 'sorex_araneus/Sorex_araneus.COMMON_SHREW1.57.gtf.gz',
+'speTri1' => 'spermophilus_tridecemlineatus/Spermophilus_tridecemlineatus.SQUIRREL.57.gtf.gz',
+'susScr1' => 'sus_scrofa/Sus_scrofa.Sscrofa9.57.gtf.gz',
+'taeGut1' => 'taeniopygia_guttata/Taeniopygia_guttata.taeGut3.2.4.57.gtf.gz',
+'fr2' => 'takifugu_rubripes/Takifugu_rubripes.FUGU4.57.gtf.gz',
+'tarSyr1' => 'tarsius_syrichta/Tarsius_syrichta.tarSyr1.57.gtf.gz',
+'tetNig2' => 'tetraodon_nigroviridis/Tetraodon_nigroviridis.TETRAODON8.57.gtf.gz',
+'tupBel1' => 'tupaia_belangeri/Tupaia_belangeri.TREESHREW.57.gtf.gz',
+'turTru1' => 'tursiops_truncatus/Tursiops_truncatus.turTru1.57.gtf.gz',
+'vicPac1' => 'vicugna_pacos/Vicugna_pacos.vicPac1.57.gtf.gz',
+'xenTro2' => 'xenopus_tropicalis/Xenopus_tropicalis.JGI4.1.57.gtf.gz',
+);
+
+# key is UCSC db name, result is FTP file name under the fasta directory
+my %ensGeneFtpPeptideFileNames_57 = (
+'anoCar1' => 'anolis_carolinensis/pep/Anolis_carolinensis.AnoCar1.0.57.pep.all.fa.gz',
+'bosTau4' => 'bos_taurus/pep/Bos_taurus.Btau_4.0.57.pep.all.fa.gz',
+'ce7' => 'caenorhabditis_elegans/pep/Caenorhabditis_elegans.WS200.57.pep.all.fa.gz',
+'calJac3' => 'callithrix_jacchus/pep/Callithrix_jacchus.calJac3.57.pep.all.fa.gz',
+'canFam2' => 'canis_familiaris/pep/Canis_familiaris.BROADD2.57.pep.all.fa.gz',
+'cavPor3' => 'cavia_porcellus/pep/Cavia_porcellus.cavPor3.57.pep.all.fa.gz',
+'choHof1' => 'choloepus_hoffmanni/pep/Choloepus_hoffmanni.choHof1.57.pep.all.fa.gz',
+'ci2' => 'ciona_intestinalis/pep/Ciona_intestinalis.JGI2.57.pep.all.fa.gz',
+'cioSav2' => 'ciona_savignyi/pep/Ciona_savignyi.CSAV2.0.57.pep.all.fa.gz',
+'danRer6' => 'danio_rerio/pep/Danio_rerio.Zv8.57.pep.all.fa.gz',
+'dasNov2' => 'dasypus_novemcinctus/pep/Dasypus_novemcinctus.dasNov2.57.pep.all.fa.gz',
+'dipOrd1' => 'dipodomys_ordii/pep/Dipodomys_ordii.dipOrd1.57.pep.all.fa.gz',
+'dm5' => 'drosophila_melanogaster/pep/Drosophila_melanogaster.BDGP5.13.57.pep.all.fa.gz',
+'echTel1' => 'echinops_telfairi/pep/Echinops_telfairi.TENREC.57.pep.all.fa.gz',
+'equCab2' => 'equus_caballus/pep/Equus_caballus.EquCab2.57.pep.all.fa.gz',
+'eriEur1' => 'erinaceus_europaeus/pep/Erinaceus_europaeus.HEDGEHOG.57.pep.all.fa.gz',
+'felCat3' => 'felis_catus/pep/Felis_catus.CAT.57.pep.all.fa.gz',
+'galGal3' => 'gallus_gallus/pep/Gallus_gallus.WASHUC2.57.pep.all.fa.gz',
+'gasAcu1' => 'gasterosteus_aculeatus/pep/Gasterosteus_aculeatus.BROADS1.57.pep.all.fa.gz',
+'gorGor3' => 'gorilla_gorilla/pep/Gorilla_gorilla.gorGor3.57.pep.all.fa.gz',
+'hg19' => 'homo_sapiens/pep/Homo_sapiens.GRCh37.57.pep.all.fa.gz',
+'loxAfr3' => 'loxodonta_africana/pep/Loxodonta_africana.loxAfr3.57.pep.all.fa.gz',
+'rheMac2' => 'macaca_mulatta/pep/Macaca_mulatta.MMUL_1.57.pep.all.fa.gz',
+'macEug1' => 'macropus_eugenii/pep/Macropus_eugenii.Meug_1.0.57.pep.all.fa.gz',
+'micMur1' => 'microcebus_murinus/pep/Microcebus_murinus.micMur1.57.pep.all.fa.gz',
+'melGal1' => 'meleagris_gallopavo/pep/Meleagris_gallopavo.UMD2.57.pep.all.fa.gz ,',
+'monDom5' => 'monodelphis_domestica/pep/Monodelphis_domestica.BROADO5.57.pep.all.fa.gz',
+'mm9' => 'mus_musculus/pep/Mus_musculus.NCBIM37.57.pep.all.fa.gz',
+'myoLuc1' => 'myotis_lucifugus/pep/Myotis_lucifugus.MICROBAT1.57.pep.all.fa.gz',
+'ochPri2' => 'ochotona_princeps/pep/Ochotona_princeps.pika.57.pep.all.fa.gz',
+'ornAna1' => 'ornithorhynchus_anatinus/pep/Ornithorhynchus_anatinus.OANA5.57.pep.all.fa.gz',
+'oryCun2' => 'oryctolagus_cuniculus/pep/Oryctolagus_cuniculus.oryCun2.57.pep.all.fa.gz',
+'oryLat2' => 'oryzias_latipes/pep/Oryzias_latipes.MEDAKA1.57.pep.all.fa.gz',
+'otoGar1' => 'otolemur_garnettii/pep/Otolemur_garnettii.BUSHBABY1.57.pep.all.fa.gz',
+'panTro2' => 'pan_troglodytes/pep/Pan_troglodytes.CHIMP2.1.57.pep.all.fa.gz',
+'ponAbe2' => 'pongo_pygmaeus/pep/Pongo_pygmaeus.PPYG2.57.pep.all.fa.gz',
+'proCap1' => 'procavia_capensis/pep/Procavia_capensis.proCap1.57.pep.all.fa.gz',
+'pteVam1' => 'pteropus_vampyrus/pep/Pteropus_vampyrus.pteVam1.57.pep.all.fa.gz',
+'rn4' => 'rattus_norvegicus/pep/Rattus_norvegicus.RGSC3.4.57.pep.all.fa.gz',
+'sacCer2' => 'saccharomyces_cerevisiae/pep/Saccharomyces_cerevisiae.SGD1.01.57.pep.all.fa.gz',
+'sorAra1' => 'sorex_araneus/pep/Sorex_araneus.COMMON_SHREW1.57.pep.all.fa.gz',
+'speTri1' => 'spermophilus_tridecemlineatus/pep/Spermophilus_tridecemlineatus.SQUIRREL.57.pep.all.fa.gz',
+'susScr1' => 'sus_scrofa/pep/Sus_scrofa.Sscrofa9.57.pep.all.fa.gz',
+'taeGut1' => 'taeniopygia_guttata/pep/Taeniopygia_guttata.taeGut3.2.4.57.pep.all.fa.gz',
+'fr2' => 'takifugu_rubripes/pep/Takifugu_rubripes.FUGU4.57.pep.all.fa.gz',
+'tarSyr1' => 'tarsius_syrichta/pep/Tarsius_syrichta.tarSyr1.57.pep.all.fa.gz',
+'tetNig2' => 'tetraodon_nigroviridis/pep/Tetraodon_nigroviridis.TETRAODON8.57.pep.all.fa.gz',
+'tupBel1' => 'tupaia_belangeri/pep/Tupaia_belangeri.TREESHREW.57.pep.all.fa.gz',
+'turTru1' => 'tursiops_truncatus/pep/Tursiops_truncatus.turTru1.57.pep.all.fa.gz',
+'vicPac1' => 'vicugna_pacos/pep/Vicugna_pacos.vicPac1.57.pep.all.fa.gz',
+'xenTro2' => 'xenopus_tropicalis/pep/Xenopus_tropicalis.JGI4.1.57.pep.all.fa.gz',
+);
+
+#	directory name under release-50/mysql/ to find 'seq_region' and
+#	'assembly' table copies for GeneScaffold coordinate conversions
+my %ensGeneFtpMySqlFileNames_57 = (
+'anoCar1' => 'anolis_carolinensis_core.57.1a' ,
+'bosTau4' => 'bos_taurus_core.57.4f' ,
+'calJac3' => 'callithrix_jacchus_core.57.3' ,
+'canFam2' => 'canis_familiaris_core.57.2m' ,
+'cavPor3' => 'cavia_porcellus_core.57.3a',
+'ce7' => 'caenorhabditis_elegans_core.57.200a' ,
+'choHof1' => 'choloepus_hoffmanni_core.57.1a',
+'ci2' => 'ciona_intestinalis_core.57.2m',
+'cioSav2' => 'ciona_savignyi_core.57.2h',
+'danRer6' => 'danio_rerio_core.57.8c',
+'dasNov2' => 'dasypus_novemcinctus_core.57.2a',
+'dipOrd1' => 'dipodomys_ordii_core.57.1c',
+'dm5' => 'drosophila_melanogaster_core.57.513b' ,
+'echTel1' => 'echinops_telfairi_core.57.1g',
+'equCab2' => 'equus_caballus_core.57.2d',
+'eriEur1' => 'erinaceus_europaeus_core.57.1e',
+'felCat3' => 'felis_catus_core.57.1f',
+'galGal3' => 'gallus_gallus_core.57.2m',
+'gasAcu1' => 'gasterosteus_aculeatus_core.57.1j',
+'gorGor3' => 'gorilla_gorilla_core.57.3',
+'hg19' => 'homo_sapiens_core.57.37b',
+'loxAfr3' => 'loxodonta_africana_core.57.3',
+'rheMac2' => 'macaca_mulatta_core.57.10l',
+'macEug1' => 'macropus_eugenii_core.57.1',
+'micMur1' => 'microcebus_murinus_core.57.1b',
+'melGal1' => 'meleagris_gallopavo_core_57_2',
+'monDom5' => 'monodelphis_domestica_core.57.5i',
+'mm9' => 'mus_musculus_core.57.37j',
+'myoLuc1' => 'myotis_lucifugus_core.57.1g',
+'ochPri2' => 'ochotona_princeps_core.57.1c',
+'ornAna1' => 'ornithorhynchus_anatinus_core.57.1k',
+'oryCun2' => 'oryctolagus_cuniculus_core.57.2',
+
+'oryLat2' => 'oryzias_latipes_core.57.1i',
+'otoGar1' => 'otolemur_garnettii_core.57.1e',
+'panTro2' => 'pan_troglodytes_core.57.21l',
+'ponAbe2' => 'pongo_pygmaeus_core.57.1c',
+'proCap1' => 'procavia_capensis_core.57.1c',
+'pteVam1' => 'pteropus_vampyrus_core.57.1c',
+'rn4' => 'rattus_norvegicus_core.57.34y',
+'sacCer2' => 'saccharomyces_cerevisiae_core.57.1j',
+'sorAra1' => 'sorex_araneus_core.57.1e',
+'speTri1' => 'spermophilus_tridecemlineatus_core.57.1g',
+'susScr1' => 'sus_scrofa_core.57.9a' ,
+'taeGut1' => 'taeniopygia_guttata_core.57.1c',
+'fr2' => 'takifugu_rubripes_core.57.4k',
+'tarSyr1' => 'tarsius_syrichta_core.57.1c',
+'tetNig2' => 'tetraodon_nigroviridis_core.57.8b',
+'tupBel1' => 'tupaia_belangeri_core.57.1f',
+'turTru1' => 'tursiops_truncatus_core.57.1c',
+'vicPac1' => 'vicugna_pacos_core.57.1c',
+'xenTro2' => 'xenopus_tropicalis_core.57.41n',
+);
+
+my @versionList = qw( 57 56 55 54 52 51 50 49 48 47 46 35 );
 
 my @ensGtfReference;
+$ensGtfReference[57] = \%ensGeneGtfFileNames_57;
 $ensGtfReference[56] = \%ensGeneGtfFileNames_56;
 $ensGtfReference[55] = \%ensGeneGtfFileNames_55;
 $ensGtfReference[54] = \%ensGeneGtfFileNames_54;
@@ -1237,6 +1406,7 @@ $ensGtfReference[47] = \%ensGeneGtfFileNames_47;
 $ensGtfReference[46] = \%ensGeneGtfFileNames_46;
 $ensGtfReference[35] = \%ensGeneGtfFileNames_35;
 my @ensPepReference;
+$ensPepReference[57] = \%ensGeneFtpPeptideFileNames_57;
 $ensPepReference[56] = \%ensGeneFtpPeptideFileNames_56;
 $ensPepReference[55] = \%ensGeneFtpPeptideFileNames_55;
 $ensPepReference[54] = \%ensGeneFtpPeptideFileNames_54;
@@ -1249,6 +1419,7 @@ $ensPepReference[47] = \%ensGeneFtpPeptideFileNames_47;
 $ensPepReference[46] = \%ensGeneFtpPeptideFileNames_46;
 $ensPepReference[35] = \%ensGeneFtpPeptideFileNames_35;
 my @ensMySqlReference;
+$ensMySqlReference[57] = \%ensGeneFtpMySqlFileNames_57;
 $ensMySqlReference[56] = \%ensGeneFtpMySqlFileNames_56;
 $ensMySqlReference[55] = \%ensGeneFtpMySqlFileNames_55;
 $ensMySqlReference[54] = \%ensGeneFtpMySqlFileNames_54;
