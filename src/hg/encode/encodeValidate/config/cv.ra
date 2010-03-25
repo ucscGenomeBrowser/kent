@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.218 2010/03/24 23:57:47 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.219 2010/03/25 00:02:35 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1712,6 +1712,20 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+term CH12
+tag CH12
+type Cell Line
+organism Mouse
+description 
+vendorName 
+vendorId 
+orderUrl 
+termId 
+termUrl 
+color 153,38,0
+sex F
+protocol (provisional)
+
 term MEL
 tag MEL
 type Cell Line
