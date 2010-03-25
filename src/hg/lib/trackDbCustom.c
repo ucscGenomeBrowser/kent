@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.80 2010/02/10 05:16:14 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.81 2010/03/25 17:27:26 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -698,6 +698,8 @@ else if(startsWith("bed ", type))
     }
 else if(startsWith("chain",type))
     cType = cfgChain;
+else if (startsWith("bam", type))
+    cType = cfgBam;
 // TODO: Only these are configurable so far
 
 // uglyAbort("cfgTypeFromTdb 3 tdb=%s type=%s", tdb->tableName,type);
