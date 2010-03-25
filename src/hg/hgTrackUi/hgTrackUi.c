@@ -35,14 +35,10 @@
 #include "dgv.h"
 #include "transMapStuff.h"
 
-#ifdef USE_BAM
-#include "bamFile.h"
-#endif
-
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.516 2010/03/08 19:47:41 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.517 2010/03/25 17:32:12 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2151,102 +2147,6 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
-#ifdef USE_BAM
-static char *grayLabels[] =
-    { "alignment quality",
-      "base qualities",
-      "unpaired ends",
-    };
-static char *grayValues[] =
-    { BAM_GRAY_MODE_ALI_QUAL,
-      BAM_GRAY_MODE_BASE_QUAL,
-      BAM_GRAY_MODE_UNPAIRED,
-    };
-
-// When a child input of a radio set is changed, click its radio button:
-#define UPDATE_RADIO_FORMAT "%s=\"\
-    var inputs = document.getElementsByName('%s'); \
-    if (inputs) { \
-      for (var i=0; i < inputs.length; i++) { \
-        if (inputs[i].type == 'radio') { \
-          inputs[i].checked = (inputs[i].value == '%s'); \
-        } \
-      } \
-    }\""
-
-void bamUi(struct trackDb *tdb, struct customTrack *ct)
-/* BAM: short-read-oriented alignment file format. */
-{
-char cartVarName[1024];
-puts("<BR>");
-printf("<B>Display read names:</B>\n");
-char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
-safef(cartVarName, sizeof(cartVarName), "%s.%s", tdb->tableName, BAM_SHOW_NAMES);
-cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
-boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
-puts("<BR>");
-if (canPair)
-    {
-    printf("<B>Attempt to join paired end reads by name:</B>\n");
-    safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, tdb->tableName);
-    cartMakeCheckBox(cart, cartVarName, TRUE);
-    puts("<BR>");
-    }
-printf("<B>Minimum alignment quality:</B>\n");
-safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, tdb->tableName);
-cartMakeIntVar(cart, cartVarName,
-	       atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
-puts("<BR>");
-if (ct)
-    {
-    // Auto-magic baseColor defaults for BAM, same as in hgTracks.c newCustomTrack
-    hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
-    hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
-    hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
-    hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
-    }
-baseColorDrawOptDropDown(cart, tdb);
-printf("<BR>\n");
-printf("<B>Additional coloring modes:</B><BR>\n");
-safef(cartVarName, sizeof(cartVarName), "%s." BAM_COLOR_MODE, tdb->tableName);
-char *selected = cartUsualString(cart, cartVarName,
-				 trackDbSettingOrDefault(tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
-cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_STRAND, sameString(selected, BAM_COLOR_MODE_STRAND));
-printf("Color by strand (blue for +, red for -)<BR>\n");
-cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_GRAY, sameString(selected, BAM_COLOR_MODE_GRAY));
-printf("Use gray for\n");
-char cartVarName2[1024];
-safef(cartVarName2, sizeof(cartVarName2), "%s." BAM_GRAY_MODE, tdb->tableName);
-int grayMenuSize = canPair ? ArraySize(grayLabels) : ArraySize(grayLabels)-1;
-char *sel2 = cartUsualString(cart, cartVarName2,
-			     trackDbSettingOrDefault(tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
-char onChange[2048];
-safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
-      "onChange", cartVarName, BAM_COLOR_MODE_GRAY);
-cgiMakeDropListFull(cartVarName2, grayLabels, grayValues, grayMenuSize, sel2, onChange);
-printf("<BR>\n");
-cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_TAG, sameString(selected, BAM_COLOR_MODE_TAG));
-printf("Use R,G,B colors specified in user-defined tag ");
-safef(cartVarName2, sizeof(cartVarName2), "%s." BAM_COLOR_TAG, tdb->tableName);
-sel2 = cartUsualString(cart, cartVarName2,
-		       trackDbSettingOrDefault(tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
-safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
-      "onkeypress", cartVarName, BAM_COLOR_MODE_TAG);
-cgiMakeTextVarWithExtraHtml(cartVarName2, sel2, 30, onChange);
-printf("<BR>\n");
-cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
-printf("No additional coloring<BR>\n");
-
-//TODO: include / exclude flags
-
-if (fileExists(hHelpFile("hgBamTrackHelp")))
-    printf("<P><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
-	   "configuration help</A></P>");
-
-}
-#endif//def USE_BAM
-
-
 void superTrackUi(struct trackDb *superTdb)
 /* List tracks in this collection, with visibility controls and UI links */
 {
@@ -2439,7 +2339,7 @@ else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track
     dgvUi(tdb);
 #ifdef USE_BAM
 else if (sameString(tdb->type, "bam"))
-    bamUi(tdb, ct);
+    bamCfgUi(cart, tdb, track, NULL, FALSE);
 #endif
 else if (tdb->type != NULL)
     {

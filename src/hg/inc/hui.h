@@ -998,6 +998,9 @@ void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *tit
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
 
+void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* BAM: short-read-oriented alignment file format. */
+
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 /* Updates the tdb->priority from cart then sorts the list anew.
    Returns TRUE if priorities obtained from cart */
