@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.128 2010/03/16 05:58:17 angie Exp $"
+#	"$Id: mm9.txt,v 1.129 2010/03/25 18:24:48 angie Exp $"
 #
 
 #######################################################################
@@ -8614,6 +8614,8 @@ rm bed.tab
 
 #########################################################################
 # KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/12/10 angie)
+# renamed to ikmc 3/25/10 at Carol's request
+# done 3/12/10 w/files emailed from Carol 3/12
 # done 12/8/09 w/files emailed from Carol 12/7
 # done 7/24/09 w/files emailed from Carol 7/24
 # done 5/7/09 w/files emailed from Carol Bult 5/7
@@ -8622,6 +8624,7 @@ rm bed.tab
     ssh hgwdev
     mkdir -p /hive/data/genomes/mm9/bed/komp/2010_03
     cd /hive/data/genomes/mm9/bed/komp/2010_03
+#*** NOTE FOR NEXT TIME: load as ikmc, ikmcExtra
     # Save files emailed from Carol Bult 3/12 as 
     # 20100312_ikmc.gff.gz
     # Make bed12 with itemRgb:
