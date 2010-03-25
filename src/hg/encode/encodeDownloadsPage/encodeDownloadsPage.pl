@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.30 2010/03/24 00:59:42 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.31 2010/03/25 18:59:27 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -383,24 +383,22 @@ for my $line (@fileList) {
         $metaData{type} = $dataType;
     }
 
+    $results = "";
     # Use the metaTbl for metadata
     if (!defined $opt_noMetaTbl) {
         my $queryResults = $db->execute("select var,val from $database.metaTbl where objName = '$tableName'");
         if($queryResults) {
             my @pairVars;
-            push @pairVars, "metadata";
             while(my @row = $queryResults->fetchrow_array()) {
 
                 # FIXME: When trackDb metadata is no longer used, this routine should be replaced with more direct metaData loading
                 #$metaData{$row[0]} = $row[1];
                 push @pairVars, join('=',$row[0],$row[1] );
-                #my $onePair = join('=',$row[0],$row[1] );
-                #push @pairVars, $onePair;
             }
-            $results = join(' ',@pairVars );
+            if(scalar(@pairVars) > 0) {
+                $results = "metadata " . join(' ',@pairVars );
+}
         }
-    } else {
-        $results = "";
     }
 
     if(!$results) {
