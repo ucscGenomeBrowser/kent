@@ -89,6 +89,20 @@ url http://www.knockoutmouse.org/search?criteria=$$
 mgiUrlLabel MGI Report: 
 mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 
+track ikmc
+shortLabel IKMC Genes
+longLabel International Knockout Mouse Consortium Genes
+group genes 
+priority 64.1
+visibility hide
+type bed 12
+noScoreFilter .
+itemRgb on
+urlLabel KOMP Data Coordination Center: 
+url http://www.knockoutmouse.org/search?criteria=$$
+mgiUrlLabel MGI Report: 
+mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+
 track acembly
 shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
@@ -687,6 +701,20 @@ termRegex [a-z0-9.-]+(_[a-z0-9]+)?
 
 searchName kompPrefix
 searchTable komp
+searchType bed
+searchMethod prefix
+searchPriority 5
+termRegex [a-z0-9.-]+
+dontCheck [a-z0-9.-]+_[a-z0-9]+
+
+searchTable ikmc
+searchType bed
+searchMethod exact
+searchPriority 5
+termRegex [a-z0-9.-]+(_[a-z0-9]+)?
+
+searchName ikmcPrefix
+searchTable ikmc
 searchType bed
 searchMethod prefix
 searchPriority 5
