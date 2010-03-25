@@ -97,7 +97,7 @@ end
 # checkTableCoords for each table (instead of checkOffend.csh)
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** checkTableCoords for each table ***"
-echo "(Only prints if there are coords off the end of a chrom)"
+echo "(Only prints if there are illegal coordinates in table)"
 foreach table ( $tables )
  checkTableCoords $db $table
 end
