@@ -1,0 +1,81 @@
+# for emacs: -*- mode: sh; -*-
+
+#       $Id: susScr2.txt,v 1.1 2010/03/25 20:08:11 hiram Exp $
+
+# Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
+#   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
+
+##########################################################################
+# Download sequence (DONE - 2010-03-03 Chin)
+    mkdir /hive/data/genomes/susScr2
+    cd /hive/data/genomes/susScr2
+    mkdir genbank
+    cd genbank
+    mkdir Sscrofa9.2
+    cd Sscrofa9.2
+wget --timestamping -r --cut-dirs=6 --level=0 -nH -x --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/*"
+    cd ..
+
+    mkdir ucscChr
+    # stay at genbank directory
+    #   fixup the accession names to become UCSC chrom names
+
+export S=Sscrofa9.2/Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc  | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    echo "${ACC} -> chr${C}"
+    zcat ${S}/AGP/chr${C}.comp.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/" | gzip > ucscChr/chr${C}.agp.gz
+done
+
+export S=Sscrofa9.2/Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc  | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    echo "${ACC} -> chr${C}"
+    echo ">chr${C}" > ucscChr/chr${C}.fa
+    zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
+    gzip ucscChr/chr${C}.fa &
+done
+   # Check them with faSize 
+    faSize Sscrofa9.2/Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
+    #	2262484801 bases (31203023 N's 2231281778 real 2231281778 upper
+    #	0 lower) in 19 sequences in 19 files
+    faSize ucscChr/chr*.fa.gz
+    #	2262484801 bases (31203023 N's 2231281778 real 2231281778 upper
+    #	0 lower) in 19 sequences in 19 files
+
+#########################################################################
+# Initial makeGenomeDb.pl (DONE - 2009-11-06 - Hiram)
+    cd /hive/data/genomes/susScr2
+    cat << '_EOF_' > susScr2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db susScr2
+clade mammal
+genomeCladePriority 35
+scientificName Sus scrofa
+commonName Pig
+assemblyDate Nov. 2009
+assemblyLabel SGSC Sscrofa9.2 (NCBI project 10718, GCA_000003025.2)
+assemblyShortLabel SGSC Sscrofa9.2
+orderKey 234
+mitoAcc NC_012095
+fastaFiles /hive/data/genomes/susScr2/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/susScr2/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir pig
+taxId 9823
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev susScr2.config.ra \
+	> makeGenomeDb.log 2>&1
+    #	real    9m0.673s
+
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/susScr2.unmasked.2bit /gbdb/susScr2/susScr2.2bit
+    #	browser should function now
+
+#########################################################################
