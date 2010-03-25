@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.267 2010/03/25 21:54:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.268 2010/03/25 23:27:27 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3246,6 +3246,11 @@ if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     if(findWordByDelimiter("off",' ',setting) == NULL)
         fourState = 1;
     }
+// Must determine visibility form cartsafef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
+setting = trackDbSettingOrDefault(subtrack, "visibility","hide");
+if(sameWord(setting,"hide"))
+    fourState -= 2; // visibility: hide means -1 or -2
+
 safef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
 return cartUsualInt(cart, objName, fourState);
 }
