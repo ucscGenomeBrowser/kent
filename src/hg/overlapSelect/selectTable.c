@@ -9,7 +9,7 @@
 #include "chromAnnMap.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: selectTable.c,v 1.31 2009/07/31 18:09:24 markd Exp $";
+static char const rcsid[] = "$Id: selectTable.c,v 1.32 2010/03/25 16:16:21 markd Exp $";
 
 static struct chromAnnMap* selectMap = NULL; // select object map
 
@@ -97,8 +97,7 @@ if ((opts & selOppositeStrand) && (inCa->strand == selCa->strand))
     return FALSE;
 if ((opts & selExcludeSelf) && isSelfMatch(opts, inCa, selCa))
     return FALSE;
-if ((opts & selIdMatch) && (inCa->name != NULL) && (selCa->name != NULL)
-    && sameString(inCa->name, selCa->name))
+if ((opts & selIdMatch) && (inCa->name != NULL) && (selCa->name != NULL) && !sameString(inCa->name, selCa->name))
     return FALSE;
 return TRUE;
 }

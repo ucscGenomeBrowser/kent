@@ -651,7 +651,7 @@ psl_gp_protStats: mkout
 ###
 # idMatch tests
 ###
-idMatchTests: psl_idMatch psl_idMatch_non
+idMatchTests: psl_idMatch psl_idMatch_non idMatchSimple idMatchSimpleNon
 
 psl_idMatch: mkout
 	${OVERSEL} -idMatch -overlapSimilarity=0.8 -dropped=output/$@.drop.psl input/mrna-idMatch1.psl input/mrna-idMatch2.psl output/$@.psl
@@ -662,6 +662,15 @@ psl_idMatch_non: mkout
 	${OVERSEL} -idMatch -overlapSimilarity=0.8 -nonOverlapping -dropped=output/$@.drop.psl input/mrna-idMatch1.psl input/mrna-idMatch2.psl output/$@.psl
 	${DIFF} expected/$@.psl output/$@.psl
 	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
+idMatchSimple: mkout
+	${OVERSEL} -idMatch input/idMatchSimple1.gp input/idMatchSimple2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+idMatchSimpleNon: mkout
+	${OVERSEL} -idMatch -nonOverlapping input/idMatchSimple1.gp input/idMatchSimple2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
 
 ###
 # whole range overlap
