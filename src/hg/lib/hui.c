@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.266 2010/03/25 17:32:12 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.267 2010/03/25 21:54:57 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -131,7 +131,9 @@ return FALSE;
 static boolean metadataToggle(char *db,struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
 /* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
 {
-struct metaObj *metaObj = metaObjQueryByObj(db,NULL,tdb->tableName,NULL);
+struct sqlConnection *conn = sqlConnect(db);
+struct metaObj *metaObj = metaObjQueryByObj(conn,NULL,tdb->tableName,NULL);
+sqlDisconnect(&conn);
 if(metaObj != NULL && metaObj->vars != NULL)
     {
     printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
