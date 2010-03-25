@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.16 2009/10/12 22:43:34 galt Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.17 2010/03/25 17:20:40 angie Exp $";
 
 /* from hgTables.c */
 
@@ -136,8 +136,7 @@ return(hti);
 
 
 
-struct grp *makeGroupList(struct sqlConnection *conn, 
-	struct trackDb *trackList, boolean allTablesOk)
+struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
 struct grp *groupsAll, *groupList = NULL, *group;
@@ -153,7 +152,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-groupsAll = hLoadGrps(sqlGetDatabase(conn));
+groupsAll = hLoadGrps(database);
 for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
     if (hashLookup(groupsInTrackList, group->name))
@@ -409,7 +408,7 @@ hashFree(&uniqHash);
 return nameList;
 }
 
-static char *findSelectedTable(struct sqlConnection *conn, struct trackDb *track, char *var)
+static char *findSelectedTable(struct trackDb *track, char *var)
 /* Find selected table.  Default to main track table if none
  * found. */
 {
@@ -434,7 +433,7 @@ else
 
 
 
-void initGroupsTracksTables(struct sqlConnection *conn)
+void initGroupsTracksTables()
 /* Get list of groups that actually have something in them. */
 {
 
@@ -442,14 +441,14 @@ fullTrackList = getFullTrackList();
 
 curTrack = findSelectedTrack(fullTrackList, NULL, hggTrack);
 
-fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
+fullGroupList = makeGroupList(fullTrackList, TRUE);
 
 curGroup = findSelectedGroup(fullGroupList, hggGroup);
 
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;
 
-curTable = findSelectedTable(conn, curTrack, hggTable);
+curTable = findSelectedTable(curTrack, hggTable);
 
 if (curTrack == NULL)
     {
@@ -520,7 +519,7 @@ struct grp *showGroupField(char *groupVar, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk)
 /* Show group control. Returns selected group. */
 {
-struct grp *group, *groupList = makeGroupList(conn, fullTrackList, allTablesOk);
+struct grp *group, *groupList = makeGroupList(fullTrackList, allTablesOk);
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
@@ -845,7 +844,8 @@ for (name = nameList; name != NULL; name = next)
     	struct hTableInfo *hti = hFindTableInfo(database, NULL, name->name);
 	if (!hti)
 	    continue;  /* filter out tables that don't exist anymore */
-	if (!htiIsPositional(hti))
+	if (!htiIsPositional(hti) &&
+	    !startsWith("bam", track->type) && !startsWith("big", track->type))
 	    continue;  /* filter out non-positional, do not add it to new list */
 	}
     slAddHead(&newList,name);
@@ -894,14 +894,15 @@ struct hTableInfo *hti = NULL;
 
 
 cartWebStart(cart, database, "Import Table to Genome Graphs");
-hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" NAME=\"mainForm\" METHOD=\"POST\">");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" NAME=\"mainForm\" METHOD=\"%s\">",
+	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
 jsWriteFunctions();
 
 
 allJoiner = joinerRead("all.joiner");
-initGroupsTracksTables(conn);
+initGroupsTracksTables();
 
 hPrintf("<TABLE BORDER=0>\n");
 
@@ -1416,7 +1417,7 @@ return dyStringCannibalize(&dy);
 }
 
 
-void submitImport(struct sqlConnection *conn)
+void submitImport()
 /* Called when they've submitted from import page */
 {
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
@@ -1429,7 +1430,7 @@ cartSaveSession(cart);
 
 
 allJoiner = joinerRead("all.joiner");
-initGroupsTracksTables(conn);
+initGroupsTracksTables();
 
 if (strchr(curTable, '.') == NULL)  /* In same database */
     {
@@ -1451,28 +1452,7 @@ if (isCt)
     isChromGraphCt = isChromGraph(curTrack);
     }
 
-
-/* debug info
-char *selGroup = cartString(cart, hggGroup);
-char *selTrack = cartString(cart, hggTrack);
-//char *selTable = cartString(cart, hggTable);
-
-hPrintf("Debug Info:<br>\n");
-hPrintf("----------------------------<br>\n");
-hPrintf("selected group: %s<br>\n",selGroup);
-hPrintf("selected track: %s<br>\n",selTrack);
-hPrintf("curTable: %s<br>\n",curTable);
-hPrintf("curTrack->type: %s<br>\n", curTrack->type);
-hPrintf("curTrack->tableName: %s<br>\n", curTrack->tableName);
-hPrintf("isWig: %d<br>\n", isWig);
-hPrintf("isPositional: %d<br>\n", isPositional);
-hPrintf("isMaf: %d<br>\n", isMaf);
-hPrintf("isBedGr: %d<br>\n", isBedGr);
-hPrintf("isChromGraphCt: %d<br>\n", isChromGraphCt);
-hPrintf("isCustomTrack: %d<br>\n", isCt);
-*/
-
-
+struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
     {  /* simple positional */
     char *convertType = 
@@ -1493,10 +1473,6 @@ if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
 else if (isPositional && !isWig && !isMaf && isBedGr && !isChromGraphCt)
     {  /* bedGraph */
     char *rawText = NULL;
-
-    //debug: 
-    char *bedGraphField = getBedGraphField(curTable);
-    hPrintf("bedGraphField = %s<br>\n",bedGraphField); fflush(stdout);
 
     rawText = makeDepthCgFromBed(isBedGr);
 
@@ -1531,7 +1507,7 @@ else if (isPositional && isWig && !isMaf && !isBedGr && !isChromGraphCt)
 
     }
 
-
+hFreeConn(&conn);
 hPrintf("\n");
 hPrintf("<CENTER>");
 cgiMakeButton("submit", "OK");

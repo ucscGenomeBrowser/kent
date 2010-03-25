@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1605 2010/03/19 18:38:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1606 2010/03/25 17:23:14 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3439,7 +3439,7 @@ void genericClickHandlerPlus(
 char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 char *imagePath = trackDbSettingClosestToHome(tdb, ITEM_IMAGE_PATH);
 
 if (itemForUrl == NULL)

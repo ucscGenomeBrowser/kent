@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.5 2009/10/12 22:43:34 galt Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.6 2010/03/25 17:20:40 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -87,7 +87,7 @@ if (isCustomTrack(curTable))
     table = ct->dbTableName;
     }
 else
-    conn = sqlConnect(database);
+    conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 
 safef(query, ArraySize(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
@@ -100,10 +100,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedGraphField = cloneString(row[0]);
     }
 sqlFreeResult(&sr);
-if (isCustomTrack(curTable))
-    hFreeConn(&conn);
-else
-    sqlDisconnect(&conn);
+hFreeConn(&conn);
 return bedGraphField;
 }
 
@@ -182,7 +179,7 @@ struct bed *getChromAsBed(
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 {
 char *fields = NULL;
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 struct sqlResult *sr;
 struct bed *bedList=NULL, *bed;
 char **row;
@@ -202,7 +199,7 @@ freez(&fields);
 sqlFreeResult(&sr);
 slReverse(&bedList);
 
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 if (retFieldCount)
     *retFieldCount = fieldCount;
 return(bedList);

@@ -266,7 +266,7 @@ void submitUpload(struct sqlConnection *conn);
 void submitUpload2(struct sqlConnection *conn);
 /* Called when they've submitted from uploads page */
 
-void submitImport(struct sqlConnection *conn);
+void submitImport();
 /* Called when they've submitted from import page */
 
 void browseRegions(struct sqlConnection *conn);
@@ -295,9 +295,6 @@ char *getBedGraphType(char *table);
 /* Return bedgraph track type if table is a bedGraph in the current database's
  * trackDb. */
  
-char *getBedGraphField(char *table);
-/* get the bedGraph dataValue field name from the track type */
-
 int  getBedGraphColumnNum(char *table);
 /* get the bedGraph dataValue column num from the track type */
 
