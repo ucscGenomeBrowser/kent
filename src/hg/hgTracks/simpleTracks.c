@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.128 2010/03/09 00:18:37 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.129 2010/03/25 17:11:09 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -237,6 +237,34 @@ if (tl.leftLabelWidth > 0.5*tl.picWidth)
     leftLabelWidthChars = leftLabelWidthDefaultChars;
     tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
     }
+}
+
+static boolean isTooLightForTextOnWhite(struct hvGfx *hvg, Color color)
+/* Return TRUE if text in this color would probably be invisible on a white background. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+int colorTotal = rgbColor.r + 2*rgbColor.g + rgbColor.b;
+return colorTotal >= 512;
+}
+
+Color darkerColor(struct hvGfx *hvg, Color color)
+/* Get darker shade of a color - half way between this color and black */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = ((int)rgbColor.r)/2;
+rgbColor.g = ((int)rgbColor.g)/2;
+rgbColor.b = ((int)rgbColor.b)/2;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+Color somewhatDarkerColor(struct hvGfx *hvg, Color color)
+/* Get a somewhat lighter shade of a color - 1/3 of the way towards black. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = (2*(int)rgbColor.r)/3;
+rgbColor.g = (2*(int)rgbColor.g)/3;
+rgbColor.b = (2*(int)rgbColor.b)/3;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
 Color lighterColor(struct hvGfx *hvg, Color color)
@@ -2927,7 +2955,7 @@ tg->lineHeight = origLineHeight;
 
 static void genericDrawItem(struct track *tg, struct spaceNode *sn,
                             struct hvGfx *hvg, int xOff, int yOff, int width,
-                            MgFont *font, Color color, enum trackVisibility vis,
+                            MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
                             double scale, boolean withLeftLabels)
 /* draw one non-overflow item */
 {
@@ -2943,7 +2971,12 @@ int textX = x1;
 char *name = tg->itemName(tg, item);
 
 if(tg->itemNameColor != NULL)
+    {
     color = tg->itemNameColor(tg, item, hvg);
+    labelColor = color;
+    if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
+	labelColor = somewhatDarkerColor(hvg, color);
+    }
 int y = yOff + tg->lineHeight * sn->row;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 /* pgSnp tracks may change flags between items */
@@ -2973,7 +3006,7 @@ if (withLabels)
             }
         else
             hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
-                        color, font, name);
+                        labelColor, font, name);
         hvGfxUnclip(hvg);
         hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
         }
@@ -2985,7 +3018,7 @@ if (withLabels)
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
             }
         else
-            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, color, font, name);
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
         }
     }
 if (!tg->mapsSelf)
@@ -3032,7 +3065,7 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
         firstOverflow = FALSE;
         }
     else
-        genericDrawItem(tg, sn, hvg, xOff, yOff, width, font, color, vis,
+        genericDrawItem(tg, sn, hvg, xOff, yOff, width, font, color, color, vis,
                         scale, withLeftLabels);
     }
 
