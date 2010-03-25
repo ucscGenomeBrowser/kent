@@ -14,9 +14,8 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblPrint.c,v 1.3 2010/03/19 21:25:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblPrint.c,v 1.4 2010/03/25 21:56:41 tdreszer Exp $";
 
-#define DB_DEFAULT      "hg19"
 #define OBJTYPE_DEFAULT "table"
 
 void usage()
@@ -32,13 +31,13 @@ errAbort(
   "return a count of unique obj var=val combinations. It is also possible to select a "
   "combination of vars by entering a string of var=val pairs.\n\n"
   "usage:\n"
-  "   metaTblPrint [-db=] [-table=] [-long/-countObjs/-countVarss/-countVals]\n"
+  "   metaTblPrint -db= [-table=] [-long/-countObjs/-countVarss/-countVals]\n"
   "                [-all [-byVar]]\n"
   "                [-obj=] [-var= [-val=]]]\n"
   "                [-var= [-val=]]\n"
   "                [-vars=\"var1=val1 var2=val2...\" [-byVar]]\n\n"
   "Options:\n"
-  "    -db      Database to query.  Default is '" DB_DEFAULT "'.\n"
+  "    -db      Database to query.  This argument is required.\n"
   "    -table   Table to query.  Default is '" METATBL_DEFAULT_NAME "'.\n"
   "    -long    Print each obj, var=val as separate line.\n"
   "    -countObjs   Just print count of objects returned in the query.\n"
@@ -86,7 +85,10 @@ struct metaByVar * metaByVars = NULL;
 int objsCnt=0, varsCnt=0,valsCnt=0;
 
 optionInit(&argc, argv, optionSpecs);
-char *db    = optionVal("db",   DB_DEFAULT);
+if(!optionExists("db"))
+    usage();
+
+char *db    = optionVal("db",NULL);
 char *table = optionVal("table",METATBL_DEFAULT_NAME);
 boolean printLong = optionExists("long");
 boolean cntObjs = optionExists("countObjs");
@@ -124,13 +126,14 @@ else if(optionExists("vars"))
 else
     usage();
 
+struct sqlConnection *conn = sqlConnect(db);
 if(byVar)
     {
-    if(metaByVars == NULL) // assertable
+    if(!all && metaByVars == NULL) // assertable
         usage();
 
     // Requested a single var
-    struct metaByVar * queryResults = metaByVarsQuery(db,table,metaByVars);
+    struct metaByVar * queryResults = metaByVarsQuery(conn,table,metaByVars);
     if(queryResults == NULL)
         verbose(1, "No metadata met your selection criteria\n");
     else
@@ -149,12 +152,12 @@ else
     if(metaByVars != NULL)
         {
         // Requested a set of var=val pairs and looking for the unique list of objects that have all of them!
-        queryResults = metaObjsQueryByVars(db,table,metaByVars);
+        queryResults = metaObjsQueryByVars(conn,table,metaByVars);
         }
     else
         {
         // Requested a single obj
-        queryResults = metaObjQuery(db,table,metaObjs);
+        queryResults = metaObjQuery(conn,table,metaObjs);
         }
 
     if(queryResults == NULL)
@@ -169,6 +172,7 @@ else
         metaObjsFree(&queryResults);
         }
     }
+sqlDisconnect(&conn);
 
 if(cntObjs || cntVars || cntVals)
     {

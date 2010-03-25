@@ -14,9 +14,8 @@
 #include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.4 2010/03/19 21:25:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.5 2010/03/25 21:56:41 tdreszer Exp $";
 
-#define DB_DEFAULT      "hg19"
 #define OBJTYPE_DEFAULT "table"
 
 void usage()
@@ -38,10 +37,10 @@ errAbort(
   "    if tableName and fileName and tableName=fileName.* then objName=someTable and objType=table.\n"
   "    else if tableName or fileName load as table or file\n\n"
   "usage:\n"
-  "   metaTblUpdate [-db=] [-table=] [-obj= [-type=] [-delete] [-var=] [-binary] [-val=]]\n"
-  "                       [-replace] [fileName]\n\n"
+  "   metaTblUpdate -db= [-table=] [-obj= [-type=] [-delete] [-var=] [-binary] [-val=]]\n"
+  "                      [-replace] [fileName]\n\n"
   "Options:\n"
-  "    -db      Database to load metadata to.  Default is '" DB_DEFAULT "'.\n"
+  "    -db      Database to load metadata to.  This argument is required.\n"
   "    -table   Table to load metadata to.  Default is '" METATBL_DEFAULT_NAME "'.\n"
   "  if file not provided, then -obj must be provided\n"
   "    -obj={objName}     Means Load from command line:\n"
@@ -75,7 +74,10 @@ int main(int argc, char *argv[])
 struct metaObj * metaObjs = NULL;
 
 optionInit(&argc, argv, optionSpecs);
-char *db    = optionVal("db",   DB_DEFAULT);
+if(!optionExists("db"))
+    usage();
+
+char *db    = optionVal("db",NULL);
 char *table = optionVal("table",METATBL_DEFAULT_NAME);
 boolean replace = FALSE;
 
@@ -120,7 +122,9 @@ else // Must be submitting formatted file
 if(metaObjs == NULL)
     usage();
 
-int count = metaObjsSetToDb(db,table,metaObjs,replace);
+struct sqlConnection *conn = sqlConnect(db);
+int count = metaObjsSetToDb(conn,table,metaObjs,replace);
+sqlDisconnect(&conn);
 
 verbose(1, "Affected %d row(s) in %s.%s\n", count,db,table);
 
