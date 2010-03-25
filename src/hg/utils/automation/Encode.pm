@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.59 2010/03/23 20:22:12 kate Exp $
+# $Id: Encode.pm,v 1.60 2010/03/24 23:59:32 braney Exp $
 
 package Encode;
 
@@ -54,6 +54,7 @@ our @extendedTypes = ("narrowPeak", "broadPeak", "gappedPeak",  "bed5FloatScore"
 # Add type names to this list for types that can be loaded as bigBed via .as files (e.g. tagAlign.as)
 # You also have to make sure the .as file is copied into the $sqlCreate directory.
 our @bigBedTypes = ("pairedTagAlign","tagAlign");
+our @bigWigTypes = ("bigWig");
 
 sub newestFile
 {

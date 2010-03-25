@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.74 2010/03/24 18:08:00 krish Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.75 2010/03/25 00:00:09 braney Exp $
 
 # Usage:
 #
@@ -254,7 +254,7 @@ sub loadBigBed
 	    die "BigBed must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
 	# Create bigBed binary file
-        my @cmds = ( "/cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as $fileList $configPath/${assembly}_chromInfo.txt ${gbdbDir}/${tableName}.bb");
+        my @cmds = ( "mkdir -p sortTmp; sort  -k1,1 -k2,2n $fileList > sortTmp/loadTmp.bed; /cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as sortTmp/loadTmp.bed $configPath/${assembly}_chromInfo.txt ${gbdbDir}/${tableName}.bb");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
@@ -277,6 +277,50 @@ sub loadBigBed
         $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
             die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
+        } else {
+            print "$fileList loaded into $tableName\n";
+        }
+    }
+    push(@{$pushQ->{TABLES}}, $tableName);
+}
+
+sub loadBigWig
+{
+# Load bigWig
+    my ($assembly, $tableName, $gbdbDir, $fileList, $sqlTable, $pushQ, $configPath) = @_;
+    HgAutomate::verbose(2, "loadBigWig ($assembly, $tableName, $gbdbDir, $fileList, $sqlTable, $pushQ)\n");
+
+    if(!$opt_skipLoad) {
+#        if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
+#            die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
+#        }
+        if ((() = split(" ", $fileList)) != 1) { 
+	    die "BigWig must be loaded with a single file but a list of files was supplied ($fileList)\n";
+	}
+	# link bigWig binary file to gbdbDir
+        my @cmds = ( "mkdir -p ${gbdbDir}; ln  $fileList ${gbdbDir}/${tableName}.bw");
+        HgAutomate::verbose(2, "loadBigWig cmds [".join(" ; ",@cmds)."]\n");
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        if(my $err = $safe->exec()) {
+            die("ERROR: bad link of '$fileList' to ${gbdbDir}\n" . $safe->stderr() . "\n");
+        } else {
+            HgAutomate::verbose(2, "$fileList linked to ${gbdbDir}/${tableName}.bw\n");
+        }
+	# symlink bigWig binary file into gbdb bbi directory
+        @cmds = ( "ln -sf ${gbdbDir}/${tableName}.bw /gbdb/${assembly}/bbi/");
+        HgAutomate::verbose(2, "loadBigWig cmds [".join(" ; ",@cmds)."]\n");
+        $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed symbolic link to /gbdb/${assembly}/bbi/\n" . $safe->stderr() . "\n");
+        } else {
+            HgAutomate::verbose(2, "${gbdbDir}/${tableName}.bw linked to  /gbdb/${assembly}/bbi/\n");
+        }
+	# create BigWig link table from trackDb to gbdb bigWig binary file
+        @cmds = ( "/cluster/bin/x86_64/hgBbiDbLink $assembly $tableName /gbdb/${assembly}/bbi/${tableName}.bw");
+        HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
+        $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed bigWig load:\n" . $safe->stderr() . "\n");
         } else {
             print "$fileList loaded into $tableName\n";
         }
@@ -435,6 +479,7 @@ for my $key (keys %ra) {
     my @files = split(/\s+/, $files);
     my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
     my %bigBedTypes = map { $_ => 1 } @Encode::bigBedTypes;
+    my %bigWigTypes = map { $_ => 1 } @Encode::bigWigTypes;
     my $hgdownload = 0;
 
     HgAutomate::verbose(2, "TYPE=[$type] extendedTypes=[".(defined($extendedTypes{$type}) ? $extendedTypes{$type} : "")."] key=[$key] tablename=[$tablename] downloadOnly=[$downloadOnly]\n");
@@ -462,6 +507,9 @@ for my $key (keys %ra) {
         $hgdownload = @files;
     } elsif ($type =~ /^bed/ and defined($sql)) {
         loadBedFromSchema($assembly, $tablename, $files, $sql, $pushQ);
+        $hgdownload = @files;
+    } elsif ($bigWigTypes{$type}) {
+        loadBigWig($assembly, $tablename, $gbdbDir, $files, $type, $pushQ, $configPath);
         $hgdownload = @files;
     } elsif ($bigBedTypes{$type}) {
         loadBigBed($assembly, $tablename, $gbdbDir, $files, $type, $pushQ, $configPath);
