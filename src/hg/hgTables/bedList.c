@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.69 2010/03/25 17:41:25 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.70 2010/03/25 21:16:35 markd Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -258,7 +258,7 @@ else
     sqlFreeResult(&sr);
     slReverse(&bedList);
     }
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 if (retFieldCount)
     *retFieldCount = fieldCount;
 return(bedList);
