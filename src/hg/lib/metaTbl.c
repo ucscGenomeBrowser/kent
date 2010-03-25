@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.5 2010/03/24 17:37:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.6 2010/03/25 21:53:43 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -416,14 +416,15 @@ switch (varType)
 struct metaObj *metadataLineParse(char *line)
 /* Parses a single formatted metadata line into metaObj for updates or queries. */
 {
-char *words[256]; // A lot!
 int thisWord = 0;
 struct metaObj *metaObj;
 struct metaVar *metaVar;
 char *cloneLine = cloneString(line);
 
     // initial chop and determine if this looks like metadata
-    int count = chopByWhiteRespectDoubleQuotes(cloneLine,words,ArraySize(words));
+    int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
+    char **words = needMem(sizeof(char *) * count);
+    count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
     if(count < 3 || words[thisWord] == NULL || differentWord(words[thisWord],"metadata"))
         {
         errAbort("This is not formatted metadata:\n\t%s\n",line);
@@ -488,6 +489,7 @@ char *cloneLine = cloneString(line);
             slAddHead(&(metaObj->vars),metaVar);
             }
         }
+    freeMem(words);
 
     // Special for old style ENCODE metadata
     if(metaObj->objName == NULL)
@@ -566,7 +568,6 @@ return metaObj;
 struct metaByVar *metaByVarsLineParse(char *line)
 /* Parses a line of "var1=val1 var2=val2 into a metaByVar object for queries. */
 {
-char *words[256]; // A lot!
 int thisWord = 0;
 struct metaByVar   *metaByVars = NULL;
 struct metaByVar   *rootVar = NULL;
@@ -575,7 +576,9 @@ char *cloneLine = cloneString(line);
 struct hash* varHash;     // There must not be multiple occurrances of the same var
 
     // initial chop and determine if this looks like metadata
-    int count = chopByWhiteRespectDoubleQuotes(cloneLine,words,ArraySize(words));
+    int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
+    char **words = needMem(sizeof(char *) * count);
+    count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
 
     verbose(3, "metaByVarsLineParse() word count:%d\n\t%s\n",count,line);
     // Get objName and figure out if this is a delete line
@@ -612,6 +615,7 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
             slAddHead(&metaByVars,rootVar);
             }
         }
+    freeMem(words);
     slReverse(&metaByVars);
     verbose(2, "metaByVarsLineParse() first: %s=%s\n",metaByVars->var,metaByVars->vals->val);
 return metaByVars;
@@ -664,7 +668,7 @@ while (lineFileNext(lf, &line,NULL))
 }
 
 // -------------- Updating the DB --------------
-int metaObjsSetToDb(char * db,char *tableName,struct metaObj *metaObjs,boolean replace)
+int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace)
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 {
 char query[8192];
@@ -672,12 +676,9 @@ struct metaObj *metaObj;
 struct metaVar *metaVar;
 int count = 0;
 
-    if(db == NULL)
-        db = METATBL_DEFAULT_DB;
     if(tableName == NULL)
         tableName = METATBL_DEFAULT_NAME;
 
-struct sqlConnection *conn = sqlConnect(db);
     if(!sqlTableExists(conn,tableName))
         errAbort("metaObjsSetToDb attempting to update non-existent table.\n");
 
@@ -741,7 +742,7 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
         // Be sure to check for var existence first, then update
         if (!replace)
             {
-            struct metaObj *objExists = metaObjQueryByObj(db,tableName,metaObj->objName,metaVar->var);
+            struct metaObj *objExists = metaObjQueryByObj(conn,tableName,metaObj->objName,metaVar->var);
             if(objExists)
                 {
                 if(differentString(metaVar->val,objExists->vars->val)
@@ -771,24 +772,24 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
         count++;
         }
     }
-sqlDisconnect(&conn);
 return count;
 }
 
 // ------------------ Querys -------------------
-struct metaObj *metaObjQuery(char * db,char *table,struct metaObj *metaObj)
+struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaObj *metaObj)
 // Query the metadata table by obj and optional vars and vals in metaObj struct.  If metaObj is NULL query all.
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 {
 //  select obj,var,val where (var= [and val=]) or ([var= and] val=) order by obj,var
     boolean buildHash = TRUE;
-    struct dyString *dy = newDyString(4096);
 
-    if(db == NULL)
-        db = METATBL_DEFAULT_DB;
     if(table == NULL)
         table = METATBL_DEFAULT_NAME;
 
+    if(!sqlTableExists(conn,table))
+        return NULL;
+
+    struct dyString *dy = newDyString(4096);
     dyStringPrintf(dy, "select objName,objType,var,varType,val from %s", table);
     if(metaObj != NULL && metaObj->objName != NULL)
         {
@@ -817,43 +818,35 @@ struct metaObj *metaObjQuery(char * db,char *table,struct metaObj *metaObj)
     dyStringPrintf(dy, " order by objName, var");
     verbose(2, "Query: %s\n",dyStringContents(dy));
 
-    struct sqlConnection *conn = sqlConnect(db);
-    if(!sqlTableExists(conn,table))
-        {
-        dyStringFree(&dy);
-        return NULL;
-        }
-
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
-    sqlDisconnect(&conn);
     verbose(2, "rows returned: %d\n",slCount(metaTbl));
     return metaObjsLoadFromMemory(&metaTbl,buildHash);
 }
 
-struct metaObj *metaObjQueryByObj(char * db,char *table,char *objName,char *varName)
+struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName)
 // Query a single metadata object and optional var from a table (default metaTbl).
 {
 if(objName == NULL)
-    return metaObjQuery(db,table,NULL);
+    return metaObjQuery(conn,table,NULL);
 
 struct metaObj *queryObj  = metaObjCreate(objName,NULL,varName,NULL,NULL);
-struct metaObj *resultObj = metaObjQuery(db,table,queryObj);
+struct metaObj *resultObj = metaObjQuery(conn,table,queryObj);
 metaObjsFree(&queryObj);
 return resultObj;
 }
 
-struct metaByVar *metaByVarsQuery(char * db,char *table,struct metaByVar *metaByVars)
+struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars)
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ANY conditions.
 // Returns new metaByVar struct fully populated and sorted in var,val,obj order.
 {
 //  select var,val,obj where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
-    struct dyString *dy = newDyString(4096);
 
-    if(db == NULL)
-        db = METATBL_DEFAULT_DB;
     if(table == NULL)
         table = METATBL_DEFAULT_NAME;
+    if(!sqlTableExists(conn,table))
+        return NULL;
 
+    struct dyString *dy = newDyString(4096);
     dyStringPrintf(dy, "select distinct objName,objType,var,varType,val from %s", table);
 
     struct metaByVar *rootVar;
@@ -881,42 +874,35 @@ struct metaByVar *metaByVarsQuery(char * db,char *table,struct metaByVar *metaBy
     dyStringPrintf(dy, " order by var, val, objName");
     verbose(2, "Query: %s\n",dyStringContents(dy));
 
-    struct sqlConnection *conn = sqlConnect(db);
-    if(!sqlTableExists(conn,table))
-        {
-        dyStringFree(&dy);
-        return NULL;
-        }
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
-    sqlDisconnect(&conn);
     verbose(2, "rows returned: %d\n",slCount(metaTbl));
     return metaByVarsLoadFromMemory(&metaTbl,TRUE);
 }
 
-struct metaByVar *metaByVarQueryByVar(char * db,char *table,char *varName,char *val)
+struct metaByVar *metaByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val)
 // Query a single metadata variable and optional val from a table (default metaTbl) for searching val->obj.
 {
 if(varName == NULL)
-    return metaByVarsQuery(db,table,NULL);
+    return metaByVarsQuery(conn,table,NULL);
 
 struct metaByVar *queryVar  = metaByVarCreate(varName,NULL,val);
-struct metaByVar *resultVar = metaByVarsQuery(db,table,queryVar);
+struct metaByVar *resultVar = metaByVarsQuery(conn,table,queryVar);
 metaByVarsFree(&queryVar);
 return resultVar;
 }
 
-struct metaObj *metaObjsQueryByVars(char * db,char *table,struct metaByVar *metaByVars)
+struct metaObj *metaObjsQueryByVars(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars)
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 {
 //  select var,val,obj where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
-    struct dyString *dy = newDyString(4096);
 
-    if(db == NULL)
-        db = METATBL_DEFAULT_DB;
     if(table == NULL)
         table = METATBL_DEFAULT_NAME;
+    if(!sqlTableExists(conn,table))
+        return NULL;
 
+    struct dyString *dy = newDyString(4096);
     dyStringPrintf(dy, "select distinct objName,objType,var,varType,val from %s", table);
 
     struct metaByVar *rootVar;
@@ -944,14 +930,7 @@ struct metaObj *metaObjsQueryByVars(char * db,char *table,struct metaByVar *meta
     dyStringPrintf(dy, " order by objName, var");
     verbose(2, "Query: %s\n",dyStringContents(dy));
 
-    struct sqlConnection *conn = sqlConnect(db);
-    if(!sqlTableExists(conn,table))
-        {
-        dyStringFree(&dy);
-        return NULL;
-        }
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
-    sqlDisconnect(&conn);
     verbose(2, "rows returned: %d\n",slCount(metaTbl));
     return metaObjsLoadFromMemory(&metaTbl,TRUE);
 }
@@ -1120,18 +1099,19 @@ return FALSE;
 void metaObjReorderVars(struct metaObj *metaObjs, char *vars,boolean back)
 // Reorders vars list based upon list of vars "cell antibody treatment".  Send to front or back.
 {
-char *words[48];
+//char *words[48];
 char *cloneLine = cloneString(vars);
-int count = chopLine(cloneLine,words);
+int count = chopByWhite(cloneLine,NULL,0);
+char **words = needMem(sizeof(char *) * count);
+count = chopByWhite(cloneLine,words,count);
+//int count = chopLine(cloneLine,words);
 
 struct metaObj *metaObj = NULL;
 for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     {
     int ix;
     struct metaVar *orderedVars = NULL;
-    struct metaVar *varsToReorder[48];
-    for( ix=0; ix<count; ix++ )
-        varsToReorder[ix] = NULL; // Be certain
+    struct metaVar **varsToReorder = needMem(sizeof(struct metaVar *) * count);
 
     struct metaVar *metaVar = NULL;
     while((metaVar = slPopHead(&(metaObj->vars))) != NULL)
@@ -1163,15 +1143,20 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
         }
 
     metaObj->vars = orderedVars;
+    freeMem(varsToReorder);
     }
+    freeMem(words);
 }
 
 void metaObjRemoveVars(struct metaObj *metaObjs, char *vars)
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 {
-char *words[48];
+//char *words[48];
 char *cloneLine = cloneString(vars);
-int count = chopLine(cloneLine,words);
+int count = chopByWhite(cloneLine,NULL,0);
+char **words = needMem(sizeof(char *) * count);
+count = chopByWhite(cloneLine,words,count);
+//int count = chopLine(cloneLine,words);
 
 struct metaObj *metaObj = NULL;
 for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
@@ -1190,6 +1175,7 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     slReverse(&keepTheseVars);
     metaObj->vars = keepTheseVars;
     }
+    freeMem(words);
 }
 
 // --------------- Free at last ----------------

@@ -87,16 +87,26 @@ void metaTblOutput(struct metaTbl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#define METATBL_DEFAULT_DB   "hg19"
 #define METATBL_DEFAULT_NAME "metaTbl"
 
+// The metaTbl holds metadata primarily for tables.
+//   Many types of objects could be supported, though currently files are the only other type.
+// It is easy to imagine using the current metaTbl to support hierarchical trees of metadata.
+// For example a composite type object called "myComposte" could have metadata that is valid for
+// all tables that have the var=composite val=myComposte metadata defined.
+//
+// There are 2 ways to look at the metadata: By Obj: obj->[var=val] and By Var: var->[val->[obj]].
+// By Obj: an object has many var/val pairs but only one val for each unique var.  Querying by
+//         object creates a single (2 level) one to many structure.
+// By Var: a variable has many possible values and each value may be defined for more than one object.
+//         Therefore, querying by var results in a (3 level) one to many to many structure.
 
 enum metaObjType
 // metadata Obects are only certain declared types
     {
     otUnknown=0,  // Unknown type
     otTable  =1,  // Table is default
-    otFile   =2  // Some are files
+    otFile   =2   // Files are also supported and used by ENCODE download only datasets.
     };
 
 enum metaVarType
@@ -187,28 +197,28 @@ struct metaObj *metaObjsLoadFromFormattedFile(char *fileName);
 
 
 // -------------- Updating the DB --------------
-int metaObjsSetToDb(char * db,char *tableName,struct metaObj *metaObjs,boolean replace);
+int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
 
 // ------------------ Querys -------------------
-struct metaObj *metaObjQuery(char * db,char *table,struct metaObj *metaObj);
+struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaObj *metaObj);
 // Query the metadata table by obj and optional vars and vals in metaObj struct.  If metaObj is NULL query all.
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 #define metaObjsQueryAll(conn,table) metaObjQuery((conn),(table),NULL)
 
-struct metaObj *metaObjQueryByObj(char * db,char *table,char *objName,char *varName);
+struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName);
 // Query a single metadata object and optional var from a table (default metaTbl).
 
-struct metaByVar *metaByVarsQuery(char * db,char *table,struct metaByVar *metaByVars);
+struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars);
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ANY conditions.
 // Returns new metaByVar struct fully populated and sorted in var,val,obj order.
 #define metaByVarsQueryAll(conn,table) metaByVarsQuery((conn),(table),NULL)
 
-struct metaByVar *metaByVarQueryByVar(char * db,char *table,char *varName,char *val);
+struct metaByVar *metaByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val);
 // Query a single metadata variable and optional val from a table (default metaTbl) for searching val->obj.
 
-struct metaObj *metaObjsQueryByVars(char * db,char *table,struct metaByVar *metaByVars);
+struct metaObj *metaObjsQueryByVars(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars);
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 
