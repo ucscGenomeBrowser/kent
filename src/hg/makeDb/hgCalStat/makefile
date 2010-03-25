@@ -14,6 +14,7 @@ lib:
 	cd ../../../lib && ${MAKE}
 
 install::
+	rm -f ${SCRIPTS}/stats.pl
 	cp -p ./stats.pl ${SCRIPTS}
 
 clean::
