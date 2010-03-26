@@ -48,10 +48,19 @@ grant   Elnitski
 project NHGRI-Elnitski
 wranglerEmail   tdreszer@soe.ucsc.edu
 
+#primary
 lab	NHGRI-Margulies
 pi      Margulies
 grant   Margulies
 project NHGRI-Margulies
+wranglerEmail   tdreszer@soe.ucsc.edu
+
+#synonym
+lab	Margulies
+pi      Margulies
+grant   Margulies
+project NHGRI-Margulies
+label   NHGRI-Margulies
 wranglerEmail   tdreszer@soe.ucsc.edu
 
 lab     Riken
@@ -168,7 +177,7 @@ wranglerEmail   tdreszer@soe.ucsc.edu
 lab     BU
 pi      Tullius
 grant   Tullius
-project Orchid
+project BU
 wranglerEmail   braney@soe.ucsc.edu
 
 # Tech development
@@ -176,6 +185,6 @@ wranglerEmail   braney@soe.ucsc.edu
 lab     GIS-Chia
 pi      Ruan
 grant   Ruan
-project Chia
+project GIS
 wranglerEmail   kent@soe.ucsc.edu
 
