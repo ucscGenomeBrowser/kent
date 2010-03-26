@@ -19,6 +19,7 @@ errAbort(
   "       generates lift file segements separated by non-bridged gaps.\n"
   "options:\n"
   "   -chr=chrN - work only on given chrom\n"
+  "   -minGap=M - examine gaps only >= than M\n"
   "   -insane - do *not* perform coordinate sanity checks on gaps\n"
   "   -bedFile=fileName.bed - output segments to fileName.bed\n"
   "   -verbose=N - N > 1 see more information about procedure"
@@ -30,12 +31,13 @@ static char *workChr = NULL;	/* work only on this given chrom name */
 static boolean insane = FALSE;	/* TRUE do not perform sanity checks on gaps */
 static FILE *bedFile = NULL; /* when requested, output segments to bed file */
 static char *bedFileName = NULL; /* output to bedFileName name */
-
+static int minGap = 0;	/* gap size must be >= than this */
 
 static struct optionSpec options[] = {
    {"chr", OPTION_STRING},
    {"insane", OPTION_BOOLEAN},
    {"bedFile", OPTION_STRING},
+   {"minGap", OPTION_INT},
    {NULL, 0},
 };
 
@@ -147,15 +149,26 @@ for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	struct agpGap *gap = agpGapLoad(row+rowOffset);
-	slAddHead(&gapList, gap);
-	++gapCount;
+	if (minGap)
+	    {
+	    if (gap->size >= minGap)
+		{
+		slAddHead(&gapList, gap);
+		++gapCount;
+		}
+	    }
+	else
+	    {
+	    slAddHead(&gapList, gap);
+	    ++gapCount;
+	    }
 	}
     sqlFreeResult(&sr);
     }
 slSort(&gapList, bedCmp);
 if (! insane)
     gapSanityCheck(gapList);
-verbose(2,"#\tfound %d gaps\n", gapCount);
+verbose(2,"#\tfound %d gaps of size >= %d\n", gapCount, minGap);
 return (gapList);
 }
 
@@ -272,6 +285,7 @@ if (argc != 3)
 workChr = optionVal("chr", NULL);
 bedFileName = optionVal("bedFile", NULL);
 insane = optionExists("insane");
+minGap = optionInt("minGap", minGap);
 gapToLift(argv[1], argv[2]);
 return 0;
 }
