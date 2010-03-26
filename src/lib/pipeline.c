@@ -29,7 +29,8 @@ struct plProc
     pid_t  pid;            /* pid for process, -1 if not running */
     enum procState state;  /* state of process */
     int status;            /* status from wait */
-    int execPipe[2];       /* pipeline to wait on exec to happen */
+    int execPipeParent;    /* pipe to wait on for exec */
+    int execPipeChild;     /* write side is close-on-exec */
 };
 
 struct pipeline
@@ -121,10 +122,9 @@ for (i = 0; i < cmdLen; i++)
     proc->cmd[i] = cloneString(cmd[i]);
 proc->cmd[cmdLen] = NULL;
 proc->state = procStateNew;
-if (pipe(proc->execPipe) != 0)
-    errnoAbort("pipe open failed");
-if (fcntl(proc->execPipe[1], F_SETFL, FD_CLOEXEC) != 0)
-    errnoAbort("fcntl set cloexec failed");
+proc->execPipeParent = pipeCreate(&proc->execPipeChild);
+if (fcntl(proc->execPipeChild, F_SETFL, FD_CLOEXEC) != 0)
+    errnoAbort("fcntl set FD_cloexec failed");
 return proc;
 }
 
@@ -139,8 +139,10 @@ freeMem(proc);
 }
 
 static void plProcStateTrans(struct plProc *proc, enum procState newState)
-/* do state transition for process, checking validity */
+/* do state transition for process changing it to a new state  */
 {
+// States must transition in order.  New state must immediately follow the
+// current state.
 if (newState != proc->state+1)
     errAbort("invalid state transition: %d -> %d", proc->state, newState);
 proc->state = newState;
@@ -205,7 +207,7 @@ static void plProcMemWrite(struct plProc* proc, int stdoutFd, int stderrFd, void
 /* implements child process to write memory buffer to pipeline after
  * fork */
 {
-safeClose(&proc->execPipe[1]);  // don't exec, so explicitly close
+safeClose(&proc->execPipeChild);  // memWriter proc doesn't exec, so explicitly close
 
 plProcSetup(proc, STDIN_FILENO, stdoutFd, stderrFd);
 ssize_t wrCnt = write(STDOUT_FILENO, otherEndBuf, otherEndBufSize);
@@ -337,18 +339,17 @@ if (proc != pl->procs)
 if (proc->next != NULL)
     safeClose(&procStdoutFd);
 
-/* child end of execPipe */
-safeClose(&proc->execPipe[1]);
+safeClose(&proc->execPipeChild); // child end of execPipe
 return prevStdoutFd;
 }
 
 static void waitOnExec(struct plProc *proc)
 /* wait on exec to happen on this process */
 {
-// execPipe will be close when exec happens
+// execPipeChild will get EOF when exec happens
 char buf[1];
-read(proc->execPipe[0], buf, sizeof(buf));
-safeClose(&proc->execPipe[0]);
+read(proc->execPipeParent, buf, sizeof(buf));
+safeClose(&proc->execPipeParent);
 }
 
 static void pipelineExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
