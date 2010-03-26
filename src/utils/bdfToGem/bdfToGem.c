@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.13 2005/02/24 18:32:33 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.14 2010/03/26 19:26:18 kent Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -126,7 +126,7 @@ for (gl = *glyph; (struct bdfGlyph *)NULL !=  gl; gl = next)
     next = gl->next;
     freeGlyph(&gl);
     }
-freez(glyph);
+*glyph = NULL;
 return;
 }
 
@@ -390,7 +390,7 @@ if ((char *)NULL == name)
 
 fprintf(f, "\n/* %s.c - compiled data for font %s */\n", name,font->facename);
 if (! noHeader)
-    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.13 2005/02/24 18:32:33 hiram Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.14 2010/03/26 19:26:18 kent Exp $\";\n");
 
 fprintf(f, "/* generated source code by utils/bdfToGem, do not edit */\n");
 fprintf(f, "/* BDF data file input: %s */\n\n", inputFileName);
@@ -523,9 +523,9 @@ fontHeader.undrline = 0;
 fontHeader.lghtng_m = 0x5555;
 fontHeader.skewng_m = 0xaaaa;
 fontHeader.flags = 0;
-fontHeader.hz_ofst = (char *)NULL;
-fontHeader.ch_ofst = (WORD *)NULL;
-fontHeader.fnt_dta = (UBYTE *)NULL;
+fontHeader.hz_ofst = NULL;
+fontHeader.ch_ofst = NULL;
+fontHeader.fnt_dta = NULL;
 fontHeader.frm_wdt = 0;	/* will be byte width of all glyphs together */
 fontHeader.frm_hgt = 0;	/* will be a single glyph height */
 fontHeader.nxt_fnt = (struct font_hdr *)NULL;
@@ -574,7 +574,7 @@ while (lineFileNext(lf, &line, NULL))
 	    {
 	    uc <<= 4;
 	    curGlyph->bitmap[glyphRow][j] = uc;
-	    errAbort("odd length of %d at line %d\n", lineCount);
+	    errAbort("odd length of %d at line %d\n", len, lineCount);
 	    }
 	++glyphRow;
 	continue;
@@ -731,6 +731,8 @@ fontHeader.ADE_hi = asciiHi;
 
 outputGem(outputFile, &fontHeader, glyphList, bdfFile);
 freeGlyphList(&glyphList);
+#ifdef SOON
+#endif
 }
 
 int main( int argc, char *argv[] )
