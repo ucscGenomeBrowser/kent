@@ -6,7 +6,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.5 2010/03/23 21:51:36 galt Exp $";
+static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.6 2010/03/26 22:03:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,7 +40,9 @@ static int convertErrCnt = 0;  // number of convert errors
 
 
 static void cnvError(char *format, ...)
-/* print a convert error */
+/* print a GFF3 to gene conversion error.  This will return.  Code must check
+ * for error count to be exceeded and unwind to the top level to print a usefull
+ * error message and abort. */
 {
 fputs("Error: ", stderr);
 va_list args;
