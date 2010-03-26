@@ -1,5 +1,11 @@
-#	"$Id: trackDb.ra,v 1.1 2010/01/22 18:58:28 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.2 2010/03/26 21:14:55 hiram Exp $";
 
 include trackDb.chainNet.ra
 
-
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
+type ctgPos
