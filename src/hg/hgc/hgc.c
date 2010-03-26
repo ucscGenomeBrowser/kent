@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1607 2010/03/25 17:53:34 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1608 2010/03/26 16:48:49 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14594,7 +14594,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     dgvStaticLoad(row+rowOffset, &dgv);
     if (dgv.chromStart != dgv.thickStart ||
-	dgv.chromEnd != dgv.thickEnd)
+	(dgv.chromEnd != dgv.thickEnd && dgv.thickEnd != dgv.chromStart))
 	{
 	printf("<B>Variant Position:</B> "
 	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
