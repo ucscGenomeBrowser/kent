@@ -192,6 +192,8 @@ void mgTextBlitSolid(int bitWidth, int bitHeight, int bitX, int bitY,
 typedef struct font_hdr MgFont;
 /* Type of our font.  */
 
+/* Collection of fonts from here and there.  The mgTinyFont() and mgSmallFont() are uniq
+ * here.  The rest are synonyms at this point for the adobe fonts below. */
 MgFont *mgTinyFont();
 MgFont *mgSmallFont();
 MgFont *mgMediumFont();
@@ -207,6 +209,35 @@ MgFont *mgSmallFixedFont();
 MgFont *mgMediumFixedFont();
 MgFont *mgLargeFixedFont();
 MgFont *mgHugeFixedFont();
+
+/* Adobe fonts from xfree project. */
+MgFont *mgCourier8Font();
+MgFont *mgCourier10Font();
+MgFont *mgCourier12Font();
+MgFont *mgCourier14Font();
+MgFont *mgCourier18Font();
+MgFont *mgCourier24Font();
+MgFont *mgCourier34Font();
+MgFont *mgHelvetica8Font();
+MgFont *mgHelvetica10Font();
+MgFont *mgHelvetica12Font();
+MgFont *mgHelvetica14Font();
+MgFont *mgHelvetica18Font();
+MgFont *mgHelvetica24Font();
+MgFont *mgHelvetica34Font();
+MgFont *mgHelveticaBold8Font();
+MgFont *mgHelveticaBold10Font();
+MgFont *mgHelveticaBold12Font();
+MgFont *mgHelveticaBold14Font();
+MgFont *mgHelveticaBold18Font();
+MgFont *mgHelveticaBold24Font();
+MgFont *mgHelveticaBold34Font();
+MgFont *mgTimes8Font();
+MgFont *mgTimes10Font();
+MgFont *mgTimes12Font();
+MgFont *mgTimes14Font();
+MgFont *mgTimes18Font();
+MgFont *mgTimes24Font();
 
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text);
