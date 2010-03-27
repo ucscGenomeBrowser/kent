@@ -10,6 +10,14 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     dnautil.o dtdParse.o dystring.o \
     emblParse.o errCatch.o errabort.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
+    font/mgCourier10.o font/mgCourier12.o font/mgCourier14.o font/mgCourier18.o \
+    font/mgCourier24.o font/mgCourier8.o font/mgHelvetica10.o font/mgHelvetica12.o \
+    font/mgHelvetica14.o font/mgHelvetica18.o font/mgHelvetica24.o font/mgHelvetica8.o \
+    font/mgHelveticaBold10.o font/mgHelveticaBold12.o font/mgHelveticaBold14.o \
+    font/mgHelveticaBold18.o font/mgHelveticaBold24.o font/mgHelveticaBold8.o \
+    font/mgHugeFont.o font/mgSixhi6.o font/mgSail8.o \
+    font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
+    font/mgTimes24.o font/mgTimes8.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o gifcomp.o \
@@ -20,9 +28,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     keys.o kxTok.o \
     linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o mgCircle.o \
-    mgHugeFont.o mgLargeFont.o mgMediumFont.o mgPolygon.o mgSmallFont.o \
-    mgTinyFont.o mime.o \
-    net.o nib.o nibTwo.o nt4.o numObscure.o \
+    mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o \
     pairHmm.o phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \

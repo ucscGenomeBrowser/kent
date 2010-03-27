@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.51 2009/06/20 17:25:10 mikep Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.52 2010/03/27 04:23:08 kent Exp $";
 
 #ifndef min3
 #define min3(x,y,z) (min(x,min(y,z)))
@@ -585,8 +585,7 @@ return mgFontPixelHeight(font);
 int mgFontLineHeight(MgFont *font)
 /* How many pixels to next line ideally? */
 {
-int celHeight = font_cel_height(font);
-return celHeight + 1 + (celHeight/5);
+return font_line_height(font);
 }
 
 int mgFontWidth(MgFont *font, char *chars, int charCount)

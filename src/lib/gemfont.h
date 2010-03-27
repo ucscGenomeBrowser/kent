@@ -42,6 +42,7 @@ WORD	frm_hgt;	/* Pixel height of bitmap. */
 struct font_hdr	*nxt_fnt; /* Set to 0 */
 WORD    xOff;		/* X offset to add. */
 WORD    yOff;		/* Y offset to add. */
+WORD    lineHeight;     /* Distance to next line. */
 }; 
 
 #define STPROP 0
@@ -54,6 +55,9 @@ void gfText(struct memGfx *screen, struct font_hdr *f, char *text,
 
 /* How tall is font? */
 int font_cel_height(struct font_hdr *f);
+
+/* How far to next line. */
+int font_line_height(struct font_hdr *f);
 
 /* How wide would this bunch of characters be? */
 long fnstring_width(struct font_hdr *f, unsigned char *s, int n);

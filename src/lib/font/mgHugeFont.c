@@ -1,12 +1,12 @@
 
 /* Huge.c - compiled data for font AdobeHelv-M-R-N--34-240-100-100 */
-static char const rcsid[] = "$Id: mgHugeFont.c,v 1.5 2005/12/15 20:18:30 hiram Exp $";
+static char const rcsid[] = "$Id: mgHugeFont.c,v 1.1 2010/03/27 04:23:13 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 100dpi/helvR24-L1.bdf */
 
 #include "common.h"
 #include "memgfx.h"
-#include "gemfont.h"
+#include "../gemfont.h"
 
 static UBYTE Huge_data[21660] = {
 0,0,0,0,0,0,0,0,0,0,
@@ -2213,7 +2213,13 @@ Huge_ch_ofst, Huge_data,
 570, 38,
 NULL,
 0, 0, /* x/y offset */
+43,
 };
+
+MgFont *mgHelvetica34Font()
+{
+return &Huge_font;
+}
 
 MgFont *mgHugeFont()
 {
@@ -4471,7 +4477,13 @@ HugeBold_ch_ofst, HugeBold_data,
 581, 38,
 NULL,
 0, 0, /* x/y offset */
+43,
 };
+
+MgFont *mgHelveticaBold34Font()
+{
+return &HugeBold_font;
+}
 
 MgFont *mgHugeBoldFont()
 {
@@ -5369,7 +5381,13 @@ HugeFixed_ch_ofst, HugeFixed_data,
 424, 20,
 NULL,
 0, 0, /* x/y offset */
+24,
 };
+
+MgFont *mgCourier34Font()
+{
+return &HugeFixed_font;
+}
 
 MgFont *mgHugeFixedFont()
 {
