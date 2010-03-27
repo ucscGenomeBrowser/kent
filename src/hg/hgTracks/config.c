@@ -17,8 +17,7 @@
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
-static char *sizes[] = {"tiny", "small", "medium", "large", "huge"};
-cartUsualString(cart, textSizeVar, "small");
+static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 

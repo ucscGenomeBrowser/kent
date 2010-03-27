@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.268 2010/03/25 23:27:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.269 2010/03/27 04:26:47 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5992,3 +5992,4 @@ if (differentWord(normScoreTest, "no"))
 
 return normScoreAvailable;
 }
+
