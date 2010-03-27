@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.14 2010/03/26 19:26:18 kent Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.15 2010/03/27 01:42:56 kent Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -390,7 +390,7 @@ if ((char *)NULL == name)
 
 fprintf(f, "\n/* %s.c - compiled data for font %s */\n", name,font->facename);
 if (! noHeader)
-    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.14 2010/03/26 19:26:18 kent Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.15 2010/03/27 01:42:56 kent Exp $\";\n");
 
 fprintf(f, "/* generated source code by utils/bdfToGem, do not edit */\n");
 fprintf(f, "/* BDF data file input: %s */\n\n", inputFileName);
@@ -399,7 +399,7 @@ if (! noHeader)
     {
     fprintf(f, "#include \"common.h\"\n");
     fprintf(f, "#include \"memgfx.h\"\n");
-    fprintf(f, "#include \"gemfont.h\"\n\n");
+    fprintf(f, "#include \"../gemfont.h\"\n\n");
     }
 
 fprintf(f, "static UBYTE %s_data[%d] = {\n", name,
@@ -457,7 +457,8 @@ fprintf(f, "0x%hx, NULL,\n", font->flags); /* flags, hz_ofst */
 fprintf(f, "%s_ch_ofst, %s_data,\n", name, name); /* ch_ofst, fnt_dta */
 fprintf(f, "%hd, %hd,\n", font->frm_wdt, font->frm_hgt);
 fprintf(f, "NULL,\n");	/*	nxt_fnt	*/
-fprintf(f, "%hd, %hd, /* x/y offset */\n", font->xOff, font->yOff);
+fprintf(f, "%hd, %hd,   /* x/y offset */\n", font->xOff, font->yOff);
+fprintf(f, "%hd,        /* lineHeight */\n", font->lineHeight);
 fprintf(f, "};\n\n");
 
 fprintf(f, "MgFont *mg%sFont()\n", name);
