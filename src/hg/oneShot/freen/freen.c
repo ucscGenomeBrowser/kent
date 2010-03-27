@@ -6,12 +6,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "sqlNum.h"
-#include "udc.h"
-#include "localmem.h"
-#include "bigWig.h"
-#include "bigBed.h"
-#include "memalloc.h"
+#include "memgfx.h"
 
 #define TRAVERSE FALSE
 
@@ -23,29 +18,48 @@ errAbort("freen - test some hairbrained thing.\n"
 
 
 
+
+int demoFont(struct memGfx *mg, MgFont *font, char *name, int x, int y)
+/* Print out some text in font.  Return text height. */
+{
+char buf[64];
+safef(buf, sizeof(buf), "abcde123ABCDExyz %s", name);
+mgText(mg, x, y, MG_BLACK, font, buf);
+return mgFontLineHeight(font);
+}
+
 void freen(char *a)
 /* Test some hair-brained thing. */
 {
-struct bbiFile        *bb;
-struct lm             *lm;
+struct memGfx *mg = mgNew(1000,1000);
+int y = 5;
 
-pushCarefulMemHandler(1000000000);
-printf("%d blocks %ld bytes after pushCarefulMemHandler\n", carefulCountBlocksAllocated(), carefulTotalAllocated());
-bb = bigBedFileOpen(a);
-printf("%d blocks %ld bytes after bigBedFileOpen\n", carefulCountBlocksAllocated(), carefulTotalAllocated());
-int i;
-for (i=0; i<2; ++i)
-    {
-    lm = lmInit(0);
-    printf("%d blocks %ld bytes after lmInit\n", carefulCountBlocksAllocated(), carefulTotalAllocated());
-    bigBedIntervalQuery(bb,"chr1",1,20000000,0,lm);
-    printf("%d blocks %ld bytes allocated after intervalQuery\n", carefulCountBlocksAllocated(), carefulTotalAllocated());
-    lmCleanup(&lm);
-    printf("%d blocks %ld bytes allocated after lmCleanup\n", carefulCountBlocksAllocated(), carefulTotalAllocated());
-    }
-bbiFileClose(&bb);
-printf("%d blocks %ld bytes allocated after bbiFileClose\n", carefulCountBlocksAllocated(), carefulTotalAllocated());
-popMemHandler();
+y += demoFont(mg, mgTinyFont(), "sixhi 6", 5, y);
+y += demoFont(mg, mgSmallFont(), "sail 8", 5, y);
+y += demoFont(mg, mgCourier8Font(), "courier 8", 5, y);
+y += demoFont(mg, mgCourier10Font(), "courier 10", 5, y);
+y += demoFont(mg, mgCourier12Font(), "courier 12", 5, y);
+y += demoFont(mg, mgCourier18Font(), "courier 18", 5, y);
+y += demoFont(mg, mgCourier24Font(), "courier 24", 5, y);
+y += demoFont(mg, mgCourier34Font(), "fixed 34", 5, y);
+y += demoFont(mg, mgHelvetica8Font(), "helvetica 8", 5, y);
+y += demoFont(mg, mgHelvetica10Font(), "helvetica 10", 5, y);
+y += demoFont(mg, mgHelvetica12Font(), "helvetica 12", 5, y);
+y += demoFont(mg, mgHelvetica18Font(), "helvetica 18", 5, y);
+y += demoFont(mg, mgHelvetica24Font(), "helvetica 24", 5, y);
+y += demoFont(mg, mgHelvetica34Font(), "helvetica 34", 5, y);
+y += demoFont(mg, mgHelveticaBold8Font(), "helvetica 8", 5, y);
+y += demoFont(mg, mgHelveticaBold10Font(), "helvetica 10", 5, y);
+y += demoFont(mg, mgHelveticaBold12Font(), "helvetica 12", 5, y);
+y += demoFont(mg, mgHelveticaBold18Font(), "helvetica 18", 5, y);
+y += demoFont(mg, mgHelveticaBold24Font(), "helvetica 24", 5, y);
+y += demoFont(mg, mgHelveticaBold34Font(), "helvetica 34", 5, y);
+y += demoFont(mg, mgTimes8Font(), "times 8", 5, y);
+y += demoFont(mg, mgTimes10Font(), "times 10", 5, y);
+y += demoFont(mg, mgTimes12Font(), "times 12", 5, y);
+y += demoFont(mg, mgTimes18Font(), "times 18", 5, y);
+y += demoFont(mg, mgTimes24Font(), "times 24", 5, y);
+mgSaveGif(mg, a, FALSE);
 }
 
 int main(int argc, char *argv[])
