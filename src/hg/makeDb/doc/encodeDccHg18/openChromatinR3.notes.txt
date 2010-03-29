@@ -1037,6 +1037,7 @@ New tables:
     wgEncodeUncFAIREseqZinbaHepg2
     wgEncodeUncFAIREseqZinbaHuvec
     wgEncodeUncFAIREseqZinbaK562
+    wgEncodeUncFAIREseqZinbaNHEK
 
 New files:
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/release3/wgEncodeUncFAIREseqZinbaGm12878.narrowPeak.gz
@@ -1045,6 +1046,7 @@ New files:
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/release3/wgEncodeUncFAIREseqZinbaHepg2.narrowPeak.gz
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/release3/wgEncodeUncFAIREseqZinbaHuvec.narrowPeak.gz
     /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/release3/wgEncodeUncFAIREseqZinbaK562.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/release3/wgEncodeUncFAIREseqZinbaNHEK.narrowPeak.gz
 
 Extra: Requires the repush of these:
 	index.html
