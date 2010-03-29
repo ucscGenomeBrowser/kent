@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.218 2010/03/24 21:39:03 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.219 2010/03/29 20:32:38 braney Exp $
 
 use warnings;
 use strict;
@@ -291,6 +291,7 @@ our %formatCheckers = (
     BAM => \&validateBAM,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
+    bam => \&validateBam,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -744,6 +745,23 @@ sub validateSAM
     }
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateSAM") if $opt_timing;
+    return ();
+}
+
+sub validateBam
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateBam") if $opt_timing;
+    HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
+    my $paramList = validationSettings("validateFiles","bam");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromDb=$daf->{assembly} $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateBam for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateBam") if $opt_timing;
     return ();
 }
 
