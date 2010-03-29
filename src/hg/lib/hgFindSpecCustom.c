@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.15 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.16 2010/03/29 23:11:37 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -287,7 +287,7 @@ if (hfs->searchDescription == NULL)
     struct trackDb *tdb = hMaybeTrackInfo(conn, hfs->searchTable);
     hFreeConn(&conn);
     if (tdb != NULL)
-	safef(buf, sizeof(buf), "%s (%s)", tdb->longLabel, hfs->searchTable);
+	safecpy(buf, sizeof(buf), tdb->longLabel);
     else
 	safef(buf, sizeof(buf), "%s", hfs->searchTable);
     hfs->searchDescription = cloneString(buf);
