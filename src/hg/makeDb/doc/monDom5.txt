@@ -1582,3 +1582,51 @@ TMPDIR=/scratch/tmp
     #	217614612 bases of 2752505800 (7.906%) in intersection
 
 ##############################################################################
+# susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-26,27 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzSusScr2.2010-03-26
+    cd /hive/data/genomes/monDom5/bed/lastzSusScr2.2010-03-26
+
+    cat << '_EOF_' > DEF
+# Pig vs. Opossum
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pig SusScr2
+SEQ2_DIR=/scratch/data/susScr2/susScr2.2bit
+SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzSusScr2.2010-03-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	Elapsed time: 1132m5s
+    cat fb.monDom5.chainSusScr2Link.txt 
+    #	179898307 bases of 3501660299 (5.138%) in intersection
+
+    mkdir /hive/data/genomes/susScr2/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/monDom5/bed/lastzSusScr2.2010-03-26/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 82m55s
+
+    cat fb.susScr2.chainMonDom5Link.txt 
+    #	182834643 bases of 2231298548 (8.194%) in intersection
+
+#########################################################################

@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.91 2010/03/19 00:23:08 hartera Exp $";
+#	"$Id: hg19.txt,v 1.92 2010/03/29 16:01:27 hiram Exp $";
 
 #############################################################################
 
@@ -8718,3 +8718,51 @@ TMPDIR=/scratch/tmp
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 #######################################################################
+# susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-26,27 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26
+    cd /hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26
+
+    cat << '_EOF_' > DEF
+# Pig vs. Human
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pig SusScr2
+SEQ2_DIR=/scratch/data/susScr2/susScr2.2bit
+SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	Elapsed time: 842m23s
+    cat fb.hg19.chainSusScr2Link.txt 
+    #	1198794058 bases of 2897316137 (41.376%) in intersection
+
+    mkdir /hive/data/genomes/susScr2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	Elapsed time: 112m40s
+
+    cat fb.susScr2.chainHg19Link.txt 
+    #	1272785114 bases of 2231298548 (57.042%) in intersection
+
+#########################################################################
