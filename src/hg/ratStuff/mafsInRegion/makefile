@@ -12,3 +12,6 @@ ${A}: compile
 
 compile: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS} ${L}
+
+clean:
+	rm -f $O
