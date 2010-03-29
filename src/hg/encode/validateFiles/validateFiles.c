@@ -10,8 +10,8 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.36 2010/03/21 18:03:25 braney Exp $";
-static char *version = "$Revision: 1.36 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.37 2010/03/29 20:25:45 braney Exp $";
+static char *version = "$Revision: 1.37 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -29,6 +29,7 @@ boolean mmPerPair;
 boolean nMatch;
 boolean isSort;
 boolean privateData;
+boolean allowOther;
 int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
@@ -98,6 +99,7 @@ errAbort(
   "   -isSort                      input is sorted by chrom\n"
 //"   -acceptDot                   Accept '.' as 'N' in DNA sequence\n"
   "   -version                     Print version\n"
+  "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
   , MAX_ERRORS);
 }
 
@@ -121,6 +123,7 @@ static struct optionSpec options[] = {
 // {"acceptDot", OPTION_BOOLEAN},
    {"isSort", OPTION_BOOLEAN},
    {"version", OPTION_BOOLEAN},
+   {"allowOther", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -1068,7 +1071,7 @@ return 0;
 int validateBigWig(struct lineFile *lf, char *file)
 {
 if (chrHash == NULL)
-    errAbort("BAM validation requires the -chromInfo or -chromDb option\n");
+    errAbort("bigWig validation requires the -chromInfo or -chromDb option\n");
 
 int errs = 0;
 struct bbiFile *bbiFile;
@@ -1090,7 +1093,7 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
 	{
-	printf("bigWig contains invalid chromosome name: %s\n", 
+	warn("bigWig contains invalid chromosome name: %s\n", 
 	    chroms->name);
 	errs++;
 	}
@@ -1098,7 +1101,7 @@ for(; chroms; chroms = chroms->next)
 	{
 	if (*size != chroms->size)
 	    {
-	    printf("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+	    warn("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
 		chroms->name,
 		*size, chroms->size);
 	    errs++;
@@ -1137,15 +1140,18 @@ for(ii=0; ii < head->n_targets; ii++)
 
     if ( (size = hashFindVal(chrHash, head->target_name[ii])) == NULL)
 	{
-	printf("BAM contains invalid chromosome name: %s\n", 
-	    head->target_name[ii]);
-	errs++;
+	if (!allowOther)
+	    {
+	    warn("BAM contains invalid chromosome name: %s\n", 
+		head->target_name[ii]);
+	    errs++;
+	    }
 	}
     else
 	{
 	if (*size != head->target_len[ii])
 	    {
-	    printf("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+	    warn("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
 		head->target_name[ii],
 		*size, head->target_len[ii]);
 	    errs++;
@@ -1237,6 +1243,7 @@ isSort         = optionExists("isSort");
 mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
 quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
+allowOther     = optionExists("allowOther");
 
 initArrays();
 dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.
