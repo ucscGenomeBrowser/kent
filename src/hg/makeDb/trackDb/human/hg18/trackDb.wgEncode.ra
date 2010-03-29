@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.934 2010/03/26 23:59:47 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.935 2010/03/29 21:07:42 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -1838,7 +1838,7 @@ compositeTrack on
 shortLabel Open Chromatin
 longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
-subGroup1 view Views Peaks=Peaks Zinba=Zinba_Peaks SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
+subGroup1 view Views Peaks=Peaks PkZ=Peaks_Zinba SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
 subGroup2 cellType Cell_Line AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc IP-pol2=ChIP-seq_Pol2 zCTRL=Input_Control
 sortOrder cellType=+ EXP=+ view=+
@@ -2551,7 +2551,8 @@ wgEncode 1
     track wgEncodeChromatinMapViewZinba
     release alpha,beta
     shortLabel Zinba Peaks
-    view Zinba
+    view PkZ
+    #visibility pack
     subTrack wgEncodeChromatinMap
     qValueFilter 0.0
     qValueFilterLimits 0:14
@@ -2564,60 +2565,70 @@ wgEncode 1
         subTrack wgEncodeChromatinMapViewZinba
         shortLabel GM12878 FAIRE Zn
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in GM12878 cells)
-        subGroups view=Zinba EXP=FAIRE cellType=GM12878
+        subGroups view=PkZ EXP=FAIRE cellType=GM12878
         type narrowPeak
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 treatment=None view=Zinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaGm12878 fileName=wgEncodeUncFAIREseqZinbaGm12878.narrowPeak.gz
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaGm12878 fileName=wgEncodeUncFAIREseqZinbaGm12878.narrowPeak.gz
 
         track wgEncodeUncFAIREseqZinbaH1hesc
         release alpha,beta
         subTrack wgEncodeChromatinMapViewZinba off
         shortLabel H1es FAIRE Zn
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in H1-hESC cells)
-        subGroups view=Zinba EXP=FAIRE cellType=H1
+        subGroups view=PkZ EXP=FAIRE cellType=H1
         type narrowPeak
         color 0,107,27
-        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=H1-hESC treatment=None view=Zinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaH1hesc fileName=wgEncodeUncFAIREseqZinbaH1hesc.narrowPeak.gz
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=H1-hESC treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaH1hesc fileName=wgEncodeUncFAIREseqZinbaH1hesc.narrowPeak.gz
 
         track wgEncodeUncFAIREseqZinbaHuvec
         release alpha,beta
         subTrack wgEncodeChromatinMapViewZinba off
         shortLabel HUVEC FAIRE Zn
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in HUVEC cells)
-        subGroups view=Zinba EXP=FAIRE cellType=HUVEC
+        subGroups view=PkZ EXP=FAIRE cellType=HUVEC
         type narrowPeak
         color 224,75,0
-        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HUVEC treatment=None view=Zinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaHuvec fileName=wgEncodeUncFAIREseqZinbaHuvec.narrowPeak.gz
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HUVEC treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaHuvec fileName=wgEncodeUncFAIREseqZinbaHuvec.narrowPeak.gz
 
         track wgEncodeUncFAIREseqZinbaHelas3
         release alpha,beta
         subTrack wgEncodeChromatinMapViewZinba off
         shortLabel HeLa FAIRE Zn
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in HeLa-S3 cells)
-        subGroups view=Zinba EXP=FAIRE cellType=HELA
+        subGroups view=PkZ EXP=FAIRE cellType=HELA
         type narrowPeak
         color 0,119,158
-        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 treatment=None view=Zinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaHelas3 fileName=wgEncodeUncFAIREseqZinbaHelas3.narrowPeak.gz
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaHelas3 fileName=wgEncodeUncFAIREseqZinbaHelas3.narrowPeak.gz
 
         track wgEncodeUncFAIREseqZinbaHepg2
         release alpha,beta
         subTrack wgEncodeChromatinMapViewZinba off
         shortLabel HepG2 FAIRE Zn
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in HepG2 cells)
-        subGroups view=Zinba EXP=FAIRE cellType=HEPG2
+        subGroups view=PkZ EXP=FAIRE cellType=HEPG2
         type narrowPeak
         color 189,0,157
-        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 treatment=None view=Zinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaHepg2 fileName=wgEncodeUncFAIREseqZinbaHepg2.narrowPeak.gz
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaHepg2 fileName=wgEncodeUncFAIREseqZinbaHepg2.narrowPeak.gz
 
         track wgEncodeUncFAIREseqZinbaK562
         release alpha,beta
         subTrack wgEncodeChromatinMapViewZinba
         shortLabel K562 FAIRE Zn
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in K562 cells)
-        subGroups view=Zinba EXP=FAIRE cellType=K562
+        subGroups view=PkZ EXP=FAIRE cellType=K562
         type narrowPeak
         color 46,0,184
-        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 treatment=None view=Zinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaK562 fileName=wgEncodeUncFAIREseqZinbaK562.narrowPeak.gz
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaK562 fileName=wgEncodeUncFAIREseqZinbaK562.narrowPeak.gz
+
+        track wgEncodeUncFAIREseqZinbaNhek
+        release alpha,beta
+        subTrack wgEncodeChromatinMapViewZinba off
+        shortLabel NHEK FAIRE Zn
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Zinba Peaks (in NHEK cells)
+        subGroups view=PkZ EXP=FAIRE cellType=NHEK
+        type narrowPeak
+        color 46,0,184
+        metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK treatment=None view=peaksZinba dataVersion="post ENCODE Jan 2010 Freeze" subId=1127 dateSubmitted=2010-03-24 dateUnrestricted=2010-12-24 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqZinbaNhek fileName=wgEncodeUncFAIREseqZinbaNhek.narrowPeak.gz
 
     track wgEncodeChromatinMapViewSIG
     release alpha,beta
