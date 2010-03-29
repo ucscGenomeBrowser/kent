@@ -1581,6 +1581,64 @@ TMPDIR=/scratch/tmp
     cat fb.calJac3.chainMonDom5Link.txt 
     #	217614612 bases of 2752505800 (7.906%) in intersection
 
+#######################################################################
+# felCatV17e Cat BLASTZ/CHAIN/NET (DONE  - 2010-03-22 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22
+    cd /hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22
+
+    cat << '_EOF_' > DEF
+# opossum vs. cat
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Opossum monDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Cat (felCatV17e)
+SEQ2_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
+SEQ2_LEN=/scratch/data/felCatV17e/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        > do.log 2>&1 &
+    # *** All done !  Elapsed time: 1228m3s
+    # *** Make sure that goldenPath/monDom5/vsFelCatV17e/README.txt is accurate.
+    # *** Add {chain,net}FelCatV17e tracks to trackDb.ra if necessary
+    cat fb.monDom5.chainFelCatV17eLink.txt
+    # 178616721 bases of 3501660299 (5.101%) in intersection
+
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    # *** All done !  Elapsed time: 100m29s
+    # *** Make sure that goldenPath/felCatV17e/vsMonDom5/README.txt is accurate.
+    # *** Add {chain,net}MonDom5 tracks to trackDb.ra if necessary.
+
+    cat fb.felCatV17e.chainMonDom5Link.txt
+    #   166499264 bases of 1990635005 (8.364%) in intersection
+
+
+
 ##############################################################################
 # susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-26,27 - Hiram)
     screen # use a screen to manage this multi-day job

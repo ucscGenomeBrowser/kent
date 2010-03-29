@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.130 2010/03/29 16:01:26 hiram Exp $"
+#	"$Id: mm9.txt,v 1.131 2010/03/29 22:11:49 chinhli Exp $"
 #
 
 #######################################################################
@@ -10222,6 +10222,58 @@ TMPDIR=/scratch/tmp
     #	real    90m38.739s
     cat fb.calJac3.chainHg19Link.txt 
     #	861811978 bases of 2752505800 (31.310%) in intersection
+
+#######################################################################
+# felCatV17e Cat BLASTZ/CHAIN/NET (DONE  - 2010-03-22 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
+    cd /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
+
+    cat << '_EOF_' > DEF
+# dog vs. cat
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Dog canFan3
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Cat (felCatV17e)
+SEQ2_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
+SEQ2_LEN=/scratch/data/felCatV17e/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        > do.log 2>&1 &
+    #   real   1581m41s
+    cat fb.mm9.chainFelCatV17eLink.txt
+    #   637007193 bases of 2620346127 (24.310%) in intersection
+
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real   125m37.926s 
+    cat fb.felCatV17e.chainMm9Link.txt
+    #   616529959 bases of 1990635005 (30.972%) in intersection
+
 
 #####################################################################
 # susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-26,27 - Hiram)

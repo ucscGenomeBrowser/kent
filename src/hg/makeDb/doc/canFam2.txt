@@ -3072,7 +3072,7 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-    #	real    1988m5.805s
+    # real    1988m5.805s
     cat fb.canFam2.chainCalJac3Link.txt 
     #	1363307334 bases of 2384996543 (57.162%) in intersection
 
@@ -3086,5 +3086,58 @@ TMPDIR=/scratch/tmp
     #	real    129m56.144s
     cat fb.calJac3.chainHg19Link.txt 
     #	1397333116 bases of 2752505800 (50.766%) in intersection
+#######################################################################
+# felCatV17e Cat BLASTZ/CHAIN/NET (working  - 2010-03-22 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22
+    cd /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22
+
+    cat << '_EOF_' > DEF
+# dog vs. cat
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Dog canFan2
+SEQ1_DIR=/scratch/data/canFam2/canFam2.2bit
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Cat (felCatV17e)
+SEQ2_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
+SEQ2_LEN=/scratch/data/felCatV17e/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > do.log 2>&1 &
+    #   real    287m24.258s
+    cat fb.canFam2.chainFelCatV17eLink.txt
+    #  1481040604 bases of 2384996543 (62.098%) in intersection
+
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    251m14.341s
+    # *** All done !  Elapsed time: 251m14s
+    # *** Make sure that goldenPath/felCatV17e/vsCanFam2/README.txt is accurate.
+    # *** Add {chain,net}CanFam2 tracks to trackDb.ra if necessary.
+    cat fb.felCatV17e.chainCanFam2Link.txt
+    # 1467506008 bases of 1990635005 (73.720%) in intersection
 
 #####################################################################
