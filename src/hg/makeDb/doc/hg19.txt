@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.92 2010/03/29 16:01:27 hiram Exp $";
+#	"$Id: hg19.txt,v 1.93 2010/03/29 22:27:51 chinhli Exp $";
 
 #############################################################################
 
@@ -4991,7 +4991,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
 	>& do.log &
-    #	real ?? about one hour but one job hung
+    #	real about one hour but one job hung
 
     # resuming from failure 
     # edited loadUp.csh, commenting out the first completed step
@@ -8718,6 +8718,73 @@ TMPDIR=/scratch/tmp
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 #######################################################################
+# felCatV17e Cat BLASTZ/CHAIN/NET (DONE  - 2010-03-22 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
+    cd /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
+
+    cat << '_EOF_' > DEF
+# human vs. cat
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Cat (felCatV17e)
+SEQ2_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
+SEQ2_LEN=/scratch/data/felCatV17e/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noDbNameCheck \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    # failed during load, manually finished the loadUp.csh,
+    cd /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22/axtChain
+      time ./loadUp.csh > loadUp.log 2>&1 &
+    # then continue
+    # with:
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pw`/DEF \
+        -continue=download  -syntenicNet -noDbNameCheck \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > download.log 2>&1 &
+    #   real    18m31.179s
+    cat fb.hg19.chainFelCatV17eLink.txt 
+    #  1266003011 bases of 2897316137 (43.696%) in intersection
+    # make it time independent and indicate that it is really done
+    cd /hive/data/genomes/hg19/bed 
+    ln -s  lastzFelCatV17e.2010-03-22 lastz.felCatV17e
+
+    # Swap
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22/DEF \
+	-swap -syntenicNet -noDbNameCheck \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.felCatV17e.chainHg19Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
 # susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-26,27 - Hiram)
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26
