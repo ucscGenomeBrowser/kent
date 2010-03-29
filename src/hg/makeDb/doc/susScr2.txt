@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: susScr2.txt,v 1.1 2010/03/25 20:08:11 hiram Exp $
+#       $Id: susScr2.txt,v 1.2 2010/03/29 16:11:05 hiram Exp $
 
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
@@ -77,5 +77,323 @@ taxId 9823
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/susScr2.unmasked.2bit /gbdb/susScr2/susScr2.2bit
     #	browser should function now
+
+#########################################################################
+# RepeatMasker (DONE - 2010-03-25 - Hiram)
+    mkdir /hive/data/genomes/susScr2/bed/repeatMasker
+    cd /hive/data/genomes/susScr2/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
+	-workhorse=hgwdev -bigClusterHub=swarm -noSplit susScr2 > do.log 2>&1
+    #	about 7 hours
+    cat faSize.rmsk.txt
+    #	2262501571 bases (31203023 N's 2231298548 real 1286207981 upper
+    #	945090567 lower) in 20 sequences in 1 files
+    #	%41.77 masked total, %42.36 masked real
+
+#########################################################################
+# simpleRepeats (DONE - 2010-03-25 - Hiram)
+    mkdir /hive/data/genomes/susScr2/bed/simpleRepeat
+    cd /hive/data/genomes/susScr2/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-bigClusterHub=pk -smallClusterHub=pk susScr2 > do.log 2>&1
+    #	about 14 minutes
+    cat fb.simpleRepeat 
+    #	26577190 bases of 2231298548 (1.191%) in intersection
+
+    #	add to the repeatMasker
+    cd /hive/data/genomes/susScr2
+    twoBitMask susScr2.rmsk.2bit -add bed/simpleRepeat/trfMask.bed susScr2.2bit
+    #	safe to ignore warnings about >=13 fields
+    twoBitToFa susScr2.2bit stdout | faSize stdin > susScr2.2bit.faSize.txt
+    cat susScr2.2bit.faSize.txt
+    #	2262501571 bases (31203023 N's 2231298548 real 1285046974 upper
+    #	946251574 lower) in 20 sequences in 1 files
+    #	%41.82 masked total, %42.41 masked real
+
+#########################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2010-03-25 - Hiram)
+    mkdir /hive/data/genomes/susScr2/bed/allGaps
+    cd /hive/data/genomes/susScr2/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../susScr2.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m12.153s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits susScr2 -not gap -bed=notGap.bed
+    #	2231463081 bases of 2231463081 (100.000%) in intersection
+    featureBits susScr2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	164533 bases of 2231463081 (0.007%) in intersection
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" susScr2 | sort -n | tail -1
+    #	27295
+    cat << '_EOF_' > mkGap.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" susScr2 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits susScr2 other.bed
+    #	164533 bases of 2231463081 (0.007%) in intersection
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad susScr2 otherGap other.bed
+    #	Loaded 96549
+    #	adding this many:
+    wc -l bed.tab
+    #	96549
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" susScr2
+    #	100179
+    hgsql susScr2 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" susScr2
+    #	196728
+    # == 100179 + 96549
+
+########################################################################
+# Create kluster run files (DONE - 2009-11-09 - Hiram)
+    # numerator is susScr2 gapless bases "real" as reported by: 
+    #   featureBits -noRandom -noHap susScr2 gap
+    # denominator is hg19 gapless bases as reported by:
+    #	featureBits -noRandom -noHap hg19 gap
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2231298548 / 2861349177 \) \* 1024
+    #	( 2231298548 / 2861349177 ) * 1024 = 798.521806
+    # ==> use -repMatch=750 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50
+    cd /hive/data/genomes/susScr2
+    blat susScr2.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/susScr2.11.ooc \
+	-repMatch=750
+    #	Wrote 31605 overused 11-mers to jkStuff/susScr2.11.ooc
+    mkdir /hive/data/staging/data/susScr2
+    cp -p susScr2.2bit jkStuff/susScr2.11.ooc /hive/data/staging/data/susScr2
+    cp -p chrom.sizes /hive/data/staging/data/susScr2
+    #	check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+	-e 'select * from gap where bridge="no" order by size;' susScr2 \
+	| sort -k7,7nr
+    #	decide on a minimum gap for this break
+    gapToLift -verbose=2 -minGap=5000 susScr2 jkStuff/nonBridged.lft \
+	-bedFile=jkStuff/nonBridged.bed
+    cp -p jkStuff/nonBridged.lft \
+	/hive/data/staging/data/susScr2/susScr2.nonBridged.lft
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2009-11-09 - Hiram)
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+
+    # edit etc/genbank.conf to add susScr2 just before susScr1
+
+# susScr2 (Pig)
+susScr2.serverGenome = /hive/data/genomes/susScr2/susScr2.2bit
+susScr2.clusterGenome = /scratch/data/susScr2/susScr2.2bit
+susScr2.ooc = /scratch/data/susScr2/susScr2.11.ooc
+susScr2.lift = /scratch/data/susScr2/susScr2.nonBridged.lft
+susScr2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+susScr2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}  
+susScr2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+susScr2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+susScr2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+susScr2.downloadDir = susScr2
+susScr2.genbank.mrna.xeno.loadDesc = yes
+susScr2.refseq.mrna.native.load = no
+
+    cvs ci -m "Added susScr2" etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial susScr2 &
+    #	logFile: var/build/logs/2010.03.26-10:25:04.susScr2.initalign.log
+    #	real    304m38.588s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad susScr2
+    #	logFile: var/dbload/hgwdev/logs/2010.03.26-15:38:17.dbload.log
+XXX - running Fri Mar 26 15:38:45 PDT 2010
+    #	real    31m29.282s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add susScr2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added susScr2 - Tetraodon Nigirividis" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="chr13:57394166-57402412" where name="susScr2";' \
+	hgcentraltest
+
+############################################################################
+# ctgPos2 track - showing clone sequence locations on chromosomes
+#	(DONE - 2010-03-26 - Hiram)
+    mkdir /hive/data/genomes/susScr2/bed/ctgPos2
+    cd /hive/data/genomes/susScr2/bed/ctgPos2
+    cat << '_EOF_' > agpToCtgPos2.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
+    exit 255;
+}
+
+my $agpFile = shift;
+
+open (FH, "<$agpFile") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[4] =~ m/^N$/);
+    my $chrSize = $a[2]-$a[1]+1;
+    my $ctgSize = $a[7]-$a[6]+1;
+    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+export S=../../genbank/Sscrofa9.2/Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc | grep 829.2  | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/"
+done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
+
+    hgLoadSqlTab susScr2 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+############################################################################
+# susScr2 Pig BLASTZ/CHAIN/NET (WORKING - 2010-03-27 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/susScr2/bed/lastzBosTau4.2010-03-27
+    cd /hive/data/genomes/susScr2/bed/lastzBosTau4.2010-03-27
+
+    cat << '_EOF_' > DEF
+# Cow vs. Pig
+BLASTZ_M=50
+
+# TARGET: Pig SusScr2
+SEQ1_DIR=/scratch/data/susScr2/susScr2.2bit
+SEQ1_LEN=/scratch/data/susScr2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Cow BosTau4
+SEQ2_DIR=/scratch/data/bosTau4/bosTau4.2bit
+SEQ2_LEN=/scratch/data/bosTau4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/susScr2/bed/lastzBosTau4.2010-03-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    2422m32.203s
+    #	failed during the netChainSubset | chainStitchId out of memory
+    #	finish that manually with ulimits to allow more memory on hgwdev:
+    export sizeG=188743680
+    ulimit -d $sizeG
+    ulimit -v $sizeG
+
+    netChainSubset -verbose=0 noClass.net susScr2.bosTau4.all.chain.gz stdout \
+	| chainStitchId stdin stdout | gzip -c > susScr2.bosTau4.over.chain.gz
+
+    #	real    2377m21.473s
+#########################################################################
+#  SWAP mm9 lastz (DONE - 2010-03-27 - Hiram)
+    #	original alignment
+    cd	/hive/data/genomes/mm9/bed/lastzSusScr2.2010-03-26
+    cat fb.mm9.chainSusScr2Link.txt 
+    #	616615408 bases of 2620346127 (23.532%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzSusScr2.2010-03-26/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	 Elapsed time: 63m4s
+    cat fb.susScr2.chainMm9Link.txt 
+    #	656444411 bases of 2231298548 (29.420%) in intersection
+
+############################################################################
+#  SWAP hg19 lastz (DONE - 2010-03-27 - Hiram)
+    #	original alignment
+    cat fb.hg19.chainSusScr2Link.txt 
+    #	1198794058 bases of 2897316137 (41.376%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	Elapsed time: 112m40s
+
+    cat fb.susScr2.chainHg19Link.txt 
+    #	1272785114 bases of 2231298548 (57.042%) in intersection
+
+#########################################################################
+#  SWAP monDom5 lastz (DONE - 2010-03-27 - Hiram)
+    #	original alignment
+    cat fb.monDom5.chainSusScr2Link.txt 
+    #	179898307 bases of 3501660299 (5.138%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/monDom5/bed/lastzSusScr2.2010-03-26/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 82m55s
+
+    cat fb.susScr2.chainMonDom5Link.txt 
+    #	182834643 bases of 2231298548 (8.194%) in intersection
 
 #########################################################################
