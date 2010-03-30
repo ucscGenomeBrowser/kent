@@ -97,7 +97,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.47 2010/03/22 04:18:14 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.48 2010/03/30 20:18:30 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -907,9 +907,9 @@ if (getGeneTree(conn, item, treeFileName))
 	printf("<A HREF=\"%s\" TARGET=_BLANK>PDF</A>&nbsp;\n", treePdfFileName);
 	printf("<A HREF=\"%s\" TARGET=_BLANK>Text</A>&nbsp;<BR>\n", treeFileName);
 	
-	printf("<BR>Homologous genes of this protein were retrieved by BLASTP. ");
+	printf("<BR>The 20 highest scoring homologous genes of this protein were retrieved by BLASTP from the genomes available in the UCSC microbial genome browser. ");
 	printf("The alignments of the protein sequences, made by <A HREF=\"http://www.drive5.com/muscle/\" TARGET=_BLANK>MUSCLE</A>, ");
-	printf("were used to construct the phylogenetic tree. This maximum likelihood tree was computed by using ");
+	printf("were used to construct the phylogenetic tree. This maximum likelihood unrooted tree was computed by using ");
 	printf("<A HREF=\"http://www.atgc-montpellier.fr/phyml/\" TARGET=_BLANK>PHYML</A> with the Jones Taylor Thornton model of sequence evolution, ");
 	printf("by including a Gamma-correction (eight categories of evolutionary rates, ");
 	printf("an estimated alpha-parameter and an estimated proportion of invariant sites).<BR>");
