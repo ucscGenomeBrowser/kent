@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.3 2010/03/22 16:55:46 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.4 2010/03/30 21:23:39 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -442,7 +442,6 @@ endif
 # Longest finished job:             174s       2.90m     0.05h    0.00d
 # Submission to last job:          1136s      18.93m     0.32h    0.01d
 
-XXXX
     # Transform cpglh output to bed +
     catDir results | awk '{
 $2 = $2 - 1;
@@ -462,11 +461,117 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # Saving bed.tab
     # Loading felCatV17e
 
-    # check iy with featureBits felCatV17e cpgIslandExt
+    # check it with featureBits felCatV17e cpgIslandExt
     #  36646772 bases of 1990635005 (1.841%) in intersection
 
 
     #   cleanup
     rm -fr hardMaskedFa
 
+
+#####################################################################
+# LASTZ Dog Swap (DONE - 2010-03-22 - Chin)
+    cd /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22
+    cat fb.canFam2.chainFelCatV17eLink.txt
+    #  1481040604 bases of 2384996543 (62.098%) in intersection
+
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    251m14.341s
+    # *** All done !  Elapsed time: 251m14s
+    # *** Make sure that goldenPath/felCatV17e/vsCanFam2/README.txt is
+    # accurate.
+    # *** Add {chain,net}CanFam2 tracks to trackDb.ra if necessary.
+    cat fb.felCatV17e.chainCanFam2Link.txt
+    # 1467506008 bases of 1990635005 (73.720%) in intersection
+
+#####################################################################
+# LASTZ Mouse Swap (DONE - 2010-03-22 - Chin)
+    cd /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
+    cat fb.mm9.chainFelCatV17eLink.txt
+    #   637007193 bases of 2620346127 (24.310%) in intersection
+    # swap
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real   125m37.926s 
+    cat fb.felCatV17e.chainMm9Link.txt
+    #   616529959 bases of 1990635005 (30.972%) in intersection
+
+
+#####################################################################
+# LASTZ Human Swap (DONE - 2010-03-22 - Chin)
+    cd /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
+    cat fb.hg19.chainFelCatV17eLink.txt
+    #  1266003011 bases of 2897316137 (43.696%) in intersection
+
+    # Swap
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    120m42.991s
+    cat fb.felCatV17e.chainHg19Link.txt
+    #   2030475813 bases of 2752505800 (73.768%) in intersection
+
+
+#####################################################################
+# LASTZ Panda Swap (DONE - 2010-03-22 - Chin)
+    cd /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+    cat fb.felCatV17e.chainAilMel1Link.txt
+    # 1503647735 bases of 1990635005 (75.536%) in intersection
+
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    155m57.566s
+    cat fb.ailMel1.chainFelCatV17eLink.txt
+    # 1507273252 bases of 2245312831 (67.130%) in intersection
+
+
+
+
+#####################################################################
+# LASTZ Oppsom  Swap (DONE - 2010-03-22 - Chin)
+    cd /hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22
+    cat fb.monDom5.chainFelCatV17eLink.txt
+    # 178616721 bases of 3501660299 (5.101%) in intersection
+
+    # Swap
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    # *** All done !  Elapsed time: 100m29s
+    # *** Make sure that goldenPath/felCatV17e/vsMonDom5/README.txt is
+    # accurate.
+    # *** Add {chain,net}MonDom5 tracks to trackDb.ra if necessary.
+
+    cat fb.felCatV17e.chainMonDom5Link.txt
+    #   166499264 bases of 1990635005 (8.364%) in intersection
+
+
+
+
+
+####################################################################
 
