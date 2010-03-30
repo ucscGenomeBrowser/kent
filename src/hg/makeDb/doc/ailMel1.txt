@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.5 2010/03/30 16:01:48 chinhli Exp $
+#	$Id: ailMel1.txt,v 1.6 2010/03/30 21:15:30 chinhli Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -293,10 +293,6 @@ TMPDIR=/scratch/tmp
     # 1503647735 bases of 1990635005 (75.536%) in intersection
 
 
-    # need to change name back due to the seq1 and seq2 switch
-    # more TODO  XXXX 03/29
-    # name ???cat fb.ailMel1.chainFelCatV17eLink.txt
-    #   ???? 2047068864 bases of 2897316137 (70.654%) in intersection
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
     cd /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
