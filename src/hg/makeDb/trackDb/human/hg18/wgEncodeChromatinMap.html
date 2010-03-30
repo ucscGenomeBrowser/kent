@@ -58,6 +58,15 @@ value at approximately the 95% sensitivity level.  The solid vertical line in
 the peak represents the point with highest signal.   ENCODE Peaks tables contain
 a p-value for statistical significance.  For these data, this was determined by
 fitting the data to a gamma distribution.</DD>
+<DT><I>Peaks (Zinba)</I></DT><DD> Enriched regions for FAIRE data were called
+using ZINBA (Zero Inflated Negative Binomial Algorithm). ZINBA is a flexible
+statistical method that uses a generalized linear model to select genomic
+windows with enriched sequence counts after adjusting for relevant confounding
+factors such as mappability, GC content, and copy number alterations.
+Significant regions are selected using the set of standardized residuals
+below a false discovery rate (qvalue) threshold. Peaks were further refined
+using a shape detection algorithm to identify local maxima and boundaries of
+the Signal (Base Overlap) data within each significant region.</DD>
 <DT><I>Signal (F-Seq Density)</I></DT><DD> Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
