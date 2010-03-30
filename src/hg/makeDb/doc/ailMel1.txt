@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.4 2010/02/12 23:57:29 hiram Exp $
+#	$Id: ailMel1.txt,v 1.5 2010/03/30 16:01:48 chinhli Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -237,5 +237,82 @@ ailMel1.perChromTables = no
     #	real    54m57.140s
     cat fb.ailMel1.chainMm9Link.txt 
     #	739076250 bases of 2245312831 (32.916%) in intersection
+
+#######################################################################
+# felCatV17e Cat BLASTZ/CHAIN/NET (working  - 2010-03-22 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+    cd /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+
+    cat << '_EOF_' > DEF
+# human vs. cat
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# QUERY: Panda ailMel1
+SEQ2_DIR=/scratch/data/ailMel1/ailMel1.2bit
+SEQ2_LEN=/scratch/data/ailMel1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=300
+
+# TARGET: Cat (felCatV17e)
+SEQ1_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
+SEQ1_LEN=/scratch/data/felCatV17e/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+BASE=/hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > do.log 2>&1 &
+    #  Command failed:
+    #     doClusterRun.csh
+    # manually run the doClusterRun.csh  03/28
+    time ./doClusterRun.csh > doClusterRun.log 2>&1 &
+    # real    93m42.604s
+    #  check with counting file number in psl directory to make sure that
+    #  all jobs were completed.
+    # manually start with "cat" step
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -continue=cat -noDbNameCheck \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > cat.log 2>&1 &
+    # real    346m8.431s
+    cat fb.felCatV17e.chainAilMel1Link.txt
+    # 1503647735 bases of 1990635005 (75.536%) in intersection
+
+
+    # need to change name back due to the seq1 and seq2 switch
+    # more TODO  XXXX 03/29
+    # name ???cat fb.ailMel1.chainFelCatV17eLink.txt
+    #   ???? 2047068864 bases of 2897316137 (70.654%) in intersection
+    mkdir /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
+    cd /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    155m57.566s
+
+    # need to change name back due to the seq1 and seq2 switch
+    # more TODO  XXXX 03/29
+    # so should be able to do
+    #	cat fb.felCatV17e.chainAilMel1Link.txt
+    # without 
+    # cd /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap
+    cat fb.ailMel1.chainFelCatV17eLink.txt
+    # 1507273252 bases of 2245312831 (67.130%) in intersection
 
 #########################################################################
