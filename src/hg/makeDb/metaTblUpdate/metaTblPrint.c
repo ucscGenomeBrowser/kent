@@ -1,20 +1,10 @@
 /* metaTblPrint - Prints metadata objects and variables from the metaTbl. */
 #include "common.h"
 #include "linefile.h"
-#include "hash.h"
 #include "options.h"
-#include "sqlList.h"
-#include "jksql.h"
-#include "trackDb.h"
-#include "hui.h"
-#include "hdb.h"
-#include "hVarSubst.h"
-#include "obscure.h"
-#include "portable.h"
-#include "dystring.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblPrint.c,v 1.4 2010/03/25 21:56:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblPrint.c,v 1.5 2010/03/30 23:45:15 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -25,27 +15,29 @@ errAbort(
   "metaTblPrint - Prints metadata objects and variables from the metaTbl.\n\n"
   "There are two basic views of the data: by objects and by variables.  Unless a single variable "
   "and no object is requested the default view is by object.  Each line of output will contain "
-  "object and all it's var=val pairs as 'formatted metadata' line.  In var view, a single line "
-  "per var=val and then a space seprated list of each obj(type) follows.  Long view will place "
-  "each object and var=val on a separate line with tab indentation.  Alternatively, count will "
+  "object and all it's var=val pairs as 'formatted metadata' line.  In 'byVar' view, a single line "
+  "per var=val and then a space seperated list of each obj(type) follows.  RA style will place "
+  "each object and var val on a separate line with indentation.  Alternatively, count will "
   "return a count of unique obj var=val combinations. It is also possible to select a "
   "combination of vars by entering a string of var=val pairs.\n\n"
   "usage:\n"
-  "   metaTblPrint -db= [-table=] [-long/-countObjs/-countVarss/-countVals]\n"
-  "                [-all [-byVar]]\n"
-  "                [-obj=] [-var= [-val=]]]\n"
+  "   metaTblPrint -db= [-table=]  [-byVar] [-ra/-countObjs/-countVarss/-countVals]\n"
+  "                [-all]\n"
+  "                [-obj= [-var= [-val=]]]\n"
   "                [-var= [-val=]]\n"
-  "                [-vars=\"var1=val1 var2=val2...\" [-byVar]]\n\n"
+  "                [-vars=\"var1=val1 var2=val2...]\n\n"
   "Options:\n"
   "    -db      Database to query.  This argument is required.\n"
   "    -table   Table to query.  Default is '" METATBL_DEFAULT_NAME "'.\n"
-  "    -long    Print each obj, var=val as separate line.\n"
+  "    -byVar   Print each var and val, then all objects that match,\n"
+  "             as opposed to printing objects and all the var=val pairs that match.\n"
+  "    -ra      Print each obj with a set of indented var val pairs on separate lines.\n"
+  "             With -byVar prints pseudo-RA style with 2 levels of indentation (not val obj pairs).\n"
   "    -countObjs   Just print count of objects returned in the query.\n"
   "    -countVars   Just print count of variables returned in the query.\n"
   "    -countVals   Just print count of values returned in the query.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
-  "      -byVar   Print which objects belong to which var=val pairs.\n"
   "    -obj={objName}  Request a single object.  The request can be further narrowed by var and val.\n"
   "    -var={varName}  Request a single variable.  The request can be further narrowed by val.\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n"
@@ -64,7 +56,7 @@ errAbort(
 static struct optionSpec optionSpecs[] = {
     {"db",       OPTION_STRING}, // default "hg19"
     {"table",    OPTION_STRING}, // default "metaTbl"
-    {"long",     OPTION_BOOLEAN},// long format
+    {"ra",       OPTION_BOOLEAN},// ra format
     {"countObjs",OPTION_BOOLEAN},// returns only count of objects
     {"countVars",OPTION_BOOLEAN},// returns only count of variables
     {"countVals",OPTION_BOOLEAN},// returns only count of values
@@ -86,17 +78,20 @@ int objsCnt=0, varsCnt=0,valsCnt=0;
 
 optionInit(&argc, argv, optionSpecs);
 if(!optionExists("db"))
+    {
+    verbose(1, "REQUIRED -db argument is missing.\n");
     usage();
+    }
 
 char *db    = optionVal("db",NULL);
 char *table = optionVal("table",METATBL_DEFAULT_NAME);
-boolean printLong = optionExists("long");
+boolean raStyle = optionExists("ra");
 boolean cntObjs = optionExists("countObjs");
 boolean cntVars = optionExists("countVars");
 boolean cntVals = optionExists("countVals");
-boolean byVar = FALSE;
+boolean byVar   = optionExists("byVar");
 
-if(printLong && (cntObjs || cntVars || cntVals))
+if(raStyle && (cntObjs || cntVars || cntVals))
     usage();
 
 boolean all = optionExists("all");
@@ -105,22 +100,17 @@ if(all)
     if(optionExists("obj")
     || optionExists("var") || optionExists("val") || optionExists("vars"))
         usage();
-
-    byVar = optionExists("byVar");
     }
 else if(optionExists("obj"))
     {
-    byVar = FALSE;
     metaObjs = metaObjCreate(optionVal("obj",  NULL),NULL,optionVal("var", NULL), NULL,optionVal("val", NULL));
     }
 else if(optionExists("var"))
     {
-    byVar = TRUE;
     metaByVars =  metaByVarCreate(optionVal("var", NULL),NULL,optionVal("val", NULL));
     }
 else if(optionExists("vars"))
     {
-    byVar = optionExists("byVar");
     metaByVars = metaByVarsLineParse(optionVal("vars", NULL));
     }
 else
@@ -142,7 +132,7 @@ if(byVar)
         varsCnt=metaByVarCount(queryResults,TRUE ,FALSE);
         valsCnt=metaByVarCount(queryResults,FALSE,TRUE );
         if(!cntObjs && !cntVars && !cntVals)
-            metaByVarPrint(queryResults,printLong);
+            metaByVarPrint(queryResults,raStyle);
         metaByVarsFree(&queryResults);
         }
     }
@@ -168,7 +158,7 @@ else
         varsCnt=metaObjCount(queryResults,FALSE);
         valsCnt=varsCnt;
         if(!cntObjs && !cntVars && !cntVals)
-            metaObjPrint(queryResults,printLong);
+            metaObjPrint(queryResults,raStyle);
         metaObjsFree(&queryResults);
         }
     }
