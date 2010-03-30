@@ -195,9 +195,15 @@ struct metaByVar*metaByVarCreate(char *var, char *varType,char *val);
 struct metaObj *metaObjsLoadFromFormattedFile(char *fileName);
 // Load all metaObjs from a file containing metadata formatted lines
 
+struct metaObj *metaObjsLoadFromHashes(struct hash *objsHash);
+// Load all metaObjs from a file containing metadata formatted lines
+
+struct metaObj *metaObjsLoadFromRAFile(char *fileName);
+// Load all metaObjs from a file containing RA formatted 'metaObjects'
+
 
 // -------------- Updating the DB --------------
-int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace);
+int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace,boolean testOnly);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
 
@@ -224,11 +230,11 @@ struct metaObj *metaObjsQueryByVars(struct sqlConnection *conn,char *table,struc
 
 
 // ----------- Printing and Counting -----------
-void metaObjPrint(struct metaObj *metaObjs,boolean printLong);
-// prints objs and var=val pairs as formatted metadata lines or long view
+void metaObjPrint(struct metaObj *metaObjs,boolean raStyle);
+// prints objs and var=val pairs as formatted metadata lines or ra style
 
-void metaByVarPrint(struct metaByVar *metaByVars,boolean printLong);
-// prints var=val pairs and objs that go with them single lines or long view
+void metaByVarPrint(struct metaByVar *metaByVars,boolean raStyle);
+// prints var=val pairs and objs that go with them single lines or ra style
 
 int metaObjCount(struct metaObj *metaObjs, boolean objs);
 // returns the count of vars belonging to this obj or objs;
@@ -249,6 +255,9 @@ void metaObjReorderVars(struct metaObj *metaObjs, char *vars,boolean back);
 
 void metaObjRemoveVars(struct metaObj *metaObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
+
+void metaObjTransformToUpdate(struct metaObj *metaObjs, char *var, char *varType,char *val,boolean deleteThis);
+/* Turns one or more metaObjs into the stucture needed to add/update or delete. */
 
 
 // --------------- Free at last ----------------

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.6 2010/03/25 21:53:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.7 2010/03/30 23:34:49 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -212,6 +212,7 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#include "ra.h"
 
 // ------- (static) convert from autoSql -------
 static void metaVarFree(struct metaVar **metaVarPtr)
@@ -369,6 +370,25 @@ if(rootVars && rootVars->vals)
 return rootVars;
 }
 
+
+// -------------- Sort primitives --------------
+int metaObjCmp(const void *va, const void *vb)
+/* Compare to sort on label. */
+{
+const struct metaObj *a = *((struct metaObj **)va);
+const struct metaObj *b = *((struct metaObj **)vb);
+return strcasecmp(a->objName, b->objName);
+}
+
+int metaVarCmp(const void *va, const void *vb)
+/* Compare to sort on label. */
+{
+const struct metaVar *a = *((struct metaVar **)va);
+const struct metaVar *b = *((struct metaVar **)vb);
+return strcasecmp(a->var, b->var);
+}
+
+
 // -------------- Enum to Strings --------------
 enum metaObjType metaObjTypeStringToEnum(char *objType)
 // Convert metadata objType string to enum
@@ -507,7 +527,7 @@ char *cloneLine = cloneString(line);
             }
         if(tableName != NULL)
             {
-            verbose(2, "tableName:%s\n",tableName);
+            verbose(3, "tableName:%s\n",tableName);
             if(fileName == NULL || startsWithWordByDelimiter(tableName,'.',fileName))
                 {
                 metaObj->objName = cloneString(tableName);
@@ -516,7 +536,7 @@ char *cloneLine = cloneString(line);
             }
         else if(fileName != NULL)
             {
-            verbose(2, "fileName:%s\n",fileName);
+            verbose(3, "fileName:%s\n",fileName);
             // NOTE: that the file object is the root of the name, so that file.fastq.gz = file.fastq
             metaObj->objName = cloneFirstWordByDelimiter(fileName,'.');
             metaObj->objType = otFile;
@@ -534,7 +554,7 @@ if(metaObj->objType == otUnknown) // NOTE: defaulting to table
     metaObj->objType = otTable;
     }
     slReverse(&(metaObj->vars));
-    verbose(2, "metadataLineParse() objName=%s(%s) %s(%s)=%s\n",
+    verbose(3, "metadataLineParse() objName=%s(%s) %s(%s)=%s\n",
     metaObj->objName, metaObjTypeEnumToString(metaObj->objType),metaObj->vars->var,metaVarTypeEnumToString(metaObj->vars->varType),metaObj->vars->val);
 return metaObj;
 }
@@ -617,7 +637,8 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
         }
     freeMem(words);
     slReverse(&metaByVars);
-    verbose(2, "metaByVarsLineParse() first: %s=%s\n",metaByVars->var,metaByVars->vals->val);
+    verbose(3, "metaByVarsLineParse() parsed:%d first: %s=%s.\n",
+        slCount(metaByVars->vals),metaByVars->var,metaByVars->vals->val);
 return metaByVars;
 }
 
@@ -654,6 +675,12 @@ char *line;
 
 while (lineFileNext(lf, &line,NULL))
     {
+    if(startsWithWord("metaObject",line))
+        {
+        // This is the RA style file!!
+        lineFileClose(&lf);
+        return metaObjsLoadFromRAFile(fileName);
+        }
     struct metaObj *metaObj = metadataLineParse(line);
     if(metaObj == NULL)
         {
@@ -667,8 +694,61 @@ while (lineFileNext(lf, &line,NULL))
     return metaObjs;
 }
 
+struct metaObj *metaObjsLoadFromHashes(struct hash *objsHash)
+// Load all metaObjs from a file containing metadata formatted lines
+{
+struct metaObj *metaObjs = NULL;
+struct hashEl* objEl = NULL;
+
+struct hashCookie objCookie = hashFirst(objsHash);
+while((objEl = hashNext(&objCookie)) != NULL)
+    {
+    struct metaObj *metaObj;
+    AllocVar(metaObj);
+    metaObj->objName = cloneString(objEl->name);
+    struct hash *varHash = objEl->val;
+    struct hashCookie varCookie = hashFirst(varHash);
+    struct hashEl* varEl = NULL;
+    while((varEl = hashNext(&varCookie)) != NULL)
+        {
+        if(sameString(varEl->name,"metaObject"))
+            continue;
+        if(sameString(varEl->name,"objType"))
+            metaObj->objType = metaObjTypeStringToEnum(varEl->val);
+        else
+            {
+            struct metaVar * metaVar;
+            AllocVar(metaVar);
+            metaVar->var     = cloneString(varEl->name);
+            metaVar->varType = vtTxt;                    // FIXME: binary?
+            metaVar->val     = cloneString(varEl->val);
+            slAddHead(&(metaObj->vars),metaVar);
+            }
+
+        }
+        slSort(&(metaObj->vars),&metaVarCmp); // Should be in determined order
+        slAddHead(&metaObjs,metaObj);
+    }
+    slSort(&metaObjs,&metaObjCmp); // Should be in determined order
+    return metaObjs;
+}
+
+struct metaObj *metaObjsLoadFromRAFile(char *fileName)
+// Load all metaObjs from a file containing RA formatted 'metaObjects'
+{
+struct hash *mdHash = raReadAll(fileName, "metaObject");
+if(mdHash == NULL)
+    {
+    verbose(1,"Missing, empty or badly formated RA file:%s\n",fileName);
+    return NULL;
+    }
+struct metaObj *metaObjs = metaObjsLoadFromHashes(mdHash);
+hashFree(&mdHash);
+return metaObjs;
+}
+
 // -------------- Updating the DB --------------
-int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace)
+int metaObjsSetToDb(struct sqlConnection *conn,char *tableName,struct metaObj *metaObjs,boolean replace,boolean testOnly)
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 {
 char query[8192];
@@ -696,8 +776,9 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
                 {
                 safef(query, sizeof(query),
                     "delete from %s where objName = '%s'",tableName,metaObj->objName);
-                verbose(2, "Delete of %d rows requested: %s\n",delCnt, query);
-                sqlUpdate(conn, query);
+                verbose(2, "Requesting delete of %d rows:\n\t%s;\n",delCnt, query);
+                if(!testOnly)
+                    sqlUpdate(conn, query);
                 count += delCnt;
                 }
             }
@@ -713,8 +794,9 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
                     safef(query, sizeof(query),
                         "delete from %s where objName = '%s' and var = '%s'",
                         tableName,metaObj->objName,metaVar->var);
-                    verbose(2, "Requested: %s\n",query);
-                    sqlUpdate(conn, query);
+                    verbose(2, "Requesting delete of 1 row:\n\t%s;\n",query);
+                    if(!testOnly)
+                        sqlUpdate(conn, query);
                     count++;
                     }
                 }
@@ -730,8 +812,9 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
             {
             safef(query, sizeof(query),
                 "delete from %s where objName = '%s'",tableName,metaObj->objName);
-            verbose(2, "Replacing %d rows requested: %s\n",delCnt, query);
-            sqlUpdate(conn, query);
+            verbose(2, "Requesting replacement of %d rows:\n\t%s;\n",delCnt, query);
+            if(!testOnly)
+                sqlUpdate(conn, query);
             count += delCnt;
             }
         }
@@ -753,8 +836,9 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
                             tableName,
                             metaVarTypeEnumToString(metaVar->varType),sqlEscapeString(metaVar->val), // FIXME: binary val?
                             metaObj->objName,metaVar->var);
-                    verbose(2, "Requested: %s\n",query);
-                    sqlUpdate(conn, query);
+                    verbose(2, "Requesting update of 1 row:\n\t%s;\n",query);
+                    if(!testOnly)
+                        sqlUpdate(conn, query);
                     count++;
                     }
                 metaObjsFree(&objExists);
@@ -767,8 +851,9 @@ for(metaObj = metaObjs;metaObj != NULL; metaObj = metaObj->next)
                 tableName,metaObj->objName,metaObjTypeEnumToString(metaObj->objType),
                           metaVar->var,    metaVarTypeEnumToString(metaVar->varType),
                           sqlEscapeString(metaVar->val)); // FIXME: binary val?
-        verbose(2, "Requested: %s\n",query);
-        sqlUpdate(conn, query);
+        verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
+        if(!testOnly)
+            sqlUpdate(conn, query);
         count++;
         }
     }
@@ -816,11 +901,13 @@ struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaO
             dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by objName, var");
-    verbose(2, "Query: %s\n",dyStringContents(dy));
+    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
-    verbose(2, "rows returned: %d\n",slCount(metaTbl));
-    return metaObjsLoadFromMemory(&metaTbl,buildHash);
+    struct metaObj *metaObjs = metaObjsLoadFromMemory(&metaTbl,buildHash);
+    verbose(3, "Returned %d object(s) with %d var(s).\n",
+        metaObjCount(metaObjs,TRUE),metaObjCount(metaObjs,FALSE));
+    return metaObjs;
 }
 
 struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName)
@@ -872,11 +959,16 @@ struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct 
         dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by var, val, objName");
-    verbose(2, "Query: %s\n",dyStringContents(dy));
+    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
-    verbose(2, "rows returned: %d\n",slCount(metaTbl));
-    return metaByVarsLoadFromMemory(&metaTbl,TRUE);
+    verbose(3, "rows (vars) returned: %d\n",slCount(metaTbl));
+    struct metaByVar *metaVars = metaByVarsLoadFromMemory(&metaTbl,TRUE);
+    verbose(3, "Returned %d vars(s) with %d val(s) with %d object(s).\n",
+        metaByVarCount(metaVars,TRUE ,FALSE),
+        metaByVarCount(metaVars,FALSE,TRUE ),
+        metaByVarCount(metaVars,FALSE,FALSE));
+    return metaVars;
 }
 
 struct metaByVar *metaByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val)
@@ -906,87 +998,146 @@ struct metaObj *metaObjsQueryByVars(struct sqlConnection *conn,char *table,struc
     dyStringPrintf(dy, "select distinct objName,objType,var,varType,val from %s", table);
 
     struct metaByVar *rootVar;
+    boolean gotVar = FALSE;
     for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
         {
-        if(rootVar==metaByVars)
+        if(!gotVar)
+            {
             dyStringPrintf(dy, " where objName in ");
+            gotVar=TRUE;
+            }
         else
             dyStringPrintf(dy, " AND objName in ");
         dyStringPrintf(dy, "(select objName from %s where var = '%s'", table, rootVar->var);
 
         struct metaLimbVal *limbVal;
+        boolean gotVal = FALSE;
         for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
-            if(limbVal==rootVar->vals)
+            if(limbVal->val == NULL || strlen(limbVal->val) < 1)
+                continue;
+
+            if(!gotVal)
+                {
                 dyStringPrintf(dy, " and val in (");
+                gotVal=TRUE;
+                }
             else
                 dyStringPrintf(dy, ",");
             dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
             }
-        if(rootVar->vals != NULL)
+        if(gotVal)
             dyStringPrintf(dy, ")");
         dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by objName, var");
-    verbose(2, "Query: %s\n",dyStringContents(dy));
+    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
-    verbose(2, "rows returned: %d\n",slCount(metaTbl));
-    return metaObjsLoadFromMemory(&metaTbl,TRUE);
+    verbose(3, "rows (vars) returned: %d\n",slCount(metaTbl));
+    struct metaObj *metaObjs = metaObjsLoadFromMemory(&metaTbl,TRUE);
+    verbose(3, "Returned %d object(s) with %d var(s).\n",
+        metaObjCount(metaObjs,TRUE),metaObjCount(metaObjs,FALSE));
+    return metaObjs;
 }
 
 
 // ----------- Printing and Counting -----------
-void metaObjPrint(struct metaObj *metaObjs,boolean printLong)
-// prints objs and var=val pairs as formatted metadata lines or long view
+void metaObjPrint(struct metaObj *metaObjs,boolean raStyle)
+// prints objs and var=val pairs as formatted metadata lines or ra style
 {
+// Single line:
+//   metadata iLoveLucy table lucy=ricky ethyl=fred
+// ra style
+//   metadata iLoveLucy table
+//       lucy ricky
+//       ethy fred
+// TODO: Expand for mutilple var types; strip quotes from vals on ra style
 struct metaObj *metaObj = NULL;
 for(metaObj=metaObjs;metaObj!=NULL;metaObj=metaObj->next)
     {
     if(metaObj->objName == NULL)
         continue;
 
-    printf("metadata %s %s%s",metaObj->objName,
-        metaObjTypeEnumToString(metaObj->objType),(printLong?"\n\t":" "));
+    printf("%s %s",(raStyle?"metaObject":"metadata"),metaObj->objName);
+    if(metaObj->deleteThis)
+        printf(" delete");
+    else
+        {
+        if(raStyle)
+            printf("\n    objType %s",metaObjTypeEnumToString(metaObj->objType));
+        else
+            printf(" %s",metaObjTypeEnumToString(metaObj->objType));
+        }
 
     struct metaVar *metaVar = NULL;
     for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
         {
-        if(metaVar->var != NULL && metaVar->val != NULL)
+        if(metaVar->var != NULL)
             {
-            printf("%s=",metaVar->var);
-            if(metaVar->varType == vtBinary)
-                printf("binary%s",(printLong?"\n\t":" "));
+            if(raStyle)
+                printf("\n    %s ",metaVar->var);
             else
-                printf("%s%s",metaVar->val,(printLong?"\n\t":" "));
+                printf(" %s=",metaVar->var);
+            if(metaVar->val != NULL)
+                {
+                if(metaVar->varType == vtBinary)
+                    printf("binary");
+                else
+                    printf("%s",metaVar->val);
+                }
             }
         }
-    printf("\n");
+    printf("%s",(raStyle?"\n\n":"\n"));
     }
 }
 
-void metaByVarPrint(struct metaByVar *metaByVars,boolean printLong)
-// prints var=val pairs and objs that go with them single lines or long view
+void metaByVarPrint(struct metaByVar *metaByVars,boolean raStyle)
+// prints var=val pairs and objs that go with them single lines or ra style
 {
+// Single line:
+//   metaVariable lucy=ethyl bestFriends lifePartners
+//   metaVariable lucy=ricky iLoveLucy divorces
+// NOT QUITE ra style
+//   metaVariable lucy
+//       ethyl
+//           bestFriends
+//           lifePartners
+//       ricky
+//           iLoveLucy
+//           divorces
+// TODO: Expand for mutilple var types; strip quotes from vals on ra style
 struct metaByVar *rootVar = NULL;
 for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
     if(rootVar->var == NULL)
         continue;
+
+    boolean first = TRUE;
     struct metaLimbVal *limbVal = NULL;
     for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if(limbVal->val == NULL)
             continue;
 
-        printf("metaVariable %s=%s",rootVar->var,
-            (rootVar->varType == vtBinary?"binary":limbVal->val));
+        if(first) // first val for this var
+            {
+            printf("metaVariable %s",rootVar->var);
+            first = FALSE;
+            }
+
+        if(rootVar->varType == vtBinary)
+            printf("%sbinary",(raStyle ? "\n    ":"="));
+        else
+            printf("%s%s",(raStyle ? "\n    ":"="),limbVal->val);
 
         struct metaLeafObj *leafObj = NULL;
         for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
             {
-            if(leafObj->objName != NULL)
-                printf("%s%s%s",(printLong?"\n\t":" "),leafObj->objName,(printLong?"\n":""));
+            if(leafObj->objName == NULL)
+                continue;
+
+            printf("%s%s",(raStyle?"\n        ":" "),leafObj->objName);
             }
         printf("\n");
         }
@@ -1151,13 +1302,19 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
 void metaObjRemoveVars(struct metaObj *metaObjs, char *vars)
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 {
-//char *words[48];
-char *cloneLine = cloneString(vars);
-int count = chopByWhite(cloneLine,NULL,0);
-char **words = needMem(sizeof(char *) * count);
-count = chopByWhite(cloneLine,words,count);
-//int count = chopLine(cloneLine,words);
-
+char *cloneLine = NULL;
+int count = 0;
+char **words = NULL;
+if(vars == NULL) // prune all!
+    {
+    }
+else
+    {
+    cloneLine = cloneString(vars);
+    count = chopByWhite(cloneLine,NULL,0);
+    words = needMem(sizeof(char *) * count);
+    count = chopByWhite(cloneLine,words,count);
+    }
 struct metaObj *metaObj = NULL;
 for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     {
@@ -1167,15 +1324,46 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     struct metaVar *metaVar = NULL;
     while((metaVar = slPopHead(&(metaObj->vars))) != NULL)
         {
-        ix = stringArrayIx(metaVar->var,words,count);
+        if(count == 0)
+            ix = 1;
+        else
+            ix = stringArrayIx(metaVar->var,words,count);
         if(ix < 0)
             slAddHead(&keepTheseVars,metaVar);
+        else
+            metaVarFree(&metaVar);
         }
 
-    slReverse(&keepTheseVars);
+    if(keepTheseVars != NULL)
+        slReverse(&keepTheseVars);
     metaObj->vars = keepTheseVars;
     }
-    freeMem(words);
+    if(words != NULL)
+        freeMem(words);
+}
+
+void metaObjTransformToUpdate(struct metaObj *metaObjs, char *var, char *varType,char *val,boolean deleteThis)
+/* Turns one or more metaObjs into the stucture needed to add/update or delete. */
+{
+metaObjRemoveVars(metaObjs,NULL); // First drop all vars currently defined.
+
+struct metaObj *metaObj = NULL;
+for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
+    {
+    metaObj->deleteThis = deleteThis;
+
+    if(var != NULL)
+        {
+        struct metaVar * metaVar;
+        AllocVar(metaVar);
+
+        metaVar->var     = cloneString(var);
+        metaVar->varType = (varType==NULL?vtUnknown:metaVarTypeStringToEnum(varType));
+        if(val != NULL)
+            metaVar->val     = cloneString(val);
+        metaObj->vars = metaVar; // Only one
+        }
+    }
 }
 
 // --------------- Free at last ----------------
