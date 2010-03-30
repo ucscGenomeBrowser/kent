@@ -18,9 +18,10 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.101 2010/01/04 19:12:26 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.102 2010/03/30 21:44:53 hiram Exp $";
 
 #define SMALLBUF 128
+#define LARGEBUF 256
 
 struct wigItem
 /* A wig track item. */
@@ -271,7 +272,7 @@ static void wigSetItemData(struct track *tg, struct wigItem *wi,
 /* copy values from *wiggle to *wi, maintain trackSpans hash	*/
 {
 static char *previousFileName = (char *)NULL;
-char spanName[128];
+char spanName[SMALLBUF];
 struct hashEl *el;
 char *trackName = tg->mapName;
 
@@ -1021,8 +1022,8 @@ if (tg->mapsSelf)
     if (tg->customPt)
 	{
 	struct customTrack *ct = tg->customPt;
-	itemName = (char *)needMem(128 * sizeof(char));
-	safef(itemName, 128, "%s %s", ct->wigFile, tg->mapName);
+	itemName = (char *)needMem(LARGEBUF * sizeof(char));
+	safef(itemName, LARGEBUF, "%s %s", ct->wigFile, tg->mapName);
 	}
     else
 #endif /* GBROWSE */
@@ -1351,8 +1352,8 @@ else if (tg->limitedVis == tvFull)
 	boolean zeroOK = TRUE;
 	double graphUpperLimit = tg->graphUpperLimit;
 	double graphLowerLimit = tg->graphLowerLimit;
-	char upper[128];
-	char lower[128];
+	char upper[SMALLBUF];
+	char lower[SMALLBUF];
 	char upperTic = '-';	/* as close as we can get with ASCII */
 			/* the ideal here would be to draw tic marks in
  			 * exactly the correct location.
