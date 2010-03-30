@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.270 2010/03/30 05:33:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.271 2010/03/30 14:54:48 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3183,8 +3183,10 @@ switch(cType)
                         break;
     case cfgBedFilt:    bedUi(tdb,cart,title, boxed);
                  	break;
+#ifdef USE_BAM
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
+#endif
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
     }
