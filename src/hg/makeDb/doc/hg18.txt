@@ -28631,7 +28631,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.406 2010/03/25 21:35:39 angie Exp $
+# $Id: hg18.txt,v 1.407 2010/03/30 17:08:49 fanhsu Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28679,7 +28679,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.406 2010/03/25 21:35:39 angie Exp $
+# $Id: hg18.txt,v 1.407 2010/03/30 17:08:49 fanhsu Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29901,3 +29901,49 @@ close (FH);
 
 # stop here pending answer for seraching with newest version id 
 
+#########################################################################
+# UPDATE snpArrayIllumina HumanCytoSNP-12 SUB-TRACK (DONE 3/23/10, Fan)
+
+# Received raw data file HumanCytoSNP-12_v2_1_forUCSC.csv
+# from Illumina,  Jennifer L. Stone Ph.D., jstone@illumina.com 
+
+    mkdir -p /hive/data/genomes/gs.19/build36/bed/snp/illumina/032210
+    cd /hive/data/genomes/gs.19/build36/bed/snp/illumina/032210
+
+    cat HumanCytoSNP-12_v2_1_forUCSC.csv |\
+    sed -e 's/,/\t/g' >HumanCytoSNP.tab
+
+    hgsql hg18 -e 'drop table snpArrayIlluminaHumanCytoSNP_12Raw'
+    hgsql hg18 < ~/src/hg/lib/snpArrayIlluminaHumanCytoSNP_12Raw.sql
+    hgsql hg18 -e 'load data local infile "HumanCytoSNP.tab" into table snpArrayIlluminaHumanCytoSNP_12Raw ignore 1 lines'
+
+    ~/src/hg/snp/snpLoad/illuminaLookup1M hg18 snpArrayIlluminaHumanCytoSNP_12Raw snp130
+
+# The illuminaLookup1M generate two files:
+#
+#	illuminaLookup.out  contains all probes found in snp130
+#	illuminaLookup.err  contains all probes not found in snp130
+
+    mv illuminaLookup.out illuminaLookupHumanCytoSNP_12a.out
+
+    cut -f 1 illuminaLookup.err >j.1
+    cat j.1 |sed -e 's/chrMt/chrM/' |\
+    sed -e 's/XY/X/'  >j.chr
+
+    cut -f 2-5 illuminaLookup.err >j.2
+
+    cut -f 6 illuminaLookup.err >j.3
+    cat j.3 |sed -e 's/F/+/' |sed -e 's/R/-/' >j.strand
+
+    cut -f 7 illuminaLookup.err |sed -e "s/\[//" |sed -e "s/\]//" >j.observed
+
+    paste j.chr j.2 j.strand j.observed >illuminaLookupHumanCytoSNP_12b.out
+
+# combine two parts
+    cat illuminaLookupHumanCytoSNP_12a.out illuminaLookupHumanCytoSNP_12b.out >snpArrayIlluminaHumanCytoSNP_12.tab
+
+# load the table
+# hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHumanCytoSNP_12.tab -tab -sqlTable=~/scratch/tip201/kent/src/hg/lib/snpArrayIlluminaHumanCytoSNP_12.sql
+    hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHumanCytoSNP_12.tab -tab -sqlTable=/cluster/home/fanhsu/scratch/tip201/kent/src/hg/lib/snpArrayIlluminaHumanCytoSNP_12.sql
+
+#############################################################################
