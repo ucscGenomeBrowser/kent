@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.269 2010/03/27 04:26:47 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.270 2010/03/30 05:33:36 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3235,6 +3235,49 @@ if(tdbIsComposite(tdb))
     printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
 }
 
+#define TV_HIDE "hide"
+char *tdbResolveVis(struct cart *cart,struct trackDb *tdb, boolean applyMax)
+// Determines the correct vis for a tdb as modified by parent
+{
+// Vis can be in trackDb and/or in cart
+// vis at subtrack overrides higher up
+// no subtrack vis then composite is max applied to view vis
+// FIXME: This should become the main API for determining a subtrack's vis.
+
+char objName[SMALLBUF];
+char *setting = NULL;
+struct trackDb *thisTdb;
+enum trackVisibility vis = tvFull;
+
+for(thisTdb = tdb;thisTdb != NULL;thisTdb = thisTdb->parent)
+    {
+    setting = trackDbLocalSetting(thisTdb, "visibility");
+    if(setting == NULL && thisTdb->subtracks != NULL)
+        setting = TV_HIDE;// non-subtrack must default to hide.
+
+    safef(objName, sizeof(objName), "%s.vis", thisTdb->tableName);
+    if(thisTdb->parent != NULL && thisTdb->subtracks != NULL) // middle level so probably view
+        {
+        char * view = trackDbLocalSetting(thisTdb, "view");
+        if(view != NULL)
+            safef(objName, sizeof(objName), "%s.%s.vis", thisTdb->parent->tableName,view);
+        }
+    setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
+    if(setting != NULL && (thisTdb->subtracks == NULL || !applyMax))
+        return setting;  // defined at lowest level so accept it.
+
+    if(setting != NULL && applyMax) // applyMax is assertable if settings is not NULL !
+        vis = tvMin(vis,hTvFromStringNoAbort(setting)); // successively limits
+    }
+if(setting != NULL) // assertably false
+    return TV_HIDE;
+
+if(applyMax && vis >= tvHide)
+    return hStringFromTv(vis);
+
+return setting; // nothing found
+}
+
 static int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
 /* Returns the four state checked state of the subtrack */
 {
@@ -3246,9 +3289,10 @@ if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     if(findWordByDelimiter("off",' ',setting) == NULL)
         fourState = 1;
     }
-// Must determine visibility form cartsafef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
-setting = trackDbSettingOrDefault(subtrack, "visibility","hide");
-if(sameWord(setting,"hide"))
+// Now check visibility
+setting = tdbResolveVis(cart,subtrack,FALSE);
+
+if(sameWord(setting,TV_HIDE))
     fourState -= 2; // visibility: hide means -1 or -2
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
