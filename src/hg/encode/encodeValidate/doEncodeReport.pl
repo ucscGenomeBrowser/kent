@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.15 2010/03/02 06:19:25 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.16 2010/03/30 23:25:04 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -41,11 +41,11 @@ our $pipeline = "encpipeline_prod";
 our $pipelinePath = "/hive/groups/encode/dcc/pipeline/" . $pipeline;
 #our $configPath = $pipelinePath . "/config";
 our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeValidate" . "/config";
-our $assembly = "hg18";
+our $assembly;  # required command-line arg
 
 sub usage {
     print STDERR <<END;
-usage: doEncodeReport.pl
+usage: doEncodeReport.pl <assembly>
 
 options:
     -configDir=dir      Path of configuration directory, containing
@@ -64,6 +64,8 @@ my $ok = GetOptions("configDir=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
+usage() if (scalar(@ARGV) != 1);
+($assembly) = @ARGV;
 $opt_verbose = 1 if (!defined $opt_verbose);
 
 # Determine submission, configuration, and output directory paths
@@ -97,12 +99,12 @@ my $sth = $dbh->execute(
         "select settings, tableName from trackDb_encodeReport where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
-        "Status", "Submission_IDs", "Treatment");
+        "Status", "Submission_IDs", "Treatment", "Assembly");
 while (@row = $sth->fetchrow_array()) {
     my $settings = $row[0];
     my $tableName = $row[1];
@@ -110,9 +112,13 @@ while (@row = $sth->fetchrow_array()) {
     $settings =~ tr/\n/|/;
     $settings =~ s/^.*metadata //;  
     $settings =~ s/\|.*$//;
-    print STDERR "     SETTINGS: $settings\n";
     my $ref = Encode::metadataLineToHash($settings);
     my %metadata =  %{$ref};
+
+    # short-circuit if this didn't come in from pipeline
+    next unless defined($metadata{"subId"});
+    print STDERR "     SETTINGS: $settings\n";
+
     my %experiment = ();
     $experiment{"project"} = "unknown";
     $experiment{"projectPi"} = "unknown";
@@ -261,7 +267,7 @@ my %submissionStatus = ();
 my %submissionUpdated = ();
 $dbh = HgDb->new(DB => $pipeline);
 $sth = $dbh->execute( 
-    "select lab, data_type, metadata, created_at, updated_at, status, id, name from projects order by id");
+    "select lab, data_type, metadata, created_at, updated_at, status, id, name from projects where db=\'$assembly\' order by id");
 
 while (@row = $sth->fetchrow_array()) {
     my $lab = $row[0];
@@ -271,6 +277,7 @@ while (@row = $sth->fetchrow_array()) {
     my $status = $row[5];
     my $id = $row[6];
     my $name = $row[7];
+    HgAutomate::verbose(1, "project: \'$name\'\n");
     $submissionStatus{$id} = $status;
     $submissionUpdated{$id} = $updated_at;
     $submissionUpdated{$id} =~ s/ \d\d:\d\d:\d\d//;
@@ -421,7 +428,7 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"releaseDate"} =  ($status eq "released") ? $updated_at : "none";
                 $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiment{"freeze"} = ($status eq "loaded") ? $Encode::dataVersion : "unknown";
-                $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-$2/;
+                $experiment{"freeze"} =~ s/^ENCODE (...).*20(\d\d).*$/$1-20$2/;
                 $experiments{$expKey} = \%experiment;
                 print STDERR "ADDING2: " . $expKey . " IDs: " . 
                         join(",", keys %ids) . " PROJ: " . $project . "\n";
@@ -452,9 +459,10 @@ foreach my $key (keys %experiments) {
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
     foreach my $subId (keys %ids) {
         last if (defined $experiment{"status"});
-        $experiment{"status"} = $submissionStatus{$subId};
-        $experiment{"releaseDate"} = $submissionUpdated{$subId}
-            if ($experiment{"status"} eq "released");
+        $experiment{"status"} = defined($submissionStatus{$subId}) ? $submissionStatus{$subId} : "unknown";
+        if ($experiment{"status"} eq "released") {
+            $experiment{"releaseDate"} = $submissionUpdated{$subId}
+        };
     }
     die "undefined status" unless defined($experiment{"status"});
 
@@ -473,7 +481,7 @@ foreach my $key (keys %experiments) {
         $experiment{"lab"} = $labs{$lab}->{"label"};
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -481,7 +489,7 @@ foreach my $key (keys %experiments) {
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
                 join(",", keys %ids),
-                $experiment{"treatment"});
+                $experiment{"treatment"}, $assembly);
 }
 
 exit 0;
