@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.936 2010/03/30 16:17:56 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.937 2010/03/30 19:36:47 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2552,7 +2552,7 @@ wgEncode 1
     release alpha,beta
     shortLabel Zinba Peaks
     view PkZ
-    #visibility pack
+    visibility pack
     subTrack wgEncodeChromatinMap
     qValueFilter 0.0
     qValueFilterLimits 0:14
