@@ -6,12 +6,14 @@
 #include "jksql.h"
 #include "twoBit.h"
 #include "dnaseq.h"
+#ifdef USE_BAM
 #include "bamFile.h"
+#endif
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.37 2010/03/29 20:25:45 braney Exp $";
-static char *version = "$Revision: 1.37 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.38 2010/03/31 18:35:24 braney Exp $";
+static char *version = "$Revision: 1.38 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -1061,13 +1063,6 @@ while (lineFileNext(lf, &seqName, NULL))
 return errs;
 }
 
-int parseBamRecord(const bam1_t *bam, void *data)
-/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
- * into a linkedFeatures item, and add it to tg->items. */
-{
-return 0;
-}
-
 int validateBigWig(struct lineFile *lf, char *file)
 {
 if (chrHash == NULL)
@@ -1114,6 +1109,14 @@ if (errs)
     errAbort("Aborting... %d errors found in bigWig file\n", errs);
 
 return errs;
+}
+
+#ifdef USE_BAM
+int parseBamRecord(const bam1_t *bam, void *data)
+/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
+ * into a linkedFeatures item, and add it to tg->items. */
+{
+return 0;
 }
 
 int validateBAM(struct lineFile *lf, char *file)
@@ -1164,6 +1167,7 @@ if (errs)
 
 return errs;
 }
+#endif
 
 void validateFiles(int (*validate)(struct lineFile *lf, char *file), int numFiles, char *files[])
 /* validateFile - validate format of different track input files. */
@@ -1275,7 +1279,9 @@ hashAdd(funcs, "broadPeak",      &validateBroadPeak);
 hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
+#ifdef USE_BAM
 hashAdd(funcs, "BAM",            &validateBAM);
+#endif
 hashAdd(funcs, "bigWig",         &validateBigWig);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
