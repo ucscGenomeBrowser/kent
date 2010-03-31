@@ -2,6 +2,7 @@
 # in various databases.
 
 # Define databases used for various organisms
+set ailMel ailMel1
 set anoCar anoCar1
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
@@ -27,7 +28,7 @@ set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droG
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set equCab equCab1,equCab2
-set felCat felCat3
+set felCat felCat3,felCatV17e
 set fr fr1,fr2
 set galGal galGal2,galGal3
 set gasAcu gasAcu1
@@ -46,20 +47,21 @@ set priPac priPac1
 set rheMac rheMac2
 set rn rn3,rn4
 set sacCer sacCer1,sacCer2
+set susScr susScr2
 set strPur strPur1,strPur2
 set taeGut taeGut1
 set tetNig tetNig1,tetNig2
 set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
 set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,$aplCal
+set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,$aplCal,$ailMel,$loxAfr
 
 # Define organism databases for which we build a SNP track:
 set snpDb130 hg18
@@ -83,7 +85,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
-set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2
+set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,loxAfr3
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -91,9 +93,7 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash
 
 # Define various non-self chains
-set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr3
-
-set nonSplitChains hg19,$tetNig,oryCun2
+set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,FelCatV17e,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -1074,18 +1074,13 @@ identifier chainSelfNonSplit
 identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id $split
+    $gbd.chain[].id
     $gbd.chain[]Link.chainId $split full
+    $gbd.chain[]Link.chainId full
     $gbd.net[].chainId exclude=0
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0
     $gbd.netSynteny[].chainId exclude=0
-
-identifier chain[${chainDest}]IdNonSplit
-"Link together chain info for chain tables that are not split"
-    $nonSplitChains.chain[].id
-    $nonSplitChains.chain[]Link.chainId full
-    $nonSplitChains.net[].chainId exclude=0
-    $nonSplitChains.netSynteny[].chainId exclude=0
 
 identifier rBestChainPanTro1Id
 "Link together reciprocal best chain/net"
@@ -1179,6 +1174,7 @@ identifier nativeEstAccession typeOf=estAccession
     sacCer2.est.qName splitPrefix=%\_ full
     sacCer2.intronEst.qName splitPrefix=%\_
     caeJap1.intronEst.qName
+    ailMel1.intronEst.qName
     $gbd.estOrientInfo.name full
 
 identifier nativeEstAccessionNonSplit typeOf=estAccession
@@ -3121,9 +3117,6 @@ tablesIgnored $dm
 
 tablesIgnored $loxAfr
     gold
-    chainHg19
-    chainHg19Link
-    xenoRefFlat
 
 tablesIgnored $equCab
     chr%_gold
@@ -3519,3 +3512,11 @@ tablesIgnored oryCun2
     ctgPos2
     gold
     intronEst
+
+tablesIgnored susScr2
+    bosTau4ChainPileUp
+    gold
+    ctgPos2
+
+tablesIgnored ailMel1
+    gold
