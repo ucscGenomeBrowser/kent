@@ -5,7 +5,7 @@
 #include "metaTbl.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.6 2010/03/30 23:45:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.7 2010/03/31 23:36:08 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -26,15 +26,19 @@ errAbort(
   "Special ENCODE format:"
   "  metadata var=val var2=\"val2 with spaces\" tableName=someTable fileName=someTable.narrowPeak.gz\n"
   "    if tableName and fileName and tableName=fileName.* then objName=someTable and objType=table.\n"
-  "    else if tableName or fileName load as table or file\n\n"
+  "    else if tableName or fileName load as table or file\n"
+  "NOTE: Updates to the shared '" METATBL_DEFAULT_NAME "' can only be done by a file written\n"
+  "      directly from metaTblPrint.  Update sandbox first, then move updates to shared table.\n\n"
   "usage:\n"
-  "   metaTblUpdate -db= [-table=] [-test [-verbose=2]]\n"
+  "   metaTblUpdate -db= [-table= [-force]] [-recreate] [-test [-verbose=2]]\n"
   "                      [-obj= [-type=] [-delete] [-var=] [-binary] [-val=]]\n"
   "                      [-vars=\"var1=val1 var2=val2... [-delete] [-var=] [-binary] [-val=]]\n"
   "                      [fileName] [-replace]\n\n"
   "Options:\n"
   "    -db      Database to load metadata to.  This argument is required.\n"
-  "    -table   Table to load metadata to.  Default is '" METATBL_DEFAULT_NAME "'.\n"
+  "    -table   Table to load metadata to.  Default is the sandbox version of '" METATBL_DEFAULT_NAME "'.\n"
+  "       -recreate   Creates new or recreates the table.  With this flag, no further arguemts are needed.\n"
+  "       -force      Overrides restrictions placed on shared  '" METATBL_DEFAULT_NAME "'.  Use caution.\n"
   "    -test    Does not update but only reports results.  Use with -verbose=2 to see each SQL statement.\n"
   "  if file not provided, then -obj or -vars must be provided\n"
   "    -obj={objName}     Means Load from command line:\n"
@@ -63,10 +67,11 @@ static struct optionSpec optionSpecs[] = {
     {"delete",  OPTION_BOOLEAN},// delete one obj or obj/var
     {"binary",  OPTION_BOOLEAN},// val is binary (NOT YET IMPLEMENTED) implies -val={file}
     {"replace", OPTION_BOOLEAN},// replace entire obj when loading from file
+    {"recreate",OPTION_BOOLEAN},// creates or recreates the table
+    {"force",   OPTION_BOOLEAN},// override restrictions on shared table
     {"test",    OPTION_BOOLEAN},// give it a test, will ya?
     {NULL,      0}
 };
-
 
 int main(int argc, char *argv[])
 // Process command line.
@@ -81,12 +86,63 @@ if(!optionExists("db"))
     }
 
 char *db         = optionVal("db",NULL);
-char *table      = optionVal("table",METATBL_DEFAULT_NAME);
+char *table      = optionVal("table",NULL);
 boolean deleteIt = optionExists("delete");
 boolean testIt   = optionExists("test");
+boolean recreate = optionExists("recreate");
+boolean force    = optionExists("force");
 boolean replace  = FALSE;
 char *var        = optionVal("var",NULL);
 char *val        = optionVal("val",NULL);
+
+struct sqlConnection *conn = sqlConnect(db);
+
+// Find the table if necessary
+if(table == NULL)
+    {
+    table = metaTblName((recreate?NULL:conn),TRUE); // Look for sandBox name first
+    if(table == NULL)
+        {
+        table = metaTblName((recreate?NULL:conn),FALSE); // Okay, default then
+        if(table == NULL)  // Now you are just getting me angry!
+            {
+            sqlDisconnect(&conn);
+            if(!recreate) // assertable
+                errAbort("No '%s.%s' found.  Consider using -recreate flag.\n",db,METATBL_DEFAULT_NAME);
+            else
+                errAbort("No '%s.%s' found.\n",db,METATBL_DEFAULT_NAME);
+            }
+        }
+    verbose(1, "Using table named '%s.%s'.\n",db,table);
+    }
+
+boolean sharedTbl = sameWord(table,METATBL_DEFAULT_NAME);  // Special restrictions apply
+
+// Recreate the table
+if(recreate)
+    {
+    if(sharedTbl && ! force)
+        {
+        sqlDisconnect(&conn);
+        verbose(1, "NOT SUPPORTED for shared table '%s'.\n",METATBL_DEFAULT_NAME);
+        }
+    boolean recreated = sqlTableExists(conn,table);
+    metaTblReCreate(conn,table,testIt);
+    if(testIt)
+        {
+        verbose(1, "Would %screate table named '%s'.\n",
+                (recreated?"re":""),table);
+        if(!recreated)
+            {
+        sqlDisconnect(&conn);
+        if(optionExists("obj") || optionExists("vars") || argc > 1)
+                verbose(1, "Can't test further commands.  Consider '-db= [-table=] -recreate' as the only arguments.\n");
+            return 0;  // Don't test any update if we haven't actually created the table!
+            }
+        }
+    else
+        verbose(1, "%s table named '%s'.\n",(recreated?"Recreated":"Created"),table);
+    }
 
 if(argc > 1 && (deleteIt || var != NULL || val != NULL))
     {
@@ -100,14 +156,21 @@ if(deleteIt && var != NULL && val != NULL)
     }
 if (argc != 2 && !deleteIt && (var == NULL || val == NULL))
     {
+    if(recreate) // no problem
+        return 0;
     verbose(1, "INCONSISTENT REQUEST: need both -var and -val.\n");
     usage();
     }
 
-struct sqlConnection *conn = sqlConnect(db);
-
+// Now get the object list
 if(optionExists("obj"))
     {
+    if(sharedTbl && !force)
+        {
+        sqlDisconnect(&conn);
+        verbose(1, "NOT SUPPORTED for shared table '%s'.\n",METATBL_DEFAULT_NAME);
+        usage(); // Must not have submitted formatted file also
+        }
     if(argc > 1 || optionExists("vars"))
         {
         sqlDisconnect(&conn);
@@ -132,6 +195,12 @@ if(optionExists("obj"))
     }
 else if(optionExists("vars"))
     {
+    if(sharedTbl && !force)
+        {
+        sqlDisconnect(&conn);
+        verbose(1, "NOT SUPPORTED for shared table '%s'.\n",METATBL_DEFAULT_NAME);
+        usage(); // Must not have submitted formatted file also
+        }
     if(argc > 1)
         {
         sqlDisconnect(&conn);
@@ -149,12 +218,20 @@ else // Must be submitting formatted file
     if(argc != 2)
         {
         sqlDisconnect(&conn);
+        if(recreate) // no problem
+            return 0;
         verbose(1, "REQUIRED: must declare -obj, -vars or supply a file.\n");
         usage(); // Must not have submitted formatted file also
         }
 
     replace = optionExists("replace");
-    metaObjs = metaObjsLoadFromFormattedFile(argv[1]);
+    boolean validated = FALSE;
+    metaObjs = metaObjsLoadFromFormattedFile(argv[1],&validated);
+    if(sharedTbl && !force && !validated)
+        {
+        sqlDisconnect(&conn);
+        errAbort("Update to shared table '%s' requires file directly written by metTblPrint from sandbox file.\n", table);
+        }
     if(metaObjs != NULL)
         verbose(1, "Read %d metadata objects from %s\n", slCount(metaObjs),argv[1]);
     }
@@ -179,8 +256,6 @@ return 0;
 
 // TODO:
 // 1) make hgc use metaTbl
-// 2) support for metaTbl_tdreszer in sandbox.  Auto-create table when requsting.
-// 3) Restrict updates to metaTbl to ONLY support checked in files.  No command line, no single line
-// 4) Diagram flow: (a) update/add "metaTbl_tdreszer" (b) Test in sandbox (c) print to RA file. (d) check in RA file (e) load RA file to "metaTbl"
-// 5) expId table?
+// 2) Diagram flow: (a) update/add "metaTbl_tdreszer" (b) Test in sandbox (c) print to RA file. (d) check in RA file (e) load RA file to "metaTbl"
+// 3) expId table?
 }

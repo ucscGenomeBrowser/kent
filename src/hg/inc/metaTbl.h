@@ -87,6 +87,8 @@ void metaTblOutput(struct metaTbl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#include "trackDb.h"
+
 #define METATBL_DEFAULT_NAME "metaTbl"
 
 // The metaTbl holds metadata primarily for tables.
@@ -131,7 +133,7 @@ struct metaObj
 // Also: when searching metadata obj->var->val this is the top struct.
     {
     struct metaObj* next;     // Next in singly linked list of objects
-    char *objName;            // Object name or ID
+    char *obj;                // Object name or ID
     enum metaObjType objType; // table | file
     boolean deleteThis;       // Used when loading formatted file which may contain delete requests
     struct metaVar* vars;     // if NOT NULL: list of variables belonging to this object
@@ -142,7 +144,7 @@ struct metaLeafObj
 // When searching var->val->obj this is the bottom-level obj struct.
     {
     struct metaLeafObj* next; // Next in singly linked list of variables
-    char *objName;            // Object name or ID
+    char *obj;                // Object name or ID
     enum metaObjType objType; // table | file
     };
 
@@ -178,28 +180,45 @@ enum metaVarType metaVarTypeStringToEnum(char *varType);
 char *metaVarTypeEnumToString(enum metaVarType varType);
 // Convert metadata varType enum string
 
-
-// ------ Loading files and parsing lines ------
+// ------ Parsing lines ------
 struct metaObj *metadataLineParse(char *line);
 /* Parses a single formatted metadata line into metaObj for updates or queries. */
-
-struct metaObj *metaObjCreate(char *obj,char *type,char *var, char *varType,char *val);
-/* Creates a singular metaObj query object based on obj and all other optional params. */
 
 struct metaByVar *metaByVarsLineParse(char *line);
 /* Parses a line of "var1=val1 var2=val2 into a metaByVar object for queries. */
 
+
+// ------ Loading from args, hashes and tdb ------
+struct metaObj *metaObjCreate(char *obj,char *type,char *var, char *varType,char *val);
+/* Creates a singular metaObj query object based on obj and all other optional params. */
+
 struct metaByVar*metaByVarCreate(char *var, char *varType,char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
-
-struct metaObj *metaObjsLoadFromFormattedFile(char *fileName);
-// Load all metaObjs from a file containing metadata formatted lines
 
 struct metaObj *metaObjsLoadFromHashes(struct hash *objsHash);
 // Load all metaObjs from a file containing metadata formatted lines
 
-struct metaObj *metaObjsLoadFromRAFile(char *fileName);
+struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table);
+// Returns the metadata for a table.  Either tdb or table must be provided
+
+
+// ------ Loading from files ------
+struct metaObj *metaObjsLoadFromFormattedFile(char *fileName,boolean *validated);
+// Load all metaObjs from a file containing metadata formatted lines
+// If requested, will determine if a magic number at the end of the file matches contents
+
+struct metaObj *metaObjsLoadFromRAFile(char *fileName,boolean *validated);
 // Load all metaObjs from a file containing RA formatted 'metaObjects'
+// If requested, will determine if a magic number at the end of the file matches contents
+
+
+
+// ------ Table name and creation ------
+void metaTblReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly);
+// Creates ore Recreates the named metaTbl.
+
+char*metaTblName(struct sqlConnection *conn,boolean mySandBox);
+// returns the metaTbl name or NULL if conn supplied but the table doesn't exist
 
 
 // -------------- Updating the DB --------------
@@ -213,7 +232,7 @@ struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaO
 // Returns new metaObj struct fully populated and sorted in obj,var order.
 #define metaObjsQueryAll(conn,table) metaObjQuery((conn),(table),NULL)
 
-struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *objName,char *varName);
+struct metaObj *metaObjQueryByObj(struct sqlConnection *conn,char *table,char *obj,char *var);
 // Query a single metadata object and optional var from a table (default metaTbl).
 
 struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct metaByVar *metaByVars);
@@ -244,6 +263,9 @@ int metaByVarCount(struct metaByVar *metaByVars,boolean vars, boolean vals);
 
 
 // ----------------- Utilities -----------------
+char *metadataFindValue(struct metaObj *metaObj, char *var);
+// Finds the val associated with the var or retruns NULL
+
 boolean metaObjContains(struct metaObj *metaObj, char *var, char *val);
 // Returns TRUE if object contains var, val or both
 
@@ -258,6 +280,9 @@ void metaObjRemoveVars(struct metaObj *metaObjs, char *vars);
 
 void metaObjTransformToUpdate(struct metaObj *metaObjs, char *var, char *varType,char *val,boolean deleteThis);
 /* Turns one or more metaObjs into the stucture needed to add/update or delete. */
+
+int metaObjCRC(struct metaObj *metaObjs);
+// returns a summ of all individual CRC values of all metObj strings
 
 
 // --------------- Free at last ----------------
