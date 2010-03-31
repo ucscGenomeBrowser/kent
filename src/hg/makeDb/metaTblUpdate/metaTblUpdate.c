@@ -5,7 +5,7 @@
 #include "metaTbl.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.7 2010/03/31 23:36:08 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblUpdate.c,v 1.8 2010/03/31 23:39:38 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -187,7 +187,7 @@ if(optionExists("obj"))
     metaObjs->deleteThis = deleteIt;
 
     verbose(2, "metadata %s %s %s%s%s%s\n",
-        metaObjs->objName,metaObjTypeEnumToString(metaObjs->objType),
+        metaObjs->obj,metaObjTypeEnumToString(metaObjs->objType),
         (metaObjs->deleteThis ? "delete ":""),
         (metaObjs->vars && metaObjs->vars->var!=NULL?metaObjs->vars->var:""),
         (metaObjs->vars && metaObjs->vars->val!=NULL?"=":""),
