@@ -7,10 +7,6 @@ import re
 import subprocess
 import md5
 
-# NOTES:
-#   fullpath name to ALL files
-#
-
 #### Classes ###################################################################
 
 #### Functions #################################################################
@@ -90,13 +86,14 @@ def main(argv=None):
     """
     if argv is None: argv = sys.argv
     # parse the args
-    parser = optparse.OptionParser(usage="Usage: %prog [options] database current_release prev_release",
+    parser = optparse.OptionParser(usage="%prog [options] database current_release (prev_release|-)",
         version="%prog 0.9")
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False)
-    parser.add_option("-t", "--track-name", dest="track_name",
-        help="the name of the composite track by default this is the name of the current directory", metavar="N")
-    parser.add_option("-n", "--name", dest="name",
-        help="the English name of track", metavar="N", default="Untitled")
+    parser.add_option("-t", "--composite-name", dest="composite_name",
+        help="the name of the composite track by default this is the name of the current directory",
+        metavar="N", default=None)
+    parser.add_option("-n", "--track-name", dest="track_name",
+        help="the English name of track", metavar="N", default=None)
     parser.add_option("--files", dest="files_path", help="dump list of new files to F", metavar="F")
     parser.add_option("--tables", dest="tables_path", help="dump list of new tablesto F", metavar="F")
 
@@ -108,8 +105,13 @@ def main(argv=None):
         parser.print_help()
         sys.exit(10)
 
+    # default track name is the current direcotry name
+    if options.composite_name == None:
+        options.composite_name = os.path.basename(os.getcwd())
+
+    # default composite name is "ENCODE composite_name"
     if options.track_name == None:
-        options.track_name = os.path.basename(os.getcwd())
+        options.track_name = "ENCODE %s" % options.composite_name
 
     # get the positional args
     database = args[0]
@@ -117,8 +119,15 @@ def main(argv=None):
     prev_release_dir = args[2]
 
     # some re we will be using
-    normal_processed = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph|bed\d+)$")
-    not_processed = re.compile("^(tagAlign|fastq|fasta|rpkm|bowtie|psl)$")
+    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+)$")
+    wig = re.compile("^(wig)$")
+    file_only = re.compile("^(tagAlign|fastq|fasta|rpkm|bowtie|psl)$")
+
+    # if new relase, add the full path to all files
+    path_prefix = ""
+    if prev_release_dir == "-":
+        path_prefix = "/usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" \
+            % (database, options.composite_name, current_release_dir)
 
     # generate the list of files
     current_files = get_file_set(current_release_dir, ".*\.gz$")
@@ -162,7 +171,7 @@ def main(argv=None):
                 (name, current_release_dir, prev_release_dir, type)
             warnings.append(warn)
             print >>sys.stderr, warn
-        if type == "wig":
+        if wig.match(type):
             wib_path = get_wib_pathname(database, name)
             if not os.path.exists(wib_path):
                 warn = "could not find %s wib file for wig %s" % (wib_path, f)
@@ -173,17 +182,17 @@ def main(argv=None):
                 warnings.append(warn)
                 print >>sys.stderr, warn
             unchanged_tables_list.append(name)
-            unchanged_files_list.append(f)
+            unchanged_files_list.append(path_prefix + f)
             unchanged_wibs_list.append(wib_path)
-        elif normal_processed.match(type):
+        elif table_and_file.match(type):
             if not table_exists(database, name):
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
             unchanged_tables_list.append(name)
-            unchanged_files_list.append(f)
-        elif not_processed.match(type):
-            unchanged_files_list.append(f)
+            unchanged_files_list.append(path_prefix + f)
+        elif file_only.match(type):
+            unchanged_files_list.append(path_prefix + f)
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
 
@@ -192,7 +201,7 @@ def main(argv=None):
         name, type, extension = f.split(".")
         assert extension == "gz"
 
-        if type == "wig":
+        if wig.match(type):
             wib_path = get_wib_pathname(database, name)
             if not os.path.exists(wib_path):
                 warn = "could not find %s wib file for wig %s" % (wib_path, f)
@@ -203,17 +212,17 @@ def main(argv=None):
                 warnings.append(warn)
                 print >>sys.stderr, warn
             removed_tables_list.append(name)
-            removed_files_list.append(f)
+            removed_files_list.append(path_prefix + f)
             removed_wibs_list.append(wib_path)
-        elif normal_processed.match(type):
+        elif table_and_file.match(type):
             if not table_exists(database, name):
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
             removed_tables_list.append(name)
-            removed_files_list.append(f)
-        elif not_processed.match(type):
-            removed_files_list.append(f)
+            removed_files_list.append(f + path_prefix)
+        elif file_only.match(type):
+            removed_files_list.append(path_prefix + f)
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
 
@@ -222,7 +231,7 @@ def main(argv=None):
         name, type, extension = f.split(".")
         assert extension == "gz"
 
-        if type == "wig":
+        if wig.match(type):
             wib_path = get_wib_pathname(database, name)
             if not os.path.exists(wib_path):
                 warn = "could not find %s wib file for wig %s" % (wib_path, f)
@@ -233,17 +242,17 @@ def main(argv=None):
                 warnings.append(warn)
                 print >>sys.stderr, warn
             new_tables_list.append(name)
-            new_files_list.append(f)
+            new_files_list.append(path_prefix + f)
             new_wibs_list.append(wib_path)
-        elif normal_processed.match(type):
+        elif table_and_file.match(type):
             if not table_exists(database, name):
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
             new_tables_list.append(name)
-            new_files_list.append(f)
-        elif not_processed.match(type):
-            new_files_list.append(f)
+            new_files_list.append(path_prefix + f)
+        elif file_only.match(type):
+            new_files_list.append(path_prefix + f)
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
 
@@ -283,8 +292,8 @@ def main(argv=None):
 
     # generate the header
     print "# generated with %s" % parser.get_version()
-    print "This is a %s of the \"%s\"" % (current_release_dir, options.name)
-    print "The composite track is %s" % options.track_name
+    print "This is a %s of the \"%s\"" % (current_release_dir, options.track_name)
+    print "The composite track is %s" % options.composite_name
     
     if len(warnings) > 0:
         warn_header = "# WARNINGS "
@@ -304,6 +313,14 @@ B) Deprecated - are currently on RR but will no longer be needed and should not 
 C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 """
+    
+    # some summary counts of current files, i.e. new + untouched
+    print "Summary total counts for %s (new+untouched):" % current_release_dir
+    print "    Tables: %d" % (len(unchanged_tables_list) + len(new_tables_list))
+    print "    Files: %d" % (len(unchanged_files_list) + len(new_files_list))
+    print "    Wibs: %d" % (len(unchanged_wibs_list) + len(new_wibs_list))
+    print
+
     # untouched list
     print "A) Untouched Tables (%d):" % len(unchanged_tables_list)
     unchanged_tables_list.sort()
@@ -313,19 +330,22 @@ D) Additional items of note
 
     print "A') Untouched Files (%d downloadables, %d wibs):" % (len(unchanged_files_list),
                                                            len(unchanged_wibs_list))
-    print "    current location on alpha:"
-    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
-    print "    on RR:"
-    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
-    print
-    unchanged_files_list.sort()
-    for i in unchanged_files_list:
-        print i
-    print
-    unchanged_wibs_list.sort()
-    for i in unchanged_wibs_list:
-        print i
-
+    if prev_release_dir == "":
+        assert len(unchanged_files_list) == 0
+        assert len(unchanged_wibs_list) == 0
+    else:
+        print "    current location on alpha:"
+        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
+        print "    on RR:"
+        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+        print
+        unchanged_files_list.sort()
+        for i in unchanged_files_list:
+            print i
+        print
+        unchanged_wibs_list.sort()
+        for i in unchanged_wibs_list:
+            print i
     print
 
     # eliminated list
@@ -337,21 +357,25 @@ D) Additional items of note
 
     print "B') Deprecated files (%d downloadables, %d wibs):" %(len(removed_files_list),
                                                                 len(removed_wibs_list))
-    print "    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
-    print "    This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
-    print "    current location on alpha:"
-    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, prev_release_dir)
-    print "    on RR:"
-    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
-    print
+    if prev_release_dir == "":
+        assert len(removed_files_list) == 0
+        assert len(removed_wibs_list) == 0
+    else:
+        print "    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
+        print "    This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
+        print "    current location on alpha:"
+        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, prev_release_dir)
+        print "    on RR:"
+        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+        print
 
-    removed_files_list.sort()
-    for i in removed_files_list:
-        print i
-    print
-    removed_wibs_list.sort()
-    for i in removed_wibs_list:
-        print i
+        removed_files_list.sort()
+        for i in removed_files_list:
+            print i
+        print
+        removed_wibs_list.sort()
+        for i in removed_wibs_list:
+            print i
 
     print
 
@@ -365,9 +389,9 @@ D) Additional items of note
     print "C') New files (%d downloadables, %d wibs):" % (len(new_files_list),
                                                          len(new_wibs_list))
     print "    current location on alpha:"
-    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    NOT on RR but must be placed in:"
-    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
 
     new_files_list.sort()
@@ -382,9 +406,9 @@ D) Additional items of note
 
     print "D) Additional items:"
     print "    current location on alpha:"
-    print "      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/%s/%s/" % (options.track_name, current_release_dir)
+    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    should be placed on the RR in (overwritting any existing copy):"
-    print "      {...}/goldenPath/encodeDCC/%s/" % options.track_name
+    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
     print "index.html"
     print "files.txt"
