@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.5 2010/03/30 22:54:33 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.6 2010/03/31 21:32:36 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -605,7 +605,60 @@ TMPDIR=/scratch/tmp
     #   166499264 bases of 1990635005 (8.364%) in intersection
 
 
+############################################################################
+# ctgPos2 track - showing clone sequence locations on chromosomes
+#       (DONE - 2010-03-30 - Chin)
+    mkdir /hive/data/genomes/felCatV17e/bed/ctgPos2
+    cd /hive/data/genomes/felCatV17e/bed/ctgPos2
+    cat << '_EOF_' > agpToCtgPos2.pl
+#!/usr/bin/env perl
 
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl
+/dev/stdin > ctgPos2.tab\n";
+    exit 255;
+}
+
+my $agpFile = shift;
+
+open (FH, "<$agpFile") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[4] =~ m/^N$/);
+    next if ($a[4] =~ m/^U$/);
+    my $chrSize = $a[2]-$a[1]+1;
+    my $ctgSize = $a[7]-$a[6]+1;
+    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize !=
+$ctgSize);
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1,
+$a[2], $a[4];
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+chmod 775 agpToCtgPos2.pl 
+
+export S=../../genbank/Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc |  while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/"
+done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
+
+    hgLoadSqlTab felCatV17e ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql \ 
+     ctgPos2.tab
+
+    # add the track ctgPos2 to src/hg/makeDb/trackDb/cat/felCatV17e/trackDb.ra
+    # at src/makeDb/trackdb do "make update" or/and "make alpha"
 
 
 ####################################################################
