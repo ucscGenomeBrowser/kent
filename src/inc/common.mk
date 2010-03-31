@@ -11,31 +11,22 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../in
 L=
 
 # libssl: disabled by default
-ifeq (${USE_SSL},)
-    USE_SSL=0
-endif
 ifeq (${USE_SSL},1)
     L+=-lssl
     HG_DEFS+=-DUSE_SSL
 endif
 
 # libpng: disabled by default
-ifeq (${USE_PNG},)
-    USE_PNG=0
-endif
 ifeq (${USE_PNG},1)
-ifeq (${PNGLIB},)
-    PNGLIB=-lpng
-endif
+    ifeq (${PNGLIB},)
+	PNGLIB=-lpng
+    endif
     L+=${PNGLIB}
     HG_DEFS+=-DUSE_PNG
     HG_INC+=${PNGINCL}
 endif
 
 # libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default
-ifeq (${USE_BAM},)
-    USE_BAM=0
-endif
 ifeq (${USE_BAM},1)
     ifeq (${SAMDIR},)
       SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
@@ -49,9 +40,9 @@ ifeq (${USE_BAM},1)
     HG_INC += -I${SAMINC}
     L+=${SAMLIB}
     HG_DEFS+=-DUSE_BAM
-endif
-ifeq (${KNETFILE_HOOKS},1)
-    HG_DEFS+=-DKNETFILE_HOOKS
+    ifeq (${KNETFILE_HOOKS},1)
+	HG_DEFS+=-DKNETFILE_HOOKS
+    endif
 endif
 
 ifeq (${HG_WARN},)
