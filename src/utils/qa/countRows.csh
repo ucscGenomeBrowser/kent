@@ -20,7 +20,7 @@ if ($#argv < 2 || $#argv > 3) then
   echo
   echo "  gets the rowcount for a list of tables from dev, beta and RR."
   echo
-  echo "    usage:  database tablelist"
+  echo "    usage:  database tablelist [genome-mysql]"
   echo "      tablelist can be just name of single table"
   echo
   echo "    RR results not in real time, but from dumps"
@@ -37,7 +37,7 @@ if ( $#argv == 3 ) then
     set doGenomeMysql=true
   else
     echo
-    echo 'error.  third argument must be "genome-mysql"'
+    echo 'error: third argument must be "genome-mysql"' > /dev/stderr
     $0
     echo
     exit 1
@@ -68,6 +68,7 @@ foreach table ( $tables )
   echo
   echo "."$rr
   if ( $doGenomeMysql == true ) then
+    echo
     echo "."$genomeMysql
     echo
   endif
