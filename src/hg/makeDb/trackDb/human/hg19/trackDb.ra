@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.106 2010/03/24 17:16:58 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.107 2010/03/31 00:45:51 mary Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1241,12 +1241,6 @@ html hg19vertChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar1 chainPetMar1
         otherDb petMar1
-
-track chainDanRer5 override
-shortLabel $o_db Chain
-
-track netDanRer5 override
-shortLabel $o_db Net
 
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
