@@ -1263,6 +1263,7 @@ do
 	${FN} -query human -comp rat -comp mouse
 done
 '_EOF_'
+    # << emacs
     chmod +x runArian.sh
     ssh kki
     cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
@@ -1354,6 +1355,7 @@ cat > gsub << 'EOF'
 /cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/fosends/out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
 'EOF'
+    # << emacs
     gensub2 contigs.lst fosEnds.lst gsub jobList
     foreach f (`cat fosEnds.lst`)
         set d = $f:r:t
@@ -1473,6 +1475,7 @@ cat > gsub << 'EOF'
 /cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/bacends/out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
 'EOF'
+# << emacs
     gensub2 contigs.lst bacends.lst gsub jobList
     foreach f (`cat bacends.lst`)
         set d = $f:r:t
@@ -24336,25 +24339,23 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V8 (DATABASE OF GENOMIC VARIANTS) (changed color of inverted 11/05/09 kuhn)
-# DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 8/12/09 angie)
+# DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
 # DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 8/11/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg17/bed/dgv.v8
-    cd /hive/data/genomes/hg17/bed/dgv.v8
+    mkdir /hive/data/genomes/hg17/bed/dgv.v9
+    cd /hive/data/genomes/hg17/bed/dgv.v9
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg17.v8.aug.2009.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg17.v9.mar.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg17.v8.aug.2009.txt
-    # Save previous version for comparison:
-    hgsql hg17 -e 'rename table dgv to dgvV7'
+      http://projects.tcag.ca/variation/downloads/indel.hg17.v9.mar.2010.txt
     # shuffle fields into bed8+ (input has one start coord==0, but min 
     # nonzero size of 99 not 100 implies most coords are 1-based):
-    foreach f (*.v8.*.txt)
+    foreach f (*.v9.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -24363,7 +24364,7 @@ See hg18.txt for details.
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "100,0,100" : "0,200,0"; \
+        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
         if ($gain ne "" || $loss ne "") { \
           $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
           $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
@@ -24374,15 +24375,17 @@ See hg18.txt for details.
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
+    # Save previous version for comparison:
+    hgsql hg17 -e 'rename table dgv to dgvV8'
     hgLoadBed hg17 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
 #Loaded 23424 elements of size 15
 
 # 11-04-2009 color change from brown to magenta:
 # old color
-# 6553700	Inversion
+# 6553700	Inversion  (100,0,100)
 # new:
-# 13107400	Inversion
+# 13107400	Inversion  (200,0,200)
 
 ############################################################################
 # KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 6/10/08 angie)

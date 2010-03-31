@@ -21255,24 +21255,22 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V8 (DATABASE OF GENOMIC VARIANTS) (changed color of inverted 11/05/09 kuhn)
-# DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 8/12/09 angie)
+# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
 # DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg18/bed/dgv.v8
-    cd /hive/data/genomes/hg18/bed/dgv.v8
+    mkdir /hive/data/genomes/hg18/bed/dgv.v9
+    cd /hive/data/genomes/hg18/bed/dgv.v9
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v8.aug.2009.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v9.mar.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v8.aug.2009.txt
-    # Save previous version for comparison:
-    hgsql hg18 -e 'rename table dgv to dgvV7'
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v9.mar.2010.txt
     # shuffle fields into bed8+
-    foreach f (*.v8.*.txt)
+    foreach f (*.v9.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -21281,7 +21279,7 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "100,0,100" : "0,200,0"; \
+        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
         if ($gain ne "" || $loss ne "") { \
           $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
           $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
@@ -21292,17 +21290,19 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
+    # Save previous version for comparison:
+    hgsql hg18 -e 'rename table dgv to dgvV8'
     hgLoadBed hg18 dgv *.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 49988 elements of size 15
+#Loaded 89427 elements of size 15
       hgsql hg18 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#35
+#38
 
 # 11-04-2009 color change from brown to magenta:
 # old color
-# 6553700	Inversion
+# 6553700	Inversion  (100,0,100)
 # new:
-# 13107400	Inversion
+# 13107400	Inversion  (200,0,200)
 
 ############################################################################
 # AGILENT CGH PROBES (AND MM8, RN4) (Done 2008-05-13, Andy)
@@ -28631,7 +28631,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.408 2010/03/30 17:12:09 fanhsu Exp $
+# $Id: hg18.txt,v 1.409 2010/03/31 14:55:17 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28679,7 +28679,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.408 2010/03/30 17:12:09 fanhsu Exp $
+# $Id: hg18.txt,v 1.409 2010/03/31 14:55:17 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
