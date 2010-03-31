@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.40 2009/02/20 23:21:26 hiram Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.41 2010/03/31 16:27:35 hiram Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -766,7 +766,7 @@ else
 }
 
 
-struct hash *getCoveredTables(struct joiner *joiner, char *db, 
+static struct hash *getCoveredTables(struct joiner *joiner, char *db, 
 	struct sqlConnection *conn)
 /* Get list of tables covered in database. */
 {
@@ -783,6 +783,7 @@ for (ig = joiner->tablesIgnored; ig != NULL; ig = ig->next)
         {
 	for (spec = ig->tableList; spec != NULL; spec = spec->next)
 	    {
+	    verbose(3,"ignoreTable: '%s'\n", spec->name);
 	    addTablesLike(hash, conn, spec->name);
 	    }
 	}
@@ -800,6 +801,7 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 	        emptyForNull(jf->splitPrefix), jf->table,
 		emptyForNull(jf->splitSuffix));
 	    addTablesLike(hash, conn, spec);
+	    verbose(4,"ident: '%s', table: '%s'\n", js->name, spec);
 	    }
 	}
     }
@@ -836,6 +838,8 @@ for (db = dbList; db != NULL; db = db->next)
 		    miss = slNameNew(fullName);
 		    slAddHead(&missList, miss);
 		    }
+		else
+		    verbose(2,"tableCovered: '%s'\n", table->name);
 		}
 	    slFreeList(&tableList);
 	    freeHash(&hash);
