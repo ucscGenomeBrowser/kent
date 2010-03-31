@@ -38,6 +38,7 @@ url http://ws170.wormbase.org/db/gene/gene?name=$$;class=Gene
 
 track chainCb3
 #replaces record chainCb3 in parent dir missing/extra subTrack,subGroups
+release beta,public
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
@@ -53,6 +54,7 @@ otherDb cb3
 
 track netCb3
 #replaces record netCb3 in parent dir missing/extra subTrack,subGroups
+release beta,public
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
