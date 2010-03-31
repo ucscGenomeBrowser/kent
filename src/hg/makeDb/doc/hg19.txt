@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.93 2010/03/29 22:27:51 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.94 2010/03/31 14:58:03 angie Exp $";
 
 #############################################################################
 
@@ -8463,9 +8463,76 @@ TMPDIR=/scratch/tmp
 #########################################################################
 # PERSONAL GENOME VARIANTS (DONE 12/29/09 giardine)
 
-# liftOver track files in /hive/data/genomes/hg18/bed/pgSnp/
+    # This is Angie's attempt to reconstruct Belinda's steps:
+    mkdir /hive/data/genomes/hg19/bed/pgSnpLiftOver
+    cd /hive/data/genomes/hg19/bed/pgSnpLiftOver
+    # liftOver track files in /hive/data/genomes/hg18/bed/pgSnp/
+    set hg18Dir = /hive/data/genomes/hg18/bed/pgSnp
+    set chainFile = /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz
 
-# remove variants that are homozygous matches to hg19
+    #*** Are we losing insertions here?:
+    foreach f (NA12878.pgSnp NA12891.pgSnp NA12892.pgSnp NA19240.pgSnp \
+               pgWatson.bed pgYri3.txt pgSnpYh.txt)
+      liftOver $hg18Dir/$f $chainFile $f:r.hg19.pgSnp{,.unmapped}
+    end
+    liftOver $hg18Dir/koref.sub.pgSnp $chainFile koref.hg19.pgSnp{,.unmapped}
+    # Why pgVenter2?
+    liftOver $hg18Dir/pgVenter.bed $chainFile pgVenter2.hg19.pgSnp{,.unmapped}
+ 
+    # remove variants that are homozygous matches to hg19
+cat > addRefNt.pl <<'_EOF_'
+#!/usr/bin/perl -w
+use strict;
+
+my $build = 'hg19';
+my $nib = "/hive/data/genomes/hg19/nib/";
+my $nibFrag = "nibFrag";
+
+while (<>) {
+   chomp;
+   my @f = split(/\t/);
+   my $ref = '';
+   if ($f[1] eq $f[2]) {
+      $ref = '.'; #insertion nothing in ref
+   }else {
+      open(NIB, "$nibFrag $nib$f[0].nib $f[1] $f[2] + stdout |")
+         or die "Couldn't run $nibFrag, $!\n";
+      while(<NIB>) {
+         chomp;
+         if (/^>/) { next; }
+         $ref .= $_;
+      }
+      close NIB or die "Couldn't close $nibFrag, $!\n";
+   }
+   #splice(@f, 3, 0, uc($ref));
+   #print join("\t", @f), "\n";
+   print join("\t", @f), "\t", uc($ref), "\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x addRefNt.pl
+    foreach f (*.pgSnp)
+      addRefNt.pl $f \
+      | perl -wpe '@w=split; s/^.*\n$// if ($w[3] eq $w[6]); s/\t\w+$//;' \
+        > $f:r.filtered.pgSnp
+    end
+#TODO: complete attempt to reverse-engineer Belinda's work
+    BelindasFix pgYri3.hg19.filtered.pgSnp > pgYri3.hg19.filtered.fixed.pgSnp
+
+    # Load into db:
+    foreach i (NA12878 NA12891 NA12892 NA19240 Watson)
+      hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+        hg19 pg$i $i.hg19.filtered.pgSnp
+    end
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      hg19 pgVenter pgVenter2.hg19.filtered.pgSnp
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      hg19 pgYh1 pgSnpYh1.hg19.filtered.pgSnp
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      hg19 pgSjk koref.hg19.filtered.pgSnp
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      hg19 pgYoruban3 pgYri3.hg19.filtered.fixed.pgSnp
+
 
 ########################################################################
 # CRG MAPABILITY (2010-01-19 - 2010-01-28, hartera, DONE)
@@ -8716,6 +8783,43 @@ TMPDIR=/scratch/tmp
       'INSERT into targetDb values("hg19Kg", "UCSC Genes", \
          "hg19", "kgTargetAli", "", "", \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+
+########################################################################
+# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg19/bed/dgv.v9
+    cd /hive/data/genomes/hg19/bed/dgv.v9
+    wget --timestamping \
+      http://projects.tcag.ca/variation/downloads/variation.hg19.v9.mar.2010.txt
+    wget --timestamping \
+      http://projects.tcag.ca/variation/downloads/indel.hg19.v9.mar.2010.txt
+    # shuffle fields into bed8+
+    foreach f (*.v9.*.txt)
+      tail -n +2 $f \
+      | perl -wpe 'chomp; \
+        ($id, $landmark, $chr, $start, $end, $varType, \
+         undef, undef, undef, $ref, $pmid, $method, \
+         $gain, $loss, undef, undef, $sample) = split("\t"); \
+        $id =~ s/^Variation_//; \
+        $start-- unless ($start == 0); \
+        $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
+        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
+        if ($gain ne "" || $loss ne "") { \
+          $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
+          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
+          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+        } \
+        $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
+                  $start, $start, $rgb, $landmark, $varType, \
+                  $ref, $pmid, $method, $sample) . "\n";' \
+          > $f:r.bed
+    end
+    hgLoadBed hg19 dgv *.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
+#Loaded 85689 elements of size 15
+      hgsql hg19 -NBe 'select count(distinct(pubMedId)) from dgv;'
+#38
+
 
 #######################################################################
 # felCatV17e Cat BLASTZ/CHAIN/NET (DONE  - 2010-03-22 - Chin)
