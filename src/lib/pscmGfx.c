@@ -20,7 +20,7 @@ int isinf(double x) { return !finite(x) && x==x; }
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.27 2008/12/11 23:02:10 hiram Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.28 2010/03/31 00:07:43 kent Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -299,7 +299,7 @@ static void pscmSetFont(struct pscmGfx *pscm, MgFont *font)
 void *v = font;
 if (v != pscm->curFont)
     {
-    psTimesFont(pscm->ps, font->frm_hgt);
+    psTimesFont(pscm->ps, font->psHeight);
     pscm->curFont = v;
     }
 }

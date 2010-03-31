@@ -43,6 +43,7 @@ struct font_hdr	*nxt_fnt; /* Set to 0 */
 WORD    xOff;		/* X offset to add. */
 WORD    yOff;		/* Y offset to add. */
 WORD    lineHeight;     /* Distance to next line. */
+WORD	psHeight;	/* Height to set for equivalent postscript. */
 }; 
 
 #define STPROP 0

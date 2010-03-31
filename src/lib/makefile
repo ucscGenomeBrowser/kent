@@ -11,13 +11,13 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     emblParse.o errCatch.o errabort.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     font/mgCourier10.o font/mgCourier12.o font/mgCourier14.o font/mgCourier18.o \
-    font/mgCourier24.o font/mgCourier8.o font/mgHelvetica10.o font/mgHelvetica12.o \
-    font/mgHelvetica14.o font/mgHelvetica18.o font/mgHelvetica24.o font/mgHelvetica8.o \
-    font/mgHelveticaBold10.o font/mgHelveticaBold12.o font/mgHelveticaBold14.o \
-    font/mgHelveticaBold18.o font/mgHelveticaBold24.o font/mgHelveticaBold8.o \
-    font/mgHugeFont.o font/mgSixhi6.o font/mgSail8.o \
+    font/mgCourier24.o font/mgCourier34.o font/mgCourier8.o font/mgHelvetica10.o \
+    font/mgHelvetica12.o font/mgHelvetica14.o font/mgHelvetica18.o font/mgHelvetica24.o \
+    font/mgHelvetica34.o font/mgHelvetica8.o font/mgHelveticaBold10.o font/mgHelveticaBold12.o \
+    font/mgHelveticaBold14.o font/mgHelveticaBold18.o font/mgHelveticaBold24.o \
+    font/mgHelveticaBold34.o font/mgHelveticaBold8.o font/mgSixhi6.o font/mgSail8.o \
     font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
-    font/mgTimes24.o font/mgTimes8.o \
+    font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o gifcomp.o \

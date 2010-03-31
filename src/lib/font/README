@@ -1,0 +1,23 @@
+Most of these files were created from fonts in the xfree package.  These were downloaded from the
+CVS archive at  http://www.xfree86.org/cvs/  in the xc/fonts/bdf/100dpi  and xc/fonts/bdf/75dpi
+modules using the bdfToGem format Hiram Clawson wrote.  The commands in particular are:
+
+bdfToGem 75dpi/courR12.bdf mgCourier12.c -name=Courier12
+bdfToGem 75dpi/courR18.bdf mgCourier18.c -name=Courier18
+bdfToGem 75dpi/courR24.bdf mgCourier24.c -name=Courier24
+bdfToGem 75dpi/helvR08.bdf mgHelvetica8.c -name=Helvetica8
+bdfToGem 75dpi/helvR12.bdf mgHelvetica12.c -name=Helvetica12
+bdfToGem 75dpi/helvR14.bdf mgHelvetica14.c -name=Helvetica14
+bdfToGem 75dpi/helvR18.bdf mgHelvetica18.c -name=Helvetica18
+bdfToGem 75dpi/helvR24.bdf mgHelvetica24.c -name=Helvetica24
+bdfToGem 75dpi/timR08.bdf mgTimes8.c -name=Times8
+bdfToGem 75dpi/timR12.bdf mgTimes12.c -name=Times12
+bdfToGem 75dpi/timR14.bdf mgTimes14.c -name=Times14
+bdfToGem 75dpi/timR18.bdf mgTimes18.c -name=Times18
+bdfToGem 75dpi/timR24.bdf mgTimes24.c -name=Times24
+bdfToGem 100dpi/courR24.bdf mgCourier34.c -name=Courier34
+bdfToGem 100dpi/helvR24.bdf mgHelvetica34.c -name=Helvetica34
+bdfToGem 100dpi/helvB24.bdf mgHelveticaBold34.c -name=HelveticaBold34
+bdfToGem 100dpi/timR24.bdf mgTimes34.c -name=Times34
+
+Two additional fonts - sail and sixhi - were from other sources now lost in the midsts of time.

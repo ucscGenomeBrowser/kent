@@ -1,6 +1,6 @@
 
 /* HelveticaBold18.c - compiled data for font AdobeHelv-B-R-N--18-180-75-75-P */
-static char const rcsid[] = "$Id: mgHelveticaBold18.c,v 1.1 2010/03/27 04:23:13 kent Exp $";
+static char const rcsid[] = "$Id: mgHelveticaBold18.c,v 1.2 2010/03/31 00:07:45 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/helvB18.bdf */
 
@@ -870,6 +870,7 @@ HelveticaBold18_ch_ofst, HelveticaBold18_data,
 NULL,
 0, 0,   /* x/y offset */
 25,        /* lineHeight */
+16,	   /* psHeight */
 };
 
 MgFont *mgHelveticaBold18Font()

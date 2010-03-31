@@ -1,6 +1,6 @@
 
 /* Helvetica10.c - compiled data for font AdobeHelv-M-R-N--10-100-75-75-P */
-static char const rcsid[] = "$Id: mgHelvetica10.c,v 1.1 2010/03/27 04:23:11 kent Exp $";
+static char const rcsid[] = "$Id: mgHelvetica10.c,v 1.2 2010/03/31 00:07:44 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/helvR10.bdf */
 
@@ -326,7 +326,8 @@ Helvetica10_ch_ofst, Helvetica10_data,
 214, 13,
 NULL,
 0, 0,   /* x/y offset */
-13,        /* lineHeight */
+13, 	   /* lineHeight */
+9,	   /* psHeight */
 };
 
 MgFont *mgHelvetica10Font()
