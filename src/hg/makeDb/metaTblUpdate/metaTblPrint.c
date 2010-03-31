@@ -4,7 +4,7 @@
 #include "options.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblPrint.c,v 1.5 2010/03/30 23:45:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblPrint.c,v 1.6 2010/03/31 23:47:03 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -84,7 +84,7 @@ if(!optionExists("db"))
     }
 
 char *db    = optionVal("db",NULL);
-char *table = optionVal("table",METATBL_DEFAULT_NAME);
+char *table = optionVal("table",NULL);
 boolean raStyle = optionExists("ra");
 boolean cntObjs = optionExists("countObjs");
 boolean cntVars = optionExists("countVars");
@@ -117,6 +117,16 @@ else
     usage();
 
 struct sqlConnection *conn = sqlConnect(db);
+
+// Find the table if necessary
+if(table == NULL)
+    {
+    table = metaTblName(conn,TRUE); // Look for sandBox name first
+    if(table == NULL)
+        errAbort("TABLE NOT FOUND: '%s.%s'.\n",db,METATBL_DEFAULT_NAME);
+    verbose(1, "Using table named '%s.%s'.\n",db,table);
+    }
+
 if(byVar)
     {
     if(!all && metaByVars == NULL) // assertable
