@@ -12,8 +12,8 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.38 2010/03/31 18:35:24 braney Exp $";
-static char *version = "$Revision: 1.38 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.39 2010/03/31 18:37:19 braney Exp $";
+static char *version = "$Revision: 1.39 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -71,8 +71,10 @@ errAbort(
   "         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)\n"
   "         csqual    : Colorspace quality (see link below)\n"
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
+#ifdef USE_BAM
   "         BAM       : Binary Alignment/Map\n"
   "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
+#endif
   "         bigWig    : Big Wig\n"
   "                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
   "\n"
