@@ -34,6 +34,7 @@ set months=`hgsql -N -h $sqlrr -e "SELECT DISTINCT firstUse FROM namedSessionDb"
   | awk -F- '{print $1"-"$2}' | sort -u`
 
 # get stats
+rm -f tempOutFile
 echo
 echo " first  count users  shared   reused  "
 echo "------  ----- ----- -------  -------"
@@ -49,7 +50,8 @@ foreach month ( $months )
     |  awk '$1 != $3 {print $1, $3}'  | wc -l`
   echo $month $count $users $shared $reuse  \
     | awk '{printf ("%7s %4s %5s %4s %2d%% %4s %2d%%\n", \
-    $1, $2, $3, $4, $4/$2*100, $5, $5/$2*100)}'
+    $1, $2, $3, $4, $4/$2*100, $5, $5/$2*100)}' | tee -a tempOutFile
+
   # do totals
   set countTot=`echo $countTot $count | awk '{print $1+$2}'`
   set userTot=`echo $userTot $users | awk '{print $1+$2}'`
@@ -68,6 +70,11 @@ echo "uniq " "-" "$uniq" \
 
 echo "------  ----- ----- -------  -------"
 echo " first  count users  shared   reused  "
+echo
+
+# graph it
+graph.csh tempOutFile
+rm -f tempOutFile
 
 echo
 # see how often people make more than one session:
