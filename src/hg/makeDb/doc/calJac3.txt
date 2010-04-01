@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.5 2010/04/01 17:28:00 hiram Exp $
+#	$Id: calJac3.txt,v 1.6 2010/04/01 17:48:38 hiram Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1297,5 +1297,50 @@ done
     hgsql qapushq < calJac3.pushQ.sql
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
+
+############################################################################
+# ctgPos2 track - showing clone sequence locations on chromosomes
+#	(DONE - 2010-04-01 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/ctgPos2
+    cd /hive/data/genomes/calJac3/bed/ctgPos2
+    cat << '_EOF_' > agpToCtgPos2.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
+    exit 255;
+}
+
+my $agpFile = shift;
+
+open (FH, "<$agpFile") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[4] =~ m/^N$/);
+    my $chrSize = $a[2]-$a[1]+1;
+    my $ctgSize = $a[7]-$a[6]+1;
+    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+export S=../../genbank/Primary_Assembly/assembled_chromosomes/AGP
+cut -f2 ${S}/chr2acc | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/"
+done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
+
+    hgLoadSqlTab calJac3 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
 ############################################################################
