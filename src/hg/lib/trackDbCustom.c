@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.81 2010/03/25 17:27:26 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.82 2010/04/01 23:51:09 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -621,7 +621,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         continue;
     if(!stInfo->isSuper)
         {
-        tdb->parent = hashFindVal(superHash, stInfo->parentName); 
+        tdb->parent = hashFindVal(superHash, stInfo->parentName);
         if (tdb->parent)
 	    {
             trackDbSuperMemberSettings(tdb);
@@ -712,7 +712,7 @@ if(cType == cfgNone && warnIfNecessary)
 return cType;
 }
 
- 
+
 char *trackDbSetting(struct trackDb *tdb, char *name)
 /* Look for a trackDb setting from lowest level on up chain of parents. */
 {
@@ -800,6 +800,9 @@ if(tdb == NULL && db != NULL)
 return tdb;
 }
 
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
 metadata_t *metadataSettingGet(struct trackDb *tdb)
 /* Looks for a metadata tag and parses the setting into arrays of tags and values */
 {
@@ -879,6 +882,33 @@ for(;ix<metadata->count;ix++)
 metadataFree(&metadata);
 return setting;
 }
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+
+void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
+/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+{
+if(tdb->extras == NULL)
+    {
+    tdb->extras = hashNew(0);
+    hashAdd(tdb->extras, name, value);
+    }
+else
+    {
+    hashReplace(tdb->extras, name, value);
+    }
+}
+
+void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal)
+/* Returns a value if it is found in the extras hash. */
+{
+if(tdb->extras == NULL)
+    return defaultVal;
+
+return hashOptionalVal(tdb->extras, name, defaultVal);
+
+}
 
 struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList)
 /* Convert a list to a forest - filling in parent and subtrack pointers.
@@ -894,7 +924,7 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList)
  * and the children have the tag:
  *     subTrack parentName
  * In this routine the subtracks are removed from the list, and stuffed into
- * the subtracks lists of their parents.  The highest level parents stay on 
+ * the subtracks lists of their parents.  The highest level parents stay on
  * the list.  There can be multiple levels of inheritance.
  *    For the supertracks the _parents_ are removed from the list.  The only
  * reference to them in the returned forest is that they are in the parent
@@ -925,7 +955,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	    char *parentName = tdb->parentName = cloneFirstWord(superTrack);
 	    struct trackDb *parent = hashFindVal(trackHash, parentName);
 	    if (parent == NULL)
-		errAbort("Parent track %s of supertrack %s doesn't exist", 
+		errAbort("Parent track %s of supertrack %s doesn't exist",
 			parentName, tdb->tableName);
 	    tdb->parent = parent;
 	    slAddHead(&superlessList, tdb);
@@ -982,7 +1012,7 @@ void rGetRefsToDescendants(struct slRef **pList, struct trackDb *tdbList)
  * and the children have the tag:
  *     subTrack parentName
  * In this routine the subtracks are removed from the list, and stuffed into
- * the subtracks lists of their parents.  The highest level parents stay on 
+ * the subtracks lists of their parents.  The highest level parents stay on
  * the list.  There can be multiple levels of inheritance.
  *    For the supertracks the _parents_ are removed from the list.  The only
  * reference to them in the returned forest is that they are in the parent

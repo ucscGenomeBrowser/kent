@@ -53,6 +53,8 @@ struct trackDb
                                  * entry.  It contains the names, but not the
                                  * values of the fields and settings that were
                                  * specified in the entry. */
+    struct hash *extras;        /* This hash allows storing extra values which may be used multiple times within a single cgi
+                                   And example is the metadata looked looked up once in the metaTbl and used again and again. */
     };
 
 #define SUPERTRACK_MASK                 0x10
@@ -292,6 +294,9 @@ struct trackDb *subTdbFind(struct trackDb *parent,char *table);
 struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
 typedef struct _metadata {
     int count;
     char**tags;
@@ -308,6 +313,15 @@ void metadataFree(metadata_t **metadata);
 char *metadataSettingFind(struct trackDb *tdb,char *name);
 /* Looks for a specific metadata setting and returns the value or null
    returned value should be freed */
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
+
+void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
+/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+
+void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
+/* Returns a value if it is found in the extras hash. */
 
 void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b);
 /* Turn comma-separated string of three numbers into three
@@ -331,7 +345,7 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
  * and the children have the tag:
  *     subTrack parentName
  * In this routine the subtracks are removed from the list, and stuffed into
- * the subtracks lists of their parents.  The highest level parents stay on 
+ * the subtracks lists of their parents.  The highest level parents stay on
  * the list.  There can be multiple levels of inheritance.
  *    For the supertracks the _parents_ are removed from the list.  The only
  * reference to them in the returned forest is that they are in the parent
