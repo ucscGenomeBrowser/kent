@@ -260,3 +260,21 @@ gorGor2.refseq.mrna.xeno.loadDesc  = yes
     #	done - 2010-02-22 - Hiram
 
 ############################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-08-06 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor2", "blat12", "17808", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor2", "blat12", "17809", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+# Set default position to location of RHO as found by blat from hg18 sequence
+#		(DONE - 2010-02-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr3_129946504_1170306:812299-819972" where name="gorGor2";' \
+        hgcentraltest
+#########################################################################
