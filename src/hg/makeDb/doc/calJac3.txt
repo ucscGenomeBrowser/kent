@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.4 2010/02/18 22:15:04 hiram Exp $
+#	$Id: calJac3.txt,v 1.5 2010/04/01 17:28:00 hiram Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -15,7 +15,7 @@
     cd genbank
     wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
 	--no-remove-listing -np \
-"ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Callithrix_jacchus/Callithrix_jacchus-3.2/*"
+"ftp://ftp.ncbi.nlm.nih.gov:/genbank/genomes/Eukaryotes/vertebrates_mammals/Callithrix_jacchus/Callithrix_jacchus-3.2/*"
 
     mkdir ucscChr
     cd ucscChr
@@ -89,7 +89,8 @@ taxId 9483
 #	real    0m20.968s
     makeGenomeDb.pl -continue=db -stop=db calJac3.config.ra > db.out 2>&1
 #	real    5m39.181s
-XXX - chromInfo doesn't have large enough fields for the name keys
+    #	XXX - chromInfo doesn't have large enough fields for the name keys
+    #	been fixed in later versions of makeGenomeDb.pl
     makeGenomeDb.pl -continue=dbDb -stop=dbDb calJac3.config.ra > dbDb.out 2>&1
     makeGenomeDb.pl -continue=trackDb -stop=trackDb calJac3.config.ra > trackDb.out 2>&1
 
@@ -646,40 +647,43 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Mon Feb 15 21:49:52 PST 2010
+    #	failed lastz run, finished manually
     #	real    287m24.258s
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+	-continue=cat \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+    #	real    158m17.502s
     cat fb.calJac3.chainPapHam1Link.txt 
-    #	2047068864 bases of 2897316137 (70.654%) in intersection
+    #	1928203329 bases of 2752505800 (70.053%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 papHam1 > rbest.log 2>&1
+    #	real 232m
 
     mkdir /hive/data/genomes/papHam1/bed/blastz.calJac3.swap
     cd /hive/data/genomes/papHam1/bed/blastz.calJac3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-11/DEF \
+	/hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15/DEF \
 	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    120m42.991s
+    #	real    791m46.765s
     cat fb.papHam1.chainCalJac3Link.txt 
-    #	2030475813 bases of 2752505800 (73.768%) in intersection
+    #	1908519637 bases of 2741867288 (69.607%) in intersection
 
 ##############################################################################
-# tarSyr1 Tarsier LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+# tarSyr1 Tarsier LASTZ/CHAIN/NET (DONE - 2010-02-21 - Hiram)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-15
-    cd /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-15
+    mkdir /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21
+    cd /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21
 
     cat << '_EOF_' > DEF
 # tarsier vs. marmoset
-# same paramters as human hg19 vs marmoset calJac3
+# same paramters as human hg19 vs tarsier tarSyr1
 BLASTZ=lastz
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
-BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
-BLASTZ_O=600
-BLASTZ_E=150
-BLASTZ_K=4500
-BLASTZ_Y=15000
-BLASTZ_T=2
 
 # TARGET: Marmoset (calJac3)
 SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
@@ -695,57 +699,54 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=300
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-15
+BASE=/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21
+TMPDIR=/scratch/tmp
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+    time nice -n +19 doBlastzChainNet.pl \
 	`pwd`/DEF \
-	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Mon Feb 15 22:00:23 PST 2010
-    #	real    287m24.258s
     cat fb.calJac3.chainTarSyr1Link.txt 
-    #	2047068864 bases of 2897316137 (70.654%) in intersection
+    #	1286219755 bases of 2752505800 (46.729%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 tarSyr1 > rbest.log 2>&1 &
+    #	real 532m
 
     mkdir /hive/data/genomes/tarSyr1/bed/blastz.calJac3.swap
     cd /hive/data/genomes/tarSyr1/bed/blastz.calJac3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-11/DEF \
+	/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running Wed Feb 24 14:36:31 PST 2010
     #	real    120m42.991s
     cat fb.tarSyr1.chainCalJac3Link.txt 
     #	2030475813 bases of 2752505800 (73.768%) in intersection
 
 #####################################################################
-# micMur1 Mouse lemur LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+# micMur1 Mouse lemur LASTZ/CHAIN/NET (DONE - 2010-02-17,22 - Hiram)
 # Mouse lemur ( Microcebus murinus)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-15
-    cd /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-15
+    mkdir /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
+    cd /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
 
     cat << '_EOF_' > DEF
 # mouse lemur vs. marmoset
-# same paramters as human hg19 vs marmoset calJac3
+# same paramters as human hg19 vs Mouse lemur micMur1
 BLASTZ=lastz
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
-BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
-BLASTZ_O=600
-BLASTZ_E=150
-BLASTZ_K=4500
-BLASTZ_Y=15000
-BLASTZ_T=2
 
 # TARGET: Marmoset (calJac3)
 SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
 SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
-SEQ1_LIMIT=50
-SEQ1_CHUNK=20000000
+SEQ1_LIMIT=5
+SEQ1_CHUNK=200000000
 SEQ1_LAP=10000
 
 # QUERY: Mouse lemur micMur1
@@ -755,7 +756,7 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=300
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-15
+BASE=/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -765,60 +766,48 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-BASE=/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
-XXX - running Wed Feb 17 13:57:47 PST 2010
-
-    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-	`pwd`/DEF \
-	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	> do.log 2>&1 &
-    #	failed first kluster job, finished manually
-    #	real    287m24.258s
+    #	real    5502m6.707s
+    #	some kluster difficulties, finished cat run manually, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=chainRun `pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> chainRun.log 2>&1 &
+    #	real    374m19.587s calJac3 micMur1 02-17
     cat fb.calJac3.chainMicMur1Link.txt 
-    #	2047068864 bases of 2897316137 (70.654%) in intersection
-    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-	-continue=cat `pwd`/DEF \
-	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	> cat.log 2>&1 &
-XXX - running Wed Feb 17 10:36:56 PST 2010
+    #	1258616069 bases of 2752505800 (45.726%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` calJac3 micMur1 > rbest.log 2>&1
+    #	real    235m55.179s calJac3 micMur1
 
     mkdir /hive/data/genomes/micMur1/bed/blastz.calJac3.swap
     cd /hive/data/genomes/micMur1/bed/blastz.calJac3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-11/DEF \
+	/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    120m42.991s
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    455m11.215s micMur1 calJac3 swap
     cat fb.micMur1.chainCalJac3Link.txt 
-    #	2030475813 bases of 2752505800 (73.768%) in intersection
+    #	1243785262 bases of 1852394361 (67.145%) in intersection
 
 #####################################################################
-# otoGar1 Bushbaby LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+# otoGar1 Bushbaby LASTZ/CHAIN/NET (DONE - 2010-02-17,22 - Hiram)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-15
-    cd /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-15
+    mkdir /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
+    cd /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
 
     cat << '_EOF_' > DEF
 # bushbaby vs. marmoset
-# same paramters as human hg19 vs marmoset calJac3
+# same paramters as human hg19 vs Bushbaby otoGar1
 BLASTZ=lastz
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
-BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
-BLASTZ_O=600
-BLASTZ_E=150
-BLASTZ_K=4500
-BLASTZ_Y=15000
-BLASTZ_T=2
 
 # TARGET: Marmoset (calJac3)
 SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
 SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
-SEQ1_LIMIT=50
-SEQ1_CHUNK=20000000
+SEQ1_LIMIT=5
+SEQ1_CHUNK=200000000
 SEQ1_LAP=10000
 
 # QUERY: Bushbaby otoGar1
@@ -828,7 +817,7 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=300
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-15
+BASE=/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -838,34 +827,475 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-BASE=/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
-XXX - running Wed Feb 17 13:57:47 PST 2010
-
-    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-	`pwd`/DEF \
-	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	> do.log 2>&1 &
-    #	failed first kluster job, finished manually
-    #	real    287m24.258s
+    #	real    4722m38.163s
+    #	memk failed at the cat run, finish it manually, then, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=chainRun `pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> chainRun.log 2>&1 &
+    #	real    285m58.314s
     cat fb.calJac3.chainOtoGar1Link.txt 
-    #	2047068864 bases of 2897316137 (70.654%) in intersection
-    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-	-continue=cat `pwd`/DEF \
-	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	> cat.log 2>&1 &
-XXX - running Wed Feb 17 10:36:21 PST 2010
+    #	1176505967 bases of 2752505800 (42.743%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 otoGar1 > rbest.log 2>&1 &
+    #	real    332m14.375s calJac3 otoGar1
 
     mkdir /hive/data/genomes/otoGar1/bed/blastz.calJac3.swap
     cd /hive/data/genomes/otoGar1/bed/blastz.calJac3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-11/DEF \
+	/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17/DEF \
 	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    120m42.991s
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    310m4.077s
     cat fb.otoGar1.chainCalJac3Link.txt 
-    #	2030475813 bases of 2752505800 (73.768%) in intersection
+    #	1158531484 bases of 1969052059 (58.837%) in intersection
 
 #####################################################################
+## 8-Way Multiz (DONE - 2009-06-09,2009-11-10 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/multiz8way
+    cd /hive/data/genomes/calJac3/bed/multiz8way
+
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=calJac1,hg19,panTro2,rheMac2,ponAbe2,mm9,canFam2,monDom5 \
+      --rename="calJac1 -> calJac3 " \
+/hive/data/genomes/hg19/bed/multiz46way/fixedTree/46wayFixed.nh  > 8way.nh
+    # *carefully* edit 8way.nh to get calJac3 at the top of this picture
+    #	resulting in this tree:
+
+(calJac3:0.066389,((rheMac2:0.057695,(ponAbe2:0.018342,
+(hg19:0.006591,panTro2:0.006639):0.012126):0.014256):0.010000,
+(mm9:0.352605,(canFam2:0.193569,monDom5:0.581923):0.020666)
+:0.088210):0.000001);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/calJac3_8way.gif
+
+    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    #	Use this output to create the table below, with this perl script:
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "grep -y calJac3 8way.distances.txt | sort -k3,3n|") or
+        die "can not read 8way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($calJac3, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/calJac3/bed/lastz.$D/fb.calJac3." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.calJac3/fb.${D}.chainCalJac3Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist, 
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                  chainCalJac3Link 
+#    distance                    on calJac3   on other
+# 01  0.1090 - Orangutan ponAbe2 (% 71.893) (% 67.448)
+# 02  0.1094 - Human hg19        (% 73.768) (% 70.654)
+# 03  0.1094 - Chimp panTro2     (% 72.304) (% 69.302)
+# 04  0.1341 - Rhesus rheMac2    (% 69.625) (% 70.711)
+# 05  0.3688 - Dog canFam2       (% 50.766) (% 57.162)
+# 06  0.5072 - Mouse mm9         (% 31.310) (% 32.815)
+# 07  0.7572 - Opossum monDom5   (%  7.906) (%  6.174)
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    #	bash shell syntax here ...
+    mkdir -p mafLinks
+H="/hive/data/genomes/calJac3/bed/"
+for S in `sed -e "s/calJac3 //" species.list`
+do
+    echo $S
+    ls -og ${H}/lastz.${S}/axtChain/calJac3.${S}.synNet.maf.gz
+    ln -s ${H}/lastz.${S}/axtChain/calJac3.${S}.synNet.maf.gz \
+        mafLinks/${S}.maf.gz
+done
+
+HERE=`pwd`
+export HERE
+PATH=${HERE}/penn:${PATH}
+export PATH
+rm -fr tmp
+mkdir -p tmp
+cd mafLinks
+time ../penn/autoMZ + T=${HERE}/tmp \
+	E=calJac3 "`cat ../tree.nh`" *.sing.maf result.maf
+    #	real    3584m8.094s
+    mkdir /gbdb/calJac3/multiz8way
+    ln -s `pwd`/mafLinks/result.maf /gbdb/calJac3/multiz8way/multiz8way.maf
+    cd /scratch/tmp
+# Loaded 7475045 mafs in 1 files from /gbdb/calJac3/multiz8way
+
+    time nice -n +19 hgLoadMaf calJac3 multiz8way
+    time nice -n +19 hgLoadMafSummary -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 calJac3 multiz8waySummary multiz8way.maf
+	| hgLoadMafSummary calJac1 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz9waySummary stdin
+    #	Created 1313222 summary blocks from 34128178 components
+    #	and 7475045 mafs from multiz8way.maf
+    #	real    8m36.016s
+
+##############################################################################
+# gorGor2 Bushbaby LASTZ/CHAIN/NET (DONE - 2010-02-22,24 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-22
+    cd /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-22
+
+    cat << '_EOF_' > DEF
+# Gorilla vs. marmoset
+# same paramters as human hg19 vs other nearby primates
+#       without all the extra blastz parameters
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=20
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor2
+SEQ2_DIR=/scratch/data/gorGor2/gorGor2.2bit
+SEQ2_LEN=/scratch/data/gorGor2/chrom.sizes
+SEQ2_CHUNK=12000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzGorGor2.2010-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	Elapsed time: 1956m3.678s
+    cat fb.calJac3.chainGorGor2Link.txt 
+    #	2101356280 bases of 2752505800 (76.343%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 gorGor2 > rbest.log 2>&1
+    #	about 4h16m
+
+    mkdir /hive/data/genomes/gorGor2/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/gorGor2/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzGorGor2.2010-02-22/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    250m57.089s
+    cat fb.gorGor2.chainCalJac3Link.txt 
+    #	2135885920 bases of 2829687208 (75.481%) in intersection
+
+#####################################################################
+## 13-Way Multiz (DONE - 2010-02-23 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way
+    cd /hive/data/genomes/calJac3/bed/multiz13way
+
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=calJac1,hg19,panTro2,rheMac2,ponAbe2,gorGor1,micMur1,otoGar1,papHam1,tarSyr1,mm9,canFam2,monDom5 \
+      --rename="calJac1 -> calJac3 ; gorGor1 -> gorGor2 " \
+/hive/data/genomes/hg19/bed/multiz46way/fixedTree/46wayFixed.nh  > 13way.nh
+
+    #	rearrange calJac3 to the top, get some help from tree_doctor:
+    /cluster/bin/phast/tree_doctor --name-ancestors --reroot calJac3 \
+        --with-branch 13way.nh
+    #	edit out the ancestors, and move calJac3 from the bottom to
+    #	the top, resulting in this tree:
+
+(calJac3:0.066389,(((((hg19:0.006591,panTro2:0.006639):0.002184,
+gorGor2:0.009411):0.009942,ponAbe2:0.018342):0.014256,
+(rheMac2:0.036199,papHam1:0.040000):0.021496):0.010000,
+((((monDom5:0.581923,canFam2:0.193569):0.020666,mm9:0.352605):0.019992,
+(micMur1:0.091452,otoGar1:0.128984):0.035463):0.011307,
+tarSyr1:0.135169):0.056911):0.000001);
+
+    #	more rearranging after seeing what the distance table looks like
+    #	below to get them appearing as much as possible in their
+    #	distance order top to bottom:
+(calJac3:0.066389,(((ponAbe2:0.018342,
+((hg19:0.006591,panTro2:0.006639):0.002184,
+gorGor2:0.009411):0.009942):0.014256,
+(rheMac2:0.036199,papHam1:0.040000):0.021496):0.010000,
+(tarSyr1:0.135169,((micMur1:0.091452,otoGar1:0.128984):0.035463,
+(mm9:0.352605,
+(canFam2:0.193569,monDom5:0.581923):0.020666):0.019992):0.011307):0.056911)
+:0.000001);
+
+    #	Use this specification in the phyloGif tool after changing the names:
+    /cluster/bin/phast/tree_doctor \
+--rename="calJac3 -> Marmoset ; ponAbe2 -> Orangutan ; hg19 -> Human ; panTro2 -> Chimp ; gorGor2 -> Gorilla ; rheMac2 -> Rhesus ; papHam1 -> Baboon ; tarSyr1 -> Tarsier ; micMur1 -> Mouse_lemur ; otoGar1 -> Bushbaby ; canFam2 -> Dog ; mm9 -> Mouse ; monDom5 -> Opossum " 13way.nh
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/calJac3_13way.gif
+
+    /cluster/bin/phast/all_dists 13way.nh > 13way.distances.txt
+    # make sure all symlinks lastz.DB -> lastzDb-date
+    #	exist here and at the swap locations, the perl script expects this
+    #	in order to find featureBits numbers.
+    #	Use 13way.distances.txt to create the table below
+    #	with this perl script:
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+
+open (FH, "grep -y calJac3 13way.distances.txt | sort -k3,3n|") or
+        die "can not read 13way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($calJac3, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/calJac3/bed/lastz.$D/fb.calJac3." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.calJac3/fb.${D}.chainCalJac3Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist, 
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+# 01  0.1090 - Orangutan ponAbe2   (% 71.893) (% 67.448)
+# 02  0.1094 - Human hg19          (% 73.768) (% 70.654)
+# 03  0.1094 - Chimp panTro2       (% 72.304) (% 69.302)
+# 04  0.1100 - Gorilla gorGor2     (% 76.343) (% 75.481)
+# 05  0.1341 - Rhesus rheMac2      (% 69.625) (% 70.711)
+# 06  0.1379 - Baboon papHam1      (% 70.053) (% 69.607)
+# 07  0.2585 - Tarsier tarSyr1     (% 46.729) (N/A)
+# 08  0.2615 - Mouse lemur micMur1 (% 45.726) (% 67.145)
+# 09  0.2991 - Bushbaby otoGar1    (% 42.743) (% 58.837)
+# 10  0.3688 - Dog canFam2         (% 50.766) (% 57.162)
+# 11  0.5072 - Mouse mm9           (% 31.310) (% 32.815)
+# 12  0.7572 - Opossum monDom5     (%  7.906) (%  6.174)
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	13way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    #	collect the single whole mafs into one place for splitting:
+    mkdir singleMafs
+    cd singleMafs
+    ln -s ../../lastz.ponAbe2/axtChain/calJac3.ponAbe2.synNet.maf.gz .
+    ln -s ../../lastz.hg19/axtChain/calJac3.hg19.synNet.maf.gz .
+    ln -s ../../lastz.panTro2/axtChain/calJac3.panTro2.synNet.maf.gz .
+    ln -s ../../lastz.gorGor2/axtChain/calJac3.gorGor2.synNet.maf.gz .
+    ln -s ../../lastz.rheMac2/axtChain/calJac3.rheMac2.synNet.maf.gz .
+    ln -s ../../lastz.papHam1/mafRBestNet/calJac3.papHam1.rbest.maf.gz .
+    ln -s ../../lastz.tarSyr1/mafRBestNet/calJac3.tarSyr1.rbest.maf.gz .
+    ln -s ../../lastz.micMur1/mafRBestNet/calJac3.micMur1.rbest.maf.gz .
+    ln -s ../../lastz.otoGar1/mafRBestNet/calJac3.otoGar1.rbest.maf.gz .
+    ln -s ../../lastz.mm9/axtChain/calJac3.mm9.synNet.maf.gz .
+    ln -s ../../lastz.canFam2/axtChain/calJac3.canFam2.synNet.maf.gz .
+    ln -s ../../lastz.monDom5/axtChain/calJac3.monDom5.synNet.maf.gz .
+
+    cd /hive/data/genomes/calJac3/bed/multiz13way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = calJac3
+set topDir = /hive/data/genomes/$db/bed/multiz13way
+set c = $1
+set result = $2
+set pennBin = $topDir/penn
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = $topDir/splitMaf
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p $topDir/tree.nh $topDir/species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/^$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($pennBin $path); rehash
+$pennBin/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/calJac3/bed/multiz13way/run/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    find ../splitMaf -type f | grep "/[0-9][0-9][0-9].maf" \
+	| xargs -L 1 basename | sort -u > chr.part.list
+    gensub2 chr.part.list single template jobList
+    para -ram=8g create jobList
+
+    #	put the split mafs back together into a single result
+    head -q -n 1 maf/000.maf > calJac3.13way.maf
+    for F in maf/*.maf
+do
+    grep -h -v "^#" ${F} >> calJac3.13way.maf
+done
+    tail -q -n 1 maf/000.maf >> calJac3.13way.maf
+    tail -q -n 1 maf/hg19_${C}.*.maf | sort -u >> ../maf/${C}.maf
+
+    #	real    13m32.340s
+
+    # load tables for a look
+    mkdir -p /gbdb/calJac3/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/maf
+    ln -s `pwd`/calJac3.13way.maf \
+	/gbdb/calJac3/multiz13way/maf/multiz13way.maf
+
+    # this generates an immense multiz13way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
+    #	Loaded 13316945 mafs in 1 files from /gbdb/calJac3/multiz13way/maf
+    #	real    9m9.365s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
+	| hgLoadMafSummary calJac3 -minSize=30000 -verbose=2 \
+		-mergeGap=1500 -maxSize=200000  multiz13waySummary stdin
+# Created 2330531 summary blocks from 99659162 components and
+#	13316945 mafs from stdin
+    #	real    17m54.685s
+
+#####################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=calJac3 -all all.joiner
+
+    mkdir /hive/data/genomes/calJac3/goldenPath
+    cd /hive/data/genomes/calJac3/goldenPath
+    time nice -n +19 makeDownloads.pl calJac3 > do.log 2>&1
+    #	real    22m30.329s
+
+    #	now ready for pushQ entry
+    mkdir /hive/data/genomes/calJac3/pushQ
+    cd /hive/data/genomes/calJac3/pushQ
+    time nice -n +19 makePushQSql.pl calJac3 > calJac3.pushQ.sql 2> stderr.out
+    real    2m52.193s
+
+    #	check for errors in stderr.out, some are OK, e.g.:
+# WARNING: calJac3 does not have seq
+# WARNING: calJac3 does not have extFile
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  bosTau4ChainPileUp
+
+    #	copy it to hgwbeta
+    scp -p calJac3.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < calJac3.pushQ.sql
+    #	in that pushQ entry walk through each entry and see if the
+    #	sizes will set properly
+
+############################################################################
