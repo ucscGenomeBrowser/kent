@@ -21,7 +21,7 @@
 #include <pthread.h>
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: errCatch.c,v 1.6 2010/03/05 02:52:17 markd Exp $";
+static char const rcsid[] = "$Id: errCatch.c,v 1.7 2010/04/01 16:35:37 markd Exp $";
 
 
 struct errCatch *errCatchNew()
@@ -52,7 +52,7 @@ pthread_t pid = pthread_self(); //  can be a pointer or a number
 // A true integer has function would be nicer, but this will do.  
 // Don't safef, theoretically that could abort.
 char key[64];
-snprintf(key, sizeof(key), "%lld", (long long)pid);
+snprintf(key, sizeof(key), "%lld",  ptrToLL(pid));
 key[ArraySize(key)-1] = '\0';
 if (perThreadStacks == NULL)
     perThreadStacks = hashNew(0);
