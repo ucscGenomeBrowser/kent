@@ -3,7 +3,7 @@
 #include "hPrint.h"
 #include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: googleAnalytics.c,v 1.4 2008/05/16 19:04:40 hiram Exp $";
+static char const rcsid[] = "$Id: googleAnalytics.c,v 1.5 2010/04/01 05:53:37 markd Exp $";
 
 void googleAnalytics()
 /* check for analytics configuration item and output google hooks if OK */
@@ -17,8 +17,8 @@ done = TRUE;	/*	do not repeat this by mistake	*/
 
 char *analyticsKey = cfgOption("analyticsKey");
 
-/*	if config is missing, nothing happens here	*/
-if (NULL == analyticsKey)
+/*	if config is missing or empty, nothing happens here	*/
+if (isEmpty(analyticsKey))
     return;
 
 
