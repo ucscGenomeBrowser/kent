@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.6 2010/03/31 21:32:36 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.7 2010/04/01 16:37:14 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -73,17 +73,17 @@ done
    #   where xxxxxx is the original access id as: chrUn_ACBE01000381.1 
    # and put it into chrUn.* files 
    # copy all the comment lines (start with #)
+S=Primary_Assembly/unplaced_scaffolds
 zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > ucscChr/chrUn.agp
    # append the gap records
 zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
         | sed -e "s/^/chrUn_/" >> ucscChr/chrUn.agp
 gzip ucscChr/chrUn.agp &
 
-S=Primary_Assembly/unplaced_scaffolds
 zcat ${S}/FASTA/unplaced.scaf.fa.gz \
         | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##" | gzip > ucscChr/chrUn.fa.gz
    # about 104034 sequences in the unplaced
-zcat chrUn.fa.gz | grep "^>" | wc
+zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    #  104034  104034 2275648
 
    # Check them with faSize 
@@ -97,6 +97,19 @@ zcat chrUn.fa.gz | grep "^>" | wc
 
 ##########################################################################
 # Initial genome build (Done - 2010-03-03 -Chin)
+
+# decide the right order by
+ hgsql -e "select orderKey,name from dbDb order by orderKey;" \
+ hgcentraltest | less
+    # 168     cavPor3
+    # 169     cavPor2
+    # 189     oryCun2
+    # 190     oryCun1
+    # 191     ochPri2
+    # 200     eriEur1
+    # 217     felCat3
+ 
+
     cd /hive/data/genomes/felCatV17e
 
     cat << '_EOF_' > felCatV17e.config.ra

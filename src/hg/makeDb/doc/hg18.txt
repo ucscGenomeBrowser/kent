@@ -28631,7 +28631,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.409 2010/03/31 14:55:17 angie Exp $
+# $Id: hg18.txt,v 1.410 2010/04/01 16:37:14 chinhli Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28679,7 +28679,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.409 2010/03/31 14:55:17 angie Exp $
+# $Id: hg18.txt,v 1.410 2010/04/01 16:37:14 chinhli Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29795,7 +29795,7 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
     #  for link on knownGenes details page
     # Also, create an HINV gene track
 
-    # download CDNA file H-InvDB_7.0  (Feb 16, 2010) -- got release # from downloads page).
+    # download CDNA file H-InvDB_7.0  (Feb 26, 2010) -- got release # from downloads page).
     #  ftp://ftp.ddbj.nig.ac.jp/mirror_database/hinv/jbirc_ff/annotation/
    mkdir /cluster/data/hinv/H-InvDB_7.0
    cd /cluster/data/hinv/H-InvDB_7.0

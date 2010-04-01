@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: susScr2.txt,v 1.3 2010/03/31 21:13:19 hiram Exp $
+#       $Id: susScr2.txt,v 1.4 2010/04/01 16:37:15 chinhli Exp $
 
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
@@ -289,7 +289,7 @@ close (FH);
     # << happy emacs
 
 export S=../../genbank/Sscrofa9.2/Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc | grep 829.2  | while read ACC
+cut -f2 ${S}/chr2acc | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     zcat ${S}/AGP/chr${C}.agp.gz \

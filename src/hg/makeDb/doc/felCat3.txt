@@ -1388,3 +1388,17 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# LIFTOVER TO FelCatV17e (working - 2010-03-29 - Chin )
+    mkdir /hive/data/genomes/felCat3/bed/blat.felCatV17e.2010-03-29
+    cd /hive/data/genomes/felCat3/bed/blat.felCatV17e.2010-03-29
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug -ooc /scratch/data/felCat3/11.ooc \
+       felCat3 felCatV17e
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+         -ooc /scratch/data/felCat3/11.ooc \
+        -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+         felCat3 felCatV17e > do.log 2>&1 &
+    #   real    36m16.693s
+
+############################################################################
