@@ -1,5 +1,5 @@
 #
-#	$Id: README,v 1.2 2010/03/31 18:18:30 hiram Exp $
+#	$Id: README,v 1.3 2010/04/01 18:56:18 hiram Exp $
 #
 
 Included here are some scripts to help with the job of constructing
@@ -106,3 +106,5 @@ to view their full help messages:
 	database update script.  It needs to have lists of databases
 	to update minimally or fully.  The logs of update activities need
 	to be checked to verify it is working OK.
+17. printEnv.pl - script to verify your cgi-bin directory is functioning
+	correctly.  Note comments in that script.
