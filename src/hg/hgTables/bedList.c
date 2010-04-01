@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.70 2010/03/25 21:16:35 markd Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.71 2010/04/01 03:19:58 markd Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -634,11 +634,11 @@ for (region = regionList; region != NULL; region = region->next)
             safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
             fbList = fbFromBed(db, fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
             if (fields >= 6)
-            fields = 6;
+                fields = 6;
             else if (fields >= 4)
-            fields = 4;
+                fields = 4;
             else
-            fields = 3;
+                fields = 3;
             if (doCt && ctNew)
                 {
                 ctNew->fieldCount = fields;
@@ -661,15 +661,15 @@ for (region = regionList; region != NULL; region = region->next)
                 else
                     {
                     if (fields >= 6)
-                    hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
-                    fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
-                    0, fbPtr->strand);
+                        hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
+                                fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
+                                0, fbPtr->strand);
                     else if (fields >= 4)
-                    hPrintf("%s\t%d\t%d\t%s\n",
-                    fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name);
+                        hPrintf("%s\t%d\t%d\t%s\n",
+                                fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name);
                     else
-                    hPrintf("%s\t%d\t%d\n",
-                        fbPtr->chrom, fbPtr->start, fbPtr->end);
+                        hPrintf("%s\t%d\t%d\n",
+                                fbPtr->chrom, fbPtr->start, fbPtr->end);
                     }
                 gotResults = TRUE;
                 }
@@ -688,12 +688,11 @@ else if (doCt)
     int wigDataSize = 0;
 
     /* Load existing custom tracks and add this new one: */
-	{
-	struct customTrack *ctList = getCustomTracks();
-	removeNamedCustom(&ctList, ctNew->tdb->tableName);
-	if (doDataPoints)
-	    {
-	    if (needSubtrackMerge || isBedGr || isBgWg)
+    struct customTrack *ctList = getCustomTracks();
+    removeNamedCustom(&ctList, ctNew->tdb->tableName);
+    if (doDataPoints)
+        {
+        if (needSubtrackMerge || isBedGr || isBgWg)
             {
             slReverse(&dataVectorList);
             wigDataSize = dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
@@ -701,7 +700,7 @@ else if (doCt)
             // TODO: see if can make prettier wig output here that
             // doesn't necessarily have one value per base
             }
-	    else
+        else
             {
             struct wiggleDataStream *wds = NULL;
             /* create an otherwise empty wds so we can print out the list */
@@ -714,14 +713,13 @@ else if (doCt)
 #endif
             wiggleDataStreamFree(&wds);
             }
-	    }
-	else
-	    slReverse(&ctNew->bedList);
+        }
+    else
+        slReverse(&ctNew->bedList);
 
-	slAddHead(&ctList, ctNew);
-	/* Save the custom tracks out to file (overwrite the old file): */
-        customTracksSaveCart(db, cart, ctList);
-	}
+    slAddHead(&ctList, ctNew);
+    /* Save the custom tracks out to file (overwrite the old file): */
+    customTracksSaveCart(db, cart, ctList);
     /*  Put up redirect-to-browser page. */
     if (redirectToGb)
         {
