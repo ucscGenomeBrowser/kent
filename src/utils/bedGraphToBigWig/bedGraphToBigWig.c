@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.22 2009/11/16 18:12:04 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.23 2010/04/01 16:02:37 markd Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -341,7 +341,7 @@ return twiceReducedList;
 void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
 {
-verboseTime(2, NULL);
+verboseTime(2, "bedGraphToBigWig");
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
