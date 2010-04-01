@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.21 2010/02/01 19:07:46 galt Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.22 2010/04/01 17:31:11 markd Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -415,7 +415,7 @@ void bbFileCreate(
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
 /* Set up timing measures. */
-verboseTime(1, NULL);
+verboseTimeInit();
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 
 /* Load up as object if defined in file. */

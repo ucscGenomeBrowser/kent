@@ -11,7 +11,7 @@
 #include "verbose.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaFind.c,v 1.5 2009/11/24 15:50:23 kent Exp $";
+static char const rcsid[] = "$Id: itsaFind.c,v 1.6 2010/04/01 17:31:10 markd Exp $";
 
 boolean mmap;
 int maxMismatch = 0;
@@ -276,7 +276,7 @@ if (argc != 4)
 maxRepeat = optionInt("maxRepeat", maxRepeat);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
 mmap = optionExists("mmap");
-verboseTime(1, NULL);
+verboseTimeInit();
 dnaUtilOpen();
 itsaBaseToValInit();
 itsaFind(argv[1], argv[2], argv[3]);

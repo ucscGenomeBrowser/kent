@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Make.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
+static char const rcsid[] = "$Id: i16Make.c,v 1.3 2010/04/01 17:31:10 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -252,7 +252,7 @@ for (slot = 0; slot < i16SlotCount; ++slot)
 void i16Make(int inCount, char *inputs[], char *output)
 /* itsaMake - Make a suffix array file out of input DNA sequences.. */
 {
-verboseTime(1, NULL);
+verboseTimeInit();
 bits64 maxGenomeSize = 1024LL*1024*1024*4;
 
 /* Load all DNA, make sure names are unique, and alphabetize by name. */

@@ -9,7 +9,7 @@
 #include "splatAli.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: splatToEland.c,v 1.3 2008/11/06 07:03:00 kent Exp $";
+static char const rcsid[] = "$Id: splatToEland.c,v 1.4 2010/04/01 17:31:11 markd Exp $";
 
 boolean multi = FALSE;
 char *reads = NULL;
@@ -245,7 +245,7 @@ fprintf(f, "\n");
 void splatToEland(char *inName, char *outName)
 /* splatToEland - Convert from splat to eland format.. */
 {
-verboseTime(1, NULL);
+verboseTimeInit();
 struct splatAli *list = splatAliLoadAll(inName);
 verboseTime(1, "Loaded %d sequences from %s", slCount(list), inName);
 if (needSort(list))

@@ -11,7 +11,7 @@
 #include "verbose.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Find.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
+static char const rcsid[] = "$Id: i16Find.c,v 1.3 2010/04/01 17:31:10 markd Exp $";
 
 boolean mmap;
 boolean noOverflow;
@@ -157,7 +157,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-verboseTime(1, NULL);
+verboseTimeInit();
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();

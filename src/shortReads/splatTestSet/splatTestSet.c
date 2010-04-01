@@ -13,7 +13,7 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: splatTestSet.c,v 1.5 2008/11/06 19:25:04 kent Exp $";
+static char const rcsid[] = "$Id: splatTestSet.c,v 1.6 2010/04/01 17:31:11 markd Exp $";
 
 /* Command line variables. */
 int chromCount = 1;
@@ -325,7 +325,7 @@ while (readsGenerated < readCount)
 void splatTestSet(char *genomeFile, char *readFile)
 /* splatTestSet - Create test set for splat. */
 {
-verboseTime(1, NULL);
+verboseTimeInit();
 if (!existingGenome)
     generateFakeGenome(genomeFile);
 struct dnaSeq *genome = dnaLoadAll(genomeFile);

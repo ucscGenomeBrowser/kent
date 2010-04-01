@@ -12,7 +12,7 @@
 #include "itsa.h"
 
 
-static char const rcsid[] = "$Id: itsaMake.c,v 1.5 2009/11/24 15:51:11 kent Exp $";
+static char const rcsid[] = "$Id: itsaMake.c,v 1.6 2010/04/01 17:31:10 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -415,7 +415,7 @@ verbose(1, "Completed %s is %lld bytes\n", output, header->size);
 void itsaMake(int inCount, char *inputs[], char *output)
 /* itsaMake - Make a suffix array file out of input DNA sequences.. */
 {
-verboseTime(1, NULL);
+verboseTimeInit();
 bits64 maxGenomeSize = 1024LL*1024*1024*4;
 
 itsaBaseToValInit();

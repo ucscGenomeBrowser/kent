@@ -5,7 +5,7 @@
 #include "portable.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: verbose.c,v 1.6 2008/10/30 09:27:23 kent Exp $";
+static char const rcsid[] = "$Id: verbose.c,v 1.7 2010/04/01 17:31:10 markd Exp $";
 
 static int logVerbosity = 1;	/* The level of log verbosity.  0 is silent. */
 static FILE *logFile;	/* File to log to. */
@@ -37,19 +37,27 @@ verboseVa(verbosity, format, args);
 va_end(args);
 }
 
-void verboseTime(int verbosity, char *label, ...)
-/* Print label and how long it's been since last call.  Call with
- * a NULL label to initialize. */
+static long lastTime = -1;  // previous call time.
+
+void verboseTimeInit(void)
+/* Initialize or reinitialize the previous time for use by verboseTime. */
 {
-static long lastTime = 0;
+lastTime = clock1000();
+}
+
+void verboseTime(int verbosity, char *label, ...)
+/* Print label and how long it's been since last call.  Start time can be
+ * initialized with verboseTimeInit, otherwise the elapsed time will be
+ * zero. */
+{
+assert(label != NULL);  // original version allowed this, but breaks some GCCs
+if (lastTime < 0)
+    verboseTimeInit();
 long time = clock1000();
 va_list args;
 va_start(args, label);
-if (label != NULL)
-    {
-    verboseVa(verbosity, label, args);
-    verbose(verbosity, ": %ld millis\n", time - lastTime);
-    }
+verboseVa(verbosity, label, args);
+verbose(verbosity, ": %ld millis\n", time - lastTime);
 lastTime = time;
 va_end(args);
 }

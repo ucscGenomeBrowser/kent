@@ -288,9 +288,13 @@ __attribute__((format(printf, 2, 3)))
 #endif
     ;
 
+void verboseTimeInit(void);
+/* Initialize or reinitialize the previous time for use by verboseTime. */
+
 void verboseTime(int verbosity, char *label, ...)
-/* Print label and how long it's been since last call.  Call with
- * a NULL label to initialize.  Verbosity level 1 */
+/* Print label and how long it's been since last call.  Start time can be
+ * initialized with verboseTimeInit, otherwise the elapsed time will be
+ * zero. */
 #if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
