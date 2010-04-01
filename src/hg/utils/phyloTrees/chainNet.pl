@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # chainNet.pl - output chainNet.ra definitions in phylogentic order
 
-#	$Id: chainNet.pl,v 1.4 2010/01/22 18:40:22 hiram Exp $
+#	$Id: chainNet.pl,v 1.5 2010/04/01 17:04:12 hiram Exp $
 
 use strict;
 use warnings;
@@ -11,13 +11,13 @@ use lib "$Bin";
 # new genomes since the 46-way construction.  This will keep
 #	the priority numbers the same for the previous 46 and place
 #	these new ones in between the previous ones.
-my $newAssemblies = "ailMel susScr";
+my $newAssemblies = "ailMel susScr oviAra";
 my $newAssemblyOffset = 5;
 my $offset46way = 10;
 my $reroot = "$Bin/rerootTree.pl";
 my $hgsql = "hgsql";
 my $home = $ENV{'HOME'};
-my $dissectTree = "$home/kent/src/hg/utils/phyloTrees/48way.dissect.txt";
+my $dissectTree = "$home/kent/src/hg/utils/phyloTrees/49way.dissect.txt";
 
 my $argc = scalar(@ARGV);
 
@@ -26,7 +26,7 @@ if ($argc != 1) {
     printf STDERR "usage:\n    chainNet.pl <db>\n";
     printf STDERR "<db> - an existing UCSC database\n";
     printf STDERR "will be using commands: rerootTree.pl and hgsql\n";
-    printf STDERR "and expecting to find \$HOME/kent/src/hg/utils/phyloTrees/48way.dissect.txt\n";
+    printf STDERR "and expecting to find \$HOME/kent/src/hg/utils/phyloTrees/49way.dissect.txt\n";
     printf STDERR "using:\n";
     printf STDERR "$reroot\n";
     printf STDERR "$dissectTree\n";
@@ -95,19 +95,21 @@ while (my $tbl = <FH>) {
     my $track = $tbl;
     my $stripDb = $tbl;
     $stripDb =~ s/[0-9]+$//;
+    $stripDb =~ s/V17e$//;
+    $stripDb =~ s/Poodle$//;
     if (defined($stripDb) && length($stripDb) > 0) {
 	if (exists($priorities{lcfirst($stripDb)})) {
 	    my $priority = $priorities{lcfirst($stripDb)};
 	    $orderChainNet{$track} = $priority;
 	} else {
-	    printf STDERR "warning: not in phylo tree: $tbl\n";
+	    printf STDERR "warning: not in phylo tree: $tbl ($stripDb)\n";
 	}
     }
 }
 close (FH);
 
 # print out the priorities in order by priority, lowest first
-foreach my $track (sort { $orderChainNet{$a} cmp $orderChainNet{$b} }
+foreach my $track (sort { $orderChainNet{$a} <=> $orderChainNet{$b} }
 	keys %orderChainNet) {
     my $priority = $orderChainNet{$track};
     printf "track chainNet%s override\n", $track;
