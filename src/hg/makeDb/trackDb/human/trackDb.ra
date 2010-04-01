@@ -387,7 +387,7 @@ type bed 12
         subGroups view=RawSignal tissueType=brain
     
         track burgeRnaSeqGemMapperAlignLiverAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq Liver Sig
         longLabel Burge Lab RNA-seq 32mer Reads from Liver, Raw Signal
         subGroups view=RawSignal tissueType=liver
@@ -399,25 +399,25 @@ type bed 12
         subGroups view=RawSignal tissueType=heart
 
         track burgeRnaSeqGemMapperAlignSkelMuscleAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq Muscle Sig
         longLabel Burge Lab RNA-seq 32mer Reads from Skeletal Muscle, Raw Signal
         subGroups view=RawSignal tissueType=skelMuscle
 
         track burgeRnaSeqGemMapperAlignColonAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq Colon Sig
         longLabel Burge Lab RNA-seq 32mer Reads from Colon, Raw Signal
         subGroups view=RawSignal tissueType=colon
 
         track burgeRnaSeqGemMapperAlignAdiposeAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq Adipose Sig
         longLabel Burge Lab RNA-seq 32mer Reads from Adipose, Raw Signal
         subGroups view=RawSignal tissueType=adipose
 
         track burgeRnaSeqGemMapperAlignTestesAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq Testes Sig
         longLabel Burge Lab RNA-seq 32mer Reads from Testes, Raw Signal
         subGroups view=RawSignal tissueType=testes
@@ -435,31 +435,31 @@ type bed 12
         subGroups view=RawSignal tissueType=breast
 
         track burgeRnaSeqGemMapperAlignBT474AllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq BT474 Sig
         longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line, Raw Signal
         subGroups view=RawSignal tissueType=BT474
 
         track burgeRnaSeqGemMapperAlignHMEAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq HME Sig
         longLabel Burge Lab RNA-seq 32mer Reads from HME (Human Mammary Epithelial) Cell Line, Raw Signal
         subGroups view=RawSignal tissueType=HME
 
         track burgeRnaSeqGemMapperAlignMCF7AllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq MCF7 Sig
         longLabel Burge Lab RNA-seq 32mer Reads from MCF-7 Breast Adenocarcinoma Cell Line, Raw Signal
         subGroups view=RawSignal tissueType=MCF7
 
         track burgeRnaSeqGemMapperAlignMB435AllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq MB435 Sig
         longLabel Burge Lab RNA-seq 32mer Reads from MB-435 Cell Line, Raw Signal
         subGroups view=RawSignal tissueType=MB435
 
         track burgeRnaSeqGemMapperAlignT47DAllRawSignal
-        subTrack burgeRnaSeqGemMapperAlignViewRawSignal on
+        subTrack burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq T47D Sig
         longLabel Burge Lab RNA-seq 32mer Reads from T-47D Breast Ductal Carcinoma Cell Line, Raw Signal
         subGroups view=RawSignal tissueType=T47D
@@ -480,43 +480,43 @@ type bed 12
         subGroups view=Alignments tissueType=brain
 
         track burgeRnaSeqGemMapperAlignLiver
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Liver
         longLabel Burge Lab RNA-seq 32mer Reads from Liver
         subGroups view=Alignments tissueType=liver
 
         track burgeRnaSeqGemMapperAlignHeart
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Heart
         longLabel Burge Lab RNA-seq 32mer Reads from Heart
         subGroups view=Alignments tissueType=heart
 
         track burgeRnaSeqGemMapperAlignSkelMuscle
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Muscle
         longLabel Burge Lab RNA-seq 32mer Reads from Skeletal Muscle
         subGroups view=Alignments tissueType=skelMuscle
 
         track burgeRnaSeqGemMapperAlignColon
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Colon
         longLabel Burge Lab RNA-seq 32mer Reads from Colon
         subGroups view=Alignments tissueType=colon
 
         track burgeRnaSeqGemMapperAlignAdipose
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Adipose
         longLabel Burge Lab RNA-seq 32mer Reads from Adipose
         subGroups view=Alignments tissueType=adipose
 
         track burgeRnaSeqGemMapperAlignTestes
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Testes
         longLabel Burge Lab RNA-seq 32mer Reads from Testes
         subGroups view=Alignments tissueType=testes
 
         track burgeRnaSeqGemMapperAlignLymphNode
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq Lymph Node
         longLabel Burge Lab RNA-seq 32mer Reads from Lymph Node
         subGroups view=Alignments tissueType=lymphNode
@@ -528,31 +528,31 @@ type bed 12
         subGroups view=Alignments tissueType=breast
 
         track burgeRnaSeqGemMapperAlignBT474
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq BT474
         longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line
         subGroups view=Alignments tissueType=BT474
 
         track burgeRnaSeqGemMapperAlignHME
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq HME
         longLabel Burge Lab RNA-seq 32mer Reads from HME (Human Mammary Epithelial) Cell Line
         subGroups view=Alignments tissueType=HME
 
         track burgeRnaSeqGemMapperAlignMCF7
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq MCF7
         longLabel Burge Lab RNA-seq 32mer Reads from MCF-7 Breast Adenocarcinoma Cell Line
         subGroups view=Alignments tissueType=MCF7
 
         track burgeRnaSeqGemMapperAlignMB435
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq MB435
         longLabel Burge Lab RNA-seq 32mer Reads from MB-435 Cell Line
         subGroups view=Alignments tissueType=MB435
 
         track burgeRnaSeqGemMapperAlignT47D
-        subTrack burgeRnaSeqGemMapperAlignViewAlignments on
+        subTrack burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq T47D
         longLabel Burge Lab RNA-seq 32mer Reads from T-47D Breast Ductal Carcinoma Cell Line
         subGroups view=Alignments tissueType=T47D
