@@ -188,7 +188,7 @@ struct metaByVar *metaByVarsLineParse(char *line);
 /* Parses a line of "var1=val1 var2=val2 into a metaByVar object for queries. */
 
 
-// ------ Loading from args, hashes and tdb ------
+// ------ Loading from args, hashes ------
 struct metaObj *metaObjCreate(char *obj,char *type,char *var, char *varType,char *val);
 /* Creates a singular metaObj query object based on obj and all other optional params. */
 
@@ -197,9 +197,6 @@ struct metaByVar*metaByVarCreate(char *var, char *varType,char *val);
 
 struct metaObj *metaObjsLoadFromHashes(struct hash *objsHash);
 // Load all metaObjs from a file containing metadata formatted lines
-
-struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table);
-// Returns the metadata for a table.  Either tdb or table must be provided
 
 
 // ------ Loading from files ------
@@ -263,7 +260,7 @@ int metaByVarCount(struct metaByVar *metaByVars,boolean vars, boolean vals);
 
 
 // ----------------- Utilities -----------------
-char *metadataFindValue(struct metaObj *metaObj, char *var);
+char *metaObjFindValue(struct metaObj *metaObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
 boolean metaObjContains(struct metaObj *metaObj, char *var, char *val);
@@ -281,8 +278,8 @@ void metaObjRemoveVars(struct metaObj *metaObjs, char *vars);
 void metaObjTransformToUpdate(struct metaObj *metaObjs, char *var, char *varType,char *val,boolean deleteThis);
 /* Turns one or more metaObjs into the stucture needed to add/update or delete. */
 
-int metaObjCRC(struct metaObj *metaObjs);
-// returns a summ of all individual CRC values of all metObj strings
+struct metaObj *metaObjClone(struct metaObj *metaObj);
+// Clones a single metaObj, including hash and maintining order
 
 
 // --------------- Free at last ----------------
@@ -291,6 +288,16 @@ void metaObjsFree(struct metaObj **metaObjsPtr);
 
 void metaByVarsFree(struct metaByVar **metaByVarsPtr);
 // Frees one or more metadata vars and any contained vals and objs.  Will free any hashes as well.
+
+
+// ----------------- CGI specific routines for use with tdb -----------------
+struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table);
+// Returns the metadata for a table.  NEVER FREE THIS STRUCT!
+// This is the main routine for CGIs to access metadata
+
+char *metadataFindValue(struct trackDb *tdb, char *var);
+// Finds the val associated with the var or retruns NULL
+
 
 #endif /* METATBL_H */
 

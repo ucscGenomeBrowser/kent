@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.8 2010/03/31 23:34:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.9 2010/04/01 23:49:49 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -373,6 +373,29 @@ return rootVars;
 }
 
 
+static int metaObjCRC(struct metaObj *metaObjs)
+// returns a summ of all individual CRC values of all metObj strings
+{
+int crc = 0;
+struct metaObj *metaObj = NULL;
+for(metaObj=metaObjs;metaObj!=NULL;metaObj=metaObj->next)
+    {
+    if(metaObj->obj != NULL)
+        crc += hashCrc(metaObj->obj);
+
+    struct metaVar *metaVar = NULL;
+    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+        {
+        if(metaVar->var != NULL)
+            crc += hashCrc(metaVar->var);
+        if(metaVar->varType == vtTxt && metaVar->val != NULL)
+            crc += hashCrc(metaVar->val);
+        }
+    }
+
+return crc;
+}
+
 // -------------- Sort primitives --------------
 int metaObjCmp(const void *va, const void *vb)
 /* Compare to sort on label. */
@@ -708,51 +731,6 @@ while((objEl = hashNext(&objCookie)) != NULL)
     }
     slSort(&metaObjs,&metaObjCmp); // Should be in determined order
     return metaObjs;
-}
-
-static struct metaObj *metadataForTableFromTdb(struct trackDb *tdb)
-// Returns the metadata for a table from a tdb setting.
-{
-metadata_t *metadata = metadataSettingGet(tdb);
-// convert to a metaObj
-struct metaObj *metaObj = NULL;
-AllocVar(metaObj);
-metaObj->obj     = tdb->tableName;
-metaObj->objType = otTable;
-metaObj->varHash = hashNew(0);
-
-int ix =0;
-for(;ix<metadata->count;ix++)
-    {
-    struct metaVar *metaVar = NULL;
-    AllocVar(metaVar);
-    metaVar->var     = metadata->tags[ix];
-    metaVar->varType = vtTxt;
-    metaVar->val     = metadata->values[ix];
-    hashAdd(metaObj->varHash, metaVar->var, metaVar); // pointer to struct to resolve type
-    slAddHead(&(metaObj->vars),metaVar);
-    }
-slSort(&(metaObj->vars),&metaVarCmp); // Should be in determined order
-metadataFree(&metadata);
-return metaObj;
-}
-
-struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
-// Returns the metadata for a table.  Either tdb or table must be provided
-{
-struct sqlConnection *conn = sqlConnect(db);
-char *metaTbl = metaTblName(conn,TRUE);  // Look for sandbox name first
-struct metaObj *metaObj = NULL;
-if(tdb != NULL && tdb->tableName != NULL)
-    table = tdb->tableName;
-if(metaTbl != NULL)
-    metaObj = metaObjQueryByObj(conn,metaTbl,table,NULL);
-sqlDisconnect(&conn);
-
-if(metaObj == NULL && tdb != NULL)
-    return metadataForTableFromTdb(tdb);
-
-return metaObj;
 }
 
 // ------ Loading from files ------
@@ -1378,7 +1356,7 @@ return count;
 
 // ----------------- Utilities -----------------
 
-char *metadataFindValue(struct metaObj *metaObj, char *var)
+char *metaObjFindValue(struct metaObj *metaObj, char *var)
 // Finds the val associated with the var or retruns NULL
 {
 if (metaObj == NULL)
@@ -1409,7 +1387,7 @@ if (metaObj == NULL)
 
 if(var != NULL)
     {
-    char *foundVal = metadataFindValue(metaObj,var);
+    char *foundVal = metaObjFindValue(metaObj,var);
     if(foundVal == NULL)
         return FALSE;
     if(val == NULL)
@@ -1523,10 +1501,7 @@ void metaObjRemoveVars(struct metaObj *metaObjs, char *vars)
 char *cloneLine = NULL;
 int count = 0;
 char **words = NULL;
-if(vars == NULL) // prune all!
-    {
-    }
-else
+if(vars != NULL)
     {
     cloneLine = cloneString(vars);
     count = chopByWhite(cloneLine,NULL,0);
@@ -1539,6 +1514,9 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     int ix;
     struct metaVar *keepTheseVars = NULL;
 
+    if(count == 0 && metaObj->varHash != NULL)
+        hashFree(&metaObj->varHash);
+
     struct metaVar *metaVar = NULL;
     while((metaVar = slPopHead(&(metaObj->vars))) != NULL)
         {
@@ -1549,7 +1527,12 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
         if(ix < 0)
             slAddHead(&keepTheseVars,metaVar);
         else
+            {
+            if(count != 0 && metaObj->varHash != NULL)
+                hashRemove(metaObj->varHash, metaVar->var);
+
             metaVarFree(&metaVar);
+            }
         }
 
     if(keepTheseVars != NULL)
@@ -1563,16 +1546,20 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
 void metaObjTransformToUpdate(struct metaObj *metaObjs, char *var, char *varType,char *val,boolean deleteThis)
 /* Turns one or more metaObjs into the stucture needed to add/update or delete. */
 {
-metaObjRemoveVars(metaObjs,NULL); // First drop all vars currently defined.
-
 struct metaObj *metaObj = NULL;
 for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     {
     metaObj->deleteThis = deleteThis;
 
+    if(metaObj->varHash != NULL)
+        hashFree(&metaObj->varHash);
+
+    struct metaVar *metaVar = NULL;
+    while((metaVar = slPopHead(&(metaObj->vars))) != NULL)
+        metaVarFree(&metaVar);
+
     if(var != NULL)
         {
-        struct metaVar * metaVar;
         AllocVar(metaVar);
 
         metaVar->var     = cloneString(var);
@@ -1584,27 +1571,41 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     }
 }
 
-int metaObjCRC(struct metaObj *metaObjs)
-// returns a summ of all individual CRC values of all metObj strings
+struct metaObj *metaObjClone(struct metaObj *metaObj)
+// Clones a single metaObj, including hash and maintining order
 {
-int crc = 0;
-struct metaObj *metaObj = NULL;
-for(metaObj=metaObjs;metaObj!=NULL;metaObj=metaObj->next)
+if(metaObj == NULL)
+    return NULL;
+
+struct metaObj *newObj;
+AllocVar(newObj);
+
+if(metaObj->obj != NULL)
+    newObj->obj    = cloneString(metaObj->obj);
+newObj->objType    = metaObj->objType;
+newObj->deleteThis = metaObj->deleteThis;
+if(metaObj->vars != NULL)
     {
-    if(metaObj->obj != NULL)
-        crc += hashCrc(metaObj->obj);
+    if(metaObj->varHash != NULL)
+        newObj->varHash = hashNew(0);
 
     struct metaVar *metaVar = NULL;
-    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+    for(metaVar = metaObj->vars; metaVar != NULL; metaVar = metaVar->next )
         {
+        struct metaVar *newVar = NULL;
+        AllocVar(newVar);
         if(metaVar->var != NULL)
-            crc += hashCrc(metaVar->var);
-        if(metaVar->varType == vtTxt && metaVar->val != NULL)
-            crc += hashCrc(metaVar->val);
+            newVar->var = cloneString(metaVar->var);
+        if(metaVar->val != NULL)
+            newVar->val = cloneString(metaVar->val);
+        newVar->varType    = metaVar->varType;
+        if(newVar->var != NULL && newVar->val != NULL)
+            hashAdd(newObj->varHash, newVar->var, newVar); // pointer to struct to resolve type
+        slAddHead(&(newObj->vars),newVar);
         }
+    slReverse(&(newObj->vars));
     }
-
-return crc;
+return newObj;
 }
 
 // --------------- Free at last ----------------
@@ -1660,6 +1661,117 @@ if(metaByVarsPtr != NULL && *metaByVarsPtr != NULL)
     }
 }
 
-// TODO: Print formatted metadata lines!
+// ----------------- CGI specific routines for use with tdb -----------------
+#define METATBL_NOT_FOUND ((struct metaObj *)-666)
+#define METADATA_NOT_FOUND ((struct metaObj *)-999)
+#define METATBL_OBJ_KEY "metaObj"
+static struct metaObj *metadataForTableFromTdb(struct trackDb *tdb)
+// Returns the metadata for a table from a tdb setting.
+{
+metadata_t *metadata = metadataSettingGet(tdb);
+if(metadata == NULL)
+    {
+    tdbExtrasAddOrUpdate(tdb,METATBL_OBJ_KEY,METADATA_NOT_FOUND);
+    return NULL;
+    }
+// convert to a metaObj
+struct metaObj *metaObj = NULL;
+AllocVar(metaObj);
+metaObj->obj     = cloneString(tdb->tableName);
+metaObj->objType = otTable;
+metaObj->varHash = hashNew(0);
 
+int ix =0;
+for(;ix<metadata->count;ix++)
+    {
+    struct metaVar *metaVar = NULL;
+    AllocVar(metaVar);
+    metaVar->var     = cloneString(metadata->tags[ix]);
+    metaVar->varType = vtTxt;
+    metaVar->val     = cloneString(metadata->values[ix]);
+    hashAdd(metaObj->varHash, metaVar->var, metaVar); // pointer to struct to resolve type
+    slAddHead(&(metaObj->vars),metaVar);
+    }
+slSort(&(metaObj->vars),&metaVarCmp); // Should be in determined order
+metadataFree(&metadata);
+
+// Save metaObj to trackDbSettings
+tdbExtrasAddOrUpdate(tdb,METATBL_OBJ_KEY,metaObj);
+
+return metaObj;
+}
+
+struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
+// Returns the metadata for a table.  NEVER FREE THIS STRUCT!
+{
+struct metaObj *metaObj = NULL;
+
+// See of the metaObj was already built
+if(tdb != NULL)
+    {
+    metaObj = tdbExtrasGetOrDefault(tdb, METATBL_OBJ_KEY,NULL);
+    if(metaObj == METADATA_NOT_FOUND) // NOT in mtatbl, not in tdb metadata setting!
+        return NULL;
+    else if(metaObj == METATBL_NOT_FOUND) // looked metaTbl already and not found!
+        return metadataForTableFromTdb(tdb);
+    else if(metaObj != NULL)
+        {
+        return metaObj;  // No reason to query the table again!
+        }
+    }
+
+struct sqlConnection *conn = sqlConnect(db);
+char *metaTbl = metaTblName(conn,TRUE);  // Look for sandbox name first
+if(tdb != NULL && tdb->tableName != NULL)
+    table = tdb->tableName;
+if(metaTbl != NULL)
+    metaObj = metaObjQueryByObj(conn,metaTbl,table,NULL);
+sqlDisconnect(&conn);
+
+// save the metaObj for next time
+if(tdb)
+    {
+    if(metaObj != NULL)
+        tdbExtrasAddOrUpdate(tdb,METATBL_OBJ_KEY,metaObj);
+    else
+        {
+        tdbExtrasAddOrUpdate(tdb,METATBL_OBJ_KEY,METATBL_NOT_FOUND);
+        return metadataForTableFromTdb(tdb);  // FIXME: metadata setting in TDB is soon to be obsolete
+        }
+    }
+
+// FIXME: Temporary to distinguish metaTbl metadata from trackDb metadata:
+metaObjRemoveVars(metaObj,"tableName");
+
+
+return metaObj;
+}
+
+char *metadataFindValue(struct trackDb *tdb, char *var)
+// Finds the val associated with the var or retruns NULL
+{
+struct metaObj *metaObj = tdbExtrasGetOrDefault(tdb, METATBL_OBJ_KEY,NULL);
+if(metaObj == METATBL_NOT_FOUND) // Note, only we if already looked for metaTbl (which requires db)
+    metaObj = metadataForTableFromTdb(tdb);
+if (metaObj == NULL || metaObj == METADATA_NOT_FOUND)
+    return NULL;
+
+return metaObjFindValue(metaObj,var);
+
+struct metaVar *metaVar = NULL;
+if(metaObj->varHash != NULL)
+    metaVar = hashFindVal(metaObj->varHash,var);
+else
+    {
+    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+        {
+        if(sameOk(var,metaVar->var))
+            break;
+        }
+    }
+if(metaVar == NULL)
+    return NULL;
+
+return metaVar->val;
+}
 
