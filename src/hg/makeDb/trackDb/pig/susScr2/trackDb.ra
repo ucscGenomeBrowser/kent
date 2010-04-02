@@ -6,3 +6,10 @@ html gold
 track gap override
 html gap
 
+track bosTau4ChainPileUp
+shortLabel bosTau4 pile up
+longLabel bosTau4 chain pile up
+group x
+priority 600
+visibility hide
+type bigWig 1 14674
