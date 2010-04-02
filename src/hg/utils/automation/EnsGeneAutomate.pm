@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.21 2010/03/25 22:46:26 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.22 2010/04/02 16:39:53 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -1065,7 +1065,7 @@ my %ensGeneGtfFileNames_56 = (
 'anoCar1' => 'anolis_carolinensis/Anolis_carolinensis.AnoCar1.0.56.gtf.gz',
 'bosTau4' => 'bos_taurus/Bos_taurus.Btau_4.0.56.gtf.gz',
 'ce7' => 'caenorhabditis_elegans/Caenorhabditis_elegans.WS200.56.gtf.gz',
-'calJac3' => 'callithrix_jacchus/Callithrix_jacchus.calJac3.56.gtf.gz' ,
+'calJac2' => 'callithrix_jacchus/Callithrix_jacchus.calJac3.56.gtf.gz' ,
 'canFam2' => 'canis_familiaris/Canis_familiaris.BROADD2.56.gtf.gz',
 'cavPor3' => 'cavia_porcellus/Cavia_porcellus.cavPor3.56.gtf.gz',
 'choHof1' => 'choloepus_hoffmanni/Choloepus_hoffmanni.choHof1.56.gtf.gz',
@@ -1119,7 +1119,7 @@ my %ensGeneFtpPeptideFileNames_56 = (
 'anoCar1' => 'anolis_carolinensis/pep/Anolis_carolinensis.AnoCar1.0.56.pep.all.fa.gz',
 'bosTau4' => 'bos_taurus/pep/Bos_taurus.Btau_4.0.56.pep.all.fa.gz',
 'ce7' => 'caenorhabditis_elegans/pep/Caenorhabditis_elegans.WS200.56.pep.all.fa.gz',
-'calJac3' => 'callithrix_jacchus/pep/Callithrix_jacchus.calJac3.56.pep.all.fa.gz',
+'calJac2' => 'callithrix_jacchus/pep/Callithrix_jacchus.calJac3.56.pep.all.fa.gz',
 'canFam2' => 'canis_familiaris/pep/Canis_familiaris.BROADD2.56.pep.all.fa.gz',
 'cavPor3' => 'cavia_porcellus/pep/Cavia_porcellus.cavPor3.56.pep.all.fa.gz',
 'choHof1' => 'choloepus_hoffmanni/pep/Choloepus_hoffmanni.choHof1.56.pep.all.fa.gz',
@@ -1173,7 +1173,7 @@ my %ensGeneFtpPeptideFileNames_56 = (
 my %ensGeneFtpMySqlFileNames_56 = (
 'anoCar1' =>  'anolis_carolinensis_core_56_1a' ,
 'bosTau4' => 'bos_taurus_core_56_4e' ,
-'calJac3' => 'callithrix_jacchus_core_56_3' ,
+'calJac2' => 'callithrix_jacchus_core_56_3' ,
 'canFam2' => 'canis_familiaris_core_56_2m' ,
 'cavPor3' => 'cavia_porcellus_core_56_3a',
 'ce7' => 'caenorhabditis_elegans_core_56_200' ,
@@ -1228,7 +1228,7 @@ my %ensGeneGtfFileNames_57 = (
 'anoCar1' => 'anolis_carolinensis/Anolis_carolinensis.AnoCar1.0.57.gtf.gz',
 'bosTau4' => 'bos_taurus/Bos_taurus.Btau_4.0.57.gtf.gz',
 'ce7' => 'caenorhabditis_elegans/Caenorhabditis_elegans.WS200.57.gtf.gz',
-'calJac3' => 'callithrix_jacchus/Callithrix_jacchus.calJac3.57.gtf.gz',
+'calJac2' => 'callithrix_jacchus/Callithrix_jacchus.calJac3.57.gtf.gz',
 'canFam2' => 'canis_familiaris/Canis_familiaris.BROADD2.57.gtf.gz',
 'cavPor3' => 'cavia_porcellus/Cavia_porcellus.cavPor3.57.gtf.gz',
 'choHof1' => 'choloepus_hoffmanni/Choloepus_hoffmanni.choHof1.57.gtf.gz',
@@ -1283,7 +1283,7 @@ my %ensGeneFtpPeptideFileNames_57 = (
 'anoCar1' => 'anolis_carolinensis/pep/Anolis_carolinensis.AnoCar1.0.57.pep.all.fa.gz',
 'bosTau4' => 'bos_taurus/pep/Bos_taurus.Btau_4.0.57.pep.all.fa.gz',
 'ce7' => 'caenorhabditis_elegans/pep/Caenorhabditis_elegans.WS200.57.pep.all.fa.gz',
-'calJac3' => 'callithrix_jacchus/pep/Callithrix_jacchus.calJac3.57.pep.all.fa.gz',
+'calJac2' => 'callithrix_jacchus/pep/Callithrix_jacchus.calJac3.57.pep.all.fa.gz',
 'canFam2' => 'canis_familiaris/pep/Canis_familiaris.BROADD2.57.pep.all.fa.gz',
 'cavPor3' => 'cavia_porcellus/pep/Cavia_porcellus.cavPor3.57.pep.all.fa.gz',
 'choHof1' => 'choloepus_hoffmanni/pep/Choloepus_hoffmanni.choHof1.57.pep.all.fa.gz',
@@ -1338,7 +1338,7 @@ my %ensGeneFtpPeptideFileNames_57 = (
 my %ensGeneFtpMySqlFileNames_57 = (
 'anoCar1' => 'anolis_carolinensis_core.57.1a' ,
 'bosTau4' => 'bos_taurus_core.57.4f' ,
-'calJac3' => 'callithrix_jacchus_core.57.3' ,
+'calJac2' => 'callithrix_jacchus_core.57.3' ,
 'canFam2' => 'canis_familiaris_core.57.2m' ,
 'cavPor3' => 'cavia_porcellus_core.57.3a',
 'ce7' => 'caenorhabditis_elegans_core.57.200a' ,
