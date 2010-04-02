@@ -49,4 +49,14 @@ public class TestTarget {
     zoomCount = 1;
  }
 
+  public String toString() {
+    return
+    "machine " + machine + "\n" + 
+    "server " + server + "\n" +
+    "quick " + quickOn + "\n" +
+    "dbSpec " + dbSpec + "\n" +
+    "table " + table + "\n" +
+    "zoomCount " + zoomCount + "\n";
+  }
+
 }
