@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.31 2010/03/25 18:59:27 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.32 2010/04/02 17:59:34 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -32,6 +32,7 @@ use vars qw/
     $opt_verbose
     $opt_checksum
     $opt_noMetaTbl
+    $opt_metaTbl
     /;
 
 our $checksumFile = "md5sum.txt";
@@ -47,6 +48,7 @@ options:
     -help               Displays this usage info
     -checksum           Generate checksum file
     -noMetaTbl	        Don't use metaTbl.  Instead, use the old trackDb/fileDb.ra methods
+    -metaTbl=table      Use an explicit metaTbl and don't use trackDb or fileDb.ra
     -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
     -db=hg18            Use a database other than the default hg18 (For aquiring releaseDate and metadata from trackDb)
     -fileType=mask	    mask for file types included (default '*.gz')
@@ -285,6 +287,7 @@ my $ok = GetOptions("fileType=s",
                     "verbose=i",
                     "checksum",
                     "noMetaTbl",
+                    "metaTbl=s",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
@@ -293,6 +296,9 @@ my $fileMask = "*.gz *.bb *.bw *.bam";
 
 my $preamble = "preamble.html";
    $preamble = $opt_preamble if(defined $opt_preamble);
+
+my $metaTbl = "metaTbl";
+   $metaTbl =$opt_metaTbl if(defined $opt_metaTbl);
 
 usage() if (scalar(@ARGV) < 1);
 
@@ -386,7 +392,7 @@ for my $line (@fileList) {
     $results = "";
     # Use the metaTbl for metadata
     if (!defined $opt_noMetaTbl) {
-        my $queryResults = $db->execute("select var,val from $database.metaTbl where objName = '$tableName'");
+        my $queryResults = $db->execute("select var,val from $database.$metaTbl where objName = '$tableName'");
         if($queryResults) {
             my @pairVars;
             while(my @row = $queryResults->fetchrow_array()) {
@@ -397,34 +403,34 @@ for my $line (@fileList) {
             }
             if(scalar(@pairVars) > 0) {
                 $results = "metadata " . join(' ',@pairVars );
-}
+            }
         }
     }
 
-    if(!$results) {
-        $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
-    }
-    if(!$results) {
-        ### TODO: This needs to be replaced with a select from a fileDb table
-        if(stat("fileDb.ra")) {
-            $results = `grep metadata fileDb.ra | grep '$fileName' | tail -1`;  # Always prefer the last line found
-            chomp $results;
-            $results =~ s/^ +//;
-            $results =~ s/ +$//;
+    if(!defined $opt_metaTbl) {
+        if(!$results) {
+            $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
         }
         if(!$results) {
-            my $associatedTable = $tableName;
-            $associatedTable =~ s/RawData/RawSignal/    if $tableName =~ /RawData/;
-            $associatedTable =~ s/Alignments/RawSignal/ if $tableName =~ /Alignments/;
-            if($tableName ne $associatedTable) {
-                $results = $db->quickQuery("select settings from trackDb where tableName = '$associatedTable'");
-                if($results) {
-                    $metaData{parent} = "RawData&rarr;RawSignal" if $tableName =~ /RawData/;
-                    $metaData{parent} = "Alignments&rarr;RawSignal" if $tableName =~ /Alignments/;
+            if(stat("fileDb.ra")) {
+                $results = `grep metadata fileDb.ra | grep '$fileName' | tail -1`;  # Always prefer the last line found
+                chomp $results;
+                $results =~ s/^ +//;
+                $results =~ s/ +$//;
+            }
+            if(!$results) {
+                my $associatedTable = $tableName;
+                $associatedTable =~ s/RawData/RawSignal/    if $tableName =~ /RawData/;
+                $associatedTable =~ s/Alignments/RawSignal/ if $tableName =~ /Alignments/;
+                if($tableName ne $associatedTable) {
+                    $results = $db->quickQuery("select settings from trackDb where tableName = '$associatedTable'");
+                    if($results) {
+                        $metaData{parent} = "RawData&rarr;RawSignal" if $tableName =~ /RawData/;
+                        $metaData{parent} = "Alignments&rarr;RawSignal" if $tableName =~ /Alignments/;
+                    }
                 }
             }
         }
-        ### TODO: This needs to be replaced with a select from a fileDb table
     }
     if( $results ) {
         my @settings = split(/\n/, $results); # New Line
