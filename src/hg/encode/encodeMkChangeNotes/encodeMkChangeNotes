@@ -93,7 +93,7 @@ def main(argv=None):
         help="the name of the composite track by default this is the name of the current directory",
         metavar="N", default=None)
     parser.add_option("-n", "--track-name", dest="track_name",
-        help="the English name of track", metavar="N", default=None)
+        help="the English name of track, by default this is \"ENCODE [composite-name]\"", metavar="N", default=None)
     parser.add_option("--files", dest="files_path", help="dump list of new files to F", metavar="F")
     parser.add_option("--tables", dest="tables_path", help="dump list of new tablesto F", metavar="F")
 
