@@ -8,12 +8,12 @@ There are some unusual pile-ups between these two genomes.
 A bed file of the chains was made:
 <PRE>
 zcat susScr2.bosTau4.all.chain.gz | grep "^chain " \
-        | awk '{printf "%s\t%d\t%d\t%s\t%s\t%s\n", $3, $6, $7, $8, $2, $5}' \
+        | awk '{printf "%s\t%d\t%d\t%s\t%s\t%s\n", 3, 6, 7, 8, 2, 5}' \
         &gt; bosTau4.chain.bed
 </PRE>
 The chain scores were scanned with ave, to find the range of scores:
 <PRE>
-$ ave -col=5 bosTau4.chain.bed
+  ave -col=5 bosTau4.chain.bed
 Q1 5300.000000
 median 8265.000000
 Q3 14079.000000
@@ -27,13 +27,13 @@ standard deviation 419128.061072
 The bed file scores were normalized to the range 0-1000 and an
 overlap count bedGraph file was calculated, and turned into a bigWig:
 <PRE>
-$ awk '
-  {printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,(1000*$5)/1506828099, $6}' \
+  awk '
+  {printf "%s\t%d\t%d\t%s\t%d\t%s\n", 1,2,3,4,(1000*5)/1506828099, 6}' \
         bosTau4.chain.bed | sort -k1,1 -k2,2n &gt; bosTau4.chain.normalized.bed
-$ bedItemOverlapCount susScr2 bosTau4.chain.normalized.bed \
+  bedItemOverlapCount susScr2 bosTau4.chain.normalized.bed \
     &gt; bosTau4.overlap.wigVar
-$ bedGraphToBigWig bosTau4.overlap.wigVar susScr2.chrom.sizes bosTau4ChainPileUp.bw
-$ bigWigInfo bosTau4ChainPileUp.bw
+  bedGraphToBigWig bosTau4.overlap.wigVar susScr2.chrom.sizes bosTau4ChainPileUp.bw
+  bigWigInfo bosTau4ChainPileUp.bw
 version: 3
 isCompressed: yes
 isSwapped: 0
