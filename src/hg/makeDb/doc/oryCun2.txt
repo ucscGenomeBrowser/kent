@@ -407,7 +407,7 @@ TMPDIR=/scratch/tmp
     #	178331930 bases of 3501660299 (5.093%) in intersection
 
 ############################################################################
-# all.joiner update - (DONE - 2010-01-06,08 - Hiram)
+# all.joiner update - (DONE - 2010-04-02 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=oryCun2 -all all.joiner
@@ -425,7 +425,36 @@ TMPDIR=/scratch/tmp
     #	copy it to hgwbeta
     scp -p oryCun2.pushQ.sql hgwbeta:/tmp
     ssh hgwbeta
+    cd /tmp
     hgsql qapushq < oryCun2.pushQ.sql
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
+
+############################################################################
+# lift file to Ensembl scaffold coordinates (DONE - 2010-04-02 - Hiram)
+    cd /hive/data/genomes/oryCun2/broad
+    cat << '_EOF_' > ctgPos2ToEnsembl.pl
+#!/usr/bin/env perl
+
+my %chromSize;
+open (FH, "<../chrom.sizes") or die "can not read ../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+',$line);
+    $chromSize{$chr} = $size;
+}
+close (FH);
+
+open (FH, "<ctgPos2.tab") or die "can not read ctgPos2.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($scaf, $size, $chr, $start, $end, $type) = split('\s+', $line);
+    printf "%s\t%s\t%s\t%s\t%s\n", $start, $scaf, $size, $chr, $chromSize{$chr};
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ctgPos2ToEnsembl.pl
+    ./ctgPos2ToEnsembl.pl | sort -k4,4 -k3,3n > ../jkStuff/ensGene.lft
+
 ############################################################################
