@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1635 2010/03/18 00:51:26 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1636 2010/04/02 20:14:15 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3505,11 +3505,16 @@ else if (ensVersionString[0])
     if (ensDateReference[0] && differentWord("current", ensDateReference))
         archive = cloneString(ensDateReference);
     /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-    if (isUnknownChrom(database, chromName))
+    if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
 	{
+	//	which table to check
+	char *ctgPos = "ctgPos";
+	if (sameWord(database,"oryCun2"))
+	    ctgPos = "ctgPos2";
+
 	if (sameWord(database,"fr2"))
 	    fr2ScaffoldEnsemblLink(archive);
-	else if (hTableExists(database, "ctgPos"))
+	else if (hTableExists(database, ctgPos))
 	    /* see if we are entirely within a single contig */
 	    {
 	    struct sqlConnection *conn = hAllocConn(database);
@@ -3517,8 +3522,8 @@ else if (ensVersionString[0])
 	    char **row = NULL;
 	    char query[256];
 	    safef(query, sizeof(query),
-    "select * from ctgPos where chrom = '%s' and chromStart<%u and chromEnd>%u",
-	    chromName, winEnd, winStart);
+    "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
+	    ctgPos, chromName, winEnd, winStart);
 	    sr = sqlGetResult(conn, query);
 
 	    int itemCount = 0;
