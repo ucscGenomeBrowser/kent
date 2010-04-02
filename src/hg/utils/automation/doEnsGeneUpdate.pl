@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.23 2010/02/11 23:48:34 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.24 2010/04/02 16:34:50 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -209,7 +209,7 @@ hgsql -e 'INSERT INTO trackVersion \\
     VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"identical to previous version $previousEnsVersion", \\
 	"identical to previous version $previousEnsVersion", \\
-	$ensVersionDateReference );' hgFixed
+	"$ensVersionDateReference" );' hgFixed
 _EOF_
 	  );
   } else {
@@ -308,7 +308,7 @@ hgsql -e 'INSERT INTO trackVersion \\
     VALUES("$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
-	$ensVersionDateReference );' hgFixed
+	"$ensVersionDateReference" );' hgFixed
 _EOF_
       );
       } else {
@@ -318,7 +318,7 @@ hgsql -e 'INSERT INTO trackVersion \\
     VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
-	$ensVersionDateReference );' hgFixed
+	"$ensVersionDateReference" );' hgFixed
 _EOF_
       );
       }
