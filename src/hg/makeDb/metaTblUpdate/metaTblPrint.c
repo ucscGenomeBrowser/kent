@@ -4,7 +4,7 @@
 #include "options.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTblPrint.c,v 1.6 2010/03/31 23:47:03 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTblPrint.c,v 1.7 2010/04/02 21:20:58 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -12,35 +12,37 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "metaTblPrint - Prints metadata objects and variables from the metaTbl.\n\n"
-  "There are two basic views of the data: by objects and by variables.  Unless a single variable "
-  "and no object is requested the default view is by object.  Each line of output will contain "
-  "object and all it's var=val pairs as 'formatted metadata' line.  In 'byVar' view, a single line "
-  "per var=val and then a space seperated list of each obj(type) follows.  RA style will place "
-  "each object and var val on a separate line with indentation.  Alternatively, count will "
-  "return a count of unique obj var=val combinations. It is also possible to select a "
-  "combination of vars by entering a string of var=val pairs.\n\n"
+  "metaTblPrint - Prints metadata objects and variables from the metaTbl.\n"
   "usage:\n"
-  "   metaTblPrint -db= [-table=]  [-byVar] [-ra/-countObjs/-countVarss/-countVals]\n"
+  "   metaTblPrint -db= [-table=] [-byVar] [-ra/-countObjs/-countVarss/-countVals]\n"
   "                [-all]\n"
   "                [-obj= [-var= [-val=]]]\n"
   "                [-var= [-val=]]\n"
-  "                [-vars=\"var1=val1 var2=val2...]\n\n"
+  "                [-vars=\"var1=val1 var2=val2...]\n"
   "Options:\n"
   "    -db      Database to query.  This argument is required.\n"
   "    -table   Table to query.  Default is '" METATBL_DEFAULT_NAME "'.\n"
   "    -byVar   Print each var and val, then all objects that match,\n"
   "             as opposed to printing objects and all the var=val pairs that match.\n"
   "    -ra      Print each obj with a set of indented var val pairs on separate lines.\n"
-  "             With -byVar prints pseudo-RA style with 2 levels of indentation (not val obj pairs).\n"
+  "             With -byVar prints pseudo-RA style with 2 levels of indentation.\n"
   "    -countObjs   Just print count of objects returned in the query.\n"
   "    -countVars   Just print count of variables returned in the query.\n"
   "    -countVals   Just print count of values returned in the query.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
-  "    -obj={objName}  Request a single object.  The request can be further narrowed by var and val.\n"
-  "    -var={varName}  Request a single variable.  The request can be further narrowed by val.\n"
-  "    -vars={var=val...}  Request a combination of var=val pairs.\n"
+  "    -obj={objName}  Request a single object.  Can be narrowed by var and val.\n"
+  "    -var={varName}  Request a single variable.  Can be narrowed by val.\n"
+  "    -vars={var=val...}  Request a combination of var=val pairs.\n\n"
+  "                    Use of 'var!=val', 'var=v%%' and 'var=?' are supported.\n"
+  "There are two basic views of the data: by objects and by variables.  Unless a single variable "
+  "and no object is requested the default view is by object.  Each line of output will contain "
+  "object and all it's var=val pairs as 'formatted metadata' line.  In 'byVar' view, a single line "
+  "per var=val and then a space seperated list of each obj(type) follows.  RA style will place "
+  "each object and var val on a separate line with indentation.  Alternatively, count will "
+  "return a count of unique obj var=val combinations. It is also possible to select a "
+  "combination of vars by entering a string of var=val pairs.\n"
+  "HINT: Use '%%' in any obj, var or val as a wildcard for selection.\n\n"
   "Examples:\n"
   "  metaTblPrint -vars=\"grant=Snyder cell=GM12878 antibody=CTCF\"\n"
   "               Return all objs that satify ALL of the constraints.\n"
@@ -75,6 +77,9 @@ int main(int argc, char *argv[])
 struct metaObj   * metaObjs   = NULL;
 struct metaByVar * metaByVars = NULL;
 int objsCnt=0, varsCnt=0,valsCnt=0;
+
+if(argc == 1)
+    usage();
 
 optionInit(&argc, argv, optionSpecs);
 if(!optionExists("db"))
