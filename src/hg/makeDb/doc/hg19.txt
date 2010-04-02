@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.94 2010/03/31 14:58:03 angie Exp $";
+#	"$Id: hg19.txt,v 1.95 2010/04/02 17:25:47 angie Exp $";
 
 #############################################################################
 
@@ -8336,24 +8336,25 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 3/1/10 angie)
+# NHGRI GWAS CATALOG (DONE 4/1/10 angie)
+# Updated 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
     cut -f 1-4 ../snp130/snp130.bed \
     | sort -k4,4 \
       > snp130Coords.bed
-    mkdir /hive/data/genomes/hg19/bed/gwasCatalog/100301
-    cd /hive/data/genomes/hg19/bed/gwasCatalog/100301
+    mkdir /hive/data/genomes/hg19/bed/gwasCatalog/100401
+    cd /hive/data/genomes/hg19/bed/gwasCatalog/100401
 
     # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-    join -t "	" -1 4 ../snp130Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/100301/noCoords.tab \
+    join -t "	" -1 4 ../snp130Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/100401/noCoords.tab \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 2780 elements of size 22
+#Loaded 2895 elements of size 22
 
 
 ######################################################################## 
