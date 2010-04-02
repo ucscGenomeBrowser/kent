@@ -13,6 +13,8 @@ group x
 priority 600
 visibility hide
 type bigWig 0 14674
+minLimit 0
+maxLimit 14674
 
 track bosTau4PileUpWig
 shortLabel pile up wiggle
