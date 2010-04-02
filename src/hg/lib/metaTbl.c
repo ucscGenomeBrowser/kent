@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.9 2010/04/01 23:49:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.10 2010/04/02 21:14:04 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -458,74 +458,46 @@ switch (varType)
 }
 
 // ------ Parsing lines ------
-struct metaObj *metadataLineParse(char *line)
-/* Parses a single formatted metadata line into metaObj for updates or queries. */
+
+struct metaObj *metaObjAddVarPairs(struct metaObj *oldObj,char *varPairs)
+// Parses line of var=val pairs adding to a metaObj.  Creates metaObj if NULL
 {
-int thisWord = 0;
-struct metaObj *metaObj;
+struct metaObj *metaObj = oldObj;
 struct metaVar *metaVar;
-char *cloneLine = cloneString(line);
+char *cloneVars = cloneString(varPairs);
 
     // initial chop and determine if this looks like metadata
-    int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
+    int count = chopByWhiteRespectDoubleQuotes(cloneVars,NULL,0);
     char **words = needMem(sizeof(char *) * count);
-    count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
-    if(count < 3 || words[thisWord] == NULL || differentWord(words[thisWord],"metadata"))
+    count = chopByWhiteRespectDoubleQuotes(cloneVars,words,count);
+    if(count < 1 || words[0] == NULL)
         {
-        errAbort("This is not formatted metadata:\n\t%s\n",line);
+        errAbort("This is not formatted var=val pairs:\n\t%s\n",varPairs);
         }
 
-    verbose(3, "metadataLineParse() word count:%d\n\t%s\n",count,line);
-    // Get objName and figure out if this is a delete line
-    AllocVar(metaObj);
-    thisWord++;
-    if(strchr(words[thisWord], '=') == NULL)
-        {
-        metaObj->obj = cloneString(words[thisWord++]);
-        verbose(3, "metadataLineParse() obj=%s\n",metaObj->obj);
-        if(sameWord(words[thisWord],"delete"))
-            {
-            metaObj->deleteThis = TRUE;
-            thisWord++;
-            }
-            if(thisWord < count && strchr(words[thisWord], '=') == NULL)
-                {
-                metaObj->objType = metaObjTypeStringToEnum(words[thisWord]);
-                if(metaObj->objType == otUnknown)
-                    {
-                    errAbort("Unknown objType '%s'.  This is not properly formatted metadata:\n\t%s\n",words[thisWord],line);
-                    //metaObjsFree(&metaObj);
-                    //return NULL;
-                    }
-                thisWord++;
-                }
-        if(thisWord < count && sameWord(words[thisWord],"delete"))  // Could be obj delete... or obj objType delete
-            {
-            metaObj->deleteThis = TRUE;
-            thisWord++;
-            }
-        }
+    verbose(3, "metaObjAddVarPairs() word count:%d\n\t%s\n",count,varPairs);
 
-    // From now on all words are expected to be var=val pairs!
-    metaObj->varHash = hashNew(0);
-    for(;thisWord<count;thisWord++)
+    if(metaObj == NULL)
+        AllocVar(metaObj);
+    if(metaObj->varHash == NULL)
+        metaObj->varHash = hashNew(0);
+
+    int ix;
+    for(ix = 0;ix<count;ix++)
         {
-        if(strchr(words[thisWord], '=') == NULL)
-            {
-            errAbort("Expected 'var=val' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",words[thisWord],line);
-            //metaObjsFree(&metaObj);
-            //return NULL;
-            }
+        if(strchr(words[ix], '=') == NULL)
+            errAbort("This is not formatted var=val pairs: '%s'\n\t%s\n",words[ix],varPairs);
+
         AllocVar(metaVar);
-        metaVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
+        metaVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
         metaVar->varType = vtTxt;                               // FIXME: binary?
-        metaVar->val = cloneString(words[thisWord]);
-        verbose(3, "metadataLineParse() var=val: %s=%s\n",metaVar->var,metaVar->val);
+        metaVar->val = cloneString(words[ix]);
+        verbose(3, "metaObjAddVarPairs() var=val: %s=%s\n",metaVar->var,metaVar->val);
         struct metaVar *oldVar = (struct metaVar *)hashFindVal(metaObj->varHash, metaVar->var);
         if(oldVar)
             {
-            verbose(1, "The same variable appears twice: %s=%s and %s=%s.  Ignoring second value.\n",
-                oldVar->var,oldVar->val,metaVar->var,metaVar->val);
+            verbose(1, "The same variable appears twice: %s=%s and %s=%s.  Ignoring second value.\n\t%s\n",
+                oldVar->var,oldVar->val,metaVar->var,metaVar->val,varPairs);
             metaVarFree(&metaVar);
             }
         else
@@ -535,6 +507,7 @@ char *cloneLine = cloneString(line);
             }
         }
     freeMem(words);
+    freeMem(cloneVars);
 
     // Special for old style ENCODE metadata
     if(metaObj->obj == NULL)
@@ -562,25 +535,62 @@ char *cloneLine = cloneString(line);
         else if(fileName != NULL)
             {
             verbose(3, "fileName:%s\n",fileName);
-            // NOTE: that the file object is the root of the name, so that file.fastq.gz = file.fastq
+            // NOTE: that the file object is the root of the name, so both file.fastq.gz and file.fastq are same obj!
             metaObj->obj     = cloneFirstWordByDelimiter(fileName,'.');
             metaObj->objType = otFile;
             }
         }
 
-if(metaObj->obj == NULL)
-    {
-    errAbort("No obj found. This is not properly formatted metadata:\n\t%s\n",line);
-    //metaObjsFree(&metaObj);
-    //return NULL;
-    }
+if(metaObj->obj == NULL) // NOTE: Should this be a hard error!
+    errAbort("No obj found. This is not properly formatted metadata:\n\t%s\n",varPairs);
+
 if(metaObj->objType == otUnknown) // NOTE: defaulting to table
-    {
     metaObj->objType = otTable;
-    }
-    slReverse(&(metaObj->vars));
-    verbose(3, "metadataLineParse() obj=%s(%s) %s(%s)=%s\n",
+
+    //slReverse(&(metaObj->vars)); Could have added vars so sort instead
+    slSort(&(metaObj->vars),&metaVarCmp); // Should be in determined order
+    verbose(3, "metaObjAddVarPairs() obj=%s(%s) %s(%s)=%s\n",
     metaObj->obj, metaObjTypeEnumToString(metaObj->objType),metaObj->vars->var,metaVarTypeEnumToString(metaObj->vars->varType),metaObj->vars->val);
+return metaObj;
+}
+
+struct metaObj *metadataLineParse(char *line)
+/* Parses a single formatted metadata line into metaObj for updates or queries. */
+{
+char *fromTheTop = line;
+char*nibbledWord = cloneNextWordByDelimiter(&line,' ');
+if(nibbledWord == NULL || differentWord(nibbledWord,"metadata"))
+    errAbort("This is not formatted metadata:\n\t%s\n",fromTheTop);
+freeMem(nibbledWord);
+
+struct metaObj *metaObj = NULL;
+char*varPairs = line;
+nibbledWord = cloneNextWordByDelimiter(&line,' ');;
+if(nibbledWord == NULL)
+    errAbort("This is not formatted metadata:\n\t%s\n",fromTheTop);
+if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should be objName
+    {
+    AllocVar(metaObj);
+    metaObj->obj = nibbledWord;
+    verbose(3, "metadataLineParse() obj=%s\n",metaObj->obj);
+    varPairs = line;
+    for(;;)
+        {
+        nibbledWord = cloneNextWordByDelimiter(&line,' ');;
+        if(nibbledWord == NULL)
+            errAbort("This is not formatted metadata:\n\t%s\n",fromTheTop);
+        if(strchr(nibbledWord, '=') != NULL) // If this is start of var=val pairs
+            break;
+
+        if(sameWord(nibbledWord,"delete"))
+            metaObj->deleteThis = TRUE;
+        else
+            metaObj->objType = metaObjTypeStringToEnum(nibbledWord);
+        varPairs = line;
+        freeMem(nibbledWord);
+        }
+    }
+metaObj = metaObjAddVarPairs(metaObj,varPairs);
 return metaObj;
 }
 
@@ -613,20 +623,25 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
             //return NULL;
             }
         AllocVar(rootVar);
-        char *var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
+        rootVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
+        rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
+        if(rootVar->notEqual)
+            rootVar->var[strlen(rootVar->var)-1] = 0;
         char *val = cloneString(words[thisWord]);
-        struct metaByVar *oldVar = (struct metaByVar *)hashFindVal(varHash, var);
+        if(sameWord(val,"?"))  // "var=?" or "var=" will query by var name only
+            freez(&val);
+
+        struct metaByVar *oldVar = (struct metaByVar *)hashFindVal(varHash, rootVar->var);
         if(oldVar)
             {  // FIXME: Could build this for 'or' queries!
             verbose(1, "The same variable appears twice: %s=%s and %s=%s.  Ignoring second value.\n",
-                oldVar->var,oldVar->vals->val,var,val);
-            freeMem(var);
+                oldVar->var,oldVar->vals->val,rootVar->var,val);
+            freeMem(rootVar->var);
+            freeMem(rootVar);
             freeMem(val);
             }
         else
             {
-            AllocVar(rootVar);
-            rootVar->var = var;
             AllocVar(limbVal);
             limbVal->val = val;
             rootVar->vals = limbVal;
@@ -1025,7 +1040,8 @@ struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaO
     dyStringPrintf(dy, "select objName,objType,var,varType,val from %s", table);
     if(metaObj != NULL && metaObj->obj != NULL)
         {
-        dyStringPrintf(dy, " where objName = '%s'", metaObj->obj);
+        dyStringPrintf(dy, " where objName %s '%s'",
+            (strchr(metaObj->obj,'%')?"like":"="),metaObj->obj);
 
         struct metaVar *metaVar;
         for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
@@ -1034,13 +1050,23 @@ struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaO
                 dyStringPrintf(dy, " and (");
             else
                 dyStringPrintf(dy, " or ");
-            if(metaVar->var != NULL && metaVar->val != NULL)
-                dyStringPrintf(dy, "(var = '%s' and val = '%s')", metaVar->var, sqlEscapeString(metaVar->val));
-            else if(metaVar->var != NULL)
-                    dyStringPrintf(dy, "var = '%s'", metaVar->var);
-            else if(metaVar->val != NULL)
-                    dyStringPrintf(dy, "val = '%s'", sqlEscapeString(metaVar->val));
-            else
+            if(metaVar->var != NULL)
+                {
+                if(metaVar->val != NULL)
+                    dyStringPrintf(dy, "(");
+                dyStringPrintf(dy, "var %s '%s'",
+                    (strchr(metaVar->var,'%')?"like":"="),metaVar->var);
+                }
+            if(metaVar->val != NULL)
+                {
+                if(metaVar->var != NULL)
+                    dyStringPrintf(dy, " and ");
+                dyStringPrintf(dy, "val %s '%s'",
+                    (strchr(metaVar->val,'%')?"like":"="), sqlEscapeString(metaVar->val));
+                if(metaVar->var != NULL)
+                    dyStringPrintf(dy, ")");
+                }
+            if(metaVar->var == NULL && metaVar->val)
                 errAbort("metaObjQuery has empty metaVar struct.\n");
             buildHash = FALSE;  // too few variables
             }
@@ -1048,7 +1074,7 @@ struct metaObj *metaObjQuery(struct sqlConnection *conn,char *table,struct metaO
             dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by objName, var");
-    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
     struct metaObj *metaObjs = metaObjsLoadFromMemory(&metaTbl,buildHash);
@@ -1087,26 +1113,47 @@ struct metaByVar *metaByVarsQuery(struct sqlConnection *conn,char *table,struct 
     for(rootVar=metaByVars;rootVar!=NULL;rootVar=rootVar->next)
         {
         if(rootVar==metaByVars)
-            dyStringPrintf(dy, " where ");
+            dyStringPrintf(dy, " where (var ");
         else
-            dyStringPrintf(dy, " OR ");
-        dyStringPrintf(dy, "(var = '%s'", rootVar->var);
+            dyStringPrintf(dy, " OR (var ");
+        if(rootVar->notEqual && rootVar->vals == NULL)
+            dyStringPrintf(dy, "NOT ");
+
+        dyStringPrintf(dy, "%s '%s'",
+            (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
 
         struct metaLimbVal *limbVal;
+        boolean multiVals = FALSE;
         for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
-            if(limbVal==rootVar->vals)
-                dyStringPrintf(dy, " and val in (");
+            if(limbVal->val == NULL || strlen(limbVal->val) < 1)
+                continue;
+
+            if(!multiVals)
+                {
+                dyStringPrintf(dy, " and val ");
+                if(rootVar->notEqual)
+                    dyStringPrintf(dy, "NOT ");
+                if(limbVal->next == NULL) // only one val
+                    {
+                    dyStringPrintf(dy, "%s '%s'",
+                        (strchr(limbVal->val,'%')?"like":"="), sqlEscapeString(limbVal->val));
+                    break;
+                    }
+                else
+                    dyStringPrintf(dy, "in (");
+                multiVals=TRUE;
+                }
             else
                 dyStringPrintf(dy, ",");
             dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
             }
-        if(rootVar->vals != NULL)
+        if(multiVals)
             dyStringPrintf(dy, ")");
         dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by var, val, objName");
-    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
     verbose(3, "rows (vars) returned: %d\n",slCount(metaTbl));
@@ -1155,30 +1202,46 @@ struct metaObj *metaObjsQueryByVars(struct sqlConnection *conn,char *table,struc
             }
         else
             dyStringPrintf(dy, " AND objName in ");
-        dyStringPrintf(dy, "(select objName from %s where var = '%s'", table, rootVar->var);
+        dyStringPrintf(dy, "(select objName from %s where var ",table);
+
+        if(rootVar->notEqual && rootVar->vals == NULL)
+            dyStringPrintf(dy, "NOT ");
+
+        dyStringPrintf(dy, "%s '%s'",
+            (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
 
         struct metaLimbVal *limbVal;
-        boolean gotVal = FALSE;
+        boolean multiVals = FALSE;
         for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
             if(limbVal->val == NULL || strlen(limbVal->val) < 1)
                 continue;
 
-            if(!gotVal)
+            if(!multiVals)
                 {
-                dyStringPrintf(dy, " and val in (");
-                gotVal=TRUE;
+                dyStringPrintf(dy, " and val ");
+                if(rootVar->notEqual)
+                    dyStringPrintf(dy, "NOT ");
+                if(limbVal->next == NULL) // only one val
+                    {
+                    dyStringPrintf(dy, "%s '%s'",
+                        (strchr(limbVal->val,'%')?"like":"="), sqlEscapeString(limbVal->val));
+                    break;
+                    }
+                else
+                    dyStringPrintf(dy, "in (");
+                multiVals=TRUE;
                 }
             else
                 dyStringPrintf(dy, ",");
             dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
             }
-        if(gotVal)
+        if(multiVals)
             dyStringPrintf(dy, ")");
         dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by objName, var");
-    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct metaTbl *metaTbl = metaTblLoadByQuery(conn, dyStringCannibalize(&dy));
     verbose(3, "rows (vars) returned: %d\n",slCount(metaTbl));
@@ -1543,8 +1606,27 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
         freeMem(words);
 }
 
+void metaObjSwapVars(struct metaObj *metaObjs, char *vars,boolean deleteThis)
+// Replaces objs' vars with var=vap pairs provided, preparing for DB update.
+{
+struct metaObj *metaObj = NULL;
+for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
+    {
+    metaObj->deleteThis = deleteThis;
+
+    if(metaObj->varHash != NULL)
+        hashFree(&metaObj->varHash);
+
+    struct metaVar *metaVar = NULL;
+    while((metaVar = slPopHead(&(metaObj->vars))) != NULL)
+        metaVarFree(&metaVar);
+
+    metaObjAddVarPairs(metaObj,vars);
+    }
+}
+
 void metaObjTransformToUpdate(struct metaObj *metaObjs, char *var, char *varType,char *val,boolean deleteThis)
-/* Turns one or more metaObjs into the stucture needed to add/update or delete. */
+// Turns one or more metaObjs into the stucture needed to add/update or delete.
 {
 struct metaObj *metaObj = NULL;
 for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
@@ -1571,7 +1653,7 @@ for( metaObj=metaObjs; metaObj!=NULL; metaObj=metaObj->next )
     }
 }
 
-struct metaObj *metaObjClone(struct metaObj *metaObj)
+struct metaObj *metaObjClone(const struct metaObj *metaObj)
 // Clones a single metaObj, including hash and maintining order
 {
 if(metaObj == NULL)
@@ -1668,40 +1750,17 @@ if(metaByVarsPtr != NULL && *metaByVarsPtr != NULL)
 static struct metaObj *metadataForTableFromTdb(struct trackDb *tdb)
 // Returns the metadata for a table from a tdb setting.
 {
-metadata_t *metadata = metadataSettingGet(tdb);
-if(metadata == NULL)
-    {
-    tdbExtrasAddOrUpdate(tdb,METATBL_OBJ_KEY,METADATA_NOT_FOUND);
+char *setting = trackDbSetting(tdb, "metadata");
+if(setting == NULL)
     return NULL;
-    }
-// convert to a metaObj
-struct metaObj *metaObj = NULL;
+struct metaObj *metaObj;
 AllocVar(metaObj);
 metaObj->obj     = cloneString(tdb->tableName);
 metaObj->objType = otTable;
-metaObj->varHash = hashNew(0);
-
-int ix =0;
-for(;ix<metadata->count;ix++)
-    {
-    struct metaVar *metaVar = NULL;
-    AllocVar(metaVar);
-    metaVar->var     = cloneString(metadata->tags[ix]);
-    metaVar->varType = vtTxt;
-    metaVar->val     = cloneString(metadata->values[ix]);
-    hashAdd(metaObj->varHash, metaVar->var, metaVar); // pointer to struct to resolve type
-    slAddHead(&(metaObj->vars),metaVar);
-    }
-slSort(&(metaObj->vars),&metaVarCmp); // Should be in determined order
-metadataFree(&metadata);
-
-// Save metaObj to trackDbSettings
-tdbExtrasAddOrUpdate(tdb,METATBL_OBJ_KEY,metaObj);
-
-return metaObj;
+return metaObjAddVarPairs(metaObj,setting);
 }
 
-struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
+const struct metaObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
 // Returns the metadata for a table.  NEVER FREE THIS STRUCT!
 {
 struct metaObj *metaObj = NULL;
@@ -1747,7 +1806,7 @@ metaObjRemoveVars(metaObj,"tableName");
 return metaObj;
 }
 
-char *metadataFindValue(struct trackDb *tdb, char *var)
+const char *metadataFindValue(struct trackDb *tdb, char *var)
 // Finds the val associated with the var or retruns NULL
 {
 struct metaObj *metaObj = tdbExtrasGetOrDefault(tdb, METATBL_OBJ_KEY,NULL);
