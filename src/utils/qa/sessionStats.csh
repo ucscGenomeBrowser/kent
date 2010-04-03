@@ -72,9 +72,19 @@ echo "------  ----- ----- -------  -------"
 echo " first  count users  shared   reused  "
 echo
 
-# graph it
+# graph sessions
+echo sessions
+echo --------
 graph.csh tempOutFile
+
+# graph users
+echo " users"
+echo --------
+rm -f tempOutFile2
+cat tempOutFile | awk '{print $1, $3}' > tempOutFile2
+graph.csh tempOutFile2
 rm -f tempOutFile
+rm -f tempOutFile2
 
 echo
 # see how often people make more than one session:
