@@ -411,9 +411,6 @@ public class HgTracks {
       // hide all and turn off ruler
       url3 = url2 + "&hgt.hideAll=yes&ruler=off";
 
-      // System.out.println();
-      System.out.println(url3);
-
       WebRequest req = new GetMethodWebRequest(url3);
 
       //System.out.println("exerciseTrack: disable JavaScript"); 
@@ -479,11 +476,13 @@ public class HgTracks {
       int code = page.getResponseCode();
       if (code != 200) {
         System.out.println("Unexpected response code " + code);
+        System.out.println(page.getURL()); // url that is giving error
       }
       String text = page.getText();
       int index = text.indexOf("HGERROR");
       if (index > 0) {
         System.out.println("Error detected:");
+        System.out.println(page.getURL()); // url that is giving error
         String errortext = text.substring(index);
         System.out.println(errortext);
       }
@@ -526,7 +525,6 @@ public class HgTracks {
         // System.out.println(links[i].asText());
       }
     }
-    System.out.println("Links found = " + count);
     return (matchLinks);
   }
 

@@ -52,6 +52,7 @@ public class TrackCheck {
     if (args.length != 1)
         usage();
     TestTarget target = new TestTarget(args[0]);
+    System.out.println("\nTarget is:\n" + target);
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -69,22 +70,18 @@ public class TrackCheck {
     ArrayList assemblyList = QADBLibrary.getDatabaseOrAll(metadbinfo, target.dbSpec);
 
     // iterate over assembly list
-    System.out.println("iterate over assembly list");
     Iterator assemblyIter = assemblyList.iterator();
     while (assemblyIter.hasNext()) {
       String assembly = (String) assemblyIter.next();
       System.out.println("Assembly = " + assembly);
 
-      // find default pos for this assembly
       try {
 	// create HGDBInfo for this assembly
 	HGDBInfo dbinfo = new HGDBInfo(target.machine, assembly);
 	if (!dbinfo.validate()) {
 	  System.out.println("Cannot connect to database for " + assembly);
-	} else {
+	} else { // find default pos for this assembly
 	  String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
-	  System.out.println("defaultPos = " + defaultPos);
-	  System.out.println();
 
 	  // get chromInfo for this assembly
 	  ArrayList chroms = QADBLibrary.getChromInfo(dbinfo);
@@ -108,7 +105,6 @@ public class TrackCheck {
           }
 
 	  ArrayList trackList = 
-	    // HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
 	    HgTracks.getTrackControlOrAll(hgtracksURL, defaultPos, target.table, debug);
 	  if (debug) {
 	    int count2 = trackList.size();
@@ -116,26 +112,19 @@ public class TrackCheck {
 	  }
 	  // iterate through tracks
 	  Iterator trackIter = trackList.iterator();
+	  int checkedCount=0;
 	  while (trackIter.hasNext()) {
 	    String track = (String) trackIter.next();
-	    System.out.println(track);
 	    String mode = "default";
-	    // String mode = "all";
 	    HgTracks.exerciseTrack(target.server, assembly, chroms, 
 				       track, mode, defaultPos, "full", target.zoomCount);
-	    // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
-				       // track, mode, defaultPos, "dense");
-	    // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
-				       // track, mode, defaultPos, "pack");
-	    // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
-				       // track, mode, defaultPos, "squish");
-	    System.out.println();
+	    checkedCount++;
 	  }
+          System.out.println("checked " + checkedCount + " of " + trackList.size() + " tracks");
 	}
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
-      System.out.println();
       System.out.println();
     }
   }
