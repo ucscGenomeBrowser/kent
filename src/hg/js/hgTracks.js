@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.61 2010/03/16 00:41:17 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.62 2010/04/03 01:50:04 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -1072,7 +1072,7 @@ $(document).ready(function()
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         $('input#suggest').autocomplete({
                                             delay: 500,
-                                            minchars: 1,
+                                            minchars: 2,
                                             ajax_get: ajaxGet(function () {return db;}, new Object),
                                             callback: function (obj) {
                                                 setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
@@ -1341,7 +1341,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                 if(cmd == 'getDna')
                 {
                     // start coordinate seems to be off by one (+1).
-                    window.location = "../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd;
+                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd);
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
