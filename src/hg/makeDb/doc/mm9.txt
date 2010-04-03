@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.131 2010/03/29 22:11:49 chinhli Exp $"
+#	"$Id: mm9.txt,v 1.132 2010/04/03 00:19:07 hartera Exp $"
 #
 
 #######################################################################
@@ -10105,7 +10105,8 @@ TMPDIR=/scratch/tmp
 # this score.
 # 2010-02-09. Loaded database and added data to /gbdb/
 # Added trackDb entry for the Mapability track.
- 
+# 2010-04-02. Replaced the Mapability 40mer subtrack bigWig file with a new one
+# provided by CRG as the old file had regions with missing data. 
      mkdir -p /hive/data/genomes/mm9/bed/crgMapability
      cd /hive/data/genomes/mm9/bed/crgMapability
 cat << 'EOF' > temp
@@ -10147,7 +10148,22 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-40_
      # Added a trackDb entry for this mapability track in
      # kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra
      # use bigWigInfo to check min and max values. Created a mapability.html
-     # description page. 
+     # description page.
+     
+     # 2010-04-02, hartera
+     # QA found regions of missing data for the 40mer subtrack. Wrote to the 
+     # data providers and they said that the original output has no missing
+     # data so they recreated the bigWig file for the 40mer subtrack and a 
+     # link to the new file was sent on 2010-04-02. 
+     cd /hive/data/genomes/mm9/bed/crgMapability
+     wget --timestamping \
+"http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-40_mm9.bw.gz"
+     gunzip M.musculus.genome.mm9.mappability-40_mm9.bw.gz
+     # Remove old file from /gbdb/mm9/bbi and add new file.
+     rm /gbdb/mm9/bbi/crgMapabilityAlign40mer.bw
+     ln -s `pwd`/M.musculus.genome.mm9.mappability-40_mm9.bw \
+         /gbdb/mm9/bbi/crgMapabilityAlign40mer.bw
+     
 #####################################################################
 # tRNAs track (2010-03-12, Fan RE-BUILT)
 #
