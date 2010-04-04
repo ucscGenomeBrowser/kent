@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
-static char const rcsid[] = "$Id: mgcClick.c,v 1.31 2009/08/28 03:49:25 markd Exp $";
+static char const rcsid[] = "$Id: mgcClick.c,v 1.32 2010/04/04 00:36:13 markd Exp $";
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
@@ -222,6 +222,12 @@ ci->moddate = cloneString(row[i++]);
 ci->version = sqlUnsigned(row[i++]);
 ci->gi = sqlUnsigned(row[i++]);
 sqlFreeResult(&sr);
+}
+
+static char *cdnaInfoDbName(struct cloneInfo *ci)
+/* get the name to use in describing this gene collection */
+{
+return (ci->isMgc ? mgcDbName() : "ORFeome");
 }
 
 static void getRefSeqInfo(struct sqlConnection *conn, struct cloneInfo *ci)
@@ -456,13 +462,13 @@ webPrintLinkCellEnd();
 
 // identity
 webPrintLinkCellRightStart();
-printf("%.1f%%", 100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
+printf("%.2f%%", 100.0 * pslIdent(psl));
 webPrintLinkCellEnd();
 
 // fraction aligned
 webPrintLinkCellRightStart();
 int aligned = psl->match + psl->misMatch + psl->repMatch;
-printf("%.1f%%", 100.0*aligned/((float)psl->qSize));
+printf("%.2f%%", 100.0*aligned/((float)psl->qSize));
 webPrintLinkCellEnd();
 }
 
@@ -736,7 +742,7 @@ printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\" target=_blank>%s:%d-%d</A>",
 webPrintLinkCellEnd();
 
 // similarity
-webPrintLinkCellStart();
+webPrintLinkCellRightStart();
 printf("%0.2f%%", 100.0*gs->sim);
 webPrintLinkCellEnd();
 }
@@ -744,18 +750,21 @@ webPrintLinkCellEnd();
 static void prRefSeqSims(struct cloneInfo *ci)
 /* print similarity information for RefSeqs */
 {
-webNewSection("RefSeq CDS similarity with %s clone %s", 
-              (ci->isMgc ? mgcDbName() : "ORFeome"), ci->acc);
+webNewSection("RefSeq CDS isoform similarity of %s clone %s", 
+              cdnaInfoDbName(ci), ci->acc);
 webPrintLinkTableStart();
 webPrintLabelCell("RefSeq");
 webPrintLabelCell("Position");
-webPrintLabelCell("CDS similarity");
+webPrintLabelCell("Similarity");
 struct geneSim *gs;
 for (gs = ci->refSeqs->genes; gs != NULL; gs = gs->next)
     prRefSeqSim(ci, gs);
 webPrintLinkTableEnd();
+printf("This table compares the similarity of the BLAT genomic alignments of "
+       "the CDS of this %s clone with alignment of RefSeq mRNA CDSs.  This is a metric "
+       "of the similarity of the exon structure of the mRNAs, rather than a measure of their "
+       "nucleotide sequence similarity.", cdnaInfoDbName(ci));
 }
-
 
 void doMgcGenes(struct trackDb *tdb, char *acc)
 /* Process click on a mgcGenes track. */
