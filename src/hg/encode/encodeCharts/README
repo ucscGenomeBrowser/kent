@@ -1,0 +1,18 @@
+*) README
+
+Run the program:
+
+  $ encodeChart.pl newreport.2010-03-31.dcc.txt important.dates.tab > tab.out
+
+Logon to: http://docs.google.com
+
+Open the file: ENCODE Cumulative Submit and Release
+
+Copy and paste file "tab.out" into the spreadsheet
+
+Chart should be automatically updated
+
+
+Send any questions and comments to:
+  Bernard Suh, bsuh@soe.ucsc.edu
+
