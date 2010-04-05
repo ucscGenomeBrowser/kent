@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.517 2010/03/25 17:32:12 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.518 2010/04/05 21:06:10 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2397,6 +2397,7 @@ else if (tdb->type != NULL)
             if (sameWord(words[1], "xeno"))
                 crossSpeciesUi(tdb);
             baseColorDrawOptDropDown(cart, tdb);
+	    indelShowOptions(cart, tdb);
             }
         }
         freeMem(typeLine);
