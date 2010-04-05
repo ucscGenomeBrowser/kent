@@ -1373,4 +1373,9 @@ done
     cd /cluster/data/danRer6/bed/multiz6way/frames
     nice hgLoadMafFrames danRer6 multiz6wayFrames multiz6way.mafFrames.gz
 
+############################################################################
+# CREATE LIFTOVER CHAINS FROM danRer6 TO danRer5 (DONE 2010-04-02 galt)
+    doSameSpeciesLiftOver.pl -debug danRer6 danRer5
+    cd /hive/data/genomes/danRer6/bed/blat.danRer5.2010-04-02
+    doSameSpeciesLiftOver.pl danRer6 danRer5 >& do.log & tail -f do.log
 
