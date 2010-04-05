@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.271 2010/03/30 14:54:48 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.272 2010/04/05 23:39:57 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3294,8 +3294,9 @@ if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
 // Now check visibility
 setting = tdbResolveVis(cart,subtrack,FALSE);
 
-if(sameWord(setting,TV_HIDE))
-    fourState -= 2; // visibility: hide means -1 or -2
+// commenting these out until Tim returns because it breaks tracks without views
+//if(sameWord(setting,TV_HIDE))
+    //fourState -= 2; // visibility: hide means -1 or -2
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
 return cartUsualInt(cart, objName, fourState);
