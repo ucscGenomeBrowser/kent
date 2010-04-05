@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.222 2010/04/05 20:17:38 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.223 2010/04/05 21:33:41 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3508,7 +3508,7 @@ description Input signal from MNase digested DNA.
 term UCDavis
 tag UCD
 type input
-description Input signal (specific to UC Davis) which may be subtracted from experimental raw signal before peaks are called.
+description Input library was prepared at UC Davis.
 
 
 ### Treatments
