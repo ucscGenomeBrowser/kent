@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.220 2010/03/26 01:39:35 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.221 2010/04/05 19:24:41 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2070,6 +2070,19 @@ targetId GeneCard:GC05M158059
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation missing
 
+term ELK4
+tag ELK4
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription This gene is a member of the Ets family of transcription factors and of the ternary complex factor (TCF) subfamily.
+orderUrl http://datasheets.scbt.com/sc-13030.pdf
+vendorName Santa Cruz Biotech
+vendorId sc-13030
+lab Farnham
+targetId GeneCard:ELK4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4&search=elk4
+validation missing
+
 term Egr-1
 tag EGR1
 type Antibody
@@ -2399,6 +2412,19 @@ vendorId sc-17796
 lab Snyder
 targetId GeneCard:GC22P022453
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC22P022453
+validation missing
+
+term IRF-1
+tag IRF1
+type Antibody
+antibodyDescription IRF-1 (C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of IRF-1 of human origin.
+targetDescription Interferon regulatory factor 1 is a member of the interferon regulatory transcription factor (IRF) family. IRF1 serves as an activator of interferons alpha and beta transcription and also functions as a transcription activator of genes induced by interferons alpha, beta, and gamma. IRF1 has been shown to play roles in regulating apoptosis and tumor suppression.	
+vendorName Santa Cruz Biotech
+vendorId sc-497
+orderUrl http://www.scbt.com/datasheet-497-irf-1-c-20-antibody.html
+lab Farnham
+targetId GeneCard:IRF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF1&search=IRF1
 validation missing
 
 term IRF4
