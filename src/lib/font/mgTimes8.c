@@ -1,6 +1,6 @@
 
 /* Times8.c - compiled data for font -Adobe-Times-M-R-N--8-80-75-75- */
-static char const rcsid[] = "$Id: mgTimes8.c,v 1.3 2010/04/06 00:58:57 kent Exp $";
+static char const rcsid[] = "$Id: mgTimes8.c,v 1.4 2010/04/06 19:56:20 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/timR08.bdf */
 
@@ -247,7 +247,7 @@ Times8_ch_ofst, Times8_data,
 200, 10,
 NULL,
 0, 0,   /* x/y offset */
-12,        /* lineHeight */
+10,        /* lineHeight */
 9,	   /* psHeight */
 };
 

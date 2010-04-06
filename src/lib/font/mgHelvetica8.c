@@ -1,6 +1,6 @@
 
 /* Helvetica8.c - compiled data for font AdobeHelv-M-R-N--8-80-75-75-P-4 */
-static char const rcsid[] = "$Id: mgHelvetica8.c,v 1.3 2010/04/06 00:58:56 kent Exp $";
+static char const rcsid[] = "$Id: mgHelvetica8.c,v 1.4 2010/04/06 19:56:20 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/helvR08.bdf */
 
@@ -269,7 +269,7 @@ Helvetica8_ch_ofst, Helvetica8_data,
 201, 11,
 NULL,
 0, 0,   /* x/y offset */
-13,        /* lineHeight */
+11,        /* lineHeight */
 9,	   /* psHeight */
 };
 

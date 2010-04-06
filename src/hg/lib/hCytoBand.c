@@ -8,7 +8,7 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-static char const rcsid[] = "$Id: hCytoBand.c,v 1.6 2008/09/17 18:10:13 kent Exp $";
+static char const rcsid[] = "$Id: hCytoBand.c,v 1.7 2010/04/06 19:56:19 kent Exp $";
 
 static char *abbreviatedBandName(struct cytoBand *band, 
 	MgFont *font, int width, boolean isDmel)
@@ -113,7 +113,7 @@ void hCytoBandDrawAt(struct cytoBand *band, struct hvGfx *hvg,
 {
 Color col = hCytoBandColor(band, hvg, isDmel, aColor, bColor, shades, maxShade);
 hvGfxBox(hvg, x, y, width, height, col);
-if (height >= fontPixelHeight+2)
+if (height >= mgFontLineHeight(font))
     {
     char *s = abbreviatedBandName(band, font, width, isDmel);
     if (s != NULL)
