@@ -11,7 +11,7 @@ alpha:
 	${MAKE} doInstall DEST=${HTDOCS}
 
 alphaCancerPublic:
-	${CVSUP} -d -P
+	${CVSUP} -d -P cancerGenomics index.html
 	${MAKE} doInstallCancerPublic DEST=${HTDOCS}
 
 beta:
@@ -33,4 +33,3 @@ doInstallCancerPublic:
 	mv ${DEST}/index.html ${DEST}/index.html.org
 	ln -sf ${DEST}/cancerGenomics/index.cancerGenomics.html ${DEST}/index.html
 	mv index.html index.html.org
-	
