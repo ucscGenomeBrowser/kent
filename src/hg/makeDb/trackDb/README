@@ -259,13 +259,15 @@ The format of the type fields:
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other
     than substituting "bigWig" for "wig" in the type line, the same as the
-    "type wig" explained above.  The database loading procedure is simply:
+    "type wig" explained above.  The database loading procedure is 
+        hgBbiDbLink hg19 myLocalBigWig /gbdb/hg18/bbi/myLocalBigWig.bw
+    which is equivalent to:
     hgsql hg19 -e 'drop table if exists myLocalBigWig; \
             create table myLocalBigWig (fileName varchar(255) not null); \
             insert into myLocalBigWig values
         ("/gbdb/hg19/bbi/myLocalBigWig.bw");' 
     I believe this works even if the entry is a URL to a remote
-    bigWig file.
+    bigWig file.   
 
 19. type bam
     This uses a binary indexed file (which can be a URL) named in a database table.
