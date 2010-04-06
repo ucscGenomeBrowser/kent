@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.24 2009/07/30 22:34:07 hiram Exp $
+# $Id: makeDownloads.pl,v 1.25 2010/04/06 18:39:53 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -634,7 +634,9 @@ For more information on the $organism genome, see the project website:
 Files included in this directory:
 
 $db.2bit - contains the complete $organism/$db genome sequence
-    in the 2bit file format.  The utility program, twoBitToFa (available
+    in the 2bit file format.  Repeats from RepeatMasker and Tandem Repeats
+    Finder (with period of 12 or less) are shown in lower case; non-repeating
+    sequence is shown in upper case.  The utility program, twoBitToFa (available
     from the kent src tree), can be used to extract .fa file(s) from
     this file.  A pre-compiled version of the command line tool can be
     found at:
@@ -823,6 +825,10 @@ sub makeChromosomesReadme {
   print $fh <<_EOF_
 This directory contains the $assemblyDate assembly of the $organism genome
 ($db, $assemblyLabel) in one gzip-compressed FASTA file per chromosome.
+
+Repeats from RepeatMasker and Tandem Repeats Finder (with period
+of 12 or less) are shown in lower case; non-repeating sequence is
+shown in upper case.
 
 This assembly was produced by $sequencingCenter.
 For more information on the $organism genome, see the project website:
