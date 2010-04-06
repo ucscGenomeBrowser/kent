@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: mm9.ucscGenes12.csh,v 1.4 2009/11/24 00:18:43 kent Exp $"
+#	"$Id: mm9.ucscGenes12.csh,v 1.5 2010/04/06 20:11:30 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -16,8 +16,6 @@ set scratchDir = /hive/scratch
 set db = mm9
 set xdb = hg19
 set Xdb = Hg19
-set xBlastTab = hgBlastTab
-set rnBlastTab = rnBlastTab
 set ydb = canFam2
 set zdb = rn4
 set spDb = sp090821
@@ -28,6 +26,17 @@ set fishDb = danRer5
 set flyDb = dm3
 set wormDb = ce6
 set yeastDb = sacCer2
+
+# Blast tables
+set rnBlastTab = rnBlastTab
+if ($db =~ hg* ) then
+    set blastTab = hgBlastTab
+    set xBlastTab = mmBlastTab
+endif
+if ($db =~ mm* ) then
+    set blastTab = mmBlastTab
+    set xBlastTab = hgBlastTab
+endif
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
@@ -1186,19 +1195,13 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 			    
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
 # Save old known genes and kgXref tables
 sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kxXrefOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 
 # Create backup database
 hgsqladmin create ${db}Backup
@@ -1244,4 +1247,26 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 #
+# Finally, need to wait until after testing, but update databases in other organisms
+# with blastTabs
+
+# Load blastTabs
+cd $dir/hgNearBlastp
+hgLoadBlastTab $xdb $blastTab run.$xdb.$tempDb/out/*.tab
+hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab
+hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
+hgLoadBlastTab $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
+hgLoadBlastTab $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
+hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
+
+# Do synteny on mouse/human/rat
+synBlastp.csh $xdb $db
+synBlastp.csh $ratDb $db
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
