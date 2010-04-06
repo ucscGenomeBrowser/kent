@@ -1,4 +1,6 @@
 KENT = ${GBROOT}/../../..
+include ${KENT}/inc/common.mk
+
 
 # FIXME: for now, need to link statically on RH7 or a warning is written
 # to stdout on RH9, which breaks the program trying to read the output. 
@@ -44,8 +46,7 @@ LIBGENBANK = $(GB_LIBARCH)/libgenbank.a
 MYLIBDIR = ${KENT}/lib/$(MACHTYPE)
 JKLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-LIBS = $(LIBGENBANK) ${JKLIBS}  ${MYSQLLIBS} -lm -lssl
-
+LIBS = $(LIBGENBANK) ${JKLIBS}  ${MYSQLLIBS} -lm ${L}
 TESTBIN = ${GBROOT}/tests/bin
 TESTBINARCH = ${TESTBIN}/$(MACHTYPE)
 

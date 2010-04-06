@@ -1,5 +1,4 @@
 GBROOT = .
-include ../../../inc/common.mk
 include ${GBROOT}/common.mk
 
 SUBDIRS = src tests
