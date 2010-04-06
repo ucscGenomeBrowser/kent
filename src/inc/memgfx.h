@@ -238,6 +238,7 @@ MgFont *mgTimes12Font();
 MgFont *mgTimes14Font();
 MgFont *mgTimes18Font();
 MgFont *mgTimes24Font();
+MgFont *mgTimes34Font();
 
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text);
