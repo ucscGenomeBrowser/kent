@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.102 2010/03/30 21:44:53 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.103 2010/04/06 18:25:16 hiram Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -721,7 +721,6 @@ if (autoScale == wiggleScaleAuto)
 	    *graphUpperLimit = 1.0;
 	    *graphLowerLimit = -1.0;
 	    }
-	    graphRange = *graphUpperLimit - *graphLowerLimit;
 	} else {
 	*graphUpperLimit = *overallUpperLimit;
 	*graphLowerLimit = *overallLowerLimit;
@@ -844,6 +843,8 @@ for (x1 = 0; x1 < width; ++x1)
 		if (whiskers)
 		    {
 		    int zeroPos = scaleHeightToPixels(0);
+		    if (zeroPos < 0)
+			zeroPos = 0;
 		    int scaledVal = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
 		    if (dataValue < 0)
