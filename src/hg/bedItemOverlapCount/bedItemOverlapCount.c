@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.20 2009/10/30 21:03:23 braney Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.21 2010/04/06 04:30:44 hiram Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
@@ -56,15 +56,19 @@ errAbort(
   "\titems in a bed file.  Output is bedGraph 4 to stdout.\n"
   "usage:\n"
   " sort bedFile.bed | bedItemOverlapCount [options] <database> stdin\n"
-  "or all the way to wiggle track data:\n"
+  "To create a bigWig file from this data to use in a custom track:\n"
   " sort bedFile.bed | bedItemOverlapCount [options] <database> stdin \\\n"
-  "         | wigEncode stdin data.wig data.wib\n"
+  "         > bedFile.bedGraph\n"
+  " bedGraphToBigWig bedFile.bedGraph chrom.sizes bedFile.bw\n"
+  "   where the chrom.sizes is obtained with the script: fetchChromSizes\n"
+  "   See also:\n"
+  " http://genome-test.cse.ucsc.edu/~kent/src/unzipped/utils/userApps/fetchChromSizes\n"
   "options:\n"
   "   -zero      add blocks with zero count, normally these are ommitted\n"
   "   -bed12     expect bed12 and count based on blocks\n"
   "              normally only first three fields are used.\n"
   "   -max       if counts per base overflows set to max (%lu) instead of exiting\n"
-  "   -outBounds ouput min/max to stderr\n"
+  "   -outBounds output min/max to stderr\n"
   "   -chromSize=sizefile\tRead chrom sizes from file instead of database\n"
   "             sizefile contains two white space separated fields per line:\n"
   "		chrom name and size\n"
@@ -76,9 +80,10 @@ errAbort(
   "   items before sending into this program as it only looks at\n"
   "   the chrom, start and end columns of the bed file.\n"
   " * Program requires a <database> connection to lookup chrom sizes for a sanity\n"
-  "   check of the incoming data (unless you use -chromSize argument).\n\n"
+  "   check of the incoming data.  Even when the -chromSize argument is used\n"
+  "   the <database> must be present, but it will not be used.\n\n"
   " * The bed file *must* be sorted by chrom\n"
-  " * Maximum count per base is %lu. Recompile with new unitSize to increase this\n",(unsigned long)MAXCOUNT, (unsigned long)MAXCOUNT
+  " * Maximum count per base is %lu. Recompile with new unitSize to increase this",(unsigned long)MAXCOUNT, (unsigned long)MAXCOUNT
   );
 }
 
@@ -303,7 +308,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 
-if (argc < 2)
+if (argc < 3)
     usage();
 host = optionVal("host", NULL);
 user = optionVal("user", NULL);
