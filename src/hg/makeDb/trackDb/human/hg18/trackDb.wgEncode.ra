@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.940 2010/04/06 20:48:02 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.941 2010/04/06 23:22:24 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21558,7 +21558,7 @@ wgEncode 1
     #    configurable on
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=5k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=254 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128785k fileName=wgEncodeGisDnaPetAlignmentsGm128785k.pairedTagAlign.gz
 
-	track wgEncodeGisDnaPetK562F20kAlignments
+	track wgEncodeGisDnaPetAlignmentsK56220k
 	release alpha
 	subTrack wgEncodeGisDnaPet
 	shortLabel K562 20k
@@ -21571,7 +21571,7 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
 	showDiffBasesMaxZoom 10000.0
-	metadata project=wgEncode grant=Gingeras lab=Gis(Ruan) dataType=DnaPet cell=K562 fragSize=20k view=Alignments dataVersion="ENCODE June 2010 Freeze" subId=1075 dateSubmitted=2010-04-05 dateUnrestricted=2011-01-05 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetK562F20kAlignments fileName=wgEncodeGisDnaPetK562F20kAlignments.pairedTagAlign.gz
+	metadata project=wgEncode grant=Gingeras lab=Gis(Ruan) dataType=DnaPet cell=K562 fragSize=20k view=Alignments dataVersion="ENCODE June 2010 Freeze" subId=1075 dateSubmitted=2010-04-05 dateUnrestricted=2011-01-05 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56220k fileName=wgEncodeGisDnaPetAlignmentsK56220k.pairedTagAlign.gz
 
 # Helicos RNA-seq (wrangler: braney)
 
