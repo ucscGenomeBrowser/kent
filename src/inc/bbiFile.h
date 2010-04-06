@@ -49,6 +49,7 @@
  *                 sumData      4 bytes float
  *                 sumSquares   4 bytes float
  *         zoom index        	cirTree index
+ *     magic# 		4 bytes - same as magic number at start of header
  */
 
 #ifndef CIRTREE_H
@@ -67,6 +68,7 @@
  *        Added totalSummary section.
  *    3 - Adding zlib compression.  Only active if uncompressBufSize is non-zero in header.
  *    4 - Fixed problem in encoder for the max field in zoom levels higher than the first one.
+ *        Added an extra sig at end of file.
  */
 
 struct bbiZoomLevel

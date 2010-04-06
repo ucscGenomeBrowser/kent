@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.25 2010/04/01 17:31:11 markd Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.26 2010/04/06 23:42:59 kent Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -522,6 +522,10 @@ for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
 /* Write total summary. */
 fseek(f, totalSummaryOffset, SEEK_SET);
 bbiSummaryElementWrite(f, &totalSum);
+
+/* Write end signature. */
+fseek(f, 0L, SEEK_END);
+writeOne(f, sig);
 
 lineFileClose(&lf);
 carefulClose(&f);

@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.22 2010/04/01 17:31:11 markd Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.23 2010/04/06 23:42:59 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -623,6 +623,10 @@ for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
 /* Write total summary. */
 fseek(f, totalSummaryOffset, SEEK_SET);
 bbiSummaryElementWrite(f, &totalSum);
+
+/* Write end signature. */
+fseek(f, 0L, SEEK_END);
+writeOne(f, sig);
 
 
 /* Clean up. */
