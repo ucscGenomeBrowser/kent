@@ -6,7 +6,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: gemfont.c,v 1.10 2010/03/27 04:23:08 kent Exp $";
+static char const rcsid[] = "$Id: gemfont.c,v 1.11 2010/04/06 00:58:56 kent Exp $";
 
 typedef union
     {
@@ -197,8 +197,5 @@ return f->frm_hgt;
 int font_line_height(struct font_hdr *f)
 /* How far to next line. */
 {
-int x = f->lineHeight;
-if (x == 0)
-   f->lineHeight = x = f->frm_hgt + 1 + (f->frm_hgt/5);
-return x;
+return f->lineHeight;
 }

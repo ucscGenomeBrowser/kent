@@ -1,6 +1,6 @@
 
 /* Courier14.c - compiled data for font -Adobe-Courier-M-R-N--14-140-75 */
-static char const rcsid[] = "$Id: mgCourier14.c,v 1.2 2010/03/31 00:07:44 kent Exp $";
+static char const rcsid[] = "$Id: mgCourier14.c,v 1.3 2010/04/06 00:58:56 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/courR14.bdf */
 
@@ -719,7 +719,7 @@ Courier14_ch_ofst, Courier14_data,
 420, 16,
 NULL,
 0, 0,   /* x/y offset */
-17,        /* lineHeight */
+18,        /* lineHeight */
 13,	   /* psHeight */
 };
 

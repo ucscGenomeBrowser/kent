@@ -1,6 +1,6 @@
 
 /* HelveticaBold14.c - compiled data for font AdobeHelv-B-R-N--14-140-75-75-P */
-static char const rcsid[] = "$Id: mgHelveticaBold14.c,v 1.2 2010/03/31 00:07:45 kent Exp $";
+static char const rcsid[] = "$Id: mgHelveticaBold14.c,v 1.3 2010/04/06 00:58:56 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/helvB14.bdf */
 
@@ -564,7 +564,7 @@ HelveticaBold14_ch_ofst, HelveticaBold14_data,
 304, 17,
 NULL,
 0, 0,   /* x/y offset */
-18,        /* lineHeight */
+19,        /* lineHeight */
 13,	   /* psHeight */
 };
 

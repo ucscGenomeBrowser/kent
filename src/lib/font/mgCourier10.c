@@ -1,6 +1,6 @@
 
 /* Courier10.c - compiled data for font -Adobe-Courier-M-R-N--10-100-75 */
-static char const rcsid[] = "$Id: mgCourier10.c,v 1.2 2010/03/31 00:07:43 kent Exp $";
+static char const rcsid[] = "$Id: mgCourier10.c,v 1.3 2010/04/06 00:58:56 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/courR10.bdf */
 
@@ -285,7 +285,7 @@ Courier10_ch_ofst, Courier10_data,
 216, 11,
 NULL,
 0, 0,   /* x/y offset */
-11,        /* lineHeight */
+13,        /* lineHeight */
 9,	   /* psHeight */
 };
 

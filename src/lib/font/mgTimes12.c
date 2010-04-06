@@ -1,6 +1,6 @@
 
 /* Times12.c - compiled data for font -Adobe-Times-M-R-N--12-120-75-7 */
-static char const rcsid[] = "$Id: mgTimes12.c,v 1.2 2010/03/31 00:07:46 kent Exp $";
+static char const rcsid[] = "$Id: mgTimes12.c,v 1.3 2010/04/06 00:58:57 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/timR12.bdf */
 
@@ -415,7 +415,7 @@ Times12_ch_ofst, Times12_data,
 245, 15,
 NULL,
 0, 0,   /* x/y offset */
-15,        /* lineHeight */
+17,        /* lineHeight */
 11,	/* psHeight */
 };
 
