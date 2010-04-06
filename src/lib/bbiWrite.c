@@ -542,7 +542,7 @@ else
     twiceReduced->end = sum->end;
     twiceReduced->validCount += sum->validCount;
     if (sum->minVal < twiceReduced->minVal) twiceReduced->minVal = sum->minVal;
-    if (sum->maxVal < twiceReduced->maxVal) twiceReduced->maxVal = sum->maxVal;
+    if (sum->maxVal > twiceReduced->maxVal) twiceReduced->maxVal = sum->maxVal;
     twiceReduced->sumData += sum->sumData;
     twiceReduced->sumSquares += sum->sumSquares;
     }
