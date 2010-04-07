@@ -1035,15 +1035,15 @@ wgEncode 1
 	color 0,119,158
 	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3NucleusPap fileName=wgEncodeGisPetClustersRep1Helas3NucleusPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1H1hescCytosolPap
+	track wgEncodeGisPetClustersRep1H1hescCellPap
 	release alpha
 	subTrack wgEncodeGisPetView3-Clusters
 	shortLabel H1-hESC cytosol longPolyA 1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA in H1-hESC cytosol)
-	subGroups view=3-Clusters cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA 
+	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA in H1-hESC cell)
+	subGroups view=3-Clusters cellType=H1-hESC localization=0-cell rnaExtract=longPolyA 
 	type bed 12
 	color 0,107,27
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1H1hescCytosolPap fileName=wgEncodeGisPetClustersRep1H1hescCytosolPap.bed12.gz
+	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1H1hescCellPap fileName=wgEncodeGisPetClustersRep1H1hescCellPap.bed12.gz
 
 	track wgEncodeGisPetClustersRep2K562CytosolPap
 	release alpha
