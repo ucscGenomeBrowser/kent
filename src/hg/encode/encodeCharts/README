@@ -1,5 +1,19 @@
 *) README
 
+*) encodeTimeline.py
+
+Run the program:
+  $ encodeTimeline.py > timeline.html
+
+  The program has hard-coded paths for 
+    the report directory
+    the important dates file
+
+  The program finds the most recent report file, parses it and
+  outputs an html file where the data is stored statically via Javascript.
+
+*) Deprecated Instructions using old Perl script
+
 Run the program:
 
   $ encodeChart.pl newreport.2010-03-31.dcc.txt important.dates.tab > tab.out
