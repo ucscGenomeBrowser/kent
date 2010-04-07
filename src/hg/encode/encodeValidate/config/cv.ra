@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.223 2010/04/05 21:33:41 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.224 2010/04/07 23:22:08 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3131,6 +3131,87 @@ description stem-loop binding protein (Homo sapiens)
 url http://view.ncbi.nlm.nih.gov/gene/7884
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
+term AUF1
+tag AUF1
+type ripAntibody
+antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of AUF1 (HNRNPD) of m,r, h origin by WB and IP
+targetDescription HNRNPD
+vendorName Millipore
+vendorId 07-260
+orderUrl http://www.millipore.com/catalogue/item/07-260
+
+term CUGBP1
+tag CUGBP1
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA. 
+targetDescription CELF1
+vendorName Millipore
+vendorId 05-621
+orderUrl http://www.millipore.com/catalogue/item/05-621
+
+term CUGBP2
+tag CUGBP2
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CUGBP2 (CELF2)of human origin by WB.
+targetDescription CELF2
+vendorName Millipore
+vendorId 04-047
+orderUrl http://www.millipore.com/catalogue/item/04-047
+
+term EF1-alpha
+tag EF1alpha
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EF1-alpha (EEF1A1) of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
+targetDescription EEF1A1
+vendorName Millipore
+vendorId 05-235
+orderUrl http://www.millipore.com/catalogue/item/05-235
+
+term FXR1
+tag FXR1
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+targetDescription FXR1
+vendorName Millipore
+vendorId 05-1529
+orderUrl http://www.millipore.com/catalogue/item/05-1529
+
+term Hexim1
+tag Hexim1
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+targetDescription Hexim1
+vendorName Millipore
+vendorId 07-955
+orderUrl http://www.millipore.com/catalogue/item/07-955
+
+term hnRNP_M1-M4
+tag hnRNPM
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended for detection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+targetDescription hnRNPM
+vendorName Millipore
+vendorId 05-620
+orderUrl http://www.millipore.com/catalogue/item/05-620
+
+term Hp1-alpha
+tag Hp1alpha
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH, IP, and WB.
+targetDescription CBX5
+vendorName Millipore
+vendorId 05-689
+orderUrl http://www.millipore.com/catalogue/item/05-689
+
+term HuR
+tag HuR
+type ripAntibody
+antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide, amino acids 3-19 of HuR. Recommended for detection of HuR (ELAV1) of h,m origin by WB, IC, IH, and IP. 
+targetDescription ELAV1
+vendorName Millipore
+vendorId ab5831
+orderUrl http://www.millipore.com/catalogue/item/ab5831
+
 term Nov_69522
 tag Nov69522
 type ripAntibody
@@ -3139,6 +3220,60 @@ targetDescription T7Tag
 vendorName Novagen
 vendorId 69522
 orderUrl http://www.emdbiosciences.com/Products/ProductDisplay.asp?catno=69522
+
+term p54nrb
+tag p54nrb
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of p54nrb (NONO) of H, R origin by IP, WB, IH. 
+targetDescription NONO
+vendorName Millipore
+vendorId 05-950
+orderUrl http://www.millipore.com/catalogue/item/05-950
+
+term PABP
+tag PABP
+type ripAntibody
+antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein (PABP). Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
+targetDescription PABP
+vendorName Millipore
+vendorId 05-847
+orderUrl http://www.millipore.com/catalogue/item/05-847
+
+term phospho-4E-BP1/2/3_Thr45
+tag EIF4EBP1Thr45
+type ripAntibody
+antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of human 4E-BP1/2/3 (EIF4EBP1) . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB. 
+targetDescription EIF4EBP1
+vendorName Millipore
+vendorId 04-1010
+orderUrl http://www.millipore.com/catalogue/item/04-1010
+
+term phospho-EIF4E_Ser209
+tag EIF4ESer209
+type ripAntibody
+antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209 of human eIF4E. Recommended for detection of phospho-eIF4E (Ser209) of H, M, and R origin by WB, IH(P), IC, and IP.
+targetDescription EIF4E
+vendorName Millipore
+vendorId 04-1058
+orderUrl http://www.millipore.com/catalogue/item/04-1058
+
+term QKI-5
+tag QKI5
+type ripAntibody
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI-5. Recommended for detection of QKI-5 (QKI) of H, M, and R origin by IP and WB.
+targetDescription QKI
+vendorName Millipore
+vendorId AB9904
+orderUrl http://www.millipore.com/catalogue/item/ab9904
+
+term Rsk1
+tag Rsk1
+type ripAntibody
+antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1 (C-LAQRRVRKLPSTTL). Recommended for detection of Rsk1 (RPS6KA1) of H, M, and R origin by WB, IP, and ELISA.
+targetDescription RPS6KA1
+vendorName Millipore
+vendorId 07-1477
+orderUrl http://www.millipore.com/catalogue/item/07-1477
 
 term SC_5261
 tag SC5261
