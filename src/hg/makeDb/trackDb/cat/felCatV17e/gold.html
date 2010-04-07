@@ -1,14 +1,16 @@
 <H2>Description</H2>
 <P>
-This track shows the draft assembly (Dec. 2008, NHGRI/Genome Technology Branch (NCBI project 10703, accession ACBE0100000))
+This track shows the draft assembly (Dec. 2008, NHGRI/Genome Technology Branch (NCBI project 10703, accession GCA_000001445.1))
 of the $organism genome.
 
-  *** Developer: check if this is accurate:
+<p>
+The cat genome assembly use paired-end fosmid ABI 3730 reads to 
+add 0.9X coverage  (from 6 other breeds and one wild cat) 
+to the cinnamon assembly (1.9X, ANG00000000) and made a otal of 2.8X coverage.
+See also: <A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?db=genomeprj&cmd=Retrieve&dopt=Overview&list_uids=32759"
+TARGET=_blank>Genome sequencing project by NHGRI/Genome Technology Branch </A> description.
+</P>
 
-Whole-genome shotgun reads were assembled into contigs.  When possible, 
-contigs were grouped into scaffolds (also known as &quot;supercontigs&quot;).
-The order, orientation and gap sizes between contigs within a scaffold are
-based on paired-end read evidence. </P>
 <P>
 In dense mode, this track depicts the contigs that make up the 
 currently viewed scaffold. 
@@ -18,6 +20,16 @@ exist between contigs, spaces are shown between the gold and brown
 blocks.  The relative order and orientation of the contigs
 within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
+
 <P>
-All components within this track are of fragment type &quot;W&quot;: 
-Whole Genome Shotgun contig. </P>
+Components in this track are of types:
+<UL>
+<LI>&quot;F&quot;: Finished sequence</LI>
+<LI>&quot;N&quot;: Gap with specified size</LI>
+<LI>&quot;U&quot;: Gap with unknown size</LI>
+<LI>&quot;W&quot;: WGS contig sequence</LI>
+
+</UL>
+See also: <A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/agp/AGP_Specification.shtml"
+TARGET=_blank>AGP specification.</A>
+</P>
