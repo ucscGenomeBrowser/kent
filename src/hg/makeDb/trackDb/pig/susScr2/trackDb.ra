@@ -6,11 +6,21 @@ html gold
 track gap override
 html gap
 
+track bosTau4ChainPileUpBroken
+shortLabel broken bigWig
+longLabel illustrating broken bigWig behavior bosTau4 chain pile up bigWig format
+group x
+priority 600
+visibility hide
+type bigWig 0 14674
+minLimit 0
+maxLimit 14674
+
 track bosTau4ChainPileUp
 shortLabel bosTau4 pile bigWig
 longLabel bosTau4 chain pile up bigWig format
 group x
-priority 600
+priority 603
 visibility hide
 type bigWig 0 14674
 minLimit 0
