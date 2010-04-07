@@ -1,11 +1,14 @@
-#!/usr/bin/env python
+#!/hive/groups/recon/local/bin/python
 
+import cgitb
 import datetime
 import os
 import re
 import sys
 
 import gviz_api
+
+cgitb.enable()
 
 # Directory containing the report files
 reportDir = "/hive/groups/encode/dcc/reports"
@@ -43,7 +46,7 @@ def getRecentReport (reportDir):
     print >> sys.stderr, "Error: Can't find a report file in dir '%s'" % reportDir
     sys.exit(-1)
 
-  return currentFile
+  return currentFile, currentDate
 
 # Read and parse the important dates file
 # Return a dict where key = event date and value = event label
@@ -93,7 +96,7 @@ def getDataArray (reportDir, importantDatesFile):
 
   submitHash = {}
   releaseHash = {}
-  currentFile = getRecentReport(reportDir)
+  currentFile, currentDate = getRecentReport(reportDir)
   fullFilePath = reportDir + "/" + currentFile
 
   try:
@@ -168,7 +171,7 @@ def getDataArray (reportDir, importantDatesFile):
     array.append(annotText)
     dataArray.append(array)
 
-  return dataArray
+  return dataArray, currentDate
 
 def main():
   # Headers for the columns in the data matrix
@@ -178,15 +181,19 @@ def main():
   data_table = gviz_api.DataTable(description)
 
   # Create and load the matrix
-  matrix = getDataArray(reportDir, importantDatesFile)
+  matrix, reportDate = getDataArray(reportDir, importantDatesFile)
   data_table.LoadData(matrix)
+
+  reportDate = str(reportDate)
+  reportDateObj = datetime.date(int(reportDate[0:4]), int(reportDate[4:6]), int(reportDate[6:8]))
+  dateStamp = reportDateObj.strftime("%b %d, %Y")
 
   # Convert to JavaScript code
   jscode = data_table.ToJSCode("jscode_data")
 
   # Commented out but could serve this page dynamically
-#  print "Content-type: text/html"
-#  print
+  print "Content-type: text/html"
+  print
 
   # Print out the webpage
   print page_template % vars()
@@ -213,6 +220,7 @@ page_template = """
   </head>
 
   <body>
+    <h2>ENCODE Cumulative Submit and Release Timeline <br><font size="-1">(Report Date: %(dateStamp)s)</font></h2>
     <div id='chart_div' style='width: 854px; height: 480px;'></div>
   </body>
 </html>
