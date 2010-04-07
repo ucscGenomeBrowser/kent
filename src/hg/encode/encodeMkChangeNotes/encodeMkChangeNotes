@@ -50,8 +50,8 @@ def next_version(name, version):
     """return the next version of a name/version pair"""
     return "%sV%d" % (name, version + 1)
 
-def get_wib_pathname(database, table_name):
-    """extract the wib pathaname of a wiggle table"""
+def get_gbdb_pathname(database, table_name):
+    """extract the gbdb pathaname of a gbdb table"""
     query = "SELECT file FROM %s LIMIT 1;" % table_name
     command = "hgsql %s --skip-column-names -e \"%s;\"" % (database, query)
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
@@ -62,7 +62,18 @@ def get_wib_pathname(database, table_name):
     if status_code == 0:
         return name
     else:
-        return None
+        query = "SELECT fileName FROM %s LIMIT 1;" % table_name
+        command = "hgsql %s --skip-column-names -e \"%s;\"" % (database, query)
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
+                                                     stdin=subprocess.PIPE,
+                                                     stderr=subprocess.PIPE)
+        name = proc.communicate()[0].rstrip()
+        status_code = proc.returncode;
+
+        if status_code == 0:
+            return name
+        else:
+            return None
 
 def same_file(x, y):
     """checks if two files are the same with various definitions of same"""
@@ -120,8 +131,8 @@ def main(argv=None):
 
     # some re we will be using
     table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+)$")
-    wig = re.compile("^(wig)$")
-    file_only = re.compile("^(tagAlign|fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|pairedTagAlign)$")
+    gbdb = re.compile("^(wig|tagAlign)$")
+    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|pairedTagAlign)$")
 
     # if new relase, add the full path to all files
     path_prefix = ""
@@ -148,13 +159,13 @@ def main(argv=None):
     # the list of files that we'll be printing
     unchanged_tables_list = []
     unchanged_files_list  = []
-    unchanged_wibs_list  = []
+    unchanged_gbdbs_list  = []
     removed_tables_list = []
     removed_files_list  = []
-    removed_wibs_list  = []
+    removed_gbdbs_list  = []
     new_tables_list = []
     new_files_list  = []
-    new_wibs_list  = []
+    new_gbdbs_list  = []
 
     # process the list of unchanged files
     for f in unchanged_files:
@@ -171,86 +182,99 @@ def main(argv=None):
                 (name, current_release_dir, prev_release_dir, type)
             warnings.append(warn)
             print >>sys.stderr, warn
-        if wig.match(type):
-            wib_path = get_wib_pathname(database, name)
-            if not os.path.exists(wib_path):
-                warn = "could not find %s wib file for wig %s" % (wib_path, f)
-                warnings.append(warn)
-                print >>sys.stderr, warn
-            if not table_exists(database, name):
+
+        if gbdb.match(type):
+            unchanged_files_list.append(path_prefix + f)
+            if table_exists(database, name):
+                unchanged_tables_list.append(name)
+                gbdb_path = get_gbdb_pathname(database, name)
+                if gbdb_path != None and os.path.exists(gbdb_path):
+                    unchanged_gbdbs_list.append(gbdb_path)
+                else:
+                    warn = "could not find %s file for %s" % (gbdb_path, f)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+            else:
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
-            unchanged_tables_list.append(name)
-            unchanged_files_list.append(path_prefix + f)
-            unchanged_wibs_list.append(wib_path)
         elif table_and_file.match(type):
-            if not table_exists(database, name):
+            unchanged_files_list.append(path_prefix + f)
+            if table_exists(database, name):
+                unchanged_tables_list.append(name)
+            else:
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
-            unchanged_tables_list.append(name)
-            unchanged_files_list.append(path_prefix + f)
         elif file_only.match(type):
             unchanged_files_list.append(path_prefix + f)
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
+
+
 
     # process the list of removed files
     for f in removed_files:
         name, type, extension = f.split(".")
         assert extension == "gz"
 
-        if wig.match(type):
-            wib_path = get_wib_pathname(database, name)
-            if not os.path.exists(wib_path):
-                warn = "could not find %s wib file for wig %s" % (wib_path, f)
-                warnings.append(warn)
-                print >>sys.stderr, warn
-            if not table_exists(database, name):
-                warn = "table %s does not exist, from filetype %s" % (name, type)
-                warnings.append(warn)
-                print >>sys.stderr, warn
-            removed_tables_list.append(name)
+        if gbdb.match(type):
             removed_files_list.append(path_prefix + f)
-            removed_wibs_list.append(wib_path)
-        elif table_and_file.match(type):
-            if not table_exists(database, name):
+            if table_exists(database, name):
+                removed_tables_list.append(name)
+                gbdb_path = get_gbdb_pathname(database, name)
+                if gbdb_path != None and os.path.exists(gbdb_path):
+                    removed_gbdbs_list.append(gbdb_path)
+                else:
+                    warn = "could not find %s file for %s" % (gbdb_path, f)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+            else:
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
-            removed_tables_list.append(name)
-            removed_files_list.append(f + path_prefix)
+        elif table_and_file.match(type):
+            removed_files_list.append(path_prefix + f)
+            if table_exists(database, name):
+                removed_tables_list.append(name)
+            else:
+                warn = "table %s does not exist, from filetype %s" % (name, type)
+                warnings.append(warn)
+                print >>sys.stderr, warn
         elif file_only.match(type):
             removed_files_list.append(path_prefix + f)
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
+
 
     # process the list of new files
     for f in new_files:
         name, type, extension = f.split(".")
         assert extension == "gz"
 
-        if wig.match(type):
-            wib_path = get_wib_pathname(database, name)
-            if not os.path.exists(wib_path):
-                warn = "could not find %s wib file for wig %s" % (wib_path, f)
-                warnings.append(warn)
-                print >>sys.stderr, warn
-            if not table_exists(database, name):
+        if gbdb.match(type):
+            new_files_list.append(path_prefix + f)
+            if table_exists(database, name):
+                new_tables_list.append(name)
+                gbdb_path = get_gbdb_pathname(database, name)
+                if gbdb_path != None and os.path.exists(gbdb_path):
+                    new_gbdbs_list.append(gbdb_path)
+                else:
+                    warn = "could not find %s file for %s" % (gbdb_path, f)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+            else:
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
-            new_tables_list.append(name)
-            new_files_list.append(path_prefix + f)
-            new_wibs_list.append(wib_path)
         elif table_and_file.match(type):
-            if not table_exists(database, name):
+            new_files_list.append(path_prefix + f)
+            if table_exists(database, name):
+                new_tables_list.append(name)
+            else:
                 warn = "table %s does not exist, from filetype %s" % (name, type)
                 warnings.append(warn)
                 print >>sys.stderr, warn
-            new_tables_list.append(name)
-            new_files_list.append(path_prefix + f)
         elif file_only.match(type):
             new_files_list.append(path_prefix + f)
         else:
@@ -261,13 +285,13 @@ def main(argv=None):
         print >>sys.stderr, "Counts:"
         print >>sys.stderr, "  unchanged tables: %d" % len(unchanged_tables_list)
         print >>sys.stderr, "  unchanged files: %d" % len(unchanged_files_list)
-        print >>sys.stderr, "  unchanged wibs: %d" % len(unchanged_wibs_list)
+        print >>sys.stderr, "  unchanged gbdbs: %d" % len(unchanged_gbdbs_list)
         print >>sys.stderr, "  removed tables: %d" % len(removed_tables_list)
         print >>sys.stderr, "  removed files: %d" % len(removed_files_list)
-        print >>sys.stderr, "  removed wibs: %d" % len(removed_wibs_list)
+        print >>sys.stderr, "  removed gbdbs: %d" % len(removed_gbdbs_list)
         print >>sys.stderr, "  new tables: %d" % len(new_tables_list)
         print >>sys.stderr, "  new files: %d" % len(new_files_list)
-        print >>sys.stderr, "  new wibs: %d" % len(new_wibs_list)
+        print >>sys.stderr, "  new gbdbs: %d" % len(new_gbdbs_list)
 
     # if asked, save the list of new files
     if options.files_path:
@@ -276,8 +300,8 @@ def main(argv=None):
         for i in new_files_list:
             print >>new_files_file, i
         print >>new_files_file
-        new_wibs_list.sort()
-        for i in new_wibs_list:
+        new_gbdbs_list.sort()
+        for i in new_gbdbs_list:
             print >>new_files_file, i
         new_files_file.close()
 
@@ -297,7 +321,7 @@ def main(argv=None):
     
     if len(warnings) > 0:
         warn_header = "# WARNINGS "
-        print warn_header, "#" * len(warn_header)
+        print warn_header + "#" * (60 - len(warn_header))
         c = 1
         for w in warnings:
             print  "%0d - %s" % (c, w)
@@ -315,10 +339,10 @@ D) Additional items of note
 """
     
     # some summary counts of current files, i.e. new + untouched
-    print "Summary total counts for %s (new+untouched):" % current_release_dir
+    print "Summary total counts for %s (new+untouched, not counting D):" % current_release_dir
     print "    Tables: %d" % (len(unchanged_tables_list) + len(new_tables_list))
     print "    Files: %d" % (len(unchanged_files_list) + len(new_files_list))
-    print "    Wibs: %d" % (len(unchanged_wibs_list) + len(new_wibs_list))
+    print "    Gbdbs: %d" % (len(unchanged_gbdbs_list) + len(new_gbdbs_list))
     print
 
     # untouched list
@@ -328,11 +352,11 @@ D) Additional items of note
         print i
     print
 
-    print "A') Untouched Files (%d downloadables, %d wibs):" % (len(unchanged_files_list),
-                                                           len(unchanged_wibs_list))
+    print "A') Untouched Files (%d downloadables, %d gbdbs):" % (len(unchanged_files_list),
+                                                           len(unchanged_gbdbs_list))
     if prev_release_dir == "":
         assert len(unchanged_files_list) == 0
-        assert len(unchanged_wibs_list) == 0
+        assert len(unchanged_gbdbs_list) == 0
     else:
         print "    current location on alpha:"
         print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
@@ -343,8 +367,8 @@ D) Additional items of note
         for i in unchanged_files_list:
             print i
         print
-        unchanged_wibs_list.sort()
-        for i in unchanged_wibs_list:
+        unchanged_gbdbs_list.sort()
+        for i in unchanged_gbdbs_list:
             print i
     print
 
@@ -355,11 +379,11 @@ D) Additional items of note
         print i
     print
 
-    print "B') Deprecated files (%d downloadables, %d wibs):" %(len(removed_files_list),
-                                                                len(removed_wibs_list))
+    print "B') Deprecated files (%d downloadables, %d gbdbs):" %(len(removed_files_list),
+                                                                len(removed_gbdbs_list))
     if prev_release_dir == "":
         assert len(removed_files_list) == 0
-        assert len(removed_wibs_list) == 0
+        assert len(removed_gbdbs_list) == 0
     else:
         print "    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
         print "    This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
@@ -373,8 +397,8 @@ D) Additional items of note
         for i in removed_files_list:
             print i
         print
-        removed_wibs_list.sort()
-        for i in removed_wibs_list:
+        removed_gbdbs_list.sort()
+        for i in removed_gbdbs_list:
             print i
 
     print
@@ -386,8 +410,8 @@ D) Additional items of note
         print i
     print
 
-    print "C') New files (%d downloadables, %d wibs):" % (len(new_files_list),
-                                                         len(new_wibs_list))
+    print "C') New files (%d downloadables, %d gbdbs):" % (len(new_files_list),
+                                                         len(new_gbdbs_list))
     print "    current location on alpha:"
     print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    NOT on RR but must be placed in:"
@@ -398,8 +422,8 @@ D) Additional items of note
     for i in new_files_list:
         print i
     print
-    new_wibs_list.sort()
-    for i in new_wibs_list:
+    new_gbdbs_list.sort()
+    for i in new_gbdbs_list:
         print i
 
     print
