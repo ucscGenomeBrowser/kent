@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.6 2010/03/30 21:15:30 chinhli Exp $
+#	$Id: ailMel1.txt,v 1.7 2010/04/07 17:42:02 hiram Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -310,5 +310,50 @@ TMPDIR=/scratch/tmp
     # cd /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap
     cat fb.ailMel1.chainFelCatV17eLink.txt
     # 1507273252 bases of 2245312831 (67.130%) in intersection
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=ailMel1 -all all.joiner
+
+    mkdir /hive/data/genomes/ailMel1/goldenPath
+    cd /hive/data/genomes/ailMel1/goldenPath
+    makeDownloads.pl ailMel1 > do.log 2>&1
+
+    #	now ready for pushQ entry
+    mkdir /hive/data/genomes/ailMel1/pushQ
+    cd /hive/data/genomes/ailMel1/pushQ
+    makePushQSql.pl ailMel1 > ailMel1.pushQ.sql 2> stderr.out
+    #	check for errors in stderr.out, some are OK, e.g.:
+# WARNING: ailMel1 does not have seq
+# WARNING: ailMel1 does not have extFile
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  bosTau4ChainPileUp
+
+    #	copy it to hgwbeta
+    scp -p ailMel1.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < ailMel1.pushQ.sql
+    #	in that pushQ entry walk through each entry and see if the
+    #	sizes will set properly
+
+############################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2010-03-25 - Hiram)
+    mkdir /hive/data/genomes/ailMel1/bed/allGaps
+    cd /hive/data/genomes/ailMel1/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../ailMel1.2bit > findMotif.txt 2>&1
+    #	real    1m12.153s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits ailMel1 -not gap -bed=notGap.bed
+    #	2245312831 bases of 2245312831 (100.000%) in intersection
+    featureBits ailMel1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	0 bases of 2245312831 (0.000%) in intersection
+    #	no new gaps
 
 #########################################################################
