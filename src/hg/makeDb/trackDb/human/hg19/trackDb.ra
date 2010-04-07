@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.107 2010/03/31 00:45:51 mary Exp $";
+#	"$Id: trackDb.ra,v 1.108 2010/04/07 18:56:55 hiram Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1553,4 +1553,35 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
     priority 2
+    color 30,130,210
+
+track hinv70Composite
+compositeTrack on
+shortLabel H-Inv 7.0
+longLabel H-Inv 7.0 gene predictions
+group genes
+priority 55
+visibility hide
+type bed 12
+url http://www.jbirc.jbic.or.jp/hinv/soup/pub_Detail.pl?acc_id=$$
+
+    track hinv70Coding
+    subTrack hinv70Composite
+    shortLabel H-Inv genes
+    longLabel H-Inv v7.0 gene predictions
+    priority 1
+    color 0,50,225
+
+    track hinv70NonCoding
+    subTrack hinv70Composite
+    shortLabel H-Inv non-coding
+    longLabel H-Inv v7.0 non-coding gene predictions
+    priority 2
+    color 15,100,180
+
+    track hinv70PseudoGene
+    subTrack hinv70Composite
+    shortLabel H-Inv pseudo-genes
+    longLabel H-Inv v7.0 pseudo gene predictions
+    priority 3
     color 30,130,210
