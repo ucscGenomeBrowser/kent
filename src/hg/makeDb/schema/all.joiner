@@ -3224,20 +3224,7 @@ tablesIgnored $hg
     affyTxnPhase3HeLaTopStrand
     affyTxnPhase3HepG2BottomStrand
     affyTxnPhase3HepG2TopStrand
-    burgeRnaSeqGemMapperAlignBrain
-    burgeRnaSeqGemMapperAlignLiver
-    burgeRnaSeqGemMapperAlignHeart
-    burgeRnaSeqGemMapperAlignSkelMuscle
-    burgeRnaSeqGemMapperAlignColon
-    burgeRnaSeqGemMapperAlignAdipose
-    burgeRnaSeqGemMapperAlignTestes
-    burgeRnaSeqGemMapperAlignLymphNode
-    burgeRnaSeqGemMapperAlignBreast
-    burgeRnaSeqGemMapperAlignBT474
-    burgeRnaSeqGemMapperAlignHME
-    burgeRnaSeqGemMapperAlignMCF7
-    burgeRnaSeqGemMapperAlignMB435
-    burgeRnaSeqGemMapperAlignT47D
+    burgeRnaSeqGemMapper%
     chimpDels
     chimpParalogy
     chimpSimpleDiff
