@@ -1,6 +1,13 @@
 *) README
 
 *) encodeTimeline.py
+   Now a cgi-bin python script.
+
+   Notes: Uses the 2.6 version of python 
+            #!/hive/groups/recon/local/bin/python
+          Requires the gviz_api.py library
+
+*) Deprecated - encodeTimeline.py [No longer a command-line program]
 
 Run the program:
   $ encodeTimeline.py > timeline.html
