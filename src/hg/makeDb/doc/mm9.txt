@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.132 2010/04/03 00:19:07 hartera Exp $"
+#	"$Id: mm9.txt,v 1.133 2010/04/07 17:42:44 hiram Exp $"
 #
 
 #######################################################################
@@ -10339,3 +10339,31 @@ TMPDIR=/scratch/tmp
     #	656444411 bases of 2231298548 (29.420%) in intersection
 
 ############################################################################
+# Vega aka Havana gene update (DONE - 2010-04-07 - Hiram)
+    #	Stephen Trevanion st3 sanger ac uk
+    #	lookup version number at the Vega WEB site:
+    #	http://vega.sanger.ac.uk/index.html
+    #	and FTP site:
+    #	ftp://ftp.sanger.ac.uk/pub/vega/
+    cd /hive/data/genomes/mm9
+    #	step wise to verify operation
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 -stop=download mm9.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 \
+	-continue=process -stop=process mm9.ensGene.ra
+# genePredCheck -db=mm9 vegaPseudo.gp.gz
+# checked: 4377 failed: 0
+# genePredCheck -db=mm9 not.vegaPseudo.gp.gz
+# checked: 57096 failed: 0
+# genePredCheck -db=mm9 mm9.allGenes.gp.gz
+# checked: 61473 failed: 0
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 \
+	-continue=load -stop=load mm9.ensGene.ra
+    #	"identical to previous version 37"
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 \
+	-continue=cleanup mm9.ensGene.ra
+    featureBits mm9 vegaGene
+    # 53838752 bases of 2620346127 (2.055%) in intersection
+    featureBits mm9 vegaPseudoGene
+    # 3060300 bases of 2620346127 (0.117%) in intersection
+
+#######################################################################

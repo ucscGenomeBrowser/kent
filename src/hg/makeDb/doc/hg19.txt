@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.95 2010/04/02 17:25:47 angie Exp $";
+#	"$Id: hg19.txt,v 1.96 2010/04/07 17:42:44 hiram Exp $";
 
 #############################################################################
 
@@ -8938,3 +8938,31 @@ TMPDIR=/scratch/tmp
     #	1272785114 bases of 2231298548 (57.042%) in intersection
 
 #########################################################################
+# Vega gene update (DONE - 2010-04-07 - Hiram)
+    #	lookup version number at the Vega WEB site:
+    #	http://vega.sanger.ac.uk/index.html
+    #	and FTP site:
+    #	ftp://ftp.sanger.ac.uk/pub/vega/
+    cd /hive/data/genomes/hg19
+    #	step wise to verify operation
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 -stop=download hg19.ensGene.ra
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 \
+	-continue=process -stop=process hg19.ensGene.ra
+# genePredCheck -db=hg19 vegaPseudo.gp.gz
+# checked: 11590 failed: 0
+# genePredCheck -db=hg19 not.vegaPseudo.gp.gz
+# checked: 96345 failed: 0
+# genePredCheck -db=hg19 hg19.allGenes.gp.gz
+# checked: 107935 failed: 0
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 \
+	-continue=load -stop=load hg19.ensGene.ra
+# zcat: download/Homo_sapiens.VEGA.38.pep.all.fa.gz: unexpected end of file
+    #	they changed their file name convention ...
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=38 \
+	-continue=cleanup hg19.ensGene.ra
+    featureBits hg19 vegaGene
+    # 74206453 bases of 2897316137 (2.561%) in intersection
+    featureBits hg19 vegaPseudoGene
+    # 8494715 bases of 2897316137 (0.293%) in intersection
+
+######################################################################## 
