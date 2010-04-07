@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: susScr2.txt,v 1.4 2010/04/01 16:37:15 chinhli Exp $
+#       $Id: susScr2.txt,v 1.5 2010/04/07 17:43:30 hiram Exp $
 
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
@@ -616,3 +616,17 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	sizes will set properly
 
 ############################################################################
+# LIFTOVER TO SusScr2 (DONE - 2010-01-15 - Hiram )
+    mkdir /hive/data/genomes/susScr1/bed/blat.susScr2.2010-04-05
+    cd /hive/data/genomes/susScr1/bed/blat.susScr2.2010-04-05
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -bigClusterHub=swarm -dbHost=hgwdev \
+	-workhorse=hgwdev \
+	-ooc=/hive/data/genomes/susScr1/jkStuff/susScr1.11.ooc \
+	-debug susScr1 susScr2
+    # Real run:
+    doSameSpeciesLiftOver.pl -bigClusterHub=swarm -dbHost=hgwdev \
+	-workhorse=hgwdev \
+	-ooc=/hive/data/genomes/susScr1/jkStuff/susScr1.11.ooc \
+	susScr1 susScr2 > do.log 2>&1
+#############################################################################
