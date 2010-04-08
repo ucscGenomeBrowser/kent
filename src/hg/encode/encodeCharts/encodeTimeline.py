@@ -14,7 +14,7 @@ cgitb.enable()
 reportDir = "/hive/groups/encode/dcc/reports"
 
 # File listing the important events and dates
-importantDatesFile = "/hive/users/bsuh/encode/important.dates.tab"
+importantDatesFile = "/hive/groups/encode/dcc/charts/important.dates.tab"
 
 # Given the directory of reports, find the latest report
 # Return the filename of the latest report
