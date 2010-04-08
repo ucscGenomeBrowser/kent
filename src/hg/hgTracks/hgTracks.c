@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1636 2010/04/02 20:14:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1637 2010/04/08 18:36:46 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1568,9 +1568,10 @@ if(tdbIsCompositeChild(tdb))
 return vis;
 }
 
-static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart,int winStart,int winEnd,int insideWidth,int seqBaseCount,int rulerClickY,int rulerClickHeight)
-{
+static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart,int winEnd,
+	int insideWidth,int seqBaseCount,int rulerClickY,int rulerClickHeight)
 /* Make hit boxes that will zoom program around ruler. */
+{
 int boxes = 30;
 int winWidth = winEnd - winStart;
 int newWinWidth = winWidth;
@@ -1624,10 +1625,11 @@ for (i=1; i<=boxes; ++i)
 return newWinWidth;
 }
 
-static int doDrawRuler(struct hvGfx *hvg,int *newWinWidth,int *rulerClickHeight,int rulerHeight,int yAfterRuler,
-                     int yAfterBases, MgFont *font,int fontHeight,boolean rulerCds)
-{
+static int doDrawRuler(struct hvGfx *hvg,int *newWinWidth,int *rulerClickHeight,
+	int rulerHeight, int yAfterRuler, int yAfterBases, MgFont *font,
+	int fontHeight,boolean rulerCds)
 /* draws the ruler. */
+{
 int scaleBarPad = 2;
 int scaleBarHeight = fontHeight;
 int scaleBarTotalHeight = fontHeight + 2 * scaleBarPad;
@@ -1636,158 +1638,159 @@ int baseHeight = fontHeight;
 //int yAfterBases = yAfterRuler;
 int showPosHeight = fontHeight;
 int codonHeight = fontHeight;
-    struct dnaSeq *seq = NULL;
-    int rulerClickY = 0;
-    *rulerClickHeight = rulerHeight;
+struct dnaSeq *seq = NULL;
+int rulerClickY = 0;
+*rulerClickHeight = rulerHeight;
 
-    int y = rulerClickY;
-    hvGfxSetClip(hvg, insideX, y, insideWidth, yAfterRuler-y+1);
-    int relNumOff = winStart;
+int y = rulerClickY;
+hvGfxSetClip(hvg, insideX, y, insideWidth, yAfterRuler-y+1);
+int relNumOff = winStart;
 
-    if (baseTitle)
-        {
-        hvGfxTextCentered(hvg, insideX, y, insideWidth, titleHeight,MG_BLACK, font, baseTitle);
-        *rulerClickHeight += titleHeight;
-        y += titleHeight;
-        }
-    if (baseShowPos||baseShowAsm)
-        {
-        char txt[256];
-        char numBuf[SMALLBUF];
-        char *freezeName = NULL;
-        freezeName = hFreezeFromDb(database);
-        sprintLongWithCommas(numBuf, winEnd-winStart);
-        if(freezeName == NULL)
-            freezeName = "Unknown";
-        if (baseShowPos&&baseShowAsm)
-            safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,freezeName,addCommasToPos(database, position),numBuf);
-        else if (baseShowPos)
-            safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(database, position),numBuf);
-        else
-            safef(txt,sizeof(txt),"%s %s",organism,freezeName);
-        hvGfxTextCentered(hvg, insideX, y, insideWidth, showPosHeight,MG_BLACK, font, txt);
-        *rulerClickHeight += showPosHeight;
-        freez(&freezeName);
-        y += showPosHeight;
-        }
-    if (baseShowScaleBar)
-        {
-        char scaleText[32];
-        int numBases = winEnd-winStart;
-        int scaleBases = computeScaleBar(numBases, scaleText, sizeof(scaleText));
-        int scalePixels = (int)((double)insideWidth*scaleBases/numBases);
-        int scaleBarX = insideX + (int)(((double)insideWidth-scalePixels)/2);
-        int scaleBarEndX = scaleBarX + scalePixels;
-        int scaleBarY = y + 0.5 * scaleBarTotalHeight;
-        *rulerClickHeight += scaleBarTotalHeight;
-        hvGfxTextRight(hvg, insideX, y + scaleBarPad,
-                (scaleBarX-2)-insideX, scaleBarHeight, MG_BLACK, font, scaleText);
-        hvGfxLine(hvg, scaleBarX, scaleBarY, scaleBarEndX, scaleBarY, MG_BLACK);
-        hvGfxLine(hvg, scaleBarX, y+scaleBarPad, scaleBarX,
-                y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
-        hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX,
-                y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
-        y += scaleBarTotalHeight;
-        }
-    if (baseShowRuler)
-        {
-        hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK,
-                    font, relNumOff, winBaseCount, 0, 1);
-        }
-    *newWinWidth = makeRulerZoomBoxes(hvg, cart,winStart,winEnd,insideWidth,seqBaseCount,rulerClickY,*rulerClickHeight);
+if (baseTitle)
+    {
+    hvGfxTextCentered(hvg, insideX, y, insideWidth, titleHeight,MG_BLACK, font, baseTitle);
+    *rulerClickHeight += titleHeight;
+    y += titleHeight;
+    }
+if (baseShowPos||baseShowAsm)
+    {
+    char txt[256];
+    char numBuf[SMALLBUF];
+    char *freezeName = NULL;
+    freezeName = hFreezeFromDb(database);
+    sprintLongWithCommas(numBuf, winEnd-winStart);
+    if(freezeName == NULL)
+	freezeName = "Unknown";
+    if (baseShowPos&&baseShowAsm)
+	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,
+		freezeName, addCommasToPos(database, position), numBuf);
+    else if (baseShowPos)
+	safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(database, position),numBuf);
+    else
+	safef(txt,sizeof(txt),"%s %s",organism,freezeName);
+    hvGfxTextCentered(hvg, insideX, y, insideWidth, showPosHeight,MG_BLACK, font, txt);
+    *rulerClickHeight += showPosHeight;
+    freez(&freezeName);
+    y += showPosHeight;
+    }
+if (baseShowScaleBar)
+    {
+    char scaleText[32];
+    int numBases = winEnd-winStart;
+    int scaleBases = computeScaleBar(numBases, scaleText, sizeof(scaleText));
+    int scalePixels = (int)((double)insideWidth*scaleBases/numBases);
+    int scaleBarX = insideX + (int)(((double)insideWidth-scalePixels)/2);
+    int scaleBarEndX = scaleBarX + scalePixels;
+    int scaleBarY = y + 0.5 * scaleBarTotalHeight;
+    *rulerClickHeight += scaleBarTotalHeight;
+    hvGfxTextRight(hvg, insideX, y + scaleBarPad,
+	    (scaleBarX-2)-insideX, scaleBarHeight, MG_BLACK, font, scaleText);
+    hvGfxLine(hvg, scaleBarX, scaleBarY, scaleBarEndX, scaleBarY, MG_BLACK);
+    hvGfxLine(hvg, scaleBarX, y+scaleBarPad, scaleBarX,
+	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+    hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX,
+	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+    y += scaleBarTotalHeight;
+    }
+if (baseShowRuler)
+    {
+    hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK,
+		font, relNumOff, winBaseCount, 0, 1);
+    }
+*newWinWidth = makeRulerZoomBoxes(hvg, cart,winStart,winEnd,insideWidth,seqBaseCount,rulerClickY,*rulerClickHeight);
 
-    if (zoomedToBaseLevel || rulerCds)
-        {
-        Color baseColor = MG_BLACK;
-        int start, end, chromSize;
-        struct dnaSeq *extraSeq;
-        /* extraSeq has extra leading & trailing bases
-        * for translation in to amino acids */
-        boolean complementRulerBases =
-                cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
-        // gray bases if not matching the direction of display
-        if (complementRulerBases != revCmplDisp)
-            baseColor = MG_GRAY;
+if (zoomedToBaseLevel || rulerCds)
+    {
+    Color baseColor = MG_BLACK;
+    int start, end, chromSize;
+    struct dnaSeq *extraSeq;
+    /* extraSeq has extra leading & trailing bases
+    * for translation in to amino acids */
+    boolean complementRulerBases =
+	    cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+    // gray bases if not matching the direction of display
+    if (complementRulerBases != revCmplDisp)
+	baseColor = MG_GRAY;
 
-        /* get sequence, with leading & trailing 3 bases
-         * used for amino acid translation */
-        start = max(winStart - 3, 0);
-        chromSize = hChromSize(database, chromName);
-        end = min(winEnd + 3, chromSize);
-        extraSeq = hDnaFromSeq(database, chromName, start, end, dnaUpper);
-        if (start != winStart - 3 || end != winEnd + 3)
-            {
-            /* at chromosome boundaries, pad with N's to assure
-             * leading & trailing 3 bases */
-            char header[4] = "NNN", trailer[4] = "NNN";
-            int size = winEnd - winStart + 6;
-            char *padded = (char *)needMem(size+1);
-            header[max(3 - winStart, 0)] = 0;
-            trailer[max(winEnd - chromSize + 3, 0)] = 0;
-            safef(padded, size+1, "%s%s%s", header, extraSeq->dna, trailer);
-            extraSeq = newDnaSeq(padded, strlen(padded), extraSeq->name);
-            }
+    /* get sequence, with leading & trailing 3 bases
+     * used for amino acid translation */
+    start = max(winStart - 3, 0);
+    chromSize = hChromSize(database, chromName);
+    end = min(winEnd + 3, chromSize);
+    extraSeq = hDnaFromSeq(database, chromName, start, end, dnaUpper);
+    if (start != winStart - 3 || end != winEnd + 3)
+	{
+	/* at chromosome boundaries, pad with N's to assure
+	 * leading & trailing 3 bases */
+	char header[4] = "NNN", trailer[4] = "NNN";
+	int size = winEnd - winStart + 6;
+	char *padded = (char *)needMem(size+1);
+	header[max(3 - winStart, 0)] = 0;
+	trailer[max(winEnd - chromSize + 3, 0)] = 0;
+	safef(padded, size+1, "%s%s%s", header, extraSeq->dna, trailer);
+	extraSeq = newDnaSeq(padded, strlen(padded), extraSeq->name);
+	}
 
-        /* for drawing bases, must clip off leading and trailing 3 bases */
-        seq = cloneDnaSeq(extraSeq);
-        seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
+    /* for drawing bases, must clip off leading and trailing 3 bases */
+    seq = cloneDnaSeq(extraSeq);
+    seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
 
-        if (zoomedToBaseLevel)
-            drawBases(hvg, insideX, y+rulerHeight, insideWidth, baseHeight,
-                baseColor, font, complementRulerBases, seq);
+    if (zoomedToBaseLevel)
+	drawBases(hvg, insideX, y+rulerHeight, insideWidth, baseHeight,
+	    baseColor, font, complementRulerBases, seq);
 
-        /* set up clickable area to toggle ruler visibility */
-            {
-            char newRulerVis[100];
-            safef(newRulerVis, 100, "%s=%s", RULER_TRACK_NAME,
-                         rulerMode == tvFull ?
-                                rulerMenu[tvDense] :
-                                rulerMenu[tvFull]);
-            mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight,
-                NULL, NULL, 0, 0, "", newRulerVis);
-            }
-        if (rulerCds)
-            {
-            /* display codons */
-            int frame;
-            int firstFrame = 0;
-            int mod;            // for determining frame ordering on display
-            struct simpleFeature *sfList;
-            double scale = scaleForWindow(insideWidth, winStart, winEnd);
+    /* set up clickable area to toggle ruler visibility */
+	{
+	char newRulerVis[100];
+	safef(newRulerVis, 100, "%s=%s", RULER_TRACK_NAME,
+		     rulerMode == tvFull ?
+			    rulerMenu[tvDense] :
+			    rulerMenu[tvFull]);
+	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight,
+	    NULL, NULL, 0, 0, "", newRulerVis);
+	}
+    if (rulerCds)
+	{
+	/* display codons */
+	int frame;
+	int firstFrame = 0;
+	int mod;            // for determining frame ordering on display
+	struct simpleFeature *sfList;
+	double scale = scaleForWindow(insideWidth, winStart, winEnd);
 
-            /* WARNING: tricky code to assure that an amino acid
-             * stays in the same frame line on the browser during panning.
-             * There may be a simpler way... */
-            if (complementRulerBases)
-                mod = (chromSize - winEnd) % 3;
-            else
-                mod = winStart % 3;
-            if (mod == 0)
-                firstFrame = 0;
-            else if (mod == 1)
-                firstFrame = 2;
-            else if (mod == 2)
-                firstFrame = 1;
+	/* WARNING: tricky code to assure that an amino acid
+	 * stays in the same frame line on the browser during panning.
+	 * There may be a simpler way... */
+	if (complementRulerBases)
+	    mod = (chromSize - winEnd) % 3;
+	else
+	    mod = winStart % 3;
+	if (mod == 0)
+	    firstFrame = 0;
+	else if (mod == 1)
+	    firstFrame = 2;
+	else if (mod == 2)
+	    firstFrame = 1;
 
-            y = yAfterBases;
-            if (complementRulerBases)
-                reverseComplement(extraSeq->dna, extraSeq->size);
-            for (frame = 0; frame < 3; frame++, y += codonHeight)
-                {
-                /* reference frame to start of chromosome */
-                int refFrame = (firstFrame + frame) % 3;
+	y = yAfterBases;
+	if (complementRulerBases)
+	    reverseComplement(extraSeq->dna, extraSeq->size);
+	for (frame = 0; frame < 3; frame++, y += codonHeight)
+	    {
+	    /* reference frame to start of chromosome */
+	    int refFrame = (firstFrame + frame) % 3;
 
-                /* create list of codons in the specified coding frame */
-                sfList = baseColorCodonsFromDna(refFrame, winStart, winEnd,
-                                             extraSeq, complementRulerBases);
-                /* draw the codons in the list, with alternating colors */
-                baseColorDrawRulerCodons(hvg, sfList, scale, insideX, y,
-                                    codonHeight, font, winStart, MAXPIXELS,
-                                    zoomedToCodonLevel);
-                }
-            }
-        }
-    hvGfxUnclip(hvg);
+	    /* create list of codons in the specified coding frame */
+	    sfList = baseColorCodonsFromDna(refFrame, winStart, winEnd,
+					 extraSeq, complementRulerBases);
+	    /* draw the codons in the list, with alternating colors */
+	    baseColorDrawRulerCodons(hvg, sfList, scale, insideX, y,
+				codonHeight, font, winStart, MAXPIXELS,
+				zoomedToCodonLevel);
+	    }
+	}
+    }
+hvGfxUnclip(hvg);
 return y;
 }
 
@@ -5533,16 +5536,16 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
             "hgt.right1", "hgt.right2", "hgt.right3",
             "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
             "hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
-                        "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
-                        "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
-                        "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
-                        "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
-                        "hgt.jump", "hgt.refresh",
+	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
+	    "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
+	    "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
+	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
+	    "hgt.jump", "hgt.refresh",
 #ifdef CONTEXT_MENU
-                        "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
+	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
 #endif
 #ifdef TRACK_SEARCH
-                        searchTracks,
+	    searchTracks,
 #endif
             NULL };
 
