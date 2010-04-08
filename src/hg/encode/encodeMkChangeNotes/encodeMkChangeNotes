@@ -129,10 +129,14 @@ def main(argv=None):
     current_release_dir = args[1]
     prev_release_dir = args[2]
 
+    # list of addition files
+    possible_addition_files = ["index.html", "files.txt", "md5sum.txt"]
+    addition_files = []
+
     # some re we will be using
-    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+)$")
+    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+|pairedTagAlign)$")
     gbdb = re.compile("^(wig|tagAlign)$")
-    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|pairedTagAlign)$")
+    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta)$")
 
     # if new relase, add the full path to all files
     path_prefix = ""
@@ -211,8 +215,6 @@ def main(argv=None):
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
 
-
-
     # process the list of removed files
     for f in removed_files:
         name, type, extension = f.split(".")
@@ -245,7 +247,6 @@ def main(argv=None):
             removed_files_list.append(path_prefix + f)
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
-
 
     # process the list of new files
     for f in new_files:
@@ -280,6 +281,15 @@ def main(argv=None):
         else:
             raise ValueError, "unknown type %s of file %s" % (type, f)
 
+    # check the list of addition files
+    for f in possible_addition_files:
+        if os.path.exists(f):
+            addition_files.append(path_prefix + f)
+        else:
+            warn = "addition file %s not found" % f
+            warnings.append(warn)
+            print >>sys.stderr, warn
+
     # output some basic stats
     if options.verbose:
         print >>sys.stderr, "Counts:"
@@ -292,6 +302,7 @@ def main(argv=None):
         print >>sys.stderr, "  new tables: %d" % len(new_tables_list)
         print >>sys.stderr, "  new files: %d" % len(new_files_list)
         print >>sys.stderr, "  new gbdbs: %d" % len(new_gbdbs_list)
+        print >>sys.stderr, "  additional files: %d" % len(addition_files)
 
     # if asked, save the list of new files
     if options.files_path:
@@ -339,9 +350,9 @@ D) Additional items of note
 """
     
     # some summary counts of current files, i.e. new + untouched
-    print "Summary total counts for %s (new+untouched, not counting D):" % current_release_dir
+    print "Summary total counts for %s (new+untouched):" % current_release_dir
     print "    Tables: %d" % (len(unchanged_tables_list) + len(new_tables_list))
-    print "    Files: %d" % (len(unchanged_files_list) + len(new_files_list))
+    print "    Files: %d" % (len(unchanged_files_list) + len(new_files_list) + len(addition_files))
     print "    Gbdbs: %d" % (len(unchanged_gbdbs_list) + len(new_gbdbs_list))
     print
 
@@ -434,9 +445,8 @@ D) Additional items of note
     print "    should be placed on the RR in (overwritting any existing copy):"
     print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
-    print "index.html"
-    print "files.txt"
-    print "md5sum.txt"
+    for f in addition_files:
+        print f
 
 #### Module ####################################################################
 
