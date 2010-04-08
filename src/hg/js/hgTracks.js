@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.63 2010/04/08 20:35:57 kent Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.64 2010/04/08 22:31:13 kent Exp $
 
 var debug = false;
 var originalPosition;
@@ -251,8 +251,7 @@ $(window).load(function () {
         browser = "chrome";
     }
     loadImgAreaSelect(true);
-    setUpMakeItemsDrag('jkTestMakeItems');
-
+    hgTracksInitTracks();
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
 

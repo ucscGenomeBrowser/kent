@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1637 2010/04/08 18:36:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1638 2010/04/08 22:31:33 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4159,6 +4159,22 @@ dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\t
 
 #endif
 
+void printTrackInitJavascript(struct track *trackList)
+{
+hPrintf("<script type='text/javascript'>\n");
+hPrintf( "function hgTracksInitTracks()\n{\n");
+
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (startsWithWord("makeItems", track->tdb->type) )
+        hPrintf("setUpMakeItemsDrag(\"%s\");\n", track->mapName);
+    }
+
+hPrintf( "}\n");
+hPrintf("</script>\n");
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4304,6 +4320,8 @@ dyStringAppend(trackDbJson, "}\n</script>\n");
 if(!trackImgOnly)
     hPrintf(dyStringContents(trackDbJson));
 #endif
+
+printTrackInitJavascript(trackList);
 
 /* Generate two lists of hidden variables for track group visibility.  Kludgy,
    but required b/c we have two different navigation forms on this page, but
