@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.224 2010/04/07 23:22:08 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.225 2010/04/08 18:43:21 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3236,8 +3236,8 @@ type ripAntibody
 antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein (PABP). Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
 targetDescription PABP
 vendorName Millipore
-vendorId 05-847
-orderUrl http://www.millipore.com/catalogue/item/05-847
+vendorId 04-1466
+orderUrl http://www.millipore.com/catalogue/item/04-1467
 
 term phospho-4E-BP1/2/3_Thr45
 tag EIF4EBP1Thr45
