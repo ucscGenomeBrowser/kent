@@ -1242,3 +1242,15 @@ cat > getGenes.csh << 'EOF'
 # The data was provided by an ENCODE lab (Guigo lab at CRG) but the data
 # production was only partially funded by ENCODE so no metadata was added
 # to trackDb for this track.   
+
+
+#############################################################################
+# encodeGencodeGeneKnownMar07  (2010-04-07 markd)
+# Was discovered to be corrupted on hgwdev and all servers
+# 
+
+    cd /cluster/data/encode/convertHg18/genePred
+    genePredCheck -db=hg18 encodeGencodeGeneKnownMar07.tab 
+    checked: 2991 failed: 0
+    hgLoadGenePred -genePredExt hg18 encodeGencodeGeneKnownMar07 encodeGencodeGeneKnownMar07.tab
+    genePredCheck -db=hg18 encodeGencodeGeneKnownMar07
