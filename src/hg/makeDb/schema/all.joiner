@@ -3507,3 +3507,7 @@ tablesIgnored susScr2
 
 tablesIgnored ailMel1
     gold
+
+tablesIgnored aplCal1
+    gold
+    intronEst
