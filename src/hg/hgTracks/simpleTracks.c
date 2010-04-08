@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.131 2010/04/07 03:38:15 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.132 2010/04/08 20:36:36 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10830,6 +10830,10 @@ else if (sameWord(type, "ld2"))
 else if (sameWord(type, "factorSource"))
     {
     factorSourceMethods(track);
+    }
+else if (sameWord(type, "makeItems"))
+    {
+    makeItemsMethods(track);
     }
 #endif /* GBROWSE */
 }

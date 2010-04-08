@@ -1107,6 +1107,9 @@ struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 void factorSourceMethods(struct track *track);
 /* Set up special methods for factorSource type tracks. */
 
+void makeItemsMethods(struct track *track);
+/* Set up special methods for makeItems type tracks. */
+
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */
 

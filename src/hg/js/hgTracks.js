@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.62 2010/04/03 01:50:04 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.63 2010/04/08 20:35:57 kent Exp $
 
 var debug = false;
 var originalPosition;
@@ -251,6 +251,7 @@ $(window).load(function () {
         browser = "chrome";
     }
     loadImgAreaSelect(true);
+    setUpMakeItemsDrag('jkTestMakeItems');
 
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
@@ -317,6 +318,25 @@ function loadImgAreaSelect(firstTime)
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
             autoHide: autoHideSetting, movable: false,
             clickClipHeight: clickClipHeight}));
+    }
+}
+
+function makeItemsEnd(img, selection)
+{
+alert("dragged out x1=" + selection.x1 + " x2=" + selection.x2);
+return true;
+}
+
+function setUpMakeItemsDrag(trackName)
+{
+// Set up so that they can drag out to define a new item on a makeItems track. 
+var img = $("#img_data_" + trackName);
+if(img != undefined && img.length != 0) {
+    var trackImgTbl = $('#imgTbl');
+    var imgHeight = trackImgTbl.height();
+    jQuery(img.imgAreaSelect( { selectionColor: 'green', outerColor: '',
+	minHeight: imgHeight, maxHeight: imgHeight, onSelectEnd: makeItemsEnd,
+	autoHide: true, movable: false}));
     }
 }
 
