@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.97 2010/04/09 15:24:24 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.98 2010/04/09 21:46:01 hiram Exp $";
 
 #############################################################################
 
@@ -2035,6 +2035,7 @@ close (FH);
 
 ##############################################################################
 # UCSC to Ensembl chr name mapping (DONE - 2009-05-08 - Hiram)
+    #	new names as of Ensembl version 57, see below
     mkdir /hive/data/genomes/hg19/ensembl
     cd /hive/data/genomes/hg19/ensembl
     wget --timestamping \
@@ -8978,5 +8979,73 @@ TMPDIR=/scratch/tmp
     # 74206453 bases of 2897316137 (2.561%) in intersection
     featureBits hg19 vegaPseudoGene
     # 8494715 bases of 2897316137 (0.293%) in intersection
+
+######################################################################## 
+# H-Inv 7.0 Gene track (DONE - 2010-04-07 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/hinv
+    cd /hive/data/genomes/hg19/bed/hinv
+    ./hinvToBed12.pl go > broken.1.exons.txt
+    hgLoadBed hg19 hinv70Coding fcdna.coding.bed
+    #	Loaded 272257 elements of size 12
+    featureBits hg19 hinv70Coding
+    #	141717797 bases of 2897316137 (4.891%) in intersection
+
+    hgLoadBed hg19 hinv70NonCoding fcdna.nonCoding.bed
+    #	Loaded 22625 elements of size 12
+    featureBits hg19 hinv70NonCoding 
+    #	1350960 bases of 2897316137 (0.047%) in intersection
+
+    hgLoadBed hg19 hinv70PseudoGene fcdna.pseudoGene.bed
+    #	Loaded 1166 elements of size 12
+    featureBits hg19 hinv70PseudoGene
+    #	1701647 bases of 2897316137 (0.059%) in intersection
+
+    featureBits hg19 hinv70Coding hinv70PseudoGene
+    #	619377 bases of 2897316137 (0.021%) in intersection
+
+    featureBits hg19 hinv70Coding hinv70NonCoding
+    #	912553 bases of 2897316137 (0.031%) in intersection
+
+    featureBits hg19 hinv70PseudoGene hinv70NonCoding
+    #	9642 bases of 2897316137 (0.000%) in intersection
+
+######################################################################## 
+# Updating the ucscToEnsembl table (DONE - 2010-04-06 - Hiram)
+    #	as of Ensembl V57, their naming scheme changed for the randoms
+    cd /hive/data/genomes/hg19/bed/ucscToEnsembl
+cat ../../chrom.sizes | while read L
+do
+    size=`echo $L | awk '{print $2}'`
+    ucName=`echo $L | awk '{print $1}'`
+    ensName=`echo $ucName | sed -e "s/^chrM/MT/; s/^chr//;"`
+    case $ucName in
+        chr17_ctg5_hap1) ensName="HSCHR17_1"
+                ;;
+        chr4_ctg9_hap1) ensName="HSCHR4_1"
+                ;;
+        chr6_apd_hap1) ensName="HSCHR6_MHC_APD"
+                ;;
+        chr6_cox_hap2) ensName="HSCHR6_MHC_COX"
+                ;;
+        chr6_dbb_hap3) ensName="HSCHR6_MHC_DBB"
+                ;;
+        chr6_mann_hap4) ensName="HSCHR6_MHC_MANN"
+                ;;
+        chr6_mcf_hap5) ensName="HSCHR6_MHC_MCF"
+                ;;
+        chr6_qbl_hap6) ensName="HSCHR6_MHC_QBL"
+                ;;
+        chr6_ssto_hap7) ensName="HSCHR6_MHC_SSTO"
+                ;;
+        *_gl*)
+ensName=`echo $L | awk '{print $1}' | sed -e "s/^chr.*_gl/GL/; s/_random//"`
+                ;;
+    esac
+    echo -e "$ucName\t$ensName"
+done > ucscToEnsemblV57.tab
+
+    hgsql hg19 -e 'delete from ucscToEnsembl where ucsc like "%";'
+    hgsql hg19 -e \
+'LOAD DATA LOCAL INFILE "ucscToEnsemblV57.tab" INTO TABLE ucscToEnsembl'
 
 ######################################################################## 
