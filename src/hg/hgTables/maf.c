@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.18 2010/01/04 19:12:22 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.19 2010/04/09 00:11:44 braney Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -60,15 +60,15 @@ textOpen();
 struct sqlConnection *ctConn = NULL;
 struct sqlConnection *ctConn2 = NULL;
 struct customTrack *ct = NULL;
-char *mafFile = NULL;
+struct hash *settings = track->settingsHash;
+char *mafFile = hashFindVal(settings, "mafFile");
 
 if (isCustomTrack(table))
     {
     ctConn = hAllocConn(CUSTOM_TRASH);
     ctConn2 = hAllocConn(CUSTOM_TRASH);
     ct = ctLookupName(table);
-    struct hash *settings = track->settingsHash;
-    if ((mafFile = hashFindVal(settings, "mafFile")) == NULL)
+    if (mafFile == NULL)
 	{
 	/* this shouldn't happen */
 	printf("cannot find custom track file %s\n", mafFile);
@@ -96,8 +96,14 @@ for (region = regionList; region != NULL; region = region->next)
 	if (bed->chromStart >= bed->chromEnd)
 	    continue;
 	if (ct == NULL)
-	    mafList = mafLoadInRegion(conn, table, bed->chrom,
-				      bed->chromStart, bed->chromEnd);
+	    {
+	    if (mafFile != NULL)
+		mafList = mafLoadInRegion2(conn, conn, table,
+			bed->chrom, bed->chromStart, bed->chromEnd, mafFile);
+	    else
+		mafList = mafLoadInRegion(conn, table, bed->chrom,
+					  bed->chromStart, bed->chromEnd);
+	    }
 	else
 	    mafList = mafLoadInRegion2(ctConn, ctConn2, ct->dbTableName,
 		    bed->chrom, bed->chromStart, bed->chromEnd, mafFile);
