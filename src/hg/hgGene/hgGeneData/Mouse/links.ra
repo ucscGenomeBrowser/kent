@@ -51,3 +51,10 @@ hgsid on
 dbInUrl on
 priority 1
 
+name stanfordSource
+shortLabel Stanford SOURCE
+tables kgXref
+idSql select mRNA from kgXref where kgID = '%s'
+url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Mm&option=Number&criteria=%s&choice=Gene
+priority 10
+

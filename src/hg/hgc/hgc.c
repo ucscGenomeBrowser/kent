@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1608 2010/03/26 16:48:49 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1609 2010/04/09 00:25:49 galt Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4804,7 +4804,7 @@ void printStanSource(char *acc, char *type)
 if (startsWith("Human", organism) || startsWith("Mouse", organism) ||
     startsWith("Rat", organism))
     {
-    char *stanSourceLink = "http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?";
+    char *stanSourceLink = "http://smd.stanford.edu/cgi-bin/source/sourceResult?";
     if(sameWord(type, "est"))
 	{
 	printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
