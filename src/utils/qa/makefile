@@ -108,6 +108,7 @@ install:
 	cp -p --remove-destination qaConfig.bash           ${SCRIPTS}
 	cp -p --remove-destination qaEncodeTracks.csh      ${SCRIPTS}
 	cp -p --remove-destination qaEnsGenes.csh          ${SCRIPTS}
+	cp -p --remove-destination qaThis.csh          ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination removeAlphas            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
