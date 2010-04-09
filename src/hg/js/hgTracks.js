@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.64 2010/04/08 22:31:13 kent Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.65 2010/04/09 07:48:47 kent Exp $
 
 var debug = false;
 var originalPosition;
@@ -134,6 +134,42 @@ function checkPosition(img, selection)
     return (selection.event.pageX >= leftX) && (selection.event.pageX < rightX)
         && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop));
 }
+
+
+function selectionPixelsToBases(img, selection)
+// Convert selection x1/x2 coordinates to chromStart/chromEnd.
+{
+var insideX = parseInt(document.getElementById("hgt.insideX").value);
+var imgWidth = jQuery(img).width() - insideX;
+var winStart = parseInt(document.getElementById("hgt.winStart").value);
+var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
+var width = winEnd - winStart;
+var mult = width / imgWidth;   // mult is bp/pixel multiplier
+var startDelta;                // startDelta is how many bp's to the right/left
+if(revCmplDisp) {
+    var x1 = Math.min(imgWidth, selection.x1);
+    startDelta = Math.floor(mult * (imgWidth - x1));
+} else {
+    var x1 = Math.max(insideX, selection.x1);
+    startDelta = Math.floor(mult * (x1 - insideX));
+}
+var endDelta;
+if(revCmplDisp) {
+    endDelta = startDelta;
+    var x2 = Math.min(imgWidth, selection.x2);
+    startDelta = Math.floor(mult * (imgWidth - x2));
+} else {
+    var x2 = Math.max(insideX, selection.x2);
+    endDelta = Math.floor(mult * (x2 - insideX));
+}
+var newStart = winStart + startDelta;
+var newEnd = winStart + 1 + endDelta;
+if(newEnd > winEnd) {
+    ewEnd = winEnd;
+}
+return {chromStart : newStart, chromEnd : newEnd};
+}
+
 
 function updatePosition(img, selection, singleClick)
 {
@@ -322,7 +358,14 @@ function loadImgAreaSelect(firstTime)
 
 function makeItemsEnd(img, selection)
 {
-alert("dragged out x1=" + selection.x1 + " x2=" + selection.x2);
+var image = $(img);
+var imageId = image.attr('id');
+var trackName = imageId.substring('img_data_'.length);
+var chrom = document.getElementById("hgt.chromName").value;
+var pos = selectionPixelsToBases(image, selection);
+var command = document.getElementById('hgt_doJsCommand');
+command.value = "makeItems " + trackName + " " + chrom + " " + pos.chromStart + " " + pos.chromEnd;
+document.TrackHeaderForm.submit();
 return true;
 }
 
