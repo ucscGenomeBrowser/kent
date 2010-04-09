@@ -10,7 +10,7 @@
 #include "hmmstats.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.6 2009/11/13 19:02:39 kent Exp $";
+static char const rcsid[] = "$Id: bigWigInfo.c,v 1.7 2010/04/09 20:32:34 ann Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ errAbort(
   "options:\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "   -chroms - list all chromosomes and their sizes\n"
-  "   -zooms - list all zoom levels and theier sizes\n"
+  "   -zooms - list all zoom levels and their sizes\n"
   );
 }
 
