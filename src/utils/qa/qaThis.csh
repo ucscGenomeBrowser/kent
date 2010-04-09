@@ -112,14 +112,14 @@ endif
 # check Table sort for table:
 
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Check table sort:"
+echo "Check table sort (only prints if errors):"
 positionalTblCheck $db $tables
 
 # ------------------------------------------------
 # check if any values are off Chrom ends
 
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Check for illegal genomic coordinates:"
+echo "Check for illegal genomic coordinates (only prints if errors):"
 checkTableCoords $db -table=$tables
 
 #----------------------------------------------
