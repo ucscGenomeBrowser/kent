@@ -63,6 +63,9 @@ set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,
 # Define organism databases for which we build a xenoRefGene track:
 set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,$aplCal,$ailMel,$loxAfr
 
+# Define organism databases for which we host the vegaGenes
+set vegaGeneDbs hg18,hg19,mm9
+
 # Define organism databases for which we build a SNP track:
 set snpDb130 hg18
 set snpDb129 hg18
@@ -112,7 +115,7 @@ set pbDb3 hg16,hg17,hg18
 set familyDb $hg,$mm,$rn,$ce,$sacCer,$dm
 
 # Define databases that support CCDS
-set ccdsDb hg18,hg17,mm8,mm9
+set ccdsDb hg19,hg18,hg17,mm8,mm9
 
 # Magic for tables split between chromosomes
 set split splitPrefix=chr%\_
@@ -648,19 +651,12 @@ identifier augustusAbinitioName dependency
    $gbd.augustusAbinitio.name
    $gbd.augustusAbinitioPep.name chopBefore=. full unique
 
-identifier vegaGeneIdHuman external=VegaGene
-"Link together various VEGA human curated gene annotation"
-    hg18.vegaGtp.transcript
-    hg18.vegaGene.name
-    hg18.vegaPseudoGene.name
-    hg18.vegaPep.name
-
-identifier vegaGeneIdMouse external=VegaGene
-"Link together various VEGA mouse curated gene annotation"
-    mm9.vegaGtp.transcript
-    mm9.vegaGene.name
-    mm9.vegaPseudoGene.name
-    mm9.vegaPep.name
+identifier vegaGeneId external=VegaGene
+"Link together various VEGA curated gene annotation"
+    $vegaGeneDbs.vegaGtp.transcript
+    $vegaGeneDbs.vegaGene.name
+    $vegaGeneDbs.vegaPseudoGene.name
+    $vegaGeneDbs.vegaPep.name
 
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
@@ -1277,6 +1273,7 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     mm7.geneNetworkId.id minCheck=0.80
     mm8.geneNetworkId.id minCheck=0.80
     mm9.geneNetworkId.id minCheck=0.80
+    hg19.geneNetworkId.id
     rn3.geneNetworkId.id minCheck=0.40
 
 identifier knownGeneId dependency
@@ -1359,6 +1356,7 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5
     $kgDb.kg3ToKg4.newId exclude=
     $kgDb.kgTargetAli.qName full
+    hg19.kg4ToKg5.newId
 
 identifier knownGeneOld3Id dependency
 "Previous UCSC Gene build"
