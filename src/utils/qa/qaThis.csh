@@ -22,6 +22,9 @@ if ($#argv < 2 || $#argv > 3) then
   echo
   echo "    c runs count per chrom"                                         
   echo
+  echo "    If redirecting output, be sure"
+  echo "    to redirect stdout and stderr (>&) "
+  echo
   echo "    Works if you provide a list of tables"
   echo "    In that case, it creates db.tableName.qa files"
   echo 
