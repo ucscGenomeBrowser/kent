@@ -853,6 +853,15 @@ void chromGraphMethods(struct track *tg);
 void chromGraphMethodsCt(struct track *tg);
 /* Fill in chromGraph methods for custom track. */
 
+void factorSourceMethods(struct track *track);
+/* Set up special methods for factorSource type tracks. */
+
+void makeItemsMethods(struct track *track);
+/* Set up special methods for makeItems type tracks. */
+
+void makeItemsMethodsCt(struct track *track);
+/* Set up special methods for makeItems type custom tracks. */
+
 void wigMafPMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 void wigMafMethods(struct track *track, struct trackDb *tdb,
@@ -1104,12 +1113,6 @@ void wikiTrackMethods(struct track *tg);
 struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 	int start, int end);
 /* fetch wiki track items as simple bed 3 list in given range */
-
-void factorSourceMethods(struct track *track);
-/* Set up special methods for factorSource type tracks. */
-
-void makeItemsMethods(struct track *track);
-/* Set up special methods for makeItems type tracks. */
 
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */

@@ -30,3 +30,9 @@ track->loadItems = makeItemsLoadItems;
 track->mapsSelf = TRUE;
 track->canPack = TRUE;
 }
+
+void makeItemsMethodsCt(struct track *tg)
+/* Methods for ENCODE peak track uses mostly linkedFeatures. */
+{
+makeItemsMethods(tg);
+}

@@ -7,6 +7,7 @@
 #include "linefile.h"
 #include "portable.h"
 #include "obscure.h"
+#include "binRange.h"
 #include "pipeline.h"
 #include "jksql.h"
 #include "net.h"
@@ -32,8 +33,9 @@
 #ifdef USE_BAM
 #include "bamFile.h"
 #endif//def USE_BAM
+#include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.118 2010/03/15 21:32:49 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.119 2010/04/09 20:06:18 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1607,6 +1609,136 @@ static struct customFactory bamFactory =
     };
 #endif//def USE_BAM
 
+/*** makeItems Factory - for track where user interactively creates items. ***/
+
+static boolean makeItemsRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type, 
+			     struct customTrack *track)
+/* Return TRUE if looks like we're handling a makeItems track */
+{
+return (sameType(type, "makeItems"));
+}
+
+struct makeItemsItem *makeItemsItemFromRow(char **row, int rowSize)
+/* Create a makeItemsItem from a row of uncertain length. */
+{
+if (rowSize < 3)
+    errAbort("err: need at least %d fields in a makeItems row, got %d", 3, rowSize);
+struct makeItemsItem *item;
+AllocVar(item);
+item->chrom = cloneString(row[0]);
+item->chromStart = sqlUnsigned(row[1]);
+item->chromEnd = sqlUnsigned(row[2]);
+item->bin = binFromRange(item->chromStart, item->chromEnd);
+if (rowSize > 3) 
+    item->name = cloneString(row[3]);
+else
+    item->name = cloneString(".");
+if (rowSize > 4) 
+    item->strand[0] = row[4][0];
+else
+    item->strand[0] = '.';
+if (rowSize > 5) 
+    item->score = sqlSigned(row[5]);
+if (rowSize > 6)
+    item->color = cloneString(row[6]);
+else
+    item->color = cloneString("0,0,0");
+if (rowSize > 7)
+    item->description = cloneString(row[7]);
+else
+    item->description = cloneString("");
+return item;
+}
+
+static struct customTrack *makeItemsLoader(struct customFactory *fac, struct hash *chromHash,
+				     struct customPp *cpp, struct customTrack *track,
+				     boolean dbRequested)
+/* Process the makeItems track line. */
+{
+char *ctDb = ctGenomeOrCurrent(track);
+struct makeItemsItem *list = NULL;
+int fieldCount = 0;
+char *line;
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[8];
+    int wordCount = chopLine(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, 3, wordCount);
+    if (fieldCount == 0)
+        fieldCount = wordCount;
+    else if (fieldCount != wordCount)
+        {
+	errAbort("error: some lines in makeItems type custom track have %d fields, others have %d",
+		fieldCount, wordCount);
+	}
+    struct makeItemsItem *item = makeItemsItemFromRow(row, wordCount);
+    customFactoryCheckChromNameDb(ctDb, item->chrom, lf);
+    slAddHead(&list, item);
+    }
+track->dbTrackType = cloneString("makeItems");
+track->tdb->type = cloneString("makeItems");
+if (fieldCount != 0)
+    {
+    char buf[16];
+    safef(buf, sizeof(buf), "%d", fieldCount);
+    ctAddToSettings(track, "fieldCount", cloneString(buf));
+    }
+
+/* If necessary add track offsets. */
+int offset = track->offset;
+if (offset != 0)
+    {
+    /* Add track offsets if any */
+    struct makeItemsItem *item;
+    for (item = list; item != NULL; item = item->next)
+	{
+	item->chromStart += offset;
+	item->chromEnd += offset;
+	}
+    track->offset = 0;	/*	so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
+    }
+
+/* Load database */
+customFactorySetupDbTrack(track);
+char *tableName = track->dbTableName;
+char *tableFormat = 
+"CREATE TABLE %s (\n"
+"    bin int unsigned not null,	# Bin for range index\n"
+"    chrom varchar(255) not null,	# Reference sequence chromosome or scaffold\n"
+"    chromStart int unsigned not null,	# Start position in chromosome\n"
+"    chromEnd int unsigned not null,	# End position in chromosome\n"
+"    name varchar(255) not null,	# Name of item - up to 16 chars\n"
+"    strand char(1) not null,	# + or - for strand\n"
+"    score int unsigned not null,	# 0-1000.  Higher numbers are darker.\n"
+"    color varchar(255) not null,	# Comma separated list of RGB components.  IE 255,0,0 for red\n"
+"    description longblob not null,	# Longer item description\n"
+"              #Indices\n"
+"    INDEX(chrom(16),bin)\n"
+")";
+struct dyString *createSql = dyStringNew(0);
+dyStringPrintf(createSql, tableFormat, tableName);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+if (sqlMaybeMakeTable(conn, tableName, createSql->string))
+    {
+    struct makeItemsItem *item;
+    for (item = list; item != NULL; item = item->next)
+	makeItemsItemSaveToDbEscaped(conn, item, tableName, 1000+strlen(item->description));
+    }
+dyStringFree(&createSql);
+hFreeConn(&conn);
+return track;
+}
+
+static struct customFactory makeItemsFactory = 
+/* Factory for makeItems tracks */
+    {
+    NULL,
+    "makeItems",
+    makeItemsRecognizer,
+    makeItemsLoader,
+    };
 
 /*** Framework for custom factories. ***/
 
@@ -1636,6 +1768,7 @@ if (factoryList == NULL)
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM
+    slAddTail(&factoryList, &makeItemsFactory);
     }
 }
 

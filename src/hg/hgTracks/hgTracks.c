@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1639 2010/04/09 00:15:12 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1640 2010/04/09 20:06:45 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3180,6 +3180,13 @@ else if (sameString(type, "bam"))
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 #endif//def USE_BAM
+else if (sameString(type, "makeItems"))
+    {
+    tg = trackFromTrackDb(tdb);
+    makeItemsMethodsCt(tg);
+    tg->nextItemButtonable = TRUE;
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
