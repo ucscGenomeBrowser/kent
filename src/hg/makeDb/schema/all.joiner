@@ -3476,6 +3476,7 @@ tablesIgnored $felCat
     gold
     intronEst
     microsat
+    ctgPos2
 
 tablesIgnored hg16
     chicken_hmrg
