@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1638 2010/04/08 22:31:33 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1639 2010/04/09 00:15:12 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4161,6 +4161,7 @@ dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\t
 
 void printTrackInitJavascript(struct track *trackList)
 {
+hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
 hPrintf("<script type='text/javascript'>\n");
 hPrintf( "function hgTracksInitTracks()\n{\n");
 
@@ -4273,6 +4274,14 @@ if(advancedJavascriptFeaturesEnabled(cart) && !psOutput)
         }
     #endif//def IMAGEv2_DRAG_SCROLL
     }
+
+char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
+if (!isEmpty(jsCommand))
+   {
+   cartRemove(cart, hgtJsCommand);
+   uglyf("Hello javascript world! Your command is '%s'<BR>\n ", jsCommand);
+   }
+
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -5417,6 +5426,7 @@ initTl();
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
+
 dragZooming = advancedJavascriptFeaturesEnabled(cart);
 
 /* Do main display. */

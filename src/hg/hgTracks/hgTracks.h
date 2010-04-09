@@ -1041,6 +1041,7 @@ void setRulerMode();
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
 #define searchTracks "hgt_searchTracks"
+#define hgtJsCommand "hgt_doJsCommand"
 
 void configPage();
 /* Put up configuration page. */
