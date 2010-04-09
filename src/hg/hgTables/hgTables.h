@@ -903,8 +903,8 @@ void doOutBed(char *table, struct sqlConnection *conn);
 void doOutHyperlinks(char *table, struct sqlConnection *conn);
 /* Output as genome browser hyperlinks. */
 
-void doOutGff(char *table, struct sqlConnection *conn);
-/* Save as GFF. */
+void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf);
+/* Save as GFF/GTF. */
 
 void doOutCustomTrack(char *table, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */

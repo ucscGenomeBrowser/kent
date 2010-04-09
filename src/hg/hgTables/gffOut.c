@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.20 2010/02/05 17:41:02 angie Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.21 2010/04/09 18:41:17 markd Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -236,15 +236,15 @@ hashFree(&nameHash);
 return(gffList);
 }
 
-void doOutGff(char *table, struct sqlConnection *conn)
-/* Save as GFF. */
+void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
+/* Save as GFF/GTF. */
 {
 struct hTableInfo *hti = getHti(database, table, conn);
 struct bed *bedList;
 struct gffLine *gffList, *gffPtr;
 char source[HDB_MAX_TABLE_STRING];
 int itemCount;
-boolean gtf2StopCodons = FALSE;
+boolean gtf2StopCodons = TRUE;
 struct region *region, *regionList = getRegions();
 
 textOpen();

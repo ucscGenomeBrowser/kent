@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.189 2010/03/25 17:41:25 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.190 2010/04/09 18:41:17 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1526,7 +1526,7 @@ else if (sameString(output, outGff))
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
     else
-        doOutGff(table, conn);
+        doOutGff(table, conn, TRUE);
     }
 else if (sameString(output, outHyperlinks))
     {
@@ -1777,6 +1777,8 @@ pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 cgiSpoof(&argc, argv);
 
+struct dyString *in = cgiUrlString();
+fprintf(stderr, "%s\n", in->string);
 hgTables();
 
 textOutClose(&compressPipeline);
