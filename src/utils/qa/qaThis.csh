@@ -20,16 +20,11 @@ if ($#argv < 2 || $#argv > 3) then
   echo
   echo "    usage:  database Tablename [c]"
   echo
-  echo "    c should run count per chrom" 
-  echo "    Creates files if given multiple tables!"
-  echo "    Runs countPerChrom last so if it gets scaffold-y"
-  echo "    Or you just don't care, you can just stop looking"
+  echo "    c runs count per chrom"                                         
   echo
-  echo "    If you happen to have ideas on how to make it simply not run"
-  echo "    When it's scaffolds versus actual chroms, let me know"                                        
-  echo
-  echo "    It should also work if you provide a list"
-  echo "    I make no promises though"
+  echo "    Works if you provide a list of tables"
+  echo "    In that case, it creates db.tableName.qa files"
+  echo 
 
   exit
 else
@@ -121,8 +116,8 @@ positionalTblCheck $db $tables
 # check if any values are off Chrom ends
 
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Check whether entries are off chroms:"
-checkOffend.csh $db $tables
+echo "Check for illegal genomic coordinates:"
+checkTableCoords $db -table=$tables
 
 #----------------------------------------------
 #Check indeces
