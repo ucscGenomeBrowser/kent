@@ -199,12 +199,12 @@ type string
 required no
 
 # cv.ra fields
-field term
-file cv
-type string
-required yes
+#field term
+#file cv
+#type string
+#required yes
 
-field type
-file cv
-type string
-required yes
+#field type
+#file cv
+#type string
+#required yes
