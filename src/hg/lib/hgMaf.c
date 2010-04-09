@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.13 2009/04/10 19:52:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.14 2010/04/09 00:12:00 braney Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -47,6 +47,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     scoredRefStaticLoad(row + rowOffset, &ref);
     if ((file != NULL) && (ref.extFile != 0))
 	errAbort("expect extFile to be zero if file specified\n");
+    if ((file == NULL) && (ref.extFile == 0))
+	errAbort("expect extFile to be not zero or file specified\n");
 
     if (ref.extFile != extFileId)
 	{
