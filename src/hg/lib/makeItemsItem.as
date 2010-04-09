@@ -1,5 +1,5 @@
-table makeItems
-"Browser extensible data"
+table makeItemsItem
+"An item in a makeItems type track."
     (
     uint bin;	       "Bin for range index"
     string chrom;      "Reference sequence chromosome or scaffold"

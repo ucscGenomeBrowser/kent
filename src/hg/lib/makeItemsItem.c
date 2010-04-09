@@ -8,10 +8,10 @@
 #include "jksql.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsItem.c,v 1.1 2010/04/09 17:44:20 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsItem.c,v 1.2 2010/04/09 17:45:57 kent Exp $";
 
-void makeItemsStaticLoad(char **row, struct makeItems *ret)
-/* Load a row from makeItems table into ret.  The contents of ret will
+void makeItemsItemStaticLoad(char **row, struct makeItemsItem *ret)
+/* Load a row from makeItemsItem table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -26,21 +26,21 @@ ret->color = row[7];
 ret->description = row[8];
 }
 
-struct makeItems *makeItemsLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all makeItems from table that satisfy the query given.  
+struct makeItemsItem *makeItemsItemLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all makeItemsItem from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with makeItemsFreeList(). */
+ * Dispose of this with makeItemsItemFreeList(). */
 {
-struct makeItems *list = NULL, *el;
+struct makeItemsItem *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = makeItemsLoad(row);
+    el = makeItemsItemLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -48,14 +48,14 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void makeItemsSaveToDb(struct sqlConnection *conn, struct makeItems *el, char *tableName, int updateSize)
-/* Save makeItems as a row to the table specified by tableName. 
+void makeItemsItemSaveToDb(struct sqlConnection *conn, struct makeItemsItem *el, char *tableName, int updateSize)
+/* Save makeItemsItem as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use makeItemsSaveToDbEscaped() */
+ * If worried about this use makeItemsItemSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s',%s)", 
@@ -64,11 +64,11 @@ sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void makeItemsSaveToDbEscaped(struct sqlConnection *conn, struct makeItems *el, char *tableName, int updateSize)
-/* Save makeItems as a row to the table specified by tableName. 
+void makeItemsItemSaveToDbEscaped(struct sqlConnection *conn, struct makeItemsItem *el, char *tableName, int updateSize)
+/* Save makeItemsItem as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than makeItemsSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than makeItemsItemSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
@@ -92,11 +92,11 @@ freez(&color);
 freez(&description);
 }
 
-struct makeItems *makeItemsLoad(char **row)
-/* Load a makeItems from row fetched with select * from makeItems
- * from database.  Dispose of this with makeItemsFree(). */
+struct makeItemsItem *makeItemsItemLoad(char **row)
+/* Load a makeItemsItem from row fetched with select * from makeItemsItem
+ * from database.  Dispose of this with makeItemsItemFree(). */
 {
-struct makeItems *ret;
+struct makeItemsItem *ret;
 
 AllocVar(ret);
 ret->bin = sqlUnsigned(row[0]);
@@ -111,17 +111,17 @@ ret->description = cloneString(row[8]);
 return ret;
 }
 
-struct makeItems *makeItemsLoadAll(char *fileName) 
-/* Load all makeItems from a whitespace-separated file.
- * Dispose of this with makeItemsFreeList(). */
+struct makeItemsItem *makeItemsItemLoadAll(char *fileName) 
+/* Load all makeItemsItem from a whitespace-separated file.
+ * Dispose of this with makeItemsItemFreeList(). */
 {
-struct makeItems *list = NULL, *el;
+struct makeItemsItem *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 
 while (lineFileRow(lf, row))
     {
-    el = makeItemsLoad(row);
+    el = makeItemsItemLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -129,17 +129,17 @@ slReverse(&list);
 return list;
 }
 
-struct makeItems *makeItemsLoadAllByChar(char *fileName, char chopper) 
-/* Load all makeItems from a chopper separated file.
- * Dispose of this with makeItemsFreeList(). */
+struct makeItemsItem *makeItemsItemLoadAllByChar(char *fileName, char chopper) 
+/* Load all makeItemsItem from a chopper separated file.
+ * Dispose of this with makeItemsItemFreeList(). */
 {
-struct makeItems *list = NULL, *el;
+struct makeItemsItem *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = makeItemsLoad(row);
+    el = makeItemsItemLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -147,10 +147,10 @@ slReverse(&list);
 return list;
 }
 
-struct makeItems *makeItemsCommaIn(char **pS, struct makeItems *ret)
-/* Create a makeItems out of a comma separated string. 
+struct makeItemsItem *makeItemsItemCommaIn(char **pS, struct makeItemsItem *ret)
+/* Create a makeItemsItem out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new makeItems */
+ * return a new makeItemsItem */
 {
 char *s = *pS;
 
@@ -169,11 +169,11 @@ ret->description = sqlStringComma(&s);
 return ret;
 }
 
-void makeItemsFree(struct makeItems **pEl)
-/* Free a single dynamically allocated makeItems such as created
- * with makeItemsLoad(). */
+void makeItemsItemFree(struct makeItemsItem **pEl)
+/* Free a single dynamically allocated makeItemsItem such as created
+ * with makeItemsItemLoad(). */
 {
-struct makeItems *el;
+struct makeItemsItem *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
@@ -183,21 +183,21 @@ freeMem(el->description);
 freez(pEl);
 }
 
-void makeItemsFreeList(struct makeItems **pList)
-/* Free a list of dynamically allocated makeItems's */
+void makeItemsItemFreeList(struct makeItemsItem **pList)
+/* Free a list of dynamically allocated makeItemsItem's */
 {
-struct makeItems *el, *next;
+struct makeItemsItem *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    makeItemsFree(&el);
+    makeItemsItemFree(&el);
     }
 *pList = NULL;
 }
 
-void makeItemsOutput(struct makeItems *el, FILE *f, char sep, char lastSep) 
-/* Print out makeItems.  Separate fields with sep. Follow last field with lastSep. */
+void makeItemsItemOutput(struct makeItemsItem *el, FILE *f, char sep, char lastSep) 
+/* Print out makeItemsItem.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->bin);
 fputc(sep,f);

@@ -3,8 +3,8 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Browser extensible data
-CREATE TABLE makeItems (
+#An item in a makeItems type track.
+CREATE TABLE makeItemsItem (
     bin int unsigned not null,	# Bin for range index
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome

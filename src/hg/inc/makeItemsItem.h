@@ -6,12 +6,12 @@
 #define MAKEITEMSITEM_H
 
 #include "jksql.h"
-#define MAKEITEMS_NUM_COLS 9
+#define MAKEITEMSITEM_NUM_COLS 9
 
-struct makeItems
-/* Browser extensible data */
+struct makeItemsItem
+/* An item in a makeItems type track. */
     {
-    struct makeItems *next;  /* Next in singly linked list. */
+    struct makeItemsItem *next;  /* Next in singly linked list. */
     unsigned bin;	/* Bin for range index */
     char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chromosome */
@@ -23,71 +23,71 @@ struct makeItems
     char *description;	/* Longer item description */
     };
 
-void makeItemsStaticLoad(char **row, struct makeItems *ret);
-/* Load a row from makeItems table into ret.  The contents of ret will
+void makeItemsItemStaticLoad(char **row, struct makeItemsItem *ret);
+/* Load a row from makeItemsItem table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct makeItems *makeItemsLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all makeItems from table that satisfy the query given.  
+struct makeItemsItem *makeItemsItemLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all makeItemsItem from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with makeItemsFreeList(). */
+ * Dispose of this with makeItemsItemFreeList(). */
 
-void makeItemsSaveToDb(struct sqlConnection *conn, struct makeItems *el, char *tableName, int updateSize);
-/* Save makeItems as a row to the table specified by tableName. 
+void makeItemsItemSaveToDb(struct sqlConnection *conn, struct makeItemsItem *el, char *tableName, int updateSize);
+/* Save makeItemsItem as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use makeItemsSaveToDbEscaped() */
+ * If worried about this use makeItemsItemSaveToDbEscaped() */
 
-void makeItemsSaveToDbEscaped(struct sqlConnection *conn, struct makeItems *el, char *tableName, int updateSize);
-/* Save makeItems as a row to the table specified by tableName. 
+void makeItemsItemSaveToDbEscaped(struct sqlConnection *conn, struct makeItemsItem *el, char *tableName, int updateSize);
+/* Save makeItemsItem as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than makeItemsSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than makeItemsItemSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
 
-struct makeItems *makeItemsLoad(char **row);
-/* Load a makeItems from row fetched with select * from makeItems
- * from database.  Dispose of this with makeItemsFree(). */
+struct makeItemsItem *makeItemsItemLoad(char **row);
+/* Load a makeItemsItem from row fetched with select * from makeItemsItem
+ * from database.  Dispose of this with makeItemsItemFree(). */
 
-struct makeItems *makeItemsLoadAll(char *fileName);
-/* Load all makeItems from whitespace-separated file.
- * Dispose of this with makeItemsFreeList(). */
+struct makeItemsItem *makeItemsItemLoadAll(char *fileName);
+/* Load all makeItemsItem from whitespace-separated file.
+ * Dispose of this with makeItemsItemFreeList(). */
 
-struct makeItems *makeItemsLoadAllByChar(char *fileName, char chopper);
-/* Load all makeItems from chopper separated file.
- * Dispose of this with makeItemsFreeList(). */
+struct makeItemsItem *makeItemsItemLoadAllByChar(char *fileName, char chopper);
+/* Load all makeItemsItem from chopper separated file.
+ * Dispose of this with makeItemsItemFreeList(). */
 
-#define makeItemsLoadAllByTab(a) makeItemsLoadAllByChar(a, '\t');
-/* Load all makeItems from tab separated file.
- * Dispose of this with makeItemsFreeList(). */
+#define makeItemsItemLoadAllByTab(a) makeItemsItemLoadAllByChar(a, '\t');
+/* Load all makeItemsItem from tab separated file.
+ * Dispose of this with makeItemsItemFreeList(). */
 
-struct makeItems *makeItemsCommaIn(char **pS, struct makeItems *ret);
-/* Create a makeItems out of a comma separated string. 
+struct makeItemsItem *makeItemsItemCommaIn(char **pS, struct makeItemsItem *ret);
+/* Create a makeItemsItem out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new makeItems */
+ * return a new makeItemsItem */
 
-void makeItemsFree(struct makeItems **pEl);
-/* Free a single dynamically allocated makeItems such as created
- * with makeItemsLoad(). */
+void makeItemsItemFree(struct makeItemsItem **pEl);
+/* Free a single dynamically allocated makeItemsItem such as created
+ * with makeItemsItemLoad(). */
 
-void makeItemsFreeList(struct makeItems **pList);
-/* Free a list of dynamically allocated makeItems's */
+void makeItemsItemFreeList(struct makeItemsItem **pList);
+/* Free a list of dynamically allocated makeItemsItem's */
 
-void makeItemsOutput(struct makeItems *el, FILE *f, char sep, char lastSep);
-/* Print out makeItems.  Separate fields with sep. Follow last field with lastSep. */
+void makeItemsItemOutput(struct makeItemsItem *el, FILE *f, char sep, char lastSep);
+/* Print out makeItemsItem.  Separate fields with sep. Follow last field with lastSep. */
 
-#define makeItemsTabOut(el,f) makeItemsOutput(el,f,'\t','\n');
-/* Print out makeItems as a line in a tab-separated file. */
+#define makeItemsItemTabOut(el,f) makeItemsItemOutput(el,f,'\t','\n');
+/* Print out makeItemsItem as a line in a tab-separated file. */
 
-#define makeItemsCommaOut(el,f) makeItemsOutput(el,f,',',',');
-/* Print out makeItems as a comma separated list including final comma. */
+#define makeItemsItemCommaOut(el,f) makeItemsItemOutput(el,f,',',',');
+/* Print out makeItemsItem as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
