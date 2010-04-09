@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.7 2010/04/01 16:37:14 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.8 2010/04/09 18:41:24 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -40,7 +40,7 @@ do
         | sed -e "s/^${ACC}/chr${C}/" | gzip > ucscChr/chr${C}.agp.gz
 done
 
-# use compenet instead 
+# use component instead 
 S=Primary_Assembly/assembled_chromosomes
 cut -f1 ${S}/chr2acc  | while read C
 do
@@ -176,6 +176,13 @@ hgsql -e "select type from gap;" felCatV17e | sort | uniq -c
     #	1 type
 
 mv felCatV17e.comp.agp felCatV17e.agp
+##########################################################################
+# fixed up the html files (working - 2010-04-06 Chin)
+
+   #  per instructions at end of makeGenomeDb.log, edit the html file
+   #  and checkin the *.ra and *.html files.
+   cd  /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/cat/felCatV17e
+
 
 
 ##########################################################################
@@ -562,17 +569,17 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainFelCatV17eLink.txt
     #  1266003011 bases of 2897316137 (43.696%) in intersection
 
-    # Swap
+    # Swap re-run 04-07
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
     cd /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22/DEF \
         -swap -syntenicNet -noDbNameCheck \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    120m42.991s
+    #   real   200m43.245s 
     cat fb.felCatV17e.chainHg19Link.txt
-    #   2030475813 bases of 2752505800 (73.768%) in intersection
+#   1211702270 bases of 1990635005 (60.870%) in intersection
 
 
 #####################################################################
@@ -673,6 +680,41 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # add the track ctgPos2 to src/hg/makeDb/trackDb/cat/felCatV17e/trackDb.ra
     # at src/makeDb/trackdb do "make update" or/and "make alpha"
 
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2010-04-09 Chin)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=felCatV17e -all all.joiner
+    
+    mkdir /hive/data/genomes/felCatV17e/goldenPath
+    cd /hive/data/genomes/felCatV17e/goldenPath
+    makeDownloads.pl felCatV17e > do.log 2>&1
+    #  vi /hive/data/genomes/felCatV17e/goldenPath/database/README.txt
+    #  vi  /hive/data/genomes/felCatV17e/goldenPath/bigZips/README.txt
+
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/felCatV17e/pushQ
+    cd /hive/data/genomes/felCatV17e/pushQ
+    makePushQSql.pl felCatV17e > felCatV17e.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: felCatV17e does not have seq
+# WARNING: felCatV17e does not have extFile
+# WARNING: felCatV17e does not have tableDescriptions
+
+    #   copy it to hgwbeta
+    #   use hgcat in .hg.conf.beta
+    scp -p felCatV17e.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < felCatV17e.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+    #   reset to hguser in .hg.conf.beta
+
+
 
 ####################################################################
+
 
