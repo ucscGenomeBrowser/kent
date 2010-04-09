@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.96 2010/04/07 17:42:44 hiram Exp $";
+#	"$Id: hg19.txt,v 1.97 2010/04/09 15:24:24 chinhli Exp $";
 
 #############################################################################
 
@@ -8824,6 +8824,7 @@ TMPDIR=/scratch/tmp
 
 #######################################################################
 # felCatV17e Cat BLASTZ/CHAIN/NET (DONE  - 2010-03-22 - Chin)
+# Rerun the complete doBlastzChainNet.pl (2010-04-07 -Chin)
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
     cd /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
@@ -8865,7 +8866,7 @@ TMPDIR=/scratch/tmp
     # with:
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pw`/DEF \
+	`pwd`/DEF \
         -continue=download  -syntenicNet -noDbNameCheck \
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
@@ -8877,17 +8878,30 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/hg19/bed 
     ln -s  lastzFelCatV17e.2010-03-22 lastz.felCatV17e
 
+#  04/07 re-reun the  doBlastzChinNet.pl steps with screen
+    cd /hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22
+ 
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+        > do.log 2>&1 &
+    #    real    423m7.683s
+
+
     # Swap
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
     cd /hive/data/genomes/felCatV17e/bed/blastz.hg19.swap
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/hg19/bed/lastzFelCatV17e.2010-03-22/DEF \
 	-swap -syntenicNet -noDbNameCheck \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    120m42.991s
+    #   real    200m43.245s
     cat fb.felCatV17e.chainHg19Link.txt 
-    #	2030475813 bases of 2752505800 (73.768%) in intersection
+    #   1211702270 bases of 1990635005 (60.870%) in intersection
 
 #####################################################################
 # susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-26,27 - Hiram)
