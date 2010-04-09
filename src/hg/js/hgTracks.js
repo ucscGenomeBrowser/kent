@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.65 2010/04/09 07:48:47 kent Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.66 2010/04/09 17:08:48 kent Exp $
 
 var debug = false;
 var originalPosition;
@@ -135,31 +135,28 @@ function checkPosition(img, selection)
         && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop));
 }
 
-
-function selectionPixelsToBases(img, selection)
-// Convert selection x1/x2 coordinates to chromStart/chromEnd.
+function pixelsToBases(img, selStart, selEnd, winStart, winEnd)
+// Convert image coordinates to chromosome coordinates
 {
 var insideX = parseInt(document.getElementById("hgt.insideX").value);
 var imgWidth = jQuery(img).width() - insideX;
-var winStart = parseInt(document.getElementById("hgt.winStart").value);
-var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
 var width = winEnd - winStart;
 var mult = width / imgWidth;   // mult is bp/pixel multiplier
 var startDelta;                // startDelta is how many bp's to the right/left
 if(revCmplDisp) {
-    var x1 = Math.min(imgWidth, selection.x1);
+    var x1 = Math.min(imgWidth, selStart);
     startDelta = Math.floor(mult * (imgWidth - x1));
 } else {
-    var x1 = Math.max(insideX, selection.x1);
+    var x1 = Math.max(insideX, selStart);
     startDelta = Math.floor(mult * (x1 - insideX));
 }
 var endDelta;
 if(revCmplDisp) {
     endDelta = startDelta;
-    var x2 = Math.min(imgWidth, selection.x2);
+    var x2 = Math.min(imgWidth, selEnd);
     startDelta = Math.floor(mult * (imgWidth - x2));
 } else {
-    var x2 = Math.max(insideX, selection.x2);
+    var x2 = Math.max(insideX, selEnd);
     endDelta = Math.floor(mult * (x2 - insideX));
 }
 var newStart = winStart + startDelta;
@@ -170,64 +167,32 @@ if(newEnd > winEnd) {
 return {chromStart : newStart, chromEnd : newEnd};
 }
 
+function selectionPixelsToBases(img, selection)
+// Convert selection x1/x2 coordinates to chromStart/chromEnd.
+{
+var winStart = parseInt(document.getElementById("hgt.winStart").value);
+var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
+return pixelsToBases(img, selection.x1, selection.x2, winStart, winEnd);
+}
 
 function updatePosition(img, selection, singleClick)
 {
-    // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
-    var chromName = document.getElementById("hgt.chromName").value;
-    var winStart = parseInt(document.getElementById("hgt.winStart").value);
-    var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
-    if(typeof imgBoxPortalStart != "undefined" && imgBoxPortalStart) {
-        winStart = imgBoxPortalStart;
-        winEnd = imgBoxPortalEnd;
-    }
-    var imgWidth = jQuery(img).width() - insideX;
-    var width = winEnd - winStart;
-    var newPos = null;
-    var newSize = null;
-    var mult = width / imgWidth;			    // mult is bp/pixel multiplier
-    var startDelta;                                     // startDelta is how many bp's to the right/left
-    if(revCmplDisp) {
-        var x1 = Math.min(imgWidth, selection.x1);
-        startDelta = Math.floor(mult * (imgWidth - x1));
-    } else {
-        var x1 = Math.max(insideX, selection.x1);
-        startDelta = Math.floor(mult * (x1 - insideX));
-    }
-    if(singleClick) {
-	var newStart = (winStart + 1) + (startDelta - Math.floor(newWinWidth / 2));
-        if(newStart < 1) {
-            newStart = 1;
-            newEnd = newWinWidth;
-        } else {
-            // hgTracks gracefully handles overflow past the end of the chrom, so don't worry about that.
-            newEnd = (winStart + 1) + (startDelta + Math.floor(newWinWidth / 2));
-        }
-	newPos = chromName + ":" + commify(newStart) + "-" + commify(newEnd);
-	newSize = newEnd - newStart + 1;
-    } else {
-        var endDelta;
-        if(revCmplDisp) {
-            endDelta = startDelta;
-            var x2 = Math.min(imgWidth, selection.x2);
-	    startDelta = Math.floor(mult * (imgWidth - x2));
-        } else {
-            var x2 = Math.max(insideX, selection.x2);
-	    endDelta = Math.floor(mult * (x2 - insideX));
-        }
-        var newStart = winStart + 1 + startDelta;
-        var newEnd = winStart + 1 + endDelta;
-        if(newEnd > winEnd) {
-            newEnd = winEnd;
-        }
-        newPos = chromName + ":" + commify(newStart) + "-" + commify(newEnd);
-        newSize = newEnd - newStart + 1;
-    }
-
-    if(newPos != null) {
-        setPosition(newPos, commify(newSize));
-	return true;
-    }
+var chromName = document.getElementById("hgt.chromName").value;
+var winStart = parseInt(document.getElementById("hgt.winStart").value);
+var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
+var pos = pixelsToBases(img, selection.x1, selection.x2, winStart, winEnd);
+if(typeof imgBoxPortalStart != "undefined" && imgBoxPortalStart) {
+    winStart = imgBoxPortalStart;
+    winEnd = imgBoxPortalEnd;
+}
+// singleClick is true when the mouse hasn't moved (or has only moved a small amount).
+if(singleClick) {
+    var center = (pos.chromStart + pos.chromEnd)/2;
+    pos.chromStart = Math.floor(center - newWinWidth/2);
+    pos.chromEnd = pos.chromStart + newWinWidth;
+}
+setPositionByCoordinates(chromName, pos.chromStart+1, pos.chromEnd);
+return true;
 }
 
 function selectChange(img, selection)
