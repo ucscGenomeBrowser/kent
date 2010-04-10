@@ -51,20 +51,19 @@ hFreeConn(&conn);
 freez(&dupeCommand);
 }
 
+static int makeItemsExtraHeight(struct track *tg)
+/* Return extra height of track. */
+{
+return tl.fontHeight+2;
+}
+
 void makeItemsLoadItems(struct track *tg)
 /* Load up items in track already.  Also make up a pseudo-item that is
  * where you drag to create an item. */
 {
 struct bed *bedList = NULL;
-struct bed *firstItem;
-AllocVar(firstItem);
-firstItem->chrom = cloneString(chromName);
-firstItem->chromStart = winStart;
-firstItem->chromEnd = winEnd;
-firstItem->name = cloneString("Drag here to create a new item");
 struct customTrack *ct = tg->customPt;
 char *tableName = ct->dbTableName;
-firstItem->name = cloneString(tableName);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -75,20 +74,39 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&bedList, bed);
     }
 sqlFreeResult(&sr);
-#ifdef SOON
-#endif /* SOON */
 hFreeConn(&conn);
 slReverse(&bedList);
-slAddHead(&bedList, firstItem);
 tg->items = bedList;
 }
+
+void makeItemsDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw simple Bed items. */
+{
+int dragBarHeight = makeItemsExtraHeight(tg);
+hvGfxTextCentered(hvg, xOff, yOff, width, dragBarHeight, color, font, 
+	"--- Drag here or inbetween items to create a new item. ---");
+bedDrawSimple(tg, seqStart, seqEnd, hvg, xOff, yOff + dragBarHeight, width,
+	font, color, vis);
+}
+
+int makeItemsTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height
+ * they use. */
+{
+return tgFixedTotalHeightOptionalOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE) + 
+	makeItemsExtraHeight(tg);
+}
+
 
 void makeItemsMethods(struct track *track)
 /* Set up special methods for makeItems type tracks. */
 {
 bedMethods(track);
+track->totalHeight = makeItemsTotalHeight;
+track->drawItems = makeItemsDrawItems;
 track->loadItems = makeItemsLoadItems;
-track->mapsSelf = TRUE;
 track->canPack = TRUE;
 }
 
