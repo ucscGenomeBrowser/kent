@@ -229,7 +229,7 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1609 2010/04/09 00:25:49 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1610 2010/04/10 06:41:01 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18401,6 +18401,8 @@ else if (sameWord(type, "bigBed"))
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 #endif//def USE_BAM
+else if (sameWord(type, "makeItems"))
+    doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
 else if (ct->wiggle)
     {
     if (ct->dbTrack)

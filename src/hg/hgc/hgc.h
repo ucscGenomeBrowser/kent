@@ -341,6 +341,9 @@ void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 void doBamDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from a BAM file. */
 
+void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
+/* Show details of a makeItems item. */
+
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 #endif
