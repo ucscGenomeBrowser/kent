@@ -14,10 +14,12 @@ set second=""
 set fourth=""
 set countPerChr=""
 
-if ($#argv == 1 && $argv[1] == "CLEAN") then
+if ($#argv == 1) then
+  if ( $argv[1] == "CLEAN" || $argv[1] == "clean" ) then 
   rm *.qa
   rm *.gapFile
   exit 0
+  endif
 endif
 
 if ($#argv < 2 || $#argv > 3) then
