@@ -35,7 +35,7 @@
 #endif//def USE_BAM
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.120 2010/04/10 01:13:58 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.121 2010/04/10 06:11:50 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1722,7 +1722,9 @@ char *tableFormat =
 "    thickEnd int unsigned not null,	# End position of thick part\n"
 "    itemRgb int unsigned not null,	# RGB 8 bits each as in bed\n"
 "    description longblob not null,	# Longer item description\n"
+"    id int auto_increment,\n"
 "              #Indices\n"
+"    PRIMARY KEY(id),\n"
 "    INDEX(chrom(16),bin)\n"
 ")";
 struct dyString *createSql = dyStringNew(0);

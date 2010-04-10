@@ -16,6 +16,8 @@ CREATE TABLE makeItemsItem (
     thickEnd int unsigned not null,	# End position of thick part
     itemRgb int unsigned not null,	# RGB 8 bits each as in bed
     description longblob not null,	# Longer item description
+    id int auto_increment,
               #Indices
+    PRIMARY KEY(id),
     INDEX(chrom(16),bin)
 );

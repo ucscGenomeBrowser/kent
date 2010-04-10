@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsItem.c,v 1.3 2010/04/10 01:13:58 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsItem.c,v 1.4 2010/04/10 06:11:50 kent Exp $";
 
 void makeItemsItemStaticLoad(char **row, struct makeItemsItem *ret)
 /* Load a row from makeItemsItem table into ret.  The contents of ret will
@@ -60,7 +60,7 @@ void makeItemsItemSaveToDb(struct sqlConnection *conn, struct makeItemsItem *el,
  * If worried about this use makeItemsItemSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%s)", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%s,0)", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  el->description);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -82,7 +82,7 @@ name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
 description = sqlEscapeString(el->description);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,'%s')", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,'%s',0)", 
 	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->score,  strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  description);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
