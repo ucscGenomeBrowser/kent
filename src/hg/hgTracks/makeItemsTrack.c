@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.6 2010/04/10 18:39:53 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.7 2010/04/10 19:01:19 kent Exp $";
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
@@ -39,10 +39,10 @@ item->bin = binFromRange(chromStart, chromEnd);
 item->chrom = cloneString(chrom);
 item->chromStart = item->thickStart = chromStart;
 item->chromEnd = item->thickEnd = chromEnd;
-item->name = cloneString("new");
+item->name = cloneString("");
 item->score = 1000;
 item->strand[0] = '.';
-item->description = cloneString("n/a");
+item->description = cloneString("");
 
 /* Add item to database. */
 struct track *track = hashMustFindVal(trackHash, trackName);

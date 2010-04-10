@@ -35,7 +35,7 @@
 #endif//def USE_BAM
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.121 2010/04/10 06:11:50 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.122 2010/04/10 19:01:04 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1632,7 +1632,7 @@ item->bin = binFromRange(item->chromStart, item->chromEnd);
 if (rowSize > 3) 
     item->name = cloneString(row[3]);
 else
-    item->name = cloneString(".");
+    item->name = cloneString("");
 if (rowSize > 4) 
     item->score = sqlSigned(row[4]);
 if (rowSize > 5) 
