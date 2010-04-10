@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.7 2010/04/10 19:01:19 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.8 2010/04/10 19:05:24 kent Exp $";
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
@@ -26,7 +26,6 @@ char *dupeCommand = cloneString(command);	/* For parsing. */
 int wordCount = chopLine(dupeCommand, words);
 if (wordCount != 5)
    errAbort("Expecting %d words in jsCommand '%s'", wordCount, command);
-uglyf("makeItemsJsCommand %s|%s|%s|%s|%s<BR>\n", words[0], words[1], words[2], words[3], words[4]);
 char *trackName = words[1];
 char *chrom = words[2];
 int chromStart = sqlUnsigned(words[3]);
@@ -74,7 +73,6 @@ if (newVal != NULL)
     char *escapedVal = sqlEscapeString(newVal);
     safef(sql, sizeof(sql), "update %s set %s='%s' where id=%d",
 	    tableName, fieldName, escapedVal, id);
-    uglyf("sql = %s<BR>\n", sql);
     sqlUpdate(conn, sql);
     freez(&escapedVal);
     cartRemove(cart, varName);	/* We don't need it any more. */
@@ -114,7 +112,6 @@ if (idString != NULL)
 	}
 
     /* Handle edits. */
-    uglyf("Theoretically editing %s #%d", tableName, id);
     updateTextField(trackName, conn, tableName, "name", id);
     updateTextField(trackName, conn, tableName, "description", id);
     }
@@ -165,11 +162,13 @@ void makeItemsDrawItems(struct track *tg, int seqStart, int seqEnd,
 /* Draw simple Bed items. */
 {
 int dragBarHeight = makeItemsExtraHeight(tg);
+#ifdef DEBUG
 struct customTrack *ct = tg->customPt;
 char *tableName = ct->dbTableName;
 hvGfxText(hvg, xOff, yOff, color, font, tableName);
+#endif /* DEBUG */
 hvGfxTextCentered(hvg, xOff, yOff, width, dragBarHeight, color, font, 
-	"--- Drag here or inbetween items to create a new item. ---");
+	"--- Drag here or in between items to create a new item. ---");
 bedDrawSimple(tg, seqStart, seqEnd, hvg, xOff, yOff + dragBarHeight, width,
 	font, color, vis);
 }
