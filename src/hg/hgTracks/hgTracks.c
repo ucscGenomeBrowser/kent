@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1640 2010/04/09 20:06:45 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1641 2010/04/10 01:14:56 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1794,6 +1794,25 @@ hvGfxUnclip(hvg);
 return y;
 }
 
+static void rAddToTrackHash(struct hash *trackHash, struct track *trackList)
+/* Add list and any children of list to hash. */
+{
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    hashAddUnique(trackHash, track->mapName, track);
+    rAddToTrackHash(trackHash, track->subtracks);
+    }
+}
+
+static void makeGlobalTrackHash(struct track *trackList)
+/* Start a global track hash. */
+{
+trackHash = newHash(8);
+rAddToTrackHash(trackHash, trackList);
+}
+
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -1824,8 +1843,6 @@ boolean rulerCds = zoomedToCdsColorLevel;
 int rulerClickHeight = 0;
 int newWinWidth = 0;
 
-/* Start a global track hash. */
-trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
@@ -1930,7 +1947,6 @@ boolean safeHeight = TRUE;
 /* Hash tracks/subtracks, limit visibility and calculate total image height: */
 for (track = trackList; track != NULL; track = track->next)
     {
-    hashAddUnique(trackHash, track->mapName, track);
     limitVisibility(track);
     if (!safeHeight)
         {
@@ -1946,7 +1962,6 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                hashAddUnique(trackHash, subtrack->mapName, subtrack);
                 if (!isSubtrackVisible(subtrack))
                     continue;
                 if (!subtrack->limitedVisSet)
@@ -3183,7 +3198,7 @@ else if (sameString(type, "bam"))
 else if (sameString(type, "makeItems"))
     {
     tg = trackFromTrackDb(tdb);
-    makeItemsMethodsCt(tg);
+    makeItemsMethods(tg);
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
@@ -4183,6 +4198,16 @@ hPrintf( "}\n");
 hPrintf("</script>\n");
 }
 
+void jsCommandDispatch(char *command, struct track *trackList)
+/* Dispatch a command sent to us from some javaScript event.  
+ * This gets executed after the track list is built, but before
+ * the track->loadItems methods are called.  */
+{
+uglyf("jsCommandDispatch(%s) on %d tracks<BR>\n", command, slCount(trackList));
+if (startsWithWord("makeItems", command))
+    makeItemsJsCommand(command, trackList, trackHash);
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4236,6 +4261,7 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
+makeGlobalTrackHash(trackList);
 #ifdef SOON
 if (measureTiming)
     uglyTime("getTrackList");
@@ -4286,7 +4312,7 @@ char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
 if (!isEmpty(jsCommand))
    {
    cartRemove(cart, hgtJsCommand);
-   uglyf("Hello javascript world! Your command is '%s'<BR>\n ", jsCommand);
+   jsCommandDispatch(jsCommand, trackList);
    }
 
 /* Tell tracks to load their items. */

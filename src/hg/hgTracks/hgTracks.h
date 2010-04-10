@@ -859,8 +859,12 @@ void factorSourceMethods(struct track *track);
 void makeItemsMethods(struct track *track);
 /* Set up special methods for makeItems type tracks. */
 
-void makeItemsMethodsCt(struct track *track);
-/* Set up special methods for makeItems type custom tracks. */
+void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash);
+/* Execute some command sent to us from the javaScript.  All we know for sure is that
+ * the first word of the command is "makeItems."  We expect it to be of format:
+ *    makeItems <trackName> <chrom> <chromStart> <chromEnd>
+ * If it is indeed of this form then we'll create a new makeItemsItem that references this
+ * location and stick it in the named track. */
 
 void wigMafPMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);

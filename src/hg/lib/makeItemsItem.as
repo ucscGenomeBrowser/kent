@@ -6,8 +6,10 @@ table makeItemsItem
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item - up to 16 chars"
-    char[1] strand;     "+ or - for strand"
     uint  score;	"0-1000.  Higher numbers are darker."
-    string color;	"Comma separated list of RGB components.  IE 255,0,0 for red"
+    char[1] strand;     "+ or - for strand"
+    uint   thickStart; "Start of thick part"
+    uint   thickEnd;   "End position of thick part"
+    uint itemRgb;	"RGB 8 bits each as in bed"
     lstring description; "Longer item description"
     )

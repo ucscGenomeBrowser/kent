@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsItem.c,v 1.2 2010/04/09 17:45:57 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsItem.c,v 1.3 2010/04/10 01:13:58 kent Exp $";
 
 void makeItemsItemStaticLoad(char **row, struct makeItemsItem *ret)
 /* Load a row from makeItemsItem table into ret.  The contents of ret will
@@ -20,10 +20,12 @@ ret->chrom = row[1];
 ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = row[4];
-safecpy(ret->strand, sizeof(ret->strand), row[5]);
-ret->score = sqlUnsigned(row[6]);
-ret->color = row[7];
-ret->description = row[8];
+ret->score = sqlUnsigned(row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[6]);
+ret->thickStart = sqlUnsigned(row[7]);
+ret->thickEnd = sqlUnsigned(row[8]);
+ret->itemRgb = sqlUnsigned(row[9]);
+ret->description = row[10];
 }
 
 struct makeItemsItem *makeItemsItemLoadByQuery(struct sqlConnection *conn, char *query)
@@ -58,8 +60,8 @@ void makeItemsItemSaveToDb(struct sqlConnection *conn, struct makeItemsItem *el,
  * If worried about this use makeItemsItemSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s',%s)", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->strand,  el->score,  el->color,  el->description);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%s)", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  el->description);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -74,21 +76,19 @@ void makeItemsItemSaveToDbEscaped(struct sqlConnection *conn, struct makeItemsIt
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *color, *description;
+char  *chrom, *name, *strand, *description;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
-color = sqlEscapeString(el->color);
 description = sqlEscapeString(el->description);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s')", 
-	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  strand,  el->score,  color,  description);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,'%s')", 
+	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->score,  strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  description);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&name);
 freez(&strand);
-freez(&color);
 freez(&description);
 }
 
@@ -104,10 +104,12 @@ ret->chrom = cloneString(row[1]);
 ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = cloneString(row[4]);
-safecpy(ret->strand, sizeof(ret->strand), row[5]);
-ret->score = sqlUnsigned(row[6]);
-ret->color = cloneString(row[7]);
-ret->description = cloneString(row[8]);
+ret->score = sqlUnsigned(row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[6]);
+ret->thickStart = sqlUnsigned(row[7]);
+ret->thickEnd = sqlUnsigned(row[8]);
+ret->itemRgb = sqlUnsigned(row[9]);
+ret->description = cloneString(row[10]);
 return ret;
 }
 
@@ -117,7 +119,7 @@ struct makeItemsItem *makeItemsItemLoadAll(char *fileName)
 {
 struct makeItemsItem *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -135,7 +137,7 @@ struct makeItemsItem *makeItemsItemLoadAllByChar(char *fileName, char chopper)
 {
 struct makeItemsItem *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -161,9 +163,11 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->score = sqlUnsignedComma(&s);
-ret->color = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->thickStart = sqlUnsignedComma(&s);
+ret->thickEnd = sqlUnsignedComma(&s);
+ret->itemRgb = sqlUnsignedComma(&s);
 ret->description = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -178,7 +182,6 @@ struct makeItemsItem *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->color);
 freeMem(el->description);
 freez(pEl);
 }
@@ -213,15 +216,17 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->score);
+fprintf(f, "%u", el->thickStart);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->color);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->thickEnd);
+fputc(sep,f);
+fprintf(f, "%u", el->itemRgb);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->description);

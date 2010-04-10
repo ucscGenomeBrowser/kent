@@ -10,9 +10,11 @@ CREATE TABLE makeItemsItem (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of item - up to 16 chars
-    strand char(1) not null,	# + or - for strand
     score int unsigned not null,	# 0-1000.  Higher numbers are darker.
-    color varchar(255) not null,	# Comma separated list of RGB components.  IE 255,0,0 for red
+    strand char(1) not null,	# + or - for strand
+    thickStart int unsigned not null,	# Start of thick part
+    thickEnd int unsigned not null,	# End position of thick part
+    itemRgb int unsigned not null,	# RGB 8 bits each as in bed
     description longblob not null,	# Longer item description
               #Indices
     INDEX(chrom(16),bin)

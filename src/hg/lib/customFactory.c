@@ -35,7 +35,7 @@
 #endif//def USE_BAM
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.119 2010/04/09 20:06:18 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.120 2010/04/10 01:13:58 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1634,17 +1634,23 @@ if (rowSize > 3)
 else
     item->name = cloneString(".");
 if (rowSize > 4) 
-    item->strand[0] = row[4][0];
+    item->score = sqlSigned(row[4]);
+if (rowSize > 5) 
+    item->strand[0] = row[5][0];
 else
     item->strand[0] = '.';
-if (rowSize > 5) 
-    item->score = sqlSigned(row[5]);
 if (rowSize > 6)
-    item->color = cloneString(row[6]);
+    item->thickStart = sqlUnsigned(row[6]);
 else
-    item->color = cloneString("0,0,0");
+    item->thickStart = item->chromStart;
 if (rowSize > 7)
-    item->description = cloneString(row[7]);
+    item->thickEnd = sqlUnsigned(row[7]);
+else
+    item->thickEnd = item->chromEnd;
+if (rowSize > 8)
+    item->itemRgb = bedParseRgb(row[8]);
+if (rowSize > 9)
+    item->description = cloneString(row[9]);
 else
     item->description = cloneString("");
 return item;
@@ -1710,9 +1716,11 @@ char *tableFormat =
 "    chromStart int unsigned not null,	# Start position in chromosome\n"
 "    chromEnd int unsigned not null,	# End position in chromosome\n"
 "    name varchar(255) not null,	# Name of item - up to 16 chars\n"
-"    strand char(1) not null,	# + or - for strand\n"
 "    score int unsigned not null,	# 0-1000.  Higher numbers are darker.\n"
-"    color varchar(255) not null,	# Comma separated list of RGB components.  IE 255,0,0 for red\n"
+"    strand char(1) not null,	# + or - for strand\n"
+"    thickStart int unsigned not null,	# Start of thick part\n"
+"    thickEnd int unsigned not null,	# End position of thick part\n"
+"    itemRgb int unsigned not null,	# RGB 8 bits each as in bed\n"
 "    description longblob not null,	# Longer item description\n"
 "              #Indices\n"
 "    INDEX(chrom(16),bin)\n"

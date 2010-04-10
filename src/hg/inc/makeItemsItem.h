@@ -6,7 +6,7 @@
 #define MAKEITEMSITEM_H
 
 #include "jksql.h"
-#define MAKEITEMSITEM_NUM_COLS 9
+#define MAKEITEMSITEM_NUM_COLS 11
 
 struct makeItemsItem
 /* An item in a makeItems type track. */
@@ -17,9 +17,11 @@ struct makeItemsItem
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item - up to 16 chars */
-    char strand[2];	/* + or - for strand */
     unsigned score;	/* 0-1000.  Higher numbers are darker. */
-    char *color;	/* Comma separated list of RGB components.  IE 255,0,0 for red */
+    char strand[2];	/* + or - for strand */
+    unsigned thickStart;	/* Start of thick part */
+    unsigned thickEnd;	/* End position of thick part */
+    unsigned itemRgb;	/* RGB 8 bits each as in bed */
     char *description;	/* Longer item description */
     };
 
