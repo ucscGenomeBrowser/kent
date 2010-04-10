@@ -14,6 +14,12 @@ set second=""
 set fourth=""
 set countPerChr=""
 
+if ($#argv == 1 && $argv[1] == "CLEAN") then
+  rm *.qa
+  rm *.gapFile
+  exit 0
+endif
+
 if ($#argv < 2 || $#argv > 3) then
   echo
   echo " Runs basic QA scripts on your table(s)"
