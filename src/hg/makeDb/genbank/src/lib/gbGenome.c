@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.78 2010/04/09 22:31:42 hiram Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.79 2010/04/10 18:09:14 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens"). */
@@ -228,12 +228,6 @@ unsigned gbGenomeOrgCat(struct gbGenome* genome, char* organism)
 int i;
 if (genome == NULL)
     return 0;
-/* hack: for panTro2 and beyond, treat human as native */
-if (sameString(organism, "Homo sapiens")
-    && startsWith("panTro", genome->database)
-    && !sameString(genome->database, "panTro1"))
-    return GB_NATIVE;
-
 for (i = 0; genome->dbMap->names[i] != NULL; i++)
     {
     if (sameString(organism, genome->dbMap->names[i]))
