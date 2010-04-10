@@ -16,20 +16,65 @@ void doMakeItemsDetails(struct customTrack *ct, char *itemIdString)
 {
 char *idString = cloneFirstWord(itemIdString);
 char *tableName = ct->dbTableName;
+char *trackName = ct->tdb->tableName;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char query[512];
 safef(query, sizeof(query), "select * from %s where id=%s", tableName, idString);
 struct sqlResult *sr = sqlGetResult(conn, query);
 
 char **row;
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     struct makeItemsItem *item = makeItemsItemLoad(row);
+    printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
+    cartSaveSession(cart);
+
+    /* Save away ID string in hidden var.  */
+    char varName[128];
+    safef(varName, sizeof(varName), "%s_%s", trackName, "id");
+    cgiMakeHiddenVar(varName, idString);
+
+    /* Put up editable name. */
+    safef(varName, sizeof(varName), "%s_%s", trackName, "name");
+    printf("<B>name:</B> ");
+    cgiMakeTextVar(varName, item->name, 17);
+    printf("<BR>\n");
+
+    /* Put up editable description. */
+    safef(varName, sizeof(varName), "%s_%s", trackName, "description");
+    printf("<B>description:</B><BR>\n");
+    cgiMakeTextArea(varName, item->description, 8, 80);
+    printf("<BR>\n");
+
+#ifdef SOON
+    /* Put up non-editable chromosome. */
+    printf("<B>chromosome:</B> %s<BR>\n", item->chrom);
+
+    /* Put up editable chromosome start and end. */
+    int chromSize = hChromSize(database, item->chrom);
+    char chromSizeString[16];
+    safef(chromSizeString, sizeof(chromSizeString), "%d", chromSize);
+    printf("<B>chromStart:</B> ");
+    safef(varName, sizeof(varName), "%s_%s", trackName, "chromStart");
+    cgiMakeIntVarInRange(varName, item->chromStart+1, NULL, 9, "1", chromSizeString);
+    printf("<BR>\n");
+    printf("<B>chromEnd:</B> ");
+    safef(varName, sizeof(varName), "%s_%s", trackName, "chromEnd");
+    cgiMakeIntVarInRange(varName, item->chromEnd, NULL, 9, "1", chromSizeString);
+    printf("<BR>\n");
+#endif /* SOON */
+
+    /* Put up update/delete/cancel buttons. */
+    cgiMakeButton("submit", "Update");
+    printf(" ");
+    safef(varName, sizeof(varName), "%s_%s", trackName, "delete");
+    cgiMakeButton(varName, "Delete");
+    printf(" ");
+    safef(varName, sizeof(varName), "%s_%s", trackName, "cancel");
+    cgiMakeButton(varName, "Cancel");
+    printf("</FORM>\n");
     printf("<B>id:</B> %d<BR>\n", item->id);
-    printf("<B>name:</B> %s<BR>\n", item->name);
-    printf("<B>chrom:</B> %s<BR>\n", item->chrom);
-    printf("<B>chromStart:</B> %d<BR>\n", item->chromStart);
-    printf("<B>chromEnd:</B> %d<BR>\n", item->chromEnd);
+    printPosOnChrom(item->chrom, item->chromStart, item->chromEnd, NULL, TRUE, NULL);
     }
 
 sqlFreeResult(&sr);

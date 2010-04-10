@@ -11,6 +11,8 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
+static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.6 2010/04/10 18:39:53 kent Exp $";
+
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
  * the first word of the command is "makeItems."  We expect it to be of format:
@@ -59,6 +61,65 @@ static int makeItemsExtraHeight(struct track *tg)
 return tl.fontHeight+2;
 }
 
+static void updateTextField(char *trackName, struct sqlConnection *conn,
+	char *tableName, char *fieldName, int id)
+/* Update text valued field with new val. */
+{
+char varName[128];
+char sql[256];
+safef(varName, sizeof(varName), "%s_%s", trackName, fieldName);
+char *newVal = cartOptionalString(cart, varName);
+if (newVal != NULL)
+    {
+    char *escapedVal = sqlEscapeString(newVal);
+    safef(sql, sizeof(sql), "update %s set %s='%s' where id=%d",
+	    tableName, fieldName, escapedVal, id);
+    uglyf("sql = %s<BR>\n", sql);
+    sqlUpdate(conn, sql);
+    freez(&escapedVal);
+    cartRemove(cart, varName);	/* We don't need it any more. */
+    }
+}
+
+static void makeItemsEditOrDelete(char *trackName, struct sqlConnection *conn, char *tableName)
+/* Troll through cart variables looking for things that indicate user edited item
+ * or deleted it in hgc,  and carry out edits. See hgc/makeItemsClick.c. */
+{
+char varName[128];
+char sql[256];
+safef(varName, sizeof(varName), "%s_%s", trackName, "id");
+char *idString = cartOptionalString(cart, varName);
+if (idString != NULL)
+    {
+    int id = sqlUnsigned(idString);
+    idString = NULL;			// Will be no good after cartRemove
+    cartRemove(cart, varName);		// Remove so only do edits once.
+
+    /* Handle cancel. */
+    safef(varName, sizeof(varName), "%s_%s", trackName, "cancel");
+    if (cartVarExists(cart, varName))
+        {
+	cartRemove(cart, varName);	// Only want to do cancels once
+	return;
+	}
+
+    /* Handle delete. */
+    safef(varName, sizeof(varName), "%s_%s", trackName, "delete");
+    if (cartVarExists(cart, varName))
+        {
+	cartRemove(cart, varName);	// Especially only want to do deletes once!
+	safef(sql, sizeof(sql), "delete from %s where id=%d", tableName, id);
+	sqlUpdate(conn, sql);
+	return;
+	}
+
+    /* Handle edits. */
+    uglyf("Theoretically editing %s #%d", tableName, id);
+    updateTextField(trackName, conn, tableName, "name", id);
+    updateTextField(trackName, conn, tableName, "description", id);
+    }
+}
+
 void makeItemsLoadItems(struct track *tg)
 /* Load up items in track already.  Also make up a pseudo-item that is
  * where you drag to create an item. */
@@ -67,6 +128,7 @@ struct bed *bedList = NULL;
 struct customTrack *ct = tg->customPt;
 char *tableName = ct->dbTableName;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+makeItemsEditOrDelete(tg->mapName, conn, tableName);
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL, &rowOffset);
 char **row;
