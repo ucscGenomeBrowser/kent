@@ -36,6 +36,9 @@ if ($#argv < 2 || $#argv > 3) then
   echo "    Works if you provide a list of tables"
   echo "    In that case, it creates db.tableName.qa files"
   echo 
+  echo "    Added clean-up functionality to remove all .qa and .gapFile files"
+  echo "    Usage:   CLEAN or clean
+  echo
 
   exit
 else
