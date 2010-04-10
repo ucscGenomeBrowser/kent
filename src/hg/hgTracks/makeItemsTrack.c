@@ -8,6 +8,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "bed.h"
+#include "binRange.h"
 #include "makeItemsItem.h"
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
@@ -32,6 +33,7 @@ int chromEnd = sqlUnsigned(words[4]);
 /* Create a new item based on command. */
 struct makeItemsItem *item;
 AllocVar(item);
+item->bin = binFromRange(chromStart, chromEnd);
 item->chrom = cloneString(chrom);
 item->chromStart = item->thickStart = chromStart;
 item->chromEnd = item->thickEnd = chromEnd;
@@ -70,7 +72,13 @@ struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct bed *bed = bedLoad6(row+rowOffset);
+    struct bed *bed = bedLoadN(row+rowOffset, 9);
+    /* Add id to front of name */
+    char *id = row[rowOffset + 10];
+    char buf[64];
+    safef(buf, sizeof(buf), "%s %s", id, bed->name);
+    freeMem(bed->name);
+    bed->name = cloneString(buf);
     slAddHead(&bedList, bed);
     }
 sqlFreeResult(&sr);
@@ -79,12 +87,25 @@ slReverse(&bedList);
 tg->items = bedList;
 }
 
+char *makeItemsItemName(struct track *tg, void *item)
+/* Return name of one of an item to display on left side. */
+{
+struct bed *bed = item;
+char *name = bed->name;
+name = skipToSpaces(name);
+name = skipLeadingSpaces(name);
+return name;
+}
+
 void makeItemsDrawItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
 int dragBarHeight = makeItemsExtraHeight(tg);
+struct customTrack *ct = tg->customPt;
+char *tableName = ct->dbTableName;
+hvGfxText(hvg, xOff, yOff, color, font, tableName);
 hvGfxTextCentered(hvg, xOff, yOff, width, dragBarHeight, color, font, 
 	"--- Drag here or inbetween items to create a new item. ---");
 bedDrawSimple(tg, seqStart, seqEnd, hvg, xOff, yOff + dragBarHeight, width,
@@ -107,6 +128,7 @@ bedMethods(track);
 track->totalHeight = makeItemsTotalHeight;
 track->drawItems = makeItemsDrawItems;
 track->loadItems = makeItemsLoadItems;
+track->itemName = makeItemsItemName;
 track->canPack = TRUE;
 }
 
