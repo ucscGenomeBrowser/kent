@@ -12,4 +12,5 @@ table makeItemsItem
     uint   thickEnd;   "End position of thick part"
     uint itemRgb;	"RGB 8 bits each as in bed"
     lstring description; "Longer item description"
+    uint id;		"Unique ID for item"
     )

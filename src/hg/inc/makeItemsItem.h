@@ -6,7 +6,7 @@
 #define MAKEITEMSITEM_H
 
 #include "jksql.h"
-#define MAKEITEMSITEM_NUM_COLS 11
+#define MAKEITEMSITEM_NUM_COLS 12
 
 struct makeItemsItem
 /* An item in a makeItems type track. */
@@ -23,6 +23,7 @@ struct makeItemsItem
     unsigned thickEnd;	/* End position of thick part */
     unsigned itemRgb;	/* RGB 8 bits each as in bed */
     char *description;	/* Longer item description */
+    unsigned id;	/* Unique ID for item */
     };
 
 void makeItemsItemStaticLoad(char **row, struct makeItemsItem *ret);
