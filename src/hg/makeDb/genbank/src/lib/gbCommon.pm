@@ -17,7 +17,7 @@ use POSIX ":sys_wait_h";  # they have got to be kidding
 BEGIN {
     use Exporter();
     @gbCommon::ISA = qw(Exporter);
-    @gbCommon::EXPORT = qw(getTimeStamp getDateStamp isoTimeStamp prMsg setTaskName 
+    @gbCommon::EXPORT = qw(setupServerPath getTimeStamp getDateStamp isoTimeStamp prMsg setTaskName 
                            makeTimeFile loadTimeFile
                            beginTask beginTaskNoLock endTask gbError makeDir
                            makeFileDir removeDir renameFile getFileSize getFileModTime
@@ -54,39 +54,38 @@ BEGIN {
     }
     chomp($mach);
 
-    my $newPath;
-    my $arch;
     if ($sys eq "Linux") {
         if ($mach eq "i686") {
-            $arch = "i386";
+            $gbCommon::arch = "i386";
         } else {
-            $arch = $mach;
+            $gbCommon::arch = $mach;
         }
     } elsif ($sys eq "FreeBSD") {
-        $arch = "fbsd_" . $mach;
+        $gbCommon::arch = "fbsd_" . $mach;
     } elsif ($sys eq "SunOS") {
-        $arch = $mach;
+        $gbCommon::arch = $mach;
     } else {
         die("can't determine system/arch: sys=${sys} mach=${mach}");
     }
-    $newPath .= "$rootDir/bin:$rootDir/bin/$arch:$rootDir/bin/i386:/cluster/bin/$arch";
+    # include minimal path prevent unnecessary autofs logging of non-existent
+    # /cluster/bin/ on public servers
+    my $newPath .= "$rootDir/bin:$rootDir/bin/$gbCommon::arch:$rootDir/bin/i386";
     $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
 
     # eieio has LANG set to en_US.UTF-8, which broken sort.
     $main::ENV{LANG} = "C";
 
-    # also allow for shared libraries in lib/$arch
+    # also allow for shared libraries in lib/$gbCommon::arch
     if (defined($main::ENV{LD_LIBRARY_PATH})) {
-        $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$arch:$main::ENV{LD_LIBRARY_PATH}";
+        $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$gbCommon::arch:$main::ENV{LD_LIBRARY_PATH}";
     } else {
-        $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$arch";
+        $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$gbCommon::arch";
     }
 
     # set umask to preserve group write
     umask 0002;
         
     @gbCommon::savedArgv = @ARGV;
-
 
     # setup TMPDIR if not set
     if (!defined($main::ENV{TMPDIR})) {
@@ -117,6 +116,12 @@ $gbCommon::conf = undef;
 # Directory to use for var files
 $gbCommon::varDir = "var";
 
+# extend PATH to include /cluster/bin for stuff that runs on the server,
+# but allow gbRoot/bin to win
+sub setupServerPath() {
+    $main::ENV{PATH} =  $main::ENV{PATH} . ":/cluster/bin/$gbCommon::arch";
+}
+
 # Generate a time stamp
 sub getTimeStamp() {
     return strftime("%Y.%m.%d-%T", localtime(time()));
@@ -131,7 +136,6 @@ sub getDateStamp() {
 sub isoTimeStamp() {
     return strftime("%Y-%m-%dT%T%z", localtime(time()));
 }
-
 
 # make a time file containing the time in seconds
 sub makeTimeFile($) {

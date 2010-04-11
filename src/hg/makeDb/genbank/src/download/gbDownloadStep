@@ -23,7 +23,7 @@ my $usage =
     . "\n";
 
 #
-# $Id: gbDownloadStep,v 1.15 2008/04/28 15:32:25 markd Exp $
+# $Id: gbDownloadStep,v 1.16 2010/04/11 06:48:30 markd Exp $
 #
 
 use strict;
@@ -34,6 +34,7 @@ use lib "$FindBin::Bin/../lib";
 use Net::FTP;
 use gbCommon;
 use gbFtp;
+setupServerPath();
 
 my $useAsn1 = 0;  # download ASN.1 files instead of GBFF
 

@@ -16,7 +16,7 @@ my $usage =
     . "  -mkOrganismList - update the organism list\n"
     . "  -verbose - print details\n";
 #
-# $Id: gbProcessStep,v 1.13 2007/10/29 03:20:28 markd Exp $
+# $Id: gbProcessStep,v 1.14 2010/04/11 06:48:31 markd Exp $
 #
 use strict;
 use warnings;
@@ -24,6 +24,7 @@ use File::Basename;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
+setupServerPath();
 
 # Generate a file name (or glob) for a file name with an access prefix
 sub getAccPrefixedFile($$) {

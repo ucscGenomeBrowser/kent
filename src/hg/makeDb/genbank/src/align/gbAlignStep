@@ -55,7 +55,7 @@ Alignment step, runs:
 ";
 
 #
-# $Id: gbAlignStep,v 1.24 2009/04/19 01:36:13 markd Exp $
+# $Id: gbAlignStep,v 1.25 2010/04/11 06:48:30 markd Exp $
 #
 use strict;
 use warnings;
@@ -63,6 +63,7 @@ use File::Basename;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
+setupServerPath();
 
 # open /cluster/ directories to avoid automounter problems on
 # genbank server results in "Device or resource busy" error
