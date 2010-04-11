@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsItem.c,v 1.5 2010/04/10 18:39:02 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsItem.c,v 1.6 2010/04/11 21:54:51 kent Exp $";
 
 void makeItemsItemStaticLoad(char **row, struct makeItemsItem *ret)
 /* Load a row from makeItemsItem table into ret.  The contents of ret will
@@ -240,4 +240,23 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+char *makeItemsItemAutoSqlString = 
+"table makeItemsItem\n"
+"\"An item in a makeItems type track.\"\n"
+"    (\n"
+"    uint bin;	       \"Bin for range index\"\n"
+"    string chrom;      \"Reference sequence chromosome or scaffold\"\n"
+"    uint   chromStart; \"Start position in chromosome\"\n"
+"    uint   chromEnd;   \"End position in chromosome\"\n"
+"    string name;       \"Name of item - up to 16 chars\"\n"
+"    uint  score;	\"0-1000.  Higher numbers are darker.\"\n"
+"    char[1] strand;     \"+ or - for strand\"\n"
+"    uint   thickStart; \"Start of thick part\"\n"
+"    uint   thickEnd;   \"End position of thick part\"\n"
+"    uint itemRgb;	\"RGB 8 bits each as in bed\"\n"
+"    lstring description; \"Longer item description\"\n"
+"    uint id;		\"Unique ID for item\"\n"
+"    )\n"
+   ;
 

@@ -94,5 +94,7 @@ void makeItemsItemOutput(struct makeItemsItem *el, FILE *f, char sep, char lastS
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+extern char *makeItemsItemAutoSqlString; /* AutoSql object/table definition. */
+
 #endif /* MAKEITEMSITEM_H */
 
