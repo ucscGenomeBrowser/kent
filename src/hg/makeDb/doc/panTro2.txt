@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.18 2010/02/12 23:51:36 hiram Exp $"
+#	"$Id: panTro2.txt,v 1.19 2010/04/11 16:48:45 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -3320,4 +3320,16 @@ TMPDIR=/scratch/tmp
     #	1990168262 bases of 2752505800 (72.304%) in intersection
 
 ############################################################################
+# mrna, est, refGene, xenoRefGene (2010-04-10 markd)
+# removed special-casing of including Human mRNAs, ESTs, and RefSeqs
+# delete old data files
+# to be included with chimp ones.
 
+    ssh genbank
+    cd /cluster/genbank/genbank
+    (./bin/gbAlignStep -initial panTro2 |& mail markd&)
+
+    ssh hgwdev
+    cd /cluster/genbank/genbank
+    ./bin/gbDbLoadStep -drop -initialLoad panTro2
+############################################################################

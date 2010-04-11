@@ -2499,3 +2499,18 @@ mysql> select count(*), exception from snp125Exceptions group by exception;
 |       61 | SingleClassTriAllelic     |
 +----------+---------------------------+
 
+#######################################################################
+# xenoRefGene (2010-04-10 markd)
+# removed special-casing of Human RefSeqs
+# delete old data files
+# update genbank.conf and realign:
+
+    ssh genbank
+    cd /cluster/genbank/genbank
+    ./bin/gbAlignStep -initial panTro1
+
+    ssh hgwdev
+    cd /cluster/genbank/genbank
+    ./bin/gbDbLoadStep -drop -initialLoad panTro1
+############################################################################
+
