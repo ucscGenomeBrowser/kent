@@ -20,8 +20,9 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 #include "wikiTrack.h"
+#include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.61 2010/01/04 19:12:23 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.62 2010/04/11 21:55:27 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -515,7 +516,30 @@ else
     }
 }
 
-static void showSchemaCt(char *table)
+static void showSchemaMakeItems(char *db, char *trackId, struct customTrack *ct)
+/* Show schema on makeItems format custom track. */
+{
+struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+char *table = ct->dbTableName;
+
+hPrintf("<B>Genome Database:</B> %s", db);
+hPrintf("<B>Track ID:</B> %s ", trackId);
+hPrintf("<B>MySQL table:</B> %s", table); 
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
+printLongWithCommas(stdout, sqlTableSize(conn, table));
+hPrintf("<BR>\n");
+if (asObj != NULL)
+    hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
+describeFields(db, table, asObj, conn);
+
+webNewSection("Sample Rows");
+printSampleRows(10, conn, ct->dbTableName);
+printTrackHtml(ct->tdb);
+hFreeConn(&conn);
+}
+
+static void showSchemaCt(char *db, char *table)
 /* Show schema on custom track. */
 {
 struct customTrack *ct = ctLookupName(table);
@@ -530,9 +554,12 @@ else if (startsWithWord("maf", type))
     showSchemaCtMaf(table, ct);
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
+else if (startsWithWord("makeItems", type))
+    showSchemaMakeItems(db, table, ct);
 else
     errAbort("Unrecognized customTrack type %s", type);
 }
+
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
 /* Show schema for the wikiTrack. */
@@ -547,7 +574,7 @@ static void showSchema(char *db, struct trackDb *tdb, char *table)
 if (hIsBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
 else if (isCustomTrack(table))
-    showSchemaCt(table);
+    showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
 else
