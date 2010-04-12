@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.56 2009/06/17 18:54:50 angie Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.57 2010/04/12 05:32:51 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -316,7 +316,20 @@ static void makeCtOrderedCommaFieldList(struct joinerDtf *dtfList,
 /* Make comma-separated field list in same order as fields are in
  * custom track. */
 {
-struct slName *fieldList = getBedFields(15);
+char *track = dtfList->table;
+struct customTrack *ct = ctLookupName(track);
+char *type = ct->dbTrackType;
+struct slName *fieldList = NULL;
+if (startsWithWord("makeItems", type))
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    fieldList = sqlListFields(conn, ct->dbTableName);
+    hFreeConn(&conn);
+    }
+else
+    {
+    fieldList = getBedFields(15);
+    }
 makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
 }

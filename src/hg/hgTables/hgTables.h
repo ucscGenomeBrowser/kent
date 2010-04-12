@@ -804,7 +804,10 @@ struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
 struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
 
-void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
+void doTabOutDb( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields);
+/* Do tab-separated output on fields of a single table. */
+
+void doTabOutCustomTracks(char *db, struct trackDb *track, struct sqlConnection *conn,
 	char *fields, FILE *f);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */

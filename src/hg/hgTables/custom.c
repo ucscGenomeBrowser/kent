@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.43 2010/03/25 17:41:25 angie Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.44 2010/04/12 05:32:51 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -514,19 +514,16 @@ if (retFieldCount != NULL)
 return bedList;
 }
 
-void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
-	char *fields, FILE *f)
-/* Print out selected fields from custom track.  If fields
+static void doTabOutBedLike(struct customTrack *ct, struct trackDb *track,
+	struct sqlConnection *conn, char *fields, FILE *f)
+/* Print out selected fields from a bed-like custom track.  If fields
  * is NULL, then print out all fields. */
 {
 struct region *regionList = getRegions(), *region;
 struct slName *chosenFields, *field;
 int count = 0;
 if (fields == NULL)
-    {
-    struct customTrack *ct = ctLookupName(track->tableName);
     chosenFields = getBedFields(ct->fieldCount);
-    }
 else
     chosenFields = commaSepToSlNames(fields);
 
@@ -545,7 +542,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bed, *bedList = cookedBedList(conn, track->tableName,
-    	region, lm, NULL);
+	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	tabBedRowFile(bed, chosenFields, f);
@@ -556,6 +553,24 @@ for (region = regionList; region != NULL; region = region->next)
 if (count == 0)
     explainWhyNoResults(f);
 }
+
+void doTabOutCustomTracks(char *db, struct trackDb *track, struct sqlConnection *conn,
+	char *fields, FILE *f)
+/* Print out selected fields from custom track.  If fields
+ * is NULL, then print out all fields. */
+{
+struct customTrack *ct = ctLookupName(track->tableName);
+char *type = ct->tdb->type;
+if (startsWithWord("makeItems", type))
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    doTabOutDb(CUSTOM_TRASH, ct->dbTableName, f, conn, fields);
+    hFreeConn(&conn);
+    }
+else
+    doTabOutBedLike(ct, track, conn, fields, f);
+}
+
 
 void removeNamedCustom(struct customTrack **pList, char *name)
 /* Remove named custom track from list if it's on there. */

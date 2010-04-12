@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.190 2010/04/09 18:41:17 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.191 2010/04/12 05:32:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1141,8 +1141,7 @@ else
 return(ret);
 }
 
-static void doTabOutDb( char *db, char *table, FILE *f,
-	struct sqlConnection *conn, char *fields)
+void doTabOutDb( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
 struct region *regionList = getRegions();
@@ -1266,7 +1265,7 @@ if (hIsBigBed(database, table, curTrack, ctLookupName))
 else if (isCustomTrack(table))
     {
     struct trackDb *track = findTrack(table, fullTrackList);
-    doTabOutCustomTracks(track, conn, fields, f);
+    doTabOutCustomTracks(db, track, conn, fields, f);
     }
 else
     doTabOutDb(db, table, f, conn, fields);
@@ -1278,6 +1277,7 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
+// uglyAbort("fullTableFields(db=%s, table=%s, isCustomTrack=%d)", db, table, isCustomTrack(table));
 if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     conn = hAllocConn(db);
@@ -1287,17 +1287,16 @@ if (hIsBigBed(database, table, curTrack, ctLookupName))
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
-    if ((ct!= NULL) && (ct->dbTrackType != NULL) &&
-	    sameString(ct->dbTrackType, "maf"))
-	{
+    char *type = ct->dbTrackType;
+    if (type != NULL)
+        {
 	conn = hAllocConn(CUSTOM_TRASH);
-	fieldList = sqlListFields(conn, ct->dbTableName);
+	if (startsWithWord("maf", type) || startsWithWord("makeItems", type))
+	    fieldList = sqlListFields(conn, ct->dbTableName);
 	hFreeConn(&conn);
 	}
-    else
-	{
+    if (fieldList == NULL)
 	fieldList = getBedFields(ct->fieldCount);
-	}
     }
 else
     {
