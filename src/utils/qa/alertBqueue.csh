@@ -46,6 +46,7 @@ endif
 echo "greetings. \n" > Bfile
 echo "  this is a periodic reminder from a QA cronjob." >> Bfile
 echo "  you have content in the B-queue that someone should look at." >> Bfile
+echo "  discarding the track =is= an option." >> Bfile
 echo "\n  usually a track is in the B-queue because QA is expecting something" >> Bfile
 echo "  from the dev crew.\n" >> Bfile
 hgsql -h $sqlbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
