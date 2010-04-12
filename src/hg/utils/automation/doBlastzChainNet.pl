@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.32 2010/02/17 21:55:58 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.33 2010/04/12 16:33:12 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -76,10 +76,10 @@ my $stepper = new HgStepManager(
 			       );
 
 # Option defaults:
-my $bigClusterHub = 'kk';
+my $bigClusterHub = 'swarm';
 my $smallClusterHub = 'memk';
 my $dbHost = 'hgwdev';
-my $workhorse = 'kolossus';
+my $workhorse = 'hgwdev';
 my $defaultChainLinearGap = "loose";
 my $defaultChainMinScore = "1000";	# from axtChain itself
 my $defaultTRepeats = "";		# for netClass option tRepeats
