@@ -22,7 +22,7 @@
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.62 2010/04/11 21:55:27 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.63 2010/04/12 18:16:48 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -523,7 +523,7 @@ struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char *table = ct->dbTableName;
 
-hPrintf("<B>Genome Database:</B> %s", db);
+hPrintf("<B>Genome Database:</B> %s ", db);
 hPrintf("<B>Track ID:</B> %s ", trackId);
 hPrintf("<B>MySQL table:</B> %s", table); 
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
@@ -531,7 +531,7 @@ printLongWithCommas(stdout, sqlTableSize(conn, table));
 hPrintf("<BR>\n");
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
-describeFields(db, table, asObj, conn);
+describeFields(CUSTOM_TRASH, table, asObj, conn);
 
 webNewSection("Sample Rows");
 printSampleRows(10, conn, ct->dbTableName);

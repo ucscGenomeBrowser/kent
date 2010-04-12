@@ -20,8 +20,9 @@
 #include "bedCart.h"
 #include "wiggle.h"
 #include "wikiTrack.h"
+#include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.79 2009/08/12 18:50:08 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.80 2010/04/12 18:16:48 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -272,25 +273,13 @@ cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   "clear all");
 }
 
-static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
-/* Put up a little html table with a check box, name, and hopefully
- * a description for each field in SQL rootTable. */
+static void showTableFieldsOnList(char *db, char *rootTable, 
+	struct asObject *asObj, struct slName *fieldList, 
+	boolean showItemRgb, boolean withGetButton)
+/* Put up html table with check box, name, description, etc for each field. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-char *table = chromTable(conn, rootTable);
-struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
-struct asObject *asObj = asForTable(conn, rootTable);
-boolean showItemRgb = FALSE;
-
-showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
-
-struct slName *fieldName, *fieldList;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
-    fieldList = bigBedGetFields(table, conn);
-else
-    fieldList = sqlListFields(conn, table);
-
 hTableStart();
+struct slName *fieldName;
 for (fieldName = fieldList; fieldName != NULL; fieldName = fieldName->next)
     {
     char *field = fieldName->name;
@@ -318,16 +307,37 @@ for (fieldName = fieldList; fieldName != NULL; fieldName = fieldName->next)
     }
 hTableEnd();
 showTableButtons(db, rootTable, withGetButton);
+}
+
+static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
+/* Put up a little html table with a check box, name, and hopefully
+ * a description for each field in SQL rootTable. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+char *table = chromTable(conn, rootTable);
+struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
+struct asObject *asObj = asForTable(conn, rootTable);
+boolean showItemRgb = FALSE;
+
+showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
+
+struct slName *fieldList;
+if (hIsBigBed(database, table, curTrack, ctLookupName))
+    fieldList = bigBedGetFields(table, conn);
+else
+    fieldList = sqlListFields(conn, table);
+
+showTableFieldsOnList(db, rootTable, asObj, fieldList, showItemRgb, withGetButton);
+
 freez(&table);
 sqlDisconnect(&conn);
 }
 
-static void showTableFieldCt(char *db, char *table, boolean withGetButton)
+static void showBedTableFields(char *db, char *table, int fieldCount, boolean withGetButton)
 /* Put up html table with a check box for each field of custom
  * track. */
 {
-struct customTrack *ct = ctLookupName(table);
-struct slName *field, *fieldList = getBedFields(ct->fieldCount);
+struct slName *field, *fieldList = getBedFields(fieldCount);
 
 hTableStart();
 for (field = fieldList; field != NULL; field = field->next)
@@ -343,12 +353,30 @@ hTableEnd();
 showTableButtons(db, table, withGetButton);
 }
 
+static void showTableFieldsCt(char *db, char *table, boolean withGetButton)
+/* Put up html table with a check box for each field of custom
+ * track. */
+{
+struct customTrack *ct = ctLookupName(table);
+char *type = ct->dbTrackType;
+if (startsWithWord("makeItems", type))
+   {
+   struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+   struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
+   struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
+   showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+   hFreeConn(&conn);
+   }
+else
+    showBedTableFields(db, table, ct->fieldCount, withGetButton);
+}
+
 static void showTableFields(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
 if (isCustomTrack(rootTable))
-    showTableFieldCt(db, rootTable, withGetButton);
+    showTableFieldsCt(db, rootTable, withGetButton);
 else if (sameWord(rootTable, WIKI_TRACK_TABLE))
     showTableFieldsDb(wikiDbName(), rootTable, withGetButton);
 else
@@ -408,6 +436,16 @@ char *table = cartString(cart, hgtaTable);
 doBigSelectPage(db, table);
 }
 
+#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
+
+static void removeFilterVars()
+/* Remove filter variables from cart. */
+{
+cartRemovePrefix(cart, hgtaFilterPrefix);
+cartRemove(cart, hgtaFilterTable);
+cartRemove(cart, filterLinkedTablePrefix);
+}
+
 void doOutSelectedFields(char *table, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
@@ -426,8 +464,7 @@ else
     /* Remove cart state if table has been changed: */
     if (fsTable && ! sameString(fsTable, dbTable))
 	{
-	cartRemovePrefix(cart, hgtaFieldSelectPrefix);
-	cartRemove(cart, hgtaFieldSelectTable);
+	removeFilterVars();
 	}
     doBigSelectPage(database, table);
     }
@@ -526,8 +563,6 @@ doSelectFieldsMore();
 
 /* ------- Filter Page Stuff ----------*/
 
-#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
-
 char *filterFieldVarName(char *db, char *table, char *field, char *type)
 /* Return variable name for filter page. */
 {
@@ -559,8 +594,7 @@ else
 	return TRUE;
     else
 	{
-	cartRemovePrefix(cart, hgtaFilterPrefix);
-	cartRemove(cart, hgtaFilterTable);
+	removeFilterVars();
 	return FALSE;
 	}
     }
@@ -943,13 +977,21 @@ static void filterControlsForTableCt(char *db, char *table)
 /* Put up filter controls for a custom track. */
 {
 struct customTrack *ct = ctLookupName(table);
+char *type = ct->dbTrackType;
 puts("<TABLE BORDER=0>");
 
-if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf"))
+if (type != NULL && startsWithWord("maf", type))
     {
     stringFilterOption(db, table, "chrom", " AND ");
     integerFilter(db, table, "chromStart", "chromStart", " AND ");
     integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
+    }
+else if (type != NULL && startsWithWord("makeItems", type))
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct sqlFieldType *ftList = sqlListFieldsAndTypes(conn, ct->dbTableName);
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    hFreeConn(&conn);
     }
 else if (ct->wiggle)
     {
@@ -1120,8 +1162,7 @@ doMainPage(conn);
 void doClearFilter(struct sqlConnection *conn)
 /* Respond to click on clear filter. */
 {
-cartRemovePrefix(cart, hgtaFilterPrefix);
-cartRemove(cart, hgtaFilterTable);
+removeFilterVars();
 doMainPage(conn);
 }
 
