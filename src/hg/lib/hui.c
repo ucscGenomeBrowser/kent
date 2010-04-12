@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.273 2010/04/12 16:12:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.274 2010/04/12 17:46:48 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3197,7 +3197,7 @@ static boolean subtracksViewIsHidden(struct cart *cart,struct trackDb *subtrack)
 if(subgroupFind(subtrack,"view",NULL) == FALSE)
     return FALSE; // No view
 
-if(subtrack->parent == NULL || subtrack->parent->parent != NULL)
+if(subtrack->parent == NULL || subtrack->parent->parent == NULL)
     return FALSE; // Not the subtrack
 
 char * view = trackDbLocalSetting(subtrack->parent, "view");
@@ -3212,7 +3212,7 @@ if(setting == NULL)
 safef(objName, sizeof(objName), "%s.%s.vis", subtrack->parent->parent->tableName,view);
 
 setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
-return sameString(setting,TV_HIDE);
+return sameWord(setting,TV_HIDE);
 }
 
 char *tdbResolveVis(struct cart *cart,struct trackDb *tdb, boolean applyMax)
