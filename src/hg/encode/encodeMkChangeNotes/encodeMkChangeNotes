@@ -145,6 +145,10 @@ def main(argv=None):
             % (database, options.composite_name, current_release_dir)
 
     # generate the list of files
+    if os.path.exists("gbdb"):
+        gbdb_files  = get_file_set("gbdb", ".*")
+    else:
+        gbdb_files = set()
     current_files = get_file_set(current_release_dir, ".*\.gz$")
     if prev_release_dir == "-":
         prev_files = set()
@@ -194,6 +198,7 @@ def main(argv=None):
                 gbdb_path = get_gbdb_pathname(database, name)
                 if gbdb_path != None and os.path.exists(gbdb_path):
                     unchanged_gbdbs_list.append(gbdb_path)
+                    gbdb_files.remove(os.path.basename(gbdb_path))
                 else:
                     warn = "could not find %s file for %s" % (gbdb_path, f)
                     warnings.append(warn)
@@ -260,6 +265,7 @@ def main(argv=None):
                 gbdb_path = get_gbdb_pathname(database, name)
                 if gbdb_path != None and os.path.exists(gbdb_path):
                     new_gbdbs_list.append(gbdb_path)
+                    gbdb_files.remove(os.path.basename(gbdb_path))
                 else:
                     warn = "could not find %s file for %s" % (gbdb_path, f)
                     warnings.append(warn)
@@ -289,6 +295,31 @@ def main(argv=None):
             warn = "addition file %s not found" % f
             warnings.append(warn)
             print >>sys.stderr, warn
+
+    # check remaining files from gbdb
+    for f in gbdb_files:
+        if '.' in f:
+            file, extension = f.split(".", 1)
+        else:
+            file = f
+        if table_exists(database, file):
+            new_tables_list.append(file)
+            gbdb_path = get_gbdb_pathname(database, file)
+            if gbdb_path != None and os.path.exists(gbdb_path):
+                new_gbdbs_list.append(gbdb_path)
+                
+                warn = "file %s in ./gbdb/ found with coresponding table and gbdb file but no download file" % f
+                warnings.append(warn)
+                print >>sys.stderr, warn
+            else:
+                warn = "file %s in ./gbdb/ found with coresponding table but no download file" % f
+                warnings.append(warn)
+                print >>sys.stderr, warn
+        else:
+            warn = "file %s in ./gbdb/ found with no coresponding table or download file found" % f
+            warnings.append(warn)
+            print >>sys.stderr, warn
+            
 
     # output some basic stats
     if options.verbose:
