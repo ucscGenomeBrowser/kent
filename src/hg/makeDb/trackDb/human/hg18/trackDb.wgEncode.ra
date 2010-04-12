@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.942 2010/04/07 01:59:07 rhead Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.943 2010/04/12 17:41:52 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21371,7 +21371,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL2
-        longLabel ENCODE GIS RNA-seq Tags Replicate 2 (PolyA+ RNA in K562 cytosol)
+        longLabel ENCODE GIS RNA-seq Tags Rep 2 (PolyA+ RNA in K562 cytosol)
         subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=2
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
@@ -21387,7 +21387,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel GM12 cyto A+ AL1
-        longLabel ENCODE GIS RNA-seq Tags Replicate 1 (PolyA+ RNA in GM12878 cytosol)
+        longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in GM12878 cytosol)
         subGroups view=4-Alignments cellType=GM12878 rnaExtract=longPolyA  rep=1
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
