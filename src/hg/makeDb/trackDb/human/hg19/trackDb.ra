@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.109 2010/04/07 22:42:50 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.110 2010/04/12 19:17:33 hiram Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1563,7 +1563,7 @@ group genes
 priority 55
 visibility hide
 type bed 12
-url http://www.jbirc.jbic.or.jp/hinv/soup/pub_Detail.pl?acc_id=$$
+url http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=$$
 
     track hinv70Coding
     subTrack hinv70Composite
