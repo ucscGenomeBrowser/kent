@@ -1687,4 +1687,53 @@ TMPDIR=/scratch/tmp
     cat fb.susScr2.chainMonDom5Link.txt 
     #	182834643 bases of 2231298548 (8.194%) in intersection
 
+##############################################################################
+# oviAri1 Sheep BLASTZ/CHAIN/NET (working - 2010-04-09 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-09
+    cd /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-09
+
+    cat << '_EOF_' > DEF
+# Sheep vs. Opossum
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Sheep OviAri1
+SEQ2_DIR=/scratch/data/oviAri1/oviAri1.2bit
+SEQ2_LEN=/scratch/data/oviAri1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   Elapsed time: 529m47s
+    cat fb.monDom5.chainOviAri1Link.txt
+    #   133534458 bases of 3501660299 (3.813%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-09/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memn -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    41m46.506s
+
+    cat fb.oviAri1.chainMonDom5Link.txt
+    #   117493519 bases of 1201271277 (9.781%) in intersection
+
+
 #########################################################################

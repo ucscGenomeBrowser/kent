@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.98 2010/04/09 21:46:01 hiram Exp $";
+#	"$Id: hg19.txt,v 1.99 2010/04/12 21:32:37 chinhli Exp $";
 
 #############################################################################
 
@@ -8979,6 +8979,56 @@ TMPDIR=/scratch/tmp
     # 74206453 bases of 2897316137 (2.561%) in intersection
     featureBits hg19 vegaPseudoGene
     # 8494715 bases of 2897316137 (0.293%) in intersection
+
+#####################################################################
+# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-09 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09
+    cd /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09
+
+    cat << '_EOF_' > DEF
+# Sheep vs. Human
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Sheep OviAri1
+SEQ2_DIR=/scratch/data/oviAri1/oviAri1.2bit
+SEQ2_LEN=/scratch/data/oviAri1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   Elapsed time: 391m53s
+    cat fb.hg19.chainOviAri1Link.txt
+    #   878545517 bases of 2897316137 (30.323%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    71m37.020s
+
+    cat fb.oviAri1.chainHg19Link.txt
+    #   824310420 bases of 1201271277 (68.620%) in intersection
+    
 
 ######################################################################## 
 # H-Inv 7.0 Gene track (DONE - 2010-04-07 - Hiram)
