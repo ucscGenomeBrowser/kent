@@ -92,12 +92,9 @@ if ( $status ) then
 endif    
 echo "Check updateTimes for each table:"
 echo "Dev:  $first "
-if ( $second != "" ) then
-  echo "Beta: $second"
-endif
-if ( $fourth != "" ) then
-  echo "RR:   $fourth" 
-endif
+echo "Beta: $second"
+echo "RR:   $fourth" 
+
 
 # ------------------------------------------------
 # check FeatureBits for table:
