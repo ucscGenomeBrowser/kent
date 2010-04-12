@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.110 2010/04/12 19:17:33 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.111 2010/04/12 21:37:08 antonio Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1547,6 +1547,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     longLabel Vega Protein Coding Annotations
     priority 1
     color 0,50,225
+    html vegaGeneComposite
 
     track vegaPseudoGene
     subTrack vegaGeneComposite
@@ -1554,6 +1555,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
     priority 2
     color 30,130,210
+    html vegaGeneComposite
 
 track hinv70Composite
 compositeTrack on

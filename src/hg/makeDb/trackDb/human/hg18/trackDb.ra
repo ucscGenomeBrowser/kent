@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.476 2010/03/16 15:43:53 katrina Exp $";
+#	"$Id: trackDb.ra,v 1.477 2010/04/12 21:37:49 antonio Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -2425,6 +2425,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     longLabel Vega Protein Coding Annotations
     priority 1
     color 0,50,225
+    html vegaGeneComposite
 
     track vegaPseudoGene
     #replaces record vegaPseudoGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
@@ -2433,6 +2434,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
     priority 2
     color 30,130,210
+    html vegaGeneComposite
 
 track multizPrimate
 shortLabel Primate Multiz
