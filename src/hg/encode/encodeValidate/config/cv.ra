@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.225 2010/04/08 18:43:21 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.226 2010/04/12 19:15:17 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2256,6 +2256,20 @@ targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
 
+term H3K4me3B
+tag H3K4me3B
+type Antibody
+antibodyDescription Rabbit monoclonal antibody
+targetDescription Histone H3 (tri-methyl K4) marks promoters in chromatin regions
+vendorName Cell Signaling
+vendorId 9751S
+orderUrl http://www.cellsignal.com/products/9751.html
+lab Farnham
+lots 1,2
+targetId GeneCard:GC01M148078
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
+
 term H3K9ac
 tag H3K9ac
 type Antibody
@@ -2325,6 +2339,20 @@ targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
 
+term H3K27me3B
+tag H3K27me3B
+type Antibody
+antibodyDescription rabbit monoclonal
+targetDescription Histone H3 (tri-methyl K27) marks repressed chromatin regions
+orderUrl http://www.cellsignal.com/products/9733.html
+vendorName Cell Signaling
+vendorId 9733S
+lab Farnham
+lots 1
+targetId GeneCard:GC01M148078
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
+
 term H3K36me3
 tag H3K36me3
 type Antibody
@@ -2335,6 +2363,20 @@ vendorName Abcam
 vendorId ab9050
 lab Bernstein
 lots 136353
+targetId GeneCard:GC01M148078
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
+
+term H3K36me3B
+tag H3K36me3B
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (tri-methyl K36) marks actively transcribed chromatin regions
+orderUrl http://www.cellsignal.com/products/9763.html
+vendorName Cell Signaling
+vendorId 9763S
+lab Farnham
+lots 
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
@@ -2425,6 +2467,19 @@ orderUrl http://www.scbt.com/datasheet-497-irf-1-c-20-antibody.html
 lab Farnham
 targetId GeneCard:IRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF1&search=IRF1
+validation missing
+
+term IRF3
+tag IRF3
+type Antibody
+antibodyDescription Rabbit polyclonal; epitope corresponding to amino acids 1-425 of IRF-3 of human origin
+targetDescription Mediates interferon-stimulated response element (ISRE) promoter activation. DsRNA leads to IRF3 phosphorylation on the C-terminal serine/threonine cluster. This induces a conformational change, leading to its dimerization, nuclear localization and association with CREB binding protein (CREBBP) to form dsRNA-activated factor 1 (DRAF1), a complex which activates the transcription of genes under the control of ISRE.
+vendorName Santa Cruz Biotech
+vendorId sc-9082
+orderUrl http://www.scbt.com/datasheet-9082-irf-3-fl-425-antibody.html
+lab Snyder
+targetId GeneCard:IRF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation missing
 
 term IRF4
@@ -2927,6 +2982,19 @@ validation missing
 #lots K0905 F2706
 #validation missing
 
+term TBP
+tag TBP
+type Antibody
+antibodyDescription Mouse monoclonal. Immunogen is synthetic peptide conjugated to KLH derived from within residues 1 - 100 of Human TATA binding protein TBP
+targetDescription General transcription factor that functions at the core of the DNA-binding multiprotein factor TFIID. Binding of TFIID to the TATA box is the initial transcriptional step of the pre-initiation complex (PIC), playing a role in the activation of eukaryotic genes transcribed by RNA polymerase II. Component of the transcription factor SL1/TIF-IB complex, which is involved in the assembly of the PIC (preinitiation complex) during RNA polymerase I-dependent transcription.
+vendorName abcam
+vendorId ab62126
+orderUrl http://www.abcam.com/TATA-binding-protein-TBP-antibody-mAbcam-62126-Nuclear-Loading-Control-and-ChIP-Grade-ab62126.html
+lab Snyder
+targetId GeneCard:TBP
+targetUrl hhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
+validation missing
+
 term TCF12
 tag TCF12
 type Antibody
@@ -3012,6 +3080,19 @@ orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
 targetId GeneCard:GC01M159275
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M159275
+validation missing
+
+term USF2
+tag USF2
+type Antibody
+antibodyDescription Mouse monoclonal. Immunogen corresponds to amino acids 1-101 of Human USF2
+targetDescription Encodes a member of the basic helix-loop-helix leucine zipper family. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs (5'-CACGTG-3').
+vendorName abcam
+vendorId ab60931
+orderUrl http://www.abcam.com/USF2-antibody-ab60931.html
+lab Snyder
+targetId GeneCard:USF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
 validation missing
 
 term XRCC4
