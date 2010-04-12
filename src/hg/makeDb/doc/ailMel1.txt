@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.8 2010/04/07 17:52:44 hiram Exp $
+#	$Id: ailMel1.txt,v 1.9 2010/04/12 19:27:04 hiram Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -174,14 +174,14 @@ ailMel1.perChromTables = no
     screen  # control this business with a screen since it takes a while
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial  ailMel1 &
-    #	var/build/logs/2010.02.03-11:16:16.ailMel1.initalign.log
-    #	real    326m58.232s
+    #	real    652m27.871s
+    #	var/build/logs/2010.04.09-15:37:11.ailMel1.initalign.log
 
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad ailMel1 &
-    #	logFile: var/dbload/hgwdev/logs/2010.02.04-11:12:16.dbload.log
-    #	real    34m59.832s
+    #	logFile: var/dbload/hgwdev/logs/2010.04.12-10:13:40.dbload.log
+    #	real    30m57.886s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
