@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.518 2010/04/05 21:06:10 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.519 2010/04/12 16:22:31 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1436,7 +1436,7 @@ baseColorDrawOptDropDown(cart, tdb);
 void vegaGeneUI(struct trackDb *tdb)
 /* Put up Vega Gene track-specific controls */
 {
-geneIdConfig(tdb); 
+geneIdConfig(tdb);
 printf("<BR>\n");
 
 /* Put up codon coloring stuff. */
@@ -2417,8 +2417,6 @@ void trackUi(struct trackDb *tdb, struct customTrack *ct)
 {
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js",NULL);
-#define SUPPORT_RESET_TO_DEFAULTS
-#ifdef SUPPORT_RESET_TO_DEFAULTS
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];
 
@@ -2432,7 +2430,6 @@ if(tdbIsComposite(tdb))
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     }
-#endif//def SUPPORT_RESET_TO_DEFAULTS
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
@@ -2479,10 +2476,8 @@ else
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
 
-#ifdef SUPPORT_RESET_TO_DEFAULTS
 if(tdbIsComposite(tdb))
     printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
-#endif//def SUPPORT_RESET_TO_DEFAULTS
 
 if (ct)
     {
