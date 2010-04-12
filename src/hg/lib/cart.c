@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.116 2010/01/14 07:37:39 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.117 2010/04/12 16:16:19 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1652,9 +1652,9 @@ else
 return dyStringCannibalize(&orderDY);
 }
 
-char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, 
+char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb,
 	boolean compositeLevel, char *suffix,char **pVariable)
-/* Returns value or NULL for a cart variable from lowest level on up. Optionally 
+/* Returns value or NULL for a cart variable from lowest level on up. Optionally
  * fills the non NULL pVariable with the actual name of the variable in the cart */
 {
 if (compositeLevel)
@@ -1845,7 +1845,7 @@ return slNames;
 void cartRemoveAllForTdb(struct cart *cart, struct trackDb *tdb)
 /* Remove all variables from cart that are associated with this tdb. */
 {
-char setting[128];
+char setting[256];
 safef(setting,sizeof(setting),"%s.",tdb->tableName);
 cartRemovePrefix(cart,setting);
 safef(setting,sizeof(setting),"%s_",tdb->tableName); // TODO: All should be {tableName}.{varName}... Fix {tableName}_sel
@@ -1857,10 +1857,11 @@ void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb)
 /* Remove all variables from cart that are associated
    with this tdb and it's children. */
 {
-cartRemoveAllForTdb(cart,tdb);
 struct trackDb *subTdb;
 for(subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
     cartRemoveAllForTdbAndChildren(cart,subTdb);
+cartRemoveAllForTdb(cart,tdb);
+        saveState(cart);
 }
 
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal)
