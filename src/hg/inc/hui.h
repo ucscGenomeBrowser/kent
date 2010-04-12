@@ -31,7 +31,7 @@ char *wrapWhiteFont(char *s);
  */
 
 #define ENCODE_DATA_RELEASE_POLICY "/ENCODE/terms.html"
-char *encodeRestrictionDateDisplay(struct trackDb *trackDb);
+char *encodeRestrictionDateDisplay(char *db,struct trackDb *trackDb);
 /* Create a string for ENCODE restriction date of this track
    if return is not null, then free it after use */
 
@@ -1099,7 +1099,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 // Make a table schema link (if appropriate and then returns TRUE)
 
 void extraUiLinks(char *db,struct trackDb *tdb);
-/* Show downlaods, schema and metadata links where appropriate */
+/* Show downloads, schema and metadata links where appropriate */
 
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 /*	check if normScore column is specified in trackDb as available */

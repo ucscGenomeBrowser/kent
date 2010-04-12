@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.272 2010/04/05 23:39:57 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.273 2010/04/12 16:12:26 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -88,91 +88,44 @@ if (hTableOrSplitExists(db, tdb->tableName))
 return FALSE;
 }
 
-static boolean metadataInTdbToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
-/* If metadata exists, create a link that will allow toggling it's display */
-{
-metadata_t *metadata = metadataSettingGet(tdb);
-if(metadata != NULL)
-    {
-    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
-           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
-    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
-    if(showLongLabel)
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
-    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
-    int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
-    for(;ix<metadata->count;ix++)
-        {
-        if(sameString(metadata->tags[ix],"fileName"))
-            {
-            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
-            makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), metadata->values[ix]);
-            printf("</td></tr>");
-            }
-        else
-            if(!sameString(metadata->tags[ix],"composite"))
-                {
-                if(sameString(metadata->tags[ix],"antibody"))
-                    {
-                    int ix2 = stringArrayIx("input",metadata->tags,metadata->count);
-                    if(ix2 != -1 && sameString(metadata->values[ix],metadata->values[ix2]))
-                        continue;
-                    }
-		printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
-                }
-        }
-    printf("</table>--></div>");
-    metadataFree(&metadata);
-    return TRUE;
-    }
-return FALSE;
-}
-
 static boolean metadataToggle(char *db,struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
 /* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct metaObj *metaObj = metaObjQueryByObj(conn,NULL,tdb->tableName,NULL);
-sqlDisconnect(&conn);
-if(metaObj != NULL && metaObj->vars != NULL)
-    {
-    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
-           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
-    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
-    if(showLongLabel)
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
-    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
-
-    metaObjRemoveVars(metaObj,"composite project tableName"); // Don't bother showing these (suggest: "composite project dataType view tableName")
-    // FIXME: Leaving tableName out as s clear difference between netaTbl and trackDb setting.  Could add back in if desired.
-    metaObjReorderVars(metaObj,"grant lab dataType cell treatment antibody protocol input view",FALSE); // Bring to front
-    metaObjReorderVars(metaObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
-    struct metaVar *metaVar;
-    for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
-        {
-        if(sameString(metaVar->var,"fileName"))
-            {
-            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metaVar->var);
-            makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), metaVar->val);
-            printf("</td></tr>");
-            }
-        else
-            {
-            // If antibody and metadata contains input={sameValue} then just print input
-            if(sameString(metaVar->var,"antibody") && metaObjContains(metaObj,"input",metaVar->val))
-                continue;
-
-            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metaVar->var,metaVar->val);
-            }
-        }
-    printf("</table>--></div>");
-    metaObjsFree(&metaObj);
-    return TRUE;
-    }
-else
-    return metadataInTdbToggle(tdb,title,embeddedInText,showLongLabel); // FIXME: This should be removed when all metadata is in metaTbl!!!
-
+const struct metaObj *safeObj = metadataForTable(db,tdb,NULL);
+if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
+
+printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
+        (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
+printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
+if(showLongLabel)
+    printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+
+struct metaObj *metaObj = metaObjClone(safeObj); // Important if we are going to remove vars!
+metaObjRemoveVars(metaObj,"composite project"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+metaObjReorderVars(metaObj,"grant lab dataType cell treatment antibody protocol input view",FALSE); // Bring to front
+metaObjReorderVars(metaObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
+struct metaVar *metaVar;
+for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+    {
+    if(sameString(metaVar->var,"fileName"))
+        {
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metaVar->var);
+        makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), metaVar->val);
+        printf("</td></tr>");
+        }
+    else
+        {
+        // If antibody and metadata contains input={sameValue} then just print input
+        if(sameString(metaVar->var,"antibody") && metaObjContains(metaObj,"input",metaVar->val))
+            continue;
+
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metaVar->var,metaVar->val);
+        }
+    }
+printf("</table>--></div>");
+return TRUE;
 }
 
 void extraUiLinks(char *db,struct trackDb *tdb)
@@ -180,8 +133,8 @@ void extraUiLinks(char *db,struct trackDb *tdb)
 {
 boolean schemaLink = (isCustomTrack(tdb->tableName) == FALSE)
                   && (hTableOrSplitExists(db, tdb->tableName));
-boolean metadataLink = (!tdbIsComposite(tdb))
-                  && trackDbSetting(tdb, "metadata");
+boolean metadataLink = (!tdbIsComposite(tdb)
+                  && metadataForTable(db, tdb, NULL) != NULL);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL);
 boolean moreThanOne = (schemaLink && metadataLink)
                    || (schemaLink && downloadLink)
@@ -3192,25 +3145,25 @@ switch(cType)
     }
 }
 
-char *encodeRestrictionDateDisplay(struct trackDb *trackDb)
+char *encodeRestrictionDateDisplay(char *db,struct trackDb *trackDb)
 /* Create a string for ENCODE restriction date of this track
    if return is not null, then free it after use */
 {
 if (!trackDb)
     return NULL;
+
 boolean addMonths = FALSE;
-char *date = metadataSettingFind(trackDb,"dateUnrestricted");
-if(date == NULL)
-    {
-    date = metadataSettingFind(trackDb,"dateSubmitted");
-    addMonths = TRUE;
-    }
-if(date == NULL)
+char *date = NULL;
+
+if(metadataForTable(db,trackDb,NULL) != NULL)
     {
     addMonths = FALSE;
-    date = trackDbSetting(trackDb, "dateUnrestricted");
-    if(date)
-        date = cloneString(date); // all returns should be freeable memory
+    date = cloneString((char *)metadataFindValue(trackDb,"dateUnrestricted"));
+    if(date == NULL)
+        {
+        date = cloneString((char *)metadataFindValue(trackDb,"dateSubmitted"));
+        addMonths = TRUE;
+        }
     }
 if(date == NULL)
     {
@@ -3238,6 +3191,30 @@ if(tdbIsComposite(tdb))
 }
 
 #define TV_HIDE "hide"
+static boolean subtracksViewIsHidden(struct cart *cart,struct trackDb *subtrack)
+// Returns TRUE if the subtrack belongs to a view that is hidden
+{
+if(subgroupFind(subtrack,"view",NULL) == FALSE)
+    return FALSE; // No view
+
+if(subtrack->parent == NULL || subtrack->parent->parent != NULL)
+    return FALSE; // Not the subtrack
+
+char * view = trackDbLocalSetting(subtrack->parent, "view");
+if(view == NULL) // assertably not null!
+    return FALSE; // This had better be found
+
+char objName[SMALLBUF];
+char *setting =trackDbLocalSetting(subtrack->parent, "visibility");
+if(setting == NULL)
+    setting = TV_HIDE;
+
+safef(objName, sizeof(objName), "%s.%s.vis", subtrack->parent->parent->tableName,view);
+
+setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
+return sameString(setting,TV_HIDE);
+}
+
 char *tdbResolveVis(struct cart *cart,struct trackDb *tdb, boolean applyMax)
 // Determines the correct vis for a tdb as modified by parent
 {
@@ -3280,29 +3257,43 @@ if(applyMax && vis >= tvHide)
 return setting; // nothing found
 }
 
+// Four State checkboxes bcan be checked/unchecked by enable/disabled
+#define FOURSTATE_KEY               "fourState"
+#define FOURSTATE_EMPTY             666
+#define FOURSTATE_UNCHECKED         0
+#define FOURSTATE_CHECKED           1
+#define FOURSTATE_DISABLE(val)      {while((val) >= 0) (val) -= 2;}
+#define FOURSTATE_ENABLE(val)       {while((val) < 0) (val) += 2;}
+#define fourStateChecked(fourState) ((fourState) == 1 || (fourState) == -1)
+#define fourStateEnabled(fourState) ((fourState) >= 0)
+
 static int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
 /* Returns the four state checked state of the subtrack */
 {
 char * setting = NULL;
 char objName[SMALLBUF];
-int fourState = 0;
+int fourState = (int)(long)tdbExtrasGetOrDefault(subtrack,FOURSTATE_KEY,(void *)FOURSTATE_EMPTY);
+if(fourState != FOURSTATE_EMPTY)
+    return fourState;
+
+fourState = FOURSTATE_UNCHECKED;  // default to unchecked, enabled
 if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     {
     if(findWordByDelimiter("off",' ',setting) == NULL)
-        fourState = 1;
+        fourState = FOURSTATE_CHECKED;
     }
 // Now check visibility
 setting = tdbResolveVis(cart,subtrack,FALSE);
 
-// commenting these out until Tim returns because it breaks tracks without views
-//if(sameWord(setting,TV_HIDE))
-    //fourState -= 2; // visibility: hide means -1 or -2
+// If subtrack's view is hide then fourstate includes disabled
+if(sameWord(setting,TV_HIDE) && subtracksViewIsHidden(cart,subtrack))
+    FOURSTATE_DISABLE(fourState);
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
-return cartUsualInt(cart, objName, fourState);
+fourState = cartUsualInt(cart, objName, fourState);
+tdbExtrasAddOrUpdate(subtrack,FOURSTATE_KEY,(void *)(long)fourState);
+return fourState;
 }
-#define fourStateChecked(fourState) ((fourState) == 1 || (fourState) == -1)
-#define fourStateEnabled(fourState) ((fourState) >= 0)
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
@@ -3365,10 +3356,10 @@ if (!primarySubtrack)
     for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
         {
 	subtrack = subtrackRef->val;
-        char *date = metadataSettingFind(subtrack,"dateUnrestricted");
-        if(date != NULL)
+        (void)metadataForTable(db,subtrack,NULL);
+        const char *date = metadataFindValue(subtrack,"dateUnrestricted");
+        if(date != NULL) // Note this is stale memory (just freed), but non-NULL means found.
             {
-            freeMem(date);
             restrictions = TRUE;
             break;
             }
@@ -3553,7 +3544,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             makeSchemaLink(db,subtrack,"schema");
             puts("&nbsp;");
 
-            char *dateDisplay = encodeRestrictionDateDisplay(subtrack);
+            char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
             if (dateDisplay)
                 printf("</TD><TD align=\"CENTER\">&nbsp;%s&nbsp;", dateDisplay);
 
@@ -5236,11 +5227,12 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
-static char *labelWithVocabLink(struct trackDb *parentTdb, struct trackDb *childTdb, char *vocabType, char *label)
+static char *labelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb, char *vocabType, char *label)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 {
 char *vocab = trackDbSetting(parentTdb, "controlledVocabulary");
+(void)metadataForTable(db,childTdb,NULL);
 if(vocab == NULL)
     return cloneString(label); // No wrapping!
 
@@ -5272,17 +5264,16 @@ for(ix=1;ix<count && !found;ix++)
         if(sameString(vocabType,words[ix]))  // tags match, but search for term
             {
             char * cvSetting = words[ix] + strlen(words[ix]) + 1;
-            char * cvTerm = metadataSettingFind(childTdb, cvSetting);
+            const char * cvTerm = metadataFindValue(childTdb,cvSetting);
             if(cvTerm != NULL)
                 {
-                char *encodedTerm = cgiEncode(cvTerm);
+                char *encodedTerm = cgiEncode((char *)cvTerm);
                 int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 2;
                 char *link=needMem(sz);
                 safef(link,sz,VOCAB_LINK,words[0],encodedTerm,cvTerm,rootLabel);
                 if(suffix)
                     safecat(link,sz,suffix);
                 freeMem(words[0]);
-                freeMem(cvTerm);
                 freeMem(encodedTerm);
                 return link;
                 }
@@ -5308,7 +5299,7 @@ printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
 #define MATRIX_BOTTOM_BUTTONS_AFTER 20
-static void matrixXheadingsRow1(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
+static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
 /* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
 {
 printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=%s>\n",COLOR_BG_ALTDEFAULT,top?"BOTTOM":"TOP");
@@ -5332,7 +5323,7 @@ if(dimensionX)
         if(tdbsX[ixX] != NULL)
             {
             char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
-            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
+            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->tag,label));
             freeMem(label);
             cntX++;
             }
@@ -5389,19 +5380,19 @@ if(dimensionX && dimensionY)
     }
 }
 
-static void matrixXheadings(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
+static void matrixXheadings(char *db,struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
 /* UI for X headings in matrix */
 {
 if(top)
-    matrixXheadingsRow1(parentTdb,dimensionX,dimensionY,tdbsX,top);
+    matrixXheadingsRow1(db,parentTdb,dimensionX,dimensionY,tdbsX,top);
 
     matrixXheadingsRow2(parentTdb,dimensionX,dimensionY,tdbsX);
 
 if(!top)
-    matrixXheadingsRow1(parentTdb,dimensionX,dimensionY,tdbsX,top);
+    matrixXheadingsRow1(db,parentTdb,dimensionX,dimensionY,tdbsX,top);
 }
 
-static void matrixYheadings(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,int ixY,struct trackDb *childTdb,boolean left)
+static void matrixYheadings(char *db,struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,int ixY,struct trackDb *childTdb,boolean left)
 /* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
 {
 if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of buttons
@@ -5409,11 +5400,11 @@ if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of
     char objName[SMALLBUF];
     printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
     if(left)
-        printf("%s&nbsp;",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
+        printf("%s&nbsp;",labelWithVocabLink(db,parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
     safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
     buttonsForOne( objName, dimensionY->names[ixY] );
     if(!left)
-        printf("&nbsp;%s",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
+        printf("&nbsp;%s",labelWithVocabLink(db,parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
     puts("</TH>");
     }
 else if (dimensionX)
@@ -5423,10 +5414,10 @@ else if (dimensionX)
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)
-    printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
+    printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(db,parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
 }
 
-static int displayABCdimensions(struct cart *cart, struct trackDb *parentTdb, struct slRef *subtrackRefList, membersForAll_t* membersForAll)
+static int displayABCdimensions(char *db,struct cart *cart, struct trackDb *parentTdb, struct slRef *subtrackRefList, membersForAll_t* membersForAll)
 /* This will walk through all declared nonX&Y dimensions (X and Y is the 2D matrix of CBs.
    NOTE: ABC dims are only supported if there are X & Y both.  Also expected number should be passed in */
 {
@@ -5476,7 +5467,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
             safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",membersForAll->members[ix]->names[aIx]);
             // TODO Set classes properly (if needed!!!)  The class abc works but what about a b or c?
             cgiMakeCheckBoxJS(objName,alreadySet,javascript);
-            printf("%s",labelWithVocabLink(parentTdb,tdbs[aIx],membersForAll->members[ix]->tag,membersForAll->members[ix]->values[aIx]));
+            printf("%s",labelWithVocabLink(db,parentTdb,tdbs[aIx],membersForAll->members[ix]->tag,membersForAll->members[ix]->values[aIx]));
             puts("</TH>");
             }
         }
@@ -5557,7 +5548,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     if(ixX > -1 && ixY > -1)
         {
         cells[ixX][ixY]++;
-        // FIXME This mess should be done once per subtrack, stored in the struct, then reused when subCBs are written out.
         int fourState = subtrackFourStateChecked(subtrack,cart);
         if(fourStateEnabled(fourState) >= 0)  // hidden views are handled by 4-way CBs: only count enabled
             {
@@ -5590,12 +5580,12 @@ puts("<BR>\n");
 
 if(membersForAll->dimensions->count > 2)
     {
-    displayABCdimensions(cart,parentTdb,subtrackRefList,membersForAll);  // No dimABCs without X & Y both
+    displayABCdimensions(db,cart,parentTdb,subtrackRefList,membersForAll);  // No dimABCs without X & Y both
     }
 
 printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
-matrixXheadings(parentTdb,membersForAll->members[dimX],membersForAll->members[dimY],tdbsX,TRUE);
+matrixXheadings(db,parentTdb,membersForAll->members[dimX],membersForAll->members[dimY],tdbsX,TRUE);
 
 // Now the Y by X matrix
 int cntX=0,cntY=0;
@@ -5607,7 +5597,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         assert(!membersForAll->members[dimY] || ixY < membersForAll->members[dimY]->count);
         printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
 
-        matrixYheadings(parentTdb, membersForAll->members[dimX],membersForAll->members[dimY],ixY,tdbsY[ixY],TRUE);
+        matrixYheadings(db,parentTdb, membersForAll->members[dimX],membersForAll->members[dimY],ixY,tdbsY[ixY],TRUE);
 
 #define MAT_CB_SETUP "<INPUT TYPE=CHECKBOX NAME='%s' VALUE=on %s>"
 #define MAT_CB(name,js) printf(MAT_CB_SETUP,(name),(js));
@@ -5655,12 +5645,12 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                 }
             }
         if(membersForAll->members[dimX] && cntX>MATRIX_RIGHT_BUTTONS_AFTER)
-            matrixYheadings(parentTdb, membersForAll->members[dimX],membersForAll->members[dimY],ixY,tdbsY[ixY],FALSE);
+            matrixYheadings(db,parentTdb, membersForAll->members[dimX],membersForAll->members[dimY],ixY,tdbsY[ixY],FALSE);
         puts("</TR>\n");
         }
     }
 if(membersForAll->members[dimY] && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
-    matrixXheadings(parentTdb,membersForAll->members[dimX],membersForAll->members[dimY],tdbsX,FALSE);
+    matrixXheadings(db,parentTdb,membersForAll->members[dimX],membersForAll->members[dimY],tdbsX,FALSE);
 
 puts("</TD></TR></TABLE>");
 
