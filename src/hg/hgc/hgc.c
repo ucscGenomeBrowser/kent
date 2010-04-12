@@ -228,8 +228,9 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 #include "parClick.h"
+#include "metaTbl.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1610 2010/04/10 06:41:01 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1611 2010/04/12 16:19:42 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2514,12 +2515,10 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
 void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
-char *version = metadataSettingFind(tdb,"dataVersion");
+(void)metadataForTable(database,tdb,NULL);
+const char *version = metadataFindValue(tdb,"dataVersion");
 if(version != NULL)
-    {
     printf("<B>Data version:</B> %s <BR>\n", version);
-    freeMem(version);
-    }
 else
     {
     version = trackDbSetting(tdb,"dataVersion");
@@ -2531,7 +2530,7 @@ else
 void printDataRestrictionDate(struct trackDb *tdb)
 /* If this annotation has a dateUnrestricted trackDb setting, print it */
 {
-char *restrictionDate = encodeRestrictionDateDisplay(tdb);
+char *restrictionDate = encodeRestrictionDateDisplay(database,tdb);
 if (restrictionDate != NULL)
     {
     printf("<A HREF=\"/ENCODE/terms.html\" TARGET=_BLANK><B>Restricted until</A>:</B> %s <BR>\n",
@@ -3551,7 +3550,7 @@ if (wordCount > 0)
     else if (sameString(type, "encodeFiveC"))
 	{
 	doEncodeFiveC(conn, tdb);
-	}   
+	}
     else if (sameString(type, "chromGraph"))
 	{
 	doChromGraph(tdb);
@@ -8061,18 +8060,18 @@ if (genomeStrEnsembl == NULL)
     }
 
 /* print URL that links to Ensembl or Vega transcript details */
-if (isEnsembl) 
+if (isEnsembl)
     {
     if (archive != NULL)
        safef(dbUrl, sizeof(dbUrl), "http://%s.archive.ensembl.org/%s",
             archive, genomeStrEnsembl);
     else
-       safef(dbUrl, sizeof(dbUrl), "http://www.ensembl.org/%s", 
+       safef(dbUrl, sizeof(dbUrl), "http://www.ensembl.org/%s",
             genomeStrEnsembl);
     }
 else if (isVega)
     safef(dbUrl, sizeof(dbUrl), "http://vega.sanger.ac.uk/%s",
-	 genomeStrEnsembl);   
+	 genomeStrEnsembl);
 
 boolean nonCoding = FALSE;
 char query[512];
@@ -8082,7 +8081,7 @@ if (gpList && (gpList->cdsStart == gpList->cdsEnd))
     nonCoding = TRUE;
 genePredFreeList(&gpList);
 /* get gene and protein IDs */
-if ((isEnsembl && hasEnsGtp) || (isVega && hasVegaGtp)) 
+if ((isEnsembl && hasEnsGtp) || (isVega && hasVegaGtp))
     {
     /* shortItemName removes version number but sometimes the ensGtp */
     /* table has a transcript with version number so exact match not used */
@@ -8090,10 +8089,10 @@ if ((isEnsembl && hasEnsGtp) || (isVega && hasVegaGtp))
     geneID=sqlGetField(database, gtpTable,"gene",cond_str);
     safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
     proteinID=sqlGetField(database, gtpTable,"protein",cond_str2);
-    } 
-  
+    }
+
 /* Print gene, transcript and protein links */
-if (geneID != NULL) 
+if (geneID != NULL)
     {
     printf("<B>%s Gene: </B>", geneType);
     printf("<A HREF=\"%s/geneview?gene=%s\" "
@@ -8102,7 +8101,7 @@ if (geneID != NULL)
 printf("<B>%s Transcript: </B>", geneType);
 printf("<A HREF=\"%s/transview?transcript=%s\" "
            "target=_blank>%s</A><BR>", dbUrl, shortItemName, itemName);
-if (proteinID != NULL) 
+if (proteinID != NULL)
     {
     printf("<B>%s Protein: </B>", geneType);
     if (nonCoding)
@@ -8742,7 +8741,7 @@ safef(query, sizeof(query),
       "select distinct phenotype from decipherRaw where id ='%s'", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL) 
+if (row != NULL)
     {
     printf("<B>Phenotype: </B><UL>");
     while (row != NULL)
@@ -8766,18 +8765,18 @@ safef(query, sizeof(query),
       "select chrom, chromStart, chromEnd from decipher where name ='%s'", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL) 
+if (row != NULL)
     {
     printPosOnChrom(row[0], atoi(row[1]), atoi(row[2]), strand, TRUE, itemName);
     }
 sqlFreeResult(&sr);
-    
+
 /* print UCSC Genes in the reported region */
 safef(query, sizeof(query),
       "select distinct geneSymbol, kgId, description from decipher d, kgXref x, knownToDecipher t where value ='%s' and t.name=kgId", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL) 
+if (row != NULL)
     {
     printf("<BR><B>UCSC Gene(s) in this genomic region: </B><UL>");
     while (row != NULL)
@@ -9330,7 +9329,7 @@ sqlFreeResult(&sr);
 
 htmlHorizontalLine();
 printf("<H3>RGD Pathway(s)</H3>\n");
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
 "select p.rgdPathwayId, p.name from rgdGenePathway g, rgdPathway p where g.rgdGeneId = '%s' and g.rgdPathwayId=p.rgdPathwayId", rgdGeneId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -10432,8 +10431,8 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, track);
-safef(query, ArraySize(query), 
-"select * from %s where name = '%s' and chromStart=%d and chromEnd=%d", 
+safef(query, ArraySize(query),
+"select * from %s where name = '%s' and chromStart=%d and chromEnd=%d",
 track, trnaName, start, end);
 
 sr = sqlGetResult(conn, query);
@@ -10448,7 +10447,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     int i, len;
     printf("<TR>");
     printf("<TD valign=top>");
-    
+
     trna = tRNAsLoad(row+rowOffset);
 
     printf("<B>tRNA name: </B>%s<BR>\n",trna->name);
@@ -10471,9 +10470,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     if (trna->next != NULL)
       printf("<hr>\n");
-    
+
     printf("</TD>");
-    
+
     printf("<TD>");
 
     /* encode '?' in tRNA name into "%3F" */
@@ -10496,7 +10495,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	chp2++;
 	}
     *chp2 = '\0';
-    
+
     sprintf(imgFileName, "../htdocs/RNA-img/%s/%s-%s.gif", database,database,trna->name);
     if (fileExists(imgFileName))
     	{
@@ -10511,10 +10510,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         database,database,trna->name,trna->name);
 	}
     printf("</TD>");
-    
+
     printf("</TR>");
     }
-  
+
 printf("</TABLE>");
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -15859,7 +15858,7 @@ return cloneString(sqlQuickQuery(conn, query, buf, sizeof(buf)-1));
 
 static void gwasCatalogCheckSnpAlleles(struct trackDb *tdb, struct gwasCatalog *gc)
 /* Look up the SNP's observed alleles in the snp track and warn if they are
- * complementary (hence the risk allele is ambiguous because strand is often 
+ * complementary (hence the risk allele is ambiguous because strand is often
  * not specified in journal articles). */
 {
 char *snpTable = trackDbSetting(tdb, "snpTable");

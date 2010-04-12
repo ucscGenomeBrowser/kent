@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.147 2010/03/25 17:41:25 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.148 2010/04/12 16:20:59 tdreszer Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -391,7 +391,7 @@ for (name = nameList; name != NULL; name = name->next)
 	hPrintf(">%s\n", name->name);
     }
 hPrintf("</SELECT>\n");
-char *restrictDate = encodeRestrictionDateDisplay(selTdb);
+char *restrictDate = encodeRestrictionDateDisplay(database,selTdb);
 if (restrictDate)
     {
     hPrintf("<A HREF=\'%s\' TARGET=BLANK>restricted until:</A>&nbsp;%s",
