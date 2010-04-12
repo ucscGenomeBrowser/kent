@@ -1,4 +1,5 @@
 # generated with encodeMkChangeNotes 0.9
+# edit to add 12 signal tables not in downloads
 This is a release1 of the "ENCODE wgEncodeGisRnaSeq"
 The composite track is wgEncodeGisRnaSeq
 
@@ -11,21 +12,39 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 0
-    Files: 12
-    Wibs: 0
+    Tables: 18
+    Files: 15
+    Gbdbs: 4
 
 A) Untouched Tables (0):
 
-A') Untouched Files (0 downloadables, 0 wibs):
+A') Untouched Files (0 downloadables, 0 gbdbs):
 
 B) Deprecated tables (0):
 
-B') Deprecated files (0 downloadables, 0 wibs):
+B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (0):
+C) New tables (18):
+wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
+wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
+wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
+wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
+wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
+wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
+wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
+wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
+wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
+wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
+wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
+wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
+wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
+wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
+wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
+wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
+wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
+wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
 
-C') New files (12 downloadables, 0 wibs):
+C') New files (12 downloadables, 4 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/release1/
     NOT on RR but must be placed in:
@@ -44,6 +63,10 @@ C') New files (12 downloadables, 0 wibs):
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
 
+/gbdb/hg18/bbi/wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.bb
+/gbdb/hg18/bbi/wgEncodeGisRnaSeqAlignmentsRep1H1hescCytosolLongpolya.bb
+/gbdb/hg18/bbi/wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.bb
+/gbdb/hg18/bbi/wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.bb
 
 D) Additional items:
     current location on alpha:
@@ -51,6 +74,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/
 
-index.html
-files.txt
-md5sum.txt
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/release1/index.html
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/release1/files.txt
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisRnaSeq/release1/md5sum.txt
