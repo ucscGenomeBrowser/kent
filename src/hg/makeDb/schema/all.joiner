@@ -3060,6 +3060,9 @@ tablesIgnored hg19
     chain_chr17_ctg5_hap1
     chain_chr17_ctg5_hap1Link
     chain_haplotypes
+    hinv70Coding
+    hinv70NonCoding
+    hinv70PseudoGene
 
 tablesIgnored mm9
     crgMapability%
