@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.943 2010/04/12 17:41:52 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.944 2010/04/12 18:33:53 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21565,7 +21565,6 @@ wgEncode 1
 	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
 	subGroups view=Alignments cellType=K562 fragSize=f20k 
 	type bigBed 6
-	color 46,0,184
         baseColorDefault diffBases
         baseColorUseSequence seq1Seq2
         baseColorTickColor lighterShade
