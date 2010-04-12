@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.944 2010/04/12 18:33:53 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.945 2010/04/12 19:49:46 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12082,7 +12082,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3E2f4
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 E2F4 Pk
+        shortLabel HeLa E2F4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in HeLa-S3 cells)
         subGroups view=Peaks factor=E2F4 cellType=t2HeLa
         type narrowPeak
@@ -12092,7 +12092,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3E2f6
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 E2F6 Pk
+        shortLabel HeLa E2F6 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in HeLa-S3 cells)
         subGroups view=Peaks factor=E2F6 cellType=t2HeLa
         type narrowPeak
@@ -12102,7 +12102,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Ha
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 HA-E2F1 Pk
+        shortLabel HeLa HA-E2F1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in HeLa-S3 cells)
         subGroups view=Peaks factor=E2F1ha cellType=t2HeLa
         type narrowPeak
@@ -12122,7 +12122,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Pol2V2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 Pol2 Pk
+        shortLabel HeLa Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
         subGroups view=Peaks factor=POL2 cellType=t2HeLa
         type narrowPeak
@@ -12192,8 +12192,8 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Pol2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 Pol2 Pk
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2 cells)
+        shortLabel HepG2p Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2/pravastatin cells)
         subGroups view=Peaks factor=POL2 cellType=uHEPG2pra
         type narrowPeak
         color 189,0,157
@@ -12202,7 +12202,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Srebp1a
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 SREBP1 Pk
+        shortLabel HepG2p SREBP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/pravastatin cells)
         subGroups view=Peaks factor=SREBP1 cellType=uHEPG2pra
         type narrowPeak
@@ -12602,7 +12602,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksMcf7Hae2f1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel MCF-7 HA-E2F1 Pk
+        shortLabel MCF7 HA-E2F1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in MCF-7 cells)
         subGroups view=Peaks factor=E2F1ha cellType=t3MCF7
         type narrowPeak
@@ -12679,7 +12679,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3E2f1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 E2F1 Pk
+        shortLabel HeLa E2F1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F1 in HeLa-S3 cells)
         subGroups view=Peaks factor=E2F1 cellType=t2HeLa
         type narrowPeak
@@ -12901,7 +12901,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Ini1Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 Ini1 Pk
+        shortLabel HeLa Ini1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG-mus in HeLa-S3 cells)
         subGroups view=Peaks factor=INI1mig cellType=t2HeLa
         type narrowPeak
@@ -12911,7 +12911,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Nrf1Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 Nrf1 Pk
+        shortLabel HeLa Nrf1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Nrf1/IgG-mus in HeLa-S3 cells)
         subGroups view=Peaks factor=NRF1mig cellType=t2HeLa
         type narrowPeak
@@ -12921,7 +12921,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3CjunRabigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 c-Jun Pk
+        shortLabel HeLa c-Jun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun/IgG-rab in HeLa-S3 cells)
         subGroups view=Peaks factor=CJUNrig cellType=t2HeLa
         type narrowPeak
@@ -12931,7 +12931,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3JundRabigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 JunD Pk
+        shortLabel HeLa JunD Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD/IgG-rab in HeLa-S3 cells)
         subGroups view=Peaks factor=JUNDrig cellType=t2HeLa
         type narrowPeak
@@ -12941,7 +12941,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Srebp1aInsln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 SREBP1 Pk
+        shortLabel HepG2i SREBP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/insolin cells)
         subGroups view=Peaks factor=SREBP1 cellType=uHEPG2ins
         type narrowPeak
@@ -12951,7 +12951,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Hsf1Forskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 HSF1 Pk
+        shortLabel HepG2f HSF1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HSF1 in HepG2/forskolin cells)
         subGroups view=Peaks factor=HSF1 cellType=uHEPG2for
         type narrowPeak
@@ -12961,7 +12961,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2ErraForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 ERRA Pk
+        shortLabel HepG2f ERRA Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ERRA in HepG2/forskolin cells)
         subGroups view=Peaks factor=ERRA cellType=uHEPG2for
         type narrowPeak
@@ -12971,7 +12971,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Hnf4aForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 HNF4A Pk
+        shortLabel HepG2f HNF4A Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HNF4A in HepG2/forskolin cells)
         subGroups view=Peaks factor=HNF4A cellType=uHEPG2for
         type narrowPeak
@@ -12981,7 +12981,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Pol2Forskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 Pol2 Pk
+        shortLabel HepG2f Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2/forskolin cells)
         subGroups view=Peaks factor=POL2 cellType=uHEPG2for
         type narrowPeak
@@ -12991,7 +12991,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Pgc1aForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 PGC1A Pk
+        shortLabel HepG2f PGC1A Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (PGC1A in HepG2/forskolin cells)
         subGroups view=Peaks factor=PGC1A cellType=uHEPG2for
         type narrowPeak
@@ -13001,7 +13001,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2CebpbForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 CEBPB Pk
+        shortLabel HepG2f CEBPB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (CEBPB in HepG2/forskolin cells)
         subGroups view=Peaks factor=CEBPB cellType=uHEPG2for
         type narrowPeak
@@ -13011,7 +13011,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHepg2Grp20Forskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HepG2 GRp20 Pk
+        shortLabel HepG2f GRp20 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GRp20 in HepG2/forskolin cells)
         subGroups view=Peaks factor=GRP20 cellType=uHEPG2for
         type narrowPeak
@@ -13021,7 +13021,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Baf155Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 BAF155 Pk
+        shortLabel HeLa BAF155 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF155/IgG-mus in HeLa-S3 cells)
         subGroups view=Peaks factor=BAF155mig cellType=t2HeLa
         type narrowPeak
@@ -13031,7 +13031,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Baf170Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 BAF170 Pk
+        shortLabel HeLa BAF170 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF170/IgG-mus in HeLa-S3 cells)
         subGroups view=Peaks factor=BAF170mig cellType=t2HeLa
         type narrowPeak
@@ -13131,7 +13131,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Bdp1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 BDP1 Pk
+        shortLabel HeLa BDP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BDP1 in HeLa-S3 cells)
         subGroups view=Peaks factor=BDP1 cellType=t2HeLa
         type narrowPeak
@@ -13141,7 +13141,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Brf1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 BRF1 Pk
+        shortLabel HeLa BRF1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF1 in HeLa-S3 cells)
         subGroups view=Peaks factor=BRF1 cellType=t2HeLa
         type narrowPeak
@@ -13151,7 +13151,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Brf2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 BRF2 Pk
+        shortLabel HeLa BRF2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF2 in HeLa-S3 cells)
         subGroups view=Peaks factor=BRF2 cellType=t2HeLa
         type narrowPeak
@@ -13161,7 +13161,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Rpc155
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 RPC155 Pk
+        shortLabel HeLa RPC155 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (RPC155 in HeLa-S3 cells)
         subGroups view=Peaks factor=RPC155 cellType=t2HeLa
         type narrowPeak
@@ -13171,7 +13171,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Tfiiic
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 TFIIIC-110 Pk
+        shortLabel HeLa TFIIIC Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TFIIIC-110 in HeLa-S3 cells)
         subGroups view=Peaks factor=TF3C110 cellType=t2HeLa
         type narrowPeak
@@ -13211,7 +13211,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksK562Tfiiic
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel K562 TFIIIC-110 Pk
+        shortLabel K562 TFIIIC Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TFIIIC-110 in K562 cells)
         subGroups view=Peaks factor=TF3C110 cellType=t1K562
         type narrowPeak
@@ -13221,7 +13221,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel HeLa-S3 Brg1 Pk
+        shortLabel HeLa Brg1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in HeLa-S3 cells)
         subGroups view=Peaks factor=BRG1mig cellType=t2HeLa
         type narrowPeak
@@ -13385,7 +13385,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3E2f4
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 E2F4 Sig
+        shortLabel HeLa E2F4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F4 in HeLa-S3 cells)
         subGroups view=Signal factor=E2F4 cellType=t2HeLa
         type bedGraph 4
@@ -13395,7 +13395,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3E2f6
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 E2F6 Sig
+        shortLabel HeLa E2F6 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in HeLa-S3 cells)
         subGroups view=Signal factor=E2F6 cellType=t2HeLa
         type bedGraph 4
@@ -13405,7 +13405,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Ha
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 HA-E2F1 Sig
+        shortLabel HeLa HA-E2F1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in HeLa-S3 cells)
         subGroups view=Signal factor=E2F1ha cellType=t2HeLa
         type bedGraph 4
@@ -13515,7 +13515,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3MouseiggV2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa IgG-mus Sig
+        shortLabel HeLa mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in HeLa cells)
         subGroups view=Signal factor=yIGm cellType=t2HeLa
         type bedGraph 4
@@ -13545,7 +13545,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Srebp1aV2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 SREBP1 Sg
+        shortLabel HepG2p SREBP1 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/pravastatin cells)
         subGroups view=Signal factor=SREBP1 cellType=uHEPG2pra
         type bedGraph 4
@@ -14025,7 +14025,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalMcf7Hae2f1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel MCF-7 HA-E2F1 Sig
+        shortLabel MCF7 HA-E2F1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in MCF-7 cells)
         subGroups view=Signal factor=E2F1ha cellType=t3MCF7
         type bedGraph 4
@@ -14101,7 +14101,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalK562Mouseigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel K562 IgG-mus Sig
+        shortLabel K562 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in K562 cells)
         subGroups view=Signal factor=yIGm cellType=t1K562
         type bedGraph 4
@@ -14141,7 +14141,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3E2f1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 E2F1 Sig
+        shortLabel HeLa E2F1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F1 in HeLa-S3 cells)
         subGroups view=Signal factor=E2F1 cellType=t2HeLa
         type bedGraph 4
@@ -14151,7 +14151,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm10847MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM10847 IgG-mus Sig
+        shortLabel GM10847 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM10847 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM10847
         type bedGraph 4
@@ -14178,7 +14178,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12878MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12878 IgG-mus Sig
+        shortLabel GM12878 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12878 cells)
         subGroups view=Signal factor=yIGm cellType=t1GM12878
         type bedGraph 4
@@ -14208,7 +14208,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12891MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12891 IgG-mus Sig
+        shortLabel GM12891 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12891 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM12891
         type bedGraph 4
@@ -14235,7 +14235,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12892MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12892 IgG-mus Sig
+        shortLabel GM12892 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12892 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM12892
         type bedGraph 4
@@ -14262,7 +14262,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm15510MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM15510 IgG-mus Sig
+        shortLabel GM15510 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM15510 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM15510
         type bedGraph 4
@@ -14289,7 +14289,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm18505MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM18505 IgG-mus Sig
+        shortLabel GM18505 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM18505 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM18505
         type bedGraph 4
@@ -14316,7 +14316,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm18526MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM18526 IgG-mus Sig
+        shortLabel GM18526 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM18526 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM18526
         type bedGraph 4
@@ -14343,7 +14343,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm18951MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM18951 IgG-mus Sig
+        shortLabel GM18951 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM18951 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM18951
         type bedGraph 4
@@ -14370,7 +14370,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm19099MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM19099 IgG-mus Sig
+        shortLabel GM19099 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM19099 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM19099
         type bedGraph 4
@@ -14397,7 +14397,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm19193MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM19193 IgG-mus Sig
+        shortLabel GM19193 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM19193 cells)
         subGroups view=Signal factor=yIGm cellType=t3GM19193
         type bedGraph 4
@@ -14434,7 +14434,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalK562MusiggMusigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel K562 IgG-mus Sig
+        shortLabel K562 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in K562 cells)
         subGroups view=Signal factor=yIGm cellType=t1K562
         type bedGraph 4
@@ -14464,7 +14464,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Ini1Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 Ini1 Sig
+        shortLabel HeLa Ini1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG-mus in HeLa-S3 cells)
         subGroups view=Signal factor=INI1mig cellType=t2HeLa
         type bedGraph 4
@@ -14474,7 +14474,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 Nrf1 Sig
+        shortLabel HeLa Nrf1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Nrf1/IgG-mus in HeLa-S3 cells)
         subGroups view=Signal factor=NRF1mig cellType=t2HeLa
         type bedGraph 4
@@ -14484,7 +14484,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Rabigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 IgG-rab Sig
+        shortLabel HeLa rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-rab in HeLa-S3 cells)
         subGroups view=Signal factor=yIGr cellType=t2HeLa
         type bedGraph 4
@@ -14494,7 +14494,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3CjunRabigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 c-Jun Sig
+        shortLabel HeLa c-Jun Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun/IgG-rab in HeLa-S3 cells)
         subGroups view=Signal factor=CJUNrig cellType=t2HeLa
         type bedGraph 4
@@ -14504,7 +14504,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3JundRabigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 JunD Sig
+        shortLabel HeLa JunD Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD/IgG-rab in HeLa-S3 cells)
         subGroups view=Signal factor=JUNDrig cellType=t2HeLa
         type bedGraph 4
@@ -14514,8 +14514,8 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2ControlInsln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 Control Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/insolin/forskolin cells)
+        shortLabel HepG2i Ctrl Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/insolin cells)
         subGroups view=Signal factor=zCTRL cellType=uHEPG2ins
         type bedGraph 4
         color 189,0,157
@@ -14524,7 +14524,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Srebp1aInsln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 SREBP1 Sig
+        shortLabel HepG2i SREBP1 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/insolin cells)
         subGroups view=Signal factor=SREBP1 cellType=uHEPG2ins
         type bedGraph 4
@@ -14534,7 +14534,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2ControlForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 Control Sig
+        shortLabel HepG2f Ctrl Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/forskolin cells)
         subGroups view=Signal factor=zCTRL cellType=uHEPG2for
         type bedGraph 4
@@ -14544,7 +14544,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Hsf1Forskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 HSF1 Sig
+        shortLabel HepG2f HSF1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HSF1 in HepG2/forskolin cells)
         subGroups view=Signal factor=HSF1 cellType=uHEPG2for
         type bedGraph 4
@@ -14554,7 +14554,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2ErraForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 ERRA Sig
+        shortLabel HepG2f ERRA Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ERRA in HepG2/forskolin cells)
         subGroups view=Signal factor=ERRA cellType=uHEPG2for
         type bedGraph 4
@@ -14564,7 +14564,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Hnf4aForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 HNF4A Sig
+        shortLabel HepG2f HNF4A Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HNF4A in HepG2/forskolin cells)
         subGroups view=Signal factor=HNF4A cellType=uHEPG2for
         type bedGraph 4
@@ -14574,7 +14574,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Pol2Forskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 Pol2 Sig
+        shortLabel HepG2f Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2/forskolin cells)
         subGroups view=Signal factor=POL2 cellType=uHEPG2for
         type bedGraph 4
@@ -14584,7 +14584,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Pgc1aForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 PGC1A Sig
+        shortLabel HepG2f PGC1A Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (PGC1A in HepG2/forskolin cells)
         subGroups view=Signal factor=PGC1A cellType=uHEPG2for
         type bedGraph 4
@@ -14594,7 +14594,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2CebpbForskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 CEBPB Sig
+        shortLabel HepG2f CEBPB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (CEBPB in HepG2/forskolin cells)
         subGroups view=Signal factor=CEBPB cellType=uHEPG2for
         type bedGraph 4
@@ -14604,7 +14604,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHepg2Grp20Forskln
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HepG2 GRp20 Sig
+        shortLabel HepG2f GRp20 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GRp20 in HepG2/forskolin cells)
         subGroups view=Signal factor=GRP20 cellType=uHEPG2for
         type bedGraph 4
@@ -14614,7 +14614,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Baf155Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 BAF155 Sig
+        shortLabel HeLa BAF155 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF155/IgG-mus in HeLa-S3 cells)
         subGroups view=Signal factor=BAF155mig cellType=t2HeLa
         type bedGraph 4
@@ -14624,7 +14624,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Baf170Musigg
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 BAF170 Sig
+        shortLabel HeLa BAF170 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF170/IgG-mus in HeLa-S3 cells)
         subGroups view=Signal factor=BAF170mig cellType=t2HeLa
         type bedGraph 4
@@ -14694,7 +14694,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12878Rad21Iggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12878 Rad21 Sig
+        shortLabel GM12878 Rad21 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21/IgG-rab in GM12878 cells)
         subGroups view=Signal factor=RAD21rab cellType=t1GM12878
         type bedGraph 4
@@ -14724,7 +14724,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Bdp1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 BDP1 Sig
+        shortLabel HeLa BDP1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BDP1 in HeLa-S3 cells)
         subGroups view=Signal factor=BDP1 cellType=t2HeLa
         type bedGraph 4
@@ -14734,7 +14734,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Brf1
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 BRF1 Sig
+        shortLabel HeLa BRF1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF1 in HeLa-S3 cells)
         subGroups view=Signal factor=BRF1 cellType=t2HeLa
         type bedGraph 4
@@ -14744,7 +14744,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Brf2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 BRF2 Sig
+        shortLabel HeLa BRF2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF2 in HeLa-S3 cells)
         subGroups view=Signal factor=BRF2 cellType=t2HeLa
         type bedGraph 4
@@ -14754,7 +14754,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Rpc155
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 RPC155 Sig
+        shortLabel HeLa RPC155 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (RPC155 in HeLa-S3 cells)
         subGroups view=Signal factor=RPC155 cellType=t2HeLa
         type bedGraph 4
@@ -14764,7 +14764,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Tfiiic
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 TFIIIC-110 Sig
+        shortLabel HeLa TFIIIC Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TFIIIC-110 in HeLa-S3 cells)
         subGroups view=Signal factor=TF3C110 cellType=t2HeLa
         type bedGraph 4
@@ -14804,7 +14804,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalK562Tfiiic
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel K562 TFIIIC-110 Sig
+        shortLabel K562 TFIIIC Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TFIIIC-110 in K562 cells)
         subGroups view=Signal factor=TF3C110 cellType=t1K562
         type bedGraph 4
@@ -14814,7 +14814,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalMcf7Input
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel MCF-7 Input Sig
+        shortLabel MCF7 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in MCF-7 cells)
         subGroups view=Signal factor=zaCTRL cellType=t3MCF7
         type bedGraph 4
@@ -14823,7 +14823,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm10847InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM10847 IgG-rab Sig
+        shortLabel GM10847 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM10847 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM10847
         type bedGraph 4
@@ -14832,7 +14832,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12878InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12878 IgG-rab Sig
+        shortLabel GM12878 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12878 cells)
         subGroups view=Signal factor=yIGr cellType=t1GM12878
         type bedGraph 4
@@ -14842,7 +14842,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12892InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12892 IgG-rab Sig
+        shortLabel GM12892 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12892 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM12892
         type bedGraph 4
@@ -14851,7 +14851,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm12891InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12891 IgG-rab Sig
+        shortLabel GM12891 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12891 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM12891
         type bedGraph 4
@@ -14860,7 +14860,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm15510InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM15510 IgG-rab Sig
+        shortLabel GM15510 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM15510 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM15510
         type bedGraph 4
@@ -14869,7 +14869,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm18505InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM18505 IgG-rab Sig
+        shortLabel GM18505 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18505 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM18505
         type bedGraph 4
@@ -14878,7 +14878,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm18526InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM18526 IgG-rab Sig
+        shortLabel GM18526 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18526 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM18526
         type bedGraph 4
@@ -14887,7 +14887,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm18951InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM18951 IgG-rab Sig
+        shortLabel GM18951 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18951 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM18951
         type bedGraph 4
@@ -14896,7 +14896,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm19099InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM19099 IgG-rab Sig
+        shortLabel GM19099 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM19099 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM19099
         type bedGraph 4
@@ -14905,7 +14905,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalGm19193InputIggrab
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM19193 IgG-rab Sig
+        shortLabel GM19193 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM19193 cells)
         subGroups view=Signal factor=yIGr cellType=t3GM19193
         type bedGraph 4
@@ -14924,7 +14924,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa-S3 Brg1 Sig
+        shortLabel HeLa Brg1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in HeLa-S3 cells)
         subGroups view=Signal factor=BRG1mig cellType=t2HeLa
         type bedGraph 4
@@ -15897,7 +15897,7 @@ html wgEncodeYaleChIPseqRelease2
         track wgEncodeYaleChIPseqSignalHelas3MouseiggV2
         release public
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa IgG-mus Sig
+        shortLabel HeLa mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in HeLa cells)
         subGroups view=Signal factor=yMouseIG cellType=t2HeLa
         type bedGraph 4
@@ -21563,7 +21563,7 @@ wgEncode 1
 	subTrack wgEncodeGisDnaPet
 	shortLabel K562 20k
 	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
-	subGroups view=Alignments cellType=K562 fragSize=f20k 
+	subGroups view=Alignments cellType=K562 fragSize=f20k
 	type bigBed 6
         baseColorDefault diffBases
         baseColorUseSequence seq1Seq2
