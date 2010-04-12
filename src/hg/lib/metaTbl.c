@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.10 2010/04/02 21:14:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.11 2010/04/12 21:56:28 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -510,6 +510,8 @@ char *cloneVars = cloneString(varPairs);
     freeMem(cloneVars);
 
     // Special for old style ENCODE metadata
+#define ENCODE_ALN  "Alignments"
+#define ENCODE_RSIG "RawSignal"
     if(metaObj->obj == NULL)
         {
         char * tableName = NULL;
@@ -530,6 +532,17 @@ char *cloneVars = cloneString(varPairs);
                 {
                 metaObj->obj     = cloneString(tableName);
                 metaObj->objType = otTable;
+                }
+            else if(stringIn(ENCODE_ALN,fileName) && stringIn(ENCODE_RSIG,tableName))// Messier case where the file has "Alignment" but the table has "RawSignal"
+                {
+                char *tmpFilName = cloneString(fileName);
+                strSwapStrs(tmpFilName, strlen(tmpFilName),ENCODE_ALN, ENCODE_RSIG);
+                if(startsWithWordByDelimiter(tableName,'.',tmpFilName))
+                    {
+                    metaObj->obj     = cloneString(tableName);
+                    metaObj->objType = otTable;
+                    }
+                freeMem(tmpFilName);
                 }
             }
         else if(fileName != NULL)
