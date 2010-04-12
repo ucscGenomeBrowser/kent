@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: oviAri1.txt,v 1.1 2010/04/03 06:17:47 chinhli Exp $
+#       $Id: oviAri1.txt,v 1.2 2010/04/12 21:33:00 chinhli Exp $
 
 
 # Ovis aries (domestic sheep) --  ISGC Ovis_aries_1.0 (2010-02-01)
@@ -9,16 +9,11 @@
 # file template copied from susScr2.txt
 
 
-# Felis catus (NCBI Project ID: 10703, Accession: GCA_000005525.1) 
+# Ovis aries (NCBI Project ID: 10709, Accession: GCA_000005525.1) 
 #   by International Sheep Genomics Consortium (ISGC)
 #    assembly] sequence: 
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
 #    Ovis_aries/Ovis_aries_1.0
-#       Felis catus
-
-
-# Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
-#   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
 
 ##########################################################################
 # Download sequence (DONE - 2010-03-22 Chin)
@@ -89,7 +84,7 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    #     in 1190 sequences in 1 files
 
 #########################################################################
-# Initial makeGenomeDb.pl (working - 2010-04-01 - Chin)
+# Initial makeGenomeDb.pl (DONE - 2010-04-01 - Chin)
     cd /hive/data/genomes/oviAri1
     cat << '_EOF_' > oviAri1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -99,7 +94,7 @@ genomeCladePriority 31
 scientificName Ovis aries
 commonName Sheep
 assemblyDate Feb. 2010
-assemblyLabel ISGC (NCBI project 10703, accession GCA_000005525.1)
+assemblyLabel ISGC (NCBI project 10709, accession GCA_000005525.1)
 assemblyShortLabel ISGC Ovis_aries_1.0
 orderKey 236
 mitoAcc NC_001941
@@ -116,6 +111,9 @@ taxId 9940
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/oviAri1.unmasked.2bit /gbdb/oviAri1/oviAri1.2bit
     #	browser should function now
+    #    per instructions at end of makeGenomeDb.log, edit the html file
+    #  and checkin the *.ra and *.html files. in 
+    #     /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/sheep/oviAri1
 
 
 #########################################################################
@@ -160,12 +158,12 @@ taxId 9940
     #   real    1m56.688s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits oviAri1 -not gap -bed=notGap.bed
-    #   1201962925 bases of 1201962925 (100.000%) in intersection
+    #   1201271277 bases of 1201271277 (100.000%) in intersection
     featureBits oviAri1 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #   691648 bases of 1201962925 (0.058%) in intersection
+    #   0 bases of 1201271277 (0.000%) in intersection zero?????
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" oviAri1 | sort -n | tail -1
-    #	484408
+    #	959944
 
     # use tcsh and ctrl-c to create the here doc
     cat << '_EOF_' > mkGap.pl
@@ -206,8 +204,9 @@ close (FH);
     #	2825659
     # == 2350123 + 475536
 
+
 ########################################################################
-# Create kluster run files (working - 2010-04-03 - Chin)
+# Create kluster run files (DONE - 2010-04-05 - Chin)
     # numerator is oviAri1 gapless bases "real" as reported by: 
     #   featureBits -noRandom -noHap oviAri1 gap
     #     1600136831 bases of 1184628269 (135.075%) in intersection
@@ -232,22 +231,22 @@ close (FH);
     hgsql -N \
 	-e 'select * from gap where bridge="no" order by size;' oviAri1 \
 	| sort -k7,7nr
-XXXX 04/03
+    #   most gaps have size > 100,000
     #	decide on a minimum gap for this break
-    gapToLift -verbose=2 -minGap=5000 oviAri1 jkStuff/nonBridged.lft \
+    gapToLift -verbose=2 -minGap=cw20000 oviAri1 jkStuff/nonBridged.lft \
 	-bedFile=jkStuff/nonBridged.bed
     cp -p jkStuff/nonBridged.lft \
 	/hive/data/staging/data/oviAri1/oviAri1.nonBridged.lft
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2010-03-26 - Hiram)
+# GENBANK AUTO UPDATE (working - 2010-04-12 - Chin)
     ssh hgwdev
-    cd ~/kent/src/hg/makeDb/genbank
+    cd $HOME/kent/src/hg/makeDb/genbank
     cvsup
 
-    # edit etc/genbank.conf to add oviAri1 just before susScr1
+    # edit etc/genbank.conf to add oviAri1 just before susScr2
 
-# oviAri1 (Pig)
+# oviAri1 (Sheep)
 oviAri1.serverGenome = /hive/data/genomes/oviAri1/oviAri1.2bit
 oviAri1.clusterGenome = /scratch/data/oviAri1/oviAri1.2bit
 oviAri1.ooc = /scratch/data/oviAri1/oviAri1.11.ooc
@@ -261,23 +260,49 @@ oviAri1.downloadDir = oviAri1
 oviAri1.genbank.mrna.xeno.loadDesc = yes
 oviAri1.refseq.mrna.native.load = no
 
+
     cvs ci -m "Added oviAri1" etc/genbank.conf
     # update /cluster/data/genbank/:
     make etc-update
 
+
+# Edit src/lib/gbGenome.c to add new species.  With these two lines:
+# static char *oviAriNames[] = {"Ovis aries", NULL};
+#   ... later ...
+#    {"oviAri", oviAriNames},
+#  gbGenome.c is  in
+#  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
+# make  and checkin
+
+    cvs ci -m "adding oviAri1 Sheep" src/lib/gbGenome.c
+    make install-server
+
+
     ssh genbank
-    screen	#	use a screen to manage this job
+    screen	#  control this business with a screen since it takes a while
+
+XXXX 04-12
     cd /cluster/data/genbank
-    time nice -n +19 bin/gbAlignStep -initial oviAri1 &
-    #	logFile: var/build/logs/2010.03.26-10:25:04.oviAri1.initalign.log
-    #	real    304m38.588s
+     time nice -n +19 bin/gbAlignStep -initial oviAri1 &
+    #   logFile: var/build/logs/2010.04.12-12:18:21.oviAri1.initalign.log
+    #    real    ???? 127m50.706s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oviAri1
+    # use local copy: XXXX 04-09 still failed with 
+XXXX 04-09
+hgwdev 2010.04.09-08:57:17 dbload: begin
+hgwdev 2010.04.09-08:57:17 dbload: command: /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/gbDbLoadStep -drop -initialLoad oviAri1
+-initialLoad specified and no sequences were found to load
+command failed: gbLoadRna -workdir=work/hgwdev/dbload -initialLoad oviAri1 at /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/../lib/gbCommon.pm line 268. at /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/../lib/gbCommon.pm line 268.
+
+    time nice -19 \
+         /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/gbDbLoadStep \
+          -drop -initialLoad oviAri1 &
+    # time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oviAri1 &
     #	logFile: var/dbload/hgwdev/logs/2010.03.26-15:38:17.dbload.log
-    #	real    68m
+    #	real    ???? 68m
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -285,23 +310,21 @@ oviAri1.refseq.mrna.native.load = no
     # add oviAri1 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added oviAri1 - Pig" etc/align.dbs etc/hgwdev.dbs
+    cvs ci -m "Added oviAri1 - Sheep" etc/align.dbs etc/hgwdev.dbs
     make etc-update
-    #	DONE 2010-03-31
+    #	DONE 2010-03-31 ????
 
 #########################################################################
 # reset position to RHO location as found from blat of hg19 RHO gene
-#	(DONE - 2010-03-31 - Hiram)
+#	(DONE - 2010-04-08 - Chin)
     hgsql -e \
 'update dbDb set defaultPos="chr13:57394166-57402412" where name="oviAri1";' \
-	hgcentraltest
-    #	and make this the default genome for Pig
-    hgsql -e 'update defaultDb set name="oviAri1" where name="susScr1";' \
 	hgcentraltest
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(DONE - 2010-03-26 - Hiram)
+#	(DONE 2010-04-08 - Chin)
+# NOTE XXXX need to create entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/oviAri1/bed/ctgPos2
     cd /hive/data/genomes/oviAri1/bed/ctgPos2
     cat << '_EOF_' > agpToCtgPos2.pl
@@ -345,39 +368,71 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     hgLoadSqlTab oviAri1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
 ############################################################################
-# oviAri1 Pig BLASTZ/CHAIN/NET (DONE - 2010-03-27 - Hiram)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (working 04-09-2010 - Chin)
+
+#  request to copy /hive/data/staging.oviAri1 over to /scratch/data/oviAri1
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-03-27
-    cd /hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-03-27
+    mkdir /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12
 
     cat << '_EOF_' > DEF
-# Cow vs. Pig
+# Cow vs. Sheep
 BLASTZ_M=50
 
-# TARGET: Pig SusScr2
-SEQ1_DIR=/scratch/data/oviAri1/oviAri1.2bit
-SEQ1_LEN=/scratch/data/oviAri1/chrom.sizes
-SEQ1_CHUNK=10000000
+# TARGET: Cow BosTau4
+SEQ1_DIR=/scratch/data/bosTau4/bosTau4.2bit
+SEQ1_LEN=/scratch/data/bosTau4/chrom.sizes
+SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
-SEQ1_LIMIT=100
+SEQ1_LIMIT=50
 
-# QUERY: Cow BosTau4
-SEQ2_DIR=/scratch/data/bosTau4/bosTau4.2bit
-SEQ2_LEN=/scratch/data/bosTau4/chrom.sizes
+# QUERY: Sheep OviAri1
+SEQ2_DIR=/scratch/data/oviAri1/oviAri1.2bit
+SEQ2_LEN=/scratch/data/oviAri1/chrom.sizes
 SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-03-27
+BASE=/hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
+XXXX 04-12 working 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #	real    2422m32.203s
+    #	real   ???? 2422m32.203s
+
+    #	and the swap
+    mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
+    cd /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	 Elapsed time: 63m4s
+    cat fb.oviAri1.chainMm9Link.txt 
+    #	656444411 bases of 2231298548 (29.420%) in intersection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #	failed during the netChainSubset | chainStitchId out of memory
     #	finish that manually with ulimits to allow more memory on hgwdev:
     export sizeG=188743680
@@ -412,7 +467,7 @@ limit vmemoryuse 163840m
 	-chainMinScore=3000 -chainLinearGap=medium > download.log 2>&1 &
 XXX - running Tue Mar 30 13:18:09 PDT 2010
     #	creating a bigWig graph to see the chain pileups:
-    cd /hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-03-27/axtChain
+    cd /hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-4-09/axtChain
     zcat oviAri1.bosTau4.all.chain.gz | grep "^chain " \
 	| awk '{printf "%s\t%d\t%d\t%s\t%s\t%s\n", $3, $6, $7, $8, $2, $5}' \
 	> all.bed
@@ -490,65 +545,90 @@ limit datasize 163840m
 limit vmemoryuse 163840m
     #	real    498m5.861s
 
-    cat fb.bosTau4.chainSusScr2Link.txt
+    cat fb.bosTau4.chainOviAri1Link.txt
     #	1383557633 bases of 2731830700 (50.646%) in intersection
 
 #########################################################################
-#  SWAP mm9 lastz (DONE - 2010-03-27 - Hiram)
+#  SWAP mm9 lastz (working - 2010-04-12 - Chin)
     #	original alignment
-    cd	/hive/data/genomes/mm9/bed/lastzSusScr2.2010-03-26
-    cat fb.mm9.chainSusScr2Link.txt 
-    #	616615408 bases of 2620346127 (23.532%) in intersection
+    cd	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09
+    cat fb.mm9.chainOviAri1Link.txt 
+    #   406407377 bases of 2620346127 (15.510%) in intersection
 
     #	and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.mm9.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm9/bed/lastzSusScr2.2010-03-26/DEF \
+	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09/DEF \
 	-swap -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	 Elapsed time: 63m4s
+    #   real    37m25.345s
     cat fb.oviAri1.chainMm9Link.txt 
-    #	656444411 bases of 2231298548 (29.420%) in intersection
+    #   383753361 bases of 1201271277 (31.946%) in intersection
 
 ############################################################################
-#  SWAP hg19 lastz (DONE - 2010-03-27 - Hiram)
+#  SWAP hg19 lastz (DONE 2010-04-12 - Chin)
     #	original alignment
-    cat fb.hg19.chainSusScr2Link.txt 
-    #	1198794058 bases of 2897316137 (41.376%) in intersection
+    cat fb.hg19.chainOviAri1Link.txt 
+    #   878545517 bases of 2897316137 (30.323%) in intersection
 
     #	and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/hg19/bed/lastzSusScr2.2010-03-26/DEF \
+	/hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09/DEF \
 	-swap -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	Elapsed time: 112m40s
+    #	real    71m37.020s
 
     cat fb.oviAri1.chainHg19Link.txt 
-    #	1272785114 bases of 2231298548 (57.042%) in intersection
+    #   824310420 bases of 1201271277 (68.620%) in intersection
 
 #########################################################################
-#  SWAP monDom5 lastz (DONE - 2010-03-27 - Hiram)
+#  SWAP monDom5 lastz (working 2010-04-12 Chin)
     #	original alignment
-    cat fb.monDom5.chainSusScr2Link.txt 
-    #	179898307 bases of 3501660299 (5.138%) in intersection
+    cat fb.monDom5.chainOviAri1Link.txt
+    #   133534458 bases of 3501660299 (3.813%) in intersection
 
+XXXX 04-12
     #	and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/monDom5/bed/lastzSusScr2.2010-03-26/DEF \
+	/hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-09/DEF \
 	-swap -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memn -bigClusterHub=pk \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	Elapsed time: 82m55s
 
     cat fb.oviAri1.chainMonDom5Link.txt 
     #	182834643 bases of 2231298548 (8.194%) in intersection
+
+
+#########################################################################
+#  SWAP equCap2 lastz (DONE 2010-04-12 Chin)
+    #   original alignment
+    cat fb.equCab2.chainOviAri1Link.txt
+    #   1012763540 bases of 2428790173 (41.698%) in intersection 
+
+
+    #   and the swap
+    mkdir /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
+    cd /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-09/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #    Elapsed time: ???? 63m4s
+    #    real    100m49.583s
+
+
+    cat fb.oviAri1.chainEquCab2Link.txt
+    #   940763026 bases of 1201271277 (78.314%) in intersection
+
 
 ############################################################################
 # running cpgIsland business (DONE - 2010-03-31 - Hiram)
