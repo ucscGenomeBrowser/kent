@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.11 2010/04/12 21:56:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.12 2010/04/13 16:05:50 tdreszer Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -573,25 +573,25 @@ struct metaObj *metadataLineParse(char *line)
 char *fromTheTop = line;
 char*nibbledWord = cloneNextWordByDelimiter(&line,' ');
 if(nibbledWord == NULL || differentWord(nibbledWord,"metadata"))
-    errAbort("This is not formatted metadata:\n\t%s\n",fromTheTop);
+    errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
 freeMem(nibbledWord);
 
 struct metaObj *metaObj = NULL;
 char*varPairs = line;
 nibbledWord = cloneNextWordByDelimiter(&line,' ');;
 if(nibbledWord == NULL)
-    errAbort("This is not formatted metadata:\n\t%s\n",fromTheTop);
+    errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
 if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should be objName
     {
     AllocVar(metaObj);
     metaObj->obj = nibbledWord;
     verbose(3, "metadataLineParse() obj=%s\n",metaObj->obj);
     varPairs = line;
-    for(;;)
+    while(strlen(line) > 0)
         {
         nibbledWord = cloneNextWordByDelimiter(&line,' ');;
         if(nibbledWord == NULL)
-            errAbort("This is not formatted metadata:\n\t%s\n",fromTheTop);
+            errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
         if(strchr(nibbledWord, '=') != NULL) // If this is start of var=val pairs
             break;
 
@@ -603,7 +603,10 @@ if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should 
         freeMem(nibbledWord);
         }
     }
-metaObj = metaObjAddVarPairs(metaObj,varPairs);
+if(strlen(varPairs) > 0)
+	metaObj = metaObjAddVarPairs(metaObj,varPairs);
+else if(metaObj->deleteThis == FALSE)
+    errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
 return metaObj;
 }
 
