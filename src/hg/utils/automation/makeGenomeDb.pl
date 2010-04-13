@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.29 2010/03/02 19:13:54 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.30 2010/04/13 23:18:44 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -467,9 +467,26 @@ _EOF_
   }
 
   # Having made the unmasked .2bit, make chrom.sizes and chromInfo.tab:
+  # verify no dots allowed in chrom names
   $bossScript->add(<<_EOF_
 
 twoBitInfo $db.unmasked.2bit stdout | sort -k2nr > chrom.sizes
+
+# if no dots in chrom names, should have only one kind of field size:
+set noDots = `cut -f 1 chrom.sizes | awk -F'.' '{print NF}' | sort -u | wc -l`
+
+if ( \$noDots != 1 ) then
+  echo "ERROR: no dots allowed in chrom names !  e.g.:"
+  grep "\." chrom.sizes | head -3
+  exit 1
+endif
+# only one kind of field size and it must be simply a one:
+set dotCount = `cut -f 1 chrom.sizes | awk -F'.' '{print NF}' | sort -u`
+if ( \$dotCount != 1 ) then
+  echo "ERROR: no dots allowed in chrom names !  e.g.:"
+  grep "\." chrom.sizes | head -3
+  exit 1
+endif
 
 rm -rf $HgAutomate::trackBuild/chromInfo
 mkdir $HgAutomate::trackBuild/chromInfo
