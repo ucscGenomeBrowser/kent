@@ -228,9 +228,9 @@
 #include "virusClick.h"
 #include "gwasCatalog.h"
 #include "parClick.h"
-#include "metaTbl.h"
+#include "mdb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1611 2010/04/12 16:19:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1612 2010/04/13 19:51:59 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
