@@ -1,5 +1,4 @@
 #! /bin/tcsh
-source `which qaConfig.csh`
 echo "Content-Type:text/html"
 echo
 echo "<HTML>"
@@ -73,7 +72,7 @@ set sql = "$sql"'order by priority;'
 
 #echo "$sql<br>"
 
-set grpraw = `/cluster/bin/i386/hgsql $recentDb -B --skip-column-names -e "$sql"`
+set grpraw = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta $recentDb -B --skip-column-names -e "$sql"`
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -107,7 +106,7 @@ end
 #echo "<br>"
 
 set sql = 'select name from dbDb where active = "1" and name not like "zoo%" order by orderKey;'
-set dblist = `/cluster/bin/i386/hgsql hgcentralbeta -B --skip-column-names -e "$sql"`
+set dblist = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta hgcentralbeta -B --skip-column-names -e "$sql"`
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -124,7 +123,7 @@ endif
 
 set sql = 'drop table gbjunk;'
 #echo "$sql<br>"
-/cluster/bin/i386/hgsql -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
+/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
 set err = $status
 if ($err) then
     # ignore this error, probably the table doesn't exist because it got cleaned up
@@ -138,8 +137,16 @@ set sql = "$sql"'db varchar(255), '
 set sql = "$sql"'grp varchar(255), '
 set sql = "$sql"'tableName varchar(255), '
 set sql = "$sql"'shortLabel varchar(255));'
+
 #echo "$sql<br>"
-/cluster/bin/i386/hgsql -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
+
+#debug remove
+#echo "$sql<br>"
+#echo "$user<br>"
+#echo "$pwd<br>"
+#echo "/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e '$sql'"
+
+/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -152,7 +159,7 @@ foreach db ( $dblist )
     set sql = 'select "'"$db"'", grp, tableName, shortLabel from trackDb '
     set sql = "$sql"'where grp not like "user" and grp not like "encode" and grp not like "x" '
     set sql = "$sql"'order by grp;'
-    /cluster/bin/i386/hgsql $db -B --skip-column-names -e "$sql" >> $junkPath
+    /cluster/bin/$MACHTYPE/hgsql -h mysqlbeta $db -B --skip-column-names -e "$sql" >> $junkPath
     set err = $status
     if ($err) then
 	echo "error $err processing: $sql <br>"
@@ -163,7 +170,7 @@ end
 #echo "<br>"
 
 set sql = 'load data local infile "'"$junkPath"'" into table gbjunk;'
-/cluster/bin/i386/hgsql -u$user -p$pwd qapushq -e "$sql" 
+/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -e "$sql" 
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -182,19 +189,21 @@ while ( $g <= $#grplabel  )
     echo "<H3>$lbl</H3>"
 
 # ---- FIND ALL TRACKS IN GRP g ----
-    set sql = 'select distinct shortLabel, ".", tableName from gbjunk '
+
+
+    @ trkdone = 0
+    @ trkchunk = 50
+    set sql = 'select count(distinct shortLabel, ".", tableName) from gbjunk '
     set sql = "$sql"'where grp="'"$grpname[$g]"'" '
-    set sql = "$sql"'order by shortLabel;'
     #echo "$sql<br>"
-    set trklist = `/cluster/bin/i386/hgsql -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
+    set trkcount = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
     set err = $status
     if ($err) then
 	echo "error $err processing: $sql <br>"
     	exit 0
     endif
-    #echo "$trklist<br>"
-    echo "<br>"
-    
+    #echo "trkcount=$trkcount<br>"
+
     echo "<table BORDER CELLSPACING=0 CELLPADDING=5>"
 
     #-- column headings --
@@ -204,72 +213,92 @@ while ( $g <= $#grplabel  )
     foreach db ( $dblist )
 	echo "<th>"
 	echo "$db"
-    	echo "</th>"
+	echo "</th>"
     end
-  
-    #-- do rows --
-    while ("$trklist" != "")
-    	
-	echo "<tr>"
-    
-    	echo "<td>"
-     	set shortLabel = ""
-    	set sep = ""
-	while ("$trklist[1]" != ".")
-	    #echo "$trklist[1] "
-	    set shortLabel = "$shortLabel$sep$trklist[1]"
-    	    shift trklist
-    	    set sep = " "
-	end
-    	shift trklist
-	echo "$shortLabel"
-    	echo "</td>"
+      
+    while ( $trkdone < $trkcount )
 
-	#get table too for yes links 
-	set table = "$trklist[1]"
-    	shift trklist
-
-	#-------DB COLUMNS LOOP-----------
-
-	set sql = 'select db from gbjunk '
-    	set sql = "$sql"'where grp="'"$grpname[$g]"'" '
-    	set sql = "$sql"'and shortLabel="'"$shortLabel"'" '
-	set sql = "$sql"'order by db;'
-    	#echo "$sql<br>"
-	set datalist = `/cluster/bin/i386/hgsql -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
-    	set err = $status
+	set sql = 'select distinct shortLabel, ".", tableName from gbjunk '
+	set sql = "$sql"'where grp="'"$grpname[$g]"'" '
+	set sql = "$sql"'order by shortLabel '
+	set sql = "$sql"'limit '"$trkdone"', '"$trkchunk"
+	#echo "$sql<br>"
+	set trklist = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
+	set err = $status
 	if ($err) then
 	    echo "error $err processing: $sql <br>"
-    	    exit 0
+	    exit 0
 	endif
-    	#echo "$datalist<br>"
-
-	foreach db ( $dblist )
-	    echo "<td>"
-	    #echo "$db"
-	    set found = "0"
-	    foreach dl ( $datalist )
-		if ("$dl" == "$db") then
-		    set found = "1"
-		endif
-	    end
-	    if ( "$found" == "1" ) then
-	        set link = '<a href="http://'"$srvr"'/cgi-bin/hgTrackUi'
-		set link = "$link"'?db='"$db"'&g='"$table"'&c=chr1&position=chr1:1-10000'
-		set link = "$link"'" target=_blank>yes</a>'
-		echo "$link"
-	    else
-		echo "no"
-	    endif
-    	    echo "</td>"
-	end
-
-	#---------------------------------
-    
-	echo "</tr>"
+	#echo "$trklist<br>"
+	echo "<br>"
 	
+	#-- do rows --
+	while ("$trklist" != "")
+	    
+	    echo "<tr>"
+	
+	    echo "<td>"
+	    set shortLabel = ""
+	    set sep = ""
+	    while ("$trklist[1]" != ".")
+		#echo "$trklist[1] "
+		set shortLabel = "$shortLabel$sep$trklist[1]"
+		shift trklist
+		set sep = " "
+	    end
+	    shift trklist
+	    echo "$shortLabel"
+	    echo "</td>"
+
+	    #get table too for yes links 
+	    set table = "$trklist[1]"
+	    shift trklist
+
+	    #-------DB COLUMNS LOOP-----------
+
+	    set sql = 'select db from gbjunk '
+	    set sql = "$sql"'where grp="'"$grpname[$g]"'" '
+	    set sql = "$sql"'and shortLabel="'"$shortLabel"'" '
+	    set sql = "$sql"'order by db;'
+	    #echo "$sql<br>"
+	    set datalist = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
+	    set err = $status
+	    if ($err) then
+		echo "error $err processing: $sql <br>"
+		exit 0
+	    endif
+	    #echo "$datalist<br>"
+
+	    foreach db ( $dblist )
+		echo "<td>"
+		#echo "$db"
+		set found = "0"
+		foreach dl ( $datalist )
+		    if ("$dl" == "$db") then
+			set found = "1"
+		    endif
+		end
+		if ( "$found" == "1" ) then
+		    set link = '<a href="http://'"$srvr"'/cgi-bin/hgTrackUi'
+		    set link = "$link"'?db='"$db"'&g='"$table"'&c=chr1&position=chr1:1-10000'
+		    set link = "$link"'" target=_blank>yes</a>'
+		    echo "$link"
+		else
+		    echo "no"
+		endif
+		echo "</td>"
+	    end
+
+	    #---------------------------------
+	
+	    echo "</tr>"
+	    
+	end
+	
+	@ trkdone = $trkdone + $trkchunk
+
     end
-    
+
     echo "</table>"
     
 # ----------------------------------
@@ -283,7 +312,7 @@ echo "<br>"
 
 set sql = 'drop table gbjunk;'
 #echo "$sql<br>"
-/cluster/bin/i386/hgsql -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
+/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
