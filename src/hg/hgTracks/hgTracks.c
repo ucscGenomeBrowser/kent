@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1641 2010/04/10 01:14:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1642 2010/04/13 07:02:04 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1125,7 +1125,7 @@ switch (vis)
         break;  /* Do nothing; */
     case tvPack:
     case tvSquish:
-    y += tHeight;
+	y += tHeight;
         break;
     case tvFull:
         if (isWithCenterLabels(track))

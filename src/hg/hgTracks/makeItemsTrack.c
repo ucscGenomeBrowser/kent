@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.8 2010/04/10 19:05:24 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.9 2010/04/13 07:02:05 kent Exp $";
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
@@ -54,7 +54,7 @@ hFreeConn(&conn);
 freez(&dupeCommand);
 }
 
-static int makeItemsExtraHeight(struct track *tg)
+static int makeItemsExtraHeight(struct track *track)
 /* Return extra height of track. */
 {
 return tl.fontHeight+2;
@@ -117,15 +117,15 @@ if (idString != NULL)
     }
 }
 
-void makeItemsLoadItems(struct track *tg)
+void makeItemsLoadItems(struct track *track)
 /* Load up items in track already.  Also make up a pseudo-item that is
  * where you drag to create an item. */
 {
 struct bed *bedList = NULL;
-struct customTrack *ct = tg->customPt;
+struct customTrack *ct = track->customPt;
 char *tableName = ct->dbTableName;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-makeItemsEditOrDelete(tg->mapName, conn, tableName);
+makeItemsEditOrDelete(track->mapName, conn, tableName);
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL, &rowOffset);
 char **row;
@@ -143,10 +143,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&bedList);
-tg->items = bedList;
+track->items = bedList;
 }
 
-char *makeItemsItemName(struct track *tg, void *item)
+char *makeItemsItemName(struct track *track, void *item)
 /* Return name of one of an item to display on left side. */
 {
 struct bed *bed = item;
@@ -156,29 +156,54 @@ name = skipLeadingSpaces(name);
 return name;
 }
 
-void makeItemsDrawItems(struct track *tg, int seqStart, int seqEnd,
+void makeItemsDrawItems(struct track *track, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
-int dragBarHeight = makeItemsExtraHeight(tg);
-#ifdef DEBUG
-struct customTrack *ct = tg->customPt;
-char *tableName = ct->dbTableName;
-hvGfxText(hvg, xOff, yOff, color, font, tableName);
-#endif /* DEBUG */
+int dragBarHeight = makeItemsExtraHeight(track);
 hvGfxTextCentered(hvg, xOff, yOff, width, dragBarHeight, color, font, 
 	"--- Drag here or in between items to create a new item. ---");
-bedDrawSimple(tg, seqStart, seqEnd, hvg, xOff, yOff + dragBarHeight, width,
+bedDrawSimple(track, seqStart, seqEnd, hvg, xOff, yOff + dragBarHeight, width,
 	font, color, vis);
 }
 
-int makeItemsTotalHeight(struct track *tg, enum trackVisibility vis)
+
+void makeItemsDrawLeftLabels(struct track *track, int seqStart, int seqEnd,
+    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+    boolean withCenterLabels, MgFont *font,
+    Color color, enum trackVisibility vis)
+/* Draw left label - just in dense or full mode. Needed to cope with empty space at top of track. */
+{
+int y = yOff + makeItemsExtraHeight(track);
+int fontHeight = mgFontLineHeight(font);
+if (withCenterLabels)
+    y += mgFontLineHeight(font);
+if (vis == tvDense)
+    hvGfxTextRight(hvg, xOff, y, width-1, fontHeight, color, font, track->shortLabel);
+else
+    {
+    struct bed *bed, *bedList = track->items;
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	if (track->itemLabelColor != NULL)
+	    color = track->itemLabelColor(track, bed, hvg);
+	int itemHeight = track->itemHeight(track, bed);
+	hvGfxTextRight(hvg, xOff, y, width - 1,
+	    itemHeight, color, font, track->itemName(track, bed));
+	y += itemHeight;
+	}
+    }
+}
+
+
+int makeItemsTotalHeight(struct track *track, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
-return tgFixedTotalHeightOptionalOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE) + 
-	makeItemsExtraHeight(tg);
+track->height = tgFixedTotalHeightOptionalOverflow(track, vis, tl.fontHeight+1, tl.fontHeight, FALSE) + 
+	makeItemsExtraHeight(track);
+return track->height;
 }
 
 
@@ -188,8 +213,8 @@ void makeItemsMethods(struct track *track)
 bedMethods(track);
 track->totalHeight = makeItemsTotalHeight;
 track->drawItems = makeItemsDrawItems;
+track->drawLeftLabels = makeItemsDrawLeftLabels;
 track->loadItems = makeItemsLoadItems;
 track->itemName = makeItemsItemName;
-track->canPack = TRUE;
 }
 
