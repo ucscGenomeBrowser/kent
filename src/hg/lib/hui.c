@@ -22,9 +22,9 @@
 #include "udc.h"
 #include "customTrack.h"
 #include "encode/encodePeak.h"
-#include "metaTbl.h"
+#include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.274 2010/04/12 17:46:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.275 2010/04/13 19:41:38 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -91,7 +91,7 @@ return FALSE;
 static boolean metadataToggle(char *db,struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
 /* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
 {
-const struct metaObj *safeObj = metadataForTable(db,tdb,NULL);
+const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
 if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
@@ -102,29 +102,30 @@ if(showLongLabel)
     printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
 printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
-struct metaObj *metaObj = metaObjClone(safeObj); // Important if we are going to remove vars!
-metaObjRemoveVars(metaObj,"composite project"); // Don't bother showing these (suggest: "composite project dataType view tableName")
-metaObjReorderVars(metaObj,"grant lab dataType cell treatment antibody protocol input view",FALSE); // Bring to front
-metaObjReorderVars(metaObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
-struct metaVar *metaVar;
-for(metaVar=metaObj->vars;metaVar!=NULL;metaVar=metaVar->next)
+struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
+mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol input view",FALSE); // Bring to front
+mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
+struct mdbVar *mdbVar;
+for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if(sameString(metaVar->var,"fileName"))
+    if(sameString(mdbVar->var,"fileName"))
         {
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metaVar->var);
-        makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), metaVar->val);
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
+        makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), mdbVar->val);
         printf("</td></tr>");
         }
     else
         {
         // If antibody and metadata contains input={sameValue} then just print input
-        if(sameString(metaVar->var,"antibody") && metaObjContains(metaObj,"input",metaVar->val))
+        if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
 
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metaVar->var,metaVar->val);
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
 printf("</table>--></div>");
+//mdbObjsFree(&mdbObj); // spill some memory
 return TRUE;
 }
 
