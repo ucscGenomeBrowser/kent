@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.82 2010/04/01 23:51:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.83 2010/04/13 06:14:30 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -226,7 +226,7 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
-		   sameString("bigBed", s) ||
+		   sameString("bigBed", s) || sameString("makeItems", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
