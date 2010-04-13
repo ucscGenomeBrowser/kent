@@ -65,6 +65,27 @@ noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
+track ucscRetroAli
+shortLabel Retroposed Genes 1.0
+longLabel Retroposed Genes, Including Pseudogenes July 2009 [ucscRetroAli]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility hide
+retroMrnaInfo ucscRetroInfo
+#transMapTypeDesc UCSC retrocopies
+baseColorDefault diffCodons
+baseColorUseCds table retroCds
+baseColorUseSequence extFile retroSeq retroExtFile 
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+release alpha, beta
+
 track igtc
 shortLabel Gene Trap
 longLabel International Gene Trap Consortium Sequence Tag Alignments
