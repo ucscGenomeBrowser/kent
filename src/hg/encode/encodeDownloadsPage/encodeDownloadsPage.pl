@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.32 2010/04/02 17:59:34 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.33 2010/04/13 20:18:51 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -31,8 +31,8 @@ use vars qw/
     $opt_db
     $opt_verbose
     $opt_checksum
-    $opt_noMetaTbl
-    $opt_metaTbl
+    $opt_noMdb
+    $opt_mdb
     /;
 
 our $checksumFile = "md5sum.txt";
@@ -47,8 +47,8 @@ Creates an HTML page and README text file listing the downloads in the current d
 options:
     -help               Displays this usage info
     -checksum           Generate checksum file
-    -noMetaTbl	        Don't use metaTbl.  Instead, use the old trackDb/fileDb.ra methods
-    -metaTbl=table      Use an explicit metaTbl and don't use trackDb or fileDb.ra
+    -noMdb	        Don't use an 'mdb' metadata table.  Instead, use the old trackDb/fileDb.ra methods
+    -mdb=tableName      Use an explicit mdb table (e.g. 'mdb_braney') and don't fall back on trackDb/fileDb.ra methods
     -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
     -db=hg18            Use a database other than the default hg18 (For aquiring releaseDate and metadata from trackDb)
     -fileType=mask	    mask for file types included (default '*.gz')
@@ -286,8 +286,8 @@ my $ok = GetOptions("fileType=s",
                     "db=s",
                     "verbose=i",
                     "checksum",
-                    "noMetaTbl",
-                    "metaTbl=s",
+                    "noMdb",
+                    "mdb=s",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
@@ -297,8 +297,8 @@ my $fileMask = "*.gz *.bb *.bw *.bam";
 my $preamble = "preamble.html";
    $preamble = $opt_preamble if(defined $opt_preamble);
 
-my $metaTbl = "metaTbl";
-   $metaTbl =$opt_metaTbl if(defined $opt_metaTbl);
+my $mdb = "mdb";
+   $mdb =$opt_mdb if(defined $opt_mdb);
 
 usage() if (scalar(@ARGV) < 1);
 
@@ -391,15 +391,17 @@ for my $line (@fileList) {
 
     $results = "";
     # Use the metaTbl for metadata
-    if (!defined $opt_noMetaTbl) {
-        my $queryResults = $db->execute("select var,val from $database.$metaTbl where objName = '$tableName'");
+    if (!defined $opt_noMdb) {
+        my $queryResults = $db->execute("select var,val from $database.$mdb where obj = '$tableName'");
         if($queryResults) {
             my @pairVars;
             while(my @row = $queryResults->fetchrow_array()) {
 
                 # FIXME: When trackDb metadata is no longer used, this routine should be replaced with more direct metaData loading
                 #$metaData{$row[0]} = $row[1];
-                push @pairVars, join('=',$row[0],$row[1] );
+                if($row[0] ne 'objType') {
+                    push @pairVars, join('=',$row[0],$row[1] );
+                }
             }
             if(scalar(@pairVars) > 0) {
                 $results = "metadata " . join(' ',@pairVars );
@@ -407,7 +409,7 @@ for my $line (@fileList) {
         }
     }
 
-    if(!defined $opt_metaTbl) {
+    if(!defined $opt_mdb) {
         if(!$results) {
             $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
         }
