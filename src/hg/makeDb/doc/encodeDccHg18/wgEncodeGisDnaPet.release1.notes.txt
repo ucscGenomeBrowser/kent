@@ -11,21 +11,27 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 0
-    Files: 34
-    Wibs: 0
+    Tables: 6
+    Files: 37
+    Gbdbs: 6
 
 A) Untouched Tables (0):
 
-A') Untouched Files (0 downloadables, 0 wibs):
+A') Untouched Files (0 downloadables, 0 gbdbs):
 
 B) Deprecated tables (0):
 
-B') Deprecated files (0 downloadables, 0 wibs):
+B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (0):
+C) New tables (6):
+wgEncodeGisDnaPetAlignmentsGm1287810k
+wgEncodeGisDnaPetAlignmentsGm128781k
+wgEncodeGisDnaPetAlignmentsGm128785k
+wgEncodeGisDnaPetAlignmentsK56210k
+wgEncodeGisDnaPetAlignmentsK5621k
+wgEncodeGisDnaPetAlignmentsK56220k
 
-C') New files (34 downloadables, 0 wibs):
+C') New files (34 downloadables, 6 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/release1/
     NOT on RR but must be placed in:
@@ -66,6 +72,12 @@ C') New files (34 downloadables, 0 wibs):
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/release1/wgEncodeGisDnaPetQual5pK5621k.csqual.gz
 /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/release1/wgEncodeGisDnaPetQual5pK56220k.csqual.gz
 
+/gbdb/hg18/bbi/wgEncodeGisDnaPetAlignmentsGm1287810k.bb
+/gbdb/hg18/bbi/wgEncodeGisDnaPetAlignmentsGm128781k.bb
+/gbdb/hg18/bbi/wgEncodeGisDnaPetAlignmentsGm128785k.bb
+/gbdb/hg18/bbi/wgEncodeGisDnaPetAlignmentsK56210k.bb
+/gbdb/hg18/bbi/wgEncodeGisDnaPetAlignmentsK5621k.bb
+/gbdb/hg18/bbi/wgEncodeGisDnaPetAlignmentsK56220k.bb
 
 D) Additional items:
     current location on alpha:
@@ -73,6 +85,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/
 
-index.html
-files.txt
-md5sum.txt
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/release1/index.html
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/release1/files.txt
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeGisDnaPet/release1/md5sum.txt
