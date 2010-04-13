@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.9 2010/04/13 07:02:05 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.10 2010/04/13 08:42:32 kent Exp $";
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
@@ -181,7 +181,7 @@ if (withCenterLabels)
     y += mgFontLineHeight(font);
 if (vis == tvDense)
     hvGfxTextRight(hvg, xOff, y, width-1, fontHeight, color, font, track->shortLabel);
-else
+else if (vis == tvFull)
     {
     struct bed *bed, *bedList = track->items;
     for (bed = bedList; bed != NULL; bed = bed->next)
@@ -194,6 +194,7 @@ else
 	y += itemHeight;
 	}
     }
+/* In pack mode the draw routine takes care of the labels. */
 }
 
 
