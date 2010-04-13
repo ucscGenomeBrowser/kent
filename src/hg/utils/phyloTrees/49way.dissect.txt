@@ -366,7 +366,7 @@ Node 52:
 	parent = 51
 	lchild = -1
 	rchild = -1
-	name = 'oviAra'
+	name = 'oviAri'
 	dparent = 0.100000
 
 Node 53:
