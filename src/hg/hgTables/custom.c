@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.45 2010/04/13 04:42:00 kent Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.46 2010/04/13 05:51:25 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -460,7 +460,7 @@ else
     }
 }
 
-struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
+struct bed *customTrackGetFilteredBeds(char *db, char *name, struct region *regionList,
 	struct lm *lm, int *retFieldCount)
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
@@ -475,8 +475,17 @@ int fieldCount;
 
 if (ct == NULL)
     errAbort("Can't find custom track %s", name);
+char *type = ct->dbTrackType;
 
-if (ct->wiggle)
+if (type != NULL && startsWithWord("makeItems", type))
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    bedList = dbGetFilteredBedsOnRegions(conn, CUSTOM_TRASH, db, ct->dbTableName, name,
+    	regionList, lm, retFieldCount);
+    hFreeConn(&conn);
+    fieldCount = 9;
+    }
+else if (ct->wiggle)
     {
     struct bed *wigBedList = NULL, *bed;
 
@@ -499,7 +508,7 @@ else
     fieldCount = ct->fieldCount;
     bf = bedFilterForCustomTrack(name);
     if (ct->fieldCount > 3)
-	idHash = identifierHash(database, name);
+	idHash = identifierHash(db, name);
 
     /* Grab filtered beds for each region. */
     for (region = regionList; region != NULL; region = region->next)

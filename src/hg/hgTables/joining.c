@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.57 2010/04/12 05:32:51 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.58 2010/04/13 05:51:25 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -1133,29 +1133,30 @@ return bedList;
 }
 
 struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm, 
+	char *db, char *dbVarName, char *table, char *tableVarName,
+	struct region *regionList, struct lm *lm, 
 	int *retFieldCount)
 /* Get list of beds from database, in all regions, that pass filtering. */
 {
 /* A joining query may be required if the filter incorporates linked tables. */
-struct hTableInfo *hti = getHti(database, table, conn);
-struct slName *fieldList = getBedFieldSlNameList(hti, database, table);
+struct hTableInfo *hti = getHti(db, table, conn);
+struct slName *fieldList = getBedFieldSlNameList(hti, db, table);
 struct joinerDtf *dtfList = NULL;
 struct joinerDtf *filterTables = NULL;
-boolean doJoin = joinRequired(database, table,
+boolean doJoin = joinRequired(db, table,
 			      fieldList, &dtfList, &filterTables);
 struct region *region;
 struct bed *bedList = NULL;
-char *idField = getIdField(database, curTrack, table, hti);
-struct hash *idHash = identifierHash(database, table);
+char *idField = getIdField(db, curTrack, table, hti);
+struct hash *idHash = identifierHash(db, table);
 
 if (! doJoin)
     {
     for (region = regionList; region != NULL; region = region->next)
 	{
 	char *identifierFilter = identifierWhereClause(idField, idHash);
-	char *filter = filterClause(database, table, region->chrom, identifierFilter);
-	struct bed *bedListRegion = getRegionAsMergedBed(database, table,
+	char *filter = filterClause(dbVarName, tableVarName, region->chrom, identifierFilter);
+	struct bed *bedListRegion = getRegionAsMergedBed(dbVarName, tableVarName,
 				    region, filter, idHash, lm, retFieldCount);
 	struct bed *bed, *nextBed;
 	for (bed = bedListRegion; bed != NULL; bed = nextBed)
@@ -1171,7 +1172,7 @@ else
     {
     struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
-    	database, table, dtfList, filterTables, 1000000, regionList);
+    	db, table, dtfList, filterTables, 1000000, regionList);
     int bedFieldCount = hTableInfoBedFieldCount(hti);
     if (retFieldCount != NULL)
 	*retFieldCount = bedFieldCount;

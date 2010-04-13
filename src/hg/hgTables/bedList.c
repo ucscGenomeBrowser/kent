@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.71 2010/04/01 03:19:58 markd Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.72 2010/04/13 05:51:24 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -212,8 +212,6 @@ struct bed *getRegionAsBed(
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 {
 char *fields = NULL;
-struct trackDb *tdb = hTrackDbForTrack(db, table);
-struct sqlConnection *conn = tdb ? hAllocConnTrack(db, tdb) : hAllocConn(db);
 struct sqlResult *sr;
 struct hTableInfo *hti;
 struct bed *bedList=NULL, *bed;
@@ -221,10 +219,26 @@ char **row;
 int fieldCount;
 boolean isPsl, isGenePred, isBedWithBlocks;
 boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
+struct sqlConnection *conn = NULL;
+char *dbTable = NULL;
 
-hti = hFindTableInfo(db, region->chrom, table);
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = ctLookupName(table);
+    dbTable = ct->dbTableName;
+    conn = hAllocConn(CUSTOM_TRASH);
+    hti = hFindTableInfo(CUSTOM_TRASH, region->chrom, dbTable);
+    }
+else
+    {
+    dbTable = table;
+    struct trackDb *tdb = hTrackDbForTrack(db, table);
+    conn = (tdb ? hAllocConnTrack(db, tdb) : hAllocConn(db));
+    hti = hFindTableInfo(db, region->chrom, table);
+    }
 if (hti == NULL)
     errAbort("Could not find table info for table %s.%s", db,table);
+
 
 if (isWiggle(db, table))
     {
@@ -243,7 +257,7 @@ else
 
     /* All beds have at least chrom,start,end.  We omit the chrom
      * from the query since we already know it. */
-    sr = regionQuery(conn, table, fields, region, TRUE, filter);
+    sr = regionQuery(conn, dbTable, fields, region, TRUE, filter);
     while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
 	{
 	/* If have a name field apply hash filter. */
@@ -275,16 +289,14 @@ struct bed *bedList = NULL;
 region->next = NULL;
 
 if (hIsBigBed(database, table, curTrack, ctLookupName))
-    {
     bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
-    }
 else if (isCustomTrack(table))
-    bedList = customTrackGetFilteredBeds(table, region, lm, retFieldCount);
+    bedList = customTrackGetFilteredBeds(database, table, region, lm, retFieldCount);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     bedList = wikiTrackGetFilteredBeds(table, region, lm, retFieldCount);
 else
-    bedList = dbGetFilteredBedsOnRegions(conn, table, region, lm,
-					 retFieldCount);
+    bedList = dbGetFilteredBedsOnRegions(conn, database, database, 
+    	table, table, region, lm, retFieldCount);
 region->next = oldNext;
 return bedList;
 }

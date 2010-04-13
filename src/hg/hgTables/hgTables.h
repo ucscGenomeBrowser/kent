@@ -791,7 +791,7 @@ struct slName *getBedFields(int fieldCount);
 struct bedFilter *bedFilterForCustomTrack(char *ctName);
 /* If the user specified constraints, then translate them to a bedFilter. */
 
-struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
+struct bed *customTrackGetFilteredBeds(char *db, char *name, struct region *regionList,
 	struct lm *lm, int *retFieldCount);
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
@@ -835,8 +835,9 @@ struct bed *getRegionAsMergedBed(
 /* Return a bed list of all items in the given range in subtrack-merged table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 
-struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
-	char *table, struct region *regionList, struct lm *lm,
+struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *db, char *dbVarName, char *table, char *tableVarName,
+	struct region *regionList, struct lm *lm, 
 	int *retFieldCount);
 /* Get list of beds from database in region that pass filtering. */
 
