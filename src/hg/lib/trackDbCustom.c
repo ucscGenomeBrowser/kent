@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.83 2010/04/13 06:14:30 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.84 2010/04/13 19:48:14 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -799,92 +799,6 @@ if(tdb == NULL && db != NULL)
     }
 return tdb;
 }
-
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-metadata_t *metadataSettingGet(struct trackDb *tdb)
-/* Looks for a metadata tag and parses the setting into arrays of tags and values */
-{
-char *setting = trackDbSetting(tdb, "metadata");
-if(setting == NULL)
-    return NULL;
-int count = countChars(setting,'='); // <= actual count, since value may contain a =
-if(count <= 0)
-    return NULL;
-
-metadata_t *metadata = needMem(sizeof(metadata_t));
-metadata->setting    = cloneString(setting);
-metadata->tags = needMem(sizeof(char*)*count);
-metadata->values = needMem(sizeof(char*)*count);
-char *cp = metadata->setting;
-for(metadata->count=0;*cp != '\0' && metadata->count<count;metadata->count++)
-    {
-    metadata->tags[metadata->count] = cloneNextWordByDelimiter(&cp,'=');
-    if(*cp != '"')
-        metadata->values[metadata->count] = cloneNextWordByDelimiter(&cp,' ');
-    else
-        {
-        metadata->values[metadata->count] = ++cp;
-        for(;*cp != '\0';cp++)
-            {
-            if(*cp == '"' && *(cp - 1) != '\\') // Not escaped
-                {
-                *cp = '\0';
-                metadata->values[metadata->count] = replaceChars(metadata->values[metadata->count],"\\\"","\"");
-                *cp = '"'; // Put it baaack!
-                break;
-                }
-            }
-        if(*cp == '\0') // Didn't find close quote!
-            metadata->values[metadata->count] = cloneString(metadata->values[metadata->count]);
-        else
-            cp++;
-        }
-    }
-
-return metadata;
-}
-
-void metadataFree(metadata_t **metadata)
-/* frees any previously obtained metadata setting */
-{
-if(metadata && *metadata)
-    {
-    for(;(*metadata)->count > 0;(*metadata)->count--)
-        {
-        freeMem((*metadata)->tags[  (*metadata)->count - 1]);
-        freeMem((*metadata)->values[(*metadata)->count - 1]);
-        }
-    freeMem((*metadata)->setting);
-    freez(metadata);
-    }
-}
-
-char *metadataSettingFind(struct trackDb *tdb,char *name)
-/* Looks for a specific metadata setting and returns the value or null
-   returned value should be freed */
-{
-metadata_t *metadata = metadataSettingGet(tdb);
-if(metadata == NULL)
-    return NULL;
-
-int ix=0;
-char *setting = NULL;
-for(;ix<metadata->count;ix++)
-    {
-    if (sameString(metadata->tags[ix],name))
-        {
-        setting = cloneString(metadata->values[ix]);
-        break;
-        }
-    }
-metadataFree(&metadata);
-return setting;
-}
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
 
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
 /* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */

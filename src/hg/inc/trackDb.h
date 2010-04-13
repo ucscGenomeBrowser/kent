@@ -294,29 +294,6 @@ struct trackDb *subTdbFind(struct trackDb *parent,char *table);
 struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-typedef struct _metadata {
-    int count;
-    char**tags;
-    char**values;
-    char* setting;
-} metadata_t;
-
-metadata_t *metadataSettingGet(struct trackDb *tdb);
-/* Looks for a metadata tag and parses the setting into arrays of tags and values */
-
-void metadataFree(metadata_t **metadata);
-/* frees any previously obtained metadata setting */
-
-char *metadataSettingFind(struct trackDb *tdb,char *name);
-/* Looks for a specific metadata setting and returns the value or null
-   returned value should be freed */
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-// TODO: metadata as a trackDb will be obsoleted soon so these routines should be removed.
-
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
 /* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
 
