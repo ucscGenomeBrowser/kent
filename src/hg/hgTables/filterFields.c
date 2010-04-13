@@ -22,7 +22,7 @@
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.80 2010/04/12 18:16:48 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.81 2010/04/13 04:42:00 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1466,8 +1466,6 @@ char explicitDbTable[512];
 /* Return just extraClause (which may be NULL) if no filter on us. */
 if (! (anyFilter() && filteredOrLinked(db, table)))
     return cloneString(extraClause);
-conn = sqlConnect(db);
-
 safef(oldDb, sizeof(oldDb), "%s", db);
 dbOverrideFromTable(dbTableBuf, &db, &table);
 if (!sameString(oldDb, db))
@@ -1475,12 +1473,22 @@ if (!sameString(oldDb, db))
 else
      explicitDb[0] = 0;
 
-/* Cope with split table. */
-safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
-if (!sqlTableExists(conn, splitTable))
-    safef(splitTable, sizeof(splitTable), "%s", table);
-safef(explicitDbTable, sizeof(explicitDbTable), "%s%s",
-      explicitDb, splitTable);
+/* Cope with split table and/or custom tracks. */
+if (isCustomTrack(table))
+    {
+    conn = sqlConnect(CUSTOM_TRASH);
+    struct customTrack *ct = ctLookupName(table);
+    safef(explicitDbTable, sizeof(explicitDbTable), "%s", ct->dbTableName);
+    }
+else
+    {
+    conn = sqlConnect(db);
+    safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
+    if (!sqlTableExists(conn, splitTable))
+	safef(splitTable, sizeof(splitTable), "%s", table);
+    safef(explicitDbTable, sizeof(explicitDbTable), "%s%s",
+	  explicitDb, splitTable);
+    }
 
 /* Get list of filter variables for this table. */
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);

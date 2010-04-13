@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.44 2010/04/12 05:32:51 kent Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.45 2010/04/13 04:42:00 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -564,7 +564,7 @@ char *type = ct->tdb->type;
 if (startsWithWord("makeItems", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    doTabOutDb(CUSTOM_TRASH, ct->dbTableName, f, conn, fields);
+    doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, track->tableName, f, conn, fields);
     hFreeConn(&conn);
     }
 else

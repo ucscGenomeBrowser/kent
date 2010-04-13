@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.191 2010/04/12 05:32:51 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.192 2010/04/13 04:42:01 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1141,7 +1141,8 @@ else
 return(ret);
 }
 
-void doTabOutDb( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
+void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
+	FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
 struct region *regionList = getRegions();
@@ -1200,7 +1201,7 @@ for (region = regionList; region != NULL; region = region->next)
     struct sqlResult *sr;
     char **row;
     int colIx, lastCol = fieldCount-1;
-    char *filter = filterClause(db, table, region->chrom, identifierFilter);
+    char *filter = filterClause(dbVarName, tableVarName, region->chrom, identifierFilter);
 
     sr = regionQuery(conn, table, fieldSpec->string,
     	region, isPositional, filter);
@@ -1212,7 +1213,7 @@ for (region = regionList; region != NULL; region = region->next)
         {
 	// Show only the SQL filter built from filter page options, not identifierFilter,
 	// because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
-	char *filterNoIds = filterClause(db, table, region->chrom, NULL);
+	char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
 	if (filterNoIds != NULL)
 	    hOrFPrintf(f, "#filter: %s\n", filterNoIds);
 	hOrFPrintf(f, "#");
@@ -1257,6 +1258,7 @@ if (outCount == 0)
 hashFree(&idHash);
 }
 
+
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
@@ -1268,7 +1270,7 @@ else if (isCustomTrack(table))
     doTabOutCustomTracks(db, track, conn, fields, f);
     }
 else
-    doTabOutDb(db, table, f, conn, fields);
+    doTabOutDb(db, db, table, table, f, conn, fields);
 }
 
 struct slName *fullTableFields(char *db, char *table)
@@ -1277,7 +1279,6 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
-// uglyAbort("fullTableFields(db=%s, table=%s, isCustomTrack=%d)", db, table, isCustomTrack(table));
 if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     conn = hAllocConn(db);
