@@ -1206,7 +1206,7 @@ release alpha
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel D HeLa3 1x75 AL1
-        longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Aligns Rep 1 1x75 Stranded 
+        longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 1 1x75 Stranded Aligns 
         subGroups view=Aligns cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
         type bed 12
