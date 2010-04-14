@@ -16,7 +16,7 @@
 <!-----------Codon Coloring Help Page------------------------------>
 <TR><TD ROWSPAN=2 VALIGN="top"></TD></TR>
 <TR><TD>
-<A NAME="Topic5"></A><BR>
+<A NAME="Topic5"></A>
 
 	<!--outer table is for border purposes-->
 	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -25,7 +25,7 @@
 		    <TR><TD>	
 			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
 			    <TR><TD><FONT SIZE="4"><A
-                            NAME="TOC"></A><B>&nbsp; Coloring gene predictions by codon</B></FONT>
+                            NAME="TOC"></A><B>&nbsp; Coloring Gene Predictions and Annotations by Codon</B></FONT>
 			    </TD></TR>
 			</TABLE>
 			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
@@ -34,54 +34,43 @@
 				<P>
                                 The Genome Browser's codon coloring feature allows
 			 	users to quickly validate and compare gene 
-				predictions. To turn on codon coloring, select the
+				predictions and annotations. To turn on codon coloring, select the
 				<em>genomic codons</em> option from the <em>Color 
-				track by codons</em> pull-down menu. Any track in 
-				the Genes and Gene Prediction Tracks group can be 
-				colored by codon.
-                                <P> 
-				<B>How are the genes/gene predictions colored?</B><BR>
-                                Starting at the <em>cdsStart</em> of each 
-				prediction, each codon is colored and labeled 
-				until the <em>cdsEnd</em> (when zoomed-in closely
-				enough). Those on the negative strand are labeled 				  and colored accordingly. The <i>genePred</i> 
-				record is followed exactly, with no consideration
-				given to any mRNA from which the gene/gene 
-				prediction is derived. Therefore, the codons of
-                                a RefSeq gene shown may not correspond to the 
-				NCBI record. Some 
-				<a href="hgCodonColoringMrna.html">mRNA tracks</a>
-                                (mRNA, blastz mRNA, and xenoMrna) may be colored 
-				according to the mRNA itself.
-                                <P>
-				Start codons (the first methionine) are indicated 
-				in green and stop codons are shown in red. All 
-				other codons are shown in the original track 
-				color, with codon boundaries indicated by 
-				alternating lighter and darker shades. 
-                                <P>
-				Codons are labeled by the amino acid they 
-				represent. Codons on the
-                                boundaries of a gap are labeled at both ends of 
-				the gap; the cyan color of the label text 
-				indicates a partial codon.
-                                Stop codons are labeled with '*'; errors are 	
-				represented by 'X' (e.g. a truncated last codon).
-                                <P>
-                                <B>When are the genes/gene predictions colored?</B><BR>
+				track by codons</em> pull-down menu. 
+                                <p> 
+				<b>Color Legend</b><br>
+				<ul>
+				<li><font color="00E000">bright green codons/lines</font>: methionine, including start 
+				codons</li>
+			    	<li><font color="FF0000">red "*"</font>: stop codons</li>
+				<li>black "X": error (e.g. truncated last codon)</li>
+				<li><font color="00DBDB">cyan colored text/lines</font>: partial codon, either 
+				spliced or truncated</li>
+				</ul></p>
+				<p>
+				All other codons are shown in the original track color, 
+				with codon boundaries indicated by alternating lighter 
+				and darker shades.
+				</p>
+				<p>
+				<B>Details</B><BR>
+				Each codon is colored and labeled in the direction of 
+				transcription. This coloring applies only to gene prediction and 
+				annotation tracks, thus the codon sequence is colored
+			        in reference to the genome and not the associated mRNA.
+				A gene prediction without a CDS will not be colored; these 
+				can be non-protein coding RNAs or predictions where a 
+				CDS annotation was not provided in the original data. 
+				<p>	
                                 To view codon coloring, the option must be
 				turned on, the track must be in squish, pack, or
 				full display mode, and the browser must be 
 				zoomed-in to a level at which there is at least 
-				one pixel per codon. The zoom-level requirement
-				varies with the image width of the browser.
-				At the default <em>image width</em> value of 620 
-				pixels, the annotation tracks window must be
-				zoomed-in to at least 1400 bp or less to view the
-				codon coloring. To view the labeling, the
-				tracks image must be zoomed to within 3 times 
-				the base level. A gene prediction with an 
-				invalid CDS (such as 0,0) will not be colored.
+				one pixel per codon. When zoomed out to large 
+				regions of the genome, the browser will not display
+			        codon coloring. To view labeling, the
+                                track must be zoomed to within 3 times
+	                        the base level.</p> 
 			        </TD>
 			        <TD WIDTH=15></TD>
 			    </TR>

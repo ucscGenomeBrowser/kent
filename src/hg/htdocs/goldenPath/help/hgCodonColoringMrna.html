@@ -23,7 +23,7 @@
 		    <TR><TD>	
 			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
 			    <TR><TD><FONT SIZE="4"><A
-                            NAME="TOC"></A><B>&nbsp; Coloring mRNAs by codon</B></FONT>
+                            NAME="TOC"></A><B>&nbsp; Codon and Base Coloring for Alignment Tracks</B></FONT>
 			    </TD></TR>
 			</TABLE>
 			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
@@ -31,116 +31,114 @@
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 				<P>
                                 The Genome Browser's codon coloring feature allows
-			 	users to quickly validate and compare mRNAs. 
-				To turn on codon coloring, select the
+			 	users to quickly validate and compare alignment tracks, including 
+				mRNAs. To turn on codon coloring, select the
 				desired option from the <em>Color 
 				track by codons</em> pull-down menu. 
-                                All mRNA, blastz mRNA, and xeno mRNA tracks may 
-				be colored by codon. 
-                                <a href="hgCodonColoring.html">Gene prediction 
-				tracks</a> can also be colored, 
-                                but only by genomic codons.
-                                <P>
-				<B>Coloring Options</B><BR>
-                                <em>genomic codons</em> - Each mRNA is colored 
-				according to its alignment with the target genome.				  The codons and the frame are based on the target
-                                sequence only and may differ from the NCBI record.
-				<P>
-                                <em>mRNA codons</em> - Each mRNA is colored 
-				according to the query sequence. The frame 
-				information takes into account 
-				&quot;hidden gaps&quot; in the query sequence 
-				that aren't shown in the browser. The codons
-				are colored and labeled by the mRNA sequence 
-				rather than the genomic sequence to which it 
-				aligns.
-				<P>
-                                <em>nonsynonymous mRNA codons</em> - Similar to
-				the <em>mRNA codons</em> option, the frame 
-                                is based on the mRNA itself. However, only 
-				those mRNA codons that translate to different
-				amino acids than the target genomic sequence 
-				are colored and labeled.  
-				<P>
-                                <em>mRNA bases</em> - The frame and coloring are 
-				based on the mRNA, but the mRNA bases are
-				shown rather than the amino acids.
-				<P>
-                                <em>different mRNA bases</em> - Same as the 
-				previous option, but only those mRNA bases that 
-				differ between the genome and the mRNA are printed.
-                                <P> 
-				<B>How are the mRNAs colored?</B><BR>
-                                The CDS for each mRNA is obtained from GenBank.
-                                Starting at the <em>cdsStart</em> position of a
-				prediction, each codon is colored 
-                                and labeled (when zoomed-in closely enough) until 
-				the <em>cdsEnd</em> position.
-                               	Those on the negative strand are labeled and 
-				colored similarly, except in <em>mRNA bases</em> 
-				and <em>different mRNA bases</em> mode where the 
-				bases are always shown with respect to the 
-				strand displayed in the Base Position track at
-				the top of the image.  The strand can be toggled by 
-				clicking on the arrow to the left of the base values. 
-                                <P>
-				When coloring genomic or mRNA codons,
-				start codons and methionine codons are indicated 
-				in green, stop codons are shown in red, and 
-				insertions are colored orange. All 
-				other codons are shown in the original track 
-				color, with codon boundaries indicated by 
-				alternating lighter and darker shades. 
-                                <P>
-				Codons are labeled by the amino acid they 
-				represent or the bases comprising the codon,
-				depending on the display mode. Codons on the
-				boundaries of a gap are labeled 
-				at both ends of 
-				the gap; the cyan color of the label text 
-				indicates a partial codon.
-                                Insertions are also labeled in cyan to designate 
-				a partial codon. Stop codons are labeled with '*';
-			 	errors are represented by 'X' (e.g. a truncated 
-				last codon).
-                                <P>
-				When coloring nonsynonymous codons, nonsynonymous codons are
-				colored red and insertions are colored orange.  Only 
-				nonsynonymous codons and insertions are labeled.
-                                <P>
-                                When an alignment error condition is encountered,
-				the alignment block is colored yellow.  
-				If you find one of these, please
-				<A HREF="/contacts.html">contact</A> the UCSC
-				Genome Browser team to report it.
-                                <P>
-                                <B>When are the mRNAs colored?</B><BR>
-				To view codon coloring, the option must be 
-				turned on, the track must be in squish, pack, or
-				full display mode, and the browser must be 
-				zoomed-in to a level at which there is at least 
-				one pixel per codon. The zoom-level requirement
-				varies with the image width of the browser.
-				At the default <em>image width</em> value of 620 
-				pixels, the annotation tracks window must be
-				zoomed-in to at most 1500 bp or fewer to view the
-				codon coloring. To view the labeling, the
-				tracks image must be zoomed to within 3 times 
-				the base level. A gene prediction with an 
-				invalid CDS (such as 0,0) will not be colored,
-				except in <em>mRNA bases</em> or <em>different 
-				mRNA bases</em> display mode where labeling 
-				occurs only at the base level. 
-				An mRNA with an incomplete GenBank CDS at either 
-				end, an invalid GenBank CDS (such as 0,0), or no 
-				CDS will not be colored or labeled.
-                                <P>
-				When viewing native mRNAs in <em>different mRNA bases</em> 
-				or <em>nonsynonymous mRNA codons</em> display mode, the browser 
-				does not have to be zoomed-in as closely as for other 
-				tracks.  Red tickmarks are still drawn even when the 
-				browser is zoomed-out beyond the level of one pixel per
-				base.
+				<p>
+				<B>Color Options</B><BR>
+				<ul>
+                                <li><i>genomic codons</i> - codons are labeled and
+			        colored according to the genomic sequence	
+				</li>
+                                <li><i>mRNA codons</i> - codons are labeled and colored
+			        according to the aligned sequence	
+				</li>
+                                <li><i>nonsynonymous mRNA codons</i> - codons are 
+				labeled and colored according to the aligned sequence. 
+				Only nonsynonymous codons are labeled.
+				Conservative and non-conservative substitutions are defined
+				using the BLOSUM62 score matrix. Conservative 
+				substitutions (yellow) are defined as positive
+				BLOSUM scores, while non-conservative substitutions (red) are 
+				defined as negative scores.
+				</li>
+                                <li><i>mRNA bases</i> - bases are labeled.	
+				</li>
+                                <li><i>different mRNA bases</i> - only those bases 
+				that differ from the genomic sequence are labeled
+				and colored.
+				</li>
+                                </ul></p><p> 
+				<b>Color Legend</b><br><br>
+				<table border="1" border-width="1" cellpadding="10">
+				  <tr>
+				    <th>&nbsp;</th>
+				    <th>genomic/<br>mRNA codons</th>
+				    <th>nonsynonymous<br>mRNA codons</th>
+				    <th>mRNA bases/<br>different mRNA bases</th>
+				  </tr>
+				  <tr>
+				    <td><font color="FF0000"><b>red</b></font></td>
+				    <td>"*" stop codons</td>
+				    <td>non-conservative<br>codon substitutions</td>
+				    <td>base substitutions</td>
+				  </tr>
+				  <tr>
+				    <td><font color="E0E000"><b>yellow</b></font></td>
+				    <td>&nbsp;</td>
+				    <td>conservative<br>codon substitutions</td>
+				    <td>&nbsp;</td>
+				  </tr>
+				  <tr>
+				    <td><font color="00DBDB"><b>cyan</b></font></td>
+				    <td>spliced or truncated<br>partial codons</td>
+				    <td>spliced or truncated<br>partial codons</td>
+				    <td>&nbsp;</td>
+				  </tr>
+				  <tr>
+				    <td><font color="00E000"><b>green</b></font></td>
+				    <td>start codons<br>incl. methionine</td>
+				    <td>&nbsp;</td>
+				    <td>&nbsp;</td>
+				  </tr>
+				  <tr>
+				    <td><b>black</b></td>
+				    <td>"X" truncated<br>codons</td>
+				    <td>&nbsp;</td>
+				    <td>&nbsp;</td>
+				  </tr>
+				</table>
+                                </p>
+				<p>
+				<B>Details</B><BR>
+				The codon reading frame is defined by the genbank CDS
+				annotation of the aligned sequence.
+				Each codon is colored and labeled in the direction of 
+				transcription. A sequence without a CDS will not be 
+				colored; these can be non-protein coding RNAs or an
+				mRNA where a CDS annotation was not provided in the
+				original data.
+				</p><p>
+				The mRNA bases/different mRNA bases display options are instead
+				colored and labeled in the direction of the genomic sequence. Note 
+				that it is possible to show the base complement, and
+				thus change the base labeling, by clicking the arrow
+				to the left of the base display or by clicking the
+				"reverse" button.
+				</p><p>
+				When zoomed out past the base level, the browser will 
+				choose one color to represent many bases. The priority of 
+				display, from most important to least important, is: 
+				different mRNA base/nonsynonmous codon coloring (if enabled), 
+				<a href="hgIndelDisplay.html">unalignable query sequence (orange or purple)</a>, 
+				an 
+				<a href="hgIndelDisplay.html">insertion in both genome and query 
+				(double horizontal line)</a>, and a 
+				<a href="hgIndelDisplay.html">poly-A tail/poly-T head (green)</a>. 
+				The browser will not display genomic/mRNA codon coloring when 
+				viewing large regions of the genome. To view 
+				labeling, the track must be zoomed to within 3 
+				times the base level.
+				</p><p>
+				<b>For information about alignment insertion/deletion display options click 
+				<a href="hgIndelDisplay.html">here</a>.</b>
+				</p>
+				<h2>References</h2>
+				<p>Henikoff S and Henikoff JG.
+				<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC50453/" target=_blank>
+				Amino acid substitution matrices from protein blocks</a>.
+				<em>PNAS</em>. 1992;89(22):10915-10919.<p>
 			        </TD>
 			        <TD WIDTH=15></TD>
 			    </TR>
