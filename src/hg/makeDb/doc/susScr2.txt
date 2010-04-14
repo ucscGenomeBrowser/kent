@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: susScr2.txt,v 1.6 2010/04/13 23:13:32 braney Exp $
+#       $Id: susScr2.txt,v 1.7 2010/04/14 13:35:20 braney Exp $
 
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
@@ -630,7 +630,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 	-ooc=/hive/data/genomes/susScr1/jkStuff/susScr1.11.ooc \
 	susScr1 susScr2 > do.log 2>&1
 #############################################################################
-# HUMAN (hg18) PROTEINS TRACK (working braney...)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-04-14)
     # bash  if not using bash shell already
 
     cd /cluster/data/susScr2
@@ -653,22 +653,21 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     done
     rm *.fa
     ls *.nsq | wc -l
-# 3275
-
+# 2915
 
     mkdir -p /cluster/data/susScr2/bed/tblastn.hg18KG
     cd /cluster/data/susScr2/bed/tblastn.hg18KG
     echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
     wc -l query.lst
-# 3275 query.lst
+# 2915 query.lst
 
-   # we want around 800000 jobs
-   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(800000/`wc query.lst | awk '{print $1}'`\)
+   # we want around 350000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(350000/`wc query.lst | awk '{print $1}'`\)
 
-# 36727/(800000/3275) = 150.351156
+# 36727/(350000/2915) = 305.883443
 
    mkdir -p kgfa
-   split -l 150 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   split -l 306 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
    for i in *; do 
      nice pslxToFa $i $i.fa; 
@@ -677,8 +676,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
    cd ..
    ls -1S kgfa/*.fa > kg.lst
    wc kg.lst
-#  245  245 3185 kg.lst
-
+#  121  121 1573 kg.lst
 
    mkdir -p blastOut
    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
@@ -732,12 +730,13 @@ exit 1
 #    para try, check, push, check etc.
 
     para time
-# Completed: 802375 of 802375 jobs
-# CPU time in finished jobs:   17244679s  287411.32m  4790.19h  199.59d  0.547 y
-# IO & Wait Time:               4643016s   77383.60m  1289.73h   53.74d  0.147 y
-# Average job time:                  27s       0.45m     0.01h    0.00d
-# Longest finished job:             164s       2.73m     0.05h    0.00d
-# Submission to last job:         45538s     758.97m    12.65h    0.53d
+# Completed: 352715 of 352715 jobs
+# CPU time in finished jobs:   13184770s  219746.16m  3662.44h  152.60d  0.418 y
+# IO & Wait Time:               1844130s   30735.51m   512.26h   21.34d  0.058 y
+# Average job time:                  43s       0.71m     0.01h    0.00d
+# Longest finished job:             149s       2.48m     0.04h    0.00d
+# Submission to last job:         16902s     281.70m     4.70h    0.20d
+
 
     ssh swarm
     cd /cluster/data/susScr2/bed/tblastn.hg18KG
@@ -760,12 +759,12 @@ chainOne $(path1)
     para create chainSpec
     para try, check, push, check etc.
 
-# Completed: 254 of 254 jobs
-# CPU time in finished jobs:     590077s    9834.62m   163.91h    6.83d  0.019 y
-# IO & Wait Time:                 20749s     345.81m     5.76h    0.24d  0.001 y
-# Average job time:                2405s      40.08m     0.67h    0.03d
-# Longest finished job:           36592s     609.87m    10.16h    0.42d
-# Submission to last job:         36604s     610.07m    10.17h    0.42d
+# Completed: 121 of 121 jobs
+# CPU time in finished jobs:     342462s    5707.70m    95.13h    3.96d  0.011 y
+# IO & Wait Time:                 67882s    1131.37m    18.86h    0.79d  0.002 y
+# Average job time:                3391s      56.52m     0.94h    0.04d
+# Longest finished job:           13532s     225.53m     3.76h    0.16d
+# Submission to last job:         13544s     225.73m     3.76h    0.16d
 
     cd /cluster/data/susScr2/bed/tblastn.hg18KG/blastOut
     for i in kg??
@@ -778,7 +777,7 @@ chainOne $(path1)
     sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
     cd ..
     pslCheck blastHg18KG.psl
-# checked: 38517 failed: 0 errors: 0
+# checked: 83553 failed: 0 errors: 0
 
     # load table 
     ssh hgwdev
@@ -787,11 +786,10 @@ chainOne $(path1)
 
     # check coverage
     featureBits susScr2 blastHg18KG 
-# 18646943 bases of 332311746 (5.611%) in intersection
+# 36312685 bases of 2231298548 (1.627%) in intersection
 
     featureBits susScr2 blastHg18KG ensGene  -enrichment
-# blastHg18KG 5.611%, ensGene 9.520%, both 4.993%, cover 88.97%, enrich 9.35x
+# blastHg18KG 1.627%, ensGene 1.284%, both 0.845%, cover 51.91%, enrich 40.42x
 
     rm -rf blastOut
 #end tblastn
-}
