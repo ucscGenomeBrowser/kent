@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.946 2010/04/14 21:45:55 ann Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.947 2010/04/14 22:11:53 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21482,6 +21482,7 @@ wgEncode 1
 
         track wgEncodeGisDnaPetAlignmentsGm1287810k
         subTrack wgEncodeGisDnaPetViewAlignments on
+        color 153,38,0
         shortLabel GM12878 10k
         longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 fragSize=10k
@@ -21496,6 +21497,7 @@ wgEncode 1
         track wgEncodeGisDnaPetAlignmentsK5621k
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 1k
+        color 46,0,184
         longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
         subGroups view=Alignments cellType=K562 fragSize=1k
         #type pairedTagAlign
@@ -21511,6 +21513,7 @@ wgEncode 1
         track wgEncodeGisDnaPetAlignmentsK56210k
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 10k
+        color 46,0,184
         longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
         subGroups view=Alignments cellType=K562 fragSize=10k
         #type pairedTagAlign
@@ -21526,6 +21529,7 @@ wgEncode 1
         track wgEncodeGisDnaPetAlignmentsGm128781k
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel GM12878 1k
+        color 153,38,0
         longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 fragSize=1k
         #type pairedTagAlign
@@ -21541,6 +21545,7 @@ wgEncode 1
         track wgEncodeGisDnaPetAlignmentsGm128785k
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel GM12878 5k
+        color 153,38,0
         longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 fragSize=5k
         #type pairedTagAlign
@@ -21556,6 +21561,7 @@ wgEncode 1
 	track wgEncodeGisDnaPetAlignmentsK56220k
 	subTrack wgEncodeGisDnaPet
 	shortLabel K562 20k
+        color 46,0,184
 	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
 	subGroups view=Alignments cellType=K562 fragSize=f20k
 	type bigBed 6
