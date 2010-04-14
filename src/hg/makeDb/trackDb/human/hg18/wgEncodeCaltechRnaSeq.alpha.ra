@@ -201,7 +201,7 @@ release alpha
         track wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75Il400
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewRawSignal off
-        shortLabel U H1ESC 2x75 RW1
+        shortLabel U H1ESC 2x75 R41
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 1 400bp 2x75 Raw Signal
         subGroups view=RawSignal cellType=H1hESC insertLength=il400 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1
         type wig 0.00 3686.36
@@ -211,7 +211,7 @@ release alpha
         track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellPapBb2R2x75Il400
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewRawSignal off
-        shortLabel U GM128 2x75 RW2
+        shortLabel U GM128 2x75 R42
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 400bp 2x75 Raw Signal
         subGroups view=RawSignal cellType=GM12878 insertLength=il400 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=2
         type wig 0.00 2486.42
@@ -298,7 +298,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U GM128 2x75 SP2
+        shortLabel U GM128 2x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 2x75 Splice Aligns
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -309,7 +309,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U GM128 2x75 SP2
+        shortLabel U GM128 2x75 SL2
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 2x75 BLAT Splice Aligns
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -320,7 +320,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U K562  2x75 SP2
+        shortLabel U K562  2x75 SW2
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 2 2x75 Splice Aligns
@@ -331,7 +331,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U K562  2x75 SP2
+        shortLabel U K562  2x75 SL2
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 2 2x75 BLAT Splice Aligns
@@ -342,7 +342,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U K562  1x32 SP1
+        shortLabel U K562  1x32 SW1
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 1 1x32 Splice Aligns
@@ -353,7 +353,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U K562  1x32 SP2
+        shortLabel U K562  1x32 SW2
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 2 1x32 Splice Aligns
@@ -364,7 +364,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices
-        shortLabel U K562  2x75 SP1
+        shortLabel U K562  2x75 SW1
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 1 2x75 Splice Aligns
@@ -375,7 +375,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U K562  2x75 SP1
+        shortLabel U K562  2x75 SL1
         # itemRgb on
         color 46,0,184
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 1 2x75 BLAT Splice Aligns
@@ -386,7 +386,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U GM128 1x32 SP1
+        shortLabel U GM128 1x32 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 1 1x32 Splice Aligns
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
         # itemRgb on
@@ -397,7 +397,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U GM128 1x32 SP2
+        shortLabel U GM128 1x32 SW2
         # itemRgb on
         color 153,38,0
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 1x32 Splice Aligns
@@ -410,7 +410,7 @@ release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices
         # itemRgb on
         color 153,38,0
-        shortLabel U GM128 2x75 SP1
+        shortLabel U GM128 2x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 1 2x75 Splice Aligns
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -419,7 +419,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U GM128 2x75 SP1
+        shortLabel U GM128 2x75 SL1
         # itemRgb on
         color 153,38,0
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 1 2x75 BLAT Splice Aligns
@@ -431,7 +431,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D GM128 1x75 SP1
+        shortLabel D GM128 1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 1 1x75 BLAT Stranded Splice Aligns
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -442,7 +442,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D GM128 1x75 SP1
+        shortLabel D GM128 1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 1 1x75 Stranded Splice Aligns
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -453,7 +453,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D GM128 1x75 SP2
+        shortLabel D GM128 1x75 SL2
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -464,7 +464,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D GM128 1x75 SP2
+        shortLabel D GM128 1x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -475,7 +475,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D K562  1x75 SP1
+        shortLabel D K562  1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 1 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -486,7 +486,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D K562  1x75 SP1
+        shortLabel D K562  1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 1 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -497,7 +497,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D K562  1x75 SP2
+        shortLabel D K562  1x75 SL2
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 2 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -508,7 +508,7 @@ release alpha
 release alpha
         colorByStrand 46,0,184 238,85,34
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D K562  1x75 SP2
+        shortLabel D K562  1x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ K562 Rep 2 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -518,7 +518,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HepG2 2x75 SP2
+        shortLabel U HepG2 2x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 2 2x75 Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -528,7 +528,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HepG2 2x75 SP1
+        shortLabel U HepG2 2x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 1 2x75 Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -538,7 +538,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D H1ESC 1x75 SP2
+        shortLabel D H1ESC 1x75 SL2
         colorByStrand 46,0,184 238,85,34
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 2 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
@@ -549,7 +549,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D H1ESC 1x75 SP2
+        shortLabel D H1ESC 1x75 SW2
         colorByStrand 46,0,184 238,85,34
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 2 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
@@ -560,7 +560,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep3H1hescCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U H1ESC 2x75 SP3
+        shortLabel U H1ESC 2x75 SW3
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 3 2x75 Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=3 insertLength=ilunk
         type bed 12
@@ -570,7 +570,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D NHEK  1x75 SP1
+        shortLabel D NHEK  1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ NHEK Rep 1 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=NHEK localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -581,7 +581,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D NHEK  1x75 SP1
+        shortLabel D NHEK  1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ NHEK Rep 1 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=NHEK localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -592,7 +592,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x32
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HepG2 1x32 SP2
+        shortLabel U HepG2 1x32 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 2 1x32 Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x32 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -602,7 +602,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HepG2 1x32 SP1
+        shortLabel U HepG2 1x32 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 1 1x32 Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x32 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -612,7 +612,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U H1ESC 2x75 SP4
+        shortLabel U H1ESC 2x75 SW4
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 4 2x75 Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=4 insertLength=ilunk
         type bed 12
@@ -622,7 +622,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R2x75Il400
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U H1ESC 2x75 SP1
+        shortLabel U H1ESC 2x75 S41
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 1 400bp 2x75 Splice Aligns 
         subGroups view=Splices cellType=H1hESC insertLength=il400 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1
         type bed 12
@@ -632,7 +632,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R2x75Il400
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U GM128 2x75 SP2
+        shortLabel U GM128 2x75 S42
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 400bp 2x75 Splice Aligns 
         subGroups view=Splices cellType=GM12878 insertLength=il400 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=2
         type bed 12
@@ -642,7 +642,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HUVEC 1x75 SP2
+        shortLabel D HUVEC 1x75 SL2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HUVEC Rep 2 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=HUVEC localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -653,7 +653,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HUVEC 1x75 SP2
+        shortLabel D HUVEC 1x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HUVEC Rep 2 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -664,7 +664,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HepG2 1x75 SP2
+        shortLabel D HepG2 1x75 SL2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 2 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -675,7 +675,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HepG2 1x75 SP2
+        shortLabel D HepG2 1x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 2 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -686,7 +686,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HepG2 1x75 SP1
+        shortLabel D HepG2 1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 1 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -697,7 +697,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HepG2 1x75 SP1
+        shortLabel D HepG2 1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 1 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=HepG2 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -708,7 +708,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HeLa3 2x75 SP1
+        shortLabel U HeLa3 2x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 1 2x75 Splice Aligns 
         subGroups view=Splices cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -718,7 +718,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HeLa3 2x75 SP2
+        shortLabel U HeLa3 2x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 2 2x75 Splice Aligns 
         subGroups view=Splices cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -728,7 +728,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U NHEK  2x75 SP1
+        shortLabel U NHEK  2x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ NHEK Rep 1 2x75 Splice Aligns 
         subGroups view=Splices cellType=NHEK localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -738,7 +738,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HUVEC 2x75 SP2
+        shortLabel U HUVEC 2x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HUVEC Rep 2 2x75 Splice Aligns 
         subGroups view=Splices cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -748,7 +748,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U HUVEC 2x75 SP1
+        shortLabel U HUVEC 2x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HUVEC Rep 1 2x75 Splice Aligns 
         subGroups view=Splices cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -758,7 +758,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U H1ESC 2x75 SP1
+        shortLabel U H1ESC 2x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 1 2x75 Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=1 insertLength=ilunk
         type bed 12
@@ -768,7 +768,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HeLa3 1x75 SP1
+        shortLabel D HeLa3 1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 1 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=HeLaS3 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -779,7 +779,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HeLa3 1x75 SP1
+        shortLabel D HeLa3 1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 1 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -790,7 +790,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HUVEC 1x75 SP1
+        shortLabel D HUVEC 1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HUVEC Rep 1 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=HUVEC localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -801,7 +801,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HUVEC 1x75 SP1
+        shortLabel D HUVEC 1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ HUVEC Rep 1 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=HUVEC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -812,7 +812,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HeLa3 1x75 SP2
+        shortLabel D HeLa3 1x75 SL2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 2 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=HeLaS3 localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -823,7 +823,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D HeLa3 1x75 SP2
+        shortLabel D HeLa3 1x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ HeLa-S3 Rep 2 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=HeLaS3 localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=2 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -834,7 +834,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R2x75
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel U H1ESC 2x75 SP2
+        shortLabel U H1ESC 2x75 SW2
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 2 2x75 Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
@@ -844,7 +844,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBlat34R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D H1ESC 1x75 SP1
+        shortLabel D H1ESC 1x75 SL1
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 1 1x75 BLAT Stranded Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=blat34 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -855,7 +855,7 @@ release alpha
         track wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R1x75d
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewSplices off
-        shortLabel D H1ESC 1x75 SP1
+        shortLabel D H1ESC 1x75 SW1
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 1 1x75 Stranded Splice Aligns 
         subGroups view=Splices cellType=H1hESC localization=0-cell mapAlgorithm=BB2 readType=r1x75D rnaExtract=longPolyA rep=1 insertLength=ilunk
         colorByStrand 46,0,184 238,85,34
@@ -1092,7 +1092,7 @@ release alpha
         track wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewAligns off
-        shortLabel U H1ESC 2x75 AL1
+        shortLabel U H1ESC 2x75 A41
         longLabel ENCODE Caltech RNA-Seq PolyA+ H1-hESC Rep 1 400bp 2x75 Aligns 
         subGroups view=Aligns cellType=H1hESC insertLength=il400 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=1
         type bed 12
@@ -1102,7 +1102,7 @@ release alpha
         track wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewAligns off
-        shortLabel U GM128 2x75 AL2
+        shortLabel U GM128 2x75 A42
         longLabel ENCODE Caltech RNA-Seq PolyA+ GM12878 Rep 2 400bp 2x75 Aligns 
         subGroups view=Aligns cellType=GM12878 insertLength=il400 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2
         type bed 12
