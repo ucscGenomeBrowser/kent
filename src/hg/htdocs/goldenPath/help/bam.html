@@ -39,7 +39,7 @@ UCSC.  This makes it possible to display alignments from files that
 are so large that the connection to UCSC would time out when
 attempting to upload the whole file to UCSC.
 Both the BAM file and its associated index file remain on your
-web-accessible server (http or ftp), not on the UCSC server.
+web-accessible server (http, https, or ftp), not on the UCSC server.
 UCSC temporarily caches the accessed portions of the files to speed up
 interactive display.
 </P><P>
@@ -73,7 +73,7 @@ samtools index my.sorted.bam</TT></PRE>
       The index command generates a new file, <TT>my.sorted.bam.bai</TT>, with which 
       genomic coordinates can quickly be translated into file offsets in <TT>my.sorted.bam</TT>.
   <LI>Move both the BAM file and index file (<TT>my.sorted.bam</TT> and 
-      <TT>my.sorted.bam.bai</TT>) to an http or ftp location.</LI>
+      <TT>my.sorted.bam.bai</TT>) to an http, https, or ftp location.</LI>
   <LI>Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
       using a single 
       <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
