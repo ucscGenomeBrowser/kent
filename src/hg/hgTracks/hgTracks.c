@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1642 2010/04/13 07:02:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1643 2010/04/14 22:54:54 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3510,6 +3510,8 @@ if (trackVersionExists)
     hFreeConn(&conn);
     }
 
+if (differentWord(database,"susScr2"))
+{
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl == if versionString from trackVersion exists */
 if (sameWord(database,"hg19"))
@@ -3586,6 +3588,7 @@ else if (ensVersionString[0])
 	hPrintf("%s</A></TD>", "Ensembl");
 	}
     }
+}
 
 /* Print NCBI MapView anchor */
 if (sameString(database, "hg18"))
