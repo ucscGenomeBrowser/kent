@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.103 2010/04/06 18:25:16 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.104 2010/04/14 17:49:15 hiram Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -889,7 +889,7 @@ for (x1 = 0; x1 < width; ++x1)
 			boxHeight = 1;
 
 		    /*	Last pixel (bottom) is a special case of a closed interval */
-		    if ((boxTop == h) && (boxHeight == 1))
+		    if ((boxTop == h) && (boxHeight > 0))
 			{
 			boxTop = h - 1;
 			boxHeight = 1;
