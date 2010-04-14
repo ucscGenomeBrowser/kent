@@ -165,13 +165,13 @@ int netOpenHttpExt(char *url, char *method, char *optionalHeader);
  * may by NULL or may contain cookies and other info. */
 
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader);
-/* Parse URL, connect to associated server on port,
- * and send most of the request to the server.  If
- * specified in the url send user name and password
- * too.  Typically the "method" will be "GET" or "POST"
+/* Parse URL, connect to associated server on port, and send most of
+ * the request to the server.  If specified in the url send user name
+ * and password too.  Typically the "method" will be "GET" or "POST"
  * and the agent will be the name of your program or
- * library. optionalHeader may be NULL or contain
- * additional header lines such as cookie info.
+ * library. optionalHeader may be NULL or contain additional header
+ * lines such as cookie info. 
+ * Proxy support via hg.conf httpProxy or env var http_proxy
  * Return data socket, or -1 if error.*/
 
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,

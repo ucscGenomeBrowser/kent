@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.79 2010/03/10 23:41:17 angie Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -308,7 +308,6 @@ else
     *u = 0;
     }
 
-
 /* Split off user part */
 v = strchr(s, '@');
 if (v == NULL)
@@ -370,6 +369,7 @@ else
 /* What's left is the host. */
 safecpy(parsed->host, sizeof(parsed->host), s);
 }
+
 
 /* this was cloned from rudp.c - move it later for sharing */
 static boolean readReadyWait(int sd, int microseconds)
@@ -804,21 +804,11 @@ else
     }
 }
 
-int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
-/* Parse URL, connect to associated server on port, and send most of
- * the request to the server.  If specified in the url send user name
- * and password too.  Typically the "method" will be "GET" or "POST"
- * and the agent will be the name of your program or
- * library. optionalHeader may be NULL or contain additional header
- * lines such as cookie info. 
- * Return data socket, or -1 if error.*/
-{
-struct netParsedUrl npu;
-struct dyString *dy = newDyString(512);
-int sd = -1;
 
-/* Parse the URL and connect. */
-netParseUrl(url, &npu);
+int connectNpu(struct netParsedUrl npu, char *url)
+/* Connect using NetParsedUrl. */
+{
+int sd = -1;
 if (sameString(npu.protocol, "http"))
     {
     sd = netConnect(npu.host, atoi(npu.port));
@@ -832,26 +822,75 @@ else
     errAbort("netHttpConnect: url (%s) is not for http.", url);
     return -1;  /* never gets here, fixes compiler complaint */
     }
-if (sd < 0)
-    return -1;
+return sd;
+}
 
-/* Ask remote server for a file. */
-dyStringPrintf(dy, "%s %s %s\r\n", method, npu.file, protocol);
-dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
-/* do not need the 80 since it is the default */
-if (sameString("80",npu.port))
-    dyStringPrintf(dy, "Host: %s\r\n", npu.host);
-else
-    dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
+void setAuthorization(struct netParsedUrl npu, char *authHeader, struct dyString *dy)
+/* Set the specified authorization header with BASIC auth base64-encoded user and password */
+{
 if (!sameString(npu.user,""))
     {
     char up[256];
     char *b64up = NULL;
     safef(up, sizeof(up), "%s:%s", npu.user, npu.password);
     b64up = base64Encode(up, strlen(up));
-    dyStringPrintf(dy, "Authorization: Basic %s\r\n", b64up);
+    dyStringPrintf(dy, "%s: Basic %s\r\n", authHeader, b64up);
     freez(&b64up);
     }
+}
+
+int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
+/* Parse URL, connect to associated server on port, and send most of
+ * the request to the server.  If specified in the url send user name
+ * and password too.  Typically the "method" will be "GET" or "POST"
+ * and the agent will be the name of your program or
+ * library. optionalHeader may be NULL or contain additional header
+ * lines such as cookie info. 
+ * Proxy support via hg.conf httpProxy or env var http_proxy
+ * Return data socket, or -1 if error.*/
+{
+struct netParsedUrl npu;
+struct netParsedUrl pxy;
+struct dyString *dy = newDyString(512);
+int sd = -1;
+/* Parse the URL and connect. */
+netParseUrl(url, &npu);
+
+char *proxyUrl = getenv("http_proxy");
+
+if (proxyUrl)
+    {
+    netParseUrl(proxyUrl, &pxy);
+    sd = connectNpu(pxy, url);
+    }
+else
+    {
+    sd = connectNpu(npu, url);
+    }
+if (sd < 0)
+    return -1;
+
+/* Ask remote server for a file. */
+char *urlForProxy = NULL;
+if (proxyUrl)
+    {
+    /* trim off the byterange part at the end of url because proxy does not understand it. */
+    urlForProxy = cloneString(url);
+    char *x = strrchr(urlForProxy, ';');
+    if (x && startsWith(";byterange=", x))
+	*x = 0;
+    }
+dyStringPrintf(dy, "%s %s %s\r\n", method, proxyUrl ? urlForProxy : npu.file, protocol);
+freeMem(urlForProxy);
+dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
+/* do not need the 80 since it is the default */
+if (sameString("80",npu.port))
+    dyStringPrintf(dy, "Host: %s\r\n", npu.host);
+else
+    dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
+setAuthorization(npu, "Authorization", dy);
+if (proxyUrl)
+    setAuthorization(pxy, "Proxy-Authorization", dy);
 dyStringAppend(dy, "Accept: */*\r\n");
 if (npu.byteRangeStart != -1)
     {
@@ -1000,6 +1039,11 @@ char *sep = NULL;
 char *headerName = NULL;
 char *headerVal = NULL;
 boolean redirect = FALSE;
+
+boolean mustUseProxy = FALSE;  /* User must use proxy 305 error*/
+char *proxyLocation = NULL;
+boolean mustUseProxyAuth = FALSE;  /* User must use proxy authentication 407 error*/
+
 while(TRUE)
     {
     i = 0;
@@ -1047,6 +1091,14 @@ while(TRUE)
 	    {
 	    redirect = TRUE;
 	    }
+	else if (sameString(code, "305"))
+	    {
+	    mustUseProxy = TRUE;
+	    }
+	else if (sameString(code, "407"))
+	    {
+	    mustUseProxyAuth = TRUE;
+	    }
 	else if (!(sameString(code, "200") || sameString(code, "206")))
 	    {
 	    warn("%s: %s %s\n", url, code, line);
@@ -1069,7 +1121,17 @@ while(TRUE)
 	{
 	if (redirect)
 	    *redirectedUrl = cloneString(headerVal);
+	if (mustUseProxy)
+	    proxyLocation = cloneString(headerVal);
 	}
+    }
+if (mustUseProxy ||  mustUseProxyAuth)
+    {
+    warn("%s: %s error. Use Proxy%s. Location = %s\n", url, 
+	mustUseProxy ? "" : " Authentication", 
+	mustUseProxy ? "305" : "407", 
+	proxyLocation ? proxyLocation : "not given");
+    return FALSE;
     }
 return TRUE;
 }
