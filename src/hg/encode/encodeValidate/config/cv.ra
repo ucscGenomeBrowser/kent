@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.226 2010/04/12 19:15:17 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.227 2010/04/14 23:10:33 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1773,7 +1773,7 @@ validation missing
 term AP-2gamma
 tag AP2gamma
 type Antibody
-antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping within an internal region of AP-2Y of human origin.
+santibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping within an internal region of AP-2Y of human origin.
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
 vendorName Santa Cruz Biotech
 vendorId sc-8977
@@ -2280,6 +2280,20 @@ vendorName Abcam
 vendorId ab4441
 lab Bernstein
 lots 455103
+targetId GeneCard:GC01M148078
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
+
+term H3K9acB
+tag H3K9acB
+type Antibody
+antibodyDescription Rabbit polyclonal
+targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
+orderUrl http://www.millipore.com/catalogue/item/07-352
+vendorName Millipore
+vendorId 07-352
+lab Farnham
+lots 
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
@@ -3715,6 +3729,16 @@ term IgG-rab
 tag IGGrab
 type input
 description Input signal from normal Rabbit IgG ChIP-seq.
+
+term IgG-rat
+tag IGGrat
+type input
+description Input signal from Normal Rat IgG ChIP-seq
+
+term IgG-Yale
+tag IGGYale
+type input
+description Input signal from Mouse IgG ChIP-seq prepared at Yale
 
 term MNase
 tag MNase
