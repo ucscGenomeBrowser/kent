@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.227 2010/04/14 23:10:33 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.228 2010/04/14 23:36:11 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2259,6 +2259,7 @@ validation missing
 term H3K4me3B
 tag H3K4me3B
 type Antibody
+displayName H3K4me3
 antibodyDescription Rabbit monoclonal antibody
 targetDescription Histone H3 (tri-methyl K4) marks promoters in chromatin regions
 vendorName Cell Signaling
@@ -2286,6 +2287,7 @@ validation missing
 
 term H3K9acB
 tag H3K9acB
+displayName H3K9ac
 type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
@@ -2356,6 +2358,7 @@ validation missing
 term H3K27me3B
 tag H3K27me3B
 type Antibody
+displayName H3K27me3
 antibodyDescription rabbit monoclonal
 targetDescription Histone H3 (tri-methyl K27) marks repressed chromatin regions
 orderUrl http://www.cellsignal.com/products/9733.html
@@ -2383,6 +2386,7 @@ validation missing
 
 term H3K36me3B
 tag H3K36me3B
+displayName H3K36me3
 type Antibody
 antibodyDescription rabbit polyclonal
 targetDescription Histone H3 (tri-methyl K36) marks actively transcribed chromatin regions
