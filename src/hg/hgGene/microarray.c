@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.17 2009/09/27 04:45:41 kent Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.18 2010/04/15 00:05:26 aamp Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -370,7 +370,7 @@ static void microarrayPrint(struct section *section,
 struct expColumn *colList = section->items, *col;
 boolean useBlue = hgExpRatioUseBlue(cart, hggExpRatioColors);
 
-hPrintf("<FORM ACTION=\"../cgi-bin/hgGene\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGene#%s\" METHOD=GET>\n", section->name);
 cartSaveSession(cart);
 hPrintf("Expression ratio colors: ");
 hgExpColorDropDown(cart, hggExpRatioColors);
