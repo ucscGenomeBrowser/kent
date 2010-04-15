@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.104 2010/04/14 17:49:15 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.105 2010/04/15 23:19:35 hiram Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -842,36 +842,47 @@ for (x1 = 0; x1 < width; ++x1)
 		{
 		if (whiskers)
 		    {
-		    int zeroPos = scaleHeightToPixels(0);
-		    if (zeroPos < 0)
-			zeroPos = 0;
+		    int zeroPos = max(0,scaleHeightToPixels(0));
 		    int scaledVal = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
+
 		    if (dataValue < 0)
 		        {
 			int scaledMin = scaleHeightToPixels(p->min);
-			hvGfxBox(hvg, x1+xOff, zeroPos, 1, scaledMin-zeroPos, lightColor);
-			if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
-			    {
+			int boxHeight = max(1,scaledMin-zeroPos);
+			hvGfxBox(hvg, x1+xOff,zeroPos,1, boxHeight, lightColor);
+			if (!isnan(std))
+			    { // Test needed due to bug in version 1.5 bigWiles
 			    int scaledMinus = scaleHeightToPixels(dataValue-std);
-			    hvGfxBox(hvg, x1+xOff, zeroPos, 1, scaledMinus-zeroPos, mediumColor);
+			    int boxHeight = max(1,scaledMinus-zeroPos);
+			    hvGfxBox(hvg, x1+xOff, zeroPos, 1, boxHeight, mediumColor);
 			    }
-			int boxHeight = scaledVal - zeroPos;
-			if (boxHeight < 1) boxHeight = 1;
-			hvGfxBox(hvg, x1+xOff, zeroPos, 1, boxHeight, drawColor);
+			boxHeight = max(1,scaledVal - zeroPos);
+			if (zeroPos == (yOff+h))  // bottom pixel special case
+			    zeroPos -= 1;
+		        if (((zeroPos-yOff)+boxHeight) == 0)
+			    boxHeight += 1;	  // top pixel special case
+			hvGfxBox(hvg, x1+xOff, zeroPos,1, boxHeight, drawColor);
 			}
 		    else
 		        {
 			int scaledMax = scaleHeightToPixels(p->max);
-			hvGfxBox(hvg, x1+xOff, scaledMax, 1, zeroPos-scaledMax, lightColor);
-			if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
-			    {
+			if (scaledMax == (h+yOff))
+			    scaledMax = (h+yOff) - 1;
+			int boxHeight = max(1,zeroPos-scaledMax);
+			hvGfxBox(hvg,x1+xOff,scaledMax,1,boxHeight, lightColor);
+			if (!isnan(std))
+			    { // Test needed due to bug in version 1.5 bigWiles
 			    int scaledPlus = scaleHeightToPixels(dataValue+std);
-			    hvGfxBox(hvg, x1+xOff, scaledPlus, 1, zeroPos-scaledPlus, mediumColor);
+			    int boxHeight = max(1,zeroPos-scaledPlus);
+			    hvGfxBox(hvg, x1+xOff, scaledPlus, 1, boxHeight, mediumColor);
 			    }
-			int boxHeight = zeroPos - scaledVal;
-			if (boxHeight < 1) boxHeight = 1;
-			hvGfxBox(hvg, x1+xOff, scaledVal, 1, boxHeight, drawColor);
+			boxHeight = max(1,zeroPos - scaledVal);
+			if (scaledVal == (yOff+h))  // bottom pixel special case
+			    scaledVal -= 1;
+		        if (((scaledVal-yOff)+boxHeight) == 0)
+			    boxHeight += 1;	    // top pixel special case
+			hvGfxBox(hvg,x1+xOff,scaledVal,1, boxHeight, drawColor);
 			}
 		    }
 		else
@@ -879,23 +890,19 @@ for (x1 = 0; x1 < width; ++x1)
 		    int y0 = graphUpperLimit * scaleFactor;
 		    int y1 = (graphUpperLimit - dataValue)*scaleFactor;
 
-		    int boxHeight = abs(y1 - y0);
+		    int boxHeight = max(1,abs(y1 - y0));
 		    int boxTop = min(y1,y0);
-		    /*	special case where dataValue is on the zero line, it
-		     *	needs to have a boxHeight of 1, otherwise it disappears into
-		     *	zero nothingness
-		     */
-		    if (boxHeight < 1)
-			boxHeight = 1;
 
-		    /*	Last pixel (bottom) is a special case of a closed interval */
-		    if ((boxTop == h) && (boxHeight > 0))
-			{
+		    //	positive data value exactly equal to Bottom pixel
+		    //  make sure it draws at least a pixel there
+		    if (boxTop == h)
 			boxTop = h - 1;
-			boxHeight = 1;
-			}
 
-		    hvGfxBox(hvg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
+		    // negative data value exactly equal to top pixel
+		    // make sure it draws something
+		    if ((boxTop+boxHeight) == 0)
+			boxHeight += 1;
+		    hvGfxBox(hvg,x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
 		    }
 		}
 	    else
@@ -904,15 +911,17 @@ for (x1 = 0; x1 < width; ++x1)
 		    {
 		    int scaledMin = scaleHeightToPixels(p->min);
 		    int scaledMax = scaleHeightToPixels(p->max);
-		    hvGfxBox(hvg, x1+xOff, scaledMax, 1, scaledMin - scaledMax, lightColor);
+		    int boxHeight = max(1,scaledMin - scaledMax);
+		    hvGfxBox(hvg, x1+xOff, scaledMax, 1, boxHeight, lightColor);
 		    int scaledMean = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
 		    if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
 			{
 			int scaledMeanPlus = scaleHeightToPixels(dataValue+std);
 			int scaledMeanMinus = scaleHeightToPixels(dataValue-std);
+			int boxHeight = max(1,scaledMeanMinus - scaledMeanPlus);
 			hvGfxBox(hvg, x1+xOff, scaledMeanPlus, 1,
-				scaledMeanMinus - scaledMeanPlus, mediumColor);
+				boxHeight, mediumColor);
 			}
 		    hvGfxBox(hvg, x1+xOff, scaledMean, 1, 1, drawColor);
 		    }
