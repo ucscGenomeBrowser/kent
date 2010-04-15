@@ -97,7 +97,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.48 2010/03/30 20:18:30 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.49 2010/04/15 00:01:13 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1181,35 +1181,48 @@ wordCount = chopLine(dupe, words);
 rowOffset = hOffsetPastBin(database, seqName, track);
 sprintf(query, "select * from %s where chrom = '%s' and name = '%s'", track, chrom, trnaName);
 sr = sqlGetResult(conn, query);
+printf("<TABLE>\n");
 while ((row = sqlNextRow(sr)) != NULL)
   {
+    printf("<TR>\n");
+    printf("<TD valign=top>\n");
     trna = tRNAsLoad(row+rowOffset);
-
-    printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
-       database,database,trna->chrom,trna->name,trna->name);
-
+    
     printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
     printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
     printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
     printf("<B>tRNAscan-SE score: </B> %.2f<BR>\n",trna->trnaScore);
     printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
-    if (!sameString(trna->genomeUrl, ""))
-    {
-        printf("<B>Summary of all genomic tRNA predictions:</B> "
-                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->genomeUrl);
-        printf("<B>tRNA alignments:</B> "
-                 "<A HREF=\"%s\" TARGET=_blank>Link</A><BR>\n", trna->trnaUrl);
-    }
-    printf("<BR><B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
+    printf("<B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
     printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
        hgTracksPathAndSettings(), database, trna->chrom, trna->chromStart+1, trna->chromEnd);
     printf("%s:%d-%d</A><BR>\n", trna->chrom, trna->chromStart+1, trna->chromEnd);
     printf("<B>Strand:</B> %s<BR>\n", trna->strand);
+    if (!sameString(trna->genomeUrl, ""))
+      {
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View summary of all genomic tRNA predictions</A><BR>\n",
+               trna->genomeUrl);
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View tRNA alignments</A><BR>\n", trna->trnaUrl);
+      }
 
     if (trna->next != NULL)
       printf("<hr>\n");
+    
+    printf("</TD>\n");
+    printf("<TD>\n");
+
+    if (startsWith(trna->chrom, trna->name))
+      printf("<img align=right src=\"../RNA-img/%s/%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+	     database,database,trna->name,trna->name);
+    else
+      printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+	   database,database,trna->chrom,trna->name,trna->name);
+    
+    printf("</TD>");
+    printf("</TR>");
   }
+ printf("</TABLE>");
  sqlFreeResult(&sr);
  hFreeConn(&conn);
  printTrackHtml(tdb);
