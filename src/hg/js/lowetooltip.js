@@ -1,151 +1,27 @@
 
 var tipup;
 var chrom;
-
-function removetitles()
-{
-    $(".hastip").each(function(i)
-    {
-        $(this).data('title', $(this).attr('title'));
-        $(this).removeAttr("title");
-    });
-}
-function addtitles()
-{
-    $(".hastip").each(function(i)
-    {
-        $(this).attr('title', $(this).data('title'));
-    });
-}
-function changetitles()
-{
-    if($("input[name=showtooltips]").attr('checked'))
-    {
-        removetitles();
-    }
-    else
-    {
-        addtitles();
-    }
-}
+var dbname;
+var timed;
+var tracks;
+var tooldiv;
+var currtip;
+var timeout;
 
 
 function setwidth()
 {
-   var windwidth = $(window).width() + $(window).scrollLeft() - 20;
-   $("input[name=pix]").val(windwidth);
-   //$("#map").prev().before('<input name="pix" type="hidden" value="'+windwidth+'"/>');
-    
-}
-function basictracks()
-{
-   var i;
-   $(".normalText").attr("value","hide");
-   var packtracks= ["refSeq","gbHits","pfam","gbRNAs","cddInfo"];
-   var fulltracks = ["ruler","gc20Base"];
-   $("select[name^='multiz']").attr("value","pack");
-   for(i in fulltracks)
-   {
-       $("select[name="+fulltracks[i]+"]").attr("value","full");
-   }
-   for(i in packtracks)
-   {
-       $("select[name="+packtracks[i]+"]").attr("value","pack");
-   }
-   //$("#TrackForm").submit();
-    
-}
-
-
-function rnatracks()
-{
-   //$(".normaltext option:contains('hide')").text("GOAWAY");
-   var i;
-   $(".normalText").attr("value","hide");
-   var packtracks= ["refSeq","CRISPRs","Rfam","tRNAs","snoRNAs","gbRNAs","alignInfo"];
-   var fulltracks = ["ruler","gc20Base"];
-   $("select[name^='multiz']").attr("value","pack");
-   for(i in fulltracks)
-   {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+fulltracks[i]+"]").attr("value","full");
-   }
-   for(i in packtracks)
-   {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+packtracks[i]+"]").attr("value","pack");
-   }
-   //$("#TrackForm").submit();
-    
-}
-function genepredtracks()
-{
-   //$(".normaltext option:contains('hide')").text("GOAWAY");
-   var i;
-   $(".normalText").attr("value","hide");
-   var packtracks=["refSeq","allpredictions","gbHits","tigrCmrORFs","cddInfo","alignInfo"];
-   $("select[name^='BlastP']").attr("value","dense");
-   $("select[name^='BlastX']").attr("value","dense");
-   $("select[name^='multiz']").attr("value","pack");
-   var fulltracks = ["ruler","gc20Base"];
-   for(i in fulltracks)
-   {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+fulltracks[i]+"]").attr("value","full");
-   }
-   for(i in packtracks)
-   {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+packtracks[i]+"]").attr("value","pack");
-   }
-   //$("#TrackForm").submit();
-    
-}
-function regulationtracks()
-{
-   //$(".normaltext option:contains('hide')").text("GOAWAY");
-   var i;
-   $(".normalText").attr("value","hide");
-   var packtracks=["refSeq","lowelabPromoter","tfBindSitePal"];
+   var windwidth = $(window).width()  - 20;
    
-   var fulltracks = ["ruler","gc20Base","codonBias","promoterScanPos","promoterScanNeg","shineDGPos","shineDGNeg"];
-   for(i in fulltracks)
+   if($("#imgTbl").length == 0)
    {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+fulltracks[i]+"]").attr("value","full");
+       $("#TrackForm").append('<input type="hidden" name="pix" value="'+windwidth+'"/>');
+       //$("#TrackForm").submit();
    }
-   for(i in packtracks)
+   else
    {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+packtracks[i]+"]").attr("value","pack");
+       $("input[name=pix]").val(windwidth);
    }
-//   $("#TrackForm").submit();
-    
-}
-function compgenotracks()
-{
-   //$(".normaltext option:contains('hide')").text("GOAWAY");
-   var i;
-   $(".normalText").attr("value","hide");
-   var packtracks=["refSeq","alignInfo","insertionRegions"];
-   $("select[name=ultraConserved]").attr("value","dense");
-   $("select[name^='BlastP']").attr("value","dense");
-   $("select[name^='BlastX']").attr("value","dense");
-   $("select[name^='multiz']").attr("value","pack");
-   $("select[name=blastzSelf").attr("value","dense");
-   $("select[name=alloperons]").attr("value","dense");
-   var fulltracks = ["ruler","gc20Base"];
-   for(i in fulltracks)
-   {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+fulltracks[i]+"]").attr("value","full");
-   }
-   for(i in packtracks)
-   {
-       //alert($("select[name="+RNAtracks[i]+"]").size());
-       $("select[name="+packtracks[i]+"]").attr("value","pack");
-   }
-   //$("#TrackForm").submit();
     
 }
 function makevisible(element)
@@ -158,11 +34,11 @@ function makevisible(element)
 }
 function update(event)
 {
-    if(tipup.size() == 0)
+    if(!tipup)
     {
         resettip(event.target);
     }
-    //console.log(tipup);
+
     var toolx = event.pageX+15;
     var tooly = event.pageY+15;
     var windwidth = $(window).width() + $(window).scrollLeft() - 10;
@@ -185,128 +61,146 @@ function update(event)
 }
 function showInfo(event,output)
 {
-    
-    if($(event.target).not( tipup ).size() == 0)
-    {
-        //console.log("||");
-        $(".tooltip").css('left',0).css('top',0);
-        
-        $(".tooltip").html(output);
-        
-        update(event);
-        $(".tooltip").css('width',$("#tooltip").width()+5);
-        
-        $(".tooltip").show();
-        
-        $(event.target).bind('mousemove', update);
-    }    
-    //$(this).unbind('mousemove')    
+
+        tipup = true;
+        currtip = event.target;
+	$("#tooltip").html(output);
+	$("#tooltip").css('left',0).css('top',0);
+	$("#tooltip").css('width',$("#tooltip").width()+5);
+	update(event);
+
+
+	$("#tooltip").show();
+	//update(event);
+
+	$(event.target).bind('mousemove', update);
 }
 function ajaxtooltipError(XMLHttpRequest, textStatus, errorThrown,event)
 {
-    //XMLHttpRequest.abort();
-    //console.log(textStatus);
-    showInfo(event, "<B>Name:</B> "+$(event.target).data('title'));
-    //$("#tooltip").text("**"+$(event.target).data('title'));
-
-    //alert(textStatus + "\n");
-    //console.log(textStatus);
+    showInfo(event, "<B>Name:</B> "+event.target.data);
 }
 
 
 
 function resettip(hastip)
 {
-    $(hastip).attr("title",$(hastip).data("title"));
     //console.log("Tip gone"+tipup);
-    tipup = $();
+    tipup = false;
     $(hastip).unbind('mousemove', update);
-    $("#tooltip").hide();
-    $("#tooltip").text('');
-    $(".tooltip").css('width','auto');
+    tooldiv.hide();
+    tooldiv.text('');
+    
+    tooldiv.css('width','auto');
     
     
 }
-
 function hidetip(event)
 {
+    event.stopPropagation();
+    if(! $(event.target).is("area[href^='../cgi-bin/hgc']"))
+    {
+    return false;
+    }
+    if(timeout)
+    {
+        clearTimeout(timeout);
+        timeout = 0;
+    }
     
+    if(currrequest != null)
+    {
+    	currrequest.abort();
+    }
+    if(tipup && $(event.target).is("div.sliceDiv area[href^='../cgi-bin/hgc']"))
+    {
     resettip(event.target);
+    }
+    //setTimeout("tracks.live('mouseout', hidetip)", 100);
+    return false;
 }
 
 
 function showtip(event)
 {
-    /*if(tipup != -1)
+    event.stopPropagation();
+    if( ! $(event.target).is("area[href^='../cgi-bin/hgc']"))
     {
-        
-    }*/
-    if(!($(event.target).is("area[href^='../cgi-bin/hgc']")))
-    {
-        
-        return;
+    return false;
     }
-    //console.log($(event.target).attr("title"));
-    $(event.target).data("title",$(event.target).attr("title"));
-    $(event.target).removeAttr("title");
-    resettip(tipup);
-    tipup = $(event.target);
-    $(event.target).bind("mouseleave",hidetip);
-    
-    if($("input[name=showtooltips]").attr('checked') === false)
-    {
-        return;
-    }
-    //$("#tooltip").load("../cgi-bin/tooltip?"+($(event.target).attr('href').split("?"))[1],"",makevisible);
-    
-    $.ajax({
+    var ajaxtip = function() {getajaxtooltip(event);};
+    timeout = setTimeout(ajaxtip, 300);
+    return false;
+}
+function getajaxtooltip(event)
+{
+    currrequest = $.ajax({
             type: "GET",
-            url: "../cgi-bin/tooltip?c="+chrom+"&"+($(event.target).attr('href').split("?"))[1],
+            url: "../cgi-bin/tooltip?c="+chrom+"&db="+dbname+"&"+($(event.target).attr('href').split("?"))[1],
             dataType: "html",
             success: function(output){showInfo(event,output);},
             error: function(XMLHttpRequest, textStatus, errorThrown){ajaxtooltipError(XMLHttpRequest, textStatus, errorThrown,event);},
             cache: true
     });
+    //tracks.die('mouseover', showtip);
+    //setTimeout("tracks.live('mouseover', showtip)", 100);
+    return false;
     
 }
+function removetitles(index, Element){
+        Element.data = Element.title;
+    	Element.title = "";
+    	//Element.className = "hastip";
+}
+//try not enabling mouseout event
+function enabletips()
+{
+    timeout = 0;
+    $("#imgTbl").bind('mouseover', showtip);
+    $("#imgTbl").bind('mouseout', hidetip);
+    //tracks.live('mouseover', showtip);
+    //tracks.live('mouseout', hidetip);
+}
+function disabletips()
+{
+    $("#imgTbl").unbind('mouseover', showtip);
+    $("#imgTbl").unbind('mouseout', hidetip);
+    //tracks.die('mouseover', showtip);
+    //tracks.die('mouseout', hidetip);
+}
+
 $(document).ready(function() 
 {
-    //NEWVERSION
-    $("area").addClass('hastip');
+    if($("#imgTbl").length != 0)
+    {
+	    timed = 0;
+	    currrequest = null;
+	    tipup = false;
+	    $("body").append("<div class='tooltip' id='tooltip'></div>");
+	    tooldiv = $("#tooltip");
+	    $("#tooltip").css({
+	    "background": "white",
+	    "border": "1px black solid",
+	    "display": "none",
+	    "position": "absolute",
+	    "font-size": "small",
+	    "opacity" : ".9",
+	    "filter": "alpha(opacity = 90)",
+	    "zoom": "1"
+	    });
+	    $("#trackMap").removeAttr("title");
+	    chrom = $("input[name=chromName]").val();
+	    dbname = $("input[name=db]").val();
+	    tracks = $("area[href^='../cgi-bin/hgc']");
+	    //tracks.addClass('hastip');
+	    //tracks.removeAttr("title");
+	    tracks.each(removetitles);
+	    enabletips();
+	    //$(window).scroll(tempdisable);
+    }
     
     
-    tipup = $()
-    $("body").append("<div class='tooltip' id='tooltip'></div>");
-    $("#tooltip").css({
-    "background": "white",
-    "border": "1px black solid",
-    "display": "none",
-    "position": "absolute",
-    "font-size": "small",
-    "opacity" : ".9",
-    "filter": "alpha(opacity = 90)",
-    "zoom": "1"
-    });
-    $("#tooltiptext").css({
-    "font-size": "small",
-    "opacity" : "1"});
-    $("#trackMap").removeAttr("title");
-    chrom = $("input[name=chromName]").val();
-    //console.log();
+    $("input[name=hgt.toggleRevCmplDisp]").after('<input type="submit" class="setwidth" value="auto-set width" onclick="setwidth()"/>');
 
-    $(".hastip").bind("mouseenter", showtip);
-    
-    $("input[name=hgt.toggleRevCmplDisp]").after('  <input type="submit" class="setwidth" value="auto-set width" onclick="setwidth()"/>');
-    
-    
-    /*$("#map").prev().before('<input type="checkbox" name="showtooltips" onclick="changetitles()">Show tooltips</input>'+
-    '<br>'+
-    '<input type="submit" class="presetbutton" value="basic tracks" onclick="basictracks()"/>'+
-    '<input type="submit" class="presetbutton" value="RNA tracks" onclick="rnatracks()"/>'+
-    '<input type="submit" class="presetbutton" value="coding gene tracks" onclick="genepredtracks()"/>'+
-    '<input type="submit" class="presetbutton" value="comparative genomics tracks" onclick="compgenotracks()"/>'+
-    '<input type="submit" class="presetbutton" value="gene regulation tracks" onclick="regulationtracks()"/>');*/
-    $('input[name=showtooltips]').attr('checked', true);
     
     
 });
