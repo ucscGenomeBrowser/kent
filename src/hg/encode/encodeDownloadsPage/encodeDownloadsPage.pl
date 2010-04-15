@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.33 2010/04/13 20:18:51 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.34 2010/04/15 19:19:42 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -400,7 +400,11 @@ for my $line (@fileList) {
                 # FIXME: When trackDb metadata is no longer used, this routine should be replaced with more direct metaData loading
                 #$metaData{$row[0]} = $row[1];
                 if($row[0] ne 'objType') {
-                    push @pairVars, join('=',$row[0],$row[1] );
+                    if($row[1] =~ m/\s/) { # Looking for a space in the string
+                        push @pairVars, join('=',$row[0],'"' . $row[1] . '"' );
+                    } else {
+                        push @pairVars, join('=',$row[0],$row[1] );
+                    }
                 }
             }
             if(scalar(@pairVars) > 0) {
