@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.949 2010/04/15 18:14:09 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.950 2010/04/15 18:51:56 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21459,8 +21459,8 @@ wgEncode 1
 
 track wgEncodeGisDnaPet
 compositeTrack on
-shortLabel GIS gDNA PET
-longLabel ENCODE GIS gDNA PET
+shortLabel GIS DNA PET
+longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
 group varRep
 subGroup1 view Views Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
