@@ -47,7 +47,7 @@ cp $file.{nhgri,dcc}.txt $reportDir
 hgsql encpipeline_prod -e "select * from projects" > $reportDir/projects.$date.txt
 
 # cleanup
-rm $file.*.tmp $file.tmp2
+rm $file.tmp $file.tmp2 
 mv $file.*.txt ./reports/
 cd reports
 rm latest
