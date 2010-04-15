@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.1 2010/04/13 19:40:24 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.2 2010/04/15 19:25:56 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -1022,6 +1022,8 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
     // Now it is time for update or add!
     for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
         {
+        stripEnclosingDoubleQuotes(mdbVar->val); // Ensures values are stripped of enclosing quotes
+
         // Be sure to check for var existence first, then update
         if (!replace)
             {
