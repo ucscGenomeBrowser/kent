@@ -5,7 +5,7 @@
 #include "mdb.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: mdbUpdate.c,v 1.1 2010/04/13 19:59:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdbUpdate.c,v 1.2 2010/04/15 19:26:54 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -140,7 +140,7 @@ if(recreate)
     if(sharedTbl && ! force)
         {
         sqlDisconnect(&conn);
-        verbose(1, "NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
+        errAbort("NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
         }
     boolean recreated = sqlTableExists(conn,table);
     mdbReCreate(conn,table,testIt);
