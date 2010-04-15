@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.18 2010/01/19 20:14:21 hiram Exp $
+#  $Id: ce6.txt,v 1.19 2010/04/15 18:03:15 chinhli Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2804,5 +2804,20 @@ zcat WT_region_specific_clusters.weight_normal.3.rp.bed.WT.good_clusters.25.gz \
             | hgLoadBed -noNameIx ce6 algBindSites stdin
 zcat all_L3_L4.L3_L4.ce6.ingenes.both_strands.reannotated.BED.gz \
     | grep -v track | awk -F'\t' '{printf "%s %d %d %s 0 %s\n", $1, $2, $3, $4, $6}' | hgLoadBed -noNameIx ce6 algBindGenic stdin
+
+############################################################################
+# CE6->CE4 LIFTOVER (working - 2010-04-15 - chin)
+
+    mkdir /hive/data/genomes/ce6/bed/blat.ce4.2010-04-15
+    cd /hive/data/genomes/ce6/bed/blat.ce4.2010-04-15
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug -ooc /scratch/data/ce6/11.ooc \
+       ce6 ce4
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+         -ooc /scratch/data/ce6/11.ooc \
+        -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+         ce6 ce4 > do.log 2>&1 &
+    #   real    6m22.653s
 
 #########################################################################
