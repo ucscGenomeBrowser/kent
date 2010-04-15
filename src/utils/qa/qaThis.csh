@@ -135,9 +135,9 @@ echo "Check for illegal genomic coordinates (only prints if errors):"
 checkTableCoords $db -table=$tables
 
 #----------------------------------------------
-#Check indeces
+#Check indices
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "check indeces:"
+echo "check indices:"
 hgsql -e "show index from ${tables}" $db
 
 #-----------------------------------------------
