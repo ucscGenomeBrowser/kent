@@ -14,13 +14,13 @@ set second=""
 set fourth=""
 set countPerChr=""
 
-if ($#argv == 1) then
-  if ( $argv[1] == "CLEAN" || $argv[1] == "clean" ) then 
-  rm *.qa
-  rm *.gapFile
-  exit 0
-  endif
-endif
+#if ($#argv == 1) then
+#  if ( $argv[1] == "CLEAN" || $argv[1] == "clean" ) then 
+#  rm *.qa
+#  rm *.gapFile
+#  exit 0
+#  endif
+#endif
 
 if ($#argv < 2 || $#argv > 3) then
   echo
@@ -36,8 +36,8 @@ if ($#argv < 2 || $#argv > 3) then
   echo "    Works if you provide a list of tables"
   echo "    In that case, it creates db.tableName.qa files"
   echo 
-  echo "    Added clean-up functionality to remove all .qa and .gapFile files"
-  echo "    Usage:   CLEAN or clean
+#  echo "    Added clean-up functionality to remove all .qa and .gapFile files"
+#  echo "    Usage:   CLEAN or clean"
   echo
 
   exit
