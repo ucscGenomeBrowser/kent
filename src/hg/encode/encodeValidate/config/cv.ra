@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.228 2010/04/14 23:36:11 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.229 2010/04/15 15:50:40 braney Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -167,7 +167,7 @@ karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
 color 0,107,27
-sex U
+sex M
 tier 2
 protocol H1_ES_protocol.pdf
 
