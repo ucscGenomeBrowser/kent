@@ -230,7 +230,7 @@
 #include "parClick.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1612 2010/04/13 19:51:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1613 2010/04/15 00:00:32 pchan Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22076,6 +22076,13 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+/* Lowe Lab Stuff */
+#ifdef LOWELAB
+ else if (loweLabClick(track, item, tdb))
+   {
+     /* do nothing, everything handled in loweLabClick */
+   }
+#endif
 else if (sameWord(track, G_DELETE_WIKI_ITEM))
     {
     doDeleteWikiItem(item, seqName, winStart, winEnd);
@@ -23085,13 +23092,6 @@ else if (sameString("par", track))
     {
     doParDetails(tdb, item);
     }
-/* Lowe Lab Stuff */
-#ifdef LOWELAB
-else if (loweLabClick(track, item, tdb))
-    {
-    /* do nothing, everything handled in loweLabClick */
-    }
-#endif
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);
