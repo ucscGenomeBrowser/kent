@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.146 2010/03/18 01:52:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.147 2010/04/15 19:24:53 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1290,6 +1290,28 @@ for (;;)
     if (b != c)
        ++out;
     }
+}
+
+char *stripEnclosingChar(char *inout,char encloser)
+// Removes enclosing char if found at both beg and end, preserving pointer
+// Note: handles brackets '(','{' and '[' by complement at end
+{
+if(inout == NULL || strlen(inout) < 2 || *inout != encloser)
+    return inout;
+
+char *end = inout + (strlen(inout) - 1);
+char closer = encloser;
+switch (closer)
+    {
+    case '(': closer = ')'; break;
+    case '{': closer = '}'; break;
+    case '[': closer = ']'; break;
+    default: break;
+    }
+if(*end  != closer)
+    return inout;
+*end = '\0';
+return memmove(inout,inout+1,strlen(inout));  // use memmove to safely copy in place
 }
 
 void stripString(char *s, char *strip)

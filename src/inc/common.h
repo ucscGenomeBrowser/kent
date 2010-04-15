@@ -777,6 +777,12 @@ char * memSwapChar(char *s, int len, char oldChar, char newChar);
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
 
+char *stripEnclosingChar(char *inout,char encloser);
+// Removes enclosing char if found at both beg and end, preserving pointer
+// Note: handles brackets '(','{' and '[' by complement at end
+#define stripEnclosingDoubleQuotes(inout) stripEnclosingChar((inout),'"')
+#define stripEnclosingSingleQuotes(inout) stripEnclosingChar((inout),'\'')
+
 void stripString(char *s, char *strip);
 /* Remove all occurences of strip from s. */
 
