@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: oviAri1.txt,v 1.2 2010/04/12 21:33:00 chinhli Exp $
+#       $Id: oviAri1.txt,v 1.3 2010/04/15 23:37:48 chinhli Exp $
 
 
 # Ovis aries (domestic sheep) --  ISGC Ovis_aries_1.0 (2010-02-01)
@@ -16,7 +16,7 @@
 #    Ovis_aries/Ovis_aries_1.0
 
 ##########################################################################
-# Download sequence (DONE - 2010-03-22 Chin)
+# Download sequence (DONE - 2010-03-22 2010-0414 Chin)
     mkdir /hive/data/genomes/oviAri1
     cd /hive/data/genomes/oviAri1
     mkdir genbank
@@ -41,6 +41,7 @@ do
         | sed -e "s/^${ACC}/chr${C}/" | gzip > ucscChr/chr${C}.agp.gz
 done
 
+
 export S=Primary_Assembly/assembled_chromosomes
 cut -f2 ${S}/chr2acc  | while read ACC
 do
@@ -59,21 +60,24 @@ done
     #   0 lower) in 27 sequences in 27 files
 
     # For unplaced scalfolds, named them as chrUn_xxxxxxxx
-    #   where xxxxxx is the original access id as: chrUn_ACBE01000381.1 
-    # and put it into chrUn.* files 
-    # copy all the comment lines (start with #)
+    #   where xxxxxx is the original access id as: chrUn_GL340781.1  
+    #   The ".1" at the end need to be filter out since
+    #   MySQL does not allow "." as part of the table name and 
+    #   will casue problems in genbank task step later
+
 export S=Primary_Assembly/unplaced_scaffolds
 zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > ucscChr/chrUn.agp
    # append the gap records
 zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
-        | sed -e "s/^/chrUn_/" >> ucscChr/chrUn.agp
+        | sed -e "s/^/chrUn_/" -e "s/\.1//"  >> ucscChr/chrUn.agp
 gzip ucscChr/chrUn.agp &
 
 zcat ${S}/FASTA/unplaced.scaf.fa.gz \
-        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##" | gzip > ucscChr/chrUn.fa.gz
+        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
+        | gzip > ucscChr/chrUn.fa.gz
    # about 1190 sequences in the unplaced
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
-   #     1190    1190   21420
+   #      1190    1190   19040
 
    # Check them with faSize 
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
@@ -84,7 +88,7 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    #     in 1190 sequences in 1 files
 
 #########################################################################
-# Initial makeGenomeDb.pl (DONE - 2010-04-01 - Chin)
+# Initial makeGenomeDb.pl (DONE - 2010-04-14 - Chin)
     cd /hive/data/genomes/oviAri1
     cat << '_EOF_' > oviAri1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -107,34 +111,45 @@ taxId 9940
     # << happy emacs
     time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev oviAri1.config.ra \
 	> makeGenomeDb.log 2>&1 &
-    # real    10m50.210s
+    # real    real    12m42.419s
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/oviAri1.unmasked.2bit /gbdb/oviAri1/oviAri1.2bit
+
+    #  Per instructions in makeGenomeDb.log:
+    #   - cvs add sheep/oviAri1
+    #   - cvs add sheep/oviAri1/*.{ra,html}
+    #   - cvs ci -m "Added oviAri1 to DBS." makefile
+    #   - cvs ci -m "Initial descriptions for oviAri1." sheep/oviAri1
+    #   - (if necessary) cvs ci sheep
+    #   - Run make update DBS=oviAri1 and make alpha when done.
+    #   - (optional) Clean up /cluster/data/oviAri1/TemporaryTrackDbCheckout
+    #   - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
     #	browser should function now
-    #    per instructions at end of makeGenomeDb.log, edit the html file
     #  and checkin the *.ra and *.html files. in 
     #     /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/sheep/oviAri1
 
 
 #########################################################################
-# RepeatMasker (DONE - 2010-04-2 - Chin)
+# RepeatMasker (DONE - 2010-04-14 - Chin)
     mkdir /hive/data/genomes/oviAri1/bed/repeatMasker
     cd /hive/data/genomes/oviAri1/bed/repeatMasker
+
     time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit oviAri1 > do.log 2>&1 &
-    #	real    317m15.920s
+    #   real    178m52.467s
     cat faSize.rmsk.txt
     #   2860512983 bases (1659241706 N's 1201271277 real 954826276 upper 
     #    246445001 lower) in 1218 sequences in 1 files
     #   %8.62 masked total, %20.52 masked real
 
 #########################################################################
-# simpleRepeats ( DONE` - 2010-04-02 - Chin)
+# simpleRepeats ( DONE - 2010-04-14 - Chin)
     mkdir /hive/data/genomes/oviAri1/bed/simpleRepeat
     cd /hive/data/genomes/oviAri1/bed/simpleRepeat
+
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-bigClusterHub=pk -smallClusterHub=pk oviAri1 > do.log 2>&1 &
-    #    real    3m18.652s
+    #   real    3m23.411s
     cat fb.simpleRepeat 
     #   4278474 bases of 1201962925 (0.356%) in intersection
 
@@ -150,20 +165,22 @@ taxId 9940
 
 #########################################################################
 # Marking *all* gaps - they are not all in the AGP file
-#	(DONE - 2010-04-02 - Chin)
+#	(DONE - 2010-04-14 - Chin)
     mkdir /hive/data/genomes/oviAri1/bed/allGaps
     cd /hive/data/genomes/oviAri1/bed/allGaps
+
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../oviAri1.unmasked.2bit > findMotif.txt 2>&1
-    #   real    1m56.688s
+    #   real    1m40.366s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits oviAri1 -not gap -bed=notGap.bed
-    #   1201271277 bases of 1201271277 (100.000%) in intersection
+    #   1201962925 bases of 1201962925 (100.000%) in intersection
     featureBits oviAri1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   691648 bases of 1201962925 (0.058%) in intersection
     #   0 bases of 1201271277 (0.000%) in intersection zero?????
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" oviAri1 | sort -n | tail -1
-    #	959944
+    #	484408
 
     # use tcsh and ctrl-c to create the here doc
     cat << '_EOF_' > mkGap.pl
@@ -206,9 +223,9 @@ close (FH);
 
 
 ########################################################################
-# Create kluster run files (DONE - 2010-04-05 - Chin)
+# Create kluster run files (DONE - 2010-04-15 - Chin)
     # numerator is oviAri1 gapless bases "real" as reported by: 
-    #   featureBits -noRandom -noHap oviAri1 gap
+    featureBits -noRandom -noHap oviAri1 gap
     #     1600136831 bases of 1184628269 (135.075%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
@@ -233,13 +250,16 @@ close (FH);
 	| sort -k7,7nr
     #   most gaps have size > 100,000
     #	decide on a minimum gap for this break
-    gapToLift -verbose=2 -minGap=cw20000 oviAri1 jkStuff/nonBridged.lft \
+    gapToLift -verbose=2 -minGap=20000 oviAri1 jkStuff/nonBridged.lft \
 	-bedFile=jkStuff/nonBridged.bed
     cp -p jkStuff/nonBridged.lft \
 	/hive/data/staging/data/oviAri1/oviAri1.nonBridged.lft
+    # ask cluster-admin to copy (evry time if any file chsnged)
+    #    /hive/data/staging/data/oviAri1 directory to cluster nodes
+    #    /scratch/data/oviAri1
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2010-04-12 - Chin)
+# GENBANK AUTO UPDATE (working - 2010-04-15 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     cvsup
@@ -272,37 +292,33 @@ oviAri1.refseq.mrna.native.load = no
 #    {"oviAri", oviAriNames},
 #  gbGenome.c is  in
 #  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
-# make  and checkin
+# make and checkin
 
     cvs ci -m "adding oviAri1 Sheep" src/lib/gbGenome.c
     make install-server
 
-
     ssh genbank
     screen	#  control this business with a screen since it takes a while
+    cd $HOME/kent/src/hg/makeDb/genbank
 
-XXXX 04-12
+
+XXXX 04-15 eveniing
     cd /cluster/data/genbank
      time nice -n +19 bin/gbAlignStep -initial oviAri1 &
-    #   logFile: var/build/logs/2010.04.12-12:18:21.oviAri1.initalign.log
-    #    real    ???? 127m50.706s
+    #    logFile: var/build/logs/2010.04.15-13:49:37.oviAri1.initalign.log
+    #    real    ????368m17.919s
+command failed: gbAlignRun -workdir=work/initial.oviAri1/align  at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
+
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    # use local copy: XXXX 04-09 still failed with 
-XXXX 04-09
-hgwdev 2010.04.09-08:57:17 dbload: begin
-hgwdev 2010.04.09-08:57:17 dbload: command: /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/gbDbLoadStep -drop -initialLoad oviAri1
--initialLoad specified and no sequences were found to load
-command failed: gbLoadRna -workdir=work/hgwdev/dbload -initialLoad oviAri1 at /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/../lib/gbCommon.pm line 268. at /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/../lib/gbCommon.pm line 268.
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oviAri1 &
+    #    var/dbload/hgwdev/logs/2010.04.13-14:43:37.dbload.log
+    #   real    11m7.008s
 
-    time nice -19 \
-         /cluster/home/chinhli/kent/src/hg/makeDb/genbank/bin/gbDbLoadStep \
-          -drop -initialLoad oviAri1 &
-    # time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oviAri1 &
-    #	logFile: var/dbload/hgwdev/logs/2010.03.26-15:38:17.dbload.log
-    #	real    ???? 68m
+
+
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -312,19 +328,18 @@ command failed: gbLoadRna -workdir=work/hgwdev/dbload -initialLoad oviAri1 at /c
         etc/hgwdev.dbs
     cvs ci -m "Added oviAri1 - Sheep" etc/align.dbs etc/hgwdev.dbs
     make etc-update
-    #	DONE 2010-03-31 ????
 
 #########################################################################
 # reset position to RHO location as found from blat of hg19 RHO gene
-#	(DONE - 2010-04-08 - Chin)
+#	(DONE - 2010-04-15 - Chin)
     hgsql -e \
 'update dbDb set defaultPos="chr13:57394166-57402412" where name="oviAri1";' \
 	hgcentraltest
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(DONE 2010-04-08 - Chin)
-# NOTE XXXX need to create entry in all.joiner since this is a new species
+#	(working 2010-04-15 - Chin)
+# NOTE - create oviAri1 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/oviAri1/bed/ctgPos2
     cd /hive/data/genomes/oviAri1/bed/ctgPos2
     cat << '_EOF_' > agpToCtgPos2.pl
@@ -368,7 +383,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     hgLoadSqlTab oviAri1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
 ############################################################################
-# oviAri1 Sheep BLASTZ/CHAIN/NET (working 04-09-2010 - Chin)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (working 04-16-2010 - Chin)
 
 #  request to copy /hive/data/staging.oviAri1 over to /scratch/data/oviAri1
     screen # use a screen to manage this multi-day job
@@ -549,7 +564,7 @@ limit vmemoryuse 163840m
     #	1383557633 bases of 2731830700 (50.646%) in intersection
 
 #########################################################################
-#  SWAP mm9 lastz (working - 2010-04-12 - Chin)
+#  SWAP mm9 lastz (DONE - 2010-04-12 - Chin)
     #	original alignment
     cd	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09
     cat fb.mm9.chainOviAri1Link.txt 
