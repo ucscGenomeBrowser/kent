@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.951 2010/04/15 21:19:19 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.952 2010/04/15 23:05:59 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21463,7 +21463,7 @@ wgEncode 1
     subTrack wgEncodeGisDnaPet
 
         track wgEncodeGisDnaPetAlignmentsK5621k
-        subTrack wgEncodeGisDnaPetViewAlignments on
+        subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 1k
         color 46,0,184
         longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
@@ -21495,7 +21495,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=257 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56210k fileName=wgEncodeGisDnaPetAlignmentsK56210k.pairedTagAlign.gz
 
 	track wgEncodeGisDnaPetAlignmentsK56220k
-	subTrack wgEncodeGisDnaPet
+	subTrack wgEncodeGisDnaPet off
 	shortLabel K562 20k
         color 46,0,184
 	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
@@ -21509,7 +21509,7 @@ wgEncode 1
 	metadata project=wgEncode grant=Gingeras lab=Gis(Ruan) dataType=DnaPet cell=K562 fragSize=20k view=Alignments dataVersion="ENCODE June 2010 Freeze" subId=1075 dateSubmitted=2010-04-05 dateUnrestricted=2011-01-05 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56220k fileName=wgEncodeGisDnaPetAlignmentsK56220k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm128781k
-        subTrack wgEncodeGisDnaPetViewAlignments on
+        subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 1k
         color 153,38,0
         longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
@@ -21525,7 +21525,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=253 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128781k fileName=wgEncodeGisDnaPetAlignmentsGm128781k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm128785k
-        subTrack wgEncodeGisDnaPetViewAlignments on
+        subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 5k
         color 153,38,0
         longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
