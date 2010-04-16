@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.9 2010/04/12 19:27:04 hiram Exp $
+#	$Id: ailMel1.txt,v 1.10 2010/04/16 17:25:05 hiram Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -192,7 +192,7 @@ ailMel1.perChromTables = no
     cvs ci -m "Adding ailMel1 - Panda - Ailuropoda melanoleuca" \
 	etc/align.dbs etc/hgwdev.dbs
     make etc-update
-    #	done - 2010-01-19 - Hiram
+    #	done - 2010-04-12 - Hiram
 
 ############################################################################
 # reset position to RHO location as found from blat of hg19 RHO gene
@@ -356,5 +356,62 @@ TMPDIR=/scratch/tmp
     #	0 bases of 2245312831 (0.000%) in intersection
     #	real    84m58.382s
     #	no new gaps
+
+#########################################################################
+# lastz Human hg19 swap (DONE - 2010-02-05 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
+    cat fb.hg19.chainAilMel1Link.txt 
+    #	1453400264 bases of 2897316137 (50.164%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    real    124m14.393s
+    cat fb.ailMel1.chainHg19Link.txt 
+    #	1411953704 bases of 2245312831 (62.884%) in intersection
+
+#########################################################################
+# lastz Dog canFam2 swap (DONE - 2010-02-05 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04
+    cat fb.canFam2.chainAilMel1Link.txt 
+    #	1791212709 bases of 2384996543 (75.103%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.canFam2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04/DEF \
+	-swap -noLoadChainSplit -workhorse=hgwdev -bigClusterHub=pk \
+	-smallClusterHub=memk -chainMinScore=3000 -chainLinearGap=medium \
+	> swap.log 2>&1 &
+    #	real    128m41.005s
+     cat fb.ailMel1.chainCanFam2Link.txt 
+    #	1788107935 bases of 2245312831 (79.637%) in intersection
+
+#########################################################################
+# lastz Rat rn4 swap (DONE - 2010-02-18 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/rn4/bed/lastzAilMel1.2010-02-04
+    cat fb.rn4.chainAilMel1Link.txt 
+    #	708197812 bases of 2571531505 (27.540%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.rn4.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzAilMel1.2010-02-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    73m37.751s
+    cat fb.ailMel1.chainRn4Link.txt 
+    #	695366144 bases of 2245312831 (30.970%) in intersection
 
 #########################################################################
