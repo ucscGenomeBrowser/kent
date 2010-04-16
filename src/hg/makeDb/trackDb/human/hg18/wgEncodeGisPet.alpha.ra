@@ -236,7 +236,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel pros cell A+ +S1
-        longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in prostate cytosol)
+        longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in prostate cell)
         subGroups view=0-PlusRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
         type bedGraph 4
         minLimit 0
