@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.25 2010/04/06 18:39:53 hiram Exp $
+# $Id: makeDownloads.pl,v 1.26 2010/04/16 20:58:58 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -917,18 +917,18 @@ Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
     rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/ .
-For a single file, e.g. ${db}ToHg18.over.chain.gz
+For a single file, e.g. ${db}ToHg19.over.chain.gz
     rsync -avzP \
-        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg18.over.chain.gz .
-    (Hg18 is merely an example here, not necessarily existing.)
+        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz .
+    (Hg19 is merely an example here, not necessarily existing.)
 
 Or with wget, all files:
     wget --timestamping \
         'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg18.over.chain.gz' \ 
-        -O ${db}ToHg18.over.chain.gz
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz' \ 
+        -O ${db}ToHg19.over.chain.gz
 
 To uncompress the *.chain.gz files:
     gunzip <file>.chain.gz 
