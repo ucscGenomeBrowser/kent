@@ -5,13 +5,14 @@
 enum
 /* flags for build, including blast algorithm */
 {
-    blastn    = 0x01,   // blast algorithms
-    blastp    = 0x02,
-    blastx    = 0x04,
-    tblastn   = 0x10,
-    tblastx   = 0x20,
-    psiblast  = 0x40,
-    bldPslx   = 0x80,   // construct a PSLx with sequence
+    blastn       = 0x001,   // blast algorithms
+    blastp       = 0x002,
+    blastx       = 0x004,
+    tblastn      = 0x010,
+    tblastx      = 0x020,
+    psiblast     = 0x040,
+    bldPslx      = 0x080,   // construct a PSLx with sequence
+    cnvNucCoords = 0x100,
 };
 
 /* score file header */

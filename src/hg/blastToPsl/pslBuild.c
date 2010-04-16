@@ -31,14 +31,15 @@ struct block
 {
     char *qAln;          /* alignment strings (not owned) */
     char *tAln;
-    int qStart;          /* Query start/end positions. */
+    int qStart;          /* Query start/end positions, in blast units */
     int qEnd;
-    int tStart;          /* Target start/end position. */
+    int tStart;          /* Target start/end position, in blast units */
     int tEnd;
     int qLetMult;        /* each letter counts as this many units */
     int tLetMult;
-    int qSizeMult;       /* user to convert coordinates */
-    int tSizeMult;
+    int qCoordMult;      /* used to convert coordinates */
+    int tCoordMult;
+    int q2tBlkSizeMult;  /* convert query block size to target block size */
     int countMult;       /* column count for match/mismatch */
     int alnStart;        /* start/end in alignment */
     int alnEnd;
@@ -55,28 +56,43 @@ blk->tAln = tAln;
 blk->qEnd = qStart;
 blk->tEnd = tStart;
 
-if (flags & tblastn)
+if (flags & cnvNucCoords)
     {
+    // DNA/DNA PSL from protein/DNA align
+    assert(flags & tblastn);
     blk->qLetMult = 1;
-    blk->qSizeMult = 1;
+    blk->qCoordMult = 3;
     blk->tLetMult = 3;
-    blk->tSizeMult = 3;
+    blk->tCoordMult = 1;
+    blk->q2tBlkSizeMult = 3;
+    blk->countMult = 3;
+    }
+else if (flags & tblastn)
+    {
+    // protein/DNA PSL
+    blk->qLetMult = 1;
+    blk->qCoordMult = 1;
+    blk->tLetMult = 3;
+    blk->tCoordMult = 1;
+    blk->q2tBlkSizeMult = 3;
     blk->countMult = 1;
     }
 else if (flags & tblastx)
     {
     blk->qLetMult = 3;
-    blk->qSizeMult = 1;
+    blk->qCoordMult = 1;
     blk->tLetMult = 3;
-    blk->tSizeMult = 1;
+    blk->tCoordMult = 1;
+    blk->q2tBlkSizeMult = 1;
     blk->countMult = 3;
     }
 else
     {
     blk->qLetMult = 1;
-    blk->qSizeMult = 1;
+    blk->qCoordMult = 1;
     blk->tLetMult = 1;
-    blk->tSizeMult = 1;
+    blk->tCoordMult = 1;
+    blk->q2tBlkSizeMult = 1;
     blk->countMult = 1;
     }
 }
@@ -132,7 +148,8 @@ while ((*qPtr != '\0') && (*tPtr != '\0')
     blk->alnEnd++;
     }
 
-assert((blk->tSizeMult * (blk->qEnd - blk->qStart)) == (blk->qSizeMult * (blk->tEnd - blk->tStart)));
+// sanity test for blast blocks being the same length after conversion to the same units
+assert((blk->tLetMult * (blk->qEnd - blk->qStart)) == (blk->qLetMult * (blk->tEnd - blk->tStart)));
 return TRUE;
 }
 
@@ -140,21 +157,20 @@ static void addUngappedBlock(struct psl* psl, int* pslSpace, struct block* blk, 
 /* add the next  ungapped block to a psl */
 {
 unsigned newIBlk = psl->blockCount;
-unsigned blkSize = blk->qSizeMult * (blk->qEnd - blk->qStart);
+unsigned blkSize = blk->qEnd - blk->qStart;  // uses query size so protein psl is right
 if (newIBlk >= *pslSpace)
     pslGrow(psl, pslSpace);
-psl->qStarts[newIBlk] = blk->qStart;
-psl->tStarts[newIBlk] = blk->tStart;
-/* uses query size so protein psl is right */
-psl->blockSizes[newIBlk] = blkSize;
+psl->qStarts[newIBlk] = blk->qCoordMult * blk->qStart;
+psl->tStarts[newIBlk] = blk->tCoordMult * blk->tStart;
+psl->blockSizes[newIBlk] = blk->qCoordMult * blkSize;
 
 /* keep bounds current */
 psl->qStart = psl->qStarts[0];
-psl->qEnd = psl->qStarts[newIBlk] + (blk->qSizeMult * psl->blockSizes[newIBlk]);
+psl->qEnd = psl->qStarts[newIBlk] + (blk->qCoordMult * blkSize);
 if (psl->strand[0] == '-')
     reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
 psl->tStart = psl->tStarts[0];
-psl->tEnd = psl->tStarts[newIBlk] + (blk->tSizeMult * psl->blockSizes[newIBlk]);
+psl->tEnd = psl->tStarts[newIBlk] + (blk->q2tBlkSizeMult * blkSize);
 if (psl->strand[1] == '-')
     reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
 
@@ -260,16 +276,18 @@ struct psl *pslBuildFromHsp(char *qName, int qSize, int qStart, int qEnd, char q
 if ((flags & tblastx) && (flags & bldPslx))
     errAbort("can't convert TBLASTX to PSLX");
 
+struct block blk;
+blkInit(&blk, qStart, qAln, tStart, tAln, flags);
+
 // construct psl
 int pslSpace = 8;
 char strand[3];
 safef(strand, sizeof(strand), "%c%c", qStrand, tStrand);
-struct psl *psl = pslNew(qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd,
+struct psl *psl = pslNew(qName, blk.qCoordMult * qSize, blk.qCoordMult * qStart, blk.qCoordMult * qEnd,
+                         tName, blk.tCoordMult * tSize, blk.tCoordMult * tStart, blk.tCoordMult * tEnd,
                          strand, pslSpace, ((flags & bldPslx) ? PSL_XA_FORMAT : 0));
 
 // fill in psl
-struct block blk;
-blkInit(&blk, qStart, qAln, tStart, tAln, flags);
 hspToBlocks(psl, &pslSpace, &blk, flags);
 finishPsl(psl, flags);
 return psl;

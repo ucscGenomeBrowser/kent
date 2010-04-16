@@ -6,7 +6,7 @@
 #include "ncbiBlast.h"
 #include "pslBuild.h"
 
-static char const rcsid[] = "$Id: blastXmlToPsl.c,v 1.1 2010/02/08 03:04:22 markd Exp $";
+static char const rcsid[] = "$Id: blastXmlToPsl.c,v 1.2 2010/04/16 17:32:12 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,8 @@ errAbort(
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
   "          an integer, double or 1e-10. Default is no filter.\n"
   "  -pslx - create PSLX output (includes sequences for blocks)\n"
+  "  -convertToNucCoords - convert protein to nucleic alignments to nucleic\n"
+  "   to nucleic coordinates\n"
   "\n"
   "Output only results of last round from PSI BLAST\n");
 }
@@ -32,12 +34,14 @@ static struct optionSpec options[] = {
     {"scores", OPTION_STRING},
     {"eVal", OPTION_DOUBLE},
     {"pslx", OPTION_BOOLEAN},
+    {"convertToNucCoords", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
 static double eVal = -1; /* default Expect value signifying no filtering */
 static boolean pslxFmt = FALSE; /* output in pslx format */
 static int errCount = 0; /* count of  PSLs failing checks */
+static boolean convertToNucCoords = 1; /* adjust query coordinates */
 
 struct coords
 /* structure to return converted coordinates */
@@ -67,7 +71,10 @@ return ucsc;
 static unsigned getFlags(struct ncbiBlastBlastOutput *outputRec)
 /* determine blast algorithm and other flags */
 {
-return pslBuildGetBlastAlgo(outputRec->ncbiBlastBlastOutputProgram->text) | (pslxFmt ? bldPslx : 0);
+unsigned algo = pslBuildGetBlastAlgo(outputRec->ncbiBlastBlastOutputProgram->text);
+if (convertToNucCoords && (algo != tblastn))
+    errAbort("-convertToNucCoords only support for TBLASTN");
+return algo | (convertToNucCoords ? cnvNucCoords : 0) | (pslxFmt ? bldPslx : 0);
 }
 
 static void outputPsl(struct psl *psl, struct ncbiBlastHsp *hspRec, FILE* pslFh, FILE* scoreFh)
@@ -196,6 +203,7 @@ if (argc != 3)
     usage();
 eVal = optionDouble("eVal", eVal);
 pslxFmt = optionExists("pslx");
+convertToNucCoords = optionExists("convertToNucCoords");
 blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL));
 if (errCount > 0)
     errAbort("%d invalid PSLs created", errCount);

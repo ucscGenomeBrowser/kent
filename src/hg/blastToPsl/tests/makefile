@@ -18,29 +18,6 @@ testBlastToPsl:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	longDbNameTest multiLineDescTest tblastxTest tblastnTest \
 	blastpPsiTest psiNoHitsTest psiBadFormatTest blastpPsiWrapTest
 
-###
-# blastXmlToPsl
-###
-testBlastXmlToPsl: mrna1Test prot1Test prot2Test
-
-mrna1Test: mkdirs
-	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
-	diff -u expected/$@.psl output/$@.psl
-	diff -u expected/$@.bscores output/$@.bscores
-
-prot1Test: mkdirs
-	${blastXmlToPsl} -scores=output/$@.bscores input/prot1.tblastn.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
-	diff -u expected/$@.psl output/$@.psl
-	diff -u expected/$@.bscores output/$@.bscores
-
-prot2Test: mkdirs
-	${blastXmlToPsl} -scores=output/$@.bscores input/prot2.psiblast.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
-	diff -u expected/$@.psl output/$@.psl
-	diff -u expected/$@.bscores output/$@.bscores
-
 protMrnaTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
@@ -159,6 +136,35 @@ psiBadFormatTest: mkdirs
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 	diff -u expected/$@.err output/$@.err
+
+###
+# blastXmlToPsl
+###
+testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest
+
+mrna1Test: mkdirs
+	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
+prot1Test: mkdirs
+	${blastXmlToPsl} -scores=output/$@.bscores input/prot1.tblastn.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
+prot2Test: mkdirs
+	${blastXmlToPsl} -scores=output/$@.bscores input/prot2.psiblast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
+prot1NucCoordTest: mkdirs
+	${blastXmlToPsl} -convertToNucCoords input/prot1.tblastn.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
 
 clean::
 	rm -rf output
