@@ -1388,7 +1388,7 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
-# LIFTOVER TO FelCatV17e (working - 2010-03-29 - Chin )
+# LIFTOVER TO FelCatV17e (DONE - 2010-03-29 - Chin )
     mkdir /hive/data/genomes/felCat3/bed/blat.felCatV17e.2010-03-29
     cd /hive/data/genomes/felCat3/bed/blat.felCatV17e.2010-03-29
     # -debug run to create run dir, preview scripts...
