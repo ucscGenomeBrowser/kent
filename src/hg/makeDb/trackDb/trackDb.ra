@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.623 2010/03/15 21:42:23 ann Exp $";
+#	"$Id: trackDb.ra,v 1.624 2010/04/16 17:36:01 angie Exp $";
 
 include trackDb.chainNet.ra
 
@@ -1538,6 +1538,18 @@ useScore 1
 exonArrows on
 type bed 6 .
 
+track snp131
+shortLabel SNPs (131)
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
+group varRep
+priority 100.093
+visibility dense 
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+
 track snp130
 shortLabel SNPs (130)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130)
@@ -2471,6 +2483,14 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.992
+padding 250
+
+searchTable snp131
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.991
 padding 250
 
 searchTable ensGene
