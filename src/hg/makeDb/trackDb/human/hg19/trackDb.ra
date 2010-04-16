@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.112 2010/04/14 23:56:15 antonio Exp $";
+#	"$Id: trackDb.ra,v 1.113 2010/04/16 17:36:22 angie Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1478,6 +1478,15 @@ priority 103.29
         color 170,100,50
         type bed 5 .
         priority 23
+
+track snp131 override
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
 
 track snp130 override
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
