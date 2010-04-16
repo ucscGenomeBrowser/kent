@@ -138,8 +138,8 @@ wgEncode 1
         track wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
         release alpha
         subTrack wgEncodeGisPetView0-PlusRawSignal on
-        shortLabel K562 chrm A+ +S1
-        longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 chromatin)
+        shortLabel K562 chrm to +S1
+        longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (Total RNA in K562 chromatin)
         subGroups view=0-PlusRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
         type bedGraph 4
         minLimit 0
@@ -946,35 +946,35 @@ wgEncode 1
 	color 46,0,184
 	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562PolysomePap fileName=wgEncodeGisPetClustersRep1K562PolysomePap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562ChromatinPap
+	track wgEncodeGisPetClustersRep1K562ChromatinTotal
 	release alpha
 	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 chromatin longPolyA 1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA in K562 chromatin)
-	subGroups view=3-Clusters cellType=K562 localization=50-chromatin rnaExtract=longPolyA 
+	shortLabel K562 chromatin total 1
+	longLabel ENCODE GIS PET Clusters Replicate 1 (Total RNA in K562 chromatin)
+	subGroups view=3-Clusters cellType=K562 localization=50-chromatin rnaExtract=total 
 	type bed 12
 	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=chromatin view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562ChromatinPap fileName=wgEncodeGisPetClustersRep1K562ChromatinPap.bed12.gz
+	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562ChromatinTotal fileName=wgEncodeGisPetClustersRep1K562ChromatinTotal.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562NucleoplasmPap
+	track wgEncodeGisPetClustersRep1K562NucleoplasmTotal
 	release alpha
 	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 nucleoplasm longPolyA 1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA in K562 nucleoplasm)
-	subGroups view=3-Clusters cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA 
+	shortLabel K562 nucleoplasm total
+	longLabel ENCODE GIS PET Clusters Replicate 1 (Total in K562 nucleoplasm)
+	subGroups view=3-Clusters cellType=K562 localization=40-nucleoplasm rnaExtract=total 
 	type bed 12
 	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleoplasm view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleoplasmPap fileName=wgEncodeGisPetClustersRep1K562NucleoplasmPap.bed12.gz
+	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal fileName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562NucleolusPap
+	track wgEncodeGisPetClustersRep1K562NucleolusTotal
 	release alpha
 	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 nucleolus longPolyA 1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA in K562 nucleolus)
-	subGroups view=3-Clusters cellType=K562 localization=60-nucleolus rnaExtract=longPolyA 
+	shortLabel K562 nucleolus total 1
+	longLabel ENCODE GIS PET Clusters Replicate 1 (Total in K562 nucleolus)
+	subGroups view=3-Clusters cellType=K562 localization=60-nucleolus rnaExtract=total 
 	type bed 12
 	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleolus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleolusPap fileName=wgEncodeGisPetClustersRep1K562NucleolusPap.bed12.gz
+	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleolusTotal fileName=wgEncodeGisPetClustersRep1K562NucleolusTotal.bed12.gz
 
 	track wgEncodeGisPetClustersRep1ProstateCellPap
 	release alpha
