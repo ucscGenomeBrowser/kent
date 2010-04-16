@@ -3418,6 +3418,22 @@ type bed 4 +
     longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
     priority 56
 
+    track pgNA19238
+    subTrack pgSnpHgwdev
+    shortLabel YRI '9238
+    longLabel YRI Trio Mother NA19238 (1000 Genomes Project)
+    group varRep
+    priority 57
+    color 128,64,0
+
+    track pgNA19239
+    subTrack pgSnpHgwdev
+    shortLabel YRI '9239
+    longLabel YRI Trio Father NA19239 (1000 Genomes Project)
+    group varRep
+    priority 58
+    color 128,64,0
+
 
 #Overrides from priority.ra
 
