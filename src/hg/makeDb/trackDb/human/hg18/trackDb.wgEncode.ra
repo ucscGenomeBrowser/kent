@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.953 2010/04/15 23:07:20 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.954 2010/04/16 16:57:18 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -21495,7 +21495,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=257 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56210k fileName=wgEncodeGisDnaPetAlignmentsK56210k.pairedTagAlign.gz
 
 	track wgEncodeGisDnaPetAlignmentsK56220k
-	subTrack wgEncodeGisDnaPet off
+        subTrack wgEncodeGisDnaPetViewAlignments off
 	shortLabel K562 20k
         color 46,0,184
 	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
