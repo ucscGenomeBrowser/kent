@@ -242,17 +242,6 @@ wgEncode 1
         maxLimit 148438
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
 
-        track wgEncodeGisPetPlusRawSigRep2Gm12878CellLongpolya
-        release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal off
-        shortLabel GM12 cyto A+ +S2
-        longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 2 (longPolyA RNA in GM12878 cytosol)
-        subGroups view=0-PlusRawSignal cellType=GM12878 localization=0-cell rnaExtract=longPolyA
-        type bedGraph 4
-        # ASH 11/16/09: can't specify {min,max}Limit here because table doesn't exist.
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
-
         track wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
         release alpha
         subTrack wgEncodeGisPetView0-PlusRawSignal off
