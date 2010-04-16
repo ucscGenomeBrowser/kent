@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.81 2009/05/31 07:28:33 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.82 2010/04/16 17:23:43 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1504,91 +1504,99 @@ fprintf(out, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s %s\n",
         psl->strand, pslDesc);
 }
 
+
+static void chkError(char* pslDesc, FILE* out, struct psl* psl, int* errCount, char* format, ...)
+/* forward needed to specify printf signature for gcc checking */
+#if defined(__GNUC__)
+__attribute__((format(printf, 5, 6)))
+#endif
+;
+
+static void chkError(char* pslDesc, FILE* out, struct psl* psl, int* errCount, char* format, ...)
+/* error handling on an pslCheck error, counting error and issuing description
+ * of PSL on the first error. */
+{
+if (*errCount == 0)
+    printPslDesc(pslDesc, out, psl);
+va_list args;
+va_start(args, format);
+vfprintf(out, format, args);
+va_end(args);
+(*errCount)++;
+}
+
+static void chkBlkRanges(char* pslDesc, FILE* out, struct psl* psl,
+                         char* pName, char* pLabel, char pCLabel, char pStrand,
+                         unsigned pSize, unsigned pStart, unsigned pEnd,
+                         unsigned iBlk, unsigned* blockSizes,
+                         unsigned* pBlockStarts, int* errCount)
+/* check the target or query ranges in a PSL incrementing errorCnt */
+{
+unsigned blkStart = pBlockStarts[iBlk];
+unsigned blkEnd = blkStart+blockSizes[iBlk];
+/* translate stand to genomic coords */
+unsigned gBlkStart = (pStrand == '+') ? blkStart : (pSize - blkEnd);
+unsigned gBlkEnd = (pStrand == '+') ? blkEnd : (pSize - blkStart);
+
+if ((pSize > 0) && (blkEnd > pSize))
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %s block %u end %u > %cSize %u\n",
+             pName, pLabel, iBlk, blkEnd, pCLabel, pSize);
+if (gBlkStart < pStart)
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %s block %u start %u < %cStart %u\n",
+             pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
+if (gBlkStart >= pEnd)
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %s block %u start %u >= %cEnd %u\n",
+             pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
+if (gBlkEnd < pStart)
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %s block %u end %u < %cStart %u\n",
+             pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
+if (gBlkEnd > pEnd)
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %s block %u end %u > %cEnd %u\n",
+             pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
+if (iBlk > 0)
+    {
+    unsigned prevBlkEnd = pBlockStarts[iBlk-1]+blockSizes[iBlk-1];
+    if (blkStart < prevBlkEnd)
+        chkError(pslDesc, out, psl, errCount,
+                 "\t%s %s block %u start %u < previous block end %u\n",
+                 pName, pLabel, iBlk, blkStart, prevBlkEnd);
+    }
+}
+
 static void chkRanges(char* pslDesc, FILE* out, struct psl* psl,
                       char* pName, char* pLabel, char pCLabel, char pStrand,
                       unsigned pSize, unsigned pStart, unsigned pEnd,
                       unsigned blockCount, unsigned* blockSizes,
-                      unsigned* pBlockStarts, int* errCountPtr)
+                      unsigned* pBlockStarts, int blockSizeMult, int* errCount)
 /* check the target or query ranges in a PSL, increment errorCnt */
 {
-int errCount = *errCountPtr;
-unsigned iBlk, prevBlkEnd = 0;
-
+unsigned iBlk;
 if (pStart >= pEnd)
-    {
-    if (errCount == 0)
-        printPslDesc(pslDesc, out, psl);
-    fprintf(out, "\t%s %cStart %u >= %cEnd %u\n",
-            pName, pCLabel, pStart, pCLabel, pEnd);
-    errCount++;
-    }
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %cStart %u >= %cEnd %u\n",
+             pName, pCLabel, pStart, pCLabel, pEnd);
 if (pEnd > pSize)
-    {
-    if (errCount == 0)
-        printPslDesc(pslDesc, out, psl);
-    fprintf(out, "\t%s %cEnd %u >= %cSize %u\n",
-            pName, pCLabel, pEnd, pCLabel, pSize);
-    errCount++;
-    }
-for (iBlk = 0; iBlk < blockCount; iBlk++)
-    {
-    unsigned blkStart = pBlockStarts[iBlk];
-    unsigned blkEnd = blkStart+blockSizes[iBlk];
-    /* translate stand to genomic coords */
-    unsigned gBlkStart = (pStrand == '+') ? blkStart : (pSize - blkEnd);
-    unsigned gBlkEnd = (pStrand == '+') ? blkEnd : (pSize - blkStart);
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %cEnd %u >= %cSize %u\n",
+             pName, pCLabel, pEnd, pCLabel, pSize);
+// check that block start/end matches overall start end
+unsigned pStartStrand = pStart, pEndStrand = pEnd;
+if (pStrand != '+')
+    reverseUnsignedRange(&pStartStrand, &pEndStrand, pSize);
+unsigned lastBlkEnd = pBlockStarts[blockCount-1] + (blockSizeMult * blockSizes[blockCount-1]);
+if ((pStartStrand != pBlockStarts[0]) || (pEndStrand != lastBlkEnd))
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s strand \"%c\" adjusted %cStart-%cEnd range %u-%u != block range %u-%u\n",
+             pName, pStrand, pCLabel, pCLabel, pStartStrand, pEndStrand, pBlockStarts[0], lastBlkEnd);
 
-    if ((pSize > 0) && (blkEnd > pSize))
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u end %u > %cSize %u\n",
-                pName, pLabel, iBlk, blkEnd, pCLabel, pSize);
-        errCount++;
-        }
-    if (gBlkStart < pStart)
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u start %u < %cStart %u\n",
-                pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
-        errCount++;
-        }
-    if (gBlkStart >= pEnd)
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u start %u >= %cEnd %u\n",
-                pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
-        errCount++;
-        }
-    if (gBlkEnd < pStart)
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u end %u < %cStart %u\n",
-                pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
-        errCount++;
-        }
-    if (gBlkEnd > pEnd)
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u end %u > %cEnd %u\n",
-                pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
-        errCount++;
-        }
-    if ((iBlk > 0) && (blkStart < prevBlkEnd))
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u start %u < previous block end %u\n",
-                pName, pLabel, iBlk, blkStart, prevBlkEnd);
-        errCount++;
-        }
-    prevBlkEnd = blkEnd;
-    }
-*errCountPtr = errCount;
+for (iBlk = 0; iBlk < blockCount; iBlk++)
+    chkBlkRanges(pslDesc, out, psl, pName, pLabel, pCLabel, pStrand,
+                 pSize, pStart, pEnd, iBlk, blockSizes, pBlockStarts, errCount);
 }
 
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl)
@@ -1599,8 +1607,7 @@ static char* VALID_STRANDS[] = {
     "+", "-", "++", "+-", "-+", "--", NULL
 };
 int i, errCount = 0;
-char strand;
-boolean isProt = FALSE;
+int tBlockSizeMult = pslIsProtein(psl) ? 3 : 1;
 
 /* check strand value */
 for (i = 0; VALID_STRANDS[i] != NULL; i++)
@@ -1609,38 +1616,16 @@ for (i = 0; VALID_STRANDS[i] != NULL; i++)
         break;
     }
 if (VALID_STRANDS[i] == NULL)
-    {
-    if (errCount == 0)
-        printPslDesc(pslDesc, out, psl);
-    fprintf(out, "\tinvalid PSL strand: \"%s\"\n", psl->strand);
-    errCount++;
-    }
+    chkError(pslDesc, out, psl, &errCount,
+             "\tinvalid PSL strand: \"%s\"\n", psl->strand);
 
 /* check target */
-if (pslIsProtein(psl))
-    {
-    isProt = TRUE;
-    for (i = 0; i < psl->blockCount ; i++)
-	psl->blockSizes[i] *= 3;
-    }
-
-strand = ((psl->strand[1] == '\0') ? '+' : psl->strand[1]);
-chkRanges(pslDesc, out, psl, psl->tName, "target", 't',
-          strand, psl->tSize, psl->tStart, psl->tEnd,
-          psl->blockCount, psl->blockSizes, psl->tStarts,
-          &errCount);
-if (isProt)
-    {
-    for (i = 0; i < psl->blockCount ; i++)
-	psl->blockSizes[i] /= 3;
-    }
+chkRanges(pslDesc, out, psl, psl->tName, "target", 't', pslTStrand(psl), psl->tSize, psl->tStart, psl->tEnd,
+          psl->blockCount, psl->blockSizes, psl->tStarts, tBlockSizeMult, &errCount);
 
 /* check query */
-strand = psl->strand[0];
-chkRanges(pslDesc, out, psl, psl->qName, "query", 'q',
-          strand, psl->qSize, psl->qStart, psl->qEnd,
-          psl->blockCount, psl->blockSizes, psl->qStarts,
-          &errCount);
+chkRanges(pslDesc, out, psl, psl->qName, "query", 'q', pslQStrand(psl), psl->qSize, psl->qStart, psl->qEnd,
+          psl->blockCount, psl->blockSizes, psl->qStarts, 1, &errCount);
 
 return errCount;
 }
