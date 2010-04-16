@@ -1011,7 +1011,7 @@ release alpha
 release alpha
         subTrack wgEncodeCaltechRnaSeqViewAligns off
         shortLabel U HepG2 2x75 AL2
-        longLabel ENCODE Caltech RNA-Seq PolyA+ Rep 2 HepG2 2x75 Paired Aligns 
+        longLabel ENCODE Caltech RNA-Seq PolyA+ HepG2 Rep 2 2x75 Paired Aligns 
         subGroups view=Aligns cellType=HepG2 localization=0-cell mapAlgorithm=erng32a readType=r2x75 rnaExtract=longPolyA rep=2 insertLength=ilunk
         type bed 12
         color 189,0,157
