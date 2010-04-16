@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.123 2010/02/27 00:57:47 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.124 2010/04/16 19:05:01 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1880,7 +1880,8 @@ if (!q)
 if ( sameString(qaUser,"kuhn") || 
      sameString(qaUser,"kuhn2") || 
      sameString(qaUser,"mary") || 
-     sameString(qaUser,"ann") 
+     sameString(qaUser,"ann") ||
+     sameString(qaUser,"antonio") 
      )  /* for users that want to automatically try to lock record immediately */
     {
     if (sameString(action,"edit") || sameString(action,"setSize")) 
