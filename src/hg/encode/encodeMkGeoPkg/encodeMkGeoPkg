@@ -1,0 +1,40 @@
+#!/usr/bin/env perl -w
+
+use warnings;
+use strict;
+
+use lib "/cluster/bin/scripts";
+use Encode;
+use HgAutomate;
+use HgDb;
+
+use vars qw/
+    $opt_db
+    $opt_verbose
+    /;
+
+sub usage {
+    print STDERR <<END;
+usage: encodeMkGeoPkg database table
+
+    -verbose=num        Set verbose level to num (default 1).
+END
+exit 1;
+}
+
+############################################################################
+# Main
+
+my $now = time();
+
+my $ok = GetOptions("verbose=i"
+                    );
+usage() if (!$ok);
+$opt_verbose = 1 if (!defined $opt_verbose);
+
+usage() if (scalar(@ARGV) < 2);
+
+my $db = HgDb->new(DB => $ARGV[0]);
+$tableName = $ARGV[1]
+
+print $tableName
