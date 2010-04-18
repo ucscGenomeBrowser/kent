@@ -1,15 +1,19 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 
 use warnings;
 use strict;
 
+use Getopt::Long;
+use Cwd;
+
 use lib "/cluster/bin/scripts";
 use Encode;
+use RAFile;
 use HgAutomate;
 use HgDb;
 
 use vars qw/
-    $opt_db
+    $opt_configDir
     $opt_verbose
     /;
 
@@ -26,15 +30,60 @@ exit 1;
 # Main
 
 my $now = time();
-
-my $ok = GetOptions("verbose=i"
+my $wd = cwd();
+my $ok = GetOptions("configDir=s",
+                    "verbose=i"
                     );
 usage() if (!$ok);
-$opt_verbose = 1 if (!defined $opt_verbose);
-
 usage() if (scalar(@ARGV) < 2);
+$opt_verbose = 1 if (!defined $opt_verbose);
+my $configPath;
+if (defined $opt_configDir) {
+    if ($opt_configDir =~ /^\//) {
+        $configPath = $opt_configDir;
+    } else {
+        $configPath = "$wd/$opt_configDir";
+    }
+} else {
+    $configPath = "/usr/local/apache/cgi-bin/encode/";
+}
+if(!(-d $configPath)) {
+    die "configPath '$configPath' is invalid; Can't find the config directory\n";
+}
+HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 
-my $db = HgDb->new(DB => $ARGV[0]);
-$tableName = $ARGV[1]
+my $database  = $ARGV[0];
+my $tableName = $ARGV[1];
 
-print $tableName
+# connect to the database and read the metadata table for the obj
+my $db = HgDb->new(DB => $database);
+
+my $results = $db->execute("SELECT var, val FROM $database.mdb WHERE obj = '$tableName'");
+my %metadata = ();
+if($results) {
+    while(my @row = $results->fetchrow_array()) {
+        my $key = $row[0];
+        my $value = $row[1];
+        $metadata{$key} =  $value;
+    }
+}
+
+# read the cv.ra file
+my %terms = Encode::getControlledVocab($configPath);
+my %cellLines = %{$terms{"Cell Line"}};
+
+my $title;
+my $organism;
+
+if(defined $metadata{"lab"} and defined $metadata{"cell"} and defined $metadata{"antibody"}) {
+    my $lab = $metadata{"lab"};
+    my $cell = $metadata{"cell"};
+    my $antibody = $metadata{"antibody"};
+    $title = "ENCODE $lab $cell $antibody";
+
+    my %cellLineInfo = %{$cellLines{$cell}};
+    $organism = $cellLineInfo{"organism"};
+}
+
+print $title, "\n";
+print $organism, "\n";
