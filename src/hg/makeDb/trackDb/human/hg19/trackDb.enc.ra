@@ -194,8 +194,8 @@ query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 # HAIB Methyl RRBS (wrangler: braney)
 track encHaibMethylRrbs
 compositeTrack on
-shortLabel HudsonAlpha MethylRrbs
-longLabel ENCODE HudsonAlpha Myers MethylRrbs
+shortLabel HudsonAlpha RRBS
+longLabel ENCODE HudsonAlpha Myers RRBS
 group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 GM12891=GM12891 GM12892=GM12892 HepG2=HepG2 H1hESC=H1-hESC HeLaS3=HeLa-S3 K562=K562
 subGroup2 rep replicate rep1=rep1 rep2=rep2
@@ -214,7 +214,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel GM12891 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM12891 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in GM12891 cells)
     subGroups  cellType=GM12891 rep=rep2
     type bed 9
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylRrbs cell=GM12891  replicate=2 dataVersion="ENCODE June 2010 Freeze" subId=1152 dateSubmitted=2010-04-09 dateUnrestricted=2011-01-09 composite=encHaibMethylRrbs tableName=encHaibMethylRrbsGm12891SitesRep2 fileName=encHaibMethylRrbsGm12891SitesRep2.bed9.gz
@@ -223,7 +223,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel GM12891 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM12891 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in GM12891 cells)
     subGroups  cellType=GM12891 rep=rep1
     type bed 9
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylRrbs cell=GM12891  replicate=1 dataVersion="ENCODE June 2010 Freeze" subId=1152 dateSubmitted=2010-04-09 dateUnrestricted=2011-01-09 composite=encHaibMethylRrbs tableName=encHaibMethylRrbsGm12891SitesRep1 fileName=encHaibMethylRrbsGm12891SitesRep1.bed9.gz
@@ -232,7 +232,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel GM12892 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM12892 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in GM12892 cells)
     subGroups  cellType=GM12892 rep=rep1
     type bed 9
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylRrbs cell=GM12892  replicate=1 dataVersion="ENCODE June 2010 Freeze" subId=1152 dateSubmitted=2010-04-09 dateUnrestricted=2011-01-09 composite=encHaibMethylRrbs tableName=encHaibMethylRrbsGm12892SitesRep1 fileName=encHaibMethylRrbsGm12892SitesRep1.bed9.gz
@@ -241,7 +241,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel GM12892 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM12892 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in GM12892 cells)
     subGroups  cellType=GM12892 rep=rep2
     type bed 9
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylRrbs cell=GM12892  replicate=2 dataVersion="ENCODE June 2010 Freeze" subId=1152 dateSubmitted=2010-04-09 dateUnrestricted=2011-01-09 composite=encHaibMethylRrbs tableName=encHaibMethylRrbsGm12892SitesRep2 fileName=encHaibMethylRrbsGm12892SitesRep2.bed9.gz
@@ -250,7 +250,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs
     shortLabel K562 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in K562 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in K562 cells)
     subGroups  cellType=K562 rep=rep2
     type bed 9
     color 46,0,184
@@ -260,7 +260,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs
     shortLabel K562 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in K562 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in K562 cells)
     subGroups  cellType=K562 rep=rep1
     type bed 9
     color 46,0,184
@@ -270,7 +270,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel H1-hESC 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in H1-hESC cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in H1-hESC cells)
     subGroups  cellType=H1hESC rep=rep1
     type bed 9
     color 0,107,27
@@ -280,7 +280,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel HepG2 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HepG2 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in HepG2 cells)
     subGroups  cellType=HepG2 rep=rep1
     type bed 9
     color 189,0,157
@@ -290,7 +290,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel HepG2 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HepG2 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in HepG2 cells)
     subGroups  cellType=HepG2 rep=rep2
     type bed 9
     color 189,0,157
@@ -300,7 +300,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel H1-hESC 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in H1-hESC cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in H1-hESC cells)
     subGroups  cellType=H1hESC rep=rep2
     type bed 9
     color 0,107,27
@@ -310,7 +310,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel HeLa-S3 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HeLa-S3 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in HeLa-S3 cells)
     subGroups  cellType=HeLaS3 rep=rep2
     type bed 9
     color 0,119,158
@@ -320,7 +320,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs off
     shortLabel HeLa-S3 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HeLa-S3 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in HeLa-S3 cells)
     subGroups  cellType=HeLaS3 rep=rep1
     type bed 9
     color 0,119,158
@@ -330,7 +330,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs
     shortLabel GM12878 2
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM12878 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 2 (in GM12878 cells)
     subGroups  cellType=GM12878 rep=rep2
     type bed 9
     color 153,38,0
@@ -340,7 +340,7 @@ noInherit on
     release alpha
     subTrack encHaibMethylRrbs
     shortLabel GM12878 1
-    longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM12878 cells)
+    longLabel ENCODE HudsonAlpha Myers RRBS Sites Replicate 1 (in GM12878 cells)
     subGroups  cellType=GM12878 rep=rep1
     type bed 9
     color 153,38,0
