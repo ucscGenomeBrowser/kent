@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.11 2010/04/19 17:03:05 braney Exp $
+#	$Id: ailMel1.txt,v 1.12 2010/04/19 17:03:46 braney Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -578,29 +578,3 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
-#############################################################################
-# N-SCAN gene predictions (nscanGene) - (2010-04-18 markd)
-
-/mblab.wustl.edu/predictions/taeGut1
-
-    # obtained NSCAN predictions from michael brent's group
-    # at WUSTL
-    cd /cluster/data/ailMel1/bed/nscan
-    wget -nv http://mblab.wustl.edu/predictions/pig/ailMel1/readme.txt
-    wget -nv http://mblab.wustl.edu/predictions/pig/ailMel1/ailMel1.fa
-    wget -nv http://mblab.wustl.edu/predictions/pig/ailMel1/ailMel1.gtf
-    gzip ailMel1.*
-    chmod a-w *
-
-    # load track
-    gtfToGenePred -genePredExt ailMel1.gtf.gz stdout | hgLoadGenePred -genePredExt ailMel1 nscanGene stdin
-    hgPepPred ailMel1 generic nscanPep ailMel1.fa.gz
-    rm *.tab
-
-    # pig/ailMel1/trackDb.ra, add:
-    track nscanGene override
-    informant Pig N-SCAN uses human (hg19) as the informant, updated with PASA clusters of pig cDNAs.
-
-    # veryify top-level search spec, should produce no results:
-    hgsql -Ne 'select name from nscanGene' ailMel1 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
-############################################################################
