@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: susScr2.txt,v 1.7 2010/04/14 13:35:20 braney Exp $
+#       $Id: susScr2.txt,v 1.8 2010/04/19 04:34:00 markd Exp $
 
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
@@ -793,3 +793,29 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2010-04-18 markd)
+
+/mblab.wustl.edu/predictions/taeGut1
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/susScr2/bed/nscan
+    wget -nv http://mblab.wustl.edu/predictions/pig/susScr2/readme.txt
+    wget -nv http://mblab.wustl.edu/predictions/pig/susScr2/susScr2.fa
+    wget -nv http://mblab.wustl.edu/predictions/pig/susScr2/susScr2.gtf
+    gzip susScr2.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt susScr2.gtf.gz stdout | hgLoadGenePred -genePredExt susScr2 nscanGene stdin
+    hgPepPred susScr2 generic nscanPep susScr2.fa.gz
+    rm *.tab
+
+    # pig/susScr2/trackDb.ra, add:
+    track nscanGene override
+    informant Pig N-SCAN uses human (hg19) as the informant, updated with PASA clusters of pig cDNAs.
+
+    # veryify top-level search spec, should produce no results:
+    hgsql -Ne 'select name from nscanGene' susScr2 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+############################################################################

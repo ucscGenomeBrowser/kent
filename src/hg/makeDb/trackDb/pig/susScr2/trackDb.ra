@@ -53,3 +53,8 @@ viewLimits 0:14674
 windowingFunction maximum
 spanList 1
 html bosTau4ChainPileUp
+
+track nscanGene override
+informant Pig N-SCAN uses human (hg19) as the informant, updated with PASA clusters of pig cDNAs.
+
+

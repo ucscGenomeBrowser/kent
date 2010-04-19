@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.624 2010/04/16 17:36:01 angie Exp $";
+#	"$Id: trackDb.ra,v 1.625 2010/04/19 04:36:38 markd Exp $";
 
 include trackDb.chainNet.ra
 
@@ -394,7 +394,7 @@ informant BUG: INFORMANT DESCRIPTION NOT SET IN TRACK DB FILE
 
 searchTable nscanGene
 searchType genePred
-termRegex chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+(\.[0-9a-z]+)?
+termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
 searchPriority 50
 
 track rgdEst
