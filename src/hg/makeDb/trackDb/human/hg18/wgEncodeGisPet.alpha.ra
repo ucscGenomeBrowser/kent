@@ -14,7 +14,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longPolyA,total
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
-dragAndDrop subTracks
+dragAndDrop subTracks 
 noInherit on
 priority 0
 type bed 3
@@ -24,7 +24,7 @@ wgEncode 1
     shortLabel Plus Raw Signal
     view 0-PlusRawSignal
     visibility dense
-    subTrack wgEncodeGisPet
+    subTrack wgEncodeGisPet 
     maxHeightPixels 100:24:16
     windowingFunction maximum
     transformFunc NONE
@@ -138,7 +138,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal on
+        subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 chrm to +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (total RNA in K562 chromatin)
         subGroups view=0-PlusRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
@@ -150,7 +150,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal on
+        subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 cytosol)
         subGroups view=0-PlusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
@@ -162,7 +162,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal on
+        subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 nlos to +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (total RNA in K562 nucleolus)
         subGroups view=0-PlusRawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
@@ -174,7 +174,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal on
+        subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 npls to +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (total RNA in K562 nucleoplasm)
         subGroups view=0-PlusRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
@@ -186,7 +186,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal on
+        subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 nucleus)
         subGroups view=0-PlusRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
@@ -198,7 +198,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal on
+        subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 psom A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 polysome)
         subGroups view=0-PlusRawSignal cellType=K562 localization=10-polysome rnaExtract=longPolyA
@@ -257,7 +257,7 @@ wgEncode 1
 
         track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
         release alpha
-        subTrack wgEncodeGisPetView0-PlusRawSignal off
+        subTrack wgEncodeGisPetView0-PlusRawSignal on
         shortLabel GM12 cyto A+ -S2
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 2 (longPolyA RNA in GM12878 cytosol)
         subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
@@ -271,7 +271,7 @@ wgEncode 1
     shortLabel Minus Raw Signal
     view 1-MinusRawSignal
     visibility dense
-    subTrack wgEncodeGisPet
+    subTrack wgEncodeGisPet 
     maxHeightPixels 100:24:16
     windowingFunction maximum
     transformFunc NONE
@@ -384,7 +384,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal on
+        subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 chrm to -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (total RNA in K562 chromatin)
         subGroups view=1-MinusRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
@@ -396,7 +396,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal on
+        subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 cytosol)
         subGroups view=1-MinusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
@@ -408,7 +408,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal on
+        subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 nlos to -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (total RNA in K562 nucleolus)
         subGroups view=1-MinusRawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
@@ -420,7 +420,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal on
+        subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 npls to -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (total RNA in K562 nucleoplasm)
         subGroups view=1-MinusRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
@@ -432,7 +432,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal on
+        subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 nucleus)
         subGroups view=1-MinusRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
@@ -444,7 +444,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal on
+        subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 psom A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in K562 polysome)
         subGroups view=1-MinusRawSignal cellType=K562 localization=10-polysome rnaExtract=longPolyA
@@ -491,7 +491,7 @@ wgEncode 1
 
         track wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
         release alpha
-        subTrack wgEncodeGisPetView1-MinusRawSignal off
+        subTrack wgEncodeGisPetView1-MinusRawSignal on
         shortLabel GM12 cyto A+ -S2
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 2 (longPolyA RNA in GM12878 cytosol)
         subGroups view=1-MinusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
@@ -517,7 +517,7 @@ wgEncode 1
     shortLabel Alignments
     view 2-Alignments
     visibility hide
-    subTrack wgEncodeGisPet
+    subTrack wgEncodeGisPet 
 
         track wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya
         release alpha
@@ -602,7 +602,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1K562ChromatinTotal
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 chrm to AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (total RNA in K562 chromatin)
         subGroups view=2-Alignments cellType=K562 localization=50-chromatin rnaExtract=total
@@ -618,7 +618,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1K562NucleolusTotal
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 nlos to AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (total RNA in K562 nucleolus)
         subGroups view=2-Alignments cellType=K562 localization=60-nucleolus rnaExtract=total
@@ -634,7 +634,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1K562NucleoplasmTotal
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 npls to AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (total RNA in K562 nucleoplasm)
         subGroups view=2-Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=total
@@ -650,7 +650,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in K562 nucleus)
         subGroups view=2-Alignments cellType=K562 localization=30-nucleus rnaExtract=longPolyA
@@ -666,7 +666,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 psom A+ AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in K562 polysome)
         subGroups view=2-Alignments cellType=K562 localization=10-polysome rnaExtract=longPolyA
@@ -713,7 +713,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel GM12 nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in GM12878 nucleus)
         subGroups view=2-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
@@ -729,7 +729,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel GM12 cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in GM12878 cytosol)
         subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
@@ -826,7 +826,7 @@ wgEncode 1
 
         track wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya
         release alpha
-        subTrack wgEncodeGisPetView2-Alignments on
+        subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in K562 cytosol)
         subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
@@ -844,12 +844,12 @@ wgEncode 1
     track wgEncodeGisPetView3-Clusters
     shortLabel Clusters
     view 3-Clusters
-    visibility dense
-    subTrack wgEncodeGisPet
+    visibility pack
+    subTrack wgEncodeGisPet 
 
         track wgEncodeGisPetClustersRep1Gm12878CytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters on
         shortLabel GM12 cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in GM12878 cytosol)
         subGroups view=3-Clusters cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA 
@@ -859,7 +859,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1Gm12878NucleusPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters on
         shortLabel GM12 nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in GM12878 nucleus)
         subGroups view=3-Clusters cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA 
@@ -869,7 +869,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1Hepg2CytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HepG cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HepG2 cytosol)
         subGroups view=3-Clusters cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA 
@@ -879,7 +879,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1Hepg2NucleusPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HepG nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HepG2 nucleus)
         subGroups view=3-Clusters cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA 
@@ -889,7 +889,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1K562CytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 cytosol)
         subGroups view=3-Clusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA 
@@ -899,7 +899,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1K562NucleusPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 nucleus)
         subGroups view=3-Clusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA 
@@ -909,7 +909,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1K562PolysomePap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 psom A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 polysome)
         subGroups view=3-Clusters cellType=K562 localization=10-polysome rnaExtract=longPolyA 
@@ -919,7 +919,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1K562ChromatinTotal
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 chrm to CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 chromatin)
         subGroups view=3-Clusters cellType=K562 localization=50-chromatin rnaExtract=total 
@@ -929,7 +929,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1K562NucleoplasmTotal
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 npls to CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 nucleoplasm)
         subGroups view=3-Clusters cellType=K562 localization=40-nucleoplasm rnaExtract=total 
@@ -939,7 +939,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1K562NucleolusTotal
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 nlos to CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 nucleolus)
         subGroups view=3-Clusters cellType=K562 localization=60-nucleolus rnaExtract=total 
@@ -949,7 +949,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1ProstateCellPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel pros cell A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in prostate cell)
         subGroups view=3-Clusters cellType=prostate localization=0-cell rnaExtract=longPolyA 
@@ -958,7 +958,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep2Gm12878CytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters on
         shortLabel GM12 cyto A+ CL2
         longLabel ENCODE GIS PET Clusters Replicate 2 (longPolyA RNA in GM12878 cytosol)
         subGroups view=3-Clusters cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA 
@@ -968,7 +968,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1HuvecCytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HUVE cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=3-Clusters cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA 
@@ -978,7 +978,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1HuvecNucleusPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HUVE nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HUVEC nucleus)
         subGroups view=3-Clusters cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA 
@@ -988,7 +988,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1Helas3CytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HeS3 cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HeLa-S3 cytosol)
         subGroups view=3-Clusters cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA 
@@ -998,7 +998,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1Helas3NucleusPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HeS3 nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HeLa-S3 nucleus)
         subGroups view=3-Clusters cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA 
@@ -1008,7 +1008,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1H1hescCellPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel hESC cell A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in H1-hESC cell)
         subGroups view=3-Clusters cellType=H1-hESC localization=0-cell rnaExtract=longPolyA 
@@ -1018,7 +1018,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep2K562CytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 cyto A+ CL2
         longLabel ENCODE GIS PET Clusters Replicate 2 (longPolyA RNA in K562 cytosol)
         subGroups view=3-Clusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA 
@@ -1028,7 +1028,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1NhekCytosolPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel NHEK cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in NHEK cytosol)
         subGroups view=3-Clusters cellType=NHEK localization=20-cytosol rnaExtract=longPolyA 
@@ -1038,7 +1038,7 @@ wgEncode 1
 
         track wgEncodeGisPetClustersRep1NhekNucleusPap
         release alpha
-        subTrack wgEncodeGisPetView3-Clusters
+        subTrack wgEncodeGisPetView3-Clusters off
         shortLabel NHEK nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in NHEK nucleus)
         subGroups view=3-Clusters cellType=NHEK localization=30-nucleus rnaExtract=longPolyA 
