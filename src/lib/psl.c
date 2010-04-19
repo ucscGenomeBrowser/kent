@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.82 2010/04/16 17:23:43 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.83 2010/04/19 23:18:40 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1482,6 +1482,8 @@ if (options & PSL_WITH_BIN)
     else
 	safef(binIx, sizeof(binIx), "INDEX(bin),\n");
     }
+else if (options & PSL_TNAMEIX)
+    safef(binIx, sizeof(binIx), "INDEX(tName(%d)),\n", tNameIdxLen);
 dyStringPrintf(sqlCmd, createString, table, 
     ((options & PSL_WITH_BIN) ? "bin smallint unsigned not null,\n" : ""));
 if (options & PSL_XA_FORMAT)
