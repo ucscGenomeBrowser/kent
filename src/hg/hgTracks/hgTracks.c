@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1643 2010/04/14 22:54:54 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1644 2010/04/19 20:46:31 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4206,9 +4206,10 @@ void jsCommandDispatch(char *command, struct track *trackList)
  * This gets executed after the track list is built, but before
  * the track->loadItems methods are called.  */
 {
-uglyf("jsCommandDispatch(%s) on %d tracks<BR>\n", command, slCount(trackList));
 if (startsWithWord("makeItems", command))
     makeItemsJsCommand(command, trackList, trackHash);
+else
+    warn("Unrecognized jsCommand %s", command);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
