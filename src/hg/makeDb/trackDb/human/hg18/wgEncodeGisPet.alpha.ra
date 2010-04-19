@@ -40,7 +40,7 @@ wgEncode 1
         subGroups view=0-PlusRawSignal cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1HuvecCytosolLongpolya
         release alpha
@@ -51,7 +51,7 @@ wgEncode 1
         type bedGraph 4
         accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya
         release alpha
@@ -61,7 +61,7 @@ wgEncode 1
         subGroups view=0-PlusRawSignal cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=nucleus view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
 
 
         track wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
@@ -287,7 +287,7 @@ wgEncode 1
         subGroups view=1-MinusRawSignal cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1HuvecCytosolLongpolya
         release alpha
@@ -298,7 +298,7 @@ wgEncode 1
         type bedGraph 4
         accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1Helas3NucleusLongpolya
         release alpha
@@ -308,7 +308,7 @@ wgEncode 1
         subGroups view=1-MinusRawSignal cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         color 0,119,158
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=nucleus view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
         release alpha
