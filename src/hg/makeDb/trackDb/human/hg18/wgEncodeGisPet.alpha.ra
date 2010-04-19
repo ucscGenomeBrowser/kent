@@ -92,7 +92,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel hESC cell A+ +S1
-	color 0,107,27
+        color 0,107,27
         longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 1 (longPolyA RNA in H1-hESC cell)
         subGroups view=0-PlusRawSignal cellType=H1-hESC localization=0-cell rnaExtract=longPolyA
         type bedGraph 4
@@ -338,7 +338,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel hESC cell A+ -S1
-	color 0,107,27
+        color 0,107,27
         longLabel ENCODE GIS PET Minus Strand Raw Signal Replicate 1 (longPolyA RNA in H1-hESC cell)
         subGroups view=1-MinusRawSignal cellType=H1-hESC localization=0-cell rnaExtract=longPolyA
         type bedGraph 4
@@ -812,7 +812,7 @@ wgEncode 1
         release alpha
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel hESC cell A+ AL1
-	color 0,107,27
+        color 0,107,27
         longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA RNA in H1-hESC cell)
         subGroups view=2-Alignments cellType=H1-hESC localization=0-cell rnaExtract=longPolyA
         colorByStrand 46,0,184 238,85,34
@@ -847,202 +847,202 @@ wgEncode 1
     visibility dense
     subTrack wgEncodeGisPet
 
-	track wgEncodeGisPetClustersRep1Gm12878CytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel GM12 cyto A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in GM12878 cytosol)
-	subGroups view=3-Clusters cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 153,38,0
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Gm12878CytosolPap fileName=wgEncodeGisPetClustersRep1Gm12878CytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep1Gm12878CytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel GM12 cyto A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in GM12878 cytosol)
+        subGroups view=3-Clusters cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 153,38,0
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Gm12878CytosolPap fileName=wgEncodeGisPetClustersRep1Gm12878CytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1Gm12878NucleusPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel GM12 nucl A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in GM12878 nucleus)
-	subGroups view=3-Clusters cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA 
-	type bed 12
-	color 153,38,0
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Gm12878NucleusPap fileName=wgEncodeGisPetClustersRep1Gm12878NucleusPap.bed12.gz
+        track wgEncodeGisPetClustersRep1Gm12878NucleusPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel GM12 nucl A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in GM12878 nucleus)
+        subGroups view=3-Clusters cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA 
+        type bed 12
+        color 153,38,0
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Gm12878NucleusPap fileName=wgEncodeGisPetClustersRep1Gm12878NucleusPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1Hepg2CytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel HepG cyto A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HepG2 cytosol)
-	subGroups view=3-Clusters cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 189,0,157
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Hepg2CytosolPap fileName=wgEncodeGisPetClustersRep1Hepg2CytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep1Hepg2CytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel HepG cyto A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HepG2 cytosol)
+        subGroups view=3-Clusters cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 189,0,157
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Hepg2CytosolPap fileName=wgEncodeGisPetClustersRep1Hepg2CytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1Hepg2NucleusPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel HepG nucl A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HepG2 nucleus)
-	subGroups view=3-Clusters cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA 
-	type bed 12
-	color 189,0,157
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Hepg2NucleusPap fileName=wgEncodeGisPetClustersRep1Hepg2NucleusPap.bed12.gz
+        track wgEncodeGisPetClustersRep1Hepg2NucleusPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel HepG nucl A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HepG2 nucleus)
+        subGroups view=3-Clusters cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA 
+        type bed 12
+        color 189,0,157
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Hepg2NucleusPap fileName=wgEncodeGisPetClustersRep1Hepg2NucleusPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562CytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 cyto A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 cytosol)
-	subGroups view=3-Clusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562CytosolPap fileName=wgEncodeGisPetClustersRep1K562CytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep1K562CytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 cyto A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 cytosol)
+        subGroups view=3-Clusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562CytosolPap fileName=wgEncodeGisPetClustersRep1K562CytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562NucleusPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 nucl A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 nucleus)
-	subGroups view=3-Clusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleusPap fileName=wgEncodeGisPetClustersRep1K562NucleusPap.bed12.gz
+        track wgEncodeGisPetClustersRep1K562NucleusPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 nucl A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 nucleus)
+        subGroups view=3-Clusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleusPap fileName=wgEncodeGisPetClustersRep1K562NucleusPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562PolysomePap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 psom A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 polysome)
-	subGroups view=3-Clusters cellType=K562 localization=10-polysome rnaExtract=longPolyA 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562PolysomePap fileName=wgEncodeGisPetClustersRep1K562PolysomePap.bed12.gz
+        track wgEncodeGisPetClustersRep1K562PolysomePap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 psom A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in K562 polysome)
+        subGroups view=3-Clusters cellType=K562 localization=10-polysome rnaExtract=longPolyA 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562PolysomePap fileName=wgEncodeGisPetClustersRep1K562PolysomePap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562ChromatinTotal
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 chrm to CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 chromatin)
-	subGroups view=3-Clusters cellType=K562 localization=50-chromatin rnaExtract=total 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562ChromatinTotal fileName=wgEncodeGisPetClustersRep1K562ChromatinTotal.bed12.gz
+        track wgEncodeGisPetClustersRep1K562ChromatinTotal
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 chrm to CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 chromatin)
+        subGroups view=3-Clusters cellType=K562 localization=50-chromatin rnaExtract=total 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562ChromatinTotal fileName=wgEncodeGisPetClustersRep1K562ChromatinTotal.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562NucleoplasmTotal
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 npls to CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 nucleoplasm)
-	subGroups view=3-Clusters cellType=K562 localization=40-nucleoplasm rnaExtract=total 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal fileName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal.bed12.gz
+        track wgEncodeGisPetClustersRep1K562NucleoplasmTotal
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 npls to CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 nucleoplasm)
+        subGroups view=3-Clusters cellType=K562 localization=40-nucleoplasm rnaExtract=total 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal fileName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal.bed12.gz
 
-	track wgEncodeGisPetClustersRep1K562NucleolusTotal
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 nlos to CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 nucleolus)
-	subGroups view=3-Clusters cellType=K562 localization=60-nucleolus rnaExtract=total 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleolusTotal fileName=wgEncodeGisPetClustersRep1K562NucleolusTotal.bed12.gz
+        track wgEncodeGisPetClustersRep1K562NucleolusTotal
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 nlos to CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (total RNA in K562 nucleolus)
+        subGroups view=3-Clusters cellType=K562 localization=60-nucleolus rnaExtract=total 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleolusTotal fileName=wgEncodeGisPetClustersRep1K562NucleolusTotal.bed12.gz
 
-	track wgEncodeGisPetClustersRep1ProstateCellPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel pros cell A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in prostate cell)
-	subGroups view=3-Clusters cellType=prostate localization=0-cell rnaExtract=longPolyA 
-	type bed 12
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1ProstateCellPap fileName=wgEncodeGisPetClustersRep1ProstateCellPap.bed12.gz
+        track wgEncodeGisPetClustersRep1ProstateCellPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel pros cell A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in prostate cell)
+        subGroups view=3-Clusters cellType=prostate localization=0-cell rnaExtract=longPolyA 
+        type bed 12
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1ProstateCellPap fileName=wgEncodeGisPetClustersRep1ProstateCellPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep2Gm12878CytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel GM12 cyto A+ CL2
-	longLabel ENCODE GIS PET Clusters Replicate 2 (longPolyA RNA in GM12878 cytosol)
-	subGroups view=3-Clusters cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 153,38,0
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep2Gm12878CytosolPap fileName=wgEncodeGisPetClustersRep2Gm12878CytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep2Gm12878CytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel GM12 cyto A+ CL2
+        longLabel ENCODE GIS PET Clusters Replicate 2 (longPolyA RNA in GM12878 cytosol)
+        subGroups view=3-Clusters cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 153,38,0
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep2Gm12878CytosolPap fileName=wgEncodeGisPetClustersRep2Gm12878CytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1HuvecCytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel HUVE cyto A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HUVEC cytosol)
-	subGroups view=3-Clusters cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 224,75,0
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1HuvecCytosolPap fileName=wgEncodeGisPetClustersRep1HuvecCytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep1HuvecCytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel HUVE cyto A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HUVEC cytosol)
+        subGroups view=3-Clusters cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 224,75,0
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1HuvecCytosolPap fileName=wgEncodeGisPetClustersRep1HuvecCytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1HuvecNucleusPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel HUVE nucl A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HUVEC nucleus)
-	subGroups view=3-Clusters cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA 
-	type bed 12
-	color 224,75,0
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1HuvecNucleusPap fileName=wgEncodeGisPetClustersRep1HuvecNucleusPap.bed12.gz
+        track wgEncodeGisPetClustersRep1HuvecNucleusPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel HUVE nucl A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HUVEC nucleus)
+        subGroups view=3-Clusters cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA 
+        type bed 12
+        color 224,75,0
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1HuvecNucleusPap fileName=wgEncodeGisPetClustersRep1HuvecNucleusPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1Helas3CytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel HeS3 cyto A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HeLa-S3 cytosol)
-	subGroups view=3-Clusters cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 0,119,158
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3CytosolPap fileName=wgEncodeGisPetClustersRep1Helas3CytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep1Helas3CytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel HeS3 cyto A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HeLa-S3 cytosol)
+        subGroups view=3-Clusters cellType=HeLaS3 localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 0,119,158
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3CytosolPap fileName=wgEncodeGisPetClustersRep1Helas3CytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1Helas3NucleusPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel HeS3 nucl A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HeLa-S3 nucleus)
-	subGroups view=3-Clusters cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA 
-	type bed 12
-	color 0,119,158
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3NucleusPap fileName=wgEncodeGisPetClustersRep1Helas3NucleusPap.bed12.gz
+        track wgEncodeGisPetClustersRep1Helas3NucleusPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel HeS3 nucl A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in HeLa-S3 nucleus)
+        subGroups view=3-Clusters cellType=HeLaS3 localization=30-nucleus rnaExtract=longPolyA 
+        type bed 12
+        color 0,119,158
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3NucleusPap fileName=wgEncodeGisPetClustersRep1Helas3NucleusPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1H1hescCellPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel hESC cell A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in H1-hESC cell)
-	subGroups view=3-Clusters cellType=H1-hESC localization=0-cell rnaExtract=longPolyA 
-	type bed 12
-	color 0,107,27
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1H1hescCellPap fileName=wgEncodeGisPetClustersRep1H1hescCellPap.bed12.gz
+        track wgEncodeGisPetClustersRep1H1hescCellPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel hESC cell A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in H1-hESC cell)
+        subGroups view=3-Clusters cellType=H1-hESC localization=0-cell rnaExtract=longPolyA 
+        type bed 12
+        color 0,107,27
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1H1hescCellPap fileName=wgEncodeGisPetClustersRep1H1hescCellPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep2K562CytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel K562 cyto A+ CL2
-	longLabel ENCODE GIS PET Clusters Replicate 2 (longPolyA RNA in K562 cytosol)
-	subGroups view=3-Clusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 46,0,184
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep2K562CytosolPap fileName=wgEncodeGisPetClustersRep2K562CytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep2K562CytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel K562 cyto A+ CL2
+        longLabel ENCODE GIS PET Clusters Replicate 2 (longPolyA RNA in K562 cytosol)
+        subGroups view=3-Clusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 46,0,184
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep2K562CytosolPap fileName=wgEncodeGisPetClustersRep2K562CytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1NhekCytosolPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel NHEK cyto A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in NHEK cytosol)
-	subGroups view=3-Clusters cellType=NHEK localization=20-cytosol rnaExtract=longPolyA 
-	type bed 12
-	color 179,0,134
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1NhekCytosolPap fileName=wgEncodeGisPetClustersRep1NhekCytosolPap.bed12.gz
+        track wgEncodeGisPetClustersRep1NhekCytosolPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel NHEK cyto A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in NHEK cytosol)
+        subGroups view=3-Clusters cellType=NHEK localization=20-cytosol rnaExtract=longPolyA 
+        type bed 12
+        color 179,0,134
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1NhekCytosolPap fileName=wgEncodeGisPetClustersRep1NhekCytosolPap.bed12.gz
 
-	track wgEncodeGisPetClustersRep1NhekNucleusPap
-	release alpha
-	subTrack wgEncodeGisPetView3-Clusters
-	shortLabel NHEK nucl A+ CL1
-	longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in NHEK nucleus)
-	subGroups view=3-Clusters cellType=NHEK localization=30-nucleus rnaExtract=longPolyA 
-	type bed 12
-	color 179,0,134
-	metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1NhekNucleusPap fileName=wgEncodeGisPetClustersRep1NhekNucleusPap.bed12.gz
+        track wgEncodeGisPetClustersRep1NhekNucleusPap
+        release alpha
+        subTrack wgEncodeGisPetView3-Clusters
+        shortLabel NHEK nucl A+ CL1
+        longLabel ENCODE GIS PET Clusters Replicate 1 (longPolyA RNA in NHEK nucleus)
+        subGroups view=3-Clusters cellType=NHEK localization=30-nucleus rnaExtract=longPolyA 
+        type bed 12
+        color 179,0,134
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1NhekNucleusPap fileName=wgEncodeGisPetClustersRep1NhekNucleusPap.bed12.gz
 
