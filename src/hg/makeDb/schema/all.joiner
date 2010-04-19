@@ -3518,3 +3518,7 @@ tablesIgnored aplCal1
 tablesIgnored oviAri1
     gold
     ctgPos2
+
+tablesIgnored calJac3
+    intronEst
+    ctgPos2
