@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.2 2010/04/15 19:25:56 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.3 2010/04/19 18:57:45 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -1297,7 +1297,7 @@ static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle)
 if(mdbVar != NULL && mdbVar->var != NULL)
     {
     if(raStyle)
-        printf("\n    %s ",mdbVar->var);
+        printf("\n%s ",mdbVar->var);
     else
         printf(" %s=",mdbVar->var);
     if(mdbVar->val != NULL)
