@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.34 2010/04/15 19:19:42 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.35 2010/04/20 23:56:29 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -373,7 +373,7 @@ for my $line (@fileList) {
     #my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","rank","replicate","subId");
     # Complete sort order, (I hope)
     my @sortFields = ("species","assembly","dataType","cell","rnaExtract","localization","phase","treatment","antibody","protocol","ripAntibody",
-                      "ripTgtProtein","restrictionEnzyme","promoter","input","control","replicate","submitteDataVersion","subId","dataVersion",
+                      "ripTgtProtein","restrictionEnzyme","promoter","control","replicate","input","inputType","submitteDataVersion","subId","dataVersion",
                       "dateSubmitted","dateResubmitted","dateReloaded","dateUnrestricted","project","grant","lab","labVersion","softwareVersion",
                       "mapAlgorithm","fragSize","fragLength","medianFragmentLength","fragmentLengthRange","chromStart","view","type","composite",
                       "tableName","parentTable","fileName","accession");
