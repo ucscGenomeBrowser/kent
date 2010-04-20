@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.60 2010/03/24 23:59:32 braney Exp $
+# $Id: Encode.pm,v 1.61 2010/04/20 01:42:20 krish Exp $
 
 package Encode;
 
@@ -36,6 +36,7 @@ our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
 our $grantConfigFile = "labs.ra";
 our $labConfigFile = "pi.ra";    # for reporting purposes
+our $expVarsFile= "expVars.ra";
 our $autoCreatedPrefix = "auto";
 
 our $restrictedMonths = 9;
@@ -198,6 +199,13 @@ sub getLabs
         %labs = RAFile::readRaFile("$configPath/$labConfigFile", "lab");
     }
     return \%labs;
+}
+
+sub getExpVars
+{
+# Returns hash indexed by the composite name in the experiments.ra file
+    my ($configPath) = @_;
+    return RAFile::readRaFile("$configPath/$expVarsFile", "composite");
 }
 
 sub getControlledVocab
