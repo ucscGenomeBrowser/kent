@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.134 2010/04/12 21:32:37 chinhli Exp $"
+#	"$Id: mm9.txt,v 1.135 2010/04/20 17:34:31 chinhli Exp $"
 #
 
 #######################################################################
@@ -10367,10 +10367,10 @@ TMPDIR=/scratch/tmp
     # 3060300 bases of 2620346127 (0.117%) in intersection
 
 #####################################################################
-# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-09 - Chin)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-16 - Chin)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09
-    cd /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09
+    mkdir /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16
+    cd /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16
 
     cat << '_EOF_' > DEF
 # Sheep vs. Mouse
@@ -10388,7 +10388,7 @@ SEQ2_LEN=/scratch/data/oviAri1/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09
+BASE=/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -10398,7 +10398,7 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #   real    370m21.462s
+    #   real    269m58.488s
     cat fb.mm9.chainOviAri1Link.txt
     #   406407377 bases of 2620346127 (15.510%) in intersection
 
@@ -10406,11 +10406,12 @@ TMPDIR=/scratch/tmp
     mkdir /hive/data/genomes/oviAri1/bed/blastz.mm9.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09/DEF \
+        /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    37m25.345s
+    #   real    35m25.217s
+
     cat fb.oviAri1.chainMm9Link.txt 
     #   383753361 bases of 1201271277 (31.946%) in intersection
 

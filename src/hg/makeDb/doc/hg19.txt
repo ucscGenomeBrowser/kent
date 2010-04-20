@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.101 2010/04/16 17:47:00 angie Exp $";
+#	"$Id: hg19.txt,v 1.102 2010/04/20 17:34:31 chinhli Exp $";
 
 #############################################################################
 
@@ -9002,10 +9002,10 @@ TMPDIR=/scratch/tmp
     # 8494715 bases of 2897316137 (0.293%) in intersection
 
 #####################################################################
-# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-09 - Chin)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-16 - Chin)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09
-    cd /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09
+    mkdir /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16
+    cd /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16
 
     cat << '_EOF_' > DEF
 # Sheep vs. Human
@@ -9023,7 +9023,7 @@ SEQ2_LEN=/scratch/data/oviAri1/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09
+BASE=/hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -9033,7 +9033,7 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #   Elapsed time: 391m53s
+    #   real    578m58.918s
     cat fb.hg19.chainOviAri1Link.txt
     #   878545517 bases of 2897316137 (30.323%) in intersection
 
@@ -9041,11 +9041,11 @@ TMPDIR=/scratch/tmp
     mkdir /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09/DEF \
+        /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    71m37.020s
+    #   real    72m47.780s
 
     cat fb.oviAri1.chainHg19Link.txt
     #   824310420 bases of 1201271277 (68.620%) in intersection

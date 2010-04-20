@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.30 2010/04/12 21:32:38 chinhli Exp $"
+#	"$Id: equCab2.txt,v 1.31 2010/04/20 17:34:31 chinhli Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.30 2010/04/12 21:32:38 chinhli Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.31 2010/04/20 17:34:31 chinhli Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -2373,10 +2373,10 @@ see doc/builds.txt for specific details.
 equCab2.refseq.mrna.xeno.load = yes
 
 #####################################################################
-# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-09 - Chin)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE - 2010-04-16 - Chin)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-09
-    cd /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-09
+    mkdir /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16
+    cd /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16
 
     cat << '_EOF_' > DEF
 # Sheep vs. Mouse
@@ -2394,7 +2394,7 @@ SEQ2_LEN=/scratch/data/oviAri1/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-09
+BASE=/hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -2404,19 +2404,18 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #   Elapsed time: 433m14s
+    #   real    397m26.503s
     cat fb.equCab2.chainOviAri1Link.txt
     #   1012763540 bases of 2428790173 (41.698%) in intersection 
 
     mkdir /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-09/DEF \
+        /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #    real    100m49.583s
-
+    #   real    103m0.724s
 
     cat fb.oviAri1.chainEquCab2Link.txt
     #   940763026 bases of 1201271277 (78.314%) in intersection

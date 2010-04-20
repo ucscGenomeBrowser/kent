@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: oviAri1.txt,v 1.3 2010/04/15 23:37:48 chinhli Exp $
+#       $Id: oviAri1.txt,v 1.4 2010/04/20 17:34:31 chinhli Exp $
 
 
 # Ovis aries (domestic sheep) --  ISGC Ovis_aries_1.0 (2010-02-01)
@@ -259,7 +259,7 @@ close (FH);
     #    /scratch/data/oviAri1
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2010-04-15 - Chin)
+# GENBANK AUTO UPDATE (DONE - 2010-04-15 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     cvsup
@@ -299,25 +299,22 @@ oviAri1.refseq.mrna.native.load = no
 
     ssh genbank
     screen	#  control this business with a screen since it takes a while
-    cd $HOME/kent/src/hg/makeDb/genbank
 
 
-XXXX 04-15 eveniing
     cd /cluster/data/genbank
-     time nice -n +19 bin/gbAlignStep -initial oviAri1 &
-    #    logFile: var/build/logs/2010.04.15-13:49:37.oviAri1.initalign.log
-    #    real    ????368m17.919s
-command failed: gbAlignRun -workdir=work/initial.oviAri1/align  at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
+     time nice -n +19 ./bin/gbAlignStep -initial oviAri1 &
+    #   logFile: var/build/logs/2010.04.16-10:04:13.oviAri1.initalign.log
+    #   real    365m55.393s
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/data/aligned/genbank.176.0/oviAri1
 
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oviAri1 &
-    #    var/dbload/hgwdev/logs/2010.04.13-14:43:37.dbload.log
-    #   real    11m7.008s
-
-
+    #    logFile: var/dbload/hgwdev/logs/2010.04.19-08:17:28.dbload.log
+    #   real    37m49.454s
 
 
     # enable daily alignment and update of hgwdev
@@ -387,8 +384,8 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 #  request to copy /hive/data/staging.oviAri1 over to /scratch/data/oviAri1
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12
-    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12
+    mkdir /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
 
     cat << '_EOF_' > DEF
 # Cow vs. Sheep
@@ -408,59 +405,36 @@ SEQ2_CHUNK=10000000
 SEQ2_LIMIT=100
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12
+BASE=/hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-XXXX 04-12 working 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #	real   ???? 2422m32.203s
-
-    #	and the swap
-    mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
-    cd /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-12/DEF \
-	-swap -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	 Elapsed time: 63m4s
-    cat fb.oviAri1.chainMm9Link.txt 
-    #	656444411 bases of 2231298548 (29.420%) in intersection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #   real    1651m36.829s
 
     #	failed during the netChainSubset | chainStitchId out of memory
     #	finish that manually with ulimits to allow more memory on hgwdev:
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
     export sizeG=188743680
     ulimit -d $sizeG
     ulimit -v $sizeG
 
-    netChainSubset -verbose=0 noClass.net oviAri1.bosTau4.all.chain.gz stdout \
-	| chainStitchId stdin stdout | gzip -c > oviAri1.bosTau4.over.chain.gz
+    netChainSubset -verbose=0 noClass.net bosTau4.oviAri1.all.chain.gz stdout \
+       |  chainStitchId stdin stdout | gzip -c > bosTau4.oviAri1.over.chain.gz
 
     #	and, finish the rest of netChains.csh manually, the netToAxt step
     #	and the axtToMaf step, log is in axtChain/finiChains.log
-
+    #   (cp netChains.csh finiChains.sh and rm the done steps)
+    ./finiChains.sh > finiChains.log &
+    #  about 4 hours
+XXXX 04-20-2010
     #	after done with netChains - continuing with load:
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-continue=load -noLoadChainSplit -syntenicNet \
@@ -471,7 +445,9 @@ XXXX 04-12 working
 # limit at 160 Gb
 limit datasize 163840m
 limit vmemoryuse 163840m
-    #	and finish it manually (7h39m)
+    #	and finish it manually (???? 7h39m)
+     ./loadUp.csh > loadUp.log 2>&1 &
+
     cat fb.oviAri1.chainBosTau4Link.txt 
     #	1478903080 bases of 2231298548 (66.280%) in intersection
     #	then continuing:
@@ -562,11 +538,21 @@ limit vmemoryuse 163840m
 
     cat fb.bosTau4.chainOviAri1Link.txt
     #	1383557633 bases of 2731830700 (50.646%) in intersection
+_________ end pig --------------
+
+   #   and the swap
+    mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
+    cd /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
 
 #########################################################################
 #  SWAP mm9 lastz (DONE - 2010-04-12 - Chin)
     #	original alignment
-    cd	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09
+    cd	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16
     cat fb.mm9.chainOviAri1Link.txt 
     #   406407377 bases of 2620346127 (15.510%) in intersection
 
@@ -574,17 +560,20 @@ limit vmemoryuse 163840m
     mkdir /hive/data/genomes/oviAri1/bed/blastz.mm9.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-09/DEF \
-	-swap -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    37m25.345s
-    cat fb.oviAri1.chainMm9Link.txt 
+        /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    35m25.217s
+
+    cat fb.oviAri1.chainMm9Link.txt
     #   383753361 bases of 1201271277 (31.946%) in intersection
+
 
 ############################################################################
 #  SWAP hg19 lastz (DONE 2010-04-12 - Chin)
     #	original alignment
+    cd /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16
     cat fb.hg19.chainOviAri1Link.txt 
     #   878545517 bases of 2897316137 (30.323%) in intersection
 
@@ -592,39 +581,39 @@ limit vmemoryuse 163840m
     mkdir /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-09/DEF \
-	-swap -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    71m37.020s
+        /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    72m47.780s
 
-    cat fb.oviAri1.chainHg19Link.txt 
+    cat fb.oviAri1.chainHg19Link.txt
     #   824310420 bases of 1201271277 (68.620%) in intersection
 
 #########################################################################
 #  SWAP monDom5 lastz (working 2010-04-12 Chin)
     #	original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-16
     cat fb.monDom5.chainOviAri1Link.txt
     #   133534458 bases of 3501660299 (3.813%) in intersection
 
-XXXX 04-12
     #	and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-09/DEF \
-	-swap -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=memn -bigClusterHub=pk \
-	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #	Elapsed time: 82m55s
+        /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memn -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    39m13.430s
 
-    cat fb.oviAri1.chainMonDom5Link.txt 
-    #	182834643 bases of 2231298548 (8.194%) in intersection
-
+    cat fb.oviAri1.chainMonDom5Link.txt
+    #   117493519 bases of 1201271277 (9.781%) in intersection
 
 #########################################################################
 #  SWAP equCap2 lastz (DONE 2010-04-12 Chin)
     #   original alignment
+    cd /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16
     cat fb.equCab2.chainOviAri1Link.txt
     #   1012763540 bases of 2428790173 (41.698%) in intersection 
 
@@ -633,17 +622,14 @@ XXXX 04-12
     mkdir /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-09/DEF \
+        /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #    Elapsed time: ???? 63m4s
-    #    real    100m49.583s
-
+    #   real    103m0.724s
 
     cat fb.oviAri1.chainEquCab2Link.txt
     #   940763026 bases of 1201271277 (78.314%) in intersection
-
 
 ############################################################################
 # running cpgIsland business (DONE - 2010-03-31 - Hiram)
