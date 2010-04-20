@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.62 2010/04/20 02:43:31 krish Exp $
+# $Id: Encode.pm,v 1.63 2010/04/20 08:12:27 krish Exp $
 
 package Encode;
 
@@ -208,7 +208,7 @@ sub getExpVars
     my %expVars = RAFile::readRaFile("$configPath/$expVarsFile", "composite");
     %expVars = %{$expVars{$composite}};
     my @results;
-    for(my $i = 1; $i <= scalar(keys %expVars); ++$i) {
+    for(my $i = 1; $i < scalar(keys %expVars); ++$i) {
         push @results, $expVars{"expVar$i"};
     }
     return @results;
