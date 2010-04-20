@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.147 2010/04/15 19:24:53 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.148 2010/04/20 15:56:50 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1230,23 +1230,23 @@ strcpy(resultPtr, string);
 return result;
 }
 
-int strSwapStrs(char *string, int sz,char *old, char *new)
-/* Swaps all occurnces of the old with the new in string. Need not be same size
+int strSwapStrs(char *string, int sz,char *oldStr, char *newStr)
+/* Swaps all occurrences of the old with the new in string. Need not be same size
    Swaps in place but restricted by sz.  Returns count of swaps or -1 for sz failure. */
 {
 // WARNING: called at low level, so no errors allowed.
 int count = 0;
 char *p=NULL;
-for(p=strstr(string,old);p!=NULL;p=strstr(p+strlen(old),old))
+for(p=strstr(string,oldStr);p!=NULL;p=strstr(p+strlen(oldStr),oldStr))
     count++;
 if(count == 0)
     return 0;
-if((strlen(string)+(count*(strlen(new) - strlen(old))))>=sz)
+if((strlen(string)+(count*(strlen(newStr) - strlen(oldStr))))>=sz)
     return -1;
-for(p=strstr(string,old);p!=NULL;p=strstr(p+strlen(new),old))
+for(p=strstr(string,oldStr);p!=NULL;p=strstr(p+strlen(newStr),oldStr))
     {
-    memmove(p+strlen(new),p+strlen(old),strlen(p+strlen(old))+1); // NULL at end is also moved!
-    memcpy(p,new,strlen(new));
+    memmove(p+strlen(newStr),p+strlen(oldStr),strlen(p+strlen(oldStr))+1); // NULL at end is also moved!
+    memcpy(p,newStr,strlen(newStr));
     }
 return count;
 }

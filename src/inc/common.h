@@ -763,8 +763,8 @@ char *replaceChars(char *string, char *oldStr, char *newStr);
  Return value needs to be freeMem'd.
 */
 
-int strSwapStrs(char *string, int sz,char *old, char *new);
-/* Swaps all occurnces of the old with the new in string. Need not be same size
+int strSwapStrs(char *string, int sz,char *oldStr, char *newStr);
+/* Swaps all occurrences of the oldStr with the newStr in string. Need not be same size
    Swaps in place but restricted by sz.  Returns count of swaps or -1 for sz failure.*/
 
 char * memSwapChar(char *s, int len, char oldChar, char newChar);
