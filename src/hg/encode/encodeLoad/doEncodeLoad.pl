@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.75 2010/03/25 00:00:09 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.76 2010/04/20 22:04:21 braney Exp $
 
 # Usage:
 #
@@ -254,7 +254,7 @@ sub loadBigBed
 	    die "BigBed must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
 	# Create bigBed binary file
-        my @cmds = ( "mkdir -p sortTmp; sort  -k1,1 -k2,2n $fileList > sortTmp/loadTmp.bed; /cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as sortTmp/loadTmp.bed $configPath/${assembly}_chromInfo.txt ${gbdbDir}/${tableName}.bb");
+        my @cmds = ( "mkdir -p sortTmp; sort  -k1,1 -k2,2n $fileList > sortTmp/loadTmp.bed; /cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as sortTmp/loadTmp.bed ../$configPath/${assembly}_chromInfo.txt ${gbdbDir}/${tableName}.bb");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
@@ -637,6 +637,14 @@ Further information is available in the
 
 <p><B>Data is <A HREF="http://genome.ucsc.edu/ENCODE/terms.html">RESTRICTED FROM USE</a>
 in publication  until the restriction date noted for the given data file.</B></p>
+<p>
+There are two files within this directory that contain information about the dow
+nloads:
+<LI><A HREF="files.txt">files.txt</A> which is a tab-separated file with the nam
+e and metadata for each download.</LI>
+<LI><A HREF="md5sum.txt">md5sum.txt</A> which is a list of the md5sum output for
+ each download.</LI>
+ <HR>
 END
 }
 
