@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.12 2010/04/19 17:03:46 braney Exp $
+#	$Id: ailMel1.txt,v 1.13 2010/04/20 00:06:17 braney Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -415,7 +415,7 @@ TMPDIR=/scratch/tmp
     #	695366144 bases of 2245312831 (30.970%) in intersection
 
 #########################################################################
-# HUMAN (hg18) PROTEINS TRACK (working
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-04-19)
     # bash  if not using bash shell already
 
     cd /cluster/data/ailMel1
@@ -438,21 +438,21 @@ TMPDIR=/scratch/tmp
     done
     rm *.fa
     ls *.nsq | wc -l
-# 2915
+# 2757
 
     mkdir -p /cluster/data/ailMel1/bed/tblastn.hg18KG
     cd /cluster/data/ailMel1/bed/tblastn.hg18KG
     echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
     wc -l query.lst
-# 2915 query.lst
+# 2757 query.lst
 
    # we want around 350000 jobs
    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(350000/`wc query.lst | awk '{print $1}'`\)
 
-# 36727/(350000/2915) = 305.883443
+# 36727/(350000/2757) = 289.303826
 
    mkdir -p kgfa
-   split -l 306 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   split -l 289 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
    for i in *; do 
      nice pslxToFa $i $i.fa; 
@@ -461,7 +461,7 @@ TMPDIR=/scratch/tmp
    cd ..
    ls -1S kgfa/*.fa > kg.lst
    wc kg.lst
-#  121  121 1573 kg.lst
+#  128  128 1664 kg.lst
 
    mkdir -p blastOut
    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
@@ -515,13 +515,12 @@ exit 1
 #    para try, check, push, check etc.
 
     para time
-# Completed: 352715 of 352715 jobs
-# CPU time in finished jobs:   13184770s  219746.16m  3662.44h  152.60d  0.418 y
-# IO & Wait Time:               1844130s   30735.51m   512.26h   21.34d  0.058 y
-# Average job time:                  43s       0.71m     0.01h    0.00d
-# Longest finished job:             149s       2.48m     0.04h    0.00d
-# Submission to last job:         16902s     281.70m     4.70h    0.20d
-
+# Completed: 352896 of 352896 jobs
+# CPU time in finished jobs:   13166354s  219439.24m  3657.32h  152.39d  0.418 y
+# IO & Wait Time:               1995282s   33254.69m   554.24h   23.09d  0.063 y
+# Average job time:                  43s       0.72m     0.01h    0.00d
+# Longest finished job:             207s       3.45m     0.06h    0.00d
+# Submission to last job:         15726s     262.10m     4.37h    0.18d
 
     ssh swarm
     cd /cluster/data/ailMel1/bed/tblastn.hg18KG
@@ -544,12 +543,12 @@ chainOne $(path1)
     para create chainSpec
     para try, check, push, check etc.
 
-# Completed: 121 of 121 jobs
-# CPU time in finished jobs:     342462s    5707.70m    95.13h    3.96d  0.011 y
-# IO & Wait Time:                 67882s    1131.37m    18.86h    0.79d  0.002 y
-# Average job time:                3391s      56.52m     0.94h    0.04d
-# Longest finished job:           13532s     225.53m     3.76h    0.16d
-# Submission to last job:         13544s     225.73m     3.76h    0.16d
+# Completed: 128 of 128 jobs
+#CPU time in finished jobs:       1401s      23.35m     0.39h    0.02d  0.000 y
+#IO & Wait Time:                 47407s     790.12m    13.17h    0.55d  0.002 y
+#Average job time:                 381s       6.36m     0.11h    0.00d
+#Longest finished job:             466s       7.77m     0.13h    0.01d
+#Submission to last job:           470s       7.83m     0.13h    0.01d
 
     cd /cluster/data/ailMel1/bed/tblastn.hg18KG/blastOut
     for i in kg??
@@ -562,7 +561,7 @@ chainOne $(path1)
     sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
     cd ..
     pslCheck blastHg18KG.psl
-# checked: 83553 failed: 0 errors: 0
+# checked: 64037 failed: 0 errors: 0
 
     # load table 
     ssh hgwdev
@@ -571,10 +570,9 @@ chainOne $(path1)
 
     # check coverage
     featureBits ailMel1 blastHg18KG 
-# 36312685 bases of 2231298548 (1.627%) in intersection
+# 32308509 bases of 2245312831 (1.439%) in intersection
 
-    featureBits ailMel1 blastHg18KG ensGene  -enrichment
-# blastHg18KG 1.627%, ensGene 1.284%, both 0.845%, cover 51.91%, enrich 40.42x
-
+    featureBits ailMel1 blastHg18KG xenoRefGene  -enrichment
+# blastHg18KG 1.439%, xenoRefGene 2.186%, both 1.137%, cover 79.05%, enrich  36.17x
     rm -rf blastOut
 #end tblastn
