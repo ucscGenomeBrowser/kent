@@ -6,7 +6,7 @@ compositeTrack on
 shortLabel HudsonAlpha RNA-seq
 longLabel ENCODE HudsonAlpha Myers RNA-seq
 group expression
-subGroup1 view Views Aligns=Aligns RPKM=RPKM
+subGroup1 view Views Aligns=Alignments RPKM=RPKM
 subGroup2 cellType Cell_Line A549=A549 Jurkat=Jurkat
 subGroup3 localization Localization cell=cell
 subGroup4 rnaExtract RnaExtract pAP=longPolyA
