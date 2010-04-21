@@ -4,7 +4,7 @@ track wgEncodeCaltechRnaSeq
 release alpha
 compositeTrack on
 shortLabel Caltech RNA-seq
-longLabel ENCODE Caltech RNA-seq Map Algorithm
+longLabel ENCODE Caltech RNA-seq 
 group expression
 #subGroup1 view Views Splices=Splice_Sites Aligns=Alignments_Unpaired Paired=Alignments_Paired RawSignal=Raw_Signal
 subGroup1 view Views PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal RawSignal=Raw_Signal Splices=Splice_Sites Aligns=Alignments 
