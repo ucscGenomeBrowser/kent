@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.275 2010/04/13 19:41:38 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.276 2010/04/21 20:34:31 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -104,7 +104,7 @@ printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLa
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
-mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol input view",FALSE); // Bring to front
+mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
 mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
 struct mdbVar *mdbVar;
 for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
@@ -3258,7 +3258,7 @@ if(applyMax && vis >= tvHide)
 return setting; // nothing found
 }
 
-// Four State checkboxes bcan be checked/unchecked by enable/disabled
+// Four State checkboxes can be checked/unchecked by enable/disabled
 #define FOURSTATE_KEY               "fourState"
 #define FOURSTATE_EMPTY             666
 #define FOURSTATE_UNCHECKED         0
@@ -5287,6 +5287,11 @@ return cloneString(label);
 }
 
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'>"
+#define MATRIX_COLS_TILL_HINT 18
+#define MATRIX_ROWS_TILL_HINT 30
+#define MATRIX_RIGHT_BUTTONS_AFTER 8
+#define MATRIX_BOTTOM_BUTTONS_AFTER 20
+
 static void buttonsForAll()
 {
 printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
@@ -5298,11 +5303,109 @@ printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
 printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 }
 
-#define MATRIX_RIGHT_BUTTONS_AFTER 8
-#define MATRIX_BOTTOM_BUTTONS_AFTER 20
+//#define HINT_ROW_COL
+//#define SLANT_COL_TITLES
+static int matrixHintColumn(members_t *dimensionX)
+/* If matrix is large enough, then this column will contain hints (Y labels) */
+{
+int hintColumn = -1; // default none
+#ifdef HINT_ROW_COL
+if(dimensionX && dimensionX->count > MATRIX_COLS_TILL_HINT)
+    {
+    int hints = 2;
+    for(hints=2;hints < 5;hints++)
+        {
+        hintColumn = (dimensionX->count + 1)/hints;
+        if(hintColumn < MATRIX_COLS_TILL_HINT)
+            break;
+        }
+    }
+#endif//def HINT_ROW_COL
+return hintColumn;
+}
+static void matrixYhints(int hintColumn,int column,members_t *dimensionY,struct trackDb *childTdb,int ixY,char * title)
+/* prints a column of hint Y labels to be used when the matrix is too big */
+{
+if(hintColumn > 1 && column > 1 && (column % hintColumn) == 0)
+    {
+    if(dimensionY == NULL || ixY < 0) // Just give the header
+        {
+        if(title != NULL)
+            printf("<TD><B><em style='font-size:70%%;'>%s</em></B></TD>",title);
+        else
+            printf("<TD>&nbsp;</TD>");
+        }
+    else if(dimensionY && childTdb != NULL)
+        {
+        printf("<TD ALIGN=CENTER class='hintCol'>%s</TD>",dimensionY->values[ixY]);
+        }
+    }
+}
+static int matrixHintRow(members_t *dimensionY)
+/* If matrix is large enough, then this row will contain hints (X labels) */
+{
+int hintRow = -1; // default none
+#ifdef HINT_ROW_COL
+if(dimensionY && dimensionY->count > MATRIX_ROWS_TILL_HINT)
+    {
+    int hints = 2;
+    for(hints=2;hints < 5;hints++)
+        {
+        hintRow = (dimensionY->count + 1)/hints;
+        if(hintRow < MATRIX_ROWS_TILL_HINT)
+            break;
+        }
+    }
+#endif//def HINT_ROW_COL
+return hintRow;
+}
+
+static void matrixXhints(int hintRow,int row,members_t *dimensionX,struct trackDb **tdbsX)
+/* prints a row of hint X labels to be used when the matrix is too big */
+{
+if(hintRow > 1 && row > 1 && (row % hintRow) == 0)
+    {
+    printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=CENTER><TD ALIGN=RIGHT nowrap colspan=2><B><em style='font-size:70%%;'>%s</em></B></TD>\n",COLOR_BG_ALTDEFAULT,dimensionX->title);
+
+    int hintColumn = matrixHintColumn(dimensionX);
+    int ixX,column=0;
+    for (ixX = 0; ixX < dimensionX->count; ixX++)
+        {
+        matrixYhints(hintColumn,column,NULL,NULL,-1,NULL);
+        if(tdbsX[ixX] != NULL)
+            {
+            //char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");
+            char *suffix=NULL;
+            char *label = labelRoot(dimensionX->values[ixX],&suffix);
+            if(strlen(label) > 9 && strlen(label) == strlen(dimensionX->values[ixX]))
+                label = replaceChars(label," ","<BR>");
+            printf("<TD class='hintRow'>%s</TD>",label);
+            freeMem(label);
+            column++;
+            }
+        }
+    if(column>MATRIX_RIGHT_BUTTONS_AFTER)
+        {
+            printf("<TD ALIGN=LEFT nowrap colspan=2><B><em style='font-size:70%%;'>%s</em></B></TD>",dimensionX->title);
+        }
+    puts("</TR>");
+    }
+}
+
+
 static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
 /* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
 {
+#ifdef SLANT_COL_TITLES
+// TODO: Too difficult to implement at this time, because EVERY browser is different.
+// Will need to query browser type and selectively implement.
+boolean slant = (dimensionX && dimensionX->count > 12);
+#else//ifndef SLANT_COL_TITLES
+boolean slant = FALSE;
+#endif//ndef SLANT_COL_TITLES
+
+int hintColumn = matrixHintColumn(dimensionX);
+
 printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=%s>\n",COLOR_BG_ALTDEFAULT,top?"BOTTOM":"TOP");
 if(dimensionX && dimensionY)
     {
@@ -5318,23 +5421,44 @@ if(dimensionX)
     if(dimensionY)
         printf("<TH align=RIGHT><EM><B>%s</EM></B></TH>", dimensionX->title);
     else
-        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<EM><B>%s</EM></B></TH>",top?"TOP":"BOTTOM", dimensionX->title);
+        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<EM><B>%s</EM></B></TH>",(top?"TOP":"BOTTOM"), dimensionX->title);
+
+    int longest = 0;
+    if(slant)
+        {
+        for (ixX = 0; ixX < dimensionX->count; ixX++)
+            {
+            if(longest < strlen(dimensionX->values[ixX]))
+                longest = strlen(dimensionX->values[ixX]);
+            }
+        }
     for (ixX = 0; ixX < dimensionX->count; ixX++)
         {
         if(tdbsX[ixX] != NULL)
             {
-            char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
-            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->tag,label));
-            freeMem(label);
+            matrixYhints(hintColumn,cntX,NULL,NULL,-1,NULL);
+
+            char *label = dimensionX->values[ixX];
+            if(!slant)
+                label = replaceChars(dimensionX->values[ixX]," (","<BR>(");
+            if(slant)
+                //printf("<TH style='overflow:auto; max-width: 26px;' ALIGN=%s>&nbsp;<span class='%s' style='top: %dpx;'>%s</span>&nbsp;</TH>\n",
+                printf("<TH style='overflow:auto; max-width: 26px; height: %dpx' ALIGN=%s>&nbsp;<span class='%s'>%s</span>&nbsp;</TH>\n",
+                    (longest*5),(top?"LEFT":"RIGHT"),(top?"slantUp":"slantDn"),labelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->tag,label));
+            else
+                printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->tag,label));
+            //printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->tag,label));
+            if(!slant)
+                freeMem(label);
             cntX++;
             }
         }
-    // If dimension is big enough, then add Y buttons to righ as well
+    // If dimension is big enough, then add Y buttons to right as well
     if(cntX>MATRIX_RIGHT_BUTTONS_AFTER)
         {
         if(dimensionY)
             {
-            printf("<TH align=LEFT><EM><B>%s</EM></B></TH>", dimensionX->title);
+            printf("<TH align=LEFT><EM><B>%s</B></EM></TH>", dimensionX->title);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
             buttonsForAll();
             puts("</TH>");
@@ -5357,6 +5481,8 @@ puts("</TR>\n");
 static void matrixXheadingsRow2(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX)
 /* prints the 2nd row of a matrix: Y title; X buttons; title Y */
 {
+int hintColumn = matrixHintColumn(dimensionX);
+
 // If there are both X and Y dimensions, then there is a row of buttons in X
 if(dimensionX && dimensionY)
     {
@@ -5364,6 +5490,8 @@ if(dimensionX && dimensionY)
     printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->title);
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
+        matrixYhints(hintColumn,cntX,NULL,NULL,-1,dimensionY->title);
+
         if(tdbsX[ixX] != NULL)
             {
             char objName[SMALLBUF];
@@ -5394,7 +5522,7 @@ if(!top)
 }
 
 static void matrixYheadings(char *db,struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,int ixY,struct trackDb *childTdb,boolean left)
-/* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
+/* prints the column of Y labels and buttons */
 {
 if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of buttons
     {
@@ -5589,11 +5717,14 @@ printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAU
 matrixXheadings(db,parentTdb,membersForAll->members[dimX],membersForAll->members[dimY],tdbsX,TRUE);
 
 // Now the Y by X matrix
+int hintCol = matrixHintColumn(membersForAll->members[dimX]);
+int hintRow = matrixHintRow(membersForAll->members[dimY]);
 int cntX=0,cntY=0;
 for (ixY = 0; ixY < sizeOfY; ixY++)
     {
     if(tdbsY[ixY] != NULL || membersForAll->members[dimY] == NULL)
         {
+        matrixXhints(hintRow,cntY,membersForAll->members[dimX],tdbsX);
         cntY++;
         assert(!membersForAll->members[dimY] || ixY < membersForAll->members[dimY]->count);
         printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
@@ -5602,11 +5733,15 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
 
 #define MAT_CB_SETUP "<INPUT TYPE=CHECKBOX NAME='%s' VALUE=on %s>"
 #define MAT_CB(name,js) printf(MAT_CB_SETUP,(name),(js));
+        int column = 0;
         for (ixX = 0; ixX < sizeOfX; ixX++)
             {
             if(tdbsX[ixX] != NULL || membersForAll->members[dimX] == NULL)
                 {
                 assert(!membersForAll->members[dimX] || ixX < membersForAll->members[dimX]->count);
+
+                matrixYhints(hintCol,column,membersForAll->members[dimY],tdbsY[ixY],ixY,NULL);
+                column++;
                 if(cntY==1) // Only do this on the first good Y
                     cntX++;
 
