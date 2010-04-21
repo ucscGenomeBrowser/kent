@@ -230,7 +230,7 @@
 #include "parClick.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1613 2010/04/15 00:00:32 pchan Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1614 2010/04/21 19:32:43 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6034,7 +6034,10 @@ char * ncbiTerm = cgiEncode(ctgName);
 safef(query, sizeof(query), "%s%s", NUCCORE_SEARCH, ncbiTerm);
 
 genericHeader(tdb, ctgName);
-printf("<B>Name:</B>&nbsp;<A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n",
+if (sameWord(database,"oryCun2"))
+    printf("<B>Name:</B>&nbsp;%s<BR>\n", ctgName);
+else
+    printf("<B>Name:</B>&nbsp;<A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n",
 	query, ctgName);
 freeMem(ncbiTerm);
 safef(query, sizeof(query), "select * from %s where contig = '%s'",
