@@ -63,6 +63,16 @@ file ddf
 type string
 required no
 
+field setType
+file ddf
+type string
+required no
+
+field inputType
+file ddf
+type string
+required no
+
 # required DAF header fields
 
 field dafVersion
