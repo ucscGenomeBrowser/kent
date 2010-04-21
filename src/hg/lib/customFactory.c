@@ -35,7 +35,7 @@
 #endif//def USE_BAM
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.122 2010/04/10 19:01:04 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.123 2010/04/21 19:25:40 galt Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1485,6 +1485,7 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     track->bbiFile = bigWigFileOpen(bigDataUrl);
+    setBbiViewLimits(track);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -1493,7 +1494,6 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
-setBbiViewLimits(track);
 return track;
 }
 
