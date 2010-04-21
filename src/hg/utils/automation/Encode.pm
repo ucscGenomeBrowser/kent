@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.63 2010/04/20 08:12:27 krish Exp $
+# $Id: Encode.pm,v 1.64 2010/04/21 19:18:52 tdreszer Exp $
 
 package Encode;
 
@@ -30,7 +30,7 @@ our $pushQFile = "pushQ.sql";
 our $dafVersion = "2.0";
 
 # Prefix for table and filenames (was 'wgEncode' in v1 pipeline)
-our $compositePrefix = "enc";
+our $compositePrefix = "wgEncode";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
@@ -350,7 +350,7 @@ sub parseDaf
 
     if($daf{dafVersion} ne $dafVersion) {
         die "NOTICE:\n\n" .
-                "ENCODE pipeline 2.0 beta testing is in progress." . 
+                "ENCODE pipeline 2.0 beta testing is in progress." .
                 "Your wrangler will complete this submission and provide you" .
                 " with a version 2.0 DAF file to use for future submissions.\n";
         #die "ERROR(s) in DAF '$dafFile':\n\n" .
@@ -401,8 +401,8 @@ sub parseDaf
 sub compositeTrackName
 {
     my ($daf) = @_;
-    return $compositePrefix . 
-        $daf->{compositeSuffix} . 
+    return $compositePrefix .
+        $daf->{compositeSuffix} .
         (defined($daf->{dataAgreementSuffix}) ? $daf->{dataAgreementSuffix} : "");
 }
 
@@ -569,9 +569,9 @@ sub latestPipelineStatus {
 # Return status that is farther along in the pipeline
 # Any status not in the list is assigned 0
     my ($status1, $status2) = @_;
-    my $first = defined($pipelineStatuses{$status1}) ? 
+    my $first = defined($pipelineStatuses{$status1}) ?
         $pipelineStatuses{$status1} : 0;
-    my $second = defined($pipelineStatuses{$status2}) ? 
+    my $second = defined($pipelineStatuses{$status2}) ?
         $pipelineStatuses{$status2} : 0;
     return ($first > $second ? $status1 : $status2);
 }
