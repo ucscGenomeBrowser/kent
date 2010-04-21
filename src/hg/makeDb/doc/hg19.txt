@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.102 2010/04/20 17:34:31 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.103 2010/04/21 20:57:24 chinhli Exp $";
 
 #############################################################################
 
@@ -9693,6 +9693,95 @@ EOF
     # Cleanup:
     nice gzip snp131Simple.bed snp131ExcludeIds.txt snp131ForLiftOver.bed
     rm -r run*/split tmp.txt *.orthoGlom.txt
+
+
+
+##############################################################################
+#  RE-BUILD sno/miRNA TRACK (DONE - 04-20-2010 - Chin)
+
+    # The data in this track is out of date so update the track. 
+    mkdir -p /hive/data/genomes/hg19/bed/wgRna-2010-04-20
+    cd /hive/data/genomes/hg19/bed/wgRna-2010-04-20
+
+    # Download GFF file of latest miRNA annotations from miRBase at the
+    # ftp://mirbase.org/pub/mirbase/CURRENT/. This is Release 14.0
+    # (September,  2009)
+    wget --timestamping \
+         ftp://mirbase.org/pub/mirbase/CURRENT/genomes/hsa.gff
+    # Re-format, need to add "chr" to the beginning of each line.
+    sed -e 's/^/chr/' hsa.gff > hsMirBaseFormat.gff
+    # Remove extra "chr" in comment lines
+    perl -pi.bak -e 's/chr#/#/' hsMirBaseFormat.gff
+    # Change chrMT to chrM
+    perl -pi.bak -e 's/chrMT/chrM/' hsMirBaseFormat.gff
+    # Remove all but ID name in last field
+    sed -e 's/\";//g' hsMirBaseFormat.gff | sed -e 's/ID=\"//g' \
+       | sed -e 's/ACC=\"MI[0-9]*\s//' > hsMirBaseFormatIdOnly.gff
+
+    # use score 906 for + strand and 480 for - strand. This will show 
+    # up black on the track for + strand and grey for - strand.
+    # Starts appear to be 1-based when compared to miRNAs in current
+    # track
+    # and those in Ensembl.
+    # Confirmed with Sam Griffith-Jones (one of the authors of miRBase,
+    # sam.griffith-jones@manchester.ac.uk) that these GFF coordinates
+    # are 1-based. 
+    # Also add thickStart and thickEnd columns and "miRNA" for type.
+    awk 'BEGIN {FS="\t"} {OFS="\t"} \
+        {if ($0 !~ /#/ && $7 == "+") \
+         print $1, $4-1, $5, $9, 960, $7, 0, 0, "miRNA"; \
+       else if ($0 !~ /#/ && $7 == "-") \
+         print $1, $4-1, $5, $9, 480, $7, 0, 0, "miRNA";}' \
+        hsMirBaseFormatIdOnly.gff > hsMirBaseFormatIdOnly.bed
+
+    # 2010-04-21
+    # Down load the current snoRNABase coordinates (version 3, based on hg19)
+    #  from 
+    # http://www-snorna.biotoul.fr/coordinates.php
+    #   to
+    # /hive/data/genomes/hg19/bed/wgRna-2010-04-20/snoRNABaseVer3Coords.xls
+
+    cd /hive/data/genomes/hg19/bed/wgRna-2010-04-20/
+    cp snoRNABaseVer3Coords.xls snoRNABaseVer3Coords.txt
+    # remove the header line (column title).
+    # remove all the quotes surrounding characters field
+    perl -pi.bak -e 's/\"//g' snoRNABaseVer3Coords.txt
+    # Reformat to BED format with thickStart and thickEnd set to 0.
+    awk 'BEGIN {FS="\t"} {OFS="\t"} \
+        {if ($4 == "+") \
+         print $1, $2-1, $3, $5, 960, $4, 0, 0,$6; \
+       else if ($4 == "-") \
+         print $1, $2-1, $3, $5, 480, $4, 0, 0,$6;}' \
+       snoRNABaseVer3Coords.txt > snoRNABaseVer3Coords.bed
+    # Merge the miRNA and snoRNA files together
+    cat hsMirBaseFormatIdOnly.bed snoRNABaseVer3Coords.bed \
+        > wgRna20100420.bed
+    # Create and load wgRna
+    cp -p /cluster/home/chinhli/kent/src/hg/lib/wgRna.sql wgRna.sql
+    hgLoadBed -sqlTable=wgRna.sql hg19 wgRna wgRna20100420.bed
+    #  Reading wgRna20100420.bed
+    #  Loaded 1152 elements of size 9
+    #  Sorted
+    #  Creating table definition for wgRna
+    #  Saving bed.tab
+    #  Loading hg19
+
+    # Clean up
+    rm *.bak
+
+    # some details about this track:
+    hgsql -e "select count(*) from wgRna;" hg19
+    #  1152
+    # contain 4 types:
+    cat wgRna20100420.bed | awk '{print $9}' | sort | uniq
+    hgsql -e "select type, count(*) from wgRna  group by type;" hg19
+    #   CDBox     269
+    #   HAcaBox   112
+    #   miRNA     750
+    #   scaRna     21
+    featureBits hg19 wgRna
+    #    107878 bases of 2897316137 (0.004%) in intersection
+
 
 
 ############################################################################
