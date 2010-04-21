@@ -7,10 +7,10 @@
 # Writes error or log information to STDOUT
 # Returns 0 if unload succeeds.
 
-# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.6 2010/03/23 03:56:31 krish Exp $
+# $Id: doEncodeUnload.pl,v 1.7 2010/04/21 18:57:32 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -56,7 +56,30 @@ sub unloadWig
         }
     }
 }
- 
+
+sub unloadBigWig
+{
+    my ($assembly, $db, $tableName) = @_;
+    $db->dropTableIfExist($tableName);
+
+    # remove symlink
+    my $file = "/gbdb/$assembly/bbi/$tableName.bw";
+    if(-e $file) {
+        HgAutomate::verbose(3, "removing bigWig '$file'\n");
+        if(system("rm -f $file")) {
+            die "unexpected error removing symlink $file";
+        }
+    }
+    # FIXME: Souldn't we remove files from downloads dir (and gbdb subdir) as well??
+    #my $file = "/usr/local/apache/htdocs/goldenPath/$assembly/encodeDCC/encSydhTfbsStanf/gbdb/$tableName.bw";
+    #if(-e $file) {
+    #    HgAutomate::verbose(3, "removing wib '$file'\n");
+    #    if(system("rm -f $file")) {
+    #        die "unexpected error removing symlink $file";
+    #    }
+    #}
+}
+
 ############################################################################
 # Main
 
@@ -142,6 +165,8 @@ for my $key (keys %ra) {
         genericUnload($assembly, $db, $tablename);
     } elsif ($type eq "wig") {
         unloadWig($assembly, $db, $tablename);
+    } elsif ($type eq "bigWig") {
+        unloadBigWig($assembly, $db, $tablename);
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }
