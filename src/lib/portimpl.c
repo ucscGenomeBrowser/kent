@@ -11,7 +11,7 @@
 #include "portimpl.h"
 #include <dirent.h>
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.15 2009/02/05 20:34:45 kent Exp $";
+static char const rcsid[] = "$Id: portimpl.c,v 1.16 2010/04/21 19:23:47 galt Exp $";
 
 static struct webServerSpecific *wss = NULL;
 
@@ -130,15 +130,16 @@ for (; !isEmpty(s); s = e)
     if (e != NULL)
        *e++ = 0;
 
-    /* Cd there.  If that fails mkdir there and then cd there. */
-    if (!maybeSetCurrentDir(s))
-        {
-	if (!makeDir(s))
+    if (s[0]!=0) /* Tolerate double-slash in path, everyone else does it. */
+	/* Cd there.  If that fails mkdir there and then cd there. */
+	if (!maybeSetCurrentDir(s))
 	    {
-	    break;
+	    if (!makeDir(s))
+		{
+		break;
+		}
+	    setCurrentDir(s);
 	    }
-	setCurrentDir(s);
-	}
     }
 setCurrentDir(curDir);
 freeMem(curDir);
