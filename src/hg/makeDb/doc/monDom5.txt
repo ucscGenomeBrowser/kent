@@ -1735,5 +1735,23 @@ TMPDIR=/scratch/tmp
     cat fb.oviAri1.chainMonDom5Link.txt
     #   117493519 bases of 1201271277 (9.781%) in intersection
 
+#########################################################################
+# lastz Rabbit oryCun2 swap (DONE - 2010-01-25 - Hiram)
+    #	original alignment
+    cd /hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21
+    cat fb.oryCun2.chainMonDom5Link.txt 
+    #	176460344 bases of 2604023284 (6.776%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/monDom5/bed/blastz.oryCun2.swap
+    cd /hive/data/genomes/monDom5/bed/blastz.oryCun2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21/DEF \
+	-swap -noLoadChainSplit -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    74m20.206s
+    cat fb.monDom5.chainOryCun2Link.txt 
+    #	178331930 bases of 3501660299 (5.093%) in intersection
 
 #########################################################################

@@ -458,3 +458,22 @@ close (FH);
     ./ctgPos2ToEnsembl.pl | sort -k4,4 -k3,3n > ../jkStuff/ensGene.lft
 
 ############################################################################
+# lastz Mouse Mm9 swap (DONE - 2009-08-26 - Hiram)
+    #	original alignment
+    cd /hive/data/genomes/mm9/bed/lastzOryCun2.2010-01-15
+    cat fb.mm9.chainOryCun2Link.txt
+# 670229789 bases of 2620346127 (25.578%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/oryCun2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/oryCun2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzOryCun2.2010-01-15/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    84m6.571s
+    cat fb.oryCun2.chainMm9Link.txt 
+    #	669602734 bases of 2604023284 (25.714%) in intersection
+
+############################################################################
