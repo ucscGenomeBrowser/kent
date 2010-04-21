@@ -1,0 +1,61 @@
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/Attic/trackDb.enc.ra,v 1.1 2010/04/21 17:54:43 tdreszer Exp $
+
+# Yale ChIP-seq (wrangler: tdreszer)
+track encSydhTfbs
+release alpha,beta
+compositeTrack on
+shortLabel SYDH TFBS
+longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale/UC-Davis/Harvard
+group regulation
+priority 0
+type bed 3
+origAssembly mm9
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL
+subGroup3 factor Factor E2F4=E2F4 POL2=Pol2 zInput=Input
+dimensions dimensionX=cellType dimensionY=factor
+sortOrder cellType=+ factor=+ view=+
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+#visibilityViewDefaults  Signal=full
+noInherit on
+dataVersion through the ENCODE Jan 2010 Freeze
+wgEncode 1
+
+#    track encSydhTfbsViewPeaks
+#    release alpha,beta
+#    shortLabel Peaks
+#    view Peaks
+#    visibility pack
+#    viewUi on
+#    subTrack encSydhTfbs
+#    signalFilter 0
+#    signalFilterLimits 0:18241
+#    pValueFilter 0
+#    pValueFilterLimits 0:300
+#    qValueFilter 0
+#    qValueFilterLimits 0:300
+
+    track encSydhTfbsViewSignal
+    release alpha,beta
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack encSydhTfbs
+    viewLimits 0:78
+    minLimit 0
+    maxLimit 20910
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+	    track encSydhTfbsStanfCh12InputIggrabSignal
+	    release alpha
+	    subTrack encSydhTfbsViewSignal off
+	    shortLabel CH12 Input Sig
+	    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in CH12 cells)
+	    subGroups view=Signal factor=zInput cellType=CH12
+	    type bigWig
+	    color 153,38,0
+	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input input=yes inputType=CH12/None/Input/IgG-rab treatment=None view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1125 dateSubmitted=2010-03-25 dateUnrestricted=2010-12-25 composite=encSydhTfbsStanf tableName=encSydhTfbsStanfCh12InputIggrabSignal fileName=encSydhTfbsStanfCh12InputIggrabSignal.bigWig.gz
+
