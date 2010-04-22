@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.36 2010/04/21 19:31:19 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.37 2010/04/22 21:26:51 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -298,7 +298,7 @@ my $preamble = "preamble.html";
    $preamble = $opt_preamble if(defined $opt_preamble);
 
 my $mdb = "mdb";
-   $mdb =$opt_mdb if(defined $opt_mdb);
+   $mdb = $opt_mdb if(defined $opt_mdb);
 
 usage() if (scalar(@ARGV) < 1);
 
@@ -392,7 +392,7 @@ for my $line (@fileList) {
     $results = "";
     # Use the metaTbl for metadata
     if (!defined $opt_noMdb) {
-        my $queryResults = $db->execute("select var,val from $database.$mdb where obj = '$tableName'");
+        my $queryResults = $db->execute("select var,val from $mdb where obj = '$tableName'");
         if($queryResults) {
             my @pairVars;
             while(my @row = $queryResults->fetchrow_array()) {
