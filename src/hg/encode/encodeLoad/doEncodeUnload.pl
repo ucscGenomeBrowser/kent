@@ -10,7 +10,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.7 2010/04/21 18:57:32 tdreszer Exp $
+# $Id: doEncodeUnload.pl,v 1.8 2010/04/22 21:01:54 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -167,6 +167,7 @@ for my $key (keys %ra) {
         unloadWig($assembly, $db, $tablename);
     } elsif ($type eq "bigWig") {
         unloadBigWig($assembly, $db, $tablename);
+        unlink "$downloadDir/gbdb/$tablename.bw";
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }
