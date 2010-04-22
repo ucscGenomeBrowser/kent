@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.148 2010/04/12 16:20:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.149 2010/04/22 19:25:22 bristor Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -428,18 +428,28 @@ if (otDefault != NULL && otDefault != otList)
     if (! otInOtList)
 	outputType = otDefault->name;
     }
-hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
+hPrintf("<SELECT NAME=\"%s\">", hgtaOutputType);
 for (ot = otList; ot != NULL; ot = ot->next)
     {
     hPrintf(" <OPTION VALUE=%s", ot->name);
     if (sameString(ot->name, outputType))
 	hPrintf(" SELECTED");
+    if (sameString(ot->name, outBed) || sameString(ot->name, outWigBed))
+        hPrintf(" id=\"outBed\"");
     hPrintf(">%s\n", ot->label);
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");
-cartMakeCheckBox(cart, "sendToGalaxy", FALSE);
-hPrintf(" Send output to <A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</A>");
+hPrintf(" Send output to ");
+cgiMakeCheckBoxIdAndJS("sendToGalaxy", FALSE,
+    "checkboxGalaxy",
+    "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
+hPrintf("<A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</A>\n");
+nbSpaces(2);
+cgiMakeCheckBoxIdAndJS("sendToGreat", FALSE,
+    "checkboxGreat",
+    "onclick=\"return onSelectGreat();\"");
+hPrintf(" <A HREF=\"http://great.stanford.edu/help/index.php/Main_Page\" target=_BLANK>GREAT</A>");
 hPrintf("</TD></TR>\n");
 }
 
@@ -920,9 +930,21 @@ hPrintf("%s",
   "For more complex queries, you may want to use "
   "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download29\">public "
-  "MySQL server</A>. Refer to the "
+  "MySQL server</A>. "
+  "To examine the biological function of your set through annotation "
+  "enrichments, send the data to "
+  "<A HREF=\"http://great.stanford.edu/public\">GREAT</A>. Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data.");
+
+hPrintf("<script type=\"text/javascript\">\n");
+hPrintf("function onSelectGreat() {\n");
+hPrintf("document.getElementById('checkboxGalaxy').checked=false;\n");
+hPrintf("document.getElementById('outBed').selected=true;\n");
+hPrintf("return true;\n");
+hPrintf("}\n");
+hPrintf("</script>\n");
+
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",

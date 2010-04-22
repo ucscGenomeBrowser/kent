@@ -431,6 +431,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
 #define hgtaDoRemoveCustomTrack "hgta_doRemoveCustomTrack"
 #define hgtaDoGalaxyQuery "hgta_doGalaxyQuery"
+#define hgtaDoGreatOutput "hgta_doGreatOutput"
+#define hgtaDoGreatQuery "hgta_doGreatQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 #define hgtaDoMetaData "hgta_doMetaData"
 #define hgtaDoSetUserRegions "hgta_doSetUserRegions"
@@ -1012,6 +1014,28 @@ void startGalaxyForm ();
 
 void sendParamsToGalaxy(char *doParam, char *paramVal);
 /* intermediate page for formats printed directly from top form */
+
+/* --------------- GREAT functions --------------- */
+boolean doGreat();
+/* Has the send query results to GREAT checkbox been selected? */
+
+void verifyGreatFormat(const char *output);
+/* check that specified outupt format is acceptable for GREAT; errAbort if not */
+
+void verifyGreatAssemblies();
+/* check that specified assembly is acceptable for GREAT; errAbort if not */
+
+void printGreatSubmitButtons();
+/* print submit button to send query results to GREAT */
+
+void startGreatForm();
+/* start form to send parameters to GREAT, also send required params */
+
+void doGetGreatOutput(void (*dispatch)());
+/* Generate output that GREAT will read via doGetGreatResults. */
+
+void doGreatTopLevel();
+/* intermediate page for sending to GREAT directly from top form */
 
 /* --------------- wikiTrack functions --------------- */
 void wikiTrackDb(struct trackDb **list);

@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.76 2010/01/04 19:12:23 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.77 2010/04/22 19:25:22 bristor Exp $";
 
 extern char *maxOutMenu[];
 
@@ -639,7 +639,10 @@ if (track == NULL)
 
 maxOut = wigMaxOutput();
 
-textOpen();
+if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
+    fputs("#", stdout);
+else
+    textOpen();
 
 if (track != NULL)
     {

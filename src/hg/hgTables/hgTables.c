@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.192 2010/04/13 04:42:01 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.193 2010/04/22 19:25:22 bristor Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1502,6 +1502,8 @@ if (track != NULL)
 	return;
 	}
     }
+if (doGreat())
+    verifyGreatFormat(output);
 if (sameString(output, outPrimaryTable))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
@@ -1546,6 +1548,8 @@ else if (sameString(output, outWigBed))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else if (doGreat() && !cgiOptionalString(hgtaDoGreatQuery))
+        doGreatTopLevel();
     else
         doOutWigBed(track, table, conn);
     }
@@ -1664,7 +1668,7 @@ else if (cartVarExists(cart, hgtaDoSelectFieldsMore))
     doSelectFieldsMore();
 else if (cartVarExists(cart, hgtaDoPrintSelectedFields))
     doPrintSelectedFields();
-else if (cartVarExists(cart, hgtaDoGalaxySelectedFields))
+else if (cartVarExists(cart, hgtaDoGalaxySelectedFields)) 
     sendParamsToGalaxy(hgtaDoPrintSelectedFields, "get output");
 else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
     doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));
@@ -1677,7 +1681,7 @@ else if (cartVarExists(cart, hgtaDoGenomicDna))
         sendParamsToGalaxy(hgtaDoGenomicDna, "submit");
     else
         doGenomicDna(conn);
-else if (cartVarExists(cart, hgtaDoGetBed))
+else if (cartVarExists(cart, hgtaDoGetBed) || cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
     doGetBed(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackTb))
     doGetCustomTrackTb(conn);
@@ -1738,7 +1742,6 @@ if (curTrack == NULL)
     }
 }
 
-
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks.
  * Here we set up cart and some global variables, dispatch the command,
@@ -1763,9 +1766,12 @@ if (lookupPosition())
     {
     /* Init track and group lists and figure out what page to put up. */
     initGroupsTracksTables();
-    dispatch();
-    }
 
+    if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
+        doGetGreatOutput(dispatch);
+    else
+        dispatch();
+    }
 /* Save variables. */
 cartCheckout(&cart);
 }

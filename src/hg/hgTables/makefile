@@ -11,7 +11,7 @@ T = tstbug.o
 O = $A.o asObj.o bedList.o bigBed.o bigWig.o chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o maf.o mainPage.o microarrayTables.o rangeHistogram.o schema.o pal.o \
-    seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o userRegions.o
+    seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o great.o userRegions.o
 
 include ../../inc/cgi_build_rules.mk
 
@@ -53,6 +53,7 @@ compositeTrack.o:	hgTables.h
 filterFields.o:	hgTables.h
 galaxy.o:	hgTables.h
 gffOut.o:	hgTables.h
+great.o:	hgTables.h
 hgTables.o:	hgTables.h
 identifiers.o:	hgTables.h
 intersect.o:	hgTables.h

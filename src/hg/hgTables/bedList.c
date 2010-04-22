@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.72 2010/04/13 05:51:24 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.73 2010/04/22 19:25:22 bristor Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -332,52 +332,59 @@ char *setting;
 htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
 if (doGalaxy())
     startGalaxyForm();
+else if (doGreat())
+    {
+    verifyGreatAssemblies();
+    startGreatForm();
+    }
 else
     hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
-hPrintf("%s\n", "<TABLE><TR><TD>");
-if (doCt)
-    {
-    hPrintf("%s\n", "</TD><TD>"
-	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
-	 "Custom track</A> header: </B>");
-    }
-else
-    {
-    cgiMakeCheckBox(hgtaPrintCustomTrackHeaders,
-	    cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
-    hPrintf("%s\n", "</TD><TD> <B> Include "
-	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
-	 "custom track</A> header: </B>");
-    }
-hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>name=");
-safef(buf, sizeof(buf), "tb_%s", hti->rootName);
-setting = cgiUsualString(hgtaCtName, buf);
-cgiMakeTextVar(hgtaCtName, setting, 16);
-hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>description=");
-safef(buf, sizeof(buf), "table browser query on %s%s%s",
-	 table,
-	 (table2 ? ", " : ""),
-	 (table2 ? table2 : ""));
-setting = cgiUsualString(hgtaCtDesc, buf);
-cgiMakeTextVar(hgtaCtDesc, setting, 50);
-hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");
-if (isWiggle(database, table) || isBigWig(table))
-    {
-    setting = cartCgiUsualString(cart, hgtaCtVis, ctVisWigMenu[2]);
-    cgiMakeDropList(hgtaCtVis, ctVisWigMenu, ctVisWigMenuSize, setting);
-    }
-else
-    {
-    setting = cartCgiUsualString(cart, hgtaCtVis, ctVisMenu[3]);
-    cgiMakeDropList(hgtaCtVis, ctVisMenu, ctVisMenuSize, setting);
-    }
-hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>url=");
-setting = cartCgiUsualString(cart, hgtaCtUrl, "");
-cgiMakeTextVar(hgtaCtUrl, setting, 50);
-hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>");
-hPrintf("%s\n", "</TD></TR></TABLE>");
-
+if (!doGreat())
+{
+    hPrintf("%s\n", "<TABLE><TR><TD>");
+    if (doCt)
+        {
+        hPrintf("%s\n", "</TD><TD>"
+    	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
+    	 "Custom track</A> header: </B>");
+        }
+    else
+        {
+        cgiMakeCheckBox(hgtaPrintCustomTrackHeaders,
+    	    cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
+        hPrintf("%s\n", "</TD><TD> <B> Include "
+    	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
+    	 "custom track</A> header: </B>");
+        }
+    hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>name=");
+    safef(buf, sizeof(buf), "tb_%s", hti->rootName);
+    setting = cgiUsualString(hgtaCtName, buf);
+    cgiMakeTextVar(hgtaCtName, setting, 16);
+    hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>description=");
+    safef(buf, sizeof(buf), "table browser query on %s%s%s",
+    	 table,
+    	 (table2 ? ", " : ""),
+    	 (table2 ? table2 : ""));
+    setting = cgiUsualString(hgtaCtDesc, buf);
+    cgiMakeTextVar(hgtaCtDesc, setting, 50);
+    hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");
+    if (isWiggle(database, table) || isBigWig(table))
+        {
+        setting = cartCgiUsualString(cart, hgtaCtVis, ctVisWigMenu[2]);
+        cgiMakeDropList(hgtaCtVis, ctVisWigMenu, ctVisWigMenuSize, setting);
+        }
+    else
+        {
+        setting = cartCgiUsualString(cart, hgtaCtVis, ctVisMenu[3]);
+        cgiMakeDropList(hgtaCtVis, ctVisMenu, ctVisMenuSize, setting);
+        }
+    hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>url=");
+    setting = cartCgiUsualString(cart, hgtaCtUrl, "");
+    cgiMakeTextVar(hgtaCtUrl, setting, 50);
+    hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>");
+    hPrintf("%s\n", "</TD></TR></TABLE>");
+}
 if (isWiggle(database, table) || isBedGraph(table) || isBigWig(table) )
     {
     char *setting = NULL;
@@ -430,10 +437,15 @@ else
         cgiMakeHiddenVar(hgtaDoGetBed, "get BED");
         printGalaxySubmitButtons();
         }
+    else if (doGreat())
+        {
+        cgiMakeHiddenVar(hgtaDoGetBed, "get BED");
+        printGreatSubmitButtons();
+        }
     else
         cgiMakeButton(hgtaDoGetBed, "get BED");
     }
-if (!doGalaxy())
+if (!doGalaxy() && !doGreat())
     {
     hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "cancel");
@@ -532,10 +544,13 @@ struct wigAsciiData *wigDataList = NULL;
 struct dataVector *dataVectorList = NULL;
 boolean doRgb = bedItemRgb(hTrackDbForTrack(db, curTable));
 
-if (!doCt)
+if (!cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE) && !doCt)
     {
     textOpen();
     }
+
+if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
+    fputs("#", stdout);
 
 if ((isWig || isBedGr || isBgWg) && sameString(outWigData, ctWigOutType))
     doDataPoints = TRUE;
@@ -698,7 +713,6 @@ if (!gotResults)
 else if (doCt)
     {
     int wigDataSize = 0;
-
     /* Load existing custom tracks and add this new one: */
     struct customTrack *ctList = getCustomTracks();
     removeNamedCustom(&ctList, ctNew->tdb->tableName);
