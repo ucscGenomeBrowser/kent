@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes13.csh,v 1.1 2010/04/21 23:22:12 cline Exp $"
+#	"$Id: hg19.ucscGenes13.csh,v 1.2 2010/04/22 00:08:36 cline Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -19,7 +19,7 @@ set Xdb = Mm9
 set ydb = canFam2
 set zdb = rn4
 set spDb = sp100331
-set pbDb = proteins090821
+set pbDb = proteins100331
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer5
@@ -49,12 +49,12 @@ set bioCycTempDb = tmpBioCyc${tmpSuffix}
 set snpTable = snp130
 
 # Public version number
-set lastVer = 4
-set curVer = 5
+set lastVer = 5
+set curVer = 6
 
 # Database to rebuild visiGene text from.  Should include recent mouse and human
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
-set vgTextDbs = (mm8 mm9 hg18 $tempDb)
+set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -94,6 +94,10 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
+
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Get Genbank info
 txGenbankData $db
@@ -149,6 +153,10 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
           echo -n "" >ccds/$c.bed
     endif
 end
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Get list of accessions that are associated with antibodies from database.
 # This will be a good list but not 100% complete.  Cluster these to get
@@ -1247,8 +1255,6 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms
@@ -1267,6 +1273,4 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
