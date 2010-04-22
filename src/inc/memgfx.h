@@ -267,6 +267,21 @@ int mgFontStringWidth(MgFont *font, char *string);
 int mgFontCharWidth(MgFont *font, char c);
 /* How wide is a character? */
 
+char *mgFontSizeBackwardsCompatible(char *size);
+/* Given "size" argument that may be in old tiny/small/medium/big/huge format,
+ * return it in new numerical string format. Do NOT free the return string*/
+
+MgFont *mgFontForSizeAndStyle(char *textSize, char *fontType);
+/* Get a font of given size and style.  Abort with error message if not found.
+ * The textSize should be 6,8,10,12,14,18,24 or 34.  For backwards compatibility
+ * textSizes of "tiny" "small", "medium", "large" and "huge" are also ok.
+ * The fontType should be "medium", "bold", or "fixed" */
+
+MgFont *mgFontForSize(char *textSize);
+/* Get a font of given size and style.  Abort with error message if not found.
+ * The textSize should be 6,8,10,12,14,18,24 or 34.  For backwards compatibility
+ * textSizes of "tiny" "small", "medium", "large" and "huge" are also ok. */
+
 void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 
 	int bottom, Color color);
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at

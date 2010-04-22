@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.52 2010/03/27 04:23:08 kent Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.53 2010/04/22 19:35:38 kent Exp $";
 
 #ifndef min3
 #define min3(x,y,z) (min(x,min(y,z)))
@@ -611,6 +611,112 @@ int mgFontCharWidth(MgFont *font, char c)
 {
 return mgFontWidth(font, &c, 1);
 }
+
+char *mgFontSizeBackwardsCompatible(char *size)
+/* Given "size" argument that may be in old tiny/small/medium/big/huge format,
+ * return it in new numerical string format. Do NOT free the return string*/
+{
+if (isdigit(size[0]))
+    return size;
+else if (sameWord(size, "tiny"))
+    return "6";
+else if (sameWord(size, "small"))
+    return "8";
+else if (sameWord(size, "medium"))
+    return "14";
+else if (sameWord(size, "large"))
+    return "18";
+else if (sameWord(size, "huge"))
+    return "34";
+else
+    {
+    errAbort("unknown font size %s", size);
+    return NULL;
+    }
+}
+
+MgFont *mgFontForSizeAndStyle(char *textSize, char *fontType)
+/* Get a font of given size and style.  Abort with error message if not found.
+ * The textSize should be 6,8,10,12,14,18,24 or 34.  For backwards compatibility
+ * textSizes of "tiny" "small", "medium", "large" and "huge" are also ok.
+ * The fontType should be "medium", "bold", or "fixed" */
+{
+textSize = mgFontSizeBackwardsCompatible(textSize);
+MgFont *font = NULL;
+if (sameString(fontType,"bold"))
+    {
+    if (sameString(textSize, "6"))
+	 font = mgTinyBoldFont();
+    else if (sameString(textSize, "8"))
+	 font = mgHelveticaBold8Font();
+    else if (sameString(textSize, "10"))
+	 font = mgHelveticaBold10Font();
+    else if (sameString(textSize, "12"))
+	 font = mgHelveticaBold12Font();
+    else if (sameString(textSize, "14"))
+	 font = mgHelveticaBold14Font();
+    else if (sameString(textSize, "18"))
+	 font = mgHelveticaBold18Font();
+    else if (sameString(textSize, "24"))
+	 font = mgHelveticaBold24Font();
+    else if (sameString(textSize, "34"))
+	 font = mgHelveticaBold34Font();
+    else
+	 errAbort("unknown textSize %s", textSize);
+    }
+else if (sameString(fontType,"fixed"))
+    {
+    if (sameString(textSize, "6"))
+	 font = mgTinyFixedFont();
+    else if (sameString(textSize, "8"))
+	 font = mgCourier8Font();
+    else if (sameString(textSize, "10"))
+	 font = mgCourier10Font();
+    else if (sameString(textSize, "12"))
+	 font = mgCourier12Font();
+    else if (sameString(textSize, "14"))
+	 font = mgCourier14Font();
+    else if (sameString(textSize, "18"))
+	 font = mgCourier18Font();
+    else if (sameString(textSize, "24"))
+	 font = mgCourier24Font();
+    else if (sameString(textSize, "34"))
+	 font = mgCourier34Font();
+    else
+	 errAbort("unknown textSize %s", textSize);
+    }
+else
+    {
+    if (sameString(textSize, "6"))
+	 font = mgTinyFont();
+    else if (sameString(textSize, "8"))
+	 font = mgSmallFont();
+    else if (sameString(textSize, "10"))
+	 font = mgHelvetica10Font();
+    else if (sameString(textSize, "12"))
+	 font = mgHelvetica12Font();
+    else if (sameString(textSize, "14"))
+	 font = mgHelvetica14Font();
+    else if (sameString(textSize, "18"))
+	 font = mgHelvetica18Font();
+    else if (sameString(textSize, "24"))
+	 font = mgHelvetica24Font();
+    else if (sameString(textSize, "34"))
+	 font = mgHelvetica34Font();
+    else
+	 errAbort("unknown textSize %s", textSize);
+    }
+return font;
+}
+
+MgFont *mgFontForSize(char *textSize)
+/* Get a font of given size and style.  Abort with error message if not found.
+ * The textSize should be 6,8,10,12,14,18,24 or 34.  For backwards compatibility
+ * textSizes of "tiny" "small", "medium", "large" and "huge" are also ok. */
+{
+return mgFontForSizeAndStyle(textSize, "medium");
+}
+
 
 void mgSlowDot(struct memGfx *mg, int x, int y, int colorIx)
 /* Draw a dot when a macro won't do. */

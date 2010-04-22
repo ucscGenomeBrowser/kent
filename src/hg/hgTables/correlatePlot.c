@@ -16,7 +16,7 @@
 #include "histogram.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.16 2009/08/19 23:00:17 angie Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.17 2010/04/22 19:35:38 kent Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -280,29 +280,13 @@ for (j = 0; j < GRAPH_HEIGHT; ++j)
 }
 
 static MgFont *fontSetup(int *height)
+/* Select font from textSize in cart. */
 {
-MgFont *font = NULL;
 #define textSizeVar "textSize"	/*	from hgTracks.h	*/
 char *textSize = cartUsualString(cart, textSizeVar, "small");
-
-if (sameString(textSize, "small"))
-     font = mgSmallFont();
-else if (sameString(textSize, "tiny"))
-     font = mgTinyFont();
-else if (sameString(textSize, "medium"))
-     font = mgMediumFont();
-else if (sameString(textSize, "large"))
-     font = mgLargeFont();
-else if (sameString(textSize, "huge"))
-     font = mgHugeFont();
-else
-     errAbort("incorrect text size '%s' in cart: %s", textSizeVar, textSize);
-
+MgFont *font = mgFontForSize(textSize);
 if (height)
-    {
     *height = mgFontLineHeight(font);
-    }
-
 return (font);
 }
 
