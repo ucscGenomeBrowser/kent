@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.277 2010/04/22 16:16:57 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.278 2010/04/22 22:08:48 mary Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -970,7 +970,7 @@ if (indelAppropriate(tdb))
 	   "<BR>\n");
     safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->tableName);
     cgiMakeCheckBox(var, showQueryInsert);
-    printf("Draw a vertical blue line for an insertion at the beginning or "
+    printf("Draw a vertical purple line for an insertion at the beginning or "
 	   "end of the query, orange for insertion in the middle of the query"
 	   "<BR>\n");
     safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->tableName);

@@ -58,8 +58,8 @@
 #define CDS_QUERY_INSERTION_B 0
 
 #define CDS_QUERY_INSERTION_AT_END 8
-#define CDS_QUERY_INSERTION_AT_END_R 90
-#define CDS_QUERY_INSERTION_AT_END_G 210
+#define CDS_QUERY_INSERTION_AT_END_R 146
+#define CDS_QUERY_INSERTION_AT_END_G 20
 #define CDS_QUERY_INSERTION_AT_END_B 255
 
 #define CDS_POLY_A 9
@@ -162,8 +162,8 @@ void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      int winStart, enum baseColorDrawOpt drawOpt,
 			      boolean indelShowQInsert, boolean indelShowPolyA);
 /* If applicable, draw 1-pixel wide orange lines for query insertions in the
- * middle of the query, 1-pixel wide blue lines for query insertions at the 
- * end of the query, and 1-pixel wide green (instead of blue) when a query 
+ * middle of the query, 1-pixel wide purple lines for query insertions at the 
+ * end of the query, and 1-pixel wide green (instead of purple) when a query 
  * insertion at the end is a valid poly-A tail. */
 
 void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
