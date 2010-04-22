@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.276 2010/04/21 20:34:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.277 2010/04/22 16:16:57 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -924,7 +924,7 @@ else if (gotSeq)
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
     printf("<BR><A HREF=\"%s\">Help on base coloring</A><BR>",
-	   CDS_MRNA_HELP_PAGE);
+	   CDS_BASE_HELP_PAGE);
     }
 }
 

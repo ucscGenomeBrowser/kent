@@ -634,6 +634,7 @@ enum baseColorDrawOpt
 /* Coloring help pages: */
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
+#define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
 
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
