@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.229 2010/04/15 15:50:40 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.230 2010/04/22 20:58:16 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1717,12 +1717,12 @@ tag CH12
 type Cell Line
 organism Mouse
 Category L
-description 
-vendorName 
-vendorId 
-orderUrl 
-termId 
-termUrl 
+description
+vendorName
+vendorId
+orderUrl
+termId
+termUrl
 color 153,38,0
 sex U
 protocol (provisional)
@@ -2295,7 +2295,7 @@ orderUrl http://www.millipore.com/catalogue/item/07-352
 vendorName Millipore
 vendorId 07-352
 lab Farnham
-lots 
+lots
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
@@ -2394,7 +2394,7 @@ orderUrl http://www.cellsignal.com/products/9763.html
 vendorName Cell Signaling
 vendorId 9763S
 lab Farnham
-lots 
+lots
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
@@ -2478,7 +2478,7 @@ term IRF-1
 tag IRF1
 type Antibody
 antibodyDescription IRF-1 (C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of IRF-1 of human origin.
-targetDescription Interferon regulatory factor 1 is a member of the interferon regulatory transcription factor (IRF) family. IRF1 serves as an activator of interferons alpha and beta transcription and also functions as a transcription activator of genes induced by interferons alpha, beta, and gamma. IRF1 has been shown to play roles in regulating apoptosis and tumor suppression.	
+targetDescription Interferon regulatory factor 1 is a member of the interferon regulatory transcription factor (IRF) family. IRF1 serves as an activator of interferons alpha and beta transcription and also functions as a transcription activator of genes induced by interferons alpha, beta, and gamma. IRF1 has been shown to play roles in regulating apoptosis and tumor suppression.
 vendorName Santa Cruz Biotech
 vendorId sc-497
 orderUrl http://www.scbt.com/datasheet-497-irf-1-c-20-antibody.html
@@ -3242,7 +3242,7 @@ orderUrl http://www.millipore.com/catalogue/item/07-260
 term CUGBP1
 tag CUGBP1
 type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA. 
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
 targetDescription CELF1
 vendorName Millipore
 vendorId 05-621
@@ -3305,7 +3305,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-689
 term HuR
 tag HuR
 type ripAntibody
-antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide, amino acids 3-19 of HuR. Recommended for detection of HuR (ELAV1) of h,m origin by WB, IC, IH, and IP. 
+antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide, amino acids 3-19 of HuR. Recommended for detection of HuR (ELAV1) of h,m origin by WB, IC, IH, and IP.
 targetDescription ELAV1
 vendorName Millipore
 vendorId ab5831
@@ -3323,7 +3323,7 @@ orderUrl http://www.emdbiosciences.com/Products/ProductDisplay.asp?catno=69522
 term p54nrb
 tag p54nrb
 type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of p54nrb (NONO) of H, R origin by IP, WB, IH. 
+antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of p54nrb (NONO) of H, R origin by IP, WB, IH.
 targetDescription NONO
 vendorName Millipore
 vendorId 05-950
@@ -3341,7 +3341,7 @@ orderUrl http://www.millipore.com/catalogue/item/04-1467
 term phospho-4E-BP1/2/3_Thr45
 tag EIF4EBP1Thr45
 type ripAntibody
-antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of human 4E-BP1/2/3 (EIF4EBP1) . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB. 
+antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of human 4E-BP1/2/3 (EIF4EBP1) . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
 targetDescription EIF4EBP1
 vendorName Millipore
 vendorId 04-1010
@@ -3718,40 +3718,40 @@ description No special treatment or protocol applies
 type control
 
 
-### Inputs
+### Inputs which are a special type of control
 term std
 tag std
-type input
+type control
 description Standard input signal for most experiments.
 
 term IgG-mus
 tag IGGmus
-type input
+type control
 description Input signal from Normal Mouse IgG ChIP-seq.
 
 term IgG-rab
 tag IGGrab
-type input
+type control
 description Input signal from normal Rabbit IgG ChIP-seq.
 
 term IgG-rat
 tag IGGrat
-type input
+type control
 description Input signal from Normal Rat IgG ChIP-seq
 
 term IgG-Yale
 tag IGGYale
-type input
+type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
 
 term MNase
 tag MNase
-type input
+type control
 description Input signal from MNase digested DNA.
 
 term UCDavis
 tag UCD
-type input
+type control
 description Input library was prepared at UC Davis.
 
 
