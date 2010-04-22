@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.220 2010/04/21 19:28:07 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.221 2010/04/22 19:56:50 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -160,12 +160,12 @@ our %validators = (
     files => \&validateFiles,
     view => \&validateDatasetName,
     labVersion => \&validateNoValidation,
-    setType => \&validateNoValidation,
     inputType => \&validateNoValidation,
     softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
     replicate => \&validateNoValidation,
     fragLength => \&validateNoValidation,
+    setType => \&validateSetType,
     cell => \&validateControlledVocabOrControl,
     antibody => \&validateControlledVocabOrControl,
     ripAntibody => \&validateControlledVocabOrControl,
@@ -238,6 +238,14 @@ sub validateRawDataAcc {
 
 sub validateNoValidation {
 # No validation
+    return ();
+}
+
+sub validateSetType {
+    my ($val, $type) = @_;
+    if($val ne 'exp' && $val ne 'input') {
+        return ("Controlled Vocabulary \'$type\' value \'$val\' must be either \'exp\' or \'input\'");
+    }
     return ();
 }
 
@@ -1706,6 +1714,31 @@ foreach my $ddfLine (@ddfLines) {
             $metadata .= " $key=$value"; # and the rest
         }
     }
+    if($daf->{dataType} =~/ChIPseq/i) {
+        if(!$ddfLine->{setType}) {
+            if($ddfLine->{antibody} =~/Input/i ) {
+                $metadata .= " setType=input";
+            } else {
+                $metadata .= " setType=exp";
+            }
+        }
+        if(!$ddfLine->{inputType}) {
+            my $inputType = $ddfLine->{cell};
+            $inputType .= "/" . $ddfLine->{treatment} if $ddfLine->{treatment};
+            $inputType .= "/Input"; # default inputType for ChIPseq is "Input" instead of antibody
+            $inputType .= "/" . $ddfLine->{protocol} if $ddfLine->{protocol};
+            $inputType .= "/" . $ddfLine->{control} if $ddfLine->{control};
+            $metadata .= " inputType=$inputType";
+        }
+    }
+    if(!$ddfLine->{inputType} && $daf->{dataType} =~/ChIPseq/i) {
+        my $inputType = $ddfLine->{cell};
+        $inputType .= "/" . $ddfLine->{treatment} if $ddfLine->{treatment};
+        $inputType .= "/Input"; # default inputType for ChIPseq is "Input" instead of antibody
+        $inputType .= "/" . $ddfLine->{protocol} if $ddfLine->{protocol};
+        $inputType .= "/" . $ddfLine->{control} if $ddfLine->{control};
+        $metadata .= " inputType=$inputType";
+    }
     $metadata .= " view=$view";
     $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
@@ -1730,6 +1763,7 @@ foreach my $ddfLine (@ddfLines) {
     }
     # Construct table name from track name and variables
     my $tableName = "$compositeTrack";
+    my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
 
     if(!defined($daf->{TRACKS}{$view}{shortLabelPrefix})) {
         $daf->{TRACKS}{$view}{shortLabelPrefix} = "";
@@ -1767,7 +1801,6 @@ foreach my $ddfLine (@ddfLines) {
 
         my $shortSuffix = "";
         my $longSuffix;
-        my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
         if($hash{'antibody'} && $hash{'cell'}) {
             $pushQDescription = "$hash{'antibody'} in $hash{'cell'}";
             $shortSuffix = "$hash{'cell'} $hash{'antibody'}";
@@ -1839,7 +1872,11 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # Add view and replicate to tablename
-    $tableName .= $view;
+    if(defined($shortViewMap{$view})) {
+        $tableName .= $shortViewMap{$view};
+    } else {
+        $tableName .= $view;
+    }
     if(defined($replicate)) {
         $tableName .= "Rep$replicate";
     }
