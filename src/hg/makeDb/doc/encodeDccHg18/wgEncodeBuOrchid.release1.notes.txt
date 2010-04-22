@@ -1,12 +1,6 @@
 # generated with encodeMkChangeNotes 0.9
 This is a release1 of the "ENCODE wgEncodeBuOrchid"
 The composite track is wgEncodeBuOrchid
-# WARNINGS #################################################
-1 - looking for wgEncodeBuOrchidSignalRep1Gm12878
-2 - file wgEncodeBuOrchidSignalRep1Gm12878.bw in ./gbdb/ found with coresponding table and gbdb file but no download file
-3 - looking for wgEncodeBuOrchidSignalRep2Gm12878
-4 - file wgEncodeBuOrchidSignalRep2Gm12878.bw in ./gbdb/ found with coresponding table and gbdb file but no download file
-############################################################
 
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
@@ -18,7 +12,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 2
-    Files: 3
+    Files: 5
     Gbdbs: 2
 
 A) Untouched Tables (0):
@@ -33,12 +27,14 @@ C) New tables (2):
 wgEncodeBuOrchidSignalRep1Gm12878
 wgEncodeBuOrchidSignalRep2Gm12878
 
-C') New files (0 downloadables, 2 gbdbs):
+C') New files (2 downloadables, 2 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBuOrchid/release1/
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBuOrchid/
 
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaRnaSeq/release1/wgEncodeBuOrchidSignalRep1Gm12878.bw
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaRnaSeq/release1/wgEncodeBuOrchidSignalRep2Gm12878.bw
 
 /gbdb/hg18/bbi/wgEncodeBuOrchidSignalRep1Gm12878.bw
 /gbdb/hg18/bbi/wgEncodeBuOrchidSignalRep2Gm12878.bw
