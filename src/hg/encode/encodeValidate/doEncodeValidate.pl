@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.221 2010/04/22 19:56:50 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.222 2010/04/22 20:57:07 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1731,14 +1731,6 @@ foreach my $ddfLine (@ddfLines) {
             $metadata .= " inputType=$inputType";
         }
     }
-    if(!$ddfLine->{inputType} && $daf->{dataType} =~/ChIPseq/i) {
-        my $inputType = $ddfLine->{cell};
-        $inputType .= "/" . $ddfLine->{treatment} if $ddfLine->{treatment};
-        $inputType .= "/Input"; # default inputType for ChIPseq is "Input" instead of antibody
-        $inputType .= "/" . $ddfLine->{protocol} if $ddfLine->{protocol};
-        $inputType .= "/" . $ddfLine->{control} if $ddfLine->{control};
-        $metadata .= " inputType=$inputType";
-    }
     $metadata .= " view=$view";
     $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
@@ -1763,7 +1755,7 @@ foreach my $ddfLine (@ddfLines) {
     }
     # Construct table name from track name and variables
     my $tableName = "$compositeTrack";
-    my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
+    my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', Alignments => 'Aln', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
 
     if(!defined($daf->{TRACKS}{$view}{shortLabelPrefix})) {
         $daf->{TRACKS}{$view}{shortLabelPrefix} = "";
