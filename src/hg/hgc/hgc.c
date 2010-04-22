@@ -230,7 +230,7 @@
 #include "parClick.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1614 2010/04/21 19:32:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1615 2010/04/22 22:33:20 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9479,6 +9479,28 @@ if (hHasField(database, "gbCdnaInfo", "version"))
 return ver;
 }
 
+static void prRefGeneXenoInfo(struct sqlConnection *conn, struct refLink *rl)
+/* print xeno refseq info, including linking to the browser, if any  */
+{
+char query[256];
+safef(query, sizeof(query), "select organism.name from gbCdnaInfo,organism "
+      "where (gbCdnaInfo.acc = '%s') and (organism.id = gbCdnaInfo.organism)",
+      rl->mrnaAcc);
+char *org = sqlQuickString(conn, query);
+if (org == NULL)
+    org = cloneString("unknown");
+printf("<B>Organism:</B> %s<BR>", org);
+char *xenoDb = hDbForSciName(org);
+if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli"))
+    {
+    printf("<B>UCSC browser: </B> \n");
+    linkToOtherBrowserSearch(xenoDb, rl->mrnaAcc);
+    printf("%s on %s (%s)</B> \n", rl->mrnaAcc, hOrganism(xenoDb), xenoDb);
+    printf("</A><BR>");
+    }
+freeMem(org);
+}
+
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
@@ -9525,25 +9547,7 @@ if (desc != NULL)
     }
 
 if (isXeno || isNewChimp(database))
-    {
-    char *org;
-    safef(query, sizeof(query), "select organism.name from gbCdnaInfo,organism "
-          "where (gbCdnaInfo.acc = '%s') and (organism.id = gbCdnaInfo.organism)",
-          rl->mrnaAcc);
-    org = sqlQuickString(conn, query);
-    if (org == NULL)
-        org = cloneString("unknown");
-    printf("<B>Organism:</B> %s<BR>", org);
-    char *xenoDb = hDbForSciName(org);
-    if (xenoDb != NULL)
-	{
-	printf("<B>UCSC browser: </B> \n");
-	linkToOtherBrowserSearch(xenoDb, rl->mrnaAcc);
-	printf("%s on %s</B> \n",rl->mrnaAcc, xenoDb);
-	printf("</A><BR>");
-	}
-    freeMem(org);
-    }
+    prRefGeneXenoInfo(conn, rl);
 else
     printCcdsForSrcDb(conn, rl->mrnaAcc);
 
