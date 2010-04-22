@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes13.csh,v 1.2 2010/04/22 00:08:36 cline Exp $"
+#	"$Id: hg19.ucscGenes13.csh,v 1.3 2010/04/22 01:36:35 cline Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -54,7 +54,7 @@ set curVer = 6
 
 # Database to rebuild visiGene text from.  Should include recent mouse and human
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
-set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
+set vgTextDbs = (mm8 mm9 hg18 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -96,8 +96,6 @@ if (0) then  # BRACKET
 #	to find the next section that is running.
 
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 # Get Genbank info
 txGenbankData $db
@@ -153,6 +151,9 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
           echo -n "" >ccds/$c.bed
     endif
 end
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # move this exit statement to the end of the section to be done next
 exit $status # BRACKET
