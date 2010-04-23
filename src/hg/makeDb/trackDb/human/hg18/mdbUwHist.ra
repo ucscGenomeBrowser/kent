@@ -10,10 +10,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsBjInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalBjInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -29,10 +31,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsCaco2Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalCaco2Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -48,10 +52,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm06990Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm06990Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -67,10 +73,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12801Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12801/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12801Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -86,10 +94,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12864Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12864Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -105,10 +115,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12865Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12865Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -124,10 +136,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12872Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12872Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -143,10 +157,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12873Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12873Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -162,10 +178,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12874Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12874Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -181,10 +199,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12875Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12875Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -200,10 +220,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12878Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalGm12878Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -219,10 +241,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHek293Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHek293Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -238,10 +262,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHelas3Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHelas3Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -257,10 +283,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHepg2Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHepg2Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -276,10 +304,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHl60Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHl60Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -295,10 +325,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHmecInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHmecInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -314,10 +346,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHreInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHreInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -333,10 +367,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHuvecInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalHuvecInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -352,10 +388,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsK562Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalK562Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -371,10 +409,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsNhekInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalNhekInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -390,12 +430,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 700
 view Alignments
 
@@ -411,12 +453,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 746
 view Alignments
 
@@ -432,12 +476,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 652
 view Alignments
 
@@ -453,12 +499,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjtertCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 517
 view Alignments
 
@@ -474,12 +522,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 519
 view Alignments
 
@@ -495,12 +545,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 727
 view Alignments
 
@@ -516,12 +568,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 714
 view Alignments
 
@@ -537,12 +591,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me1.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 597
 view Alignments
 
@@ -558,12 +614,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 595
 view Alignments
 
@@ -580,12 +638,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 520
 view Alignments
 
@@ -601,12 +661,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 728
 view Alignments
 
@@ -622,12 +684,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 748
 view Alignments
 
@@ -643,12 +707,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 654
 view Alignments
 
@@ -664,12 +730,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12801Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12801/Input
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 299
 view Alignments
 
@@ -685,12 +753,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 982
 view Alignments
 
@@ -706,12 +776,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 985
 view Alignments
 
@@ -727,12 +799,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 986
 view Alignments
 
@@ -748,12 +822,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 988
 view Alignments
 
@@ -769,12 +845,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 991
 view Alignments
 
@@ -790,12 +868,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 992
 view Alignments
 
@@ -812,12 +892,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 690
 view Alignments
 
@@ -833,12 +915,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 703
 view Alignments
 
@@ -854,12 +938,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 747
 view Alignments
 
@@ -876,12 +962,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 699
 view Alignments
 
@@ -898,12 +986,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hek293Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 626
 view Alignments
 
@@ -919,12 +1009,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 691
 view Alignments
 
@@ -940,12 +1032,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 732
 view Alignments
 
@@ -961,12 +1055,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 715
 view Alignments
 
@@ -982,12 +1078,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me1.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 607
 view Alignments
 
@@ -1003,12 +1101,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 655
 view Alignments
 
@@ -1024,12 +1124,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 406
 view Alignments
 
@@ -1045,12 +1147,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 704
 view Alignments
 
@@ -1066,12 +1170,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 745
 view Alignments
 
@@ -1087,12 +1193,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 610
 view Alignments
 
@@ -1108,12 +1216,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hl60Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Eland (GAPipeline-1.0.1)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 306
 view Alignments
 
@@ -1129,12 +1239,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hl60H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 674
 view Alignments
 
@@ -1150,12 +1262,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1HmecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 676
 view Alignments
 
@@ -1172,12 +1286,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HmecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 677
 view Alignments
 
@@ -1193,12 +1309,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 523
 view Alignments
 
@@ -1214,12 +1332,14 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 749
 view Alignments
 
@@ -1235,12 +1355,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 717
 view Alignments
 
@@ -1256,12 +1378,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me1.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 602
 view Alignments
 
@@ -1277,12 +1401,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 622
 view Alignments
 
@@ -1299,12 +1425,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 693
 view Alignments
 
@@ -1321,12 +1449,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 678
 view Alignments
 
@@ -1342,12 +1472,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 719
 view Alignments
 
@@ -1363,12 +1495,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 604
 view Alignments
 
@@ -1385,12 +1519,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 659
 view Alignments
 
@@ -1406,12 +1542,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 707
 view Alignments
 
@@ -1427,12 +1565,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 720
 view Alignments
 
@@ -1449,12 +1589,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 660
 view Alignments
 
@@ -1471,12 +1613,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 695
 view Alignments
 
@@ -1492,12 +1636,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 709
 view Alignments
 
@@ -1513,12 +1659,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 623
 view Alignments
 
@@ -1534,12 +1682,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 612
 view Alignments
 
@@ -1555,12 +1705,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 697
 view Alignments
 
@@ -1576,12 +1728,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 681
 view Alignments
 
@@ -1597,12 +1751,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 723
 view Alignments
 
@@ -1618,12 +1774,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 679
 view Alignments
 
@@ -1639,12 +1797,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 698
 view Alignments
 
@@ -1660,12 +1820,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 712
 view Alignments
 
@@ -1681,12 +1843,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 726
 view Alignments
 
@@ -1702,12 +1866,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 682
 view Alignments
 
@@ -1723,12 +1889,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep1Werirb1Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 407
 view Alignments
 
@@ -1744,12 +1912,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 734
 view Alignments
 
@@ -1765,12 +1935,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 742
 view Alignments
 
@@ -1786,12 +1958,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 671
 view Alignments
 
@@ -1807,12 +1981,14 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjtertCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 516
 view Alignments
 
@@ -1828,12 +2004,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 518
 view Alignments
 
@@ -1849,12 +2027,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 701
 view Alignments
 
@@ -1870,12 +2050,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 713
 view Alignments
 
@@ -1891,12 +2073,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 596
 view Alignments
 
@@ -1912,12 +2096,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 527
 view Alignments
 
@@ -1933,12 +2119,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 702
 view Alignments
 
@@ -1954,12 +2142,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 744
 view Alignments
 
@@ -1975,12 +2165,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 672
 view Alignments
 
@@ -1996,12 +2188,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 983
 view Alignments
 
@@ -2017,12 +2211,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 984
 view Alignments
 
@@ -2038,12 +2234,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 987
 view Alignments
 
@@ -2059,12 +2257,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 989
 view Alignments
 
@@ -2080,12 +2280,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 990
 view Alignments
 
@@ -2101,12 +2303,14 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 993
 view Alignments
 
@@ -2122,12 +2326,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 528
 view Alignments
 
@@ -2143,12 +2349,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 729
 view Alignments
 
@@ -2164,12 +2372,14 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 743
 view Alignments
 
@@ -2185,12 +2395,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 673
 view Alignments
 
@@ -2206,12 +2418,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hek293Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 599
 view Alignments
 
@@ -2227,12 +2441,14 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 532
 view Alignments
 
@@ -2248,12 +2464,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 733
 view Alignments
 
@@ -2269,12 +2487,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 716
 view Alignments
 
@@ -2290,12 +2510,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 656
 view Alignments
 
@@ -2312,12 +2534,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 608
 view Alignments
 
@@ -2333,12 +2557,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 705
 view Alignments
 
@@ -2354,12 +2580,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 609
 view Alignments
 
@@ -2375,12 +2603,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hl60H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 675
 view Alignments
 
@@ -2396,12 +2626,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 601
 view Alignments
 
@@ -2417,12 +2649,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 706
 view Alignments
 
@@ -2438,12 +2672,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 718
 view Alignments
 
@@ -2459,12 +2695,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 657
 view Alignments
 
@@ -2480,12 +2718,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 692
 view Alignments
 
@@ -2501,12 +2741,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 684
 view Alignments
 
@@ -2522,12 +2764,14 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 750
 view Alignments
 
@@ -2543,12 +2787,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 658
 view Alignments
 
@@ -2564,12 +2810,14 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2K562Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 525
 view Alignments
 
@@ -2585,12 +2833,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 708
 view Alignments
 
@@ -2606,12 +2856,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 721
 view Alignments
 
@@ -2627,12 +2879,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 694
 view Alignments
 
@@ -2648,12 +2902,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 710
 view Alignments
 
@@ -2670,12 +2926,14 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 722
 view Alignments
 
@@ -2691,12 +2949,14 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 661
 view Alignments
 
@@ -2712,12 +2972,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 696
 view Alignments
 
@@ -2733,12 +2995,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 711
 view Alignments
 
@@ -2754,12 +3018,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 724
 view Alignments
 
@@ -2775,12 +3041,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 680
 view Alignments
 
@@ -2796,12 +3064,14 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraCtcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 753
 view Alignments
 
@@ -2817,12 +3087,14 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 730
 view Alignments
 
@@ -2838,12 +3110,14 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 725
 view Alignments
 
@@ -2859,12 +3133,14 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.4)
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 683
 view Alignments
 
@@ -2880,12 +3156,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep2Werirb1Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion Eland (GAPipeline-1.3.2)
 parentTable wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 407
 view Alignments
 
@@ -2901,10 +3179,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsSaecInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalSaecInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -2920,10 +3200,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsSknshraInput.tagAlign.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalSknshraInput
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -2939,10 +3221,12 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsWerirb1Input.tagAlign.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion Eland (GAPipeline-1.5)
 parentTable wgEncodeUwChIPSeqRawSignalWerirb1Input
 project wgEncode
+setType input
 subId 1107
 view Alignments
 
@@ -2958,11 +3242,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 700
 tableName wgEncodeUwChIPSeqHotspotsRep1BjH3k27me3
 view Hotspots
@@ -2979,11 +3265,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 746
 tableName wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3
 view cHot
@@ -3000,11 +3288,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 652
 tableName wgEncodeUwChIPSeqHotspotsRep1BjH3k4me3
 view Hotspots
@@ -3021,11 +3311,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1BjtertCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 517
 tableName wgEncodeUwChIPSeqHotspotsRep1BjtertCtcf
 view Hotspots
@@ -3042,11 +3334,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 519
 tableName wgEncodeUwChIPSeqHotspotsRep1Caco2Ctcf
 view Hotspots
@@ -3063,11 +3357,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 727
 tableName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k27me3
 view Hotspots
@@ -3084,11 +3380,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 714
 tableName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k36me3
 view Hotspots
@@ -3105,11 +3403,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 595
 tableName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me3
 view Hotspots
@@ -3127,11 +3427,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 298
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf
 view Hotspots
@@ -3148,11 +3450,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 728
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k27me3
 view Hotspots
@@ -3169,11 +3473,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 748
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3
 view cHot
@@ -3190,11 +3496,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 654
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3
 view Hotspots
@@ -3211,11 +3519,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12801Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12801/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 299
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12801Ctcf
 view Hotspots
@@ -3232,11 +3542,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 982
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf
 view Hotspots
@@ -3253,11 +3565,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 985
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf
 view Hotspots
@@ -3274,11 +3588,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 986
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf
 view Hotspots
@@ -3295,11 +3611,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 988
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf
 view Hotspots
@@ -3316,11 +3634,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 991
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf
 view Hotspots
@@ -3337,11 +3657,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 992
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf
 view Hotspots
@@ -3359,11 +3681,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 301
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878Ctcf
 view Hotspots
@@ -3380,11 +3704,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 703
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k27me3
 view Hotspots
@@ -3401,11 +3727,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 747
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3
 view cHot
@@ -3423,11 +3751,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 302
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3
 view Hotspots
@@ -3445,11 +3775,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Hek293Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 303
 tableName wgEncodeUwChIPSeqHotspotsRep1Hek293Ctcf
 view Hotspots
@@ -3467,11 +3799,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 304
 tableName wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf
 view Hotspots
@@ -3488,11 +3822,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 732
 tableName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k27me3
 view Hotspots
@@ -3509,11 +3845,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 715
 tableName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k36me3
 view Hotspots
@@ -3530,11 +3868,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 655
 tableName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k4me3
 view Hotspots
@@ -3551,11 +3891,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 406
 tableName wgEncodeUwChIPSeqHotspotsRep1Hepg2Ctcf
 view Hotspots
@@ -3572,11 +3914,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 704
 tableName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k27me3
 view Hotspots
@@ -3593,11 +3937,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 745
 tableName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3
 view cHot
@@ -3614,11 +3960,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 610
 tableName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k4me3
 view Hotspots
@@ -3635,11 +3983,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Hl60Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 306
 tableName wgEncodeUwChIPSeqHotspotsRep1Hl60Ctcf
 view Hotspots
@@ -3656,11 +4006,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Hl60H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 674
 tableName wgEncodeUwChIPSeqHotspotsRep1Hl60H3k4me3
 view Hotspots
@@ -3677,11 +4029,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1HmecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 676
 tableName wgEncodeUwChIPSeqHotspotsRep1HmecCtcf
 view Hotspots
@@ -3699,11 +4053,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HmecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 677
 tableName wgEncodeUwChIPSeqHotspotsRep1HmecH3k27me3
 view Hotspots
@@ -3720,11 +4076,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1HreCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 523
 tableName wgEncodeUwChIPSeqHotspotsRep1HreCtcf
 view Hotspots
@@ -3742,11 +4100,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 749
 tableName wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3
 view cHot
@@ -3763,11 +4123,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 717
 tableName wgEncodeUwChIPSeqHotspotsRep1HreH3k36me3
 view Hotspots
@@ -3784,11 +4146,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 622
 tableName wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3
 view Hotspots
@@ -3806,11 +4170,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 693
 tableName wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf
 view Hotspots
@@ -3828,11 +4194,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 678
 tableName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k27me3
 view Hotspots
@@ -3849,11 +4217,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 719
 tableName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3
 view Hotspots
@@ -3870,11 +4240,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 604
 tableName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k4me3
 view Hotspots
@@ -3892,11 +4264,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1K562Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 307
 tableName wgEncodeUwChIPSeqHotspotsRep1K562Ctcf
 view Hotspots
@@ -3913,11 +4287,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 707
 tableName wgEncodeUwChIPSeqHotspotsRep1K562H3k27me3
 view Hotspots
@@ -3934,11 +4310,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 720
 tableName wgEncodeUwChIPSeqHotspotsRep1K562H3k36me3
 view Hotspots
@@ -3956,11 +4334,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 308
 tableName wgEncodeUwChIPSeqHotspotsRep1K562H3k4me3
 view Hotspots
@@ -3978,11 +4358,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 695
 tableName wgEncodeUwChIPSeqHotspotsRep1NhekCtcf
 view Hotspots
@@ -3999,11 +4381,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 709
 tableName wgEncodeUwChIPSeqHotspotsRep1NhekH3k27me3
 view Hotspots
@@ -4020,11 +4404,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 623
 tableName wgEncodeUwChIPSeqHotspotsRep1NhekH3k36me3
 view Hotspots
@@ -4041,11 +4427,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 612
 tableName wgEncodeUwChIPSeqHotspotsRep1NhekH3k4me3
 view Hotspots
@@ -4062,11 +4450,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 697
 tableName wgEncodeUwChIPSeqHotspotsRep1SaecCtcf
 view Hotspots
@@ -4083,11 +4473,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 681
 tableName wgEncodeUwChIPSeqHotspotsRep1SaecH3k27me3
 view Hotspots
@@ -4104,11 +4496,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 723
 tableName wgEncodeUwChIPSeqHotspotsRep1SaecH3k36me3
 view Hotspots
@@ -4125,11 +4519,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 679
 tableName wgEncodeUwChIPSeqHotspotsRep1SaecH3k4me3
 view Hotspots
@@ -4146,11 +4542,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 698
 tableName wgEncodeUwChIPSeqHotspotsRep1SknshraCtcf
 view Hotspots
@@ -4167,11 +4565,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 712
 tableName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k27me3
 view Hotspots
@@ -4188,11 +4588,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 726
 tableName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k36me3
 view Hotspots
@@ -4209,11 +4611,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 682
 tableName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k4me3
 view Hotspots
@@ -4230,11 +4634,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 407
 tableName wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf
 view Hotspots
@@ -4251,11 +4657,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 734
 tableName wgEncodeUwChIPSeqHotspotsRep2BjH3k27me3
 view Hotspots
@@ -4272,11 +4680,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 742
 tableName wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3
 view cHot
@@ -4293,11 +4703,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 671
 tableName wgEncodeUwChIPSeqHotspotsRep2BjH3k4me3
 view Hotspots
@@ -4314,11 +4726,13 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqHotspotsRep2BjtertCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 516
 tableName wgEncodeUwChIPSeqHotspotsRep2BjtertCtcf
 view Hotspots
@@ -4335,11 +4749,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 518
 tableName wgEncodeUwChIPSeqHotspotsRep2Caco2Ctcf
 view Hotspots
@@ -4356,11 +4772,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 701
 tableName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k27me3
 view Hotspots
@@ -4377,11 +4795,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 713
 tableName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k36me3
 view Hotspots
@@ -4398,11 +4818,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 596
 tableName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k4me3
 view Hotspots
@@ -4419,11 +4841,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 527
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm06990Ctcf
 view Hotspots
@@ -4440,11 +4864,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 702
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k27me3
 view Hotspots
@@ -4461,11 +4887,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 744
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3
 view cHot
@@ -4482,11 +4910,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 672
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3
 view Hotspots
@@ -4503,11 +4933,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 983
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf
 view Hotspots
@@ -4524,11 +4956,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 984
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf
 view Hotspots
@@ -4545,11 +4979,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 987
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf
 view Hotspots
@@ -4566,11 +5002,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 989
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf
 view Hotspots
@@ -4587,11 +5025,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 990
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf
 view Hotspots
@@ -4608,11 +5048,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 993
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf
 view Hotspots
@@ -4629,11 +5071,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 528
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12878Ctcf
 view Hotspots
@@ -4650,11 +5094,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 729
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k27me3
 view Hotspots
@@ -4671,11 +5117,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 743
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3
 view cHot
@@ -4692,11 +5140,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 673
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k4me3
 view Hotspots
@@ -4713,11 +5163,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2Hek293Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 599
 tableName wgEncodeUwChIPSeqHotspotsRep2Hek293Ctcf
 view Hotspots
@@ -4734,11 +5186,13 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 532
 tableName wgEncodeUwChIPSeqHotspotsRep2Helas3Ctcf
 view Hotspots
@@ -4755,11 +5209,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 733
 tableName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k27me3
 view Hotspots
@@ -4776,11 +5232,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 716
 tableName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k36me3
 view Hotspots
@@ -4797,11 +5255,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 656
 tableName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k4me3
 view Hotspots
@@ -4819,11 +5279,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 406
 tableName wgEncodeUwChIPSeqHotspotsRep2Hepg2Ctcf
 view Hotspots
@@ -4840,11 +5302,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 705
 tableName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3
 view Hotspots
@@ -4861,11 +5325,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 609
 tableName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k4me3
 view Hotspots
@@ -4882,11 +5348,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Hl60H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 675
 tableName wgEncodeUwChIPSeqHotspotsRep2Hl60H3k4me3
 view Hotspots
@@ -4903,11 +5371,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2HreCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 601
 tableName wgEncodeUwChIPSeqHotspotsRep2HreCtcf
 view Hotspots
@@ -4924,11 +5394,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 706
 tableName wgEncodeUwChIPSeqHotspotsRep2HreH3k27me3
 view Hotspots
@@ -4945,11 +5417,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 718
 tableName wgEncodeUwChIPSeqHotspotsRep2HreH3k36me3
 view Hotspots
@@ -4966,11 +5440,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 657
 tableName wgEncodeUwChIPSeqHotspotsRep2HreH3k4me3
 view Hotspots
@@ -4987,11 +5463,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 692
 tableName wgEncodeUwChIPSeqHotspotsRep2HuvecCtcf
 view Hotspots
@@ -5008,11 +5486,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 684
 tableName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3
 view Hotspots
@@ -5029,11 +5509,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 750
 tableName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3
 view cHot
@@ -5050,11 +5532,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 658
 tableName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k4me3
 view Hotspots
@@ -5071,11 +5555,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2K562Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 525
 tableName wgEncodeUwChIPSeqHotspotsRep2K562Ctcf
 view Hotspots
@@ -5092,11 +5578,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2K562H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 708
 tableName wgEncodeUwChIPSeqHotspotsRep2K562H3k27me3
 view Hotspots
@@ -5113,11 +5601,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2K562H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 721
 tableName wgEncodeUwChIPSeqHotspotsRep2K562H3k36me3
 view Hotspots
@@ -5134,11 +5624,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 694
 tableName wgEncodeUwChIPSeqHotspotsRep2NhekCtcf
 view Hotspots
@@ -5155,11 +5647,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 710
 tableName wgEncodeUwChIPSeqHotspotsRep2NhekH3k27me3
 view Hotspots
@@ -5177,11 +5671,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 722
 tableName wgEncodeUwChIPSeqHotspotsRep2NhekH3k36me3
 view Hotspots
@@ -5198,11 +5694,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 661
 tableName wgEncodeUwChIPSeqHotspotsRep2NhekH3k4me3
 view Hotspots
@@ -5219,11 +5717,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 696
 tableName wgEncodeUwChIPSeqHotspotsRep2SaecCtcf
 view Hotspots
@@ -5240,11 +5740,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 711
 tableName wgEncodeUwChIPSeqHotspotsRep2SaecH3k27me3
 view Hotspots
@@ -5261,11 +5763,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 724
 tableName wgEncodeUwChIPSeqHotspotsRep2SaecH3k36me3
 view Hotspots
@@ -5282,11 +5786,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 680
 tableName wgEncodeUwChIPSeqHotspotsRep2SaecH3k4me3
 view Hotspots
@@ -5303,11 +5809,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 753
 tableName wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf
 view cHot
@@ -5324,11 +5832,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 730
 tableName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3
 view Hotspots
@@ -5345,11 +5855,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 725
 tableName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k36me3
 view Hotspots
@@ -5366,11 +5878,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 683
 tableName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k4me3
 view Hotspots
@@ -5387,11 +5901,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion Hotspot-v5.0
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 407
 tableName wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf
 view Hotspots
@@ -5408,10 +5924,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm06990Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 298
 tableName wgEncodeUwChIPSeqPeaksGm06990Ctcf
 view Peaks
@@ -5428,10 +5946,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm12801Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12801/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 299
 tableName wgEncodeUwChIPSeqPeaksGm12801Ctcf
 view Peaks
@@ -5448,10 +5968,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm12878Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 301
 tableName wgEncodeUwChIPSeqPeaksGm12878Ctcf
 view Peaks
@@ -5468,10 +5990,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm12878H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 302
 tableName wgEncodeUwChIPSeqPeaksGm12878H3k4me3
 view Peaks
@@ -5488,10 +6012,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksHek293Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 303
 tableName wgEncodeUwChIPSeqPeaksHek293Ctcf
 view Peaks
@@ -5508,10 +6034,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksHelas3Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 304
 tableName wgEncodeUwChIPSeqPeaksHelas3Ctcf
 view Peaks
@@ -5528,10 +6056,12 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqPeaksHepg2Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 406
 tableName wgEncodeUwChIPSeqPeaksHepg2Ctcf
 view Peaks
@@ -5548,10 +6078,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksHl60Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 306
 tableName wgEncodeUwChIPSeqPeaksHl60Ctcf
 view Peaks
@@ -5568,9 +6100,11 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksHreCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
+setType exp
 subId 523
 tableName wgEncodeUwChIPSeqPeaksHreCtcf
 view Peaks
@@ -5587,10 +6121,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksK562Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 307
 tableName wgEncodeUwChIPSeqPeaksK562Ctcf
 view Peaks
@@ -5607,10 +6143,12 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksK562H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 308
 tableName wgEncodeUwChIPSeqPeaksK562H3k4me3
 view Peaks
@@ -5627,11 +6165,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 700
 tableName wgEncodeUwChIPSeqPeaksRep1BjH3k27me3
 view Peaks
@@ -5648,11 +6188,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 746
 tableName wgEncodeUwChIPSeqPeaksRep1BjH3k36me3
 view Peaks
@@ -5669,11 +6211,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 652
 tableName wgEncodeUwChIPSeqPeaksRep1BjH3k4me3
 view Peaks
@@ -5690,11 +6234,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksRep1BjtertCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 517
 tableName wgEncodeUwChIPSeqPeaksRep1BjtertCtcf
 view Peaks
@@ -5711,11 +6257,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 519
 tableName wgEncodeUwChIPSeqPeaksRep1Caco2Ctcf
 view Peaks
@@ -5732,11 +6280,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 727
 tableName wgEncodeUwChIPSeqPeaksRep1Caco2H3k27me3
 view Peaks
@@ -5753,11 +6303,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 714
 tableName wgEncodeUwChIPSeqPeaksRep1Caco2H3k36me3
 view Peaks
@@ -5774,11 +6326,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 595
 tableName wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me3
 view Peaks
@@ -5796,11 +6350,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 520
 tableName wgEncodeUwChIPSeqPeaksRep1Gm06990Ctcf
 view Peaks
@@ -5817,11 +6373,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 728
 tableName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k27me3
 view Peaks
@@ -5838,11 +6396,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 748
 tableName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3
 view Peaks
@@ -5859,11 +6419,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 654
 tableName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k4me3
 view Peaks
@@ -5880,11 +6442,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 982
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf
 view Peaks
@@ -5901,11 +6465,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 985
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf
 view Peaks
@@ -5922,11 +6488,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 986
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf
 view Peaks
@@ -5943,11 +6511,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 988
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf
 view Peaks
@@ -5964,11 +6534,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 991
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf
 view Peaks
@@ -5985,11 +6557,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 992
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf
 view Peaks
@@ -6007,11 +6581,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 690
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12878Ctcf
 view Peaks
@@ -6028,11 +6604,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 703
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k27me3
 view Peaks
@@ -6049,11 +6627,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 747
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3
 view Peaks
@@ -6071,11 +6651,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 699
 tableName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k4me3
 view Peaks
@@ -6093,11 +6675,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Hek293Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 626
 tableName wgEncodeUwChIPSeqPeaksRep1Hek293Ctcf
 view Peaks
@@ -6115,11 +6699,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 691
 tableName wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf
 view Peaks
@@ -6136,11 +6722,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 732
 tableName wgEncodeUwChIPSeqPeaksRep1Helas3H3k27me3
 view Peaks
@@ -6157,11 +6745,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 715
 tableName wgEncodeUwChIPSeqPeaksRep1Helas3H3k36me3
 view Peaks
@@ -6178,11 +6768,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 655
 tableName wgEncodeUwChIPSeqPeaksRep1Helas3H3k4me3
 view Peaks
@@ -6199,11 +6791,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 704
 tableName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k27me3
 view Peaks
@@ -6220,11 +6814,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 745
 tableName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3
 view Peaks
@@ -6241,11 +6837,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 610
 tableName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k4me3
 view Peaks
@@ -6262,11 +6860,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1Hl60H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 674
 tableName wgEncodeUwChIPSeqPeaksRep1Hl60H3k4me3
 view Peaks
@@ -6283,11 +6883,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1HmecCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 676
 tableName wgEncodeUwChIPSeqPeaksRep1HmecCtcf
 view Peaks
@@ -6305,11 +6907,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HmecH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 677
 tableName wgEncodeUwChIPSeqPeaksRep1HmecH3k27me3
 view Peaks
@@ -6327,11 +6931,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 749
 tableName wgEncodeUwChIPSeqPeaksRep1HreH3k27me3
 view Peaks
@@ -6348,11 +6954,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 717
 tableName wgEncodeUwChIPSeqPeaksRep1HreH3k36me3
 view Peaks
@@ -6369,11 +6977,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 622
 tableName wgEncodeUwChIPSeqPeaksRep1HreH3k4me3
 view Peaks
@@ -6391,11 +7001,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 693
 tableName wgEncodeUwChIPSeqPeaksRep1HuvecCtcf
 view Peaks
@@ -6413,11 +7025,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 678
 tableName wgEncodeUwChIPSeqPeaksRep1HuvecH3k27me3
 view Peaks
@@ -6434,11 +7048,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 719
 tableName wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3
 view Peaks
@@ -6455,11 +7071,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 604
 tableName wgEncodeUwChIPSeqPeaksRep1HuvecH3k4me3
 view Peaks
@@ -6477,11 +7095,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1K562Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 659
 tableName wgEncodeUwChIPSeqPeaksRep1K562Ctcf
 view Peaks
@@ -6498,11 +7118,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 707
 tableName wgEncodeUwChIPSeqPeaksRep1K562H3k27me3
 view Peaks
@@ -6519,11 +7141,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 720
 tableName wgEncodeUwChIPSeqPeaksRep1K562H3k36me3
 view Peaks
@@ -6541,11 +7165,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 660
 tableName wgEncodeUwChIPSeqPeaksRep1K562H3k4me3
 view Peaks
@@ -6563,11 +7189,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksRep1NhekCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 695
 tableName wgEncodeUwChIPSeqPeaksRep1NhekCtcf
 view Peaks
@@ -6584,11 +7212,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 709
 tableName wgEncodeUwChIPSeqPeaksRep1NhekH3k27me3
 view Peaks
@@ -6605,11 +7235,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 623
 tableName wgEncodeUwChIPSeqPeaksRep1NhekH3k36me3
 view Peaks
@@ -6626,11 +7258,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 612
 tableName wgEncodeUwChIPSeqPeaksRep1NhekH3k4me3
 view Peaks
@@ -6647,11 +7281,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SaecCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 697
 tableName wgEncodeUwChIPSeqPeaksRep1SaecCtcf
 view Peaks
@@ -6668,11 +7304,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 681
 tableName wgEncodeUwChIPSeqPeaksRep1SaecH3k27me3
 view Peaks
@@ -6689,11 +7327,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 723
 tableName wgEncodeUwChIPSeqPeaksRep1SaecH3k36me3
 view Peaks
@@ -6710,11 +7350,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 679
 tableName wgEncodeUwChIPSeqPeaksRep1SaecH3k4me3
 view Peaks
@@ -6731,11 +7373,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 698
 tableName wgEncodeUwChIPSeqPeaksRep1SknshraCtcf
 view Peaks
@@ -6752,11 +7396,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 712
 tableName wgEncodeUwChIPSeqPeaksRep1SknshraH3k27me3
 view Peaks
@@ -6773,11 +7419,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 726
 tableName wgEncodeUwChIPSeqPeaksRep1SknshraH3k36me3
 view Peaks
@@ -6794,11 +7442,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 682
 tableName wgEncodeUwChIPSeqPeaksRep1SknshraH3k4me3
 view Peaks
@@ -6815,10 +7465,12 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqPeaksWerirb1Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
+setType exp
 subId 407
 tableName wgEncodeUwChIPSeqPeaksWerirb1Ctcf
 view Peaks
@@ -6835,11 +7487,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 700
 view RawData
 
@@ -6855,11 +7509,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 746
 view RawData
 
@@ -6875,11 +7531,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 652
 view RawData
 
@@ -6895,11 +7553,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1BjtertCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 517
 view RawData
 
@@ -6915,11 +7575,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 519
 view RawData
 
@@ -6935,11 +7597,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 727
 view RawData
 
@@ -6955,11 +7619,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 714
 view RawData
 
@@ -6975,11 +7641,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me1.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 597
 view RawData
 
@@ -6995,11 +7663,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 595
 view RawData
 
@@ -7016,11 +7686,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 520
 view RawData
 
@@ -7036,11 +7708,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 728
 view RawData
 
@@ -7056,11 +7730,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 748
 view RawData
 
@@ -7076,11 +7752,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 654
 view RawData
 
@@ -7096,12 +7774,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12801Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12801/Input
 lab Uw
 labVersion 1
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 299
 view RawData
 
@@ -7117,11 +7797,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 982
 view RawData
 
@@ -7137,11 +7819,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 985
 view RawData
 
@@ -7157,11 +7841,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 986
 view RawData
 
@@ -7177,11 +7863,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 988
 view RawData
 
@@ -7197,11 +7885,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 991
 view RawData
 
@@ -7217,11 +7907,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 992
 view RawData
 
@@ -7238,11 +7930,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 690
 view RawData
 
@@ -7258,11 +7952,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 703
 view RawData
 
@@ -7278,11 +7974,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 747
 view RawData
 
@@ -7299,11 +7997,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 699
 view RawData
 
@@ -7320,11 +8020,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Hek293Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 626
 view RawData
 
@@ -7340,11 +8042,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 691
 view RawData
 
@@ -7360,11 +8064,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 732
 view RawData
 
@@ -7380,11 +8086,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 715
 view RawData
 
@@ -7400,11 +8108,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me1.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 607
 view RawData
 
@@ -7420,11 +8130,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 655
 view RawData
 
@@ -7440,12 +8152,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion 1
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 406
 view RawData
 
@@ -7461,11 +8175,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 704
 view RawData
 
@@ -7481,11 +8197,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 745
 view RawData
 
@@ -7501,11 +8219,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 610
 view RawData
 
@@ -7521,12 +8241,14 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Hl60Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion 1
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 306
 view RawData
 
@@ -7542,11 +8264,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1Hl60H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 674
 view RawData
 
@@ -7562,11 +8286,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1HmecCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 676
 view RawData
 
@@ -7583,11 +8309,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HmecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 677
 view RawData
 
@@ -7603,11 +8331,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1HreCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 523
 view RawData
 
@@ -7623,11 +8353,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 749
 view RawData
 
@@ -7643,11 +8375,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 717
 view RawData
 
@@ -7663,11 +8397,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k4me1.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me1
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 602
 view RawData
 
@@ -7683,11 +8419,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 622
 view RawData
 
@@ -7704,11 +8442,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 693
 view RawData
 
@@ -7725,11 +8465,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 678
 view RawData
 
@@ -7745,11 +8487,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 719
 view RawData
 
@@ -7765,11 +8509,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 604
 view RawData
 
@@ -7786,11 +8532,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1K562Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 659
 view RawData
 
@@ -7806,11 +8554,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 707
 view RawData
 
@@ -7826,11 +8576,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 720
 view RawData
 
@@ -7847,11 +8599,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 660
 view RawData
 
@@ -7868,11 +8622,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1NhekCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 695
 view RawData
 
@@ -7888,11 +8644,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 709
 view RawData
 
@@ -7908,11 +8666,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 623
 view RawData
 
@@ -7928,11 +8688,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 612
 view RawData
 
@@ -7948,11 +8710,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SaecCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 697
 view RawData
 
@@ -7968,11 +8732,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 681
 view RawData
 
@@ -7988,11 +8754,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 723
 view RawData
 
@@ -8008,11 +8776,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 679
 view RawData
 
@@ -8028,11 +8798,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 698
 view RawData
 
@@ -8048,11 +8820,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 712
 view RawData
 
@@ -8068,11 +8842,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 726
 view RawData
 
@@ -8088,11 +8864,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 682
 view RawData
 
@@ -8108,12 +8886,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep1Werirb1Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion 1
 parentTable wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 407
 view RawData
 
@@ -8129,11 +8909,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 734
 view RawData
 
@@ -8149,11 +8931,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 742
 view RawData
 
@@ -8169,11 +8953,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 671
 view RawData
 
@@ -8189,11 +8975,13 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqRawDataRep2BjtertCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 516
 view RawData
 
@@ -8209,11 +8997,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 518
 view RawData
 
@@ -8229,11 +9019,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 701
 view RawData
 
@@ -8249,11 +9041,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 713
 view RawData
 
@@ -8269,11 +9063,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 596
 view RawData
 
@@ -8289,11 +9085,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 527
 view RawData
 
@@ -8309,11 +9107,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 702
 view RawData
 
@@ -8329,11 +9129,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 744
 view RawData
 
@@ -8349,11 +9151,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 672
 view RawData
 
@@ -8369,11 +9173,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 983
 view RawData
 
@@ -8389,11 +9195,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 984
 view RawData
 
@@ -8409,11 +9217,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 987
 view RawData
 
@@ -8429,11 +9239,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 989
 view RawData
 
@@ -8449,11 +9261,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 990
 view RawData
 
@@ -8469,11 +9283,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 993
 view RawData
 
@@ -8489,11 +9305,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 528
 view RawData
 
@@ -8509,11 +9327,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 729
 view RawData
 
@@ -8529,11 +9349,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 743
 view RawData
 
@@ -8549,11 +9371,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 673
 view RawData
 
@@ -8569,11 +9393,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2Hek293Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 599
 view RawData
 
@@ -8589,11 +9415,13 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 532
 view RawData
 
@@ -8609,11 +9437,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 733
 view RawData
 
@@ -8629,11 +9459,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 716
 view RawData
 
@@ -8649,11 +9481,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 656
 view RawData
 
@@ -8670,11 +9504,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 608
 view RawData
 
@@ -8690,11 +9526,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 705
 view RawData
 
@@ -8710,11 +9548,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 609
 view RawData
 
@@ -8730,11 +9570,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2Hl60H3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 675
 view RawData
 
@@ -8750,11 +9592,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2HreCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 601
 view RawData
 
@@ -8770,11 +9614,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 706
 view RawData
 
@@ -8790,11 +9636,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 718
 view RawData
 
@@ -8810,11 +9658,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 657
 view RawData
 
@@ -8830,11 +9680,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 692
 view RawData
 
@@ -8850,11 +9702,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 684
 view RawData
 
@@ -8870,11 +9724,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 750
 view RawData
 
@@ -8890,11 +9746,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 658
 view RawData
 
@@ -8910,11 +9768,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2K562Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2K562Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 525
 view RawData
 
@@ -8930,11 +9790,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2K562H3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 708
 view RawData
 
@@ -8950,11 +9812,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2K562H3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 721
 view RawData
 
@@ -8970,11 +9834,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2NhekCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 694
 view RawData
 
@@ -8990,11 +9856,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 710
 view RawData
 
@@ -9011,11 +9879,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 722
 view RawData
 
@@ -9031,11 +9901,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 661
 view RawData
 
@@ -9051,11 +9923,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SaecCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 696
 view RawData
 
@@ -9071,11 +9945,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 711
 view RawData
 
@@ -9091,11 +9967,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 724
 view RawData
 
@@ -9111,11 +9989,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 680
 view RawData
 
@@ -9131,11 +10011,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraCtcf.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 753
 view RawData
 
@@ -9151,11 +10033,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k27me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 730
 view RawData
 
@@ -9171,11 +10055,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k36me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 725
 view RawData
 
@@ -9191,11 +10077,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k4me3.fastq.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 683
 view RawData
 
@@ -9211,12 +10099,14 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep2Werirb1Ctcf.fastq.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion 1
 parentTable wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 407
 view RawData
 
@@ -9232,11 +10122,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 700
 tableName wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
 view RawSignal
@@ -9253,11 +10145,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 746
 tableName wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
 view zRawSig
@@ -9274,11 +10168,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 652
 tableName wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
 view RawSignal
@@ -9295,11 +10191,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 517
 tableName wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
 view RawSignal
@@ -9316,11 +10214,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 519
 tableName wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
 view RawSignal
@@ -9337,11 +10237,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 727
 tableName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
 view RawSignal
@@ -9358,11 +10260,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 714
 tableName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
 view RawSignal
@@ -9379,11 +10283,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 595
 tableName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
 view RawSignal
@@ -9402,11 +10308,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 298
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
 view RawSignal
@@ -9423,11 +10331,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 728
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
 view RawSignal
@@ -9444,11 +10354,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 748
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
 view zRawSig
@@ -9465,11 +10377,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 654
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
 view RawSignal
@@ -9486,11 +10400,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12801/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 299
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
 view RawSignal
@@ -9507,11 +10423,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 982
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
 view RawSignal
@@ -9528,11 +10446,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 985
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
 view RawSignal
@@ -9549,11 +10469,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 986
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
 view RawSignal
@@ -9570,11 +10492,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 988
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
 view RawSignal
@@ -9591,11 +10515,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 991
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
 view RawSignal
@@ -9612,11 +10538,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 992
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
 view RawSignal
@@ -9634,11 +10562,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 301
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
 view RawSignal
@@ -9655,11 +10585,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 703
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3
 view RawSignal
@@ -9676,11 +10608,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 747
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
 view zRawSig
@@ -9698,11 +10632,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 302
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
 view RawSignal
@@ -9720,11 +10656,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 303
 tableName wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
 view RawSignal
@@ -9742,11 +10680,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 304
 tableName wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
 view RawSignal
@@ -9763,11 +10703,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 732
 tableName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3
 view RawSignal
@@ -9784,11 +10726,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 715
 tableName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3
 view RawSignal
@@ -9805,11 +10749,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 655
 tableName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3
 view RawSignal
@@ -9826,11 +10772,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 406
 tableName wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf
 view RawSignal
@@ -9847,11 +10795,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 704
 tableName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3
 view RawSignal
@@ -9868,11 +10818,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 745
 tableName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
 view zRawSig
@@ -9889,11 +10841,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 610
 tableName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
 view RawSignal
@@ -9910,11 +10864,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 306
 tableName wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf
 view RawSignal
@@ -9931,11 +10887,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 674
 tableName wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
 view RawSignal
@@ -9952,11 +10910,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1HmecCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 676
 tableName wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
 view RawSignal
@@ -9974,11 +10934,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HMEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 677
 tableName wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
 view RawSignal
@@ -9995,11 +10957,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1HreCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 523
 tableName wgEncodeUwChIPSeqRawSignalRep1HreCtcf
 view RawSignal
@@ -10017,11 +10981,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 749
 tableName wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
 view zRawSig
@@ -10038,11 +11004,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 717
 tableName wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
 view RawSignal
@@ -10059,11 +11027,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 622
 tableName wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
 view RawSignal
@@ -10081,11 +11051,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 693
 tableName wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
 view RawSignal
@@ -10103,11 +11075,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 678
 tableName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
 view RawSignal
@@ -10124,11 +11098,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 719
 tableName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
 view RawSignal
@@ -10145,11 +11121,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 604
 tableName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
 view RawSignal
@@ -10167,11 +11145,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1K562Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 307
 tableName wgEncodeUwChIPSeqRawSignalRep1K562Ctcf
 view RawSignal
@@ -10188,11 +11168,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 707
 tableName wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3
 view RawSignal
@@ -10209,11 +11191,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 720
 tableName wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3
 view RawSignal
@@ -10231,11 +11215,13 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 308
 tableName wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
 view RawSignal
@@ -10253,11 +11239,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 695
 tableName wgEncodeUwChIPSeqRawSignalRep1NhekCtcf
 view RawSignal
@@ -10274,11 +11262,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 709
 tableName wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3
 view RawSignal
@@ -10295,11 +11285,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 623
 tableName wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3
 view RawSignal
@@ -10316,11 +11308,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 612
 tableName wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3
 view RawSignal
@@ -10337,11 +11331,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 697
 tableName wgEncodeUwChIPSeqRawSignalRep1SaecCtcf
 view RawSignal
@@ -10358,11 +11354,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 681
 tableName wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
 view RawSignal
@@ -10379,11 +11377,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 723
 tableName wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
 view RawSignal
@@ -10400,11 +11400,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 679
 tableName wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
 view RawSignal
@@ -10421,11 +11423,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 698
 tableName wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
 view RawSignal
@@ -10442,11 +11446,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 712
 tableName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
 view RawSignal
@@ -10463,11 +11469,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 726
 tableName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
 view RawSignal
@@ -10484,11 +11492,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 682
 tableName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
 view RawSignal
@@ -10505,11 +11515,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
 replicate 1
+setType exp
 subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
 view RawSignal
@@ -10526,11 +11538,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 734
 tableName wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
 view RawSignal
@@ -10547,11 +11561,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 742
 tableName wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
 view zRawSig
@@ -10568,11 +11584,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 671
 tableName wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
 view RawSignal
@@ -10589,11 +11607,13 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType BJ/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 516
 tableName wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf
 view RawSignal
@@ -10610,11 +11630,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 518
 tableName wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
 view RawSignal
@@ -10631,11 +11653,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 701
 tableName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
 view RawSignal
@@ -10652,11 +11676,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 713
 tableName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
 view RawSignal
@@ -10673,11 +11699,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType Caco-2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 596
 tableName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
 view RawSignal
@@ -10694,11 +11722,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 527
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
 view RawSignal
@@ -10715,11 +11745,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 702
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
 view RawSignal
@@ -10736,11 +11768,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 744
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
 view zRawSig
@@ -10757,11 +11791,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM06990/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 672
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
 view RawSignal
@@ -10778,11 +11814,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12864/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 983
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
 view RawSignal
@@ -10799,11 +11837,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12865/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 984
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
 view RawSignal
@@ -10820,11 +11860,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12872/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 987
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
 view RawSignal
@@ -10841,11 +11883,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12873/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 989
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
 view RawSignal
@@ -10862,11 +11906,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12874/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 990
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
 view RawSignal
@@ -10883,11 +11929,13 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12875/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 993
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
 view RawSignal
@@ -10904,11 +11952,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 528
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf
 view RawSignal
@@ -10925,11 +11975,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 729
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3
 view RawSignal
@@ -10946,11 +11998,13 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 743
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
 view zRawSig
@@ -10967,11 +12021,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType GM12878/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 673
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
 view RawSignal
@@ -10988,11 +12044,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HEK293/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 599
 tableName wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf
 view RawSignal
@@ -11009,11 +12067,13 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 532
 tableName wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf
 view RawSignal
@@ -11030,11 +12090,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 733
 tableName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3
 view RawSignal
@@ -11051,11 +12113,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 716
 tableName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3
 view RawSignal
@@ -11072,11 +12136,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HeLa-S3/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 656
 tableName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3
 view RawSignal
@@ -11094,11 +12160,13 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 406
 tableName wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
 view RawSignal
@@ -11115,11 +12183,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 705
 tableName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3
 view RawSignal
@@ -11136,11 +12206,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HepG2/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 609
 tableName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3
 view RawSignal
@@ -11157,11 +12229,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HL-60/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 675
 tableName wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
 view RawSignal
@@ -11178,11 +12252,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2HreCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 601
 tableName wgEncodeUwChIPSeqRawSignalRep2HreCtcf
 view RawSignal
@@ -11199,11 +12275,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 706
 tableName wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
 view RawSignal
@@ -11220,11 +12298,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 718
 tableName wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
 view RawSignal
@@ -11241,11 +12321,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HRE/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 657
 tableName wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
 view RawSignal
@@ -11262,11 +12344,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 692
 tableName wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf
 view RawSignal
@@ -11283,11 +12367,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 684
 tableName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
 view RawSignal
@@ -11304,11 +12390,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 750
 tableName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
 view zRawSig
@@ -11325,11 +12413,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType HUVEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 658
 tableName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
 view RawSignal
@@ -11346,11 +12436,13 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2K562Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 525
 tableName wgEncodeUwChIPSeqRawSignalRep2K562Ctcf
 view RawSignal
@@ -11367,11 +12459,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 708
 tableName wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3
 view RawSignal
@@ -11388,11 +12482,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType K562/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 721
 tableName wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3
 view RawSignal
@@ -11409,11 +12505,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 694
 tableName wgEncodeUwChIPSeqRawSignalRep2NhekCtcf
 view RawSignal
@@ -11430,11 +12528,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 710
 tableName wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3
 view RawSignal
@@ -11452,11 +12552,13 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 722
 tableName wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3
 view RawSignal
@@ -11473,11 +12575,13 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType NHEK/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 661
 tableName wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3
 view RawSignal
@@ -11494,11 +12598,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 696
 tableName wgEncodeUwChIPSeqRawSignalRep2SaecCtcf
 view RawSignal
@@ -11515,11 +12621,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 711
 tableName wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
 view RawSignal
@@ -11536,11 +12644,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 724
 tableName wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
 view RawSignal
@@ -11557,11 +12667,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType SAEC/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 680
 tableName wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
 view RawSignal
@@ -11578,11 +12690,13 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 753
 tableName wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
 view zRawSig
@@ -11599,11 +12713,13 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 730
 tableName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
 view RawSignal
@@ -11620,11 +12736,13 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 725
 tableName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
 view RawSignal
@@ -11641,11 +12759,13 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3.wig.gz
 fragLength 350
 grant Stam
+inputType SK-N-SH_RA/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 683
 tableName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
 view RawSignal
@@ -11662,13 +12782,15 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wig.gz
 fragLength 350
 grant Stam
+inputType WERI-Rb-1/Input
 lab Uw
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
 replicate 2
+setType exp
 subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: -332736545
+# MAGIC: 859705586
