@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.625 2010/04/19 04:36:38 markd Exp $";
+#	"$Id: trackDb.ra,v 1.626 2010/04/23 17:26:20 mary Exp $";
 
 include trackDb.chainNet.ra
 
@@ -464,7 +464,7 @@ longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
 priority 36
 visibility hide
-color 34,139,34
+color 0,100,0
 type psl
 baseColorDefault diffCodons
 baseColorUseCds genbank
