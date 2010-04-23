@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.955 2010/04/20 23:16:24 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.956 2010/04/23 16:23:27 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12659,8 +12659,8 @@ wgEncode 1
         track wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewPeaks off
-        shortLabel K562b SETDB1 Pk
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1/MNase in K562b cells)
+        shortLabel K562/M SETDB1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in K562b/MNase cells)
         subGroups view=Peaks factor=SETDB1m cellType=t1K562
         type narrowPeak
         color 46,0,184
@@ -14121,8 +14121,8 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel K562b SETDB1 Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1/MNase in K562b cells)
+        shortLabel K562/M SETDB1 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in K562b/MNase cells)
         subGroups view=Signal factor=SETDB1m cellType=t1K562
         type bedGraph 4
         color 46,0,184
