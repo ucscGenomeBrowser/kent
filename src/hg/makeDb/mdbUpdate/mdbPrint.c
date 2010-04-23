@@ -4,7 +4,7 @@
 #include "options.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdbPrint.c,v 1.3 2010/04/23 15:58:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdbPrint.c,v 1.4 2010/04/23 22:33:19 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -182,11 +182,11 @@ sqlDisconnect(&conn);
 if(cntObjs || cntVars || cntVals)
     {
     if(cntObjs)
-        printf("%d objects\n",objsCnt);
+        printf("%d object%s\n",objsCnt,(objsCnt==1?"":"s"));
     if(cntVars)
-        printf("%d variable\n",varsCnt);
+        printf("%d variable%s\n",varsCnt,(varsCnt==1?"":"s"));
     if(cntVals)
-        printf("%d values\n",valsCnt);
+        printf("%d value%s\n",valsCnt,(valsCnt==1?"":"s"));
     }
 else if( varsCnt>0 || valsCnt>0 || objsCnt>0 )
     {
