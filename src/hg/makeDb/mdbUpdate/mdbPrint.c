@@ -4,7 +4,7 @@
 #include "options.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdbPrint.c,v 1.2 2010/04/23 02:56:21 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdbPrint.c,v 1.3 2010/04/23 15:58:26 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -98,9 +98,6 @@ boolean cntObjs = optionExists("countObjs");
 boolean cntVars = optionExists("countVars");
 boolean cntVals = optionExists("countVals");
 boolean byVar   = optionExists("byVar");
-
-if(raStyle && (cntObjs || cntVars || cntVals))
-    usage();
 
 boolean all = optionExists("all");
 if(all)
