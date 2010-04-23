@@ -372,13 +372,25 @@ endif
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo  "Find the correct parameters for the 3 trackDb variables"
-echo  "which appears in the chain-OtherOrg download file."
-echo  "Compare this to the chain description page."
+#echo  "Find the correct parameters for the 3 trackDb variables"
+#echo  "which appears in the chain-OtherOrg download file."
+#echo  "Compare this to the chain description page."
+echo   "Go to the chain/net description page for this track"
+echo   "and compare the output which is taken from the chain-OtherOrg download file:"
 echo
 
 getMatrixLines.csh $db $otherDb
 getChainLines.csh $db $otherDb
+
+
+set OrgName=`hgsql -Ne "SELECT organism FROM dbDb WHERE NAME LIKE '$db%'" hgcentraltest` 
+
+set OrgName=`echo $OrgName | tr "[:upper:]" "[:lower:]"` 
+
+
+echo
+echo   "If the output doesn't match, put overrides in this file with the above output: " 
+echo   "/cluster/home/$USER/kent/src/hg/makeDb/trackDb/$OrgName/trackDb.chainNet.ra"
 
 
 # -------------------------------------------------
