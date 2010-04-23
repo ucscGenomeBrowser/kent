@@ -2743,14 +2743,14 @@ objType file
 antibody SETDB1
 cell K562b
 composite wgEncodeYaleChIPseq
-control MNase
+control UCDavis
 dataType ChIPseq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase.tagAlign.gz
 grant Snyder
-inputType K562b/None/Input/MNase
+inputType K562b/None/Input/UCDavis
 lab UCD(Farnham)
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 parentTable wgEncodeYaleChIPseqRawSignalRep1K562bSetdb1Mnase
@@ -2758,7 +2758,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1088
-treatment None
+treatment MNaseD
 view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2
@@ -6538,14 +6538,14 @@ objType file
 antibody SETDB1
 cell K562b
 composite wgEncodeYaleChIPseq
-control MNase
+control UCDavis
 dataType ChIPseq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase.tagAlign.gz
 grant Snyder
-inputType K562b/None/Input/MNase
+inputType K562b/None/Input/UCDavis
 lab UCD(Farnham)
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 parentTable wgEncodeYaleChIPseqRawSignalRep2K562bSetdb1Mnase
@@ -6553,7 +6553,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1088
-treatment None
+treatment MNaseD
 view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2
@@ -10999,21 +10999,21 @@ objType table
 antibody SETDB1
 cell K562b
 composite wgEncodeYaleChIPseq
-control MNase
+control UCDavis
 dataType ChIPseq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase.narrowPeak.gz
 grant Snyder
-inputType K562b/None/Input/MNase
+inputType K562b/None/Input/UCDavis
 lab UCD(Farnham)
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 project wgEncode
 setType exp
 subId 1088
 tableName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
-treatment None
+treatment MNaseD
 view Peaks
 
 metaObject wgEncodeYaleChIPseqPeaksK562bTr4
@@ -14810,14 +14810,14 @@ objType file
 antibody SETDB1
 cell K562b
 composite wgEncodeYaleChIPseq
-control MNase
+control UCDavis
 dataType ChIPseq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase.fastq.gz
 grant Snyder
-inputType K562b/None/Input/MNase
+inputType K562b/None/Input/UCDavis
 lab UCD(Farnham)
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 parentTable wgEncodeYaleChIPseqRawSignalRep1K562bSetdb1Mnase
@@ -14825,7 +14825,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1088
-treatment None
+treatment MNaseD
 view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bTr4
@@ -18327,14 +18327,14 @@ objType file
 antibody SETDB1
 cell K562b
 composite wgEncodeYaleChIPseq
-control MNase
+control UCDavis
 dataType ChIPseq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase.fastq.gz
 grant Snyder
-inputType K562b/None/Input/MNase
+inputType K562b/None/Input/UCDavis
 lab UCD(Farnham)
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 parentTable wgEncodeYaleChIPseqRawSignalRep2K562bSetdb1Mnase
@@ -18342,7 +18342,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1088
-treatment None
+treatment MNaseD
 view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bTr4
@@ -23611,21 +23611,21 @@ objType table
 antibody SETDB1
 cell K562b
 composite wgEncodeYaleChIPseq
-control MNase
+control UCDavis
 dataType ChIPseq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase.bedGraph4.gz
 grant Snyder
-inputType K562b/None/Input/MNase
+inputType K562b/None/Input/UCDavis
 lab UCD(Farnham)
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 project wgEncode
 setType exp
 subId 1088
 tableName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
-treatment None
+treatment MNaseD
 view Signal
 
 metaObject wgEncodeYaleChIPseqSignalK562bTr4
@@ -24554,4 +24554,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: -1578419034
+# MAGIC: -1081625468
