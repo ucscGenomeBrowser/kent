@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.3 2010/04/19 18:57:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.4 2010/04/23 02:38:36 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -245,7 +245,9 @@ fputc('}',f);
 #include "hgConfig.h"
 #include "obscure.h"
 
+#define MDB_METADATA_KEY  "metadata"
 #define MDB_METAOBJ_RAKEY "metaObject"
+#define MDB_METAVAR_RAKEY "metaVariable"
 #define MDB_OBJ_TYPE "objType"
 
 // ------- (static) convert from autoSql -------
@@ -492,6 +494,8 @@ char *cloneVars = cloneString(varPairs);
     int ix;
     for(ix = 0;ix<count;ix++)
         {
+        if(*words[ix] == '#')
+            break;
         if(strchr(words[ix], '=') == NULL)
             errAbort("This is not formatted var=val pairs: '%s'\n\t%s\n",words[ix],varPairs);
 
@@ -600,7 +604,7 @@ struct mdbObj *metadataLineParse(char *line)
 {
 char *fromTheTop = line;
 char*nibbledWord = cloneNextWordByDelimiter(&line,' ');
-if(nibbledWord == NULL || differentWord(nibbledWord,"metadata"))
+if(nibbledWord == NULL || differentWord(nibbledWord,MDB_METADATA_KEY))
     errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
 freeMem(nibbledWord);
 
@@ -620,7 +624,7 @@ if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should 
         nibbledWord = cloneNextWordByDelimiter(&line,' ');;
         if(nibbledWord == NULL)
             errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
-        if(strchr(nibbledWord, '=') != NULL) // If this is start of var=val pairs
+        if(*nibbledWord == '#' || strchr(nibbledWord, '=') != NULL) // IS commnet OR start of var=val pairs
             break;
 
         if(sameWord(nibbledWord,"delete"))
@@ -631,7 +635,7 @@ if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should 
         freeMem(nibbledWord);
         }
     }
-if(strlen(varPairs) > 0)
+if(varPairs != NULL && strlen(varPairs) > 0 && *varPairs != '#')
         mdbObj = mdbObjAddVarPairs(mdbObj,varPairs);
 else if(mdbObj->deleteThis == FALSE)
     errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
@@ -796,6 +800,9 @@ char *line;
 
 while (lineFileNext(lf, &line,NULL))
     {
+    char *start = skipLeadingSpaces(line);
+    if(start == NULL || *start == '#')
+        continue;
     if(startsWithWord(MDB_METAOBJ_RAKEY,line))
         {
         // This is the RA style file!!
@@ -1156,7 +1163,7 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
         else
             dyStringPrintf(dy, " OR (var ");
         if(rootVar->notEqual && rootVar->vals == NULL)
-            dyStringPrintf(dy, "NOT ");
+            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
 
         dyStringPrintf(dy, "%s '%s'",
             (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
@@ -1172,7 +1179,7 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
                 {
                 dyStringPrintf(dy, " and val ");
                 if(rootVar->notEqual)
-                    dyStringPrintf(dy, "NOT ");
+                    dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
                 if(limbVal->next == NULL) // only one val
                     {
                     dyStringPrintf(dy, "%s '%s'",
@@ -1244,7 +1251,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
         dyStringPrintf(dy, "(select obj from %s where var ",table);
 
         if(rootVar->notEqual && rootVar->vals == NULL)
-            dyStringPrintf(dy, "NOT ");
+            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
 
         dyStringPrintf(dy, "%s '%s'",
             (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
@@ -1260,7 +1267,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
                 {
                 dyStringPrintf(dy, " and val ");
                 if(rootVar->notEqual)
-                    dyStringPrintf(dy, "NOT ");
+                    dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
                 if(limbVal->next == NULL) // only one val
                     {
                     dyStringPrintf(dy, "%s '%s'",
@@ -1304,6 +1311,8 @@ if(mdbVar != NULL && mdbVar->var != NULL)
         {
         if(mdbVar->varType == vtBinary)
             printf("binary");
+        else if(!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
+            printf("\"%s\"",mdbVar->val);
         else
             printf("%s",mdbVar->val);
         }
@@ -1327,7 +1336,7 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     if(mdbObj->obj == NULL)
         continue;
 
-    printf("%s %s",(raStyle?MDB_METAOBJ_RAKEY:"metadata"),mdbObj->obj);
+    printf("%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
     if(mdbObj->deleteThis)
         printf(" delete");
 
@@ -1357,37 +1366,35 @@ void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle)
 //   mdbVariable lucy=ethyl bestFriends lifePartners
 //   mdbVariable lucy=ricky iLoveLucy divorces
 // NOT QUITE ra style
-//   mdbVariable lucy
-//       ethyl
-//           bestFriends
-//           lifePartners
-//       ricky
-//           iLoveLucy
-//           divorces
-// TODO: Expand for mutilple var types; strip quotes from vals on ra style
+//   metadata Fred wife=Ethyl
+//   metadata Lucy wife=Ethyl
+// Results in:
+//   mdbVariable wife Ethyl
+//   metaObject Fred
+//   metaObject Lucy
 struct mdbByVar *rootVar = NULL;
 for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
     if(rootVar->var == NULL)
         continue;
 
-    boolean first = TRUE;
     struct mdbLimbVal *limbVal = NULL;
     for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if(limbVal->val == NULL)
             continue;
 
-        if(first) // first val for this var
-            {
-            printf("mdbVariable %s",rootVar->var);
-            first = FALSE;
-            }
+        if(raStyle)
+            printf("%s %s ",MDB_METAVAR_RAKEY,rootVar->var);
+        else
+            printf("%s %s=",MDB_METAVAR_RAKEY,rootVar->var);
 
         if(rootVar->varType == vtBinary)
-            printf("%sbinary",(raStyle ? "\n    ":"="));
+            printf("binary");
+        else if(!raStyle && strchr(limbVal->val, ' ') != NULL) // Has blanks
+            printf("\"%s\"",limbVal->val);
         else
-            printf("%s%s",(raStyle ? "\n    ":"="),limbVal->val);
+            printf("%s",limbVal->val);
 
         struct mdbLeafObj *leafObj = NULL;
         for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
@@ -1395,9 +1402,14 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
             if(leafObj->obj == NULL)
                 continue;
 
-            printf("%s%s",(raStyle?"\n        ":" "),leafObj->obj);
+            if(raStyle)
+                printf("\n%s %s",MDB_METAOBJ_RAKEY,leafObj->obj);
+            else
+                printf(" %s",leafObj->obj);
             }
         printf("\n");
+        if(raStyle)
+            printf("\n");
         }
     }
 }
@@ -1795,7 +1807,7 @@ if(mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
 static struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb)
 // Returns the metadata for a table from a tdb setting.
 {
-char *setting = trackDbSetting(tdb, "metadata");
+char *setting = trackDbSetting(tdb, MDB_METADATA_KEY);
 if(setting == NULL)
     return NULL;
 struct mdbObj *mdbObj;
