@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.17 2010/03/25 17:20:40 angie Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.18 2010/04/23 04:20:19 galt Exp $";
 
 /* from hgTables.c */
 
@@ -1365,13 +1365,23 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	AllocArray(hit, numWindows);
 	}
 
+    //debug
+    //hPrintf("length of statsList=%d<br>\n", slCount(statsList));
+
+
     for(stats=statsList;stats;stats=stats->next)
 	{
+
+
+	//debug
+	//hPrintf("stats-> count=%d start=%d end=%d (end-start)=%d mean=%f <br>\n", 
+	  //  stats->count, stats->chromStart, stats->chromEnd, stats->chromEnd - stats->chromStart, stats->mean);
+
 	totalValues += stats->count;
 	int i; 
 	int start = stats->chromStart;
 	int end = stats->chromEnd;
-	double sumData = stats->mean;
+	double sumData = (stats->span * stats->mean * stats->count) / (stats->chromEnd - stats->chromStart);  // fixing this line
 	for(i = start/windowSize; i*windowSize < end; ++i)
 	    {
 	    overlap = rangeIntersection(start, end, i*windowSize, (i+1)*windowSize);
@@ -1408,7 +1418,10 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     freez(&hit);
     grandTotalValues+=totalValues;
     fflush(stdout);  /* so user can see progress */
+
     }
+
+
 //debug
 //hPrintf("Genome Total Number of Values = %llu<br>\n", grandTotalValues);
 
@@ -1451,6 +1464,10 @@ if (isCt)
     {
     isChromGraphCt = isChromGraph(curTrack);
     }
+
+//debug
+//hPrintf("isCt=%d isWig=%d isPositional=%d isMaf=%d isBedGr=%d<br>\n", 
+    //isCt, isWig, isPositional, isMaf, isBedGr);
 
 struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
