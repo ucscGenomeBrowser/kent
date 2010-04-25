@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.134 2010/04/15 04:17:08 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.135 2010/04/25 17:46:51 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -176,11 +176,7 @@ char *position = NULL; 		/* Name of position. */
 
 int trackTabWidth = 11;
 int leftLabelWidthDefaultChars = 17;   /* default number of characters allowed for left label */
-#if 0
 int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
-#else
-int leftLabelWidthChars = 22;   /* number of characters allowed for left label */
-#endif
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
