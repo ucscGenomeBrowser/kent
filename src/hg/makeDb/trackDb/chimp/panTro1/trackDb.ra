@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.42 2010/04/11 15:08:16 markd Exp $";
+#	"$Id: trackDb.ra,v 1.43 2010/04/26 17:26:13 mary Exp $";
 
 include trackDb.chainNet.ra
 
@@ -36,7 +36,7 @@ viewLimits 30:70
 type wig 0 100 
 
 track xenoRefGene override
-release beta,public
+release public
 html xenoRefGeneNoHs
 shortLabel Human RefSeq
 longLabel Human RefSeq Genes
