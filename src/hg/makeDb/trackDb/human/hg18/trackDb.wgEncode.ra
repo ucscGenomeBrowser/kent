@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.956 2010/04/23 16:23:27 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.957 2010/04/26 22:29:53 rhead Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8328,7 +8328,7 @@ subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 SK-N-SH_RA=SK
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 noInherit on
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 priority 0
 type bed 3
@@ -22515,7 +22515,7 @@ subGroup1 view Views TestedSites=Tested_Sites
 subGroup2 cellType Cell_Line K562=K562
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 priority 0
 type bed 3
