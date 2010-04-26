@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.6 2010/04/01 17:48:38 hiram Exp $
+#	$Id: calJac3.txt,v 1.7 2010/04/26 16:00:20 markd Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1343,4 +1343,28 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
     hgLoadSqlTab calJac3 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
+############################################################################
+# N-SCAN gene predictions (nscanGene) - (2010-04-26 markd)
+
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/calJac3/bed/nscan
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/calJac3/readme.txt
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/calJac3/calJac3.prot.fa
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/calJac3/calJac3.gtf
+    gzip calJac3.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt calJac3.gtf.gz stdout | hgLoadGenePred -genePredExt calJac3 nscanGene stdin
+    hgPepPred calJac3 generic nscanPep calJac3.prot.fa.gz
+    rm *.tab
+
+    # marmoset/calJac3/trackDb.ra, add:
+    track nscanGene override
+    informant Marmoset N-SCAN used mouse (mm9) as the informant for conservation. PASA clustered human ESTs were mapped to the marmoset genome with the use of the human/marmoset synteny chain track. These remapped clusters were then filtered for splice sites, and used as the EST track on marmoset.
+
+    # veryify top-level search spec, should produce no results:
+    hgsql -Ne 'select name from nscanGene' calJac3 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
 ############################################################################

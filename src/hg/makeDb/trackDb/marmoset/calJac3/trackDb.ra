@@ -111,3 +111,7 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track nscanGene override
+informant Marmoset N-SCAN used mouse (mm9) as the informant for conservation. PASA clustered human ESTs were mapped to the marmoset genome with the use of the human/marmoset synteny chain track. These remapped clusters were then filtered for splice sites, and used as the EST track on marmoset.
+
