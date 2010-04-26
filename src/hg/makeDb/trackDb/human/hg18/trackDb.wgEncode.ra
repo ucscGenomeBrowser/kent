@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.957 2010/04/26 22:29:53 rhead Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.958 2010/04/26 23:14:24 krish Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8341,8 +8341,9 @@ wgEncode 1
     subTrack wgEncodeUwDGF
     pValueFilter 0.0
     pValueFilterLimits 1:324
-    scoreFilter 500
-    scoreFilterLimits 500:1000
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    minGrayLevel 2
 
         track wgEncodeUwDGFHotspotsGm06990
         release alpha,beta
@@ -8398,8 +8399,9 @@ wgEncode 1
     subTrack wgEncodeUwDGF
     pValueFilter 0.0
     pValueFilterLimits 1:324
-    scoreFilter 500
-    scoreFilterLimits 500:1000
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    minGrayLevel 3
 
         track wgEncodeUwDGFPeaksGm06990
         release alpha,beta
