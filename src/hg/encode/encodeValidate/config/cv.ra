@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.230 2010/04/22 20:58:16 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.231 2010/04/26 20:20:17 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1939,6 +1939,19 @@ targetId GeneCard:GC14P074815
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14P074815
 validation missing
 
+term c-Jun
+tag cJUN
+type Antibody
+antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin
+targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
+vendorName Santa Cruz Biotech
+vendorId sc-1694
+orderUrl http://www.scbt.com/product.php?datasheet=1694
+lab Snyder
+targetId GeneCard:GC01M058958
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
+validation missing
+
 term c-Myc
 tag cMYC
 type Antibody
@@ -1953,17 +1966,18 @@ targetId GeneCard:GC08P128817
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08P128817
 validation missing
 
-term c-Jun
-tag cJUN
+term Ccnt2
+tag Ccnt2
 type Antibody
-antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin
-targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
-vendorName Santa Cruz Biotech
-vendorId sc-1694
-orderUrl http://www.scbt.com/product.php?datasheet=1694
-lab Snyder
-targetId GeneCard:GC01M058958
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
+antibodyDescription Goal polyclonal. Raised against an internal region of human CycT2a/b. Recommeded for detection of CycT2a/b of rat, mouse or human origin. Vendor recommeds it use for the folloiwng applications: WB, IF and ELISA.
+targetDescription CycT2 is one of three cyclins that can form a heterodimer with cyclin-dependent kinase 9 (CDK9). The heterodimer is known as positive elongation factor b (P-TEFb) and is responsible for the phosphophorylation of Ser2 of the heptad repeat in the C-terminal domain of RNA polymerase II as well as the negative elongation factors DSIF (hSpt4/hSpt5) and NELF. Phosphorylation of RNA polymerase II and the negative elongation factors by P-TEFb promotes elongation. CycT2 contains a leucine rich domain capable of binding to the C-terminal domain of RNA polymerase II.
+vendorName Santa Cruz Biotechnology
+vendorId sc-12419
+orderUrl http://www.scbt.com/jp/datasheet-12419-cyclin-t2a-b-a-20-antibody.html
+lab Struhl
+lots H2306
+targetId GeneCard:CCNT2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT2
 validation missing
 
 term CEBPB
@@ -2437,6 +2451,20 @@ orderUrl http://www.scbt.com/datasheet-16424-hrt1-c-20-antibody.html
 lab Myers
 targetId GeneCard:GC08M080838
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
+validation missing
+
+term HMGN3
+tag HMGN3
+type Antibody
+antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry.
+targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 top 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
+orderUrl http://www.acris-antibodies.com/NB100-61076.htm
+vendorName Acris Antibodies
+vendorId NB100-61076
+lots 1
+lab Struhl
+targetId GeneCard:HMGN3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
 validation missing
 
 term HNF4A
@@ -3065,6 +3093,18 @@ targetId GeneCard:GC10P114700
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10P114700
 validation missing
 
+term TFIIB
+tag TFIIB
+type Antibody
+antibodyDescription Rabbit polyclonal. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Supports following applications: WB, IP, IF, ELISA, FCM and ChIP.
+targetDescription TFIIB is a general transcription factor that is believed to play a critical role in recruiting RNA polymerase II to the pre-initiation complex to activate transcription. TFIIB binds to the core promoter element indirectly via TFIID subunit TBP (TATA-binding protein) and directly via the TFIIB-response element (BRE). TFIIB directly recruits RNA polymerase II to the pre-initiation complex.
+vendorName Santa Cruz Biotechnology
+vendorId sc-225
+orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
+lots J1905
+lab Struhl
+validation missing
+
 term TFIIIC-110
 tag TF3C110
 type Antibody
@@ -3074,6 +3114,8 @@ vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
 vendorId 4286
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
+targetId GeneCard:GTF2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
 
 term TR4
@@ -3113,14 +3155,27 @@ targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
 validation missing
 
+term WHIP
+tag WHIP
+type Antibody
+antibodyDescription Rabbit polyclonal; Immunogen:Synthetic peptide: SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP.
+targetDescription Interacts with the N-terminal portion of Werner protein containing the exonuclease domain, shows homology to replication factor C family proteins, and is conserved from E. coli to human. Studies in yeast suggest that this gene may influence the aging process. Functions as a modulator for initiation or reinitiation events during DNA polymerase delta-mediated DNA synthesis. Has an intrinsic ATPase activity that functions as a sensor of DNA damage or of arrested replication forks and regulates the extent of DNA synthesis.
+vendorName Abcam
+vendorId ab4731
+orderUrl http://www.abcam.com/WHIP-antibody-ab4731.html
+lab Snyder
+targetId GeneCard:WRNIP1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
+validation missing
+
 term XRCC4
 tag XRCC4
 type Antibody
 targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
 antibodyDescription Rabbit polyclonal
-orderUrl http://www.abcam.com/index.html?datasheet=1451
+orderUrl http://www.abcam.com/index.html?datasheet=145
 vendorName Abcam
-vendorId ab1451
+vendorId ab145
 lab Snyder
 targetId GeneCard:GC05P082409
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P082409
