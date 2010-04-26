@@ -44,7 +44,7 @@ else:
 # Regex for match location
 #  can either include chrom info (chr_pattern)
 #  or the case where inherit chrom info from left (nochr_pattern)
-chr_pattern = re.compile("^(chr.+)\.fa\:(\d+)([FR])([ACGT\d]+)$")
+chr_pattern = re.compile("^(.+)\.fa\:(\d+)([FR])([ACGT\d]+)$")
 nochr_pattern = re.compile("^(\d+)([FR])([ACGT\d]+)$")
 
 # Loop through file
