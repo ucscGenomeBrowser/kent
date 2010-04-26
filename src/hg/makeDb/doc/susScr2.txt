@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: susScr2.txt,v 1.8 2010/04/19 04:34:00 markd Exp $
+#       $Id: susScr2.txt,v 1.9 2010/04/26 15:28:21 markd Exp $
 
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
@@ -795,8 +795,6 @@ chainOne $(path1)
 #end tblastn
 #############################################################################
 # N-SCAN gene predictions (nscanGene) - (2010-04-18 markd)
-
-/mblab.wustl.edu/predictions/taeGut1
 
     # obtained NSCAN predictions from michael brent's group
     # at WUSTL
