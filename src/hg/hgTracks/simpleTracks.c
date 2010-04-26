@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.135 2010/04/25 17:46:51 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.136 2010/04/26 23:17:40 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5414,12 +5414,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(SMALLDYBUF);
     labelStarted = FALSE; /* reset for each item in track */
-    if ((useGeneName || useAcc || useMim) &&
-        (!isNative || isNewChimp(database)))
-                /* special handling for chimp -- both chimp and
-                   human refSeq's are considered 'native', so we
-                   label them to distinguish */
-
+    if ((useGeneName || useAcc || useMim) && isNative)
         {
         char *org = getOrganismShort(conn, lf->name);
         if (org != NULL)
@@ -7376,8 +7371,6 @@ void mrnaMethods(struct track *tg)
 /* Make track of mRNA methods. */
 {
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-if (isNewChimp(database))
-    tg->itemName = xenoMrnaName;
 }
 
 char *interProName(struct track *tg, void *item)
@@ -7406,8 +7399,6 @@ void estMethods(struct track *tg)
 tg->drawItems = linkedFeaturesAverageDenseOrientEst;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 tg->totalHeight = tgFixedTotalHeightUsingOverflow;
-if (isNewChimp(database))
-    tg->itemName = xenoMrnaName;
 }
 #endif /* GBROWSE */
 

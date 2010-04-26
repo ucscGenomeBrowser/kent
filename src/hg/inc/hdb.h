@@ -780,9 +780,6 @@ int compareDbs(char *dbA, char *dbB);
 int getTableSize(char *db, char *table);
 /* Get count of rows in a table in the primary database */
 
-boolean isNewChimp(char *database) ;
-/* database is panTro2 or later */
-
 struct slName *getDomainList(struct sqlConnection *conn, char *ucscGeneId,
        char *domainDb);
 

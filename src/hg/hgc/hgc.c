@@ -230,7 +230,7 @@
 #include "parClick.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1615 2010/04/22 22:33:20 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1616 2010/04/26 23:17:40 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5231,10 +5231,7 @@ struct psl *pslList = NULL;
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) )
     {
     char temp[256];
-    if (isNewChimp(database))
-        sprintf(temp, "Other RNA");
-    else
-        sprintf(temp, "non-%s RNA", organism);
+    sprintf(temp, "non-%s RNA", organism);
     type = temp;
     table = track;
     }
@@ -9546,7 +9543,7 @@ if (desc != NULL)
     printf("<BR>\n");
     }
 
-if (isXeno || isNewChimp(database))
+if (isXeno)
     prRefGeneXenoInfo(conn, rl);
 else
     printCcdsForSrcDb(conn, rl->mrnaAcc);
@@ -9686,12 +9683,7 @@ sqlFreeResult(&sr);
 
 /* print the first section with info  */
 if (isXeno)
-    {
-    if (isNewChimp(database))
-        cartWebStart(cart, database, "Other RefSeq Gene");
-    else
-        cartWebStart(cart, database, "Non-%s RefSeq Gene", organism);
-    }
+    cartWebStart(cart, database, "Non-%s RefSeq Gene", organism);
 else
     cartWebStart(cart, database, "RefSeq Gene");
 printf("<table border=0>\n<tr>\n");

@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.226 2010/04/01 03:12:15 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.227 2010/04/26 23:17:41 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1709,8 +1709,6 @@ if (alignCount > 0)
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
     char title[256];
     slReverse(&table->posList);
-    if (isNewChimp(db))
-        organism = cloneString("Chimp or Human");
     safef(title, sizeof(title), "%s%s %sligned mRNA Search Results",
 			isXeno ? "Non-" : "", organism, 
 			aligns ?  "A" : "Una");
@@ -2128,22 +2126,9 @@ if (rlList != NULL)
 		AllocVar(table);
 		table->name = cloneString(hfs->searchTable);
 		if (startsWith("xeno", hfs->searchTable))
-                    {
-                    if (isNewChimp(db))
-                        safef(desc, sizeof(desc), 
-                                "Non-Chimp or Human RefSeq Genes");
-                    else
-                        safef(desc, sizeof(desc), "Non-%s RefSeq Genes",
-                              hOrganism(db));
-                    }
+                    safef(desc, sizeof(desc), "Non-%s RefSeq Genes", hOrganism(db));
 		else
-                    {
-                    if (isNewChimp(db))
-                        safef(desc, sizeof(desc), 
-                                "Chimp and Human RefSeq Genes");
-                    else
-                        safef(desc, sizeof(desc), "RefSeq Genes");
-                    }
+                    safef(desc, sizeof(desc), "RefSeq Genes");
 		table->description = cloneString(desc);
 		slAddHead(&hgp->tableList, table);
 		}
@@ -2902,29 +2887,6 @@ char *singleBaseExp =
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)$";
 
-static boolean chimpSpecialChrom(struct hgPositions *hgp, char **term, 
-                                        char *hgAppName)
-/* special handling for newer chimp assemblies to warn user
- * that chr2 is gone, and set default position */
-{
-char *msg = "No chr2 or chr23 in newer chimp assemblies: see <A TARGET=_BLANK HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download25\">Chimp Chromosome Numbering</A>";
-
-if (isNewChimp(hgp->database))
-    {
-    if (sameString("chr2", *term) || startsWith("chr2:", *term) ||
-        sameString("chr23", *term) || startsWith("chr23:", *term))
-        {
-        *term = hDefaultPos(hgp->database);
-        if (endsWith(hgAppName, "hgTables"))
-            hUserAbort("%s", msg);
-        else
-            warn("%s", msg);
-        return TRUE;
-        }
-    }
-return FALSE;
-}
-
 static void collapseSamePos(struct hgPositions *hgp)
 /* If all positions in all tables in hgp are the same position, then 
  * trim all but the first table/pos. */
@@ -3043,8 +3005,6 @@ hgp->extraCgi = cloneString(extraCgi);
 
 if (singleSearch(db, term, cart, hgp))
     return hgp;
-
-chimpSpecialChrom(hgp, &term, hgAppNameIn);
 
 /* Allow any search term to end with a :Start-End range -- also support stuff 
  * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  

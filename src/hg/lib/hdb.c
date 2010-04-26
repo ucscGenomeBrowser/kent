@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.423 2010/03/23 00:57:01 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.424 2010/04/26 23:17:41 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4525,13 +4525,6 @@ int ct = sqlTableSize(conn, table);
 hFreeConn(&conn);
 return ct;
 }
-
-boolean isNewChimp(char *database)
-/* database is panTro2 or later */
-{
-return (startsWith("panTro", database) && !sameString("panTro1", database));
-}
-
 
 int compareDbs(char *dbA, char *dbB)
 /* Compare two org# e.g. mm6 vs. mm16 or mm6 vs. hg17
