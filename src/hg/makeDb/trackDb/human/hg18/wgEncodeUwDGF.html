@@ -4,14 +4,14 @@
 that identify sites where regulatory factors bind to the genome.</P>
 <P>Footprinting is a technique used to define the DNA sequences that interact
 with and bind specific DNA-binding proteins, such as transcription factors,
-zinc-finger DNA binding proteins, hormone-receptor complexes, and other 
+zinc-finger proteins, hormone-receptor complexes, and other 
 chromatin-modulating factors like CTCF.  The technique depends upon the
 strength and tight nature of protein-DNA interactions. In their native chromatin
 state, DNA sequences that interact directly with DNA-binding proteins are
-relatively protected to DNA degrading endonucleases, while the exposed/unbound
+relatively protected from DNA degrading endonucleases, while the exposed/unbound
 portions are readily degraded by such endonucleases. A massively parallel
 next-generation sequencing technique to define the DNase hypersensitive sites
-in the genome was adopted. Sequencing these these next-generation-sequencing
+in the genome was adopted. Sequencing these next-generation-sequencing
 DNase samples to significantly higher depths of 300-fold or greater produces
 a base-pair level resolution of the DNase susceptibility maps of the native
 chromatin state.  These base-pair resolution maps represent and are dependent
@@ -75,15 +75,14 @@ directly reflected in raw tag density (<I>Signal</I>), which is shown
 in the track as density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).  DNaseI hypersensitive zones
 (<I>HotSpots</I>) were identified using the HotSpot algorithm
-described in Sabo <EM>et al.</EM> (2004).  0.5% false discovery rate
-thresholds (FDR 0.005) were computed for each cell type by applying
+described in Sabo <EM>et al.</EM> (2004).  False discovery rate thresholds 
+of 0.5% (FDR 0.005) were computed for each cell type by applying
 the HotSpot algorithm to an equivalent number of random uniquely
 mapping 36-mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>)
-were identified as signal peaks within FDR 0.5% hypersensitive zones
+were identified as signal peaks within 0.5% (FDR 0.005) hypersensitive zones
 using a peak-finding algorithm.  Only DNase Solexa libraries from unique
 cell types producing the highest quality data, as defined by Percent
-Tags in Hotspots (PTIH><font color="red">XXX</font>%) were designated
-for deep sequencing to a depth
+Tags in Hotspots (PTIH ~40%) were designated for deep sequencing to a depth
 of over 200 million tags. While the HotSpots algorithm identifies
 genomic regions of elevated tag counts relative to random expectation,
 the <i>FP-DETECTOR</i> algorithm (developed by the UW ENCODE group) searches for
