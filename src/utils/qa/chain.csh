@@ -385,12 +385,13 @@ getChainLines.csh $db $otherDb
 
 set OrgName=`hgsql -Ne "SELECT organism FROM dbDb WHERE NAME LIKE '$db%'" hgcentraltest` 
 
-set OrgName=`echo $OrgName | tr "[:upper:]" "[:lower:]"` 
+set OrgName=`echo $OrgName | tr '[A-Z]' '[a-z]'` 
 
 
 echo
 echo   "If the output doesn't match, put overrides in this file with the above output: " 
 echo   "/cluster/home/$USER/kent/src/hg/makeDb/trackDb/$OrgName/trackDb.chainNet.ra"
+echo   "*Note use the path name to guide you. It may not work perfectly in all cases."
 
 
 # -------------------------------------------------
