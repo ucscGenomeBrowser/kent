@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.50 2010/02/08 22:11:26 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.51 2010/04/27 00:17:23 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -141,7 +141,7 @@ function matCbClick(matCB)
 function matSetMatrixCheckBoxes(state)
 {
 // matButtons:onclick Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    //$("body").css('cursor','wait');
+    //jQuery(this).css('cursor', 'wait');
     var matCBs = $("input.matCB").not(".abc");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
@@ -164,7 +164,7 @@ function matSetMatrixCheckBoxes(state)
     });
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
-    //$("body").css('cursor','default');
+    //jQuery(this).css('cursor', '');
     return true;
 }
 
@@ -299,11 +299,12 @@ function matCbComplete(matCB,complete)
     if(complete) {
         $(matCB).css('opacity', '1');  // For some reason IE accepts direct change but isn't happy with simply adding class!
         $(matCB).removeClass('halfVis');
-        $(matCB).parent().attr("title","");
+        $(matCB).attr("title","");
     } else {
         $(matCB).css('opacity', '0.5');
         $(matCB).addClass('halfVis');
-        $(matCB).parent().attr("title","Not all associated subtracks have been selected");
+        $(matCB).attr("title","Not all associated subtracks have been selected");
+        $('.halfVis').css('opacity', '0.5');
     }
 }
 
@@ -935,12 +936,12 @@ function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
 //var start = startTiming();
-//document.body.style.cursor="wait";
+jQuery('body').css('cursor', 'wait');
     if (document.getElementsByTagName) {
         matSubCBsSelected();
         showOrHideSelectedSubtracks();
     }
-//document.body.style.cursor="default";
+jQuery('body').css('cursor', '');
 //showTiming(start,"matInitializeMatrix()");
 }
 
@@ -1011,4 +1012,5 @@ $(document).ready(function()
             function(){$(this).removeClass('pale');}
         );
     }
+    $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 });
