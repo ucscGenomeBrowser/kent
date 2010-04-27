@@ -1,8 +1,8 @@
 setenv BRANCHNN 229
 setenv TODAY 2010-04-19       # v229 final
 setenv LASTWEEK 2010-04-06    # v228 final
-setenv REVIEWDAY 2010-04-13      # v229 preview
-setenv LASTREVIEWDAY 2010-03-30  # v228 preview
+setenv REVIEWDAY 2010-04-27      # v230 preview
+setenv LASTREVIEWDAY 2010-04-13  # v229 preview
 
 setenv GWEEKLYBLD /cluster/bin/build/buildrepo/src/utils/qa/weeklybld
 setenv WEEKLYBLD /cluster/bin/build/scripts
