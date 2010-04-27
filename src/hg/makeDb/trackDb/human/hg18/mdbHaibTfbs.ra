@@ -9875,7 +9875,7 @@ subId 52
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8
 objType file
-antibody Pol2
+antibody Pol2-4H8
 cell K562
 composite wgEncodeHudsonalphaChipSeq
 dataType ChipSeq
@@ -11459,7 +11459,7 @@ subId 52
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8
 objType file
-antibody Pol2
+antibody Pol2-4H8
 cell K562
 composite wgEncodeHudsonalphaChipSeq
 dataType ChipSeq
@@ -16582,4 +16582,4 @@ treatment None
 type wig
 view RawSignal
 
-# MAGIC: 521652179
+# MAGIC: 525423521
