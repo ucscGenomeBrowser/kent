@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.8 2010/04/09 18:41:24 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.9 2010/04/27 19:20:00 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -588,6 +588,7 @@ TMPDIR=/scratch/tmp
     cat fb.felCatV17e.chainAilMel1Link.txt
     # 1503647735 bases of 1990635005 (75.536%) in intersection
 
+    #   re-run swap 04-26
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
     cd /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -596,11 +597,16 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     # real    155m57.566s
+    cd /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap
     cat fb.ailMel1.chainFelCatV17eLink.txt
     # 1507273252 bases of 2245312831 (67.130%) in intersection
 
-
-
+    #   Due to the SEQ1 and SEQ2 spec'ed in
+    # /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22/DEF
+    # need to copy the swap directory from ailMel1 to felCatv17e
+    #  also need to rename from ailMel1.felCatV17e, or 6way step will have
+    #  problem
+    #  Ping hiram for this 
 
 #####################################################################
 # LASTZ Oppsom  Swap (DONE - 2010-03-22 - Chin)
@@ -712,6 +718,125 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     #   sizes will set properly
 
     #   reset to hguser in .hg.conf.beta
+
+
+#####################################################################
+## 6-Way Multiz (working - 2010-04-19 - Chin)
+# use /cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh 
+    mkdir /hive/data/genomes/felCatV17e/bed/multiz6way
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way
+
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=felCat3,hg19,mm9,canFam2,monDom5,ailMel1 \
+      --rename="felCat3 -> felCatV17e  " \
+/cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh > 6way.nh 
+
+    #   rearrange felCatV17e to the top, get some help from tree_doctor:
+    /cluster/bin/phast/tree_doctor --name-ancestors --reroot felCatV17e \
+           --with-branch 6way.nh
+    #   edit out the ancestors, and move felCatV17e from the bottom to
+    #   the top, resulting in this tree:
+
+(((felCatV17e:0.098612,(canFam2:0.052458,ailMel1:0.050000):0.050000):0.093470,(hg19:0.144018,mm9:0.356483):0.020593):0.258392,monDom5:0.340786);
+
+    #   more rearranging after seeing what the distance table looks like
+    #   below to get them appearing as much as possible in their
+    #   distance order top to bottom: (TO_DO)
+
+    # use the phyloGif to get the tree image
+   /cluster/bin/x86_64/phyloGif -phyloGif_tree=6way.nh \
+   -phyloGif_width=260  -phyloGif_height=260 > 6way.gif
+
+    #   more rearranging after seeing what the distance table looks like
+    #   below to get them appearing as much as possible in their
+    #   distance order top to bottom: (TO_DO)
+
+
+
+    #   usee this specification in the phyloGif tool after changing the names:
+    /cluster/bin/phast/tree_doctor \
+--rename="felCatV17e -> Cat ;  hg19 -> Human ; ailMel1 -> Panda ; canFam2 -> Dog ; mm9 -> Mouse ; monDom5 -> Opossum " 6way.nh
+
+    #   http://genome.ucsc.edu/cgi-bin/phyloGif
+    #   to obtain a gif image for htdocs/images/phylo/felCatV17e_6way.gif
+   /cluster/bin/x86_64/phyloGif -phyloGif_tree=6way.nh \
+   -phyloGif_width=260  -phyloGif_height=260 > felCatV17e_6way.gif
+
+    /cluster/bin/phast/all_dists 6way.nh > 6way.distances.txt
+    # make sure all symlinks lastz.DB -> lastzDb-date
+    #   exist here and at the swap locations, the perl script expects this
+    #   in order to find featureBits numbers.
+    cd /hive/data/genomes/felCatV17e/bed]
+    ln -s blastz.hg19.swap lastz.hg19
+    ln -s blastz.canFam2.swap lastz.canFam2
+    ln -s blastz.mm9.swap lastz.mm9
+    ln -s blastz.monDom5.swap lastz.monDom5
+    # ln -s blastz.ailMel1.swap lastz.ailMel1 (we switched SEQ1 and SEQ2)
+    ln -s /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap lastz.ailMel1
+
+
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way
+    #   Use 6way.distances.txt to create the table below
+    #   with this perl script:
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+
+open (FH, "grep -y felCatV17e 6way.distances.txt | sort -k3,3n|") or
+        die "can not read 6way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($felCatV17e, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/felCatV17e/bed/lastz.$D/fb.felCatV17e." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.felCatV17e/fb.${D}.chainCalJac3Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+   ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+###### 04-27 stop here due to wrong output from sizeStats.pl 
+###### pending move/rename aelMel1/felcatV17e lastz swap results
+# 02  0.1986 - Panda ailMel1    (% 0.000) (N/A)
+# 04  0.2011 - Dog canFam2      (% 73.720) (N/A)
+# 06  0.3567 - Human hg19       (% 60.870) (N/A)
+# 08  0.5692 - Mouse mm9        (% 30.972) (N/A)
+# 10  0.7913 - Opossum monDom5  (% 8.364) (N/A)
+
 
 
 
