@@ -8,19 +8,10 @@ source `which qaConfig.csh`
 set db=''
 set tableList=''
 set table =''
-set first=""
-set second=""
-#set third=""
-set fourth=""
+set devTime=""
+set betaTime=""
+set rrTime=""
 set countPerChr=""
-
-#if ($#argv == 1) then
-#  if ( $argv[1] == "CLEAN" || $argv[1] == "clean" ) then 
-#  rm *.qa
-#  rm *.gapFile
-#  exit 0
-#  endif
-#endif
 
 if ($#argv < 2 || $#argv > 3) then
   echo
@@ -34,10 +25,8 @@ if ($#argv < 2 || $#argv > 3) then
   echo "    to redirect stdout and stderr (>&) "
   echo
   echo "    Works if you provide a list of tables"
-  echo "    In that case, it creates db.tableName.qa files"
+  echo "    In that case, it creates tableList.db.qa"
   echo 
-#  echo "    Added clean-up functionality to remove all .qa and .gapFile files"
-#  echo "    Usage:   CLEAN or clean"
   echo
 
   exit
@@ -60,15 +49,21 @@ if (! $status) then
  set tables=`cat $tableList`
  if ( $countPerChr != "c" ) then
    foreach table ( $tables )
-     $0 $db $table >& $db.$table.qa
+     $0 $db $table >>& $db.$tableList.qa
    end
  else  
    foreach table ( $tables )
-     $0 $db $table c >& $db.$table.qa
+     $0 $db $table c >>& $db.$tableList.qa
    end
  endif  
 else
   set tables=$tableList
+
+#--------------------------------------------------
+#Display Table name  
+echo "~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~ "
+echo "$tables"
+echo
 
 #------------------------------------------------
 #check getSplit.csh 
@@ -82,18 +77,18 @@ getSplit.csh $db $tables hgwdev
 
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo
-set first=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$tables'"' $db \
+set devTime=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$tables'"' $db \
    | awk '{print $14, $15}'`
-set second=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'$tables'"' $db \
+set betaTime=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'$tables'"' $db \
    | awk '{print $14, $15}'`
-set fourth=`getRRtableStatus.csh $db $tables Update_time`
+set rrTime=`getRRtableStatus.csh $db $tables Update_time`
 if ( $status ) then
-    set fourth=""
+    set rrTime=""
 endif    
 echo "Check updateTimes for each table:"
-echo "Dev:  $first "
-echo "Beta: $second"
-echo "RR:   $fourth" 
+echo "Dev:  $devTime "
+echo "Beta: $betaTime"
+echo "RR:   $rrTime" 
 
 
 # ------------------------------------------------
@@ -110,15 +105,8 @@ if ($status) then
 endif
 
 echo "featureBits -countGaps $db $tables gap"
-featureBits -countGaps $db $tables gap -bed=$db.$tables.gapFile
-echo
-if ( -z $db.$tables.gapFile ) then
-echo
-rm -f $db.$tables.gapFile
-else
-echo "There are gaps overlapping $tables (gaps may be bridged or not):"
-echo "Gap file is here: $db.gapFile" 
-endif
+featureBits -countGaps $db $tables gap 
+
 		    
 # ------------------------------------------------
 # check Table sort for table:
@@ -160,10 +148,10 @@ echo "Verify the makedoc at:"
 echo "~/kent/src/hg/makeDb/doc/$db.txt"
 
 #----------------------------------------------
-#Show the first 2 rows
+#Show the first 3 rows
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Here are the first two rows of the table:"
-hgsql -e "select * from ${tables} limit 2" $db
+echo "Here are the first three rows of the table:"
+hgsql -e "select * from ${tables} limit 3" $db
 
 #------------------------------------------------
 #Count per Chrom 
