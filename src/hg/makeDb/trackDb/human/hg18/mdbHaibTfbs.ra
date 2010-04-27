@@ -9860,15 +9860,34 @@ antibody Pol2
 cell K562
 composite wgEncodeHudsonalphaChipSeq
 dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-11-20
-dateUnrestricted 2010-08-19
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
-labVersion 3
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
+project wgEncode
+replicate 1
+setType exp
+subId 52
+
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-20
+dateUnrestricted 2010-08-19
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8.fastq.gz
+grant Myers
+inputType K562/None/Input/PCR2x
+lab HudsonAlpha
+labVersion 3
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -11425,15 +11444,34 @@ antibody Pol2
 cell K562
 composite wgEncodeHudsonalphaChipSeq
 dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-11-20
-dateUnrestricted 2010-08-19
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
-labVersion 4
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
+project wgEncode
+replicate 2
+setType exp
+subId 52
+
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-20
+dateUnrestricted 2010-08-19
+fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8.fastq.gz
+grant Myers
+inputType K562/None/Input/PCR2x
+lab HudsonAlpha
+labVersion 4
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -16544,4 +16582,4 @@ treatment None
 type wig
 view RawSignal
 
-# MAGIC: 2076395921
+# MAGIC: 521652179
