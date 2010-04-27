@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.115 2010/04/27 23:01:09 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.116 2010/04/27 23:14:00 baertsch Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -9,26 +9,6 @@ visibility hide
 
 track gap override
 visibility hide
-
-track ucscRetroAli
-shortLabel Retroposed Genes
-longLabel Retroposed Genes, Including Pseudogenes November 2009 [ucscRetroAli]
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility pack
-nextItemButton on
-retroMrnaInfo ucscRetroInfo
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds
-baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
 
 track tRNAs
 shortLabel tRNA Genes

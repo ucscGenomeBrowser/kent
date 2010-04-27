@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.626 2010/04/23 17:26:20 mary Exp $";
+#	"$Id: trackDb.ra,v 1.627 2010/04/27 23:13:56 baertsch Exp $";
 
 include trackDb.chainNet.ra
 
@@ -396,6 +396,26 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
 searchPriority 50
+
+track ucscRetroAli
+shortLabel Retroposed Genes
+longLabel Retroposed Genes, Including Pseudogenes November 2009 [ucscRetroAli]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+retroMrnaInfo ucscRetroInfo
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
 
 track rgdEst
 shortLabel RGD EST

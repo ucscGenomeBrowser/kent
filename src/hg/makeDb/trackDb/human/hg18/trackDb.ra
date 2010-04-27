@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.479 2010/04/27 23:00:34 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.480 2010/04/27 23:11:16 baertsch Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -419,26 +419,6 @@ hgsid on
 oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
-
-track ucscRetroAli
-shortLabel Retroposed Genes
-longLabel Retroposed Genes, Including Pseudogenes November 2009 [ucscRetroAli]
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility pack
-nextItemButton on
-retroMrnaInfo ucscRetroInfo
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds
-baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
 
 track tRNAs
 shortLabel tRNA Genes
