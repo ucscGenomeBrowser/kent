@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.477 2010/04/12 21:37:49 antonio Exp $";
+#	"$Id: trackDb.ra,v 1.478 2010/04/27 21:44:08 braney Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -3799,3 +3799,13 @@ html ../HInvGeneMrna
 url http://www.jbirc.jbic.or.jp/hinv/soup/pub_Detail.pl?acc_id=$$
 type bed 6
 
+track brTestPlus
+extTable brTestMinus
+shortLabel multiWig Test #1
+longLabel Test of multiwig using bigWigs and two tables
+group x
+priority 144.492
+visibility hide
+type bigWig -120 120
+autoScale Off
+maxHeightPixels 128:32:11
