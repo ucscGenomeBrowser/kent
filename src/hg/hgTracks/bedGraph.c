@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.21 2010/03/25 17:46:01 angie Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.22 2010/04/27 23:31:41 braney Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -213,9 +213,13 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
+struct preDrawContainer *preDrawContainer;
+AllocVar(preDrawContainer);
+preDrawContainer->preDraw = preDraw;
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+	       preDrawContainer, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
+freeMem(preDrawContainer);
 freeMem(preDraw);
 }	/*	bedGraphDrawItems()	*/
 

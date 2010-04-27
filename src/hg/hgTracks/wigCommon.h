@@ -32,6 +32,12 @@ struct wigCartOptions
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);
 /* Create a wigCartOptions from cart contents and tdb. */
 
+struct preDrawContainer
+    {
+    struct preDrawContainer *next;
+    struct preDrawElement *preDraw;
+    };
+
 struct preDrawElement
     {
 	double	max;	/*	maximum value seen for this point	*/
@@ -120,7 +126,7 @@ void wigFindItemLimits(void *items,
 
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
+	MgFont *font, Color color, enum trackVisibility vis, struct preDrawContainer *preDrawContainer,
 	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
 /* Draw once we've figured out predraw. */
 

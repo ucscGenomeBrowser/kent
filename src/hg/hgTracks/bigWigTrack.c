@@ -11,7 +11,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.9 2010/03/25 17:46:01 angie Exp $";
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.10 2010/04/27 23:31:41 braney Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -19,46 +19,82 @@ static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 /* Allocate predraw area. */
 int preDrawZero, preDrawSize;
-struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+struct preDrawContainer *preDrawList = NULL;
 
 /* Get summary info from bigWig */
 int summarySize = width;
 struct bbiSummaryElement *summary;
 AllocArray(summary, summarySize);
-if (bigWigSummaryArrayExtended(tg->bbiFile, chromName, winStart, winEnd, summarySize, summary))
-    {
-    /* Convert format to predraw */
-    int i;
-    for (i=0; i<summarySize; ++i)
-        {
-	struct preDrawElement *pe = &preDraw[i + preDrawZero];
-	struct bbiSummaryElement *be = &summary[i];
-	pe->count = be->validCount;
-	pe->min = be->minVal;
-	pe->max = be->maxVal;
-	pe->sumData = be->sumData;
-	pe->sumSquares = be->sumSquares;
-	}
 
-    /* Call actual graphing routine. */
-    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-		   preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+struct bbiFile *bbiFile ;
+for(bbiFile = tg->bbiFile; bbiFile ; bbiFile = bbiFile->next)
+    {
+    struct preDrawContainer *preDrawContainer;
+    struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+    AllocVar(preDrawContainer);
+    preDrawContainer->preDraw = preDraw;
+    slAddHead(&preDrawList, preDrawContainer);
+
+    if (bigWigSummaryArrayExtended(bbiFile, chromName, winStart, winEnd, summarySize, summary))
+	{
+	/* Convert format to predraw */
+	int i;
+	for (i=0; i<summarySize; ++i)
+	    {
+	    struct preDrawElement *pe = &preDraw[i + preDrawZero];
+	    struct bbiSummaryElement *be = &summary[i];
+	    pe->count = be->validCount;
+	    pe->min = be->minVal;
+	    pe->max = be->maxVal;
+	    pe->sumData = be->sumData;
+	    pe->sumSquares = be->sumSquares;
+	    }
+	}
     }
 
-freeMem(preDraw);
+/* Call actual graphing routine. */
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+
+struct preDrawContainer *nextContain;
+for(; preDrawList ; preDrawList = nextContain)
+    {
+    nextContain = preDrawList->next;
+    freeMem(preDrawList->preDraw);
+    freeMem(preDrawList);
+    }
 freeMem(summary);
 }
 
 static void bigWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
-if (tg->bbiFile == NULL)
+char *extTableString = trackDbSetting(tg->tdb, "extTable");
+
+if (extTableString != NULL)
     {
-    /* Figure out bigWig file name. */
+    // if there's an extra table, read this one in too
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
     char *fileName = bbiNameFromTable(conn, tg->mapName);
-    tg->bbiFile = bigWigFileOpen(fileName);
+    struct bbiFile *bbiFile = bigWigFileOpen(fileName);
+    slAddHead(&tg->bbiFile, bbiFile);
+
+    fileName = bbiNameFromTable(conn, extTableString);
+    bbiFile = bigWigFileOpen(fileName);
+    slAddHead(&tg->bbiFile, bbiFile);
+
     hFreeConn(&conn);
+    }
+else
+    {
+    if (tg->bbiFile == NULL)
+	{
+	/* Figure out bigWig file name. */
+	struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+	char *fileName = bbiNameFromTable(conn, tg->mapName);
+	tg->bbiFile = bigWigFileOpen(fileName);
+	hFreeConn(&conn);
+	}
     }
 }
 
