@@ -90,7 +90,7 @@ static void getGenbankInfo(struct sqlConnection *conn, struct mappingInfo *mi)
 {
 char query[512], **row;
 struct sqlResult *sr;
-char *defDb = hDefaultDb();
+char *defDb = database; 
 
 /* if id has been modified for multi-level ancestor mappings:
  *    NM_012345.1-1.1 -> db:NM_012345a.1.1
@@ -148,14 +148,16 @@ else if (startsWith("retro", tbl))
     strcpy(mi->geneSet, "Mrna");
 else
     strcpy(mi->geneSet, "Retro");
-if (suffix != NULL)
+if (suffix != NULL && strlen(suffix) > 0)
     mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo%s where name='%s'", mi->tblPre, mi->geneSet, suffix,
                        mappedId);
 else
+    {
     mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo where name='%s'", mi->tblPre, mi->geneSet,
                        mappedId);
+    }
 parseSrcId(mi);
 getGenbankInfo(conn, mi);
 return mi;
@@ -797,7 +799,7 @@ psl = loadAlign(conn, mi, start);
 if (startsWith("August",mi->geneSet))
     safef(acc, sizeof(acc), "aug-%s.T1",mi->seqId);
 else
-    safef(acc, sizeof(acc), "%s.%d",mi->seqId, mi->gbCurVer);
+    safef(acc, sizeof(acc), "%s",mi->seqId);
 // value is: extFile seqTbl extFileTbl
 if ((nwords != (int)ArraySize(words)) || !sameString(words[0], "extFile"))
     errAbort("invalid %s track setting: %s ", BASE_COLOR_USE_SEQUENCE, spec);
@@ -806,10 +808,11 @@ char *extTable = words[2];
 rnaSeq = hDnaSeqGet(database, acc, seqTable, extTable);
 if (rnaSeq == NULL)
     {
+    safef(acc, sizeof(acc), "%s.%d",mi->seqId, mi->gbCurVer);
     rnaSeq = hDnaSeqGet(database, acc, "seq", "extFile");
     if (rnaSeq == NULL)
-        errAbort("can't get mRNA sequence from %s prefix %s for %s from %s", 
-            database, mi->geneSet, acc, track);
+        errAbort("can't get mRNA sequence from %s prefix %s for %s from %s mappedId %s", 
+            database, mi->geneSet, acc, track, mappedId);
     }
 sqlDisconnect(&defDbConn);
 showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cds.start, cds.end);
