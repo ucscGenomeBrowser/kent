@@ -5,7 +5,7 @@
 #                          corresponding tableName in order to look up the dateReleased in trackDb.
 #                          Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.37 2010/04/22 21:26:51 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.38 2010/04/27 22:59:03 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -297,7 +297,7 @@ my $fileMask = "*.gz *.bb *.bw *.bam";
 my $preamble = "preamble.html";
    $preamble = $opt_preamble if(defined $opt_preamble);
 
-my $mdb = "mdb";
+my $mdb = "metaDb";
    $mdb = $opt_mdb if(defined $opt_mdb);
 
 usage() if (scalar(@ARGV) < 1);
