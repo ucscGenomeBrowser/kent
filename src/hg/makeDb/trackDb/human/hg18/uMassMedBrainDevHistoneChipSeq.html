@@ -1,0 +1,61 @@
+<H2>Description</H2>
+<P>
+This track displays maps of chromatin state in the given cell types as
+identified by chromatin immunoprecipitation followed by high-throughput
+sequencing (ChIP-Seq).</P>
+<P>
+In the given cell type, ChIP-Seq begins by using formaldehyde to cross-link
+histones and other DNA-associated proteins to genomic DNA. The cross-linked
+chromatin is subsequently extracted, mechanically sheared, and
+immunoprecipitated using specific antibodies. After reversal of cross-links,
+the immunoprecipitated DNA is sequenced and mapped to the human reference
+genome. The relative enrichment of each antibody-target (epitope) across
+the genome is inferred from the density of mapped fragments. </P>
+<P>
+Measurements were made in neuronal and non-neuronal nuclei collected from
+prefrontal cortex (PFC) of 11 individuals ranging in age from 0.5 to 69 years. </P>
+
+<H2>Display Conventions and Configuration</H2>
+
+<H2>Methods</H2>
+<P>
+Human prefrontal cortex samples used in this study were obtained from the
+Brain and Tissue Bank for Developmental Disorders, University of Maryland
+and a brain bank at the University of California, Irvine.  Nuclei extraction,
+chromatin immunoprecipitation and sequencing were carried out as described
+in Cheung I, et al. (2010). Sequencing was performed on an Illumina
+Genome Analyzer (GA II).</P>
+<P>
+The length of sequence reads was 36 bp. Reads were mapped using Bowtie (version 0.11.3, 
+Langmead B, Trapnell C, Pop M, Salzberg SL (2009)) allowing up to one
+mismatch to map all sequence reads to the gender appropriate human genome hg18,
+and 67-87% of the reads in the neuronal samples mapped to one unique
+location in the genome. The mapped reads were analyzed using the MACS software
+package (version 1.3.5, Zhang Y, et al. (2008)) with bw = 230 bp, as defined
+experimentally by PCR, tSize = 36 bp, and other parameters set at default.</P>
+
+<H2>Verification</H2>
+<P>
+A subset of the peaks that were positioned more than
+10 kb from annotated genes were experimentally tested for 
+RNA expression in PFC neurons by qRT-PCR and
+in situ hybridization to verify that H3K4me3 mapping can serve as a
+guide to uncover unannotated novel and cell-specific transcripts in the brain.</P>
+
+<H2>Credits</H2>
+<P>
+Chromatin immunoprecipitation experiments were carried out by Iris Cheung,
+Yan Jiang and Schahram Akbarian; analyses were performed by Hennady Shulha,
+Jie Wang and Zhiping Weng at the University of Massachusetts Medical School.</P>
+
+<H2>References</H2>
+<P>
+Cheung I, et al. Developmental regulation and individual differences of
+neuronal H3K4me3 epigenomes in the prefrontal cortex. Proc. Natl. Acad. Sci.
+USA (in press for May 2010 publication).</P>
+<P>
+Langmead B, Trapnell C, Pop M, Salzberg S. 
+<A TARGET=_blank HREF="http://genomebiology.com/2009/10/3/R25/">Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</A>.
+<EM>Genome Biol.</EM> 2009;10:R25.</P>
+<P>
+Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nussbaum C, Myers RM, Brown M, Li W, et al. 2008. <A TARGET=_BLANK HREF="http://genomebiology.com/2008/9/9/R137">Model-based Analysis of ChIP-Seq (MACS)</A>. <em>Genome Biol</em> 9: R137

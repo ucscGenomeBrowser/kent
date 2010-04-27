@@ -1,8 +1,9 @@
-#	"$Id: trackDb.ra,v 1.480 2010/04/27 23:11:16 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.481 2010/04/27 23:25:21 kate Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
 include trackDb.wgEncode.ra
+include trackDb.pipeline.ra
 
 track clonePos override
 longLabel Clone Coverage
