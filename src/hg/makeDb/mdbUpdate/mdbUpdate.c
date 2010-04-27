@@ -5,7 +5,7 @@
 #include "mdb.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: mdbUpdate.c,v 1.2 2010/04/15 19:26:54 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdbUpdate.c,v 1.3 2010/04/27 22:40:12 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -13,7 +13,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "mdbUpdate - Adds, updates or removes metadata objects and variables from the 'mdb' metadata table.\n"
+  "mdbUpdate - Adds, updates or removes metadata objects and variables from the '" MDB_DEFAULT_NAME "' metadata table.\n"
   "usage:\n"
   "   mdbUpdate {db} [-table= [-force]] [-recreate] [-test [-verbose=2]]\n"
   "                  [-obj= [-type=] [-delete] [-var=] [-binary] [-val=]]\n"
@@ -62,14 +62,14 @@ errAbort(
   "            Creates or empties the named metadata table.\n"
   "  mdbUpdate hg18 -test vars=\"composite=wgEncodeDukeDNase\" -delete\n"
   "            Tests the delete of all objects that have the named composite defined.\n"
-  "  mdbUpdate hg18 -table=mdb encBroadHistone.mdb.ra -replace\n"
-  "            Replaces all metadata for objects found in the provided file.\n"
+  "  mdbUpdate hg18 -table=" MDB_DEFAULT_NAME " mdbBroadHistone.ra -replace\n"
+  "            Replaces all metadata in the shared table for objects found in the provided file.\n"
   "            File must have been printed with mdbPrint.\n"
   );
 }
 
 static struct optionSpec optionSpecs[] = {
-    {"table",   OPTION_STRING}, // default "mdb"
+    {"table",   OPTION_STRING}, // default "metaDb"
     {"obj",     OPTION_STRING}, // objName or objId
     {"vars",    OPTION_STRING}, // Select set of object by vars
     {"var",     OPTION_STRING}, // variable

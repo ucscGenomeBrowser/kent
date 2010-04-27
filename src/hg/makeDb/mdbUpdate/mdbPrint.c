@@ -4,7 +4,7 @@
 #include "options.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdbPrint.c,v 1.4 2010/04/23 22:33:19 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdbPrint.c,v 1.5 2010/04/27 22:40:12 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 
@@ -12,7 +12,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "mdbPrint - Prints metadata objects and variables from the mdb metadata table.\n"
+  "mdbPrint - Prints metadata objects and variables from the '" MDB_DEFAULT_NAME "' metadata table.\n"
   "usage:\n"
   "   mdbPrint {db} [-table=] [-byVar] [-ra/-line/-countObjs/-countVars/-countVals]\n"
   "                 [-all]\n"
@@ -57,7 +57,7 @@ errAbort(
 }
 
 static struct optionSpec optionSpecs[] = {
-    {"table",    OPTION_STRING}, // default "mdb"
+    {"table",    OPTION_STRING}, // default "metaDb"
     {"ra",       OPTION_BOOLEAN},// ra format
     {"line",     OPTION_BOOLEAN},// linear format
     {"countObjs",OPTION_BOOLEAN},// returns only count of objects
