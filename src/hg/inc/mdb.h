@@ -91,7 +91,7 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 
 #include "trackDb.h"
 
-#define MDB_DEFAULT_NAME "mdb"
+#define MDB_DEFAULT_NAME "metaDb"
 
 // The mdb holds metadata primarily for tables.
 //   Many types of objects could be supported, though currently files are the only other type.

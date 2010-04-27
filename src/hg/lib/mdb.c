@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.4 2010/04/23 02:38:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.5 2010/04/27 22:33:06 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -857,7 +857,7 @@ return mdbObjs;
 }
 
 // ------ Table name and creation ------
-#define MDB_SPEC_LOCATION "/cluster/bin/sqlCreate/mdb.sql"
+#define MDB_SPEC_LOCATION "/cluster/bin/sqlCreate/metaDb.sql"
 
 void mdbReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly)
 // Creates ore Recreates the named mdb.
@@ -897,7 +897,7 @@ char*mdbTableName(struct sqlConnection *conn,boolean mySandBox)
 char *tblName = NULL;
 char *root = NULL;
 char *sand = NULL;
-char *name = cfgOption("db.mdb");
+char *name = cfgOption("db.metaDb");
 if(name == NULL)
     {
     name = cfgOption("db.trackDb");
