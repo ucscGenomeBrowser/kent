@@ -68,6 +68,7 @@ expProbeTable expRatio
 expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
+extTable *
 filePos *
 filterBy genePred bed
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
