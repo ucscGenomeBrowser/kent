@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.136 2010/04/26 23:17:40 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.137 2010/04/27 20:28:28 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5414,7 +5414,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(SMALLDYBUF);
     labelStarted = FALSE; /* reset for each item in track */
-    if ((useGeneName || useAcc || useMim) && isNative)
+    if ((useGeneName || useAcc || useMim) && !isNative)
         {
         char *org = getOrganismShort(conn, lf->name);
         if (org != NULL)
