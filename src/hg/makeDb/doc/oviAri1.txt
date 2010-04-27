@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: oviAri1.txt,v 1.4 2010/04/20 17:34:31 chinhli Exp $
+#       $Id: oviAri1.txt,v 1.5 2010/04/27 19:30:46 chinhli Exp $
 
 
 # Ovis aries (domestic sheep) --  ISGC Ovis_aries_1.0 (2010-02-01)
@@ -429,10 +429,8 @@ TMPDIR=/scratch/tmp
 
     #	and, finish the rest of netChains.csh manually, the netToAxt step
     #	and the axtToMaf step, log is in axtChain/finiChains.log
-    #   (cp netChains.csh finiChains.sh and rm the done steps)
-    ./finiChains.sh > finiChains.log &
+
     #  about 4 hours
-XXXX 04-20-2010
     #	after done with netChains - continuing with load:
     cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -445,59 +443,30 @@ XXXX 04-20-2010
 # limit at 160 Gb
 limit datasize 163840m
 limit vmemoryuse 163840m
-    #	and finish it manually (???? 7h39m)
+    #	and finish it manually
      ./loadUp.csh > loadUp.log 2>&1 &
-
-    cat fb.oviAri1.chainBosTau4Link.txt 
-    #	1478903080 bases of 2231298548 (66.280%) in intersection
+ ulimit -d  163840000
+ ulimit -v 163840000
+    cat fb.bosTau4.chainOviAri1Link.txt 
+    #   1319167970 bases of 2731830700 (48.289%) in intersection
     #	then continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-continue=download -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > download.log 2>&1 &
-XXX - running Tue Mar 30 13:18:09 PDT 2010
-    #	creating a bigWig graph to see the chain pileups:
-    cd /hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-4-09/axtChain
-    zcat oviAri1.bosTau4.all.chain.gz | grep "^chain " \
-	| awk '{printf "%s\t%d\t%d\t%s\t%s\t%s\n", $3, $6, $7, $8, $2, $5}' \
-	> all.bed
-    #	find the largest score:
-    ave -col=5 all.bed
-Q1 5300.000000
-median 8265.000000
-Q3 14079.000000
-average 12729.401671
-min 3000.000000
-max 1506828099.000000
-count 144157201
-total 1835034915327.000000
-standard deviation 419128.061072
-    #	normalize the scores to 0-1000:
-    awk '
-{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,(1000*$5)/1506828099, $6}' \
-        all.bed | sort -k1,1 -k2,2n > all.chain.bed
-    bedGraphToBigWig all.chain.overlap.wigVar ../../../chrom.sizes all.chain.bw
-    bigWigInfo all.chain.bw
-version: 3
-isCompressed: yes
-isSwapped: 0
-primaryDataSize: 188,237,695
-primaryIndexSize: 1,267,372
-zoomLevels: 10
-chromCount: 20
-basesCovered: 2,255,615,700
-mean: 28.797958
-min: 1.000000
-max: 14674.000000
-std: 202.526527
-    ln -s `pwd`/all.chain.bw /gbdb/oviAri1/bbi/bosTau4ChainPileUp.bw
+	-chainMinScore=3000 -chainLinearGap=medium > download.part3.log 2>&1 &
+    # failed again with 
+    #    needLargeMem: Out of memory - request size 1073741824 bytes, errno: 12
+    #   add the following to netSynteny.csh
+# limit at 160 Gb
+limit datasize 163840m
+limit vmemoryuse 163840m
+    #   and finish it manually
 
-    hgsql oviAri1 -e 'drop table if exists bosTau4ChainPileUp; \
-            create table bosTau4ChainPileUp (fileName varchar(255) not null); \
-            insert into bosTau4ChainPileUp values
-	("/gbdb/oviAri1/bbi/bosTau4ChainPileUp.bw");'
-
+     tcsh
+     cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
+     ./netSynteny.csh > & netSynteny_tcsh.log 
+==== begin pig ==========
     #	and the swap
     mkdir /hive/data/genomes/bosTau4/bed/blastz.oviAri1.swap
     cd /hive/data/genomes/bosTau4/bed/blastz.oviAri1.swap
@@ -514,31 +483,7 @@ export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
 
-chainSwap /hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-03-27/axtChain/oviAri1.bosTau4.all.chain.gz stdout \
-| nice chainSort stdin stdout | nice gzip -c > bosTau4.oviAri1.all.chain.gz
-
-    #	it also runs out of memory in the lift over file creation:
-    export sizeG=188743680
-    ulimit -d $sizeG
-    ulimit -v $sizeG
-
-    netChainSubset -verbose=0 noClass.net bosTau4.oviAri1.all.chain.gz stdout \
-	| chainStitchId stdin stdout | gzip -c > bosTau4.oviAri1.over.chain.gz
-
-    #	and netChains.csh is finished manually with this added:
-# memory limit 160 Gb
-limit datasize 163840m
-limit vmemoryuse 163840m
-
-    #	manually run the loadUp.csh with this added:
-# memory limit 160 Gb
-limit datasize 163840m
-limit vmemoryuse 163840m
-    #	real    498m5.861s
-
-    cat fb.bosTau4.chainOviAri1Link.txt
-    #	1383557633 bases of 2731830700 (50.646%) in intersection
-_________ end pig --------------
+======== end pig =======
 
    #   and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
