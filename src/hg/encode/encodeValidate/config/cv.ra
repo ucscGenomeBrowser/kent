@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.231 2010/04/26 20:20:17 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.232 2010/04/28 01:14:09 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1909,7 +1909,7 @@ vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 4295
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
-targetId GeneCard: GC08M037820
+targetId GeneCard:GC08M037820
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2&search=Brf2
 validation missing
 
@@ -2095,6 +2095,32 @@ vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4&search=elk4
+validation missing
+
+term ERalpha_a
+tag ERalpha(a)
+type Antibody
+antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
+targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-543
+orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
+lab Ruan
+targetId GeneCard:ESR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
+validation missing
+
+term ERalpha_b
+tag ERalpha(b)
+type Antibody
+antibodyDescription Monoclonal antibody raised in mouse against the NH2 terminus of the human ER (estrogen receptor alpha), using a KLH-conjugated synthetic peptide (Q19-K32).
+targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
+vendorName Diagenode
+vendorId MAb-009-050
+orderUrl http://www.diagenode.com/en/catalog/antibodies-3/nuclear-receptor-30/product/er-alpha-monoclonal-antibody-185
+lab Ruan
+targetId GeneCard:ESR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
 validation missing
 
 term Egr-1
