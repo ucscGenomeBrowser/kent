@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.222 2010/04/22 20:57:07 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.223 2010/04/28 23:14:08 braney Exp $
 
 use warnings;
 use strict;
@@ -2014,6 +2014,20 @@ foreach my $ddfLine (@ddfLines) {
         if($type eq 'wig') {
             my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
             print TRACK_RA "    type $type $placeHolder\n";
+        } elsif($type eq 'bigWig') {
+            my @cmds;
+            my $tmpFile = $Encode::autoCreatedPrefix . $type  ;
+            push @cmds, "bigWigInfo -minMax @{$ddfLine->{files}}";
+            my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
+            if(my $err = $safe->exec()) {
+                print STDERR  "ERROR: failed bigWigInfo: " . $safe->stderr() . "\n";
+                # don't show end-user pipe error(s)
+                pushError(\@errors, "failed creation of trackDb");
+            }
+            my $lines = Encode::readFile($tmpFile);
+            my $line = shift(@{$lines});
+            print TRACK_RA "    type bigWig " . $line . "\n";
+
         } elsif($type eq 'gtf') { # GTF is converted to and loaded as genePred
             print TRACK_RA "    type genePred\n";
         } elsif($type eq 'tagAlign') { # tagAligns are bed 6 but with column called 'sequence' instead of 'name'
