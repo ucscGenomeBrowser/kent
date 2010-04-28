@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.234 2010/04/28 18:11:11 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.235 2010/04/28 20:59:18 vsmalladi Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -2528,7 +2528,7 @@ targetId GeneCard:GC22P022453
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC22P022453
 validation missing
 
-term IRF-1
+term IRF1
 tag IRF1
 type Antibody
 antibodyDescription IRF-1 (C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of IRF-1 of human origin.
