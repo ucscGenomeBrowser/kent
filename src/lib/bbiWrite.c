@@ -7,6 +7,7 @@
 #include "cirTree.h"
 #include "bPlusTree.h"
 #include "bbiFile.h"
+#include "obscure.h"
 
 void bbiWriteDummyHeader(FILE *f)
 /* Write out all-zero header, just to reserve space for it. */
@@ -172,10 +173,14 @@ for (;;)
 	    	lf->fileName, lf->lineIx);
 	    }
 	hashAdd(uniqHash, chrom, NULL);
+	struct hashEl *chromHashEl = hashLookup(chromSizesHash, chrom);
+	if (chromHashEl == NULL)
+	    errAbort("%s is not found in chromosome sizes file", chrom);
+	int chromSize = ptToInt(chromHashEl->val);
 	AllocVar(usage);
 	usage->name = cloneString(chrom);
 	usage->id = id++;
-	usage->size = hashIntVal(chromSizesHash, chrom);
+	usage->size = chromSize;
 	slAddHead(&usageList, usage);
 	lastStart = -1;
 	}
