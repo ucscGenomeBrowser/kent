@@ -7,7 +7,7 @@
 #include "genePredReader.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: genePredToFakePsl.c,v 1.3 2008/09/03 19:18:39 markd Exp $";
+static char const rcsid[] = "$Id: genePredToFakePsl.c,v 1.4 2010/04/28 04:46:37 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -33,16 +33,63 @@ errAbort(
   "\n");
 }
 
-void fakePslFromGenePred(char *db, char *fileTbl, char *pslOut, char *cdsOut)
+static void cnvGenePredCds(struct genePred *gp, int qSize, FILE *cdsFh)
+/* determine CDS and output */
+{
+int e, off = 0;
+int qCdsStart = -1, qCdsEnd = -1;
+int eCdsStart, eCdsEnd;
+
+for (e = 0; e < gp->exonCount; ++e)
+    {
+    if (genePredCdsExon(gp, e, &eCdsStart, &eCdsEnd))
+        {
+        if (qCdsStart < 0)
+            qCdsStart = off + (eCdsStart - gp->exonStarts[e]);
+        qCdsEnd = off + (eCdsEnd - gp->exonStarts[e]);
+        }
+    off += gp->exonEnds[e] - gp->exonStarts[e];
+    } 
+if (gp->strand[0] == '-')
+    reverseIntRange(&qCdsStart, &qCdsEnd, qSize);
+fprintf(cdsFh,"%s\t%d..%d\n", gp->name, qCdsStart+1, qCdsEnd); /* genbank cds is closed 1-based */
+}
+
+static void cnvGenePred(char *db, struct genePred *gp, FILE *pslFh, FILE *cdsFh)
+/* convert a genePred to a psl and CDS */
+{
+int chromSize = hChromSize(db, gp->chrom);
+int e = 0, qSize=0;
+
+for (e = 0; e < gp->exonCount; ++e)
+    qSize+=(gp->exonEnds[e] - gp->exonStarts[e]);
+struct psl *psl = pslNew(gp->name, qSize, 0, qSize,
+                         gp->chrom, chromSize, gp->txStart, gp->txEnd,
+                         gp->strand, gp->exonCount, 0);
+psl->blockCount = gp->exonCount;		    
+for (e = 0; e < gp->exonCount; ++e)
+    {
+    psl->blockSizes[e] = (gp->exonEnds[e] - gp->exonStarts[e]);
+    psl->qStarts[e] = e==0 ? 0 : psl->qStarts[e-1] + psl->blockSizes[e-1];
+    psl->tStarts[e] = gp->exonStarts[e];
+    }
+psl->match = qSize;	
+psl->tNumInsert = psl->blockCount-1; 
+psl->tBaseInsert = (gp->txEnd - gp->txStart) - qSize;
+pslTabOut(psl, pslFh);
+pslFree(&psl);
+if (gp->cdsStart < gp->cdsEnd)
+    cnvGenePredCds(gp, qSize, cdsFh);
+}
+
+static void fakePslFromGenePred(char *db, char *fileTbl, char *pslOut, char *cdsOut)
 /* check a genePred */
 {
 struct sqlConnection *conn = NULL;
 struct genePredReader *gpr;
 struct genePred *gp;
-int iRec = 0;
-int chromSize = -1; 
-FILE *out = mustOpen(pslOut, "w");
-FILE *cds = mustOpen(cdsOut, "w");
+FILE *pslFh = mustOpen(pslOut, "w");
+FILE *cdsFh = mustOpen(cdsOut, "w");
 
 conn = hAllocConn(db);
 
@@ -57,61 +104,12 @@ else
 
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
-    struct psl *psl;
-    int e = 0, qSize=0, qCdsStart=0, qCdsEnd=0;
-    
-    iRec++;
-    chromSize = hChromSize(db, gp->chrom);
-    for (e = 0; e < gp->exonCount; ++e)
-	qSize+=(gp->exonEnds[e] - gp->exonStarts[e]);
-    psl = pslNew(gp->name, qSize, 0, qSize,
-                 gp->chrom, chromSize, gp->txStart, gp->txEnd,
-                 gp->strand, gp->exonCount, 0);
-    psl->blockCount = gp->exonCount;		    
-    for (e = 0; e < gp->exonCount; ++e)
-	{
-	psl->blockSizes[e] = (gp->exonEnds[e] - gp->exonStarts[e]);
-	psl->qStarts[e] = e==0 ? 0 : psl->qStarts[e-1] + psl->blockSizes[e-1];
-	psl->tStarts[e] = gp->exonStarts[e];
-	}
-    psl->match = qSize;	
-    psl->tNumInsert = psl->blockCount-1; 
-    psl->tBaseInsert = (gp->txEnd - gp->txStart) - qSize;
-    pslTabOut(psl, out);
-    qCdsStart = gp->cdsStart - gp->txStart;
-    qCdsEnd = gp->cdsEnd - gp->txStart;
-    
-    for (e = 1; e < gp->exonCount; ++e)
-	{
-	int intronSize = gp->exonStarts[e] - gp->exonEnds[e-1];
-	if (gp->exonStarts[e] <= gp->cdsStart)
-	    qCdsStart -= intronSize;
-	if (gp->exonStarts[e] <= gp->cdsEnd)
-	    qCdsEnd -= intronSize;
-	} 
-    
-    if (gp->strand[0] == '-')
-	{
-	int temp = qCdsEnd;
-	qCdsEnd = qSize - qCdsStart;
-	qCdsStart = qSize - temp;
-	}
-	
-    fprintf(cds,"%s\t", gp->name);
-    //if (gp->strand[0] == '-')
-    //	fprintf(cds,"complement(");
-    
-    fprintf(cds,"%d..%d", qCdsStart+1, qCdsEnd); /* genbank cds is closed 1-based */
-    
-    //if (gp->strand[0] == '-')
-    //	fprintf(cds,")");
-    fprintf(cds,"\n");
-    
-    pslFree(&psl);
+    cnvGenePred(db, gp, pslFh, cdsFh);
     }
 genePredReaderFree(&gpr);
-if (conn != NULL)
-    hFreeConn(&conn);
+hFreeConn(&conn);
+carefulClose(&pslFh);
+carefulClose(&cdsFh);
 }
 
 int main(int argc, char *argv[])
