@@ -525,7 +525,6 @@ setType input
 subId 741
 submittedDataVersion V2 - PCR1x
 treatment None
-type wig
 view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Ebf
@@ -1913,7 +1912,6 @@ setType input
 subId 741
 submittedDataVersion V2 - PCR1X
 treatment None
-type wig
 view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Egr1
@@ -2840,7 +2838,6 @@ setType input
 subId 741
 submittedDataVersion V2 - PCR1x
 treatment None
-type wig
 view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Ebf
@@ -4133,7 +4130,6 @@ setType input
 subId 741
 submittedDataVersion V2 - PCR1X
 treatment None
-type wig
 view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Egr1
@@ -11729,7 +11725,6 @@ softwareVersion Customized Alignment
 subId 774
 tableName wgEncodeHudsonalphaChipSeqRawSignalA549Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalA549Gr
@@ -11755,7 +11750,6 @@ softwareVersion Customized Alignment
 subId 774
 tableName wgEncodeHudsonalphaChipSeqRawSignalA549Gr
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa
@@ -11780,7 +11774,6 @@ setType input
 subId 899
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02
@@ -11805,7 +11798,6 @@ setType input
 subId 901
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02
@@ -11830,7 +11822,6 @@ setType input
 subId 813
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
@@ -11855,7 +11846,6 @@ setType exp
 subId 899
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
@@ -11880,7 +11870,6 @@ setType exp
 subId 1003
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm
@@ -11905,7 +11894,6 @@ setType exp
 subId 803
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm
 treatment DEX_500pM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex50nm
@@ -11930,7 +11918,6 @@ setType exp
 subId 802
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex50nm
 treatment DEX_50nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm
@@ -11955,7 +11942,6 @@ setType exp
 subId 801
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm
 treatment DEX_5nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
@@ -11981,7 +11967,6 @@ softwareVersion 1
 subId 801
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2
@@ -12006,7 +11991,6 @@ setType exp
 subId 809
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2Pcr2xEtoh02
@@ -12031,7 +12015,6 @@ setType exp
 subId 813
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2Pcr2xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xDexa
@@ -12056,7 +12039,6 @@ setType exp
 subId 913
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xDexa
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02
@@ -12081,7 +12063,6 @@ setType exp
 subId 901
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cControl
@@ -12105,7 +12086,6 @@ setType input
 subId 437
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cControl
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cNrsf
@@ -12129,7 +12109,6 @@ setType exp
 subId 437
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cNrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf
@@ -12154,7 +12133,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a
@@ -12179,7 +12157,6 @@ setType exp
 subId 783
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl3Pcr1xBcl3
@@ -12204,7 +12181,6 @@ setType exp
 subId 812
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl3Pcr1xBcl3
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x
@@ -12230,7 +12206,6 @@ softwareVersion 1
 subId 262
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2
@@ -12257,7 +12232,6 @@ subId 741
 submittedDataVersion V2 - PCR1x
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
@@ -12282,7 +12256,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
@@ -12307,7 +12280,6 @@ setType exp
 subId 260
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
@@ -12332,7 +12304,6 @@ setType exp
 subId 67
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
@@ -12357,7 +12328,6 @@ setType exp
 subId 756
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
@@ -12382,7 +12352,6 @@ setType exp
 subId 70
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2
@@ -12407,7 +12376,6 @@ setType exp
 subId 422
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300
@@ -12432,7 +12400,6 @@ setType exp
 subId 795
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
@@ -12457,7 +12424,6 @@ setType exp
 subId 804
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19
@@ -12482,7 +12448,6 @@ setType exp
 subId 806
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3
@@ -12507,7 +12472,6 @@ setType exp
 subId 422
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
@@ -12532,7 +12496,6 @@ setType exp
 subId 52
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
@@ -12557,7 +12520,6 @@ setType exp
 subId 920
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1
@@ -12582,7 +12544,6 @@ setType exp
 subId 422
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
@@ -12607,7 +12568,6 @@ setType exp
 subId 259
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
@@ -12632,7 +12592,6 @@ setType exp
 subId 830
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
@@ -12657,7 +12616,6 @@ setType exp
 subId 71
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1
@@ -12683,7 +12641,6 @@ subId 422
 submittedDataVersion V2 - PCR1x
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
@@ -12708,7 +12665,6 @@ setType exp
 subId 756
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
@@ -12733,7 +12689,6 @@ setType exp
 subId 261
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33
@@ -12758,7 +12713,6 @@ setType exp
 subId 798
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891ControlPcr1x
@@ -12783,7 +12737,6 @@ setType input
 subId 973
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891ControlPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x
@@ -12808,7 +12761,6 @@ setType exp
 subId 976
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x
@@ -12833,7 +12785,6 @@ setType exp
 subId 977
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x
@@ -12858,7 +12809,6 @@ setType exp
 subId 978
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pu1Pcr1x
@@ -12883,7 +12833,6 @@ setType exp
 subId 973
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pu1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x
@@ -12908,7 +12857,6 @@ setType exp
 subId 979
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x
@@ -12933,7 +12881,6 @@ setType input
 subId 981
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x
@@ -12958,7 +12905,6 @@ setType exp
 subId 981
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x
@@ -12983,7 +12929,6 @@ setType exp
 subId 980
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x
@@ -13008,7 +12953,6 @@ setType exp
 subId 994
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescControlPcr1x
@@ -13033,7 +12977,6 @@ setType input
 subId 814
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescControlPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x
@@ -13058,7 +13001,6 @@ setType exp
 subId 814
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x
@@ -13083,7 +13025,6 @@ setType exp
 subId 958
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x
@@ -13108,7 +13049,6 @@ setType exp
 subId 879
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x
@@ -13133,7 +13073,6 @@ setType exp
 subId 833
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Control
@@ -13157,7 +13096,6 @@ setType input
 subId 433
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp
@@ -13182,7 +13120,6 @@ setType exp
 subId 781
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Pol2
@@ -13206,7 +13143,6 @@ setType exp
 subId 433
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Taf1Pcr1xTaf1
@@ -13231,7 +13167,6 @@ setType exp
 subId 782
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Taf1Pcr1xTaf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x
@@ -13256,7 +13191,6 @@ setType exp
 subId 1060
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
@@ -13281,7 +13215,6 @@ setType input
 subId 878
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Fosl2Pcr1x
@@ -13306,7 +13239,6 @@ setType exp
 subId 867
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Fosl2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Gabp
@@ -13331,7 +13263,6 @@ setType exp
 subId 776
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Hey1Pcr1x
@@ -13356,7 +13287,6 @@ setType exp
 subId 876
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Hey1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Jund
@@ -13380,7 +13310,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Jund
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Nrsf
@@ -13404,7 +13333,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2P300
@@ -13428,7 +13356,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2P300
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Pol2
@@ -13452,7 +13379,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x
@@ -13477,7 +13403,6 @@ setType exp
 subId 878
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Sin3ak20
@@ -13501,7 +13426,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Sin3ak20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
@@ -13525,7 +13449,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1
@@ -13550,7 +13473,6 @@ setType exp
 subId 780
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1
@@ -13574,7 +13496,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
@@ -13599,7 +13520,6 @@ setType exp
 subId 832
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x
@@ -13624,7 +13544,6 @@ setType input
 subId 1028
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x
 treatment None
-type wig
 view zRaw
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x
@@ -13649,7 +13568,6 @@ setType exp
 subId 1028
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x
 treatment None
-type wig
 view zRaw
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
@@ -13675,7 +13593,6 @@ softwareVersion 1
 subId 262
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
@@ -13702,7 +13619,6 @@ subId 741
 submittedDataVersion V2 - PCR1X
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
@@ -13727,7 +13643,6 @@ setType exp
 subId 260
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
@@ -13752,7 +13667,6 @@ setType exp
 subId 67
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
@@ -13777,7 +13691,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
@@ -13802,7 +13715,6 @@ setType exp
 subId 70
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
@@ -13827,7 +13739,6 @@ setType exp
 subId 52
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
@@ -13852,7 +13763,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1
@@ -13877,7 +13787,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
@@ -13902,7 +13811,6 @@ setType exp
 subId 259
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
@@ -13927,7 +13835,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
@@ -13952,7 +13859,6 @@ setType exp
 subId 71
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
@@ -13977,7 +13883,6 @@ setType exp
 subId 807
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
@@ -14002,7 +13907,6 @@ setType exp
 subId 261
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
@@ -14026,7 +13930,6 @@ setType input
 subId 435
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Nrsf
@@ -14050,7 +13953,6 @@ setType exp
 subId 435
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
@@ -14074,7 +13976,6 @@ setType input
 subId 436
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
@@ -14098,7 +13999,6 @@ setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf
@@ -14122,7 +14022,6 @@ setType exp
 subId 436
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
@@ -14146,7 +14045,6 @@ setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl
@@ -14170,7 +14068,6 @@ setType input
 subId 438
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf
@@ -14194,7 +14091,6 @@ setType exp
 subId 438
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
@@ -14218,7 +14114,6 @@ setType input
 subId 434
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
@@ -14242,7 +14137,6 @@ setType exp
 subId 434
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
@@ -14267,7 +14161,6 @@ setType exp
 subId 899
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
@@ -14292,7 +14185,6 @@ setType exp
 subId 1003
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm
@@ -14317,7 +14209,6 @@ setType exp
 subId 803
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm
 treatment DEX_500pM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex50nm
@@ -14342,7 +14233,6 @@ setType exp
 subId 802
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex50nm
 treatment DEX_50nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm
@@ -14367,7 +14257,6 @@ setType exp
 subId 801
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm
 treatment DEX_5nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
@@ -14392,7 +14281,6 @@ setType input
 subId 801
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2
@@ -14417,7 +14305,6 @@ setType exp
 subId 809
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02
@@ -14442,7 +14329,6 @@ setType exp
 subId 813
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xDexa
@@ -14467,7 +14353,6 @@ setType exp
 subId 913
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xDexa
 treatment DEX_100nM
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02
@@ -14492,7 +14377,6 @@ setType exp
 subId 901
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02
 treatment EtOH_0.02pct
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
@@ -14516,7 +14400,6 @@ setType input
 subId 437
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cNrsf
@@ -14540,7 +14423,6 @@ setType exp
 subId 437
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cNrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf
@@ -14565,7 +14447,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl11a
@@ -14590,7 +14471,6 @@ setType exp
 subId 783
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl11a
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl3Pcr1xBcl3
@@ -14615,7 +14495,6 @@ setType exp
 subId 812
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl3Pcr1xBcl3
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x
@@ -14641,7 +14520,6 @@ softwareVersion 1
 subId 262
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2
@@ -14668,7 +14546,6 @@ subId 741
 submittedDataVersion V2 - PCR1x
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Ebf
@@ -14693,7 +14570,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Ebf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1
@@ -14718,7 +14594,6 @@ setType exp
 subId 260
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
@@ -14743,7 +14618,6 @@ setType exp
 subId 67
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
@@ -14768,7 +14642,6 @@ setType exp
 subId 759
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
@@ -14793,7 +14666,6 @@ setType exp
 subId 70
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2
@@ -14818,7 +14690,6 @@ setType exp
 subId 422
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878P300
@@ -14843,7 +14714,6 @@ setType exp
 subId 795
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878P300
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20
@@ -14868,7 +14738,6 @@ setType exp
 subId 804
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5n19
@@ -14893,7 +14762,6 @@ setType exp
 subId 806
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5n19
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3
@@ -14918,7 +14786,6 @@ setType exp
 subId 422
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
@@ -14943,7 +14810,6 @@ setType exp
 subId 52
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol24h8Pcr1x
@@ -14968,7 +14834,6 @@ setType exp
 subId 920
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1
@@ -14993,7 +14858,6 @@ setType exp
 subId 422
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20
@@ -15018,7 +14882,6 @@ setType exp
 subId 259
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sp1Pcr1x
@@ -15043,7 +14906,6 @@ setType exp
 subId 830
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sp1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
@@ -15068,7 +14930,6 @@ setType exp
 subId 71
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1
@@ -15094,7 +14955,6 @@ subId 422
 submittedDataVersion V2 - PCR1x
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tcf12
@@ -15119,7 +14979,6 @@ setType exp
 subId 759
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tcf12
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1
@@ -15144,7 +15003,6 @@ setType exp
 subId 261
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Zbtb33
@@ -15169,7 +15027,6 @@ setType exp
 subId 798
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Zbtb33
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x
@@ -15194,7 +15051,6 @@ setType exp
 subId 976
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x
@@ -15219,7 +15075,6 @@ setType exp
 subId 977
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x
@@ -15244,7 +15099,6 @@ setType exp
 subId 978
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pu1Pcr1x
@@ -15269,7 +15123,6 @@ setType exp
 subId 973
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pu1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x
@@ -15294,7 +15147,6 @@ setType exp
 subId 979
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x
@@ -15319,7 +15171,6 @@ setType exp
 subId 981
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x
@@ -15344,7 +15195,6 @@ setType exp
 subId 980
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x
@@ -15369,7 +15219,6 @@ setType exp
 subId 994
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescNrsfPcr1x
@@ -15394,7 +15243,6 @@ setType exp
 subId 814
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescNrsfPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol24h8Pcr1x
@@ -15419,7 +15267,6 @@ setType exp
 subId 958
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol24h8Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol2Pcr1x
@@ -15444,7 +15291,6 @@ setType exp
 subId 879
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescTaf1Pcr1x
@@ -15469,7 +15315,6 @@ setType exp
 subId 833
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescTaf1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Control
@@ -15494,7 +15339,6 @@ softwareVersion SL592
 subId 781
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Gabp
@@ -15519,7 +15363,6 @@ setType exp
 subId 781
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Pol2
@@ -15543,7 +15386,6 @@ setType exp
 subId 433
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Taf1Pcr1xTaf1
@@ -15568,7 +15410,6 @@ setType exp
 subId 782
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Taf1Pcr1xTaf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x
@@ -15593,7 +15434,6 @@ setType exp
 subId 1060
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
@@ -15618,7 +15458,6 @@ setType input
 subId 878
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Fosl2Pcr1x
@@ -15643,7 +15482,6 @@ setType exp
 subId 867
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Fosl2Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Gabp
@@ -15668,7 +15506,6 @@ setType exp
 subId 776
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Hey1Pcr1x
@@ -15693,7 +15530,6 @@ setType exp
 subId 876
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Hey1Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Jund
@@ -15717,7 +15553,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Jund
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Nrsf
@@ -15741,7 +15576,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2P300
@@ -15765,7 +15599,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2P300
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Pol2
@@ -15789,7 +15622,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x
@@ -15814,7 +15646,6 @@ setType exp
 subId 878
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20
@@ -15838,7 +15669,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1
@@ -15863,7 +15693,6 @@ setType exp
 subId 780
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1
@@ -15887,7 +15716,6 @@ setType exp
 subId 432
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
@@ -15912,7 +15740,6 @@ setType exp
 subId 832
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x
@@ -15937,7 +15764,6 @@ setType input
 subId 1028
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x
 treatment None
-type wig
 view zRaw
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x
@@ -15962,7 +15788,6 @@ setType exp
 subId 1028
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x
 treatment None
-type wig
 view zRaw
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x
@@ -15988,7 +15813,6 @@ softwareVersion 1
 subId 262
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2
@@ -16015,7 +15839,6 @@ subId 741
 submittedDataVersion V2 - PCR1X
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1
@@ -16040,7 +15863,6 @@ setType exp
 subId 260
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
@@ -16065,7 +15887,6 @@ setType exp
 subId 67
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Hey1
@@ -16090,7 +15911,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Hey1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
@@ -16115,7 +15935,6 @@ setType exp
 subId 70
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
@@ -16140,7 +15959,6 @@ setType exp
 subId 52
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol24h8
@@ -16165,7 +15983,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol24h8
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pu1
@@ -16190,7 +16007,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pu1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20
@@ -16215,7 +16031,6 @@ setType exp
 subId 259
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Six5
@@ -16240,7 +16055,6 @@ setType exp
 subId 741
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Six5
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
@@ -16265,7 +16079,6 @@ setType exp
 subId 71
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Taf1
@@ -16290,7 +16103,6 @@ setType exp
 subId 807
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Taf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1
@@ -16315,7 +16127,6 @@ setType exp
 subId 261
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
@@ -16339,7 +16150,6 @@ setType input
 subId 435
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
@@ -16363,7 +16173,6 @@ setType exp
 subId 435
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
@@ -16387,7 +16196,6 @@ setType input
 subId 436
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
@@ -16411,7 +16219,6 @@ setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf
@@ -16435,7 +16242,6 @@ setType exp
 subId 436
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
@@ -16459,7 +16265,6 @@ setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl
@@ -16483,7 +16288,6 @@ setType input
 subId 438
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf
@@ -16507,7 +16311,6 @@ setType exp
 subId 438
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
@@ -16531,7 +16334,6 @@ setType input
 subId 434
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf
@@ -16555,7 +16357,6 @@ setType exp
 subId 434
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf
 treatment None
-type wig
 view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
@@ -16579,7 +16380,6 @@ setType input
 subId 6
 tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
-type wig
 view RawSignal
 
-# MAGIC: 525423521
+# MAGIC: 522800921
