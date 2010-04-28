@@ -28631,7 +28631,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.412 2010/04/28 22:32:49 hartera Exp $
+# $Id: hg18.txt,v 1.413 2010/04/28 22:35:21 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28679,7 +28679,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.412 2010/04/28 22:32:49 hartera Exp $
+# $Id: hg18.txt,v 1.413 2010/04/28 22:35:21 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29668,8 +29668,8 @@ see doc/builds.txt for specific details.
 # 2010-03-16 - 2010-03-18. Added metadata to trackDb for the subtracks and#
 # added downloads for the bigWig data files.
 # 2010-04-28 Received new data from Thomas Derrien. Downloaded data and 
-# added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig so sent 
-# a new binary to data providers and they re-created the bigWig files. 
+# added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig 
+# so sent a new binary to data providers and they re-created the bigWig files. 
      mkdir -p /hive/data/genomes/hg18/bed/crgMapability
      cd /hive/data/genomes/hg18/bed/crgMapability
 cat << 'EOF' > temp
