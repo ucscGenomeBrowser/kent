@@ -28631,7 +28631,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.411 2010/04/02 17:26:05 angie Exp $
+# $Id: hg18.txt,v 1.412 2010/04/28 22:32:49 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28679,7 +28679,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.411 2010/04/02 17:26:05 angie Exp $
+# $Id: hg18.txt,v 1.412 2010/04/28 22:32:49 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29667,7 +29667,9 @@ see doc/builds.txt for specific details.
 # Added trackDb entry for the subtracks to the ENCODE Mapability track entry.
 # 2010-03-16 - 2010-03-18. Added metadata to trackDb for the subtracks and#
 # added downloads for the bigWig data files.
- 
+# 2010-04-28 Received new data from Thomas Derrien. Downloaded data and 
+# added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig so sent 
+# a new binary to data providers and they re-created the bigWig files. 
      mkdir -p /hive/data/genomes/hg18/bed/crgMapability
      cd /hive/data/genomes/hg18/bed/crgMapability
 cat << 'EOF' > temp
@@ -29754,7 +29756,41 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg18_H.sapiens.genome
      # Then run encodeDownloadsPages.pl
      /cluster/home/hartera/bin/encodeDownloadsPage.pl -checksum \
           -preamble=preamble.html index.html . 
-           
+
+     # Downloaded and added new bigWig files to /gbdb/hg18/bbi 
+     # (2010-04-28, hartera). New files were created as there was a bug
+     # in the older version of bedGraphToBigWig.          
+     cd /hive/data/genomes/hg18/bed/crgMapability
+     rm temp download.csh download.log 
+cat << 'EOF' > temp
+#!/bin/tcsh -ef
+http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg18.main.mappability-100.bw.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg18.main.mappability-36.bw.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg18.main.mappability-40.bw.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg18.main.mappability-50.bw.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg18.main.mappability-75.bw.bz2
+'EOF'
+     awk '{if ($0 ~ /#/) print; else print "wget --timestamping \"" $0 "\"";}' \
+         temp > download.csh
+     rm temp
+     chmod +x download.csh
+     ./download.csh >& download.log &
+
+     # Add data to /gbdb/. The file names in /gbdb/ are the same as before 
+     # so the tables do not need to be reloaded.
+     cd /hive/data/genomes/hg18/bed/crgMapability
+     bunzip2 *.bz2
+     foreach f (`ls *.bw`)
+        echo $f
+        set g=`echo $f | cut -d "-" -f2`
+        set num=`echo $g | cut -d "." -f1`
+        set mer=`echo "${num}mer"`
+        set nf=`echo "wgEncodeCrgMapabilityAlign${mer}.bw"`
+        echo $nf
+        rm /gbdb/hg18/bbi/${nf}
+        ln -s `pwd`/${f} /gbdb/hg18/bbi/${nf}
+     end
+
 #####################################################################
 # tRNAs track (2010-03-12, Fan RE-BUILT)
 #
