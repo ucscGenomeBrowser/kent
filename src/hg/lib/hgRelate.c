@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.27 2010/02/25 04:08:52 markd Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.28 2010/04/28 17:42:53 galt Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -179,7 +179,7 @@ if (tmpDir == NULL)
 if (tmpDir == NULL)
     tmpDir = "/var/tmp";
 if (inclPid)
-    safef(path, PATH_LEN, "%s/%s.%d.tab", tmpDir, tableName, getpid());
+    safef(path, PATH_LEN, "%s/%s.%d.tab", tmpDir, tableName, (int) getpid()); /* int cast for Solaris */
 else
     safef(path, PATH_LEN, "%s/%s.tab", tmpDir, tableName);
 }
