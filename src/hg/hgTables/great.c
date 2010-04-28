@@ -8,7 +8,7 @@
 #include "textOut.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: great.c,v 1.1 2010/04/22 19:25:22 bristor Exp $";
+static char const rcsid[] = "$Id: great.c,v 1.2 2010/04/28 22:07:49 bristor Exp $";
 
 static struct dyString *getRequestName()
 {
@@ -133,7 +133,7 @@ dispatch();
 
 fflush(stdout);
 fclose(stdout);
-cartSetBoolean(cart, hgtaDoGreatOutput, FALSE);
+cartRemove(cart, hgtaDoGreatOutput);
 stdout = saveStdout;
 htmlOpen("Table Browser integration with GREAT");
 doSubmitToGreat(tn.forCgi);
