@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.233 2010/04/28 01:18:47 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.234 2010/04/28 18:11:11 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1966,8 +1966,8 @@ targetId GeneCard:GC08P128817
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08P128817
 validation missing
 
-term Ccnt2
-tag Ccnt2
+term CCNT2
+tag CCNT2
 type Antibody
 antibodyDescription Goal polyclonal. Raised against an internal region of human CycT2a/b. Recommeded for detection of CycT2a/b of rat, mouse or human origin. Vendor recommeds it use for the folloiwng applications: WB, IF and ELISA.
 targetDescription CycT2 is one of three cyclins that can form a heterodimer with cyclin-dependent kinase 9 (CDK9). The heterodimer is known as positive elongation factor b (P-TEFb) and is responsible for the phosphophorylation of Ser2 of the heptad repeat in the C-terminal domain of RNA polymerase II as well as the negative elongation factors DSIF (hSpt4/hSpt5) and NELF. Phosphorylation of RNA polymerase II and the negative elongation factors by P-TEFb promotes elongation. CycT2 contains a leucine rich domain capable of binding to the C-terminal domain of RNA polymerase II.
