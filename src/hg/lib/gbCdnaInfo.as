@@ -5,8 +5,8 @@ table gbCdnaInfo
     string acc; "Genbank/EMBL accession (without .version)"
     ushort version; "Version number in Genbank"
     string moddate; "Date last modified, in SQL DATE format/ascii YYYY-MM-DD"
-    string type; "Either EST or mRNA.  In SQL an ENUM"
-    string direction; "Enum 5, 3 for read direction 5'/3', or 0 unknown."
+    enum('EST','mRNA') type; "Either EST or mRNA.
+    enum('5','3','0') direction; "5, 3 for read direction 5'/3', or 0 unknown."
     uint source;      "Link to id in source table saying where cDNA came from"
     uint organism;    "Link to id in organism table."
     uint library;     "Link to id in library table."
