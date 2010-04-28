@@ -61,8 +61,18 @@ else
 
 #--------------------------------------------------
 #Display Table name  
+echo
 echo "~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~ "
-echo "$tables"
+echo   "$tables"
+echo
+echo "~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~ "
+echo
+
+# ------------------------------------------------
+#Verify make doc:
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "Verify the makedoc at:"
+echo "~/kent/src/hg/makeDb/doc/$db.txt"
 echo
 
 #------------------------------------------------
@@ -107,7 +117,6 @@ endif
 echo "featureBits -countGaps $db $tables gap"
 featureBits -countGaps $db $tables gap 
 
-		    
 # ------------------------------------------------
 # check Table sort for table:
 
@@ -141,17 +150,12 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check level for html and trackDb entry:"
 findLevel $db $tables
 
-# ------------------------------------------------
-#Verify make doc:
-echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Verify the makedoc at:"
-echo "~/kent/src/hg/makeDb/doc/$db.txt"
-
 #----------------------------------------------
 #Show the first 3 rows
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "Here are the first three rows of the table:"
 hgsql -e "select * from ${tables} limit 3" $db
+echo
 
 #------------------------------------------------
 #Count per Chrom 
@@ -159,6 +163,7 @@ hgsql -e "select * from ${tables} limit 3" $db
     echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
     echo "Check countPerChrom.csh"  
     countPerChrom.csh $db $tables
+    echo
   endif
 endif
 
