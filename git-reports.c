@@ -357,7 +357,8 @@ while (lineFileNext(lf, &line, &lineSize))
         //@@ -99,7 +99,9 @@
 	// saves 17 seconds over the more expensive sed command
 	}
-    fprintf(h, "%s\n", line);
+    if (h)
+	fprintf(h, "%s\n", line);
     }
 if (h)
     {
