@@ -10,7 +10,7 @@
 #include "hmmstats.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.7 2010/04/09 20:32:34 ann Exp $";
+static char const rcsid[] = "$Id: bigWigInfo.c,v 1.8 2010/04/28 22:56:25 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,7 @@ errAbort(
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "   -chroms - list all chromosomes and their sizes\n"
   "   -zooms - list all zoom levels and their sizes\n"
+  "   -minMax - list the min and max on a single line\n"
   );
 }
 
@@ -30,6 +31,7 @@ static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"chroms", OPTION_BOOLEAN},
    {"zooms", OPTION_BOOLEAN},
+   {"minMax", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -45,6 +47,14 @@ void bigWigInfo(char *fileName)
 /* bigWigInfo - Print out information about bigWig file.. */
 {
 struct bbiFile *bwf = bigWigFileOpen(fileName);
+
+if (optionExists("minMax"))
+    {
+    struct bbiSummaryElement sum = bbiTotalSummary(bwf);
+    printf("%f %f\n", sum.minVal, sum.maxVal);
+    return;
+    }
+
 printf("version: %d\n", bwf->version);
 printf("isCompressed: %s\n", (bwf->uncompressBufSize > 0 ? "yes" : "no"));
 printf("isSwapped: %d\n", bwf->isSwapped);
