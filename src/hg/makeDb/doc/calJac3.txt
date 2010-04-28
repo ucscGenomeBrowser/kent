@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.7 2010/04/26 16:00:20 markd Exp $
+#	$Id: calJac3.txt,v 1.8 2010/04/28 23:16:15 hiram Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1172,6 +1172,21 @@ close (FH);
     ln -s ../../lastz.mm9/axtChain/calJac3.mm9.synNet.maf.gz .
     ln -s ../../lastz.canFam2/axtChain/calJac3.canFam2.synNet.maf.gz .
     ln -s ../../lastz.monDom5/axtChain/calJac3.monDom5.synNet.maf.gz .
+
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
+    for D in gorGor2 tarSyr1 papHam1 otoGar1 micMur1
+do
+    mkdir ${D}
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+        ../singleMafs/calJac3.${D}.rbest.maf.gz
+done
+for D in ponAbe2 hg19 panTro2 rheMac2 mm9 canFam2 monDom5
+do
+    mkdir ${D}
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+        ../singleMafs/calJac3.${D}.synNet.maf.gz
+done
 
     cd /hive/data/genomes/calJac3/bed/multiz13way
     mkdir penn
