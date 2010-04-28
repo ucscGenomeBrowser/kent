@@ -1189,3 +1189,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - hg19: chr10:135,483,678-135,488,584 DUUX4 and others in weird, tangled tandem dup, maybe
   retro copies
+
+- rn4:chr1:78,970,961-79,025,593 - nasty xeno refseq alignments in tandem dup.
