@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.43 2010/04/26 17:26:13 mary Exp $";
+#	"$Id: trackDb.ra,v 1.44 2010/04/28 17:40:30 mary Exp $";
 
 include trackDb.chainNet.ra
 
@@ -34,15 +34,6 @@ color 0,100,0
 altColor 255,128,0
 viewLimits 30:70
 type wig 0 100 
-
-track xenoRefGene override
-release public
-html xenoRefGeneNoHs
-shortLabel Human RefSeq
-longLabel Human RefSeq Genes
-priority 35
-visibility pack
-type genePred
 
 track chainHg16 override
 shortLabel $o_db Chain
