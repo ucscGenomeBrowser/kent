@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.37 2010/01/04 19:12:30 kent Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.38 2010/04/29 23:39:53 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -112,14 +112,12 @@ if(isNameAtCompositeLevel(tdb,name))
             {
             if(setting[0] != '\0')
                 *absMin = sqlDouble(setting);
-            freeMem(setting);
             }
         setting = trackDbSettingByView(tdb,MAX_LIMIT);
         if(setting != NULL)
             {
             if(setting[0] != '\0')
                 *absMax = sqlDouble(setting);
-            freeMem(setting);
             }
         else
             {
@@ -127,7 +125,6 @@ if(isNameAtCompositeLevel(tdb,name))
             if(setting != NULL)
                 {
                 parseColonRange(setting, absMin, absMax);
-                freeMem(setting);
                 }
             }
         }
@@ -136,7 +133,6 @@ if(isNameAtCompositeLevel(tdb,name))
     if(setting != NULL)
         {
         parseColonRange(setting, retMin, retMax);
-        freeMem(setting);
         }
     }
 }
