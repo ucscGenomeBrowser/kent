@@ -1,5 +1,5 @@
 table transRegCodeMotif
-"A transcription factor binding motif according to Harbison Gordon et al""
+"A transcription factor binding motif according to Harbison Gordon et al"
     (
     string name;			"Motif name."
     int columnCount;			"Count of columns in motif."

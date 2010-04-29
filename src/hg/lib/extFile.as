@@ -4,6 +4,6 @@ table extFile
     uint id;		"ID/index"
     string name;	"File name (without path)"
     string path;	"Full path of file"
-    long size;		"byte size of file"
+    uint size;		"byte size of file"
     )
 

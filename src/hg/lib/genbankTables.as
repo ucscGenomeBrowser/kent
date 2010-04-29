@@ -14,8 +14,8 @@ table gbLoaded
     string loadRelease;	"release version that was loaded"
     string loadUpdate;	"update that was loaded (date or 'full')"
     string accPrefix;   "first two characters of accessions (or empty)"
-    timestamp time;	"time that this entry was inserted"
-    boolean extFileUpdated;	"true if extFile has been updated"
+    string time;	"time that this entry was inserted"
+    ubyte extFileUpdated;	"true if extFile has been updated"
     )
 
 table gbStatus
@@ -23,7 +23,7 @@ table gbStatus
     (
     string acc;		"GenBank accession"
     short version;	"GenBank version number suffix"
-    date modDate;	"last modified date"
+    string modDate;	"last modified date"
     enum type;		"Full length ('mRNA') or EST ('EST')"
     enum srcDb;		"Source database: 'GenBank' or 'RefSeq'"
     enum orgCat;	"Organism category: this ('native') or other ('xeno')"
@@ -35,7 +35,7 @@ table gbStatus
     string metaUpdate;	"update where metadata was obtained (date or 'full')"
     string extRelease;	"release version containing the external file"
     string extUpdate;	"update containing the external file (date or 'full')"
-    timestamp time;	"time that this entry was inserted"
+    string time;	"time that this entry was inserted"
     )
 
 table mgcFullStatus

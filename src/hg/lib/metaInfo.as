@@ -3,5 +3,5 @@ table metaInfo
     (
     string name;       "customTrash table name"
     int useCount;      "Number of times this table used"
-    datetime lastUse;  "table most-recent-usage date."
+    string lastUse;  "table most-recent-usage date."
     )
