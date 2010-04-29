@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1644 2010/04/19 20:46:31 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1645 2010/04/29 02:56:41 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4179,7 +4179,7 @@ dyStringPrintf(trackDbJson, "\t%s: {", track->mapName);
 if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
     dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->tableName);
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               track->shortLabel, track->longLabel, track->canPack, track->limitedVis);
+               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
 
 #endif
@@ -4509,7 +4509,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	if(dragZooming && assemblySupportsGeneSuggest(database))
-            hWrites(" gene <input type='text' size='8' name='hgt.suggest' id='suggest'>\n");
+            hWrites(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> <input type='text' size='8' name='hgt.suggest' id='suggest'>\n");
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");

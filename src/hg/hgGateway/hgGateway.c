@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.116 2010/03/18 00:51:28 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.117 2010/04/29 02:54:35 larrym Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -98,7 +98,7 @@ puts(
 "<td align=center valign=baseline>assembly</td>\n"
 "<td align=center valign=baseline>position or search term</td>\n");
 if(supportsSuggest)
-    puts("<td align=center valign=baseline>gene</td>\n");
+    puts("<td align=center valign=baseline><a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a></td>\n");
 puts(
 "<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
