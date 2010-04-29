@@ -12,8 +12,8 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.39 2010/03/31 18:37:19 braney Exp $";
-static char *version = "$Revision: 1.39 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.40 2010/04/29 23:38:50 braney Exp $";
+static char *version = "$Revision: 1.40 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -1114,10 +1114,43 @@ return errs;
 }
 
 #ifdef USE_BAM
+unsigned char *seq;
+
+struct bamCallbackData
+{
+char *file;
+char *chrom;
+int *errs;
+int count;
+};
+
 int parseBamRecord(const bam1_t *bam, void *data)
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
  * into a linkedFeatures item, and add it to tg->items. */
 {
+struct bamCallbackData *bd = data;
+char *chrom = bd->chrom;
+char *file = bd->file;
+int *errs = bd->errs;
+unsigned char *qname = &bam->data[bam->core.n_cigar];
+if (qname == NULL)
+    errAbort("bad qname");
+
+//printf("%d\n",bamIsRc(bam));
+seq = &bam->data[bam->core.l_qname + bam->core.n_cigar];
+
+if (bam->core.n_cigar != 1)
+    errAbort("validateFiles doesn't support indel alignments at the moment");
+
+   if (! checkMismatchesSeq(file, bd->count, chrom, bam->core.pos,  bam->core.pos + bam->core.l_qseq, bamIsRc(bam) ? '-' : '+', bamGetQuerySequence(bam, TRUE)))
+    {
+printf("align: ciglen %d qlen %d pos %d lenght %d strand %c\n",bam->core.n_cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
+printf("data: %s %s\n",bam->data,  bamGetQuerySequence(bam, FALSE));
+    if (++(*errs) >= maxErrors)
+        errAbort("Aborting .. found %d errors\n", *errs);
+    }
+    
+bd->count++;
 return 0;
 }
 
@@ -1166,6 +1199,30 @@ for(ii=0; ii < head->n_targets; ii++)
 
 if (errs)
     errAbort("Aborting... %d errors found in BAM file\n", errs);
+
+if (!genome)
+    return errs; // only check sequence if 2bit file specified
+
+bam_index_t *idx = bam_index_load(file);
+struct bamCallbackData *bd;
+AllocVar(bd);
+
+bd->file = file;
+bd->errs = &errs;
+bd->count = 0;
+
+for(ii=0; ii < head->n_targets; ii++)
+    {
+    char position[256];
+    safef(position, sizeof position, "%s:%d-%d",head->target_name[ii], 0, head->target_len[ii]);
+    int chromId, start, end;
+    int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
+
+    bd->chrom = head->target_name[ii];
+    ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
+
+    }
+//    printf("final count %d\n", bd->count);
 
 return errs;
 }
