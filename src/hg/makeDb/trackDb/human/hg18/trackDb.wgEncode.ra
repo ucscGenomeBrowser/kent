@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.958 2010/04/26 23:14:24 krish Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.959 2010/04/29 18:52:39 vanessa Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4553,7 +4553,7 @@ type broadPeak
 wgEncode 1
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Astrocy 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Astrocy cells)
@@ -4562,7 +4562,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Astrocy treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Astrocy 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Astrocy cells)
@@ -4571,7 +4571,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Astrocy treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Chorion 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Chorion cells)
@@ -4580,7 +4580,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Chorion treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Fibrobl 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Fibrobl cells)
@@ -4589,7 +4589,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Fibrobl treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Fibrobl 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Fibrobl cells)
@@ -4598,7 +4598,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Fibrobl treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Gliobla 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Gliobla cells)
@@ -4607,7 +4607,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Gliobla treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Gliobla 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Gliobla cells)
@@ -4616,7 +4616,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Gliobla treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray
     shortLabel GM12878 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12878 cells)
@@ -4626,7 +4626,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12878 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray
     shortLabel GM12878 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12878 cells)
@@ -4636,7 +4636,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12878 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray
     shortLabel GM12878 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM12878 cells)
@@ -4646,7 +4646,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12878 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12891 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12891 cells)
@@ -4655,7 +4655,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12891 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12891 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12891 cells)
@@ -4664,7 +4664,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12891 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12892 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12892 cells)
@@ -4673,7 +4673,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12892 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12892 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12892 cells)
@@ -4682,7 +4682,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12892 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM18507 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM18507 cells)
@@ -4691,7 +4691,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM18507 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM18507 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM18507 cells)
@@ -4700,7 +4700,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM18507 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM18507 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM18507 cells)
@@ -4709,7 +4709,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM18507 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19238 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19238 cells)
@@ -4718,7 +4718,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19238 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19238 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19238 cells)
@@ -4727,7 +4727,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19238 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19239 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19239 cells)
@@ -4736,7 +4736,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19239 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19239 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19239 cells)
@@ -4745,7 +4745,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19239 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19240 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19240 cells)
@@ -4754,7 +4754,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19240 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19240 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19240 cells)
@@ -4763,7 +4763,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19240 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -4773,7 +4773,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -4783,7 +4783,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HeLa-S3 cells)
@@ -4793,7 +4793,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -4803,7 +4803,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNa4h  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -4813,7 +4813,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNa4h  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -4823,7 +4823,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNg4h  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -4833,7 +4833,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNg4h  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HepG2 cells)
@@ -4843,7 +4843,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HepG2 cells)
@@ -4853,7 +4853,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HepG2 cells)
@@ -4863,7 +4863,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HMEC 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HMEC cells)
@@ -4872,7 +4872,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HMEC treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HMEC 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HMEC cells)
@@ -4881,7 +4881,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HMEC treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HUVEC 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HUVEC cells)
@@ -4891,7 +4891,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HUVEC treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HUVEC 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HUVEC cells)
@@ -4901,7 +4901,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HUVEC treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
@@ -4910,7 +4910,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=androgen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
@@ -4919,7 +4919,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=androgen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
@@ -4928,7 +4928,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
@@ -4937,7 +4937,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
@@ -4947,7 +4947,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=androgen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
@@ -4957,7 +4957,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=androgen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
@@ -4967,7 +4967,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
@@ -4977,7 +4977,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
@@ -4986,7 +4986,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
@@ -4995,7 +4995,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=estrogen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
@@ -5004,7 +5004,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=estrogen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
@@ -5013,7 +5013,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=vehicle  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
@@ -5022,7 +5022,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=vehicle  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Medullo 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Medullo cells)
@@ -5031,7 +5031,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Medullo treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Medullo 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Medullo cells)
@@ -5040,7 +5040,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Medullo treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel NHEK 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in NHEK cells)
@@ -5050,7 +5050,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=NHEK treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel NHEK 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in NHEK cells)
@@ -5060,7 +5060,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=NHEK treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Osteobl 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Osteobl cells)
@@ -5069,7 +5069,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Osteobl treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Osteobl 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Osteobl cells)
@@ -5078,7 +5078,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Osteobl treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel ProgFib 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in ProgFib cells)
@@ -5087,7 +5087,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=ProgFib treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib
-    release alpha
+    release alpha,beta
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel ProgFib 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in ProgFib cells)
