@@ -30,28 +30,28 @@ beta:
 # recursive target to do install to DEST, with extra excludes EXCL
 # this queries CVS to find out the list of files to install, so
 # avoid the usual crud that collects in directories.
-doInstall:
-	rsync -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
-
+doInstall: doRsync
 #	ln -sf ENCODE ${DEST}/encode
 
-doInstallCancerPublic:
-	rsync -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
-
+doInstallCancerPublic: doRsync
 	mv ${DEST}/index.html ${DEST}/index.html.org
 	ln -sf ${DEST}/cancerGenomics/index.cancerGenomics.html ${DEST}/index.html
 	mv index.html index.html.org
 
-doInstallCancerSU2C:
-	rsync -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
-
+doInstallCancerSU2C: doRsync
 	mv ${DEST}/index.html ${DEST}/index.html.org
 	ln -sf ${DEST}/cancerGenomics/index.cancerGenomics.su2c.html ${DEST}/index.html
 	mv index.html index.html.org
 
-doInstallCancerTCGA:
-	rsync -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
-
+doInstallCancerTCGA: doRsync
 	mv ${DEST}/index.html ${DEST}/index.html.org
 	ln -sf ${DEST}/cancerGenomics/index.cancerGenomics.tcga.html ${DEST}/index.html
 	mv index.html index.html.org
+
+# Run rsync.  Care is taking to preserve times and mode on files.  rsync is
+# smart about recreating file under the current users so that times and
+# permissions maybe modified.  However, problems happen when a directory
+# is not owned by the current users.  These options attemp to work around it.
+# use create care in changing
+doRsync:
+	umask 002; rsync --times --recursive --executability --omit-dir-times --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
