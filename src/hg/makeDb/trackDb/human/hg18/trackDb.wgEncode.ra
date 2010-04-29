@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.959 2010/04/29 18:52:39 vanessa Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.960 2010/04/29 23:49:49 rhead Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8356,7 +8356,7 @@ wgEncode 1
 
         track wgEncodeUwDGFHotspotsK562
         release alpha,beta
-        subTrack wgEncodeUwDGFViewHotspots off
+        subTrack wgEncodeUwDGFViewHotspots on
         shortLabel K562 Hspot
         longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in K562 cells)
         subGroups view=Hotspots cellType=K562
@@ -8414,7 +8414,7 @@ wgEncode 1
 
         track wgEncodeUwDGFPeaksK562
         release alpha,beta
-        subTrack wgEncodeUwDGFViewPeaks off
+        subTrack wgEncodeUwDGFViewPeaks on
         shortLabel K562 Pk
         longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 0.5%) (in K562 cells)
         subGroups view=Peaks cellType=K562
@@ -8473,7 +8473,7 @@ wgEncode 1
 
         track wgEncodeUwDGFSignalK562
         release alpha,beta
-        subTrack wgEncodeUwDGFViewSignal off
+        subTrack wgEncodeUwDGFViewSignal on
         shortLabel K562 Sig
         longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in K562 cells)
         subGroups view=Signal cellType=K562
@@ -8538,7 +8538,7 @@ wgEncode 1
 
         track wgEncodeUwDGFRawSignalK562
         release alpha,beta
-        subTrack wgEncodeUwDGFViewRawSignal off
+        subTrack wgEncodeUwDGFViewRawSignal on
         shortLabel K562 Raw
         longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in K562 cells)
         subGroups view=RawSignal cellType=K562
