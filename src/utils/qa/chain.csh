@@ -372,26 +372,19 @@ endif
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-#echo  "Find the correct parameters for the 3 trackDb variables"
-#echo  "which appears in the chain-OtherOrg download file."
-#echo  "Compare this to the chain description page."
-echo   "Go to the chain/net description page for this track"
-echo   "and compare the output which is taken from the chain-OtherOrg download file:"
+echo   "Go to the chain/net description page for this track, and make"
+echo   "sure that the matrix, the chainMinScore, and the chainLinearGap"
+echo   "are displayed correctly The correct values for the 3 variables"
+echo   "are given below. They were taken from the README page in the"
+echo   "in the downloads directory.:"
 echo
 
 getMatrixLines.csh $db $otherDb
 getChainLines.csh $db $otherDb
 
-
-set OrgName=`hgsql -Ne "SELECT organism FROM dbDb WHERE NAME LIKE '$db%'" hgcentraltest` 
-
-set OrgName=`echo $OrgName | tr '[A-Z]' '[a-z]'` 
-
-
 echo
-echo   "If the output doesn't match, put overrides in this file with the above output: " 
-echo   "/cluster/home/$USER/kent/src/hg/makeDb/trackDb/$OrgName/trackDb.chainNet.ra"
-echo   "*Note use the path name to guide you. It may not work perfectly in all cases."
+echo   "If any of the values are displayed incorrectly, adjust them in"
+echo   "trackDb.ra."
 
 
 # -------------------------------------------------
