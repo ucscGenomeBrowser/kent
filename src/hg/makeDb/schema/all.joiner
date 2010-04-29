@@ -2952,7 +2952,7 @@ tablesIgnored $gbd
     chromInfo
     cpgIsland
     cpgIslandExt
-    ctgPos
+    ctgPos%
     cytoBand
     cytoBandIdeo
     evofold
@@ -2963,9 +2963,11 @@ tablesIgnored $gbd
     gc5Base
     gcPercent
     genscanSubopt
+    %gold
     grp
     hgFindSpec%
     history
+    intronEst
     knownAlt
     miRNA
     nestedRepeats
@@ -3010,7 +3012,6 @@ tablesIgnored $gbd
     uwNucOccDennis
     uwNucOccMec
 
-
 tablesIgnored $kgDb
     pbAaDist_
     pbAnomLimit
@@ -3019,7 +3020,6 @@ tablesIgnored $kgDb
     pep%Dist
 
 tablesIgnored hg19
-    gold
     bacEndPairsBad
     multizMHCSummary
     netSyn_mann_hap4
@@ -3073,25 +3073,7 @@ tablesIgnored mm9
     crgMapability%
     rest
 
-tablesIgnored $calJac
-    gold
-
-tablesIgnored $petMar
-    %gold
-    intronEst
-
-tablesIgnored $braFlo
-    %gold
-    intronEst
-
-tablesIgnored $cavPor
-    gold
-
-tablesIgnored $cb
-    chr%_gold
-
 tablesIgnored $ce
-    chr%_gold
     chr%_wabaCbr
     wabaCbr
     nucleosomeControl
@@ -3121,67 +3103,23 @@ tablesIgnored $dm
     flyreg
     flyreg2
 
-tablesIgnored $loxAfr
-    gold
-
-tablesIgnored $equCab
-    chr%_gold
-
-tablesIgnored $fr
-    chr%_gold
-
 tablesIgnored $galGal
-    chr%_gold
     supercontig
     caCondor454
 
 tablesIgnored $danRer
-    chr%_gold
-    ctgPos2
     wz_ests
 
-tablesIgnored $caePb
-    chr%_gold
-    ctgPos2
-
-tablesIgnored $caeRem
-    chr%_gold
-    ctgPos2
-
-tablesIgnored $caeJap
-    chr%_gold
-    ctgPos2
-
-tablesIgnored $priPac
-    chr%_gold
-    ctgPos2
-
 tablesIgnored $canFam
-    chr%_gold
     genomicSuperDups
 
-tablesIgnored $droYak
-    chr%_gold
-
-tablesIgnored $droMult
-    gold
-    intronEst
-
-tablesIgnored $anoCar
-    gold
-
 tablesIgnored $anoGam
-    chr%_gold
     anoEstNcl
 
 tablesIgnored $bosTau
-    gold
-    intronEst
     contigOrient
 
 tablesIgnored $apiMel
-    gold
-    intronEst
     brhInparalog
     modelRefGene
     scaffolds
@@ -3256,13 +3194,13 @@ tablesIgnored $hg
     cnpSharpSampleCount
     cnpSharpSamples
     cnpTuzun
-    ctgPos
     delConrad
     delConrad2
     delHinds
     delHinds2
     delMccarroll
     dgv
+    encode%
     eponine
     exaptedRepeats
     fox2ClipClusters
@@ -3309,123 +3247,6 @@ tablesIgnored $hg
     wgRna
     zoom1_affyTranscriptome
     zoom2_affyTranscriptome
-    encodeAffyChIpRnapHl60PvalHr00
-    encodeAffyChIpRnapHl60PvalHr02
-    encodeAffyChIpRnapHl60PvalHr08
-    encodeAffyChIpRnapHl60PvalHr32
-    encodeAffyChIpRnapHl60SitesHr00
-    encodeAffyChIpRnapHl60SitesHr02
-    encodeAffyChIpRnapHl60SitesHr08
-    encodeAffyChIpRnapHl60SitesHr32
-    encodeAffyRnaHl60SigHr00
-    encodeAffyRnaHl60SigHr02
-    encodeAffyRnaHl60SigHr08
-    encodeAffyRnaHl60SigHr32
-    encodeAffyRnaHl60SitesHr00
-    encodeAffyRnaHl60SitesHr02
-    encodeAffyRnaHl60SitesHr08
-    encodeAffyRnaHl60SitesHr32
-    encodeAffyEc1BrainCerebellumSites
-    encodeAffyEc51BrainCerebellumSites
-    encodeAffyEc1BrainFrontalLobeSites
-    encodeAffyEc51BrainFrontalLobeSites
-    encodeAffyEc1BrainHippocampusSites
-    encodeAffyEc51BrainHippocampusSites
-    encodeAffyEc1BrainHypothalamusSites
-    encodeAffyEc51BrainHypothalamusSites
-    encodeAffyEc1FetalKidneySites
-    encodeAffyEc51FetalKidneySites
-    encodeAffyEc1FetalSpleenSites
-    encodeAffyEc51FetalSpleenSites
-    encodeAffyEc1PlacentaSites
-    encodeAffyEc51PlacentaSites
-    encodeAffyEc1TestisSites
-    encodeAffyEc51TestisSites
-    encodeAffyEc1FetalTestisSites
-    encodeAffyEc51FetalTestisSites
-    encodeAffyEc1ProstateSites
-    encodeAffyEc51ProstateSites
-    encodeAffyEc1OvarySites
-    encodeAffyEc51OvarySites
-    encodeAffyEc1HeLaC1S3Sites
-    encodeAffyEc51HeLaC1S3Sites
-    encodeAffyEc1GM06990Sites
-    encodeAffyEc51GM06990Sites
-    encodeAffyEc1HepG2Sites
-    encodeAffyEc51HepG2Sites
-    encodeAffyEc1K562Sites
-    encodeAffyEc51K562Sites
-    encodeAffyEc1TertBJSites
-    encodeAffyEc51TertBJSites
-    encodeAffyEc1BrainCerebellumSignal
-    encodeAffyEc51BrainCerebellumSignal
-    encodeAffyEc1BrainFrontalLobeSignal
-    encodeAffyEc51BrainFrontalLobeSignal
-    encodeAffyEc1BrainHippocampusSignal
-    encodeAffyEc51BrainHippocampusSignal
-    encodeAffyEc1BrainHypothalamusSignal
-    encodeAffyEc51BrainHypothalamusSignal
-    encodeAffyEc1FetalKidneySignal
-    encodeAffyEc51FetalKidneySignal
-    encodeAffyEc1FetalSpleenSignal
-    encodeAffyEc51FetalSpleenSignal
-    encodeAffyEc1PlacentaSignal
-    encodeAffyEc51PlacentaSignal
-    encodeAffyEc1TestisSignal
-    encodeAffyEc51TestisSignal
-    encodeAffyEc1FetalTestisSignal
-    encodeAffyEc51FetalTestisSignal
-    encodeAffyEc1ProstateSignal
-    encodeAffyEc51ProstateSignal
-    encodeAffyEc1OvarySignal
-    encodeAffyEc51OvarySignal
-    encodeAffyEc1HeLaC1S3Signal
-    encodeAffyEc51HeLaC1S3Signal
-    encodeAffyEc1GM06990Signal
-    encodeAffyEc51GM06990Signal
-    encodeAffyEc1HepG2Signal
-    encodeAffyEc51HepG2Signal
-    encodeAffyEc1K562Signal
-    encodeAffyEc51K562Signal
-    encodeAffyEc1TertBJSignal
-    encodeAffyEc51TertBJSignal
-    encodeEvoFold
-    encodeGisChip%
-    encodeGencodeGenePolyA%
-    enocdeGencodeRaceFrags%
-    encodeNhgriDnaseHs%
-    encodeRegulomeDnaseGM06990%
-    encodeSangerChip%
-    encodeStanfordPromoters%
-    encodeUcsdChipAch3Imr90
-    encodeUcsdChipMeh3k4Imr90
-    encodeUcsdChipRnapHct116
-    encodeUcsdChipRnapHela
-    encodeUcsdChipRnapImr90
-    encodeUcsdChipRnapThp1
-    encodeUcsdChipTaf250Hct116
-    encodeUcsdChipTaf250Hela
-    encodeUcsdChipTaf250Imr90
-    encodeUcsdChipTaf250Thp1
-    encodeUcsdNgChipKnownSites
-    encodeUcsdNgChipNovelSites
-    encodeUcsdNgChipSignal
-    encodeUcsdNgHeLaH3K4me3_p0
-    encodeUcsdNgHeLaH3K4me3_p30
-    encodeUcsdNgHeLaRnap_p0
-    encodeUcsdNgHeLaRnap_p30
-    encodeUcsdNgValChipH3K4me
-    encodeUcsdNgValChipH3ac
-    encodeUcsdNgValChipRnap
-    encodeUcsdNgValChipTaf
-    encodeUncFaireSignal
-    encodeUncFairePeaks
-    encodeUncFairePeaksChipotle
-    encodeUvaDnaRep%
-    encodeYaleChipPval%
-    encodeYaleChipSignal%
-    encodeYaleChipSites%
-    encodeTba%
     kiddEichlerValidAbc7
     kiddEichlerValidAbc8
     kiddEichlerValidAbc9
@@ -3438,20 +3259,16 @@ tablesIgnored $hg
     wgEncode%
 
 tablesIgnored $mm
-    chr%_gold
     syntenyRat
     syntenyHuman
-    ctgPos
     rikenCageCtssMinus
     rikenCageCtssPlus
     rikenCageTc
 
 tablesIgnored $panTro
-    chr%_gold
     humanDels
 
 tablesIgnored $rn
-    chr%_gold
     all_sts_primer
     bactigPos
     recombRateRat
@@ -3459,12 +3276,9 @@ tablesIgnored $rn
     syntenyHuman
 
 tablesIgnored $sacCer
-    chr%_gold
-    chr%_gap
     2micron_mrna
     2micron_intronEst
     2micron_est
-    2micron_gold
     2micron_gap
     sgdClone
     yeastP2P
@@ -3473,16 +3287,12 @@ tablesIgnored $sacCer
     uwFootprintsTagCounts
 
 tablesIgnored $tetNig
-    gold
     ecoresHg17
     cytokines
     hoxGenes
 
 tablesIgnored $felCat
-    gold
-    intronEst
     microsat
-    ctgPos2
 
 tablesIgnored hg16
     chicken_hmrg
@@ -3496,33 +3306,11 @@ tablesIgnored hg17
 tablesIgnored canFam2
     uncertified
 
-tablesIgnored equCab2
-    ctgPos2
-
 tablesIgnored oryLat2
     microsat
 
-tablesIgnored oryCun2
-    ctgPos2
-    gold
-    intronEst
-
 tablesIgnored susScr2
     bosTau4ChainPileUp
-    gold
-    ctgPos2
 
-tablesIgnored ailMel1
-    gold
 
-tablesIgnored aplCal1
-    gold
-    intronEst
 
-tablesIgnored oviAri1
-    gold
-    ctgPos2
-
-tablesIgnored calJac3
-    intronEst
-    ctgPos2
