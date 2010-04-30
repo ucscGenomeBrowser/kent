@@ -229,8 +229,9 @@
 #include "gwasCatalog.h"
 #include "parClick.h"
 #include "mdb.h"
+#include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1616 2010/04/26 23:17:40 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1617 2010/04/30 21:24:50 braney Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2281,6 +2282,32 @@ char *geneTable = tdb->tableName;
 boolean foundPep = FALSE;
 
 showGenePos(geneName, tdb);
+if (startsWith("ENCODE Gencode",tdb->longLabel))
+    {
+    char *yaleTable = trackDbSetting(tdb, "yalePseudoAssoc");
+
+    if ((yaleTable != NULL) && (hTableExists(database, yaleTable)))
+        {
+        struct sqlConnection *conn = hAllocConn(database);
+        char query[512];
+        safef(query, sizeof(query),
+            "select * from %s where transcript = '%s'", yaleTable, geneName);
+        char buffer[512];
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char *yaleUrl = trackDbSetting(tdb, "yaleUrl");
+        char **row;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct yaleGencodeAssoc *ya = yaleGencodeAssocLoad(row);
+            safef(buffer, sizeof buffer, "%s/%s",yaleUrl,ya->yaleId);
+            printf("<B>Yale pseudogene:</B> <a href=\"%s\" target=\"_blank\">%s</a><br>\n", buffer, ya->yaleId);
+
+            }
+        sqlFreeResult(&sr);
+        hFreeConn(&conn);
+        }
+    }
+
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
