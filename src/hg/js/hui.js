@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.51 2010/04/27 00:17:23 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.52 2010/04/30 00:27:21 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -412,25 +412,39 @@ function matSubCBsSelected()
 }
 
 /////////////////// subtrack configuration support ////////////////
-
 function compositeCfgUpdateSubtrackCfgs(inp)
 {
 // Updates all subtrack configuration values when the composite cfg is changed
+    // If view association then find it:
+    var view = "";
+    var daddy = $(inp).parents(".blueBox");
+    if(daddy.length == 1) {
+        var classList = $(daddy[0]).attr("class").split(" ");
+        if(classList.length == 2) {
+            view = classList[1];
+        }
+    }
     var suffix = inp.name.substring(inp.name.indexOf("."));  // Includes '.'
     //if(suffix.length==0)
     //    suffix = inp.name.substring(inp.name.indexOf("_"));
     if(suffix.length==0) {
-        alert("Unable to parse '"+inp.name+"'");
+        warn("Unable to parse '"+inp.name+"'");
         return true;
     }
     if(inp.type.indexOf("select") == 0) {
         var list = $("select[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
+        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
         if($(list).length>0) {
             if(inp.multiple != true)
                 $(list).attr('selectedIndex',inp.selectedIndex);
             else {
-                $(list).each(function() {  // for all dependent (subtrack) multi-selects
+                $(list).each(function(view) {  // for all dependent (subtrack) multi-selects
                     sel = this;
+                    if(view != "") {
+                        var hasClass = $(this).parents(".blueBox." + view);
+                        if(hasClass.length != 0)
+                            return;
+                    }
                     $(this).children('option').each(function() {  // for all options of dependent mult-selects
                         $(this).attr('selected',$(inp).children('option:eq('+this.index+')').attr('selected')); // set selected state to independent (parent) selected state
                     });
@@ -441,17 +455,20 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     }
     else if(inp.type.indexOf("checkbox") == 0) {
         var list = $("checkbox[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
+        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
         if($(list).length>0)
             $(list).attr("checked",$(inp).attr("checked"));
     }
     else if(inp.type.indexOf("radio") == 0) {
         var list = $("input:radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
         list = $(list).filter("[value='"+inp.value+"']")
+        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
         if($(list).length>0)
             $(list).attr("checked",true);
     }
     else {  // Various types of inputs
         var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
+        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
         if($(list).length>0)
             $(list).val(inp.value);
         //else {
