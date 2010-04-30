@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.46 2010/02/08 19:28:55 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.47 2010/04/30 23:54:51 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -90,7 +90,6 @@ speciesCodonDefault danRer4
 speciesGroups vertebrate mammal
 sGroup_vertebrate fr1 tetNig1 xenTro2
 sGroup_mammal monDom4 mm8 hg18
-speciesDefaultOff fr1
 treeImage phylo/danRer4_7way.gif
 
 track nscanGene override
