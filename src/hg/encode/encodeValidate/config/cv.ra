@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.235 2010/04/28 20:59:18 vsmalladi Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.236 2010/04/30 15:25:54 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3923,6 +3923,12 @@ term insulin
 tag INSLN
 description Human DMEM with 0.5% BSA supplemented with 100nM insulin and 10uM 22-hydroxycholesterol for 6h. (Snyder)
 type treatment
+
+term MNaseD
+tag MNaseD
+description "Fragmented using micrococcal nuclease digestion"
+type treatment
+label MNase
 
 term pravastatin
 tag PRAVAST
