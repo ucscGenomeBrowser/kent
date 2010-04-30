@@ -6,8 +6,9 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.15 2009/11/19 05:31:21 markd Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.16 2010/04/30 19:57:34 bsuh Exp $";
 
+#define DEFAULT_MAX_ROW 100
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
 #define DEFAULT_FACTOR 5
@@ -23,6 +24,7 @@ errAbort(
   "   -tolerate - Just ignore bad input rather than aborting.\n"
   "   -minCol=N - Filter out blocks with fewer than N columns (default %d)\n"
   "   -minRow=N - Filter out blocks with fewer than N rows (default %d)\n"
+  "   -maxRow=N - Filter out blocks with >= N rows (default %d)\n"
   "   -factor - Filter out scores below -minFactor * (ncol**2) * nrow\n"
         /* score cutoff recommended by Webb Miller */
   "   -minFactor=N - Factor to use with -minFactor (default %d)\n"
@@ -32,7 +34,7 @@ errAbort(
   "   -overlap - Reject overlapping blocks in reference (assumes ordered blocks)\n"
   "   -componentFilter=filename - Filter out blocks without a component listed in filename \n"
   "   -speciesFilter=filename - Filter out blocks without a species listed in filename \n",
-        DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_FACTOR
+        DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_MAX_ROW, DEFAULT_FACTOR
   );
 }
 
@@ -40,6 +42,7 @@ static struct optionSpec options[] = {
    {"tolerate", OPTION_BOOLEAN},
    {"minCol", OPTION_INT},
    {"minRow", OPTION_INT},
+   {"maxRow", OPTION_INT},
    {"minScore", OPTION_FLOAT},
    {"factor", OPTION_BOOLEAN},
    {"minFactor", OPTION_INT},
@@ -54,6 +57,7 @@ static struct optionSpec options[] = {
 /* record number of rejected blocks, and reason */
 int rejectMinCol = 0;
 int rejectMinRow = 0;
+int rejectMaxRow = 0;
 int rejectMinScore = 0;
 int rejectMinFactor = 0;
 int rejectNeedComp = 0;
@@ -63,6 +67,7 @@ int rejectOverlap = 0;
 
 int minCol = DEFAULT_MIN_COL;
 int minRow = DEFAULT_MIN_ROW;
+int maxRow = DEFAULT_MAX_ROW;
 boolean gotMinScore = FALSE;
 double minScore;
 boolean gotMinFactor = FALSE;
@@ -143,6 +148,13 @@ if (nrow < minRow)
     verbose(3, "%s:%d nrow=%d\n", maf->components->src, 
                     maf->components->start, nrow);
     rejectMinRow++;
+    return FALSE;
+    }
+if (nrow > maxRow)
+    {
+    verbose(3, "%s:%d nrow=%d\n", maf->components->src, 
+                    maf->components->start, nrow);
+    rejectMaxRow++;
     return FALSE;
     }
 if (ncol < minCol)
@@ -242,6 +254,8 @@ if (rejectMinCol)
     fprintf(stderr, "rejected minCol: %d\n", rejectMinCol);
 if ( rejectMinRow)
     fprintf(stderr, "rejected minRow: %d\n", rejectMinRow);
+if ( rejectMaxRow)
+    fprintf(stderr, "rejected maxRow: %d\n", rejectMaxRow);
 if ( rejectMinScore)
     fprintf(stderr, "rejected minScore: %d\n", rejectMinScore);
 if (rejectMinFactor)
@@ -254,7 +268,7 @@ if (rejectSpeciesFilter)
     fprintf(stderr, "rejected speciesFilter: %d\n", rejectSpeciesFilter);
 if ( rejectOverlap)
     fprintf(stderr, "rejected overlap: %d\n", rejectOverlap);
-categorizedRejects = rejectMinCol + rejectMinRow + rejectMinScore +
+categorizedRejects = rejectMinCol + rejectMinRow + rejectMaxRow + rejectMinScore +
                      rejectMinFactor + rejectNeedComp + rejectComponentFilter +
                      rejectOverlap;
 if (rejects != categorizedRejects)
@@ -282,6 +296,7 @@ if (optionExists("factor"))
     }
 minCol = optionInt("minCol", DEFAULT_MIN_COL);
 minRow = optionInt("minRow", DEFAULT_MIN_ROW);
+maxRow = optionInt("maxRow", DEFAULT_MAX_ROW);
 componentFile = optionVal("componentFilter", NULL);
 if (componentFile != NULL)
     componentHash = hashComponentList(componentFile);
@@ -290,8 +305,8 @@ if (speciesFile != NULL)
     speciesHash = hashComponentList(speciesFile);
 rejectFile = optionVal("reject", NULL);
 needComp = optionVal("needComp", NULL);
-verbose(3, "minCol=%d, minRow=%d, gotMinScore=%d, minScore=%f, gotMinFactor=%d, minFactor=%d\n", 
-        minCol, minRow, gotMinScore, minScore, gotMinFactor, minFactor);
+verbose(3, "minCol=%d, minRow=%d, maxRow=%d, gotMinScore=%d, minScore=%f, gotMinFactor=%d, minFactor=%d\n", 
+        minCol, minRow, maxRow, gotMinScore, minScore, gotMinFactor, minFactor);
 
 mafFilter(argc-1, argv+1);
 return 0;
