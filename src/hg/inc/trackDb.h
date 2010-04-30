@@ -300,6 +300,12 @@ void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
 /* Returns a value if it is found in the extras hash. */
 
+boolean tdbIsView(struct trackDb *tdb,char **viewName);
+// Is this tdb a view?  Will fill viewName if provided
+
+char *tdbGetViewName(struct trackDb *tdb);
+// returns NULL the view name for view or child track (do not free)
+
 void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b);
 /* Turn comma-separated string of three numbers into three
  * color components. */

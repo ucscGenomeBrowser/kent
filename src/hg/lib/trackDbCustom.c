@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.84 2010/04/13 19:48:14 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.85 2010/04/30 00:23:50 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -712,7 +712,6 @@ if(cType == cfgNone && warnIfNecessary)
 return cType;
 }
 
-
 char *trackDbSetting(struct trackDb *tdb, char *name)
 /* Look for a trackDb setting from lowest level on up chain of parents. */
 {
@@ -734,7 +733,6 @@ char *trackDbSettingByView(struct trackDb *tdb, char *name)
 if (tdb->parent == NULL)
     return NULL;
 return trackDbSettingClosestToHome(tdb->parent, name);
-return NULL;
 }
 
 
@@ -822,6 +820,32 @@ if(tdb->extras == NULL)
 
 return hashOptionalVal(tdb->extras, name, defaultVal);
 
+}
+
+boolean tdbIsView(struct trackDb *tdb,char **viewName)
+// Is this tdb a view?  Will fill viewName if provided
+{
+if(tdb && tdb->parent && tdb->subtracks)
+    {
+    char *view = trackDbLocalSetting(tdb, "view");
+    if(viewName)
+        *viewName = view;
+    return (view != NULL);
+    }
+return FALSE;
+}
+
+char *tdbGetViewName(struct trackDb *tdb)
+// returns NULL the view name for view or child track (do not free)
+{
+char *view = NULL;
+if(tdbIsComposite(tdb))
+    return NULL;
+else if(tdbIsCompositeChild(tdb) && subgroupFind(tdb,"view",&view))
+    return view;
+else if(tdbIsView(tdb,&view))
+    return view;
+return NULL;
 }
 
 struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList)
