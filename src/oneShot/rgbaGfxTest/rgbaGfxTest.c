@@ -4,8 +4,16 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "memgfx.h"
+#include "bigWig.h"
 
-static char const rcsid[] = "$Id: rgbaGfxTest.c,v 1.1 2010/04/29 22:42:27 kent Exp $";
+char *chrom = "chr2";
+int chromStart = 74514968;
+int chromEnd = 74589245;
+int minVal = 0;
+int maxVal = 40;
+
+static char const rcsid[] = "$Id: rgbaGfxTest.c,v 1.2 2010/04/30 17:08:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -13,13 +21,22 @@ void usage()
 errAbort(
   "rgbaGfxTest - Test out rgbaGfx system.\n"
   "usage:\n"
-  "   rgbaGfxTest XXX\n"
+  "   rgbaGfxTest in1.bw in2.bw in3.bw ... inN.bw out.png\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -chrom=chr2\n"
+  "   -chromStart=74514968\n"
+  "   -chromEnd=74589245\n"
+  "   -minVal=0\n"
+  "   -maxVal=40\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"chrom", OPTION_STRING},
+   {"chromStart", OPTION_INT},
+   {"chromEnd", OPTION_INT},
+   {"minVal", OPTION_INT},
+   {"maxVal", OPTION_INT},
    {NULL, 0},
 };
 
@@ -92,6 +109,14 @@ res.b = (a.b * b.b)/255;
 return res;
 }
 
+void rgBlendDot(struct rgbaGfx *rg, int x, int y, struct rgbaColor color)
+/* BLend in one dot. */
+{
+struct rgbaColor *pt = _rgPixAdr(rg, x, y);
+*pt = rgbaTransparentBlend(*pt, color);
+}
+
+/* Draw a box. */
 void rgDrawBox(struct rgbaGfx *rg, int x, int y, int width, int height, struct rgbaColor color)
 /* Draw a box. */
 {
@@ -204,9 +229,8 @@ if (fclose(pngFile) != 0)
 }
 
 
-void rgBrezy(struct rgbaGfx *rg, int x1, int y1, int x2, int y2, struct rgbaColor color,
-	int yBase, boolean fillFromBase)
-/* Brezenham line algorithm.  Optionally fill in under line. */
+void rgDrawLine(struct rgbaGfx *rg, int x1, int y1, int x2, int y2, struct rgbaColor color)
+/* Draw a line from one point to another using Brezenham line algorithm.  */
 {
 if (x1 == x2)
     {
@@ -221,13 +245,7 @@ if (x1 == x2)
 	y = y1;
 	height = y2-y1+1;
 	}
-    if (fillFromBase)
-        {
-	if (y < yBase)
-	    rgDrawBox(rg, x1, y, 1, yBase-y, color);
-	}
-    else
-        rgDrawBox(rg, x1, y, 1, height, color);
+    rgDrawBox(rg, x1, y, 1, height, color);
     }
 else if (y1 == y2)
     {
@@ -242,15 +260,7 @@ else if (y1 == y2)
 	x = x1;
 	width = x2-x1+1;
 	}
-    if (fillFromBase)
-        {
-	if (y1 < yBase)
-	    rgDrawBox(rg, x, y1, width, yBase - y1, color);
-	}
-    else
-        {
-	rgDrawBox(rg, x, y1, width, 1, color);
-	}
+    rgDrawBox(rg, x, y1, width, 1, color);
     }
 else
     {
@@ -282,13 +292,7 @@ else
 	dots = delta_x+1;
 	while (--dots >= 0)
 	    {
-	    if (fillFromBase)
-		{
-		if (y1 < yBase)
-		    rgDrawBox(rg,x1,y1,1,yBase-y1,color);
-		}
-	    else
-		rgPutDot(rg,x1,y1,color);
+	    rgBlendDot(rg,x1,y1,color);
 	    duty_cycle -= delta_y;
 	    x1 += 1;
 	    if (duty_cycle < 0)
@@ -303,13 +307,7 @@ else
 	dots = delta_y+1;
 	while (--dots >= 0)
 	    {
-	    if (fillFromBase)
-		{
-		if (y1 < yBase)
-		    rgDrawBox(rg,x1,y1,1,yBase-y1,color);
-		}
-	    else
-		rgPutDot(rg,x1,y1,color);
+	    rgBlendDot(rg,x1,y1,color);
 	    duty_cycle += delta_x;
 	    y1+=incy;
 	    if (duty_cycle > 0)
@@ -322,47 +320,96 @@ else
     }
 }
 
-void rgDrawLine(struct rgbaGfx *rg, int x1, int y1, int x2, int y2, struct rgbaColor color)
-/* Draw a line from one point to another. */
+
+struct rgbaColor rgbaLightRainbowColor(double pos)
+/* Giving a position 0.0 to 1.0 in rainbow, return color. */
 {
-rgBrezy(rg, x1, y1, x2, y2, color, 0, FALSE);
+double maxHue = 360.0;
+struct hslColor hsl = {pos*maxHue, 1000, 750};
+struct rgbColor rgb = mgHslToRgb(hsl);
+struct rgbaColor rgba = {rgb.r, rgb.g, rgb.b, 255};
+return rgba;
 }
 
-void rgFillUnder(struct rgbaGfx *rg, int x1, int y1, int x2, int y2, 
-	int bottom, struct rgbaColor color)
-/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
- * it's top, a horizontal line at bottom as it's bottom, and
- * vertical lines from the bottom to y1 on the left and bottom to
- * y2 on the right. */
+void drawRainbowBar(struct rgbaGfx *rg, int x, int y, int width, int height)
+/* Draw a horizontal bar in rainbow colors. */
 {
-rgBrezy(rg, x1, y1, x2, y2, color, bottom, TRUE);
+int i;
+for (i=0; i<width; ++i)
+    {
+    struct rgbaColor rgba = rgbaLightRainbowColor((double)i/width);
+    rgDrawBox(rg, x+i, y, 1, height, rgba);
+    }
+}
+
+void drawBigWigAt(char *fileName, struct rgbaGfx *rg, struct rgbaColor col,
+	int xOff, int yOff, int width, int height)
+/* Load in data and draw bigWig part at given position. */
+{
+struct bbiFile *bwf = bigWigFileOpen(fileName);
+struct bbiSummaryElement summary[width];
+if (bigWigSummaryArrayExtended(bwf, chrom, chromStart, chromEnd, width, summary))
+    {
+    int i;
+    double pixelScale = (double)height/(maxVal - minVal + 1);
+    for (i=0; i<width; ++i)
+        {
+	struct bbiSummaryElement *sum = &summary[i];
+	if (sum->validCount > 0)
+	    {
+	    int x = xOff + i;
+	    double val = sum->sumData/sum->validCount;
+	    if (val > maxVal) val = maxVal;
+	    if (val < minVal) val = minVal;
+	    double scaledVal = pixelScale * val;
+	    rgDrawBox(rg, x, yOff + height - scaledVal, 1, scaledVal, col);
+	    }
+	}
+    }
+bigWigFileClose(&bwf);
 }
 
 
-void rgbaGfxTest(char *a)
+
+void rgbaGfxTest(char *inNames[], int inCount, char *output)
 /* rgbaGfxTest - Test out rgbaGfx system.. */
 {
-struct rgbaGfx *rg = rgbaGfxNew(500, 500);
+int width = 700, heightOne = 50, spaceBetween=10;
+int lineHeight = heightOne + spaceBetween;
+int height = lineHeight * (inCount+1);
+struct rgbaGfx *rg = rgbaGfxNew(width, height);
 rgbaGfxSetToSolidWhite(rg);
 
+#ifdef OLD
 struct rgbaColor red = {255, 128, 128, 255};
 struct rgbaColor green = {128, 255, 128, 255};
 struct rgbaColor blue = {128, 128, 255, 255};
-// struct rgbaColor weakBlue = {0,0,100,255};
+struct rgbaColor weakBlue = {200,200,255,255};
 
 rgDrawBox(rg, 50, 100, 200, 200, red);
 rgDrawBox(rg, 100, 50, 200, 200, blue);
 rgDrawBox(rg, 150, 0, 50, 500, green);
+rgDrawBox(rg, 0, 150, 500, 50, weakBlue);
+drawRainbowBar(rg, 0, 275, 500, 50);
+#endif /* OLD */
 
-savePng(a, rg);
+int i;
+for (i=0; i<inCount; ++i)
+    {
+    struct rgbaColor col = rgbaLightRainbowColor((double)i/inCount);
+    drawBigWigAt(inNames[i], rg, col, 0, 0, width, heightOne);
+    drawBigWigAt(inNames[i], rg, col, 0, (1+i)*lineHeight, width, heightOne);
+    }
+
+savePng(output, rg);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc < 3)
     usage();
-rgbaGfxTest(argv[1]);
+rgbaGfxTest(argv+1, argc-2, argv[argc-1]);
 return 0;
 }
