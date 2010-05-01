@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.135 2010/04/20 17:34:31 chinhli Exp $"
+#	"$Id: mm9.txt,v 1.136 2010/05/01 18:42:00 hartera Exp $"
 #
 
 #######################################################################
@@ -10106,7 +10106,10 @@ TMPDIR=/scratch/tmp
 # 2010-02-09. Loaded database and added data to /gbdb/
 # Added trackDb entry for the Mapability track.
 # 2010-04-02. Replaced the Mapability 40mer subtrack bigWig file with a new one
-# provided by CRG as the old file had regions with missing data. 
+# provided by CRG as the old file had regions with missing data.
+# 2010-04-28. Received new data from Thomas Derrien. Downloaded data and 
+# added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig so
+# sent a new binary to data providers and they re-created the bigWig files. 
      mkdir -p /hive/data/genomes/mm9/bed/crgMapability
      cd /hive/data/genomes/mm9/bed/crgMapability
 cat << 'EOF' > temp
@@ -10163,7 +10166,49 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-40_
      rm /gbdb/mm9/bbi/crgMapabilityAlign40mer.bw
      ln -s `pwd`/M.musculus.genome.mm9.mappability-40_mm9.bw \
          /gbdb/mm9/bbi/crgMapabilityAlign40mer.bw
-     
+
+     # Downloaded and added new bigWig files to /gbdb/hg19/bbi 
+     # (2010-04-30 and 2010-05-01, hartera). New files were created as 
+     # there was a bug in the older version of bedGraphToBigWig.          
+     cd /hive/data/genomes/mm9/bed/crgMapability
+     rm temp download.csh download.log 
+cat << 'EOF' > temp
+#!/bin/tcsh -ef
+http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-100_mm9.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-36_mm9.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-40_mm9.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-50_mm9.bz2
+http://genome.crg.es/~tderrien/UCSC_Tracks/M.musculus.genome.mm9.mappability-75_mm9.bz2
+'EOF'
+     awk '{if ($0 ~ /#/) print; else print "wget --timestamping \"" $0 "\"";}' \
+         temp > download.csh
+     rm temp
+     chmod +x download.csh
+     ./download.csh >& download.log &
+
+     # Add data to /gbdb/. The file names in /gbdb/ are the same as before 
+     # so the tables do not need to be reloaded.
+     cd /hive/data/genomes/mm9/bed/crgMapability
+     bunzip2 *.bz2
+     # File names do not have a *.bw extension so re-name
+     foreach f (`ls *mm9`)
+        echo $f
+        set g=${f}.bw
+        echo $g
+        mv $f $g
+     end
+     # Then symlink to /gbdb/
+     foreach f (`ls *.bw`)
+        echo $f
+        set g=`echo $f | cut -d "-" -f2`
+        set num=`echo $g | cut -d "_" -f1`
+        set mer=`echo "${num}mer"`
+        set nf=`echo "crgMapabilityAlign${mer}.bw"`
+        echo $nf
+        rm /gbdb/mm9/bbi/${nf}
+        ln -s `pwd`/${f} /gbdb/mm9/bbi/${nf}
+     end
+
 #####################################################################
 # tRNAs track (2010-03-12, Fan RE-BUILT)
 #
@@ -10414,6 +10459,5 @@ TMPDIR=/scratch/tmp
 
     cat fb.oviAri1.chainMm9Link.txt 
     #   383753361 bases of 1201271277 (31.946%) in intersection
-
 
 #######################################################################
