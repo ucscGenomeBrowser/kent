@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.280 2010/04/30 00:26:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.281 2010/05/01 02:11:06 markd Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5036,6 +5036,7 @@ if (isCustomTrack(name))
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 baseColorDrawOptDropDown(cart, tdb);
+indelShowOptions(cart, tdb);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
 safef(cartVarName, sizeof(cartVarName), "%s." BAM_COLOR_MODE, name);
