@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1617 2010/04/30 21:24:50 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1618 2010/05/01 04:44:16 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5127,6 +5127,14 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
+static boolean isPslToPrintByClick(struct psl *psl, int startFirst, boolean isClicked)
+/* Determine if a psl should be printed based on if it was or was not the one that was clicked
+ * on.
+ */
+{
+return ((psl->tStart == startFirst) && sameString(psl->tName, seqName)) == isClicked;
+}
+
 void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
                            char *typeName, char *itemIn)
 /* Print list of mRNA alignments, don't add extra textual link when
@@ -5134,7 +5142,7 @@ void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand
 {
 struct psl *psl;
 int aliCount = slCount(pslList);
-boolean same;
+boolean isClicked;
 if (pslList == NULL || typeName == NULL)
     return;
 
@@ -5143,18 +5151,20 @@ if (aliCount > 1)
 
 printf("<PRE><TT>");
 if (startsWith("chr", pslList->tName))
-    printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END              QUERY      START  END  TOTAL\n");
+    printf("BROWSER | SIZE IDENTITY CHROMOSOME  STRAND    START     END              QUERY      START  END  TOTAL\n");
 else
-    printf(" SIZE IDENTITY  SCAFFOLD   STRAND    START     END              QUERY      START  END  TOTAL\n");
-printf("--------------------------------------------------------------------------------------------\n");
-for (same = 1; same >= 0; same -= 1)
+    printf("BROWSER | SIZE IDENTITY  SCAFFOLD   STRAND    START     END              QUERY      START  END  TOTAL\n");
+printf("-----------------------------------------------------------------------------------------------------\n");
+for (isClicked = 1; isClicked >= 0; isClicked -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-	if (same ^ (psl->tStart != startFirst))
+	if (isPslToPrintByClick(psl, startFirst, isClicked))
 	    {
             char otherString[512];
-	    sprintf(otherString, "%d&aliTrack=%s", psl->tStart, typeName);
+	    safef(otherString, sizeof(otherString), "%d&aliTrack=%s", psl->tStart, typeName);
+            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+                   hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
 		   psl->match + psl->misMatch + psl->repMatch,
@@ -5184,6 +5194,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	!startsWith("xeno", typeName)
 	&& !(startsWith("user", typeName) && pslIsProtein(psl))
 	&& psl->tStart == startFirst
+        && sameString(psl->tName, seqName)
 	)
 	{
         char otherString[512];
@@ -5194,7 +5205,6 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
-
 }
 
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
@@ -6501,8 +6511,8 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
 
 /* Look up alignments in database */
 hFindSplitTable(database, seqName, type, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s' and tStart=%d",
-	table, acc, start);
+sprintf(query, "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
+	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", acc, start);
@@ -6635,8 +6645,8 @@ else
     /* Look up alignments in database */
     hFindSplitTable(database, seqName, track, table, &hasBin);
     safef(query, sizeof(query),
-	  "select * from %s where qName = '%s' and tStart=%d",
-	  table, acc, start);
+	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
+	  table, acc, seqName, start);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) == NULL)
 	errAbort("Couldn't find alignment for %s at %d", acc, start);
@@ -18547,7 +18557,7 @@ void blastProtein(struct trackDb *tdb, char *itemName)
 {
 char startBuf[64], endBuf[64];
 int start = cartInt(cart, "o");
-boolean same;
+boolean isClicked;
 struct psl *psl = 0;
 struct sqlResult *sr = NULL;
 struct sqlConnection *conn = hAllocConn(database);
@@ -18705,11 +18715,11 @@ if (slCount(pslList) > 1)
 printf("<TT><PRE>");
 printf("ALIGNMENT PEPTIDE COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
 printf("--------------------------------------------------------------------------------\n");
-for (same = 1; same >= 0; same -= 1)
+for (isClicked = 1; isClicked >= 0; isClicked -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-	if (same ^ (psl->tStart != start))
+	if (isPslToPrintByClick(psl, start, isClicked))
 	    {
 	    printf("<A HREF=\"%s&o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&pred=%s\">",
 		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
@@ -18731,7 +18741,7 @@ for (same = 1; same >= 0; same -= 1)
 	    sprintLongWithCommas(startBuf, psl->tStart + 1);
 	    sprintLongWithCommas(endBuf, psl->tEnd);
 	    printf("%s:%s-%s</A> <BR>",psl->tName,startBuf, endBuf);
-	    if (same)
+	    if (isClicked)
 		printf("\n");
 	    }
 	}
