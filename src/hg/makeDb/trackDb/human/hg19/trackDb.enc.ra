@@ -671,7 +671,7 @@ origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2  H1hESC=H1-hESC uK562=K562_<i>IFN&alpha;_30min<i> vK562=K562_<i>IFN&gamma;_6hrs<i>
-subGroup3 factor Factor  cJUN=c-Jun CCNT2=CCNT2 ELK4=ELK4 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 POL2=Pol2 NRF1=Nrf1 RAD21=Rad21 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP zInput=Input_Control 
+subGroup3 factor Factor  cJUN=c-Jun CCNT2=CCNT2 ELK4=ELK4 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 POL2=Pol2 NRF1=Nrf1 RAD21=Rad21 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP  zInputrab=Input_(<i>IgG-rab<i>)  zInputucd=Input_(<i>UCDavis<i>)
 subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit UCD=UC_Davis 
 subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
@@ -948,7 +948,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewSignal off
 	    shortLabel HeLa-S3 Input Sig
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
-	    subGroups view=Signal factor=zInput cellType=HeLaS3 control=UCD treatment=aNone
+	    subGroups view=Signal factor=zInputucd cellType=HeLaS3 control=UCD treatment=aNone
 	    type bigWig 1 8970
 	    color 0,119,158
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=Input treatment=None control=UCDavis setType=input inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1140 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3InputUcdSig fileName=wgEncodeSydhTfbsHelas3InputUcdSig.bigWig.gz
@@ -989,7 +989,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewSignal off
 	    shortLabel HepG2 Input Sig
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
-	    subGroups view=Signal factor=zInput cellType=HepG2 control=IGGrab treatment=aNone
+	    subGroups view=Signal factor=zInputrab cellType=HepG2 control=IGGrab treatment=aNone
 	    type bigWig 1 10514
 	    color 189,0,157
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Input treatment=None control=IgG-rab setType=input inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1136 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2InputIggrabSig fileName=wgEncodeSydhTfbsHepg2InputIggrabSig.bigWig.gz
@@ -1019,7 +1019,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewSignal off
 	    shortLabel H1-hESC Input Sig
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in H1-hESC cells)
-	    subGroups view=Signal factor=zInput cellType=H1hESC control=UCD treatment=aNone
+	    subGroups view=Signal factor=zInputucd cellType=H1hESC control=UCD treatment=aNone
 	    type bigWig 1 5725
 	    color 0,107,27
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=Input treatment=None control=UCDavis setType=input inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1176 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescInputUcdSig fileName=wgEncodeSydhTfbsH1hescInputUcdSig.bigWig.gz
@@ -1083,7 +1083,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewSignal on
 	    shortLabel K562 Input Sig
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
-	    subGroups view=Signal factor=zInput cellType=K562 control=IGGrab treatment=aNone
+	    subGroups view=Signal factor=zInputrab cellType=K562 control=IGGrab treatment=aNone
 	    type bigWig 1 6064
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Input treatment=None control=IgG-rab setType=input inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1132 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562InputIggrabSig fileName=wgEncodeSydhTfbsK562InputIggrabSig.bigWig.gz
