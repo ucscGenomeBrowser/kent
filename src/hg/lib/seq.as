@@ -6,7 +6,7 @@ table seq
     uint size;		"Size of sequence (number of bases)"
     string gb_date;	"unused"
     uint extFile;	"ID/index of file in extFile"
-    uint file_offset;	"byte offset of sequence in file"
-    uint file_size;	"byte size of sequence in file"
+    bigint file_offset;	"byte offset of sequence in file"
+    bigint file_size;	"byte size of sequence in file"
     )
 
