@@ -1065,8 +1065,8 @@ identifier chainSelf
 
 identifier chainSelfNonSplit
 "Link together self chain info"
-    hg19.chainSelf.id
-    hg19.chainSelfLink.chainId full
+    $gbd.chainSelf.id
+    $gbd.chainSelfLink.chainId full
 
 identifier chain[${chainDest}]Id
 "Link together chain info"
