@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.281 2010/05/01 02:11:06 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.282 2010/05/03 23:56:42 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5056,15 +5056,18 @@ safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
       "onChange", cartVarName, BAM_COLOR_MODE_GRAY);
 cgiMakeDropListFull(cartVarName2, grayLabels, grayValues, grayMenuSize, sel2, onChange);
 printf("<BR>\n");
-cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_TAG, sameString(selected, BAM_COLOR_MODE_TAG));
-printf("Use R,G,B colors specified in user-defined tag ");
-safef(cartVarName2, sizeof(cartVarName2), "%s." BAM_COLOR_TAG, name);
-sel2 = cartUsualString(cart, cartVarName2,
-		       trackDbSettingOrDefault(tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
-safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
-      "onkeypress", cartVarName, BAM_COLOR_MODE_TAG);
-cgiMakeTextVarWithExtraHtml(cartVarName2, sel2, 30, onChange);
-printf("<BR>\n");
+if (trackDbSetting(tdb, "noColorTag") == NULL)
+    {
+    cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_TAG, sameString(selected, BAM_COLOR_MODE_TAG));
+    printf("Use R,G,B colors specified in user-defined tag ");
+    safef(cartVarName2, sizeof(cartVarName2), "%s." BAM_COLOR_TAG, name);
+    sel2 = cartUsualString(cart, cartVarName2,
+			   trackDbSettingOrDefault(tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
+    safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
+	  "onkeypress", cartVarName, BAM_COLOR_MODE_TAG);
+    cgiMakeTextVarWithExtraHtml(cartVarName2, sel2, 30, onChange);
+    printf("<BR>\n");
+    }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
 printf("No additional coloring<BR>\n");
 
