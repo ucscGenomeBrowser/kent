@@ -2910,12 +2910,6 @@ type transMapInfo
     $transMapDb.transMapInfoMRna
     $transMapDb.transMapInfoSplicedEst
 
-type transMapInfo
-    $transMapDb.transMapInfoRefSeq
-    $transMapDb.transMapInfoUcscGenes
-    $transMapDb.transMapInfoMRna
-    $transMapDb.transMapInfoSplicedEst
-
 type transMapSrc
     hgFixed.transMapSrcRefSeq
     hgFixed.transMapSrcUcscGenes
