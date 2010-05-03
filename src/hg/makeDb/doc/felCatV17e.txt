@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.9 2010/04/27 19:20:00 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.10 2010/05/03 20:51:20 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -550,6 +550,11 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
     cat fb.mm9.chainFelCatV17eLink.txt
     #   637007193 bases of 2620346127 (24.310%) in intersection
+    # make sure the link exists:
+    # cd /hive/data/genomes/mm9/bed
+    # ln -s /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22 \
+    #      /lastz.felCatV17e
+
     # swap
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
     cd /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
@@ -587,6 +592,14 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
     cat fb.felCatV17e.chainAilMel1Link.txt
     # 1503647735 bases of 1990635005 (75.536%) in intersection
+    # link it
+    #  cd /hive/data/genomes/ailMel1/bed
+    #  ln -s /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+    #  lastz.felCatV17e
+    # run rbest 2010-04-30
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        felCatV17e ailMel1 > rbest.log 2>&1 &
+    #   real    234m49.556s
 
     #   re-run swap 04-26
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
@@ -603,16 +616,33 @@ TMPDIR=/scratch/tmp
 
     #   Due to the SEQ1 and SEQ2 spec'ed in
     # /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22/DEF
-    # need to copy the swap directory from ailMel1 to felCatv17e
-    #  also need to rename from ailMel1.felCatV17e, or 6way step will have
-    #  problem
-    #  Ping hiram for this 
+    # need to copy the dDirectory from ailMel1 to felCatv17e
+    #  without this, 6way step will have problem
+    #  cd /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap]
+    #  cp -pr * /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap/ 
+    #  cd /hive/data/genomes/felCatV17e/bed
+    #  ln -s lastzAilMel1.2010-03-22 lastz.ailMel1
+
+
+    # mkdir /hive/data/genomes/felCatV17e/bed/lastzAilMel1.2010-03-22
+    # cd /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+    # cp -rp * /hive/data/genomes/felCatV17e/bed/lastzAilMel1.2010-03-22/ 
+    # cd /hive/data/genomes/felCatV17e/bed
+    # ln -s /hive/data/genomes/felCatV17e/bed/lastzAilMel1.2010-03-22 lastz.ailMel1
+    # cd /hive/data/genomes/ailMel1/bed
+    # ln -s  blastz.felCatV17e.swap  lastz.felCatV17e
+
+
+
 
 #####################################################################
 # LASTZ Oppsom  Swap (DONE - 2010-03-22 - Chin)
     cd /hive/data/genomes/monDom5/bed/lastzFelCatV17e.2010-03-22
     cat fb.monDom5.chainFelCatV17eLink.txt
     # 178616721 bases of 3501660299 (5.101%) in intersection
+    # make sure the link exist
+    # cd /hive/data/genomes/monDom5/bed
+    #  ln -s lastzFelCatV17e.2010-03-22 lastz.felCatV17e 
 
     # Swap
     mkdir /hive/data/genomes/felCatV17e/bed/blastz.monDom5.swap
@@ -771,8 +801,8 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     ln -s blastz.canFam2.swap lastz.canFam2
     ln -s blastz.mm9.swap lastz.mm9
     ln -s blastz.monDom5.swap lastz.monDom5
-    # ln -s blastz.ailMel1.swap lastz.ailMel1 (we switched SEQ1 and SEQ2)
-    ln -s /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap lastz.ailMel1
+    ln -s /hive/data/genomes/felCatV17e/bed/lastzAilMel1.2010-03-22 /
+            lastz.ailMel1
 
 
     cd /hive/data/genomes/felCatV17e/bed/multiz6way
@@ -799,7 +829,7 @@ while (my $line = <FH>) {
     chomp $chainLinkMeasure;
     $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
     $chainLinkMeasure =~ s/\%//;
-    my $swapFile="/hive/data/genomes/${D}/bed/lastz.felCatV17e/fb.${D}.chainCalJac3Link.txt";
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.felCatV17e/fb.${D}.chainFelCatV17eLink.txt";
     my $swapMeasure = "N/A";
     if ( -s $swapFile ) {
         $swapMeasure =
@@ -829,14 +859,154 @@ close (FH);
     # << happy emacs
     chmod +x ./sizeStats.pl
     ./sizeStats.pl
-###### 04-27 stop here due to wrong output from sizeStats.pl 
-###### pending move/rename aelMel1/felcatV17e lastz swap results
-# 02  0.1986 - Panda ailMel1    (% 0.000) (N/A)
-# 04  0.2011 - Dog canFam2      (% 73.720) (N/A)
-# 06  0.3567 - Human hg19       (% 60.870) (N/A)
-# 08  0.5692 - Mouse mm9        (% 30.972) (N/A)
-# 10  0.7913 - Opossum monDom5  (% 8.364) (N/A)
+#
+#       If you can fill in all the numbers in this table, you are ready for
+#       the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                  chainFlCatV17eLink
+#    distance                on felCatV17e on other
+# 02  0.1986 - Panda ailMel1    (% 75.536) (% 67.130)
+# 04  0.2011 - Dog canFam2      (% 73.720) (% 62.098)
+# 06  0.3567 - Human hg19       (% 60.870) (% 43.696)
+# 08  0.5692 - Mouse mm9        (% 30.972) (% 24.310)
+# 10  0.7913 - Opossum monDom5  (% 8.364) (% 5.101)
 
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        6way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    #   collect the single whole mafs into one place for splitting:
+    mkdir singleMaf
+    cd singleMafs
+    ln -s ../../lastz.hg19/axtChain/felCatV17e.hg19.synNet.maf.gz .
+    ln -s ../../lastz.mm9/axtChain/felCatV17e.mm9.synNet.maf.gz .
+    ln -s ../../lastz.canFam2/axtChain/felCatV17e.canFam2.synNet.maf.gz .
+    ln -s ../../lastz.monDom5/axtChain/felCatV17e.monDom5.synNet.maf.gz .
+    # N50 for ailMel1 is 1281781 (less than 10 ~ 20 MB) use rbest
+    ln -s ../../lastz.ailMel1/mafRBestNet/felCatV17e.ailMel1.rbest.maf.gz .
+
+
+    # to use rbest or net, use n50.pl chrom.size to tell
+    mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/splitMaf
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/splitMaf
+    for D in ailMel1
+do
+    mkdir ${D}
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+        ../singleMafs/felCatV17e.${D}.rbest.maf.gz
+done
+
+for D in hg19 mm9 canFam2 monDom5
+do
+    mkdir ${D}
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+        ../singleMafs/felCatV17e.${D}.synNet.maf.gz
+done
+
+
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn
+
+    ssh swarm
+    mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/run
+    mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/run/maf
+
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/run
+
+    #  set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = felCatV17e
+set topDir = /hive/data/genomes/$db/bed/multiz6way
+set c = $1
+set result = $2
+set pennBin = $topDir/penn
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = $topDir/splitMaf
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p $topDir/tree.nh $topDir/species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/^$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($pennBin $path); rehash
+$pennBin/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/felCatV17e/bed/multiz6way/run/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    find ../splitMaf -type f | grep "/[0-9][0-9][0-9].maf" \
+        | xargs -L 1 basename | sort -u > chr.part.list
+    gensub2 chr.part.list single template jobList
+    para -ram=8g create jobList
+
+    #   put the split mafs back together into a single result
+    head -q -n 1 maf/000.maf > felCatV17e.6way.maf
+    for F in maf/*.maf
+do
+    grep -h -v "^#" ${F} >> felCatV17e.6way.maf
+done
+    tail -q -n 1 maf/000.maf >> felCatV17e.6way.maf
+    tail -q -n 1 maf/hg19_${C}.*.maf | sort -u >> ../maf/${C}.maf
+
+    #   real    13m32.340s
+
+    # load tables for a look
+    mkdir -p /gbdb/felCatV17e/multiz6way/maf
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/maf
+    ln -s `pwd`/felCatV17e.6way.maf \
+        /gbdb/felCatV17e/multiz6way/maf/multiz6way.maf
+
+    # this generates an immense multiz6way.tab file in the directory
+    #   where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+        -pathPrefix=/gbdb/felCatV17e/multiz6way/maf felCatV17e multiz6way
+    #   Loaded 13316945 mafs in 1 files from
+    #   /gbdb/felCatV17e/multiz6way/maf
+    #   real    9m9.365s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/felCatV17e/multiz6way/maf/*.maf \
+        | hgLoadMafSummary felCatV17e -minSize=30000 -verbose=2 \
+                -mergeGap=1500 -maxSize=200000  multiz6waySummary stdin
+# Created 2330531 summary blocks from 99659162 components and
+#       13316945 mafs from stdin
+    #   real    17m54.685s
 
 
 
