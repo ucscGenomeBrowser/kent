@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1618 2010/05/01 04:44:16 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1619 2010/05/04 00:03:28 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -742,7 +742,12 @@ void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb)
 {
 char *strand = NULL;
 if (bedSize >= 4 && bed->name[0] != 0)
-    printf("<B>Item:</B> %s<BR>\n", bed->name);
+    {
+    char *label = "Item", *tdbLabel = NULL;
+    if (tdb && ((tdbLabel = trackDbSetting(tdb, "bedNameLabel")) != NULL))
+	label = tdbLabel;
+    printf("<B>%s:</B> %s<BR>\n", label, bed->name);
+    }
 if (bedSize >= 5)
     {
     if (!tdb || !trackDbSetting(tdb, "noScoreFilter"))
