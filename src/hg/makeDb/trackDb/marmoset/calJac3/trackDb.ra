@@ -79,7 +79,7 @@ type bed 5 .
 
 track multiz13way
 shortLabel Conservation
-longLabel 8-Way Multiz Alignment & Conservation 
+longLabel 13-Way Multiz Alignment & Conservation 
 group compGeno
 priority 103.4
 visibility pack
