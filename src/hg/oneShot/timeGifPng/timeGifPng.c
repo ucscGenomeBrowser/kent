@@ -9,7 +9,7 @@
 #include "verbose.h"
 
 
-static char const rcsid[] = "$Id: timeGifPng.c,v 1.1 2010/05/03 17:22:11 braney Exp $";
+static char const rcsid[] = "$Id: timeGifPng.c,v 1.2 2010/05/04 23:56:01 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ void usage()
 errAbort(
   "timeGifPng - program to do some GIF and PNG timing\n"
   "usage:\n"
-  "   timeGifPng file.gif\n"
+  "   timeGifPng nTimes file.gif [file.gif ..]\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -54,13 +54,14 @@ static void pngWarn(png_structp png, png_const_charp warningMessage)
 warn("%s", (char *)warningMessage);
 }
 
-boolean saveToPng(FILE *f, struct rgbaGfx *rg)
+boolean saveToPng(FILE *f, struct rgbaGfx *rg, int level)
 /* Save RGBA PNG to an already open file.
  * Reference: http://libpng.org/pub/png/libpng-1.2.5-manual.html */
 {
 png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING,
 					  NULL, // don't need pointer to data for err/warn handlers
 					  pngAbort, pngWarn);
+
 if (!png)
     {
     errAbort("png_write_struct failed");
@@ -90,6 +91,7 @@ png_init_io(png, f);
 png_set_IHDR(png, info, rg->width, rg->height, 8, // 8=bit_depth
 	     PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
 	     PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+png_set_compression_level(png, level);
 
 // Write header/params, write pixels, close and clean up.
 // PNG wants a 2D array of pointers to byte offsets into palette/colorMap.
@@ -105,10 +107,10 @@ png_destroy_write_struct(&png, &info);
 return TRUE;
 }
 
-void savePng(char *filename, struct rgbaGfx *rg)
+void savePng(char *filename, struct rgbaGfx *rg, int level)
 {
 FILE *pngFile = mustOpen(filename, "wb");
-if (!saveToPng(pngFile, rg))
+if (!saveToPng(pngFile, rg, level))
     {
     remove(filename);
     errAbort("Couldn't save %s", filename);
@@ -161,7 +163,7 @@ for(ii=0; ii < rg->height; ii++)
 return rg;
 }
 
-void timeGifPng(char *gifFile)
+void timeGifPng( int count, int fileNo, char *gifFile)
 /* timeGifPng - program to do some GIF and PNG timing. */
 {
 /* first read in GIF to memory */
@@ -174,10 +176,6 @@ long pngTime, gifTime;
 struct rgbaGfx *rg = convertMemToRgba(mem);
 
 lastTime = clock1000();
-savePng("test.png", rg);
-pngTime = clock1000() - lastTime;
-
-lastTime = clock1000();
 mgSaveGif(mem, "test.gif", FALSE);
 gifTime = clock1000() - lastTime;
 
@@ -185,19 +183,30 @@ int fd = open("test.gif", O_RDONLY);
 long gifSize = lseek(fd, 0L, 2);
 close(fd);
 
-fd = open("test.png", O_RDONLY);
-long pngSize = lseek(fd, 0L, 2);
-close(fd);
+printf("%d %d gif %ld %ld\n",count, fileNo,  gifTime, gifSize);
+int ii;
+for(ii=0; ii < 10; ii++)
+    {
+    lastTime = clock1000();
+    savePng("test.png", rg, ii);
+    pngTime = clock1000() - lastTime;
 
-printf("%ld %ld %ld %ld\n", gifSize, pngSize, gifTime, pngTime);
+    fd = open("test.png", O_RDONLY);
+    long pngSize = lseek(fd, 0L, 2);
+    close(fd);
+    printf("%d %d png%d %ld %ld\n",count, fileNo, ii, pngTime, pngSize);
+    }
+
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-int ii;
-for(ii=1; ii < argc; ii++)
-    timeGifPng(argv[ii]);
+int ii,jj;
+int numTimes = atoi(argv[1]);
+for(jj=0; jj < numTimes; jj++)
+    for(ii=2; ii < argc; ii++)
+        timeGifPng(jj, ii -2 , argv[ii]);
 return 0;
 }
