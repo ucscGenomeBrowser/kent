@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.41 2009/11/19 05:31:21 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.42 2010/05/04 06:18:59 markd Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -385,6 +385,30 @@ for (el = *pList; el != NULL; el = next)
     mafCompFree(&el);
     }
 *pList = NULL;
+}
+
+char *mafCompGetSrcDb(struct mafComp *mc, char *buf, int bufSize)
+/* parse the srcDb name from the mafComp src name, return NULL if no srcDb */
+{
+char *e = strchr(mc->src, '.');
+if (e == NULL)
+    return NULL;
+int len = e - mc->src;
+if (len >= bufSize)
+    errAbort("srcDb name in \"%s\" overflows buffer length of %d", mc->src, len);
+strncpy(buf, mc->src, len-1);
+buf[len] = '\0';
+return buf;
+}
+
+char *mafCompGetSrcName(struct mafComp *mc)
+/* parse the src sequence name from the mafComp src name */
+{
+char *e = strchr(mc->src, '.');
+if (e == NULL)
+    return mc->src;
+else
+    return e+1;
 }
 
 int mafPlusStart(struct mafComp *comp)

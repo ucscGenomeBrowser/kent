@@ -78,6 +78,12 @@ void mafCompFree(struct mafComp **pObj);
 void mafCompFreeList(struct mafComp **pList);
 /* Free up a list of maf components. */
 
+char *mafCompGetSrcDb(struct mafComp *mc, char *buf, int bufSize);
+/* parse the srcDb name from the mafComp src name, return NULL if no srcDb */
+
+char *mafCompGetSeqName(struct mafComp *mc);
+/* parse the src sequence name from the mafComp src name */
+
 struct mafRegDef
 /* MAF region definition (r line) */
 {
