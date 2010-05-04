@@ -1,5 +1,3 @@
 track chainNetPanTro2 override
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 chainMinScore 5000
-chainLinearGap medium
-
