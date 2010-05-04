@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.961 2010/05/03 18:07:18 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.962 2010/05/04 20:00:08 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -20454,6 +20454,7 @@ dragAndDrop subTracks
 priority 34.3
 #visibility pack
 color 12,12,120
+url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
 type genePred
 hgGene on
 hgsid on
@@ -22613,8 +22614,8 @@ noInherit on
 # Orchid tracks (wranger: braney)
 track wgEncodeBuOrchid
 compositeTrack on
-shortLabel BU Orchid
-longLabel ENCODE BU Orchid
+shortLabel BU ORChID
+longLabel ENCODE BU ORChID 
 group map
 subGroup1 view Views Signal=Signal
 #subGroup2 cellType Cell_Line GM12878=GM12878
@@ -22641,24 +22642,24 @@ noInherit on
 	track wgEncodeBuOrchidSignalRep1Gm12878
 	release alpha
 	subTrack wgEncodeBuOrchidSignalView
-	shortLabel Orchid v1
-	longLabel Orchid v1
+	shortLabel ORChID v1
+	longLabel ORChID Version 1
 	subGroups view=Signal
 	type bigWig 0 10000
 	autoScale on
 	configurable on
 	color 153,38,0
-	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
+	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep1Gm12878 fileName=wgEncodeBuOrchidSignalRep1Gm12878.bw
 
 	track wgEncodeBuOrchidSignalRep2Gm12878
 	release alpha
 	subTrack wgEncodeBuOrchidSignalView
-	shortLabel Orchid v2
-	longLabel Orchid v2
+	shortLabel ORChID v2
+	longLabel ORChID Version 2
 	subGroups view=Signal
 	type bigWig 0 10000
 	configurable on
 	autoScale on
 	color 153,38,0
-	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep2Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep2Gm12878.bedGraph4.gz
+	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep2Gm12878 fileName=wgEncodeBuOrchidSignalRep2Gm12878.bw
 
