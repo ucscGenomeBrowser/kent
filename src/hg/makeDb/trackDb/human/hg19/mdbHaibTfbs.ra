@@ -278,6 +278,146 @@ tableName wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1
+objType file
+antibody GABP
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-29
+dateUnrestricted 2011-01-29
+fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1.bam.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1518
+parentTable wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1188
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2
+objType file
+antibody GABP
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-29
+dateUnrestricted 2011-01-29
+fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2.bam.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1660
+parentTable wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 1188
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1
+objType table
+antibody GABP
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-29
+dateUnrestricted 2011-01-29
+fileName wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1.broadPeak.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1518
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1188
+tableName wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2
+objType table
+antibody GABP
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-29
+dateUnrestricted 2011-01-29
+fileName wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2.broadPeak.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1660
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1188
+tableName wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1
+objType table
+antibody GABP
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-29
+dateUnrestricted 2011-01-29
+fileName wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1.wig.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1518
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1188
+tableName wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
+objType table
+antibody GABP
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-29
+dateUnrestricted 2011-01-29
+fileName wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2.wig.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1660
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 1188
+tableName wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1
 objType file
 antibody Sin3Ak-20
@@ -698,6 +838,146 @@ tableName wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1
+objType file
+antibody SRF
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-27
+dateUnrestricted 2011-01-27
+fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1.bam.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1483
+parentTable wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1180
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2
+objType file
+antibody SRF
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-27
+dateUnrestricted 2011-01-27
+fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2.bam.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1659
+parentTable wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 1180
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1
+objType table
+antibody SRF
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-27
+dateUnrestricted 2011-01-27
+fileName wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1.broadPeak.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1483
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1180
+tableName wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2
+objType table
+antibody SRF
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-27
+dateUnrestricted 2011-01-27
+fileName wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2.broadPeak.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1659
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1180
+tableName wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1
+objType table
+antibody SRF
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-27
+dateUnrestricted 2011-01-27
+fileName wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1.wig.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1483
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1180
+tableName wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsH1hescSrfPcr1xRawRep2
+objType table
+antibody SRF
+cell H1-hESC
+composite wgEncodeHaibTfbs
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-27
+dateUnrestricted 2011-01-27
+fileName wgEncodeHaibTfbsH1hescSrfPcr1xRawRep2.wig.gz
+grant Myers
+inputType H1-hESC/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL1659
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 1180
+tableName wgEncodeHaibTfbsH1hescSrfPcr1xRawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1
 objType file
 antibody TCF12
@@ -886,4 +1166,4 @@ tableName wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: 1449830123
+# MAGIC: 1748869196
