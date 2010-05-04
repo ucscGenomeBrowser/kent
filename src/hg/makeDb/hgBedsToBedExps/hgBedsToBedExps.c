@@ -8,7 +8,7 @@
 #include "bedGraph.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.3 2010/03/08 23:35:38 kent Exp $";
+static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.4 2010/05/04 23:55:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -271,7 +271,7 @@ void hgBedsToBedExps(char *inCfg, char *outBed, char *outExp)
 /* hgBedsToBedExps - Convert multiple bed files to a single bedExp.. */
 {
 /* Load up input configuration . */
-struct bToBeCfg *cfg, *cfgList = bToBeCfgLoadAll(inCfg);
+struct bToBeCfg *cfgList = bToBeCfgLoadAll(inCfg);
 verbose(1, "Loaded %d records from %s\n", slCount(cfgList), inCfg);
 
 /* Find and output all sources used. */
