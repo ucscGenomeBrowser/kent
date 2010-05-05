@@ -16384,6 +16384,36 @@ TMPDIR=/scratch/tmp
 see file: ucscGenes10.txt
 
 #######################################################################
+# ENCODE Regulation track  (In progress May 2010, very rough instructions
+# as am still defining how to build track...)
+
+      # Create the DNAse peak clusters subtrack.
+      # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
+      # unzipped in directory /hive/users/kent/regulate/dnase/peaks
+      cd /hive/users/kent/regulate/dnase
+      ls -1 peaks/*.narrowPeak > peak.lst
+      regClusterMakeTableOfTables peak.lst peak.table
+      regCluster peak.table /dev/null peak.bed
+      awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
+      hgLoadBed hg18 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
+
+      # Create the Transcription Factor Binding Site subtrack
+      # Get all of the narrowPeak file for wgEncodeYaleChIPseq into tfbs/yale
+      # directory and create all.lst by cutting and pasting 
+      # the file list from
+      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
+      cd /hive/users/kent/regulate/tfbs/yale
+      grep narrowPeak all. > peak.lst
+      cut -f 2 peak.lst > file.lst
+      foreach i (`cat file.lst`)
+          wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/$i
+      end
+      # Then edit peak.cfg to make sure all cell lines have uniq letters
+      regClusterBedExpCfg peak.lst -encodeList peak.cfg peak.bed peak.exps
+      hgLoadBed hg18 wgEncodeRegTfbsClustered peak.bed
+      hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
+
+#######################################################################
 # CGAP SAGE (DONE 2007-04-17 Andy)
 
    ssh hgwdev
@@ -28631,7 +28661,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.413 2010/04/28 22:35:21 hartera Exp $
+# $Id: hg18.txt,v 1.414 2010/05/05 00:49:41 kent Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28679,7 +28709,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.413 2010/04/28 22:35:21 hartera Exp $
+# $Id: hg18.txt,v 1.414 2010/05/05 00:49:41 kent Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
