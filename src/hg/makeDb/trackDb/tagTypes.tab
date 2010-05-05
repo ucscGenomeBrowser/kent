@@ -286,6 +286,8 @@ wgEncode *
 wigColorBy wig
 wiggle wigMaf
 windowingFunction *
+yalePseudoAssoc *
+yaleUrl *
 yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
