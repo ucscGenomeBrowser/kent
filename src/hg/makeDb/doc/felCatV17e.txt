@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.11 2010/05/04 15:38:05 braney Exp $
+#       $Id: felCatV17e.txt,v 1.12 2010/05/05 14:56:10 braney Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -1012,7 +1012,7 @@ done
 
 ####################################################################
 
-# HUMAN (hg18) PROTEINS TRACK (working braney 2010-05-04
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-05-05)
     # bash  if not using bash shell already
 
     cd /cluster/data/felCatV17e
@@ -1035,21 +1035,21 @@ done
     done
     rm *.fa
     ls *.nsq | wc -l
-# 2757
+# 2765
 
     mkdir -p /cluster/data/felCatV17e/bed/tblastn.hg18KG
     cd /cluster/data/felCatV17e/bed/tblastn.hg18KG
     echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
     wc -l query.lst
-# 2757 query.lst
+# 2765 query.lst
 
    # we want around 350000 jobs
    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(350000/`wc query.lst | awk '{print $1}'`\)
 
-# 36727/(350000/2757) = 289.303826
+# 36727/(350000/2765) = 290.143300
 
    mkdir -p kgfa
-   split -l 289 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   split -l 290 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
    for i in *; do 
      nice pslxToFa $i $i.fa; 
@@ -1058,7 +1058,7 @@ done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
    wc kg.lst
-#  128  128 1664 kg.lst
+#  127  127 1651 kg.lst
 
    mkdir -p blastOut
    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
@@ -1112,12 +1112,13 @@ exit 1
 #    para try, check, push, check etc.
 
     para time
-# Completed: 352896 of 352896 jobs
-# CPU time in finished jobs:   13166354s  219439.24m  3657.32h  152.39d  0.418 y
-# IO & Wait Time:               1995282s   33254.69m   554.24h   23.09d  0.063 y
-# Average job time:                  43s       0.72m     0.01h    0.00d
-# Longest finished job:             207s       3.45m     0.06h    0.00d
-# Submission to last job:         15726s     262.10m     4.37h    0.18d
+
+# Completed: 351155 of 351155 jobs
+# CPU time in finished jobs:   15303249s  255054.15m  4250.90h  177.12d  0.485 y
+# IO & Wait Time:               2843300s   47388.34m   789.81h   32.91d  0.090 y
+# Average job time:                  52s       0.86m     0.01h    0.00d
+# Longest finished job:             134s       2.23m     0.04h    0.00d
+# Submission to last job:         19084s     318.07m     5.30h    0.22d
 
     ssh swarm
     cd /cluster/data/felCatV17e/bed/tblastn.hg18KG
@@ -1140,12 +1141,13 @@ chainOne $(path1)
     para create chainSpec
     para try, check, push, check etc.
 
-# Completed: 128 of 128 jobs
-#CPU time in finished jobs:       1401s      23.35m     0.39h    0.02d  0.000 y
-#IO & Wait Time:                 47407s     790.12m    13.17h    0.55d  0.002 y
-#Average job time:                 381s       6.36m     0.11h    0.00d
-#Longest finished job:             466s       7.77m     0.13h    0.01d
-#Submission to last job:           470s       7.83m     0.13h    0.01d
+# Completed: 127 of 127 jobs
+# CPU time in finished jobs:     544804s    9080.07m   151.33h    6.31d  0.017 y
+# IO & Wait Time:                 82233s    1370.55m    22.84h    0.95d  0.003 y
+# Average job time:                4937s      82.29m     1.37h    0.06d
+# Longest finished job:           24063s     401.05m     6.68h    0.28d
+# Submission to last job:         24074s     401.23m     6.69h    0.28d
+
 
     cd /cluster/data/felCatV17e/bed/tblastn.hg18KG/blastOut
     for i in kg??
@@ -1158,7 +1160,7 @@ chainOne $(path1)
     sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
     cd ..
     pslCheck blastHg18KG.psl
-# checked: 64037 failed: 0 errors: 0
+# checked: 50782 failed: 0 errors: 0
 
     # load table 
     ssh hgwdev
@@ -1167,9 +1169,12 @@ chainOne $(path1)
 
     # check coverage
     featureBits felCatV17e blastHg18KG 
-# 32308509 bases of 2245312831 (1.439%) in intersection
+# 23826621 bases of 1990635005 (1.197%) in intersection
+
+    featureBits felCatV17e blastHg18KG refGene  -enrichment
+# blastHg18KG 1.197%, refGene 0.021%, both 0.013%, cover 1.12%, enrich 52.73x
 
     featureBits felCatV17e blastHg18KG xenoRefGene  -enrichment
-# blastHg18KG 1.439%, xenoRefGene 2.186%, both 1.137%, cover 79.05%, enrich  36.17x
+# blastHg18KG 1.197%, xenoRefGene 2.066%, both 1.010%, cover 84.36%, enrich 40.83x
     rm -rf blastOut
 #end tblastn
