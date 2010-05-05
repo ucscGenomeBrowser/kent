@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: regCluster.c,v 1.2 2010/03/10 19:31:19 kent Exp $";
+static char const rcsid[] = "$Id: regCluster.c,v 1.3 2010/05/05 00:50:37 kent Exp $";
 
 int clDims = 1;
 double clScoreScale = 1.0;
@@ -23,9 +23,10 @@ errAbort(
 "usage:\n"
 "   regCluster tableOfTables output.cluster output.bed\n"
 "Where the table-of-tables is space or tab separated in the format:\n"
-"   <fileName> <chrom> <start> <end> <score> <dim1 label> ... <dimN label>\n"
-"where chrom, start, end are the indexes (starting with 0) of the chromosome, start, and end\n"
-"fields in the file.\n"
+"   <fileName> <chrom> <start> <end> <score> <normScore> <dim1 label> ... <dimN label>\n"
+"where chrom, start, end, score are the indexes (starting with 0) of the chromosome, start, \n"
+"and end fields in the file, normScore is a factor to multiply score by to get it into the\n"
+"0-1000 range, and the dim# labels are the labels in each dimention.\n"
 "for example\n"
 "   simpleReg.bed 0 1 2 4 aCell aFactor\n"
 "options:\n"
@@ -227,7 +228,15 @@ int itemCount = slCount(itemList);
 struct regCluster *clusterList = NULL;
 if (itemCount < easyMax)
     {
-    addCluster(lm, itemList, 0, BIGNUM, &clusterList);
+    struct regItem *item = itemList;
+    int chromStart = item->chromStart;
+    int chromEnd = item->chromEnd;
+    for (item = item->next; item != NULL; item = item->next)
+        {
+	if (item->chromStart < chromStart) chromStart = item->chromStart;
+	if (item->chromEnd > chromEnd) chromEnd = item->chromEnd;
+	}
+    addCluster(lm, itemList, chromStart, chromEnd, &clusterList);
     }
 else
     {

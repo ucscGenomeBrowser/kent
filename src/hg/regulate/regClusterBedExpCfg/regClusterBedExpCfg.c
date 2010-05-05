@@ -5,9 +5,11 @@
 #include "options.h"
 #include "obscure.h"
 #include "sqlNum.h"
-#include "hmmStats.h"
+#include "hmmstats.h"
 
-static char const rcsid[] = "$Id: regClusterBedExpCfg.c,v 1.1 2010/03/08 23:35:07 kent Exp $";
+static char const rcsid[] = "$Id: regClusterBedExpCfg.c,v 1.2 2010/05/05 00:50:37 kent Exp $";
+
+boolean encodeList = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +19,17 @@ errAbort(
   "usage:\n"
   "   regClusterBedExpCfg inputFileList output.cfg\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -encodeList - the inputFileList is of format you might get from cut and paste of\n"
+  "        encode downloads page - tab separated with following columns:\n"
+  "             <relDate> <fileName> <fileSize> <submitDate> <metadata>\n"
+  "        where the metadata component is in the format:\n"
+  "              this=that; that=two words; that=whatever\n"
+  "        and the antibody and factor tags in the metadata are used\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"encodeList", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -120,8 +128,8 @@ if (highEnd > maxVal) highEnd = maxVal;
 return 1000.0/highEnd;
 }
 
-void regClusterBedExpCfg(char *input, char *output)
-/* regClusterBedExpCfg - Create config file for hgBedsToBedExps from list of files.. */
+void makeConfigFromFileList(char *input, char *output)
+/* makeConfigFromFileList - Create config file for hgBedsToBedExps from list of files.. */
 {
 FILE *f = mustOpen(output, "w");
 struct slName *in, *inList = readAllLines(input);
@@ -143,12 +151,91 @@ for (in = inList; in != NULL; in = in->next)
 carefulClose(&f);
 }
 
+void makeConfigFromEncodeList(char *input, char *output)
+/* create config file for hgBedsToBedExps from tab-separated file of format
+ *         <relDate> <fileName> <fileSize> <submitDate> <metadata> */
+{
+FILE *f = mustOpen(output, "w");
+struct lineFile *lf = lineFileOpen(input, TRUE);
+char *line;
+
+while (lineFileNextReal(lf, &line))
+    {
+    /* Parse out line into major components. */
+    char *releaseDate = nextWord(&line);
+    char *fileName = nextWord(&line);
+    char *fileSize = nextWord(&line);
+    char *submitDate = nextWord(&line);
+    char *metadata = trimSpaces(line);
+    if (isEmpty(metadata))
+        errAbort("line %d of %s is truncated", lf->lineIx, lf->fileName);
+
+    verbose(2, "releaseDate=%s; fileName=%s; fileSize=%s; submitDate=%s; %s\n", 
+    	releaseDate, fileName, fileSize, submitDate, metadata);
+
+
+    /* Loop through metadata looking for cell and antibody.  Metadata
+     * is in format this=that; that=two words; that=whatever */
+    char *cell = NULL, *antibody = NULL;
+    for (;;)
+        {
+	/* Find terminating semicolon if any replace it with zero, and
+	 * note position for next time around loop. */
+	metadata = skipLeadingSpaces(metadata);
+	if (isEmpty(metadata))
+	    break;
+	char *semi = strchr(metadata, ';');
+	if (semi != NULL)
+	   *semi++ = 0;
+
+	/* Parse out name/value pair. */
+	char *name = metadata;
+	char *value = strchr(metadata, '=');
+	if (value == NULL)
+	   errAbort("Missing '=' in metadata after tag %s in line %d of %s", 
+	   	name, lf->lineIx, lf->fileName);
+	*value++ = 0;
+	name = trimSpaces(name);
+	value = trimSpaces(value);
+
+	/* Look for our tags. */
+	if (sameString(name, "cell"))
+	    cell = value;
+	else if (sameString(name, "antibody"))
+	    antibody = value;
+
+	metadata = semi;
+	}
+    if (cell == NULL) 
+        errAbort("No cell in metadata line %d of %s", lf->lineIx, lf->fileName);
+    if (antibody == NULL) 
+        errAbort("No antibody in metadata line %d of %s", lf->lineIx, lf->fileName);
+
+    fprintf(f, "%s\t%s\t", antibody, cell);
+    fprintf(f, "%c\t", cell[0]);
+    fprintf(f, "file\t6\t");
+    fprintf(f, "%g\t", calcNormScoreFactor(fileName, 6));
+    fprintf(f, "%s\n", fileName);
+    }
+carefulClose(&f);
+}
+
+void regClusterBedExpCfg(char *input, char *output)
+/* regClusterBedExpCfg - Create config file for hgBedsToBedExps from list of files.. */
+{
+if (encodeList)
+    makeConfigFromEncodeList(input, output);
+else
+    makeConfigFromFileList(input, output);
+}
+ 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+encodeList = optionExists("encodeList");
 regClusterBedExpCfg(argv[1], argv[2]);
 return 0;
 }

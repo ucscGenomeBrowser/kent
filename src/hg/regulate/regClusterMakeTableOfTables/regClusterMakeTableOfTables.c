@@ -5,9 +5,9 @@
 #include "options.h"
 #include "obscure.h"
 #include "sqlNum.h"
-#include "hmmStats.h"
+#include "hmmstats.h"
 
-static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.2 2010/03/10 19:46:34 kent Exp $";
+static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.3 2010/05/05 00:50:37 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,6 +16,7 @@ errAbort(
   "regClusterMakeTableOfTables - Make up a table of tables for regCluster program\n"
   "usage:\n"
   "   regClusterMakeTableOfTables fileListFile output\n"
+  "Where the fileListFile is a list of narrowPeak format files.\n"
   );
 }
 
@@ -97,8 +98,9 @@ if (highEnd > maxVal) highEnd = maxVal;
 return 1000.0/highEnd;
 }
 
-void regClusterMakeTableOfTables(char *input, char *output)
-/* regClusterMakeTableOfTables - Make up a table of tables for regCluster program. */
+void makeTableFromFileNames(char *input, char *output)
+/* makeTableFromFileNames - Make up a table of tables for regCluster from
+ * input that is a list of file names that include metadata. */
 {
 FILE *f = mustOpen(output, "w");
 struct slName *in, *inList = readAllLines(input);
@@ -106,8 +108,8 @@ int commonPrefix = commonPrefixSize(inList);
 int commonSuffix = commonSuffixSize(inList);
 for (in = inList; in != NULL; in = in->next)
     {
-    fprintf(f, "%s\t1\t2\t3\t7\t", in->name);
-    fprintf(f, "%g\t", calcNormScoreFactor(in->name, 7));
+    fprintf(f, "%s\t0\t1\t2\t6\t", in->name);
+    fprintf(f, "%g\t", calcNormScoreFactor(in->name, 6));
     char *s = in->name;
     int len = strlen(s);
     char *midString = cloneStringZ(s+commonPrefix, len - commonPrefix - commonSuffix);
@@ -115,6 +117,12 @@ for (in = inList; in != NULL; in = in->next)
     freez(&midString);
     }
 carefulClose(&f);
+}
+
+void regClusterMakeTableOfTables(char *input, char *output)
+/* regClusterMakeTableOfTables - Make up a table of tables for regCluster program. */
+{
+makeTableFromFileNames(input, output);
 }
 
 int main(int argc, char *argv[])
