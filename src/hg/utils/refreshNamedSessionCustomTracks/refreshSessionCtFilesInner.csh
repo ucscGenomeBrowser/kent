@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/refreshSessionCtFilesInner.csh instead.
 
-# $Id: refreshSessionCtFilesInner.csh,v 1.4 2010/01/22 05:57:54 angie Exp $
+# $Id: refreshSessionCtFilesInner.csh,v 1.5 2010/05/05 08:18:42 galt Exp $
 
 setenv HGDB_CONF /cluster/home/qateam/.hg.conf.hgcentral
 
@@ -56,6 +56,6 @@ else
 endif
 
 sort -u $finalOut | sed -e 's@^/export@@' \
-| xargs -n 1024 ls -lu > $logDir/$today/$thisHour
+| xargs -n 512 ls -lu > $logDir/$today/$thisHour
 
 # Don't clean up $tmpLog here -- caller may use it.
