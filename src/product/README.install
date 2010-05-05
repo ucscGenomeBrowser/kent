@@ -162,7 +162,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 
 12.  Load the databases
 
-for DIR_NAME in cb1 hgFixed proteinDB/proteins040315
+for DIR_NAME in cb1 hgFixed proteinDB/proteins040315 visiGene
 do
     DB=`basename ${DIR_NAME}`
     #	Create the cb1 database and load its data
@@ -252,4 +252,4 @@ done
 
 
 ====================================================================
-This file last updated: $Date: 2009/11/12 19:36:21 $
+This file last updated: $Date: 2010/05/05 17:41:31 $
