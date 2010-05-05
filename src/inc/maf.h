@@ -81,7 +81,7 @@ void mafCompFreeList(struct mafComp **pList);
 char *mafCompGetSrcDb(struct mafComp *mc, char *buf, int bufSize);
 /* parse the srcDb name from the mafComp src name, return NULL if no srcDb */
 
-char *mafCompGetSeqName(struct mafComp *mc);
+char *mafCompGetScrName(struct mafComp *mc);
 /* parse the src sequence name from the mafComp src name */
 
 struct mafRegDef
