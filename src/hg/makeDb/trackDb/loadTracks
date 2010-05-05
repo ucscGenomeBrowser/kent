@@ -108,7 +108,7 @@ loadDbTracks() {
 
     cmd="tdbQuery $qopts 'select count(*) from $db' -root=`pwd`"
     echo $cmd
-    # eval $cmd
+    eval $cmd
 
     cmd="hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
     echo $cmd
