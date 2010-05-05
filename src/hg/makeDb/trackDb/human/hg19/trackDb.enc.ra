@@ -1279,7 +1279,8 @@ wgEncode 1
     view Signal
 	visibility full
     subTrack wgEncodeSydhHistone
-#	viewLimits 1:20
+	# For view limits: used an mean call and 2 std across all data- need to work on a better concept #
+	viewLimits 3:20
 	minLimit -1
     maxLimit 13293
     autoScale off
@@ -1297,7 +1298,7 @@ wgEncode 1
 
 		track wgEncodeSydhHistoneNt2d1InputStdSig
 	    release alpha
-	    subTrack wgEncodeSydhHistoneViewSignal on
+	    subTrack wgEncodeSydhHistoneViewSignal off
 	    shortLabel NT2D Input    Sg
 	    longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in NT2-D1 cells)
 	    subGroups view=Signal factor=Input cellType=NT2D1 control=std treatment=None
