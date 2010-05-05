@@ -374,7 +374,7 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo   "Go to the chain/net description page for this track, and make"
 echo   "sure that the matrix, the chainMinScore, and the chainLinearGap"
-echo   "are displayed correctly The correct values for the 3 variables"
+echo   "are displayed correctly. The correct values for the 3 variables"
 echo   "are given below. They were taken from the README page in the"
 echo   "in the downloads directory.:"
 echo
