@@ -543,9 +543,11 @@ rsync -avzP --delete --max-delete=20 \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteinDB/ \
     $WEBROOT/goldenPath/proteinDB/
 </PRE>
-<LI>Get a list of all of the protein databasese like so:<BR>
+<LI>Get a list of all of the protein databases like so:<BR>
+<PRE>
 mysql&gt; SELECT DISTINCT(proteomeDb) FROM hgcentral.gdbPdb ORDER BY proteomeDb;<BR>
-Create a database for each one, e.g.:
+</PRE>
+<LI>Create a database for each one, e.g.:
 <PRE>
 mysql&gt; create database proteins080707
 mysql&gt; create database proteins090821
@@ -571,15 +573,17 @@ rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
   $WEBROOT/goldenPath/uniProt/
 </PRE>
-<LI>Get a list of all of the UniProt databasese like so:<BR>
+<LI>Get a list of all of the UniProt databases like so:<BR>
+<PRE>
 mysql&gt; SHOW DATABASES LIKE 'sp%';<BR>
-Create a database for each one, e.g.:
+</PRE>
+<LI>Create a database for each one, e.g.:
 <PRE>
 mysql&gt; create database sp080707
 mysql&gt; create database sp090821
 and so on
 </PRE>
-<LI>Import the data in a similar fashion as listed above.
+<LI>Import the data from sp*/database in a similar fashion as listed above.
 <LI>Create a symlink to the most recent uniProt database, e.g.:
 <PRE>
 	/var/lib/mysql/uniProt  -&gt; sp090821
