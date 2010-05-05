@@ -171,7 +171,8 @@ NAMES
 Symbol names begin with a lower-case letter.  The second 
 and subsequent words in a name begin with a capital letter 
 to help visually separate the words.  Abbreviation of words 
-is strongly discouraged.  If a word is abbreviated in 
+is strongly discouraged.  Words of five letters and less should
+generally not be abbreviated. If a word is abbreviated in 
 general it is abbreviated to the first three letters:
    tabSeparatedFile -> tabSepFile
 In some cases, for local variables abbreviating
@@ -190,7 +191,6 @@ These naming rules apply to variables, constants, functions, fields,
 and structures.  They generally are used for file names, database tables,
 database columns, and C macros as well, though there is a bit less
 consistency there in the existing code base.
-
 
 ERROR HANDLING AND MEMORY ALLOCATION
 
@@ -321,4 +321,4 @@ return twoBit;
 }
 
 ====================================================================
-This file last updated: $Date: 2008/07/08 21:23:25 $
+This file last updated: $Date: 2010/05/05 23:34:03 $
