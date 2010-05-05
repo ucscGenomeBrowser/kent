@@ -115,6 +115,7 @@ databases </A>&nbsp;
 <LI><A HREF="#step9">Set up HgFixed database</A>&nbsp;
 <LI><A HREF="#step10">Set up the protein databases</A>&nbsp;
 <LI><A HREF="#step11">Set up the UniProt database</A>&nbsp;
+<LI><A HREF="#step12">Set up the visiGene database</A>&nbsp;
 </OL>
 <BR><BR>
 <HR>
@@ -542,21 +543,19 @@ rsync -avzP --delete --max-delete=20 \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteinDB/ \
     $WEBROOT/goldenPath/proteinDB/
 </PRE>
-<LI>Create the protein databases
+<LI>Get a list of all of the protein databasese like so:<BR>
+mysql&gt; SELECT DISTINCT(proteomeDb) FROM hgcentral.gdbPdb ORDER BY proteomeDb;<BR>
+Create a database for each one, e.g.:
 <PRE>
-mysql&gt; create database proteins040115
-mysql&gt; create database proteins040315
-mysql&gt; create database proteins040515
-mysql&gt; create database proteins050415
-mysql&gt; create database proteins051015
-mysql&gt; create database proteins060115
-mysql&gt; create database proteins070202
+mysql&gt; create database proteins080707
+mysql&gt; create database proteins090821
+and so on
 </PRE>
 <LI>Import the data from proteinDB/proteins*/database in a similar
 	fashion as listed above.
-<LI>Create symlinks for your MySQL database of:
+<LI>Create a symlink to the most recent proteins database, e.g.:
 <PRE>
-	/var/lib/mysql/proteome -&gt; proteins070202
+	/var/lib/mysql/proteome -&gt; proteins090821
 </PRE>
 </OL>
 
@@ -572,22 +571,38 @@ rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
   $WEBROOT/goldenPath/uniProt/
 </PRE>
-<LI>Create the UniProt databases.
+<LI>Get a list of all of the UniProt databasese like so:<BR>
+mysql&gt; SHOW DATABASES LIKE 'sp%';<BR>
+Create a database for each one, e.g.:
 <PRE>
-mysql&gt; create database sp040115
-mysql&gt; create database sp040315
-mysql&gt; create database sp040515
-mysql&gt; create database sp050415
-mysql&gt; create database sp051015
-mysql&gt; create database sp060115
-mysql&gt; create database sp070202
+mysql&gt; create database sp080707
+mysql&gt; create database sp090821
+and so on
 </PRE>
 <LI>Import the data in a similar fashion as listed above.
-<LI>Create symlinks for your MySQL database of:
+<LI>Create a symlink to the most recent uniProt database, e.g.:
 <PRE>
-	/var/lib/mysql/uniProt  -&gt; sp070202
+	/var/lib/mysql/uniProt  -&gt; sp090821
 </PRE>
 </OL>
+
+<H4><a NAME="step12"></A>
+12. Create the visiGene database</H4>
+
+<OL type="a">
+<LI>Download a copy of the dumped visiGene tables.
+<PRE>
+rsync -avzP --delete --max-delete=20 \
+   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/visiGene/ \
+   $WEBROOT/goldenPath/visiGene/
+</PRE>
+<LI>Create a visiGene database</LI>
+<PRE>
+mysql&gt; create database visiGene
+</PRE>
+<LI>Import the data in a similar fashion as listed above.</LI>
+</OL>
+
 
 <hr WIDTH="100%">
 <BR><em>Should you have any comments or questions, please contact
