@@ -8,7 +8,7 @@
 #include "bedGraph.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.5 2010/05/06 17:53:41 kent Exp $";
+static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.6 2010/05/06 18:02:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -186,15 +186,21 @@ for (ref = list; ref != NULL; ref = ref->next)
         levels[i] = 0;
 
     /* Set levels according to sourceSite list. */
+    double maxLevel = 0.0;
     for (site = range->val; site != NULL; site = site->next)
 	{
-	levels[site->source->sourceIx] = site->site->dataValue;
+	double level = site->site->dataValue;
+	if (level > 1000)
+	    level = 1000;
+	if (level > maxLevel)
+	    maxLevel = level;
+	levels[site->source->sourceIx] = level;
 	}
 
     /* Output. */
     fprintf(f, "%s\t%d\t%d\t", chrom, range->start, range->end);
     fprintf(f, "%s\t", factor->factor);
-    fprintf(f, "0\t");
+    fprintf(f, "%d\t", round(maxLevel));	/* score */
     fprintf(f, "+\t");  /* strand.... */
     fprintf(f, "%d\t%d\t", range->start, range->end);
     fprintf(f, "0\t");  /* itemRgb */
