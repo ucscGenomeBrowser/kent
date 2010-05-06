@@ -980,6 +980,13 @@ wgEncode 1
     view Signal
 	visibility full
     subTrack wgEncodeSydhTfbs
+	# View Limits a work in progres
+	viewLimits 3:40
+	minLimit -1
+    maxLimit 12768
+    autoScale off
+    maxHeightPixels 100:32:16
+    windowingFunction mean
    
 
 		#Tier 1 Cell Line, deafult track on #
