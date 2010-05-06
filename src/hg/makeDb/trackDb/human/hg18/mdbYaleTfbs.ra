@@ -15524,6 +15524,28 @@ subId 615
 treatment None
 view RawData
 
+metaObject wgEncodeYaleChIPseqRawDataRep1K562Pol2
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeYaleChIPseq
+control std
+dataType ChIPseq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileName wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Yale(Snyder)
+parentTable wgEncodeYaleChIPseqRawSignalRep1K562Pol2
+project wgEncode
+replicate 1
+setType exp
+subId 16
+treatment None
+view RawData
+
 metaObject wgEncodeYaleChIPseqRawDataRep1K562Pol2Musigg
 objType file
 antibody Pol2
@@ -19034,6 +19056,28 @@ project wgEncode
 replicate 2
 setType exp
 subId 615
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562Pol2
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeYaleChIPseq
+control std
+dataType ChIPseq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileName wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Yale(Snyder)
+parentTable wgEncodeYaleChIPseqRawSignalRep2K562Pol2
+project wgEncode
+replicate 2
+setType exp
+subId 16
 treatment None
 view RawData
 
@@ -24554,4 +24598,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: -1081625468
+# MAGIC: 1510481419
