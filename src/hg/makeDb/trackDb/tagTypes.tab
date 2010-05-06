@@ -13,11 +13,14 @@ allButtonPair *
 altColor *
 autoScale *
 autoTranslate genePred
+bamColorMode bam
+bamGrayMode bam
 baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred
 baseColorUseSequence *
 bedFilter bed
+bedNameLabel bed
 blastRef psl
 boxedCfg *
 canPack *
@@ -122,9 +125,9 @@ hgsid bed genePred
 html *
 idInUrlSql altGraphX genePred
 idXref genePred
-indelDoubleInsert psl
-indelPolyA psl
-indelQueryInsert psl
+indelDoubleInsert psl bam
+indelPolyA psl bam
+indelQueryInsert psl bam
 informant genePred
 interTable encodeFiveC
 interTableKind encodeFiveC
@@ -162,6 +165,7 @@ minScore bed broadPeak narrowPeak
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 nextItemButton *
+noColorTag bam
 noInherit *
 noScoreFilter bedGraph bed
 notNCBI bed
@@ -226,6 +230,7 @@ showCdsAllScales psl
 showCdsMaxZoom psl
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
+showNames bam
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak
 signalFilterLimits bed narrowPeak
