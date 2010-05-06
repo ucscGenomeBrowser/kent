@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.962 2010/05/04 20:00:08 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.963 2010/05/06 18:49:15 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8323,7 +8323,7 @@ shortLabel UW DNase DGF
 longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
-subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
+subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 SK-N-SH_RA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
@@ -8466,7 +8466,7 @@ wgEncode 1
         release alpha,beta
         subTrack wgEncodeUwDGFViewSignal off
         shortLabel GM06990 Sig
-        longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in GM06990 cells)
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in GM06990 cells)
         subGroups view=Signal cellType=GM06990
         type bedGraph 4
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Signal dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalGm06990 fileName=wgEncodeUwDGFSignalGm06990.bedGraph4.gz
@@ -8475,7 +8475,7 @@ wgEncode 1
         release alpha,beta
         subTrack wgEncodeUwDGFViewSignal on
         shortLabel K562 Sig
-        longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in K562 cells)
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in K562 cells)
         subGroups view=Signal cellType=K562
         type bedGraph 4
         color 46,0,184
@@ -8486,7 +8486,7 @@ wgEncode 1
         subTrack wgEncodeUwDGFViewSignal on
         shortLabel HepG2 Sig
         color 189,0,157
-        longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in HepG2 cells)
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HepG2 cells)
         subGroups view=Signal cellType=HepG2
         type bedGraph 4
         minLimit 1
@@ -8497,7 +8497,7 @@ wgEncode 1
         release alpha,beta
         subTrack wgEncodeUwDGFViewSignal off
         shortLabel SK-N-SH_RA Sig
-        longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (SK-N-SH_RA cells)
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (SK-N-SH_RA cells)
         subGroups view=Signal cellType=SK-N-SH_RA
         type bedGraph 4
         minLimit 1
@@ -8508,7 +8508,7 @@ wgEncode 1
         release alpha,beta
         subTrack wgEncodeUwDGFViewSignal off
         shortLabel Th1 Sig
-        longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in Th1 cells)
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in Th1 cells)
         subGroups view=Signal cellType=Th1
         type bedGraph 4
         minLimit 1
