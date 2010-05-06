@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.91 2010/05/05 23:33:00 chinhli Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.92 2010/05/06 16:05:54 chinhli Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -2609,7 +2609,7 @@ type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
-otherDb OviAri1
+otherDb oviAri1
 chainMinScore 3000
 chainLinearGap medium 
 spectrum on
@@ -2627,7 +2627,7 @@ html chainNet
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain OviAri1
+        type chain oviAri1
         html chainNet
 
     track chainNetOviAri1Viewnet
@@ -2641,7 +2641,7 @@ html chainNet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign OviAri1 chainOviAri1
+        type netAlign oviAri1 chainOviAri1
         html chainNet
 
 
