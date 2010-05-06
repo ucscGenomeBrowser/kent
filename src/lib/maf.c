@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.43 2010/05/06 00:04:50 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.44 2010/05/06 02:59:41 markd Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -397,7 +397,7 @@ int len = e - mc->src;
 if (len >= bufSize-1)
     errAbort("srcDb name in \"%s\" overflows buffer length of %d", mc->src, bufSize);
 strncpy(buf, mc->src, len);
-buf[len+1] = '\0';
+buf[len] = '\0';
 return buf;
 }
 
