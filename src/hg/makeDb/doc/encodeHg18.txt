@@ -1235,16 +1235,6 @@ cat > getGenes.csh << 'EOF'
     hgLoadBed hg18 encodeTbaBinConsDec07 BinCons.bed
     
 #############################################################################
-# CRG MAPABILITY (2010-01-19 - 2010-01-28, hartera, DONE)
-# See kent/src/hg/makeDb/doc/hg18.txt for documentation on the addition of 
-# CRG alignability subtracks, to the existing ENCODE Mapability track, for 
-# sequence k-mers of 36,40,50,75 and 100 nucleotides. 
-# The data was provided by an ENCODE lab (Guigo lab at CRG) but the data
-# production was only partially funded by ENCODE so no metadata was added
-# to trackDb for this track.   
-
-
-#############################################################################
 # encodeGencodeGeneKnownMar07  (2010-04-07 markd)
 # Was discovered to be corrupted on hgwdev and all servers
 # 
