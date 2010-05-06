@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: oviAri1.txt,v 1.5 2010/04/27 19:30:46 chinhli Exp $
+#       $Id: oviAri1.txt,v 1.6 2010/05/06 16:27:44 chinhli Exp $
 
 
 # Ovis aries (domestic sheep) --  ISGC Ovis_aries_1.0 (2010-02-01)
@@ -466,24 +466,6 @@ limit vmemoryuse 163840m
      tcsh
      cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
      ./netSynteny.csh > & netSynteny_tcsh.log 
-==== begin pig ==========
-    #	and the swap
-    mkdir /hive/data/genomes/bosTau4/bed/blastz.oviAri1.swap
-    cd /hive/data/genomes/bosTau4/bed/blastz.oviAri1.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/oviAri1/bed/lastzBosTau4.2010-03-27/DEF \
-	-swap -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	most interesting, this failed on the first step chainSwap
-    #	but the failure didn't make it stop, it continued and produced
-    #	zero results to the end.  Running manually:
-    cd /hive/data/genomes/bosTau4/bed/blastz.oviAri1.swap/axtChain
-export sizeG=188743680
-ulimit -d $sizeG
-ulimit -v $sizeG
-
-======== end pig =======
 
    #   and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
@@ -541,6 +523,8 @@ ulimit -v $sizeG
     cd /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-16
     cat fb.monDom5.chainOviAri1Link.txt
     #   133534458 bases of 3501660299 (3.813%) in intersection
+    cd /hive/data/genomes/monDom5/bed/
+    ln -s lastzFelCatV17e.2010-03-22 lastz.oviAri1
 
     #	and the swap
     mkdir /hive/data/genomes/oviAri1/bed/blastz.monDom5.swap
@@ -577,7 +561,7 @@ ulimit -v $sizeG
     #   940763026 bases of 1201271277 (78.314%) in intersection
 
 ############################################################################
-# running cpgIsland business (DONE - 2010-03-31 - Hiram)
+# running cpgIsland business (DONE -2010-04-29 - Chin)
     mkdir /hive/data/genomes/oviAri1/bed/cpgIsland
     cd /hive/data/genomes/oviAri1/bed/cpgIsland
     cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
@@ -627,17 +611,28 @@ endif
 '_EOF_'
     # << happy emacs
 
+    chmod 775 runOne 
     gensub2 chr.list single template jobList
     para create jobList
     para try
     para check ... etc
     para time
-# Completed: 20 of 20 jobs
-# CPU time in finished jobs:        168s       2.79m     0.05h    0.00d  0.000 y
-# IO & Wait Time:                    86s       1.44m     0.02h    0.00d  0.000 y
-# Average job time:                  13s       0.21m     0.00h    0.00d
-# Longest finished job:              29s       0.48m     0.01h    0.00d
-# Submission to last job:            31s       0.52m     0.01h    0.00d
+    para problems
+    para status
+    # then, kick it with para push
+    # check it with plb
+    # when all are done, para time shows:
+   #   para time
+    #  1218 jobs in batch
+    #  319 jobs (including everybody's) in Parasol queue or running.
+    #  Checking finished jobs
+    #  Completed: 1218 of 1218 jobs
+    #  CPU time in finished jobs:        201s       3.36m     0.06h    0.00d  0.000 y
+    #  IO & Wait Time:                  3099s      51.64m     0.86h    0.04d  0.000 y
+    #  Average job time:                   3s       0.05m     0.00h    0.00d
+    #  Longest finished job:              25s       0.42m     0.01h    0.00d
+    #  Submission to last job:            90s       1.50m     0.03h    0.00d
+    #  Estimated complete:                 0s       0.00m     0.00h    0.00d
 
     # Transform cpglh output to bed +
     catDir results | awk '{
@@ -652,13 +647,18 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /hive/data/genomes/oviAri1/bed/cpgIsland
     hgLoadBed oviAri1 cpgIslandExt -tab \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
-    # Loaded 38778 elements of size 10
+    # Loaded 25384 elements of size 10
+    # Sorted
+    # Creating table definition for cpgIslandExt
+    # Saving bed.tab
+    # Loading oviAri1
+
 
     #	cleanup
     rm -fr hardMaskedFa
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE - 2010-03-31 - Hiram)
+# all.joiner update, downloads and in pushQ - (??? Pending the ISg status 2010-04-29)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=oviAri1 -all all.joiner
