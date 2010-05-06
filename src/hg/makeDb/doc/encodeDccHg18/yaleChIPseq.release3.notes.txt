@@ -156,7 +156,7 @@ A) Untouched Tables (145):
     wgEncodeYaleChIPseqSignalNt2d1Yy1
     wgEncodeYaleChIPseqSignalRep1K562InputV2
 
-A') Untouched Files (341 downloadables, 0 wibs):
+A') Untouched Files (343 downloadables, 0 wibs):
    current location on alpha:
      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release3/
    on RR:
@@ -326,6 +326,7 @@ A') Untouched Files (341 downloadables, 0 wibs):
     wgEncodeYaleChIPseqRawDataRep1K562Nfe2.fastq.gz
     wgEncodeYaleChIPseqRawDataRep1K562Nfya.fastq.gz
     wgEncodeYaleChIPseqRawDataRep1K562Nfyb.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz
     wgEncodeYaleChIPseqRawDataRep1K562Rad21.fastq.gz
     wgEncodeYaleChIPseqRawDataRep1K562Rpc155.fastq.gz
     wgEncodeYaleChIPseqRawDataRep1K562Sirt6.fastq.gz
@@ -393,6 +394,7 @@ A') Untouched Files (341 downloadables, 0 wibs):
     wgEncodeYaleChIPseqRawDataRep2K562Nfe2.fastq.gz
     wgEncodeYaleChIPseqRawDataRep2K562Nfya.fastq.gz
     wgEncodeYaleChIPseqRawDataRep2K562Nfyb.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz
     wgEncodeYaleChIPseqRawDataRep2K562Rad21.fastq.gz
     wgEncodeYaleChIPseqRawDataRep2K562Rpc155.fastq.gz
     wgEncodeYaleChIPseqRawDataRep2K562Sirt6.fastq.gz
@@ -507,7 +509,7 @@ A') Untouched Files (341 downloadables, 0 wibs):
 
 B) Deprecated tables (0):
 
-B') Deprecated files (134 downloadables, 0 wibs):
+B') Deprecated files (132 downloadables, 0 wibs):
    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
    current location on alpha:
@@ -645,8 +647,6 @@ B') Deprecated files (134 downloadables, 0 wibs):
     wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp2.tagAlign.gz
     wgEncodeYaleChIPseqAlignmentsRep3K562Bdp1.tagAlign.gz
     wgEncodeYaleChIPseqAlignmentsRep3K562Brf1.tagAlign.gz
-    wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz
-    wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz
     wgEncodeYaleChIPseqRel2AlignmentsRep1Helas3Largefragment.tagAlign.gz
     wgEncodeYaleChIPseqRel2AlignmentsRep2Helas3Largefragment.tagAlign.gz
 
