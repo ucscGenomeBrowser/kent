@@ -1217,7 +1217,7 @@ type bed 3
 origAssembly hg19
 nextItemButton on
 shortLabel SYDH Histone
-longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UCD/Harvard 
+longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard 
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line  NT2D1=NT2-D1
