@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.66 2010/04/09 17:08:48 kent Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.67 2010/05/06 18:53:34 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -252,7 +252,6 @@ $(window).load(function () {
         browser = "chrome";
     }
     loadImgAreaSelect(true);
-    hgTracksInitTracks();
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
 
@@ -336,7 +335,7 @@ return true;
 
 function setUpMakeItemsDrag(trackName)
 {
-// Set up so that they can drag out to define a new item on a makeItems track. 
+// Set up so that they can drag out to define a new item on a makeItems track.
 var img = $("#img_data_" + trackName);
 if(img != undefined && img.length != 0) {
     var trackImgTbl = $('#imgTbl');
