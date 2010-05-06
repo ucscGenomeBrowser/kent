@@ -8,7 +8,7 @@
 #include "bedGraph.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.4 2010/05/04 23:55:11 kent Exp $";
+static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.5 2010/05/06 17:53:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -205,7 +205,7 @@ for (ref = list; ref != NULL; ref = ref->next)
         fprintf(f, "%d,", i);
     fprintf(f, "\t");
     for (i=0; i<sourceCount; ++i)
-        fprintf(f, "%1.5f,", levels[i]);
+        fprintf(f, "%d,", round(levels[i]));
     fprintf(f, "\n");
     }
 
