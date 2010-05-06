@@ -4,6 +4,9 @@ include trackDb.encode.ra
 # chainNet tracks
 include trackDb.chainNet.ra
 
+# Neandertal tracks
+include trackDb.nt.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -1121,6 +1124,23 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v8
+release beta
+
+track dgv
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+priority 144.8
+visibility hide
+color 0,100,0
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
+dataVersion v9
+release alpha
 
 track kiddEichlerDisc
 compositeTrack on

@@ -1,6 +1,7 @@
-#	"$Id: trackDb.ra,v 1.627 2010/04/27 23:13:56 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.628 2010/05/06 19:04:27 angie Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.nt.ra
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
