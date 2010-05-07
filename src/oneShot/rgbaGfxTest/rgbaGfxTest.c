@@ -13,7 +13,7 @@ int chromEnd = 74589245;
 int minVal = 0;
 int maxVal = 40;
 
-static char const rcsid[] = "$Id: rgbaGfxTest.c,v 1.2 2010/04/30 17:08:46 kent Exp $";
+static char const rcsid[] = "$Id: rgbaGfxTest.c,v 1.3 2010/05/07 05:37:08 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -374,7 +374,7 @@ bigWigFileClose(&bwf);
 void rgbaGfxTest(char *inNames[], int inCount, char *output)
 /* rgbaGfxTest - Test out rgbaGfx system.. */
 {
-int width = 700, heightOne = 50, spaceBetween=10;
+int width = 700, heightOne = 50, spaceBetween=6;
 int lineHeight = heightOne + spaceBetween;
 int height = lineHeight * (inCount+1);
 struct rgbaGfx *rg = rgbaGfxNew(width, height);
@@ -397,8 +397,9 @@ int i;
 for (i=0; i<inCount; ++i)
     {
     struct rgbaColor col = rgbaLightRainbowColor((double)i/inCount);
-    drawBigWigAt(inNames[i], rg, col, 0, 0, width, heightOne);
-    drawBigWigAt(inNames[i], rg, col, 0, (1+i)*lineHeight, width, heightOne);
+    uglyf("color %d,%d,%d\n", col.r, col.g, col.b);
+    drawBigWigAt(inNames[i], rg, col, 0, spaceBetween, width, heightOne);
+    drawBigWigAt(inNames[i], rg, col, 0, (1+i)*lineHeight + spaceBetween, width, heightOne);
     }
 
 savePng(output, rg);
