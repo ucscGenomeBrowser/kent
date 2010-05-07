@@ -31,16 +31,17 @@ def print_sam (fh, qname, flag, rname, pos, mapq, cigar, mrnm, mpos, isize,
 def rc (sequence):
   return sequence.translate(string.maketrans("ACGTacgt", "TGCAtgca"))[::-1]
 
-if (len(sys.argv) != 3):
+if (len(sys.argv) < 2):
   print >> sys.stderr, "Usage:"
+  print >> sys.stderr, "  elandExtToSAM.py eland_extended_file > SAM_filename"
+  print >> sys.stderr, "    prints out SAM file to stdout"
+  print >> sys.stderr
   print >> sys.stderr, "  elandExtToSAM.py eland_extended_file SAM_filename"
+  print >> sys.stderr, "    prints out gzip-ed SAM file to SAM_filename.gz"
   sys.exit(-1)
 else:
   # Open up eland extended file handle
   elandExtFile = sys.argv[1]
-  outputFile = sys.argv[2]
-  if not outputFile.endswith('.gz'):
-    outputFile += ".gz"
   try:
     if elandExtFile.endswith('.bz2'):
       eland_f = bz2.BZ2File(elandExtFile, 'rb')
@@ -51,11 +52,18 @@ else:
   except:
     print >> sys.stderr, "Error: Can't open file '%s'" % elandExtFile
     sys.exit(-1)
-  try:
-    sam_f = gzip.GzipFile(outputFile, 'wb', 6)
-  except:
-    print >> sys.stderr, "Error: Can't open file '%s'" % outputFile
-    sys.exit(-1)
+
+  if (len(sys.argv) == 3):
+    outputFile = sys.argv[2]
+    if not outputFile.endswith('.gz'):
+      outputFile += ".gz"
+    try:
+      output_f = gzip.GzipFile(outputFile, 'wb', 6)
+    except:
+      print >> sys.stderr, "Error: Can't open file '%s'" % outputFile
+      sys.exit(-1)
+  else:
+    output_f = sys.stdout
 
 # Regex for match location
 #  can either include chrom info (chr_pattern)
@@ -149,10 +157,7 @@ for line in eland_f:
       else:
         print >> sys.stderr, "Error: Invalid strand in '%s'" % match_info
 
-    print_sam(sam_f, QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
+    print_sam(output_f, QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
               SEQ, QUAL, TAG)
-
-eland_f.close()
-sam_f.close()
 
 sys.exit(0)
