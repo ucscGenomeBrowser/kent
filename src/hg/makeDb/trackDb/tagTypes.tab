@@ -9,6 +9,7 @@
 # edited lightly by hand.
 
 accession *
+aggregate bigWig wig bedGraph
 allButtonPair *
 altColor *
 autoScale *
@@ -47,6 +48,7 @@ colorChromDefault psl
 compareGenomeLinks bed
 compositeTrack *
 configurable *
+container *
 controlledVocabulary *
 dataVersion *
 dateSubmitted bedGraph bed
