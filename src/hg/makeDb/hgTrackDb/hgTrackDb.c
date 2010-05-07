@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.65 2010/05/07 05:04:12 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.66 2010/05/07 05:05:05 kent Exp $";
 
 
 void usage()
@@ -86,7 +86,6 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     struct trackDb *tdb = hel->val;
     slSafeAddHead(&tdbList, tdb);
-    if (sameString("affyAllExonSuper", tdb->tableName)) uglyf("trackDbListFromHash of %s, tdb %p, tdb->grp=%s<BR>\n", tdb->tableName, tdb, tdb->grp); 
     }
 return tdbList;
 }
@@ -269,7 +268,6 @@ tdbList= pruneRelease(tdbList);
  * applying overrides*/
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
-    if (sameString("affyAllExonSuper", tdb->tableName)) uglyf("addVersionRa %s of %s, tdb %p, tdb->grp=%s<BR>\n", raName, tdb->tableName, tdb, tdb->grp); 
     if (tdb->overrides != NULL)
 	applyOverride(trackHash, tdb);
     else
@@ -726,7 +724,6 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	 * Only put it on the list once. */
 	if (!hashLookup(superTrackHash, parent->tableName))
 	    {
-	if (parent != NULL && sameString("affyAllExonSuper", parent->tableName)) uglyf("flatten from heavens of %s, tdb %p, parent %p, parent->subTracks %p, parent->grp=%s<BR>\n", parent->tableName, tdb, parent, parent->subtracks, parent->grp); 
 	    hashAdd(superTrackHash, parent->tableName, parent);
 	    slAddHead(&tdbList, parent);
 	    }
@@ -758,7 +755,6 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
     FILE *f = mustOpen(tab, "w");
     for (td = tdbList; td != NULL; td = td->next)
         {
-	if (sameString("affyAllExonSuper", td->tableName)) uglyf("got %s befor hVarSubstTrackDb, grp=%s\n", td->tableName, td->grp);
         hVarSubstTrackDb(td, database);
         char *hold = td->html;
         td->html = "";
