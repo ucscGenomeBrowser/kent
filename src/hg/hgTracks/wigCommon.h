@@ -130,6 +130,13 @@ void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
 /* Draw once we've figured out predraw. */
 
+void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis, char *shortLabel, double graphUpperLimit, double graphLowerLimit,
+	boolean showNumbers);
+/* Draw labels on left for a wiggle-type track. */
+
 /******************  in source file bedGraph.c ************************/
 void wigBedGraphFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);

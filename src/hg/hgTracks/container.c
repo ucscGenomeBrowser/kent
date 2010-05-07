@@ -8,57 +8,58 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "container.h"
 
 
-static void containerLoad(struct track *tg)
+static void containerLoad(struct track *track)
 /* containerLoad - call load routine on all children. This one is generic for all containers. */
 {
 struct track *subtrack;
-for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     subtrack->loadItems(subtrack);
 }
 
-static void containerFree(struct track *tg)
+static void containerFree(struct track *track)
 /* containerFree - call free routine on all children. */
 {
 struct track *subtrack;
-for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     subtrack->freeItems(subtrack);
 }
 
-static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
+static void containerDraw(struct track *track, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw items in container. */
 {
-// hvGfxBox(hvg, xOff, yOff, width, tg->height, MG_BLUE);
 struct track *subtrack;
-for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+int y = yOff;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
-	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+	{
+	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
+	}
     }
 }
 
-static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
+static int containerTotalHeight(struct track *track, enum trackVisibility vis)
 /* Return total height of container. */
 {
-int totalHeight =  wigTotalHeight(tg, vis);
+int totalHeight = 0;
 struct track *subtrack;
-for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    subtrack->totalHeight(subtrack, vis);
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+	{
+	totalHeight += subtrack->totalHeight(subtrack, vis);
+	track->lineHeight = subtrack->lineHeight;
+	track->heightPer = subtrack->heightPer;
+	}
+    }
+track->height = totalHeight;
 return totalHeight;
-}
-
-void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
-/* Draw left labels - by deferring to first subtrack. */
-{
-if (tg->subtracks)
-    tg->drawLeftLabels(tg->subtracks, seqStart, seqEnd, hvg, xOff, yOff, 
-    	width, height, withCenterLabels, font, color, vis);
 }
 
 void makeContainerTrack(struct track *track, struct trackDb *tdb)
@@ -78,17 +79,21 @@ for (subtdb = tdb->subtracks; subtdb != NULL; subtdb = subtdb->next)
     }
 slSort(&track->subtracks, trackPriCmp);
 
-/* Set methods shared by all containers. */
+/* Set methods that may be shared by all containers. */
 track->loadItems = containerLoad;
 track->freeItems = containerFree;
+track->drawItems = containerDraw;
+track->totalHeight = containerTotalHeight;
 
 /* Set methods specific to containers. */
 char *containerType = trackDbSetting(tdb, "container");
 if (sameString(containerType, "multiWig"))
     {
-    track->totalHeight = multiWigTotalHeight;
-    track->drawItems = multiWigDraw;
-    track->drawLeftLabels = multiWigLeftLabels;
+    multiWigContainerMethods(track);
+    }
+else if (sameString(containerType, "folder"))
+    {
+    /* Folder's just use the default methods. */
     }
 else
     errAbort("unknown container type %s in trackDb for %s", containerType, tdb->tableName);

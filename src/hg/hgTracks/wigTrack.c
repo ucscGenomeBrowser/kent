@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.106 2010/04/27 23:31:41 braney Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.107 2010/05/07 22:30:14 kent Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -1364,11 +1364,12 @@ freeMem(preDrawContainer);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
 
-void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
+void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
-/*	drawing left labels	*/
+	enum trackVisibility vis, char *shortLabel, 
+	double graphUpperLimit, double graphLowerLimit, boolean showNumbers)
+/* Draw labels on left for a wiggle-type track. */
 {
 int fontHeight = tl.fontHeight+1;
 int centerOffset = 0;
@@ -1390,22 +1391,20 @@ if (withCenterLabels)
 if (tg->limitedVis == tvDense)
     {
     hvGfxTextRight(hvg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
-	tg->ixColor, font, tg->shortLabel);
+	tg->ixColor, font, shortLabel);
     }
 else if (tg->limitedVis == tvFull)
     {
     int centerLabel = (height/2)-(fontHeight/2);
-    int labelWidth = 0;
+    int labelWidth = mgFontStringWidth(font, shortLabel);
 
     /* track label is centered in the whole region */
-    hvGfxText(hvg, xOff, yOff+centerLabel, tg->ixColor, font, tg->shortLabel);
-    labelWidth = mgFontStringWidth(font,tg->shortLabel);
+    hvGfxText(hvg, xOff, yOff+centerLabel, tg->ixColor, font, shortLabel);
+
     /*	Is there room left to draw the min, max ?	*/
-    if (height >= (3 * fontHeight))
+    if (showNumbers && height >= (3 * fontHeight))
 	{
 	boolean zeroOK = TRUE;
-	double graphUpperLimit = tg->graphUpperLimit;
-	double graphLowerLimit = tg->graphLowerLimit;
 	char upper[SMALLBUF];
 	char lower[SMALLBUF];
 	char upperTic = '-';	/* as close as we can get with ASCII */
@@ -1498,7 +1497,17 @@ else if (tg->limitedVis == tvFull)
 	    }	/*	drawing 0.0 and perhaps yLineMark	*/
 	}	/* if (height >= (3 * fontHeight))	*/
     }	/*	if (tg->visibility == tvFull)	*/
-}	/* wigLeftLabels */
+} /* wigAxisLeftLabels */
+
+void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+/*	drawing left labels	*/
+{
+wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels, 
+	font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit, TRUE);
+}	
 
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[])
