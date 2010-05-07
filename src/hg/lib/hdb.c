@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.424 2010/04/26 23:17:41 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.425 2010/05/07 05:03:55 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3448,8 +3448,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (parent != NULL)
         {
-	tdbMarkAsComposite(parent);
-	tdbMarkAsCompositeChild(tdb);
+	if (trackDbLocalSetting(parent, "compositeTrack"))
+	    {
+	    tdbMarkAsComposite(parent);
+	    tdbMarkAsCompositeChild(tdb);
+	    }
 	}
     trackDbCompositeMarkup(tdb, tdb->subtracks);
     }

@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.85 2010/04/30 00:23:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.86 2010/05/07 05:03:55 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -38,9 +38,11 @@ void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b
 /* Turn comma-separated string of three numbers into three
  * color components. */
 {
+char dupe[64];
+safecpy(dupe, sizeof(dupe), text);
 char *words[4];
 int wordCount;
-wordCount = chopString(text, ", \t", words, ArraySize(words));
+wordCount = chopString(dupe, ", \t", words, ArraySize(words));
 if (wordCount != 3)
     errAbort("Expecting 3 comma separated values in %s.", text);
 *r = atoi(words[0]);
@@ -48,7 +50,7 @@ if (wordCount != 3)
 *b = atoi(words[2]);
 }
 
-static unsigned char parseVisibility(char *value, struct lineFile *lf)
+static unsigned char parseVisibility(char *value)
 /* Parse a visibility value */
 {
 if (sameString(value, "hide") || sameString(value, "0"))
@@ -62,8 +64,7 @@ else if (sameString(value, "pack") || sameString(value, "3"))
 else if (sameString(value, "squish") || sameString(value, "4"))
     return tvSquish;
 else
-    errAbort("Unknown visibility %s line %d of %s",
-             value, lf->lineIx, lf->fileName);
+    errAbort("Unknown visibility %s ", value);
 return tvHide;  /* never reached */
 }
 
@@ -90,52 +91,54 @@ static void trackDbAddInfo(struct trackDb *bt,
 {
 if (sameString(var, "track"))
     parseTrackLine(bt, value, lf);
-else if (sameString(var, "shortLabel") || sameString(var, "name"))
-    bt->shortLabel = cloneString(value);
-else if (sameString(var, "longLabel") || sameString(var, "description"))
-    bt->longLabel = cloneString(value);
-else if (sameString(var, "priority"))
-    bt->priority = atof(value);
-else if (sameWord(var, "url"))
-    bt->url = cloneString(value);
-else if (sameString(var, "visibility"))
-    {
-    bt->visibility =  parseVisibility(value, lf);
-    }
-else if (sameWord(var, "color"))
-    {
-    parseColor(value, &bt->colorR, &bt->colorG, &bt->colorB);
-    }
-else if (sameWord(var, "altColor"))
-    {
-    parseColor(value, &bt->altColorR, &bt->altColorG, &bt->altColorB);
-    }
-else if (sameWord(var, "type"))
-    {
-    bt->type = cloneString(value);
-    }
-else if (sameWord(var, "spectrum") || sameWord(var, "useScore"))
-    {
-    bt->useScore = TRUE;
-    }
-else if (sameWord(var, "canPack"))
-    {
-    bt->canPack = !(sameString(value, "0") || sameString(value, "off"));
-    }
-else if (sameWord(var, "chromosomes"))
-    sqlStringDynamicArray(value, &bt->restrictList, &bt->restrictCount);
-else if (sameWord(var, "private"))
-    bt->private = TRUE;
-else if (sameWord(var, "group"))
-    {
-    bt->grp = cloneString(value);
-    }
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
 hashAdd(bt->settingsHash, var, cloneString(value));
 
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
+}
+
+void trackDbFieldsFromSettings(struct trackDb *bt)
+/* Update trackDb fields from settings hash */
+{
+char *shortLabel = trackDbSetting(bt, "shortLabel");
+if (shortLabel != NULL)
+     bt->shortLabel = cloneString(shortLabel);
+char *longLabel = trackDbSetting(bt, "longLabel");
+if (longLabel != NULL)
+     bt->longLabel = cloneString(longLabel);
+char *priority = trackDbSetting(bt, "priority");
+if (priority != NULL)
+     bt->priority = atof(priority);
+char *url = trackDbSetting(bt, "url");
+if (url != NULL)
+     bt->url = cloneString(url);
+char *visibility = trackDbSetting(bt, "visibility");
+if (visibility != NULL)
+     bt->visibility = parseVisibility(visibility);
+char *color = trackDbSetting(bt, "color");
+if (color != NULL)
+    parseColor(color, &bt->colorR, &bt->colorG, &bt->colorB);
+char *altColor = trackDbSetting(bt, "altColor");
+if (altColor != NULL)
+    parseColor(altColor, &bt->altColorR, &bt->altColorG, &bt->altColorB);
+char *type = trackDbSetting(bt, "type");
+if (type != NULL)
+     bt->type = cloneString(type);
+if (trackDbSetting(bt, "spectrum") != NULL || trackDbSetting(bt, "useScore") != NULL)
+    bt->useScore = TRUE;
+char *canPack = trackDbSetting(bt, "canPack");
+if (canPack != NULL)
+    bt->canPack = !(sameString(canPack, "0") || sameString(canPack, "off"));
+char *chromosomes = trackDbSetting(bt, "chromosomes");
+if (chromosomes != NULL)
+    sqlStringDynamicArray(chromosomes, &bt->restrictList, &bt->restrictCount);
+if (trackDbSetting(bt, "private") != NULL)
+    bt->private = TRUE;
+char *grp = trackDbSetting(bt, "group");
+if (grp != NULL)
+     bt->grp = cloneString(grp);
 }
 
 static void replaceStr(char **varPtr, char *val)
@@ -292,7 +295,9 @@ struct lineFile *lf = lineFileOpen(raFile, TRUE);
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
+#ifdef UNUSED
 struct hash *compositeHash = hashNew(8);
+#endif /* UNUSED */
 char *incFile;
 
 for (;;)
@@ -345,8 +350,10 @@ for (;;)
 	trackDbUpdateOldTag(&word, &line);
 	trackDbAddInfo(bt, word, line, lf);
 	}
+#ifdef UNUSED
     if (trackDbLocalSetting(bt, "compositeTrack") != NULL)
         hashAdd(compositeHash, bt->tableName, bt);
+#endif /* UNUSED */
     }
 lineFileClose(&lf);
 
@@ -354,6 +361,7 @@ slReverse(&btList);
 return btList;
 }
 
+#ifdef UNUSED
 void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
 			      boolean hideFirst)
 /* Override visbility settings using a ra file.  If hideFirst, set all
@@ -382,12 +390,13 @@ while ((raRecord = raNextRecord(lf)) != NULL)
         {
         struct trackDb *td = hashFindVal(tdHash, trackName);
         if (td != NULL)
-            td->visibility = parseVisibility(visibility, lf);
+            td->visibility = parseVisibility(visibility);
         }
     hashFree(&raRecord);
     }
 lineFileClose(&lf);
 }
+#endif /* UNUSED */
 
 #ifdef OLD
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa)
@@ -702,7 +711,6 @@ else if (startsWith("bam", type))
     cType = cfgBam;
 // TODO: Only these are configurable so far
 
-// uglyAbort("cfgTypeFromTdb 3 tdb=%s type=%s", tdb->tableName,type);
 if(cType == cfgNone && warnIfNecessary)
     {
     if(!startsWith("bed ", type) && !startsWith("bigBed", type)

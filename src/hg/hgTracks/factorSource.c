@@ -33,8 +33,20 @@ static void factorSourceDrawItemAt(struct track *track, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw factorSource item at a particular position. */
 {
-/* Calculate position, and draw box around where we are. */
+/* Figure out maximum score and draw box based on it. */
+int i;
 struct bed *bed = item;
+double maxScore = 0.0;
+for (i=0; i<track->sourceCount; ++i)
+    {
+    float score = bed->expScores[i];
+    if (score > maxScore)
+        maxScore = score;
+    }
+int grayIx = grayInRange(bed->score, 0, 1000);
+color = shadesOfGray[grayIx];
+
+/* Calculate position, and draw box around where we are. */
 int heightPer = track->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
@@ -55,7 +67,7 @@ if (vis == tvFull || vis == tvPack)
 	float score = bed->expScores[i];
 	if (score > 0.0)
 	    {
-	    int grayIx = grayInRange(score*100, 0, 100);
+	    int grayIx = grayInRange(score, 0, 1000);
 	    int color = shadesOfGray[grayIx];
 	    hvGfxTextCentered(hvg, x, y, w, heightPer, color, font, label);
 	    x += mgFontStringWidth(font, label);

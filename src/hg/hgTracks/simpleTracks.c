@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.137 2010/04/27 20:28:28 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.138 2010/05/07 05:07:57 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2234,28 +2234,31 @@ chromColor[26] = hvGfxFindColorIx(hvg, CHROM_Un_R, CHROM_Un_G, CHROM_Un_B);
 chromosomeColorsMade = TRUE;
 }
 
+void rFindSubtrackColors(struct hvGfx *hvg, struct track *trackList)
+/* Find colors of subtracks and their children */
+{
+struct track *subtrack;
+for (subtrack = trackList; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (!isSubtrackVisible(subtrack))
+ 	continue;
+    subtrack->ixColor = hvGfxFindRgb(hvg, &subtrack->color);
+    subtrack->ixAltColor = hvGfxFindRgb(hvg, &subtrack->altColor);
+    rFindSubtrackColors(hvg, subtrack->subtracks);
+    }
+}
+
 void findTrackColors(struct hvGfx *hvg, struct track *trackList)
 /* Find colors to draw in. */
 {
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (track->limitedVis != tvHide)
+    if (track->limitedVis != tvHide) 
 	{
 	track->ixColor = hvGfxFindRgb(hvg, &track->color);
 	track->ixAltColor = hvGfxFindRgb(hvg, &track->altColor);
-        if (tdbIsComposite(track->tdb))
-            {
-	    struct track *subtrack;
-            for (subtrack = track->subtracks; subtrack != NULL;
-                         subtrack = subtrack->next)
-                {
-                if (!isSubtrackVisible(subtrack))
-                    continue;
-                subtrack->ixColor = hvGfxFindRgb(hvg, &subtrack->color);
-                subtrack->ixAltColor = hvGfxFindRgb(hvg, &subtrack->altColor);
-                }
-            }
+	rFindSubtrackColors(hvg, track->subtracks);
         }
     }
 }
@@ -9023,7 +9026,7 @@ if (!tg->limitedVisSet)
 	tg->limitedVis = tvHide;
 	return tvHide;
 	}
-    if (trackIsCompositeWithSubtracks(tg))
+    if (tg->subtracks != NULL)
 	{
 	struct track *subtrack;
 	int subCnt = subtrackCount(tg->subtracks);

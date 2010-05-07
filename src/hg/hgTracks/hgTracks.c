@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1645 2010/04/29 02:56:41 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1646 2010/05/07 05:07:57 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2733,7 +2733,10 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     if (slCount(tdb->subtracks) != 0)
         {
         tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
-        makeCompositeTrack(track, tdb);
+	if (trackDbLocalSetting(tdb, "compositeTrack"))
+	    makeCompositeTrack(track, tdb);
+	else if (trackDbLocalSetting(tdb, "container"))
+	    makeContainerTrack(track, tdb);
         }
     else
         {

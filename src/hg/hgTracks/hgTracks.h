@@ -94,7 +94,7 @@ struct track
     int lineHeight;            /* Height per track including border. */
     int heightPer;             /* Height per track minus border. */
 
-    int (*itemHeight)(struct track *xtg, void *item);
+    int (*itemHeight)(struct track *tg, void *item);
     /* Return height of one item. */
 
     int (*itemRightPixels)(struct track *tg, void *item);
@@ -230,6 +230,9 @@ struct track
 
 
 typedef void (*TrackHandler)(struct track *tg);
+
+int trackPriCmp(const void *va, const void *vb);
+/* Compare for sort based on priority */
 
 boolean trackIsCompositeWithSubtracks(struct track *track);
 /* Temporary function until all composite tracks point to their own children */
@@ -1077,6 +1080,9 @@ void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBe
 void makeCompositeTrack(struct track *track, struct trackDb *tdb);
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
+
+void makeContainerTrack(struct track *track, struct trackDb *tdb);
+/* Construct track subtrack list from trackDb entry for container tracks. */
 
 bool isSubtrackVisible(struct track *tg);
 /* Should this subtrack be displayed? */

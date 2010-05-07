@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.519 2010/04/12 16:22:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.520 2010/05/07 05:05:58 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2154,7 +2154,9 @@ struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(database, tdb->tableName) && trackDbLocalSetting(tdb, "compositeTrack") == NULL) // NOTE: tdb if composite, is not yet populated with it's own subtracks!
+    if (!hTableOrSplitExists(database, tdb->tableName) && tdb->subtracks != NULL &&
+    	trackDbLocalSetting(tdb, "compositeTrack") == NULL) 
+	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",

@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgTracks
 
 O = $A.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigTrack.o \
-	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o contigTrack.o \
+	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
         expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \
 	mafTrack.o makeItemsTrack.o netTrack.o pslTrack.o rmskTrack.o \
