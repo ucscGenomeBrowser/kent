@@ -16408,9 +16408,11 @@ see file: ucscGenes10.txt
       foreach i (`cat file.lst`)
           wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/$i
       end
+      regClusterBedExpCfg peak.lst -encodeList peak.cfg
       # Then edit peak.cfg to make sure all cell lines have uniq letters
-      regClusterBedExpCfg peak.lst -encodeList peak.cfg peak.bed peak.exps
-      hgLoadBed hg18 wgEncodeRegTfbsClustered peak.bed
+      hgBedsToBedExps peak.cfg peak.bed peak.exps
+      awk '$2 != $3' peak.bed > filtered.bed
+      hgLoadBed hg18 wgEncodeRegTfbsClustered filtered.bed
       hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
 #######################################################################
@@ -28661,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.414 2010/05/05 00:49:41 kent Exp $
+# $Id: hg18.txt,v 1.415 2010/05/07 05:31:45 kent Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28709,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.414 2010/05/05 00:49:41 kent Exp $
+# $Id: hg18.txt,v 1.415 2010/05/07 05:31:45 kent Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
