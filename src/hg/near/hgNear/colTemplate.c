@@ -36,10 +36,18 @@ static void xyzCellPrint(struct column *col, struct genePos *gp,
 {
 char *string = xyzCellVal(col, gp, conn);
 hPrintf("<TD>");
-if (col->xyzItalics)
-    hPrintf("<I>%s</I>", naForNull(string));
+if (string == NULL) 
+    {
+    hPrintf("n/a");
+    }
+else if (col->xyzItalics)
+    {
+    hPrintf("<I>");
+    hPrintEncodedNonBreak(string);
+    hPrintf("</I>");
+    }
 else
-    hPrintf("%s", naForNull(string));
+    hPrintEncodedNonBreak(string);
 hPrintf("</TD>");
 freeMem(string);
 }

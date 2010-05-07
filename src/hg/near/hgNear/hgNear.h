@@ -366,6 +366,9 @@ void hPrintf(char *format, ...);
 void hPrintNonBreak(char *s);
 /* Print out string but replace spaces with &nbsp; */
 
+void hPrintEncodedNonBreak(char *s);
+/* Print with htmlEncode and non-break */
+
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
 

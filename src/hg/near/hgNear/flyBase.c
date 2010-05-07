@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: flyBase.c,v 1.1 2003/10/29 16:31:52 kent Exp $";
+static char const rcsid[] = "$Id: flyBase.c,v 1.2 2010/05/07 03:37:41 galt Exp $";
 
 static char *flyTxToGene(char *tx)
 /* Convert transcript to gene (by cutting off '-') */
@@ -30,7 +30,7 @@ char *geneName = flyTxToGene(gp->name);
 hPrintf("<TD><A HREF=\"");
 hPrintf(col->itemUrl, geneName);
 hPrintf("\" TARGET=_blank>");
-hPrintf("%s", gp->name);
+hPrintEncodedNonBreak(gp->name);
 hPrintf("</A></TD>");
 }
 

@@ -19,9 +19,8 @@
 #include "hgColors.h"
 #include "hgNear.h"
 #include "versionInfo.h"
-#include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.185 2009/11/20 19:17:35 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.186 2010/05/07 03:37:41 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -388,6 +387,7 @@ safef(query, sizeof(query), col->itemUrlQuery, sVal);
 return sqlQuickString(conn, query);
 }
 
+
 void cellSimplePrintExt(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn, boolean lookupForUrl)
 /* This just prints one field from table. */
@@ -403,7 +403,7 @@ else
     if (col->selfLink)
         {
 	selfAnchorId(gp);
-	hPrintNonBreak(s);
+	hPrintEncodedNonBreak(s);
         hPrintf("</A>");
 	}
     else if (col->itemUrl != NULL)
@@ -431,12 +431,12 @@ else
 	if (!col->useHgsid)
 	    hPrintf(" TARGET=_blank");
 	hPrintf(">");
-	hPrintNonBreak(s);
+	hPrintEncodedNonBreak(s);
         hPrintf("</A>");
 	}
     else
         {
-	hPrintNonBreak(s);
+	hPrintEncodedNonBreak(s);
 	}
     freeMem(s);
     }
@@ -550,7 +550,8 @@ if (s == NULL)
     s = cloneString("n/a");
 hPrintf("<TD>");
 selfAnchorId(gp);
-hPrintf("%s</A></TD>", s);
+hPrintEncodedNonBreak(s);
+hPrintf("</A></TD>");
 freeMem(s);
 }
 

@@ -613,11 +613,12 @@ for (hel = hashLookup(col->customIdHash, gp->name); hel != NULL; hel = hashLooku
         hPrintf("<A HREF=\"");
 	hPrintf(col->itemUrl, encoded);
 	hPrintf("\">");
-	hPrintNonBreak(hel->val);
+	hPrintEncodedNonBreak(hel->val);
 	hPrintf("</A>");
+	freeMem(encoded);
 	}
     else
-	hPrintNonBreak(hel->val);
+	hPrintEncodedNonBreak(hel->val);
     }
 if (!gotAny)
     {

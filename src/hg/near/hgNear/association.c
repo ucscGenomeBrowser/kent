@@ -345,7 +345,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hPrintf(col->itemUrl, row[1]);
 	hPrintf("\" TARGET=_blank>");
 	}
-    hPrintNonBreak(s);
+    hPrintEncodedNonBreak(s);
     if (col->itemUrl)
         {
 	hPrintf("</A>");

@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.33 2008/09/03 19:20:42 markd Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.34 2010/05/07 03:37:42 galt Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -260,7 +260,7 @@ if (s == NULL)
     }
 else
     {
-    hPrintNonBreak(s);
+    hPrintEncodedNonBreak(s);
     freeMem(s);
     }
 hPrintf("</A></TD>");

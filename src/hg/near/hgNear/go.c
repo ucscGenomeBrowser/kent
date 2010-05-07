@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.21 2007/05/03 21:31:58 fanhsu Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.22 2010/05/07 03:37:41 galt Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -123,7 +123,7 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    // hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/GSearch?query=%s&mode=id\" TARGET=_blank>", row[1]);
 	    // hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/DisplayGoTerm?id=%s&viz=tree\" TARGET=_blank>", row[1]);
 
-	    hPrintNonBreak(row[0]);
+	    hPrintEncodedNonBreak(row[0]);
 	    hPrintf("</A>");
 	    hPrintf("'");
 	    }
