@@ -32,6 +32,9 @@ void hPrintEnable();
 void hPrintNonBreak(char *s);
 /* Print out string but replace spaces with &nbsp; */
 
+void hPrintEncodedNonBreak(char *s);
+/* Print with htmlEncode and non-break */
+
 void hPuts(char *string);
 /* Puts that can be suppressed if not making html. */
 

@@ -2,8 +2,9 @@
  * when postscript and PDF images are being drawn  */
 
 #include "hPrint.h"
+#include "htmshell.h"
 
-static char const rcsid[] = "$Id: hPrint.c,v 1.10 2008/12/18 05:54:58 larrym Exp $";
+static char const rcsid[] = "$Id: hPrint.c,v 1.11 2010/05/07 03:38:32 galt Exp $";
 
 static boolean suppressHtml = FALSE;
 /* If doing PostScript output we'll suppress most of HTML output. */
@@ -59,6 +60,14 @@ while ((c = *s++) != '\0')
 	fputs("&nbsp;", stdout);
     else
         putchar(c);
+}
+
+void hPrintEncodedNonBreak(char *s)
+/* Print with htmlEncode and non-break */
+{
+char *encoded = htmlEncode(s);
+hPrintNonBreak(encoded);
+freeMem(encoded);
 }
 
 void hPuts(char *string)
