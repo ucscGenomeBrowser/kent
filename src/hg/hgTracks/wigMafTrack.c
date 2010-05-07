@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.144 2009/08/24 23:07:54 hiram Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.145 2010/05/07 18:29:15 kent Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -2459,7 +2459,6 @@ void wigMafMethods(struct track *track, struct trackDb *tdb,
 {
 struct track *wigTrack;
 int i;
-char *savedType;
 struct dyString *wigType;
 struct consWiggle *consWig, *consWigList = NULL;
 
@@ -2493,26 +2492,15 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
             continue;
         }
     first = FALSE;
-    //  manufacture and initialize wiggle subtrack
-    /* CAUTION: this code is very interdependent with
-       hgTracks.c:fillInFromType()
-       Also, both the main track and subtrack share the same tdb */
-    // restore "type" line, but change type to "wig"
-    savedType = tdb->type;
+
+    //  Manufacture and initialize wiggle subtrack, both tdb and track
+    struct trackDb *wigTdb = CloneVar(tdb);
     wigType = newDyString(64);
-    dyStringClear(wigType);
     dyStringPrintf(wigType, "type wig ");
     for (i = 1; i < wordCount; i++)
-        {
         dyStringPrintf(wigType, "%s ", words[i]);
-        }
-    dyStringPrintf(wigType, "\n");
-    tdb->type = cloneString(wigType->string);
-    wigTrack = trackFromTrackDb(tdb);
-    tdb->type = savedType;
-
-    /* replace tablename with wiggle table from "wiggle" setting */
-    wigTrack->mapName = cloneString(consWig->table);
+    wigTdb->type = cloneString(wigType->string);
+    wigTdb->tableName = consWig->table;
 
     /* Tweak wiggle left labels: replace underscore with space and
      * append 'Cons' */
@@ -2520,8 +2508,11 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     dyStringAppend(ds, consWig->leftLabel);
     if (differentString(consWig->leftLabel, DEFAULT_CONS_LABEL))
         dyStringAppend(ds, " Cons");
-    wigTrack->shortLabel = dyStringCannibalize(&ds);
-    subChar(wigTrack->shortLabel, '_', ' ');
+    wigTdb->shortLabel = dyStringCannibalize(&ds);
+    subChar(wigTdb->shortLabel, '_', ' ');
+
+    wigTrack = trackFromTrackDb(wigTdb);
+
 
     /* setup wiggle methods in subtrack */
     wigMethods(wigTrack, tdb, wordCount, words);
