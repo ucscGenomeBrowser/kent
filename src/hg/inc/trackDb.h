@@ -180,10 +180,12 @@ void trackDbOutput(struct trackDb *el, FILE *f, char sep, char lastSep);
 int trackDbCmp(const void *va, const void *vb);
 /* Sort track by priority. */
 
+#ifdef UNUSED
 void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
 			      boolean hideFirst);
 /* Override visbility settings using a ra file.  If hideFirst, set all
  * visibilities to hide before applying visibilityRa. */
+#endif /* UNUSED */
 
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
@@ -193,6 +195,9 @@ struct trackDb *trackDbFromRa(char *raFile);
 
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
+
+void trackDbFieldsFromSettings(struct trackDb *td);
+/* Update trackDb fields from settings hash */
 
 char *trackDbLocalSetting(struct trackDb *tdb, char *name);
 /* Return setting from tdb, but *not* any of it's parents. */
