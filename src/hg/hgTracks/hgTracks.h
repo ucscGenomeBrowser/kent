@@ -91,8 +91,8 @@ struct track
 	/* Return total height. Called before and after drawItems.
 	 * Must set the following variables. */
     int height;                /* Total height - must be set by above call. */
-    int lineHeight;            /* Height per track including border. */
-    int heightPer;             /* Height per track minus border. */
+    int lineHeight;            /* Height per item line including border. */
+    int heightPer;             /* Height per item line minus border. */
 
     int (*itemHeight)(struct track *tg, void *item);
     /* Return height of one item. */
@@ -110,7 +110,7 @@ struct track
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw a single option.  This is optional, but if it's here
      * then you can plug in genericDrawItems into the drawItems,
-     * which takes care of all sorts of things. */
+     * which takes care of all sorts of things including packing. */
 
     int (*itemStart)(struct track *tg, void *item);
     /* Return start of item in base pairs. */
