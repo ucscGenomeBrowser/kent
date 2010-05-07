@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/Attic/trackDb.enc.ra,v 1.7 2010/05/06 20:50:36 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/Attic/trackDb.enc.ra,v 1.8 2010/05/07 15:49:03 cricket Exp $
 
 
 # Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler: Cricket)
@@ -6,7 +6,7 @@ track wgEncodeSydhHist
 release alpha
 compositeTrack on
 shortLabel SDYH Hist
-longLabel ENCODE Histone by ChIP-seq from Stanford/Yale/UC-Davis/Harvard 
+longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard 
 group regulation
 priority 0
 type bed 3
@@ -46,7 +46,7 @@ wgEncode 1
    		release alpha
     		subTrack wgEncodeSydhHistViewPeaks 
     		shortLabel MEL H3K4me3 Pk
-    		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me3 in MEL cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Peaks (H3K4me3 in MEL cells)
     		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -72,7 +72,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHistViewSig 
     		shortLabel MEL H3K4me3 Sg
-    		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me3 in MEL cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (H3K4me3 in MEL cells)
     		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
     		type bigWig 1 38729
     		color 153,38,0
@@ -83,7 +83,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHist off
     		shortLabel MEL Input Sig
-    		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in MEL cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (Input in MEL cells)
     		subGroups view=Signal factor=zInput cellType=MEL control=IGGYale treatment=None
     		type bigWig 1.000000 80497.000000
     		color 153,38,0
