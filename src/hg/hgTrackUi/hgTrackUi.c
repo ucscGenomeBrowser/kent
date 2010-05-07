@@ -38,19 +38,11 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.521 2010/05/07 23:50:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.522 2010/05/07 23:52:07 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
 char *chromosome = NULL;	        /* Chromosome. */
-
-void superTrackUi(struct trackDb *superTdb);
-
-
-
-/* Even more of a mess. */
-
-
 
 void tfbsConsSitesUi(struct trackDb *tdb)
 {
