@@ -1,11 +1,11 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/Attic/trackDb.enc.ra,v 1.8 2010/05/07 15:49:03 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/Attic/trackDb.enc.ra,v 1.9 2010/05/07 16:04:59 cricket Exp $
 
 
 # Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler: Cricket)
 track wgEncodeSydhHist
 release alpha
 compositeTrack on
-shortLabel SDYH Hist
+shortLabel SDYH Histone
 longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard 
 group regulation
 priority 0
