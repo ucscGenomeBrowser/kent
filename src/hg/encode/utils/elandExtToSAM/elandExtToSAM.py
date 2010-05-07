@@ -8,37 +8,53 @@
 # Additional sample input from:
 #   http://nextgenseq.blogspot.com/2008/10/file-formats.html
 
+import bz2
+import gzip
 import re
 import string
 import sys
 
 # Output variables in SAM tab-delimited format
-def print_sam (qname, flag, rname, pos, mapq, cigar, mrnm, mpos, isize, 
+def print_sam (fh, qname, flag, rname, pos, mapq, cigar, mrnm, mpos, isize, 
                seq, qual, tag):
   if len(tag) != 0:
     # We have tags to output
     tagstring = '\t'.join(tag)
-    print "%s\t%d\t%s\t%d\t%d\t%s\t%s\t%d\t%d\t%s\t%s\t%s" % (qname,
+    output = "%s\t%d\t%s\t%d\t%d\t%s\t%s\t%d\t%d\t%s\t%s\t%s" % (qname,
      flag, rname, pos, mapq, cigar, mrnm, mpos, isize, seq, qual, tagstring)
   else:
-    print "%s\t%d\t%s\t%d\t%d\t%s\t%s\t%d\t%d\t%s\t%s" % (qname,
+    output = "%s\t%d\t%s\t%d\t%d\t%s\t%s\t%d\t%d\t%s\t%s" % (qname,
      flag, rname, pos, mapq, cigar, mrnm, mpos, isize, seq, qual)
+  fh.write(output + "\n")
 
 # Reverse complement sequence
 def rc (sequence):
   return sequence.translate(string.maketrans("ACGTacgt", "TGCAtgca"))[::-1]
 
-if (len(sys.argv) != 2):
+if (len(sys.argv) != 3):
   print >> sys.stderr, "Usage:"
-  print >> sys.stderr, "  elandExtToSAM.py eland_extended_file > SAM_filename"
+  print >> sys.stderr, "  elandExtToSAM.py eland_extended_file SAM_filename"
   sys.exit(-1)
 else:
   # Open up eland extended file handle
   elandExtFile = sys.argv[1]
+  outputFile = sys.argv[2]
+  if not outputFile.endswith('.gz'):
+    outputFile += ".gz"
   try:
-    eland_f = open(elandExtFile, 'r')
+    if elandExtFile.endswith('.bz2'):
+      eland_f = bz2.BZ2File(elandExtFile, 'rb')
+    elif elandExtFile.endswith('.gz'):
+      eland_f = gzip.GzipFile(elandExtFile, 'rb')
+    else:
+      eland_f = open(elandExtFile, 'r')
   except:
     print >> sys.stderr, "Error: Can't open file '%s'" % elandExtFile
+    sys.exit(-1)
+  try:
+    sam_f = gzip.GzipFile(outputFile, 'wb', 6)
+  except:
+    print >> sys.stderr, "Error: Can't open file '%s'" % outputFile
     sys.exit(-1)
 
 # Regex for match location
@@ -82,6 +98,12 @@ for line in eland_f:
   # No indels present in eland_extended alignment format
   match_loc_array = match_loc.split(',')
   for match_info in match_loc_array:
+    # Reset Defaults
+    FLAG = 0
+    POS = 0
+    MAPQ = 0
+    CIGAR = '*'
+    SEQ = seq
     TAG = []
     if match_info == '-':
       FLAG |= 0x4 # Query sequence is unmapped
@@ -127,7 +149,10 @@ for line in eland_f:
       else:
         print >> sys.stderr, "Error: Invalid strand in '%s'" % match_info
 
-    print_sam(QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
+    print_sam(sam_f, QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
               SEQ, QUAL, TAG)
+
+eland_f.close()
+sam_f.close()
 
 sys.exit(0)
