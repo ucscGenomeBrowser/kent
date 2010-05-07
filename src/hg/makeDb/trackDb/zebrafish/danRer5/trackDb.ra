@@ -25,7 +25,7 @@ indelQueryInsert on
 indelPolyA on
 
 track vegaGene
-#replaces record vegaGene in parent dir missing/extra subTrack
+#replaces record vegaGene in parent dir missing/extra parent
 shortLabel Vega Genes
 longLabel Vega v28 Annotations
 group genes
@@ -39,7 +39,7 @@ dataVersion VEGA Release 28
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
 
 track vegaPseudoGene
-#replaces record vegaPseudoGene in parent dir missing/extra subTrack
+#replaces record vegaPseudoGene in parent dir missing/extra parent
 shortLabel Vega Pseudogenes
 longLabel Vega v28 Annotated Pseudogenes 
 group genes
@@ -81,13 +81,13 @@ groupings affyZonWildTypeGroups
     
     track affyZonWildType
     #replaces record affyZonWildType in parent dir missing/extra group,visibility,type,expScale,expStep,groupings
-    subTrack affyConsensusAndTargetZonWildType
+    parent affyConsensusAndTargetZonWildType
     shortLabel WT Array Cons
     longLabel Zon Lab Expression for Wild Type Zfish (Consensus Seq.)
     priority 1
    
     track affyTargetZonWildType
-    subTrack affyConsensusAndTargetZonWildType
+    parent affyConsensusAndTargetZonWildType
     shortLabel WT Array Targ
     longLabel Zon Lab Expression for Wild Type Zfish (Target Seq.)
     priority 2
@@ -102,13 +102,13 @@ visibility hide
 type psl .
 
     track affyZebrafishConsensus
-    subTrack affyZebrafish
+    parent affyZebrafish
     shortLabel Affy Zfish Cons
     longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
     priority 1
     
     track affyZebrafishTarget
-    subTrack affyZebrafish
+    parent affyZebrafish
     shortLabel Affy Zfish Targ
     longLabel Alignments of Affymetrix Target Sequences from Zebrafish Chip
     priority 2 

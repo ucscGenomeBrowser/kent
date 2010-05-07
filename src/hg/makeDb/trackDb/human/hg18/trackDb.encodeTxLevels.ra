@@ -26,42 +26,42 @@ dataVersion ENCODE Oct 2005 Freeze
 origAssembly hg17
 
     track encodeAffyRnaGm06990Signal
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Signal
     color 150,90,0
     priority 1
 
     track encodeAffyRnaHeLaSignal
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLa) Signal
     color 220,132,12
     priority 2
 
     track encodeAffyRnaHl60SignalHr00
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
     color 50,50,150
     priority 3
 
     track encodeAffyRnaHl60SignalHr02
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
     color 50,50,180
     priority 4
 
     track encodeAffyRnaHl60SignalHr08
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
     color 50,50,210
     priority 5
 
     track encodeAffyRnaHl60SignalHr32
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
     color 50,50,240
@@ -81,42 +81,42 @@ dataVersion ENCODE Oct 2005 Freeze
 origAssembly hg17
 
     track encodeAffyRnaGm06990Sites
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Sites 
     color 150,90,0
     priority 1
 
     track encodeAffyRnaHeLaSites
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLa) Sites 
     color 220,132,12
     priority 2
 
     track encodeAffyRnaHl60SitesHr00
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Sites 
     color 50,50,150
     priority 3
 
     track encodeAffyRnaHl60SitesHr02
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Sites 
     color 50,50,180
     priority 4
 
     track encodeAffyRnaHl60SitesHr08
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Sites 
     color 50,50,210
     priority 5
 
     track encodeAffyRnaHl60SitesHr32
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Sites 
     color 50,50,240
@@ -138,26 +138,26 @@ origAssembly hg17
 #origAssembly hg17
 #
 #    track encodeGisRnaPetMCF7
-#    subTrack encodeGisRnaPet
+#    parent encodeGisRnaPet
 #    shortLabel GIS RNA MCF7
 #    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (log phase MCF7)
 #    priority 1
 #
 #    track encodeGisRnaPetMCF7Estr
-#    subTrack encodeGisRnaPet
+#    parent encodeGisRnaPet
 #    shortLabel GIS RNA MCF7 Est
 #    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (estrogen-stim MCF7)
 #    priority 2
 #
 #    track encodeGisRnaPetHCT116
-#    subTrack encodeGisRnaPet
+#    parent encodeGisRnaPet
 #    shortLabel GIS RNA HCT116
 #    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (5FU-stim HCT116)
 #    priority 3
 #    color 58,119,40
 #    
 #    track encodeGisRnaPetHes3
-#    subTrack encodeGisRnaPet
+#    parent encodeGisRnaPet
 #    shortLabel GIS RNA hES3
 #    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (embryonic stem cell hES3)
 #    priority 4
@@ -203,7 +203,7 @@ origAssembly hg17
 subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
 
     track encodeYaleAffyNeutRNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA Neutro
     longLabel Yale Neutrophil RNA Transcript Map
     priority 1
@@ -211,7 +211,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=neutro 
 
     track encodeYaleAffyPlacRNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA Plcnta
     longLabel Yale Placenta RNA Transcript Map
     priority 2
@@ -219,7 +219,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=plac
 
     track encodeYaleAffyNB4RARNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 RA
     longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
     priority 3
@@ -227,7 +227,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=nb4
 
     track encodeYaleAffyNB4TPARNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 TPA
     longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 4
@@ -235,7 +235,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=nb4
 
     track encodeYaleAffyNB4UntrRNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 Un
     longLabel Yale NB4 RNA Transcript Map, Untreated
     priority 5
@@ -243,7 +243,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=nb4
 
     track encodeYaleAffyHELAS3PolyARNATranscriptMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA HELA PolyA
     longLabel Yale HELA S3 PolyA RNA Transcript Map
     priority 6
@@ -251,7 +251,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3TotalRNATranscriptMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA HELA Total
     longLabel Yale HELA S3 Total RNA Transcript Map
     priority 7
@@ -273,7 +273,7 @@ origAssembly hg17
 subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
 
     track encodeYaleAffyNeutRNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR Neutro
     longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
     priority 1
@@ -283,7 +283,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyPlacRNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR Plcnta
     longLabel Yale Placenta RNA Transcriptionally Active Region
     priority 12
@@ -293,7 +293,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4RARNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR NB4 RA
     longLabel Yale NB4 RNA, TAR, Treated with Retinoic Acid
     priority 13
@@ -303,7 +303,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4TPARNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR NB4 TPA
     longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 14
@@ -313,7 +313,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4UntrRNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR NB4 Un
     longLabel Yale NB4 RNA, TAR, Untreated
     priority 15
@@ -323,7 +323,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyHELAS3PolyARNATarsRelaxed
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA PolyA R
     longLabel Yale HELA S3 PolyA RNA, TAR, Relaxed
     priority 16
@@ -331,7 +331,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3PolyARNATarsStringent
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA PolyA S
     longLabel Yale HELA S3 PolyA RNA, TAR, Stringent
     priority 17
@@ -339,7 +339,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3TotalRNATarsRelaxed
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA Total R
     longLabel Yale HELA S3 Total RNA, TAR, Relaxed
     priority 18
@@ -347,7 +347,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3TotalRNATarsStringent
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA Total S
     longLabel Yale HELA S3 Total RNA, TAR, Stringent
     priority 19

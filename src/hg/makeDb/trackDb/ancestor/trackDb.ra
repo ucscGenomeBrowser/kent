@@ -79,7 +79,7 @@ type psl
 noInherit on
 
     track transMapRefGene
-    subTrack transMap
+    parent transMap
     shortLabel TransMapRefGene
     longLabel TransMap RefSeq Genes
     color 34,139,34
@@ -92,7 +92,7 @@ noInherit on
     itemAttrTbl transMapRefAttr
 
     track transMapRefAli
-    subTrack transMap off
+    parent transMap off
     shortLabel TransMapRefAli
     longLabel TransMap RefSeq Alignments
     color 120,12,120
@@ -103,7 +103,7 @@ noInherit on
     cdsDrawDefault genomic\ codons
 
     track transMapMRnaGene
-    subTrack transMap
+    parent transMap
     shortLabel TransMapMRnaGene
     longLabel TransMap protein coding mRNAs
     color 34,139,34
@@ -115,7 +115,7 @@ noInherit on
     baseColorDefault genomicCodons
 
     track transMapMRnaAli
-    subTrack transMap off
+    parent transMap off
     shortLabel TransMapMRnaAli
     longLabel TransMap mRNA alignments
     color 134,139,34

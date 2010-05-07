@@ -52,19 +52,19 @@ origAssembly hg17
 priority 49.2
 
     track encodeGisRnaPetMCF7
-    subTrack encodeGisRnaPet
+    parent encodeGisRnaPet
     shortLabel GIS RNA MCF7
     longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (log phase MCF7)
     priority 1
 
     track encodeGisRnaPetMCF7Estr
-    subTrack encodeGisRnaPet
+    parent encodeGisRnaPet
     shortLabel GIS RNA MCF7 Est
     longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (estrogen-stim MCF7)
     priority 2
 
     track encodeGisRnaPetHCT116
-    subTrack encodeGisRnaPet
+    parent encodeGisRnaPet
     shortLabel GIS RNA HCT116
     longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (5FU-stim HCT116)
     priority 3
@@ -86,42 +86,42 @@ viewLimits 0:25
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyRnaGm06990Signal
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Signal
     color 150,90,0
     priority 1
 
     track encodeAffyRnaHeLaSignal
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLa) Signal
     color 220,132,12
     priority 2
 
     track encodeAffyRnaHl60SignalHr00
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
     color 50,50,150
     priority 3
 
     track encodeAffyRnaHl60SignalHr02
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
     color 50,50,180
     priority 4
 
     track encodeAffyRnaHl60SignalHr08
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
     color 50,50,210
     priority 5
 
     track encodeAffyRnaHl60SignalHr32
-    subTrack encodeAffyRnaSignal
+    parent encodeAffyRnaSignal
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
     color 50,50,240
@@ -139,42 +139,42 @@ type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyRnaGm06990Sites
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Sites 
     color 150,90,0
     priority 1
 
     track encodeAffyRnaHeLaSites
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLa) Sites 
     color 220,132,12
     priority 2
 
     track encodeAffyRnaHl60SitesHr00
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Sites 
     color 50,50,150
     priority 3
 
     track encodeAffyRnaHl60SitesHr02
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Sites 
     color 50,50,180
     priority 4
 
     track encodeAffyRnaHl60SitesHr08
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Sites 
     color 50,50,210
     priority 5
 
     track encodeAffyRnaHl60SitesHr32
-    subTrack encodeAffyRnaTransfrags
+    parent encodeAffyRnaTransfrags
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Sites 
     color 50,50,240
@@ -198,7 +198,7 @@ dataVersion ENCODE Oct 2005 Freeze
 subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
 
     track encodeYaleAffyNeutRNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA Neutro
     longLabel Yale Neutrophil RNA Transcript Map
     priority 1
@@ -206,7 +206,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=neutro 
 
     track encodeYaleAffyPlacRNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA Plcnta
     longLabel Yale Placenta RNA Transcript Map
     priority 2
@@ -214,7 +214,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=plac
 
     track encodeYaleAffyNB4RARNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 RA
     longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
     priority 3
@@ -222,7 +222,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=nb4
 
     track encodeYaleAffyNB4TPARNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 TPA
     longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 4
@@ -230,7 +230,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=nb4
 
     track encodeYaleAffyNB4UntrRNATransMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 Un
     longLabel Yale NB4 RNA Transcript Map, Untreated
     priority 5
@@ -238,7 +238,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=nb4
 
     track encodeYaleAffyHELAS3PolyARNATranscriptMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA HELA PolyA
     longLabel Yale HELA S3 PolyA RNA Transcript Map
     priority 6
@@ -246,7 +246,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3TotalRNATranscriptMap
-    subTrack encodeYaleAffyRNATransMap
+    parent encodeYaleAffyRNATransMap
     shortLabel Yale RNA HELA Total
     longLabel Yale HELA S3 Total RNA Transcript Map
     priority 7
@@ -266,7 +266,7 @@ dataVersion ENCODE Oct 2005 Freeze
 subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
 
     track encodeYaleAffyNeutRNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR Neutro
     longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
     priority 1
@@ -276,7 +276,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyPlacRNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR Plcnta
     longLabel Yale Placenta RNA Transcriptionally Active Region
     priority 12
@@ -286,7 +286,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4RARNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR NB4 RA
     longLabel Yale NB4 RNA, TAR, Treated with Retinoic Acid
     priority 13
@@ -296,7 +296,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4TPARNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR NB4 TPA
     longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 14
@@ -306,7 +306,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4UntrRNATars
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR NB4 Un
     longLabel Yale NB4 RNA, TAR, Untreated
     priority 15
@@ -316,7 +316,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     urlLabel Yale DART Link:
 
     track encodeYaleAffyHELAS3PolyARNATarsRelaxed
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA PolyA R
     longLabel Yale HELA S3 PolyA RNA, TAR, Relaxed
     priority 16
@@ -324,7 +324,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3PolyARNATarsStringent
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA PolyA S
     longLabel Yale HELA S3 PolyA RNA, TAR, Stringent
     priority 17
@@ -332,7 +332,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3TotalRNATarsRelaxed
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA Total R
     longLabel Yale HELA S3 Total RNA, TAR, Relaxed
     priority 18
@@ -340,7 +340,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     subGroups celltype=hela
 
     track encodeYaleAffyHELAS3TotalRNATarsStringent
-    subTrack encodeYaleAffyRNATars
+    parent encodeYaleAffyRNATars
     shortLabel Yale TAR HELA Total S
     longLabel Yale HELA S3 Total RNA, TAR, Stringent
     priority 19
@@ -359,7 +359,7 @@ type bed 12
 dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
 
     track encodeGisChipPet
-    subTrack encodeGisChipPetAll
+    parent encodeGisChipPetAll
     shortLabel p53 HCT116 +5FU
     longLabel GIS ChIP-PET: p53 Ab on 5FU treated HCT116 cells
     color 158,35,135
@@ -368,7 +368,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     priority 1
 
     track encodeGisChipPetStat1Gif
-    subTrack encodeGisChipPetAll
+    parent encodeGisChipPetAll
     shortLabel STAT1 HeLa +gIF
     longLabel GIS ChIP-PET: STAT1 Ab on gIF treated HeLa cells
     color 67,79,35
@@ -376,7 +376,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     priority 2
 
     track encodeGisChipPetStat1NoGif
-    subTrack encodeGisChipPetAll
+    parent encodeGisChipPetAll
     shortLabel STAT1 HeLa -gIF
     longLabel GIS ChIP-PET: STAT1 Ab on untreated HeLa cells
     color 125,140,35
@@ -384,7 +384,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     priority 3
 
     track encodeGisChipPetMycP493
-    subTrack encodeGisChipPetAll
+    parent encodeGisChipPetAll
     shortLabel cMyc P493
     longLabel GIS ChIP-PET: c-Myc Ab on P493 B cells
     color 158,35,135
@@ -410,7 +410,7 @@ autoScale Off
 dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
 
     track encodeSangerChipH3K4me1
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4m1 GM6990
     subGroups celltype=gm06990 factor=h3k4me1
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, GM06990 cells) 
@@ -420,7 +420,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me2
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4m2 GM6990
     subGroups celltype=gm06990 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, GM06990 cells)
@@ -430,7 +430,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me3
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4m3 GM6990
     subGroups celltype=gm06990 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, GM06990 cells)
@@ -440,7 +440,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3ac
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3ac GM06990
     subGroups celltype=gm06990 factor=h3ac
     longLabel Sanger Institute ChIP-chip (H3ac ab, GM06990 cells) 
@@ -450,7 +450,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH4ac
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H4ac GM06990
     subGroups celltype=gm06990 factor=h4ac
     longLabel Sanger Institute ChIP-chip (H4ac ab, GM06990 cells)
@@ -460,7 +460,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K9me3
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K9me3 GM06990
     subGroups celltype=gm06990 factor=h3k9me3
     longLabel Sanger Institute ChIP-chip (H3K9me3 ab, GM06990 cells)
@@ -469,7 +469,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K27me3
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K27me3 GM06990
     subGroups celltype=gm06990 factor=h3k27me3
     longLabel Sanger Institute ChIP-chip (H3K27me3 ab, GM06990 cells)
@@ -478,7 +478,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
     
     track encodeSangerChipH3K36me3
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K36me3 GM06990
     subGroups celltype=gm06990 factor=h3k36me3
     longLabel Sanger Institute ChIP-chip (H3K36me3 ab, GM06990 cells)
@@ -487,7 +487,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K79me3
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K79me3 GM06990
     subGroups celltype=gm06990 factor=h3k79me3
     longLabel Sanger Institute ChIP-chip (H3K79me3 ab, GM06990 cells)
@@ -496,7 +496,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
     
     track encodeSangerChipCTCF
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI CTCF GM06990
     subGroups celltype=gm06990 factor=ctcf
     longLabel Sanger Institute ChIP-chip (CTCF ab, GM06990 cells)
@@ -505,7 +505,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
    
     track encodeSangerChipH3K4me2K562
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me2 K562
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, K562 cells)
     subGroups celltype=k562 factor=h3k4me2
@@ -515,7 +515,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me3K562
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me3 K562
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, K562 cells)
     subGroups celltype=k562 factor=h3k4me3
@@ -525,7 +525,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3acK562
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3ac K562
     longLabel Sanger Institute ChIP-chip (H3ac ab, K562 cells)
     subGroups celltype=k562 factor=h3ac
@@ -535,7 +535,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH4acK562
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H4ac K562
     longLabel Sanger Institute ChIP-chip (H4ac ab, K562 cells)
     subGroups celltype=k562 factor=h3ac
@@ -545,7 +545,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me1HeLa
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me1 HeLa
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, HeLa cells) 
     subGroups celltype=hela factor=h3k4me1
@@ -554,7 +554,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me2HeLa
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me2 HeLa
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, HeLa cells)
     subGroups celltype=hela factor=h3k4me2
@@ -563,7 +563,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me3HeLa
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me3 HeLa
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, HeLa cells)
     subGroups celltype=hela factor=h3k4me3
@@ -572,7 +572,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3acHeLa
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3ac HeLa
     longLabel Sanger Institute ChIP-chip (H3ac ab, HeLa cells) 
     subGroups celltype=hela factor=h3ac
@@ -581,7 +581,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH4acHeLa
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H4ac HeLa
     longLabel Sanger Institute ChIP-chip (H4ac ab, HeLa cells)
     subGroups celltype=hela factor=h4ac
@@ -590,7 +590,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me1HFL1
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me1 HFL-1
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, HFL-1 cells) 
     subGroups celltype=hfl1 factor=h3k4me1
@@ -599,7 +599,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me2HFL1
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me2 HFL-1
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h3k4me2
@@ -608,7 +608,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me3HFL1
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me3 HFL-1
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h3k4me3
@@ -617,7 +617,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3acHFL1
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3ac HFL-1
     longLabel Sanger Institute ChIP-chip (H3ac ab, HFL-1 cells) 
     subGroups celltype=hfl1 factor=h3ac
@@ -626,7 +626,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH4acHFL1
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H4ac HFL-1
     longLabel Sanger Institute ChIP-chip (H4ac ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h4ac
@@ -635,7 +635,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me1Molt4
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me1 MOLT4
     subGroups celltype=molt4 factor=h3k4me1
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, MOLT4 cells) 
@@ -644,7 +644,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me2Molt4
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me2 MOLT4
     subGroups celltype=molt4 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, MOLT4 cells)
@@ -653,7 +653,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me3Molt4
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me3 MOLT4
     subGroups celltype=molt4 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, MOLT4 cells)
@@ -662,7 +662,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3acMolt4
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3ac MOLT4
     subGroups celltype=molt4 factor=h3ac
     longLabel Sanger Institute ChIP-chip (H3ac ab, MOLT4 cells) 
@@ -671,7 +671,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH4acMolt4
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H4ac MOLT4
     subGroups celltype=molt4 factor=h4ac
     longLabel Sanger Institute ChIP-chip (H4ac ab, MOLT4 cells)
@@ -680,7 +680,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,130
 
     track encodeSangerChipH3K4me1Ptr8
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me1 PTR8
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, PTR8 cells) 
     subGroups celltype=ptr8 factor=h3k4me1
@@ -689,7 +689,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me2Ptr8
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me2 PTR8
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, PTR8 cells)
     subGroups celltype=ptr8 factor=h3k4me2
@@ -698,7 +698,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     color 10,10,10
 
     track encodeSangerChipH3K4me3Ptr8
-    subTrack encodeSangerChip
+    parent encodeSangerChip
     shortLabel SI H3K4me3 PTR8
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, PTR8 cells)
     subGroups celltype=ptr8 factor=h3k4me3
@@ -726,7 +726,7 @@ subGroup3 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3a
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipHitH3K4me1GM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4m1 GM6990
     longLabel Sanger Institute ChIP-chip Hits (H3K4me1 ab, GM06990 cells) 
     subGroups datatype=hit celltype=gm06990 factor=h3k4me1
@@ -734,7 +734,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3K4me2GM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4m2 GM6990
     subGroups datatype=hit celltype=gm06990 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Hits (H3K4me2 ab, GM06990 cells)
@@ -742,7 +742,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3K4me3GM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4m3 GM6990
     subGroups datatype=hit celltype=gm06990 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, GM06990 cells)
@@ -750,7 +750,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3acGM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3ac GM06990
     subGroups datatype=hit celltype=gm06990 factor=h3ac
     longLabel Sanger Institute ChIP-chip Hits (H3ac ab, GM06990 cells) 
@@ -758,7 +758,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH4acGM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H4ac GM06990
     subGroups datatype=hit celltype=gm06990 factor=h4ac
     longLabel Sanger Institute ChIP-chip Hits (H4ac ab, GM06990 cells)
@@ -766,7 +766,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3K4me2K562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me2 K562
     subGroups datatype=hit celltype=k562 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Hits (H3K4me2 ab, K562 cells)
@@ -774,7 +774,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipHitH3K4me3K562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me3 K562
     subGroups datatype=hit celltype=k562 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Hits (H3K4me3 ab, K562 cells)
@@ -782,7 +782,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipHitH3acK562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3ac K562
     subGroups datatype=hit celltype=k562 factor=h3ac
     longLabel Sanger Institute ChIP-chip Hits (H3ac ab, K562 cells)
@@ -790,7 +790,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipHitH4acK562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H4ac K562
     subGroups datatype=hit celltype=k562 factor=h4ac
     longLabel Sanger Institute ChIP-chip Hits (H4ac ab, K562 cells)
@@ -798,7 +798,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipHitH3K4me1HeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me1 HeLa
     subGroups datatype=hit celltype=hela factor=h3k4me1
     longLabel Sanger Institute ChIP-chip Hits (H3K4me1 ab, HeLa cells) 
@@ -806,7 +806,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3K4me2HeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me2 HeLa
     subGroups datatype=hit celltype=hela factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Hits (H3K4me2 ab, HeLa cells)
@@ -814,7 +814,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3K4me3HeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me3 HeLa
     subGroups datatype=hit celltype=hela factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Hits (H3K4me3 ab, HeLa cells)
@@ -822,7 +822,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH3acHeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3ac HeLa
     subGroups datatype=hit celltype=hela factor=h3ac
     longLabel Sanger Institute ChIP-chip Hits (H3ac ab, HeLa cells) 
@@ -830,7 +830,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipHitH4acHeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H4ac HeLa
     subGroups datatype=hit celltype=hela factor=h4ac
     longLabel Sanger Institute ChIP-chip Hits (H4ac ab, HeLa cells)
@@ -838,7 +838,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3K4me1GM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     noInherit on
     type bed 3 .
     shortLabel SI H3K4m1 GM6990
@@ -848,7 +848,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3K4me2GM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4m2 GM6990
     subGroups datatype=peak celltype=gm06990 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Peak Centers(H3K4me2 ab, GM06990 cells)
@@ -858,7 +858,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3K4me3GM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4m3 GM6990
     subGroups datatype=peak celltype=gm06990 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Peak Centers(H3K4me3 ab, GM06990 cells)
@@ -868,7 +868,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3acGM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3ac GM06990
     subGroups datatype=peak celltype=gm06990 factor=h3ac
     longLabel Sanger Institute ChIP-chip Peak Centers (H3ac ab, GM06990 cells) 
@@ -878,7 +878,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH4acGM06990
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H4ac GM06990
     subGroups datatype=peak celltype=gm06990 factor=h4ac
     longLabel Sanger Institute ChIP-chip Peak Centers (H4ac ab, GM06990 cells)
@@ -888,7 +888,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3K4me2K562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me2 K562
     subGroups datatype=peak celltype=k562 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me2 ab, K562 cells)
@@ -898,7 +898,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipCenterH3K4me3K562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me3 K562
     subGroups datatype=peak celltype=k562 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me3 ab, K562 cells)
@@ -908,7 +908,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipCenterH3acK562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3ac K562
     subGroups datatype=peak celltype=k562 factor=h3ac
     longLabel Sanger Institute ChIP-chip Peak Centers (H3ac ab, K562 cells)
@@ -918,7 +918,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipCenterH4acK562
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H4ac K562
     subGroups datatype=peak celltype=k562 factor=h4ac
     longLabel Sanger Institute ChIP-chip Peak Centers (H4ac ab, K562 cells)
@@ -928,7 +928,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,10
 
     track encodeSangerChipCenterH3K4me1HeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me1 HeLa
     subGroups datatype=peak celltype=hela factor=h3k4me1
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me1 ab, HeLa cells) 
@@ -938,7 +938,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3K4me2HeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me2 HeLa
     subGroups datatype=peak celltype=hela factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me2 ab, HeLa cells)
@@ -948,7 +948,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3K4me3HeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3K4me3 HeLa
     subGroups datatype=peak celltype=hela factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me3 ab, HeLa cells)
@@ -958,7 +958,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH3acHeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H3ac HeLa
     subGroups datatype=peak celltype=hela factor=h3ac
     longLabel Sanger Institute ChIP-chip Peak Centers (H3ac ab, HeLa cells) 
@@ -968,7 +968,7 @@ dataVersion ENCODE Oct 2005 Freeze
     color 10,10,130
 
     track encodeSangerChipCenterH4acHeLa
-    subTrack encodeSangerChipHits
+    parent encodeSangerChipHits
     shortLabel SI H4ac HeLa
     subGroups datatype=peak celltype=hela factor=h4ac
     longLabel Sanger Institute ChIP-chip Peak Centers (H4ac ab, HeLa cells)
@@ -995,42 +995,42 @@ autoScale Off
 dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeUCDavisE2F1Median
-    subTrack encodeUCDavisChip
+    parent encodeUCDavisChip
     shortLabel UCD E2F1
     longLabel UC Davis ChIP-chip NimbleGen (E2F1 ab, HeLa Cells)
     priority 1
     dataVersion ENCODE June 2005 Freeze
 
     track encodeUCDavisChipMyc
-    subTrack encodeUCDavisChip
+    parent encodeUCDavisChip
     shortLabel UCD c-Myc
     longLabel UC Davis ChIP-chip NimbleGen (c-Myc ab, HeLa Cells)
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
     
     track encodeUCDavisPolIIGM
-    subTrack encodeUCDavisChip
+    parent encodeUCDavisChip
     shortLabel UCD PolII_GM
     longLabel UC Davis ChIP-chip NimbleGen (PolII, GM06990 Cells)
     priority 3
     dataVersion Mar 2007
     
     track encodeUCDavisPolIIHelaS3
-    subTrack encodeUCDavisChip
+    parent encodeUCDavisChip
     shortLabel UCD PolII_HelaS3
     longLabel UC Davis ChIP-chip NimbleGen (PolII, HelaS3 Cells)
     priority 4
     dataVersion Mar 2007
     
     track encodeUCDavisTafGM
-    subTrack encodeUCDavisChip
+    parent encodeUCDavisChip
     shortLabel UCD Taf_GM
     longLabel UC Davis ChIP-chip NimbleGen (TAF, GM06990 Cells)
     priority 5
     dataVersion Mar 2007
     
     track encodeUCDavisTafHelaS3
-    subTrack encodeUCDavisChip
+    parent encodeUCDavisChip
     shortLabel UCD Taf_HelaS3
     longLabel UC Davis ChIP-chip NimbleGen (TAF, HelaS3 Cells)
     priority 6
@@ -1048,7 +1048,7 @@ type bed 5
 dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeUcDavisChipHitsE2F1
-    subTrack encodeUcDavisChipHits
+    parent encodeUcDavisChipHits
     shortLabel UCD E2F1 Hits
     longLabel UC Davis ChIP-chip Hits NimbleGen (E2F1 ab, HeLa Cells)
     priority 1
@@ -1056,7 +1056,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Oct 2006
 
     track encodeUcDavisChipHitsMyc
-    subTrack encodeUcDavisChipHits
+    parent encodeUcDavisChipHits
     shortLabel UCD c-Myc Hits
     longLabel UC Davis ChIP-chip Hits NimbleGen (c-Myc ab, HeLa Cells)
     priority 2
@@ -1084,7 +1084,7 @@ origAssembly hg17
 dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeUcsdNgHeLaDmH3K4_p0
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3K4me2 -gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H3K4me2, no gamma interferon
     subGroups gif=no factor=h3k4me2 peak=signal
@@ -1093,7 +1093,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p30
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3K4me2 +gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H3K4me2, 30 min after gamma interferon
     subGroups gif=yes factor=h3k4me2 peak=signal
@@ -1102,7 +1102,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaH3K4me3_p0
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3K4me3 -gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H3K4me3, no gamma interferon
     subGroups gif=no factor=h3k4me3 peak=signal
@@ -1111,7 +1111,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaH3K4me3_p30
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3K4m3 +gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H3K4me3, 30 min after gamma interferon
     subGroups gif=yes factor=h3k4me3 peak=signal
@@ -1120,7 +1120,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p0
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3ac -gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H3ac, no gamma interferon
     subGroups gif=no factor=h3ac peak=signal
@@ -1129,7 +1129,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p30
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3ac +gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H3ac, 30 min after gamma interferon
     subGroups gif=yes factor=h3ac peak=signal
@@ -1138,7 +1138,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH4_p0
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H4ac -gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, H4ac, no gamma interferon
     subGroups gif=no factor=h4ac peak=signal
@@ -1147,7 +1147,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaStat1_p30
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI STAT1 +gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, STAT1, 30 min after gamma interferon
     subGroups gif=yes factor=stat1 peak=signal
@@ -1156,7 +1156,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaRnap_p0
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI Pol2 -gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, Pol2, no gamma interferon
     subGroups gif=no factor=pol2 peak=signal
@@ -1165,7 +1165,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaRnap_p30
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI Pol2 +gIF
     longLabel Ludwig Institute/UCSD ChIP-chip Ng: HeLa, Pol2, 30 min after gamma interferon
     color 0,63,135
@@ -1174,7 +1174,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p0_peak
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3K4m2 -IF Pk
     longLabel Ludwig Institute/UCSD ChIP-chip Ng Peak: HeLa, H3K4me2, no gamma interferon
     subGroups gif=no factor=h3k4me2 peak=peak
@@ -1183,7 +1183,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p30_peak
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3K4m2 +IF Pk
     longLabel Ludwig Institute/UCSD ChIP-chip Ng Peak: HeLa, H3K4me2, 30 min after gamma interferon
     subGroups gif=yes factor=h3k4me2 peak=peak
@@ -1192,7 +1192,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p0_peak
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3ac -gIF Pk
     longLabel Ludwig Institute/UCSD ChIP-chip Ng Peak: HeLa, H3ac, no gamma interferon
     subGroups gif=no factor=h3ac peak=peak
@@ -1201,7 +1201,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p30_peak
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H3ac +gIF Pk
     longLabel Ludwig Institute/UCSD ChIP-chip Ng Peak: HeLa, H3ac, 30 min after gamma interferon
     subGroups gif=yes factor=h3ac peak=peak
@@ -1210,7 +1210,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH4_p0_peak
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI H4ac -gIF Pk
     color 33,91,51
     longLabel Ludwig Institute/UCSD ChIP-chip Ng Peak: HeLa, H4ac, no gamma interferon
@@ -1219,7 +1219,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaStat1_p30_peak
-    subTrack encodeUcsdNgGif
+    parent encodeUcsdNgGif
     shortLabel LI STAT1 +gIF Pk
     subGroups gif=yes factor=stat1 peak=peak
     color 0,63,135
@@ -1247,7 +1247,7 @@ origAssembly hg16
 dataVersion Dec 2006, March 2007, May 2007, Aug 2007
 
     track encodeUcsdLiPcrGMCTCF
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI CTCF GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (CTCF in GM06990 cells)
     subGroups celltype=gm factor=ctcf
@@ -1256,7 +1256,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 1
 
     track encodeUcsdLiPcrHeLaCTCF
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI CTCF HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (CTCF in HeLa cells)
     subGroups celltype=hela factor=ctcf
@@ -1264,7 +1264,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 2
 
     track encodeUcsdLiPcrIMR90CTCF
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI CTCF IMR90
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (CTCF in IMR90 cells)
     subGroups celltype=imr90 factor=ctcf
@@ -1273,7 +1273,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 3
 
     track encodeUcsdLiPcrK562CTCF
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI CTCF K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (CTCF in K562 cells)
     subGroups celltype=k562 factor=ctcf
@@ -1282,7 +1282,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 4
 
     track encodeUcsdLiPcrU937CTCF
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI CTCF U937
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (CTCF in U937 cells)
     subGroups celltype=u937 factor=ctcf
@@ -1290,7 +1290,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 5
 
     track encodeUcsdLiPcrHeLaH2AZ
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H2AZ HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H2AZ in HeLa cells)
     subGroups celltype=hela factor=h2az
@@ -1298,7 +1298,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 6
 
     track encodeUcsdLiPcrGM06990H3K4me1
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me1 GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me1 in GM06990 cells)
     subGroups celltype=gm factor=h3k4me1
@@ -1307,7 +1307,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 7
 
     track encodeUcsdLiPcrIMR90H3K4me1
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me1 IMR90
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me1 in IMR90 cells)
     subGroups celltype=imr90 factor=h3k4me1
@@ -1316,7 +1316,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 8
 
     track encodeUcsdLiPcrK562H3K4me1
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me1 K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me1 in K562 cells)
     subGroups celltype=k562 factor=h3k4me1
@@ -1325,7 +1325,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 9
 
     track encodeUcsdLiPcrGM06990H3K4me2
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me2 GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me2 in GM06990 cells)
     subGroups celltype=gm factor=h3k4me2
@@ -1334,7 +1334,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 10
 
     track encodeUcsdLiPcrK562H3K4me2
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me2 K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me2 in K562 cells)
     subGroups celltype=k562 factor=h3k4me2
@@ -1343,7 +1343,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 11
 
     track encodeUcsdLiPcrGM06990H3K4me3
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me3 GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me3 in GM06990 cells)
     subGroups celltype=gm factor=h3k4me3
@@ -1352,7 +1352,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 12
 
     track encodeUcsdLiPcrHeLaH3K4me3
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me3 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me3 in HeLa cells)
     subGroups celltype=hela factor=h3k4me3
@@ -1360,7 +1360,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 13
 
     track encodeUcsdLiPcrIMR90H3K4me3
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me3 IMR90
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me3 in IMR90 cells)
     subGroups celltype=imr90 factor=h3k4me3
@@ -1369,7 +1369,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 14
 
     track encodeUcsdLiPcrK562H3K4me3
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K4me3 K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K4me3 in K562 cells)
     subGroups celltype=k562 factor=h3k4me3
@@ -1378,7 +1378,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 15
 
     track encodeUcsdLiPcrGMH3K9Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K9Ac GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K9Ac in GM06990 cells)
     subGroups celltype=gm factor=h3k9ac
@@ -1387,7 +1387,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 16
 
     track encodeUcsdLiPcrK562H3K9Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K9Ac K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K9Ac in K562 cells)
     subGroups celltype=k562 factor=h3k9ac
@@ -1396,7 +1396,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 17
 
     track encodeUcsdLiPcrGMH3K18Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K18Ac GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K18Ac in GM06990 cells)
     subGroups celltype=gm factor=h3k18ac
@@ -1405,7 +1405,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 18
 
     track encodeUcsdLiPcrK562H3K18Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K18Ac K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K18Ac in K562 cells)
     subGroups celltype=k562 factor=h3k18ac
@@ -1414,7 +1414,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 19
 
     track encodeUcsdLiPcrGMH3K27Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K27Ac GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K27Ac in GM06990 cells)
     subGroups celltype=gm factor=h3k27ac
@@ -1423,7 +1423,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 20
 
     track encodeUcsdLiPcrHeLaH3K27Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K27Ac HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K27Ac in HeLa cells)
     subGroups celltype=hela factor=h3k27ac
@@ -1431,7 +1431,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 21
 
     track encodeUcsdLiPcrK562H3K27Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H3K27Ac K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H3K27Ac in K562 cells)
     subGroups celltype=k562 factor=h3k27ac
@@ -1440,7 +1440,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 22
 
     track encodeUcsdLiPcrK562H4Ac
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H4Ac K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H4Ac in K562 cells)
     subGroups celltype=k562 factor=h4ac
@@ -1449,7 +1449,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 23
 
     track encodeUcsdLiPcrHeLaH4K20me1
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H4K20me1 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H4K20me1 in HeLa cells)
     subGroups celltype=hela factor=h4k20me1
@@ -1457,7 +1457,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 24
 
     track encodeUcsdLiPcrHeLaH4K20me2
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H4K20me2 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H4K20me2 in HeLa cells)
     subGroups celltype=hela factor=h4k20me2
@@ -1465,7 +1465,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 25
 
     track encodeUcsdLiPcrHeLaH4K20me3
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI H4K20me3 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (H4K20me3 in HeLa cells)
     subGroups celltype=hela factor=h4k20me3
@@ -1473,7 +1473,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 26
 
     track encodeUcsdLiPcrGM06990p300
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI p300 GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (p300 in GM06990 cells)
     subGroups celltype=gm factor=p300
@@ -1482,7 +1482,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 27
 
     track encodeUcsdLiPcrHeLap300
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI p300 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (p300 in HeLa cells)
     subGroups celltype=hela factor=p300
@@ -1490,7 +1490,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 28
 
     track encodeUcsdLiPcrIMR90p300
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI p300 IMR90
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (p300 in IMR90 cells)
     subGroups celltype=imr90 factor=p300
@@ -1499,7 +1499,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 29
 
     track encodeUcsdLiPcrK562p300
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI p300 K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (p300 in K562 cells)
     subGroups celltype=k562 factor=p300
@@ -1508,7 +1508,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 30
 
     track encodeUcsdLiPcrGMRNAPII
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI Pol2 GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (Pol2 in GM06990 cells)
     subGroups celltype=gm factor=pol2
@@ -1517,7 +1517,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 31
 
     track encodeUcsdLiPcrGMTAF250
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI TAF1 GM
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (TAF1 in GM06990 cells)
     subGroups celltype=gm factor=taf1
@@ -1526,7 +1526,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 32
 
     track encodeUcsdLiPcrHeLaTAF250
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI TAF1 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (TAF1 in HeLa cells)
     subGroups celltype=hela factor=taf1
@@ -1534,7 +1534,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 33
 
     track encodeUcsdLiPcrK562TAF250
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI TAF1 K562
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (TAF1 in K562 cells)
     subGroups celltype=k562 factor=taf1
@@ -1543,7 +1543,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 34
 
     track encodeUcsdLiPcrTonsilTAF250
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI TAF1 Tonsil
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (TAF1 in tonsil cells)
     subGroups celltype=tonsil factor=taf1
@@ -1551,7 +1551,7 @@ dataVersion Dec 2006, March 2007, May 2007, Aug 2007
     priority 35
 
     track encodeUcsdLiPcrHeLaYY1
-    subTrack encodeUcsdLiPcrChip
+    parent encodeUcsdLiPcrChip
     shortLabel LI YY1 HeLa
     longLabel Ludwig Institute/UCSD PCR ChIP-chip (YY1 in HeLa cells)
     subGroups celltype=hela factor=yy1
@@ -1578,7 +1578,7 @@ origAssembly hg17
 dataVersion Dec 2006, March 2007, May 2007
 
     track encodeUcsdLiNgGM06990CTCF
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     shortLabel LI CTCF GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (CTCF in GM06990 cells)
     subGroups celltype=gm factor=ctcf
@@ -1590,7 +1590,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Mar 2007
     shortLabel LI CTCF HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (CTCF in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=ctcf
     priority 2
 
@@ -1598,7 +1598,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI H3 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3
     priority 3
 
@@ -1606,14 +1606,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI H3Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3Ac in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3ac
     priority 4
 
     track encodeUcsdLiNgGM06990H3K4me1
     shortLabel LI H3K4me1 GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me1 in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k4me1
     color 43,109,51
     dataVersion May 2007
@@ -1623,7 +1623,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI H3K4me1 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me1 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k4me1
     priority 6
 
@@ -1631,7 +1631,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion May 2007
     shortLabel LI H3K4me1 K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me1 in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=h3k4me1
     color 51,43,109
     priority 7
@@ -1639,7 +1639,7 @@ dataVersion Dec 2006, March 2007, May 2007
     track encodeUcsdLiNgGM06990H3K4me2
     shortLabel LI H3K4me2 GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me2 in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k4me2
     color 43,109,51
     dataVersion May 2007
@@ -1649,7 +1649,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion May 2007
     shortLabel LI H3K4me2 K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me2 in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=h3k4me2
     color 51,43,109
     priority 9
@@ -1658,14 +1658,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI K3K4me2 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me2 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k4me2
     priority 10
 
     track encodeUcsdLiNgGM06990H3K4me3
     shortLabel LI H3K4me3 GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me3 in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k4me3
     color 43,109,51
     dataVersion Mar 2007
@@ -1674,7 +1674,7 @@ dataVersion Dec 2006, March 2007, May 2007
     track encodeUcsdLiNgK562H3K4me3
     shortLabel LI H3K4me3 K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me3 in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=h3k4me3
     dataVersion May 2007
     color 51,43,109
@@ -1684,14 +1684,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI H3K4me3 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K4me3 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k4me2
     priority 13
 
     track encodeUcsdLiNgGM06990H3K9Ac
     shortLabel LI H3K9Ac GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K9Ac in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k9ac
     color 43,109,51
     dataVersion May 2007
@@ -1701,14 +1701,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Mar 2007
     shortLabel LI H3K9Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K9Ac in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k9ac
     priority 15
 
     track encodeUcsdLiNgK562H3K9Ac
     shortLabel LI H3K9Ac K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K9Ac in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=h3k9ac
     dataVersion May 2007
     color 51,43,109
@@ -1717,7 +1717,7 @@ dataVersion Dec 2006, March 2007, May 2007
     track encodeUcsdLiNgGM06990H3K18Ac
     shortLabel LI H3K18Ac GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K18Ac in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k18ac
     color 43,109,51
     dataVersion Mar 2007
@@ -1727,14 +1727,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Mar 2007
     shortLabel LI H3K18Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K18Ac in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k18ac
     priority 18
 
     track encodeUcsdLiNgK562H3K18Ac
     shortLabel LI H3K18Ac K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K18Ac in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=h3k18ac
     color 51,43,109
     dataVersion May 2007
@@ -1743,7 +1743,7 @@ dataVersion Dec 2006, March 2007, May 2007
     track encodeUcsdLiNgGM06990H3K27Ac
     shortLabel LI H3K27Ac GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K27Ac in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=h3k27ac
     color 43,109,51
     dataVersion Mar 2007
@@ -1753,14 +1753,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Mar 2007
     shortLabel LI H3K27Ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K27Ac in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k27ac
     priority 21
 
     track encodeUcsdLiNgK562H3K27Ac
     shortLabel LI H3K27Ac K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K27Ac in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=h3k27ac
     color 51,43,109
     dataVersion May 2007
@@ -1770,7 +1770,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Mar 2007
     shortLabel LI H3K27me3 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H3K27me3 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h3k27me3
     priority 23
 
@@ -1778,7 +1778,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI H4ac HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (H4ac in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=h4ac
     priority 24
 
@@ -1786,14 +1786,14 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI p300 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (p300 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=p300
     priority 25
 
     track encodeUcsdLiNgGM06990RNAPII
     shortLabel LI Pol2 GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (RNA Polymerase II in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=pol2
     dataVersion Mar 2007
     color 43,109,51
@@ -1803,7 +1803,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI Pol2 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (RNA Polymerase II in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=pol2
     priority 27
 
@@ -1811,7 +1811,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Mar 2007
     shortLabel LI TAF1 GM
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (TAF1 in GM06990 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=gm factor=taf1
     color 43,109,51
     priority 28
@@ -1820,7 +1820,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion Dec 2006
     shortLabel LI TAF1 HeLa
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (TAF1 in HeLa cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=hela factor=taf1
     priority 29
 
@@ -1828,7 +1828,7 @@ dataVersion Dec 2006, March 2007, May 2007
     dataVersion May 2007
     shortLabel LI TAF1 K562
     longLabel Ludwig Institute/UCSD Nimblegen ChIP-chip (TAF1 in K562 cells)
-    subTrack encodeUcsdLiNgChip
+    parent encodeUcsdLiNgChip
     subGroups celltype=k562 factor=taf1
     color 51,43,109
     priority 30
@@ -1851,13 +1851,13 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgChipSignal
-    subTrack encodeUcsdNgChip
+    parent encodeUcsdNgChip
     shortLabel LI Ng TAF1 IMR90
     longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells 
     priority 1
 
     track encodeUcsdNgChipKnownSites
-    subTrack encodeUcsdNgChip
+    parent encodeUcsdNgChip
     shortLabel TAF1 Known Sites
     longLabel Ludwig Institute TAF1 Sites Matching to Known Transcripts
     noInherit on
@@ -1867,7 +1867,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 2
 
     track encodeUcsdNgChipNovelSites
-    subTrack encodeUcsdNgChip
+    parent encodeUcsdNgChip
     shortLabel TAF1 Novel Sites
     longLabel Ludwig Institute TAF1 Sites Matching No Known Transcripts
     noInherit on
@@ -1894,27 +1894,27 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgValChipH3ac
-    subTrack encodeUcsdNgValChip
+    parent encodeUcsdNgValChip
     shortLabel LI Ng Val H3ac
     longLabel Ludwig Institute ChIP-chip Validation: H3ac antibody, IMR90 cells
     priority 1
 
     track encodeUcsdNgValChipH3K4me
-    subTrack encodeUcsdNgValChip
+    parent encodeUcsdNgValChip
     shortLabel LI Ng Val H3K4m2
     longLabel Ludwig Institute ChIP-chip Validation: H3K4me2 antibody, IMR90 cells
     priority 2
     color 0,63,135
 
     track encodeUcsdNgValChipRnap
-    subTrack encodeUcsdNgValChip
+    parent encodeUcsdNgValChip
     shortLabel LI Ng Val Pol2
     longLabel Ludwig Institute ChIP-chip Validation: Pol2 8WG16 antibody, IMR90 cells
     priority 3
     color 109,51,43
 
     track encodeUcsdNgValChipTaf
-    subTrack encodeUcsdNgValChip
+    parent encodeUcsdNgValChip
     shortLabel LI Ng Val TAF1
     longLabel Ludwig Institute ChIP-chip Validation: TAF1 antibody, IMR90 cells
     priority 4
@@ -1941,31 +1941,31 @@ yLineMark 2.378
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUppsalaChipAch3
-    subTrack encodeUppsalaChip
+    parent encodeUppsalaChip
     shortLabel UU H3ac HepG2
     longLabel Uppsala University, Sweden  ChIP-chip (H3ac, HepG2) 
     priority 1
 
     track encodeUppsalaChipHnf3b
-    subTrack encodeUppsalaChip
+    parent encodeUppsalaChip
     shortLabel UU HNF-3b HepG2
     longLabel Uppsala University, Sweden  ChIP-chip (HNF-3b, HepG2) 
     priority 2
 
     track encodeUppsalaChipHnf4a
-    subTrack encodeUppsalaChip
+    parent encodeUppsalaChip
     shortLabel UU HNF-4a HepG2
     longLabel Uppsala University, Sweden  ChIP-chip (HNF-4a, HepG2) 
     priority 3
 
     track encodeUppsalaChipUsf1
-    subTrack encodeUppsalaChip
+    parent encodeUppsalaChip
     shortLabel UU USF-1 HepG2
     longLabel Uppsala University, Sweden  ChIP-chip (USF-1, HepG2) 
     priority 4
 
     track encodeUppsalaChipSites
-    subTrack encodeUppsalaChip
+    parent encodeUppsalaChip
     noInherit on
     shortLabel UU Sites
     longLabel Uppsala University, Sweden  ChIP-chip (HepG2) Sites
@@ -1992,31 +1992,31 @@ altColor 50, 50, 50
 dataVersion ENCODE May 2006
 
     track encodeUppsalaChipH3acBut0h
-    subTrack encodeUppsalaChipBut
+    parent encodeUppsalaChipBut
     shortLabel UU H3ac HepG2 0h
     longLabel Uppsala University, Sweden  ChIP-chip (H3ac, HepG2, Butyrate 0h) 
     priority 1
 
     track encodeUppsalaChipH3acBut12h
-    subTrack encodeUppsalaChipBut
+    parent encodeUppsalaChipBut
     shortLabel UU H3ac HepG2 12h
     longLabel Uppsala University, Sweden  ChIP-chip (H3ac, HepG2, Butyrate 12h) 
     priority 2
 
     track encodeUppsalaChipH4acBut0h
-    subTrack encodeUppsalaChipBut
+    parent encodeUppsalaChipBut
     shortLabel UU H4ac HepG2 0h
     longLabel Uppsala University, Sweden  ChIP-chip (H4ac, HepG2, Butyrate 0h) 
     priority 3
 
     track encodeUppsalaChipH4acBut12h
-    subTrack encodeUppsalaChipBut
+    parent encodeUppsalaChipBut
     shortLabel UU H4ac HepG2 12h
     longLabel Uppsala University, Sweden  ChIP-chip (H4ac, HepG2, Butyrate 12h) 
     priority 4
 
     track encodeUppsalaChipH3acBut0vs12
-    subTrack encodeUppsalaChipBut
+    parent encodeUppsalaChipBut
     noInherit on
     shortLabel UU H3ac 0h vs 12h
     longLabel Uppsala University, Sweden  ChIP-chip (H3ac 0h vs. 12h)
@@ -2025,7 +2025,7 @@ dataVersion ENCODE May 2006
     priority 5
 
     track encodeUppsalaChipH4acBut0vs12
-    subTrack encodeUppsalaChipBut
+    parent encodeUppsalaChipBut
     noInherit on
     shortLabel UU H4ac 0h vs 12h
     longLabel Uppsala University, Sweden  ChIP-chip (H4ac 0h vs. 12h)
@@ -2052,28 +2052,28 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
-    subTrack encodeYaleChIPSTAT1Pval
+    parent encodeYaleChIPSTAT1Pval
     shortLabel Yale 36-36 PVal
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, P-Value
     priority 1
     color 50,50,200
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
-    subTrack encodeYaleChIPSTAT1Pval
+    parent encodeYaleChIPSTAT1Pval
     shortLabel Yale 50-38 PVal
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, P-Value
     priority 2
     color 50,50,200
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
-    subTrack encodeYaleChIPSTAT1Pval
+    parent encodeYaleChIPSTAT1Pval
     shortLabel Yale 50-50 PVal
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, P-Value
     priority 3
     color 50,50,200
 
     track encodeYaleChIPSTAT1HeLaBingRenPval
-    subTrack encodeYaleChIPSTAT1Pval
+    parent encodeYaleChIPSTAT1Pval
     shortLabel Yale LI PVal
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, P-Value
     priority 4
@@ -2098,7 +2098,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
-    subTrack encodeYaleChIPSTAT1Sig
+    parent encodeYaleChIPSTAT1Sig
     shortLabel Yale 36-36 Sig
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, Signal
     priority 1
@@ -2106,7 +2106,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 224,66,81
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSig
-    subTrack encodeYaleChIPSTAT1Sig
+    parent encodeYaleChIPSTAT1Sig
     shortLabel Yale 50-38 Sig
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, Signal
     priority 2
@@ -2114,7 +2114,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 224,66,81
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSig
-    subTrack encodeYaleChIPSTAT1Sig
+    parent encodeYaleChIPSTAT1Sig
     shortLabel Yale 50-50 Sig
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, Signal
     priority 3
@@ -2122,7 +2122,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 224,66,81
 
     track encodeYaleChIPSTAT1HeLaBingRenSig
-    subTrack encodeYaleChIPSTAT1Sig
+    parent encodeYaleChIPSTAT1Sig
     shortLabel Yale LI Sig
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, Signal
     priority 4
@@ -2143,7 +2143,7 @@ origAssembly hg16
 type bed .
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite
-    subTrack encodeYaleChIPSTAT1Sites
+    parent encodeYaleChIPSTAT1Sites
     shortLabel Yale 36-36 Sites
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, Binding Sites
     priority 1
@@ -2151,7 +2151,7 @@ type bed .
     altColor 50,50,200
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSite
-    subTrack encodeYaleChIPSTAT1Sites
+    parent encodeYaleChIPSTAT1Sites
     shortLabel Yale 50-38 Sites
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, Binding Sites
     priority 2
@@ -2159,7 +2159,7 @@ type bed .
     altColor 50,50,200
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSite
-    subTrack encodeYaleChIPSTAT1Sites
+    parent encodeYaleChIPSTAT1Sites
     shortLabel Yale 50-50 Sites
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, Binding Sites
     priority 3
@@ -2167,7 +2167,7 @@ type bed .
     altColor 50,50,200
 
     track encodeYaleChIPSTAT1HeLaBingRenSites
-    subTrack encodeYaleChIPSTAT1Sites
+    parent encodeYaleChIPSTAT1Sites
     shortLabel Yale LI Sites
     longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, Binding Sites
     priority 4
@@ -2193,7 +2193,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
 dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     
     track encodeYaleChipPvalBaf155
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU BAF155 HeLa P
     longLabel Yale ChIP-chip (BAF155 ab, HeLa S3 cells) P-Value 
     color 50,50,200
@@ -2202,7 +2202,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 1
 
     track encodeYaleChipPvalBaf170
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU BAF170 HeLa P
     longLabel Yale ChIP-chip (BAF170 ab, HeLa S3 cells) P-Value 
     color 200,50,50
@@ -2211,7 +2211,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 2
 
     track encodeYaleChipPvalFos
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU c-Fos HeLa P
     longLabel Yale ChIP-chip (c-Fos ab, HeLa S3 cells) P-Value
     subGroups celltype=hela factor=fos
@@ -2220,7 +2220,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 3
 
     track encodeYaleChipPvalJun
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU c-Jun HeLa P
     longLabel Yale ChIP-chip (c-Jun ab, HeLa S3 cells) P-Value
     subGroups celltype=hela factor=jun
@@ -2229,7 +2229,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 4
 
     track encodeYaleChipPvalTaf
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU TAF1 HeLa P
     longLabel Yale ChIP-chip (TAF1 ab, HeLa S3 cells) P-Value
     color 200,50,50
@@ -2238,7 +2238,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 5
 
     track encodeYaleChipPvalPol2Hela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU Pol2 HeLa P
     longLabel Yale ChIP-chip (Pol2 ab, HeLa S3 cells) P-Value
     color 100,20,20
@@ -2247,7 +2247,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 6
 
     track encodeYaleChipPvalPol2nHela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU Pol2N HeLa P
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, HeLa S3 cells) P-Value
     color 20,20,100
@@ -2256,7 +2256,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 7
 
     track encodeYaleChipPvalH4kac4Hela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU H4Kac4 HeLa P
     longLabel Yale ChIP-chip (H4Kac4 ab, HeLa S3 cells) P-Value
     color 50,50,200
@@ -2265,7 +2265,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 8
 
     track encodeYaleChipPvalH3k27me3Hela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU H3K27me3 HeLa P
     longLabel Yale ChIP-chip (H3K27me3 ab, HeLa S3 cells) P-Value
     color 112,63,175
@@ -2274,7 +2274,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 9
     
     track encodeYaleChipPvalStat1HelaIfna
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU STAT1 HeLa IF P
     longLabel Yale ChIP-chip (STAT1 ab, HeLa S3 cells, Interferon-alpha treated) P-Value
     color 100,20,20
@@ -2283,7 +2283,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 10
     
     track encodeYaleChipPvalP65nHelaTnfa
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU P65-N HeLa TNF P
     longLabel Yale ChIP-chip (NFKB p65 N-terminus ab, HeLa S3 cells, TNF-alpha treated) P-Value
     color 20,20,100
@@ -2292,7 +2292,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 11
 
     track encodeYaleChipPvalP65cHelaTnfa
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU P65-C HeLa TNF P
     longLabel Yale ChIP-chip (NFKB p65 C-terminus ab, HeLa S3 cells, TNF-alpha treated) P-Value
     color 20,100,20
@@ -2301,7 +2301,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 12
 
     track encodeYaleChipPvalSmarca4Hela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU SMARCA4 HeLa P
     longLabel Yale ChIP-chip (SMARCA4, HeLa S3 cells) P-Value
     color 50,50,200
@@ -2310,7 +2310,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 13
     
     track encodeYaleChipPvalSmarca6Hela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU SMARCA6 HeLa P
     longLabel Yale ChIP-chip (SMARCA6, HeLa S3 cells) P-Value
     color 200,50,50
@@ -2319,7 +2319,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 14
     
     track encodeYaleChipPvalNrsfHela
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU NRSF HeLa P
     longLabel Yale ChIP-chip (NRSF, HeLa S3 cells) P-Value
     color 100,20,20
@@ -2328,7 +2328,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 15
 
     track encodeYaleChipPvalPol2Gm06990
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU Pol2 GM P
     color 100,20,20
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) P-Value
@@ -2337,7 +2337,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 16
 
     track encodeYaleChipPvalPol2nGm06990
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU Pol2N GM P
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, GM06990 cells) P-Value
     color 20,20,100
@@ -2346,7 +2346,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 17
 
     track encodeYaleChipPvalH4kac4Gm06990
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU H4Kac4 GM P
     longLabel Yale ChIP-chip (H4Kac4 ab, GM06990 cells) P-Value
     color 20,100,20
@@ -2355,7 +2355,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 18
 
     track encodeYaleChipPvalBaf155K562
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU BAF155 K562 P
     longLabel Yale ChIP-chip (BAF155 ab, K562 cells) P-Value
     color 50,50,200
@@ -2364,7 +2364,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 19
 
     track encodeYaleChipPvalBaf170K562
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU BAF170 K562 P
     longLabel Yale ChIP-chip (BAF170 ab, K562 cells) P-Value
     color 200,50,50
@@ -2373,7 +2373,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 20
 
     track encodeYaleChipPvalBaf47K562
-    subTrack encodeYaleChipPval
+    parent encodeYaleChipPval
     shortLabel YU BAF47 K562 P
     longLabel Yale ChIP-chip (BAF47 ab, K562 cells) P-Value
     color 112,63,175
@@ -2401,7 +2401,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
 dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
 
     track encodeYaleChipSignalBaf155
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU BAF155 HeLa S
     longLabel Yale ChIP-chip (BAF155 ab, HeLa S3 cells) Signal
     color 50,50,200
@@ -2410,7 +2410,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 1
 
     track encodeYaleChipSignalBaf170
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU BAF170 HeLa S
     longLabel Yale ChIP-chip (BAF170 ab, HeLa S3 cells) Signal
     color 200,50,50
@@ -2419,7 +2419,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 2
 
     track encodeYaleChipSignalFos
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU c-Fos HeLa S
     longLabel Yale ChIP-chip (c-Fos ab, HeLa S3 cells) Signal
     color 112,63,175
@@ -2428,7 +2428,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 3
 
     track encodeYaleChipSignalJun
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU c-Jun HeLa S
     longLabel Yale ChIP-chip (c-Jun ab, HeLa S3 cells) Signal
     color 50,50,200
@@ -2437,7 +2437,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 4
 
     track encodeYaleChipSignalTaf
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU TAF1 HeLa S
     longLabel Yale ChIP-chip (TAF1 ab, HeLa S3 cells) Signal
     color 200,50,50
@@ -2446,7 +2446,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 5
 
     track encodeYaleChipSignalPol2Hela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU Pol2 HeLa S
     longLabel Yale ChIP-chip (Pol2 ab, HeLa S3 cells) Signal
     color 100,20,20
@@ -2455,7 +2455,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 6
 
     track encodeYaleChipSignalPol2nHela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU Pol2N HeLa S
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, HeLa S3 cells) Signal
     color 20,20,100
@@ -2464,7 +2464,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 7
 
     track encodeYaleChipSignalH4kac4Hela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU H4Kac4 HeLa S
     longLabel Yale ChIP-chip (H4Kac4 ab, HeLa S3 cells) Signal
     color 50,50,200
@@ -2473,7 +2473,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 8
 
     track encodeYaleChipSignalH3k27me3Hela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU H3K27me3 HeLa S
     longLabel Yale ChIP-chip (H3K27me3 ab, HeLa S3 cells) Signal
     color 112,63,175
@@ -2482,7 +2482,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 9
 
     track encodeYaleChipSignalStat1HelaIfna
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU STAT1 HeLa IF S
     longLabel Yale ChIP-chip (STAT1 ab, HeLa S3 cells, Interferon-alpha treated) Signal
     color 100,20,20
@@ -2491,7 +2491,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 10
     
     track encodeYaleChipSignalP65nHelaTnfa
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU P65-N HeLa TNF S
     longLabel Yale ChIP-chip (NFKB p65 N-terminus ab, HeLa S3 cells, TNF-alpha treated) Signal
     color 20,20,100
@@ -2500,7 +2500,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 11
 
     track encodeYaleChipSignalP65cHelaTnfa
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU P65-C HeLa TNF S
     longLabel Yale ChIP-chip (NFKB p65 C-terminus ab, HeLa S3 cells, TNF-alpha treated) Signal
     color 20,100,20
@@ -2509,7 +2509,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 12
 
     track encodeYaleChipSignalSmarca4Hela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU SMARCA4 HeLa S
     longLabel Yale ChIP-chip (SMARCA4, HeLa S3 cells) Signal
     color 50,50,200
@@ -2518,7 +2518,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 13
     
     track encodeYaleChipSignalSmarca6Hela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU SMARCA6 HeLa S
     longLabel Yale ChIP-chip (SMARCA6, HeLa S3 cells) Signal
     color 200,50,50
@@ -2527,7 +2527,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 14
     
     track encodeYaleChipSignalNrsfHela
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU NRSF HeLa S
     longLabel Yale ChIP-chip (NRSF, HeLa S3 cells) Signal
     color 100,20,20
@@ -2536,7 +2536,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 15
 
     track encodeYaleChipSignalPol2Gm06990
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU Pol2 GM S
     color 100,20,20
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) Signal
@@ -2545,7 +2545,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 16
 
     track encodeYaleChipSignalPol2nGm06990
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU Pol2N GM S
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, GM06990 cells) Signal
     color 20,20,100
@@ -2554,7 +2554,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 17
 
     track encodeYaleChipSignalH4kac4Gm06990
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU H4Kac4 GM S
     longLabel Yale ChIP-chip (H4Kac4 ab, GM06990 cells) Signal
     color 20,100,20
@@ -2563,7 +2563,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 18
 
     track encodeYaleChipSignalBaf155K562
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU BAF155 K562 S
     longLabel Yale ChIP-chip (BAF155 ab, K562 cells) Signal
     color 50,50,200
@@ -2572,7 +2572,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 19
 
     track encodeYaleChipSignalBaf170K562
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU BAF170 K562 S
     longLabel Yale ChIP-chip (BAF170 ab, K562 cells) Signal
     color 200,50,50
@@ -2581,7 +2581,7 @@ dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     priority 20
 
     track encodeYaleChipSignalBaf47K562
-    subTrack encodeYaleChipSig
+    parent encodeYaleChipSig
     shortLabel YU BAF47 K562 S
     longLabel Yale ChIP-chip (BAF47 ab, K562 cells) Signal
     color 112,63,175
@@ -2605,7 +2605,7 @@ subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
 
     track encodeYaleChipSitesBaf155
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU BAF155 HeLa
     longLabel Yale ChIP-chip (BAF155 ab, HeLa S3 cells) Sites 
     color 50,50,200
@@ -2615,7 +2615,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 1
 
     track encodeYaleChipSitesBaf170
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU BAF170 HeLa
     longLabel Yale ChIP-chip (BAF170 ab, HeLa S3 cells) Sites 
     color 200,50,50
@@ -2625,7 +2625,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 2
 
     track encodeYaleChipSitesFos
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU c-Fos HeLa
     longLabel Yale ChIP-chip (c-Fos ab, HeLa S3 cells) Sites
     color 112,63,175
@@ -2635,7 +2635,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 3
 
     track encodeYaleChipSitesJun
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU c-Jun HeLa
     longLabel Yale ChIP-chip (c-Jun ab, HeLa S3 cells) Sites 
     color 50,50,200
@@ -2645,7 +2645,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 4
 
     track encodeYaleChipSitesTaf
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU TAF1 HeLa
     longLabel Yale ChIP-chip (TAF1 ab, HeLa S3 cells) Sites
     color 200,50,50
@@ -2655,7 +2655,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 5
 
     track encodeYaleChipSitesPol2Hela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU Pol2 HeLa
     longLabel Yale ChIP-chip (Pol2 ab, HeLa S3 cells) Sites
     color 100,20,20
@@ -2665,7 +2665,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 6
 
     track encodeYaleChipSitesPol2nHela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU Pol2N HeLa
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, HeLa S3 cells) Sites
     color 20,20,100
@@ -2675,7 +2675,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 7
 
     track encodeYaleChipSitesH4kac4Hela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU H4Kac4 HeLa
     longLabel Yale ChIP-chip (H4Kac4 ab, HeLa S3 cells) Sites
     color 50,50,200
@@ -2685,7 +2685,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 8
 
     track encodeYaleChipSitesH3k27me3Hela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU H3K27me3 HeLa
     longLabel Yale ChIP-chip (H3K27me3 ab, HeLa S3 cells) Sites
     color 112,63,175
@@ -2695,7 +2695,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 9
 
     track encodeYaleChipSitesStat1HelaIfna
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU STAT1 HeLa IF
     longLabel Yale ChIP-chip (STAT1 ab, HeLa S3 cells, Interferon-alpha treated) Sites
     color 100,20,20
@@ -2705,7 +2705,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 10
     
     track encodeYaleChipSitesP65nHelaTnfa
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU P65-N HeLa TNF
     longLabel Yale ChIP-chip (NFKB p65 N-terminus ab, HeLa S3 cells, TNF-alpha treated) Sites
     color 20,20,100
@@ -2715,7 +2715,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 11
 
     track encodeYaleChipSitesP65cHelaTnfa
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU P65-C HeLa TNF
     longLabel Yale ChIP-chip (NFKB p65 C-terminus ab, HeLa S3 cells, TNF-alpha treated) Sites
     color 20,100,20
@@ -2725,7 +2725,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 12
 
     track encodeYaleChipSitesSmarca4Hela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU SMARCA4 HeLa
     longLabel Yale ChIP-chip (SMARCA4, HeLa S3 cells) Sites
     color 50,50,200
@@ -2735,7 +2735,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 13
     
     track encodeYaleChipSitesSmarca6Hela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU SMARCA6 HeLa
     longLabel Yale ChIP-chip (SMARCA6, HeLa S3 cells) Sites
     color 200,50,50
@@ -2745,7 +2745,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 14
     
     track encodeYaleChipSitesNrsfHela
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU NRSF HeLa
     longLabel Yale ChIP-chip (NRSF, HeLa S3 cells) Sites
     color 100,20,20
@@ -2755,7 +2755,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 15
 
     track encodeYaleChipSitesPol2Gm06990
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU Pol2 GM
     color 100,20,20
     type bed5FloatScoreWithFdr
@@ -2765,7 +2765,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 16
 
     track encodeYaleChipSitesPol2nGm06990
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU Pol2N GM
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, GM06990 cells) Sites
     color 20,20,100
@@ -2775,7 +2775,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 17
 
     track encodeYaleChipSitesH4kac4Gm06990
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU H4Kac4 GM
     longLabel Yale ChIP-chip (H4Kac4 ab, GM06990 cells) Sites
     color 20,100,20
@@ -2785,7 +2785,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 18
 
     track encodeYaleChipSitesBaf155K562
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU BAF155 K562
     longLabel Yale ChIP-chip (BAF155 ab, K562 cells) Sites
     color 50,50,200
@@ -2795,7 +2795,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 19
 
     track encodeYaleChipSitesBaf170K562
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU BAF170 K562
     longLabel Yale ChIP-chip (BAF170 ab, K562 cells) Sites
     color 200,50,50
@@ -2805,7 +2805,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 20
 
     track encodeYaleChipSitesBaf47K562
-    subTrack encodeYaleChipSites
+    parent encodeYaleChipSites
     shortLabel YU BAF47 K562
     longLabel Yale ChIP-chip (BAF47 ab, K562 cells) Sites
     color 112,63,175
@@ -2827,14 +2827,14 @@ url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
 urlLabel Yale DART Link:
 
     track encodeYaleChipRfbrClusters
-    subTrack encodeYaleChipRfbr
+    parent encodeYaleChipRfbr
     shortLabel Yale RFBR Clusters
     longLabel Yale ChIP-chip Regulatory Factor Binding Regions (RFBR) Clusters
     color 50,50,150
     priority 1
 
     track encodeYaleChipRfbrDeserts
-    subTrack encodeYaleChipRfbr
+    parent encodeYaleChipRfbr
     shortLabel Yale RFBR Deserts
     longLabel Yale ChIP-chip Regulatory Factor Binding Regions (RFBR) Deserts
     color 200,50,50
@@ -2873,14 +2873,14 @@ type bed 5
 dataVersion ENCODE Oct 2005 Freeze, Oct 2006
 
     track encodeUtexStageStat1HelaTags
-    subTrack encodeUtexStage
+    parent encodeUtexStage
     shortLabel UT STAT1 HeLa Tags
     longLabel University of Texas, Austin STAGE (STAT1, HeLa) Tags
     dataVersion Oct 2006
     priority 1
 
     track encodeUtexStageCMycHelaTags
-    subTrack encodeUtexStage
+    parent encodeUtexStage
     shortLabel UT Myc HeLa Tags
     longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
     priority 2
@@ -2889,7 +2889,7 @@ dataVersion ENCODE Oct 2005 Freeze, Oct 2006
     track encodeUtexStageMycHelaPeaks
     shortLabel UT Myc HeLa Pk
     longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Peaks
-    subTrack encodeUtexStage
+    parent encodeUtexStage
     noInherit on
     color 120,30,50
     type bed 5 .
@@ -2915,112 +2915,112 @@ smoothingWindow 2
 dataVersion ENCODE June 2006
 
     track encodeUWRegulomeBaseCD4
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel CD4
     longLabel CD4 DNaseI Sensitivity
     color 0,0,255
     priority 1
 
     track encodeUWRegulomeBaseCaCo2
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel CaCo2
     longLabel CaCo2 DNaseI Sensitivity
     color 0,48,224
     priority 2
 
     track encodeUWRegulomeBaseCaLU3
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel CaLU3
     longLabel CaLU3 DNaseI Sensitivity
     color 0,96,176
     priority 3
 
     track encodeUWRegulomeBaseEryAdult
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel EryAdult
     longLabel EryAdult DNaseI Sensitivity
     color 0,119,153
     priority 4
 
     track encodeUWRegulomeBaseEryFetal
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel EryFetal
     longLabel EryFetal DNaseI Sensitivity
     color 0,153,119
     priority 5
 
     track encodeUWRegulomeBaseGM
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel GM
     longLabel GM DNaseI Sensitivity
     color 0,187,85
     priority 6
 
     track encodeUWRegulomeBaseHMEC
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel HMEC
     longLabel HMEC DNaseI Sensitivity
     color 56,238,0
     priority 7
 
     track encodeUWRegulomeBaseHRE
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel HRE
     longLabel HRE DNaseI Sensitivity
     color 0,255,0
     priority 8
 
     track encodeUWRegulomeBaseHeLa
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel HeLa
     longLabel HeLa DNaseI Sensitivity
     color 68,238,0
     priority 9
 
     track encodeUWRegulomeBaseHepG2
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel HepG2
     longLabel HepG2 DNaseI Sensitivity
     color 96,192,326
     priority 10
 
     track encodeUWRegulomeBaseHuh7
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel Huh7
     longLabel Huh7 DNaseI Sensitivity
     color 136,170,0
     priority 11
 
     track encodeUWRegulomeBaseK562
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel K562
     longLabel K562 DNaseI Sensitivity
     color 170,136,0
     priority 12
 
     track encodeUWRegulomeBaseNHBE
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel NHBE
     longLabel NHBE DNaseI Sensitivity
     color 204,102,0
     priority 13
 
     track encodeUWRegulomeBasePANC
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel PANC
     longLabel PANC DNaseI Sensitivity
     color 238,68,0
     priority 14
 
     track encodeUWRegulomeBaseSAEC
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel SAEC
     longLabel SAEC DNaseI Sensitivity
     color 255,0,0
     priority 15
 
     track encodeUWRegulomeBaseSKnSH
-    subTrack encodeUWRegulomeBase
+    parent encodeUWRegulomeBase
     shortLabel SKnSH
     longLabel SKnSH DNaseI Sensitivity
     color 255,0,255
@@ -3039,7 +3039,7 @@ subGroup1 amplicon Amplicon even=Even odd=Odd
 dataVersion ENCODE Oct2005 Freeze
 
     track encodeRegulomeAmplEvenCACO2
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel CACO2 (Even)
     longLabel CACO2 Amplicon (Even)
     subGroups amplicon=even
@@ -3047,7 +3047,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 1
 
     track encodeRegulomeAmplEvenGM
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel GM06990 (Even)
     longLabel GM06990 Amplicon (Even)
     subGroups amplicon=even
@@ -3055,7 +3055,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 3
 
     track encodeRegulomeAmplEvenKNSH
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel SKNSH (Even)
     longLabel SKNSH Amplicon (Even)
     subGroups amplicon=even
@@ -3063,7 +3063,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 5
 
     track encodeRegulomeAmplEvenHuh7
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel Huh7 (Even)
     longLabel Huh7 Amplicon (Even)
     subGroups amplicon=even
@@ -3071,7 +3071,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 7
 
     track encodeRegulomeAmplEvenHepG2
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel HepG2 (Even)
     longLabel HepG2 Amplicon (Even)
     subGroups amplicon=even
@@ -3079,7 +3079,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 9
 
     track encodeRegulomeAmplEvenK562
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel K562 (Even)
     longLabel K562 Amplicon (Even)
     subGroups amplicon=even
@@ -3087,7 +3087,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 11
 
     track encodeRegulomeAmplEvenCD34
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel CD34 (Even)
     longLabel CD34 Amplicon (Even)
     subGroups amplicon=even
@@ -3095,7 +3095,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 13
 
     track encodeRegulomeAmplEvenHeLa
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel HeLa (Even)
     longLabel HeLa Amplicon (Even)
     subGroups amplicon=even
@@ -3103,7 +3103,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 15
 
     track encodeRegulomeAmplOddCACO2
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel CACO2 (Odd)
     longLabel CACO2 Amplicon (Odd)
     subGroups amplicon=odd
@@ -3111,7 +3111,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 2
 
     track encodeRegulomeAmplOddGM
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel GM06990 (Odd)
     longLabel GM06990 Amplicon (Odd)
     subGroups amplicon=odd
@@ -3119,7 +3119,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 4
 
     track encodeRegulomeAmplOddKNSH
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel SKNSH (Odd)
     longLabel SKNSH Amplicon (Odd)
     subGroups amplicon=odd
@@ -3127,7 +3127,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 6
 
     track encodeRegulomeAmplOddHuh7
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel Huh7 (Odd)
     longLabel Huh7 Amplicon (Odd)
     subGroups amplicon=odd
@@ -3135,7 +3135,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 8
 
     track encodeRegulomeAmplOddHepG2
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel HepG2 (Odd)
     longLabel HepG2 Amplicon (Odd)
     subGroups amplicon=odd
@@ -3143,7 +3143,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 10
 
     track encodeRegulomeAmplOddK562
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel K562 (Odd)
     longLabel K562 Amplicon (Odd)
     subGroups amplicon=odd
@@ -3151,7 +3151,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 12
 
     track encodeRegulomeAmplOddCD34
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel CD34 (Odd)
     longLabel CD34 Amplicon (Odd)
     subGroups amplicon=odd
@@ -3159,7 +3159,7 @@ dataVersion ENCODE Oct2005 Freeze
     priority 14
 
     track encodeRegulomeAmplOddHeLa
-    subTrack encodeRegulomeAmplicon
+    parent encodeRegulomeAmplicon
     shortLabel HeLa (Odd)
     longLabel HeLa Amplicon (Odd)
     subGroups amplicon=odd
@@ -3187,14 +3187,14 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 dataVersion May 2006
 
     track encodeRegulomeDnaseGM06990Sens
-    subTrack encodeRegulomeDnaseArray
+    parent encodeRegulomeDnaseArray
     shortLabel DnaseI Sens
     longLabel UW DNase-array GM06990 Sensitivity 
     color 000,000,153
     priority 1
 
     track encodeRegulomeDnaseGM06990Sites
-    subTrack encodeRegulomeDnaseArray
+    parent encodeRegulomeDnaseArray
     shortLabel DnaseI HSs 
     longLabel UW DNase-array GM06990 HSs
     noInherit on
@@ -3222,7 +3222,7 @@ dataVersion ENCODE June & Oct 2005 Freezes and August 2006
 subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
 
     track encodeNhgriDnaseHsChipRawGm06990
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990)
     color 80,50,80
@@ -3231,7 +3231,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 1
 
     track encodeNhgriDnaseHsChipRawCd4
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase CD4 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+)
     color 120,10,120
@@ -3240,7 +3240,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 2
 
     track encodeNhgriDnaseHsChipRawHela
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase HeLa Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3)
     color 180,12,140
@@ -3249,7 +3249,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 3
 
     track encodeNhgriDnaseHsChipRawHepG2
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase HepG2 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2)
     color 240,12,132
@@ -3258,7 +3258,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 4
 
     track encodeNhgriDnaseHsChipRawH9
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase H9 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (H9)
     color 255,0,0
@@ -3267,7 +3267,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 5
    
     track encodeNhgriDnaseHsChipRawImr90
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase IMR90 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (IMR990)
     color 238,40,100
@@ -3276,7 +3276,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 6
 
     track encodeNhgriDnaseHsChipRawK562
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase K562 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (K562)
     color 204,102,0
@@ -3285,7 +3285,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 7
 
     track encodeNhgriDnaseHsChipPvalGm06990
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990)
     noInherit on
@@ -3297,7 +3297,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Aug 2006
 
     track encodeNhgriDnaseHsChipPvalCd4
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase CD4 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+)
@@ -3309,7 +3309,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Aug 2006
 
     track encodeNhgriDnaseHsChipPvalHela
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HeLa Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3)
@@ -3321,7 +3321,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Aug 2006
 
     track encodeNhgriDnaseHsChipPvalHepG2
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HepG2 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2)
@@ -3333,7 +3333,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Sept 2006
 
     track encodeNhgriDnaseHsChipPvalH9
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase H9 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (H9)
@@ -3345,7 +3345,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Feb 2007
 
     track encodeNhgriDnaseHsChipPvalImr90
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase IMR90 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (IMR90)
@@ -3357,7 +3357,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Feb 2007
 
     track encodeNhgriDnaseHsChipPvalK562
-    subTrack encodeNhgriDukeDnaseHs
+    parent encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase K562 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (K562)
@@ -3369,7 +3369,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     dataVersion Feb 2007
 
     track encodeNhgriDnaseHsMpssCd4
-    subTrack encodeNhgriDukeDnaseHs off
+    parent encodeNhgriDukeDnaseHs off
     shortLabel DNase CD4 MS
     longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
     dataVersion ENCODE June 2005 Freeze
@@ -3381,7 +3381,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     priority 15
 
     track encodeNhgriDnaseHsMpssCd4Act
-    subTrack encodeNhgriDukeDnaseHs off
+    parent encodeNhgriDukeDnaseHs off
     shortLabel DNase CD4-act MS
     longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
     dataVersion ENCODE June 2005 Freeze
@@ -3448,14 +3448,14 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 dataVersion ENCODE Oct 2005 Freeze, June 2007
 
     track encodeTbaPhastCons
-    subTrack encodeTbaCons
+    parent encodeTbaCons
     shortLabel TBA PhastCons
     longLabel TBA PhastCons Conservation
     color 170,100,50
     priority 1
 
     track encodeTbaGerpCons
-    subTrack encodeTbaCons
+    parent encodeTbaCons
     shortLabel TBA GERP Cons
     longLabel TBA GERP Conservation
     type wig -25.74 4.48
@@ -3469,7 +3469,7 @@ dataVersion ENCODE Oct 2005 Freeze, June 2007
     priority 3
 
     track encodeTbaSconeConsUpdate
-    subTrack encodeTbaCons
+    parent encodeTbaCons
     shortLabel TBA SCONE Cons
     longLabel TBA SCONE Conservation
     color 100,90,160
@@ -3489,28 +3489,28 @@ type bed 5 .
 dataVersion ENCODE Oct 2005 Freeze, June 2007
 
     track encodeTbaPhastConsEl
-    subTrack encodeTbaElements
+    parent encodeTbaElements
     shortLabel TBA PhastCons
     longLabel TBA PhastCons Conserved Elements
     color 170,100,50
     priority 1
 
     track encodeTbaBinConsEl
-    subTrack encodeTbaElements
+    parent encodeTbaElements
     shortLabel TBA BinCons
     longLabel TBA BinCons Conserved Elements
     color 190,70,80
     priority 2
 
     track encodeTbaGerpEl
-    subTrack encodeTbaElements
+    parent encodeTbaElements
     shortLabel TBA GERP 
     longLabel TBA GERP Conserved Elements
     color 120,80,120
     priority 3
 
     track encodeTbaSconeElUpdate
-    subTrack encodeTbaElements
+    parent encodeTbaElements
     shortLabel TBA SCONE
     longLabel TBA SCONE Conserved Elements
     color 100,90,160
@@ -3574,7 +3574,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMlaganPhastCons
-    subTrack encodeMlaganCons
+    parent encodeMlaganCons
     shortLabel MLAGAN PhastCons
     longLabel MLAGAN PhastCons Conservation
     type wig 0.0 1.0
@@ -3586,7 +3586,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeMlaganGerpCons
-    subTrack encodeMlaganCons
+    parent encodeMlaganCons
     shortLabel MLAGAN GERP Cons
     longLabel MLAGAN GERP Conservation
     type wig -25.74 4.48
@@ -3612,21 +3612,21 @@ type bed 5 .
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMlaganPhastConsEl
-    subTrack encodeMlaganElements
+    parent encodeMlaganElements
     shortLabel MLAGAN PhastCons
     longLabel MLAGAN PhastCons Conserved Elements
     color 170,100,50
     priority 1
 
     track encodeMlaganBinConsEl
-    subTrack encodeMlaganElements
+    parent encodeMlaganElements
     shortLabel MLAGAN BinCons
     longLabel MLAGAN BinCons Conserved Elements
     color 170,5,10
     priority 2
 
     track encodeMlaganGerpEl
-    subTrack encodeMlaganElements
+    parent encodeMlaganElements
     shortLabel MLAGAN GERP
     longLabel MLAGAN GERP Conserved Elements
     color 120,80,120
@@ -3688,7 +3688,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMavidPhastCons
-    subTrack encodeMavidCons
+    parent encodeMavidCons
     shortLabel MAVID PhastCons
     longLabel MAVID PhastCons Conservation
     type wig 0.0 1.0
@@ -3700,7 +3700,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeMavidGerpCons
-    subTrack encodeMavidCons
+    parent encodeMavidCons
     shortLabel MAVID GERP Cons
     longLabel MAVID GERP Conservation
     type wig -22.58 4.48
@@ -3726,21 +3726,21 @@ type bed 5 .
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMavidPhastConsEl
-    subTrack encodeMavidElements
+    parent encodeMavidElements
     shortLabel MAVID PhastCons
     longLabel MAVID PhastCons Conserved Elements
     color 170,100,50
     priority 1
 
     track encodeMavidBinConsEl
-    subTrack encodeMavidElements
+    parent encodeMavidElements
     shortLabel MAVID BinCons
     longLabel MAVID BinCons Conserved Elements
     color 170,5,10
     priority 2
 
     track encodeMavidGerpEl
-    subTrack encodeMavidElements
+    parent encodeMavidElements
     shortLabel MAVID GERP
     longLabel MAVID GERP Conserved Elements
     color 120,80,120
@@ -3761,19 +3761,19 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeMsaElUnion
     shortLabel Loose
     longLabel MSA Consensus Loose Constrained Elements
-    subTrack encodeMsaElements
+    parent encodeMsaElements
     priority 1
     color 80,70,180
 
     track encodeMsaElModerate
-    subTrack encodeMsaElements
+    parent encodeMsaElements
     shortLabel Moderate
     longLabel MSA Consensus Moderate Constrained Elements
     priority 2
     color 80,105,148
 
     track encodeMsaElIntersect
-    subTrack encodeMsaElements
+    parent encodeMsaElements
     shortLabel Strict
     longLabel MSA Consensus Strict Constrained Elements
     priority 3
@@ -3794,28 +3794,28 @@ spanList 1
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMsaAlignMean
-    subTrack encodeMsaAlignComp
+    parent encodeMsaAlignComp
     shortLabel Mean
     longLabel Mean Agreement MAVID-MLAGAN-TBA
     color 20,20,20
     priority 1
 
     track encodeMsaAlignMavidMlagan
-    subTrack encodeMsaAlignComp
+    parent encodeMsaAlignComp
     shortLabel MAVID-MLAGAN
     longLabel Agreement MAVID-MLAGAN
     color 20,20,150
     priority 2
 
     track encodeMsaAlignMavidTba
-    subTrack encodeMsaAlignComp
+    parent encodeMsaAlignComp
     shortLabel MAVID-TBA
     longLabel Agreement MAVID-TBA
     color 20,20,150
     priority 3
 
     track encodeMsaAlignMlaganTba
-    subTrack encodeMsaAlignComp
+    parent encodeMsaAlignComp
     shortLabel MLAGAN-TBA
     longLabel Agreement MLAGAN-TBA
     color 20,20,150
@@ -3836,21 +3836,21 @@ maxHeightPixels 128:16:16
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMsaAlignMavidUngapped
-    subTrack encodeMsaAlignUngapped
+    parent encodeMsaAlignUngapped
     shortLabel MAVID
     longLabel Ungapped Species in MAVID
     color 110,40,30
     priority 1
 
     track encodeMsaAlignMlaganUngapped
-    subTrack encodeMsaAlignUngapped
+    parent encodeMsaAlignUngapped
     shortLabel MLAGAN
     longLabel Ungapped Species in MLAGAN
     color 110,40,30
     priority 2
 
     track encodeMsaAlignTbaUngapped
-    subTrack encodeMsaAlignUngapped
+    parent encodeMsaAlignUngapped
     shortLabel TBA
     longLabel Ungapped Species in TBA
     color 110,40,30

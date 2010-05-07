@@ -37,7 +37,7 @@ type genePred
 url http://ws170.wormbase.org/db/gene/gene?name=$$;class=Gene
 
 track chainCb3
-#replaces record chainCb3 in parent dir missing/extra subTrack,subGroups
+#replaces record chainCb3 in parent dir missing/extra parent,subGroups
 release beta,public
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
@@ -53,7 +53,7 @@ type chain cb3
 otherDb cb3
 
 track netCb3
-#replaces record netCb3 in parent dir missing/extra subTrack,subGroups
+#replaces record netCb3 in parent dir missing/extra parent,subGroups
 release beta,public
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date) Alignment Net
@@ -161,14 +161,14 @@ type bed 5 .
 # compositeTrack on
 # 
 # 	track nucleosome20MerSense
-# 	subTrack nucleosome20Mer
+# 	parent nucleosome20Mer
 #	shortLabel 20-mer mask +
 #	longLabel non-unique and almost repetitive 20-mer starts, sense strand
 #	priority 1
 #	color 33,128,255 
 #
 #	track nucleosome20MerAntisense
-#	subTrack nucleosome20Mer
+#	parent nucleosome20Mer
 #	shortLabel 20-mer mask -
 #	longLabel non-unique and almost repetitive 20-mer starts, antisense strand
 #	priority 2
@@ -217,14 +217,14 @@ autoScale Off
 compositeTrack on
 
 	track monoNucleosomesSense
-	subTrack nucleosomeDensity
+	parent nucleosomeDensity
 	shortLabel NSome Core +Covg
 	longLabel Coverage of mononucleosomal fragments, sense strand reads
 	color 0,72,255
 	priority 1
 
 	track monoNucleosomesAntiSense
-	subTrack nucleosomeDensity
+	parent nucleosomeDensity
 	shortLabel NSome Core -Covg
 	longLabel Coverage of mononucleosomal fragments, antisense strand reads
 	color 0,170,37
@@ -245,14 +245,14 @@ autoScale Off
 compositeTrack on
 
 	track nucleosomeControlSenseCoverage
-	subTrack nucleosomeControlCoverage
+	parent nucleosomeControlCoverage
 	shortLabel Cntl MNase +Covg
 	longLabel Micrococcal nuclease control coverage, sense strand reads
 	color 255,132,0
 	priority 1
 
 	track nucleosomeControlAntisenseCoverage
-	subTrack nucleosomeControlCoverage
+	parent nucleosomeControlCoverage
 	shortLabel Cntl MNase -Covg
 	longLabel Micrococcal nuclease control coverage, antisense strand reads
 	color 200,80,0
@@ -269,19 +269,19 @@ itemRgb on
 compositeTrack on
 
 	track nucleosomeControl
-	subTrack nucleosome
+	parent nucleosome
 	shortLabel Control
 	longLabel mononucleosome control
 	priority 1
 
 	track nucleosomeFragmentsSense
-	subTrack nucleosome
+	parent nucleosome
 	shortLabel fragments +
 	longLabel mononucleosomal fragments, sense strand reads
 	priority 2
 
 	track nucleosomeFragmentsAntisense
-	subTrack nucleosome
+	parent nucleosome
 	shortLabel fragments -
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 3

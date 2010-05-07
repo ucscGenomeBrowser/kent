@@ -58,35 +58,35 @@ gClass_Unprocessed_pseudogene 0,91,191
 origAssembly hg17
 
     track encodeGencodeGeneKnownMar07
-    subTrack encodeGencodeGeneMar07
+    parent encodeGencodeGeneMar07
     shortLabel Gencode Ref
     longLabel Gencode Reference Genes
     color 33,91,51
     priority 1
 
     track encodeGencodeGenePutativeMar07
-    subTrack encodeGencodeGeneMar07
+    parent encodeGencodeGeneMar07
     shortLabel Gencode Putative
     longLabel Gencode Putative Genes
     color  84,188,0
     priority 2
 
     track encodeGencodeGenePolymorphicMar07
-    subTrack encodeGencodeGeneMar07
+    parent encodeGencodeGeneMar07
     shortLabel Gencode Polymorph
     longLabel Gencode Polymorphic
     color 160,32,240
     priority 3
 
     track encodeGencodeGenePseudoMar07
-    subTrack encodeGencodeGeneMar07
+    parent encodeGencodeGeneMar07
     shortLabel Gencode Pseudo
     longLabel Gencode Pseudogenes
     color 0,91,191
     priority 4
 
     track encodeGencodeGenePolyAMar07
-    subTrack encodeGencodeGeneMar07
+    parent encodeGencodeGeneMar07
     shortLabel Gencode PolyA
     longLabel Gencode polyA Features
     noInherit on
@@ -123,21 +123,21 @@ gClass_Unprocessed_pseudogene 0,91,191
 origAssembly hg17
 
     track encodeGencodeGeneKnownOct05
-    subTrack encodeGencodeGeneOct05
+    parent encodeGencodeGeneOct05
     shortLabel Gencode Ref
     longLabel Gencode Reference Genes
     color 33,91,51
     priority 1
 
     track encodeGencodeGenePutativeOct05
-    subTrack encodeGencodeGeneOct05
+    parent encodeGencodeGeneOct05
     shortLabel Gencode Putative
     longLabel Gencode Putative Genes
     color  84,188,0
     priority 2
 
     track encodeGencodeGenePseudoOct05
-    subTrack encodeGencodeGeneOct05
+    parent encodeGencodeGeneOct05
     shortLabel Gencode Pseudo
     longLabel Gencode Pseudogenes
     color 0,91,191
@@ -170,111 +170,111 @@ autoTranslate 0
 origAssembly hg17
 
     track encodeGencodeRaceFragsPrimer
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Primer
     longLabel Gencode 5' RACE primer
     priority 1
 
     track encodeGencodeRaceFragsBrain
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Brain
     longLabel Gencode RACEfrags from Brain
     color 248,0,8
     priority 2
 
     track encodeGencodeRaceFragsColon
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Colon
     longLabel Gencode RACEfrags from Colon
     color 250,5,255
     priority 3
     
     track encodeGencodeRaceFragsHeart
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Heart
     longLabel Gencode RACEfrags from Heart
     color 225,30,255
     priority 4
 
     track encodeGencodeRaceFragsKidney
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Kidney
     longLabel Gencode RACEfrags from Kidney
     color 212,0,44
     priority 5
 
     track encodeGencodeRaceFragsLiver
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Liver
     longLabel Gencode RACEfrags from Liver
     color 236,0,20
     priority 6
 
     track encodeGencodeRaceFragsLung
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Lung
     longLabel Gencode RACEfrags from Lung
     color 200,0,56
     priority 7
 
     track encodeGencodeRaceFragsMuscle
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Muscle
     longLabel Gencode RACEfrags from Muscle
     color 188,0,68
     priority 8
 
     track encodeGencodeRaceFragsPlacenta
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Placenta
     longLabel Gencode RACEfrags from Placenta
     color 176,0,80
     priority 9
 
     track encodeGencodeRaceFragsSmallIntest
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Sm Int
     longLabel Gencode RACEfrags from Small Intestine
     color 164,0,92
     priority 10
 
     track encodeGencodeRaceFragsSpleen
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Spleen
     longLabel Gencode RACEfrags from Spleen
     color 152,0,104
     priority 11
 
     track encodeGencodeRaceFragsStomach
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Stomach
     longLabel Gencode RACEfrags from Stomach
     color 140,0,116
     priority 12
 
     track encodeGencodeRaceFragsTestis
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags Testis
     longLabel Gencode RACEfrags from Testis
     color 128,0,128
     priority 13
 
     track encodeGencodeRaceFragsGM06990
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags GM06990
     longLabel Gencode RACEfrags from GM06990 cells
     color 0,0,205
     priority 14
 
     track encodeGencodeRaceFragsHL60
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags HL60
     longLabel Gencode RACEfrags from HL60 cells
     color 0,0,255
     priority 15
 
     track encodeGencodeRaceFragsHela
-    subTrack encodeGencodeRaceFrags
+    parent encodeGencodeRaceFrags
     shortLabel RACEfrags HeLaS3
     longLabel Gencode RACEfrags from HeLaS3 cells
     color 125,130,255
@@ -306,133 +306,133 @@ origAssembly hg17
 dataVersion ENCODE June 2005 Freeze
 
     track encodeEgaspFullAceview
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel AceView
     longLabel AceView Gene Predictions
     color 22,150,20
     priority 1
 
     track encodeEgaspFullDogfish
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel DOGFISH-C
     longLabel DOGFISH-C Gene Predictions
     color 12,20,150
     priority 2
 
     track encodeEgaspFullEnsembl
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Ensembl
     longLabel Ensembl Gene Predictions
     color 22,150,20
     priority 3
 
     track encodeEgaspFullEnsemblPseudo
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Ensembl Pseudo
     longLabel Ensembl Pseudogene Predictions
     color 130,130,130
     priority 3.1
 
     track encodeEgaspFullExogean
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Exogean
     longLabel Exogean Gene Predictions
     priority 4
     color 100,12,100
 
     track encodeEgaspFullExonhunter
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel ExonHunter
     longLabel ExonHunter Gene Predictions
     color 12,20,150
     priority 5
 
     track encodeEgaspFullFgenesh
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Fgenesh++
     longLabel Fgenesh++ Gene Predictions
     color 22,150,20
     priority 6
 
     track encodeEgaspFullSoftberryPseudo
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Fgenesh Pseudo
     longLabel Fgenesh Pseudogene Predictions
     color 130,130,130
     priority 7
 
     track encodeEgaspFullGeneId
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel GeneID
     longLabel GeneID Gene Predictions
     priority 8
     color 100,12,100
 
     track encodeEgaspFullGeneIdU12
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel GeneID U12
     longLabel GeneID U12 Intron Predictions
     priority 9
     color 200,132,12
 
     track encodeEgaspFullGenemark
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel GeneMark
     longLabel GeneMark Gene Predictions
     color 100,12,100
     priority 10
 
     track encodeEgaspFullJigsaw
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Jigsaw
     longLabel Jigsaw Gene Predictions
     priority 11
     color 22,150,20
 
     track encodeEgaspFullPairagonMrna
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Pairgn/NSCAN-E 
     longLabel Pairagon/NSCAN-EST Gene Predictions
     priority 12
     color 12,50,200
 
     track encodeEgaspFullPairagonAny
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Pairgn/NSCAN-E/+
     longLabel Pairagon/NSCAN Any Evidence Gene Predictions
     priority 13
     color 12,65,165
 
     track encodeEgaspFullPairagonMultiple
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel NSCAN
     longLabel N-SCAN Gene Predictions
     priority 14
     color 12,85,135
 
     track encodeEgaspFullSgp2
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel SGP2
     longLabel SGP2 Gene Predictions
     priority 16
     color 100,12,100
 
     track encodeEgaspFullSgp2U12
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel SGP2 U12
     longLabel SGP2 U12 Intron Predictions
     priority 17
     color 200,132,12
 
     track encodeEgaspFullSpida
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel SPIDA Exons
     longLabel SPIDA Exon Predictions
     color 100,12,100
     priority 18
 
     track encodeEgaspFullTwinscan
-    subTrack encodeEgaspFull
+    parent encodeEgaspFull
     shortLabel Twinscan
     longLabel Twinscan Gene Predictions
     color 12,20,150
@@ -455,42 +455,42 @@ origAssembly hg17
 dataVersion ENCODE June 2005 Freeze
 
     track encodeEgaspPartAceCons
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel ACEScan Cons Alt
     longLabel ACEScan Conserved Alternative Exon Predictions
     priority 1
     color 100,12,100
 
     track encodeEgaspPartAceOther
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel ACEScan Other
     longLabel ACEScan Unconserved Alternative and Constitutive Exon Predictions
     priority 2
     color 66,12,133
 
     track encodeEgaspPartAugustusAbinitio
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel Augustus 
     longLabel Augustus Ab Initio Gene Predictions
     color 12,50,200
     priority 3
 
     track encodeEgaspPartAugustusEst
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel Augustus/EST
     longLabel Augustus + EST/Protein Evidence Gene Predictions
     color 12,65,165
     priority 4
 
     track encodeEgaspPartAugustusDual
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel Augustus/Mouse
     longLabel Augustus + Mouse Homology Gene Predictions
     color 12,85,135
     priority 5
 
     track encodeEgaspPartAugustusAny
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel Augustus/EST/Mouse
     longLabel Augustus + EST/Protein Evidence + Mouse Homology Gene Predictions
     priority 6
@@ -498,14 +498,14 @@ dataVersion ENCODE June 2005 Freeze
 
 
     track encodeEgaspPartGenezilla
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel GeneZilla
     longLabel GeneZilla Gene Predictions
     color 22,150,20
     priority 7
 
     track encodeEgaspPartSaga
-    subTrack encodeEgaspPartial
+    parent encodeEgaspPartial
     shortLabel SAGA
     longLabel SAGA Gene Predictions
     color 80,20,80
@@ -528,84 +528,84 @@ origAssembly hg17
 dataVersion ENCODE June 2005 Freeze
 
     track encodeEgaspUpdAugustusAbinitio
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel Augustus Update
     longLabel Augustus Ab Initio Gene Predictions
     color 12,50,200
     priority 1
 
     track encodeEgaspUpdAugustusEst
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel Augustus/EST Upd
     longLabel Augustus + EST/Protein Evidence Gene Predictions
     color 12,65,165
     priority 2
 
     track encodeEgaspUpdAugustusDual
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel August/Mouse Upd
     longLabel Augustus + Mouse Homology Gene Predictions
     color 12,85,135
     priority 3
 
     track encodeEgaspUpdAugustusAny
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel August/EST/Ms Upd
     longLabel Augustus + EST/Protein Evidence + Mouse Homology Gene Predictions
     priority 4
     color 12,100,100
 
     track encodeEgaspUpdExogean
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel Exogean Update
     longLabel Exogean Gene Predictions
     priority 5
     color 100,12,100
 
     track encodeEgaspUpdFgenesh
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel FGenesh++ Upd
     longLabel Fgenesh++ Gene Predictions
     priority 6
     color 22,150,20
 
     track encodeEgaspUpdGeneId
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel GeneID Update
     longLabel GeneID Gene Predictions
     priority 7
     color 100,12,100
 
     track encodeEgaspUpdGeneIdU12
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel GeneID U12 Upd
     longLabel GeneID U12 Intron Predictions
     priority 8
     color 200,132,12
 
     track encodeEgaspUpdJigsaw
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel Jigsaw Update
     longLabel Jigsaw Gene Predictions
     color 22,150,20
     priority 9
 
     track encodeEgaspUpdSgp2
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel SGP2 Update
     longLabel SGP2 Gene Predictions
     priority 10
     color 100,12,100
 
     track encodeEgaspUpdSgp2U12
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel SGP2 U12 Update
     longLabel SGP2 U12 Intron Predictions
     priority 11
     color 200,132,12
 
     track encodeEgaspUpdYalePseudo
-    subTrack encodeEgaspUpdate
+    parent encodeEgaspUpdate
     shortLabel Yale Pseudo Upd
     longLabel Yale Pseudogene Predictions
     priority 12
@@ -640,7 +640,7 @@ baseColorDefault genomicCodons
     dataVersion ENCODE June 2005 Freeze
 
     track encodePseudogeneConsensus
-    subTrack encodePseudogene
+    parent encodePseudogene
     shortLabel Consensus Pseudogenes
     longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS ENCODE Pseudogenes 
     urlName gene
@@ -651,7 +651,7 @@ baseColorDefault genomicCodons
     priority 1
 
     track encodePseudogeneHavana
-    subTrack encodePseudogene
+    parent encodePseudogene
     shortLabel Havana-Gencode Pseudogenes
     longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
     urlLabel Vega Genes Link:
@@ -659,7 +659,7 @@ baseColorDefault genomicCodons
     priority 2
 
     track encodePseudogeneYale
-    subTrack encodePseudogene
+    parent encodePseudogene
     shortLabel Yale Pseudogenes
     longLabel Yale Pseudogene Predictions
     urlName gene
@@ -668,19 +668,19 @@ baseColorDefault genomicCodons
     priority 3
 
     track encodePseudogeneUcsc
-    subTrack encodePseudogene
+    parent encodePseudogene
     shortLabel UCSC Retrogenes
     longLabel UCSC Retrogene Predictions
     priority 4
 
     track encodePseudogeneUcsc2
-    subTrack encodePseudogene
+    parent encodePseudogene
     shortLabel UCSC Pseudogenes
     longLabel UCSC Pseudogene Predictions
     priority 5
 
     track encodePseudogeneGIS
-    subTrack encodePseudogene
+    parent encodePseudogene
     shortLabel GIS Pseudogenes
     longLabel Genome Institute of Singapore (GIS) Pseudogenes 
     priority 6
@@ -709,61 +709,61 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeBuFirstExonCerebrum
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     shortLabel BU Cere. Cortex
     longLabel Boston University First Exon Activity in Cerebral Cortex
     priority 1
 
     track encodeBuFirstExonColon
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     longLabel Boston University First Exon Activity in Colon
     shortLabel BU Colon
     priority 2
 
     track encodeBuFirstExonHeart
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     shortLabel BU Heart
     longLabel Boston University First Exon Activity in Heart
     priority 3
 
     track encodeBuFirstExonKidney
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     longLabel Boston University First Exon Activity in Kidney
     shortLabel BU Kidney
     priority 4
 
     track encodeBuFirstExonLiver
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     shortLabel BU Liver
     longLabel Boston University First Exon Activity in Liver
     priority 5
 
     track encodeBuFirstExonLung
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     longLabel Boston University First Exon Activity in Lung
     shortLabel BU Lung
     priority 6
 
     track encodeBuFirstExonSkMuscle
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     shortLabel BU Skel. Muscle
     longLabel Boston University First Exon Activity in Skeletal Muscle
     priority 7
 
     track encodeBuFirstExonSpleen
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     longLabel Boston University First Exon Activity  in Spleen
     shortLabel BU Spleen
     priority 8
 
     track encodeBuFirstExonStomach
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     shortLabel BU Stomach
     longLabel Boston University First Exon Activity in Stomach
     priority 9
 
     track encodeBuFirstExonTestis
-    subTrack encodeBuFirstExon
+    parent encodeBuFirstExon
     longLabel Boston University First Exon Activity in Testis
     shortLabel BU Testis
     priority 10
@@ -787,14 +787,14 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeRikenCagePlus
-    subTrack encodeRikenCage
+    parent encodeRikenCage
     shortLabel Riken CAGE +
     longLabel Riken CAGE Plus Strand - Predicted Gene Start Sites
     priority 1
     color 109,51,43
 
     track encodeRikenCageMinus
-    subTrack encodeRikenCage
+    parent encodeRikenCage
     shortLabel Riken CAGE -
     longLabel Riken CAGE Minus Strand - Predicted Gene Start Sites
     priority 2
@@ -819,14 +819,14 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeRikenCageMappedTagsPositive
-    subTrack encodeRikenCageMappedTagsScore
+    parent encodeRikenCageMappedTagsScore
     shortLabel Riken CAGE MT +
     longLabel Riken CAGE Mapped Tags overlap count, Plus strand - TEST TRACK ONLY
     priority 1
     color 109,51,43
 
     track encodeRikenCageMappedTagsNegative
-    subTrack encodeRikenCageMappedTagsScore
+    parent encodeRikenCageMappedTagsScore
     shortLabel Riken CAGE MT -
     longLabel Riken CAGE Mapped Tags overlap count, Minus strand - TEST TRACK ONLY
     priority 2
@@ -859,103 +859,103 @@ dataVersion ENCODE June 2005 Freeze
 origAssembly hg16
 
     track encodeStanfordPromotersAGS
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro AGS
     longLabel Stanford Promoter Activity  (AGS cells)
     priority 1
 
     track encodeStanfordPromotersBe2C
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro Be2c
     longLabel Stanford Promoter Activity  (Be2c cells)
     priority 2
 
     track encodeStanfordPromotersCRL1690
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro CRL1690
     longLabel Stanford Promoter Activity  (CRL1690 cells)
     priority 3
 
     track encodeStanfordPromotersG402
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro G402
     longLabel Stanford Promoter Activity  (G402 cells)
     priority 4
 
     track encodeStanfordPromotersHCT116
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro HCT116
     longLabel Stanford Promoter Activity  (HCT116 cells)
     priority 5
 
     track encodeStanfordPromotersHMCB
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro HMCB
     longLabel Stanford Promoter Activity  (HMCB cells)
     priority 6
 
     track encodeStanfordPromotersHT1080
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro HT1080
     longLabel Stanford Promoter Activity  (HT1080 cells)
     priority 7
 
     track encodeStanfordPromotersHTB11
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro HTB11
     longLabel Stanford Promoter Activity  (HTB11 cells)
     priority 8
 
     track encodeStanfordPromotersHela
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro Hela
     longLabel Stanford Promoter Activity  (HeLa cells)
     priority 9
 
     track encodeStanfordPromotersHepG2
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro HepG2
     longLabel Stanford Promoter Activity  (HepG2 cells)
     priority 10
 
     track encodeStanfordPromotersJEG3
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro JEG3
     longLabel Stanford Promoter Activity  (JEG3 cells)
     priority 11
 
     track encodeStanfordPromotersMG63
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro MG63
     longLabel Stanford Promoter Activity  (MG63 cells)
     priority 12
 
     track encodeStanfordPromotersMRC5
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro MRC5
     longLabel Stanford Promoter Activity  (MRC5 cells)
     priority 13
 
     track encodeStanfordPromotersPanc1
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro Panc1
     longLabel Stanford Promoter Activity  (Panc1 cells)
     priority 14
 
     track encodeStanfordPromotersSnu182
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro Snu182
     longLabel Stanford Promoter Activity  (Snu182 cells)
     priority 15
 
     track encodeStanfordPromotersU87
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro U87
     longLabel Stanford Promoter Activity  (U87 cells)
     priority 16
 
     track encodeStanfordPromotersAverage
-    subTrack encodeStanfordPromoters
+    parent encodeStanfordPromoters
     shortLabel Stan Pro Average
     longLabel Stanford Promoter Activity  (Average)
     priority 17
@@ -1000,7 +1000,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleMASNB4RNANprotTMFWDMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
+    parent encodeYaleMASPlacRNATransMap
     shortLabel Yale NB4 NgF RNA
     longLabel Yale NB4 RNA Trans Map, MAS Array, Forward Direction, NimbleGen Protocol
     priority 1
@@ -1008,7 +1008,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 50,50,200
 
     track encodeYaleMASNB4RNANprotTMREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
+    parent encodeYaleMASPlacRNATransMap
     shortLabel Yale NB4 NgR RNA
     longLabel Yale NB4 RNA Trans Map, MAS Array, Reverse Direction, NimbleGen Protocol
     priority 2
@@ -1016,7 +1016,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 200,50,50
 
     track encodeYaleMASPlacRNANprotTMFWDMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
+    parent encodeYaleMASPlacRNATransMap
     shortLabel Yale Plc NgF RNA
     longLabel Yale Placenta RNA Trans Map, MAS Array, Forward Direction, NimbleGen Protocol
     priority 3
@@ -1024,7 +1024,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 50,50,200
 
     track encodeYaleMASPlacRNANprotTMREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
+    parent encodeYaleMASPlacRNATransMap
     shortLabel Yale Plc NgR RNA
     longLabel Yale Placenta RNA Trans Map, MAS Array, Reverse Direction, NimbleGen Protocol
     priority 4
@@ -1032,7 +1032,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 200,50,50
 
     track encodeYaleMASPlacRNATransMapFwdMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
+    parent encodeYaleMASPlacRNATransMap
     shortLabel Yale Plc BtF RNA
     longLabel Yale Placenta RNA TransMap, MAS array, Forward Direction, Bertone Protocol
     priority 5
@@ -1040,7 +1040,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 50,50,200
 
     track encodeYaleMASPlacRNATransMapRevMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
+    parent encodeYaleMASPlacRNATransMap
     shortLabel Yale Plc BtR RNA
     longLabel Yale Placenta RNA Trans Map, MAS Array, Reverse Direction, Bertone Protocol
     priority 6
@@ -1061,7 +1061,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
+    parent encodeYaleMASPlacRNATars
     shortLabel Yale NB4 NgF TAR
     longLabel Yale NB4 RNA TARs, MAS array, Forward Direction, NimbleGen Protocol
     priority 1
@@ -1069,7 +1069,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 50,50,200
 
     track encodeYaleMASNB4RNANProtTarsREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
+    parent encodeYaleMASPlacRNATars
     shortLabel Yale NB4 NgR TAR
     longLabel Yale NB4 RNA TARs, MAS array, Reverse Direction, NimbleGen Protocol
     priority 2
@@ -1077,7 +1077,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 200,50,50
 
     track encodeYaleMASPlacRNANprotTarsFWDMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
+    parent encodeYaleMASPlacRNATars
     shortLabel Yale Plc NgF TAR
     longLabel Yale Placenta RNA TARs, MAS array, Forward Direction, NimbleGen Protocol
     priority 3
@@ -1085,7 +1085,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 50,50,200
 
     track encodeYaleMASPlacRNANprotTarsREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
+    parent encodeYaleMASPlacRNATars
     shortLabel Yale Plc NgR TAR
     longLabel Yale Placenta RNA TARs, MAS array, Reverse Direction, NimbleGen Protocol
     priority 4
@@ -1093,7 +1093,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 200,50,50
 
     track encodeYaleMASPlacRNATarsFwdMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
+    parent encodeYaleMASPlacRNATars
     shortLabel Yale Plc BtF TAR
     longLabel Yale Placenta RNA TARs, MAS array, Forward Direction, Bertone Protocol
     priority 5
@@ -1101,7 +1101,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 50,50,200
 
     track encodeYaleMASPlacRNATarsRevMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
+    parent encodeYaleMASPlacRNATars
     shortLabel Yale Plc BtR TAR
     longLabel Yale Placenta RNA TARs, MAS array, Reverse Direction, Bertone Protocol
     priority 6
@@ -1130,224 +1130,224 @@ chromosomes chr21,chr22
 type bed 3 .
 
     track encodeAffyEc1BrainCerebellumSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites BrainC
     longLabel Affy Ext Trans Sites (1-base window) (Brain Cerebellum)
     color 248,0,8
     priority 1
 
     track encodeAffyEc51BrainCerebellumSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Sites BrainC
     longLabel Affy Ext Trans Sites (51-base window) (Brain Cerebellum)
     color 248,0,8
     priority 2
 
     track encodeAffyEc1BrainFrontalLobeSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites BrainF
     longLabel Affy Ext Trans Sites (1-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 3    
 
     track encodeAffyEc51BrainFrontalLobeSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site BrainF
     longLabel Affy Ext Trans Sites (51-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 4    
 
     track encodeAffyEc1BrainHippocampusSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites Hippoc
     longLabel Affy Ext Trans Sites (1-base window) (Brain Hippocampus)
     color 248,0,8
     priority 5
 
     track encodeAffyEc51BrainHippocampusSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site Hippoc
     longLabel Affy Ext Trans Sites (51-base window) (Brain Hippocampus)
     color 248,0,8
     priority 6
 
     track encodeAffyEc1BrainHypothalamusSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites BrainH
     longLabel Affy Ext Trans Sites (1-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 7
 
     track encodeAffyEc51BrainHypothalamusSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Sites BrainH
     longLabel Affy Ext Trans Sites (51-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 8
 
     track encodeAffyEc1FetalKidneySites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites FetalK
     longLabel Affy Ext Trans Sites (1-base window) (Fetal Kidney)
     color 176,0,80
     priority 9
 
     track encodeAffyEc51FetalKidneySites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site FetalK
     longLabel Affy Ext Trans Sites (51-base window) (Fetal Kidney)
     color 176,0,80
     priority 10
 
     track encodeAffyEc1FetalSpleenSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites Spleen
     longLabel Affy Ext Trans Sites (1-base window) (Fetal Spleen)
     color 176,0,80
     priority 11
 
     track encodeAffyEc51FetalSpleenSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site Spleen
     longLabel Affy Ext Trans Sites (51-base window) (Fetal Spleen)
     color 176,0,80
     priority 12
 
     track encodeAffyEc1PlacentaSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites Placen
     longLabel Affy Ext Trans Sites (1-base window) (Placenta)
     color 176,0,80
     priority 13
 
     track encodeAffyEc51PlacentaSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site Placen
     longLabel Affy Ext Trans Sites (51-base window) (Placenta)
     color 176,0,80
     priority 14
 
     track encodeAffyEc1TestisSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites Testis
     longLabel Affy Ext Trans Sites (1-base window) (Testis)
     color 128,0,128
     priority 15
 
     track encodeAffyEc51TestisSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site Testis
     longLabel Affy Ext Trans Sites (51-base window) (Testis)
     color 128,0,128
     priority 16
 
     track encodeAffyEc1FetalTestisSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites FetalT
     longLabel Affy Ext Trans Sites (1-base window) (Fetal Testis)
     color 128,0,128    
     priority 17
 
     track encodeAffyEc51FetalTestisSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site FetalT
     longLabel Affy Ext Trans Sites (51-base window) (Fetal Testis)
     color 128,0,128
     priority 18
 
     track encodeAffyEc1ProstateSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites Prost
     longLabel Affy Ext Trans Sites (1-base window) (Prostate)
     color 128,0,128
     priority 19
 
     track encodeAffyEc51ProstateSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site Prost
     longLabel Affy Ext Trans Sites (51-base window) (Prostate)
     color 128,0,128
     priority 20
 
     track encodeAffyEc1OvarySites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites Ovary
     longLabel Affy Ext Trans Sites (1-base window) (Ovary)
     color 128,0,128
     priority 21
 
     track encodeAffyEc51OvarySites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site Ovary
     longLabel Affy Ext Trans Sites (51-base window) (Ovary)
     color 128,0,128
     priority 22
 
     track encodeAffyEc1HeLaC1S3Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites HeLa
     longLabel Affy Ext Trans Sites (1-base window) (HeLa C1S3)
     color 0,0,205
     priority 23
 
     track encodeAffyEc51HeLaC1S3Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site HeLa
     longLabel Affy Ext Trans Sites (51-base window) (HeLa C1S3)
     color 0,0,205
     priority 24
 
     track encodeAffyEc1GM06990Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites GM0699
     longLabel Affy Ext Trans Sites (1-base window) (GM06990)
     color 0,0,205
     priority 25
 
     track encodeAffyEc51GM06990Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site GM0699
     longLabel Affy Ext Trans Sites (51-base window) (GM06990)
     color 0,0,205
     priority 26
 
     track encodeAffyEc1HepG2Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites HepG2
     longLabel Affy Ext Trans Sites (1-base window) (HepG2)
     color 0,0,205
     priority 27
 
     track encodeAffyEc51HepG2Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site HepG2
     longLabel Affy Ext Trans Sites (51-base window) (HepG2)
     color 0,0,205
     priority 28
 
     track encodeAffyEc1K562Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites K562
     longLabel Affy Ext Trans Sites (1-base window) (K562)
     color 0,0,205
     priority 29
 
     track encodeAffyEc51K562Sites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site K562
     longLabel Affy Ext Trans Sites (51-base window) (K562)
     color 0,0,205
     priority 30
 
     track encodeAffyEc1TertBJSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC1 Sites TertBJ
     longLabel Affy Ext Trans Sites (1-base window) (Tert-BJ)
     color 0,0,205
     priority 31
 
     track encodeAffyEc51TertBJSites
-    subTrack encodeAffyEcSites
+    parent encodeAffyEcSites
     shortLabel EC51 Site TertBJ
     longLabel Affy Ext Trans Sites (51-base window) (Tert-BJ)
     color 0,0,205
@@ -1369,224 +1369,224 @@ autoScale Off
 type wig 0 62385
 
     track encodeAffyEc1BrainCerebellumSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl BrainC
     longLabel Affy Ext Trans Signal (1-base window) (Brain Cerebellum)
     color 248,0,8
     priority 1
 
     track encodeAffyEc51BrainCerebellumSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl BrainC
     longLabel Affy Ext Trans Signal (51-base window) (Brain Cerebellum)
     color 248,0,8
     priority 2
 
     track encodeAffyEc1BrainFrontalLobeSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl BrainF
     longLabel Affy Ext Trans Signal (1-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 3    
 
     track encodeAffyEc51BrainFrontalLobeSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl BrainF
     longLabel Affy Ext Trans Signal (51-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 4    
 
     track encodeAffyEc1BrainHippocampusSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl Hippoc
     longLabel Affy Ext Trans Signal (1-base window) (Brain Hippocampus)
     color 248,0,8
     priority 5
 
     track encodeAffyEc51BrainHippocampusSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl Hippoc
     longLabel Affy Ext Trans Signal (51-base window) (Brain Hippocampus)
     color 248,0,8
     priority 6
 
     track encodeAffyEc1BrainHypothalamusSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl BrainH
     longLabel Affy Ext Trans Signal (1-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 7
 
     track encodeAffyEc51BrainHypothalamusSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl BrainH
     longLabel Affy Ext Trans Signal (51-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 8
 
     track encodeAffyEc1FetalKidneySignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl FetalK
     longLabel Affy Ext Trans Signal (1-base window) (Fetal Kidney)
     color 176,0,80
     priority 9
 
     track encodeAffyEc51FetalKidneySignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl FetalK
     longLabel Affy Ext Trans Signal (51-base window) (Fetal Kidney)
     color 176,0,80
     priority 10
 
     track encodeAffyEc1FetalSpleenSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl Spleen
     longLabel Affy Ext Trans Signal (1-base window) (Fetal Spleen)
     color 176,0,80
     priority 11
 
     track encodeAffyEc51FetalSpleenSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl Spleen
     longLabel Affy Ext Trans Signal (51-base window) (Fetal Spleen)
     color 176,0,80
     priority 12
 
     track encodeAffyEc1PlacentaSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl Placen
     longLabel Affy Ext Trans Signal (1-base window) (Placenta)
     color 176,0,80
     priority 13
 
     track encodeAffyEc51PlacentaSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl Placen
     longLabel Affy Ext Trans Signal (51-base window) (Placenta)
     color 176,0,80
     priority 14
 
     track encodeAffyEc1TestisSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl Testis
     longLabel Affy Ext Trans Signal (1-base window) (Testis)
     color 128,0,128
     priority 15
 
     track encodeAffyEc51TestisSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl Testis
     longLabel Affy Ext Trans Signal (51-base window) (Testis)
     color 128,0,128
     priority 16
 
     track encodeAffyEc1FetalTestisSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl FetalT
     longLabel Affy Ext Trans Signal (1-base window) (Fetal Testis)
     color 128,0,128    
     priority 17
 
     track encodeAffyEc51FetalTestisSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl FetalT
     longLabel Affy Ext Trans Signal (51-base window) (Fetal Testis)
     color 128,0,128
     priority 18
 
     track encodeAffyEc1ProstateSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl Prost
     longLabel Affy Ext Trans Signal (1-base window) (Prostate)
     color 128,0,128
     priority 19
 
     track encodeAffyEc51ProstateSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl Prost
     longLabel Affy Ext Trans Signal (51-base window) (Prostate)
     color 128,0,128
     priority 20
 
     track encodeAffyEc1OvarySignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl Ovary
     longLabel Affy Ext Trans Signal (1-base window) (Ovary)
     color 128,0,128
     priority 21
 
     track encodeAffyEc51OvarySignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl Ovary
     longLabel Affy Ext Trans Signal (51-base window) (Ovary)
     color 128,0,128
     priority 22
 
     track encodeAffyEc1HeLaC1S3Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl HeLa
     longLabel Affy Ext Trans Signal (1-base window) (HeLa C1S3)
     color 0,0,205
     priority 23
 
     track encodeAffyEc51HeLaC1S3Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl HeLa
     longLabel Affy Ext Trans Signal (51-base window) (HeLa C1S3)
     color 0,0,205
     priority 24
 
     track encodeAffyEc1GM06990Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl GM0699
     longLabel Affy Ext Trans Signal (1-base window) (GM06990)
     color 0,0,205
     priority 25
 
     track encodeAffyEc51GM06990Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl GM0699
     longLabel Affy Ext Trans Signal (51-base window) (GM06990)
     color 0,0,205
     priority 26
 
     track encodeAffyEc1HepG2Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl HepG2
     longLabel Affy Ext Trans Signal (1-base window) (HepG2)
     color 0,0,205
     priority 27
 
     track encodeAffyEc51HepG2Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl HepG2
     longLabel Affy Ext Trans Signal (51-base window) (HepG2)
     color 0,0,205
     priority 28
 
     track encodeAffyEc1K562Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl K562
     longLabel Affy Ext Trans Signal (1-base window) (K562)
     color 0,0,205
     priority 29
 
     track encodeAffyEc51K562Signal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl K562
     longLabel Affy Ext Trans Signal (51-base window) (K562)
     color 0,0,205
     priority 30
 
     track encodeAffyEc1TertBJSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC1 Sgnl TertBJ
     longLabel Affy Ext Trans Signal (1-base window) (Tert-BJ)
     color 0,0,205
     priority 31
 
     track encodeAffyEc51TertBJSignal
-    subTrack encodeAffyEcSignal
+    parent encodeAffyEcSignal
     shortLabel EC51 Sgnl TertBJ
     longLabel Affy Ext Trans Signal (51-base window) (Tert-BJ)
     color 0,0,205
@@ -1621,7 +1621,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalBrg1Hr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=Brg1 time=0h
     shortLabel Affy Brg1 RA 0h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1629,7 +1629,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 1
 
     track encodeAffyChIpHl60PvalBrg1Hr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=Brg1 time=2h
     shortLabel Affy Brg1 RA 2h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1637,7 +1637,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 3
 
     track encodeAffyChIpHl60PvalBrg1Hr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=Brg1 time=8h
     shortLabel Affy Brg1 RA 8h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1645,7 +1645,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 5
 
     track encodeAffyChIpHl60PvalBrg1Hr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=Brg1 time=32h
     shortLabel Affy Brg1 RA 32h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1653,7 +1653,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 7
 
     track encodeAffyChIpHl60PvalCebpeHr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CEBPe time=0h
     shortLabel Affy CEBPe RA 0h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1661,7 +1661,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 9
 
     track encodeAffyChIpHl60PvalCebpeHr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CEBPe time=2h
     shortLabel Affy CEBPe RA 2h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1669,7 +1669,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 11
 
     track encodeAffyChIpHl60PvalCebpeHr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CEBPe time=8h
     shortLabel Affy CEBPe RA 8h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1677,7 +1677,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60PvalCebpeHr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CEBPe time=32h
     shortLabel Affy CEBPe RA 32h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1685,7 +1685,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 15
 
     track encodeAffyChIpHl60PvalCtcfHr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CTCF time=0h
     shortLabel Affy CTCF RA 0h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1693,7 +1693,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 17
 
     track encodeAffyChIpHl60PvalCtcfHr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CTCF time=2h
     shortLabel Affy CTCF RA 2h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1701,7 +1701,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 19
 
     track encodeAffyChIpHl60PvalCtcfHr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CTCF time=8h
     shortLabel Affy CTCF RA 8h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1709,7 +1709,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 21
 
     track encodeAffyChIpHl60PvalCtcfHr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=CTCF time=32h
     shortLabel Affy CTCF RA 32h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1717,7 +1717,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 23
 
     track encodeAffyChIpHl60PvalH3K27me3Hr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=H3K27me3 time=0h
     shortLabel Affy H3K27me3 RA 0h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1725,7 +1725,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 25
 
     track encodeAffyChIpHl60PvalH3K27me3Hr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=H3K27me3 time=2h
     shortLabel Affy H3K27me3 RA 2h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1733,7 +1733,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 27
 
     track encodeAffyChIpHl60PvalH3K27me3Hr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     subGroups factor=H3K27me3 time=8h
     shortLabel Affy H3K27me3 RA 8h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1741,7 +1741,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 29
 
     track encodeAffyChIpHl60PvalH3K27me3Hr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy H3K27me3 RA 32h
     subGroups factor=H3K27me3 time=32h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1749,7 +1749,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 31
 
     track encodeAffyChIpHl60PvalH4Kac4Hr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 0h
     subGroups factor=H4Kac4 time=0h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1757,7 +1757,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 33
 
     track encodeAffyChIpHl60PvalH4Kac4Hr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 2h
     subGroups factor=H4Kac4 time=2h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1765,7 +1765,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 35
 
     track encodeAffyChIpHl60PvalH4Kac4Hr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 8h
     subGroups factor=H4Kac4 time=8h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1773,7 +1773,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 37
 
     track encodeAffyChIpHl60PvalH4Kac4Hr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 32h
     subGroups factor=H4Kac4 time=32h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1781,7 +1781,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 39
 
     track encodeAffyChIpHl60PvalP300Hr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 0h
     subGroups factor=P300 time=0h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1789,7 +1789,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 41
 
     track encodeAffyChIpHl60PvalP300Hr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 2h
     subGroups factor=P300 time=2h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1797,7 +1797,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 43
 
     track encodeAffyChIpHl60PvalP300Hr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 8h
     subGroups factor=P300 time=8h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1805,7 +1805,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 45
 
     track encodeAffyChIpHl60PvalP300Hr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 32h
     subGroups factor=P300 time=32h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1813,7 +1813,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 47
 
     track encodeAffyChIpHl60PvalPu1Hr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 0h
     subGroups factor=PU1 time=0h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1821,7 +1821,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 49
 
     track encodeAffyChIpHl60PvalPu1Hr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 2h
     subGroups factor=PU1 time=2h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1829,7 +1829,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 51
 
     track encodeAffyChIpHl60PvalPu1Hr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 8h
     subGroups factor=PU1 time=8h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1837,7 +1837,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 53
 
     track encodeAffyChIpHl60PvalPu1Hr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 32h
     subGroups factor=PU1 time=32h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1845,7 +1845,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 55
 
     track encodeAffyChIpHl60PvalRnapHr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 0h
     subGroups factor=Pol2 time=0h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1853,7 +1853,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 57
 
     track encodeAffyChIpHl60PvalRnapHr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 2h
     subGroups factor=Pol2 time=2h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1861,7 +1861,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 59
 
     track encodeAffyChIpHl60PvalRnapHr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 8h
     subGroups factor=Pol2 time=8h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1869,7 +1869,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 61
 
     track encodeAffyChIpHl60PvalRnapHr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 32h
     subGroups factor=Pol2 time=32h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1877,7 +1877,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 63
 
     track encodeAffyChIpHl60PvalRaraHr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 0h
     subGroups factor=RARA time=0h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1885,7 +1885,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 65
 
     track encodeAffyChIpHl60PvalRaraHr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 2h
     subGroups factor=RARA time=2h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1893,7 +1893,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 67
 
     track encodeAffyChIpHl60PvalRaraHr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 8h
     subGroups factor=RARA time=8h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1901,7 +1901,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 69
 
     track encodeAffyChIpHl60PvalRaraHr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 32h
     subGroups factor=RARA time=32h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1909,7 +1909,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 71
 
     track encodeAffyChIpHl60PvalSirt1Hr00
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 0h
     subGroups factor=SIRT1 time=0h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 0hrs) P-Value
@@ -1917,7 +1917,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 73
 
     track encodeAffyChIpHl60PvalSirt1Hr02
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 2h
     subGroups factor=SIRT1 time=2h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 2hrs) P-Value
@@ -1925,7 +1925,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 75
 
     track encodeAffyChIpHl60PvalSirt1Hr08
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 8h
     subGroups factor=SIRT1 time=8h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 8hrs) P-Value
@@ -1933,7 +1933,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 77
 
     track encodeAffyChIpHl60PvalSirt1Hr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 32h
     subGroups factor=SIRT1 time=32h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1941,7 +1941,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 79
 
     track encodeAffyChIpHl60PvalTfiibHr32
-    subTrack encodeAffyChIpHl60Pval
+    parent encodeAffyChIpHl60Pval
     shortLabel Affy TFIIB RA 32h
     subGroups factor=TFIIB time=32h
     longLabel Affymetrix ChIP-chip (TFIIB retinoic acid-treated HL-60, 32hrs) P-Value
@@ -1964,7 +1964,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60SitesBrg1Hr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 0h
     subGroups factor=Brg1 time=0h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 0hrs) Sites
@@ -1972,7 +1972,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 2
 
     track encodeAffyChIpHl60SitesBrg1Hr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 2h
     subGroups factor=Brg1 time=2h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 2hrs) Sites
@@ -1980,7 +1980,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 4
 
     track encodeAffyChIpHl60SitesBrg1Hr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 8h
     subGroups factor=Brg1 time=8h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 8hrs) Sites
@@ -1988,7 +1988,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 6
 
     track encodeAffyChIpHl60SitesBrg1Hr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 32h
     subGroups factor=Brg1 time=32h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 32hrs) Sites
@@ -1996,7 +1996,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 8
 
     track encodeAffyChIpHl60SitesCebpeHr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 0h
     subGroups factor=CEBPe time=0h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 0hrs) Sites
@@ -2004,7 +2004,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 10
 
     track encodeAffyChIpHl60SitesCebpeHr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 2h
     subGroups factor=CEBPe time=2h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 2hrs) Sites
@@ -2012,7 +2012,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60SitesCebpeHr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 8h
     subGroups factor=CEBPe time=8h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 8hrs) Sites
@@ -2020,7 +2020,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 14
 
     track encodeAffyChIpHl60SitesCebpeHr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 32h
     subGroups factor=CEBPe time=32h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 32hrs) Sites
@@ -2028,7 +2028,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 16
 
     track encodeAffyChIpHl60SitesCtcfHr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 0h
     subGroups factor=CTCF time=0h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 0hrs) Sites
@@ -2036,7 +2036,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 18
 
     track encodeAffyChIpHl60SitesCtcfHr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 2h
     subGroups factor=CTCF time=2h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 2hrs) Sites
@@ -2044,7 +2044,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 20
 
     track encodeAffyChIpHl60SitesCtcfHr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 8h
     subGroups factor=CTCF time=8h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 8hrs) Sites
@@ -2052,7 +2052,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 22
 
     track encodeAffyChIpHl60SitesCtcfHr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 32h
     subGroups factor=CTCF time=32h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 32hrs) Sites
@@ -2060,7 +2060,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 24
 
     track encodeAffyChIpHl60SitesH3K27me3Hr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 0h
     subGroups factor=H3K27me3 time=0h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 0hrs) Sites
@@ -2068,7 +2068,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 26
 
     track encodeAffyChIpHl60SitesH3K27me3Hr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 2h
     subGroups factor=H3K27me3 time=2h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 2hrs) Sites
@@ -2076,7 +2076,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 28
 
     track encodeAffyChIpHl60SitesH3K27me3Hr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 8h
     subGroups factor=H3K27me3 time=8h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 8hrs) Sites
@@ -2084,7 +2084,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 30
 
     track encodeAffyChIpHl60SitesH3K27me3Hr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 32h
     subGroups factor=H3K27me3 time=32h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 32hrs) Sites
@@ -2092,7 +2092,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 32
 
     track encodeAffyChIpHl60SitesH4Kac4Hr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 0h
     subGroups factor=H4Kac4 time=0h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 0hrs) Sites
@@ -2100,7 +2100,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 34
 
     track encodeAffyChIpHl60SitesH4Kac4Hr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 2h
     subGroups factor=H4Kac4 time=2h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 2hrs) Sites
@@ -2108,7 +2108,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 36
 
     track encodeAffyChIpHl60SitesH4Kac4Hr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 8h
     subGroups factor=H4Kac4 time=8h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 8hrs) Sites
@@ -2116,7 +2116,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 38
 
     track encodeAffyChIpHl60SitesH4Kac4Hr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 32h
     subGroups factor=H4Kac4 time=32h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 32hrs) Sites
@@ -2124,7 +2124,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 40
 
     track encodeAffyChIpHl60SitesP300Hr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 0h
     subGroups factor=P300 time=0h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 0hrs) Sites
@@ -2132,7 +2132,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 42
 
     track encodeAffyChIpHl60SitesP300Hr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 2h
     subGroups factor=P300 time=2h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 2hrs) Sites
@@ -2140,7 +2140,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 44
 
     track encodeAffyChIpHl60SitesP300Hr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 8h
     subGroups factor=P300 time=8h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 8hrs) Sites
@@ -2148,7 +2148,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 46
 
     track encodeAffyChIpHl60SitesP300Hr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 32h
     subGroups factor=P300 time=32h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 32hrs) Sites
@@ -2156,7 +2156,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 48
 
     track encodeAffyChIpHl60SitesPu1Hr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 0h
     subGroups factor=PU1 time=0h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 0hrs) Sites
@@ -2164,7 +2164,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 50
 
     track encodeAffyChIpHl60SitesPu1Hr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 2h
     subGroups factor=PU1 time=2h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 2hrs) Sites
@@ -2172,7 +2172,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 52
 
     track encodeAffyChIpHl60SitesPu1Hr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 8h
     subGroups factor=PU1 time=8h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 8hrs) Sites
@@ -2180,7 +2180,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 54
 
     track encodeAffyChIpHl60SitesPu1Hr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 32h
     subGroups factor=PU1 time=32h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 32hrs) Sites
@@ -2188,7 +2188,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 56
 
     track encodeAffyChIpHl60SitesRnapHr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 0h
     subGroups factor=Pol2 time=0h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 0hrs) Sites
@@ -2196,7 +2196,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 58
 
     track encodeAffyChIpHl60SitesRnapHr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 2h
     subGroups factor=Pol2 time=2h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 2hrs) Sites
@@ -2204,7 +2204,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 60
 
     track encodeAffyChIpHl60SitesRnapHr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 8h
     subGroups factor=Pol2 time=8h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 8hrs) Sites
@@ -2212,7 +2212,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 62
 
     track encodeAffyChIpHl60SitesRnapHr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 32h
     subGroups factor=Pol2 time=32h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 32hrs) Sites
@@ -2220,7 +2220,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 64
 
     track encodeAffyChIpHl60SitesRaraHr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 0h
     subGroups factor=RARA time=0h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 0hrs) Sites
@@ -2228,7 +2228,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 66
 
     track encodeAffyChIpHl60SitesRaraHr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 2h
     subGroups factor=RARA time=2h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 2hrs) Sites
@@ -2236,7 +2236,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 68
 
     track encodeAffyChIpHl60SitesRaraHr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 8h
     subGroups factor=RARA time=8h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 8hrs) Sites
@@ -2244,7 +2244,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 70
 
     track encodeAffyChIpHl60SitesRaraHr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 32h
     subGroups factor=RARA time=32h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 32hrs) Sites
@@ -2252,7 +2252,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 72
 
     track encodeAffyChIpHl60SitesSirt1Hr00
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 0h
     subGroups factor=SIRT1 time=0h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 0hrs) Sites
@@ -2260,7 +2260,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 74
 
     track encodeAffyChIpHl60SitesSirt1Hr02
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 2h
     subGroups factor=SIRT1 time=2h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 2hrs) Sites
@@ -2268,7 +2268,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 76
 
     track encodeAffyChIpHl60SitesSirt1Hr08
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 8h
     subGroups factor=SIRT1 time=8h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 8hrs) Sites
@@ -2276,7 +2276,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 78
 
     track encodeAffyChIpHl60SitesSirt1Hr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 32h
     subGroups factor=SIRT1 time=32h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 32hrs) Sites
@@ -2284,7 +2284,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 80
 
     track encodeAffyChIpHl60SitesTfiibHr32
-    subTrack encodeAffyChIpHl60Sites
+    parent encodeAffyChIpHl60Sites
     shortLabel Affy TFIIB RA 32h
     subGroups factor=TFIIB time=32h
     longLabel Affymetrix ChIP-chip (TFIIB retinoic acid-treated HL-60, 32hrs) Sites
@@ -2315,7 +2315,7 @@ origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr00
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict P-Value
@@ -2323,7 +2323,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr02
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=2h
     shortLabel Affy H3K9ac2 2h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 2hrs) Strict P-Value
@@ -2331,7 +2331,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr08
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=8h
     shortLabel Affy H3K9ac2 8h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 8hrs) Strict P-Value
@@ -2339,7 +2339,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr32
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=32h
     shortLabel Affy H3K9ac2 32h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 32hrs) Strict P-Value
@@ -2347,7 +2347,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr00
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=0h
     shortLabel Affy H4Kac4 0h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 0hrs) Strict P-Value
@@ -2355,7 +2355,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr02
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=2h
     shortLabel Affy H4Kac4 2h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 2hrs) Strict P-Value
@@ -2363,7 +2363,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr08
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=8h
     shortLabel Affy H4Kac4 8h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 8hrs) Strict P-Value
@@ -2371,7 +2371,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 7
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr32
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=32h
     shortLabel Affy H4Kac4 32h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 32hrs) Strict P-Value
@@ -2379,7 +2379,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 8
 
     track encodeAffyChIpHl60PvalStrictPol2Hr00
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=0h
     shortLabel Affy Pol2 0h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 0hrs) Strict P-Value
@@ -2387,7 +2387,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 9
 
     track encodeAffyChIpHl60PvalStrictPol2Hr02
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=2h
     shortLabel Affy Pol2 2h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 2hrs) Strict P-Value
@@ -2395,7 +2395,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 10
 
     track encodeAffyChIpHl60PvalStrictPol2Hr08
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=8h
     shortLabel Affy Pol2 8h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 8hrs) Strict P-Value
@@ -2403,7 +2403,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 11
 
     track encodeAffyChIpHl60PvalStrictPol2Hr32
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=32h
     shortLabel Affy Pol2 32h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 32hrs) Strict P-Value
@@ -2411,7 +2411,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60PvalStrictp63_ActD
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=actd time=0h
     shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict P-Value
@@ -2419,7 +2419,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60PvalStrictp63_mActD
-    subTrack encodeAffyChIpHl60PvalStrict
+    parent encodeAffyChIpHl60PvalStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict P-Value
@@ -2446,7 +2446,7 @@ origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr00
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H3K9K14ac2 time=0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict Signal
@@ -2454,7 +2454,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr02
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H3K9K14ac2 time=2h
     shortLabel Affy H3K9ac2 2h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 2hrs) Strict Signal
@@ -2462,7 +2462,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr08
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H3K9K14ac2 time=8h
     shortLabel Affy H3K9ac2 8h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 8hrs) Strict Signal
@@ -2470,7 +2470,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr32
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H3K9K14ac2 time=32h
     shortLabel Affy H3K9ac2 32h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 32hrs) Strict Signal
@@ -2478,7 +2478,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr00
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H4Kac4 time=0h
     shortLabel Affy H4Kac4 0h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 0hrs) Strict Signal
@@ -2486,7 +2486,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr02
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H4Kac4 time=2h
     shortLabel Affy H4Kac4 2h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 2hrs) Strict Signal
@@ -2494,7 +2494,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr08
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H4Kac4 time=8h
     shortLabel Affy H4Kac4 8h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 8hrs) Strict Signal
@@ -2502,7 +2502,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 7
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr32
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=H4Kac4 time=32h
     shortLabel Affy H4Kac4 32h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 32hrs) Strict Signal
@@ -2510,7 +2510,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 8
 
     track encodeAffyChIpHl60SignalStrictPol2Hr00
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=Pol2 time=0h
     shortLabel Affy Pol2 0h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 0hrs) Strict Signal
@@ -2518,7 +2518,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 9
 
     track encodeAffyChIpHl60SignalStrictPol2Hr02
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=Pol2 time=2h
     shortLabel Affy Pol2 2h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 2hrs) Strict Signal
@@ -2526,7 +2526,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 10
 
     track encodeAffyChIpHl60SignalStrictPol2Hr08
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=Pol2 time=8h
     shortLabel Affy Pol2 8h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 8hrs) Strict Signal
@@ -2534,7 +2534,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 11
 
     track encodeAffyChIpHl60SignalStrictPol2Hr32
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=Pol2 time=32h
     shortLabel Affy Pol2 32h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 32hrs) Strict Signal
@@ -2542,7 +2542,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60SignalStrictp63_ActD
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=actd time=0h
     shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Signal
@@ -2550,7 +2550,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60SignalStrictp63_mActD
-    subTrack encodeAffyChIpHl60SignalStrict
+    parent encodeAffyChIpHl60SignalStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Signal
@@ -2573,7 +2573,7 @@ origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr00
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H3K9K14ac2 time=0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict Sites
@@ -2581,7 +2581,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr02
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H3K9K14ac2 time=2h
     shortLabel Affy H3K9ac2 2h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 2hrs) Strict Sites
@@ -2589,7 +2589,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr08
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H3K9K14ac2 time=8h
     shortLabel Affy H3K9ac2 8h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 8hrs) Strict Sites
@@ -2597,7 +2597,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr32
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H3K9K14ac2 time=32h
     shortLabel Affy H3K9ac2 32h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 32hrs) Strict Sites
@@ -2605,7 +2605,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr00
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H4Kac4 time=0h
     shortLabel Affy H4Kac4 0h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 0hrs) Strict Sites
@@ -2613,7 +2613,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr02
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H4Kac4 time=2h
     shortLabel Affy H4Kac4 2h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 2hrs) Strict Sites
@@ -2621,7 +2621,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr08
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H4Kac4 time=8h
     shortLabel Affy H4Kac4 8h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 8hrs) Strict Sites
@@ -2629,7 +2629,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 7
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr32
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=H4Kac4 time=32h
     shortLabel Affy H4Kac4 32h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 32hrs) Strict Sites
@@ -2637,7 +2637,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 8
 
     track encodeAffyChIpHl60SitesStrictRnapHr00
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=Pol2 time=0h
     shortLabel Affy Pol2 0h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 0hrs) Strict Sites
@@ -2645,7 +2645,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 9
 
     track encodeAffyChIpHl60SitesStrictRnapHr02
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=Pol2 time=2h
     shortLabel Affy Pol2 2h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 2hrs) Strict Sites
@@ -2653,7 +2653,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 10
 
     track encodeAffyChIpHl60SitesStrictRnapHr08
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=Pol2 time=8h
     shortLabel Affy Pol2 8h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 8hrs) Strict Sites
@@ -2661,7 +2661,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 11
 
     track encodeAffyChIpHl60SitesStrictRnapHr32
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=Pol2 time=32h
     shortLabel Affy Pol2 32h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 32hrs) Strict Sites
@@ -2669,7 +2669,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60SitesStrictP63_ActD
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=actd time=0h
     shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Sites
@@ -2677,7 +2677,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60SitesStrictP63_mActD
-    subTrack encodeAffyChIpHl60SitesStrict
+    parent encodeAffyChIpHl60SitesStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Sites
@@ -2714,82 +2714,82 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdChipRnapHela_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI Pol2 HeLa
     longLabel Ludwig Institute ChIP-chip: Pol2 8WG16 ab, HeLa cells
     priority 1
 
     track encodeUcsdChipRnapThp1_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI Pol2 THP1
     longLabel Ludwig Institute ChIP-chip: Pol2 8WG16 ab, THP1 cells
     priority 2
     color 0,63,135
 
     track encodeUcsdChipRnapImr90_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI Pol2 IMR90
     longLabel Ludwig Institute ChIP-chip: Pol2 8WG16 ab, IMR90 cells 
     priority 3
     color 109,51,43
 
     track encodeUcsdChipRnapHct116_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI Pol2 HCT116
     longLabel Ludwig Institute ChIP-chip: Pol2 8WG16 ab, HCT116 cells 
     priority 4
     color 58,119,40
 
     track encodeUcsdChipTaf250Hela_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI TAF1 HeLa
     longLabel Ludwig Institute ChIP-chip: TAF1 ab, HeLa cells 
     priority 5
 
     track encodeUcsdChipTaf250Thp1_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI TAF1 THP1
     longLabel Ludwig Institute ChIP-chip: TAF1 ab, THP1 cells 
     priority 6
     color 0,63,135
 
     track encodeUcsdChipTaf250Imr90_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI TAF1 IMR90
     longLabel Ludwig Institute ChIP-chip: TAF1 ab, IMR90 cells 
     priority 7
     color 109,51,43
 
     track encodeUcsdChipTaf250Hct116_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI TAF1 HCT116
     longLabel Ludwig Institute ChIP-chip: TAF1 ab, HCT116 cells 
     priority 8
     color 58,119,40
 
     track encodeUcsdChipAch3Imr90_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI H3ac IMR90
     longLabel Ludwig Institute ChIP-chip: H3ac ab, IMR90 cells 
     priority 9
     color 109,51,43
 
     track encodeUcsdChipMeh3k4Imr90_f
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI H3K4me2 IMR90
     longLabel Ludwig Institute ChIP-chip: H3K4me2 ab, IMR90 cells 
     priority 10
     color 109,51,43
 
     track encodeUcsdChipH3K27me3Suz12
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI SUZ12 HeLa
     longLabel Ludwig Institute ChIP-chip: SUZ12 protein ab, HeLa cells 
     priority 11
     color 109,51,43
 
     track encodeUcsdChipH3K27me3
-    subTrack encodeLIChIP
+    parent encodeLIChIP
     shortLabel LI H3K27me3 HeLa
     longLabel Ludwig Institute ChIP-chip: H3K27me3 ab, HeLa cells 
     priority 12
@@ -2814,98 +2814,98 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdChipHeLaH3H4dmH3K4_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H3K4me2 -gIF
     longLabel Ludwig Institute ChIP-chip: H3K4me2 ab, HeLa cells, no gamma interferon
     priority 1
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4dmH3K4_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H3K4me2 +gIF
     longLabel Ludwig Institute ChIP-chip: H3K4me2 ab, HeLa cells, 30 min. after gamma interferon 
     priority 2
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4tmH3K4_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H3K4me3 -gIF
     longLabel Ludwig Institute ChIP-chip: H3K4me3 ab, HeLa cells, no gamma interferon
     priority 3
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4tmH3K4_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H3K4me3 +gIF
     longLabel Ludwig Institute ChIP-chip: H3K4me3 ab, HeLa cells, 30 min. after gamma interferon 
     priority 4
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4acH3_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H3ac -gIF
     longLabel Ludwig Institute ChIP-chip: H3ac ab, HeLa cells, no gamma interferon
     priority 5
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4acH3_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H3ac +gIF
     longLabel Ludwig Institute ChIP-chip: H3ac ab, HeLa cells, 30 min. after gamma interferon 
     priority 6
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4acH4_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H4ac -gIF
     longLabel Ludwig Institute ChIP-chip: H4ac ab, HeLa cells, no gamma interferon
     priority 7
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4acH4_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI H4ac +gIF
     longLabel Ludwig Institute ChIP-chip: H4ac ab, HeLa cells, 30 min. after gamma interferon 
     priority 8
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4stat1_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI STAT1 -gIF
     longLabel Ludwig Institute ChIP-chip: STAT1 ab, HeLa cells, no gamma interferon
     priority 9
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4stat1_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI STAT1 +gIF
     longLabel Ludwig Institute ChIP-chip: STAT1 ab, HeLa cells, 30 min. after gamma interferon
     priority 10
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4RNAP_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI Pol2 -gIF
     longLabel Ludwig Institute ChIP-chip: RNA Pol2, HeLa cells, no gamma interferon
     priority 11
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4RNAP_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI Pol2 +gIF
     longLabel Ludwig Institute ChIP-chip: RNA Pol2, HeLa cells, 30 min. after gamma interferon
     priority 12
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4TAF250_p0
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI TAF1 -gIF
     longLabel Ludwig Institute ChIP-chip: TAF1, HeLa cells, no gamma interferon 
     priority 13
     color 109,51,43
 
     track encodeUcsdChipHeLaH3H4TAF250_p30
-    subTrack encodeLIChIPgIF
+    parent encodeLIChIPgIF
     shortLabel LI TAF1 +gIF
     longLabel Ludwig Institute ChIP-chip: TAF1, HeLa cells, 30 min. after gamma interferon
     priority 14
@@ -2942,37 +2942,37 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordChipHCT116Sp1
-    subTrack encodeStanfordChip
+    parent encodeStanfordChip
     shortLabel Stan HCT116 Sp1
     longLabel Stanford ChIP-chip (HCT116 cells, Sp1 ChIP)
     priority 1
 
     track encodeStanfordChipHCT116Sp3
-    subTrack encodeStanfordChip
+    parent encodeStanfordChip
     shortLabel Stan HCT116 Sp3
     longLabel Stanford ChIP-chip (HCT116 cells, Sp3 ChIP)
     priority 2
 
     track encodeStanfordChipJurkatSp1
-    subTrack encodeStanfordChip
+    parent encodeStanfordChip
     shortLabel Stan Jurkat Sp1
     longLabel Stanford ChIP-chip (Jurkat cells, Sp1 ChIP)
     priority 3
 
     track encodeStanfordChipJurkatSp3
-    subTrack encodeStanfordChip
+    parent encodeStanfordChip
     shortLabel Stan Jurkat Sp3
     longLabel Stanford ChIP-chip (Jurkat cells, Sp3 ChIP)
     priority 4
 
     track encodeStanfordChipK562Sp1
-    subTrack encodeStanfordChip
+    parent encodeStanfordChip
     shortLabel Stan K562 Sp1
     longLabel Stanford ChIP-chip (K562 cells, Sp1 ChIP)
     priority 5
 
     track encodeStanfordChipK562Sp3
-    subTrack encodeStanfordChip
+    parent encodeStanfordChip
     shortLabel Stan K562 Sp3
     longLabel Stanford ChIP-chip (K562 cells, Sp3 ChIP)
     priority 6
@@ -2998,37 +2998,37 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordChipSmoothedHCT116Sp1
-    subTrack encodeStanfordChipSmoothed
+    parent encodeStanfordChipSmoothed
     shortLabel Stan Sc HCT116 Sp1
     longLabel Stanford ChIP-chip Smoothed Score (HCT116 cells, Sp1 ChIP)
     priority 1
 
     track encodeStanfordChipSmoothedHCT116Sp3
-    subTrack encodeStanfordChipSmoothed
+    parent encodeStanfordChipSmoothed
     shortLabel Stan Sc HCT116 Sp3
     longLabel Stanford ChIP-chip Smoothed Score (HCT116 cells, Sp3 ChIP)
     priority 2
 
     track encodeStanfordChipSmoothedJurkatSp1
-    subTrack encodeStanfordChipSmoothed
+    parent encodeStanfordChipSmoothed
     shortLabel Stan Sc Jurkat Sp1
     longLabel Stanford ChIP-chip Smoothed Score (Jurkat cells, Sp1 ChIP)
     priority 3
 
     track encodeStanfordChipSmoothedJurkatSp3
-    subTrack encodeStanfordChipSmoothed
+    parent encodeStanfordChipSmoothed
     shortLabel Stan Sc Jurkat Sp3
     longLabel Stanford ChIP-chip Smoothed Score (Jurkat cells, Sp3 ChIP)
     priority 4
 
     track encodeStanfordChipSmoothedK562Sp1
-    subTrack encodeStanfordChipSmoothed
+    parent encodeStanfordChipSmoothed
     shortLabel Stan Sc K562 Sp1
     longLabel Stanford ChIP-chip Smoothed Score (K562 cells, Sp1 ChIP)
     priority 5
 
     track encodeStanfordChipSmoothedK562Sp3
-    subTrack encodeStanfordChipSmoothed
+    parent encodeStanfordChipSmoothed
     shortLabel Stan Sc K562 Sp3
     longLabel Stanford ChIP-chip Smoothed Score (K562 cells, Sp3 ChIP)
     priority 6
@@ -3047,14 +3047,14 @@ origAssembly hg17
 dataVersion March 2007
 
     track encodeStanfordNRSFEnriched
-    subTrack encodeStanfordNRSF
+    parent encodeStanfordNRSF
     shortLabel Stanf NRSF Enriched
     longLabel Stanford NRSF/REST Enriched
     priority 1
     color 0,128,0
 
     track encodeStanfordNRSFControl
-    subTrack encodeStanfordNRSF
+    parent encodeStanfordNRSF
     shortLabel Stanf NRSF Control
     longLabel Stanford NRSF/REST Control
     priority 2
@@ -3080,73 +3080,73 @@ origAssembly hg17
 dataVersion Mar 2007
 
     track encodeStanfordChipGMO6990GABP
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan GMO6690 GABP
     longLabel Stanford ChIP-chip (GMO6990 cells, GABP ChIP)
     priority 1
 
     track encodeStanfordChipGMO6990SRF
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan GMO6690 SRF
     longLabel Stanford ChIP-chip (GMO6990 cells, SRF ChIP)
     priority 2
 
     track encodeStanfordChipHepG2GABP
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan HepG2 GABP
     longLabel Stanford ChIP-chip (HepG2 cells, GABP ChIP)
     priority 3
 
     track encodeStanfordChipHepG2SRF
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan HepG2 SRF
     longLabel Stanford ChIP-chip (HepG2 cells, SRF ChIP)
     priority 4
 
     track encodeStanfordChipHeLaGABP
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan HeLa GABP
     longLabel Stanford ChIP-chip (HeLa cells, GABP ChIP)
     priority 5
 
     track encodeStanfordChipHeLaSRF
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan HeLa SRF
     longLabel Stanford ChIP-chip (HeLa cells, SRF ChIP)
     priority 6
 
     track encodeStanfordChipHeLaTAF
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan HeLa TAF
     longLabel Stanford ChIP-chip (HeLa cells, TAF ChIP)
     priority 7
 
     track encodeStanfordChipK562GABP
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan K562 GABP
     longLabel Stanford ChIP-chip (K562 cells, GABP ChIP)
     priority 8
 
     track encodeStanfordChipK562SRF
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan K562 SRF
     longLabel Stanford ChIP-chip (K562 cells, SRF ChIP)
     priority 9
 
     track encodeStanfordChipK562TAF
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan K562 TAF
     longLabel Stanford ChIP-chip (K562 cells, TAF ChIP)
     priority 10
 
     track encodeStanfordChipNRSFMono
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan Jurkat NRSF/REST/Mono 
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Mono ChIP)
     priority 11
 
     track encodeStanfordChipNRSFUpstate
-    subTrack encodeStanfordChipJohnson
+    parent encodeStanfordChipJohnson
     shortLabel Stan Jurkat NRSF/REST/Upstate 
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Upstate ChIP)
     priority 12
@@ -3185,7 +3185,7 @@ subGroup1 dataType Data_Type raw=Raw peaks=Peaks
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUtexChipHeLaMycRaw
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     shortLabel UT Myc HeLa
     longLabel University of Texas, Austin  ChIP-chip (c-Myc, HeLa) 
     subGroups dataType=raw
@@ -3193,7 +3193,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeUtexChip2091fibMycRaw
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     shortLabel UT Myc Fb
     longLabel University of Texas, Austin  ChIP-chip (c-Myc, 2091 fibroblasts)
     subGroups dataType=raw
@@ -3201,7 +3201,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeUtexChip2091fibMycStimRaw
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     shortLabel UT Myc st-Fb 
     longLabel University of Texas, Austin  ChIP-chip (c-Myc, FBS-stimulated 2091 fibroblasts)
     subGroups dataType=raw
@@ -3209,7 +3209,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeUtexChip2091fibE2F4Raw
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     shortLabel UT E2F4 Fb
     longLabel University of Texas, Austin  ChIP-chip (E2F4, 2091 fibroblasts) 
     subGroups dataType=raw
@@ -3220,12 +3220,12 @@ dataVersion ENCODE Oct 2005 Freeze
     shortLabel UT Myc HeLa Pk
     longLabel University of Texas, Austin  ChIP-chip (c-Myc, HeLa) Peaks
     subGroups dataType=peaks
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     color 50,0,0
     priority 5
 
     track encodeUtexChip2091fibMycPeaks
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     shortLabel UT Myc Fb Pk
     longLabel University of Texas, Austin  ChIP-chip (c-Myc, 2091 fibroblasts) Peaks
     subGroups dataType=peaks
@@ -3236,7 +3236,7 @@ dataVersion ENCODE Oct 2005 Freeze
     shortLabel UT Myc st-Fb Pk
     longLabel University of Texas, Austin  ChIP-chip (c-Myc, FBS-stimulated 2091 fibroblasts) Peaks
     subGroups dataType=peaks
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     color 50,0,0
     priority 7
 
@@ -3244,7 +3244,7 @@ dataVersion ENCODE Oct 2005 Freeze
     shortLabel UT E2F4 st-Fb Pk
     longLabel University of Texas, Austin  ChIP-chip (E2F4, 2091 fibroblasts) Peaks
     subGroups dataType=peaks
-    subTrack encodeUtexChip
+    parent encodeUtexChip
     color 50,0,0
     priority 8
 
@@ -3268,49 +3268,49 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordMethBe2C
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth Be2C
     longLabel Stanford Methylation Digest (Be2C cells)
     priority 1
 
     track encodeStanfordMethCRL1690
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth CRL1690
     longLabel Stanford Methylation Digest (CRL1690 cells)
     priority 2
 
     track encodeStanfordMethHCT116
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth HCT116
     longLabel Stanford Methylation Digest (HCT116 cells)
     priority 3
 
     track encodeStanfordMethHT1080
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth HT1080
     longLabel Stanford Methylation Digest (HT1080 cells)
     priority 4
 
     track encodeStanfordMethHepG2
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth HepG2
     longLabel Stanford Methylation Digest (HepG2 cells)
     priority 5
 
     track encodeStanfordMethJEG3
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth JEG3
     longLabel Stanford Methylation Digest (JEG3 cells)
     priority 6
 
     track encodeStanfordMethSnu182
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth Snu182
     longLabel Stanford Methylation Digest (Snu182 cells)
     priority 7
 
     track encodeStanfordMethU87
-    subTrack encodeStanfordMeth
+    parent encodeStanfordMeth
     shortLabel Stan Meth U87
     longLabel Stanford Methylation Digest (U87 cells)
     priority 8
@@ -3335,49 +3335,49 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordMethSmoothedBe2C
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc Be2C
     longLabel Stanford Methylation Digest Smoothed Score (Be2C cells)
     priority 1
 
     track encodeStanfordMethSmoothedCRL1690
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc CRL1690
     longLabel Stanford Methylation Digest Smoothed Score (CRL1690 cells)
     priority 2
 
     track encodeStanfordMethSmoothedHCT116
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc HCT116
     longLabel Stanford Methylation Digest Smoothed Score (HCT116 cells)
     priority 3
 
     track encodeStanfordMethSmoothedHT1080
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc HT1080
     longLabel Stanford Methylation Digest Smoothed Score (HT1080 cells)
     priority 4
 
     track encodeStanfordMethSmoothedHepG2
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc HepG2
     longLabel Stanford Methylation Digest Smoothed Score (HepG2 cells)
     priority 5
 
     track encodeStanfordMethSmoothedJEG3
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc JEG3
     longLabel Stanford Methylation Digest Smoothed Score (JEG3 cells)
     priority 6
 
     track encodeStanfordMethSmoothedSnu182
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc Snu182
     longLabel Stanford Methylation Digest Smoothed Score (Snu182 cells)
     priority 7
 
     track encodeStanfordMethSmoothedU87
-    subTrack encodeStanfordMethSmoothed
+    parent encodeStanfordMethSmoothed
     shortLabel Stan Meth Sc U87
     longLabel Stanford Methylation Digest Smoothed Score (U87 cells)
     priority 8
@@ -3403,13 +3403,13 @@ dataVersion ENCODE Oct 2005 Freeze
 origAssembly hg17
 
     track encodeUncFaireSignal
-    subTrack encodeUncFaire
+    parent encodeUncFaire
     shortLabel FAIRE Signal
     longLabel University of North Carolina FAIRE Signal
     priority 1
 
     track encodeUncFairePeaks
-    subTrack encodeUncFaire
+    parent encodeUncFaire
     shortLabel FAIRE PeakFinder
     longLabel University of North Carolina FAIRE Peaks (PeakFinder)
     noInherit on
@@ -3422,7 +3422,7 @@ origAssembly hg17
     priority 2
     
     track encodeUncFairePeaksChipotle
-    subTrack encodeUncFaire
+    parent encodeUncFaire
     shortLabel FAIRE ChIPOTle
     longLabel University of North Carolina FAIRE Peaks (ChIPOTle)
     noInherit on
@@ -3461,31 +3461,31 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeUvaDnaRep0
-    subTrack encodeUvaDnaRep
+    parent encodeUvaDnaRep
     shortLabel UVa DNA Rep 0h
     longLabel University of Virginia Temporal Profiling of DNA Replication (0-2 hrs) 
     priority 1
 
     track encodeUvaDnaRep2
-    subTrack encodeUvaDnaRep
+    parent encodeUvaDnaRep
     shortLabel UVa DNA Rep 2h
     longLabel University of Virginia Temporal Profiling of DNA Replication (2-4 hrs) 
     priority 2
 
     track encodeUvaDnaRep4
-    subTrack encodeUvaDnaRep
+    parent encodeUvaDnaRep
     shortLabel UVa DNA Rep 4h
     longLabel University of Virginia Temporal Profiling of DNA Replication (4-6 hrs) 
     priority 3
 
     track encodeUvaDnaRep6
-    subTrack encodeUvaDnaRep
+    parent encodeUvaDnaRep
     shortLabel UVa DNA Rep 6h
     longLabel University of Virginia Temporal Profiling of DNA Replication (6-8 hrs) 
     priority 4
 
     track encodeUvaDnaRep8
-    subTrack encodeUvaDnaRep
+    parent encodeUvaDnaRep
     shortLabel UVa DNA Rep 8h
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
@@ -3504,28 +3504,28 @@ origAssembly hg16
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUvaDnaRepEarly
-    subTrack encodeUvaDnaRepSeg
+    parent encodeUvaDnaRepSeg
     shortLabel UVa DNA Rep Early
     longLabel University of Virginia Temporal Profiling of DNA Replication (Early) 
     color 50,50,100
     priority 1
 
     track encodeUvaDnaRepMid
-    subTrack encodeUvaDnaRepSeg
+    parent encodeUvaDnaRepSeg
     shortLabel UVa DNA Rep Mid
     longLabel University of Virginia Temporal Profiling of DNA Replication (Mid) 
     color 30,80,130
     priority 2
 
     track encodeUvaDnaRepLate
-    subTrack encodeUvaDnaRepSeg
+    parent encodeUvaDnaRepSeg
     shortLabel UVa DNA Rep Late
     longLabel University of Virginia Temporal Profiling of DNA Replication (Late) 
     color 10,110,160
     priority 3
 
     track encodeUvaDnaRepPanS
-    subTrack encodeUvaDnaRepSeg
+    parent encodeUvaDnaRepSeg
     shortLabel UVa DNA Rep PanS
     longLabel University of Virginia Temporal Profiling of DNA Replication (PanS) 
     color 100,50,50
@@ -3545,7 +3545,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
 origAssembly hg17
 
     track encodeUvaDnaRepOriginsNSGM
-    subTrack encodeUvaDnaRepOrigins
+    parent encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, GM06990
     shortLabel UVa Ori-NS GM
     color 205,0,0
@@ -3554,7 +3554,7 @@ origAssembly hg17
     priority 1
 
     track encodeUvaDnaRepOriginsNSHela
-    subTrack encodeUvaDnaRepOrigins
+    parent encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, HeLa
     shortLabel UVa Ori-NS HeLa
     color 250,0,0
@@ -3563,7 +3563,7 @@ origAssembly hg17
     priority 2
 
     track encodeUvaDnaRepOriginsBubbleHela
-    subTrack encodeUvaDnaRepOrigins
+    parent encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-Bubble, HeLa
     shortLabel UVa Ori-Bubble HeLa
     color 0,0,128
@@ -3572,7 +3572,7 @@ origAssembly hg17
     priority 3
 
     track encodeUvaDnaRepOriginsTR50Hela
-    subTrack encodeUvaDnaRepOrigins
+    parent encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-TR50, HeLa
     shortLabel UVa Ori-TR50 HeLa
     dataVersion May 2007
@@ -3695,25 +3695,25 @@ type wig 0.0 100.0
 dataVersion ENCODE June 2005 Freeze
 
     track encodeHapMapCovCEU
-    subTrack encodeHapMapCov
+    parent encodeHapMapCov
     shortLabel HapMap Cov CEU
     longLabel HapMap Resequencing Coverage CEPH (CEU)
     priority 1
 
     track encodeHapMapCovCHB
-    subTrack encodeHapMapCov
+    parent encodeHapMapCov
     shortLabel HapMap Cov CHB
     longLabel HapMap Resequencing Coverage Chinese (CHB)
     priority 2
 
     track encodeHapMapCovJPT
-    subTrack encodeHapMapCov
+    parent encodeHapMapCov
     shortLabel HapMap Cov JPT
     longLabel HapMap Resequencing Coverage Japanese (JPT)
     priority 3
 
     track encodeHapMapCovYRI
-    subTrack encodeHapMapCov
+    parent encodeHapMapCov
     shortLabel HapMap Cov YRI
     longLabel HapMap Resequencing Coverage Yoruban (YRI)
     priority 4
@@ -3771,25 +3771,25 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeHapMapAlleleFreqCEU
-    subTrack encodeHapMapAlleleFreq
+    parent encodeHapMapAlleleFreq
     shortLabel Allele Freq CEU
     longLabel HapMap Minor Allele Frequencies CEPH (CEU)
     priority 1
 
     track encodeHapMapAlleleFreqCHB
-    subTrack encodeHapMapAlleleFreq
+    parent encodeHapMapAlleleFreq
     shortLabel Allele Freq CHB
     longLabel HapMap Minor Allele Frequencies Chinese (CHB)
     priority 2
 
     track encodeHapMapAlleleFreqJPT
-    subTrack encodeHapMapAlleleFreq
+    parent encodeHapMapAlleleFreq
     shortLabel Allele Freq JPT
     longLabel HapMap Minor Allele Frequencies Japanese (JPT)
     priority 3
 
     track encodeHapMapAlleleFreqYRI
-    subTrack encodeHapMapAlleleFreq
+    parent encodeHapMapAlleleFreq
     shortLabel Allele Freq YRI
     longLabel HapMap Minor Allele Frequencies Yoruban (YRI)
     priority 4
@@ -3827,55 +3827,55 @@ type bed 4
 dataVersion ENCODE June 2005 Freeze
 
     track encodeTransFragsAffyDistal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Affy Dist
     longLabel Affy Distal 
     priority 1
 
     track encodeTransFragsAffyIntronicDistal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Affy Intron Dist
     longLabel Affy Intronic Distal 
     priority 2
 
     track encodeTransFragsAffyProximal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Affy Prox
     longLabel Affy Proximal 
     priority 3
 
     track encodeTransFragsYaleIntergenicDistal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Yale Intergen Dist
     longLabel Yale Intergenic Distal 
     priority 4
 
     track encodeTransFragsYaleIntergenicProximal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Yale Intergen Prox
     longLabel Yale Intergenic Proximal
     priority 5
 
     track encodeTransFragsYaleIntronicDistal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Yale Intron Dist
     longLabel Yale Intronic Distal
     priority 6
 
     track encodeTransFragsConservedDistal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Cons Distal
     longLabel Conserved Distal 
     priority 7
 
     track encodeTransFragsConservedProximal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Cons Prox
     longLabel Conserved Proximal
     priority 8
 
     track encodeTransFragsConservedIntronicDistal
-    subTrack encodeTransFrags
+    parent encodeTransFrags
     shortLabel Cons Intron Dist
     longLabel Conserved Intronic Distal
     priority 9
@@ -3892,19 +3892,19 @@ type bed 4
 dataVersion ENCODE June 2005 Freeze
 
     track encodeNhgriDnaseHs2
-    subTrack encodeDnase
+    parent encodeDnase
     shortLabel NHGRI DNAseI HS
     longLabel NHGRI DNAseI HS
     priority 1
 
     track encodeRegulomeDnaseHs
-    subTrack encodeDnase
+    parent encodeDnase
     shortLabel Regulome DNAseI HS
     longLabel Regulome DNAseI HS
     priority 2
 
     track encodeDnaseHs
-    subTrack encodeDnase
+    parent encodeDnase
     shortLabel Combined DNAseI HS
     longLabel Combined DNAseI HS
     priority 3
@@ -3931,25 +3931,25 @@ type bed 4 +
 dataVersion ENCODE June 2005 Freeze
 
     track encodeDNDSsmall
-    subTrack encodeDNDS
+    parent encodeDNDS
     shortLabel dN/dS 0.0 to 0.2
     longLabel ENCODE Exons dN/dS 0.0 to 0.2
     priority 1
 
     track encodeDNDSmedium
-    subTrack encodeDNDS
+    parent encodeDNDS
     shortLabel dN/dS 0.2 to 0.5
     longLabel ENCODE Exons dN/dS 0.2 to 0.5
     priority 2
 
     track encodeDNDSlarge
-    subTrack encodeDNDS
+    parent encodeDNDS
     shortLabel dN/dS 0.5 to 1.5
     longLabel ENCODE Exons dN/dS 0.5 to 1.5
     priority 3
 
     track encodeDNDShuge
-    subTrack encodeDNDS
+    parent encodeDNDS
     shortLabel dN/dS 1.5 to inf
     longLabel ENCODE Exons dN/dS 1.5 to inf
     priority 4
@@ -3965,37 +3965,37 @@ type bed 4 .
 dataVersion ENCODE June 2005 Freeze
 
     track encodeGencodeIntronsProximal
-    subTrack encodeGencodeRegions
+    parent encodeGencodeRegions
     shortLabel Intronic Prox
     longLabel Gencode Intronic Proximal Regions
     priority 1
 
     track encodeGencodeIntronsDistal
-    subTrack encodeGencodeRegions
+    parent encodeGencodeRegions
     shortLabel Intronic Dist
     longLabel Gencode Intronic Distal Regions
     priority 2
 
     track encodeGencodeIntergenicProximal
-    subTrack encodeGencodeRegions
+    parent encodeGencodeRegions
     shortLabel Intergenic Prox
     longLabel Gencode Intergenic Proximal Regions
     priority 3
 
     track encodeGencodeIntergenicDistal
-    subTrack encodeGencodeRegions
+    parent encodeGencodeRegions
     shortLabel Intergenic Dist
     longLabel Gencode Intergenic Distal Regions
     priority 4
 
     track encodeGencodeOtherESTs
-    subTrack encodeGencodeRegions
+    parent encodeGencodeRegions
     shortLabel Other ESTs
     longLabel Gencode Other ESTs
     priority 5
 
     track encodeGencodeExonic
-    subTrack encodeGencodeRegions
+    parent encodeGencodeRegions
     shortLabel Exonic
     longLabel Gencode Exonic Regions
     priority 6
@@ -4011,19 +4011,19 @@ type bed 5
 dataVersion ENCODE June 2005 Freeze
 
     track L1_LINE
-    subTrack encodeWorkshopIntersections
+    parent encodeWorkshopIntersections
     shortLabel L1_LINE
     longLabel L1 LINEs for Intersection
     priority 1
 
     track L2_LINE
-    subTrack encodeWorkshopIntersections
+    parent encodeWorkshopIntersections
     shortLabel L2_LINE
     longLabel L2 LINEs for Intersection
     priority 2
 
     track Alu_SINE
-    subTrack encodeWorkshopIntersections
+    parent encodeWorkshopIntersections
     shortLabel Alu_SINE
     longLabel Alu SINEs for Intersection
     priority 3
@@ -4040,37 +4040,37 @@ type bed 4
 dataVersion ENCODE June 2005 Freeze
 
     track encodeAllGencodeExonic
-    subTrack encodeWorkshopSelections
+    parent encodeWorkshopSelections
     shortLabel Gencode Exonic
     longLabel Consensus Gencode Exonic
     priority 1
 
     track encodeAllIntronsProximal
-    subTrack encodeWorkshopSelections
+    parent encodeWorkshopSelections
     shortLabel Intronic Prox
     longLabel Consensus Intronic Proximal
     priority 2
 
     track encodeAllIntronsDistal
-    subTrack encodeWorkshopSelections
+    parent encodeWorkshopSelections
     shortLabel Intronic Dist
     longLabel Consensus Intronic Distal
     priority 3
 
     track encodeAllIntergenicProximal
-    subTrack encodeWorkshopSelections
+    parent encodeWorkshopSelections
     shortLabel Intergenic Prox
     longLabel Consensus Intergenic Proximal
     priority 4
 
     track encodeAllIntergenicDistal
-    subTrack encodeWorkshopSelections
+    parent encodeWorkshopSelections
     shortLabel Intergenic Dist
     longLabel Consensus Intergenic Distal
     priority 5
 
     track encodeAllOtherESTs
-    subTrack encodeWorkshopSelections
+    parent encodeWorkshopSelections
     shortLabel Other ESTs
     longLabel Consensus Other ESTs
     priority 6
@@ -4092,7 +4092,7 @@ type bed 4 .
 dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyRnaGm06990SitesIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Prx GM06990
     longLabel Affy Intronic Proximal GM06990 Transfrags
     subGroups region=intronicProximal celltype=gm06990 source=affy
@@ -4100,7 +4100,7 @@ dataVersion ENCODE June 2005 Freeze
     color 248,0,8
 
     track encodeAffyRnaHeLaSitesIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Prx HeLa
     longLabel Affy Intronic Proximal HeLa Transfrags
     subGroups region=intronicProximal celltype=hela source=affy
@@ -4108,7 +4108,7 @@ dataVersion ENCODE June 2005 Freeze
     color 236,0,20
 
     track encodeAffyRnaHl60SitesHr00IntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Prx HL60
     longLabel Affy Intronic Proximal HL60 Transfrags
     subGroups region=intronicProximal celltype=hl60 source=affy
@@ -4116,7 +4116,7 @@ dataVersion ENCODE June 2005 Freeze
     color 224,0,32
 
     track encodeAffyRnaHl60SitesHr02IntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In PrxHL60 2h
     longLabel Affy Intronic Proximal HL60 Retinoic 2hr Transfrags
     subGroups region=intronicProximal celltype=hl60 source=affy
@@ -4124,7 +4124,7 @@ dataVersion ENCODE June 2005 Freeze
     color 212,0,44
 
     track encodeAffyRnaHl60SitesHr08IntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Prx HL60 8h
     longLabel Affy Intronic Proximal HL60 Retinoic 8h Transfrags
     subGroups region=intronicProximal celltype=hl60 source=affy
@@ -4132,7 +4132,7 @@ dataVersion ENCODE June 2005 Freeze
     color 200,0,56
 
     track encodeAffyRnaHl60SitesHr32IntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Prx HL60 32h
     longLabel Affy Intronic Proximal HL60 Retinoic 32h Transfrags
     subGroups region=intronicProximal celltype=hl60 source=affy
@@ -4140,7 +4140,7 @@ dataVersion ENCODE June 2005 Freeze
     color 188,0,68
 
     track encodeYaleAffyNB4RARNATarsIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Prx NB4 RA
     longLabel Yale Intronic Proximal NB4 Retinoic TARs
     subGroups region=intronicProximal celltype=nb4 source=yale
@@ -4148,7 +4148,7 @@ dataVersion ENCODE June 2005 Freeze
     color 176,0,80
 
     track encodeYaleAffyNB4TPARNATarsIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Prx NB4 TPA
     longLabel Yale Intronic Proximal TPA-Treated NB4 TARs
     subGroups region=intronicProximal celltype=nb4 source=yale
@@ -4156,7 +4156,7 @@ dataVersion ENCODE June 2005 Freeze
     color 164,0,92
 
     track encodeYaleAffyNB4UntrRNATarsIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Prx NB4 Un
     longLabel Yale Intronic Proximal NB4 TARs
     subGroups region=intronicProximal celltype=nb4 source=yale
@@ -4164,7 +4164,7 @@ dataVersion ENCODE June 2005 Freeze
     color 152,0,104
 
     track encodeYaleAffyNeutRNATarsAllIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Prx Neu
     longLabel Yale Intronic Proximal Neutrophil TARs
     subGroups region=intronicProximal celltype=neut source=yale
@@ -4172,7 +4172,7 @@ dataVersion ENCODE June 2005 Freeze
     color 140,0,116
 
     track encodeYaleAffyPlacRNATarsIntronsProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Prx Plac
     longLabel Yale Intronic Proximal Placental TARs
     subGroups region=intronicProximal celltype=plac source=yale
@@ -4180,7 +4180,7 @@ dataVersion ENCODE June 2005 Freeze
     color 128,0,128
 
     track encodeAffyRnaGm06990SitesIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Dst GM06990
     longLabel Affy Intronic Distal GM06990 Transfrags
     subGroups region=intronicDistal celltype=gm06990 source=affy
@@ -4188,7 +4188,7 @@ dataVersion ENCODE June 2005 Freeze
     color 250,5,255
 
     track encodeAffyRnaHeLaSitesIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Dst HeLa
     longLabel Affy Intronic Distal HeLa Transfrags
     subGroups region=intronicDistal celltype=hela source=affy
@@ -4196,7 +4196,7 @@ dataVersion ENCODE June 2005 Freeze
     color 225,30,255
 
     track encodeAffyRnaHl60SitesHr00IntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Dst HL60
     longLabel Affy Intronic Distal Hl60 Transfrags
     subGroups region=intronicDistal celltype=hl60 source=affy
@@ -4204,7 +4204,7 @@ dataVersion ENCODE June 2005 Freeze
     color 200,55,255
 
     track encodeAffyRnaHl60SitesHr02IntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Dst HL60 2h
     longLabel Affy Intronic Distal Hl60 2hr Transfrags
     subGroups region=intronicDistal celltype=hl60 source=affy
@@ -4212,7 +4212,7 @@ dataVersion ENCODE June 2005 Freeze
     color 175,80,255
 
     track encodeAffyRnaHl60SitesHr08IntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Dst HL60 8h
     longLabel Affy Intronic Distal Hl60 8hr Transfrags
     subGroups region=intronicDistal celltype=hl60 source=affy
@@ -4220,7 +4220,7 @@ dataVersion ENCODE June 2005 Freeze
     color 150,105,255
 
     track encodeAffyRnaHl60SitesHr32IntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy In Dst HL60 32h
     longLabel Affy Intronic Distal Hl60 32hr Transfrags
     subGroups region=intronicDistal celltype=hl60 source=affy
@@ -4228,7 +4228,7 @@ dataVersion ENCODE June 2005 Freeze
     color 125,130,255
 
     track encodeYaleAffyNB4RARNATarsIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Dst NB4
     longLabel Yale Intronic Distal NB4 Retinoic TARs
     subGroups region=intronicDistal celltype=nb4 source=yale
@@ -4236,7 +4236,7 @@ dataVersion ENCODE June 2005 Freeze
     color 100,155,255
 
     track encodeYaleAffyNB4TPARNATarsIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Dst NB4 TPA
     longLabel Yale Intronic Distal NB4 TPA-Treated TARs
     subGroups region=intronicDistal celltype=nb4 source=yale
@@ -4244,7 +4244,7 @@ dataVersion ENCODE June 2005 Freeze
     color 75,180,255
 
     track encodeYaleAffyNB4UntrRNATarsIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Dst NB4 Un
     longLabel Yale Intronic Distal Untreated NB4 TARs
     subGroups region=intronicDistal celltype=nb4 source=yale
@@ -4252,7 +4252,7 @@ dataVersion ENCODE June 2005 Freeze
     color 50,205,255
 
     track encodeYaleAffyNeutRNATarsAllIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Dst Neu
     longLabel Yale Intronic Distal Neutrophil TARs
     subGroups region=intronicDistal celltype=neut source=yale
@@ -4260,7 +4260,7 @@ dataVersion ENCODE June 2005 Freeze
     color 25,230,255
 
     track encodeYaleAffyPlacRNATarsIntronsDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale In Dst Plac 
     longLabel Yale Intronic Distal Placental TARs
     subGroups region=intronicDistal celltype=plac source=yale
@@ -4268,7 +4268,7 @@ dataVersion ENCODE June 2005 Freeze
     color 0,255,255
 
     track encodeAffyRnaGm06990SitesIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Prx GM06990
     longLabel Affymetrix Intergenic Proximal GM06990 Transfrags
     subGroups region=intergenicProximal celltype=gm06990 source=affy
@@ -4276,7 +4276,7 @@ dataVersion ENCODE June 2005 Freeze
     color 131,191,7
 
     track encodeAffyRnaHeLaSitesIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Prx HeLa
     longLabel Affymetrix Intergenic Proximal Hela Transfrags
     subGroups region=intergenicProximal celltype=hela source=affy
@@ -4284,7 +4284,7 @@ dataVersion ENCODE June 2005 Freeze
     color 137,185,19
 
     track encodeAffyRnaHl60SitesHr00IntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Prx HL60 0h
     longLabel Affymetrix Intergenic Proximal HL60 Transfrags
     subGroups region=intergenicProximal celltype=hl60 source=affy
@@ -4292,7 +4292,7 @@ dataVersion ENCODE June 2005 Freeze
     color 143,179,31
 
     track encodeAffyRnaHl60SitesHr02IntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Prx HL60 2h
     longLabel Affymetrix Intergenic Proximal HL60 Retinoic 2hr Transfrags
     subGroups region=intergenicProximal celltype=hl60 source=affy
@@ -4300,7 +4300,7 @@ dataVersion ENCODE June 2005 Freeze
     color 149,173,43
 
     track encodeAffyRnaHl60SitesHr08IntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Prx HL60 8h
     longLabel Affymetrix Intergenic Proximal HL60 Retinoic 8hr Transfrags
     subGroups region=intergenicProximal celltype=hl60 source=affy
@@ -4308,7 +4308,7 @@ dataVersion ENCODE June 2005 Freeze
     color 155,167,55
 
     track encodeAffyRnaHl60SitesHr32IntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Prx HL60 32h
     longLabel Affymetrix Intergenic Proximal HL60 Retinoic 32hr Transfrags
     subGroups region=intergenicProximal celltype=hl60 source=affy
@@ -4316,7 +4316,7 @@ dataVersion ENCODE June 2005 Freeze
     color 161,161,67
 
     track encodeYaleAffyNB4RARNATarsIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Prx NB4 RA
     longLabel Yale Intergenic Proximal NB4 Retinoic TARs
     subGroups region=intergenicProximal celltype=nb4 source=yale
@@ -4324,7 +4324,7 @@ dataVersion ENCODE June 2005 Freeze
     color 167,155,79
 
     track encodeYaleAffyNB4TPARNATarsIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Prx NB4 TPA
     longLabel Yale Intergenic Proximal NB4 TPA-Treated TARs
     subGroups region=intergenicProximal celltype=nb4 source=yale
@@ -4332,7 +4332,7 @@ dataVersion ENCODE June 2005 Freeze
     color 173,149,91
 
     track encodeYaleAffyNB4UntrRNATarsIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Prx NB4 Un
     longLabel Yale Intergenic Proximal Untreated NB4 TARs
     subGroups region=intergenicProximal celltype=nb4 source=yale
@@ -4340,7 +4340,7 @@ dataVersion ENCODE June 2005 Freeze
     color 179,143,103
 
     track encodeYaleAffyNeutRNATarsAllIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Prx Neu
     longLabel Yale Intergenic Proximal Neutrophil TARs
     subGroups region=intergenicProximal celltype=neut source=yale
@@ -4348,7 +4348,7 @@ dataVersion ENCODE June 2005 Freeze
     color 185,137,115
 
     track encodeYaleAffyPlacRNATarsIntergenicProximal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Prx Plac
     longLabel Yale Intergenic Proximal Placental TARs
     subGroups region=intergenicProximal celltype=plac source=yale
@@ -4356,7 +4356,7 @@ dataVersion ENCODE June 2005 Freeze
     color 191,131,127
 
     track encodeAffyRnaGm06990SitesIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Dst GM06990 
     longLabel Affymetrix Intergenic Distal GM06990 Transfrags
     subGroups region=intergenicDistal celltype=gm06990 source=affy
@@ -4364,7 +4364,7 @@ dataVersion ENCODE June 2005 Freeze
     color 0,0,255
 
     track encodeAffyRnaHeLaSitesIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Dst HeLa
     longLabel Affymetrix Intergenic Distal HeLa Transfrags
     subGroups region=intergenicDistal celltype=hela source=affy
@@ -4372,7 +4372,7 @@ dataVersion ENCODE June 2005 Freeze
     color 5,0,250
 
     track encodeAffyRnaHl60SitesHr00IntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Dst HL60 0h
     longLabel Affymetrix Intergenic Distal HL60 Transfrags
     subGroups region=intergenicDistal celltype=hl60 source=affy
@@ -4380,7 +4380,7 @@ dataVersion ENCODE June 2005 Freeze
     color 30,0,225
 
     track encodeAffyRnaHl60SitesHr02IntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Dst HL60 2h 
     longLabel Affymetrix Intergenic Distal HL60 Retinoic 2hr Transfrags
     subGroups region=intergenicDistal celltype=hl60 source=affy
@@ -4388,7 +4388,7 @@ dataVersion ENCODE June 2005 Freeze
     color 55,0,200
 
     track encodeAffyRnaHl60SitesHr08IntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Dst HL60 8h
     longLabel Affymetrix Intergenic Distal HL60 Retinoic 8hr Transfrags
     subGroups region=intergenicDistal celltype=hl60 source=affy
@@ -4396,7 +4396,7 @@ dataVersion ENCODE June 2005 Freeze
     color 80,0,175
 
     track encodeAffyRnaHl60SitesHr32IntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Affy Ig Dst HL60 32h
     longLabel Affymetrix Intergenic Distal HL60 Retinoic 32hr Transfrags
     subGroups region=intergenicDistal celltype=hl60 source=affy
@@ -4404,7 +4404,7 @@ dataVersion ENCODE June 2005 Freeze
     color 105,0,150
 
     track encodeYaleAffyNB4RARNATarsIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Dst NB4 RA
     longLabel Yale Intergenic Distal NB4 Retinoic TARs
     subGroups region=intergenicDistal celltype=nb4 source=yale
@@ -4412,7 +4412,7 @@ dataVersion ENCODE June 2005 Freeze
     color 130,0,125
 
     track encodeYaleAffyNB4TPARNATarsIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Dst NB4 TPA
     longLabel Yale Intergenic Distal TPA-Treated NB4 TARs
     subGroups region=intergenicDistal celltype=nb4 source=yale
@@ -4420,7 +4420,7 @@ dataVersion ENCODE June 2005 Freeze
     color 155,0,100
 
     track encodeYaleAffyNB4UntrRNATarsIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Dst NB4 Un
     longLabel Yale Intergenic Distal Untreated NB4 TARs
     subGroups region=intergenicDistal celltype=nb4 source=yale
@@ -4428,7 +4428,7 @@ dataVersion ENCODE June 2005 Freeze
     color 180,0,75
 
     track encodeYaleAffyNeutRNATarsAllIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Dst Neu
     longLabel Yale Intergenic Distal Neutrophil TARs
     subGroups region=intergenicDistal celltype=neut source=yale
@@ -4436,7 +4436,7 @@ dataVersion ENCODE June 2005 Freeze
     color 205,0,50
 
     track encodeYaleAffyPlacRNATarsIntergenicDistal
-    subTrack encodeNoncodingTransFrags
+    parent encodeNoncodingTransFrags
     shortLabel Yale Ig Dst Plac
     longLabel Yale Intergenic Distal Placental TARs
     subGroups region=intergenicDistal celltype=plac source=yale

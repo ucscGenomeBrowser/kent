@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.92 2010/05/06 16:05:54 chinhli Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.93 2010/05/07 05:35:51 kent Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -26,11 +26,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetAplCal1
+    parent chainNetAplCal1
     spectrum on
 
         track chainAplCal1
-        subTrack chainNetAplCal1Viewchain
+        parent chainNetAplCal1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -41,10 +41,10 @@ html chainNet
     shortLabel Net
     view net
     visibility dense
-    subTrack chainNetAplCal1
+    parent chainNetAplCal1
 
         track netAplCal1
-        subTrack chainNetAplCal1Viewnet
+        parent chainNetAplCal1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -77,11 +77,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetFr2
+    parent chainNetFr2
     spectrum on
 
         track chainFr2
-        subTrack chainNetFr2Viewchain
+        parent chainNetFr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -92,10 +92,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetFr2
+    parent chainNetFr2
 
         track netFr2
-        subTrack chainNetFr2Viewnet
+        parent chainNetFr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -128,11 +128,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetFr1
+    parent chainNetFr1
     spectrum on
 
         track chainFr1
-        subTrack chainNetFr1Viewchain
+        parent chainNetFr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -143,10 +143,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetFr1
+    parent chainNetFr1
 
         track netFr1
-        subTrack chainNetFr1Viewnet
+        parent chainNetFr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -179,11 +179,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetTetNig2
+    parent chainNetTetNig2
     spectrum on
 
         track chainTetNig2
-        subTrack chainNetTetNig2Viewchain
+        parent chainNetTetNig2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -194,10 +194,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetTetNig2
+    parent chainNetTetNig2
 
         track netTetNig2
-        subTrack chainNetTetNig2Viewnet
+        parent chainNetTetNig2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -230,11 +230,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetTetNig1
+    parent chainNetTetNig1
     spectrum on
 
         track chainTetNig1
-        subTrack chainNetTetNig1Viewchain
+        parent chainNetTetNig1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -245,10 +245,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetTetNig1
+    parent chainNetTetNig1
 
         track netTetNig1
-        subTrack chainNetTetNig1Viewnet
+        parent chainNetTetNig1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -281,11 +281,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDanRer6
+    parent chainNetDanRer6
     spectrum on
 
         track chainDanRer6
-        subTrack chainNetDanRer6Viewchain
+        parent chainNetDanRer6Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -296,10 +296,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDanRer6
+    parent chainNetDanRer6
 
         track netDanRer6
-        subTrack chainNetDanRer6Viewnet
+        parent chainNetDanRer6Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -332,11 +332,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDanRer5
+    parent chainNetDanRer5
     spectrum on
 
         track chainDanRer5
-        subTrack chainNetDanRer5Viewchain
+        parent chainNetDanRer5Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -347,10 +347,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDanRer5
+    parent chainNetDanRer5
 
         track netDanRer5
-        subTrack chainNetDanRer5Viewnet
+        parent chainNetDanRer5Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -383,11 +383,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDanRer4
+    parent chainNetDanRer4
     spectrum on
 
         track chainDanRer4
-        subTrack chainNetDanRer4Viewchain
+        parent chainNetDanRer4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -398,10 +398,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDanRer4
+    parent chainNetDanRer4
 
         track netDanRer4
-        subTrack chainNetDanRer4Viewnet
+        parent chainNetDanRer4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -434,11 +434,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDanRer3
+    parent chainNetDanRer3
     spectrum on
 
         track chainDanRer3
-        subTrack chainNetDanRer3Viewchain
+        parent chainNetDanRer3Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -449,10 +449,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDanRer3
+    parent chainNetDanRer3
 
         track netDanRer3
-        subTrack chainNetDanRer3Viewnet
+        parent chainNetDanRer3Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -485,11 +485,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDanRer2
+    parent chainNetDanRer2
     spectrum on
 
         track chainDanRer2
-        subTrack chainNetDanRer2Viewchain
+        parent chainNetDanRer2Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -500,10 +500,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDanRer2
+    parent chainNetDanRer2
 
         track netDanRer2
-        subTrack chainNetDanRer2Viewnet
+        parent chainNetDanRer2Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -536,11 +536,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDanRer1
+    parent chainNetDanRer1
     spectrum on
 
         track chainDanRer1
-        subTrack chainNetDanRer1Viewchain
+        parent chainNetDanRer1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -551,10 +551,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDanRer1
+    parent chainNetDanRer1
 
         track netDanRer1
-        subTrack chainNetDanRer1Viewnet
+        parent chainNetDanRer1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -587,11 +587,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetXenTro2
+    parent chainNetXenTro2
     spectrum on
 
         track chainXenTro2
-        subTrack chainNetXenTro2Viewchain
+        parent chainNetXenTro2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -602,10 +602,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetXenTro2
+    parent chainNetXenTro2
 
         track netXenTro2
-        subTrack chainNetXenTro2Viewnet
+        parent chainNetXenTro2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -638,11 +638,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetXenTro1
+    parent chainNetXenTro1
     spectrum on
 
         track chainXenTro1
-        subTrack chainNetXenTro1Viewchain
+        parent chainNetXenTro1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -653,10 +653,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetXenTro1
+    parent chainNetXenTro1
 
         track netXenTro1
-        subTrack chainNetXenTro1Viewnet
+        parent chainNetXenTro1Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -688,11 +688,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOryLat2
+    parent chainNetOryLat2
     spectrum on
 
         track chainOryLat2
-        subTrack chainNetOryLat2Viewchain
+        parent chainNetOryLat2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain 
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -704,10 +704,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOryLat2
+    parent chainNetOryLat2
 
         track netOryLat2
-        subTrack chainNetOryLat2Viewnet
+        parent chainNetOryLat2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -742,12 +742,12 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOryLat1
+    parent chainNetOryLat1
     spectrum on
 
         track chainOryLat1
         release alpha
-        subTrack chainNetOryLat1Viewchain
+        parent chainNetOryLat1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain 
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -759,11 +759,11 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOryLat1
+    parent chainNetOryLat1
 
         track netOryLat1
         release alpha
-        subTrack chainNetOryLat1Viewnet
+        parent chainNetOryLat1Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -797,11 +797,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetGasAcu1
+    parent chainNetGasAcu1
     spectrum on
 
         track chainGasAcu1
-        subTrack chainNetGasAcu1Viewchain
+        parent chainNetGasAcu1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -812,10 +812,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetGasAcu1
+    parent chainNetGasAcu1
 
         track netGasAcu1
-        subTrack chainNetGasAcu1Viewnet
+        parent chainNetGasAcu1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -848,11 +848,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetGalGal3
+    parent chainNetGalGal3
     spectrum on
 
         track chainGalGal3
-        subTrack chainNetGalGal3Viewchain
+        parent chainNetGalGal3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -863,10 +863,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetGalGal3
+    parent chainNetGalGal3
 
         track netGalGal3
-        subTrack chainNetGalGal3Viewnet
+        parent chainNetGalGal3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -899,11 +899,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetGalGal2
+    parent chainNetGalGal2
     spectrum on
 
         track chainGalGal2
-        subTrack chainNetGalGal2Viewchain
+        parent chainNetGalGal2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -914,10 +914,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetGalGal2
+    parent chainNetGalGal2
 
         track netGalGal2
-        subTrack chainNetGalGal2Viewnet
+        parent chainNetGalGal2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -950,11 +950,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetTaeGut1
+    parent chainNetTaeGut1
     spectrum on
 
         track chainTaeGut1
-        subTrack chainNetTaeGut1Viewchain
+        parent chainNetTaeGut1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -965,10 +965,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetTaeGut1
+    parent chainNetTaeGut1
 
         track netTaeGut1
-        subTrack chainNetTaeGut1Viewnet
+        parent chainNetTaeGut1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1001,11 +1001,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOrnAna1
+    parent chainNetOrnAna1
     spectrum on
 
         track chainOrnAna1
-        subTrack chainNetOrnAna1Viewchain
+        parent chainNetOrnAna1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1016,10 +1016,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOrnAna1
+    parent chainNetOrnAna1
 
         track netOrnAna1
-        subTrack chainNetOrnAna1Viewnet
+        parent chainNetOrnAna1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1052,11 +1052,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetAnoCar1
+    parent chainNetAnoCar1
     spectrum on
 
         track chainAnoCar1
-        subTrack chainNetAnoCar1Viewchain
+        parent chainNetAnoCar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1067,10 +1067,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetAnoCar1
+    parent chainNetAnoCar1
 
         track netAnoCar1
-        subTrack chainNetAnoCar1Viewnet
+        parent chainNetAnoCar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1103,11 +1103,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetPetMar1
+    parent chainNetPetMar1
     spectrum on
 
         track chainPetMar1
-        subTrack chainNetPetMar1Viewchain
+        parent chainNetPetMar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1118,10 +1118,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetPetMar1
+    parent chainNetPetMar1
 
         track netPetMar1
-        subTrack chainNetPetMar1Viewnet
+        parent chainNetPetMar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1154,11 +1154,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetBraFlo1
+    parent chainNetBraFlo1
     spectrum on
 
         track chainBraFlo1
-        subTrack chainNetBraFlo1Viewchain
+        parent chainNetBraFlo1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1169,10 +1169,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetBraFlo1
+    parent chainNetBraFlo1
 
         track netBraFlo1
-        subTrack chainNetBraFlo1Viewnet
+        parent chainNetBraFlo1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1205,11 +1205,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetStrPur2
+    parent chainNetStrPur2
     spectrum on
 
         track chainStrPur2
-        subTrack chainNetStrPur2Viewchain
+        parent chainNetStrPur2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1220,10 +1220,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetStrPur2
+    parent chainNetStrPur2
 
         track netStrPur2
-        subTrack chainNetStrPur2Viewnet
+        parent chainNetStrPur2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1255,7 +1255,7 @@ spectrum on
 html chainNet
 
     track chainMacEug1
-    subTrack chainNetMacEug1
+    parent chainNetMacEug1
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date) Chained Alignments
@@ -1263,7 +1263,7 @@ html chainNet
     html chainNet
 
     track netMacEug1
-    subTrack chainNetMacEug1
+    parent chainNetMacEug1
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date) Alignment Net
@@ -1296,11 +1296,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetLoxAfr3
+    parent chainNetLoxAfr3
     spectrum on
 
         track chainLoxAfr3
-        subTrack chainNetLoxAfr3Viewchain
+        parent chainNetLoxAfr3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1311,10 +1311,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetLoxAfr3
+    parent chainNetLoxAfr3
 
         track netLoxAfr3
-        subTrack chainNetLoxAfr3Viewnet
+        parent chainNetLoxAfr3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1347,11 +1347,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetLoxAfr2
+    parent chainNetLoxAfr2
     spectrum on
 
         track chainLoxAfr2
-        subTrack chainNetLoxAfr2Viewchain
+        parent chainNetLoxAfr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1362,10 +1362,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetLoxAfr2
+    parent chainNetLoxAfr2
 
         track netLoxAfr2
-        subTrack chainNetLoxAfr2Viewnet
+        parent chainNetLoxAfr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1398,11 +1398,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetLoxAfr1
+    parent chainNetLoxAfr1
     spectrum on
 
         track chainLoxAfr1
-        subTrack chainNetLoxAfr1Viewchain
+        parent chainNetLoxAfr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1413,10 +1413,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetLoxAfr1
+    parent chainNetLoxAfr1
 
         track netLoxAfr1
-        subTrack chainNetLoxAfr1Viewnet
+        parent chainNetLoxAfr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1449,11 +1449,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMonDom1
+    parent chainNetMonDom1
     spectrum on
 
         track chainMonDom1
-        subTrack chainNetMonDom1Viewchain
+        parent chainNetMonDom1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1464,10 +1464,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMonDom1
+    parent chainNetMonDom1
 
         track netMonDom1
-        subTrack chainNetMonDom1Viewnet
+        parent chainNetMonDom1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1500,11 +1500,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMonDom4
+    parent chainNetMonDom4
     spectrum on
 
         track chainMonDom4
-        subTrack chainNetMonDom4Viewchain
+        parent chainNetMonDom4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1515,10 +1515,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMonDom4
+    parent chainNetMonDom4
 
         track netMonDom4
-        subTrack chainNetMonDom4Viewnet
+        parent chainNetMonDom4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1551,11 +1551,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMonDom5
+    parent chainNetMonDom5
     spectrum on
 
         track chainMonDom5
-        subTrack chainNetMonDom5Viewchain
+        parent chainNetMonDom5Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1566,10 +1566,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMonDom5
+    parent chainNetMonDom5
 
         track netMonDom5
-        subTrack chainNetMonDom5Viewnet
+        parent chainNetMonDom5Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1602,11 +1602,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetEriEur1
+    parent chainNetEriEur1
     spectrum on
 
         track chainEriEur1
-        subTrack chainNetEriEur1Viewchain
+        parent chainNetEriEur1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1617,10 +1617,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetEriEur1
+    parent chainNetEriEur1
 
         track netEriEur1
-        subTrack chainNetEriEur1Viewnet
+        parent chainNetEriEur1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1653,11 +1653,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetSorAra1
+    parent chainNetSorAra1
     spectrum on
 
         track chainSorAra1
-        subTrack chainNetSorAra1Viewchain
+        parent chainNetSorAra1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1668,10 +1668,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetSorAra1
+    parent chainNetSorAra1
 
         track netSorAra1
-        subTrack chainNetSorAra1Viewnet
+        parent chainNetSorAra1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1704,11 +1704,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMm9
+    parent chainNetMm9
     spectrum on
 
         track chainMm9
-        subTrack chainNetMm9Viewchain
+        parent chainNetMm9Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1719,10 +1719,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMm9
+    parent chainNetMm9
 
         track netMm9
-        subTrack chainNetMm9Viewnet
+        parent chainNetMm9Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1755,11 +1755,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMm8
+    parent chainNetMm8
     spectrum on
 
         track chainMm8
-        subTrack chainNetMm8Viewchain
+        parent chainNetMm8Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1770,10 +1770,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMm8
+    parent chainNetMm8
 
         track netMm8
-        subTrack chainNetMm8Viewnet
+        parent chainNetMm8Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1806,11 +1806,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMm7
+    parent chainNetMm7
     spectrum on
 
         track chainMm7
-        subTrack chainNetMm7Viewchain
+        parent chainNetMm7Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1821,10 +1821,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMm7
+    parent chainNetMm7
 
         track netMm7
-        subTrack chainNetMm7Viewnet
+        parent chainNetMm7Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1857,11 +1857,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMm6
+    parent chainNetMm6
     spectrum on
 
         track chainMm6
-        subTrack chainNetMm6Viewchain
+        parent chainNetMm6Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1872,10 +1872,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMm6
+    parent chainNetMm6
 
         track netMm6
-        subTrack chainNetMm6Viewnet
+        parent chainNetMm6Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1909,7 +1909,7 @@ html chainNet
 
     track chainMm5
     release alpha
-    subTrack chainNetMm5
+    parent chainNetMm5
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date) Chained Alignments
@@ -1918,7 +1918,7 @@ html chainNet
 
     track netMm5
     release alpha
-    subTrack chainNetMm5
+    parent chainNetMm5
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date) Alignment Net
@@ -1951,11 +1951,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetRn4
+    parent chainNetRn4
     spectrum on
 
         track chainRn4
-        subTrack chainNetRn4Viewchain
+        parent chainNetRn4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -1966,10 +1966,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetRn4
+    parent chainNetRn4
 
         track netRn4
-        subTrack chainNetRn4Viewnet
+        parent chainNetRn4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2002,11 +2002,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetRn3
+    parent chainNetRn3
     spectrum on
 
         track chainRn3
-        subTrack chainNetRn3Viewchain
+        parent chainNetRn3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2017,10 +2017,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetRn3
+    parent chainNetRn3
 
         track netRn3
-        subTrack chainNetRn3Viewnet
+        parent chainNetRn3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2053,11 +2053,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetCavPor3
+    parent chainNetCavPor3
     spectrum on
 
         track chainCavPor3
-        subTrack chainNetCavPor3Viewchain
+        parent chainNetCavPor3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2068,10 +2068,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetCavPor3
+    parent chainNetCavPor3
 
         track netCavPor3
-        subTrack chainNetCavPor3Viewnet
+        parent chainNetCavPor3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2106,12 +2106,12 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetCavPor2
+    parent chainNetCavPor2
     spectrum on
 
         track chainCavPor2
         release alpha
-        subTrack chainNetCavPor2Viewchain
+        parent chainNetCavPor2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2122,11 +2122,11 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetCavPor2
+    parent chainNetCavPor2
 
         track netCavPor2
         release alpha
-        subTrack chainNetCavPor2Viewnet
+        parent chainNetCavPor2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2159,11 +2159,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOryCun2
+    parent chainNetOryCun2
     spectrum on
 
         track chainOryCun2
-        subTrack chainNetOryCun2Viewchain
+        parent chainNetOryCun2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2174,10 +2174,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOryCun2
+    parent chainNetOryCun2
 
         track netOryCun2
-        subTrack chainNetOryCun2Viewnet
+        parent chainNetOryCun2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2210,11 +2210,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOryCun1
+    parent chainNetOryCun1
     spectrum on
 
         track chainOryCun1
-        subTrack chainNetOryCun1Viewchain
+        parent chainNetOryCun1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2225,10 +2225,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOryCun1
+    parent chainNetOryCun1
 
         track netOryCun1
-        subTrack chainNetOryCun1Viewnet
+        parent chainNetOryCun1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2261,11 +2261,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetEquCab2
+    parent chainNetEquCab2
     spectrum on
 
         track chainEquCab2
-        subTrack chainNetEquCab2Viewchain
+        parent chainNetEquCab2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2276,10 +2276,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetEquCab2
+    parent chainNetEquCab2
 
         track netEquCab2
-        subTrack chainNetEquCab2Viewnet
+        parent chainNetEquCab2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2312,11 +2312,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetEquCab1
+    parent chainNetEquCab1
     spectrum on
 
         track chainEquCab1
-        subTrack chainNetEquCab1Viewchain
+        parent chainNetEquCab1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2327,10 +2327,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetEquCab1
+    parent chainNetEquCab1
 
         track netEquCab1
-        subTrack chainNetEquCab1Viewnet
+        parent chainNetEquCab1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2363,11 +2363,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetEchTel1
+    parent chainNetEchTel1
     spectrum on
 
         track chainEchTel1
-        subTrack chainNetEchTel1Viewchain
+        parent chainNetEchTel1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2378,10 +2378,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetEchTel1
+    parent chainNetEchTel1
 
         track netEchTel1
-        subTrack chainNetEchTel1Viewnet
+        parent chainNetEchTel1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2414,11 +2414,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDasNov2
+    parent chainNetDasNov2
     spectrum on
 
         track chainDasNov2
-        subTrack chainNetDasNov2Viewchain
+        parent chainNetDasNov2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2429,10 +2429,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDasNov2
+    parent chainNetDasNov2
 
         track netDasNov2
-        subTrack chainNetDasNov2Viewnet
+        parent chainNetDasNov2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2465,11 +2465,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetDasNov1
+    parent chainNetDasNov1
     spectrum on
 
         track chainDasNov1
-        subTrack chainNetDasNov1Viewchain
+        parent chainNetDasNov1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2480,10 +2480,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetDasNov1
+    parent chainNetDasNov1
 
         track netDasNov1
-        subTrack chainNetDasNov1Viewnet
+        parent chainNetDasNov1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2516,11 +2516,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetSusScr2
+    parent chainNetSusScr2
     spectrum on
 
         track chainSusScr2
-        subTrack chainNetSusScr2Viewchain
+        parent chainNetSusScr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2531,10 +2531,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetSusScr2
+    parent chainNetSusScr2
 
         track netSusScr2
-        subTrack chainNetSusScr2Viewnet
+        parent chainNetSusScr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2567,11 +2567,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetSusScr1
+    parent chainNetSusScr1
     spectrum on
 
         track chainSusScr1
-        subTrack chainNetSusScr1Viewchain
+        parent chainNetSusScr1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2582,10 +2582,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetSusScr1
+    parent chainNetSusScr1
 
         track netSusScr1
-        subTrack chainNetSusScr1Viewnet
+        parent chainNetSusScr1Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2619,11 +2619,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOviAri1
+    parent chainNetOviAri1
     spectrum on
     
         track chainOviAri1
-        subTrack chainNetOviAri1Viewchain
+        parent chainNetOviAri1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2634,10 +2634,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOviAri1
+    parent chainNetOviAri1
     
         track netOviAri1
-        subTrack chainNetOviAri1Viewnet
+        parent chainNetOviAri1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2671,11 +2671,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetBosTau4
+    parent chainNetBosTau4
     spectrum on
 
         track chainBosTau4
-        subTrack chainNetBosTau4Viewchain
+        parent chainNetBosTau4Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2686,10 +2686,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetBosTau4
+    parent chainNetBosTau4
 
         track netBosTau4
-        subTrack chainNetBosTau4Viewnet
+        parent chainNetBosTau4Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2722,11 +2722,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetBosTau3
+    parent chainNetBosTau3
     spectrum on
 
         track chainBosTau3
-        subTrack chainNetBosTau3Viewchain
+        parent chainNetBosTau3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2737,10 +2737,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetBosTau3
+    parent chainNetBosTau3
 
         track netBosTau3
-        subTrack chainNetBosTau3Viewnet
+        parent chainNetBosTau3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2773,11 +2773,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetBosTau2
+    parent chainNetBosTau2
     spectrum on
 
         track chainBosTau2
-        subTrack chainNetBosTau2Viewchain
+        parent chainNetBosTau2Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2788,10 +2788,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetBosTau2
+    parent chainNetBosTau2
 
         track netBosTau2
-        subTrack chainNetBosTau2Viewnet
+        parent chainNetBosTau2Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2824,11 +2824,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetBosTau1
+    parent chainNetBosTau1
     spectrum on
 
         track chainBosTau1
-        subTrack chainNetBosTau1Viewchain
+        parent chainNetBosTau1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2839,10 +2839,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetBosTau1
+    parent chainNetBosTau1
 
         track netBosTau1
-        subTrack chainNetBosTau1Viewnet
+        parent chainNetBosTau1Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2875,11 +2875,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetAilMel1
+    parent chainNetAilMel1
     spectrum on
 
         track chainAilMel1
-        subTrack chainNetAilMel1Viewchain
+        parent chainNetAilMel1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2890,10 +2890,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetAilMel1
+    parent chainNetAilMel1
 
         track netAilMel1
-        subTrack chainNetAilMel1Viewnet
+        parent chainNetAilMel1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2926,11 +2926,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetCanFam2
+    parent chainNetCanFam2
     spectrum on
 
         track chainCanFam2
-        subTrack chainNetCanFam2Viewchain
+        parent chainNetCanFam2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2941,10 +2941,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetCanFam2
+    parent chainNetCanFam2
 
         track netCanFam2
-        subTrack chainNetCanFam2Viewnet
+        parent chainNetCanFam2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -2977,11 +2977,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetFelCatV17e
+    parent chainNetFelCatV17e
     spectrum on
 
         track chainFelCatV17e
-        subTrack chainNetFelCatV17eViewchain
+        parent chainNetFelCatV17eViewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -2992,10 +2992,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetFelCatV17e
+    parent chainNetFelCatV17e
 
         track netFelCatV17e
-        subTrack chainNetFelCatV17eViewnet
+        parent chainNetFelCatV17eViewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -3028,11 +3028,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetFelCat3
+    parent chainNetFelCat3
     spectrum on
 
         track chainFelCat3
-        subTrack chainNetFelCat3Viewchain
+        parent chainNetFelCat3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3043,10 +3043,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetFelCat3
+    parent chainNetFelCat3
 
         track netFelCat3
-        subTrack chainNetFelCat3Viewnet
+        parent chainNetFelCat3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -3078,11 +3078,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetMicMur1
+    parent chainNetMicMur1
     spectrum on
 
         track chainMicMur1
-        subTrack chainNetMicMur1Viewchain
+        parent chainNetMicMur1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3093,10 +3093,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetMicMur1
+    parent chainNetMicMur1
 
         track netMicMur1
-        subTrack chainNetMicMur1Viewnet
+        parent chainNetMicMur1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3128,11 +3128,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetTarSyr1
+    parent chainNetTarSyr1
     spectrum on
 
         track chainTarSyr1
-        subTrack chainNetTarSyr1Viewchain
+        parent chainNetTarSyr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3143,10 +3143,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetTarSyr1
+    parent chainNetTarSyr1
 
         track netTarSyr1
-        subTrack chainNetTarSyr1Viewnet
+        parent chainNetTarSyr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3172,11 +3172,11 @@ sortOrder view=+
     shortLabel Chains
     view chain
     visibility pack
-    subTrack chainNetVenter
+    parent chainNetVenter
     spectrum on
 
         track chainVenter1
-        subTrack chainNetVenterViewchain off
+        parent chainNetVenterViewchain off
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3191,10 +3191,10 @@ sortOrder view=+
     shortLabel Nets
     view net
     visibility full
-    subTrack chainNetVenter
+    parent chainNetVenter
 
         track netVenter1
-        subTrack chainNetVenterViewnet off
+        parent chainNetVenterViewnet off
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -3226,11 +3226,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetHg18
+    parent chainNetHg18
     spectrum on
 
         track chainHg18
-        subTrack chainNetHg18Viewchain
+        parent chainNetHg18Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3241,10 +3241,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetHg18
+    parent chainNetHg18
 
         track netHg18
-        subTrack chainNetHg18Viewnet
+        parent chainNetHg18Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3276,11 +3276,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetHg19
+    parent chainNetHg19
     spectrum on
 
         track chainHg19
-        subTrack chainNetHg19Viewchain
+        parent chainNetHg19Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3291,10 +3291,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetHg19
+    parent chainNetHg19
 
         track netHg19
-        subTrack chainNetHg19Viewnet
+        parent chainNetHg19Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3326,11 +3326,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetHg17
+    parent chainNetHg17
     spectrum on
 
         track chainHg17
-        subTrack chainNetHg17Viewchain
+        parent chainNetHg17Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3341,10 +3341,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetHg17
+    parent chainNetHg17
 
         track netHg17
-        subTrack chainNetHg17Viewnet
+        parent chainNetHg17Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3376,11 +3376,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetPanTro2
+    parent chainNetPanTro2
     spectrum on
 
         track chainPanTro2
-        subTrack chainNetPanTro2Viewchain
+        parent chainNetPanTro2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3391,10 +3391,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetPanTro2
+    parent chainNetPanTro2
 
         track netPanTro2
-        subTrack chainNetPanTro2Viewnet
+        parent chainNetPanTro2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3426,11 +3426,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetPanTro1
+    parent chainNetPanTro1
     spectrum on
 
         track chainPanTro1
-        subTrack chainNetPanTro1Viewchain
+        parent chainNetPanTro1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3441,10 +3441,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetPanTro1
+    parent chainNetPanTro1
 
         track netPanTro1
-        subTrack chainNetPanTro1Viewnet
+        parent chainNetPanTro1Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3476,11 +3476,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetGorGor2
+    parent chainNetGorGor2
     spectrum on
 
         track chainGorGor2
-        subTrack chainNetGorGor2Viewchain
+        parent chainNetGorGor2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3491,10 +3491,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetGorGor2
+    parent chainNetGorGor2
 
         track netGorGor2
-        subTrack chainNetGorGor2Viewnet
+        parent chainNetGorGor2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3526,11 +3526,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetGorGor1
+    parent chainNetGorGor1
     spectrum on
 
         track chainGorGor1
-        subTrack chainNetGorGor1Viewchain
+        parent chainNetGorGor1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3541,10 +3541,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetGorGor1
+    parent chainNetGorGor1
 
         track netGorGor1
-        subTrack chainNetGorGor1Viewnet
+        parent chainNetGorGor1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3576,11 +3576,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetPonAbe2
+    parent chainNetPonAbe2
     spectrum on
 
         track chainPonAbe2
-        subTrack chainNetPonAbe2Viewchain
+        parent chainNetPonAbe2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3591,10 +3591,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetPonAbe2
+    parent chainNetPonAbe2
 
         track netPonAbe2
-        subTrack chainNetPonAbe2Viewnet
+        parent chainNetPonAbe2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3626,11 +3626,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetTupBel1
+    parent chainNetTupBel1
     spectrum on
 
         track chainTupBel1
-        subTrack chainNetTupBel1Viewchain
+        parent chainNetTupBel1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3641,10 +3641,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetTupBel1
+    parent chainNetTupBel1
 
         track netTupBel1
-        subTrack chainNetTupBel1Viewnet
+        parent chainNetTupBel1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3676,11 +3676,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetOtoGar1
+    parent chainNetOtoGar1
     spectrum on
 
         track chainOtoGar1
-        subTrack chainNetOtoGar1Viewchain
+        parent chainNetOtoGar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3691,10 +3691,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetOtoGar1
+    parent chainNetOtoGar1
 
         track netOtoGar1
-        subTrack chainNetOtoGar1Viewnet
+        parent chainNetOtoGar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3726,11 +3726,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetCalJac3
+    parent chainNetCalJac3
     spectrum on
 
         track chainCalJac3
-        subTrack chainNetCalJac3Viewchain
+        parent chainNetCalJac3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3741,10 +3741,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetCalJac3
+    parent chainNetCalJac3
 
         track netCalJac3
-        subTrack chainNetCalJac3Viewnet
+        parent chainNetCalJac3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3776,11 +3776,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetCalJac1
+    parent chainNetCalJac1
     spectrum on
 
         track chainCalJac1
-        subTrack chainNetCalJac1Viewchain
+        parent chainNetCalJac1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3791,10 +3791,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetCalJac1
+    parent chainNetCalJac1
 
         track netCalJac1
-        subTrack chainNetCalJac1Viewnet
+        parent chainNetCalJac1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3826,11 +3826,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetPapHam1
+    parent chainNetPapHam1
     spectrum on
 
         track chainPapHam1
-        subTrack chainNetPapHam1Viewchain
+        parent chainNetPapHam1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3841,10 +3841,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetPapHam1
+    parent chainNetPapHam1
 
         track netPapHam1
-        subTrack chainNetPapHam1Viewnet
+        parent chainNetPapHam1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3876,11 +3876,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetRheMac2
+    parent chainNetRheMac2
     spectrum on
 
         track chainRheMac2
-        subTrack chainNetRheMac2Viewchain
+        parent chainNetRheMac2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3891,10 +3891,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetRheMac2
+    parent chainNetRheMac2
 
         track netRheMac2
-        subTrack chainNetRheMac2Viewnet
+        parent chainNetRheMac2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3926,11 +3926,11 @@ html chainNet
     shortLabel Chain
     view chain
     visibility pack
-    subTrack chainNetRheMac1
+    parent chainNetRheMac1
     spectrum on
 
         track chainRheMac1
-        subTrack chainNetRheMac1Viewchain
+        parent chainNetRheMac1Viewchain
         subGroups view=chain
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3941,10 +3941,10 @@ html chainNet
     shortLabel Net
     view net
     visibility full
-    subTrack chainNetRheMac1
+    parent chainNetRheMac1
 
         track netRheMac1
-        subTrack chainNetRheMac1Viewnet
+        parent chainNetRheMac1Viewnet
         subGroups view=net
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment net
@@ -3970,11 +3970,11 @@ sortOrder view=+
     shortLabel Chains
     view chain
     visibility pack
-    subTrack chainNetPoodle
+    parent chainNetPoodle
     spectrum on
 
         track chainCanFamPoodle1
-        subTrack chainNetPoodleViewchain off
+        parent chainNetPoodleViewchain off
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3989,10 +3989,10 @@ sortOrder view=+
     shortLabel Nets
     view net
     visibility full
-    subTrack chainNetPoodle
+    parent chainNetPoodle
 
         track netCanFamPoodle1
-        subTrack chainNetPoodleViewnet off
+        parent chainNetPoodleViewnet off
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

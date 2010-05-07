@@ -112,7 +112,7 @@ priority 134
 
 track chainRheMac1
 shortLabel Macaque Chain 
-# subTrack chains
+# parent chains
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
 priority 135

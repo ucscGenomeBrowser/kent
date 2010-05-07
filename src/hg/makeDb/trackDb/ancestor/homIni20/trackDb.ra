@@ -1,6 +1,6 @@
 
 track chainPonAbe2
-#replaces record chainPonAbe2 in parent dir missing/extra release,subTrack,subGroups
+#replaces record chainPonAbe2 in parent dir missing/extra release,parent,subGroups
 shortLabel Orang Chain 
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno

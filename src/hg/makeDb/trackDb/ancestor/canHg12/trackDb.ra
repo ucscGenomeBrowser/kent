@@ -147,7 +147,7 @@ speciesOrder eutGli1 eutPri1 hg17
 # type chain 
 
 track chainMonDom4
-#replaces record chainMonDom4 in parent dir missing/extra release,subTrack,subGroups
+#replaces record chainMonDom4 in parent dir missing/extra release,parent,subGroups
 shortLabel Opossum Chain 
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
@@ -270,7 +270,7 @@ type netAlign eutPri1 chainEutPri1
 otherDb eutPri1
 
 track chainCanFam2
-#replaces record chainCanFam2 in parent dir missing/extra release,subTrack,subGroups
+#replaces record chainCanFam2 in parent dir missing/extra release,parent,subGroups
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno

@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.90 2010/04/21 17:55:56 tdreszer Exp $";
+#	"$Id: trackDb.ra,v 1.91 2010/05/07 05:35:53 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.enc.ra
@@ -45,35 +45,35 @@ maxHeightPixels 100:32:16
 visibility hide
 
     track crgMapabilityAlign36mer
-    subTrack mapability
+    parent mapability
     shortLabel CRG Align 36
     longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
     color 120,0,0
     priority 1
 
     track crgMapabilityAlign40mer
-    subTrack mapability
+    parent mapability
     shortLabel CRG Align 40
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
     color 120,0,0
     priority 2
     
     track crgMapabilityAlign50mer
-    subTrack mapability
+    parent mapability
     shortLabel CRG Align 50
     longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
     color 120,0,0
     priority 3
 
     track crgMapabilityAlign75mer
-    subTrack mapability
+    parent mapability
     shortLabel CRG Align 75
     longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
     color 120,0,0
     priority 4
 
     track crgMapabilityAlign100mer
-    subTrack mapability
+    parent mapability
     shortLabel CRG Align 100
     longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
     color 120,0,0
@@ -283,14 +283,14 @@ showTopScorers 200
 type bed 5 .
 
     track phastConsElements30wayPlacental
-    subTrack mostConserved30way
+    parent mostConserved30way
     shortLabel Mammal
     longLabel PhastCons Placental Mammal Conserved Elements, 30-way Multiz Alignment
     color 100,50,170
     priority 1
 
     track phastConsElements30wayEuarch
-    subTrack mostConserved30way
+    parent mostConserved30way
     shortLabel Euarch
     longLabel PhastCons Euarchontoglires Conserved Elements, 30-way Multiz Alignment
     color 100,50,170
@@ -298,7 +298,7 @@ type bed 5 .
 
     track phastConsElements30way
     #replaces record phastConsElements30way in parent dir missing/extra group,visibility,exonArrows,showTopScorers,type
-    subTrack mostConserved30way
+    parent mostConserved30way
     shortLabel Vertebrate
     longLabel PhastCons Vertebrate Conserved Elements, 30-way Multiz Alignment
     color 170,100,50
@@ -340,14 +340,14 @@ urlLabel Vega Transcript:
 url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
 
     track vegaGene
-    subTrack vegaGeneComposite
+    parent vegaGeneComposite
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
     priority 1
     color 0,50,225
 
     track vegaPseudoGene
-    subTrack vegaGeneComposite
+    parent vegaGeneComposite
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
     priority 2
@@ -369,10 +369,10 @@ type bed 3
     track woldRnaSeqViewSPLC
     shortLabel Splices
     view SPLC
-    subTrack woldRnaSeq
+    parent woldRnaSeq
 
         track woldRnaSeqSplicesBrain1
-        subTrack woldRnaSeqViewSPLC
+        parent woldRnaSeqViewSPLC
         shortLabel Wold Brain Rep1
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Brain (Replicate 1)
         priority 1
@@ -382,7 +382,7 @@ type bed 3
         type bed 12 .
 
         track woldRnaSeqSplicesBrain2
-        subTrack woldRnaSeqViewSPLC
+        parent woldRnaSeqViewSPLC
         shortLabel Wold Brain Rep2
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Brain (Replicate 2)
         priority 3
@@ -392,7 +392,7 @@ type bed 3
         type bed 12 .
 
         track woldRnaSeqSplicesLiver1
-        subTrack woldRnaSeqViewSPLC
+        parent woldRnaSeqViewSPLC
         shortLabel Wold Liver Rep1
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Liver (Replicate 1)
         priority 5
@@ -402,7 +402,7 @@ type bed 3
         type bed 12 .
 
         track woldRnaSeqSplicesLiver2
-        subTrack woldRnaSeqViewSPLC
+        parent woldRnaSeqViewSPLC
         shortLabel Wold Liver Rep2
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Liver (Replicate 2)
         priority 7
@@ -412,7 +412,7 @@ type bed 3
         type bed 12 .
 
         track woldRnaSeqSplicesMuscle1
-        subTrack woldRnaSeqViewSPLC
+        parent woldRnaSeqViewSPLC
         shortLabel Wold Muscle Rep1
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Muscle (Replicate 1)
         priority 9
@@ -422,7 +422,7 @@ type bed 3
         type bed 12 .
 
         track woldRnaSeqSplicesMuscle2
-        subTrack woldRnaSeqViewSPLC
+        parent woldRnaSeqViewSPLC
         shortLabel Wold Muscle Rep2
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Muscle (Replicate 2)
         priority 11
@@ -434,10 +434,10 @@ type bed 3
     track woldRnaSeqViewSIG
     shortLabel Signal Densities
     view SIG
-    subTrack woldRnaSeq
+    parent woldRnaSeq
 
         track woldRnaSeqSignalBrain1
-        subTrack woldRnaSeqViewSIG
+        parent woldRnaSeqViewSIG
         shortLabel Wold Brain Rep1
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 1)
         priority 2
@@ -452,7 +452,7 @@ type bed 3
         maxHeightPixels 64:25:16
 
         track woldRnaSeqSignalBrain2
-        subTrack woldRnaSeqViewSIG
+        parent woldRnaSeqViewSIG
         shortLabel Wold Brain Rep2
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 2)
         priority 4
@@ -467,7 +467,7 @@ type bed 3
         maxHeightPixels 64:25:16
 
         track woldRnaSeqSignalLiver1
-        subTrack woldRnaSeqViewSIG
+        parent woldRnaSeqViewSIG
         shortLabel Wold Liver Rep1
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 1)
         priority 6
@@ -482,7 +482,7 @@ type bed 3
         maxHeightPixels 64:25:16
 
         track woldRnaSeqSignalLiver2
-        subTrack woldRnaSeqViewSIG
+        parent woldRnaSeqViewSIG
         shortLabel Wold Liver Rep2
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 2)
         priority 8
@@ -497,7 +497,7 @@ type bed 3
         maxHeightPixels 64:25:16
 
         track woldRnaSeqSignalMuscle1
-        subTrack woldRnaSeqViewSIG
+        parent woldRnaSeqViewSIG
         shortLabel Wold Muscle Rep1
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 1)
         priority 10
@@ -512,7 +512,7 @@ type bed 3
         maxHeightPixels 64:25:16
 
         track woldRnaSeqSignalMuscle2
-        subTrack woldRnaSeqViewSIG
+        parent woldRnaSeqViewSIG
         shortLabel Wold Muscle Rep2
         longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 2)
         priority 12

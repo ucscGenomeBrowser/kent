@@ -16,10 +16,10 @@ priority 1
     view align
     visibility full
     viewUi on
-    subTrack encodeMsaTbaDec07
+    parent encodeMsaTbaDec07
 
         track encodeTbaAlignDec07
-        subTrack encodeMsaTbaDec07Viewalign
+        parent encodeMsaTbaDec07Viewalign
         shortLabel TBA Align
         longLabel TBA Alignments of 36 Vertebrates in the ENCODE Regions
         subGroups view=align
@@ -46,10 +46,10 @@ priority 1
     shortLabel Conservation
     view cons
     visibility dense
-    subTrack encodeMsaTbaDec07
+    parent encodeMsaTbaDec07
 
         track encodeTbaBinConsDec07
-        subTrack encodeMsaTbaDec07Viewcons
+        parent encodeMsaTbaDec07Viewcons
         shortLabel BinCons
         longLabel Conserved Elements in TBA 36-Way Alignments in the ENCODE Regions, BinCons Method
         noInherit on
@@ -60,7 +60,7 @@ priority 1
         dataVersion ENCODE Nov 2008 Freeze
 
         track encodeTbaChaiConsDec07
-        subTrack encodeMsaTbaDec07Viewcons
+        parent encodeMsaTbaDec07Viewcons
         shortLabel Chai Cons
         longLabel Conserved Elements in TBA 36-Way Alignments in the ENCODE Regions, Chai Method
         subGroups view=cons
