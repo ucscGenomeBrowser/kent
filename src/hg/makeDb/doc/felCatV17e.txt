@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.12 2010/05/05 14:56:10 braney Exp $
+#       $Id: felCatV17e.txt,v 1.13 2010/05/07 17:20:37 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -751,7 +751,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 
 #####################################################################
-## 6-Way Multiz (working - 2010-04-19 - Chin)
+## 6-Way Multiz (DONE - 2010-04-19 - Chin)
 # use /cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh 
     mkdir /hive/data/genomes/felCatV17e/bed/multiz6way
     cd /hive/data/genomes/felCatV17e/bed/multiz6way
@@ -981,13 +981,14 @@ do
     grep -h -v "^#" ${F} >> felCatV17e.6way.maf
 done
     tail -q -n 1 maf/000.maf >> felCatV17e.6way.maf
-    tail -q -n 1 maf/hg19_${C}.*.maf | sort -u >> ../maf/${C}.maf
 
     #   real    13m32.340s
 
     # load tables for a look
     mkdir -p /gbdb/felCatV17e/multiz6way/maf
-    cd /hive/data/genomes/felCatV17e/bed/multiz6way/maf
+    # cd /hive/data/genomes/felCatV17e/bed/multiz6way/maf
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/run
+
     ln -s `pwd`/felCatV17e.6way.maf \
         /gbdb/felCatV17e/multiz6way/maf/multiz6way.maf
 
@@ -996,18 +997,137 @@ done
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
         -pathPrefix=/gbdb/felCatV17e/multiz6way/maf felCatV17e multiz6way
-    #   Loaded 13316945 mafs in 1 files from
-    #   /gbdb/felCatV17e/multiz6way/maf
-    #   real    9m9.365s
+    # Indexing and tabulating /gbdb/felCatV17e/multiz6way/maf/multiz6way.maf
+    # Loading multiz6way into database
+    # Loaded 5500990 mafs in 1 files from /gbdb/felCatV17e/multiz6way/maf
+    # 
+    # real    5m56.770s
 
     # load summary table
     time nice -n +19 cat /gbdb/felCatV17e/multiz6way/maf/*.maf \
         | hgLoadMafSummary felCatV17e -minSize=30000 -verbose=2 \
                 -mergeGap=1500 -maxSize=200000  multiz6waySummary stdin
-# Created 2330531 summary blocks from 99659162 components and
-#       13316945 mafs from stdin
-    #   real    17m54.685s
+    # Created 1029626 summary blocks from 15177161 components and 
+    #      5500990 mafs from stdin
+    # real    9m46.074s
 
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/anno
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/anno
+    mkdir maf run
+
+    #   most of these will already exist from previous multiple
+    #   alignments
+    #   remove the echo from in front of the twoBitInfo command to get
+    #   them
+    #   to run if this loop appears to be correct
+    for DB in `cat ../species.list`
+do
+    CDIR="/hive/data/genomes/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+        echo "creating ${DB}.N.bed"
+        echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+        ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `sed -e "s/felCatV17e //" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    #   the annotation step requires large memory, run on memk nodes
+
+    ssh memk
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/anno/run
+    ls ../../run/maf | sed -e "s/.maf//" > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../run/maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCatV17e/felCatV17e.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    gensub2 chr.list single template jobList
+    para -ram=30g create jobList
+    #   specify lots of ram to get one job per node
+    para -ram=30g push
+    #   
+# para time
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:       3735s      62.25m     1.04h    0.04d  0.000 y
+# IO & Wait Time:                  2382s      39.70m     0.66h    0.03d  0.000 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest finished job:             600s      10.00m     0.17h    0.01d
+# Submission to last job:           787s      13.12m     0.22h    0.01d
+
+    ssh hgwdev
+    rm -fr /gbdb/felCatV17e/multiz6way/maf
+    mkdir /gbdb/felCatV17e/multiz6way/maf
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/anno/maf
+    ln -s `pwd`/*.maf /gbdb/felCatV17e/multiz6way/maf/
+    #   by loading this into the table multiz6way, it will replace the
+    #   previously loaded table with the unannotated mafs
+    #   huge temp files are made, do them on local disk
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+        -pathPrefix=/gbdb/felCatV17e/multiz6way/maf felCatV17e multiz6way
+    #   real    93m33.812s
+    #   Loading multiz6way into database
+    #   Loaded 6501831 mafs in 256 files from /gbdb/felCatV17e/multiz6way/maf
+
+    time nice -n +19 cat /gbdb/felCatV17e/multiz6way/maf/*.maf \
+        | hgLoadMafSummary felCatV17e -minSize=30000 -mergeGap=1500 \
+                 -maxSize=200000  multiz6waySummary stdin
+    #   Created 1029626 summary blocks from 15177161 components \
+    #   and 6501831 mafs from stdin
+    #   Loading into felCatV17e table multiz6waySummary...
+    #   Loading complete
+    #   real    72m12.808s
+
+    #   by loading this into the table multiz6waySummary, it will
+    #   replace
+    #   the previously loaded table with the unannotated mafs
+    #   remove the multiz6way*.tab files in this /data/tmp directory
+# -rw-rw-r-- 1 338738590 May  6 15:49 multiz6way.tab
+# -rw-rw-r-- 1  49960609 May  6 17:04 multiz6waySummary.tab
+    wc -l multiz6way*.tab
+  #  6501831 multiz6way.tab
+  #  1029626 multiz6waySummary.tab
+  #  7531457 total
+    rm multiz6way*.tab
+
+    # create some downloads
+    mkdir -p /hive/data/genomes/felCatV17e/bed/multiz6way/download/maf
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/download/maf
+    # time cp -p ../../anno/maf/chr*.maf .
+    time cp -p ../../anno/maf/*.maf .
+    #   real    6m55.315s
+    time gzip --rsyncable *.maf
+    #   real    30m37.474s
+    time md5sum *.gz > md5sum.txt
+    #   real    1m36.814s
+    #   user    0m13.210s
+    #   sys     0m2.212s
 
 
 ####################################################################
