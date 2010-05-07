@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.520 2010/05/07 05:05:58 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.521 2010/05/07 23:50:46 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2438,19 +2438,15 @@ printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
 cartSaveSession(cart);
 printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
-/* Print link for supertrack */
-if (tdbIsSuperTrackChild(tdb))
+/* Print link for parent track */
+struct trackDb *parentTdb = tdb->parent;
+if (parentTdb)
     {
-    struct trackDb *superTdb = tdb->parent;
-    assert(superTdb != NULL);
-    if (superTdb)
-        {
-        char *encodedMapName = cgiEncode(superTdb->tableName);
-        printf("<H3>Member of super-track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>",
-                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                    chromosome, encodedMapName, superTdb->shortLabel);
-        freeMem(encodedMapName);
-        }
+    char *encodedMapName = cgiEncode(parentTdb->tableName);
+    printf("<H3>Parent track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>",
+		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		chromosome, encodedMapName, parentTdb->shortLabel);
+    freeMem(encodedMapName);
     }
 
 if (ct && sameString(tdb->type, "maf"))
