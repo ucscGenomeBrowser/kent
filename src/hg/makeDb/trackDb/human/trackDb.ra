@@ -1124,7 +1124,7 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v8
-release beta
+release public
 
 track dgv
 shortLabel DGV Struct Var
