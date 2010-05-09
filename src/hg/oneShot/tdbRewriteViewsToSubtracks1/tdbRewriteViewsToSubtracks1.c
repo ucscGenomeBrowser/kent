@@ -13,13 +13,13 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks1.c,v 1.1 2010/02/03 22:08:41 kent Exp $";
+static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks1.c,v 1.2 2010/05/09 17:22:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "tdbRewriteViewsToSubtracks - Convert views to subtracks with sub-sub-tracks.\n"
+  "tdbRewriteViewsToSubtracks1 - Convert views to subtracks with sub-sub-tracks.\n"
   "usage:\n"
   "   tdbRewriteViewsToSubtracks1 inFile.ra outFile.ra\n"
   );
@@ -677,8 +677,8 @@ fputs(file->endSpace, f);
 carefulClose(&f);
 }
 
-void tdbRewriteViewsToSubtracks(char *inFile, char *outFile)
-/* tdbRewriteViewsToSubtracks - Convert views to subtracks with sub-sub-tracks.. */
+void tdbRewriteViewsToSubtracks1(char *inFile, char *outFile)
+/* tdbRewriteViewsToSubtracks1 - Convert views to subtracks with sub-sub-tracks.. */
 {
 struct lm *rootLm = lmInit(0);
 struct raLevel *rootLevel = raLevelReadOneFile(inFile, rootLm);
@@ -691,6 +691,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-tdbRewriteViewsToSubtracks(argv[1], argv[2]);
+tdbRewriteViewsToSubtracks1(argv[1], argv[2]);
 return 0;
 }
