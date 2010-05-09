@@ -28,22 +28,28 @@ static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 int totalHeight =  wigTotalHeight(tg, vis);
 struct track *subtrack;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    subtrack->totalHeight(subtrack, vis);
+    if (isSubtrackVisible(subtrack))
+	subtrack->totalHeight(subtrack, vis);
 return totalHeight;
 }
 
 static boolean graphLimitsAllSame(struct track *trackList)
 /* Return TRUE if graphUpperLimit and graphLowerLimit same for all tracks. */
 {
-struct track *firstTrack = trackList;
-if (firstTrack == NULL)
-    return FALSE;
+struct track *firstTrack = NULL;
 struct track *track;
-for (track = firstTrack->next; track != NULL; track = track->next)
-    if (track->graphUpperLimit != firstTrack->graphUpperLimit 
-      || track->graphLowerLimit != firstTrack->graphLowerLimit)
-        return FALSE;
-return TRUE;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (isSubtrackVisible(track))
+        {
+	if (firstTrack == NULL)
+	    firstTrack = track;
+	else if (track->graphUpperLimit != firstTrack->graphUpperLimit 
+	    || track->graphLowerLimit != firstTrack->graphLowerLimit)
+	    return FALSE;
+	}
+    }
+return firstTrack != NULL;
 }
 
 static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
