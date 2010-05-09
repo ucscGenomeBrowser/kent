@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.482 2010/05/07 05:35:26 kent Exp $";
+#	"$Id: trackDb.ra,v 1.483 2010/05/09 17:21:18 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -3300,6 +3300,7 @@ group regulation
     aggregate rainbowOverlay
     shortLabel Enhancer H3K4Me1
     longLabel Enhancer mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    configurable on
     visibility full
     maxHeightPixels 100:50:11
     group regulation
