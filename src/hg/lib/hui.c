@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.282 2010/05/03 23:56:42 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.283 2010/05/09 17:18:29 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3433,8 +3433,6 @@ else
     preSorted = TRUE;
     puts("</TR></THEAD><TBODY>");
     }
-
-// cgiMakeOnClickButton("matChkBoxesNormalizeAll(); return 1;", "jkTest");
 
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
