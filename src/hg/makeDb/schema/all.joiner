@@ -3273,7 +3273,8 @@ tablesIgnored $mm
     rikenCageCtssMinus
     rikenCageCtssPlus
     rikenCageTc
-    
+    broadStemChip%
+
 tablesIgnored $panTro
     humanDels
 
