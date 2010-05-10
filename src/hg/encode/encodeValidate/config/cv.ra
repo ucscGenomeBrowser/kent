@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.237 2010/05/04 17:08:52 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.238 2010/05/10 20:24:28 krish Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -658,6 +658,7 @@ protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 term GM18505
 tag GM18505
 type Cell Line
+organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
@@ -713,6 +714,7 @@ protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 term GM19099
 tag GM19099
 type Cell Line
+organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
@@ -726,6 +728,7 @@ protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 term GM19193
 tag GM19193
 type Cell Line
+organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
