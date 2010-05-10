@@ -1,9 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.8 2010/04/28 23:16:15 hiram Exp $
+#	$Id: calJac3.txt,v 1.9 2010/05/10 16:27:46 hiram Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
-# ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/
+# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
 #	Callithrix_jacchus/Callithrix_jacchus-3.2
 #	Callithrix jacchus
 
@@ -15,7 +15,7 @@
     cd genbank
     wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
 	--no-remove-listing -np \
-"ftp://ftp.ncbi.nlm.nih.gov:/genbank/genomes/Eukaryotes/vertebrates_mammals/Callithrix_jacchus/Callithrix_jacchus-3.2/*"
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Callithrix_jacchus/Callithrix_jacchus-3.2/*"
 
     mkdir ucscChr
     cd ucscChr
@@ -1245,6 +1245,7 @@ popd > /dev/null
     find ../splitMaf -type f | grep "/[0-9][0-9][0-9].maf" \
 	| xargs -L 1 basename | sort -u > chr.part.list
     gensub2 chr.part.list single template jobList
+    mkdir maf
     para -ram=8g create jobList
 
     #	put the split mafs back together into a single result
