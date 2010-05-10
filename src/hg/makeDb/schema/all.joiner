@@ -1111,8 +1111,8 @@ identifier danRerBacExtName
 
 identifier danRerBacSangerName
 "Sanger's identifiers for BAC Clones"
-    $danRer.bacCloneXRef.sangerName dupeOk
-    $danRer.bacCloneAlias.sangerName minCheck=0.97 dupeOk
+    danRer3,danRer4.bacCloneXRef.sangerName dupeOk
+    danRer3,danRer4.bacCloneAlias.sangerName minCheck=0.97 dupeOk
 
 identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
