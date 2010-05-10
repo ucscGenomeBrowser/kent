@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.102 2009/02/13 01:02:16 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.103 2010/05/10 08:23:35 kent Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1224,7 +1224,8 @@ if (*list == NULL)
     AllocVar(gene);
     safef(query, sizeof(query), "select * from %s", table);
     sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL){
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
         if (!sameString(table,"all_mrna"))
             {
             el = genePredLoad(row);
