@@ -1112,7 +1112,7 @@ identifier danRerBacExtName
 identifier danRerBacSangerName
 "Sanger's identifiers for BAC Clones"
     danRer3,danRer4.bacCloneXRef.sangerName dupeOk
-    danRer3,danRer4.bacCloneAlias.sangerName minCheck=0.97 dupeOk
+    danRer3,danRer4.bacCloneAlias.sangerName minCheck=0.97
 
 identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
@@ -2644,7 +2644,7 @@ identifier lsSnpPdbSnpId
 identifier consIndelsId
 "consIndels tables name field"
     hg17,hg18.consIndelsHgMmCanFam.name
-    hg17,hg18.consIndelsHgMmCanFamConf
+    hg17,hg18.consIndelsHgMmCanFamConf.id
 
 # Dependencies not already captured in identifiers
 
@@ -3110,14 +3110,13 @@ tablesIgnored $dm
     flyreg2
 
 tablesIgnored $galGal
+    ecoresTetraodon
     supercontig
     caCondor454
 
 tablesIgnored $danRer
-    wz_ests
-
-tablesIgnored danRer4
     phastConsElements
+    wz_ests
 
 tablesIgnored $canFam
     genomicSuperDups
@@ -3209,6 +3208,7 @@ tablesIgnored $hg
     delHinds2
     delMccarroll
     dgv
+    ecoresTetNig1
     encode%
     eponine
     exaptedRepeats
@@ -3302,7 +3302,7 @@ tablesIgnored $tetNig
     cytokines
     hoxGenes
 
-tablesIgnored fr1
+tablesIgnored $fr
     ecoresHg16
     ecoresRn3
 
@@ -3315,14 +3315,8 @@ tablesIgnored hg16
     mouse_hmrg
     syntenyMm4
 
-tablesIgnored hg17
-    ecoresTetNig1
-
 tablesIgnored canFam2
     uncertified
-
-tablesIgnored galGal2
-    ecoresTetraodon
 
 tablesIgnored oryLat2
     microsat
