@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.483 2010/05/09 17:21:18 kent Exp $";
+#	"$Id: trackDb.ra,v 1.484 2010/05/10 21:40:23 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -3293,67 +3293,78 @@ shortLabel ENCODE Regulation
 longLabel Integrated Regulation Track Based on ENCODE Data
 group regulation
 
-    track wgEncodeRegH3K4Me3
+    track wgEncodeRegMarkEnhancer
     container multiWig
     type bigWig 0 40
     superTrack wgEncodeReg full
     aggregate rainbowOverlay
     shortLabel Enhancer H3K4Me1
-    longLabel Enhancer mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
     configurable on
     visibility full
     maxHeightPixels 100:50:11
-    group regulation
     priority 1
 
 	track jkEnhGm12878
 	shortLabel	Gm12878
 	longLabel Enhancer mark (H3K4Me1) on Gm12878 cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	type bigWig 0 40
 	color 255,128,128
 
 	track jkEnhH1hesc
 	shortLabel	H1 ES
 	longLabel Enhancer mark (H3K4Me1) on H1 ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 255,223,128
 
 	track jkEnhHmec
 	shortLabel	HMEC
 	longLabel Enhancer mark (H3K4Me1) on HMEC ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 191,255,128
 
 	track jkEnhHsmm
 	shortLabel	HSMM
 	longLabel Enhancer mark (H3K4Me1) on Xyz ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 128,255,159
 
 	track jkEnhHuvec
 	shortLabel	HUVEC
 	longLabel Enhancer mark (H3K4Me1) on HUVEC ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 128,255,255
 
 	track jkEnhK562
 	shortLabel	K562
 	longLabel Enhancer mark (H3K4Me1) on K562 ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 128,159,255
 
 	track jkEnhNhek
 	shortLabel	NHEK
 	longLabel Enhancer mark (H3K4Me1) on NHEK ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 191,128,255
 
 	track jkEnhNhlf
 	shortLabel	NHLF
 	longLabel Enhancer mark (H3K4Me1) on NHLF ES cells from ENCODE 
-	parent wgEncodeRegH3K4Me3
+	parent wgEncodeRegMarkEnhancer
 	color 255,128,223
+
+    track wgEncodeRegMarkPromoter
+    table cpgIslandExt
+    superTrack wgEncodeReg pack
+    shortLabel Promoter H3K4Me3
+    longLabel Promoter histone mark (H3K4Me3) on ....
+    visibility pack
+    color 0,100,0
+    altColor 128,228,128
+    type bed 4 +
+    priority 1.5
+
 
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
@@ -3362,7 +3373,6 @@ group regulation
     superTrack wgEncodeReg dense
     visibility dense
     useScore 1
-    group regulation
     priority 2
 
     track wgEncodeRegTfbsClustered
@@ -3373,7 +3383,6 @@ group regulation
     sourceTable wgEncodeRegTfbsCells
     visibility dense
     useScore 1
-    group regulation
     priority 3
 
 track cons44way
