@@ -2948,7 +2948,8 @@ tablesIgnored $gbd
     chromInfo
     cpgIsland
     cpgIslandExt
-    ctgPos%
+    ctgPos
+    ctgPos2
     cytoBand
     cytoBandIdeo
     evofold
