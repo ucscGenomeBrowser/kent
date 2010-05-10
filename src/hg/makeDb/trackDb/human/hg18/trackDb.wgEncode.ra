@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.963 2010/05/06 18:49:15 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.964 2010/05/10 19:50:30 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4550,6 +4550,7 @@ visibility hide
 canPack On
 priority 0
 type broadPeak
+maxItems 20
 wgEncode 1
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy
