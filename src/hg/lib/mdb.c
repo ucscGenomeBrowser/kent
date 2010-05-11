@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.6 2010/05/11 01:43:30 kent Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.7 2010/05/11 16:03:48 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -1153,7 +1153,7 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
         return NULL;
 
     struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select distinct obj,var,varType,val from %s", table);
+    dyStringPrintf(dy, "select obj,var,varType,val from %s", table);
 
     struct mdbByVar *rootVar;
     for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
@@ -1235,20 +1235,21 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
         return NULL;
 
     struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select distinct obj,var,varType,val from %s", table);
+    dyStringPrintf(dy, "select t1.obj,t1.var,t1.varType,t1.val from %s t1", table);
 
     struct mdbByVar *rootVar;
     boolean gotVar = FALSE;
-    for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+    int tix;
+    for(rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
         {
         if(!gotVar)
             {
-            dyStringPrintf(dy, " where obj in ");
+            dyStringPrintf(dy, " where t1.obj in ");
             gotVar=TRUE;
             }
         else
-            dyStringPrintf(dy, " AND obj in ");
-        dyStringPrintf(dy, "(select obj from %s where var ",table);
+            dyStringPrintf(dy, " AND t1.obj in ");
+        dyStringPrintf(dy, "(select t%d.obj from %s t%d where t%d.obj = t1.obj and t%d.var ",tix,table,tix,tix,tix);
 
         if(rootVar->notEqual && rootVar->vals == NULL)
             dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
@@ -1265,7 +1266,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 
             if(!multiVals)
                 {
-                dyStringPrintf(dy, " and val ");
+                dyStringPrintf(dy, " and t%d.val ",tix);
                 if(rootVar->notEqual)
                     dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
                 if(limbVal->next == NULL) // only one val
