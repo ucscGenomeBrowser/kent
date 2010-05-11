@@ -132,7 +132,9 @@
 <P>
 Neandertals are the closest extinct relatives of humans. They lived from
 several hundred thousand years ago until their disappearance approximately
-30,000 years ago. The Neandertal genome sequence consists of short
+30,000 years ago. The Neandertal genome sequence 
+(published by Green <em>et al.</em> in <A HREF="http://www.sciencemag.org/special/neandertal/" 
+TARGET=_BLANK><em>Science</em></A> May 2010) consists of short
 sequence fragments, usually about 50 base pairs long, mapped to the
 human reference genome. The DNA was extracted largely from three
 Neandertal bones, each about 40,000 years old, from the Vindija Cave
@@ -145,7 +147,7 @@ This portal provides access to the sequence data and alignments to the
 reference human genome (NCBI 
 Build 36/<A HREF="../cgi-bin/hgGateway?db=hg18">hg18</A>) as well as the reference
 chimpanzee genome (CGSC 2.1/<A HREF="../cgi-bin/hgGateway?db=panTro2">panTro2</A>) and several associated analyses
-(see <A HREF="#References">References</A>). 
+(see <A HREF="#Downloads">Downloads</A> and <A HREF="#References">References</A>). 
 </P>
 <P>
 The following annotations are available on the human hg18 genome assembly:
@@ -245,6 +247,233 @@ to a modern human mitochondrial sequence.
           </TD></TR></TBODY>
         </TABLE>
         <BR>
+
+<!--outer table is for border purposes-->
+        <TABLE width="100%" bgcolor="#888888" border="0" cellpadding="1" cellspacing="0">
+          <TBODY>
+            <TR><TD>
+                <TABLE width="100%" bgcolor="#fffee8" border="0" cellpadding="0" cellspacing="0">
+                  <TBODY>
+                    <TR><TD>
+                        <TABLE width="100%" background="../images/hr.gif" bgcolor="#d9e4f8" border="0">
+                          <TBODY>
+                            <TR><TD><a name="Downloads"></a><font size="4"><b>&nbsp;
+				Downloads</b></font> 
+			    </TD></TR>
+                          </TBODY>
+                        </TABLE>
+                        <TABLE width="100%" bgcolor="#fffee8" border="0" cellpadding="0">
+                          <TBODY>
+                            <TR><TH height="3"><BR></TH>
+                              <TD><BR></TD>
+                            </TR>
+                            <TR><TD width="10"><BR></TD>
+                              <TD>
+                                <P>
+Data files for tracks at UCSC can be downloaded at the locations below.
+Files that end with .sql and .txt.gz are dumped from our MySQL
+database; .sql files name the data fields of each row, and .txt.gz
+files contain all rows with tab-separated fields.  
+All database dump files have a first column &quot;bin&quot; that can
+be ignored (it is for database query speedup).  
+
+Files that end in .bam and .bai contain compressed sequence alignments
+and index files in the <A
+HREF="http://samtools.sourceforge.net/SAM1.pdf" TARGET=_BLANK>BAM</A>
+format.  
+The free software packages <A HREF="http://samtools.sourceforge.net/"
+TARGET=_BLANK>samtools</A> and 
+<A HREF="http://picard.sourceforge.net/"
+TARGET=_BLANK>PICARD</A> are useful for viewing and manipulating BAM 
+files.
+
+The .bw suffix denotes the 
+<A HREF="../goldenPath/help/bigWig.html">bigWig</A> format, which stores 
+a numeric signal for genomic positions.
+<UL>
+<LI><B>Neandertal Alleles in Human/Chimp Coding Non-synonymous Differences in Human Lineage:</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntHumChimpCodingDiff.sql"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntHumChimpCodingDiff.sql</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntHumChimpCodingDiff.txt.gz"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntHumChimpCodingDiff.txt.gz</A><BR>
+</LI>
+<LI><B>Selective Sweep Scan (S) on Neandertal vs. Human Polymorphisms:</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/bbi/ntSssZScorePMVar.bw"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/bbi/ntSssZScorePMVar.bw</A><BR>
+</LI>
+<LI><B>Selective Sweep Scan (S): 5% Smallest S scores:</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssTop5p.sql"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssTop5p.sql</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssTop5p.txt.gz"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssTop5p.txt.gz</A><BR>
+</LI>
+<LI><B>SNPS Used for Selective Sweep Scan (S):</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssSnps.sql"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssSnps.sql</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssSnps.txt.gz"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntSssSnps.txt.gz</A><BR>
+</LI>
+<LI><B>Candidate Regions for Gene Flow from Neandertal to Non-African Modern Humans:</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntOoaHaplo.sql"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntOoaHaplo.sql</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntOoaHaplo.txt.gz"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntOoaHaplo.txt.gz</A><BR>
+</LI>
+<LI><B>Neandertal Sequence Contigs Generated by Genotype Caller:</B><BR>
+Human:<BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/all-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/all-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/all-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/all-hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Feld1-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Feld1-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Feld1-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Feld1-hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Mez1-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Mez1-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Mez1-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Mez1-hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Sid1253-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Sid1253-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Sid1253-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Sid1253-hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.16-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.16-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.16-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.16-hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.25-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.25-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.25-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.25-hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.26-hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.26-hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.26-hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/Vi33.26-hg18.bam.bai</A><BR>
+Chimp:<BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/all-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/all-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/all-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/all-pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Feld1-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Feld1-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Feld1-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Feld1-pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Mez1-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Mez1-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Mez1-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Mez1-pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Sid1253-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Sid1253-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Sid1253-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Sid1253-pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.16-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.16-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.16-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.16-pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.25-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.25-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.25-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.25-pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.26-pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.26-pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.26-pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/Vi33.26-pt2.bam.bai</A><BR>
+</LI>
+<LI><B>Neandertal Sequence Reads:</B><BR>
+Human:<BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLFeld1.hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLFeld1.hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLFeld1.hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLFeld1.hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLMez1.hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLMez1.hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLMez1.hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLMez1.hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLSid1253.hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLSid1253.hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLSid1253.hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLSid1253.hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.16.hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.16.hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.16.hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.16.hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.25.hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.25.hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.25.hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.25.hg18.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.26.hg18.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.26.hg18.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.26.hg18.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/seqAlis/SLVi33.26.hg18.bam.bai</A><BR>
+Chimpanzee:<BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLFeld1.pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLFeld1.pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLFeld1.pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLFeld1.pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLMez1.pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLMez1.pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLMez1.pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLMez1.pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLSid1253.pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLSid1253.pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLSid1253.pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLSid1253.pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.16.pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.16.pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.16.pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.16.pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.25.pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.25.pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.25.pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.25.pt2.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.26.pt2.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.26.pt2.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.26.pt2.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/panTro2/neandertal/seqAlis/SLVi33.26.pt2.bam.bai</A><BR>
+</LI>
+<LI><B>Alignments of Sequence Reads from 5 Modern Humans:</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS4_HGDP00778_Han.paired.qualfilt.rmdup.entropy1.0.sort.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS4_HGDP00778_Han.paired.qualfilt.rmdup.entropy1.0.sort.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS4_HGDP00778_Han.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS4_HGDP00778_Han.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS5_HGDP00542_Papuan.paired.qualfilt.rmdup.entropy1.0.sort.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS5_HGDP00542_Papuan.paired.qualfilt.rmdup.entropy1.0.sort.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS5_HGDP00542_Papuan.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS5_HGDP00542_Papuan.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS6_HGDP00927_Yoruba.paired.qualfilt.rmdup.entropy1.0.sort.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS6_HGDP00927_Yoruba.paired.qualfilt.rmdup.entropy1.0.sort.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS6_HGDP00927_Yoruba.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS6_HGDP00927_Yoruba.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS7_HGDP01029_San.paired.qualfilt.rmdup.entropy1.0.sort.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS7_HGDP01029_San.paired.qualfilt.rmdup.entropy1.0.sort.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS7_HGDP01029_San.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS7_HGDP01029_San.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS8_HGDP00521_French.paired.qualfilt.rmdup.entropy1.0.sort.bam"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS8_HGDP00521_French.paired.qualfilt.rmdup.entropy1.0.sort.bam</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS8_HGDP00521_French.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/humans/MMS8_HGDP00521_French.paired.qualfilt.rmdup.entropy1.0.sort.bam.bai</A><BR>
+</LI>
+<LI><B>Neandertal Mitochondrial Sequence (2008):</B><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntMito.sql"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntMito.sql</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntMito.txt.gz"
+>ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ntMito.txt.gz</A><BR>
+<A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/ntMito/ntM.fa"
+>ftp://hgdownload.cse.ucsc.edu/gbdb/hg18/neandertal/ntMito/ntM.fa</A><BR>
+</LI>
+</UL>
+</P>
+                              </TD>
+                              <TD width="15"><BR></TD>
+                          </TR></TBODY>
+                        </TABLE>
+                        <BR>
+                  </TD></TR></TBODY>
+                </TABLE>
+          </TD></TR></TBODY>
+        </TABLE>
+      <BR>
+
 <!--outer table is for border purposes-->
         <TABLE width="100%" bgcolor="#888888" border="0" cellpadding="1" cellspacing="0">
           <TBODY>
