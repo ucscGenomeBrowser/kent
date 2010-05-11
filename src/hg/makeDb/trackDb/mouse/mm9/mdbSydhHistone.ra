@@ -1,0 +1,67 @@
+metaObject wgEncodeSydhHistMelH3k4me3IggyalePk
+objType table
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1166
+tableName wgEncodeSydhHistMelH3k4me3IggyalePk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyaleSig
+objType table
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1166
+tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistMelInputIggyaleSig
+objType table
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-26
+dateUnrestricted 2011-01-26
+fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 1168
+tableName wgEncodeSydhHistMelInputIggyaleSig
+treatment None
+view Signal
+
+# MAGIC: -831302295
