@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.87 2010/05/11 01:43:30 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.88 2010/05/11 19:07:24 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -153,63 +153,10 @@ static void overrideField(struct trackDb *td, struct trackDb *overTd,
 /* Update override one field from override. */
 {
 if (sameString(var, "track"))
-    {
-    // skip
-    }
-else if (sameString(var, "shortLabel") || sameString(var, "name"))
-    replaceStr(&td->shortLabel, overTd->shortLabel);
-else if (sameString(var, "longLabel") || sameString(var, "description"))
-    replaceStr(&td->longLabel, overTd->longLabel);
-else if (sameString(var, "priority"))
-    td->priority = overTd->priority;
-else if (sameWord(var, "url"))
-    replaceStr(&td->url, overTd->url);
-else if (sameString(var, "visibility"))
-    td->visibility =  overTd->visibility;
-else if (sameWord(var, "color"))
-    {
-    td->colorR = overTd->colorR;
-    td->colorG = overTd->colorG;
-    td->colorB = overTd->colorB;
-    }
-else if (sameWord(var, "altColor"))
-    {
-    td->altColorR = overTd->altColorR;
-    td->altColorG = overTd->altColorG;
-    td->altColorB = overTd->altColorB;
-    }
-else if (sameWord(var, "type"))
-    replaceStr(&td->type, overTd->type);
-else if (sameWord(var, "spectrum") || sameWord(var, "useScore"))
-    td->useScore = overTd->useScore;
-else if (sameWord(var, "canPack"))
-    td->canPack = overTd->canPack;
-else if (sameWord(var, "chromosomes"))
-    {
-    // just format and re-parse
-    char *sa = sqlStringArrayToString(overTd->restrictList, overTd->restrictCount);
-    sqlStringFreeDynamicArray(&td->restrictList);
-    sqlStringDynamicArray(sa, &td->restrictList, &td->restrictCount);
-    freeMem(sa);
-    }
-else if (sameWord(var, "private"))
-    td->private = overTd->private;
-else if (sameWord(var, "group"))
-    {
-    replaceStr(&td->grp, overTd->grp);
-    }
-else if (sameWord(var, "release"))
-    {
-    // ignore -- it was pruned by pruneRelease before this was called.
-    }
-else	/* Add to settings. */
-    {
-    if (td->settingsHash == NULL)
-	td->settingsHash = hashNew(7);
-    char *val = hashMustFindVal(overTd->settingsHash, var);
-    struct hashEl *hel = hashStore(td->settingsHash, var);
-    replaceStr((char**)&hel->val, val);
-    }
+    return;
+char *val = hashMustFindVal(overTd->settingsHash, var);
+struct hashEl *hel = hashStore(td->settingsHash, var);
+replaceStr((char**)&hel->val, val);
 }
 
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd)
@@ -219,7 +166,9 @@ assert(overTd->overrides != NULL);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(overTd->overrides);
 while ((hel = hashNext(&hc)) != NULL)
+    {
     overrideField(td, overTd, hel->name);
+    }
 }
 
 static boolean packableType(char *type)
