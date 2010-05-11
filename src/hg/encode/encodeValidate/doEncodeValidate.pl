@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.223 2010/04/28 23:14:08 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.224 2010/05/11 20:25:02 braney Exp $
 
 use warnings;
 use strict;
@@ -298,7 +298,6 @@ our %formatCheckers = (
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
-    BAM => \&validateBAM,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
     bam => \&validateBam,
@@ -792,22 +791,6 @@ sub validateBigWig
     return ();
 }
 
-sub validateBAM
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateBAM") if $opt_timing;
-    HgAutomate::verbose(2, "validateBAM($path,$file,$type)\n");
-    my $paramList = validationSettings("validateFiles","BAM");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM $file"]);
-    if(my $err = $safe->exec()) {
-	print STDERR  "ERROR: failed validateBAM : " . $safe->stderr() . "\n";
-	# don't show end-user pipe error(s)
-	return("failed validateBAM for '$file'");
-    }
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateBAM") if $opt_timing;
-    return ();
-}
 
 sub validateCsqual
 {
