@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.104 2010/04/30 18:45:00 hartera Exp $";
+#	"$Id: hg19.txt,v 1.105 2010/05/11 23:43:07 hartera Exp $";
 
 #############################################################################
 
@@ -8576,6 +8576,9 @@ while (<>) {
 # 2010-04-28. Received new data from Thomas Derrien. Downloaded data and 
 # added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig so
 # sent a new binary to data providers and they re-created the bigWig files. 
+# 2010-05-11. All ENCODE tracks need to be preceded by the wgEncode prefix now
+# on all assemblies. Update the file names in /gbdb/hg19/bbi and the 
+# table names. (hartera)
     mkdir -p /hive/data/genomes/hg19/bed/crgMapability
     cd /hive/data/genomes/hg19/bed/crgMapability
 cat << 'EOF' > temp
@@ -8713,6 +8716,28 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
        rm /gbdb/hg19/bbi/${nf}
        ln -s `pwd`/${f} /gbdb/hg19/bbi/${nf}
      end
+
+     # 2010-05-11, hartera. Re-name bigWig files and update tables
+     # as all ENCODE tracks should now have the wgEncode prefix on all 
+     # assemblies.
+    cd /hive/data/genomes/hg19/bed/crgMapability
+    foreach f (`ls *.bw`)
+       echo $f
+       set g=`echo $f | cut -d "-" -f2`
+       set num=`echo $g | cut -d "." -f1`
+       set mer=`echo "${num}mer"`
+       set of=`echo "encCrgMapabilityAlign${mer}.bw"`
+       set nf=`echo "wgEncodeCrgMapabilityAlign${mer}.bw"`
+       echo $nf
+       rm /gbdb/hg19/bbi/${of}
+       ln -s `pwd`/${f} /gbdb/hg19/bbi/${nf}
+       hgsql hg19 -e "drop table if exists encCrgMapabilityAlign${mer}; \
+     create table wgEncodeCrgMapabilityAlign${mer} (fileName varchar(255) not null); \
+     insert into wgEncodeCrgMapabilityAlign${mer} values ('/gbdb/hg19/bbi/${nf}');"
+     end
+     # Then change the subtrack names to match the new table names in
+     # kent/src/hg/makeDb/trackDb/human/hg19/trackDb.wgEncode.ra as 
+     # the contents of trackDb.enc.ra has been moved there. 
 
 #####################################################################
 # tRNAs track (2010-01-13, Fan DONE)
