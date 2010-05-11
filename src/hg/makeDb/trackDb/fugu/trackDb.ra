@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.81 2010/03/15 21:42:27 ann Exp $";
+#	"$Id: trackDb.ra,v 1.82 2010/05/11 01:42:13 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -52,20 +52,6 @@ intronGap 30
 type psl est
 baseColorUseSequence genbank
 showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-
-track est
-#replaces record est in parent dir missing/extra maxItems
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility dense
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 

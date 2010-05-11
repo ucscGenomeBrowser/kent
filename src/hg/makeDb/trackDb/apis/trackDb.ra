@@ -15,22 +15,6 @@ color 0,100,180
 type genePred bdgpLiftGenePep
 otherDb dm1
 
-track all_mrna
-shortLabel A. mel. mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility dense
-spectrum on
-type psl mrna
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
 track intronEst
 #replaces record intronEst in parent dir missing/extra maxItems
 shortLabel Spliced ESTs
@@ -43,19 +27,6 @@ intronGap 30
 type psl est
 baseColorUseSequence genbank
 showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-
-track all_est
-shortLabel A. mel. ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 

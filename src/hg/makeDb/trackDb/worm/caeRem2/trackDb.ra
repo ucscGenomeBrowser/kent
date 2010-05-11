@@ -2,46 +2,6 @@
 track gold override
 priority 9
 
-# Unsplit mRNA track for scaffold-based assembly.
-track all_mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank
-group rna
-priority 54
-visibility pack
-spectrum on
-type psl .
-cdsDrawOptions enabled
-baseColorUseCds genbank
-baseColorUseSequence genbank
-showDiffBasesAllScales .
-
-# set in priority.ra:
-# track chainCaePb1
-# priority 136
-# 
-# track netCaePb1
-# priority 136.1
-# 
-# track chainCb3
-# priority 137
-# 
-# track netCb3
-# priority 137.1
-
-track all_est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-
 #Overrides from priority.ra
 
 track chainCaePb1 override

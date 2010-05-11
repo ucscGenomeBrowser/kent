@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.629 2010/05/07 05:35:51 kent Exp $";
+#	"$Id: trackDb.ra,v 1.630 2010/05/11 01:42:11 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -894,6 +894,7 @@ visibility hide
 type bed 12
 
 track mrna
+table all_mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
@@ -940,6 +941,7 @@ indelQueryInsert on
 maxItems 300
 
 track est
+table all_est
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna

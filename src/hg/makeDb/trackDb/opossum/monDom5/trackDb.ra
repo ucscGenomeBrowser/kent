@@ -1,38 +1,6 @@
-#	"$Id: trackDb.ra,v 1.34 2010/03/02 21:23:48 kuhn Exp $";
+#	"$Id: trackDb.ra,v 1.35 2010/05/11 01:42:13 kent Exp $";
 
 include trackDb.chainNet.ra
-
-# Unsplit mRNA
-track all_mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank
-group rna
-priority 54
-visibility pack
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-# Unsplit EST track
-track all_est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
 
 track multiz9way
 shortLabel Conservation

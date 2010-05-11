@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.11 2010/02/08 19:28:32 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.12 2010/05/11 01:42:12 kent Exp $";
 
 include trackDb.chainNet.ra
 
@@ -11,36 +11,6 @@ visibility hide
 type bed 6 .
 useScore 1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr23,chr24,chr25,chr26,chr27,chr28,chr29,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-
-
-track all_mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility pack
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-track all_est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
 
 track blastHg17KG override
 shortLabel Human Proteins

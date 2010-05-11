@@ -1,20 +1,6 @@
 track mrna override
 spectrum on
 
-track est
-#replaces record est in parent dir missing/extra maxItems
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-
 track cytoBandIdeo
 shortLabel Chromosome Band (Low-res)
 longLabel Chromosome Bands (Low-resolution for Chromosome Ideogram)

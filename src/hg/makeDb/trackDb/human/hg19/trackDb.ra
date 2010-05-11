@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.116 2010/04/27 23:14:00 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.117 2010/05/11 01:42:13 kent Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -20,37 +20,6 @@ color 0,20,150
 type bed 6 +
 nextItemButton on
 noScoreFilter .
-
-# Unsplit mRNA track for scaffold-based assembly.
-track all_mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank
-group rna
-priority 54
-visibility dense
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-track all_est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
 
 track hapChainNet
 compositeTrack on

@@ -1,30 +1,4 @@
 
-track all_est
-shortLabel All Ciona ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-
-track all_mrna
-shortLabel Ciona mRNAs
-longLabel $Organism mRNAs from Genbank 
-group rna
-priority 54
-visibility dense
-spectrum on
-type psl mrna
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
 track xenoMrna override
 longLabel Non-$Organism mRNAs from Genbank
 
