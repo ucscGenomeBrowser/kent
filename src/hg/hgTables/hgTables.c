@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.194 2010/05/11 01:43:25 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.195 2010/05/11 23:46:27 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -229,18 +229,6 @@ static struct trackDb *getFullTrackList()
 {
 struct trackDb *list = hTrackDb(database, NULL);
 struct customTrack *ctList, *ct;
-
-#ifdef UNUSED
-/* Change the mrna track to all_mrna to avoid confusion elsewhere. */
-struct trackDb *tdb;
-for (tdb = list; tdb != NULL; tdb = tdb->next)
-    {
-    if (sameString(tdb->table, "mrna"))
-        {
-	tdb->table = cloneString("all_mrna");
-	}
-    }
-#endif /* UNUSED */
 
 /* add wikiTrack if enabled */
 if (wikiTrackEnabled(database, NULL))
@@ -731,7 +719,7 @@ if (group != NULL && sameString(group->name, "all"))
     group = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (sameString(name, track->table) &&
+    if (sameString(name, track->track) &&
        (group == NULL || sameString(group->name, track->grp)))
        return track;
     }
