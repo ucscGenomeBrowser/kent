@@ -1,8 +1,8 @@
-#	"$Id: trackDb.ra,v 1.117 2010/05/11 01:42:13 kent Exp $";
+#	"$Id: trackDb.ra,v 1.118 2010/05/11 23:28:09 hartera Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
-include trackDb.enc.ra
+include trackDb.wgEncode.ra
 
 track stsMap override
 visibility hide
