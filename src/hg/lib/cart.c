@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.118 2010/04/14 07:42:57 galt Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.119 2010/05/11 01:43:29 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1665,7 +1665,7 @@ if (compositeLevel)
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
     char buf[512];
-    safef(buf, sizeof buf, "%s.%s", tdb->tableName,suffix);
+    safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
     char *cartSetting = hashFindVal(cart->hash, buf);
     if (cartSetting != NULL)
 	{
@@ -1722,7 +1722,7 @@ char *cartNormalizeVariableClosestToHome(struct cart *cart,struct cart *oldCart,
    most recently superceded */
 {
 char childVar[512];
-safef(childVar, sizeof childVar, "%s.%s", tdb->tableName,suffix);
+safef(childVar, sizeof childVar, "%s.%s", tdb->track,suffix);
 char *lowestVar = childVar;
 char *lowestVal = hashFindVal(cart->hash, childVar);
 if(!tdbIsCompositeChild(tdb))
@@ -1737,13 +1737,13 @@ char *parentVal = NULL;
 char *stView;
 if(subgroupFind(tdb,"view",&stView))
     {
-    safef(parentVar,sizeof parentVar,"%s.%s.%s",tdb->parent->tableName,stView,suffix);
+    safef(parentVar,sizeof parentVar,"%s.%s.%s",tdb->parent->track,stView,suffix);
     parentVal = hashFindVal(cart->hash, parentVar);
     cartPairNormalize(cart,oldCart,&lowestVar,&lowestVal,parentVar,parentVal);
     }
 if(!oneLevel)
     {
-    safef(parentVar,sizeof parentVar,"%s.%s",tdb->parent->tableName,suffix);
+    safef(parentVar,sizeof parentVar,"%s.%s",tdb->parent->track,suffix);
     parentVal = hashFindVal(cart->hash, parentVar);
     cartPairNormalize(cart,oldCart,&lowestVar,&lowestVal,parentVar,parentVal);
     }
@@ -1849,11 +1849,11 @@ void cartRemoveAllForTdb(struct cart *cart, struct trackDb *tdb)
 /* Remove all variables from cart that are associated with this tdb. */
 {
 char setting[256];
-safef(setting,sizeof(setting),"%s.",tdb->tableName);
+safef(setting,sizeof(setting),"%s.",tdb->track);
 cartRemovePrefix(cart,setting);
-safef(setting,sizeof(setting),"%s_",tdb->tableName); // TODO: All should be {tableName}.{varName}... Fix {tableName}_sel
+safef(setting,sizeof(setting),"%s_",tdb->track); // TODO: All should be {track}.{varName}... Fix {track}_sel
 cartRemovePrefix(cart,setting);
-cartRemove(cart,tdb->tableName);
+cartRemove(cart,tdb->track);
 }
 
 void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb)

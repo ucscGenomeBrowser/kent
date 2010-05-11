@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.64 2009/05/14 21:45:24 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.65 2010/05/11 01:43:27 kent Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -61,13 +61,13 @@ if (isAxt)
     {
     struct hash *qSizeHash = hChromSizeHash(tg->otherDb);
     struct mafAli *mafList = 
-            axtLoadAsMafInRegion(conn, tg->mapName, chrom, start, end,
+            axtLoadAsMafInRegion(conn, tg->table, chrom, start, end,
                                  database, tg->otherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
 else
-    return mafLoadInRegion(conn, tg->mapName, chrom, start, end);
+    return mafLoadInRegion(conn, tg->table, chrom, start, end);
 }
 
 static struct mafItem *baseByBaseItems(struct track *tg, int scoreHeight)
@@ -489,7 +489,7 @@ static void mafDrawOverview(struct track *tg, int seqStart, int seqEnd,
 char **row;
 int rowOffset;
 struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName, 
+struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, 
     seqStart, seqEnd, NULL, &rowOffset);
 double scale = scaleForPixels(width);
 int x1,x2,y,w;
@@ -724,7 +724,7 @@ if (vis == tvFull)
         char mafTable[64];
         if ((suffix = trackDbSetting(tg->tdb, "pairwise")) == NULL ||
             *suffix == 0)
-                suffix = tg->mapName;
+                suffix = tg->table;
         safef(mafTable, sizeof(mafTable), "%s_%s", mi->name, suffix);
         if (!hTableExists(database, mafTable))
             continue;
@@ -910,8 +910,8 @@ else
     mafDrawGraphic(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, 
                     color, vis, isAxt);
     }
-mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
-    tg->mapName, NULL);
+mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track, 
+    tg->track, NULL);
 }
 
 static void mafDraw(struct track *tg, int seqStart, int seqEnd,

@@ -210,7 +210,7 @@ for (group = groupList; group != NULL; group = group->next)
                 for (tr2 = group->trackList; tr2 != NULL; tr2 = tr2->next)
                     {
                     char *parent = tr2->track->tdb->parentName;
-                    if (parent && sameString(parent, track->mapName))
+                    if (parent && sameString(parent, track->track))
                         {
                         AllocVar(ref);
                         ref->track = tr2->track;
@@ -241,7 +241,7 @@ for (group = groupList; group != NULL; group = group->next)
                 tdb->parent ? "TITLE=\"Part of super track: " : "",
                 tdb->parent ? tdb->parent->shortLabel : "",
                 tdb->parent ? "...\"" : "", hgTrackUiName(),
-		cartSessionVarName(), cartSessionId(cart), track->mapName);
+		cartSessionVarName(), cartSessionId(cart), track->track);
         hPrintf(" %s", track->shortLabel);
         if (tdbIsSuper(track->tdb))
             hPrintf("...");
@@ -265,7 +265,7 @@ for (group = groupList; group != NULL; group = group->next)
             else
                 {
                 /* check for option of limiting visibility to one mode */
-                hTvDropDownClassVisOnly(track->mapName, track->visibility,
+                hTvDropDownClassVisOnly(track->track, track->visibility,
                             track->canPack, (track->visibility == tvHide) ?
                             "hiddenText" : "normalText",
                             trackDbSetting(track->tdb, "onlyVisibility"));
@@ -281,7 +281,7 @@ for (group = groupList; group != NULL; group = group->next)
         if (withPriorityOverride)
             {
             hPrintf("<TD>");
-            safef(pname, sizeof(pname), "%s.priority",track->mapName);
+            safef(pname, sizeof(pname), "%s.priority",track->track);
             hDoubleVar(pname, (double)track->priority, 4);
             hPrintf("</TD>");
             hPrintf("<TD>\n");
@@ -290,7 +290,7 @@ for (group = groupList; group != NULL; group = group->next)
                 hPrintf("&nbsp");
             else
                 {
-                safef(gname, sizeof(gname), "%s.group",track->mapName);
+                safef(gname, sizeof(gname), "%s.group",track->track);
                 printGroupListHtml(gname, groupList, track->groupName);
                 }
             hPrintf("</TD>");

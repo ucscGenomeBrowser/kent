@@ -50,7 +50,7 @@ void loadItemsSwitchDbTss(struct track *tg)
 {
 char optionScoreStr[128]; /* Option -  score filter */
 safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-      tg->tdb->tableName);
+      tg->tdb->track);
 if (!cartVarExists(cart, optionScoreStr))
     cartSetInt(cart, optionScoreStr, SWITCHDBTSS_FILTER); 
 loadLinkedFeaturesWithLoaders(tg, switchDbTssLoadConduit, lfFromSwitchDbTss, 

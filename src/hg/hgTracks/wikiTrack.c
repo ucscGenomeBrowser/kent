@@ -10,7 +10,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.20 2009/11/01 19:46:05 aamp Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -52,13 +52,13 @@ if (wikiItem)
 
 if (enableHgcClick)
     {
-    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName, 
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track, 
                   hgcClickName, statusLine, NULL, FALSE, NULL         );
     }
 else
     {	/* go directly to the wiki description */
     char *directUrl = wikiUrl(wikiItem);
-    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName, 
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track, 
                   hgcClickName, statusLine, directUrl, FALSE, NULL);
     freeMem(directUrl);
     }
@@ -118,7 +118,7 @@ int scoreMax = 99999;
 
 safef(where, ArraySize(where), "db='%s'", database);
 
-sr = hRangeQuery(wikiConn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+sr = hRangeQuery(wikiConn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct wikiTrack *item = wikiTrackLoad(row);
@@ -173,7 +173,7 @@ if (wikiTrackEnabled(database, NULL))
 tg->items = lfList;
 }	/*	static void wikiTrackLoadItems(struct track *tg)	*/
 
-struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
+struct bed *wikiTrackGetBedRange(char *table, char *chromName,
 	int start, int end)
 /* fetch wiki track items as simple bed 3 list in given range */
 {
@@ -186,7 +186,7 @@ int rowOffset;
 
 safef(where, ArraySize(where), "db='%s'", database);
 
-sr = hRangeQuery(wikiConn, mapName, chromName, start, end, where, &rowOffset);
+sr = hRangeQuery(wikiConn, table, chromName, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct wikiTrack *item = wikiTrackLoad(row);
@@ -216,7 +216,8 @@ if (wikiTrackEnabled(database, NULL))
 
     linkedFeaturesMethods(tg);
     AllocVar(tdb);
-    tg->mapName = WIKI_TRACK_TABLE;
+    tg->track = WIKI_TRACK_TABLE;
+    tg->table = WIKI_TRACK_TABLE;
     tg->canPack = TRUE;
     tg->visibility = tvHide;
     tg->hasUi = TRUE;
@@ -233,7 +234,8 @@ if (wikiTrackEnabled(database, NULL))
     tg->defaultGroupName = cloneString("map");
     tg->exonArrows = TRUE;
     tg->nextItemButtonable = TRUE;
-    tdb->tableName = cloneString(tg->mapName);
+    tdb->track = cloneString(tg->track);
+    tdb->table = cloneString(tg->table);
     tdb->shortLabel = cloneString(tg->shortLabel);
     tdb->longLabel = cloneString(tg->longLabel);
     tdb->useScore = 1;

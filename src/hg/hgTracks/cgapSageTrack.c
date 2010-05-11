@@ -129,7 +129,7 @@ static void cgapSageMapItem(struct track *tg, struct hvGfx *hvg, void *item, cha
 {
 struct linkedFeatures *lf = item;
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, 
-                  tg->mapName, itemName, NULL, NULL, TRUE,
+                  tg->track, itemName, NULL, NULL, TRUE,
                   (char *)lf->extra);
 }
 
@@ -257,7 +257,7 @@ struct hash *libTotHash = getTotTagsHashFromTable(conn);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
-sr = hOrderedRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+sr = hOrderedRangeQuery(conn, tg->table, chromName, winStart, winEnd,
 			NULL, &rowOffset);
 if ((winEnd - winStart) > CGAP_SAGE_DENSE_GOVERNOR)
     tg->visibility = tvDense;

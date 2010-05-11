@@ -14,7 +14,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.4 2009/04/10 20:02:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.5 2010/05/11 01:43:24 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -45,7 +45,8 @@ char buf[256];
 
 AllocVar(ct);
 AllocVar(tdb);
-tdb->tableName = customTrackTableFromLabel(ctName);
+tdb->table = customTrackTableFromLabel(ctName);
+tdb->track = cloneString(tdb->table);
 tdb->shortLabel = ctName;
 tdb->longLabel = ctDesc;
 safef(buf, sizeof(buf), "bed %d .", fields);
@@ -74,7 +75,7 @@ if (ct == NULL)
     return(NULL);
 
 AllocVar(hti);
-hti->rootName = cloneString(ct->tdb->tableName);
+hti->rootName = cloneString(ct->tdb->table);
 hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
@@ -185,7 +186,7 @@ struct customTrack *newList = NULL, *ct, *next;
 for (ct = *pList; ct != NULL; ct = next)
     {
     next = ct->next;
-    if (!sameString(ct->tdb->tableName, name))
+    if (!sameString(ct->tdb->table, name))
         {
 	slAddHead(&newList, ct);
 	}

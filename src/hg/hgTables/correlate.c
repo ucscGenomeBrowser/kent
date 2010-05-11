@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.78 2009/07/15 00:55:21 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.79 2010/05/11 01:43:25 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -302,7 +302,7 @@ else
     for (track = limitedTrackList; track != NULL; track = track->next)
 	{
 	if (allTracks || sameString(selGroup->name, track->grp))
-	    hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
+	    hPrintf(" <OPTION VALUE=%s%s>%s\n", track->table,
 		(track == selTrack ? " SELECTED" : ""),
 		track->shortLabel);
 	}
@@ -327,7 +327,7 @@ if (tdb == NULL)
 table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
 table->actualTdb = tdb;
-table->actualTable = cloneString(tdb->tableName);
+table->actualTable = cloneString(tdb->table);
 table->isBedGraph = FALSE;
 table->isWig = FALSE;
 table->isBigWig = FALSE;
@@ -391,7 +391,7 @@ else if (startsWithWord("bigWig", tdb->type))
     {
     table->isBigWig = TRUE;
     }
-else if (sameString("cpgIsland", tdb->tableName))
+else if (sameString("cpgIsland", tdb->table))
     {
     table->isBedGraph = TRUE;
     table->bedGraphColumnName = cloneString("perCpg");
@@ -442,7 +442,7 @@ else if (startsWith("wig",tdb->type))
         if (!wiggles)
             /* should have found this earlier (correlateOK) */
             errAbort("No conservation wiggle found for track %s",
-                        tdb->tableName);
+                        tdb->table);
         boolean found = FALSE;
         for (wig = wiggles; wig != NULL; wig = wig->next)
             {
@@ -451,7 +451,7 @@ else if (startsWith("wig",tdb->type))
             }
         if (!found)
             errAbort("Conservation wiggle %s not found for track %s",
-                        table->tableName, tdb->tableName);
+                        table->tableName, tdb->table);
 	freeMem(table->actualTable);
 	table->actualTable = cloneString(table->tableName);
 	}
@@ -1764,7 +1764,7 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
 	v1->count, v1->min, v1->max, v1->sumData,
 	    v1->sumSquares, v1->r, v1->fetchTime,
 		v1->calcTime, table1->actualTable, table2->actualTable,
-		    table1->tdb->tableName, table2->tdb->tableName, v1->m,
+		    table1->tdb->table, table2->tdb->table, v1->m,
 			v1->b);
     statsRowOut(v2->chrom, v2->name, table2->shortLabel, 0, 0,
 	v2->count, v2->min, v2->max, v2->sumData,
@@ -2343,7 +2343,7 @@ static void tableInfoDebugDisplay(struct trackTable *tableList)
     for (table = tableList; table != NULL; table = table->next)
 	{
 	hPrintf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD></TR>\n",
-	    table->shortLabel, table->tdb->tableName, table->tableName,
+	    table->shortLabel, table->tdb->table, table->tableName,
 	    table->actualTdb->type,
 	    table->isBedGraph ? "bedGraph" : table->isWig ? "wiggle" : "other",
 	    table->bedGraphColumnNum, table->bedGraphColumnName,

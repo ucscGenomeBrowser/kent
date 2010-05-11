@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.105 2010/03/03 23:25:07 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.106 2010/05/11 01:43:26 kent Exp $";
 
 Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
 /* Find a color which is a percentless 'lighter' shade of color */
@@ -1673,7 +1673,7 @@ void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
  * tg is linkedFeatures or linkedFeaturesSeries (currently the only
  * two supported track types -- bed, psl etc. are subclasses of these). */
 {
-if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
+if (initedTrack == NULL || differentString(tg->track, initedTrack))
     {
     int overallStart, overallEnd;
     boolean isSeries = FALSE;
@@ -1681,7 +1681,7 @@ if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
 	isSeries = TRUE;
     else if (!baseColorCanDraw(tg))
 	errAbort("baseColorInitTrack: track %s has a type not recognized by baseColorCanDraw.",
-		 tg->mapName);
+		 tg->track);
     getLinkedFeaturesSpan((struct linkedFeatures *)tg->items, &overallStart, &overallEnd,
 			  isSeries);
     if (overallStart < cachedGenoStart || overallEnd > cachedGenoEnd)
@@ -1691,7 +1691,7 @@ if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
 	cachedGenoEnd = overallEnd;
 	cachedGenoDna = hDnaFromSeq(database, chromName, cachedGenoStart, cachedGenoEnd, dnaUpper);
 	}
-    initedTrack = cloneString(tg->mapName);
+    initedTrack = cloneString(tg->track);
     }
 
 /* allocate colors for coding coloring */
@@ -1705,10 +1705,10 @@ if (!cdsColorsMade)
 static void checkTrackInited(struct track *tg, char *what)
 /* Die if baseColorInitTrack has not been called (most recently) for this track. */
 {
-if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
+if (initedTrack == NULL || differentString(tg->track, initedTrack))
     errAbort("Error: Track %s should have been baseColorInitTrack'd before %s.  "
 	     "(tg->drawItems may be unrecognized by baseColorCanDraw)",
-	     tg->mapName, what);
+	     tg->track, what);
 }
 
 enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
@@ -1745,7 +1745,7 @@ if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffCodons ||
     indelShowPolyA)
     {
-    *retMrnaSeq = maybeGetSeqUpper(lf, tg->mapName, tg);
+    *retMrnaSeq = maybeGetSeqUpper(lf, tg->track, tg);
     if (*retMrnaSeq != NULL && *retPsl != NULL) // we have both sequence and PSL
 	{
         if ((*retMrnaSeq)->size != (*retPsl)->qSize)

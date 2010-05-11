@@ -81,7 +81,7 @@ else
 		hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 		}
 	    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-		     tg->mapName, tg->mapItemName(tg, bed), NULL);
+		     tg->track, tg->mapItemName(tg, bed), NULL);
 	    }
 	hFreeConn(&conn);
 	cutterFree(&cut);
@@ -149,7 +149,8 @@ struct trackDb *tdb;
 
 bedMethods(tg);
 AllocVar(tdb);
-tg->mapName = CUTTERS_TRACK_NAME;
+tg->track = CUTTERS_TRACK_NAME;
+tg->table = CUTTERS_TRACK_NAME;
 tg->canPack = TRUE;
 tg->visibility = tvHide;
 tg->hasUi = TRUE;
@@ -161,7 +162,8 @@ tg->priority = 99.9;
 tg->defaultPriority = 99.9;
 tg->groupName = cloneString("map");
 tg->defaultGroupName = cloneString("map");
-tdb->tableName = cloneString(CUTTERS_TRACK_NAME);
+tdb->track = cloneString(CUTTERS_TRACK_NAME);
+tdb->table = cloneString(CUTTERS_TRACK_NAME);
 tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);

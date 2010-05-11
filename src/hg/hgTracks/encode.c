@@ -10,7 +10,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.23 2009/12/21 22:43:33 markd Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.24 2010/05/11 01:43:27 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -191,12 +191,12 @@ if (ct)
 else
     {
     db = database;
-    table = tg->tdb->tableName;
+    table = tg->tdb->table;
     }
 conn = hAllocConn(db);
 pt = encodePeakInferTypeFromTable(db, table, tg->tdb->type);
 tg->customInt = pt;
-filterConstraints = encodePeakFilter(tg->tdb->tableName, tg->tdb, (ct!=NULL));
+filterConstraints = encodePeakFilter(tg->tdb->track, tg->tdb, (ct!=NULL));
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -97,7 +97,7 @@
 
 #define LISTUI
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.49 2010/04/15 00:01:13 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.50 2010/05/11 01:43:29 kent Exp $";
 
 extern char *uniprotFormat;
 
@@ -471,7 +471,7 @@ char *temparray[160];
 char *giwords[5];
 char *spAcc = NULL;
 struct slName *el, *list;
-char *table = tdb->tableName;
+char *table = tdb->table;
 char *pdb = hPdbFromGdb(database);
 struct genePred *gpList = NULL, *gp = NULL;
 char tableName[64];
@@ -953,7 +953,6 @@ struct bed *cb=NULL;
 struct sargassoSeaXra *cbs=NULL, *cbs2, *list=NULL;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-char *track = tdb->tableName;
 char query[512];
 char *dupe, *words[16];
 char **row;
@@ -969,9 +968,9 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, trnaName, start, num);
-rowOffset = hOffsetPastBin(database, seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, trnaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     cb=bedLoadN(row+1, 6);
@@ -1162,7 +1161,6 @@ void printCode(char code)
 
 void doTrnaGenes(struct trackDb *tdb, char *trnaName)
 {
-char *track = tdb->tableName;
 struct tRNAs *trna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -1178,8 +1176,8 @@ genericHeader(tdb,trnaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
-rowOffset = hOffsetPastBin(database, seqName, track);
-sprintf(query, "select * from %s where chrom = '%s' and name = '%s'", track, chrom, trnaName);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+sprintf(query, "select * from %s where chrom = '%s' and name = '%s'", tdb->table, chrom, trnaName);
 sr = sqlGetResult(conn, query);
 printf("<TABLE>\n");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1231,7 +1229,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 void doSnornaGenes(struct trackDb *tdb, char *snornaName)
 {
-char *track = tdb->tableName;
 struct snoRNAs *snorna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -1245,8 +1242,8 @@ genericHeader(tdb,snornaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
-rowOffset = hOffsetPastBin(database, seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, snornaName);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, snornaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
   {
@@ -1277,7 +1274,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 void doGbRnaGenes(struct trackDb *tdb, char *gbRnaName)
 {
-char *track = tdb->tableName;
 struct gbRNAs *gbRna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -1292,8 +1288,8 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 
-rowOffset = hOffsetPastBin(database, seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, gbRnaName);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, gbRnaName);
 sr = sqlGetResult(conn, query);
 
 
@@ -1326,7 +1322,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 void doEasyGenes(struct trackDb *tdb, char *egName)
 {
-char *track = tdb->tableName;
 struct easyGene *egList = NULL, *eg;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -1335,8 +1330,8 @@ char **row;
 int rowOffset;
 
 genericHeader(tdb,egName);
-rowOffset = hOffsetPastBin(database, seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, egName);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, egName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slAddTail(&egList,easyGeneLoad(row+rowOffset));
@@ -1377,7 +1372,6 @@ struct codeBlast *cb=NULL;
 struct codeBlastScore *cbs=NULL, *cbs2, *list=NULL;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-char *track = tdb->tableName;
 char query[512];
 char *dupe, *words[16];
 char **row;
@@ -1393,9 +1387,9 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, trnaName, start, num);
-rowOffset = hOffsetPastBin(database, seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, trnaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1789,7 +1783,6 @@ hFreeConn(&conn);
 /*void doTigrOperons(struct trackDb *tdb, char *opName)*/
 /* track handler for the TIGR operon predictions */
 /*{
-char *track = tdb->tableName;
 struct tigrOperon *op;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -1806,7 +1799,7 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, opName, start, num);
-sprintf(query, "select * from %sInfo where name = '%s'", track, opName);
+sprintf(query, "select * from %sInfo where name = '%s'", tdb->table, opName);
 sr = sqlGetResult(conn, query);*/
 /* Make the operon table like on the TIGR web page. */
 /*if ((row = sqlNextRow(sr)) != NULL)
@@ -1854,7 +1847,6 @@ tigrOperonFree(&op);
 void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
 /* Handle the TIRG CMR gene track. */
 {
-  char *track = tdb->tableName;
   struct tigrCmrGene *tigr;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
@@ -1869,8 +1861,8 @@ void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database, seqName, track);
-  sprintf(query, "select * from %s where name = '%s'", track, tigrName);
+  rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+  sprintf(query, "select * from %s where name = '%s'", tdb->table, tigrName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1920,7 +1912,6 @@ void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
 void doJgiGene(struct trackDb *tdb, char *jgiName)
 /* Handle the JGI gene track. */
 {
-  char *track = tdb->tableName;
   struct jgiGene *jgi;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
@@ -1934,8 +1925,8 @@ void doJgiGene(struct trackDb *tdb, char *jgiName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database, seqName, track);
-  sprintf(query, "select * from %s where name = '%s'", track, jgiName);
+  rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+  sprintf(query, "select * from %s where name = '%s'", tdb->table, jgiName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1967,7 +1958,6 @@ void doJgiGene(struct trackDb *tdb, char *jgiName)
 void doPfamHit(struct trackDb *tdb, char *hitName)
 /* Handle the Pfam hits track. */
 {
-  char *track = tdb->tableName;
   struct lowelabPfamHits *pfamHit;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
@@ -1986,9 +1976,9 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database, seqName, track);
+  rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", track, hitName,seqName,start);
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", tdb->table, hitName,seqName,start);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2038,7 +2028,6 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
 void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
 /* Handle the TIGR operons track. */
 {
-    char *track = tdb->tableName;
     struct bed *tigrOperon;
     struct lowelabTIGROperonScore *tigrOperonScore;
     char query[512];
@@ -2058,8 +2047,8 @@ void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
 
-    rowOffset = hOffsetPastBin(database, seqName, track);
-    sprintf(query, "select * from %s where name = '%s'", track, tigrOperonName);
+    rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+    sprintf(query, "select * from %s where name = '%s'", tdb->table, tigrOperonName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2131,7 +2120,6 @@ void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
 void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
 /* Handle the Arkin operons track. */
 {
-    char *track = tdb->tableName;
     struct bed *arkinOperon;
     struct lowelabArkinOperonScore *arkinOperonScore;
     char query[512];
@@ -2151,8 +2139,8 @@ void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
 
-    rowOffset = hOffsetPastBin(database, seqName, track);
-    sprintf(query, "select * from %s where name = '%s'", track, arkinOperonName);
+    rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+    sprintf(query, "select * from %s where name = '%s'", tdb->table, arkinOperonName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2225,7 +2213,6 @@ void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
 struct bed * getBlastpTrackRecord(struct sqlConnection *conn, struct trackDb *tdb, char *targetName)
 /* Get blastp track record clicked by user*/
 {
-    char *track = tdb->tableName;
     struct bed *blastpTrack = NULL;
     char *dupe, *words[16];
     int wordCount;
@@ -2245,9 +2232,9 @@ struct bed * getBlastpTrackRecord(struct sqlConnection *conn, struct trackDb *td
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
 
-    rowOffset = hOffsetPastBin(database, seqName, track);
+    rowOffset = hOffsetPastBin(database, seqName, tdb->table);
     sprintf(query, "select distinct * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = %d",
-            track, targetName, chrom, start, end);
+            tdb->table, targetName, chrom, start, end);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         blastpTrack = bedLoadN(row+rowOffset, bedSize);
@@ -3075,7 +3062,6 @@ float computeNMolePerOD(char* dna, int length)
 void doPrimers(struct trackDb *tdb, char *primerName)
 /* Handle the array primer and GOLD primer tracks. */
 {
-    char *track = tdb->tableName;
     struct bed *primer;
     struct dnaSeq *sequence;
     char query[512];
@@ -3100,8 +3086,8 @@ void doPrimers(struct trackDb *tdb, char *primerName)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
 
-    rowOffset = hOffsetPastBin(database, seqName, track);
-    sprintf(query, "select * from %s where name = '%s'", track, primerName);
+    rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+    sprintf(query, "select * from %s where name = '%s'", tdb->table, primerName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3344,22 +3330,22 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
 
       if(strlen(rnaHyb->JGITarget) > 0)
         {
-          saveTableName = tdb->tableName;
-          tdb->tableName = jgiTable;
+          saveTableName = tdb->table;
+          tdb->table = jgiTable;
           printf("<b>Additional information for target<b><br/>");
           printf("<hr/>");
           doJgiGene(tdb, rnaHyb->JGITarget);
-          tdb->tableName = saveTableName;
+          tdb->table = saveTableName;
         }
 
       if(strlen(rnaHyb->trnaTarget) > 0)
         {
-          saveTableName = tdb->tableName;
-          tdb->tableName = tRNATable;
+          saveTableName = tdb->table;
+          tdb->table = tRNATable;
           printf("<b>Additional information for target<b><br/>");
           printf("<hr/>");
           doTrnaGenes(tdb, rnaHyb->trnaTarget);
-          tdb->tableName = saveTableName;
+          tdb->table = saveTableName;
         }
 
 
@@ -3374,7 +3360,6 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
 
 void doarCOGs(struct trackDb *tdb, char *itemName)
 {
-  char *track = tdb->tableName;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
@@ -3406,9 +3391,9 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database,seqName, track);
+  rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3432,9 +3417,9 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
   arCOGsFree(&infoload);
   printTrackHtml(tdb);
 }
+
 void doloweOrthologs(struct trackDb *tdb, char *itemName)
 {
-  char *track = tdb->tableName;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
@@ -3457,9 +3442,9 @@ void doloweOrthologs(struct trackDb *tdb, char *itemName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database,seqName, track);
+  rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3480,9 +3465,9 @@ void doloweOrthologs(struct trackDb *tdb, char *itemName)
   hFreeConn(&conn);
   printTrackHtml(tdb);
 }
+
 void doCddInfo(struct trackDb *tdb, char *itemName)
 {
-  char *track = tdb->tableName;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
@@ -3519,9 +3504,9 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database,seqName, track);
+  rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3548,9 +3533,9 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
   cddInfoFree(&infoload);
   printTrackHtml(tdb);
 }
+
 void domegablastInfo(struct trackDb *tdb, char *itemName)
 {
-  char *track = tdb->tableName;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
@@ -3567,9 +3552,9 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database,seqName, track);
+  rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3603,9 +3588,9 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
   megablastInfoFree(&infoload);
   printTrackHtml(tdb);
 }
+
 void doAlignInfo(struct trackDb *tdb, char *itemName)
 {
-  char *track = tdb->tableName;
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
@@ -3628,9 +3613,9 @@ void doAlignInfo(struct trackDb *tdb, char *itemName)
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database, seqName, track);
+  rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d;", track, itemName,seqName,start);
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d;", tdb->table, itemName,seqName,start);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3661,7 +3646,6 @@ void doAlignInfo(struct trackDb *tdb, char *itemName)
 void doCRISPRs(struct trackDb *tdb, char *crisprName)
 /* Handle the CRISPR array track. */
 {
-    char *track = tdb->tableName;
     struct bed *crispr;
     struct dnaSeq *sequence;
 	char tempSeq[512];
@@ -3683,8 +3667,8 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
 	
-    rowOffset = hOffsetPastBin(database, seqName, track);
-    safef(query, ArraySize(query), "select * from %s where name = '%s'", track, crisprName);
+    rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+    safef(query, ArraySize(query), "select * from %s where name = '%s'", tdb->table, crisprName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {

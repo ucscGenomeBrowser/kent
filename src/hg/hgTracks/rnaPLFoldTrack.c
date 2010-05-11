@@ -134,7 +134,7 @@ void rnaPLFoldLoadItems(struct track *tg)
 {
 int count = 0;
 
-bedLoadRnaLpFoldItem(tg, tg->mapName, (ItemLoader)rnaPLFoldLoad);
+bedLoadRnaLpFoldItem(tg, tg->table, (ItemLoader)rnaPLFoldLoad);
 count = slCount((struct sList *)(tg->items));
 tg->canPack = FALSE;
 }
@@ -224,8 +224,8 @@ return; /* mapDiamondUI is working well, but there is a bug with
 	 * so keep this disabled until there is something more specific like an hgc 
 	 * handler for diamonds. */
 if (drawMap && xt-xl>5 && xb-xl>5)
-    mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
-		 tg->tdb->tableName);
+    mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->track,
+		 tg->tdb->track);
 }
 
 void rnaPLFoldAddToDenseValueHash(struct hash *rnaPLFoldHash, unsigned a, char rnaPLFoldVal)
@@ -260,10 +260,8 @@ boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 Color        yellow    = hvGfxFindRgb(hvg, &undefinedYellowColor);
 char        *rnaPLFoldVal     = NULL;
 boolean      rnaPLFoldTrm     = FALSE;
-struct dyString *dsRnaLpFoldTrm = newDyString(32);
  int basePairOffset;
 
-dyStringPrintf(dsRnaLpFoldTrm, "%s_trm", tg->mapName);
 if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
     hvGfxBox(hvg, insideX, yOff, insideWidth, tg->height-1, yellow);
 mapTrackBackground(tg, hvg, xOff, yOff);

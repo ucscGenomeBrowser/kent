@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.38 2010/04/29 23:39:53 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.39 2010/05/11 01:43:30 kent Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -68,7 +68,7 @@ if (debugOpened)
 
 #ifdef NOT
 /*	example usage:	*/
-snprintf(dbgMsg, DBGMSGSZ, "%s pixels: min,default,max: %d:%d:%d", tdb->tableName, wigCart->minHeight, wigCart->defaultHeight, wigCart->maxHeight);
+snprintf(dbgMsg, DBGMSGSZ, "%s pixels: min,default,max: %d:%d:%d", tdb->track, wigCart->minHeight, wigCart->defaultHeight, wigCart->maxHeight);
 wigDebugPrint("wigFetch");
 #endif
 
@@ -224,7 +224,7 @@ else if (missingAbsMin || missingAbsMax)
 	warn("trackDb %s, and no default view limits are specified for track %s",
 	     (isBedGraph ? MIN_LIMIT " and/or " MAX_LIMIT " is not specified" :
 			   "'type wig' line is missing min and/or max data value"),
-	     tdb->tableName);
+	     tdb->track);
     // When that becomes an errAbort, remove these defines from wiggle.h:
     if (isBedGraph)
 	{
@@ -505,7 +505,7 @@ if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
 	autoScale = cloneString(manualString);
     else
 	{
-	if (isCustomTrack(tdb->tableName))
+	if (isCustomTrack(tdb->track))
 	    // backwards defaults for custom tracks, autoScale on
 	    autoScale = wigCheckBinaryOption(tdb,notDefault,Default,
 		AUTOSCALEDEFAULT, AUTOSCALE);

@@ -1,7 +1,7 @@
 table trackDb
 "This describes an annotation track."
 (
-string tableName; "Symbolic ID of Track"
+string track; 	"Symbolic ID of Track"
 string shortLabel; "Short label displayed on left"
 string type;      "Track type: bed, psl, genePred, etc."
 string longLabel; "Long label displayed in middle"

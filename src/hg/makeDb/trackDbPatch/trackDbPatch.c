@@ -7,12 +7,13 @@
 #include "ra.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: trackDbPatch.c,v 1.4 2010/01/04 19:12:37 kent Exp $";
+static char const rcsid[] = "$Id: trackDbPatch.c,v 1.5 2010/05/11 01:43:30 kent Exp $";
 
 char *clPatchDir = NULL;
 char *clKey = "track";
 boolean clFirstFile = FALSE;
 boolean clMultiFile = FALSE;
+boolean clDelete = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +29,7 @@ errAbort(
   "   -key=tagName - use tagName as key.  Default '%s'\n"
   "   -multiFile - allow multiple files in filePos tag\n"
   "   -firstFile - when a patch can go to multiple files apply it to first rather than last file\n"
+  "   -delete - delete tracks in patches.ra, which should contain only track and filePos tags\n"
   , clKey
   );
 }
@@ -37,6 +39,7 @@ static struct optionSpec options[] = {
    {"key", OPTION_STRING},
    {"multiFile", OPTION_BOOLEAN},
    {"firstFile", OPTION_BOOLEAN},
+   {"delete", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -116,7 +119,7 @@ while ((word = nextWord(&filesAndPos)) != NULL)
 return list;
 }
 
-struct raPatch *raPatchReadOne(struct lineFile *lf)
+struct raPatch *raPatchReadOne(struct lineFile *lf, boolean deleteFieldsOnly)
 /* Read next patch from lineFile. */
 {
 struct slPair *tagList = raNextRecordAsSlPairList(lf);
@@ -158,6 +161,9 @@ for (tag = tagList; tag != NULL; tag = next)
 	}
     else
         {
+	if (deleteFieldsOnly)
+	    errAbort("Tag %s not allowed with -delete mode in stanza ending line %d of %s.",
+	    	tag->name, lf->lineIx, lf->fileName);
 	slAddHead(&newTagList, tag);
 	}
     }
@@ -248,7 +254,8 @@ slReverse(&lineList);
 return lineList;
 }
 
-static void applyPatches(char *inName, struct slRef *patchRefList, char *keyField, char *outName)
+static void applyPatches(char *inName, struct slRef *patchRefList, char *keyField, char *outName,
+	boolean doDelete)
 /* Apply patches in list. */
 {
 int keyFieldLen = strlen(keyField);
@@ -297,55 +304,62 @@ for (;;)
     if (patch)
         {
 	++glPatchRecordCount;
-	verbose(3, "Got patch %s with %d tags starting %s %s\n", patch->track, slCount(patch->tagList), patch->tagList->name, (char *)patch->tagList->val);
-	int indent = 0;
-	struct hash *appliedHash = hashNew(0);
-	for (line = stanza; line != NULL; line = line->next)
+	if (doDelete)
+	    verbose(2, "Deleting %s in %s\n", patch->track, inName);
+	else
 	    {
-	    char *lineStart = line->name;
-	    char *tagStart = skipLeadingSpaces(lineStart);
-	    boolean copyLine = TRUE;
-	    if (tagStart[0] != 0 && tagStart[0] != '#')
-	        {
-		indent = tagStart - lineStart;
-		struct slPair *tagPatch;
-		for (tagPatch = patch->tagList; tagPatch != NULL; tagPatch = tagPatch->next)
+	    verbose(3, "Got patch %s with %d tags starting %s %s\n", patch->track, slCount(patch->tagList), patch->tagList->name, (char *)patch->tagList->val);
+	    int indent = 0;
+	    struct hash *appliedHash = hashNew(0);
+	    for (line = stanza; line != NULL; line = line->next)
+		{
+		char *lineStart = line->name;
+		char *tagStart = skipLeadingSpaces(lineStart);
+		boolean copyLine = TRUE;
+		if (tagStart[0] != 0 && tagStart[0] != '#')
 		    {
-		    if (startsWithWord(tagPatch->name, tagStart))
-		        {
-			copyLine = FALSE;
-			spaceOut(f, indent);
-			fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
-			verbose(2, "Applying patch '%s' to modify %s'\n", (char*)tagPatch->val, tagStart);
-			++glPatchFieldModifyCount;
-			hashAdd(appliedHash, tagPatch->name, NULL);
-			break;
+		    indent = tagStart - lineStart;
+		    struct slPair *tagPatch;
+		    for (tagPatch = patch->tagList; tagPatch != NULL; tagPatch = tagPatch->next)
+			{
+			if (startsWithWord(tagPatch->name, tagStart))
+			    {
+			    copyLine = FALSE;
+			    spaceOut(f, indent);
+			    fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
+			    verbose(2, "Applying patch '%s' to modify %s'\n", (char*)tagPatch->val, tagStart);
+			    ++glPatchFieldModifyCount;
+			    hashAdd(appliedHash, tagPatch->name, NULL);
+			    break;
+			    }
 			}
 		    }
+		if (copyLine)
+		    {
+		    fprintf(f, "%s\n", line->name);
+		    }
 		}
-	    if (copyLine)
-	        {
-		fprintf(f, "%s\n", line->name);
+	    struct slPair *tagPatch;
+	    for (tagPatch = patch->tagList; tagPatch != NULL; tagPatch = tagPatch->next)
+		{
+		if (!hashLookup(appliedHash, tagPatch->name))
+		    {
+		    spaceOut(f, indent);
+		    ++glPatchFieldAddCount;
+		    verbose(2, "Applying patch to %s adding %s %s\n", patch->track, tagPatch->name, (char*)tagPatch->val);
+		    fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
+		    hashAdd(appliedHash, tagPatch->name, NULL);
+		    }
 		}
+	    hashFree(&appliedHash);
 	    }
-	struct slPair *tagPatch;
-	for (tagPatch = patch->tagList; tagPatch != NULL; tagPatch = tagPatch->next)
-	    {
-	    if (!hashLookup(appliedHash, tagPatch->name))
-	        {
-		spaceOut(f, indent);
-		++glPatchFieldAddCount;
-		verbose(2, "Applying patch to %s adding %s %s\n", patch->track, tagPatch->name, (char*)tagPatch->val);
-		fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
-		hashAdd(appliedHash, tagPatch->name, NULL);
-		}
-	    }
-	hashFree(&appliedHash);
 	}
     else
         {
 	for (line = stanza; line != NULL; line = line->next)
 	    {
+	    if (startsWithWord("track", skipLeadingSpaces(line->name)))
+		verbose(3, "copying %s unchanged\n", line->name); 
 	    fprintf(f, "%s\n", line->name);
 	    }
 	}
@@ -363,8 +377,10 @@ void trackDbPatch(char *patchesFile, char *backupDir)
 /* Read in patch file. */
 struct lineFile *lf = lineFileOpen(patchesFile, TRUE);
 struct raPatch *patch, *patchList = NULL;
-while ((patch = raPatchReadOne(lf)) != NULL)
+while ((patch = raPatchReadOne(lf, clDelete)) != NULL)
+    {
     slAddHead(&patchList, patch);
+    }
 slReverse(&patchList);
 
 /* Group it by file to patch */
@@ -396,7 +412,7 @@ for (file = fileList; file != NULL; file = file->next)
 
     /* Do patch reading original source and creating temp file. */
     makeDirForFile(backupPath);
-    applyPatches(file->fileName, file->patchList, clKey, tempPath);
+    applyPatches(file->fileName, file->patchList, clKey, tempPath, clDelete);
 
     /* If testing, move temp to patch */
     if (clPatchDir)
@@ -428,6 +444,7 @@ clKey = optionVal("key", clKey);
 clPatchDir = optionVal("test", clPatchDir);
 clFirstFile = optionExists("firstFile");
 clMultiFile = optionExists("multiFile");
+clDelete = optionExists("delete");
 trackDbPatch(argv[1], argv[2]);
 return 0;
 }

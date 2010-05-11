@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1646 2010/05/07 05:07:57 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1647 2010/05/11 01:43:27 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -120,7 +120,7 @@ struct track *trackFindByName(struct track *tracks, char *trackName)
 struct track *track;
 for (track = tracks; track != NULL; track = track->next)
     {
-    if (sameString(track->mapName, trackName))
+    if (sameString(track->track, trackName))
         return track;
     else if (track->subtracks != NULL)
         {
@@ -204,38 +204,38 @@ for (group = groupList; group != NULL; group = group->next)
                 {
                 if(tdbIsComposite(tdb))
                     {
-                    safef(pname, sizeof(pname),"%s.*",track->mapName); //to remove all settings associated with this composite!
+                    safef(pname, sizeof(pname),"%s.*",track->track); //to remove all settings associated with this composite!
                     cartRemoveLike(cart,pname);
                     struct track *subTrack;
                     for(subTrack = track->subtracks;subTrack != NULL; subTrack = subTrack->next)
                         {
                         subTrack->visibility = tdb->visibility;
-                        cartRemove(cart, subTrack->mapName);
+                        cartRemove(cart, subTrack->track);
                         }
                     }
 
                 /* restore defaults */
                 if (tdbIsSuperTrackChild(tdb) || tdbIsCompositeChild(tdb))
                     {
-                    assert(tdb->parent != NULL && tdb->parent->tableName);
-                    cartRemove(cart, tdb->parent->tableName);
+                    assert(tdb->parent != NULL && tdb->parent->track);
+                    cartRemove(cart, tdb->parent->track);
                     #ifndef IMAGEv2_DRAG_REORDER
                     if (withPriorityOverride)
                         {
-                        safef(pname, sizeof(pname), "%s.priority",tdb->parent->tableName);
+                        safef(pname, sizeof(pname), "%s.priority",tdb->parent->track);
                         cartRemove(cart, pname);
                         }
                     #endif//ndef IMAGEv2_DRAG_REORDER
                     }
 
                 track->visibility = tdb->visibility;
-                cartRemove(cart, track->mapName);
+                cartRemove(cart, track->track);
 
                 /* set the track priority back to the default value */
                 #ifndef IMAGEv2_DRAG_REORDER
                 if (withPriorityOverride)
                     {
-                    safef(pname, sizeof(pname), "%s.priority",track->mapName);
+                    safef(pname, sizeof(pname), "%s.priority",track->track);
                     cartRemove(cart, pname);
                     track->priority = track->defaultPriority;
                     }
@@ -253,10 +253,10 @@ for (group = groupList; group != NULL; group = group->next)
                         (changeVis != tvHide && parentTdb->isShow))
                         {
                         /* remove if setting to default vis */
-                        cartRemove(cart, parentTdb->tableName);
+                        cartRemove(cart, parentTdb->track);
                         }
                     else
-                        cartSetString(cart, parentTdb->tableName,
+                        cartSetString(cart, parentTdb->track,
                                     changeVis == tvHide ? "hide" : "show");
                     }
                 else
@@ -264,9 +264,9 @@ for (group = groupList; group != NULL; group = group->next)
                     /* regular track */
                     if (changeVis == tdb->visibility)
                         /* remove if setting to default vis */
-                        cartRemove(cart, track->mapName);
+                        cartRemove(cart, track->track);
                     else
-                        cartSetString(cart, track->mapName,
+                        cartSetString(cart, track->track,
                                                 hStringFromTv(changeVis));
                     track->visibility = changeVis;
                     }
@@ -341,8 +341,8 @@ else
 }
 
 char *trackUrl(char *mapName, char *chromName)
-{
 /* Return hgTrackUi url; chromName is optional. */
+{
 char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 if(chromName == NULL)
@@ -469,9 +469,9 @@ struct track *chromIdeoTrack(struct track *trackList)
 struct track *track;
 for(track = trackList; track != NULL; track = track->next)
     {
-    if(sameString(track->mapName, "cytoBandIdeo"))
+    if(sameString(track->track, "cytoBandIdeo"))
 	{
-	if (hTableExists(database, track->mapName))
+	if (hTableExists(database, track->table))
 	    return track;
 	else
 	    return NULL;
@@ -849,7 +849,8 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 struct trackDb *tdb;
-tg->mapName = "hgUserPsl";
+tg->track = "hgUserPsl";
+tg->table = tg->track;
 tg->canPack = TRUE;
 tg->visibility = tvPack;
 tg->longLabel = "Your Sequence from Blat Search";
@@ -864,7 +865,8 @@ tg->exonArrows = TRUE;
 
 /* better to create the tdb first, then use trackFromTrackDb */
 AllocVar(tdb);
-tdb->tableName = cloneString(tg->mapName);
+tdb->track = cloneString(tg->track);
+tdb->table = cloneString(tg->table);
 tdb->visibility = tg->visibility;
 tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
@@ -1006,7 +1008,8 @@ if (oligoSize >= 30)
 touppers(medOligo);
 
 bedMethods(tg);
-tg->mapName = "oligoMatch";
+tg->track = "oligoMatch";
+tg->table = tg->track;
 tg->canPack = TRUE;
 tg->visibility = tvHide;
 tg->hasUi = TRUE;
@@ -1023,7 +1026,8 @@ tg->groupName = "map";
 tg->defaultGroupName = cloneString(tg->groupName);
 
 AllocVar(tdb);
-tdb->tableName = cloneString(tg->mapName);
+tdb->track = cloneString(tg->track);
+tdb->table = cloneString(tg->table);
 tdb->visibility = tg->visibility;
 tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
@@ -1076,19 +1080,19 @@ else
     hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 
 minRange = 0.0;
-safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
-safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+safef( o4, sizeof(o4),"%s.min.cutoff", track->track);
+safef( o5, sizeof(o5),"%s.max.cutoff", track->track);
 minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1,
                                 track->minRange );
 maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1,
                                 track->maxRange);
-if( sameString( track->mapName, "humMusL" ) ||
-    sameString( track->mapName, "musHumL" ) ||
-    sameString( track->mapName, "mm3Rn2L" ) ||
-    sameString( track->mapName, "hg15Mm3L" ) ||
-    sameString( track->mapName, "mm3Hg15L" ) ||
-    sameString( track->mapName, "regpotent" ) ||
-    sameString( track->mapName, "HMRConservation" )  )
+if( sameString( track->table, "humMusL" ) ||
+    sameString( track->table, "musHumL" ) ||
+    sameString( track->table, "mm3Rn2L" ) ||
+    sameString( track->table, "hg15Mm3L" ) ||
+    sameString( track->table, "mm3Hg15L" ) ||
+    sameString( track->table, "regpotent" ) ||
+    sameString( track->table, "HMRConservation" )  )
     {
     int binCount = round(1.0/track->scaleRange);
     minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
@@ -1172,15 +1176,15 @@ switch (vis)
 
                 rootName = cloneString( name );
                 beforeFirstPeriod( rootName );
-                if( sameString( track->mapName, "humMusL" ) ||
-                         sameString( track->mapName, "hg15Mm3L" ))
+                if( sameString( track->table, "humMusL" ) ||
+                         sameString( track->table, "hg15Mm3L" ))
                     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
                              itemHeight, track->ixColor, font, "Mouse Cons");
-                else if( sameString( track->mapName, "musHumL" ) ||
-                         sameString( track->mapName, "mm3Hg15L"))
+                else if( sameString( track->table, "musHumL" ) ||
+                         sameString( track->table, "mm3Hg15L"))
                     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
                                 itemHeight, track->ixColor, font, "Human Cons");
-                else if( sameString( track->mapName, "mm3Rn2L" ))
+                else if( sameString( track->table, "mm3Rn2L" ))
                     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
                                 itemHeight, track->ixColor, font, "Rat Cons");
                 else
@@ -1259,12 +1263,12 @@ Color fillColor = lightGrayIndex();
 labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
-safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->mapName);
+safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
 mapBoxReinvoke(hvg, insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 mapBoxToggleVis(hvg, insideX + arrowButtonWidth, y + 1, insideWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
-safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->mapName);
+safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
 mapBoxReinvoke(hvg, insideX + insideWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
@@ -1358,7 +1362,7 @@ if (track->subType == lfSubSample && track->items == NULL)
 
 /* override doMapItems for hapmapLd track */
 /* does not scale with subtracks right now, so this is commented out until it can be fixed
-if (startsWith("hapmapLd",track->mapName))
+if (startsWith("hapmapLd",track->table))
     {
     y += round((double)(scaleForPixels(insideWidth)*insideWidth/2));
     return y;
@@ -1551,12 +1555,12 @@ if(tdbIsCompositeChild(tdb))
 	{
 	struct trackDb *parent = trackDbCompositeParent(tdb);
 	assert(parent != NULL);
-        int len = strlen(parent->tableName) + strlen(viewName) + 10;
+        int len = strlen(parent->track) + strlen(viewName) + 10;
 
 	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
 	// in the middle for the javascript to work.
 	char ddName[len];
-        safef(ddName,len,"%s.%s.vis", parent->tableName,viewName);
+        safef(ddName,len,"%s.%s.vis", parent->track,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
             vis = hTvFromString(fromParent);
@@ -1800,7 +1804,7 @@ static void rAddToTrackHash(struct hash *trackHash, struct track *trackList)
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
-    hashAddUnique(trackHash, track->mapName, track);
+    hashAddUnique(trackHash, track->track, track);
     rAddToTrackHash(trackHash, track->subtracks);
     }
 }
@@ -2094,7 +2098,7 @@ if(theImgBox)
             int order = flatTrack->order;
             #else//ifndef FLAT_TRACK_LIST
             char var[256];
-            safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
+            safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
             int order = cartUsualInt(cart, var,IMG_ANYORDER);
             #endif//ndef FLAT_TRACK_LIST
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),order);
@@ -2176,10 +2180,10 @@ if (withLeftLabels && psOutput == NULL)
 		    {
 		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
                     mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-		    	parent->tableName, parent->shortLabel, track->mapName);
+		    	parent->track, parent->shortLabel, track->track);
 		    }
                 else
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->mapName, track->shortLabel, track->mapName);
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
                 }
             }
         }
@@ -2276,7 +2280,7 @@ if (withLeftLabels)
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 #ifndef FLAT_TRACK_LIST
         if (trackIsCompositeWithSubtracks(track))
@@ -2376,7 +2380,7 @@ if (withCenterLabels)
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 #ifndef FLAT_TRACK_LIST
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
@@ -2389,7 +2393,7 @@ if (withCenterLabels)
                 sliceHeight      = trackPlusLabelHeight(track, fontHeight) - fontHeight;
                 sliceOffsetY     = y;
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -2439,7 +2443,7 @@ if (withCenterLabels)
             if(sliceHeight > 0)
                 {
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
 #ifndef FLAT_TRACK_LIST
@@ -2491,7 +2495,7 @@ if (withLeftLabels)
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 #ifndef FLAT_TRACK_LIST
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
@@ -2664,13 +2668,13 @@ hels = cartFindPrefix(cart, prefix);
 for (hel = hels; hel != NULL; hel = hel->next)
     {
     struct trackDb *subtrack;
-    char *table = hel->val;
+    char *subtrackName = hel->val;
     /* check non-subtrack. */
-    if (sameString(track->tdb->tableName, table))
+    if (sameString(track->tdb->track, subtrackName))
 	{
 	track->visibility = tvFull;
 	track->tdb->visibility = tvFull;
-	cartSetString(cart, track->tdb->tableName, "full");
+	cartSetString(cart, track->tdb->track, "full");
 	}
     else if (track->tdb->subtracks != NULL)
 	{
@@ -2678,14 +2682,14 @@ for (hel = hels; hel != NULL; hel = hel->next)
 	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	    {
 	    subtrack = tdbRef->val;
-	    if (sameString(subtrack->tableName, table))
+	    if (sameString(subtrack->track, subtrackName))
 		{
 		char selName[SMALLBUF];
 		track->visibility = tvFull;
-		cartSetString(cart, track->tdb->tableName, "full");
+		cartSetString(cart, track->tdb->track, "full");
 		track->tdb->visibility = tvFull;
 		subtrack->visibility = tvFull;
-		safef(selName, sizeof(selName), "%s_sel", table);
+		safef(selName, sizeof(selName), "%s_sel", subtrackName);
 		cartSetBoolean(cart, selName, TRUE);
 		}
 	    }
@@ -2725,7 +2729,7 @@ tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->tableName))
+    if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
     track = trackFromTrackDb(tdb);
@@ -2740,27 +2744,27 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
-        handler = lookupTrackHandler(tdb->tableName);
+        handler = lookupTrackHandler(tdb->table);
         if (handler != NULL)
             handler(track);
         }
     if (cgiVarExists("hgGenomeClick"))
 	makeHgGenomeTrackVisible(track);
     if (track->loadItems == NULL)
-        warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->tableName);
+        warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->track);
     else if (track->drawItems == NULL)
-        warn("No draw handler for %s", tdb->tableName);
+        warn("No draw handler for %s", tdb->track);
     else
         slAddHead(pTrackList, track);
     }
 }
 
-static int getScoreFilter(char *tableName)
+static int getScoreFilter(char *trackName)
 /* check for score filter configuration setting */
 {
 char optionScoreStr[256];
 
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tableName);
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", trackName);
 return cartUsualInt(cart, optionScoreStr, 0);
 }
 
@@ -2770,7 +2774,7 @@ void ctLoadSimpleBed(struct track *tg)
 {
 struct customTrack *ct = tg->customPt;
 struct bed *bed, *nextBed, *list = NULL;
-int scoreFilter = getScoreFilter(ct->tdb->tableName);
+int scoreFilter = getScoreFilter(ct->tdb->track);
 
 if (ct->dbTrack)
     {
@@ -2817,7 +2821,7 @@ struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 boolean useItemRgb = FALSE;
-int scoreFilter = getScoreFilter(ct->tdb->tableName);
+int scoreFilter = getScoreFilter(ct->tdb->track);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
@@ -2878,7 +2882,7 @@ void ctLoadBed8(struct track *tg)
 struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
-int scoreFilter = getScoreFilter(ct->tdb->tableName);
+int scoreFilter = getScoreFilter(ct->tdb->track);
 
 if (ct->dbTrack)
     {
@@ -2928,7 +2932,7 @@ struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 boolean useItemRgb = FALSE;
-int scoreFilter = getScoreFilter(ct->tdb->tableName);
+int scoreFilter = getScoreFilter(ct->tdb->track);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
@@ -3300,13 +3304,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    boolean toAll = sameWord(s, "all");
 		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
 			{
-			if (toAll || sameString(s, tg->mapName))
+			if (toAll || sameString(s, tg->track))
 			    {
 			    if (hTvFromString(command) == tg->tdb->visibility)
 				/* remove if setting to default vis */
-				cartRemove(cart, tg->mapName);
+				cartRemove(cart, tg->track);
 			    else
-				cartSetString(cart, tg->mapName, command);
+				cartSetString(cart, tg->track, command);
 			    /* hide or show supertrack enclosing this track */
 			    if (tdbIsSuperTrackChild(tg->tdb))
 				{
@@ -3792,7 +3796,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
         else
             {
             /* get group */
-            safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
+            safef(cartVar, sizeof(cartVar), "%s.group",track->track);
             groupName = cloneString(                                              //1
                     cartUsualString(cart, cartVar, track->defaultGroupName));
             }
@@ -3803,7 +3807,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
             cartRemove(cart, cartVar);
 
         /* get priority */
-        safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
+        safef(cartVar, sizeof(cartVar), "%s.priority",track->track);
         float priority = (float)cartUsualDouble(cart, cartVar,
                                                     track->defaultPriority);
         /* remove cart variables that are the same as the trackDb settings */
@@ -3875,7 +3879,7 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
     if (tdbIsSuperTrackChild(track->tdb))
         {
         assert(track->tdb->parentName != NULL);
-        if (hTvFromString(cartUsualString(cart, track->mapName,
+        if (hTvFromString(cartUsualString(cart, track->track,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
         if (hashLookup(superHash, track->tdb->parentName))
@@ -3943,7 +3947,7 @@ void limitSuperTrackVis(struct track *track)
 if(tdbIsSuperTrackChild(track->tdb))
     {
     assert(track->tdb->parent != NULL);
-    if (sameString("hide", cartUsualString(cart, track->tdb->parent->tableName,
+    if (sameString("hide", cartUsualString(cart, track->tdb->parent->track,
                                     track->tdb->parent->isShow ? "show" : "hide")))
         track->visibility = tvHide;
     }
@@ -3978,13 +3982,13 @@ if (cgiOptionalString( "hideTracks"))
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    char *s = cartOptionalString(cart, track->mapName);
+    char *s = cartOptionalString(cart, track->track);
     if (cgiOptionalString("hideTracks"))
 	{
-	s = cgiOptionalString(track->mapName);
+	s = cgiOptionalString(track->track);
 	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
 	    {
-	    cartSetString(cart, track->mapName, s);
+	    cartSetString(cart, track->track, s);
 	    }
 	}
     if (s != NULL)
@@ -3994,7 +3998,7 @@ for (track = trackList; track != NULL; track = track->next)
 	struct trackDb *parent = track->tdb->parent;
 	char *parentShow = NULL;
 	if (parent)
-	    parentShow = cartUsualString(cart, parent->tableName,
+	    parentShow = cartUsualString(cart, parent->track,
 			 parent->isShow ? "show" : "hide");
 	if (!parent || sameString(parentShow, "show"))
 	    compositeTrackVis(track);
@@ -4093,9 +4097,9 @@ if (measureTiming)
     uglyTime("Done with trackForm");
 for (track = trackList; track != NULL; track = track->next)
     {
-    char *cartVis = cartOptionalString(cart, track->mapName);
+    char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
-    cartRemove(cart, track->mapName);
+    cartRemove(cart, track->track);
     }
 if (measureTiming)
     {
@@ -4178,9 +4182,9 @@ static void trackJson(struct dyString *trackDbJson, struct track *track, int cou
 // add entry for given track to the trackDbJson string
 if(count)
     dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->mapName);
+dyStringPrintf(trackDbJson, "\t%s: {", track->track);
 if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->tableName);
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
@@ -4197,7 +4201,7 @@ struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (startsWithWord("makeItems", track->tdb->type) )
-        hPrintf("setUpMakeItemsDrag(\"%s\");\n", track->mapName);
+        hPrintf("setUpMakeItemsDrag(\"%s\");\n", track->track);
     }
 
 hPrintf( "}\n");
@@ -4771,7 +4775,7 @@ if (!hideControls)
 		myControlGridStartCell(cg, isOpen, group->name);
 		if (track->hasUi)
 		    {
-		    char *url = trackUrl(track->mapName, chromName);
+		    char *url = trackUrl(track->track, chromName);
 		    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
 		    if(trackDbSetting(track->tdb, "wgEncode") != NULL)
 			hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
@@ -4794,7 +4798,7 @@ if (!hideControls)
 		    else
 			{
 			/* check for option of limiting visibility to one mode */
-			hTvDropDownClassVisOnly(track->mapName, track->visibility,
+			hTvDropDownClassVisOnly(track->track, track->visibility,
 				    track->canPack, (track->visibility == tvHide) ?
 				    "hiddenText" : "normalText",
 				    trackDbSetting(track->tdb, "onlyVisibility"));

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaTbl.h"
 
-static char const rcsid[] = "$Id: metaTbl.c,v 1.12 2010/04/13 16:05:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: metaTbl.c,v 1.13 2010/05/11 01:43:30 kent Exp $";
 
 void metaTblStaticLoad(char **row, struct metaTbl *ret)
 /* Load a row from metaTbl table into ret.  The contents of ret will
@@ -1771,7 +1771,7 @@ if(setting == NULL)
     return NULL;
 struct metaObj *metaObj;
 AllocVar(metaObj);
-metaObj->obj     = cloneString(tdb->tableName);
+metaObj->obj     = cloneString(tdb->table);
 metaObj->objType = otTable;
 return metaObjAddVarPairs(metaObj,setting);
 }
@@ -1797,8 +1797,8 @@ if(tdb != NULL)
 
 struct sqlConnection *conn = sqlConnect(db);
 char *metaTbl = metaTblName(conn,TRUE);  // Look for sandbox name first
-if(tdb != NULL && tdb->tableName != NULL)
-    table = tdb->tableName;
+if(tdb != NULL && tdb->table != NULL)
+    table = tdb->table;
 if(metaTbl != NULL)
     metaObj = metaObjQueryByObj(conn,metaTbl,table,NULL);
 sqlDisconnect(&conn);

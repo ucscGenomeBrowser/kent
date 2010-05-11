@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customTrackTester.c,v 1.4 2008/09/03 19:19:28 markd Exp $";
+static char const rcsid[] = "$Id: customTrackTester.c,v 1.5 2010/05/11 01:43:30 kent Exp $";
 
 void usage()
 /* explain usage and exit */
@@ -71,14 +71,14 @@ struct customTrack *expCts = customFactoryParse(db, expectedFile, TRUE, NULL);
 verbose(3, "found %d tracks in output file %s, %d tracks in expected file %s\n",
                 slCount(newCts), outFile, slCount(expCts), expectedFile);
 for (ct = expCts; ct != NULL; ct = ct->next)
-    hashAdd(expHash, ct->tdb->tableName, ct);
+    hashAdd(expHash, ct->tdb->track, ct);
 for (ct = newCts; ct != NULL; ct = ct->next)
     {
-    if ((expCt = hashFindVal(expHash, ct->tdb->tableName)) == NULL)
-        errAbort("ct %s not found in expected", ct->tdb->tableName);
-    verbose(3, "output settings: %s %s\n%s\n", ct->tdb->tableName, 
+    if ((expCt = hashFindVal(expHash, ct->tdb->track)) == NULL)
+        errAbort("ct %s not found in expected", ct->tdb->track);
+    verbose(3, "output settings: %s %s\n%s\n", ct->tdb->track, 
                                 ct->tdb->shortLabel, ct->tdb->settings);
-    verbose(3, "expected settings: %s %s\n%s\n", expCt->tdb->tableName,
+    verbose(3, "expected settings: %s %s\n%s\n", expCt->tdb->track,
                                 expCt->tdb->shortLabel, expCt->tdb->settings);
     struct hash *newSettings = trackDbHashSettings(ct->tdb);
     struct hash *expSettings = trackDbHashSettings(expCt->tdb);
@@ -94,10 +94,10 @@ for (ct = newCts; ct != NULL; ct = ct->next)
         char *newVal = NULL;
         if ((newVal = (char *)hashFindVal(newSettings, setting)) == NULL)
             errAbort("ct %s setting %s not found in new", 
-                        ct->tdb->tableName, setting);
+                        ct->tdb->track, setting);
         if (differentString(newVal, expVal))
             errAbort("ct %s setting %s differs from expected: %s should be %s",
-                        ct->tdb->tableName, setting, newVal, expVal);
+                        ct->tdb->track, setting, newVal, expVal);
         }
     }
 }

@@ -11,7 +11,7 @@
 #include "customTrack.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.33 2010/01/04 19:12:27 kent Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.34 2010/05/11 01:43:29 kent Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -31,12 +31,12 @@ struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 int operations = wigFetchStats;	/*	default operation */
 
-if (startsWith("ct_", tdb->tableName))
+if (startsWith("ct_", tdb->table))
     {
-    ct = lookupCt(tdb->tableName);
+    ct = lookupCt(tdb->table);
     if (!ct)
         {
-        warn("<P>wiggleClick: can not find custom wiggle track '%s'</P>", tdb->tableName);
+        warn("<P>wiggleClick: can not find custom wiggle track '%s'</P>", tdb->table);
         return;
         }
     if (! ct->wiggle)
@@ -58,7 +58,7 @@ if (startsWith("ct_", tdb->tableName))
     }
 else
     {
-    hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
     /*span = spanInUse(conn, table, chrom, winStart, winEnd, cart);*/
     span = minSpan(conn, table, chrom, winStart, winEnd, cart, tdb);
     }
@@ -227,7 +227,7 @@ printf("<B>Total Bases in view: </B> %s <BR>\n", num1Buf);
 
 if (bbList != NULL)
     {
-    bbiIntervalStatsReport(bbList, tdb->tableName, chrom, winStart, winEnd);
+    bbiIntervalStatsReport(bbList, tdb->table, chrom, winStart, winEnd);
     }
 else
     {
@@ -244,10 +244,10 @@ void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb,
 /* Display details for BigWig built in tracks. */
 {
 char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
+safef(query, sizeof(query), "select fileName from %s", tdb->table);
 char *fileName = sqlQuickString(conn, query);
 if (fileName == NULL)
-    errAbort("Missing fileName in %s table", tdb->tableName);
+    errAbort("Missing fileName in %s table", tdb->table);
 bigWigClick(tdb, fileName);
 }
 

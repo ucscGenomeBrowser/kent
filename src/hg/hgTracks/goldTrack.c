@@ -121,7 +121,7 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
 	    frag->strand,
 	    frag->chrom, frag->chromStart, frag->chromEnd);
 
-	mapBoxHc(hvg, frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->mapName, 
+	mapBoxHc(hvg, frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->track, 
 	    frag->frag, status);
 	}
     ++ix;

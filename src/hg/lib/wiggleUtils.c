@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.55 2009/09/03 23:12:10 braney Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.56 2010/05/11 01:43:30 kent Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -363,7 +363,7 @@ if (sameWord("NONE",tdbDefault))
 else if( sameWord("first",tdbDefault))
     {
     char query[1024];
-    snprintf(query, sizeof(query), "SELECT span FROM %s limit 1", tdb->tableName );
+    snprintf(query, sizeof(query), "SELECT span FROM %s limit 1", tdb->table );
     char *tmpSpan = sqlQuickString(conn, query);
     AllocArray(ret,2);
     ret[0] = sqlUnsigned(tmpSpan);

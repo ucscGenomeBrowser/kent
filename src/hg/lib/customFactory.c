@@ -35,7 +35,7 @@
 #endif//def USE_BAM
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.123 2010/04/21 19:25:40 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.124 2010/05/11 01:43:29 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -223,7 +223,7 @@ struct dyString *errDy = newDyString(0);
 struct lineFile *lf;
 char *line;
 int i;
-dyStringPrintf(errDy, "track load error (track name='%s'):<BR>\n", track->tdb->tableName);
+dyStringPrintf(errDy, "track load error (track name='%s'):<BR>\n", track->tdb->track);
 lf = lineFileOpen(track->dbStderrFile, TRUE);
 i = 0;
 while( (i < 3) && lineFileNext(lf, &line, NULL))
@@ -1816,6 +1816,14 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 *retB = atoi(row[2]);
 }
 
+static void stripJavascript(char **pString)
+/* Replace *pString (which is dynamically allocated) with javascript free version of itself. */
+{
+char *tmp = *pString;
+*pString = jsStripJavascript(tmp);
+freeMem(tmp);
+}
+
 static void customTrackUpdateFromSettings(struct customTrack *track, 
                                           char *genomeDb,
 					  char *line, int lineIx)
@@ -1845,7 +1853,8 @@ if ((val = hashFindVal(hash, "name")) != NULL)
         tdb->shortLabel = cloneString("My Track");
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
-    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    tdb->table = customTrackTableFromLabel(tdb->shortLabel);
+    tdb->track = cloneString(tdb->table);
     /* also use name for description, if not specified */
     tdb->longLabel = cloneString(tdb->shortLabel);
     }
@@ -1983,15 +1992,10 @@ if ((line != NULL) && !strstr(line, "tdbType"))
         dyStringPrintf(ds, "track %s", line);
     ctAddToSettings(track, "origTrackLine", dyStringCannibalize(&ds));
     }
-char *tmp = tdb->tableName;
-tdb->tableName = jsStripJavascript(tmp);
-freeMem(tmp);
-tmp = tdb->shortLabel;
-tdb->shortLabel = jsStripJavascript(tmp);
-freeMem(tmp);
-tmp = tdb->longLabel;
-tdb->longLabel = jsStripJavascript(tmp);
-freeMem(tmp);
+stripJavascript(&tdb->track);
+stripJavascript(&tdb->table);
+stripJavascript(&tdb->shortLabel);
+stripJavascript(&tdb->longLabel);
 }
 
 char *browserLinesToSetting(struct slName *browserLines)

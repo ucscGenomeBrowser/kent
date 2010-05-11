@@ -92,7 +92,7 @@ if (isFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL,
+    sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
 		     &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -124,7 +124,7 @@ if (isFull)
 		sprintf(statusLine, "Repeat %s, family %s",
 		    ro.repName, ro.repFamily);
 		}
-	    mapBoxHc(hvg, ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
+	    mapBoxHc(hvg, ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->track,
 	    	ro.repName, statusLine);
 	    }
 	}
@@ -136,7 +136,7 @@ else
     boolean hasBin;
     struct dyString *query = newDyString(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(database, chromName, tg->mapName, table, &hasBin))
+    if (hFindSplitTable(database, chromName, tg->table, table, &hasBin))
         {
 	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)

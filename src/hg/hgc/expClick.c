@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.24 2010/01/22 22:52:04 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.25 2010/05/11 01:43:28 kent Exp $";
 
 /* global flag to indicate if the track is a cancer genomics track */
 boolean isCancerGenomicsTrack = FALSE;
@@ -425,7 +425,7 @@ char *tdbSetting = trackDbSettingOrDefault(tdb, "expColor", "redGreen");
 char *colorVal = NULL;
 enum expColorType colorScheme;
 char colorVarName[256];
-safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
+safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->track);
 colorVal = cartUsualString(cart, colorVarName, tdbSetting);
 colorScheme = getExpColorType(colorVal);
 
@@ -438,7 +438,7 @@ if (sameWord(tdb->grp, "cancerGenomics"))
 if (!ct)
     {
     genericHeader(tdb, itemName);
-    bedList = loadMsBed(tdb, tdb->tableName, seqName, winStart, winEnd);
+    bedList = loadMsBed(tdb, tdb->table, seqName, winStart, winEnd);
     }
 else if (ct->dbTrack)
     {
@@ -461,7 +461,7 @@ else
     if (!ct)
 	{
 	groupings = maGetTrackGroupings(database, tdb);
-	combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->tableName);
+	combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->track);
 	}
     else
 	combineGroup = maGetGroupingFromCt(ct);

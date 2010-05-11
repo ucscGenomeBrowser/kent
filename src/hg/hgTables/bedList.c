@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.73 2010/04/22 19:25:22 bristor Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.74 2010/05/11 01:43:24 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -715,7 +715,7 @@ else if (doCt)
     int wigDataSize = 0;
     /* Load existing custom tracks and add this new one: */
     struct customTrack *ctList = getCustomTracks();
-    removeNamedCustom(&ctList, ctNew->tdb->tableName);
+    removeNamedCustom(&ctList, ctNew->tdb->table);
     if (doDataPoints)
         {
         if (needSubtrackMerge || isBedGr || isBgWg)

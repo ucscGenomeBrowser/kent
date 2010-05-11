@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.149 2010/04/22 19:25:22 bristor Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.150 2010/05/11 01:43:25 kent Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -197,7 +197,7 @@ else
 	{
 	if (allTracks || sameString(selGroup->name, track->grp))
 	    {
-	    hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->tableName,
+	    hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->table,
 		(track == selTrack ? " SELECTED" : ""),
 		track->shortLabel);
 	    }
@@ -615,7 +615,7 @@ hPrintf("<TABLE BORDER=0>\n");
     struct trackDb *t;
     for (t = fullTrackList;  t != NULL;  t = t->next)
         {
-        if (isCustomTrack(t->tableName))
+        if (isCustomTrack(t->table))
             {
             hasCustomTracks = TRUE;
             break;
@@ -808,7 +808,7 @@ if (correlateTrackTableOK(tdb, curTable))
 	    for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
                 {
 		struct trackDb *subTdb = tdbRef->val;
-                if (sameString(table2, subTdb->tableName))
+                if (sameString(table2, subTdb->table))
                     {
                     tdb2 = subTdb;
                     break;

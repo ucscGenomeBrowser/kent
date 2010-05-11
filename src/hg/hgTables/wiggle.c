@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.77 2010/04/22 19:25:22 bristor Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.78 2010/05/11 01:43:25 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -404,11 +404,11 @@ struct slRef *tdbRef;
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *sTdb = tdbRef->val;
-    if (isSubtrackMerged(sTdb->tableName) &&
-	! sameString(tdb1->tableName, sTdb->tableName) &&
+    if (isSubtrackMerged(sTdb->table) &&
+	! sameString(tdb1->table, sTdb->table) &&
 	hSameTrackDbType(tdb1->type, sTdb->type))
 	{
-	struct trackTable *tt2 = trackTableNew(sTdb, sTdb->tableName, conn);
+	struct trackTable *tt2 = trackTableNew(sTdb, sTdb->table, conn);
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
 	numSubtracks++;
@@ -646,14 +646,14 @@ else
 
 if (track != NULL)
     {
-    if (!sameString(track->tableName, table) && track->subtracks != NULL)
+    if (!sameString(track->table, table) && track->subtracks != NULL)
 	{
 	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
 	struct slRef *tdbRef;
 	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	    {
 	    struct trackDb *tdb = tdbRef->val;
-	    if (sameString(tdb->tableName, table))
+	    if (sameString(tdb->table, table))
 		{
 		track = tdb;
 		break;

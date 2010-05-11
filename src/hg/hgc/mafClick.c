@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.60 2009/01/06 00:22:10 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.61 2010/05/11 01:43:29 kent Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -449,14 +449,14 @@ static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn,
 if (axtOtherDb != NULL)
     {
     struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
-    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->tableName,
+    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->table,
     	chrom, start, end,
 	database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
 else
-    return mafLoadInRegion2(conn, conn2, tdb->tableName, chrom, 
+    return mafLoadInRegion2(conn, conn2, tdb->table, chrom, 
 	start, end, file);
 }
 
@@ -469,14 +469,14 @@ static struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn,
 if (axtOtherDb != NULL)
     {
     struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
-    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->tableName,
+    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->table,
     	chrom, start, end,
         database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
 else
-    return mafLoadInRegion(conn, tdb->tableName, chrom, start, end);
+    return mafLoadInRegion(conn, tdb->table, chrom, start, end);
 }
 
 #ifdef ADDEXONCAPITAL
@@ -499,7 +499,7 @@ char *chrom = cartCgiUsualString(cart, "c", "chr7");
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%d&db=%s"
         "&parentWigMaf=%s\" TARGET=\"_blank\">%s</A>",
 hgcPathAndSettings(), table, table, chrom, 
-winStart, winEnd, winStart, database, tdb->tableName, label);
+winStart, winEnd, winStart, database, tdb->track, label);
 }
 
 static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)
@@ -525,12 +525,12 @@ else
     int useTarg = FALSE;
     int useIrowChains = FALSE;
 
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
+    safef(option, sizeof(option), "%s.%s", tdb->track, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) && 
 	trackDbSetting(tdb, "irows") != NULL)
 	    useIrowChains = TRUE;
 
-    safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
+    safef(buffer, sizeof(buffer), "%s.vis",tdb->track);
     if (useIrowChains)
 	{
 	if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
@@ -548,7 +548,7 @@ else
     	axtOtherDb, fileName);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     
-    safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
+    safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
     speciesOrder = cartUsualString(cart, option, NULL);
     if (speciesOrder == NULL)
 	speciesOrder = trackDbSetting(tdb, "speciesOrder");
@@ -576,7 +576,7 @@ else
                 if (!organism)
                     organism = buf;
 		nextMc = mc->next;
-		safef(option, sizeof(option), "%s.%s", tdb->tableName, buf);
+		safef(option, sizeof(option), "%s.%s", tdb->track, buf);
 		if (!cartUsualBoolean(cart, option, TRUE))
 		    {
 		    if (speciesOffHash == NULL)
@@ -705,7 +705,7 @@ else
         puts("</P>\n");
 
         /* no alignment to display when in visibilities where only wiggle is shown */
-        char *vis = cartOptionalString(cart, tdb->tableName);
+        char *vis = cartOptionalString(cart, tdb->track);
         if (vis)
             {
             enum trackVisibility tv = hTvFromStringNoAbort(vis);
@@ -1082,12 +1082,12 @@ else
     int mafOrig;
     char query[256];
     
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
+    safef(option, sizeof(option), "%s.%s", tdb->track, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) && 
 	trackDbSetting(tdb, "irows") != NULL)
 	    useIrowChains = TRUE;
 
-    safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
+    safef(buffer, sizeof(buffer), "%s.vis",tdb->track);
     if (useIrowChains)
 	{
 	if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
@@ -1105,12 +1105,12 @@ else
     	axtOtherDb);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     
-    safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
+    safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
     speciesOrder = cartUsualString(cart, option, NULL);
     if (speciesOrder == NULL)
 	speciesOrder = trackDbSetting(tdb, "speciesOrder");
 
-    safef(query, sizeof(query), "select chromStart from %s", tdb->tableName);
+    safef(query, sizeof(query), "select chromStart from %s", tdb->table);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
 
     for (maf = mafList; maf != NULL; maf = maf->next)
@@ -1136,7 +1136,7 @@ else
                 if (!organism)
                     organism = buf;
 		nextMc = mc->next;
-		safef(option, sizeof(option), "%s.%s", tdb->tableName, buf);
+		safef(option, sizeof(option), "%s.%s", tdb->track, buf);
 		if (!cartUsualBoolean(cart, option, TRUE))
 		    {
 		    if (speciesOffHash == NULL)

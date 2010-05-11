@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1619 2010/05/04 00:03:28 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1620 2010/05/11 01:43:28 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -833,7 +833,7 @@ if (url != NULL && url[0] != 0)
 	ins[0] = "$$";
 	outs[0] = idInUrl;
 	ins[1] = "$T";
-	outs[1] = tdb->tableName;
+	outs[1] = tdb->track;
 	ins[2] = "$S";
 	outs[2] = seqName;
 	ins[3] = "$[";
@@ -872,7 +872,7 @@ if (url != NULL && url[0] != 0)
                trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:"));
         printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
 
-	if (sameWord(tdb->tableName, "npredGene"))
+	if (sameWord(tdb->table, "npredGene"))
 	    {
 	    printf("%s (%s)</A><BR>\n", idInUrl, "NCBI MapView");
 	    }
@@ -918,7 +918,7 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 
@@ -987,7 +987,7 @@ if (filterTable)
     }
 else
     {
-    hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
     safef(query, sizeof(query),
           "select * from %s where chrom = '%s' and chromEnd > %d and "
           "chromStart < %d order by score desc",
@@ -1088,7 +1088,7 @@ for(ix=0;ix<cnt;ix++)
     *title = '\0';
     title++;
     if((table = strchr(words[ix],'.')) == NULL)
-        table = tdb->tableName;
+        table = tdb->table;
     else
         {
         *table++ = '\0';  // assigns before advance
@@ -1114,7 +1114,7 @@ for(ix=0;ix<cnt;ix++)
         printf("<P>The item \"%s\" has been located in other genomes:\n<UL>\n",name);
         }
     printf("<LI>");
-    safef(extra,sizeof(extra),"%s=full",tdb->tableName);
+    safef(extra,sizeof(extra),"%s=full",tdb->track);
     linkToOtherBrowserExtra(db, chrom, beg, end, extra);
     printf("%s</A></LI>\n",strSwapChar(title,'_',' '));
     sqlFreeResult(&sr);
@@ -1148,7 +1148,7 @@ struct sqlConnection *sc;
 struct atom ret;
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 #if 0
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escapedName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -1299,12 +1299,12 @@ char **row;
 boolean firstTime = TRUE;
 char *escapedName = sqlEscapeString(item);
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
     {
-    struct hTableInfo *hti = hFindTableInfoWithConn(conn, seqName, tdb->tableName);
+    struct hTableInfo *hti = hFindTableInfoWithConn(conn, seqName, tdb->table);
     if (hti && *hti->nameField && differentString("name", hti->nameField))
 	sprintf(query, "select * from %s where %s = '%s' and chrom = '%s' and chromStart = %d",
 	    table, hti->nameField, escapedName, seqName, start);
@@ -1453,7 +1453,7 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
@@ -2175,7 +2175,7 @@ switch (cdsStatus)
 void showGenePos(char *name, struct trackDb *tdb)
 /* Show gene prediction position and other info. */
 {
-char *track = tdb->tableName;
+char *rootTable = tdb->table;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct genePred *gpList = NULL, *gp = NULL;
@@ -2185,7 +2185,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
-hFindSplitTable(database, seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -2254,7 +2254,7 @@ void showGenePosMouse(char *name, struct trackDb *tdb,
 /* Show gene prediction position and other info. */
 {
 char query[512];
-char *track = tdb->tableName;
+char *rootTable = tdb->table;
 struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
@@ -2262,7 +2262,7 @@ boolean hasBin;
 int posCount = 0;
 char table[64] ;
 
-hFindSplitTable(database, seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'", table, name);
 sr = sqlGetResult(connMm, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2283,7 +2283,7 @@ void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
 /* Show parts of gene common to everything. If pepTable is not null,
  * it's the old table name, but will check gbSeq first. */
 {
-char *geneTable = tdb->tableName;
+char *geneTable = tdb->table;
 boolean foundPep = FALSE;
 
 showGenePos(geneName, tdb);
@@ -2366,7 +2366,7 @@ if (!foundPep)
 
 puts("<LI>\n");
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-/* ugly hack to put out a correct message describing the mRNA */
+/* hack to put out a correct message describing the mRNA */
 if (sameString(mrnaClick, "htcGeneMrna"))
     printf("%s</A> from genomic sequences\n", mrnaDescription);
 else
@@ -2386,7 +2386,7 @@ void geneShowPosAndLinksDNARefseq(char *geneName, char *pepName, struct trackDb 
 				  char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of a DNA based RefSeq gene */
 {
-char *geneTable = tdb->tableName;
+char *geneTable = tdb->table;
 
 showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
@@ -2404,7 +2404,7 @@ void geneShowPosAndLinksMouse(char *geneName, char *pepName,
 			      char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of gene common to everything */
 {
-char *geneTable = tdb->tableName;
+char *geneTrack = tdb->track;
 
 showGenePosMouse(geneName, tdb, connMm);
 printf("<H3>Links to sequence:</H3>\n");
@@ -2414,9 +2414,9 @@ if (pepTable != NULL && hTableExists(database, pepTable))
     hgcAnchorSomewhereDb(pepClick, pepName, pepTable, seqName, mousedb);
     printf("<LI>Translated Protein</A> \n");
     }
-hgcAnchorSomewhereDb(mrnaClick, geneName, geneTable, seqName, mousedb);
+hgcAnchorSomewhereDb(mrnaClick, geneName, geneTrack, seqName, mousedb);
 printf("<LI>%s</A>\n", mrnaDescription);
-hgcAnchorSomewhereDb(genomicClick, geneName, geneTable, seqName, mousedb);
+hgcAnchorSomewhereDb(genomicClick, geneName, geneTrack, seqName, mousedb);
 printf("<LI>Genomic Sequence</A> DNA sequence from assembly\n");
 printf("</UL>\n");
 }
@@ -2488,7 +2488,7 @@ void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, char *subType)
 /* Handle click in generic psl track. */
 {
-struct psl* pslList = getAlignments(conn, tdb->tableName, item);
+struct psl* pslList = getAlignments(conn, tdb->table, item);
 
 /* check if there is an alignment available for this sequence.  This checks
  * both genbank sequences and other sequences in the seq table.  If so,
@@ -2497,9 +2497,9 @@ if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
     if (sameString("protein", subType))
-        printAlignments(pslList, start, "htcProteinAli", tdb->tableName, item);
+        printAlignments(pslList, start, "htcProteinAli", tdb->track, item);
     else
-        printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
+        printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
     }
 else
     {
@@ -2510,24 +2510,32 @@ pslFreeList(&pslList);
 }
 
 
-static char *getParentTrackName(struct trackDb *tdb)
-/* Get the track table name or composite track parent name if applicable. */
+static char *getParentTableName(struct trackDb *tdb)
+/* Get the track table or composite track parent table if applicable. */
 {
 tdb = trackDbTopLevelSelfOrParent(tdb);
-return tdb->tableName;
+return tdb->table;
 }
+
+static char *getParentTrackName(struct trackDb *tdb)
+/* Get the track name or composite track parent name if applicable. */
+{
+tdb = trackDbTopLevelSelfOrParent(tdb);
+return tdb->track;
+}
+
 
 void printTBSchemaLink(struct trackDb *tdb)
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 {
-if (hTableOrSplitExists(database, tdb->tableName))
+if (hTableOrSplitExists(database, tdb->table))
     {
-    char *trackTable = getParentTrackName(tdb);
+    char *trackTable = getParentTableName(tdb);
     printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&position=%s:%d-%d&"
 	   "hgta_doSchema=describe+table+schema\" target=ucscSchema title='Open schema in new window'>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, trackTable, tdb->tableName,
+	   database, tdb->grp, trackTable, tdb->table,
 	   seqName, winStart+1, winEnd);
     }
 }
@@ -2535,19 +2543,19 @@ if (hTableOrSplitExists(database, tdb->tableName))
 void printTrackUiLink(struct trackDb *tdb)
 /* Make link to hgTrackUi. */
 {
-char *trackTable = getParentTrackName(tdb);
+char *trackName = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
-if (!sameString(trackTable, tdb->tableName))
-    parentTdb = hTrackDbForTrack(database, trackTable);
+if (!sameString(trackName, tdb->track))
+    parentTdb = hTrackDbForTrack(database, trackName);
 printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        "Go to %s track controls</A></P>\n",
-       trackTable, cartSidUrlString(cart), parentTdb->shortLabel);
+       trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
 void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
-(void)metadataForTable(database,tdb,NULL);
+metadataForTable(database,tdb,NULL);
 const char *version = metadataFindValue(tdb,"dataVersion");
 if(version != NULL)
     printf("<B>Data version:</B> %s <BR>\n", version);
@@ -2597,13 +2605,13 @@ void printTrackHtml(struct trackDb *tdb)
 {
 char *tableName;
 
-if (!isCustomTrack(tdb->tableName))
+if (!isCustomTrack(tdb->track))
     {
     extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
-    if ((tableName = hTableForTrack(database, tdb->tableName)) != NULL)
+    if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
 	{
 	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 
@@ -2722,7 +2730,6 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 		       char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
-char *track = tdb->tableName;
 char *thisOrg = hOrganism(database);
 char *otherOrg = NULL;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
@@ -2741,7 +2748,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, atoi(item));
+chain = chainLoadIdRange(database, tdb->table, seqName, winStart, winEnd, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 
 if (subChain == NULL)
@@ -2828,7 +2835,7 @@ if (normScoreAvailable)
     {
     boolean hasBin;
     char tableName[HDB_MAX_TABLE_STRING];
-    hFindSplitTable(database, chain->tName, track, tableName, &hasBin);
+    hFindSplitTable(database, chain->tName, tdb->table, tableName, &hasBin);
     char query[256];
     struct sqlResult *sr;
     char **row;
@@ -2854,7 +2861,7 @@ if (sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
     {
     if (chainWinSize < 1000000)
         {
-        hgcAnchorSomewhere("htcChainAli", item, track, chain->tName);
+        hgcAnchorSomewhere("htcChainAli", item, tdb->track, chain->tName);
         printf("View details of parts of chain within browser "
            "window</A>.<BR>\n");
         }
@@ -2969,7 +2976,7 @@ if (otherOrg == NULL)
     /* use first word in short track label */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
-hFindSplitTable(database, seqName, tdb->tableName, table, &rowOffset);
+hFindSplitTable(database, seqName, tdb->table, table, &rowOffset);
 snprintf(query, sizeof(query),
 	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
 	 "and level = %s",
@@ -3100,7 +3107,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3211,7 +3218,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3324,7 +3331,7 @@ wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
 /* printCustomUrl(tdb, itemForUrl, item == itemForUrl); */
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3361,7 +3368,7 @@ boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 int bedSize = 5;
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
@@ -3404,7 +3411,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, item);
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
@@ -3434,7 +3441,7 @@ struct sqlResult *sr;
 char query[256];
 char **row;
 genericHeader(tdb, item);
-safef(query, sizeof(query), "select chrom,chromStart,chromEnd,name,score,strand from %s where name='%s'", tdb->tableName, item);
+safef(query, sizeof(query), "select chrom,chromStart,chromEnd,name,score,strand from %s where name='%s'", tdb->table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3619,11 +3626,11 @@ if (imagePath)
     char *bothWords[2];
     int shouldBeTwo = chopLine(imagePath, bothWords);
     if (shouldBeTwo != 2)
-	errAbort("itemImagePath setting for %s track incorrect. Needs to be \"itemImagePath <path> <suffix>\".", tdb->tableName);
+	errAbort("itemImagePath setting for %s track incorrect. Needs to be \"itemImagePath <path> <suffix>\".", tdb->track);
     printf("<BR><IMG SRC=\"%s/%s.%s\"><BR><BR>\n", bothWords[0], item, bothWords[1]);
     shouldBeTwo = chopLine(bigImagePath, bothWords);
     if (shouldBeTwo != 2)
-	errAbort("bigItemImagePath setting for %s track incorrect. Needs to be \"itemImagePath <path> <suffix>\".", tdb->tableName);
+	errAbort("bigItemImagePath setting for %s track incorrect. Needs to be \"itemImagePath <path> <suffix>\".", tdb->track);
     printf("<A HREF=\"%s/%s.%s\">Download Original Image</A><BR>\n", bothWords[0], item, bothWords[1]);
     }
 
@@ -3778,7 +3785,8 @@ struct trackDb *tdbList = NULL, *tdb;
 for (ct=ctList;  ct != NULL;  ct=ct->next)
     {
     AllocVar(tdb);
-    tdb->tableName = ct->tdb->tableName;
+    tdb->track = ct->tdb->track;
+    tdb->table = ct->tdb->table;
     tdb->shortLabel = ct->tdb->shortLabel;
     tdb->type = ct->tdb->type;
     tdb->longLabel = ct->tdb->longLabel;
@@ -3810,7 +3818,7 @@ struct customTrack *lookupCt(char *name)
 struct customTrack *ct;
 
 for (ct=getCtList();  ct != NULL;  ct=ct->next)
-    if (sameString(name, ct->tdb->tableName))
+    if (sameString(name, ct->tdb->track))
 	return(ct);
 
 return(NULL);
@@ -3868,7 +3876,8 @@ else
     {
     struct trackDb *tdb;
     AllocVar(tdb);
-    tdb->tableName = cloneString(USER_PSL_TRACK_NAME);
+    tdb->track = cloneString(USER_PSL_TRACK_NAME);
+    tdb->table = cloneString(USER_PSL_TRACK_NAME);
     tdb->shortLabel = cloneString(USER_PSL_TRACK_LABEL);
     tdb->type = cloneString("psl");
     tdb->longLabel = cloneString(USER_PSL_TRACK_LONGLABEL);
@@ -3932,7 +3941,7 @@ if (maskRep)
     char *visString = cartOptionalString(cart, "rmsk");
     for (rtdb = tdbList;  rtdb != NULL;  rtdb=rtdb->next)
 	{
-	if (startsWith(rtdb->tableName, "rmsk"))
+	if (startsWith(rtdb->table, "rmsk"))
 	    break;
 	}
     printf("<P> <B>Note:</B> repeat masking style from previous page will <B>not</B> apply to this page.\n");
@@ -3975,10 +3984,11 @@ printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    char *track = tdb->tableName;
-    if (sameString(USER_PSL_TRACK_NAME, track) ||
+    char *table = tdb->table;
+    char *track = tdb->track;
+    if (sameString(USER_PSL_TRACK_NAME, table) ||
 	(lookupCt(track) != NULL) ||
-	(fbUnderstandTrack(database, track) && !dnaIgnoreTrack(track)))
+	(fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
 	{
         char *visString = cartUsualString(cart, track, hStringFromTv(tdb->visibility));
          if (differentString(visString, "hide") && tdb->parent)
@@ -4011,32 +4021,32 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    {
 	    printf("<TR>");
 	    printf("<TD>%s</TD>", tdb->shortLabel);
-	    sprintf(buf, "%s_case", tdb->tableName);
+	    sprintf(buf, "%s_case", tdb->track);
 	    printf("<TD>");
 	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	    printf("</TD>");
-	    sprintf(buf, "%s_u", tdb->tableName);
+	    sprintf(buf, "%s_u", tdb->track);
 	    printf("<TD>");
 	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	    printf("</TD>");
-	    sprintf(buf, "%s_b", tdb->tableName);
+	    sprintf(buf, "%s_b", tdb->track);
 	    printf("<TD>");
 	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	    printf("</TD>");
-	    sprintf(buf, "%s_i", tdb->tableName);
+	    sprintf(buf, "%s_i", tdb->track);
 	    printf("<TD>");
 	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	    printf("</TD>");
 	    printf("<TD>");
-	    sprintf(buf, "%s_red", tdb->tableName);
+	    sprintf(buf, "%s_red", tdb->track);
 	    cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
 	    printf("</TD>");
 	    printf("<TD>");
-	    sprintf(buf, "%s_green", tdb->tableName);
+	    sprintf(buf, "%s_green", tdb->track);
 	    cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
 	    printf("</TD>");
 	    printf("<TD>");
-	    sprintf(buf, "%s_blue", tdb->tableName);
+	    sprintf(buf, "%s_blue", tdb->track);
 	    cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
 	    printf("</TD>");
 	    printf("</TR>\n");
@@ -4285,7 +4295,7 @@ struct hTableInfo *ctToHti(struct customTrack *ct)
 struct hTableInfo *hti;
 
 AllocVar(hti);
-hti->rootName = cloneString(ct->tdb->tableName);
+hti->rootName = cloneString(ct->tdb->table);
 hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
@@ -4524,12 +4534,13 @@ if (defaultUpper)
 AllocArray(colors, winSize);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    char *track = tdb->tableName;
+    char *track = tdb->track;
+    char *table = tdb->table;
     struct featureBits *fbList = NULL, *fb;
     struct customTrack *ct = lookupCt(track);
-    if (sameString(USER_PSL_TRACK_NAME, track) ||
+    if (sameString(USER_PSL_TRACK_NAME, table) ||
 	(ct != NULL) ||
-	(fbUnderstandTrack(database, track) && !dnaIgnoreTrack(track)))
+	(fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
         {
 	char buf[256];
 	int r,g,b;
@@ -4611,7 +4622,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 bedFreeList(&ctBedList);
 	    }
 	else
-	    fbList = fbGetRange(database, track, seqName, winStart, winEnd);
+	    fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
 
 	/* Flip underline/italic/bold bits. */
 	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, fbList);
@@ -5109,7 +5120,7 @@ if (row != NULL)
     if (hGenBankHaveSeq(database, acc, NULL))
         {
         printf("<B>%s sequence:</B> ", type);
-        hgcAnchorSomewhere("htcDisplayMrna", acc, tdb->tableName, seqName);
+        hgcAnchorSomewhere("htcDisplayMrna", acc, tdb->track, seqName);
         printf("%s</A><BR>\n", acc);
         }
     }
@@ -5263,10 +5274,10 @@ return pslList;
 void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
 {
-char *track = tdb->tableName;
+char *track = tdb->track;
+char *table = tdb->table;
 struct sqlConnection *conn = hAllocConn(database);
 char *type;
-char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
@@ -5275,22 +5286,19 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
     type = temp;
-    table = track;
     }
 else if ( sameWord("blatzHg17KG", track)  )
     {
     type = "Human mRNA";
-    table = track;
     }
 else if (stringIn("estFiltered",track))
     {
     type = "EST";
-    table = track;
     }
 else if (stringIn("est", track) || stringIn("Est", track))
     {
     type = "EST";
-    table = "all_est";
+    // 	table = "all_est";	// Should fall out of wash now
     }
 else if (startsWith("psu", track))
     {
@@ -5300,12 +5308,10 @@ else if (startsWith("psu", track))
 else if (sameWord("xenoBlastzMrna", track) )
     {
     type = "Blastz to foreign mRNA";
-    table = "xenoBlastzMrna";
     }
 else if (startsWith("mrnaBlastz",track  ))
     {
     type = "mRNA";
-    table = track;
     }
 else if (startsWith("pseudoMrna",track) || startsWith("pseudoGeneLink",track))
     {
@@ -5315,17 +5321,15 @@ else if (startsWith("pseudoMrna",track) || startsWith("pseudoGeneLink",track))
 else if (startsWith("celeraMrna",track))
     {
     type = "mRNA";
-    table = "celeraMrna";
     }
 else if (startsWith("all_mrnaFiltered",track))
     {
     type = "mRNA";
-    table = track;
     }
 else
     {
     type = "mRNA";
-    table = "all_mrna";
+    // table = "all_mrna";  // should fall out of wash now
     }
 
 /* Print non-sequence info. */
@@ -5346,10 +5350,10 @@ if (pslList == NULL)
     }
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
-if (startsWith("mrnaBlastz",tdb->tableName))
+if (startsWith("mrnaBlastz",tdb->table))
     slSort(&pslList, pslCmpScoreDesc);
 
-printAlignments(pslList, start, "htcCdnaAli", table, acc);
+printAlignments(pslList, start, "htcCdnaAli", track, acc);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -5358,8 +5362,8 @@ hFreeConn(&conn);
 void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, char *subType)
 /* Handles click in affyU95 or affyU133 tracks */
 {
-struct psl* pslList = getAlignments(conn, tdb->tableName, item);
-struct psl* psl;
+struct psl  *pslList = getAlignments(conn, tdb->table, item);
+struct psl *psl;
 char *face = "Times"; /* specifies font face to use */
 char *fsize = "+1"; /* specifies font size */
 
@@ -5369,7 +5373,7 @@ char *fsize = "+1"; /* specifies font size */
 if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
-    printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
+    printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
     }
 else
     {
@@ -5409,7 +5413,7 @@ wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
 /* If this is the affyZebrafish track, check for human ortholog information */
-if (sameString("affyZebrafish", tdb->tableName))
+if (sameString("affyZebrafish", tdb->table))
     {
     if (orthoTable != NULL && hTableExists(database, orthoTable))
         {
@@ -5570,7 +5574,7 @@ genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
-safef(query, sizeof(query), "select tName, tEnd, strand from %s where qName='%s' and tStart=%d;", tdb->tableName, item, start);
+safef(query, sizeof(query), "select tName, tEnd, strand from %s where qName='%s' and tStart=%d;", tdb->table, item, start);
 
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -5856,7 +5860,6 @@ webIncludeHelpFile(USER_PSL_TRACK_NAME, TRUE);
 void doHgGold(struct trackDb *tdb, char *fragName)
 /* Click on a fragment of golden path. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2 = hAllocConn(database);
 struct sqlConnection *conn3 = hAllocConn(database);
@@ -5882,7 +5885,7 @@ char *tmpString;
 int first;
 
 cartWebStart(cart, database, "%s", fragName);
-hFindSplitTable(database, seqName, track, splitTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, splitTable, &hasBin);
 sprintf(query, "select * from %s where frag = '%s' and chromStart = %d",
 	splitTable, fragName, start);
 sr = sqlMustGetResult(conn, query);
@@ -6004,7 +6007,6 @@ printTrackHtml(tdb);
 void doHgGap(struct trackDb *tdb, char *gapType)
 /* Print a teeny bit of info about a gap. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
@@ -6015,8 +6017,8 @@ boolean hasBin;
 char splitTable[64];
 
 cartWebStart(cart, database, "Gap in Sequence");
-hFindSplitTable(database, seqName, track, splitTable, &hasBin);
-if (sameString(track, splitTable))
+hFindSplitTable(database, seqName, tdb->table, splitTable, &hasBin);
+if (sameString(tdb->table, splitTable))
     safef(query, sizeof(query), "select * from %s where chrom = '%s' and "
 	  "chromStart = %d",
 	  splitTable, seqName, start);
@@ -6058,7 +6060,6 @@ if ((row = sqlNextRow(*retSr)) == NULL)
 void doHgContig(struct trackDb *tdb, char *ctgName)
 /* Click on a contig. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2 = hAllocConn(database);
 char query[256], query2[256];
@@ -6080,10 +6081,10 @@ else
 	query, ctgName);
 freeMem(ncbiTerm);
 safef(query, sizeof(query), "select * from %s where contig = '%s'",
-	track, ctgName);
-selectOneRow(conn, track, query, &sr, &row);
+	tdb->table, ctgName);
+selectOneRow(conn, tdb->table, query, &sr, &row);
 
-if (sameString("ctgPos2", track))
+if (sameString("ctgPos2", tdb->table))
     {
     ctg2 = ctgPos2Load(row);
     printf("<B>Type:</B> %s<BR>\n", ctg2->type);
@@ -6145,7 +6146,6 @@ switch (stage[0])
 void doHgCover(struct trackDb *tdb, char *cloneName)
 /* Respond to click on clone. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
@@ -6154,8 +6154,8 @@ struct clonePos *clone;
 int fragCount;
 
 cartWebStart(cart, database, "%s", cloneName);
-sprintf(query, "select * from %s where name = '%s'", track, cloneName);
-selectOneRow(conn, track, query, &sr, &row);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, cloneName);
+selectOneRow(conn, tdb->table, query, &sr, &row);
 clone = clonePosLoad(row);
 sqlFreeResult(&sr);
 
@@ -6195,15 +6195,14 @@ struct bactigPos *bactig;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
-char *track = tdb->tableName;
 char query[256];
 char goldTable[16];
 char ctgStartStr[16];
 int ctgStart;
 
 genericHeader(tdb, bactigName);
-sprintf(query, "select * from %s where name = '%s'", track, bactigName);
-selectOneRow(conn, track, query, &sr, &row);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, bactigName);
+selectOneRow(conn, tdb->table, query, &sr, &row);
 bactig = bactigPosLoad(row);
 sqlFreeResult(&sr);
 printf("<B>Name:</B> %s<BR>\n", bactigName);
@@ -7018,7 +7017,6 @@ fetchAndShowWaba("wabaCbr", name);
 void doHgRepeat(struct trackDb *tdb, char *repeat)
 /* Do click on a repeat track. */
 {
-char *track = tdb->tableName;
 int offset = cartInt(cart, "o");
 cartWebStart(cart, database, "Repeat");
 if (offset >= 0)
@@ -7033,11 +7031,11 @@ if (offset >= 0)
     boolean hasBin;
     int start = cartInt(cart, "o");
 
-    hFindSplitTable(database, seqName, track, table, &hasBin);
+    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
     sprintf(query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
 	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);
-    if (sameString(track,"rmskNew"))
+    if (sameString(tdb->table,"rmskNew"))
         printf("<H3>CENSOR Information</H3>\n");
     else
         printf("<H3>RepeatMasker Information</H3>\n");
@@ -7079,7 +7077,6 @@ printTrackHtml(tdb);
 void doHgIsochore(struct trackDb *tdb, char *item)
 /* do click on isochore track. */
 {
-char *track = tdb->tableName;
 cartWebStart(cart, database, "Isochore Info");
 printf("<H2>Isochore Information</H2>\n");
 if (cgiVarExists("o"))
@@ -7091,7 +7088,7 @@ if (cgiVarExists("o"))
     char query[256];
     int start = cartInt(cart, "o");
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
-	    track, item, seqName, start);
+	    tdb->table, item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -7113,7 +7110,6 @@ printTrackHtml(tdb);
 void doSimpleRepeat(struct trackDb *tdb, char *item)
 /* Print info on simple repeat. */
 {
-char *track = tdb->tableName;
 cartWebStart(cart, database, "Simple Repeat Info");
 printf("<H2>Simple Tandem Repeat Information</H2>\n");
 if (cgiVarExists("o"))
@@ -7124,9 +7120,9 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cartInt(cart, "o");
-    int rowOffset = hOffsetPastBin(database, seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
-	    track, item, seqName, start);
+	    tdb->table, item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -7215,7 +7211,7 @@ puts("using the TSSW program. "
 void doCpgIsland(struct trackDb *tdb, char *item)
 /* Print info on CpG Island. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 boolean isExt = hHasField(database, table, "obsExp");
 cartWebStart(cart, database, "CpG Island Info");
 printf("<H2>CpG Island Info</H2>\n");
@@ -7305,15 +7301,14 @@ freeMem(probeString);
 void doIlluminaProbes(struct trackDb *tdb, char *item)
 /* The details page of the Illumina Probes track. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(database, seqName, track);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char query[256];
 int start = cartInt(cart, "o");
 genericHeader(tdb, item);
-safef(query, sizeof(query), "select * from %s where name = '%s' and chromStart = '%d'", track, item, start);
+safef(query, sizeof(query), "select * from %s where name = '%s' and chromStart = '%d'", tdb->table, item, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -7344,14 +7339,13 @@ printTrackHtml(tdb);
 void doSwitchDbTss(struct trackDb *tdb, char *item)
 /* Print SwitchDB TSS details. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(database, seqName, track);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char query[256];
 genericHeader(tdb, item);
-safef(query, sizeof(query), "select * from %s where name = '%s'", track, item);
+safef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -7488,11 +7482,11 @@ char *prot = NULL;
 
 hgcStart("Protein Translation from Genome");
 safef(where, sizeof(where), "name = \"%s\"", geneName);
-gp = genePredReaderLoadQuery(conn, tdb->tableName, where);
+gp = genePredReaderLoadQuery(conn, tdb->table, where);
 hFreeConn(&conn);
 if (gp == NULL)
     errAbort("%s not found in %s when translating to protein",
-             geneName, tdb->tableName);
+             geneName, tdb->table);
 else if (gp->cdsStart == gp->cdsEnd)
     errAbort("No CDS defined: no protein translation for %s", geneName);
 prot = getPredMRnaProtSeq(gp);
@@ -7835,7 +7829,6 @@ void doPslDetailed(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 int total = 0, i = 0;
-char *track = tdb->tableName;
 struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
@@ -7844,8 +7837,8 @@ printCustomUrl(tdb, item, TRUE);
 
 puts("<P>");
 puts("<B>Alignment Summary:</B><BR>\n");
-pslList = getAlignments(conn, track, item);
-printAlignments(pslList, start, "htcCdnaAli", track, item);
+pslList = getAlignments(conn, tdb->table, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
 
 puts("<P>");
 total = 0;
@@ -8069,7 +8062,7 @@ char dbUrl[256];
 char geneType[256];
 char gtpTable[256];
 
-if (startsWith("ens", tdb->tableName))
+if (startsWith("ens", tdb->table))
    {
    isEnsembl = TRUE;
    safef(geneType, sizeof(geneType), "Ensembl");
@@ -8077,7 +8070,7 @@ if (startsWith("ens", tdb->tableName))
    if (hTableExists(database, gtpTable))
       hasEnsGtp = TRUE;
    }
-else if (startsWith("vega", tdb->tableName))
+else if (startsWith("vega", tdb->table))
    {
    isVega = TRUE;
    safef(geneType, sizeof(geneType), "Vega");
@@ -8118,7 +8111,7 @@ else if (isVega)
 boolean nonCoding = FALSE;
 char query[512];
 safef(query, sizeof(query), "name = \"%s\"", itemName);
-struct genePred *gpList = genePredReaderLoadQuery(conn, tdb->tableName, query);
+struct genePred *gpList = genePredReaderLoadQuery(conn, tdb->table, query);
 if (gpList && (gpList->cdsStart == gpList->cdsEnd))
     nonCoding = TRUE;
 genePredFreeList(&gpList);
@@ -8219,14 +8212,14 @@ sprintf(condStr, "name='%s'", item);
 
 /* if this is a non-coding gene track, then print the biotype and
    the external ID */
-if (sameWord(tdb->tableName, "ensGeneNonCoding"))
+if (sameWord(tdb->table, "ensGeneNonCoding"))
     {
     struct sqlConnection *conn2 = hAllocConn(database);
     char query[256];
     struct sqlResult *sr = NULL;
     char **row;
     safef(query, sizeof(query), "select biotype, extGeneId from %s where %s",
-          tdb->tableName, condStr);
+          tdb->table, condStr);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8270,7 +8263,7 @@ if (hTableExists(database, "ensInfo"))
 
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
-if (sqlGetField(database, tdb->tableName, "name", condStr) != NULL)
+if (sqlGetField(database, tdb->table, "name", condStr) != NULL)
     {
     if (wordCount > 0)
     	{
@@ -8511,7 +8504,7 @@ struct sqlResult *sr;
 char **row;
 char *otherDb = trackDbSetting(tdb, "otherDb");
 char *qtlOrg;
-if (sameString(tdb->tableName, "rgdQtl"))
+if (sameString(tdb->table, "rgdQtl"))
     qtlOrg = organism;
 else if (isNotEmpty(otherDb))
     qtlOrg = hOrganism(otherDb);
@@ -8522,7 +8515,7 @@ genericHeader(tdb, item);
 printf("<B>%s QTL %s: ", qtlOrg, item);
 safef(query, sizeof(query),
       "select description from %sLink where name='%s';",
-      tdb->tableName, item);
+      tdb->table, item);
 sr = sqlMustGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     printf("%s", row[0]);
@@ -8533,7 +8526,7 @@ if (isNotEmpty(tdb->url))
     {
     boolean gotId = FALSE;
     safef(query, sizeof(query), "select id from %sLink where name='%s';",
-	  tdb->tableName, item);
+	  tdb->table, item);
     sr = sqlMustGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8553,7 +8546,7 @@ struct bed *selectedPos=NULL, *otherPosList=NULL, *bed=NULL;
 safef(query, sizeof(query),
       "select chrom, chromStart, chromEnd from %s where name='%s' "
       "order by (chromEnd-chromStart);",
-      tdb->tableName, item);
+      tdb->table, item);
 sr = sqlMustGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -9090,7 +9083,7 @@ void doVax003Vax004(struct trackDb *tdb, char *item)
 {
 char *id;
 struct sqlConnection *conn = hAllocConn(database);
-char *aliTbl = tdb->tableName;
+char *aliTbl = tdb->table;
 int start = cartInt(cart, "o");
 char cond_str[255], *subjId;
 
@@ -9111,18 +9104,19 @@ printf("</H3>");
 /* print alignments that track was based on */
 struct psl *pslList = getAlignments(conn, aliTbl, item);
 printf("<H3>Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", aliTbl, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
 hFreeConn(&conn);
 
 printTrackHtml(tdb);
 }
+
 void doUniGene3(struct trackDb *tdb, char *item)
 /* Put up UniGene info. */
 {
 char *url = tdb->url;
 char *id;
 struct sqlConnection *conn = hAllocConn(database);
-char *aliTbl = tdb->tableName;
+char *aliTbl = tdb->table;
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, item);
@@ -9136,7 +9130,7 @@ printf("</H3>\n");
 /* print alignments that track was based on */
 struct psl *pslList = getAlignments(conn, aliTbl, item);
 printf("<H3>Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", aliTbl, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
 hFreeConn(&conn);
 
 printTrackHtml(tdb);
@@ -9184,7 +9178,6 @@ return(isBDGP);
 void doRgdGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a RGD gene. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -9257,7 +9250,7 @@ htmlHorizontalLine();
 
 /* print alignments that track was based on */
 {
-char *aliTbl = (sameString(track, "rgdGene") ? "refSeqAli" : "xenoRGDAli");
+char *aliTbl = (sameString(tdb->table, "rgdGene") ? "refSeqAli" : "xenoRGDAli");
 struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
 printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
@@ -9703,7 +9696,7 @@ char **row;
 char query[256];
 char *sqlRnaName = rnaName;
 char *summary = NULL;
-boolean isXeno = sameString(tdb->tableName, "xenoRefGene");
+boolean isXeno = sameString(tdb->table, "xenoRefGene");
 struct refLink *rl;
 int start = cartInt(cart, "o");
 int left = cartInt(cart, "l");
@@ -9733,7 +9726,7 @@ prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
 if (genbankIsRefSeqCodingMRnaAcc(rnaName))
-    addPalLink(conn, tdb->tableName,  chrom, left, right, rnaName);
+    addPalLink(conn, tdb->track,  chrom, left, right, rnaName);
 
 printf("</tr>\n</table>\n");
 
@@ -9750,7 +9743,7 @@ htmlHorizontalLine();
 
 /* print alignments that track was based on */
 {
-char *aliTbl = (sameString(tdb->tableName, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
+char *aliTbl = (sameString(tdb->table, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
 struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
 printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
@@ -10122,7 +10115,7 @@ else
     {
     /* display mrna */
     printf("<LI><B>mRna:</B> %s \n", pg->name);
-    linkToOtherBrowserExtra(database, pg->gChrom, pg->gStart, pg->gEnd, "all_mrna=pack");
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->gStart, pg->gEnd, "mrna=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
     printf("</A></LI>");
     }
@@ -10188,7 +10181,7 @@ if (hTableExists(database, "all_mrna"))
 
     if (pslList != NULL)
         {
-        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "all_mrna", \
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "mrna", \
                 pg->name);
         htmlHorizontalLine();
         safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",\
@@ -10260,7 +10253,7 @@ if (pg->posConf != 0)
 void doPseudoPsl(struct trackDb *tdb, char *acc)
 /* Click on an pseudogene based on mrna alignment. */
 {
-char *track = tdb->tableName;
+char *tableName = tdb->table;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
@@ -10284,7 +10277,7 @@ else if (startsWith("pseudoGeneLink",alignTable))
 if (startsWith("pseudoUcsc",alignTable))
     {
     alignTable = cloneString("pseudoMrna");
-    track = cloneString("pseudoGeneLink3");
+    tableName = cloneString("pseudoGeneLink3");
     }
 if (hTableExists(database, alignTable) )
     {
@@ -10301,7 +10294,7 @@ cartWebStart(cart, database, "%s", acc);
 
 
 safef(where, sizeof(where), "name = '%s'", acc);
-sr = hRangeQuery(conn, track, chrom, start, end, where, &rowOffset);
+sr = hRangeQuery(conn, tableName, chrom, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     pg = pseudoGeneLinkLoad(row+rowOffset);
@@ -10348,10 +10341,10 @@ int start = cartInt(cart, "o");
 headerItem = cloneString(geneName);
 genericHeader(tdb, headerItem);
 printCustomUrl(tdb, geneName, FALSE);
-if ((sameString(tdb->tableName, "encodePseudogeneConsensus")) ||
-         (sameString(tdb->tableName, "encodePseudogeneYale")))
+if ((sameString(tdb->table, "encodePseudogeneConsensus")) ||
+         (sameString(tdb->table, "encodePseudogeneYale")))
     {
-    safef(query, sizeof(query), "select name2 from %s where name = '%s'", tdb->tableName, geneName);
+    safef(query, sizeof(query), "select name2 from %s where name = '%s'", tdb->table, geneName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -10454,7 +10447,6 @@ printTrackHtml(tdb);
 
 void doTrnaGenesGb(struct trackDb *tdb, char *trnaName)
 {
-char *track = tdb->tableName;
 struct tRNAs *trna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -10471,10 +10463,10 @@ genericHeader(tdb,trnaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
-rowOffset = hOffsetPastBin(database, seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 safef(query, ArraySize(query),
 "select * from %s where name = '%s' and chromStart=%d and chromEnd=%d",
-track, trnaName, start, end);
+tdb->table, trnaName, start, end);
 
 sr = sqlGetResult(conn, query);
 
@@ -10709,7 +10701,7 @@ void doBDGPGene(struct trackDb *tdb, char *geneName)
 {
 struct bdgpGeneInfo *bgi = NULL;
 struct flyBaseSwissProt *fbsp = NULL;
-char *geneTable = tdb->tableName;
+char *geneTable = tdb->table;
 char *truncName = cloneString(geneName);
 char *ptr = strchr(truncName, '-');
 char infoTable[128];
@@ -10819,13 +10811,13 @@ if (hGenBankHaveSeq(database, geneName, pepTable))
     }
 
 puts("<LI>\n");
-hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+hgcAnchorSomewhere("htcGeneMrna", geneName, tdb->track, seqName);
 printf("%s</A> may be different from the genomic sequence.\n",
        "Predicted mRNA");
 puts("</LI>\n");
 
 puts("<LI>\n");
-hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+hgcAnchorSomewhere("htcGeneInGenome", geneName, tdb->track, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 printf("</UL>\n");
@@ -10864,7 +10856,7 @@ if (n < 3)
     n = 3;
 if (n > maxN)
     n = maxN;
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and chromStart = %d "
       "and name = '%s'",
@@ -10966,7 +10958,6 @@ if (hTableExists(database, xrefTable))
 printCustomUrl(tdb, geneName, FALSE);
 if (startsWith("genePred", tdb->type))
     {
-    char *geneTable = tdb->tableName;
     char *pepTable = pepTableFromType(tdb->type);
     showGenePos(geneName, tdb);
     printf("<H3>Links to sequence:</H3>\n");
@@ -10980,16 +10971,17 @@ if (startsWith("genePred", tdb->type))
 	printf("Predicted Protein</A> \n");
 	puts("</LI>\n");
 	}
-    else { uglyf("Doh, no go for %s from %s<BR>\n", geneName, pepTable); }
+    else 
+        errAbort("Doh, no go for %s from %s<BR>\n", geneName, pepTable);
 
     puts("<LI>\n");
-    hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+    hgcAnchorSomewhere("htcGeneMrna", geneName, tdb->track, seqName);
     printf("%s</A> may be different from the genomic sequence.\n",
 	   "Predicted mRNA");
     puts("</LI>\n");
 
     puts("<LI>\n");
-    hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+    hgcAnchorSomewhere("htcGeneInGenome", geneName, tdb->track, seqName);
     printf("Genomic Sequence</A> from assembly\n");
     puts("</LI>\n");
     printf("</UL>\n");
@@ -11008,7 +11000,7 @@ void doBGIGene(struct trackDb *tdb, char *geneName)
 /* Show Beijing Genomics Institute gene annotation info. */
 {
 struct bgiGeneInfo *bgi = NULL;
-char *geneTable = tdb->tableName;
+char *geneTable = tdb->table;
 char infoTable[128];
 char pepTable[128];
 char query[512];
@@ -11136,13 +11128,13 @@ if (hGenBankHaveSeq(database, geneName, pepTable))
     }
 
 puts("<LI>\n");
-hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+hgcAnchorSomewhere("htcGeneMrna", geneName, tdb->track, seqName);
 printf("%s</A> may be different from the genomic sequence.\n",
        "Predicted mRNA");
 puts("</LI>\n");
 
 puts("<LI>\n");
-hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+hgcAnchorSomewhere("htcGeneInGenome", geneName, tdb->track, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 printf("</UL>\n");
@@ -11153,7 +11145,7 @@ printTrackHtml(tdb);
 void doBGISnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a Beijing Genomics Institute SNP. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct bgiSnp snp;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -11248,7 +11240,6 @@ s = e+1;
 void doGenomicDups(struct trackDb *tdb, char *dupName)
 /* Handle click on genomic dup track. */
 {
-char *track = tdb->tableName;
 struct genomicDups dup;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -11262,12 +11253,12 @@ printf("<H2>Genomic Duplication Region</H2>\n");
 if (cgiVarExists("o"))
     {
     int start = cartInt(cart, "o");
-    int rowOffset = hOffsetPastBin(database, seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
     parseChromPointPos(dupName, oChrom, &oStart);
 
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
 	    "and otherChrom = '%s' and otherStart = %d",
-	    track, seqName, start, oChrom, oStart);
+	    tdb->table, seqName, start, oChrom, oStart);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)))
 	{
@@ -11311,7 +11302,6 @@ freeDnaSeq(&seq);
 void doBlatMouse(struct trackDb *tdb, char *itemName)
 /* Handle click on blatMouse track. */
 {
-char *track = tdb->tableName;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
@@ -11373,7 +11363,7 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(database, seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s'", table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -11383,7 +11373,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printAlignments(pslList, start, "htcBlatXeno", tdb->track, itemName);
 printTrackHtml(tdb);
 }
 
@@ -11509,7 +11499,7 @@ char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
-psl = loadPslFromRangePair(tdb->tableName, item);
+psl = loadPslFromRangePair(tdb->table, item);
 printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -11525,7 +11515,7 @@ printf("<B>Strand:</B> %s<BR>\n",psl->strand);
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", psl->tStart,
-	tdb->tableName, otherOrg, otherChromTable, otherDb);
+	tdb->table, otherOrg, otherChromTable, otherDb);
 /* joni */
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
@@ -11554,7 +11544,7 @@ char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
-psl = loadPslFromRangePair(tdb->tableName, item);
+psl = loadPslFromRangePair(tdb->table, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
        psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
@@ -11569,7 +11559,7 @@ printf("<B>Strand:</B> %s<BR>\n",psl->strand);
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", psl->tStart,
-	tdb->tableName, otherOrg, otherChromTable, otherDb);
+	tdb->table, otherOrg, otherChromTable, otherDb);
 
 printCustomUrl(tdb, item, TRUE);
 printTrackHtml(tdb);
@@ -11588,7 +11578,7 @@ char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
-psl = loadPslFromRangePair(tdb->tableName, item);
+psl = loadPslFromRangePair(tdb->table, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
        psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
@@ -11609,7 +11599,7 @@ printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db
        anotherString, psl->qStart, psl->qEnd, otherOrg);
 
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart,
-	tdb->tableName, otherOrg, otherChromTable);
+	tdb->table, otherOrg, otherChromTable);
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
@@ -11909,7 +11899,6 @@ void doAlignCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
     /* Handle click on blat or blastz track in a generic fashion */
     /* otherGenome is the text to display for genome name on details page */
 {
-char *track = tdb->tableName;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
@@ -11947,10 +11936,10 @@ printf("%s DNA</A><BR>\n", otherGenome);
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(database, seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 
 /* if this is a non-split table then query with tName */
-if (startsWith(track, table))
+if (startsWith(tdb->table, table))
     safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'", table, itemName,seqName);
 else
     safef(query, sizeof(query), "select * from %s where qName = '%s'", table, itemName);
@@ -11962,14 +11951,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printAlignments(pslList, start, "htcBlatXeno", tdb->track, itemName);
 printTrackHtml(tdb);
 }
 
 void doTSS(struct trackDb *tdb, char *itemName)
 /* Handle click on DBTSS track. */
 {
-char *track = tdb->tableName;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
@@ -11998,7 +11986,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcCdnaAli", track, itemName);
+printAlignments(pslList, start, "htcCdnaAli", tdb->track, itemName);
 printTrackHtml(tdb);
 }
 
@@ -12040,7 +12028,6 @@ hFreeConn(&conn);
 void doEncodeRna(struct trackDb *tdb, char *itemName)
 /* Handle click on encodeRna track. */
 {
-char *track = tdb->tableName;
 struct encodeRna rna;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -12051,9 +12038,9 @@ int rowOffset;
 struct slName *nameList, *sl;
 
 genericHeader(tdb, itemName);
-rowOffset = hOffsetPastBin(database, seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
-      track, seqName, start, itemName);
+      tdb->table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -12085,7 +12072,6 @@ hFreeConn(&conn);
 void doRnaGene(struct trackDb *tdb, char *itemName)
 /* Handle click on RNA Genes track. */
 {
-char *track = tdb->tableName;
 struct rnaGene rna;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -12095,9 +12081,9 @@ char query[256];
 int rowOffset;
 
 genericHeader(tdb, itemName);
-rowOffset = hOffsetPastBin(database, seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
-	track, seqName, start, itemName);
+	tdb->table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -12119,7 +12105,7 @@ hFreeConn(&conn);
 void doStsMarker(struct trackDb *tdb, char *marker)
 /* Respond to click on an STS marker. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 char query[256];
 char title[256];
 struct sqlConnection *conn = hAllocConn(database);
@@ -12449,7 +12435,7 @@ hFreeConn(&conn1);
 void doStsMapMouse(struct trackDb *tdb, char *marker)
 /* Respond to click on an STS marker. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 char title[256];
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
@@ -12575,7 +12561,7 @@ hFreeConn(&conn1);
 void doStsMapMouseNew(struct trackDb *tdb, char *marker)
 /* Respond to click on an STS marker. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 char title[256];
 char query[256];
 char query1[256];
@@ -12754,7 +12740,7 @@ hFreeConn(&conn1);
 void doStsMapRat(struct trackDb *tdb, char *marker)
 /* Respond to click on an STS marker. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 char title[256];
 char query[256];
 char query1[256];
@@ -13242,7 +13228,6 @@ hFreeConn(&conn);
 void doMouseOrthoDetail(struct trackDb *tdb, char *itemName)
 /* Handle click on mouse synteny track. */
 {
-char *track = tdb->tableName;
 struct mouseSyn el;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -13255,8 +13240,8 @@ cartWebStart(cart, database, "Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-	track, seqName, start);
-rowOffset = hOffsetPastBin(database, seqName, track);
+	tdb->table, seqName, start);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -13276,7 +13261,6 @@ printTrackHtml(tdb);
 void doMouseSyn(struct trackDb *tdb, char *itemName)
 /* Handle click on mouse synteny track. */
 {
-char *track = tdb->tableName;
 struct mouseSyn el;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -13289,8 +13273,8 @@ cartWebStart(cart, database, "Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-	track, seqName, start);
-rowOffset = hOffsetPastBin(database, seqName, track);
+	tdb->table, seqName, start);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -13310,7 +13294,6 @@ printTrackHtml(tdb);
 void doMouseSynWhd(struct trackDb *tdb, char *itemName)
 /* Handle click on Whitehead mouse synteny track. */
 {
-char *track = tdb->tableName;
 struct mouseSynWhd el;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -13323,8 +13306,8 @@ cartWebStart(cart, database, "Mouse Synteny (Whitehead)");
 printf("<H2>Mouse Synteny (Whitehead)</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-	track, seqName, start);
-rowOffset = hOffsetPastBin(database, seqName, track);
+	tdb->table, seqName, start);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -13349,7 +13332,6 @@ hFreeConn(&conn);
 void doEnsPhusionBlast(struct trackDb *tdb, char *itemName)
 /* Handle click on Ensembl Phusion Blast synteny track. */
 {
-char *track = tdb->tableName;
 struct ensPhusionBlast el;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -13365,8 +13347,8 @@ cartWebStart(cart, database, "%s", tdb->longLabel);
 printf("<H2>%s</H2>\n", tdb->longLabel);
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-	track, seqName, start);
-rowOffset = hOffsetPastBin(database, seqName, track);
+	tdb->table, seqName, start);
+rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -13535,7 +13517,7 @@ return rsId;
 void doSnpEntrezGeneLink(struct trackDb *tdb, char *name)
 /* print link to EntrezGene for this SNP */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 if (hTableExists(database, "knownGene") && hTableExists(database, "refLink") &&
     hTableExists(database, "mrnaRefseq") && hTableExists(database, table))
     {
@@ -13575,7 +13557,7 @@ if (hTableExists(database, "knownGene") && hTableExists(database, "refLink") &&
 void doSnpOld(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
-char *group = tdb->tableName;
+char *snpTable = tdb->table;
 struct snp snp;
 struct snpMap snpMap;
 int start = cartInt(cart, "o");
@@ -13594,10 +13576,10 @@ sprintf(query,
 	"where  chrom = '%s' "
 	"  and  chromStart = %d "
 	"  and  name = '%s'",
-        group, seqName, start, itemName);
-rowOffset = hOffsetPastBin(database, seqName, group);
+        snpTable, seqName, start, itemName);
+rowOffset = hOffsetPastBin(database, seqName, snpTable);
 sr = sqlGetResult(conn, query);
-if (sameString(group,"snpMap"))
+if (sameString(snpTable,"snpMap"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	snpMapStaticLoad(row+rowOffset, &snpMap);
@@ -13729,7 +13711,7 @@ if (isNotEmpty(snpSeqSetting))
     }
 else
     {
-    safef(snpSeqTable, sizeof(snpSeqTable), "%sSeq", tdb->tableName);
+    safef(snpSeqTable, sizeof(snpSeqTable), "%sSeq", tdb->table);
     if (!hTableExists(database, snpSeqTable))
 	{
 	safecpy(snpSeqTable, sizeof(snpSeqTable), "snpSeq");
@@ -13763,7 +13745,7 @@ if (isNotEmpty(seqFile))
     }
 char seqFileBuf[512];
 safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/%s.fa",
-      database, tdb->tableName);
+      database, tdb->table);
 if (fileExists(seqFileBuf))
     return cloneString(seqFileBuf);
 safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/snp.fa", database);
@@ -14090,14 +14072,14 @@ generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
 void doSnp(struct trackDb *tdb, char *itemName)
 /* Process SNP details. */
 {
-char   *group = tdb->tableName;
+char   *snpTable = tdb->table;
 struct snp snp;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char   query[256];
-int    rowOffset=hOffsetPastBin(database, seqName, group);
+int    rowOffset=hOffsetPastBin(database, seqName, snpTable);
 int    firstOne=1;
 char  *exception=0;
 char  *chrom="";
@@ -14106,7 +14088,7 @@ int    chromStart=0;
 cartWebStart(cart, database, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 safef(query, sizeof(query), "select * from %s where chrom='%s' and "
-      "chromStart=%d and name='%s'", group, seqName, start, itemName);
+      "chromStart=%d and name='%s'", snpTable, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr))!=NULL)
     {
@@ -14240,7 +14222,7 @@ sqlDisconnect(&conn);
 
 void doCnpLocke(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpLocke thisItem;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14270,7 +14252,7 @@ hFreeConn(&conn);
 
 void doCnpIafrate(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpIafrate cnpIafrate;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14301,7 +14283,7 @@ hFreeConn(&conn);
 
 void doCnpIafrate2(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpIafrate2 thisItem;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14341,7 +14323,7 @@ hFreeConn(&conn);
 
 void doDelHinds2(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct delHinds2 thisItem;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14368,7 +14350,7 @@ hFreeConn(&conn);
 
 void doDelConrad2(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct delConrad2 thisItem;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14397,7 +14379,7 @@ hFreeConn(&conn);
 
 void doCnpSebat(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpSebat cnpSebat;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14425,7 +14407,7 @@ hFreeConn(&conn);
 
 void doCnpSebat2(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpSebat2 cnpSebat2;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14543,7 +14525,7 @@ printf("</table>\n");
 
 void doCnpSharp(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpSharp cnpSharp;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14586,7 +14568,7 @@ printTrackHtml(tdb);
 
 void doCnpSharp2(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct cnpSharp2 cnpSharp2;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -14624,7 +14606,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[512];
-int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 genericHeader(tdb, id);
 printCustomUrl(tdb, id, FALSE);
 
@@ -14679,7 +14661,7 @@ printTrackHtml(tdb);
 void doAffy120K(struct trackDb *tdb, char *itemName)
 /* Put up info on an Affymetrix SNP. */
 {
-char *group = tdb->tableName;
+char *table = tdb->table;
 struct snp snp;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -14696,7 +14678,7 @@ sprintf(query, "select * "
 	       "  and  chromStart = %d "
 	       "  and  name = '%s'",
                seqName, start, itemName);
-rowOffset = hOffsetPastBin(database, seqName, group);
+rowOffset = hOffsetPastBin(database, seqName, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -14765,7 +14747,7 @@ sqlDisconnect(&conn);
 void doAffy10K(struct trackDb *tdb, char *itemName)
 /* Put up info on an Affymetrix SNP. */
 {
-char *group = tdb->tableName;
+char *table = tdb->table;
 struct snp snp;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -14782,7 +14764,7 @@ sprintf(query, "select * "
 	       "  and  chromStart = %d "
 	       "  and  name = '%s'",
                seqName, start, itemName);
-rowOffset = hOffsetPastBin(database, seqName, group);
+rowOffset = hOffsetPastBin(database, seqName, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -15305,7 +15287,7 @@ void printSnp125Function(struct trackDb *tdb, struct snp125 *snp)
  * report how this SNP relates to any nearby genes. */
 {
 char varName[512];
-safef(varName, sizeof(varName), "%s_geneTrack", tdb->tableName);
+safef(varName, sizeof(varName), "%s_geneTrack", tdb->track);
 struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
 if (geneTracks == NULL)
     {
@@ -15678,7 +15660,7 @@ if (pdbIds != NULL)
 void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
-char   *table = tdb->tableName;
+char   *table = tdb->table;
 struct snp125 snp;
 struct snp *snpAlign = NULL;
 int    start = cartInt(cart, "o");
@@ -15771,12 +15753,12 @@ char query[512];
 char **row;
 int start = cartInt(cart, "o");
 boolean isBed4 = startsWith("bed 4", tdb->type);
-boolean hasBin = hIsBinned(database, tdb->tableName);
+boolean hasBin = hIsBinned(database, tdb->table);
 
 genericHeader(tdb, item);
 safef(query, sizeof(query),
       "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-      tdb->tableName, item, seqName, start);
+      tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -15939,11 +15921,11 @@ int itemStart = cartInt(cart, "o"), itemEnd = cartInt(cart, "t");
 genericHeader(tdb, item);
 struct sqlConnection *conn = hAllocConn(database);
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy, "select * from %s where chrom = '%s' and ", tdb->tableName, seqName);
+dyStringPrintf(dy, "select * from %s where chrom = '%s' and ", tdb->table, seqName);
 hAddBinToQuery(itemStart, itemEnd, dy);
 dyStringPrintf(dy, "chromStart = %d and name = '%s'", itemStart, item);
 struct sqlResult *sr = sqlGetResult(conn, dy->string);
-int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 boolean first = TRUE;
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -16018,7 +16000,7 @@ int bedSize;
 
 genericHeader(tdb, item);
 bedSize = 8;
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -16053,7 +16035,7 @@ int bedSize;
 
 genericHeader(tdb, item);
 bedSize = 8;
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -16147,7 +16129,6 @@ hFreeConn(&conn);
 void doJaxAllele(struct trackDb *tdb, char *item)
 /* Show gene prediction position and other info. */
 {
-char *track = tdb->tableName;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2 = hAllocConn(database);
@@ -16161,7 +16142,7 @@ genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "jaxAlleleInfo");
 safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
 safef(query, sizeof(query), "name = \"%s\"", item);
-sr = hRangeQuery(conn, track, seqName, winStart, winEnd, query, &hasBin);
+sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, query, &hasBin);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct bed *bed = bedLoadN(row+hasBin, 12);
@@ -16258,10 +16239,10 @@ if ((selectedPheno = strstr(item, " source=")) != NULL)
     selectedPheno += strlen(" source=");
     }
 genericHeader(tdb, item);
-safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->tableName);
+safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->table);
 safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
 safef(query, sizeof(query), "name = \"%s\"", item);
-sr = hRangeQuery(conn, tdb->tableName, seqName, winStart, winEnd, query,
+sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, query,
 		 &hasBin);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -16365,7 +16346,6 @@ hFreeConn(&conn);
 void doJaxAliasGenePred(struct trackDb *tdb, char *item)
 /* Show gene prediction position and other info. */
 {
-char *track = tdb->tableName;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2 = hAllocConn(database);
@@ -16376,9 +16356,9 @@ char aliasTable[256];
 boolean gotAlias = FALSE;
 
 genericHeader(tdb, item);
-safef(aliasTable, sizeof(aliasTable), "%sAlias", track);
+safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->table);
 gotAlias = hTableExists(database, aliasTable);
-hFindSplitTable(database, seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -16461,7 +16441,7 @@ safef(query, sizeof(query),
 	 "         chromStarts, Id, color "
 	 "from     %s "
 	 "where    name = '%s' and chromStart = %d "
-	 "order by Id ", tdb->tableName, item, start);
+	 "order by Id ", tdb->table, item, start);
 for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
     {
     printf("<BR>\n");
@@ -16506,7 +16486,7 @@ safef(query, sizeof(query),
 	 "         chromStarts, Id, color, allLines "
 	 "from     %s "
 	 "where    name = '%s' and chromStart = %d "
-	 "order by Id ", tdb->tableName, item, start);
+	 "order by Id ", tdb->table, item, start);
 for (ee = encodeErgeHssCellLinesLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
     {
     if (ee->Id>0)
@@ -16534,7 +16514,7 @@ hFreeConn(&conn);
 
 void doEncodeIndels(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct encodeIndels encodeIndel;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -16908,7 +16888,6 @@ sqlFreeResult(&sr);
 void doCeleraDupPositive(struct trackDb *tdb, char *dupName)
 /* Handle click on celeraDupPositive track. */
 {
-char *track = tdb->tableName;
 struct celeraDupPositive dup;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
@@ -16926,11 +16905,11 @@ else
 if (cgiVarExists("o"))
     {
     int start = cgiInt("o");
-    int rowOffset = hOffsetPastBin(database, seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
     safef(query, sizeof(query),
 	  "select * from %s where chrom = '%s' and chromStart = %d and name= '%s'",
-	  track, seqName, start, dupName);
+	  tdb->table, seqName, start, dupName);
     sr = sqlGetResult(conn, query);
     i = 0;
     while ((row = sqlNextRow(sr)))
@@ -17011,7 +16990,6 @@ cartWebStart(cart, database, "%s", tdb->longLabel);
 
 if (cgiVarExists("o"))
     {
-    char *track = tdb->tableName;
     struct genomicSuperDups dup;
     struct dyString *query = newDyString(512);
     struct sqlConnection *conn = hAllocConn(database);
@@ -17030,10 +17008,10 @@ if (cgiVarExists("o"))
 	alignUrl = "http://humanparalogy.gs.washington.edu";
     else if (sameString("hg15", database) || sameString("hg16", database))
 	alignUrl = "http://humanparalogy.gs.washington.edu/jab/der_oo33";
-    rowOffset = hOffsetPastBin(database, seqName, track);
+    rowOffset = hOffsetPastBin(database, seqName, tdb->table);
     parseSuperDupsChromPointPos(dupName, oChrom, &oStart, &dupId);
     dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
-		   track, seqName);
+		   tdb->table, seqName);
     if (rowOffset > 0)
 	hAddBinToQuery(start, end, query);
     if (dupId >= 0)
@@ -17055,7 +17033,7 @@ if (cgiVarExists("o"))
 	       "View DNA for other position</A><BR>\n",
 	       hgcPathAndSettings(), dup.otherStart, dup.otherEnd, "",
 	       dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand,
-	       database, track);
+	       database, tdb->track);
 	printf("<B>Other Position Relative Orientation:</B>%s<BR>\n",
 	       dup.strand);
 	printf("<B>Filter Verdict:</B> %s<BR>\n", dup.verdict);
@@ -17279,7 +17257,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -17352,7 +17330,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -17398,7 +17376,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -17471,7 +17449,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
         table, item, seqName );
 sr = sqlGetResult(conn, query);
@@ -17530,9 +17508,9 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doGcDetails(struct trackDb *tdb, char *itemName) {
+void doGcDetails(struct trackDb *tdb, char *itemName) 
 /* Show details for gc percent */
-char *group = tdb->tableName;
+{
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -17544,7 +17522,7 @@ char table[64];
 
 cartWebStart(cart, database, "Percentage GC in 20,000 Base Windows (GC)");
 
-hFindSplitTable(database, seqName, group, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
 	table, seqName, start, itemName);
 
@@ -18055,13 +18033,13 @@ char *image = NULL;
 /* Load the altGraphX record and start page. */
 if(id != 0)
     {
-    snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
+    snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->table, id);
     ag = altGraphXLoadByQuery(conn, query);
     }
 else
     {
     snprintf(query, sizeof(query),"select * from %s where tName like '%s' and tStart <= %d and tEnd >= %d",
-	     tdb->tableName, seqName, winEnd, winStart);
+	     tdb->table, seqName, winEnd, winStart);
     ag = altGraphXLoadByQuery(conn, query);
     }
 if(ag == NULL)
@@ -18072,14 +18050,14 @@ printPosOnChrom(ag->tName, ag->tStart, ag->tEnd, ag->strand, FALSE, NULL);
 /* Print a display of the Graph. */
 printf("<b>Plots of Alt-Splicing:</b>");
 printf("<center>\n");
-if(sameString(tdb->tableName, "altGraphXPsb2004"))
+if(sameString(tdb->table, "altGraphXPsb2004"))
     printf("Common Splicing<br>");
 printf("Alt-Splicing drawn to scale.<br>");
 image = altGraphXMakeImage(tdb,ag);
 freez(&image);
 /* Normally just print graph with exons scaled up. For conserved
    track also display orthologous loci. */
-if(differentString(tdb->tableName, "altGraphXPsb2004"))
+if(differentString(tdb->table, "altGraphXPsb2004"))
     {
     struct altGraphX *copy = altGraphXClone(ag);
     altGraphXVertPosSort(copy);
@@ -18239,7 +18217,7 @@ int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 char *winOn = cartUsualString( cart, "win", "F" );
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
 	table, item, seqName);
 sr = sqlGetResult(conn, query);
@@ -18270,7 +18248,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
 			      otherDb, thisPsl, pslTableName );
 	    sprintf(otherString, "%d&win=T", thisPsl->tStart );
-	    hgcAnchorSomewhere( tdb->tableName, cgiEncode(item), otherString, thisPsl->tName );
+	    hgcAnchorSomewhere( tdb->track, cgiEncode(item), otherString, thisPsl->tName );
 	    printf("View individual alignment windows\n</a>");
 	    printf("<br><br>");
 	    }
@@ -18330,7 +18308,7 @@ char pslTableName[128] = "blastzBestMouse";
 int offset;
 int motifid;
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'",
 	table, item);
 sr = sqlGetResult(conn, query);
@@ -18421,7 +18399,7 @@ int start = cartInt(cart, "o");
 char *type;
 fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
-    if (sameString(trackId, ct->tdb->tableName))
+    if (sameString(trackId, ct->tdb->track))
 	break;
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
@@ -18461,17 +18439,19 @@ else if (ct->dbTrack && startsWith("bedGraph", ct->dbTrackType))
            "&hgta_table=%s&position=%s:%d-%d&"
            "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
            "View table schema</A></P>\n",
-           database, ct->tdb->grp, ct->tdb->tableName, ct->tdb->tableName,
+           database, ct->tdb->grp, ct->tdb->table, ct->tdb->table,
            seqName, winStart+1, winEnd);
     }
 else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlConnection *conn2 = hAllocConn(CUSTOM_TRASH);
-    char *saveName = ct->tdb->tableName;
-    ct->tdb->tableName = ct->dbTableName;
+    char *saveTable = ct->tdb->table;
+    char *saveTrack = ct->tdb->track;
+    ct->tdb->table = ct->tdb->track = ct->dbTableName;
     customMafClick(conn, conn2, ct->tdb);
-    ct->tdb->tableName = saveName;
+    ct->tdb->table = saveTable;
+    ct->tdb->track = saveTrack;
     hFreeConn(&conn2);
     hFreeConn(&conn);
     }
@@ -18567,7 +18547,7 @@ struct psl *psl = 0;
 struct sqlResult *sr = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char query[256], **row;
-struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
+struct psl* pslList = getAlignments(conn, tdb->table, itemName);
 char *useName = itemName;
 char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
@@ -18580,11 +18560,11 @@ boolean isSacCer = FALSE;
 char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
 char *blastRef = trackDbSettingOrDefault(tdb, "blastRef", "NULL");
 
-if (sameString("blastSacCer1SG", tdb->tableName))
+if (sameString("blastSacCer1SG", tdb->table))
     isSacCer = TRUE;
-if (startsWith("blastDm", tdb->tableName))
+if (startsWith("blastDm", tdb->table))
     isDm = TRUE;
-if (startsWith("blastCe", tdb->tableName))
+if (startsWith("blastCe", tdb->table))
     isCe = TRUE;
 buffer = needMem(strlen(itemName)+ 1);
 strcpy(buffer, itemName);
@@ -18635,7 +18615,7 @@ if (pos != NULL)
     {
     if (isDm == TRUE)
 	{
-	char *dmDb = cloneString(strchr(tdb->tableName, 'D'));
+	char *dmDb = cloneString(strchr(tdb->track, 'D'));
 
 	*dmDb = tolower(*dmDb);
 	*strchr(dmDb, 'F') = 0;
@@ -18647,11 +18627,11 @@ if (pos != NULL)
     else if (isCe == TRUE)
 	{
 	char *assembly;
-	if (sameString("blastWBRef01", tdb->tableName))
+	if (sameString("blastWBRef01", tdb->table))
 	    assembly = "ce3";
-	else if (sameString("blastCe6SG", tdb->tableName))
+	else if (sameString("blastCe6SG", tdb->table))
 	    assembly = "ce6";
-	else if (sameString("blastCe4SG", tdb->tableName))
+	else if (sameString("blastCe4SG", tdb->table))
 	    assembly = "ce4";
 	else
 	    assembly = "ce3";
@@ -18669,9 +18649,9 @@ if (pos != NULL)
     else
 	{
 	char *assembly;
-	if (sameString("blastHg16KG", tdb->tableName))
+	if (sameString("blastHg16KG", tdb->table))
 	    assembly = "hg16";
-	else if (sameString("blastHg17KG", tdb->tableName))
+	else if (sameString("blastHg17KG", tdb->table))
 	    assembly = "hg17";
 	else
 	    assembly = "hg18";
@@ -18728,11 +18708,11 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    {
 	    printf("<A HREF=\"%s&o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&pred=%s\">",
 		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->tableName, pred);
+		psl->tStart, psl->tEnd, database,tdb->track, pred);
 	    printf("alignment</A> ");
 	    printf("<A HREF=\"%s&o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s\">",
 		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->tableName);
+		psl->tStart, psl->tEnd, database,tdb->track);
 	    printf("peptide</A> ");
 	    printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
 		100.0 * (psl->match + psl->repMatch + psl->misMatch) / psl->qSize,
@@ -18742,7 +18722,7 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    printf("<A HREF=\"%s&position=%s:%d-%d&db=%s&ss=%s+%s\">",
 		   hgTracksPathAndSettings(),
 		   psl->tName, psl->tStart + 1, psl->tEnd, database,
-		   tdb->tableName, itemName);
+		   tdb->track, itemName);
 	    sprintLongWithCommas(startBuf, psl->tStart + 1);
 	    sprintLongWithCommas(endBuf, psl->tEnd);
 	    printf("%s:%s-%s</A> <BR>",psl->tName,startBuf, endBuf);
@@ -18826,8 +18806,8 @@ int rowOffset;
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, NULL);
-if (!hFindSplitTable(database, seqName, tdb->tableName, fullTable, &rowOffset))
-    errAbort("No %s track in database %s", tdb->tableName, database);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, &rowOffset))
+    errAbort("No %s table in database %s", tdb->table, database);
 safef(query, sizeof(query),
     "select * from %s where chrom = '%s' and chromStart=%d",
     fullTable, seqName, start);
@@ -18859,7 +18839,7 @@ int start = cartInt(cart, "o");
 genericHeader(tdb, item);
 genericBedClick(conn, tdb, item, start, 4);
 safef(extra, sizeof(extra), "chromStart = %d", start);
-sr = hRangeQuery(conn, tdb->tableName, seqName, winStart, winEnd, extra,
+sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, extra,
 		 &rowOffset);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -18901,7 +18881,7 @@ boolean hasBin = FALSE;
 
 genericHeader(tdb, item);
 genericBedClick(conn, tdb, item, start, 4);
-hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
 safef(query, sizeof(query), "select * from %s where name = '%s'",
       fullTable, item);
 sr = sqlGetResult(conn, query);
@@ -18945,7 +18925,7 @@ struct bed *bed = NULL;
 char query[512];
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and chromStart = %d",
       fullTable, seqName, start);
@@ -19002,7 +18982,7 @@ num = 0;
 num = atoi(words[1]);
 
 /* get data for this item */
-sprintf(query, "select * from %s where name = '%s' and chromStart = %d", tdb->tableName, item, start);
+sprintf(query, "select * from %s where name = '%s' and chromStart = %d", tdb->table, item, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     bed = bedLoadN(row+hasBin, num);
@@ -19048,12 +19028,12 @@ struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 struct gencodeIntron *intron, *intronList = NULL;
 char query[256];
-int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
 genericHeader(tdb, item);
 safef(query, sizeof query,
         "select * from %s where name='%s' and chrom='%s' and chromStart=%d",
-                tdb->tableName, item, seqName, start);
+                tdb->table, item, seqName, start);
 intronList = gencodeIntronLoadByQuery(conn, query, rowOffset);
 for (intron = intronList; intron != NULL; intron = intron->next)
     {
@@ -19111,14 +19091,14 @@ char query[1024];
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
 safef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    if (endsWith(tdb->tableName, "Average"))
+    if (endsWith(tdb->table, "Average"))
 	printESPAverageDetails(row+hasBin, tdb);
     else
 	printESPDetails(row+hasBin, tdb);
@@ -19141,7 +19121,7 @@ char query[1024];
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
 safef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -19160,7 +19140,7 @@ printTrackHtml(tdb);
 
 void doEncodeHapMapAlleleFreq(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct encodeHapMapAlleleFreq alleleFreq;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -19312,7 +19292,7 @@ void doHapmapSnpsSummaryTable(struct sqlConnection *conn, struct trackDb *tdb, c
 /* Use the hapmapAllelesSummary table (caller checks for existence) to display allele
  * frequencies for the 4 HapMap Phase II populations. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct hapmapAllelesSummary *summaryItem;
 struct sqlResult *sr;
 char **row;
@@ -19517,7 +19497,7 @@ else
 void doHapmapSnps(struct trackDb *tdb, char *itemName)
 /* assume just one hapmap snp at a given location */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -19587,7 +19567,7 @@ hFreeConn(&conn);
 void doHapmapOrthos(struct trackDb *tdb, char *itemName)
 /* could assume just one match */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct hapmapAllelesOrtho *ortho;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -19719,7 +19699,7 @@ boolean hasBin = FALSE;
 char query[512];
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
 safef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -19986,7 +19966,7 @@ char **row;
 char *bayesianFiguresUrl = "../images/mammalPsg";
 
 genericHeader(tdb, itemName);
-sprintf(query, "select * from %s where name = '%s'", tdb->tableName, itemName);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, itemName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     mammalPsg = mammalPsgLoad(row);
@@ -20043,7 +20023,7 @@ boolean approx;
 enum {CONS, GAIN, LOSS} elementType;
 
 genericHeader(tdb, itemName);
-sprintf(query, "select * from %s where name = '%s'", tdb->tableName, itemName);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, itemName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     dless = dlessLoad(row);
@@ -20354,7 +20334,7 @@ if(info->stop >0)
 
 
 /* show genome sequence */
-hgcAnchorSomewhere("htcGeneInGenome", cgiEncode(info->name), tdb->tableName, seqName);
+hgcAnchorSomewhere("htcGeneInGenome", cgiEncode(info->name), tdb->track, seqName);
 printf("View DNA for this putative fragment</A><BR>\n");
 
 /* show the detail alignment */
@@ -20403,7 +20383,7 @@ hFreeConn(&conn);
 
 void doDv(struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct dvBed dvBed;
 struct dv *dv;
 struct dvXref2 *dvXref2;
@@ -20525,7 +20505,7 @@ if (linktype != NULL)
 
 void doOreganno (struct trackDb *tdb, char *itemName)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct oreganno *r = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -20639,7 +20619,7 @@ hFreeConn(&conn);
 
 void doSnpArray (struct trackDb *tdb, char *itemName, char *dataSource)
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -20701,7 +20681,7 @@ void doSnpArray2 (struct trackDb *tdb, char *itemName, char *dataSource)
 /* This is a temp solution for 3 Illumina SNP Arrays to blank out strand info for non-dbSnp entries */
 /* Should be removed once Illumina comes up with a clear defintion of their strand data */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -21101,7 +21081,7 @@ printTrackHtml(tdb);
 void doOmiciaOld (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Omicia OMIM track */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct omiciaLink *link = NULL;
 struct omiciaAttr *attr = NULL;
 void *omim = NULL;
@@ -21160,7 +21140,7 @@ printTrackHtml(tdb);
 void doProtVar (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the UniProt variation track */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct protVarPos *mut = NULL;
 struct protVar *details = NULL;
 struct protVarAttr attr;
@@ -21240,10 +21220,10 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doGv (struct trackDb *tdb, char *itemName)
+void doGv(struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Genome variation track */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct gvPos *mut = NULL;
 struct gv *details = NULL;
 struct gvAttr attr;
@@ -21354,7 +21334,7 @@ printf("</DL>\n");
 printTBSchemaLink(tdb);
 printDataVersion(tdb);
 printOrigAssembly(tdb);
-if ((tableName = hTableForTrack(database, tdb->tableName)) != NULL)
+if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
     {
     struct sqlConnection *conn = hAllocConn(database);
     char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
@@ -21380,7 +21360,7 @@ hFreeConn(&conn);
 void doPgSnp(struct trackDb *tdb, char *itemName)
 /* print detail page for personal genome track (pgSnp) */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 char *escName = sqlEscapeString(itemName);
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -21441,7 +21421,7 @@ hFreeConn(&conn);
 void doAllenBrain(struct trackDb *tdb, char *itemName)
 /* Put up page for Allen Brain Atlas. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct psl *pslList;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -21466,7 +21446,6 @@ hFreeConn(&conn);
 void doExaptedRepeats(struct trackDb *tdb, char *itemName)
 /* Respond to click on the exaptedRepeats track. */
 {
-char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
@@ -21476,8 +21455,8 @@ unsigned int chromStart, chromEnd;
 boolean blastzAln;
 
 cartWebStart(cart, database, "%s", itemName);
-sprintf(query, "select * from %s where name = '%s'", track, itemName);
-selectOneRow(conn, track, query, &sr, &row);
+sprintf(query, "select * from %s where name = '%s'", tdb->table, itemName);
+selectOneRow(conn, tdb->table, query, &sr, &row);
 chr = cloneString(row[0]);
 chromStart = sqlUnsigned(row[1]);
 chromEnd = sqlUnsigned(row[2]);
@@ -21517,11 +21496,11 @@ if (startsWith("psl", tdb->type))
     struct sqlResult *sr = NULL;
     struct dyString *query = dyStringNew(512);
     char **row = NULL;
-    int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+    int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
     int start = cartInt(cart, "o");
     int end = cartInt(cart, "t");
     dyStringPrintf(query, "select * from %s where tName = '%s' and ",
-		   tdb->tableName, seqName);
+		   tdb->table, seqName);
     if (rowOffset)
 	hAddBinToQuery(start, end, query);
     dyStringPrintf(query, "tStart = %d and qName = '%s'", start, itemName);
@@ -21534,7 +21513,7 @@ if (startsWith("psl", tdb->type))
 	if (hGenBankHaveSeq(database, itemName, NULL))
 	    {
 	    printf("<H3>%s/Genomic Alignments</H3>", name);
-	    printAlignments(psl, start, "htcCdnaAli", tdb->tableName,
+	    printAlignments(psl, start, "htcCdnaAli", tdb->table,
 			    encodedName);
 	    }
 	else
@@ -21561,7 +21540,7 @@ struct sqlResult *sr;
 char **row;
 genericHeader(tdb, item);
 char defaultExtra[HDB_MAX_TABLE_STRING];
-safef(defaultExtra, sizeof(defaultExtra), "%sExtra", tdb->tableName);
+safef(defaultExtra, sizeof(defaultExtra), "%sExtra", tdb->table);
 char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", defaultExtra);
 boolean gotExtra = sqlTableExists(conn, extraTable);
 if (gotExtra)
@@ -21609,7 +21588,7 @@ if (gotExtra)
     sqlFreeResult(&sr);
     }
 safef(query, sizeof(query), "select chrom,chromStart,chromEnd from %s "
-      "where name = '%s'", tdb->tableName, item);
+      "where name = '%s'", tdb->table, item);
 sr = sqlGetResult(conn, query);
 char lastChr[32];
 int lastStart = -1;
@@ -21639,7 +21618,7 @@ genericHeader(tdb, item);
 printf("<B>Name:</B> %s<BR>\n", item);
 
 /* this prints the detail page for the clinical information for Cancer Demo datasets */
-char *table = tdb->tableName;
+char *table = tdb->table;
 char *cliniTable=NULL, *key=NULL;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
@@ -21854,7 +21833,7 @@ char confTable[128];
 
 /* create name for confidence table containing posterior probability and
    false discovery rate (FDR). */
-safef(confTable, sizeof(confTable), "%sConf", tdb->tableName);
+safef(confTable, sizeof(confTable), "%sConf", tdb->table);
 
 if (sqlTableExists(conn, confTable))
     {
@@ -21952,14 +21931,14 @@ char *escapedName = sqlEscapeString(item);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, item);
-if (! startsWith(KIDD_EICHLER_DISC_PREFIX, tdb->tableName))
+if (! startsWith(KIDD_EICHLER_DISC_PREFIX, tdb->table))
     errAbort("track tableName must begin with "KIDD_EICHLER_DISC_PREFIX
-	     " but instead it is %s", tdb->tableName);
-hasBin = hOffsetPastBin(database, seqName, tdb->tableName);
+	     " but instead it is %s", tdb->table);
+hasBin = hOffsetPastBin(database, seqName, tdb->table);
 /* We don't need to add bin to this because name is indexed: */
 safef(query, sizeof(query), "select * from %s where name = '%s' "
 	       "and chrom = '%s' and chromStart = %d",
-	       tdb->tableName, escapedName, seqName, start);
+	       tdb->table, escapedName, seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -21976,7 +21955,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	endForUrl += atoi(endFudge);
     char sampleName[16];
     safecpy(sampleName, sizeof(sampleName),
-	    tdb->tableName + strlen(KIDD_EICHLER_DISC_PREFIX));
+	    tdb->table + strlen(KIDD_EICHLER_DISC_PREFIX));
     touppers(sampleName);
     char itemPlus[2048];
     safef(itemPlus, sizeof(itemPlus),
@@ -22054,7 +22033,7 @@ if (isCustomTrack(track))
     {
     struct customTrack *ctList = getCtList();
     for (ct = ctList; ct != NULL; ct = ct->next)
-	if (sameString(track, ct->tdb->tableName))
+	if (sameString(track, ct->tdb->track))
 	    break;
     }
 
@@ -22086,7 +22065,8 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
             }
         strncat(wigType, "\n", 128 - strlen(wigType));
         tdb->type = wigType;
-        tdb->tableName = cloneString(track);
+        tdb->track = cloneString(track);
+        tdb->table = cloneString(track);
         freeMem(typeLine);
         cartRemove(cart, "parentWigMaf");	/* ONE TIME ONLY USE !!!	*/
         }

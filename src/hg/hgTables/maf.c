@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.19 2010/04/09 00:11:44 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.20 2010/05/11 01:43:25 kent Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -25,7 +25,7 @@ if (track == NULL)
 if (isEmpty(track->type))
     return FALSE;
 
-if (sameString(track->tableName, table))
+if (sameString(track->table, table))
     {
     if (startsWithWord("maf",track->type) || startsWithWord("wigMaf",track->type))
         return TRUE;
@@ -37,7 +37,7 @@ else
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
 	struct trackDb *childTdb = tdbRef->val;
-        if(sameString(childTdb->tableName, table))
+        if(sameString(childTdb->table, table))
             {
             if (startsWithWord("maf",childTdb->type) || startsWithWord("wigMaf",childTdb->type))
                 return TRUE;

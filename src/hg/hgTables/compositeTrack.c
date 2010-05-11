@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.18 2010/01/04 19:12:21 kent Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.19 2010/05/11 01:43:25 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -156,7 +156,7 @@ void doSubtrackMergeMore(struct sqlConnection *conn)
 char *dbTable = getDbTable(database, curTable);
 
 htmlOpen("Merge subtracks of %s (%s)",
-	 curTrack->tableName, curTrack->longLabel);
+	 curTrack->table, curTrack->longLabel);
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=%s>\n",
 	cartUsualString(cart, "formMethod", "POST"));
@@ -246,12 +246,12 @@ struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(curTrac
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     tdb = tdbRef->val;
-    if (!sameString(tdb->tableName, curTable) &&
-	isSubtrackMerged(tdb->tableName) &&
+    if (!sameString(tdb->table, curTable) &&
+	isSubtrackMerged(tdb->table) &&
 	sameString(tdb->type, primary->type))
 	{
 	dyStringAppend(dy, linePrefix);
-	dyStringPrintf(dy, "  %s (%s)\n", tdb->tableName, tdb->longLabel);
+	dyStringPrintf(dy, "  %s (%s)\n", tdb->table, tdb->longLabel);
 	}
     }
 return dyStringCannibalize(&dy);

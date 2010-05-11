@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.9 2008/02/20 00:42:28 markd Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.10 2010/05/11 01:43:28 kent Exp $";
 
 
 
@@ -75,7 +75,7 @@ struct bed *bed = NULL, *bedNext = NULL, *bedList = NULL;
 boolean skipPseudos = cartUsualBoolean(cart, "affyTransfrags.skipPseudos", TRUE);
 boolean skipDups = cartUsualBoolean(cart, "affyTransfrags.skipDups", FALSE);
 /* Use simple bed loader to do database work. */
-bedLoadItem(tg, tg->mapName, affyTransfragLoader);
+bedLoadItem(tg, tg->table, affyTransfragLoader);
 
 /* Now filter based on options. */
 for(bed = tg->items; bed != NULL; bed = bedNext) 

@@ -415,7 +415,6 @@ static void connectedLfFromPslsInRange(struct sqlConnection *conn,
 /* Return linked features from range of table after have
  * already connected to database.. */
 {
-char *track = tg->mapName;
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -424,22 +423,22 @@ struct linkedFeatures *lfList = NULL, *lf;
 char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128];
 
-safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->track);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
     {
     safef(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
-    sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
+    sr = hRangeQuery(conn, tg->table, chromName, start, end, extraWhere, &rowOffset);
     }
 else
     {
     safef(extraWhere, sizeof(extraWhere), " ");
-    sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+    sr = hRangeQuery(conn, tg->table, chromName, start, end, NULL, &rowOffset);
     }
 
 if (sqlCountColumns(sr) < 21+rowOffset)
-    errAbort("trackDb has incorrect table type for table \"%s\"",
-	     tg->mapName);
+    errAbort("trackDb has incorrect table type for track \"%s\"",
+	     tg->track);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
@@ -487,7 +486,7 @@ void pslChromMethods(struct track *tg, char *colorChromDefault)
 {
 char option[128]; /* Option -  rainbow chromosome color */
 char *optionStr ;
-safef( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->track);
 optionStr = cartUsualString(cart, option, colorChromDefault);
 tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/

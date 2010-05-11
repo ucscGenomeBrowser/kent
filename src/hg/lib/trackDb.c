@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDb.c,v 1.10 2010/04/12 16:17:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDb.c,v 1.11 2010/05/11 01:43:30 kent Exp $";
 
 struct trackDb *trackDbLoad(char **row)
 /* Load a trackDb from row fetched with select * from trackDb
@@ -20,7 +20,7 @@ int sizeOne;
 
 AllocVar(ret);
 ret->restrictCount = sqlSigned(row[14]);
-ret->tableName = cloneString(row[0]);
+ret->track = cloneString(row[0]);
 ret->shortLabel = cloneString(row[1]);
 ret->type = cloneString(row[2]);
 ret->longLabel = cloneString(row[3]);
@@ -116,7 +116,7 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->tableName = sqlStringComma(&s);
+ret->track = sqlStringComma(&s);
 ret->shortLabel = sqlStringComma(&s);
 ret->type = sqlStringComma(&s);
 ret->longLabel = sqlStringComma(&s);
@@ -155,7 +155,7 @@ void trackDbFree(struct trackDb **pEl)
 struct trackDb *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->tableName);
+freeMem(el->track);
 freeMem(el->shortLabel);
 freeMem(el->type);
 freeMem(el->longLabel);
@@ -191,7 +191,7 @@ void trackDbOutput(struct trackDb *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tableName);
+fprintf(f, "%s", el->track);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

@@ -90,7 +90,7 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 6);
@@ -333,9 +333,9 @@ char *codeNames[18] = {"within genus", "\t", "crenarchaea", "euryarchaea", "\t",
 		       "\t", "eukarya", "\t", "thermophile", "hyperthermophile","acidophile",
 		       "alkaliphile", "halophile", "methanogen", "strict aerobe",
 		       "strict anaerobe", "anaerobe or aerobe"}; int i;
-safef(cMode, sizeof(cMode), "%s.scoreFilter", tg->tdb->tableName);
+safef(cMode, sizeof(cMode), "%s.scoreFilter", tg->tdb->track);
 cutoff=cartUsualInt(cart, cMode,0 );
-sr=hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, 0);
+sr=hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, 0);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -571,7 +571,7 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 15);
@@ -653,7 +653,7 @@ double gcSetting = (double)cartUsualInt(cart, "rnaHybridization.gc", 50) / 100;
 int hideTrnaSetting = cartUsualBoolean(cart, "rnaHybridization.hideTrna", FALSE);
 int showKnownTargetsSetting = cartUsualBoolean(cart, "rnaHybridization.showKnownTargets", TRUE);
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     rnaHyb = rnaHybridizationLoad(row);

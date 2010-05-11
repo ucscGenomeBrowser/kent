@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.107 2010/05/07 22:30:14 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.108 2010/05/11 01:43:28 kent Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -185,7 +185,7 @@ static struct hash *trackSpans = NULL;	/* hash of hashes */
 char *wigNameCallback(struct track *tg, void *item)
 /* Return name of wig level track. */
 {
-return tg->mapName;
+return tg->track;
 }
 
 /*	NOT used at this time, maybe later	*/
@@ -274,7 +274,7 @@ static void wigSetItemData(struct track *tg, struct wigItem *wi,
 static char *previousFileName = (char *)NULL;
 char spanName[SMALLBUF];
 struct hashEl *el;
-char *trackName = tg->mapName;
+char *trackName = tg->track;
 
 /*	Allocate trackSpans one time only, for all tracks	*/
 if (! trackSpans)
@@ -332,11 +332,11 @@ ct = tg->customPt;
 
 /*	Verify this is a custom track	*/
 if (ct == (void *)NULL)
-    errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
+    errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->track);
 
 /*	and should *not* be here for a database custom track	*/
 if (ct->dbTrack)
-    errAbort("ctWigLoadItems: this custom wiggle track is in database: %s", tg->mapName);
+    errAbort("ctWigLoadItems: this custom wiggle track is in database: %s", tg->track);
 
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
@@ -439,7 +439,7 @@ if (tg->customPt != (void *)NULL)
 else
 #endif /* GBROWSE */
     {
-    dbTableName = tg->mapName;
+    dbTableName = tg->table;
     tdb = tg->tdb;
     }
 
@@ -1031,17 +1031,17 @@ if (tg->mapsSelf)
 	{
 	struct customTrack *ct = tg->customPt;
 	itemName = (char *)needMem(LARGEBUF * sizeof(char));
-	safef(itemName, LARGEBUF, "%s %s", ct->wigFile, tg->mapName);
+	safef(itemName, LARGEBUF, "%s %s", ct->wigFile, tg->track);
 	}
     else
 #endif /* GBROWSE */
-	itemName = cloneString(tg->mapName);
+	itemName = cloneString(tg->track);
 
 #ifdef FLAT_TRACK_LIST
     // Don't bother if we are flat, imgV2, dense and a child.
     if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
 #endif//def FLAT_TRACK_LIST
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName,
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track,
             itemName, NULL);
     freeMem(itemName);
     }
@@ -1058,7 +1058,7 @@ struct hashEl *el, *elList;
  *	here for basesPerPixel, pick the largest usingDataSpan that is
  *	not greater than the basesPerPixel
  */
-el = hashLookup(trackSpans, tg->mapName);	/*  What Spans do we have */
+el = hashLookup(trackSpans, tg->track);	/*  What Spans do we have */
 elList = hashElListHash(el->val);		/* Our pointer to spans hash */
 for (el = elList; el != NULL; el = el->next)
     {
@@ -1525,25 +1525,25 @@ AllocVar(wigCart);
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,tdb->tableName, (char **) NULL);
-wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,tdb->track, (char **) NULL);
 
-wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,tdb->tableName, (char **) NULL);
-wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,tdb->tableName, (char **) NULL);
-wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,tdb->track, (char **) NULL);
 
-wigFetchMinMaxPixelsWithCart(cart,tdb,tdb->tableName, &minHeight, &maxHeight, &defaultHeight);
-wigFetchYLineMarkValueWithCart(cart,tdb,tdb->tableName, &yLineMark);
+wigFetchMinMaxPixelsWithCart(cart,tdb,tdb->track, &minHeight, &maxHeight, &defaultHeight);
+wigFetchYLineMarkValueWithCart(cart,tdb,tdb->track, &yLineMark);
 wigCart->yLineMark = yLineMark;
-wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->tableName, (char **) NULL);
-wigCart->alwaysZero = wigFetchAlwaysZeroWithCart(cart,tdb,tdb->tableName, (char **) NULL);
-wigCart->transformFunc = wigFetchTransformFuncWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->alwaysZero = wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->transformFunc = wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
 
-wigFetchMinMaxYWithCart(cart,tdb,tdb->tableName, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
+wigFetchMinMaxYWithCart(cart,tdb,tdb->track, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
 
 wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 

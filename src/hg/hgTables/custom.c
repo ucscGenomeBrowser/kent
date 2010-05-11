@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.46 2010/04/13 05:51:25 kent Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.47 2010/05/11 01:43:25 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -49,7 +49,8 @@ struct trackDb *tdb;
 char buf[256];
 
 tdb = customTrackTdbDefault();
-tdb->tableName = customTrackTableFromLabel(ctName);
+tdb->table = customTrackTableFromLabel(ctName);
+tdb->track = cloneString(tdb->table);
 tdb->shortLabel = ctName;
 tdb->longLabel = ctDesc;
 safef(buf, sizeof(buf), "bed %d .", fields);
@@ -82,7 +83,7 @@ if (ct == NULL)
     return(NULL);
 
 AllocVar(hti);
-hti->rootName = cloneString(ct->tdb->tableName);
+hti->rootName = cloneString(ct->tdb->table);
 hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
@@ -550,7 +551,7 @@ fprintf(f, "\n");
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, track->tableName,
+    struct bed *bed, *bedList = cookedBedList(conn, track->table,
 	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
@@ -568,12 +569,12 @@ void doTabOutCustomTracks(char *db, struct trackDb *track, struct sqlConnection 
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
-struct customTrack *ct = ctLookupName(track->tableName);
+struct customTrack *ct = ctLookupName(track->table);
 char *type = ct->tdb->type;
 if (startsWithWord("makeItems", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, track->tableName, f, conn, fields);
+    doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, track->table, f, conn, fields);
     hFreeConn(&conn);
     }
 else
@@ -588,7 +589,7 @@ struct customTrack *newList = NULL, *ct, *next;
 for (ct = *pList; ct != NULL; ct = next)
     {
     next = ct->next;
-    if (!sameString(ct->tdb->tableName, name))
+    if (!sameString(ct->tdb->table, name))
         {
 	slAddHead(&newList, ct);
 	}

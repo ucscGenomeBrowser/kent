@@ -10,7 +10,7 @@
 #include "hapmapAllelesSummary.h"
 #include "hapmapPhaseIIISummary.h"
 
-static char const rcsid[] = "$Id: hapmapTrack.c,v 1.47 2009/03/09 21:17:52 angie Exp $";
+static char const rcsid[] = "$Id: hapmapTrack.c,v 1.48 2010/05/11 01:43:27 kent Exp $";
 
 // These values are all overwritten in loadFilters() below.
 char *mixedFilter = HAP_FILTER_DEFAULT;
@@ -202,14 +202,14 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    if (endsWith(tg->mapName, "PhaseII"))
+    if (endsWith(tg->table, "PhaseII"))
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
     else
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
-    if (sameString(tg->mapName, orthoTable))
+    if (sameString(tg->table, orthoTable))
 	{
 	struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
@@ -224,7 +224,7 @@ for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     }
 
 struct hapmapSnps *simpleLoadItem, *simpleItemList = NULL;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapSnpsLoad(row+rowOffset);
@@ -608,15 +608,15 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    if (endsWith(tg->mapName, "PhaseII"))
+    if (endsWith(tg->table, "PhaseII"))
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
     else
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
-    if (sameString(tg->mapName, orthoTable))
+    if (sameString(tg->table, orthoTable))
 	{
 	struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
 	struct hapmapAllelesOrtho *orthoItemsFiltered = NULL;
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
@@ -632,7 +632,7 @@ for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     }
 
 struct hapmapSnps *simpleLoadItem, *simpleItemList = NULL, *simpleItemsFiltered = NULL;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapSnpsLoad(row+rowOffset);
@@ -734,19 +734,19 @@ return FALSE;
 }
 
 boolean loadOrthosPhaseIII(struct track *tg, struct sqlConnection *conn, struct hash *summaryHash)
-/* If tg->mapName is a hapmapAlleles table, load & filter into tg->items and return TRUE. */
+/* If tg->table is a hapmapAlleles table, load & filter into tg->items and return TRUE. */
 {
 int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
     safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
-    if (sameString(tg->mapName, orthoTable))
+    if (sameString(tg->table, orthoTable))
 	{
 	struct hapmapAllelesOrtho *item, *itemList = NULL;
 	struct hapmapPhaseIIISummary *summary;
 	int rowOffset;
-	struct sqlResult *sr = hRangeQuery(conn, tg->mapName,
+	struct sqlResult *sr = hRangeQuery(conn, tg->table,
 					   chromName, winStart, winEnd, NULL, &rowOffset);
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -778,7 +778,7 @@ if (loadOrthosPhaseIII(tg, conn, summaryHash))
 
 struct hapmapSnps *item, *itemList = NULL;
 struct hapmapPhaseIIISummary *summary;
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     item = hapmapSnpsLoad(row+rowOffset);
@@ -831,11 +831,11 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    if (endsWith(tg->mapName, "PhaseII"))
+    if (endsWith(tg->table, "PhaseII"))
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
     else
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
-    if (sameString(tg->mapName, orthoTable))
+    if (sameString(tg->table, orthoTable))
 	{
 	struct hapmapAllelesOrtho *thisItem = item;
 	chromStart = thisItem->chromStart;
@@ -897,11 +897,11 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    if (endsWith(tg->mapName, "PhaseII"))
+    if (endsWith(tg->table, "PhaseII"))
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
     else
 	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
-    if (sameString(tg->mapName, orthoTable))
+    if (sameString(tg->table, orthoTable))
 	{
 	struct hapmapAllelesOrtho *thisItem = item;
 	gradient = grayInRange(thisItem->score, 0, 100);

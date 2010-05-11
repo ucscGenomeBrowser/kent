@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.8 2009/03/03 21:11:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.9 2010/05/11 01:43:28 kent Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -20,7 +20,7 @@ char **row = NULL;
 struct slList *itemList = NULL, *item = NULL;
 
 if (NULL == sr)
-    errAbort("While loading track %s, bedLoadItemSqlResult was given empty sqlResult", tg->mapName);
+    errAbort("While loading track %s, bedLoadItemSqlResult was given empty sqlResult", tg->track);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -39,7 +39,7 @@ char option[128]; /* Option -  score filter */
 char *optionScoreVal;
 int  optionScore = defaultFilterScore;
 
-safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
+safef(option, sizeof(option), "%s.scoreFilter", tg->track);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
@@ -58,7 +58,7 @@ struct sqlResult *sr = NULL;
 char extraWhere[128];
 
 scoreFilterSqlClause(tg, extraWhere, sizeof(extraWhere), 0);
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, extraWhere, &rowOffset);
 bedLoadItemBySqlResult(tg, sr, rowOffset, (ItemLoader)rnaSecStrLoad);
 
 sqlFreeResult(&sr);
@@ -213,7 +213,7 @@ if (color)
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHc(hvg, rnaSecStr->chromStart, rnaSecStr->chromEnd, x1, y, x2 - x1, heightPer,
-		 tg->mapName, tg->mapItemName(tg, rnaSecStr), NULL);
+		 tg->track, tg->mapItemName(tg, rnaSecStr), NULL);
 	}
     }
 }

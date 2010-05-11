@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.523 2010/05/09 17:26:29 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.524 2010/05/11 01:43:26 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -163,7 +163,7 @@ if (genePredTables != NULL)
     slSort(&geneTdbList, trackDbCmp);
     printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
     char cartVar[256];
-    safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->tableName);
+    safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->track);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     struct slName *selectedGeneTracks = cartOptionalSlNameList(cart, cartVar);
@@ -179,7 +179,7 @@ if (genePredTables != NULL)
     char **labels = needMem(menuSize*sizeof(char *));
     for (i = 0, gTdb = geneTdbList;  i < menuSize && gTdb != NULL;  i++, gTdb = gTdb->next)
 	{
-	values[i] = gTdb->tableName;
+	values[i] = gTdb->track;
 	labels[i] = gTdb->shortLabel;
 	}
     cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
@@ -288,7 +288,7 @@ void snp125Ui(struct trackDb *tdb)
 {
 char autoSubmit[2048];
 char *orthoTable = snp125OrthoTable(tdb, NULL);
-int version = snpVersion(tdb->tableName);
+int version = snpVersion(tdb->track);
 
 if (version < 130)
     snp125ValidLabelsSize--; // no by-1000genomes
@@ -511,7 +511,7 @@ char *val;
 
 printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
 
-safef(var, sizeof(var), "%s_val", tdb->tableName);
+safef(var, sizeof(var), "%s_val", tdb->track);
 val = cartUsualString(cart,  var, ldValDefault);
 cgiMakeRadioButton(var, "rsquared", sameString("rsquared", val));
 printf("&nbsp;r<sup>2</sup>&nbsp;&nbsp;");
@@ -522,7 +522,7 @@ printf("&nbsp;LOD<BR>");
 
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 
-safef(var, sizeof(var), "%s_trm", tdb->tableName);
+safef(var, sizeof(var), "%s_trm", tdb->track);
 cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldTrmDefault));
 printf("&nbsp;Trim to triangle<BR>\n");
 
@@ -535,9 +535,9 @@ if (tdbIsComposite(tdb))
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
 	struct trackDb *subTdb = tdbRef->val;
-	if (hTableExists(database, subTdb->tableName))
+	if (hTableExists(database, subTdb->table))
 	    {
-	    safef(var, sizeof(var), "%s_inv", subTdb->tableName);
+	    safef(var, sizeof(var), "%s_inv", subTdb->track);
 	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault));
 	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
 		   subTdb->longLabel);
@@ -547,14 +547,14 @@ if (tdbIsComposite(tdb))
     }
 else
     {
-    safef(var, sizeof(var), "%s_inv", tdb->tableName);
+    safef(var, sizeof(var), "%s_inv", tdb->track);
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault));
     printf("&nbsp;Invert the display<BR>&nbsp;&nbsp;\n");
     }
 printf("<BR><B>Colors:</B>\n");
 
-safef(var, sizeof(var), "%s_pos", tdb->tableName);
+safef(var, sizeof(var), "%s_pos", tdb->track);
 val = cartUsualString(cart, var, ldPosDefault);
 printf("<TABLE>\n ");
 printf("<TR>\n  <TD>&nbsp;&nbsp;LD values&nbsp;&nbsp;</TD>\n  <TD>- ");
@@ -565,7 +565,7 @@ printf("</TD>\n  <TD>");
 radioButton(var, val, "blue");
 printf("</TD>\n </TR>\n ");
 
-safef(var, sizeof(var), "%s_out", tdb->tableName);
+safef(var, sizeof(var), "%s_out", tdb->track);
 val = cartUsualString(cart, var, ldOutDefault);
 printf("<TR>\n  <TD>&nbsp;&nbsp;Outlines&nbsp;&nbsp;</TD>\n  <TD>- ");
 radioButton(var, val, "red");
@@ -586,7 +586,7 @@ printf("</TABLE>\n");
 
 if (tdb->type && sameString(tdb->type, "ld2"))
     {
-    safef(var, sizeof(var), "%s_gap", tdb->tableName);
+    safef(var, sizeof(var), "%s_gap", tdb->track);
     printf("&nbsp;&nbsp;");
     cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldGapDefault));
     printf("&nbsp;In dense mode, shade gaps between markers by T-int<BR>\n");
@@ -614,7 +614,7 @@ void labelMakeCheckBox(struct trackDb *tdb, char *sym, char *desc, boolean dflt)
 /* add a checkbox use to choose labels to enable. */
 {
 char varName[64];
-safef(varName, sizeof(varName), "%s.label.%s", tdb->tableName, sym);
+safef(varName, sizeof(varName), "%s.label.%s", tdb->track, sym);
 boolean option = cartUsualBoolean(cart, varName, dflt);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
@@ -966,7 +966,7 @@ char *affyMap;
 char *col;
 char varName[128];
 
-safef(varName, sizeof(varName), "%s.%s", tdb->tableName, "type");
+safef(varName, sizeof(varName), "%s.%s", tdb->track, "type");
 affyMap = cartUsualString(cart, varName, affyEnumToString(affyTissue));
 col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Experiment Display: </b> ");
@@ -1021,7 +1021,7 @@ char *drawExons = trackDbSetting(tdb, "expDrawExons");
 boolean checked = FALSE;
 if (!drawExons || differentWord(drawExons, "on"))
     return;
-safef(checkBoxName, sizeof(checkBoxName), "%s.expDrawExons", tdb->tableName);
+safef(checkBoxName, sizeof(checkBoxName), "%s.expDrawExons", tdb->track);
 checked = cartCgiUsualBoolean(cart, checkBoxName, FALSE);
 puts("<B>Draw intron lines/arrows and exons: </B> ");
 cgiMakeCheckBox(checkBoxName, checked);
@@ -1034,7 +1034,7 @@ void expRatioColorOption(struct trackDb *tdb)
 char radioName[256];
 char *colorSetting = NULL;
 char *tdbSetting = trackDbSettingOrDefault(tdb, "expColor", "redGreen");
-safef(radioName, sizeof(radioName), "%s.color", tdb->tableName);
+safef(radioName, sizeof(radioName), "%s.color", tdb->track);
 colorSetting = cartUsualString(cart, radioName, tdbSetting);
 puts("<BR><B>Color: </B><BR> ");
 cgiMakeRadioButton(radioName, "redGreen", sameString(colorSetting, "redGreen"));
@@ -1060,7 +1060,7 @@ struct hash *ret =
 if ((ret == NULL) && (gHashOfHashes == NULL))
     errAbort("Could not get group settings for track.");
 expRatioDrawExonOption(tdb);
-expRatioCombineDropDown(tdb->tableName, groupings, gHashOfHashes);
+expRatioCombineDropDown(tdb->track, groupings, gHashOfHashes);
 expRatioColorOption(tdb);
 }
 
@@ -1077,7 +1077,7 @@ char *affyAllExonMap;
 char *col;
 char varName[128];
 
-safef(varName, sizeof(varName), "%s.%s", tdb->tableName, "type");
+safef(varName, sizeof(varName), "%s.%s", tdb->track, "type");
 affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
 col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Experiment Display: </b> ");
@@ -1143,16 +1143,16 @@ boolean useGene, useAcc, useSprot, usePos;
 int cMode;
 char *cModes[3] = {"0", "1", "2"};
 
-safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
-safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
-safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
-safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->track);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->track);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->track);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->track);
 useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 useSprot= cartUsualBoolean(cart, sprotName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
 
-safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->tableName);
+safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->track);
 cMode = cartUsualInt(cart, cModeStr, 0);
 
 printf("<P><B>Color elements: </B> ");
@@ -1187,15 +1187,15 @@ boolean useGene, useAcc, usePos;
 int cMode;
 char *cModes[3] = {"0", "1", "2"};
 
-safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
-safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
-safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
-safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->track);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->track);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->track);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->track);
 useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
 
-safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->tableName);
+safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->track);
 cMode = cartUsualInt(cart, cModeStr, 0);
 
 printf("<P><B>Color elements: </B> ");
@@ -1227,16 +1227,16 @@ boolean useGene, useAcc, useSprot, usePos;
 int cMode;
 char *cModes[3] = {"0", "1", "2"};
 
-safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
-safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
-safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
-safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->track);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->track);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->track);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->track);
 useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 useSprot= cartUsualBoolean(cart, sprotName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
 
-safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->tableName);
+safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->track);
 cMode = cartUsualInt(cart, cModeStr, 0);
 
 printf("<P><B>Color elements: </B> ");
@@ -1265,7 +1265,7 @@ void hg17KgIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+safef(varName, sizeof(varName), "%s.label", tdb->track);
 geneLabel = cartUsualString(cart, varName, "gene symbol");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene symbol");
@@ -1286,7 +1286,7 @@ void omimGeneIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+safef(varName, sizeof(varName), "%s.label", tdb->track);
 geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Label:</B> ");
 radioButton(varName, geneLabel, "OMIM ID");
@@ -1323,11 +1323,11 @@ void knownGeneShowWhatUi(struct trackDb *tdb)
 {
 char varName[64];
 printf("<B>Show:</B> ");
-safef(varName, sizeof(varName), "%s.show.noncoding", tdb->tableName);
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
 boolean option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "non-coding genes");
-safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->tableName);
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
@@ -1354,7 +1354,7 @@ void geneIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+safef(varName, sizeof(varName), "%s.label", tdb->track);
 geneLabel = cartUsualString(cart, varName, "gene");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene");
@@ -1369,7 +1369,7 @@ static void hideNoncodingOpt(struct trackDb *tdb)
 /* Put up option to hide non-coding elements. */
 printf("<B>Hide non-coding genes:</B> ");
 char varName[64];
-safef(varName, sizeof(varName), "%s.%s", tdb->tableName, HIDE_NONCODING_SUFFIX);
+safef(varName, sizeof(varName), "%s.%s", tdb->track, HIDE_NONCODING_SUFFIX);
 cartMakeCheckBox(cart, varName, HIDE_NONCODING_DEFAULT);
 }
 
@@ -1378,7 +1378,7 @@ void refGeneUI(struct trackDb *tdb)
 {
 /* Figure out if OMIM database is available. */
 int omimAvail = 0;
-if (sameString(tdb->tableName, "refGene"))
+if (sameString(tdb->track, "refGene"))
     {
     struct sqlConnection *conn = hAllocConn(database);
     char query[128];
@@ -1459,7 +1459,7 @@ ensemblNonCodingTypeConfig(tdb);
 void mrnaUi(struct trackDb *tdb, boolean isXeno)
 /* Put up UI for an mRNA (or EST) track. */
 {
-struct mrnaUiData *mud = newMrnaUiData(tdb->tableName, isXeno);
+struct mrnaUiData *mud = newMrnaUiData(tdb->track, isXeno);
 struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
 char *filterTypeVar = mud->filterTypeVar;
@@ -1493,7 +1493,7 @@ char filterVar[256];
 char *filterVal = "";
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->track);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
 }
@@ -1508,7 +1508,7 @@ char *colorSetting;
 char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
 
 printf("<p><b>Color track based on chromosome:</b> ");
-snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
+snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->track);
 colorSetting = cartUsualString(cart, colorVar, colorDefault);
 cgiMakeRadioButton(colorVar, "on", sameString(colorSetting, "on"));
 printf(" on ");
@@ -1567,12 +1567,12 @@ struct sqlConnection *conn = hAllocConn(database);
 
 char newRow = 0;
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
-snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
-snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->tableName );
-snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->tableName );
-snprintf( &options[6][0], 256, "%s.interp.gap", tdb->tableName );
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->track );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->track );
+snprintf( &options[3][0], 256, "%s.fill", tdb->track );
+snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->track );
+snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->track );
+snprintf( &options[6][0], 256, "%s.interp.gap", tdb->track );
 
 thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
@@ -1603,7 +1603,7 @@ printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
 cgiMakeDoubleVar(&options[5][0], thisMaxYRange, 6 );
 
 printf("<p><b>Toggle Species on/off</b><br>" );
-sr = hRangeQuery(conn, tdb->tableName, chromosome, 0, 1877426, NULL, &rowOffset);
+sr = hRangeQuery(conn, tdb->table, chromosome, 0, 1877426, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
@@ -1631,7 +1631,7 @@ boolean compositeTrack = tdbIsComposite(tdb);
 if (compositeTrack)
     return;	// configuration taken care of by hCompositeUi() later
 else if (normScoreAvailable)
-    chainCfgUi(database, cart, tdb, tdb->tableName, NULL, FALSE, chromosome);
+    chainCfgUi(database, cart, tdb, tdb->track, NULL, FALSE, chromosome);
 else
     crossSpeciesUi(tdb);
 }
@@ -1641,7 +1641,7 @@ void chromGraphUi(struct trackDb *tdb)
 {
 char varName[chromGraphVarNameMaxSize];
 struct sqlConnection *conn = NULL;
-char *track = tdb->tableName;
+char *track = tdb->track;
 if (!isCustomTrack(track))
     conn = hAllocConn(database);
 double minVal,maxVal;
@@ -1748,12 +1748,12 @@ int thisHeightPer, thisLineGap;
 float thisMinYRange, thisMaxYRange;
 char *interpolate, *fill;
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
-snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
-snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->tableName );
-snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->tableName );
-snprintf( &options[6][0], 256, "%s.interp.gap", tdb->tableName );
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->track );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->track );
+snprintf( &options[3][0], 256, "%s.fill", tdb->track );
+snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->track );
+snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->track );
+snprintf( &options[6][0], 256, "%s.interp.gap", tdb->track );
 
 thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
@@ -1800,7 +1800,7 @@ tnfgVis = hTvFromString(visString);
 printf("<b>Transfrags Display Mode: </b>");
 hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
-wigCfgUi(cart,tdb,tdb->tableName,"<u>Graph Plotting options:</u>",FALSE);
+wigCfgUi(cart,tdb,tdb->track,"<u>Graph Plotting options:</u>",FALSE);
 printf("<p><b><u>View/Hide individual cell lines:</u></b>");
 }
 
@@ -1813,12 +1813,12 @@ int thisHeightPer, thisLineGap;
 float thisMinYRange, thisMaxYRange;
 char *interpolate, *fill;
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
-snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
-snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->tableName );
-snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->tableName );
-snprintf( &options[6][0], 256, "%s.interp.gap", tdb->tableName );
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->track );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->track );
+snprintf( &options[3][0], 256, "%s.fill", tdb->track );
+snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->track );
+snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->track );
+snprintf( &options[6][0], 256, "%s.interp.gap", tdb->track );
 
 thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
@@ -1979,7 +1979,7 @@ char cartVar[128];
 for (i = 0;  i < popCount;  i++)
     {
     char table[HDB_MAX_TABLE_STRING];
-    if (endsWith(tdb->tableName, "PhaseII"))
+    if (endsWith(tdb->track, "PhaseII"))
 	safef(table, sizeof(table), "hapmapSnps%sPhaseII", pops[i]);
     else
 	safef(table, sizeof(table), "hapmapSnps%s", pops[i]);
@@ -2101,17 +2101,17 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 safef(query, sizeof(query),
-      "select reference,pubMedId from %s group by pubMedId order by reference;", tdb->tableName);
+      "select reference,pubMedId from %s group by pubMedId order by reference;", tdb->table);
 sr = sqlGetResult(conn, query);
 printf("<BR><B>Filter by publication reference:</B>\n");
 char cartVarName[256];
-safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tdb->tableName);
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tdb->track);
 boolean isInclude = sameString("include", cartUsualString(cart, cartVarName, "include"));
 cgiMakeRadioButton(cartVarName, "include", isInclude);
 printf("include\n");
 cgiMakeRadioButton(cartVarName, "exclude", !isInclude);
 printf("exclude<BR>\n");
-safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->tableName);
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->track);
 struct slName *checked = cartOptionalSlNameList(cart, cartVarName);
 boolean setAll = (checked == NULL && isInclude);
 #define MAX_DGV_REFS 128
@@ -2128,7 +2128,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     labelArr[refCount] = cloneString(label);
     valueArr[refCount++] = cloneString(pmId);
     if (refCount >= MAX_DGV_REFS)
-	errAbort("dgvUi: %s has too many references (max %d)", tdb->tableName, MAX_DGV_REFS);
+	errAbort("dgvUi: %s has too many references (max %d)", tdb->track, MAX_DGV_REFS);
     if (setAll)
 	slAddHead(&checked, slNameNew(pmId));
     }
@@ -2146,19 +2146,19 @@ struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(database, tdb->tableName) && tdb->subtracks != NULL &&
+    if (!hTableOrSplitExists(database, tdb->table) && tdb->subtracks != NULL &&
     	trackDbLocalSetting(tdb, "compositeTrack") == NULL) 
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdb->tableName), tdb->shortLabel);
+                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("<TD>");
     enum trackVisibility tv =
-                    hTvFromString(cartUsualString(cart, tdb->tableName,
+                    hTvFromString(cartUsualString(cart, tdb->track,
                                             hStringFromTv(tdb->visibility)));
-    hTvDropDownClassVisOnly(tdb->tableName, tv, tdb->canPack,
+    hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
                             tv == tvHide ?  "hiddenText" : "normalText",
                             trackDbSetting(tdb, "onlyVisibility"));
     printf("<TD>%s", tdb->longLabel);
@@ -2173,7 +2173,8 @@ printf("</TABLE>");
 void specificUi(struct trackDb *tdb, struct customTrack *ct)
 	/* Draw track specific parts of UI. */
 {
-char *track = tdb->tableName;
+char *track = tdb->track;
+
 
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
@@ -2261,13 +2262,13 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type) || startsWith("bigWig", tdb->type))
-    wigCfgUi(cart,tdb,tdb->tableName,NULL, FALSE);
+    wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))
-            wigMafCfgUi(cart, tdb, tdb->tableName, NULL, FALSE, database);
+            wigMafCfgUi(cart, tdb, tdb->track, NULL, FALSE, database);
         else
-            wigCfgUi(cart,tdb,tdb->tableName, NULL, FALSE);
+            wigCfgUi(cart,tdb,tdb->track, NULL, FALSE);
         }
 else if (startsWith("chromGraph", tdb->type))
         chromGraphUi(tdb);
@@ -2290,7 +2291,7 @@ else if (sameString(track, "humMusL") ||
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
 else if (startsWith("net", track))
-    netAlignCfgUi(database, cart, tdb, tdb->tableName, NULL, FALSE);
+    netAlignCfgUi(database, cart, tdb, tdb->track, NULL, FALSE);
 else if (startsWith("chain", track) || endsWith("chainSelf", track))
     chainColorUi(tdb);
 else if (sameString(track, "orthoTop4"))
@@ -2346,7 +2347,7 @@ else if (tdb->type != NULL)
         {
 	    if (sameWord(words[0], "genePred"))
             {
-            genePredCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
+            genePredCfgUi(cart,tdb,tdb->track,NULL,FALSE);
             }
         else if(sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak")
              || sameWord(words[0], "broadPeak")  || sameWord(words[0], "gappedPeak"))
@@ -2377,14 +2378,14 @@ else if (tdb->type != NULL)
             &&  !startsWith("encodeGencodeIntron", track))
                 {
                 if (trackDbSetting(tdb, "scoreFilterMax"))
-                    scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,
+                    scoreCfgUi(database, cart,tdb,tdb->track,NULL,
                         sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
                 else
-                    scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
+                    scoreCfgUi(database, cart,tdb,tdb->track,NULL,1000,FALSE);
                 }
             }
         else if (sameWord(words[0], "bed5FloatScore") || sameWord(words[0], "bed5FloatScoreWithFdr"))
-            scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
+            scoreCfgUi(database, cart,tdb,tdb->track,NULL,1000,FALSE);
         else if (sameWord(words[0], "psl"))
             {
             if (wordCount == 3)
@@ -2397,8 +2398,10 @@ else if (tdb->type != NULL)
         freeMem(typeLine);
     }
 if (tdbIsSuperTrack(tdb))
+    {
     superTrackUi(tdb);
-else if (tdb->subtracks);
+    }
+else if (tdb->subtracks)
 // else if (tdbIsComposite(tdb))  for the moment generalizing this to include other containers...
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
@@ -2417,10 +2420,10 @@ char setting[128];
 
 // NOTE: Currently only composite multi-view tracks because
 // reset relies upon all cart vars following naming convention:
-//   {tableName}.{varName}...  ( One exception supported: {tableName}_sel ).
+//   {track}.{varName}...  ( One exception supported: {track}_sel ).
 if(tdbIsComposite(tdb))
     {
-    safef(setting,sizeof(setting),"%s.%s",tdb->tableName,RESET_TO_DEFAULTS);
+    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
@@ -2435,7 +2438,7 @@ printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 struct trackDb *parentTdb = tdb->parent;
 if (parentTdb)
     {
-    char *encodedMapName = cgiEncode(parentTdb->tableName);
+    char *encodedMapName = cgiEncode(parentTdb->track);
     printf("<H3>Parent track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>",
 		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
 		chromosome, encodedMapName, parentTdb->shortLabel);
@@ -2460,8 +2463,8 @@ else
     {
     /* normal visibility control dropdown */
     char *vis = hStringFromTv(tdb->visibility);
-    hTvDropDownClassVisOnly(tdb->tableName,
-        hTvFromString(cartUsualString(cart,tdb->tableName, vis)),
+    hTvDropDownClassVisOnly(tdb->track,
+        hTvFromString(cartUsualString(cart,tdb->track, vis)),
         tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
     }
 printf("&nbsp;");
@@ -2474,7 +2477,7 @@ if (ct)
     {
     puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
     cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
+    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("&nbsp;");
     if (differentString(tdb->type, "chromGraph"))
         cgiMakeOnClickButton("document.customTrackForm.submit();return false;",
@@ -2490,7 +2493,7 @@ if (ct)
     /* hidden form for custom tracks CGI */
     printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
     cartSaveSession(cart);
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
+    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
     }
 else
@@ -2503,10 +2506,10 @@ else
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
 
-   if (hTableOrSplitExists(database, tdb->tableName))
+   if (hTableOrSplitExists(database, tdb->table))
         {
         /* Print update time of the table (or one of the components if split) */
-        char *tableName = hTableForTrack(database, tdb->tableName);
+        char *tableName = hTableForTrack(database, tdb->table);
 	struct sqlConnection *conn = hAllocConnProfile(getTrackProfileName(tdb), database);
 
 	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
@@ -2529,7 +2532,8 @@ struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel,
 struct trackDb *tdb;
 
 AllocVar(tdb);
-tdb->tableName = tableName;
+tdb->track = tableName;
+tdb->table = tableName;
 tdb->shortLabel = shortLabel;
 tdb->longLabel = longLabel;
 tdb->visibility = defaultVis;
@@ -2590,7 +2594,7 @@ else if (isCustomTrack(track))
     ctList = customTracksParseCart(database, cart, NULL, NULL);
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
-        if (sameString(track, ct->tdb->tableName))
+        if (sameString(track, ct->tdb->track))
             {
             tdb = ct->tdb;
             break;

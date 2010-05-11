@@ -19,7 +19,7 @@ return bedLoadN(row, 15);
 static void loadAll(struct track *track)
 /* Go load all items in window. */
 {
-bedLoadItem(track, track->mapName, (ItemLoader)loadOne);
+bedLoadItem(track, track->table, (ItemLoader)loadOne);
 }
 
 static int rightPixels(struct track *track, void *item)

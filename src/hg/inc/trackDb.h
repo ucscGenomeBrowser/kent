@@ -16,7 +16,8 @@ struct trackDb
 /* This describes an annotation track. */
     {
     struct trackDb *next;  /* Next in singly linked list.  Next sibling in tree. */
-    char *tableName;	/* Symbolic ID of Track */
+    char *track; /* Symbolic ID of Track - used in cart. Is tableName in database historically. */
+    char *table; /* Symbolic ID of Table - used in database. Same as track usually. */
     char *shortLabel;	/* Short label displayed on left */
     char *type;	/* Track type: bed, psl, genePred, etc. */
     char *longLabel;	/* Long label displayed in middle */
@@ -339,6 +340,9 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
  * reference to them in the returned forest is that they are in the parent
  * field of their children.  The parents of supertracks have no subtracks
  * after this call currently. */
+
+void trackDbAddTableField(struct trackDb *tdbList);
+/* Add table field by looking it up in settings.  */
 
 struct slRef *trackDbListGetRefsToDescendants(struct trackDb *tdbForest);
 /* Return reference list to everything in forest. Do slFreeList when done. */

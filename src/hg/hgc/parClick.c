@@ -13,7 +13,7 @@ static struct bed *loadParTable(struct trackDb *tdb)
 struct bed *pars = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char query[512];
-safef(query, sizeof(query), "select * from %s", tdb->tableName);
+safef(query, sizeof(query), "select * from %s", tdb->table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -120,7 +120,7 @@ void doParDetails(struct trackDb *tdb, char *name)
 // load entire PAR table (t's tiny) and partition
 struct bed *pars = loadParTable(tdb);
 if (slCount(pars) & 1)
-    errAbort("par items not paired in %s", tdb->tableName);
+    errAbort("par items not paired in %s", tdb->table);
 
 struct bed *clickedPar = getClickedPar(name, &pars);
 struct bed *homPar = getHomologousPar(clickedPar, &pars);

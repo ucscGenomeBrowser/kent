@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.18 2010/04/23 04:20:19 galt Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.19 2010/05/11 01:43:24 kent Exp $";
 
 /* from hgTables.c */
 
@@ -170,7 +170,7 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (!hashLookup(groupsInDatabase, track->grp))
          warn("Track %s has group %s, which isn't in grp table",
-	 	track->tableName, track->grp);
+	 	track->track, track->grp);
     }
 
 /* Create dummy group for all tracks. */
@@ -228,7 +228,7 @@ if (group != NULL && sameString(group->name, "all"))
     group = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (sameString(name, track->tableName) &&
+    if (sameString(name, track->table) &&
        (group == NULL || sameString(group->name, track->grp)))
        return track;
     }
@@ -253,7 +253,7 @@ struct trackDb *track = NULL;
 
 if (name != NULL)
     {
-    /* getFullTrackList tweaks tdb->tableName mrna to all_mrna, so in
+    /* getFullTrackList tweaks tdb->table mrna to all_mrna, so in
      * case mrna is passed in (e.g. from hgc link to schema page)
      * tweak it here too: */
     if (sameString(name, "mrna"))
@@ -289,9 +289,9 @@ for (tdb = list; tdb != NULL; tdb = next)
     {
     next = tdb->next;
     /* Change the mrna track to all_mrna to avoid confusion elsewhere. */
-    if (sameString(tdb->tableName, "mrna"))
+    if (sameString(tdb->table, "mrna"))
         {
-        tdb->tableName = cloneString("all_mrna");
+        tdb->table = cloneString("all_mrna");
         }
     }
 
@@ -348,9 +348,9 @@ if (trackDupe != NULL && trackDupe[0] != 0)
         slSort(&(track->subtracks), trackDbCmp);
         for (subTdb = track->subtracks; subTdb != NULL; subTdb = subTdb->next)
             {
-            name = slNameNew(subTdb->tableName);
+            name = slNameNew(subTdb->table);
             slAddTail(&subList, name);
-            hashAdd(uniqHash, subTdb->tableName, NULL);
+            hashAdd(uniqHash, subTdb->table, NULL);
             }
         pList = slCat(pList, subList);
         }
@@ -365,7 +365,7 @@ struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner)
 {
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
-char *trackTable = track->tableName;
+char *trackTable = track->table;
 
 hashAdd(uniqHash, trackTable, NULL);
 if (useJoiner)
@@ -415,8 +415,8 @@ static char *findSelectedTable(struct trackDb *track, char *var)
 
 if (track == NULL)
     return cartString(cart, var);
-else if (isCustomTrack(track->tableName))
-    return track->tableName;
+else if (isCustomTrack(track->table))
+    return track->table;
 else
     {
 
@@ -625,7 +625,7 @@ else
         {
         if (allTracks || sameString(selGroup->name, track->grp))
             {
-            hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->tableName,
+            hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->table,
                 (track == selTrack ? " SELECTED" : ""),
                 track->shortLabel);
             }
@@ -652,7 +652,7 @@ else if (track && tdbIsComposite(track))
     struct trackDb *subTdb;
     for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
         {
-        if (sameWord(subTdb->tableName, table))
+        if (sameWord(subTdb->table, table))
             {
             tdb = subTdb;
             break;
@@ -1451,7 +1451,7 @@ if (strchr(curTable, '.') == NULL)  /* In same database */
     isPositional = htiIsPositional(hti);
     }
 
-if (!curTrack || !sameString(curTrack->tableName, curTable))
+if (!curTrack || !sameString(curTrack->table, curTable))
     {
     struct trackDb *tdb = hTrackDbForTrack(database, curTable);
     curTrack = tdb;

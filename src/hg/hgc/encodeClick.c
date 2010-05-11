@@ -17,7 +17,7 @@ struct sqlResult *sr;
 enum encodePeakType peakType;
 char **row;
 char *db;
-char *table = tdb->tableName;
+char *table = tdb->table;
 char *chrom = cartString(cart,"c");
 int start = cgiInt("o");
 int end = cgiInt("t");
@@ -33,7 +33,7 @@ else
 conn = hAllocConn(db);
 peakType = encodePeakInferTypeFromTable(db, table, tdb->type);
 if (peakType == 0)
-    errAbort("unrecognized peak type from table %s", tdb->tableName);
+    errAbort("unrecognized peak type from table %s", tdb->table);
 genericHeader(tdb, NULL);
 sr = hOrderedRangeQuery(conn, table, chrom, start, end,
 			NULL, &rowOffset);

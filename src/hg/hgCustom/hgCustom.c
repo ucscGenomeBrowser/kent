@@ -19,7 +19,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.140 2010/03/16 06:55:49 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.141 2010/05/11 01:43:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -385,7 +385,7 @@ puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here
 if (isUpdateForm)
     {
     /* hidden variables to identify track */
-    cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
+    cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->track);
     char buf[512];
     char *shortLabel = htmlEncode(ct->tdb->shortLabel);
     char *longLabel = htmlEncode(ct->tdb->longLabel);
@@ -497,7 +497,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         printf("<TR><TD>%s</A></TD>", shortLabel);
     else
 	{
-	char *cgiName = cgiEncode(ct->tdb->tableName);
+	char *cgiName = cgiEncode(ct->tdb->track);
         printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s&%s=%s'>%s</A></TD>", 
             shortLabel, hgCustomName(),cartSidUrlString(cart),
 	    hgCtTable, cgiName, shortLabel);
@@ -555,7 +555,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     /* Delete checkboxes */
     printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix, 
-            ct->tdb->tableName);
+            ct->tdb->track);
     cgiMakeCheckBox(buf, setAllDelete);
     puts("</TD>");
 
@@ -564,7 +564,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         {
         printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
         safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix, 
-                ct->tdb->tableName);
+                ct->tdb->track);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
             cgiMakeCheckBoxWithMsg(buf, setAllUpdate, dataUrl);
         else
@@ -890,7 +890,7 @@ struct customTrack *ct;
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char var[256];
-    safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->tableName);
+    safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->track);
     if (cartBoolean(cart, var))
 	slRemoveEl(&ctList, ct);
     }
@@ -906,7 +906,7 @@ struct customTrack *refreshCts = NULL;
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char var[256];
-    safef(var, sizeof var, "%s_%s", hgCtRefreshPrefix, ct->tdb->tableName);
+    safef(var, sizeof var, "%s_%s", hgCtRefreshPrefix, ct->tdb->track);
     if (cartUsualBoolean(cart, var, FALSE))
 	{
 	struct customTrack *nextCt = NULL, *urlCt = NULL;
@@ -915,7 +915,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	for (urlCt = urlCts; urlCt != NULL; urlCt = nextCt)
 	    {
 	    nextCt = urlCt->next;
-	    if (sameString(ct->tdb->tableName, urlCt->tdb->tableName))
+	    if (sameString(ct->tdb->track, urlCt->tdb->track))
 		slAddHead(&refreshCts, urlCt);
 	    }
 	}
@@ -972,12 +972,12 @@ if (truncated)
 return (dyStringCannibalize(&ds));
 }
 
-struct customTrack *ctFromList(struct customTrack *ctList, char *tableName)
+struct customTrack *ctFromList(struct customTrack *ctList, char *track)
 /* return custom track from list */
 {
 struct customTrack *ct = NULL;
 for (ct = ctList; ct != NULL; ct = ct->next)
-    if (sameString(tableName, ct->tdb->tableName))
+    if (sameString(track, ct->tdb->track))
         return ct;
 return NULL;
 }

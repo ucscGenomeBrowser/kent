@@ -80,7 +80,7 @@ if(metadata)
             *ptr = 0;
         }
     }
-// fprintf(stderr, "%s; setting: %s\n", track->mapName, setting);
+// fprintf(stderr, "%s; setting: %s\n", track->track, setting);
 retVal = setting && strlen(setting) &&
     ((sameString(op, "is") && !strcasecmp(setting, val)) ||
      (sameString(op, "contains") && containsStringNoCase(setting, val) != NULL));
@@ -201,7 +201,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
                                (isEmpty(metaName) || isEmpty(metaSearch) || isMetaMatch(subTrack, metaName, metaOp, metaSearch)))
                                 {
                                 // XXXX to parent hash. - use tdb->parent instead.
-                                hashAdd(parents, subTrack->mapName, track);
+                                hashAdd(parents, subTrack->track, track);
 //                                fprintf(stderr, "found subtrack: %s\n", subTrack->shortLabel);
                                 tracksFound++;
                                 if(tracks == NULL)
@@ -233,8 +233,8 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
             hPrintf("<td>%s</td>\n", track->longLabel);
             // How do we get subtrack's parent?
             struct track *parent = NULL;
-            if(hashLookup(parents, track->mapName) != NULL)
-                parent = (struct track *) hashLookup(parents, track->mapName)->val;
+            if(hashLookup(parents, track->track) != NULL)
+                parent = (struct track *) hashLookup(parents, track->track)->val;
             hPrintf("<td>%s</td>\n", parent != NULL ? parent->longLabel : track->group != NULL ? track->group->label : "");
             hPrintf("<td>\n");
             if (tdbIsSuper(track->tdb))
@@ -244,7 +244,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
                 }
             else
                 {
-                hTvDropDownClassVisOnly(track->mapName, track->visibility,
+                hTvDropDownClassVisOnly(track->track, track->visibility,
                                         track->canPack, (track->visibility == tvHide) ? 
                                         "hiddenText" : "normalText", 
                                         trackDbSetting(track->tdb, "onlyVisibility"));

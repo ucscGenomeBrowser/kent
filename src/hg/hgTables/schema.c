@@ -22,7 +22,7 @@
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.63 2010/04/12 18:16:48 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.64 2010/05/11 01:43:25 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -327,7 +327,7 @@ static void printTrackHtml(struct trackDb *tdb)
 {
 if (tdb != NULL && isNotEmpty(tdb->html))
     {
-    webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->tableName);
+    webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->table);
     puts(tdb->html);
     }
 }
@@ -598,7 +598,7 @@ static boolean curTrackDescribesCurTable()
 {
 if (curTrack == NULL)
     return FALSE;
-if (sameString(curTrack->tableName, curTable))
+if (sameString(curTrack->table, curTable))
     return TRUE;
 else if (startsWith("wigMaf", curTrack->type))
     {
@@ -614,7 +614,7 @@ else if (curTrack->subtracks != NULL)
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
 	struct trackDb *sTdb = tdbRef->val;
-        if (sameString(sTdb->tableName, curTable))
+        if (sameString(sTdb->table, curTable))
             return TRUE;
         }
     }

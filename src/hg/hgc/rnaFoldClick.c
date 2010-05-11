@@ -15,7 +15,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.8 2009/08/13 03:08:30 markd Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.9 2010/05/11 01:43:29 kent Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define RED 0xFF0000
@@ -320,7 +320,7 @@ slReverse(&maf->components);
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
 /* Handle click on rnaSecStr type elements. */
 {
-char *table = tdb->tableName;
+char *table = tdb->table;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 struct rnaSecStr *item;
@@ -347,7 +347,7 @@ item = rnaSecStrLoad(row + rowOffset);
 maf  = mafFromRnaSecStrItem(mafTrack, item);
 
 /* order maf by species */
-safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
+safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
 speciesOrder = cartUsualString(cart, option, NULL);
 if (speciesOrder == NULL)
   speciesOrder = trackDbSetting(tdb, "speciesOrder");

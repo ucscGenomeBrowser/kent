@@ -19,7 +19,7 @@ struct ctgPos *ctgList = NULL, *ctg;
 
 /* Get the contigs and load into tg->items. */
 sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
-    tg->mapName, chromName, winEnd, winStart);
+    tg->table, chromName, winEnd, winStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -84,7 +84,7 @@ for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
 	y += lineHeight;
     else 
 	{
-	mapBoxHc(hvg, ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->mapName, 
+	mapBoxHc(hvg, ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->track, 
 	    tg->mapItemName(tg, ctg), 
 	    tg->itemName(tg, ctg));
 	}

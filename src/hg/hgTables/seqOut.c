@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.23 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.24 2010/05/11 01:43:25 kent Exp $";
 
 static char *genePredMenu[] =
     {
@@ -58,7 +58,7 @@ htmlOpen("Select sequence type for %s", track->shortLabel);
 hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 
-if (isRefGeneTrack(track->tableName))
+if (isRefGeneTrack(track->table))
     {
     /* RefGene covers all 3 types, but in it's own way. */
     for (typeIx = 0; typeIx < 3; ++typeIx)

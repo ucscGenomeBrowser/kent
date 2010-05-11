@@ -65,7 +65,7 @@ int lines = 0;
 int heightFromCart;
 char o1[128];
 
-safef( o1, 128, "%s.heightPer", tg->mapName);
+safef( o1, 128, "%s.heightPer", tg->track);
 
 heightFromCart = atoi(cartUsualString(cart, o1, "50"));
 
@@ -85,7 +85,7 @@ switch (vis)
 	break;
     case tvPack:
     case tvSquish:
-        errAbort("Sorry can't handle pack in sampleTotalHeight (%s)", tg->mapName);
+        errAbort("Sorry can't handle pack in sampleTotalHeight (%s)", tg->track);
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
@@ -267,12 +267,12 @@ lf=tg->items;
 if(lf==NULL) return;
 
 //take care of cart options
-safef( o1, 128,"%s.linear.interp", tg->mapName);
-safef( o2, 128, "%s.anti.alias", tg->mapName);
-safef( o3, 128,"%s.fill", tg->mapName);
-safef( o4, 128,"%s.min.cutoff", tg->mapName);
-safef( o5, 128,"%s.max.cutoff", tg->mapName);
-safef( o6, 128,"%s.interp.gap", tg->mapName);
+safef( o1, 128,"%s.linear.interp", tg->track);
+safef( o2, 128, "%s.anti.alias", tg->track);
+safef( o3, 128,"%s.fill", tg->track);
+safef( o4, 128,"%s.min.cutoff", tg->track);
+safef( o5, 128,"%s.max.cutoff", tg->track);
+safef( o6, 128,"%s.interp.gap", tg->track);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
@@ -280,7 +280,7 @@ aa = cartUsualString(cart, o2, "on");
 antiAlias = sameString(aa, "on");
 
 //don't fill gcPercent track by default (but fill others)
-if(sameString( tg->mapName, "pGC") && sameString(database,"zooHuman3"))
+if(sameString( tg->table, "pGC") && sameString(database,"zooHuman3"))
 {
     fillStr = cartUsualString(cart, o3, "0");
 }
@@ -311,7 +311,7 @@ hFactor = (double)heightPer*tg->scaleRange;
 //errAbort( "min=%g, max=%g\n", minRangeCutoff, maxRangeCutoff );
 
 
-if( sameString( tg->mapName, "zoo" ) || sameString( tg->mapName, "zooNew" ) )
+if( sameString( tg->table, "zoo" ) || sameString( tg->table, "zooNew" ) )
     binCount = binCount - 100;    //save some space at top, between each zoo species
 
 minRange = whichSampleBin( minRangeCutoff, tg->minRange, tg->maxRange, binCount );
@@ -320,7 +320,7 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 //errAbort( "(%g,%g) cutoff=(%g,%g)\n", tg->minRange, tg->maxRange, minRangeCutoff, maxRangeCutoff );
 
 
-if( sameString( tg->mapName, "zoo" ) || sameString( tg->mapName, "zooNew" ) )
+if( sameString( tg->table, "zoo" ) || sameString( tg->table, "zooNew" ) )
     {
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
@@ -425,7 +425,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     if( noZoom && isFull )
 	{
 	mapBoxHc(hvg, lf->start, lf->end, currentX ,y, currentWidth,
-	    heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
+	    heightPer, tg->track, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
 
 	if( lf->next != NULL )
 	    y += sampleUpdateY( lf->name, lf->next->name, lineHeight );
@@ -479,7 +479,7 @@ char query[256];
 /*see if we have a summary table*/
 safef(query, sizeof(query), 
 	"select name from %s where name = '%s' limit 1", 
-	tg->mapName, tg->shortLabel);
+	tg->table, tg->shortLabel);
 //errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
@@ -493,7 +493,7 @@ if(tg->visibility == tvDense)
 	}
     }
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
@@ -583,22 +583,22 @@ pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
 /* Determine zoom level. */
- if (!strstr(tg->mapName,"HMRConservation"))
+ if (!strstr(tg->table,"HMRConservation"))
    z = humMusZoomLevel();
  else z=0;
 
 
 if(z == 1 )
     safef(tableName, sizeof(tableName), "%s_%s", "zoom1",
-	    tg->mapName);
+	    tg->table);
 else if( z == 2)
     safef(tableName, sizeof(tableName), "%s_%s", "zoom50",
-	    tg->mapName);
+	    tg->table);
 else if(z == 3)
     safef(tableName, sizeof(tableName), "%s_%s",
-	    "zoom2500", tg->mapName);
+	    "zoom2500", tg->table);
 else
-    safef(tableName, sizeof(tableName), "%s", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s", tg->table);
 
 //printf("(%s)", tableName );
 
@@ -784,7 +784,7 @@ char option[64];
 zooSpeciesHashInit();
 
 /*see if we have a summary table*/
-safef(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+safef(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->table, tg->shortLabel);
 //errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
@@ -798,7 +798,7 @@ if(tg->visibility == tvDense)
 	}
     }
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
@@ -873,11 +873,11 @@ pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 /* Determine zoom level. */
 if(pixPerBase >= zoom1)
-    safef(tableName, sizeof(tableName), "%s_%s", "zoom1", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s_%s", "zoom1", tg->table);
 else if(pixPerBase >= zoom2)
-    safef(tableName, sizeof(tableName), "%s_%s", "zoom2", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s_%s", "zoom2", tg->table);
 else 
-    safef(tableName, sizeof(tableName), "%s", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s", tg->table);
 
 /*see if we have a summary table*/
 if(hTableExists(database, tableName))
@@ -885,8 +885,8 @@ if(hTableExists(database, tableName))
 else
     {
     warn("<p>Couldn't find table %s<br><br>", tableName);
-    safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->mapName, tg->shortLabel);
-    safef(tableName, sizeof(tableName), "%s", tg->mapName);
+    safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->table, tg->shortLabel);
+    safef(tableName, sizeof(tableName), "%s", tg->table);
     }
 
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));

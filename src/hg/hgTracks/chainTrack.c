@@ -15,7 +15,7 @@
 #include "chainCart.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.38 2009/12/21 22:43:32 markd Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.39 2010/05/11 01:43:27 kent Exp $";
 
 
 struct cartOptions
@@ -136,10 +136,10 @@ if (hash->size)
     {
     boolean isSplit = TRUE;
     /* Make up range query. */
-    sprintf(fullName, "%s_%s", chromName, tg->mapName);
+    sprintf(fullName, "%s_%s", chromName, tg->table);
     if (!hTableExists(database, fullName))
 	{
-	strcpy(fullName, tg->mapName);
+	strcpy(fullName, tg->table);
 	isSplit = FALSE;
 	}
 
@@ -249,7 +249,7 @@ void chainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
-char *track = tg->mapName;
+char *table = tg->table;
 struct chain chain;
 int rowOffset;
 char **row;
@@ -270,7 +270,7 @@ if (startsWith("chr",optionChrStr))
     snprintf(extraWhere, sizeof(extraWhere), 
             "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
-    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+    sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
             extraWhere, &rowOffset);
     }
 else
@@ -279,13 +279,13 @@ else
         {
         snprintf(extraWhere, sizeof(extraWhere), 
                 "score > \"%d\"",chainCart->scoreFilter);
-        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
                 extraWhere, &rowOffset);
         }
     else
         {
         snprintf(extraWhere, sizeof(extraWhere), " ");
-        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
                 NULL, &rowOffset);
         }
     }

@@ -34,7 +34,7 @@ unsigned labelSet = 0;
 
 // label setting are on parent track
 char prefix[128];
-safef(prefix, sizeof(prefix), "%s.label", tg->tdb->tableName);
+safef(prefix, sizeof(prefix), "%s.label", tg->tdb->track);
 struct hashEl *labels = cartFindPrefix(cart, prefix);
 
 if (labels == NULL)
@@ -42,9 +42,9 @@ if (labels == NULL)
     // default to common name+accession and save this in cart so it makes sense in trackUi
     labelSet = useOrgCommon|useAcc;
     char setting[64];
-    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->tableName);
+    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->track);
     cartSetBoolean(cart, setting, TRUE);
-    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->tableName);
+    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->track);
     cartSetBoolean(cart, setting, TRUE);
     }
 struct hashEl *label;

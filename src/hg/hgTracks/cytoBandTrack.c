@@ -75,7 +75,7 @@ if(tg->mapsSelf)
     tg->mapItem(tg, hvg, band, band->name, band->name, band->chromStart, band->chromEnd,
 		x1, y, w, heightPer);
 else
-    mapBoxHc(hvg, band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName,
+    mapBoxHc(hvg, band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->track,
 	     band->name, band->name);
 }
 

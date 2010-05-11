@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "spaceSaver.h"
 
-static char const rcsid[] = "$Id: altGraphXTrack.c,v 1.16 2010/01/07 01:35:19 kent Exp $";
+static char const rcsid[] = "$Id: altGraphXTrack.c,v 1.17 2010/05/11 01:43:26 kent Exp $";
 
 const static int altGraphXMaxRows = 20;
 
@@ -67,7 +67,7 @@ void altGraphXMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *ite
 struct altGraphX *ag = item;
 char buff[32];
 snprintf(buff, sizeof(buff), "%d", ag->id);
-mapBoxHc(hvg, start, end, x, y, width, height, tg->mapName, buff, "altGraphX Details");
+mapBoxHc(hvg, start, end, x, y, width, height, tg->track, buff, "altGraphX Details");
 }
 
 void altGraphXMap(char *tableName, struct altGraphX *ag, struct hvGfx *hvg, int start, int end, 
@@ -93,7 +93,7 @@ if(vis == tvFull)
     hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
     altGraphXDrawPack(tg->items, tg->ss, hvg, xOff, yOff, width, heightPer, lineHeight,
 		      winStart, winEnd, scale, font, color, shadesOfGray,
-		      tg->mapName, altGraphXMap);
+		      tg->track, altGraphXMap);
     hvGfxUnclip(hvg);
     }
 }
@@ -221,7 +221,7 @@ struct sqlConnection *conn = hAllocConn(database);
 int rowOffSet;
 char **row;
 struct altGraphX *ag=NULL, *agList=NULL;
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
+struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName,
 				   winStart, winEnd, NULL, &rowOffSet);
 while((row = sqlNextRow(sr)) != NULL)
     {
@@ -296,7 +296,7 @@ struct sqlConnection *conn = hAllocConn(database);
 int rowOffSet;
 char **row;
 struct altGraphX *ag=NULL, *agList=NULL;
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
+struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName,
 				   winStart, winEnd, NULL, &rowOffSet);
 while((row = sqlNextRow(sr)) != NULL)
     {

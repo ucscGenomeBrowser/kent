@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.283 2010/05/09 17:18:29 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.284 2010/05/11 01:43:30 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -53,11 +53,11 @@ static boolean makeNamedDownloadsLink(struct trackDb *tdb,char *name)
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open dowloads directory in a new window' TARGET=ucscDownloads>%s</A>",
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
             trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
             ENCODE_DCC_DOWNLOADS,
-            tdb->tableName,name);
+            tdb->track,name);
     return TRUE;
     }
 return FALSE;
@@ -73,16 +73,14 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
-if (hTableOrSplitExists(db, tdb->tableName))
+if (hTableOrSplitExists(db, tdb->table))
     {
-    char *tableName  = tdb->tableName;
-    if (sameString(tableName, "mrna"))
-	tableName = "all_mrna";
+    char *tableName  = tdb->table;
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
     struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
-    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->tableName,tableName,hint,label);
+    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track,tableName,hint,label);
     return TRUE;
     }
 return FALSE;
@@ -96,8 +94,8 @@ if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
-printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
+        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, title);
+printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->table);
 if(showLongLabel)
     printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
 printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
@@ -132,8 +130,8 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb)
 /* Show downlaods, schema and metadata links where appropriate */
 {
-boolean schemaLink = (isCustomTrack(tdb->tableName) == FALSE)
-                  && (hTableOrSplitExists(db, tdb->tableName));
+boolean schemaLink = (isCustomTrack(tdb->table) == FALSE)
+                  && (hTableOrSplitExists(db, tdb->table));
 boolean metadataLink = (!tdbIsComposite(tdb)
                   && metadataForTable(db, tdb, NULL) != NULL);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL);
@@ -858,7 +856,7 @@ if (isNotEmpty(setting))
     else if (! sameString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
 		 "must be one of {none,all,given,genbank,table}.",
-		 tdb->tableName, BASE_COLOR_USE_CDS, setting);
+		 tdb->track, BASE_COLOR_USE_CDS, setting);
     }
 else if (startsWith("genePred", tdb->type))
     gotIt = TRUE;
@@ -881,7 +879,7 @@ if (isNotEmpty(setting))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
 		 "must be one of {none,genbank,seq,ss,extFile,nameIsSequence,seq1Seq2,"
 		 "hgPcrResult,lfExtra}.",
-		 tdb->tableName, BASE_COLOR_USE_SEQUENCE, setting);
+		 tdb->track, BASE_COLOR_USE_SEQUENCE, setting);
     }
 return gotIt;
 }
@@ -895,7 +893,7 @@ char var[512];
 boolean gotCds = baseColorGotCds(tdb);
 boolean gotSeq = baseColorGotSequence(tdb);
 
-safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->tableName);
+safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
 if (gotCds && gotSeq)
     {
     puts("<P><B>Color track by codons or bases:</B>");
@@ -963,17 +961,17 @@ if (indelAppropriate(tdb))
     char var[512];
     indelEnabled(cart, tdb, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->tableName);
+    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("Draw double horizontal lines when both genome and query have "
 	   "an insertion "
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->tableName);
+    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->track);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("Draw a vertical purple line for an insertion at the beginning or "
 	   "end of the query, orange for insertion in the middle of the query"
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->tableName);
+    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->track);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))
@@ -999,7 +997,7 @@ char optionStr[512];
 alreadySet = !sameString("off",
 		trackDbSettingOrDefault(tdb, settingName, defaultOnOff));
 safef(optionStr, sizeof(optionStr), "%s_%s",
-      settingName, tdb->tableName);
+      settingName, tdb->track);
 alreadySet = cartUsualBoolean(cart, optionStr, alreadySet);
 return alreadySet;
 }
@@ -1661,10 +1659,10 @@ for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
     struct trackDb *tdb = trackEl->val;
     char *dupe = cloneString(tdb->type);
     char *type = firstWordInLine(dupe);
-    if ((sameString(type, "genePred")) && (!sameString(tdb->tableName, "tigrGeneIndex") && !tdbIsComposite(tdb)))
+    if ((sameString(type, "genePred")) && (!sameString(tdb->track, "tigrGeneIndex") && !tdbIsComposite(tdb)))
 	{
 	AllocVar(name);
-	name->name = tdb->tableName;
+	name->name = tdb->track;
 	name->label = tdb->shortLabel;
 	slAddHead(&nameList, name);
 	}
@@ -1744,7 +1742,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     if (hTrackOnChrom(tdb, chrom))
 	{
 	if (tdb->subtracks == NULL || !leafOnly)
-	    hashAdd(trackHash, tdb->tableName, tdb);
+	    hashAdd(trackHash, tdb->track, tdb);
 	}
     rAddTrackListToHash(trackHash, tdb->subtracks, chrom, leafOnly);
     }
@@ -1821,7 +1819,7 @@ if (primarySubtrack)
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
 	struct trackDb *subtrack = tdbRef->val;
-	if (sameString(subtrack->tableName, primarySubtrack))
+	if (sameString(subtrack->track, primarySubtrack))
 	    {
 	    type = subtrack->type;
 	    break;
@@ -2176,7 +2174,7 @@ int mIx;
 for(mIx=0;mIx<members->count;mIx++)
     {
     char objName[SMALLBUF];
-    safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->tableName,members->names[mIx],letter);
+    safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,members->names[mIx],letter);
     currentlySet=(NULL!=findWordByDelimiter(members->names[mIx],',',dimCheckedDefaults));
     currentlySet=cartUsualBoolean(cart,objName,currentlySet);
     if(currentlySet)
@@ -2447,8 +2445,8 @@ if(setting == NULL) // Must be in trackDb or not a sortable table
     return NULL;
 
 sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
-sortOrder->htmlId = needMem(strlen(parentTdb->tableName)+15);
-safef(sortOrder->htmlId, (strlen(parentTdb->tableName)+15), "%s.sortOrder", parentTdb->tableName);
+sortOrder->htmlId = needMem(strlen(parentTdb->track)+15);
+safef(sortOrder->htmlId, (strlen(parentTdb->track)+15), "%s.sortOrder", parentTdb->track);
 char *cartSetting = NULL;
 if(cart != NULL)
     cartSetting = cartCgiUsualString(cart, sortOrder->htmlId, setting);
@@ -2669,7 +2667,7 @@ char *setting = trackDbSettingClosestToHome(tdb, FILTER_BY);
 if(setting == NULL)
     return NULL;
 if( name == NULL )
-    name = tdb->tableName;
+    name = tdb->track;
 
 setting = cloneString(setting);
 char *filters[10];
@@ -2875,9 +2873,9 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     int openSize = min(20,fullSize);
     int closedSize = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
 //#define MULTI_SELECT_WITH_JS "<div class='multiSelectContainer'><SELECT name='%s.filterBy.%s' multiple=true size=%d openSize=%d style='display: none' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this,%d);' class='normalText filterBy'></div><BR>\n"
-//    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize,openSize,openSize);
+//    printf(MULTI_SELECT_WITH_JS,tdb->track,filterBy->column,closedSize,openSize,openSize,openSize);
 #define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onkeydown='this.size=%d' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this);' class='filterBy'><BR>\n"
-    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize,openSize);
+    printf(MULTI_SELECT_WITH_JS,tdb->track,filterBy->column,closedSize,openSize,openSize);
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
@@ -2904,7 +2902,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         }
     }
     // The following is needed to make msie scroll to selected option.
-    printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->tableName);
+    printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->track);
 puts("</TR></TABLE>");
 
 return;
@@ -2922,7 +2920,7 @@ int ix;
 #define CHECKBOX_ID_SZ 128
 // What is wanted: id="cb_ES_K4_SIG_cb"
 struct dyString *id = newDyString(CHECKBOX_ID_SZ);
-dyStringPrintf(id,"cb_%s_", tdb->tableName);
+dyStringPrintf(id,"cb_%s_", tdb->track);
 int dimIx=1; // Skips over view dim for now
 for(;dimIx<dimMax;dimIx++)
     {
@@ -3080,7 +3078,7 @@ struct trackDb *tdb;
 boolean cartPriorities = FALSE;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->track);
     char *cartHas = cartOptionalString(cart,htmlIdentifier);
     if(cartHas != NULL)
 	{
@@ -3112,7 +3110,7 @@ boolean cartPriorities = FALSE;
 for (tdbRef = *tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *tdb = tdbRef->val;
-    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->track);
     char *cartHas = cartOptionalString(cart,htmlIdentifier);
     if(cartHas != NULL)
 	{
@@ -3223,7 +3221,7 @@ char *setting =trackDbLocalSetting(subtrack->parent, "visibility");
 if(setting == NULL)
     setting = TV_HIDE;
 
-safef(objName, sizeof(objName), "%s.%s.vis", subtrack->parent->parent->tableName,view);
+safef(objName, sizeof(objName), "%s.%s.vis", subtrack->parent->parent->track,view);
 
 setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
 return sameWord(setting,TV_HIDE);
@@ -3248,12 +3246,12 @@ for(thisTdb = tdb;thisTdb != NULL;thisTdb = thisTdb->parent)
     if(setting == NULL && thisTdb->subtracks != NULL)
         setting = TV_HIDE;// non-subtrack must default to hide.
 
-    safef(objName, sizeof(objName), "%s.vis", thisTdb->tableName);
+    safef(objName, sizeof(objName), "%s.vis", thisTdb->track);
     if(thisTdb->parent != NULL && thisTdb->subtracks != NULL) // middle level so probably view
         {
         char * view = trackDbLocalSetting(thisTdb, "view");
         if(view != NULL)
-            safef(objName, sizeof(objName), "%s.%s.vis", thisTdb->parent->tableName,view);
+            safef(objName, sizeof(objName), "%s.%s.vis", thisTdb->parent->track,view);
         }
     setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
     if(setting != NULL && (thisTdb->subtracks == NULL || !applyMax))
@@ -3304,7 +3302,7 @@ setting = tdbResolveVis(cart,subtrack,FALSE);
 if(sameWord(setting,TV_HIDE) && subtracksViewIsHidden(cart,subtrack))
     FOURSTATE_DISABLE(fourState);
 
-safef(objName, sizeof(objName), "%s_sel", subtrack->tableName);
+safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 fourState = cartUsualInt(cart, objName, fourState);
 tdbExtrasAddOrUpdate(subtrack,FOURSTATE_KEY,(void *)(long)fourState);
 return fourState;
@@ -3345,13 +3343,13 @@ boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDr
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 if(sortOrder != NULL)
     {
-    printf(" id='subtracks.%s.sortable'",parentTdb->tableName);
+    printf(" id='subtracks.%s.sortable'",parentTdb->track);
     dyStringClear(dyHtml);
     dyStringPrintf(dyHtml, "tableSortable");
     colorIx = COLOR_BG_ALTDEFAULT_IX;
     }
 else
-    printf(" id='subtracks.%s'",parentTdb->tableName);
+    printf(" id='subtracks.%s'",parentTdb->track);
 if(useDragAndDrop)
     {
     if(dyStringLen(dyHtml) > 0)
@@ -3394,14 +3392,14 @@ if (!primarySubtrack)
     if(sortOrder != NULL)   // Add some sort buttons
         {
         puts("<TD colspan=5>&nbsp;</TD></TR>");
-        printf("<TR id=\"%s.sortTr\" class='nodrop nodrag'>\n",parentTdb->tableName);     // class='nodrop nodrag'
+        printf("<TR id=\"%s.sortTr\" class='nodrop nodrag'>\n",parentTdb->track);     // class='nodrop nodrag'
         printf("<TD>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%s\"></TD>", sortOrder->htmlId, sortOrder->htmlId,sortOrder->sortOrder); // keeing track of priority
         // Columns in tdb order (unchanging), sort in cart order (changed by user action)
         int sIx=0;
         for(sIx=0;sIx<sortOrder->count;sIx++)
             {
             printf ("<TH id='%s.%s.sortTh' abbr='%c' nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
-                parentTdb->tableName,sortOrder->column[sIx],
+                parentTdb->track,sortOrder->column[sIx],
 		(sortOrder->forward[sIx]?'-':'+'),
 		sortOrder->column[sIx],sortOrder->title[sIx],
 		(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
@@ -3443,8 +3441,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     boolean checkedCB = fourStateChecked(fourState);
     boolean enabledCB = fourStateEnabled(fourState);
     isPrimary = (primarySubtrack &&
-         sameString(subtrack->tableName, primarySubtrack));
-    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s_sel", subtrack->tableName);
+         sameString(subtrack->track, primarySubtrack));
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s_sel", subtrack->track);
 
 
     if (primarySubtrack)
@@ -3498,7 +3496,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
             if(sortOrder != NULL || useDragAndDrop)
                 {
-                safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->tableName);
+                safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->track);
                 float priority = (float)cartUsualDouble(cart, htmlIdentifier, subtrack->priority);
                 printf("<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%.0f\">", htmlIdentifier, htmlIdentifier, priority); // keeing track of priority
                 }
@@ -3517,7 +3515,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
                         printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
-                            MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,titleRoot);  // FIXME: Currently configurable under sort only supported when multiview
+                            MAKE_CFG_SUBTRACK_LINK(subtrack->track,titleRoot);  // FIXME: Currently configurable under sort only supported when multiview
                         else
                             printf("%s\n",titleRoot);
                         puts ("</TD>");
@@ -3530,7 +3528,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf ("<TD nowrap='true'>&nbsp;");
                 indentIfNeeded(hierarchy,membership);
                 if(cType != cfgNone)
-                    MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,subtrack->shortLabel);
+                    MAKE_CFG_SUBTRACK_LINK(subtrack->track,subtrack->shortLabel);
                 else
                     printf("%s\n",subtrack->shortLabel);
                 puts ("</TD>");
@@ -3546,10 +3544,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
 #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
 #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
-                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->tableName);
+                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->track);
                 boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
-                MAKE_CFG_SUBTRACK_DIV(subtrack->tableName,htmlIdentifier,open);
-                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->tableName);
+                MAKE_CFG_SUBTRACK_DIV(subtrack->track,htmlIdentifier,open);
+                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->track);
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
@@ -3575,7 +3573,7 @@ puts("<P>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 if(dependentCfgsNeedBinding)
-    cfgLinkToDependentCfgs(parentTdb,parentTdb->tableName);
+    cfgLinkToDependentCfgs(parentTdb,parentTdb->track);
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
 dyStringFree(&dyHtml)
 sortOrderFree(&sortOrder);
@@ -3796,7 +3794,7 @@ controlGridEndCell(cg);
 void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed)
 /* Put up UI for an mRNA (or EST) track. */
 {
-struct mrnaUiData *mud = newBedUiData(tdb->tableName);
+struct mrnaUiData *mud = newBedUiData(tdb->track);
 struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
 char *filterTypeVar = mud->filterTypeVar;
@@ -4105,8 +4103,8 @@ if (scoreCtString != NULL)
     puts("&nbsp; <B> Show only items in top-scoring </B>");
     cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
     /* Only check size of table if track does not have subtracks */
-    if ( !compositeLevel && hTableExists(db, tdb->tableName))
-        printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->tableName));
+    if ( !compositeLevel && hTableExists(db, tdb->table))
+        printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->table));
     else
         printf("&nbsp; (range: 1 to 100,000)\n");
     }
@@ -4293,7 +4291,7 @@ if(setting || sameWord(filter,NO_SCORE_FILTER))
                 safef(limits, sizeof(limits), "violates lower limit (%d)", minLimit);
             else //if(maxLimit != NO_VALUE)
                 safef(limits, sizeof(limits), "violates uppper limit (%d)", maxLimit);
-            warn("invalid filter by %s: %s %s for track %s", field, value, limits, tdb->tableName);
+            warn("invalid filter by %s: %s %s for track %s", field, value, limits, tdb->track);
             }
         }
     // else no default limits!
@@ -4328,7 +4326,7 @@ if(setting || sameWord(filter,NO_SCORE_FILTER))
         *and=TRUE;
         }
     }
-    //if(dyStringLen(extraWhere)) warn("SELECT FROM %s WHERE %s",tdb->tableName,dyStringContents(extraWhere));
+    //if(dyStringLen(extraWhere)) warn("SELECT FROM %s WHERE %s",tdb->table,dyStringContents(extraWhere));
 return extraWhere;
 }
 
@@ -4373,7 +4371,7 @@ if(setting)
                 safef(limits, sizeof(limits), "violates lower limit (%g)", minLimit);
             else //if((int)maxLimit != NO_VALUE)
                 safef(limits, sizeof(limits), "violates uppper limit (%g)", maxLimit);
-            warn("invalid filter by %s: %s %s for track %s", field, value, limits, tdb->tableName);
+            warn("invalid filter by %s: %s %s for track %s", field, value, limits, tdb->track);
             }
         }
     if(invalid)
@@ -4407,7 +4405,7 @@ if(setting)
         *and=TRUE;
         }
     }
-    //if(dyStringLen(extraWhere)) warn("SELECT FROM %s WHERE %s",tdb->tableName,dyStringContents(extraWhere));
+    //if(dyStringLen(extraWhere)) warn("SELECT FROM %s WHERE %s",tdb->table,dyStringContents(extraWhere));
 return extraWhere;
 }
 
@@ -4505,9 +4503,9 @@ if(trackDbSettingClosestToHomeOn(tdb, "nmdFilter"))
     cgiMakeCheckBox(varName, nmdDefault);
     }
 
-if(!sameString(tdb->tableName, "tigrGeneIndex")
-&& !sameString(tdb->tableName, "ensGeneNonCoding")
-&& !sameString(tdb->tableName, "encodeGencodeRaceFrags"))
+if(!sameString(tdb->track, "tigrGeneIndex")
+&& !sameString(tdb->track, "ensGeneNonCoding")
+&& !sameString(tdb->track, "encodeGencodeRaceFrags"))
     baseColorDrawOptDropDown(cart, tdb);
 
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
@@ -4523,7 +4521,7 @@ static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species
 /* check the cart to see if species is turned off or on (default is defaultState) */
 {
 boolean ret = defaultState;
-safef(option, optionSize, "%s.%s", tdb->tableName, species);
+safef(option, optionSize, "%s.%s", tdb->track, species);
 
 /* see if this is a simple multiz (not composite track) */
 char *s = cartOptionalString(cart, option);
@@ -4538,7 +4536,7 @@ else
 	if (subgroupFind(tdb, "view", &viewString))
 	    {
 	    safef(option, optionSize, "%s.%s.%s",
-		tdb->parent->tableName, viewString,  species);
+		tdb->parent->track, viewString,  species);
 	    ret = cartUsualBoolean(cart, option, ret);
 	    }
 	}
@@ -4566,9 +4564,9 @@ char option[MAX_SP_SIZE];
 /* determine species and groups for pairwise -- create checkboxes */
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     {
-    if (isCustomTrack(tdb->tableName))
+    if (isCustomTrack(tdb->track))
 	return NULL;
-    errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->tableName);
+    errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->track);
     }
 
 char **groups = needMem(MAX_GROUPS * sizeof (char *));
@@ -4759,7 +4757,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
             label = wmSpecies->name;
-        strcpy(trackName, tdb->tableName);
+        strcpy(trackName, tdb->track);
 
         /* try AaMaf first */
         chp = strstr(trackName, "AaMaf");
@@ -4887,7 +4885,7 @@ cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
 
 char *irowStr = trackDbSetting(tdb, "irows");
 boolean doIrows = (irowStr == NULL) || !sameString(irowStr, "off");
-if (isCustomTrack(tdb->tableName) || doIrows)
+if (isCustomTrack(tdb->track) || doIrows)
     puts("Display chains between alignments<BR>");
 else
     {
@@ -5174,7 +5172,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             {
             if(firstOpened == -1)
                 {
-                safef(varName, sizeof(varName), "%s.%s.showCfg", parentTdb->tableName, viewName);
+                safef(varName, sizeof(varName), "%s.%s.showCfg", parentTdb->track, viewName);
                 if(cartUsualBoolean(cart,varName,FALSE))
                     firstOpened = ix;
                 }
@@ -5196,13 +5194,13 @@ for (ix = 0; ix < membersOfView->count; ix++)
         printf("<TD>");
         if(configurable[ix] != cfgNone)
             {
-            MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,(firstOpened == ix));
+            MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->track,(firstOpened == ix));
             }
         else
             printf("<B>%s</B>\n",membersOfView->values[ix]);
         puts("</TD>");
 
-        safef(varName, sizeof(varName), "%s.%s.vis", parentTdb->tableName, viewName);
+        safef(varName, sizeof(varName), "%s.%s.vis", parentTdb->track, viewName);
         enum trackVisibility tv =
             hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
 
@@ -5235,7 +5233,7 @@ if(makeCfgRows)
             while(0 < ix2--)
                 printf("<TD width=100>&nbsp;</TD>");
             printf("<TD colspan=%d>",membersOfView->count+1);
-            safef(varName, sizeof(varName), "%s", view->tableName);
+            safef(varName, sizeof(varName), "%s", view->track);
             if(configurable[ix] != cfgNone)
                 {
                 cfgByCfgType(configurable[ix],db,cart,view->subtracks,varName,
@@ -5489,7 +5487,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
             boolean alreadySet=FALSE;
             if(membersForAll->checkedTags[ix] != NULL)
                 alreadySet=(NULL!=findWordByDelimiter(membersForAll->members[ix]->names[aIx],',',membersForAll->checkedTags[ix]));
-            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->tableName,membersForAll->members[ix]->names[aIx], 'A' + (ix - dimA));
+            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,membersForAll->members[ix]->names[aIx], 'A' + (ix - dimA));
             safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",membersForAll->members[ix]->names[aIx]);
             // TODO Set classes properly (if needed!!!)  The class abc works but what about a b or c?
             cgiMakeCheckBoxJS(objName,alreadySet,javascript);
@@ -5784,11 +5782,11 @@ if (isNotEmpty(button))
         {
 	subtrack = tdbRef->val;
         boolean newVal = FALSE;
-        safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+        safef(option, sizeof(option), "%s_sel", subtrack->track);
         newVal = sameString(button, ADD_BUTTON_LABEL);
         if (primarySubtrack)
             {
-            if (sameString(subtrack->tableName, primarySubtrack))
+            if (sameString(subtrack->track, primarySubtrack))
                 newVal = TRUE;
             if (hSameTrackDbType(primaryType, subtrack->type))
                 cartSetBoolean(cart, option, newVal);
@@ -5860,11 +5858,11 @@ for (i = 0; i < MAX_SUBGROUP; i++)
                 if (sameString(subName, subGroup) && sameString(subValue, name))
                     {
                     boolean newVal = FALSE;
-                    safef(option, sizeof(option),"%s_sel", subtrack->tableName);
+                    safef(option, sizeof(option),"%s_sel", subtrack->track);
                     newVal = sameString(button, ADD_BUTTON_LABEL);
                     if (primarySubtrack)
                         {
-                        if (sameString(subtrack->tableName, primarySubtrack))
+                        if (sameString(subtrack->track, primarySubtrack))
                             newVal = TRUE;
                         if (hSameTrackDbType(primaryType, subtrack->type))
                             cartSetBoolean(cart, option, newVal);
@@ -5973,7 +5971,7 @@ if (!tdbIsSuperTrack(tdb))
 /* determine if supertrack is show/hide */
 boolean show = FALSE;
 char *setting =
-        cartUsualString(cart, tdb->tableName, tdb->isShow ? "show" : "hide");
+        cartUsualString(cart, tdb->track, tdb->isShow ? "show" : "hide");
 if (sameString("show", setting))
     show = TRUE;
 
@@ -5986,13 +5984,13 @@ if (show && (visibleChild == -1))
     for (cTdb = tdb->subtracks; cTdb != NULL; cTdb = tdb->next)
         {
         cTdb->visibility =
-                hTvFromString(cartUsualString(cart, cTdb->tableName,
+                hTvFromString(cartUsualString(cart, cTdb->track,
                                       hStringFromTv(cTdb->visibility)));
         if (cTdb->visibility != tvHide)
             visibleChild = 1;
         }
     }
-hideShowDropDown(tdb->tableName, show, (show && visibleChild) ?
+hideShowDropDown(tdb->track, show, (show && visibleChild) ?
                             "normalText" : "hiddenText");
 return TRUE;
 }
@@ -6030,7 +6028,7 @@ char *rootName = NULL;
 if(tdbIsCompositeChild(tdb) == TRUE && trackDbLocalSetting(tdb, "parent") != NULL)
     {
     if(trackDbSettingClosestToHomeOn(tdb, "configurable"))
-        rootName = tdb->tableName;  // subtrackName
+        rootName = tdb->track;  // subtrackName
     else
         rootName = firstWordInLine(cloneString(trackDbLocalSetting(tdb, "parent"))); // compositeName
     }
@@ -6047,9 +6045,10 @@ if(rootName != NULL)
         name = cloneString(rootName);
     }
 else
-    name = cloneString(tdb->tableName);
+    name = cloneString(tdb->track);
 return name;
 }
+
 void compositeViewControlNameFree(char **name)
 /* frees a string allocated by compositeViewControlNameFromTdb */
 {
@@ -6063,7 +6062,7 @@ boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name)
 {
 struct trackDb *parent;
 for (parent = tdb->parent; parent != NULL; parent = parent->parent)
-    if (startsWithWordByDelimiter(parent->tableName, '.', name))
+    if (startsWithWordByDelimiter(parent->track, '.', name))
         return TRUE;
 return FALSE;
 }

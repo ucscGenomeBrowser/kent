@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
-static char const rcsid[] = "$Id: mgcClick.c,v 1.32 2010/04/04 00:36:13 markd Exp $";
+static char const rcsid[] = "$Id: mgcClick.c,v 1.33 2010/05/11 01:43:29 kent Exp $";
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
@@ -785,7 +785,7 @@ if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
 prSeqLinks(conn, ci);
 prAligns(conn, ci);
 prMiscDiffs(conn, acc);
-prMethodsLink(conn, tdb->tableName);
+prMethodsLink(conn, tdb->track);
 
 cloneInfoFree(&ci);
 hFreeConn(&conn);
@@ -848,7 +848,7 @@ if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
 prSeqLinks(conn, ci);
 prAligns(conn, ci);
 prMiscDiffs(conn, acc);
-prMethodsLink(conn, tdb->tableName);
+prMethodsLink(conn, tdb->track);
 cloneInfoFree(&ci);
 hFreeConn(&conn);
 }

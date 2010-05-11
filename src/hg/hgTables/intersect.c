@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.52 2010/01/04 19:12:22 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.53 2010/05/11 01:43:25 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -627,12 +627,12 @@ else
 	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	    {
 	    subtrack = tdbRef->val;
-	    if (! sameString(curTable, subtrack->tableName) &&
-		isSubtrackMerged(subtrack->tableName) &&
+	    if (! sameString(curTable, subtrack->table) &&
+		isSubtrackMerged(subtrack->table) &&
 		sameString(subtrack->type, primaryType))
 		{
 		struct bed *bedList2 =
-		    getRegionAsBed(db, subtrack->tableName, region, NULL,
+		    getRegionAsBed(db, subtrack->table, region, NULL,
 				   idHash, lm, retFieldCount);
 		bedList = slCat(bedList, bedList2);
 		}
@@ -660,14 +660,14 @@ else
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
 	subtrack = tdbRef->val;
-	if (! sameString(curTable, subtrack->tableName) &&
-	    isSubtrackMerged(subtrack->tableName) &&
+	if (! sameString(curTable, subtrack->table) &&
+	    isSubtrackMerged(subtrack->table) &&
 	    sameString(subtrack->type, primaryType))
 	    {
-	    struct hTableInfo *hti2 = getHtiOnDb(database, subtrack->tableName);
+	    struct hTableInfo *hti2 = getHtiOnDb(database, subtrack->table);
 	    struct lm *lm2 = lmInit(64*1024);
 	    struct bed *bedList2 =
-		getRegionAsBed(db, subtrack->tableName, region, NULL, idHash,
+		getRegionAsBed(db, subtrack->table, region, NULL, idHash,
 			       lm2, NULL);
 	    if (firstTime)
 		firstTime = FALSE;

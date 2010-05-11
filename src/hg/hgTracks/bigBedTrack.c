@@ -35,7 +35,7 @@ struct bbiFile *bbi = track->bbiFile;
 if (bbi == NULL)
     {
     struct sqlConnection *conn = hAllocConnTrack(database, track->tdb);
-    char *fileName = bbiNameFromTable(conn, track->mapName);
+    char *fileName = bbiNameFromTable(conn, track->table);
     hFreeConn(&conn);
     bbi = track->bbiFile = bigBedFileOpen(fileName);
     }

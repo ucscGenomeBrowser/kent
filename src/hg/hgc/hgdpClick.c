@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.8 2009/09/23 18:42:20 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.9 2010/05/11 01:43:28 kent Exp $";
 
 struct hgdpPopInfo
     {
@@ -401,7 +401,7 @@ int hasBin=1;
 
 safef(query, sizeof(query),
       "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-      tdb->tableName, item, seqName, start);
+      tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -419,7 +419,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("</TD></TR></TABLE>\n");
     }
 else
-    errAbort("doHgdpGeo: no match in %s for %s at %s:%d", tdb->tableName, item, seqName, start);
+    errAbort("doHgdpGeo: no match in %s for %s at %s:%d", tdb->table, item, seqName, start);
 
 sqlFreeResult(&sr);
 printTrackHtml(tdb);

@@ -12,7 +12,7 @@
 #include "udc.h"
 #endif//def KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.20 2010/03/16 06:58:22 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
 #include "bamFile.h"
 
@@ -174,7 +174,7 @@ if (udcCacheTimeout() < 300)
 #endif//def USE_BAM && KNETFILE_HOOKS
 
 char varName[1024];
-safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->tableName);
+safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->track);
 boolean isPaired = cartUsualBoolean(cart, varName,
 				    (trackDbSetting(tdb, "pairEndsByName") != NULL));
 char position[512];
@@ -182,16 +182,16 @@ safef(position, sizeof(position), "%s:%d-%d", seqName, winStart, winEnd);
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
 char *fileName;
-if (isCustomTrack(tdb->tableName))
+if (isCustomTrack(tdb->table))
     {
     fileName = trackDbSetting(tdb, "bigDataUrl");
     if (fileName == NULL)
-	errAbort("doBamDetails: can't find bigDataUrl for custom track %s", tdb->tableName);
+	errAbort("doBamDetails: can't find bigDataUrl for custom track %s", tdb->track);
     }
 else
     {
     struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-    fileName = bamFileNameFromTable(conn, tdb->tableName, seqName);
+    fileName = bamFileNameFromTable(conn, tdb->table, seqName);
     hFreeConn(&conn);
     }
 bamFetch(fileName, position, oneBam, &btd);

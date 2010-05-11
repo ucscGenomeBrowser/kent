@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.66 2010/03/25 17:20:40 angie Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.67 2010/05/11 01:43:24 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -71,7 +71,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     if (sameString(tdb->type, "chromGraph"))
         {
 	AllocVar(gg);
-	gg->name = tdb->tableName;
+	gg->name = tdb->table;
 	gg->shortLabel = tdb->shortLabel;
 	gg->longLabel = tdb->longLabel;
 	gg->binFileName = trackDbRequiredSetting(tdb, "binaryFile");
@@ -157,7 +157,7 @@ for (gg = list; gg != NULL; gg = gg->next)
 	if (compTdb == NULL)
 	    cgs = chromGraphSettingsGet(gg->name, conn2, tdb, cart);	
 	else
-	    cgs = chromGraphSettingsGet(compTdb->tableName, conn2, compTdb, cart);	
+	    cgs = chromGraphSettingsGet(compTdb->table, conn2, compTdb, cart);	
 	gg->shortLabel = tdb->shortLabel;
 	gg->longLabel = tdb->longLabel;
 	gg->settings = cgs;

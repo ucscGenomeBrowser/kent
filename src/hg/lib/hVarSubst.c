@@ -49,7 +49,7 @@ static char *lookupTrackDbSubVar(char *desc, struct trackDb *tdb, char *settingN
 char *val = trackDbSettingClosestToHome(tdb, settingName);
 if (val == NULL)
    errAbort("trackDb (%s) setting \"%s\" not found for variable substitution of \"$%s\" in %s",
-            tdb->tableName, settingName, varName, desc);
+            tdb->track, settingName, varName, desc);
 return val;
 }
 
@@ -107,7 +107,7 @@ if (matrixHeader != NULL)
 errno = 0;
 size = sqrt(sqlDouble(words[0]));
 if (errno)
-    errAbort("Invalid matrix size in for track %s: %s\n", tdb->tableName,
+    errAbort("Invalid matrix size in for track %s: %s\n", tdb->track,
              words[0]);
 dyStringAppend(dest, "The following matrix was used:<P>\n");
 k = 1;
@@ -305,7 +305,7 @@ if (dest != NULL)
 void hVarSubstTrackDb(struct trackDb *tdb, char *database)
 /* Substitute variables in trackDb shortLabel, longLabel, and html fields. */
 {
-hVarSubstInVar(tdb->tableName, tdb, database, &tdb->shortLabel);
-hVarSubstInVar(tdb->tableName, tdb, database, &tdb->longLabel);
-hVarSubstInVar(tdb->tableName, tdb, database, &tdb->html);
+hVarSubstInVar(tdb->track, tdb, database, &tdb->shortLabel);
+hVarSubstInVar(tdb->track, tdb, database, &tdb->longLabel);
+hVarSubstInVar(tdb->track, tdb, database, &tdb->html);
 }

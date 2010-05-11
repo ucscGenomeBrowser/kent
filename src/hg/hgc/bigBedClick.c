@@ -9,7 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.10 2010/03/08 23:25:56 angie Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.11 2010/05/11 01:43:28 kent Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -107,10 +107,10 @@ void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 /* Handle click in generic bigBed track. */
 {
 char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
+safef(query, sizeof(query), "select fileName from %s", tdb->table);
 char *fileName = sqlQuickString(conn, query);
 if (fileName == NULL)
-    errAbort("Missing fileName in %s table", tdb->tableName);
+    errAbort("Missing fileName in %s table", tdb->table);
 bigBedClick(fileName, tdb, item, start, bedSize);
 }
 

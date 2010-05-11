@@ -11,7 +11,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.10 2010/04/27 23:31:41 braney Exp $";
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.11 2010/05/11 01:43:26 kent Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -75,7 +75,7 @@ if (extTableString != NULL)
     {
     // if there's an extra table, read this one in too
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    char *fileName = bbiNameFromTable(conn, tg->mapName);
+    char *fileName = bbiNameFromTable(conn, tg->table);
     struct bbiFile *bbiFile = bigWigFileOpen(fileName);
     slAddHead(&tg->bbiFile, bbiFile);
 
@@ -91,7 +91,7 @@ else
 	{
 	/* Figure out bigWig file name. */
 	struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-	char *fileName = bbiNameFromTable(conn, tg->mapName);
+	char *fileName = bbiNameFromTable(conn, tg->table);
 	tg->bbiFile = bigWigFileOpen(fileName);
 	hFreeConn(&conn);
 	}

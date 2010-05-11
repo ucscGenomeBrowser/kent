@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "netCart.h"
 
-static char const rcsid[] = "$Id: netCart.c,v 1.1 2009/03/18 18:27:00 hiram Exp $";
+static char const rcsid[] = "$Id: netCart.c,v 1.2 2010/05/11 01:43:30 kent Exp $";
 
 enum netColorEnum netFetchColorOption(struct cart *cart, struct trackDb *tdb,
 	boolean compositeLevel)
@@ -54,8 +54,8 @@ switch(sqlUnsigned(netLevel))
     case 4: ret = netLevelStringToEnum(NET_LEVEL_4); break;
     case 5: ret = netLevelStringToEnum(NET_LEVEL_5); break;
     case 6: ret = netLevelStringToEnum(NET_LEVEL_6); break;
-    default: warn("trackDb setting %s=%s for table %s is unrecognized, should be in range [0-6]",
-	NET_LEVEL, netLevel, tdb->tableName);
+    default: warn("trackDb setting %s=%s for track %s is unrecognized, should be in range [0-6]",
+	NET_LEVEL, netLevel, tdb->track);
 	break;
     }
 

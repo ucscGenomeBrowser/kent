@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.425 2010/05/07 05:03:55 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.426 2010/05/11 01:43:29 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3317,9 +3317,9 @@ if ((exists = sqlTableExists(conn, tbl)))
     struct trackDb *oneTable = trackDbLoadWhere(conn, tbl, where), *oneRow;
     while ((oneRow = slPopHead(&oneTable)) != NULL)
         {
-        if (!hashLookup(loaded, oneRow->tableName))
+        if (!hashLookup(loaded, oneRow->track))
             {
-            hashAdd(loaded, oneRow->tableName, NULL);
+            hashAdd(loaded, oneRow->track, NULL);
             slAddHead(tdbList, oneRow);
             // record for use in check available tracks
             char *profileName = getTrackProfileName(oneRow);
@@ -3358,6 +3358,7 @@ hashFree(&loaded);
 
 /* fill in supertrack fields, if any in settings */
 trackDbSuperMarkup(tdbList);
+trackDbAddTableField(tdbList);
 return tdbList;
 }
 
@@ -3366,7 +3367,7 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb, char *
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->tableName) != NULL)
+if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->table) != NULL)
     slAddHead(tdbRetList, tdb);
 else
     trackDbFree(&tdb);
@@ -3403,7 +3404,7 @@ static void inheritFromSuper(struct trackDb *subtrackTdb,
  * supertrack system as a whole is factored out -jk. */
 {
 assert(subtrackTdb->parent == compositeTdb);
-subtrackTdb->parentName = compositeTdb->tableName; 
+subtrackTdb->parentName = compositeTdb->track; 
 if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     {
     if (isEmpty(subtrackTdb->type))
@@ -3491,7 +3492,7 @@ static struct trackDb *rFindTrack(int level, struct trackDb *tdbList, char *trac
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (sameString(track, tdb->tableName))
+    if (sameString(track, tdb->track))
         return tdb;
     struct trackDb *matchingChild = rFindTrack(level+1, tdb->subtracks, track);
     if (matchingChild != NULL)
@@ -3504,7 +3505,7 @@ if (level == 0)
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	{
 	struct trackDb *p = tdb->parent;
-	if (p != NULL && sameString(track, p->tableName))
+	if (p != NULL && sameString(track, p->track))
 	    return p;
 	}
     }
@@ -3574,7 +3575,7 @@ struct sqlConnection *conn = hAllocConn(db);
 char where[256];
 safef(where, sizeof(where),
    "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
-    tdb->tableName);
+    tdb->track);
 tdb->subtracks = loadAndLookupTrackDb(conn, where);       // TODO: Straighten out when super points to children and when not!
 struct trackDb *subTdb;
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)

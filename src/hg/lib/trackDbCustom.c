@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.86 2010/05/07 05:03:55 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.87 2010/05/11 01:43:30 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -73,7 +73,7 @@ static void parseTrackLine(struct trackDb *bt, char *value,
 /* parse the track line */
 {
 char *val2 = cloneString(value);
-bt->tableName = nextWord(&val2);
+bt->track = nextWord(&val2);
 
 // check for override option
 if (val2 != NULL)
@@ -244,7 +244,7 @@ void trackDbPolish(struct trackDb *bt)
 /* Fill in missing values with defaults. */
 {
 if (bt->shortLabel == NULL)
-    bt->shortLabel = cloneString(bt->tableName);
+    bt->shortLabel = cloneString(bt->track);
 if (bt->longLabel == NULL)
     bt->longLabel = cloneString(bt->shortLabel);
 if (bt->altColorR == 0 && bt->altColorG == 0 && bt->altColorB == 0)
@@ -295,9 +295,6 @@ struct lineFile *lf = lineFileOpen(raFile, TRUE);
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
-#ifdef UNUSED
-struct hash *compositeHash = hashNew(8);
-#endif /* UNUSED */
 char *incFile;
 
 for (;;)
@@ -350,10 +347,6 @@ for (;;)
 	trackDbUpdateOldTag(&word, &line);
 	trackDbAddInfo(bt, word, line, lf);
 	}
-#ifdef UNUSED
-    if (trackDbLocalSetting(bt, "compositeTrack") != NULL)
-        hashAdd(compositeHash, bt->tableName, bt);
-#endif /* UNUSED */
     }
 lineFileClose(&lf);
 
@@ -361,70 +354,7 @@ slReverse(&btList);
 return btList;
 }
 
-#ifdef UNUSED
-void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
-			      boolean hideFirst)
-/* Override visbility settings using a ra file.  If hideFirst, set all
- * visibilities to hide before applying visibilityRa. */
-{
-struct lineFile *lf;
-struct hash *raRecord;
 
-if (hideFirst)
-    {
-    /* Set visibility to hide on all entries */
-    struct hashEl *hel;
-    struct hashCookie cookie;
-    cookie = hashFirst(tdHash);
-    while ((hel = hashNext(&cookie)) != NULL)
-	((struct trackDb *)hel->val)->visibility = tvHide;
-    }
-
-/* Parse the ra file, adjusting visibility accordingly */
-lf = lineFileOpen(visibilityRa, TRUE);
-while ((raRecord = raNextRecord(lf)) != NULL)
-    {
-    char *trackName = hashFindVal(raRecord, "track");
-    char *visibility = hashFindVal(raRecord, "visibility");
-    if ((trackName != NULL) && (visibility != NULL))
-        {
-        struct trackDb *td = hashFindVal(tdHash, trackName);
-        if (td != NULL)
-            td->visibility = parseVisibility(visibility);
-        }
-    hashFree(&raRecord);
-    }
-lineFileClose(&lf);
-}
-#endif /* UNUSED */
-
-#ifdef OLD
-void trackDbOverridePriority(struct hash *tdHash, char *priorityRa)
-/* Override priority settings using a ra file. */
-{
-struct lineFile *lf;
-struct hash *raRecord;
-
-/* Parse the ra file, adjusting priority accordingly */
-lf = lineFileOpen(priorityRa, TRUE);
-while ((raRecord = raNextRecord(lf)) != NULL)
-    {
-    char *trackName = hashFindVal(raRecord, "track");
-    char *priority = hashFindVal(raRecord, "priority");
-    if ((trackName != NULL) && (priority != NULL))
-        {
-        struct trackDb *td = hashFindVal(tdHash, trackName);
-        if (td != NULL)
-            {
-            td->priority = atof(priority);
-            trackDbPolish(td);
-            }
-        }
-    hashFree(&raRecord);
-    }
-lineFileClose(&lf);
-}
-#endif /* OLD */
 
 struct hash *trackDbHashSettings(struct trackDb *tdb)
 /* Force trackDb to hash up it's settings.  Usually this is just
@@ -488,7 +418,7 @@ char *trackDbRequiredSetting(struct trackDb *tdb, char *name)
 {
 char *ret = trackDbSetting(tdb, name);
 if (ret == NULL)
-   errAbort("Missing required %s setting in %s track", name, tdb->tableName);
+   errAbort("Missing required %s setting in %s track", name, tdb->track);
 return ret;
 }
 
@@ -616,8 +546,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
         tdbMarkAsSuperTrack(tdb);
         tdb->isShow = stInfo->isShow;
-        if (!hashLookup(superHash, tdb->tableName))
-            hashAdd(superHash, tdb->tableName, tdb);
+        if (!hashLookup(superHash, tdb->track))
+            hashAdd(superHash, tdb->track, tdb);
         }
     freeMem(stInfo);
     }
@@ -715,7 +645,7 @@ if(cType == cfgNone && warnIfNecessary)
     {
     if(!startsWith("bed ", type) && !startsWith("bigBed", type)
     && subgroupFind(tdb,"view",NULL))
-        warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->tableName);
+        warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }
 return cType;
 }
@@ -763,7 +693,7 @@ return  (setting && (   sameWord(setting,"on")
                      || atoi(setting) != 0));
 }
 
-struct trackDb *subTdbFind(struct trackDb *parent,char *table)
+struct trackDb *subTdbFind(struct trackDb *parent,char *childName)
 /* Return child tdb if it exists in parent. */
 {
 if(parent == NULL)
@@ -774,7 +704,7 @@ struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(parent->subt
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *tdb = tdbRef->val;
-    if (sameString(tdb->tableName, table))
+    if (sameString(tdb->track, childName))
 	{
 	found = tdb;
         break;
@@ -784,23 +714,23 @@ slFreeList(&tdbRefList);
 return found;
 }
 
-struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table)
-/* Find or creates the tdb for this table. May return NULL. */
+struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *track)
+/* Find or creates the tdb for this track. May return NULL. */
 {
 struct trackDb *tdb = NULL;
 if (parent != NULL)
     {
-    if(sameString(parent->tableName, table))
+    if(sameString(parent->track, track))
         tdb = parent;
-    else if(consWiggleFind(db,parent,table) != NULL)
+    else if(consWiggleFind(db,parent,track) != NULL)
         tdb = parent;
     else
-        tdb = subTdbFind(parent,table);
+        tdb = subTdbFind(parent,track);
     }
 if(tdb == NULL && db != NULL)
     {
     struct sqlConnection *conn = hAllocConn(db);
-    tdb = hMaybeTrackInfo(conn, table);
+    tdb = hMaybeTrackInfo(conn, track);
     hFreeConn(&conn);
     }
 return tdb;
@@ -868,7 +798,7 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList)
  * In the subTrack system the parents have the tag:
  *     compositeTrack on
  * and the children have the tag:
- *     subTrack parentName
+ *     parent parentName
  * In this routine the subtracks are removed from the list, and stuffed into
  * the subtracks lists of their parents.  The highest level parents stay on
  * the list.  There can be multiple levels of inheritance.
@@ -881,7 +811,7 @@ struct trackDb *forest = NULL;
 struct hash *trackHash = hashNew(0);
 struct trackDb *tdb, *next;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    hashAdd(trackHash, tdb->tableName, tdb);
+    hashAdd(trackHash, tdb->track, tdb);
 
 /* Do superTrack inheritance.  This involves setting up the parent pointers to superTracks,
  * but removing the superTracks themselves from the list. */
@@ -902,7 +832,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	    struct trackDb *parent = hashFindVal(trackHash, parentName);
 	    if (parent == NULL)
 		errAbort("Parent track %s of supertrack %s doesn't exist",
-			parentName, tdb->tableName);
+			parentName, tdb->track);
 	    tdb->parent = parent;
 	    slAddHead(&superlessList, tdb);
 	    }
@@ -929,7 +859,7 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	    }
 	else
 	    {
-	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->tableName);
+	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->track);
 	    }
 	freez(&parentName);
 	}
@@ -941,6 +871,20 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 
 hashFree(&trackHash);
 return forest;
+}
+
+void trackDbAddTableField(struct trackDb *tdbList)
+/* Add table field by looking it up in settings.  */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *table = trackDbLocalSetting(tdb, "table");
+    if (table != NULL)
+        tdb->table = cloneString(table);
+    else
+        tdb->table = cloneString(tdb->track);
+    }
 }
 
 void rGetRefsToDescendants(struct slRef **pList, struct trackDb *tdbList)

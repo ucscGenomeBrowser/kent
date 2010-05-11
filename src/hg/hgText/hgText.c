@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.171 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.172 2010/05/11 01:43:25 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -588,11 +588,11 @@ for (t = trackList, i=1; t != NULL; t = t->next, ++i)
     {
     trackLabels[i] = t->shortLabel;
     safef(chrN_track, sizeof(chrN_track), "%s_%s", hDefaultChrom(),
-	  t->tableName);
+	  t->table);
     if (hTableExists(chrN_track))
-	safef(tbl, sizeof(tbl), "%s.chrN_%s", database, t->tableName);
+	safef(tbl, sizeof(tbl), "%s.chrN_%s", database, t->table);
     else
-	safef(tbl, sizeof(tbl), "%s.%s", database, t->tableName);
+	safef(tbl, sizeof(tbl), "%s.%s", database, t->table);
     trackNames[i] = cloneString(tbl);
     if (value != NULL && sameString(value, tbl))
         selected = trackNames[i];

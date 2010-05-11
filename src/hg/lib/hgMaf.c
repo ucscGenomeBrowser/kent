@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.14 2010/04/09 00:12:00 braney Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.15 2010/05/11 01:43:30 kent Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -424,7 +424,7 @@ char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig)
 /* Return name of cart variable for this cons wiggle */
 {
 char option[128];
-safef(option, sizeof option, "%s.cons.%s", tdb->tableName, wig->leftLabel);
+safef(option, sizeof option, "%s.cons.%s", tdb->track, wig->leftLabel);
 return (cloneString(option));
 }
 

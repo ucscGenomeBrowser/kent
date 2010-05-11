@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.193 2010/04/22 19:25:22 bristor Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.194 2010/05/11 01:43:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -178,7 +178,7 @@ fprintf(f, ".\n");
 char *curTableLabel()
 /* Return label for current table - track short label if it's a track */
 {
-if (curTrack != NULL && sameString(curTrack->tableName, curTable))
+if (curTrack != NULL && sameString(curTrack->table, curTable))
     return curTrack->shortLabel;
 else
     return curTable;
@@ -227,17 +227,21 @@ if (s != NULL)
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(database, NULL), *tdb;
+struct trackDb *list = hTrackDb(database, NULL);
 struct customTrack *ctList, *ct;
 
+#ifdef UNUSED
 /* Change the mrna track to all_mrna to avoid confusion elsewhere. */
+struct trackDb *tdb;
 for (tdb = list; tdb != NULL; tdb = tdb->next)
     {
-    if (sameString(tdb->tableName, "mrna"))
+    if (sameString(tdb->table, "mrna"))
         {
-	tdb->tableName = cloneString("all_mrna");
+	tdb->table = cloneString("all_mrna");
 	}
     }
+#endif /* UNUSED */
+
 /* add wikiTrack if enabled */
 if (wikiTrackEnabled(database, NULL))
     wikiTrackDb(&list);
@@ -483,6 +487,7 @@ else
     }
 }
 
+#ifdef UNUSED
 char *trackTable(char *rawTable)
 /* Return table name for track, substituting all_mrna
  * for mRNA if need be. */
@@ -490,16 +495,19 @@ char *trackTable(char *rawTable)
 char *table = rawTable;
 return table;
 }
+#endif /* UNUSED */
 
 char *connectingTableForTrack(char *rawTable)
 /* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
 {
+#ifdef UNUSED
 if (sameString(rawTable, "mrna"))
     return cloneString("all_mrna");
 else if (sameString(rawTable, "est"))
     return cloneString("all_est");
 else
+#endif /* UNUSED */
     return cloneString(rawTable);
 }
 
@@ -723,7 +731,7 @@ if (group != NULL && sameString(group->name, "all"))
     group = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (sameString(name, track->tableName) &&
+    if (sameString(name, track->table) &&
        (group == NULL || sameString(group->name, track->grp)))
        return track;
     }
@@ -762,7 +770,7 @@ struct trackDb *track = NULL;
 
 if (name != NULL)
     {
-    /* getFullTrackList tweaks tdb->tableName mrna to all_mrna, so in
+    /* getFullTrackList tweaks tdb->table mrna to all_mrna, so in
      * case mrna is passed in (e.g. from hgc link to schema page)
      * tweak it here too: */
     if (sameString(name, "mrna"))
@@ -819,7 +827,7 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (!hashLookup(groupsInDatabase, track->grp))
          warn("Track %s has group %s, which isn't in grp table",
-	 	track->tableName, track->grp);
+	 	track->table, track->grp);
     }
 
 /* Create dummy group for all tracks. */
@@ -911,9 +919,9 @@ if (trackDupe != NULL && trackDupe[0] != 0)
 	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
             {
 	    struct trackDb *subTdb = tdbRef->val;
-	    name = slNameNew(subTdb->tableName);
+	    name = slNameNew(subTdb->table);
 	    slAddTail(&subList, name);
-	    hashAdd(uniqHash, subTdb->tableName, NULL);
+	    hashAdd(uniqHash, subTdb->table, NULL);
             }
         pList = slCat(pList, subList);
         }
@@ -926,7 +934,7 @@ struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner)
 {
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
-char *trackTable = track->tableName;
+char *trackTable = track->table;
 
 hashAdd(uniqHash, trackTable, NULL);
 if (useJoiner)
@@ -969,8 +977,8 @@ static char *findSelectedTable(struct trackDb *track, char *var)
 {
 if (track == NULL)
     return cartString(cart, var);
-else if (isCustomTrack(track->tableName))
-    return track->tableName;
+else if (isCustomTrack(track->table))
+    return track->table;
 else
     {
     struct slName *tableList = tablesForTrack(track, TRUE);
@@ -1015,13 +1023,13 @@ if (hti != NULL && hti->nameField[0] != 0)
     idField = cloneString(hti->nameField);
 else if (track != NULL)
     {
-    struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->tableName);
+    struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->table);
     if (trackHti != NULL && isCustomTrack(table))
         idField = cloneString(trackHti->nameField);
     else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
         struct joinerPair *jp, *jpList;
-        jpList = joinerRelate(allJoiner, db, track->tableName);
+        jpList = joinerRelate(allJoiner, db, track->table);
         for (jp = jpList; jp != NULL; jp = jp->next)
             {
             if (sameString(jp->a->field, trackHti->nameField))
@@ -1484,7 +1492,7 @@ else
     }
 if (track != NULL)
     {
-    if (sameString(track->tableName, "gvPos") &&
+    if (sameString(track->table, "gvPos") &&
 	!cartVarExists(cart, "gvDisclaimer"))
 	{
 	/* display disclaimer and add flag to cart, program exits from here */
@@ -1492,7 +1500,7 @@ if (track != NULL)
 	htmlStart("Table Browser");
 	gvDisclaimer();
 	}
-    else if (sameString(track->tableName, "gvPos") &&
+    else if (sameString(track->table, "gvPos") &&
 	     sameString(cartString(cart, "gvDisclaimer"), "Disagree"))
 	{
 	cartRemove(cart, "gvDisclaimer");

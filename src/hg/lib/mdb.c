@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.5 2010/04/27 22:33:06 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.6 2010/05/11 01:43:30 kent Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -1812,7 +1812,7 @@ if(setting == NULL)
     return NULL;
 struct mdbObj *mdbObj;
 AllocVar(mdbObj);
-mdbObj->obj     = cloneString(tdb->tableName);
+mdbObj->obj     = cloneString(tdb->table);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString("table");
@@ -1842,8 +1842,8 @@ if(tdb != NULL)
 
 struct sqlConnection *conn = sqlConnect(db);
 char *mdb = mdbTableName(conn,TRUE);  // Look for sandbox name first
-if(tdb != NULL && tdb->tableName != NULL)
-    table = tdb->tableName;
+if(tdb != NULL && tdb->table != NULL)
+    table = tdb->table;
 if(mdb != NULL)
     mdbObj = mdbObjQueryByObj(conn,mdb,table,NULL);
 sqlDisconnect(&conn);

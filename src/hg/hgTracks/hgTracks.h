@@ -58,7 +58,8 @@ struct track
  * of the graphical genome browser. */
     {
     struct track *next;   /* Next on list. */
-    char *mapName;             /* Database track name. Name on image map etc. */
+    char *track;             /* Track symbolic name. Name on image map etc. Same as tdb->track. */
+    char *table;             /* Table symbolic name. Name of database table. Same as tdb->table.*/
     enum trackVisibility visibility; /* How much of this want to see. */
     enum trackVisibility limitedVis; /* How much of this actually see. */
     boolean limitedVisSet;	     /* Is limited visibility set? */

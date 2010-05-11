@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.66 2010/05/07 05:05:05 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.67 2010/05/11 01:43:30 kent Exp $";
 
 
 void usage()
@@ -98,7 +98,7 @@ struct trackDb *newList = NULL, *tdb, *next;
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    verbose(3,"pruneStrict checking table: '%s'\n", tdb->tableName);
+    verbose(3,"pruneStrict checking track: '%s'\n", tdb->track);
     if (tdb->subtracks != NULL)
 	{
 	tdb->subtracks = pruneStrict(tdb->subtracks, db);
@@ -107,12 +107,12 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (hTableOrSplitExists(db, tdb->tableName))
+    else if (hTableOrSplitExists(db, tdb->table))
         {
 	slAddHead(&newList, tdb);
 	}
     else
-	verbose(3,"pruneStrict removing table: '%s'\n", tdb->tableName);
+	verbose(3,"pruneStrict removing track: '%s' no table %s\n", tdb->track, tdb->table);
     }
 slReverse(&newList);
 return newList;
@@ -133,7 +133,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	    slAddHead(&newList, tdb);
 	else
 	    verbose(3,"pruneEmptyContainers: empty track: '%s'\n",
-		tdb->tableName);
+		tdb->track);
 	}
     else 
         {
@@ -193,17 +193,17 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
 	{
 	/* we want to include this track, check to see if we already have it */
 	struct hashEl *hel;
-	if ((hel = hashLookup(haveHash, tdb->tableName)) != NULL)
+	if ((hel = hashLookup(haveHash, tdb->track)) != NULL)
 	    errAbort("found two copies of table %s: one with release %s, the other %s\n", 
-		tdb->tableName, (char *)hel->val, release);
+		tdb->track, (char *)hel->val, release);
 
-	hashAdd(haveHash, tdb->tableName, rel);
+	hashAdd(haveHash, tdb->track, rel);
 	hashRemove(tdb->settingsHash, "release");
 	slAddHead(&relList, tdb);
 	}
     else
 	verbose(3,"pruneRelease: removing '%s', release: '%s' != '%s'\n",
-	    tdb->tableName, rel, release);
+	    tdb->track, rel, release);
     }
 
 freeHash(&haveHash);
@@ -234,9 +234,9 @@ while (!done)
 	    }
 	else
 	    {
-	    verbose(3,"pruneOrhans: removing '%s'\n",
-		tdb->tableName);
-	    hashRemove(trackHash, tdb->tableName);
+	    verbose(3,"pruneOrphans: removing '%s'\n",
+		tdb->track);
+	    hashRemove(trackHash, tdb->track);
 	    done = FALSE;
 	    }
 	freeMem(parentName);
@@ -250,7 +250,7 @@ static void applyOverride(struct hash *trackHash,
                           struct trackDb *overTd)
 /* Apply a trackDb override to a track, if it exists */
 {
-struct trackDb *tdb = hashFindVal(trackHash, overTd->tableName);
+struct trackDb *tdb = hashFindVal(trackHash, overTd->track);
 if (tdb != NULL)
     trackDbOverride(tdb, overTd);
 }
@@ -271,7 +271,7 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
     if (tdb->overrides != NULL)
 	applyOverride(trackHash, tdb);
     else
-	hashStore(trackHash, tdb->tableName)->val = tdb;
+	hashStore(trackHash, tdb->track)->val = tdb;
     }
 }
 
@@ -349,7 +349,7 @@ for (td = tdbList; td != NULL; td = td->next)
         {
         char *htmlName = trackDbSetting(td, "html");
         if (htmlName == NULL)
-            htmlName = td->tableName;
+            htmlName = td->track;
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
 	if (fileExists(fileName))
             {
@@ -409,7 +409,7 @@ for (td = tdbList; td != NULL; td = tdNext)
         AllocVar(sgd);
 	sgd->compositeTdb = td;
 
-	verbose(3,"getting subgroups for %s\n", td->tableName);
+	verbose(3,"getting subgroups for %s\n", td->track);
 	for(i=1; ; i++)
 	    {
 	    safef(subGroupName, sizeof(subGroupName), "subGroup%d", i);
@@ -431,7 +431,7 @@ for (td = tdbList; td != NULL; td = tdNext)
 	    verbose(3,"   adding group %s\n", sgName);
 	    hashAdd(sgd->nameHash, sgName, subGroupHash);
 	    }
-	hashAdd(compositeHash, td->tableName, sgd);
+	hashAdd(compositeHash, td->track, sgd);
 	}
     }
 return compositeHash;
@@ -442,16 +442,16 @@ static void checkOneSubGroups(char *compositeName,
 {
 char *subGroups = trackDbSetting(td, "subGroups");
 
-verbose(2, "   checkOne %s %s\n", compositeName, td->tableName);
+verbose(2, "   checkOne %s %s\n", compositeName, td->track);
 if (subGroups && (sgd->nameHash == NULL))
     {
     errAbort("subTrack %s has groups not defined in parent %s\n",
-	     td->tableName, compositeName);
+	     td->track, compositeName);
     }
 else if (!subGroups && (sgd->nameHash != NULL))
     {
     errAbort("subtrack %s is missing subGroups defined in parent %s\n",  
-	td->tableName, compositeName);
+	td->track, compositeName);
     }
 
 if (!subGroups && (sgd->nameHash == NULL))
@@ -466,7 +466,7 @@ for (slPair = slPairList; slPair; slPair = slPair->next)
     struct hashEl *hel = hashLookup( sgd->nameHash, slPair->name);
     if (hel == NULL)
 	errAbort("subtrack %s has subGroup (%s) not found in parent\n", 
-	    td->tableName, slPair->name);
+	    td->track, slPair->name);
 
     struct hash *subHash = hel->val;
     hashStore(foundHash, slPair->name);
@@ -474,7 +474,7 @@ for (slPair = slPairList; slPair; slPair = slPair->next)
     if (hashLookup(subHash, slPair->val) == NULL)
 	{
 	errAbort("subtrack %s has subGroup (%s) with value (%s) not found in parent\n", 
-	    td->tableName, slPair->name, (char *)slPair->val);
+	    td->track, slPair->name, (char *)slPair->val);
 	}
     }
 
@@ -484,7 +484,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     if (hashLookup(foundHash, hel->name) == NULL)
 	errAbort("subtrack %s is missing required subGroup %s\n", 
-	    td->tableName, hel->name);
+	    td->track, hel->name);
     }
 
 }
@@ -502,18 +502,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	struct slRef *childList = trackDbListGetRefsToDescendantLeaves(
 	    tdb->subtracks);
 
-	verbose(2,"verifying %s child %p\n",tdb->tableName, childList);
+	verbose(2,"verifying %s child %p\n",tdb->track, childList);
 	for (child = childList; child != NULL; child = child->next)
 	    {
 	    struct trackDb *childTdb = child->val;
-	    verbose(2, "  checking child %s\n",childTdb->tableName);
+	    verbose(2, "  checking child %s\n",childTdb->track);
 
 	    /* Look for some ancestor in composite hash and set sgd to it. */
-	    struct subGroupData *sgd =  hashFindVal(compositeHash, tdb->tableName);
+	    struct subGroupData *sgd =  hashFindVal(compositeHash, tdb->track);
 	    verbose(2, "looking for %s in compositeHash got %p\n", 
-		tdb->tableName, sgd);
+		tdb->track, sgd);
 	    assert(sgd != NULL);	
-	    checkOneSubGroups(tdb->tableName, childTdb, sgd);
+	    checkOneSubGroups(tdb->track, childTdb, sgd);
 	    }
 	}
     }
@@ -567,7 +567,7 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
 	    slAddHead(&itemsToSort, item);
 	else
 	    {
-	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->tableName);
+	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->track);
 	    needsSorting = FALSE;
 	    sortableTdbItemCreate(tdbItem,sortOrder);
 	    break;
@@ -577,7 +577,7 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
     // Does this container need to be sorted?
     if(needsSorting && slCount(itemsToSort))
         {
-        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->tableName,slCount(itemsToSort));
+        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->track,slCount(itemsToSort));
         sortTdbItemsAndUpdatePriorities(&itemsToSort);
         countOfSortedContainers++;
         }
@@ -675,6 +675,7 @@ layerOnRa(strict, database, asmDir, trackHash, FALSE);
 
 /* Represent hash as list */
 struct trackDb *tdbList = trackDbListFromHash(trackHash);
+trackDbAddTableField(tdbList);
 
 /* Get rid of orphans with no parent of the correct release. */
 tdbList = pruneOrphans(tdbList, trackHash);
@@ -722,9 +723,9 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	{
 	/* The supertrack may appear as a 'floating' parent for multiple tracks.
 	 * Only put it on the list once. */
-	if (!hashLookup(superTrackHash, parent->tableName))
+	if (!hashLookup(superTrackHash, parent->track))
 	    {
-	    hashAdd(superTrackHash, parent->tableName, parent);
+	    hashAdd(superTrackHash, parent->track, parent);
 	    slAddHead(&tdbList, parent);
 	    }
 	}
@@ -788,23 +789,23 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
         if (isEmpty(td->html))
 	    {
 	    if (strict && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
-	    	!sameString(td->tableName,"cytoBandIdeo"))
+	    	!sameString(td->track,"cytoBandIdeo"))
 		{
-		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
+		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->track, td->shortLabel);
 		}
 	    }
 	else
 	    {
-	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, "html", td->html);
+	    updateBigTextField(conn,  trackDbName, "tableName", td->table, "html", td->html);
 	    }
 	if (td->settingsHash != NULL)
 	    {
 	    char *settings = settingsFromHash(td->settingsHash);
-	    updateBigTextField(conn, trackDbName, "tableName", td->tableName,
+	    updateBigTextField(conn, trackDbName, "tableName", td->track,
 	    	"settings", settings);
 	    if (showSettings)
 		{
-		verbose(1, "%s: type='%s';", td->tableName, td->type);
+		verbose(1, "%s: type='%s';", td->track, td->type);
 		if (isNotEmpty(settings))
 		    {
 		    char *oneLine = replaceChars(settings, "\n", "; ");

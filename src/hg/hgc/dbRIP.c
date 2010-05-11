@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.8 2008/09/03 19:19:07 markd Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.9 2010/05/11 01:43:28 kent Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -165,7 +165,7 @@ int itemCount = 0;
 
 genericHeader(tdb, item);
 
-hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);

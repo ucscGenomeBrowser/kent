@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.26 2010/03/16 00:42:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.27 2010/05/11 01:43:27 kent Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -31,7 +31,7 @@ struct flatTracks *flatTrack;
 AllocVar(flatTrack);
 flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
-safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
+safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
 if(flatTrack->order >= IMG_ORDEREND)
     {
@@ -791,7 +791,7 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
             imgFile = slice->parentImg->file;
         //else if(differentString(imgFile,slice->parentImg->file))
         //    {
-        //    char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+        //    char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->track : imgFile);
         //    warn("imgTrackAddMapItem(%s) called, but not all slice images are the same for this track.",name);
         //    }
         // Not a valid warning!  Side image and data image may be different!!!
@@ -809,7 +809,7 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
             }
         else
         {  // FIXME: This is assuming that if there is no map then the entire slice should get the link!
-            char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+            char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->track : imgFile);
             warn("imgTrackAddMapItem(%s,%s) mapItem(lx:%d,rx:%d) is overlapping slice:%s(lx:%d,rx:%d)",name,title,topLeftX,bottomRightX,
                  sliceTypeToString(slice->type),slice->offsetX,(slice->offsetX + slice->width - 1));
             sliceAddLink(slice,link,title);
@@ -819,7 +819,7 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
     }
 //if(count>=2)
 //    {
-//    char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+//    char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->track : imgFile);
 //    warn("imgTrackAddMapItem(%s) called for map items stretching across %d slice(s).",name,count);
 //    }
 return count;
@@ -832,7 +832,7 @@ if(imgTrack)
     {
     struct dyString *myDy = addIndent(dy,indent);
     dyStringPrintf(myDy,"imgTrack: name:%s tdb:%s%s%s order:%d vis:%s",
-            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->tableName?imgTrack->tdb->tableName:""),
+            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->track?imgTrack->tdb->track:""),
             (imgTrack->showCenterLabel?" centerLabel":""),(imgTrack->reorderable?" reorderable":""),
             imgTrack->order,hStringFromTv(imgTrack->vis));
     if(dy == NULL)
@@ -866,7 +866,7 @@ if (imgTrack->tdb == NULL && imgTrack->name == NULL)
         }
     return FALSE;
     }
-char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->tableName);
+char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track);
 if (imgTrack->db == NULL)
     {
     if (verbose)
@@ -1456,7 +1456,7 @@ else
             struct trackDb * tdb = imgTrack->tdb;
             if(tdbIsCompositeChild(tdb))
                 tdb = trackDbCompositeParent(tdb);
-            trackName = tdb->tableName;
+            trackName = tdb->track;
             }
         hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
         }
@@ -1591,7 +1591,7 @@ hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
-    char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->tableName );
+    char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
     //if(verbose && imgTrack->order == 3)
     //    imgTrackShow(NULL,imgTrack,0);
     hPrintf("<TR id='tr_%s'%s>\n",trackName,

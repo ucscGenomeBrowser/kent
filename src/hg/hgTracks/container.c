@@ -65,12 +65,13 @@ return totalHeight;
 void makeContainerTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry for container tracks. */
 {
+// uglyf("track->track=%s, track->table=%s, tdb->track=%s, tdb->table=%s<BR>\n", track->track,track->table, tdb->track, tdb->table);
 /* Wrap tracks around child tdb's, maintaining same heirarchy as in tdb. */
 struct trackDb *subtdb;
 for (subtdb = tdb->subtracks; subtdb != NULL; subtdb = subtdb->next)
     {
     struct track *subtrack = trackFromTrackDb(subtdb);
-    TrackHandler handler = lookupTrackHandler(subtdb->tableName);
+    TrackHandler handler = lookupTrackHandler(subtdb->table);
     if (handler != NULL)
 	handler(subtrack);
     slAddHead(&track->subtracks, subtrack);
@@ -96,7 +97,7 @@ else if (sameString(containerType, "folder"))
     /* Folder's just use the default methods. */
     }
 else
-    errAbort("unknown container type %s in trackDb for %s", containerType, tdb->tableName);
+    errAbort("unknown container type %s in trackDb for %s", containerType, tdb->track);
 }
 
 

@@ -51,7 +51,7 @@ matchingCartSettings = cartFindLike(cart, cartGenomeWildStr);
 for (el = matchingCartSettings; el != NULL; el = el->next)
     {
     char *val = (char *)el->val;
-    if (val && sameString(val, tg->mapName))
+    if (val && sameString(val, tg->track))
 	{
 	graphCartVarName = el->name;
 	break;
@@ -142,7 +142,7 @@ else
     safef(query, sizeof(query),
 	"select chromStart,val from %s "
 	"where chrom='%s' and chromStart>=%d and chromStart<%d",
-	tg->mapName, chromName,
+	tg->table, chromName,
 	seqStart - cgs->maxGapToFill, seqEnd + cgs->maxGapToFill);
     sr = sqlGetResult(conn, query);
 
@@ -179,7 +179,7 @@ else
 /* Do map box */
 xOff = hvGfxAdjXW(hvg, xOff, width);
 
-char *encodedTrack = cgiEncode(tg->mapName);
+char *encodedTrack = cgiEncode(tg->track);
 if(theImgBox && curImgTrack)
     {
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
@@ -319,7 +319,7 @@ void chromGraphMethods(struct track *tg)
 chromGraphMethodsCommon(tg);
 tg->drawItems = cgDrawItems;
 struct sqlConnection *conn = hAllocConn(database);
-tg->customPt = chromGraphSettingsGet(tg->mapName, conn,
+tg->customPt = chromGraphSettingsGet(tg->track, conn,
 	tg->tdb, cart);
 hFreeConn(&conn);
 }
@@ -329,6 +329,6 @@ void chromGraphMethodsCt(struct track *tg)
 {
 tg->drawItems = cgDrawItemsCt;
 chromGraphMethodsCommon(tg);
-tg->customPt = chromGraphSettingsGet(tg->mapName, NULL, tg->tdb, cart);
+tg->customPt = chromGraphSettingsGet(tg->track, NULL, tg->tdb, cart);
 }
 

@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.6 2010/03/25 17:20:40 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.7 2010/05/11 01:43:24 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -35,7 +35,7 @@ char *getBedGraphType(char *table)
 /* Return bedgraph track type if table is a bedGraph in the current database's 
  * trackDb. */
 {
-if (curTrack && sameString(curTrack->tableName, table))
+if (curTrack && sameString(curTrack->table, table))
     {
     if (startsWith("bedGraph", curTrack->type))
 	return curTrack->type;

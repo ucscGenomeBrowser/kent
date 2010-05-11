@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.1 2007/06/05 23:48:09 galt Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.2 2010/05/11 01:43:24 kent Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -28,7 +28,7 @@ safecpy(setting, sizeof setting, track->type);
 char *type = nextWord(&p);
 
 if (sameString(type, "maf") || sameString(type, "wigMaf"))
-    if (sameString(track->tableName, table))
+    if (sameString(track->table, table))
         return TRUE;
 return FALSE;
 }

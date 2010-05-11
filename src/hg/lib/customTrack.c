@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.180 2009/12/11 15:32:47 angie Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.181 2010/05/11 01:43:29 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -49,7 +49,8 @@ AllocVar(tdb);
 tdb->shortLabel = cloneString(CT_DEFAULT_TRACK_NAME);
 tdb->longLabel = cloneString(CT_DEFAULT_TRACK_DESCR);
 
-tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+tdb->table = customTrackTableFromLabel(tdb->shortLabel);
+tdb->track = cloneString(tdb->table);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
 tdb->type = (char *)NULL;
@@ -331,9 +332,11 @@ safef(buf, sizeof(buf), "%s %d", prev, ct_nextDefaultTrackNum);
 ct->tdb->longLabel = cloneString(buf);
 freeMem(prev);
 
-prev = ct->tdb->tableName;
-ct->tdb->tableName = customTrackTableFromLabel(ct->tdb->shortLabel);
-freeMem(prev);
+freez(&ct->tdb->table);
+ct->tdb->table = customTrackTableFromLabel(ct->tdb->shortLabel);
+
+freez(&ct->tdb->track);
+ct->tdb->track = cloneString(ct->tdb->table);
 }
 
 struct customTrack *customTrackAddToList(struct customTrack *ctList,
@@ -356,14 +359,14 @@ slReverse(&addCts);
 for (ct = addCts; ct != NULL; ct = nextCt)
     {
     nextCt = ct->next;
-    if (hashLookup(ctHash, ct->tdb->tableName))
+    if (hashLookup(ctHash, ct->tdb->track))
         freeMem(ct);
     else
         {
         if (isDefaultTrack(ct) && makeDefaultUnique)
             makeUniqueDefaultTrack(ct);
         slAddHead(&newCtList, ct);
-        hashAdd(ctHash, ct->tdb->tableName, ct);
+        hashAdd(ctHash, ct->tdb->track, ct);
         }
     }
 /* add in older tracks that haven't been replaced by newer */
@@ -371,14 +374,14 @@ for (ct = ctList; ct != NULL; ct = nextCt)
     {
     struct customTrack *newCt;
     nextCt = ct->next;
-    if ((newCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
+    if ((newCt = hashFindVal(ctHash, ct->tdb->track)) != NULL)
         {
         slAddHead(&replacedCts, ct);
         }
     else
         {
         slAddHead(&oldCtList, ct);
-        hashAdd(ctHash, ct->tdb->tableName, ct);
+        hashAdd(ctHash, ct->tdb->track, ct);
         }
     }
 slReverse(&oldCtList);
@@ -827,7 +830,7 @@ if (customTracksExist(cart, &ctFileName))
         for (ct = ctList; ct != NULL; ct = nextCt)
             {
             nextCt = ct->next;
-            if (sameString(selectedTable, ct->tdb->tableName))
+            if (sameString(selectedTable, ct->tdb->track))
                 {
                 if (cartVarExists(cart, CT_DO_REMOVE_VAR))
                     {
@@ -966,7 +969,7 @@ struct customTrack *ctFind(struct customTrack *ctList,char *name)
 {
 struct customTrack *ct;
 for (ct=ctList;
-     ct != NULL && differentString(ct->tdb->tableName,name);
+     ct != NULL && differentString(ct->tdb->track,name);
      ct=ct->next) {}
 return ct;
 }

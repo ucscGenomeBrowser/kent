@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.22 2010/04/27 23:31:41 braney Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.23 2010/05/11 01:43:26 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -36,7 +36,7 @@ void ctBedGraphLoadItems(struct track *tg)
 
 /*	Verify this is a custom track	*/
 if (tg->customPt == (void *)NULL)
-    errAbort("ctBedGraphLoadItems: did not find a custom wiggle track: %s", tg->mapName);
+    errAbort("ctBedGraphLoadItems: did not find a custom wiggle track: %s", tg->track);
 
 errAbort("custom track bedGraph load items not yet implemented");
 }
@@ -57,7 +57,7 @@ struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
 int graphColumn = 5;
 char *tableName;
 
-if(sameString(tg->mapName, "affyTranscription"))
+if(sameString(tg->track, "affyTranscription"))
     wigCart->colorTrack = "affyTransfrags";
 graphColumn = wigCart->graphColumn;
 
@@ -72,7 +72,7 @@ if (tg->customPt)
 else 
 #endif /* GBROWSE */
     {
-    tableName = tg->mapName;
+    tableName = tg->table;
     conn = hAllocConnTrack(database, tg->tdb);
     }
 

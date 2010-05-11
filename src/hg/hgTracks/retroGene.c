@@ -2,7 +2,7 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.18 2009/12/21 22:43:34 markd Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.19 2010/05/11 01:43:28 kent Exp $";
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -56,7 +56,7 @@ char **row;
 int rowOffset;
 int colCount ;
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 colCount = sqlCountColumns(sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -124,9 +124,9 @@ char *retroName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 char cartvar[512];
-boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
-boolean isRetroNative = startsWith( "ucscRetro", tg->mapName) || startsWith( "retroMrnaInfo", tg->mapName);
-safef(cartvar, sizeof(cartvar), "%s.label", (isNative ? "pseudoGeneLink.label" : (isRetroNative ? tg->mapName : "xenoRefGene.label")));
+boolean isNative = sameString(tg->table, "pseudoGeneLink") ;
+boolean isRetroNative = startsWith( "ucscRetro", tg->table) || startsWith( "retroMrnaInfo", tg->table);
+safef(cartvar, sizeof(cartvar), "%s.label", (isNative ? "pseudoGeneLink.label" : (isRetroNative ? tg->track : "xenoRefGene.label")));
 char *refGeneLabel = cartUsualString(cart, cartvar, "gene") ;
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
@@ -171,7 +171,7 @@ unsigned labelSet = 0;
 
 // label setting are on parent track
 char prefix[128];
-safef(prefix, sizeof(prefix), "%s.label", tg->tdb->tableName);
+safef(prefix, sizeof(prefix), "%s.label", tg->tdb->track);
 struct hashEl *labels = cartFindPrefix(cart, prefix);
 
 if (labels == NULL)
@@ -179,9 +179,9 @@ if (labels == NULL)
     // default to common name+accession and save this in cart so it makes sense in trackUi
     labelSet = useAcc;
     char setting[64];
-    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->tableName);
+    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->track);
     cartSetBoolean(cart, setting, TRUE);
-    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->tableName);
+    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->track);
     cartSetBoolean(cart, setting, TRUE);
     }
 struct hashEl *label;

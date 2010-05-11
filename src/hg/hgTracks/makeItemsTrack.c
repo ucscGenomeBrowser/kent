@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.10 2010/04/13 08:42:32 kent Exp $";
+static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.11 2010/05/11 01:43:28 kent Exp $";
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
@@ -125,7 +125,7 @@ struct bed *bedList = NULL;
 struct customTrack *ct = track->customPt;
 char *tableName = ct->dbTableName;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-makeItemsEditOrDelete(track->mapName, conn, tableName);
+makeItemsEditOrDelete(track->track, conn, tableName);
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL, &rowOffset);
 char **row;

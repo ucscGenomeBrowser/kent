@@ -16,7 +16,7 @@ void doMakeItemsDetails(struct customTrack *ct, char *itemIdString)
 {
 char *idString = cloneFirstWord(itemIdString);
 char *tableName = ct->dbTableName;
-char *trackName = ct->tdb->tableName;
+char *trackName = ct->tdb->track;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char query[512];
 safef(query, sizeof(query), "select * from %s where id=%s", tableName, idString);

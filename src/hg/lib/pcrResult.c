@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.11 2008/12/22 21:06:01 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.12 2010/05/11 01:43:30 kent Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -148,7 +148,8 @@ struct trackDb *pcrResultFakeTdb()
 {
 struct trackDb *tdb;
 AllocVar(tdb);
-tdb->tableName = cloneString(PCR_RESULT_TRACK_NAME);
+tdb->track = cloneString(PCR_RESULT_TRACK_NAME);
+tdb->table = cloneString(PCR_RESULT_TRACK_NAME);
 tdb->shortLabel = cloneString(PCR_RESULT_TRACK_LABEL);
 tdb->longLabel = cloneString(PCR_RESULT_TRACK_LONGLABEL);
 tdb->grp = cloneString("map");

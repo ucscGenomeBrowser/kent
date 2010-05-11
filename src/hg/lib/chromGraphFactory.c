@@ -15,7 +15,7 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.17 2009/02/24 19:41:39 galt Exp $";
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.18 2010/05/11 01:43:29 kent Exp $";
 
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
@@ -948,7 +948,8 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     tdb->shortLabel = cloneString(shortLabel);
     tdb->longLabel = cloneString(longLabel);
     tdb->type = "chromGraph";
-    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    tdb->track = customTrackTableFromLabel(tdb->shortLabel);
+    tdb->table = cloneString(tdb->track);
     track->dbTableName = NULL;
 
     /* Create settings */

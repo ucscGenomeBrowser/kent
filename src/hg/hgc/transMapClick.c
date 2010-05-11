@@ -46,7 +46,7 @@ static struct transMapBag *transMapBagLoad(struct sqlConnection *conn,
 {
 struct transMapBag *bag;
 AllocVar(bag);
-bag->psl = getAlignments(conn, tdb->tableName, mappedId);
+bag->psl = getAlignments(conn, tdb->table, mappedId);
 
 char *transMapInfoTbl = trackDbRequiredSetting(tdb, transMapInfoTblSetting);
 bag->info = transMapInfoQuery(conn, transMapInfoTbl, mappedId);
@@ -191,7 +191,7 @@ static void displayAligns(struct trackDb *tdb, struct transMapBag *bag)
 {
 int start = cartInt(cart, "o");
 printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->tableName, bag->info->mappedId);
+printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->track, bag->info->mappedId);
 }
 
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)

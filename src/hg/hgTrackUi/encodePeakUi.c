@@ -13,7 +13,7 @@ void encodePeakUi(struct trackDb *tdb, struct customTrack *ct)
 {
 struct sqlConnection *conn;
 char *table;
-char *trackName = tdb->tableName;
+char *trackName = tdb->track;
 char pValVarName[256];
 char qValVarName[256];
 char scoreVarName[256];
@@ -26,7 +26,7 @@ if (ct)
 else
     {
     conn = hAllocConn(database);
-    table = tdb->tableName;
+    table = tdb->table;
     if (!trackDbSettingOn(tdb, "filterPvalQval"))
 	useScore = TRUE;
     }
@@ -36,7 +36,7 @@ if (useScore)
     puts("<BR><B>Minimum score (0-1000):</B>");
     cgiMakeTextVar(scoreVarName, cartCgiUsualString(cart, scoreVarName, "0"), 4);
     int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
-    scoreGrayLevelCfgUi(cart, tdb, tdb->tableName, scoreMax);
+    scoreGrayLevelCfgUi(cart, tdb, trackName, scoreMax);
     }
 else
     {

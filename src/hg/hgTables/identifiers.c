@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.29 2009/09/23 18:42:17 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.30 2010/05/11 01:43:25 kent Exp $";
 
 
 static boolean forCurTable()
@@ -44,7 +44,7 @@ if (xrefSpec != NULL)
     if (isEmpty(words[2]))
 	errAbort("trackDb error: track %s, setting idXref must be followed "
 		 "by three words (xrefTable, idField, aliasField).",
-		 curTrack->tableName);
+		 curTrack->table);
     xrefTable = words[0];
     idField = words[1];
     aliasField = words[2];

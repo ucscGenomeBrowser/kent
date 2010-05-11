@@ -7,7 +7,7 @@
 #include "wikiTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2009/01/09 00:58:27 angie Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2010/05/11 01:43:25 kent Exp $";
 
 void wikiTrackDb(struct trackDb **list)
 /* create a trackDb entry for the wiki track */
@@ -15,13 +15,14 @@ void wikiTrackDb(struct trackDb **list)
 struct trackDb *tdb;
 
 AllocVar(tdb);
-tdb->tableName = WIKI_TRACK_TABLE;
+tdb->track = WIKI_TRACK_TABLE;
+tdb->table = WIKI_TRACK_TABLE;
 tdb->shortLabel = WIKI_TRACK_LABEL;
 tdb->longLabel = WIKI_TRACK_LONGLABEL;
 tdb->visibility = tvFull;
 tdb->priority = WIKI_TRACK_PRIORITY;
 
-tdb->html = hFileContentsOrWarning(hHelpFile(tdb->tableName));
+tdb->html = hFileContentsOrWarning(hHelpFile(tdb->track));
 tdb->type = "none";
 tdb->grp = "map";
 tdb->canPack = FALSE;

@@ -121,7 +121,7 @@ void doTriangle(struct trackDb *tdb, char *item, char *motifTable)
 int start = cartInt(cart, "o");
 struct dnaSeq *seq = NULL;
 struct dnaMotif *motif = loadDnaMotif(item, motifTable);
-char *table = tdb->tableName;
+char *table = tdb->table;
 int rowOffset = hOffsetPastBin(database, seqName, table);
 char query[256];
 struct sqlResult *sr;
@@ -164,10 +164,10 @@ char fullTable[64];
 boolean hasBin = FALSE;
 char *motifTable = "flyregMotif";
 struct dnaMotif *motif = NULL;
-boolean isVersion2 = sameString(tdb->tableName, "flyreg2");
+boolean isVersion2 = sameString(tdb->table, "flyreg2");
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       fullTable, seqName);
 hAddBinToQuery(start, end, query);
@@ -266,7 +266,7 @@ void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable)
 struct dnaMotif *motif = loadDnaMotif(item, motifTable);
 int start = cartInt(cart, "o");
 struct dnaSeq *seq = NULL;
-char *table = tdb->tableName;
+char *table = tdb->table;
 int rowOffset = hOffsetPastBin(database, seqName, table);
 char query[256];
 struct sqlResult *sr;
@@ -539,13 +539,13 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 char query[256];
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 struct sqlConnection *conn = hAllocConn(database);
 struct transRegCodeProbe *probe = NULL;
 
 cartWebStart(cart, database, "ChIP-chip Probe Info");
 safef(query, sizeof(query), "select * from %s where name = '%s'",
-	tdb->tableName, item);
+	tdb->table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     probe = transRegCodeProbeLoad(row+rowOffset);

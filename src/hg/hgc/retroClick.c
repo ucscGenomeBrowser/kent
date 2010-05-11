@@ -678,7 +678,7 @@ void retroClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
 struct sqlConnection *conn = hAllocConn(database);
-struct mappingInfo *mi = mappingInfoNew(conn, tdb->tableName, mappedId);
+struct mappingInfo *mi = mappingInfoNew(conn, tdb->table, mappedId);
 struct psl *pslList = NULL;
 char *table;
 

@@ -11,7 +11,7 @@
 #include "netCart.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.26 2009/06/12 22:19:35 hiram Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.27 2010/05/11 01:43:28 kent Exp $";
 
 struct cartOptions
     {
@@ -142,7 +142,7 @@ if (w > 1)
 	snprintf(depth, sizeof(depth), "%d", level);
 	dyStringPrintf(bubble, "%s %c %dk ", 
 	    fill->qName, fill->qStrand, fill->qStart/1000);
-	mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->mapName, 
+	mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->track, 
 	    depth, bubble->string);
 	dyStringFree(&bubble);
 	}
@@ -180,7 +180,7 @@ if (w >= 1)
 	dyStringPrintf(bubble, "size %d/%d Ns %d/%d newRep %d/%d", 
 	    gap->qSize, gap->tSize, gap->qN, gap->tN,
 	    gap->qNewR, gap->tNewR);
-        mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->mapName, 
+        mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->track, 
 		depth, bubble->string);
 	dyStringFree(&bubble);
 	}
@@ -240,7 +240,7 @@ static void netDraw(struct track *tg, int seqStart, int seqEnd,
  * the items as well as drawing them. */
 {
 /* Load Net. */
-struct chainNet *net = chainNetLoadRange(database, tg->mapName, chromName,
+struct chainNet *net = chainNetLoadRange(database, tg->table, chromName,
 	seqStart, seqEnd, NULL);
 
 if (net != NULL)

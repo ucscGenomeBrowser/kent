@@ -231,7 +231,7 @@ void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemN
 		    int x, int y, int width, int height)
 {
 if(tg->visibility != tvDense && tg->visibility != tvHide)
-    mapBoxHcTwoItems(hvg, start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
+    mapBoxHcTwoItems(hvg, start, end, x,y, width, height, tg->track, itemName, itemName, itemName);
 }
 
 
@@ -490,7 +490,7 @@ char *affyMap;
 enum affyOptEnum affyType;
 
 bedList = tg->items;
-safef(varName, sizeof(varName), "%s.%s", tg->mapName, "type");
+safef(varName, sizeof(varName), "%s.%s", tg->track, "type");
 affyMap = cartUsualString(cart, varName, affyEnumToString(affyTissue));
 affyType = affyStringToEnum(affyMap);
 if(tg->limitedVis == tvDense)
@@ -572,7 +572,7 @@ if (ct != NULL)
 else
     {
     struct microarrayGroups *groups = maGetTrackGroupings(database, tg->tdb);
-    grouping = maCombineGroupingFromCart(groups, cart, tg->mapName);
+    grouping = maCombineGroupingFromCart(groups, cart, tg->track);
     }
 lfsFromBedAndGrouping(tg, grouping);
 }
@@ -901,7 +901,7 @@ char *tdbSetting = trackDbSettingOrDefault(tg->tdb, "expColor", "redGreen");
 char *colorVal = NULL;
 enum expColorType expColor;
 
-safef(colorVarName, sizeof(colorVarName), "%s.color", tg->tdb->tableName);
+safef(colorVarName, sizeof(colorVarName), "%s.color", tg->tdb->track);
 colorVal = cartUsualString(cart, colorVarName, tdbSetting);
 expColor = getExpColorType(colorVal);
 
@@ -1235,7 +1235,7 @@ int rowOffset;
 int itemCount =0;
 struct bed *bedList = NULL, *bed;
 enum trackVisibility vis = tg->visibility;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 15);
@@ -1345,7 +1345,7 @@ void expRatioDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 {
 int y = yOff;
 
-if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+if (sameString(tg->table, "CGHBreastCancerUCSF"))
     loadFiltersAndHash("phenBreastTumors");
 
 if (isWithCenterLabels(tg))
@@ -1366,7 +1366,7 @@ if ((vis == tvFull) || (vis == tvPack))
 	{
 	char *name = tg->itemName(tg, item);
 	int itemHeight = tg->itemHeight(tg, item);
-	if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	if (sameString(tg->table, "CGHBreastCancerUCSF"))
 	    {
 	    struct hashEl *hel = hashLookup(clinicalHash, name);
 	    struct simpleClinical *clinicalItem;
@@ -1414,24 +1414,24 @@ nProbes = slCount(probes);
 nExps = slCount(marrays);
 totalHeight = nExps * lineHeight;
 if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
-    !(sameString(tg->mapName, "expRatioUCSFDemo") || sameString(tg->mapName, "cnvLungBroadv2")  || sameString(tg->mapName, "CGHBreastCancerUCSF")  || sameString(tg->mapName, "expBreastCancerUCSF")) )
+    !(sameString(tg->table, "expRatioUCSFDemo") || sameString(tg->table, "cnvLungBroadv2")  || sameString(tg->table, "CGHBreastCancerUCSF")  || sameString(tg->table, "expBreastCancerUCSF")) )
     {
     int xOffRc = hvGfxAdjXW(hvg, xOff, insideWidth);
     if(theImgBox && curImgTrack)
         {
         char link[512];
-        safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->mapName); // NOTE: winStart,winEnd removed due to portal
+        safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->track); // NOTE: winStart,winEnd removed due to portal
         #ifdef IMAGEv2_SHORT_MAPITEMS
             if(xOffRc < insideX && xOffRc+insideWidth > insideX)
-                warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->mapName,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
+                warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->track,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
         #endif//def IMAGEv2_SHORT_MAPITEMS
-        imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight, tg->mapName);
+        imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight, tg->track);
         }
     else
         {
         hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",
-            hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
+            hgcNameAndSettings(), tg->track, chromName, winStart, winEnd, database);
         hPrintf("TITLE=\"zoomInMore\">\n");
         }
      }
@@ -1448,18 +1448,18 @@ else
 	if (x2 > insideWidth-1)
 	    x2 = insideWidth-1;
 	w = x2 - x1 + 1;
-	if (sameString(tg->mapName, "expRatioUCSFDemo") || sameString(tg->mapName, "cnvLungBroadv2")  || sameString(tg->mapName, "expBreastCancerUCSF"))
+	if (sameString(tg->table, "expRatioUCSFDemo") || sameString(tg->table, "cnvLungBroadv2")  || sameString(tg->table, "expBreastCancerUCSF"))
 	    {
             struct slList *item;
             for (item = tg->items; item != NULL; item = item->next)
                 {
                 char *name = tg->itemName(tg, item);
-                mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name);
+                mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->track, name, name, name);
                 y = y + lineHeight;
                 }
 	    break;
 	    }
-	else if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	else if (sameString(tg->table, "CGHBreastCancerUCSF"))
 	    {
             struct slList *item;
 	    struct hashEl *hel = NULL;
@@ -1475,7 +1475,7 @@ else
 		    clinicalItem = (struct simpleClinical *)hel->val;
 		    if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
 		        {
-                        mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name);
+                        mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->track, name, name, name);
                         y = y + lineHeight;
 			}
 		    }
@@ -1483,7 +1483,7 @@ else
 	    break;
 	    }
 	else
-	    mapBoxHcTwoItems(hvg, probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
+	    mapBoxHcTwoItems(hvg, probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->track, probe->name, probe->name, probe->name);
 	}
     }
 }
@@ -1586,7 +1586,7 @@ char *drawExons = trackDbSetting(tg->tdb, "expDrawExons");
 boolean drawExonChecked = FALSE;
 
 
-safef(exonDrawCartName, sizeof(exonDrawCartName), "%s.expDrawExons", tg->mapName);
+safef(exonDrawCartName, sizeof(exonDrawCartName), "%s.expDrawExons", tg->track);
 drawExonChecked = cartCgiUsualBoolean(cart, exonDrawCartName, FALSE);
 if (drawExons && sameWord(drawExons, "on") && drawExonChecked)
     {
@@ -1627,13 +1627,13 @@ else
 	}
     else
 	{
-	if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	if (sameString(tg->table, "CGHBreastCancerUCSF"))
             loadFiltersAndHash("phenBreastTumors");
         struct slList *item;
 	for (item = tg->items, i = 0; item != NULL && i < nExps; item = item->next, i++)
 	    {
 	    /* filter */
-	    if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	    if (sameString(tg->table, "CGHBreastCancerUCSF"))
 	        {
 	        struct hashEl *hel = NULL;
 	        struct simpleClinical *clinicalItem;
@@ -1762,7 +1762,7 @@ expRatioMethods(tg);
 tg->drawItems = expRatioDrawItems;
 tg->drawLeftLabels = expRatioDrawLeftLabels;
 tg->trackFilter = lfsFromExpRatio;
-if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+if (sameString(tg->table, "CGHBreastCancerUCSF"))
     tg->totalHeight = ucsfdemoTotalHeight;
 }
 

@@ -76,7 +76,7 @@ if ((setting = trackDbSettingClosestToHome(tg->tdb, "filterTopScorers")) != NULL
         /* if there are not too many rows in the table then can define */
         /* top table as the track or subtrack table */
         if (sameWord(topTable, "self"))
-            topTable = cloneString(tg->mapName);
+            topTable = cloneString(tg->table);
         }
     }
 
@@ -118,11 +118,11 @@ else
 	}
     else if(scoreFilterClause != NULL && tg->bedSize >= 5)
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
 	}
     else
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 	}
     freeMem(scoreFilterClause);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -208,12 +208,12 @@ else
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
     if (scoreFilterClause != NULL)
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
 	freeMem(scoreFilterClause);
 	}
     else
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
 			 NULL, &rowOffset);
 	}
 
@@ -258,12 +258,12 @@ else
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
     if (scoreFilterClause != NULL)
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
 	freeMem(scoreFilterClause);
 	}
     else
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
 			 NULL, &rowOffset);
 	}
 
@@ -453,17 +453,17 @@ if (tg->isBigBed)
     }
 else
     {
-    /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
+    /* Use tg->tdb->track because subtracks inherit composite track's tdb
      * by default, and the variable is named after the composite track. */
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
     if (scoreFilterClause != NULL)
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
 	freeMem(scoreFilterClause);
 	}
     else
 	{
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 	}
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -538,7 +538,7 @@ if (color)
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHgcOrHgGene(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-                          tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid, NULL);
+                          tg->track, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid, NULL);
 	}
     }
 if (tg->subType == lfWithBarbs || tg->exonArrows)
@@ -564,7 +564,7 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 /* Draw simple Bed items. */
 {
 if (!tg->drawItemAt)
-    errAbort("missing drawItemAt in track %s", tg->mapName);
+    errAbort("missing drawItemAt in track %s", tg->track);
 
 if (vis == tvDense && canDrawBigBedDense(tg))
     {
@@ -743,7 +743,7 @@ unsigned char r, g, b;
 
 char *colors = cloneString(trackDbSetting(tg->tdb, "colorByStrand"));
 if (!colors)
-    errAbort("colorByStrand setting missing (in %s)", tg->mapName);
+    errAbort("colorByStrand setting missing (in %s)", tg->track);
 if (chopByWhite(colors, words, sizeof(words)) != 2)
     errAbort("invalid colorByStrand setting %s (expecting pair of RGB values r,g,b r,g,b)", colors);
 if (orientation == 1)
@@ -834,7 +834,7 @@ else if (fieldCount < 12)
 else
     {
     linkedFeaturesMethods(track);
-    track->extraUiData = newBedUiData(track->mapName);
+    track->extraUiData = newBedUiData(track->track);
     track->loadItems = loadGappedBed;
     if (trackDbSetting(tdb, "colorByStrand"))
 	{

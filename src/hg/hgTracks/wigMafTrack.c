@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.145 2010/05/07 18:29:15 kent Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.146 2010/05/11 01:43:28 kent Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -188,7 +188,7 @@ if (firstCase != NULL)
     }
 
 char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
-safef(buffer, sizeof(buffer), "%s.vis",/*cfgPrefix*/track->mapName);
+safef(buffer, sizeof(buffer), "%s.vis",/*cfgPrefix*/track->track);
 if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
     useTarg = TRUE;
 else
@@ -281,7 +281,7 @@ for (group = 0; group < groupCt; group++)
 	}
 
 
-    safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->mapName);
+    safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->track);
     speciesCt = chopLine(cloneString(speciesOrder), species);
 
     for (i = 0; i < speciesCt; i++)
@@ -307,7 +307,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     mi->height = height;
     dyStringPrintf(order, "%s ",mi->db);
     }
-safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->mapName);
+safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->track);
 cartSetString(cart, option, order->string);
 compositeViewControlNameFree(&cfgPrefix);
 slReverse(&miList);
@@ -388,7 +388,7 @@ else
     char *fileName = getTrackMafFile(track);  // optional
     conn = hAllocConn(database);
     conn2 = hAllocConn(database);
-    mp->list = wigMafLoadInRegion(conn, conn2, track->mapName,
+    mp->list = wigMafLoadInRegion(conn, conn2, track->table,
 				chromName, winStart - 2 , winEnd + 2, fileName);
     hFreeConn(&conn);
     hFreeConn(&conn2);
@@ -526,7 +526,7 @@ return cloneString(table);
 static boolean displayPairwise(struct track *track)
 /* determine if tables are present for pairwise display */
 {
-return winBaseCount < MAF_SUMMARY_VIEW || isCustomTrack(track->mapName) ||
+return winBaseCount < MAF_SUMMARY_VIEW || isCustomTrack(track->table) ||
 	pairwiseSuffix(track) || summarySetting(track);
 }
 
@@ -580,7 +580,7 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
         char *fileName = getTrackMafFile(track);  // optional
 	conn = hAllocConn(database);
 	conn2 = hAllocConn(database);
-	mp->list = wigMafLoadInRegion(conn, conn2, track->mapName,
+	mp->list = wigMafLoadInRegion(conn, conn2, track->table,
 					chromName, winStart, winEnd, fileName);
 	hFreeConn(&conn);
 	hFreeConn(&conn2);
@@ -627,7 +627,7 @@ mp->list = (char *)-1;   /* no maf's loaded or attempted to load */
 /* if we're out in summary view and rendering a custom
  * track we force dense mode since we don't have
  * a summary table (yet). */
-if ((winBaseCount >= MAF_SUMMARY_VIEW) && isCustomTrack(track->mapName))
+if ((winBaseCount >= MAF_SUMMARY_VIEW) && isCustomTrack(track->table))
     track->limitedVis = tvDense;
 
 /* Load up mafs and store in track so drawer doesn't have
@@ -1197,7 +1197,7 @@ if (miList == NULL)
 /* get pairwise table suffix from trackDb */
 suffix = pairwiseSuffix(track);
 
-if (vis == tvFull && !isCustomTrack(track->mapName))
+if (vis == tvFull && !isCustomTrack(track->table))
     {
     double minY = 50.0;
     double maxY = 100.0;
@@ -1219,7 +1219,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     if (mi->ix < 0)
         /* ignore item for the score */
         continue;
-    if (isCustomTrack(track->mapName))
+    if (isCustomTrack(track->table))
 	{
 	struct mafPriv *mp = getMafPriv(track);
 	drawScoreOverviewCT(mp->ct->dbTableName, mi->height,
@@ -1237,7 +1237,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
         if (hTableExists(database, tableName))
             {
             /* reuse the wigTrack for pairwise tables */
-            wigTrack->mapName = tableName;
+            wigTrack->track = tableName;
+            wigTrack->table = tableName;
             wigTrack->loadItems(wigTrack);
             wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
                                                     pairwiseHeight - 1;
@@ -1400,7 +1401,7 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
     if (displayZoomedIn(track))
         return drawPairsFromMultipleMaf(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
-    if (isCustomTrack(track->mapName) || pairwiseSuffix(track))
+    if (isCustomTrack(track->table) || pairwiseSuffix(track))
         return drawPairsFromPairwiseMafScores(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
     if (summarySetting(track))
@@ -1796,7 +1797,7 @@ else
     {
     conn2 = hAllocConn(database);
     conn3 = hAllocConn(database);
-    tableName = track->mapName;
+    tableName = track->table;
     mafFile = getTrackMafFile(track);  // optional
     }
 
@@ -1804,7 +1805,7 @@ if (hIsGsidServer())
     {
     /* decide the value of mafOrigOffset to be used to display xxAaMaf tracks. */
     struct sqlConnection *conn = hAllocConn(database);
-    safef(query, sizeof(query), "select chromStart from %s", track->mapName);
+    safef(query, sizeof(query), "select chromStart from %s", track->table);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
     mafOrigOffset = (mafOrig % 3) - 1;
     /* offset has to be non-negative */
@@ -1845,7 +1846,7 @@ else
 	}
     }
 
-safef(buf, sizeof(buf), "%s.frames",/*cfgPrefix*/track->mapName);
+safef(buf, sizeof(buf), "%s.frames",/*cfgPrefix*/track->track);
 if (cartVarExists(cart, buf))
     framesTable = cartUsualString(cart, buf, NULL);
 else
@@ -2391,7 +2392,7 @@ if (wigTrack == NULL)
     else
         {
         /* use or scored refs from maf table*/
-        drawScoreOverview(track->mapName, height, seqStart, seqEnd, hvg,
+        drawScoreOverview(track->table, height, seqStart, seqEnd, hvg,
                             xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
@@ -2449,8 +2450,8 @@ if (vis == tvFull || vis == tvPack)
 	wigMafDrawPairwise(track, seqStart, seqEnd, hvg, xOff, y,
 				width, font, color, vis);
     }
-mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName,
-            track->mapName, NULL);
+mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, track->height, track->track,
+            track->track, NULL);
 }
 
 void wigMafMethods(struct track *track, struct trackDb *tdb,
@@ -2500,7 +2501,8 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     for (i = 1; i < wordCount; i++)
         dyStringPrintf(wigType, "%s ", words[i]);
     wigTdb->type = cloneString(wigType->string);
-    wigTdb->tableName = consWig->table;
+    wigTdb->track = consWig->table;
+    wigTdb->table= consWig->table;
 
     /* Tweak wiggle left labels: replace underscore with space and
      * append 'Cons' */
