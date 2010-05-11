@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.67 2010/05/11 01:43:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.68 2010/05/11 19:07:47 kent Exp $";
 
 
 void usage()
@@ -589,32 +589,6 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
 if(countOfSortedContainers > 0)
     verbose(1,"Sorted %d containers\n",countOfSortedContainers);
 }
-
-#ifdef OLD
-static void inheritFieldsFromParents(struct trackDb *tdb, struct trackDb *parent)
-/* Inherit undefined fields (outside of settings) from parent. */
-{
-if (tdb->shortLabel == NULL)
-    tdb->shortLabel = cloneString(parent->shortLabel);
-if (tdb->type == NULL)
-    tdb->type = cloneString(parent->type);
-if (tdb->longLabel == NULL)
-    tdb->longLabel = cloneString(parent->longLabel);
-if (tdb->restrictList == NULL)
-    tdb->restrictList = parent->restrictList;
-if (tdb->url == NULL)
-    tdb->url = cloneString(parent->url);
-if (tdb->grp == NULL)
-    tdb->grp = cloneString(parent->grp);
-if (tdb->canPack == 2 && parent->canPack != 2)
-    tdb->canPack = parent->canPack;
-if (parent->private)
-    tdb->private = TRUE;
-if (parent->useScore)
-    tdb->useScore = TRUE;
-}
-#endif /* OLD */
-
 
 
 static void rSetTrackDbFields(struct trackDb *tdbList)
