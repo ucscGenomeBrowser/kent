@@ -38,6 +38,9 @@ if (len(sys.argv) < 2):
   print >> sys.stderr
   print >> sys.stderr, "  elandExtToSAM.py eland_extended_file SAM_filename"
   print >> sys.stderr, "    prints out gzip-ed SAM file to SAM_filename.gz"
+  print >> sys.stderr
+  print >> sys.stderr, "  Note: eland_extended_file can be:"
+  print >> sys.stderr, "         bzip2-ed, gzip-ed or plain/uncompressed"
   sys.exit(-1)
 else:
   # Open up eland extended file handle
