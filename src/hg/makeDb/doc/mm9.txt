@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.136 2010/05/01 18:42:00 hartera Exp $"
+#	"$Id: mm9.txt,v 1.137 2010/05/12 23:05:01 baertsch Exp $"
 #
 
 #######################################################################
@@ -10461,3 +10461,85 @@ TMPDIR=/scratch/tmp
     #   383753361 bases of 1201271277 (31.946%) in intersection
 
 #######################################################################
+#############################################################################
+# ucscRetro track (2010-04-12, baertsch DONE)
+mkdir -p /hive/users/baertsch/retro/mm9
+cd /hive/users/baertsch/retro/mm9
+wget http://compbio.soe.ucsc.edu/retrogene/retroFinder-1.16.tar.gz
+tar xvfz retroFinder-1.16.tar.gz
+cd retroFinder-1.16/src/pslPseudo
+make
+cd ../../..
+
+
+cat << '_EOF_' > DEF
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 "
+DB=mm9
+SCORETHRESH=550
+GENOMENAME='Mus musculus'
+GBDB=mm
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz/
+TMPMRNA=/hive/users/baertsch/mrnaBlastz/$DB
+TMPEST=/hive/users/baertsch/est/$DB
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=1
+SCRIPT=/hive/users/baertsch/retro/$DB/retroFinder-1.16/scripts
+GENOME=/hive/data/genomes/
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=/hive/users/baertsch/retro
+OUTDIR=/hive/users/baertsch/retro/$DB/
+RESULT=$OUTDIR/result
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+VERSION=2
+TABLE=ucscRetroInfo$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+NIB=$LOCAL/nib
+RMSK=x
+NET1=netHg19 
+NET2=netCanFam2 
+NET3=netRn4 
+GENE1=knownGene
+GENE2=refGene
+GENE3=ensGene
+CLUSTER=swarm
+SPECIES="hg18 mm9"
+ROOTDIR="~/public_html/retro/mm9Nov09"
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ARRAY=gnfAtlas2
+AFFYPROBE=affyGnf1m
+ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median 
+ARRAYRATIO=hgFixed.gnfMouseAtlas2AllRatio
+ARRAYABS=hgFixed.gnfMouseAtlas2All
+ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps 
+ARRAYEXPALL=hgFixed.gnfMouseAtlas2AllExps
+ARRAYLOOKUP=knownToGnfAtlas2 
+ARRAYPSLS="/hive/data/genomes/mm9/bed/geneAtlas2/affyGnf1m.psl"
+ALTSPLICE=sibTxGraph
+SPLITBYAGE=splitRetrosByAgeMouse
+PDB=proteins090821
+'_EOF_'
+    # << happy emacs
+
+#add ./retroFinder-1.16/scripts to PATH
+retroFinder-1.16/scripts/filterMrna.sh DEF
+retroFinder-1.16/scripts/filterEst.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep1.sh DEF
+#check cluster job
+nohup retroFinder-1.16/scripts/ucscRetroStep2.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep3.sh DEF
+#check cluster job
+nohup retroFinder-1.16/scripts/ucscRetroStep4.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep5.sh DEF
+    # Load the track
+nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
+#add ucscRetroAli to trackDb.ra 
+
