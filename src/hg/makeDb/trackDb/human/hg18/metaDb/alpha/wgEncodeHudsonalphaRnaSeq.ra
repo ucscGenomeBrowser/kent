@@ -14,7 +14,7 @@ localization cell
 mapAlgorithm erng3
 project wgEncode
 readType 1x36
-replicate 2
+replicate 1
 rnaExtract longPolyA
 subId 902
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa
@@ -276,4 +276,4 @@ tableName wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25
 treatment None
 view RPKM
 
-# MAGIC: -2049254094
+# MAGIC: -2049254096
