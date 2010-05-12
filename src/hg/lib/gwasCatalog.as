@@ -12,7 +12,7 @@ table gwasCatalog
     string title;      "Title of publication"
     string trait;      "Disease or trait assessed in study"
     string initSample; "Initial sample size"
-    string replSample; "Replication sample size"
+    lstring replSample; "Replication sample size"
     string region;     "Chromosome band / region of SNP"
     string genes;      "Reported Gene(s)"
     string riskAllele; "Strongest SNP-Risk Allele"
