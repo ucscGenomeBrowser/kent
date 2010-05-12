@@ -348,7 +348,7 @@ static void waitOnExec(struct plProc *proc)
 {
 // execPipeChild will get EOF when exec happens
 char buf[1];
-read(proc->execPipeParent, buf, sizeof(buf));
+(void)read(proc->execPipeParent, buf, sizeof(buf));
 safeClose(&proc->execPipeParent);
 }
 
