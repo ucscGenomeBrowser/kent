@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.105 2010/05/11 23:43:07 hartera Exp $";
+#	"$Id: hg19.txt,v 1.106 2010/05/12 21:55:45 chinhli Exp $";
 
 #############################################################################
 
@@ -9768,6 +9768,7 @@ EOF
     # Download GFF file of latest miRNA annotations from miRBase at the
     # ftp://mirbase.org/pub/mirbase/CURRENT/. This is Release 14.0
     # (September,  2009)
+    # 04-27-2010 Get the newest miRNA release 15
     wget --timestamping \
          ftp://mirbase.org/pub/mirbase/CURRENT/genomes/hsa.gff
     # Re-format, need to add "chr" to the beginning of each line.
@@ -9796,6 +9797,7 @@ EOF
          print $1, $4-1, $5, $9, 480, $7, 0, 0, "miRNA";}' \
         hsMirBaseFormatIdOnly.gff > hsMirBaseFormatIdOnly.bed
 
+XXXX 04-27 stop pending new data for snoRNA
     # 2010-04-21
     # Down load the current snoRNABase coordinates (version 3, based on hg19)
     #  from 
@@ -9844,6 +9846,62 @@ EOF
     featureBits hg19 wgRna
     #    107878 bases of 2897316137 (0.004%) in intersection
 
+
+#############################################################################
+# AFFY U133Plus2 (working 2010-05-12 Chin)
+    # Align probes 
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed
+    mkdir -p affyProbes/affyU133Plus2/run
+    cd affyProbes/affyU133Plus2/run
+    mkdir psl
+    ls -1 /scratch/data/hg19/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/affyProbes/U133Plus2_all.fa > mrna.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg19/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+#   Completed: 93 of 93 jobs
+#   CPU time in finished jobs:    32443s     540.71m     9.01h    0.38d  0.001 y
+#   IO & Wait Time:                3416s      56.94m     0.95h    0.04d  0.000 y
+#   Average job time:               386s       6.43m     0.11h    0.00d
+#   Longest finished job:          2736s      45.60m     0.76h    0.03d
+#   Submission to last job:        5872s      97.87m     1.63h    0.07d
+#   Estimated complete:               0s       0.00m     0.00h    0.00d
+
+    # Do sort, best in genome filter.
+    # to create affyU133Plus2.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyU133Plus2.psl /dev/null
+    #   Processing raw.psl to ../affyU133Plus2.psl and /dev/null
+    #   .....Processed 691720 alignments
+    rm -r raw.psl psl
+
+    # Load probes and alignments into database.
+    ssh hgwdev
+    cd /cluster/data/hg19/bed/affyProbes/affyU133Plus2
+    hgLoadPsl hg19 affyU133Plus2.psl
+    hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    #   Attempt to GET_LOCK timed out.
+    #   Another client may have locked this name, history
+    #   re-run it with -replace option
+    hgLoadSeq -replace hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    #   Creating seq.tab file
+    #   Adding /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    #   54613 sequences
+    #   Updating seq table
+    #   All done
+ 
 
 
 ############################################################################
