@@ -28663,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.416 2010/05/12 22:57:25 baertsch Exp $
+# $Id: hg18.txt,v 1.417 2010/05/12 23:46:11 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28711,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.416 2010/05/12 22:57:25 baertsch Exp $
+# $Id: hg18.txt,v 1.417 2010/05/12 23:46:11 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29599,7 +29599,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 4/1/10)
+# NHGRI GWAS CATALOG (DONE 5/12/10)
+# Updated 4/1/10
 # Updated 3/1/10
 # Originally done 1/19/10
 # Area of possible future improvement: for SNPs that can't be mapped via our SNP track,
@@ -29610,8 +29611,8 @@ see doc/builds.txt for specific details.
     cut -f 1-4 ../snp130/snp130.bed \
     | sort -k4,4 \
     > snp130Coords.bed
-    mkdir /hive/data/genomes/hg18/bed/gwasCatalog/100401
-    cd /hive/data/genomes/hg18/bed/gwasCatalog/100401
+    mkdir /hive/data/genomes/hg18/bed/gwasCatalog/100512
+    cd /hive/data/genomes/hg18/bed/gwasCatalog/100512
     wget http://www.genome.gov/admin/gwascatalog.txt
     # Column headers:
 #  1 Date Added to Catalog
@@ -29638,24 +29639,21 @@ see doc/builds.txt for specific details.
     # Columns of interest: pretty much all except for Date Added to the Catalog,
     # and Link which can be generated from PubMedID.  Watch out for these:
     # * Some rows don't name a SNP ("" or "NR") -- in that case, skip.
-    # * One of their Reported Gene(s) has HTML: "HBB<br />"
     # * Risk allele is not always just a number, may have desc
     # * Missing data may be "", "NR", "NS" or "Pending"
-    # * Platform has some "Illumima", "Ilumina"
 
     # Use SNPs (comma-sep list) to map to genome coords, and strongest SNP-Risk Allele 
     # as bed 4+ name.
     perl -we 'while (<>) { \
                 next if (/^\s*$/); \
+                s/\r$//; \
                 @w = split("\t"); \
                 next if ($w[13] !~ /^rs\d+/); \
                 if ($w[3] =~ /^(\d+)\/(\d+)\/(\d+)$/) { # transform to mysql DATE \
                   ($month, $day, $year) = ($1, $2, $3); \
                   $w[3] = "$year-$month-$day"; \
                 } else { die "Cant parse date ($w[3])\t" } \
-                $w[11] =~ s@<br />$@@; \
-                $w[16] =~ s/&nbsp;$//; \
-                $w[19] =~ s/^(Illumima|Ilumina)/Illumina/; \
+                $w[13] =~ s/ //g; \
                 my @snps = split(",", $w[13]); \
                 foreach $i (13, 5, 0) { # discard columns (use descending order) \
                   splice(@w, $i, 1); \
@@ -29672,7 +29670,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 3051 elements of size 22
+#Loaded 3461 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29682,7 +29680,7 @@ see doc/builds.txt for specific details.
                    where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
                          gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                    order by gc.name limit 20;'
-    # count(*) = 150
+    # count(*) = 170
 
 
 #############################################################################
