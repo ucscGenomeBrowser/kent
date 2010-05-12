@@ -28663,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.415 2010/05/07 05:31:45 kent Exp $
+# $Id: hg18.txt,v 1.416 2010/05/12 22:57:25 baertsch Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28711,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.415 2010/05/07 05:31:45 kent Exp $
+# $Id: hg18.txt,v 1.416 2010/05/12 22:57:25 baertsch Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -30013,3 +30013,87 @@ close (FH);
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHumanCytoSNP_12.tab -tab -sqlTable=/cluster/home/fanhsu/scratch/tip201/kent/src/hg/lib/snpArrayIlluminaHumanCytoSNP_12.sql
 
 #############################################################################
+# ucscRetro track (2010-04-12, baertsch DONE)
+mkdir -p /hive/users/baertsch/retro/hg18
+cd /hive/users/baertsch/retro/hg18
+wget http://compbio.soe.ucsc.edu/retrogene/retroFinder-1.16.tar.gz
+tar xvfz retroFinder-1.16.tar.gz
+cd retroFinder-1.16/src/pslPseudo
+make
+cd ../../..
+
+cat << '_EOF_' > DEF
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 "
+DB=hg18
+SCORETHRESH=550
+LOGNAME=baertsch
+GENOMENAME='Homo sapiens'
+GBDB=hg
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz/
+TMPMRNA=/hive/users/baertsch/mrnaBlastz/$DB
+TMPEST=/hive/users/baertsch/est/$DB
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=1
+SCRIPT=/hive/users/baertsch/retro/hg18/retroFinder-1.16/scripts
+GENOME=/hive/data/genomes/
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=/hive/users/baertsch/retro
+OUTDIR=/hive/users/baertsch/retro/$DB/
+RESULT=$OUTDIR/result
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+VERSION=5
+TABLE=ucscRetroInfo$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+TWOBIT=$LOCAL/$DB.2bit
+NIB=$LOCAL/nib
+RMSK=/hive/data/genomes/$DB/linSpecRep/
+NET1=netMm8 
+NET2=netCanFam2 
+NET3=netRheMac2 
+GENE1=knownGene
+GENE2=refGene
+GENE3=mgcGenes
+CLUSTER=swarm
+SPECIES="hg18 mm9 rheMac2"
+ROOTDIR="/cluster/home/baertsch/public_html"
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ARRAY=gnfAtlas2
+AFFYPROBE="affyU133A,affyGnf1h"
+ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median 
+ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
+ARRAYABS=hgFixed.gnfHumanAtlas2All   
+ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps 
+ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
+ARRAYLOOKUP=knownToGnfAtlas2 
+ARRAYPSLS="/hive/data/genomes/hg18/bed/geneAtlas2/affyU133A.psl
+/hive/data/genom
+es/hg18/bed/geneAtlas2/affyGnf1h.psl"
+ALTSPLICE=altGraphX
+SPLITBYAGE=splitRetrosByAge
+PDB=proteins090821
+'_EOF_'
+    # << happy emacs
+
+#add ./retroFinder-1.16/scripts to PATH
+retroFinder-1.16/scripts/filterMrna.sh DEF
+retroFinder-1.16/scripts/filterEst.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep1.sh DEF
+#check cluster job
+nohup retroFinder-1.16/scripts/ucscRetroStep2.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep3.sh DEF
+#check cluster job
+nohup retroFinder-1.16/scripts/ucscRetroStep4.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep5.sh DEF
+    # Load the track
+nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
+#add ucscRetroAli to trackDb.ra 
+
