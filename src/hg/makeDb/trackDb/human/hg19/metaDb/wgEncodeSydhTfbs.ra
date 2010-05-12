@@ -1512,6 +1512,140 @@ tableName wgEncodeSydhTfbsHepg2TbpIggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
+objType file
+antibody ZNF274
+cell HepG2
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam.gz
+grant Snyder
+inputType HepG2/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1190
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
+objType file
+antibody ZNF274
+cell HepG2
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam.gz
+grant Snyder
+inputType HepG2/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1190
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdPk
+objType table
+antibody ZNF274
+cell HepG2
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
+grant Snyder
+inputType HepG2/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
+project wgEncode
+setType exp
+subId 1190
+tableName wgEncodeSydhTfbsHepg2Znf274UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1
+objType file
+antibody ZNF274
+cell HepG2
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1.fastq.gz
+grant Snyder
+inputType HepG2/None/Input/UCDavis
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1190
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2
+objType file
+antibody ZNF274
+cell HepG2
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2.fastq.gz
+grant Snyder
+inputType HepG2/None/Input/UCDavis
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1190
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdSig
+objType table
+antibody ZNF274
+cell HepG2
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig.gz
+grant Snyder
+inputType HepG2/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1190
+tableName wgEncodeSydhTfbsHepg2Znf274UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsK562Ccnt2StdAlnRep1
 objType file
 antibody CCNT2
@@ -2502,4 +2636,4 @@ tableName wgEncodeSydhTfbsK562Usf2StdSig
 treatment None
 view Signal
 
-# MAGIC: 1565038982
+# MAGIC: 1510301657
