@@ -20,6 +20,28 @@ subId 266
 tableName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
 view Aligns
 
+metaObject wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+tableName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75
+view Aligns
+
 metaObject wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75d
 objType table
 cell GM12878
@@ -152,6 +174,28 @@ subId 267
 tableName wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32
 view Aligns
 
+metaObject wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+tableName wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75
+view Aligns
+
 metaObject wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -216,6 +260,28 @@ replicate 2
 rnaExtract longPolyA
 subId 266
 tableName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32
+view Aligns
+
+metaObject wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+tableName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75
 view Aligns
 
 metaObject wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75d
@@ -350,6 +416,28 @@ subId 267
 tableName wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32
 view Aligns
 
+metaObject wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+tableName wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75
+view Aligns
+
 metaObject wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -371,6 +459,978 @@ rnaExtract longPolyA
 subId 904
 tableName wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75d
 view Aligns
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1026
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75Il400
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75Il400.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75Il400
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1061
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep1Helas3CellPapNaR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep1Helas3CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep1Helas3CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1004
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep1Hepg2CellPapNaR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep1Hepg2CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep1Hepg2CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 998
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep1HuvecCellPapNaR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep1HuvecCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep1HuvecCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1006
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep1NhekCellPapNaR2x75
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep1NhekCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep1NhekCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1010
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep2Gm12878CellPapNaR2x75Il400
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Gm12878CellPapNaR2x75Il400.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep2Gm12878CellPapNaR2x75Il400
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1057
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep2H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep2H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep2H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1033
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep2Helas3CellPapNaR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Helas3CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep2Helas3CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1005
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep2Hepg2CellPapNaR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Hepg2CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep2Hepg2CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1093
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep2HuvecCellPapNaR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep2HuvecCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep2HuvecCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1009
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep3H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep3H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep3H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1043
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep4H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep4H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep4H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1064
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd1Rep5H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd1Rep5H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd1Rep5H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1026
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75Il400
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75Il400.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75Il400
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1061
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep1Helas3CellPapNaR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep1Helas3CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep1Helas3CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1004
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep1Hepg2CellPapNaR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep1Hepg2CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep1Hepg2CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 998
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep1HuvecCellPapNaR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep1HuvecCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep1HuvecCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1006
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep1NhekCellPapNaR2x75
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep1NhekCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep1NhekCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1010
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep2Gm12878CellPapNaR2x75Il400
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Gm12878CellPapNaR2x75Il400.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep2Gm12878CellPapNaR2x75Il400
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1057
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep2H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep2H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep2H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1033
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep2Helas3CellPapNaR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Helas3CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep2Helas3CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1005
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep2Hepg2CellPapNaR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Hepg2CellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep2Hepg2CellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1093
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep2HuvecCellPapNaR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep2HuvecCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep2HuvecCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1009
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep3H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep3H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep3H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1043
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep4H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep4H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep4H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1064
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRd2Rep5H1hescCellPapNaR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRd2Rep5H1hescCellPapNaR2x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRd2Rep5H1hescCellPapNaR2x75
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1Gm12878CellPapNaR1x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqFastqRep1Gm12878CellPapNaR1x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1Gm12878CellPapNaR1x75
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1034
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1038
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32
+project wgEncode
+readType 1x32
+replicate 1
+rnaExtract longPolyA
+subId 1091
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1040
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1036
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1042
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1055
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1039
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32
+project wgEncode
+readType 1x32
+replicate 2
+rnaExtract longPolyA
+subId 1092
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1041
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1037
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75.fastq.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+tableName wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75
+view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75d
 objType table
@@ -482,6 +1542,28 @@ subId 1036
 tableName wgEncodeCaltechRnaSeqMinusRawSignalRep1HuvecCellPapBb2R1x75d
 view MinusRawSignal
 
+metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+tableName wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75
+view MinusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -524,6 +1606,28 @@ replicate 1
 rnaExtract longPolyA
 subId 1042
 tableName wgEncodeCaltechRnaSeqMinusRawSignalRep1NhekCellPapBb2R1x75d
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+tableName wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75d
@@ -636,6 +1740,28 @@ subId 1037
 tableName wgEncodeCaltechRnaSeqMinusRawSignalRep2HuvecCellPapBb2R1x75d
 view MinusRawSignal
 
+metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+tableName wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75
+view MinusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -723,7 +1849,7 @@ replicate 1
 rnaExtract longPolyA
 subId 1061
 tableName wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400
-view Alignments
+view Paired
 
 metaObject wgEncodeCaltechRnaSeqPairedRep1Helas3CellPapErng32aR2x75
 objType table
@@ -753,8 +1879,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32.bed12.gz
 grant Myers
 lab Caltech
@@ -765,9 +1891,9 @@ project wgEncode
 readType 1x32
 replicate 1
 rnaExtract longPolyA
-subId 1079
+subId 1091
 tableName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32
-view Alignments
+view Paired
 
 metaObject wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75
 objType table
@@ -789,7 +1915,7 @@ replicate 1
 rnaExtract longPolyA
 subId 998
 tableName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75
-view Aligns
+view Paired
 
 metaObject wgEncodeCaltechRnaSeqPairedRep1HuvecCellPapErng32aR2x75
 objType table
@@ -900,7 +2026,7 @@ replicate 2
 rnaExtract longPolyA
 subId 1057
 tableName wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400
-view Alignments
+view Paired
 
 metaObject wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75
 objType table
@@ -952,8 +2078,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32.bed12.gz
 grant Myers
 lab Caltech
@@ -964,9 +2090,9 @@ project wgEncode
 readType 1x32
 replicate 2
 rnaExtract longPolyA
-subId 1080
+subId 1092
 tableName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32
-view Alignments
+view Paired
 
 metaObject wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75
 objType table
@@ -974,8 +2100,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-06
-dateUnrestricted 2010-10-06
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75.bed12.gz
 grant Myers
 lab Caltech
@@ -986,7 +2112,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 897
+subId 1093
 tableName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75
 view Paired
 
@@ -1054,7 +2180,7 @@ replicate 3
 rnaExtract longPolyA
 subId 1043
 tableName wgEncodeCaltechRnaSeqPairedRep3H1hescCellPapErng32aR2x75
-view Aligns
+view Paired
 
 metaObject wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75
 objType table
@@ -1076,7 +2202,51 @@ replicate 4
 rnaExtract longPolyA
 subId 1064
 tableName wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75
-view Alignments
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqPairedRep5H1hescCellPapErng32aR2x75
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqPairedRep5H1hescCellPapErng32aR2x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+tableName wgEncodeCaltechRnaSeqPairedRep5H1hescCellPapErng32aR2x75
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+tableName wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75d
 objType table
@@ -1188,6 +2358,28 @@ subId 1036
 tableName wgEncodeCaltechRnaSeqPlusRawSignalRep1HuvecCellPapBb2R1x75d
 view PlusRawSignal
 
+metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+tableName wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75
+view PlusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -1230,6 +2422,28 @@ replicate 1
 rnaExtract longPolyA
 subId 1042
 tableName wgEncodeCaltechRnaSeqPlusRawSignalRep1NhekCellPapBb2R1x75d
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+tableName wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75d
@@ -1342,6 +2556,28 @@ subId 1037
 tableName wgEncodeCaltechRnaSeqPlusRawSignalRep2HuvecCellPapBb2R1x75d
 view PlusRawSignal
 
+metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+tableName wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75
+view PlusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -1363,6 +2599,1986 @@ rnaExtract longPolyA
 subId 904
 tableName wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75d
 view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqRawData2Rep1Gm12878CellLongpolyaBow0982x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData2Rep1Gm12878CellLongpolyaBow0982x75.bowtie.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal2Rep1Gm12878CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData2
+
+metaObject wgEncodeCaltechRnaSeqRawData2Rep1K562CellLongpolyaBow0982x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData2Rep1K562CellLongpolyaBow0982x75.bowtie.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal2Rep1K562CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData2
+
+metaObject wgEncodeCaltechRnaSeqRawData2Rep2Gm12878CellLongpolyaBow0982x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData2Rep2Gm12878CellLongpolyaBow0982x75.bowtie.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal2Rep2Gm12878CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData2
+
+metaObject wgEncodeCaltechRnaSeqRawData2Rep2K562CellLongpolyaBow0982x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData2Rep2K562CellLongpolyaBow0982x75.bowtie.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal2Rep2K562CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData2
+
+metaObject wgEncodeCaltechRnaSeqRawData3Rep1Gm12878CellLongpolyaBow0982x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData3Rep1Gm12878CellLongpolyaBow0982x75.fasta.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal3Rep1Gm12878CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData3
+
+metaObject wgEncodeCaltechRnaSeqRawData3Rep1K562CellLongpolyaBow0982x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData3Rep1K562CellLongpolyaBow0982x75.fasta.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal3Rep1K562CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData3
+
+metaObject wgEncodeCaltechRnaSeqRawData3Rep2Gm12878CellLongpolyaBow0982x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData3Rep2Gm12878CellLongpolyaBow0982x75.fasta.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal3Rep2Gm12878CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData3
+
+metaObject wgEncodeCaltechRnaSeqRawData3Rep2K562CellLongpolyaBow0982x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData3Rep2K562CellLongpolyaBow0982x75.fasta.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981
+localization cell
+mapAlgorithm bow098
+parentTable wgEncodeCaltechRnaSeqRawSignal3Rep2K562CellLongpolyaBow0982x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData3
+
+metaObject wgEncodeCaltechRnaSeqRawData4Rep1Gm12878CellLongpolyaBb12x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData4Rep1Gm12878CellLongpolyaBb12x75.psl.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981/blat34
+localization cell
+mapAlgorithm BB1
+parentTable wgEncodeCaltechRnaSeqRawSignal4Rep1Gm12878CellLongpolyaBb12x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData4
+
+metaObject wgEncodeCaltechRnaSeqRawData4Rep1K562CellLongpolyaBb12x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData4Rep1K562CellLongpolyaBb12x75.psl.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981/blat34
+localization cell
+mapAlgorithm BB1
+parentTable wgEncodeCaltechRnaSeqRawSignal4Rep1K562CellLongpolyaBb12x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData4
+
+metaObject wgEncodeCaltechRnaSeqRawData4Rep2Gm12878CellLongpolyaBb12x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData4Rep2Gm12878CellLongpolyaBb12x75.psl.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981/blat34
+localization cell
+mapAlgorithm BB1
+parentTable wgEncodeCaltechRnaSeqRawSignal4Rep2Gm12878CellLongpolyaBb12x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData4
+
+metaObject wgEncodeCaltechRnaSeqRawData4Rep2K562CellLongpolyaBb12x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData4Rep2K562CellLongpolyaBb12x75.psl.gz
+grant Myers
+lab Caltech
+labVersion bowtie0.981/blat34
+localization cell
+mapAlgorithm BB1
+parentTable wgEncodeCaltechRnaSeqRawSignal4Rep2K562CellLongpolyaBb12x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData4
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng32x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Gm12878CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng3b1x32
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng3b1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0beta
+localization cell
+mapAlgorithm erng3b
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Gm12878CellLongpolyaErng3b1x32
+project wgEncode
+readType 1x32
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellPapErng32aR1x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellPapErng32aR1x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Gm12878CellPapErng32aR1x75
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR1x75d
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1H1hescCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1034
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1026
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75Il400
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75Il400.rpkm.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1H1hescCellPapErng32aR2x75Il400
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1061
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR1x75d
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Helas3CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1038
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Helas3CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1004
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x32
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Hepg2CellPapErng32aR1x32
+project wgEncode
+readType 1x32
+replicate 1
+rnaExtract longPolyA
+subId 1091
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x75d
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Hepg2CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1040
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1Hepg2CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 998
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR1x75d
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1HuvecCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1036
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1HuvecCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1006
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng32x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1K562CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng3b1x32
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng3b1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0beta
+localization cell
+mapAlgorithm erng3b
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1K562CellLongpolyaErng3b1x32
+project wgEncode
+readType 1x32
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1K562CellPapErng32aR1x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellPapErng32aR1x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1K562CellPapErng32aR1x75
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR1x75d
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1NhekCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1042
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR2x75
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep1NhekCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1010
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng32x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Gm12878CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng3b1x32
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng3b1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0beta
+localization cell
+mapAlgorithm erng3b
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Gm12878CellLongpolyaErng3b1x32
+project wgEncode
+readType 1x32
+replicate 2
+rnaExtract longPolyA
+subId 266
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR1x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR1x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Gm12878CellPapErng32aR1x75
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR2x75Il400
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR2x75Il400.rpkm.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Gm12878CellPapErng32aR2x75Il400
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1057
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR1x75d
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2H1hescCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1055
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1033
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR1x75d
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Helas3CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1039
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Helas3CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1005
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x32
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Hepg2CellPapErng32aR1x32
+project wgEncode
+readType 1x32
+replicate 2
+rnaExtract longPolyA
+subId 1092
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x75d
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Hepg2CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1041
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2Hepg2CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1093
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR1x75d
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2HuvecCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1037
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2HuvecCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1009
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng32x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2K562CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng3b1x32
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng3b1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0beta
+localization cell
+mapAlgorithm erng3b
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2K562CellLongpolyaErng3b1x32
+project wgEncode
+readType 1x32
+replicate 2
+rnaExtract longPolyA
+subId 267
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep2K562CellPapErng32aR1x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellPapErng32aR1x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep2K562CellPapErng32aR1x75
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep3H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqRawData5Rep3H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep3H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1043
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep4H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep4H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep4H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1064
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData5Rep5H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData5Rep5H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal5Rep5H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+view RawData5
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellLongpolyaErng32x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Gm12878CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellPapErng32aR1x75d
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Gm12878CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1103
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR1x75d
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1H1hescCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1034
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1026
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75Il400
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75Il400.rpkm.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1H1hescCellPapErng32aR2x75Il400
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1061
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR1x75d
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Helas3CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1038
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Helas3CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1004
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x32
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Hepg2CellPapErng32aR1x32
+project wgEncode
+readType 1x32
+replicate 1
+rnaExtract longPolyA
+subId 1091
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x75d
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Hepg2CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1040
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1Hepg2CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 998
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR1x75d
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1HuvecCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1036
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1HuvecCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1006
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1K562CellLongpolyaErng32x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1K562CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1K562CellPapErng32aR1x75d
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1K562CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1105
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR1x75d
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1NhekCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1042
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR2x75
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep1NhekCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1010
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellLongpolyaErng32x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Gm12878CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR1x75d
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Gm12878CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1104
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR2x75Il400
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR2x75Il400.rpkm.gz
+grant Myers
+insertLength 400
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Gm12878CellPapErng32aR2x75Il400
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1057
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR1x75d
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2H1hescCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1055
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1033
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR1x75d
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Helas3CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1039
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR2x75
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Helas3CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1005
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x32
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Hepg2CellPapErng32aR1x32
+project wgEncode
+readType 1x32
+replicate 2
+rnaExtract longPolyA
+subId 1092
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x75d
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Hepg2CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1041
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR2x75
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2Hepg2CellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1093
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR1x75d
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2HuvecCellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1037
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR2x75
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2HuvecCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1009
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2K562CellLongpolyaErng32x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2K562CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep2K562CellPapErng32aR1x75d
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellPapErng32aR1x75d.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep2K562CellPapErng32aR1x75d
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1106
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep3H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqRawData6Rep3H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep3H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1043
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep4H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep4H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep4H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1064
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData6Rep5H1hescCellPapErng32aR2x75
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawData6Rep5H1hescCellPapErng32aR2x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm erng32a
+parentTable wgEncodeCaltechRnaSeqRawSignal6Rep5H1hescCellPapErng32aR2x75
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+view RawData6
+
+metaObject wgEncodeCaltechRnaSeqRawData7Rep1Gm12878CellLongpolyaErng32x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData7Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal7Rep1Gm12878CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData7
+
+metaObject wgEncodeCaltechRnaSeqRawData7Rep1K562CellLongpolyaErng32x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData7Rep1K562CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal7Rep1K562CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData7
+
+metaObject wgEncodeCaltechRnaSeqRawData7Rep2Gm12878CellLongpolyaErng32x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData7Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal7Rep2Gm12878CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData7
+
+metaObject wgEncodeCaltechRnaSeqRawData7Rep2K562CellLongpolyaErng32x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawData7Rep2K562CellLongpolyaErng32x75.rpkm.gz
+grant Myers
+lab Caltech
+labVersion erange3.0.1
+localization cell
+mapAlgorithm erng3
+parentTable wgEncodeCaltechRnaSeqRawSignal7Rep2K562CellLongpolyaErng32x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData7
+
+metaObject wgEncodeCaltechRnaSeqRawDataRep1Gm12878CellLongpolyaNa2x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawDataRep1Gm12878CellLongpolyaNa2x75.fasta.gz
+grant Myers
+lab Caltech
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaNa2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 266
+view RawData
+
+metaObject wgEncodeCaltechRnaSeqRawDataRep1K562CellLongpolyaNa2x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawDataRep1K562CellLongpolyaNa2x75.fasta.gz
+grant Myers
+lab Caltech
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaNa2x75
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 267
+view RawData
+
+metaObject wgEncodeCaltechRnaSeqRawDataRep2Gm12878CellLongpolyaNa2x75
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawDataRep2Gm12878CellLongpolyaNa2x75.fasta.gz
+grant Myers
+lab Caltech
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaNa2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData
+
+metaObject wgEncodeCaltechRnaSeqRawDataRep2K562CellLongpolyaNa2x75
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqRawDataRep2K562CellLongpolyaNa2x75.fasta.gz
+grant Myers
+lab Caltech
+localization cell
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaNa2x75
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 236
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
 objType table
@@ -1481,8 +4697,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32.wig.gz
 grant Myers
 lab Caltech
@@ -1493,7 +4709,7 @@ project wgEncode
 readType 1x32
 replicate 1
 rnaExtract longPolyA
-subId 1079
+subId 1091
 tableName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32
 view RawSignal
 
@@ -1724,8 +4940,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R1x32.wig.gz
 grant Myers
 lab Caltech
@@ -1736,7 +4952,7 @@ project wgEncode
 readType 1x32
 replicate 2
 rnaExtract longPolyA
-subId 1080
+subId 1092
 tableName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R1x32
 view RawSignal
 
@@ -1746,8 +4962,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-06
-dateUnrestricted 2010-10-06
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75.wig.gz
 grant Myers
 lab Caltech
@@ -1755,10 +4971,10 @@ labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
 project wgEncode
-readType r2x75
+readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 897
+subId 1093
 tableName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75
 view RawSignal
 
@@ -1872,6 +5088,28 @@ subId 1064
 tableName wgEncodeCaltechRnaSeqRawSignalRep4H1hescCellPapBb2R2x75
 view RawSignal
 
+metaObject wgEncodeCaltechRnaSeqRawSignalRep5H1hescCellPapBb2R2x75
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqRawSignalRep5H1hescCellPapBb2R2x75.wig.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+tableName wgEncodeCaltechRnaSeqRawSignalRep5H1hescCellPapBb2R2x75
+view RawSignal
+
 metaObject wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75
 objType table
 cell GM12878
@@ -1938,6 +5176,28 @@ subId 266
 tableName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+tableName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75
+view Splices
+
 metaObject wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d
 objType table
 cell GM12878
@@ -1958,6 +5218,28 @@ replicate 1
 rnaExtract longPolyA
 subId 870
 tableName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm blat34
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 870
+tableName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d
@@ -2143,8 +5425,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32.bed12.gz
 grant Myers
 lab Caltech
@@ -2155,7 +5437,7 @@ project wgEncode
 readType 1x32
 replicate 1
 rnaExtract longPolyA
-subId 1079
+subId 1091
 tableName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32
 view Splices
 
@@ -2357,6 +5639,28 @@ subId 267
 tableName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+tableName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75
+view Splices
+
 metaObject wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -2377,6 +5681,28 @@ replicate 1
 rnaExtract longPolyA
 subId 903
 tableName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm blat34
+project wgEncode
+readType 1x75
+replicate 1
+rnaExtract longPolyA
+subId 903
+tableName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d
@@ -2533,6 +5859,28 @@ subId 266
 tableName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+tableName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75
+view Splices
+
 metaObject wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d
 objType table
 cell GM12878
@@ -2576,6 +5924,28 @@ replicate 2
 rnaExtract longPolyA
 subId 1057
 tableName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R2x75Il400
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm blat34
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 898
+tableName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d
@@ -2738,8 +6108,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x32.bed12.gz
 grant Myers
 lab Caltech
@@ -2750,7 +6120,7 @@ project wgEncode
 readType 1x32
 replicate 2
 rnaExtract longPolyA
-subId 1080
+subId 1092
 tableName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x32
 view Splices
 
@@ -2782,8 +6152,8 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-06
-dateUnrestricted 2010-10-06
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75.bed12.gz
 grant Myers
 lab Caltech
@@ -2794,7 +6164,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 897
+subId 1093
 tableName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75
 view Splices
 
@@ -2952,6 +6322,28 @@ subId 267
 tableName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+tableName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75
+view Splices
+
 metaObject wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75d
 objType table
 cell K562
@@ -2972,6 +6364,28 @@ replicate 2
 rnaExtract longPolyA
 subId 904
 tableName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75d
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm blat34
+project wgEncode
+readType 1x75
+replicate 2
+rnaExtract longPolyA
+subId 904
+tableName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d
@@ -3040,4 +6454,26 @@ subId 1064
 tableName wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: -984573609
+metaObject wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75.bed12.gz
+grant Myers
+lab Caltech
+labVersion ERANGE3.2.0alpha
+localization cell
+mapAlgorithm BB2
+project wgEncode
+readType 2x75
+replicate 5
+rnaExtract longPolyA
+subId 1065
+tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
+view Splices
+
+# MAGIC: 1084923584

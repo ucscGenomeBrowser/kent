@@ -1041,4 +1041,400 @@ subId 9
 tableName wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
 view PlusClusters
 
-# MAGIC: 990527085
+metaObject wgEncodeRikenCageRawData2K562CytosolLongnonpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageRawData2K562CytosolLongnonpolya.csqual.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignal2K562CytosolLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 9
+view RawData2
+
+metaObject wgEncodeRikenCageRawData2K562NucleusLongnonpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageRawData2K562NucleusLongnonpolya.csqual.gz
+grant Gingeras
+lab Riken
+localization nucleus
+parentTable wgEncodeRikenCageRawSignal2K562NucleusLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 9
+view RawData2
+
+metaObject wgEncodeRikenCageRawData2ProstateCellLongnonpolya
+objType file
+cell prostate
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageRawData2ProstateCellLongnonpolya.csqual.gz
+grant Gingeras
+lab Riken
+localization cell
+parentTable wgEncodeRikenCageRawSignal2ProstateCellLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 9
+view RawData2
+
+metaObject wgEncodeRikenCageRawData3Gm12878NucleolusTotal
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3Gm12878NucleolusTotal.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleolus
+parentTable wgEncodeRikenCageRawSignal3Gm12878NucleolusTotal
+project wgEncode
+rnaExtract total
+subId 1001
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3H1hescCellLongnonpolya
+objType file
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3H1hescCellLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization cell
+parentTable wgEncodeRikenCageRawSignal3H1hescCellLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 1002
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3Hepg2CytosolLongnonpolya
+objType file
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3Hepg2CytosolLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignal3Hepg2CytosolLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 1015
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3Hepg2NucleolusTotal
+objType file
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3Hepg2NucleolusTotal.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleolus
+parentTable wgEncodeRikenCageRawSignal3Hepg2NucleolusTotal
+project wgEncode
+rnaExtract total
+subId 1015
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3Hepg2NucleusLongnonpolya
+objType file
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3Hepg2NucleusLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleus
+parentTable wgEncodeRikenCageRawSignal3Hepg2NucleusLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 1015
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3HuvecCytosolLongnonpolya
+objType file
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3HuvecCytosolLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignal3HuvecCytosolLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 1014
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3NhekCytosolLongnonpolya
+objType file
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3NhekCytosolLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignal3NhekCytosolLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 1018
+view RawData3
+
+metaObject wgEncodeRikenCageRawData3NhekNucleusLongnonpolya
+objType file
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageRawData3NhekNucleusLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleus
+parentTable wgEncodeRikenCageRawSignal3NhekNucleusLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 1018
+view RawData3
+
+metaObject wgEncodeRikenCageRawDataGm12878CytosolLongnonpolya
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-09
+dateUnrestricted 2009-12-09
+fileName wgEncodeRikenCageRawDataGm12878CytosolLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignalGm12878CytosolLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 232
+view RawData
+
+metaObject wgEncodeRikenCageRawDataGm12878NucleusLongnonpolya
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-09
+dateUnrestricted 2009-12-09
+fileName wgEncodeRikenCageRawDataGm12878NucleusLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleus
+parentTable wgEncodeRikenCageRawSignalGm12878NucleusLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 232
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562ChromatinTotal
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
+fileName wgEncodeRikenCageRawDataK562ChromatinTotal.fastq.gz
+grant Gingeras
+lab Riken
+localization chromatin
+parentTable wgEncodeRikenCageRawSignalK562ChromatinTotal
+project wgEncode
+rnaExtract total
+subId 212
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562CytosolLongnonpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageRawDataK562CytosolLongnonpolya.csfasta.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignalK562CytosolLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 9
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562CytosolLongpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-04
+fileName wgEncodeRikenCageRawDataK562CytosolLongpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization cytosol
+parentTable wgEncodeRikenCageRawSignalK562CytosolLongpolya
+project wgEncode
+rnaExtract longPolyA
+subId 202
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562NucleolusTotal
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
+fileName wgEncodeRikenCageRawDataK562NucleolusTotal.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleolus
+parentTable wgEncodeRikenCageRawSignalK562NucleolusTotal
+project wgEncode
+rnaExtract total
+subId 212
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562NucleoplasmTotal
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
+fileName wgEncodeRikenCageRawDataK562NucleoplasmTotal.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleoplasm
+parentTable wgEncodeRikenCageRawSignalK562NucleoplasmTotal
+project wgEncode
+rnaExtract total
+subId 212
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562NucleusLongnonpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageRawDataK562NucleusLongnonpolya.csfasta.gz
+grant Gingeras
+lab Riken
+localization nucleus
+parentTable wgEncodeRikenCageRawSignalK562NucleusLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 9
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562NucleusLongpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-04
+fileName wgEncodeRikenCageRawDataK562NucleusLongpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization nucleus
+parentTable wgEncodeRikenCageRawSignalK562NucleusLongpolya
+project wgEncode
+rnaExtract longPolyA
+subId 202
+view RawData
+
+metaObject wgEncodeRikenCageRawDataK562PolysomeLongnonpolya
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
+fileName wgEncodeRikenCageRawDataK562PolysomeLongnonpolya.fastq.gz
+grant Gingeras
+lab Riken
+localization polysome
+parentTable wgEncodeRikenCageRawSignalK562PolysomeLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 212
+view RawData
+
+metaObject wgEncodeRikenCageRawDataProstateCellLongnonpolya
+objType file
+cell prostate
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageRawDataProstateCellLongnonpolya.csfasta.gz
+grant Gingeras
+lab Riken
+localization cell
+parentTable wgEncodeRikenCageRawSignalProstateCellLongnonpolya
+project wgEncode
+rnaExtract longNonPolyA
+subId 9
+view RawData
+
+# MAGIC: 1683250323
