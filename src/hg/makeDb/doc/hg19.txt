@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.106 2010/05/12 21:55:45 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.107 2010/05/12 23:34:42 baertsch Exp $";
 
 #############################################################################
 
@@ -9905,3 +9905,86 @@ XXXX 04-27 stop pending new data for snoRNA
 
 
 ############################################################################
+#############################################################################
+# ucscRetro track (2010-03-31, baertsch,rhartera DONE)
+mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
+cd /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
+
+mkdir -p /hive/data/genomes/hg19/bed/retro/ 
+
+cat << '_EOF_' > DEF
+
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 -skipBlatMerge "
+DB=hg19
+SCORETHRESH=550
+GENOMENAME='Homo sapiens'
+GBDB=hg
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz
+TMPMRNA=/hive/groups/gencode/pseudogenes/retroFinder/mrnaBlastz/$DB
+TMPEST=/hive/groups/gencode/pseudogenes/retroFinder/est/$DB
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=0
+SCRIPT=/cluster/home/baertsch/baertsch/scripts
+GENOME=/hive/data/genomes/
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=/hive/groups/gencode/pseudogenes/retroFinder/retro
+OUTDIR=/hive/groups/gencode/pseudogenes/retroFinder/retro/$DB
+RESULT=$OUTDIR/result
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+VERSION=2
+TABLE=ucscRetroInfo$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+NIB=$LOCAL/nib
+RMSK=rmsk
+NET1=netCanFam2 
+NET2=netMm9 
+NET3=netRheMac2 
+GENE1=knownGene
+GENE2=refGene
+GENE3=mgcGenes
+CLUSTER=swarm
+SPECIES="hg19"
+ROOTDIR="/cluster/home/hartera/public_html"
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ARRAY=gnfAtlas2
+ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median
+ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
+ARRAYABS=hgFixed.gnfHumanAtlas2All
+ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps
+ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
+ARRAYLOOKUP=knownToGnfAtlas2
+ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
+ALTSPLICE=
+SPLITBYAGE=$SCRIPT/splitRetrosByAge
+PDB=proteins090821
+
+'_EOF_'
+    # << happy emacs
+
+retroFinder-1.16/scripts/filterMrna.sh DEF
+retroFinder-1.16/scripts/filterEst.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep1.sh DEF
+#check cluster job
+nohup retroFinder-1.16/scripts/ucscRetroStep2.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep3.sh DEF
+#check cluster job
+nohup retroFinder-1.16/scripts/ucscRetroStep4.sh DEF
+    # Load the track
+nohup retroFinder-1.16/scripts/ucscRetroStep5.sh DEF
+nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
+#add ucscRetroAli to trackDb.ra 
+cp  ucscRetroAli.psl /hive/data/genomes/hg19/bed/retro/ 
+cp  ucscRetroInfo.bed /hive/data/genomes/hg19/bed/retro/ 
+cp  ucscRetroCds.tab /hive/data/genomes/hg19/bed/retro/ 
+
+cd /hive/data/genomes/hg19/bed/retro/ 
+
