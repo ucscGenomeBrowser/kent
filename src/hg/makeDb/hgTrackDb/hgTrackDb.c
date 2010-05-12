@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.68 2010/05/11 19:07:47 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.69 2010/05/12 06:52:38 kent Exp $";
 
 
 void usage()
@@ -497,7 +497,7 @@ struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     struct slRef *child;
-    if (trackDbLocalSetting(tdb, "composite"))
+    if (trackDbLocalSetting(tdb, "compositeTrack"))
 	{
 	struct slRef *childList = trackDbListGetRefsToDescendantLeaves(
 	    tdb->subtracks);
