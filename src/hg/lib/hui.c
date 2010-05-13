@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.284 2010/05/11 01:43:30 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.285 2010/05/13 21:38:33 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1401,6 +1401,31 @@ void wiggleGraphDropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions),
 	curVal);
+}
+
+static char *aggregateLabels[] = 
+    {
+    "none",
+    "transparent overlay",
+    "solid overlay",
+    "sum",
+    "product",
+    };
+
+static char *aggregateValues[] = 
+    {
+    WIG_AGGREGATE_NONE,
+    WIG_AGGREGATE_TRANSPARENT,
+    WIG_AGGREGATE_SOLID,
+    WIG_AGGREGATE_SUM,
+    WIG_AGGREGATE_PRODUCT,
+    };
+
+void aggregateDropDown(char *var, char *curVal)
+/* Make drop down menu for aggregate strategy */
+{
+cgiMakeDropListFull(var, aggregateLabels, aggregateValues, 
+	ArraySize(aggregateValues), curVal, NULL);
 }
 
 static char *wiggleTransformFuncOptions[] = {
@@ -3689,6 +3714,16 @@ wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
 printf("<TABLE BORDER=0>");
+
+char *aggregate = trackDbSetting(tdb, "aggregate");
+if (aggregate != NULL && tdb->subtracks)
+    {
+    char *aggregateVal = cartOrTdbString(cart, tdb, "aggregate", NULL);
+    printf("<TR valign=center><th align=right>Aggregation method:</th><td align=left>");
+    safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
+    aggregateDropDown(option, aggregateVal);
+    puts("</td></TR>");
+    }
 
 printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
 snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
