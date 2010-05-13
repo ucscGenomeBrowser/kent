@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.109 2010/05/13 00:51:18 hartera Exp $";
+#	"$Id: hg19.txt,v 1.110 2010/05/13 18:05:27 chinhli Exp $";
 
 #############################################################################
 
@@ -9867,7 +9867,7 @@ XXXX 04-27 stop pending new data for snoRNA
 
 
 #############################################################################
-# AFFY U133Plus2 (working 2010-05-12 Chin)
+# AFFY U133Plus2 (DONE 2010-05-12 Chin)
     # Align probes 
     ssh swarm
     cd /hive/data/genomes/hg19/bed
@@ -9908,7 +9908,7 @@ XXXX 04-27 stop pending new data for snoRNA
 
     # Load probes and alignments into database.
     ssh hgwdev
-    cd /cluster/data/hg19/bed/affyProbes/affyU133Plus2
+    cd /hive/data/genomes/hg19/bed/affyProbes/affyU133Plus2
     hgLoadPsl hg19 affyU133Plus2.psl
     hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     #   Attempt to GET_LOCK timed out.
@@ -9921,7 +9921,56 @@ XXXX 04-27 stop pending new data for snoRNA
     #   Updating seq table
     #   All done
  
+#############################################################################
+# AFFY U95 (working 2010-05-13 Chin)
+    # Align probes 
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed
+    mkdir -p affyProbes/affyU95/run
+    cd affyProbes/affyU95/run
+    mkdir psl
+    ls -1 /scratch/data/hg19/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/affyProbes/HG-U95Av2_all.fa > mrna.lst
 
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg19/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:       2101s      35.01m     0.58h    0.02d  0.000 y
+# IO & Wait Time:                   657s      10.95m     0.18h    0.01d  0.000 y
+# Average job time:                  30s       0.49m     0.01h    0.00d
+# Longest finished job:             165s       2.75m     0.05h    0.00d
+# Submission to last job:           619s      10.32m     0.17h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+#Submission to last job:          1685s      28.08m     0.47h    0.02d
+
+
+    # Do sort, best in genome filter.
+    # to create affyU95.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyU95.psl /dev/null
+    rm -r raw.psl psl
+
+    # Load probes and alignments into database.
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/affyProbes/affyU95
+    hgLoadPsl hg19 affyU95.psl
+    hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #   Creating seq.tab file
+    #   Adding /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #   12386 sequences
+    #   Updating seq table
+    #   All done
 
 ############################################################################
 #############################################################################
