@@ -302,6 +302,12 @@ while(scalar(keys %objsSet) > 0) {
     my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/" . $cellLineInfo{"protocol"};
     my $growthProtocol = "Cells were grown according to the approved ENCODE cell culture protocols: $growthProtocolUrl";
 
+    my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
+    my $extractProtocol    = "For extraction protocol details see: $extractProtocolUrl";
+
+    my $dataProcessingUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
+    my $dataProcessing    = "For data processing details see: $dataProcessingUrl";
+
     my $dataType = $dataTypeCleaner{getSameMetadata("dataType", @currentMetadata)};
     my $molecule = $dataTypeMolecule{$dataType};
 
@@ -346,8 +352,8 @@ while(scalar(keys %objsSet) > 0) {
     #}
     print "!Sample_growth_protocol = $growthProtocol" . "\n";
     print "!Sample_molecule = $molecule" . "\n";
-    print "!Sample_extract_protocol = [required]" . "\n";
-    print "!Sample_data_processing = [required; list_of_values]" . "\n";
+    print "!Sample_extract_protocol = $extractProtocol" . "\n";
+    print "!Sample_data_processing = $dataProcessing" . "\n";
     print "!Sample_library_strategy = $libraryStrategy" . "\n";
     print "!Sample_library_source = $ibrarySource" . "\n";
     print "!Sample_library_selection = $ibrarySelection" . "\n";
