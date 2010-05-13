@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.108 2010/05/12 23:46:11 angie Exp $";
+#	"$Id: hg19.txt,v 1.109 2010/05/13 00:51:18 hartera Exp $";
 
 #############################################################################
 
@@ -8581,6 +8581,8 @@ while (<>) {
 # 2010-05-11. All ENCODE tracks need to be preceded by the wgEncode prefix now
 # on all assemblies. Update the file names in /gbdb/hg19/bbi and the 
 # table names. (hartera)
+# 2010-05-12. Added 24mer track to trackDb entry. Updated downloads with the
+# new data.
     mkdir -p /hive/data/genomes/hg19/bed/crgMapability
     cd /hive/data/genomes/hg19/bed/crgMapability
 cat << 'EOF' > temp
@@ -8741,6 +8743,21 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      # kent/src/hg/makeDb/trackDb/human/hg19/trackDb.wgEncode.ra as 
      # the contents of trackDb.enc.ra has been moved there. 
 
+     # 2010-05-12
+     # Added subtrack for the new 24mer table. 
+     # Updated the downloads for the new data.
+     cd /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC
+     # Change name of downloads directory to be consistent with the 
+     # new track name.
+     mv encMapability wgEncodeMapability
+     cd wgEncodeMapability
+     rm encCrg* md5sum.txt
+     cp -p /gbdb/hg19/bbi/wgEncodeCrg*.bw .
+     gzip wgEncodeCrg*.bw
+     # Then run encodeDownloadsPage.pl script to update the index.html and
+     # regenerate the md5sum.txt file.
+     encodeDownloadsPage.pl -db=hg19 -checksum index.html 
+ 
 #####################################################################
 # tRNAs track (2010-01-13, Fan DONE)
 # tRNAs track (2010-03-10, Fan RE-BUILT WITH UPDATED DATA FROM TODD LOWE)
