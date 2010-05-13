@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.10 2010/05/13 17:18:14 mary Exp $
+#	$Id: calJac3.txt,v 1.11 2010/05/13 21:35:49 chinhli Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1249,19 +1249,19 @@ popd > /dev/null
     para -ram=8g create jobList
 
     #	put the split mafs back together into a single result
+    ssh hgwdev
+    cd  /hive/data/genomes/calJac3/bed/multiz13way/run
+
     head -q -n 1 maf/000.maf > calJac3.13way.maf
     for F in maf/*.maf
 do
     grep -h -v "^#" ${F} >> calJac3.13way.maf
 done
     tail -q -n 1 maf/000.maf >> calJac3.13way.maf
-    tail -q -n 1 maf/hg19_${C}.*.maf | sort -u >> ../maf/${C}.maf
-
-    #	real    13m32.340s
 
     # load tables for a look
     mkdir -p /gbdb/calJac3/multiz13way/maf
-    cd /hive/data/genomes/calJac3/bed/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/run
     ln -s `pwd`/calJac3.13way.maf \
 	/gbdb/calJac3/multiz13way/maf/multiz13way.maf
 
@@ -1270,16 +1270,134 @@ done
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
-    #	Loaded 13316945 mafs in 1 files from /gbdb/calJac3/multiz13way/maf
-    #	real    9m9.365s
+    #   Loading multiz13way into database
+    #   Loaded 27583585 mafs in 257 files from /gbdb/calJac3/multiz13way/maf
+    #   real    34m38.042s
 
     # load summary table
     time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
 	| hgLoadMafSummary calJac3 -minSize=30000 -verbose=2 \
 		-mergeGap=1500 -maxSize=200000  multiz13waySummary stdin
-# Created 2330531 summary blocks from 99659162 components and
-#	13316945 mafs from stdin
-    #	real    17m54.685s
+    #   Created 4661062 summary blocks from 199318324 components 
+    #   and 27583585 mafs from stdin
+    #   Loading into calJac3 table multiz13waySummary...
+    #   Loading complete
+    #   real    38m46.339s
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/anno
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno
+    mkdir maf run
+
+    #   most of these will already exist from previous multiple
+    #   alignments
+    #   remove the echo from in front of the twoBitInfo command to get
+    #   them
+    #   to run if this loop appears to be correct
+    for DB in `cat ../species.list`
+do
+    CDIR="/hive/data/genomes/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+        echo "creating ${DB}.N.bed"
+        echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+        ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    # rm -f nBeds sizes
+    for DB in `sed -e "s/calJac3 //" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    #   the annotation step requires large memory, run on memk nodes
+    ssh memk
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno/run
+    ls ../../run/maf | sed -e "s/.maf//" > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../run/maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    gensub2 chr.list single template jobList
+    para -ram=30g create jobList
+    #   specify lots of ram to get one job per node
+    para -ram=30g push
+    #   
+    #  para check
+    #  256 jobs in batch
+    #  0 jobs (including everybody's) in Parasol queue or running.
+    #  Checking finished jobs
+    #  ...
+    #  ranOk: 256
+    #  total jobs in batch: 256
+
+
+    ssh hgwdev
+    rm -fr /gbdb/calJac3/multiz13way/maf
+    mkdir /gbdb/calJac3/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno/maf
+    ln -s `pwd`/*.maf /gbdb/calJac3/multiz13way/maf/
+    #   by loading this into the table multiz13way, it will replace the
+    #   previously loaded table with the unannotated mafs
+    #   huge temp files are made, do them on local disk
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+        -pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
+    #  Loaded 14259674 mafs in 256 files from /gbdb/calJac3/multiz13way/maf
+    #  real    15m41.804s
+
+    time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
+        | hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
+                 -maxSize=200000  multiz13waySummary stdin
+    #   Indexing and tabulating stdin
+    #   Created 2330531 summary blocks from 99659162 components 
+    #   and 14259674 mafs from stdin
+    #   Loading into calJac3 table multiz13waySummary...
+    #   Loading complete
+    #   real    17m17.229s
+
+    #   by loading this into the table multiz13waySummary, it will
+    #   replace
+    #   the previously loaded table with the unannotated mafs
+    #   remove the multiz13way*.tab files in this /data/tmp directory
+    #   -rw-rw-r-- 1 727501509 May 11 16:48 multiz13way.tab
+    #   -rw-rw-r-- 1 113079736 May 12 08:57 multiz13waySummary.tab
+    wc -l multiz13way*.tab
+    #    14259674 multiz13way.tab
+    #     2330531 multiz13waySummary.tab
+    #    16590205 total
+    rm multiz13way*.tab
+
+    # create some downloads
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/download/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/download/maf
+    time cp -p ../../anno/maf/*.maf .
+    #   real    37m48.902s
+    time gzip --rsyncable *.maf
+    #   real    64m55.554s
+    time md5sum *.gz > md5sum.txt
+    #   real    2m41.707s
 
 #####################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
