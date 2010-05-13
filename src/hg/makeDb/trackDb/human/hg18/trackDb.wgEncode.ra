@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.965 2010/05/11 22:36:33 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.966 2010/05/13 19:06:13 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -13247,7 +13247,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqRel2SignalGm12878Jund
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal
-        shortLabel GM128 JunD Sig
+        shortLabel GM12878 JunD Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in GM12878 cells)
         subGroups view=Signal factor=JUND cellType=t1GM12878
         type bedGraph 4
@@ -13257,7 +13257,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqRel2SignalGm12878Max
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal
-        shortLabel GM128 Max Sig
+        shortLabel GM12878 Max Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
         subGroups view=Signal factor=MAX cellType=t1GM12878
         type bedGraph 4
@@ -13277,7 +13277,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqRel2SignalGm12878Pol2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal
-        shortLabel GM128 Pol2 Sig
+        shortLabel GM12878 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
         subGroups view=Signal factor=POL2 cellType=t1GM12878
         type bedGraph 4
@@ -13297,7 +13297,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqRel2SignalGm12878Cfos
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal
-        shortLabel GM128 c-Fos Sig
+        shortLabel GM12878 c-Fos Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
         subGroups view=Signal factor=CFOS cellType=t1GM12878
         type bedGraph 4
@@ -13678,7 +13678,7 @@ wgEncode 1
         track wgEncodeYaleChIPseqSignalK562Ifna30Pol2
         release alpha,beta
         subTrack wgEncodeYaleChIPseqViewSignal off
-        shortLabel K562/Ia30 Pol2 Sig
+        shortLabel K562/Ia3 Pol2 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNa30 cells)
         subGroups view=Signal factor=POL2 cellType=uK562Ia30
         type bedGraph 4
