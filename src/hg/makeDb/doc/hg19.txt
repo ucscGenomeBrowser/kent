@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.110 2010/05/13 18:05:27 chinhli Exp $";
+#	"$Id: hg19.txt,v 1.111 2010/05/13 21:44:19 hartera Exp $";
 
 #############################################################################
 
@@ -9974,7 +9974,7 @@ XXXX 04-27 stop pending new data for snoRNA
 
 ############################################################################
 #############################################################################
-# ucscRetro track (2010-03-31, baertsch,rhartera DONE)
+# ucscRetro track (2010-03-31, baertsch,hartera DONE)
 mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
 cd /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
 
