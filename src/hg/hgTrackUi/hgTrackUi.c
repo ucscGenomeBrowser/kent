@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.524 2010/05/11 01:43:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.525 2010/05/13 21:39:19 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2401,9 +2401,14 @@ if (tdbIsSuperTrack(tdb))
     {
     superTrackUi(tdb);
     }
-else if (tdb->subtracks)
-// else if (tdbIsComposite(tdb))  for the moment generalizing this to include other containers...
+else if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
     {
+    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
+    }
+else if (trackDbLocalSetting(tdb, "container"))
+    {
+    /* For the moment, be a composite... */
+    tdbMarkAsComposite(tdb);
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
 extraUiLinks(database,tdb);
@@ -2471,7 +2476,9 @@ printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
 
 if(tdbIsComposite(tdb))
+    {
     printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+    }
 
 if (ct)
     {
