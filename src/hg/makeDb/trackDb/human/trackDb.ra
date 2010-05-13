@@ -1507,6 +1507,7 @@ exonArrows off
 
 track mrna override
 spectrum on
+visibility dense
 
 
 track haplotype
