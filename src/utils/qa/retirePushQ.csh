@@ -41,12 +41,14 @@ if ( $status ) then
 endif
 echo "backed up $1 ok."
 
-set maxqid = `hgsql $hhost qapushq -B --skip-column-names -e "select max(qid) from pushQ"`
+# tcsh is now treating numbers with leading zeros as octal, the most useless thing ever.
+# have to add +0 to convert to number trimming off leading zeros.
+set maxqid = `hgsql $hhost qapushq -B --skip-column-names -e "select max(qid)+0 from pushQ"`
 echo "maxqid = $maxqid"
 #@ x = $res + 1
 #echo $x
 
-set minqid = `hgsql $hhost qapushq -B --skip-column-names -e "select min(qid) from $1"`
+set minqid = `hgsql $hhost qapushq -B --skip-column-names -e "select min(qid)+0 from $1"`
 echo "minqid = $minqid"
 @ maxqid = ($maxqid - $minqid) + 1
 echo "adjusted maxqid=$maxqid"
