@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.9 2010/05/10 16:27:46 hiram Exp $
+#	$Id: calJac3.txt,v 1.10 2010/05/13 17:18:14 mary Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1384,3 +1384,16 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # veryify top-level search spec, should produce no results:
     hgsql -Ne 'select name from nscanGene' calJac3 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
 ############################################################################
+# Fixing references to old calJac1 date to be to March 2009 - (2010-05-12 mary)
+
+# trackDb
+cd /cluster/home/mary/kent/src/hg/makeDb/trackDb/marmoset
+find -name "*.html" | xargs grep 2007
+
+# downloads
+cd /usr/local/apache/htdocs/goldenPath/calJac3
+find -name "*" | xargs grep 2007
+
+# hgcentral
+hgsql hgcentraltest
+update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3"
