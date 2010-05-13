@@ -28663,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.417 2010/05/12 23:46:11 angie Exp $
+# $Id: hg18.txt,v 1.418 2010/05/13 00:13:15 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28711,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.417 2010/05/12 23:46:11 angie Exp $
+# $Id: hg18.txt,v 1.418 2010/05/13 00:13:15 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29700,6 +29700,8 @@ see doc/builds.txt for specific details.
 # 2010-04-28 Received new data from Thomas Derrien. Downloaded data and 
 # added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig 
 # so sent a new binary to data providers and they re-created the bigWig files. 
+# 2010-05-12. Updated downloads for the new data files.
+
      mkdir -p /hive/data/genomes/hg18/bed/crgMapability
      cd /hive/data/genomes/hg18/bed/crgMapability
 cat << 'EOF' > temp
@@ -29820,6 +29822,16 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg18.main.mappabilit
         rm /gbdb/hg18/bbi/${nf}
         ln -s `pwd`/${f} /gbdb/hg18/bbi/${nf}
      end
+     # 2010-05-12
+     # Updated downloads for the new data files.
+     cd /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeMapability
+     rm wgEncodeCrg*
+     cp -p /gbdb/hg18/bbi/wgEncodeCrg*.bw .
+     gzip wgEncodeCrg*.bw
+     rm md5sum.txt
+     # Run encodeDownloadsPage.pl to generate the index page for downloads
+     # and generate new md5sum.txt file for the data.
+     encodeDownloadsPage.pl -checksum -db=hg19 index.html
 
 #####################################################################
 # tRNAs track (2010-03-12, Fan RE-BUILT)
