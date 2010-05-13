@@ -567,8 +567,6 @@ void wiggleGridDropDown(char *var, char *curVal);
 #define WIG_AGGREGATE_NONE "none"
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
 #define WIG_AGGREGATE_SOLID "solidOverlay"
-#define WIG_AGGREGATE_SUM "sum"
-#define WIG_AGGREGATE_PRODUCT "product"
 
 /*** BAM alignment track coloring code: ***/
 // tdbSettings / cart var suffixes and default values:

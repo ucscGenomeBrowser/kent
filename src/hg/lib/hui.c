@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.285 2010/05/13 21:38:33 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.286 2010/05/13 21:43:21 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1408,8 +1408,6 @@ static char *aggregateLabels[] =
     "none",
     "transparent overlay",
     "solid overlay",
-    "sum",
-    "product",
     };
 
 static char *aggregateValues[] = 
@@ -1417,8 +1415,6 @@ static char *aggregateValues[] =
     WIG_AGGREGATE_NONE,
     WIG_AGGREGATE_TRANSPARENT,
     WIG_AGGREGATE_SOLID,
-    WIG_AGGREGATE_SUM,
-    WIG_AGGREGATE_PRODUCT,
     };
 
 void aggregateDropDown(char *var, char *curVal)
