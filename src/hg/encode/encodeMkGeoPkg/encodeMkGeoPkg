@@ -159,7 +159,7 @@ my $ok = GetOptions("instance=s",
                     );
 # parse options
 usage() if (!$ok);
-usage() if (scalar(@ARGV) < 2);
+usage() if (scalar(@ARGV) < 3);
 # get options or set defaults
 if (not defined $opt_instance) {
     $opt_instance = "prod";
@@ -184,6 +184,7 @@ HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 
 my $database  = $ARGV[0];
 my $compositeName = $ARGV[1];
+my $instrument = $ARGV[2];
 
 # some counters we use
 my $i;
@@ -191,6 +192,9 @@ my $j;
 my $c;
 my $f;
 my $o;
+
+# get the project dir
+my $compositeDir = "/hive/groups/encode/dcc/analysis/ftp/pipeline/$database/$compositeName";
 
 # read the cv.ra file
 my %cvTerms = Encode::getControlledVocab($configPath);
@@ -300,7 +304,7 @@ while(scalar(keys %objsSet) > 0) {
     my $organism = $cellLineInfo{"organism"};
     my $provider = $cellLineInfo{"vendorName"};
     my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/" . $cellLineInfo{"protocol"};
-    my $growthProtocol = "Cells were grown according to the approved ENCODE cell culture protocols: $growthProtocolUrl";
+    my $growthProtocol = "Cells were grown according to ENCODE cell culture protocols: $growthProtocolUrl";
 
     my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
     my $extractProtocol    = "For extraction protocol details see: $extractProtocolUrl";
@@ -343,13 +347,6 @@ while(scalar(keys %objsSet) > 0) {
         }
     }
     print "!Sample_biomaterial_provider = $provider" . "\n";
-    #for $i (@currentMetadata) {
-    #    my %metadata = %{$i};
-    #    if ($metadata{"objType"} eq "file") {
-    #        my $file = $metadata{"fileName"};
-    #        print "!Sample_supplementary_file = $file" . "\n";
-    #    }
-    #}
     print "!Sample_growth_protocol = $growthProtocol" . "\n";
     print "!Sample_molecule = $molecule" . "\n";
     print "!Sample_extract_protocol = $extractProtocol" . "\n";
@@ -357,7 +354,32 @@ while(scalar(keys %objsSet) > 0) {
     print "!Sample_library_strategy = $libraryStrategy" . "\n";
     print "!Sample_library_source = $ibrarySource" . "\n";
     print "!Sample_library_selection = $ibrarySelection" . "\n";
-    print "!Sample_instrument_model = [required]" . "\n";
+    print "!Sample_instrument_model = $instrument" . "\n";
+    my $rawCount = 1;
+    for $i (@currentMetadata) {
+        my %metadata = %{$i};
+        my $filename = $metadata{"fileName"};
+        if ($metadata{"view"} eq "RawData") {
+            my ($name, $type, $compression) = split(/\./, $filename);
+            my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
+            print "!Sample_raw_file_$rawCount = $filename" . "\n";
+            print "!Sample_raw_file_type_$rawCount = $type" . "\n";
+            print "!Sample_raw_file_checksum_$rawCount = $checksum" . "\n";
+            ++$rawCount;
+        }
+    }
+    my $supplementCount = 1;
+    for $i (@currentMetadata) {
+        my %metadata = %{$i};
+        my $filename = $metadata{"fileName"};
+        if ($metadata{"view"} ne "RawData") {
+            my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
+            print "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
+            print "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
+            print "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
+            ++$supplementCount;
+        }
+    }
     print "\n";
     
     exit;
