@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.238 2010/05/10 20:24:28 krish Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.239 2010/05/13 17:43:31 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1735,7 +1735,7 @@ tag MEL
 type Cell Line
 organism Mouse
 description leukemia (K562 analog)
-color 153,38,0
+color 46,0,184
 
 # Gene types
 term Known
