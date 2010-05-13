@@ -8,6 +8,16 @@
 #include "hgTracks.h"
 #include "container.h"
 #include "wigCommon.h"
+#include "hui.h"
+
+static boolean isOverlayTypeAggregate(char *aggregate)
+/* Return TRUE if aggregater type is one of the overlay ones. */
+{
+if (aggregate == NULL)
+    return FALSE;
+return differentString(aggregate, WIG_AGGREGATE_NONE);
+}
+
 
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -15,25 +25,54 @@ static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw items in container. */
 {
 struct track *subtrack;
+char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+boolean overlay = isOverlayTypeAggregate(aggregate);
+int y = yOff;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
-	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+	{
+	int height = subtrack->totalHeight(subtrack, vis);
+	hvGfxSetClip(hvg, xOff, y, width, height);
+	if (overlay)
+	    subtrack->lineHeight = tg->lineHeight;
+	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	if (!overlay)
+	    {
+	    y += height;
+	    y += 1;
+	    }
+	hvGfxUnclip(hvg);
+	}
     }
 }
 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of container. */
 {
-int totalHeight =  wigTotalHeight(tg, vis);
+char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+boolean overlay = isOverlayTypeAggregate(aggregate);
+int totalHeight =  0;
+if (overlay)
+    totalHeight =  wigTotalHeight(tg, vis);
 struct track *subtrack;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
     if (isSubtrackVisible(subtrack))
-	subtrack->totalHeight(subtrack, vis);
+	{
+	int oneHeight = subtrack->totalHeight(subtrack, vis);
+	if (!overlay)
+	    {
+	    if (totalHeight != 0)
+	       totalHeight += 1;
+	    totalHeight += oneHeight;
+	    }
+	}
+    }
 return totalHeight;
 }
 
-static boolean graphLimitsAllSame(struct track *trackList)
+static boolean graphLimitsAllSame(struct track *trackList, struct track **retFirstTrack)
 /* Return TRUE if graphUpperLimit and graphLowerLimit same for all tracks. */
 {
 struct track *firstTrack = NULL;
@@ -43,7 +82,7 @@ for (track = trackList; track != NULL; track = track->next)
     if (isSubtrackVisible(track))
         {
 	if (firstTrack == NULL)
-	    firstTrack = track;
+	    *retFirstTrack = firstTrack = track;
 	else if (track->graphUpperLimit != firstTrack->graphUpperLimit 
 	    || track->graphLowerLimit != firstTrack->graphLowerLimit)
 	    return FALSE;
@@ -58,10 +97,36 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-boolean showNumbers = graphLimitsAllSame(tg->subtracks);
-wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels,
-	font, color, vis, tg->shortLabel, tg->subtracks->graphUpperLimit, 
-	tg->subtracks->graphLowerLimit, showNumbers);
+char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+boolean overlay = isOverlayTypeAggregate(aggregate);
+if (overlay)
+    {
+    struct track *firstVisibleSubtrack = NULL;
+    boolean showNumbers = graphLimitsAllSame(tg->subtracks, &firstVisibleSubtrack);
+    struct track *subtrack = (showNumbers ? firstVisibleSubtrack : tg->subtracks);
+    wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels,
+	    font, color, vis, tg->shortLabel, subtrack->graphUpperLimit, 
+	    subtrack->graphLowerLimit, showNumbers);
+    }
+else
+    {
+    struct track *subtrack;
+    int y = yOff;
+    if (withCenterLabels)
+       y += tl.fontHeight+1;
+    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	{
+	if (isSubtrackVisible(subtrack))
+	    {
+	    int height = subtrack->totalHeight(subtrack, vis);
+	    wigLeftAxisLabels(subtrack, seqStart, seqEnd, hvg, xOff, y, width, height, withCenterLabels,
+	    	font, subtrack->ixColor, vis, subtrack->shortLabel, subtrack->graphUpperLimit,
+		subtrack->graphLowerLimit, TRUE);
+	    y += height;
+	    y += 1;
+	    }
+	}
+    }
 }
 
 void multiWigContainerMethods(struct track *track)

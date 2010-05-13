@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.108 2010/05/11 01:43:28 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.109 2010/05/13 21:42:02 kent Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -1359,7 +1359,6 @@ preDrawContainer->preDraw = preDraw;
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 	preDrawContainer, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
-
 freeMem(preDrawContainer);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
@@ -1385,7 +1384,7 @@ if (wigCart->yLineOnOff == wiggleYLineMarkOn)
     ++numberOfLines;
 
 if (withCenterLabels)
-	centerOffset = fontHeight;
+    centerOffset = fontHeight;
 
 /*	We only do Dense and Full	*/
 if (tg->limitedVis == tvDense)
