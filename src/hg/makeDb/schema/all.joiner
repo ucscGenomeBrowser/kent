@@ -2958,6 +2958,7 @@ tablesIgnored $gbd
     NIAGene
     ancientRepeat
     axtInfo
+    bam%
     blatFr1
     chromInfo
     cpgIsland
@@ -3234,6 +3235,10 @@ tablesIgnored $hg
     mammalPsg
     nimhBipolarUs
     nimhBipolarDe
+    ntHumChimpCodingDiff
+    ntMito
+    ntOoaHaplo
+    ntSss%
     perlegen
     pga
     pgVenter
