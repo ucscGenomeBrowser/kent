@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.484 2010/05/10 21:40:23 kent Exp $";
+#	"$Id: trackDb.ra,v 1.485 2010/05/14 01:48:35 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -238,9 +238,6 @@ visibility hide
 #maxGapToFill 10000
 #minMax 0,1
 
-
-track mrna override
-visibility dense
 
 track haplotypePos
 shortLabel $Organism hapPos
@@ -3294,10 +3291,12 @@ longLabel Integrated Regulation Track Based on ENCODE Data
 group regulation
 
     track wgEncodeRegMarkEnhancer
+    # compositeTrack on
     container multiWig
+    noInherit on
     type bigWig 0 40
     superTrack wgEncodeReg full
-    aggregate rainbowOverlay
+    aggregate solidOverlay
     shortLabel Enhancer H3K4Me1
     longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
     configurable on
@@ -3326,7 +3325,7 @@ group regulation
 
 	track jkEnhHsmm
 	shortLabel	HSMM
-	longLabel Enhancer mark (H3K4Me1) on Xyz ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on HSMM ES cells from ENCODE 
 	parent wgEncodeRegMarkEnhancer
 	color 128,255,159
 
@@ -3354,16 +3353,83 @@ group regulation
 	parent wgEncodeRegMarkEnhancer
 	color 255,128,223
 
+
     track wgEncodeRegMarkPromoter
-    table cpgIslandExt
-    superTrack wgEncodeReg pack
+    container multiWig
+    superTrack wgEncodeReg full
+    aggregate transparentOverlay
     shortLabel Promoter H3K4Me3
-    longLabel Promoter histone mark (H3K4Me3) on ....
-    visibility pack
-    color 0,100,0
-    altColor 128,228,128
-    type bed 4 +
-    priority 1.5
+    longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    type wig 0 30000
+    viewLimits 0:40
+    configurable on
+    visibility full
+    maxHeightPixels 100:50:11
+    priority 1
+
+	track wgEncodeRegMarkPromoterGm12878
+        table wgEncodeBroadChipSeqSignalGm12878H3k4me3
+	shortLabel	Gm12878
+	longLabel Promoter mark (H3K4Me3) on Gm12878 cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 100593.50
+	color 255,128,128
+
+	track wgEncodeRegMarkPromoterH1hesc
+        table wgEncodeBroadChipSeqSignalH1hescH3k4me3
+	shortLabel	H1 ES
+	longLabel Promoter mark (H3K4Me3) on H1 ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 12434.00
+	color 255,223,128
+
+	track wgEncodeRegMarkPromoterHmec
+        table wgEncodeBroadChipSeqSignalHmecH3k4me3
+	shortLabel	HMEC
+	longLabel Promoter mark (H3K4Me3) on HMEC ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 15838.00
+	color 191,255,128
+
+	track wgEncodeRegMarkPromoterHsmm
+        table wgEncodeBroadChipSeqSignalHsmmH3k4me3
+	shortLabel	HSMM
+	longLabel Promoter mark (H3K4Me3) on HSMM ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 42282.00
+	color 128,255,159
+
+	track wgEncodeRegMarkPromoterHuvec
+        table wgEncodeBroadChipSeqSignalHuvecH3k4me3
+	shortLabel	HUVEC
+	longLabel Promoter mark (H3K4Me3) on HUVEC ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 9954.75
+	color 128,255,255
+
+	track wgEncodeRegMarkPromoterK562
+        table wgEncodeBroadChipSeqSignalK562H3k4me3
+	shortLabel	K562
+	longLabel Promoter mark (H3K4Me3) on K562 ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 16145.25
+	color 128,159,255
+
+	track wgEncodeRegMarkPromoterNhek
+        table wgEncodeBroadChipSeqSignalNhekH3k4me3
+	shortLabel	NHEK
+	longLabel Promoter mark (H3K4Me3) on NHEK ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 12229.50
+	color 191,128,255
+
+	track wgEncodeRegMarkPromoterNhlf
+        table wgEncodeBroadChipSeqSignalNhlfH3k4me3
+	shortLabel	NHLF
+	longLabel Promoter mark (H3K4Me3) on NHLF ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 28587.00
+	color 255,128,223
 
 
     track wgEncodeRegDnaseClustered
@@ -3511,6 +3577,7 @@ priority 103.29
         subGroups view=phyloP clade=mammal
         shortLabel Mammal Cons2
         longLabel Placental Mammal Basewise Conservation by PhyloP V2
+	visibility hide
         noInherit on
         configurable on
         type wig -14.12 3.15
