@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1621 2010/05/14 16:08:51 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1622 2010/05/14 21:38:54 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3470,6 +3470,20 @@ genericHeader(tdb, NULL);
 printTrackHtml(tdb);
 }
 
+static void genericContainerClick(struct sqlConnection *conn, char *containerType,
+	struct trackDb *tdb, char *item, char *itemForUrl)
+/* Print page for container of some sort. */
+{
+if (sameString(containerType, "multiWig"))
+    {
+    errAbort("It's suprising that multiWig container gets to hgc. It should go to hgTrackUi.");
+    }
+else
+    {
+    errAbort("Unrecognized container type %s for %s", containerType, tdb->track);
+    }
+}
+
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -3478,7 +3492,8 @@ char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-char *imagePath = trackDbSettingClosestToHome(tdb, ITEM_IMAGE_PATH);
+char *imagePath = trackDbSetting(tdb, ITEM_IMAGE_PATH);
+char *container = trackDbSetting(tdb, "container");
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -3486,18 +3501,20 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 headerItem = cloneString(item);
 
-if (wordCount > 0)
+/* Suppress printing item name in page header, as it is not informative for these types of
+ * tracks... */
+if (container == NULL && wordCount > 0)
     {
     type = words[0];
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "netAlign")
 	|| sameString(type, "encodePeak"))
-        /* suppress printing item name in page header, as it is
-           not informative for these track types */
         headerItem = NULL;
     else if ((sameString(type, "narrowPeak") || sameString(type, "broadPeak") || sameString(type, "gappedPeak"))
 	     && headerItem && sameString(headerItem, "."))
 	headerItem = NULL;
     }
+
+/* Print header. */
 genericHeader(tdb, headerItem);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (plus != NULL)
@@ -3505,7 +3522,11 @@ if (plus != NULL)
     fputs(plus, stdout);
     }
 
-if (wordCount > 0)
+if (container != NULL)
+    {
+    genericContainerClick(conn, container, tdb, item, itemForUrl);
+    }
+else if (wordCount > 0)
     {
     type = words[0];
     if (sameString(type, "bed"))
