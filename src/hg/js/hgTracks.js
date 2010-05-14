@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.67 2010/05/06 18:53:34 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.68 2010/05/14 17:33:19 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -710,13 +710,19 @@ this.each(function(){
 function imgTblSetOrder(table)
 {
 // Sets the 'order' value for the image table after a drag reorder
-    $("input[name$='_imgOrd']").each(function (i) {
-        var tr = $(this).parents('tr');
-        if($(this).val() != $(tr).attr('rowIndex')) {
-            //warn('Reordered '+$(this).val() + " to "+$(tr).attr('rowIndex'));
-            $(this).val($(tr).attr('rowIndex'));
+    var names = [];
+    var values = [];
+    $("tr.imgOrd").each(function (i) {
+        if ($(this).attr('abbr') != $(this).attr('rowIndex').toString()) {
+            $(this).attr('abbr',$(this).attr('rowIndex').toString());
+            var name = this.id.substring('tr_'.length) + '_imgOrd';
+            names.push(name);
+            values.push($(this).attr('abbr'));
         }
     });
+    if(names.length > 0) {
+        setCartVars(names,values);
+    }
 }
 
 function imgTblZipButtons(table)

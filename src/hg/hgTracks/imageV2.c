@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.27 2010/05/11 01:43:27 kent Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.28 2010/05/14 17:31:54 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1594,8 +1594,8 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
     //if(verbose && imgTrack->order == 3)
     //    imgTrackShow(NULL,imgTrack,0);
-    hPrintf("<TR id='tr_%s'%s>\n",trackName,
-        (imgTrack->reorderable?" class='trDraggable'":" class='nodrop nodrag'"));
+    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s'>\n",trackName,imgTrack->order,
+        (imgTrack->reorderable?" trDraggable":" nodrop nodrag"));
 
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
@@ -1614,7 +1614,6 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 
     // Main/Data image region
     hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
-    hPrintf("  <input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
     // centerLabel
     if(imgTrack->showCenterLabel)
         {
