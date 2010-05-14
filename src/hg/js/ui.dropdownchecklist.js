@@ -292,16 +292,21 @@
             var allSelected = null != firstSelect && firstSelect.attr("selected");
             var selectOptions = sourceSelect.find("option");
             var text = self._formatText(selectOptions, options.firstItemChecksAll, allSelected);
+            var newheight = 20;
             var controlLabel = controlWrapper.find(".multiCb-text");
-            controlLabel.html(text);
-            //controlLabel.attr("title", text);
-            var newheight = text.split('<BR>').length * 20;
+            if(text.length == 0) {
+                controlLabel.html("Select ...");
+                controlLabel.attr("title", "Need to make a selection.");
+                controlLabel.css('color','#AA0000');
+            } else  {
+                controlLabel.html(text);
+                controlLabel.attr("title", "Click to change selection.");
+                newheight = text.split('<BR>').length * 20;
+                controlLabel.css('color','black');
+            }
             controlLabel.css('height',newheight);
-            controlLabel.css('color','black');
             var controlContainer = controlLabel.parent();
-
             controlContainer.css('height',newheight); // Why is this needed?
-            //alert($(controlContainer).attr('type'));
         },
         // Updates the text shown in the control depending on the checked (selected) items
         _defaultControlText: function() {
@@ -329,6 +334,7 @@
                 if (text.length > 0) {
                     text = text.substring(0, text.length - '<BR>'.length);
                 }
+
             }
             return text;
         },
