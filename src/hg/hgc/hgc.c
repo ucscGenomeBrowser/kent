@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1620 2010/05/11 01:43:28 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1621 2010/05/14 16:08:51 braney Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1324,7 +1324,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
-	printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr><tr><td> %s </td><td> %s </td></tr></table>", row[hasBin+6], row[hasBin+7]);
+	printf("<br><B>Sequence 1:</B> %s<br><B>Sequence 2:</B> %s<br>\n",row[hasBin+6], row[hasBin+7]);
     printCompareGenomeLinks(tdb,bed->name);
     }
 sqlFreeResult(&sr);
