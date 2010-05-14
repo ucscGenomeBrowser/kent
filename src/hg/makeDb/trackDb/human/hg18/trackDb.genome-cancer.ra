@@ -5,7 +5,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings COSMICsummaryGroups
@@ -18,7 +18,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings CGHBreastCancerStanfordGroups
@@ -31,7 +31,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings vantVeerExpGroups
@@ -44,7 +44,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings vijver2002Groups
@@ -57,7 +57,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings desmedt2007Groups
@@ -70,7 +70,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings lajosJCO2006Groups
@@ -83,7 +83,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.2
 groupings ucsfNeveExpGroups
@@ -96,7 +96,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
@@ -110,7 +110,7 @@ longLabel Lymph-Node-Negative Breast Cancer Gene Exp. (Wang et al. Lancet 2005)
 group cancerGenomics
 priority 44
 visibility hide
-logicalDb localDb
+dbProfile cancerPubDb
 type expRatio
 expScale 2.0
 expStep 0.2
@@ -123,7 +123,7 @@ longLabel Breast Cancer Gene Expression (Chin et al. Cancer Cell 2006)
 group cancerGenomics
 priority 45
 visibility pack
-logicalDb localDb
+dbProfile cancerPubDb
 type expRatio
 expScale 2.0
 expStep 0.2
@@ -137,7 +137,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.2
 groupings chinSFGenomeBio2007Groups
@@ -149,7 +149,7 @@ longLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
 group cancerGenomics
 priority 46
 visibility hide
-logicalDb localDb
+dbProfile cancerPubDb
 type expRatio
 expScale 2.0
 expStep 0.2
@@ -163,7 +163,7 @@ group cancerGenomics
 priority 45.1
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings maser22KcghGroups
@@ -176,7 +176,7 @@ group cancerGenomics
 priority 45.2
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings maser44BcghGroups
@@ -189,7 +189,7 @@ group cancerGenomics
 priority 45.3
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings maser244AcghGroups
@@ -202,7 +202,7 @@ group cancerGenomics
 priority 46.1
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings lin2008ExpGroups
@@ -215,7 +215,7 @@ group cancerGenomics
 priority 46.2
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings lin2008cnv50KGroups
@@ -228,7 +228,7 @@ group cancerGenomics
 priority 46.3
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings lin2008cnv250KGroups
@@ -241,7 +241,7 @@ group cancerGenomics
 priority 47.1
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 2.0
 expStep 0.1
 groupings weir2007Groups
@@ -255,7 +255,7 @@ longLabel TCGA GBM mskcc CGH array 244A
 group cancerGenomics
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 0.5
 expStep 0.05
 groupings mskccCGHGroups
@@ -267,7 +267,7 @@ longLabel TCGA GBM harvard CGH array 244A
 group cancerGenomics
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
@@ -279,7 +279,7 @@ longLabel TCGA GBM UNC Agilent Expression array 4x44k
 group cancerGenomics
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.1  
 groupings uncAgiExpGroups
@@ -291,7 +291,7 @@ longLabel TCGA GBM Broad GBM Affymetrix Expression array U133A
 group cancerGenomics
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 3.0
 expStep 0.2
 groupings broadGBMexp_affyGroups
@@ -304,7 +304,7 @@ group cancerGenomics
 priority 44
 visibility hide
 type expRatio
-logicalDb localDb
+dbProfile cancerPubDb
 expScale 1.0
 expStep 0.2
 groupings uncHmiRNAGroups
@@ -316,7 +316,7 @@ longLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
 group cancerGenomics
 priority 47
 visibility hide
-logicalDb localDb
+dbProfile cancerPubDb
 type expRatio
 expScale 2.0
 expStep 0.2
@@ -326,7 +326,7 @@ maxItems 2000
 track CaMPScoreExternal
 shortLabel Colon CaMP Score (Wood et al. 2007)
 longLabel Color CaMP Score External Science (Wood et al. Science 2007)
-logicalDb localDb
+dbProfile cancerPubDb
 group cancerGenomics
 visibility hide
 type bed
