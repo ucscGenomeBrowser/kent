@@ -142,18 +142,6 @@ expScale 2.0
 expStep 0.1
 groupings maserMouseCGHGroups
 
-track maserAllCGH
-shortLabel Hs Vs. Mm CGH (Maser et. al 2007)
-longLabel Human Multi-tissue Cancer vs. TKO Lymphoma Mice CGH (Maser et. al 2007)
-group cancerGenomics
-priority 45.3
-visibility hide
-type expRatio
-dbProfile cancerPubDb
-expScale 2.0
-expStep 0.1
-groupings maserAllCGHGroups
-
 track ucsfChinCGH2006
 shortLabel  Breast Cancer CGH (Chin et. al Cancer Cell 2006)
 longLabel Breast Cancer CGH (Chin et. al. Cancer Cell 2006)
@@ -483,17 +471,17 @@ expStep 0.05
 groupings mskccCGHGroups
 maxItems 2000
 
-track harvardCGH
-shortLabel TCGA GBM Harvard CGH
-longLabel TCGA GBM harvard CGH array 244A 
-group cancerGenomics
-visibility hide
-type expRatio
-dbProfile cancerPubDb
-expScale 1.0
-expStep 0.1
-groupings harvardCGHGroups
-maxItems 2000
+#track harvardCGH
+#shortLabel TCGA GBM Harvard CGH
+#longLabel TCGA GBM harvard CGH array 244A 
+#group cancerGenomics
+#visibility hide
+#type expRatio
+#dbProfile cancerPubDb
+#expScale 1.0
+#expStep 0.1
+#groupings harvardCGHGroups
+#maxItems 2000
 
 track uncAgiExp
 shortLabel TCGA GBM UNC 4x44K Gene Exp.
