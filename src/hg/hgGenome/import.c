@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.19 2010/05/11 01:43:24 kent Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.20 2010/05/14 23:30:24 kent Exp $";
 
 /* from hgTables.c */
 
@@ -253,11 +253,6 @@ struct trackDb *track = NULL;
 
 if (name != NULL)
     {
-    /* getFullTrackList tweaks tdb->table mrna to all_mrna, so in
-     * case mrna is passed in (e.g. from hgc link to schema page)
-     * tweak it here too: */
-    if (sameString(name, "mrna"))
-        name = "all_mrna";
     track = findTrackInGroup(name, trackList, group);
     }
 if (track == NULL)
@@ -281,19 +276,8 @@ return track;
 struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(database, NULL), *tdb, *next;
+struct trackDb *list = hTrackDb(database, NULL);
 struct customTrack *ctList, *ct;
-
-
-for (tdb = list; tdb != NULL; tdb = next)
-    {
-    next = tdb->next;
-    /* Change the mrna track to all_mrna to avoid confusion elsewhere. */
-    if (sameString(tdb->table, "mrna"))
-        {
-        tdb->table = cloneString("all_mrna");
-        }
-    }
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -398,7 +382,7 @@ if (useJoiner)
     }
 
 name = slNameNew(trackTable);
-if (!tdbIsComposite(track))
+if (!tdbIsComposite(track) && !trackDbLocalSetting(track, "container"))
     /* suppress for composite tracks -- only the subtracks have tables */
     slAddHead(&nameList, name);
 
@@ -436,7 +420,6 @@ else
 void initGroupsTracksTables()
 /* Get list of groups that actually have something in them. */
 {
-
 fullTrackList = getFullTrackList();
 
 curTrack = findSelectedTrack(fullTrackList, NULL, hggTrack);
