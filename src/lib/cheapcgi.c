@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.134 2010/04/21 20:29:40 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.135 2010/05/14 20:11:07 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1854,15 +1854,11 @@ void commonCssStyles()
     //printf(".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
     printf(".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN);
     printf(".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);
-    //printf(".slant90 {display:block; line-height:80%%; -moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); progid:DXImageTransform.Microsoft.BasicImage(rotation=3);writing-mode}\n");
-    printf(".slantUp {-moz-transform:rotate(-75deg); -moz-transform-origin: bottom left; -webkit-transform:rotate(-75deg); -webkit-transform-origin: bottom left; white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);writing-mode}\n");
-    printf(".slantDn {-moz-transform:rotate( 75deg); -moz-transform-origin: top left;    -webkit-transform:rotate( 75deg); -webkit-transform-origin: top left;    white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);writing-mode}\n");
-    //printf(".slant90 {writing-mode: bt-lr;}\n");
+    //printf(".slantUp {-moz-transform:rotate(-75deg); -moz-transform-origin: bottom left; -webkit-transform:rotate(-75deg); -webkit-transform-origin: bottom left; white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
+    //printf(".slantDn {-moz-transform:rotate( 75deg); -moz-transform-origin: top left;    -webkit-transform:rotate( 75deg); -webkit-transform-origin: top left;    white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
     //printf(".rotate90 {-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);}\n");
     printf(".hintCol {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
     printf(".hintRow {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
-    //printf(".hintCol {font-size:70%%; line-height:80%%; border-style: hidden inset hidden; border-width: thin; background-color:%s;}\n",COLOR_BG_DEFAULT);
-    //printf(".hintCol {font-size:70%%; line-height:80%%; border-style: hidden inset hidden; border-width: thin; border-color: %s; background-color:%s;}\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
     //printf(".halfVis {opacity: 0.5; filters.alpha.opacity=50;}\n");   // not ready for prime time because ff and ie can't agree
     puts("</style>");
 }
