@@ -57,21 +57,19 @@ endif
 ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p /usr/local/apache/htdocs/admin/hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
 
-
-# OLD WAY NOT NEEDED
-#echo
-#echo "Push request:"
-#echo "Please push from dev --> hgdownload "
-#echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
-#echo
-#echo "reason: (describe here)"
-
 echo
-echo "NOTE:  If this is an update of hgcentral that is not part of a new"
-echo "build, also ask for the relevant tables to be pushed to hgdownload"
-echo "for mirror site access. For example:"
-echo "  Please also push the hgcentral/blatServers table"
-echo "  from hgnfs1 --> hgdownload."
+echo "A new hgcentral.sql file should now be present at:"
+echo "  http://hgdownload.cse.ucsc.edu/admin/"
+echo
+echo "If it is not, you can request a push of the file:"
+echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
+echo "  from hgwdev --> hgdownload "
+echo
+echo "NOTE:  Some mirrors like to get hgcentral tables via ftp or rsync"
+echo "from hgdownload.cse.ucsc.edu/mysql/hgcentral/ instead of from the"
+echo "hgcentral.sql file. To make a table in hgcentral available there"
+echo "right now, ask for it to be pushed from hgnfs1 --> hgdownload. (Or"
+echo "just wait for the automatic weekly rsync.)"
 echo
 
 exit 0
