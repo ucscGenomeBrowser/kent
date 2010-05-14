@@ -810,7 +810,7 @@ void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
 	FILE *f, struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on fields of a single table. */
 
-void doTabOutCustomTracks(char *db, struct trackDb *track, struct sqlConnection *conn,
+void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
 	char *fields, FILE *f);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */

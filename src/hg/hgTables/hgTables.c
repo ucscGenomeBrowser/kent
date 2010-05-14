@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.195 2010/05/11 23:46:27 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.196 2010/05/14 23:32:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -722,6 +722,12 @@ for (track = trackList; track != NULL; track = track->next)
     if (sameString(name, track->track) &&
        (group == NULL || sameString(group->name, track->grp)))
        return track;
+    if (track->subtracks)
+        {
+	struct trackDb *subtrack = findTrackInGroup(name, track->subtracks, group);
+	if (subtrack != NULL)
+	    return subtrack;
+	}
     }
 return NULL;
 }
@@ -1262,8 +1268,7 @@ if (hIsBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
-    struct trackDb *track = findTrack(table, fullTrackList);
-    doTabOutCustomTracks(db, track, conn, fields, f);
+    doTabOutCustomTracks(db, table, conn, fields, f);
     }
 else
     doTabOutDb(db, db, table, table, f, conn, fields);
