@@ -59,6 +59,10 @@ defaultLinkedTables genePred
 dimensionAchecked *
 dimensionBchecked *
 dimensionCchecked *
+dimensionDchecked *
+dimensionEchecked *
+dimensionFchecked *
+dimensionGchecked *
 dimensionZchecked *
 dimensions *
 directUrl *
@@ -76,6 +80,7 @@ expTable bed expRatio
 extTable *
 filePos *
 filterBy genePred bed
+filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 frames wigMaf
 gClass_2way_consensus_pseudogene genePred

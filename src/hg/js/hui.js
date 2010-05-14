@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.52 2010/04/30 00:27:21 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.53 2010/05/14 18:34:39 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -156,7 +156,7 @@ function matSetMatrixCheckBoxes(state)
     }
     if(state) { // If clicking [+], further limit to only checked ABCs
         var classes = matAbcCBclasses('unchecked');
-        subCDs = objsFilterByClasses(subCDs,false,classes);  // remove unchecked abcCB classes
+        subCDs = objsFilterByClasses(subCDs,"not",classes);  // remove unchecked abcCB classes
     }
     $( subCDs ).each( function (i) {
         this.checked = state;
@@ -166,6 +166,63 @@ function matSetMatrixCheckBoxes(state)
     matSubCBsSelected();
     //jQuery(this).css('cursor', '');
     return true;
+}
+
+function filterCompositeSelectionChanged(obj)
+{ // filterComposite:onchange Set subtrack selection based upon the changed filter
+
+    if($(obj).val() != undefined
+    && $(obj).val().toString().indexOf("All,") != -1) {
+        $(obj).val("All");
+        $(obj).attr('selectedIndex',0);
+    }
+    // Get list of values which should match classes of subtracks
+    var classes = $(obj).val();  // It is already an array!
+    if(classes == null) { // Nothing is selected.  Mark with "[empty]"
+        classes = "";
+        setCartVar($(obj).attr('name'),"[empty]");
+        //$(obj).val("[empty]");
+    }
+
+    // For all subtracks that DO NOT match selected classes AND are checked: uncheck
+    var subCBs = $("input.subCB");
+    var subCBsToUnselect = subCBs;
+    if (classes.length > 0 && classes[0] != "All")
+        subCBsToUnselect = objsFilterByClasses(subCBsToUnselect,"not",classes);  // remove unchecked classes
+    if (subCBsToUnselect.length > 0)
+        subCBsToUnselect = $(subCBsToUnselect).filter(":checked");
+    if (subCBsToUnselect.length > 0)
+        subCBsToUnselect.each( function (i) { matSubCBcheckOne(this,false); });
+
+    // For all subtracks that DO match a selected class AND are NOT checked:
+    //  Figure out if other selection criteria match.  If so: check
+    //var subCBs = $("input.subCB");
+    var subCBsToSelect = subCBs;
+    if(classes.length > 0) {
+        if(classes.length > 0 && classes[0] != "All")
+            subCBsToSelect = objsFilterByClasses(subCBsToSelect,"or",classes);     // Keep any that should be selected
+        // Now deal with all the others
+        if (subCBsToSelect.length > 0) {
+            var filterComp = $("select.filterComp").not("[name='"+obj.name+"']"); // Exclude self from list
+            for(var ix=0;ix<filterComp.length && subCBsToSelect.length > 0;ix++) {
+                var filterClasses = $(filterComp[ix]).val();
+                //alert(filterClasses);
+                if(filterClasses.length > 0 && filterClasses[0] != "All")
+                    subCBsToSelect = objsFilterByClasses(subCBsToSelect,"or",filterClasses);     // Keep any that should be selected
+                else if(filterClasses.length == 0)
+                    subCBsToSelect.length = 0;
+            }
+            //alert("filterComp:"+filterComp.length);
+        }
+        // What to do now?
+        if (subCBsToSelect.length > 0)
+            subCBsToSelect = $(subCBsToSelect).not(":checked");
+        if (subCBsToSelect.length > 0)
+            subCBsToSelect.each( function (i) { matSubCBcheckOne(this,true); });
+    }
+    //alert("Subtracks:"+subCBs.length+"  To be selected:"+subCBsToSelect.length+"  unselected:"+subCBsToUnselect.length)
+    matSubCBsSelected();
+    //$(obj).children("option:even").disabled = true;
 }
 
 ///////////// CB support routines ///////////////
@@ -192,7 +249,7 @@ function matSubCBsCheck(state)
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
         var classes = matAbcCBclasses('unchecked');
-        subCBs = objsFilterByClasses(subCBs,false,classes);  // remove unchecked abcCB classes
+        subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
         if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
         } else {//if(arguments.length == 2) { // Requested dim ABC (or only 1 dimension so this code is harmless)
@@ -266,7 +323,7 @@ function matChkBoxNormalize(matCB)
     var subCBs = $("input.subCB").filter(classes); // All subtrack CBs that match matrix CB
 
     if(arguments.length > 1 && arguments[1].length > 0) { // dim ABC NOT classes
-        subCBs = objsFilterByClasses(subCBs,false,arguments[1]);
+        subCBs = objsFilterByClasses(subCBs,"not",arguments[1]);
     }
 
     if(subCBs.length > 0) {
@@ -353,9 +410,11 @@ function objsFilterByClasses(objs,keep,classes)
 {
 // Accepts an obj list and an array of classes, then filters successively by that list
     if( classes != undefined && classes.length > 0 ) {
-        if(keep) {
+        if(keep == "and") {
             objs = $( objs ).filter( '.' + classes.join('.') ); // filter('class1.class2') is same as filter('.class1').filter('.class2')
-        } else {
+        } else if(keep == "or") {
+            objs = $( objs ).filter( '.' + classes.join(',.') ); // filter('class1.class2') is same as filter('.class1').filter('.class2')
+        } else if(keep == "not") {
             for(var cIx=classes.length-1;cIx>-1;cIx--) {
                 objs = $( objs ).not( '.' + classes[cIx] );   // not('class1.class2') is different from not('.class1').not('.class2')
             }
@@ -404,7 +463,7 @@ function matAbcCBclasses(limitTo)
 function matSubCBsSelected()
 {
 // Displays visible and checked track count
-    var counter = $('#subCBcount');
+    var counter = $('.subCBcount');
     if(counter != undefined) {
         var subCBs =  $("input.subCB");
         $(counter).text($(subCBs).filter(":enabled:checked").length + " of " +$(subCBs).length+ " selected");
@@ -974,8 +1033,17 @@ function multiSelectLoad(div,sizeWhenOpen)
     $(sel).show();
 }
 
-function multiSelectBlur(obj)
+function multiSelectCollapseToSelectedOnly(obj)
 {
+    var items = $(obj).children("option");
+    if(items.length > 0) {
+        $(items).not(":selected").hide();
+    }
+    $(obj).attr("size",$(items).filter(":selected").length);
+}
+
+function multiSelectBlur(obj)
+{ // Closes a multiselect and colapse it to a single option when appropriate
     if($(obj).val() == undefined || $(obj).val() == "") {
         $(obj).val("All");
         $(obj).attr('selectedIndex',0);
@@ -983,6 +1051,9 @@ function multiSelectBlur(obj)
     //if(obj.value == "All") // Close if selected index is 1
     if($(obj).attr('selectedIndex') == 0) // Close if selected index is 1
         $(obj).attr('size',1);
+    else
+        multiSelectCollapseToSelectedOnly(obj);
+
     /*else if($.browser.msie == false && $(obj).children('option[selected]').length==1) {
         var ix;
         for(ix=0;ix<obj.options.length;ix++) {
@@ -997,17 +1068,37 @@ function multiSelectBlur(obj)
     }*/
 }
 
-function multiSelectClick(obj,sizeWhenOpen)
-{
-    if($(obj).attr('size') == 1)
-        $(obj).attr('size',sizeWhenOpen);
-    else if($(obj).attr('selectedIndex') == 0)
-        $(obj).attr('size',1);
+function multiSelectFocus(obj,sizeWhenOpen)
+{ // Opens multiselect whenever it gets focus
+    if($(obj).attr('size') != sizeWhenOpen) {
+    $(obj).children("option").show();
+    $(obj).attr('size',sizeWhenOpen);
+    //warn("Selected:"+$(obj).children("option").filter(":selected").length);
+    }
+//return false;
 }
+
+function multiSelectClick(obj,sizeWhenOpen)
+{ // Opens multiselect whenever it is clicked
+    if($(obj).attr('size') != sizeWhenOpen) {
+        multiSelectFocus(obj,sizeWhenOpen);
+        //$(obj).children("option").show();
+        //$(obj).attr('size',sizeWhenOpen);
+        return false;
+    } else if($(obj).attr('selectedIndex') == 0)
+        $(obj).attr('size',1);
+return true;
+}
+
 
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
+    //jQuery.each(jQuery.browser, function(i, val) {
+    //    if(val) {
+    //        browser = i;
+    //    }
+    //});
     //matInitializeMatrix();
     //$("div.multiSelectContainer").each( function (i) {
     //    var sel = $(this).children("select:first");
@@ -1030,4 +1121,6 @@ $(document).ready(function()
         );
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
+
+    $('.filterComp').dropdownchecklist({ firstItemChecksAll: true, emptyText: 'Please select ...' });
 });
