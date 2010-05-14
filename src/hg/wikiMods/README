@@ -1,4 +1,7 @@
 
+Fetch MediaWiki version 1.13.0 from:
+http://dumps.wikimedia.org/mediawiki/1.13/mediawiki-1.13.0.tar.gz
+
 The files:
 
 SpecialUserloginUCSC.php
