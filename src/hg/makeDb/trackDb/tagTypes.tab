@@ -54,6 +54,7 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
+dbProfile *
 defaultGeneTracks bed
 defaultLinkedTables genePred
 dimensionAchecked *
