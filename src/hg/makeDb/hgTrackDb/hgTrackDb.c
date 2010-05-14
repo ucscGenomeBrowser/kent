@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.69 2010/05/12 06:52:38 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.70 2010/05/14 23:31:04 kent Exp $";
 
 
 void usage()
@@ -770,7 +770,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	else
 	    {
-	    updateBigTextField(conn,  trackDbName, "tableName", td->table, "html", td->html);
+	    updateBigTextField(conn,  trackDbName, "tableName", td->track, "html", td->html);
 	    }
 	if (td->settingsHash != NULL)
 	    {
