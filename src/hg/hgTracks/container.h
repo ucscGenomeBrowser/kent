@@ -9,5 +9,13 @@ void makeContainerTrack(struct track *track, struct trackDb *tdb);
 void multiWigContainerMethods(struct track *track);
 /* Override general container methods for multiWig. */
 
+void containerLoadItems(struct track *track);
+/* containerLoadItems - call load routine on all children. */
+
+void containerDrawItems(struct track *track, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw items in container. */
+
 #endif /* CONTAINER_H */
 

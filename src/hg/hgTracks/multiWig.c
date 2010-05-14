@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "dystring.h"
 #include "hdb.h"
 #include "hgTracks.h"
 #include "container.h"
@@ -38,13 +39,13 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    subtrack->lineHeight = tg->lineHeight;
 	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
 	if (!overlay)
-	    {
-	    y += height;
-	    y += 1;
-	    }
+	    y += height + 1;
 	hvGfxUnclip(hvg);
 	}
     }
+char *url = trackUrl(tg->track, chromName);
+mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, tg->track, NULL,
+	      url, TRUE, NULL);
 }
 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
@@ -69,6 +70,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    }
 	}
     }
+tg->height = totalHeight;
 return totalHeight;
 }
 
@@ -122,16 +124,26 @@ else
 	    wigLeftAxisLabels(subtrack, seqStart, seqEnd, hvg, xOff, y, width, height, withCenterLabels,
 	    	font, subtrack->ixColor, vis, subtrack->shortLabel, subtrack->graphUpperLimit,
 		subtrack->graphLowerLimit, TRUE);
-	    y += height;
-	    y += 1;
+	    y += height+1;
 	    }
 	}
+    }
+}
+
+void multiWigLoadItems(struct track *track)
+{
+containerLoadItems(track);
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    subtrack->mapsSelf = FALSE;	/* Round about way to tell wig not to do own mapping. */
     }
 }
 
 void multiWigContainerMethods(struct track *track)
 /* Override general container methods for multiWig. */
 {
+track->loadItems = multiWigLoadItems;
 track->totalHeight = multiWigTotalHeight;
 track->drawItems = multiWigDraw;
 track->drawLeftLabels = multiWigLeftLabels;

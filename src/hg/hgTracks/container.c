@@ -11,8 +11,8 @@
 #include "container.h"
 
 
-static void containerLoad(struct track *track)
-/* containerLoad - call load routine on all children. This one is generic for all containers. */
+void containerLoadItems(struct track *track)
+/* containerLoadItems - call load routine on all children. */
 {
 struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -27,7 +27,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     subtrack->freeItems(subtrack);
 }
 
-static void containerDraw(struct track *track, int seqStart, int seqEnd,
+void containerDrawItems(struct track *track, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw items in container. */
@@ -38,7 +38,8 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
-	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, 
+		vis);
 	y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
 	}
     }
@@ -81,9 +82,9 @@ for (subtdb = tdb->subtracks; subtdb != NULL; subtdb = subtdb->next)
 slSort(&track->subtracks, trackPriCmp);
 
 /* Set methods that may be shared by all containers. */
-track->loadItems = containerLoad;
+track->loadItems = containerLoadItems;
 track->freeItems = containerFree;
-track->drawItems = containerDraw;
+track->drawItems = containerDrawItems;
 track->totalHeight = containerTotalHeight;
 
 /* Set methods specific to containers. */
