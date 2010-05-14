@@ -28663,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.418 2010/05/13 00:13:15 hartera Exp $
+# $Id: hg18.txt,v 1.419 2010/05/14 20:47:06 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28711,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.418 2010/05/13 00:13:15 hartera Exp $
+# $Id: hg18.txt,v 1.419 2010/05/14 20:47:06 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -30107,3 +30107,23 @@ nohup retroFinder-1.16/scripts/ucscRetroStep5.sh DEF
 nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
 #add ucscRetroAli to trackDb.ra 
 
+#############################################################################
+# NEANDERTAL TRACKS (DONE 5/6/10 angie)
+    # Ed Green and Hernan Burbano contributed data for several tracks
+    # in advance of the publication in Science of the Neandertal genome
+    # sequence and analysis.  These tracks were built on a private,
+    # access-controlled server (genome-nt) and then transferred to hgwdev
+    # and quickly pushed to hgwbeta and RR when the embargo lifted.
+    # Full descriptions are in a separate file, hg18.nt.txt.
+    # Track tables, in case anybody searches for them in here:
+    # H-C Coding Diffs:	ntHumChimpCodingDiff
+    # Sel Swp Scan (S):	ntSssZScorePMVar
+    # 5% Lowest S:	ntSssTop5p
+    # S SNPs:	 	ntSssSnps 
+    # Cand. Gene Flow:	ntOoaHaplo
+    # Neandertal Cntgs:	bamAll bamFeld1 bamMez1 bamSid1253 bamVi33dot16 bamVi33dot25 bamVi33dot26
+    # Neandertal Seq:	bamSLFeld1 bamSLMez1 bamSLSid1253 bamSLVi33dot16 bamSLVi33dot25 bamSLVi33dot26 
+    # Modern Human Seq:	bamMMS4 bamMMS5 bamMMS6 bamMMS7 bamMMS8
+    # Neandertal Mito:	ntMito
+
+#############################################################################
