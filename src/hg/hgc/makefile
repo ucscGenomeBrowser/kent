@@ -6,10 +6,10 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgc
 
-O = $A.o bamClick.o bigBedClick.o cgapSageClick.o encodeClick.o expClick.o mafClick.o \
-	makeItemsClick.o hgdpClick.o regMotif.o wiggleClick.o retroClick.o \
-	lowelab.o rnaFoldClick.o transMapClick.o txCdsInfo.o \
-	ccdsClick.o mgcClick.o dbRIP.o wikiTrack.o virusClick.o parClick.o
+O = $A.o bamClick.o bigBedClick.o dbRIP.o ccdsClick.o cgapSageClick.o encodeClick.o expClick.o \
+	hgdpClick.o lowelab.o mafClick.o makeItemsClick.o mgcClick.o \
+	parClick.o peakClusters.o regMotif.o retroClick.o rnaFoldClick.o \
+	transMapClick.o txCdsInfo.o virusClick.o wiggleClick.o wikiTrack.o 
 
 include ../../inc/cgi_build_rules.mk
 

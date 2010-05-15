@@ -230,6 +230,9 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 	char *tfToConditionTable, char *conditionTable);
 /* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
 
+void doPeakClusters(struct trackDb *tdb, char *item);
+/* Display detailed info about a cluster of peaks from other tracks. */
+
 void doFlyreg(struct trackDb *tdb, char *item);
 /* flyreg.org: Drosophila DNase I Footprint db. */
 

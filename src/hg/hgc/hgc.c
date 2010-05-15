@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1622 2010/05/14 21:38:54 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1623 2010/05/15 21:03:21 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22804,6 +22804,10 @@ else if (sameWord(track, "transRegCodeProbe"))
     {
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
     	"transRegCodeCondition", "growthCondition");
+    }
+else if (sameWord(track, "wgEncodeRegDnaseClustered"))
+    {
+    doPeakClusters(tdb, item);
     }
 
 else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
