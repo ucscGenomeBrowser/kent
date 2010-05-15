@@ -377,7 +377,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
  * clump->tStart and clump->tEnd so that the coords are relative to that 
  * target sequence (not the collection of all target sequences). */
 
-#define gfVersion "34x7"	/* Current BLAT version number */
+#define gfVersion "34x8"	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.12 2009/12/07 18:24:00 galt Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.13 2010/05/15 06:28:15 galt Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -344,7 +344,6 @@ char *endDna = fDna + seq->size;
 char *fpPerfect = fPrimer + fPrimerSize - minPerfect;
 char *rpPerfect = rPrimer;
 char *fpMatch, *rpMatch;
-int sizeLeft;
 int goodSize = minGood - minPerfect;
 struct gfPcrOutput  *out;
 int matchSize;
@@ -355,36 +354,66 @@ for (;;)
     fpMatch = memMatch(fpPerfect, minPerfect, fDna, endDna - fDna);
     if (fpMatch == NULL)
         break;
-    sizeLeft = endDna - fpMatch;
     rDna = fpMatch;
     for (;;)
         {
-	int fPos, rPos, fGoodPos, rGoodPos;
+	int fPos, rPos, fGoodPos, rGoodPos, fTrim, rTrim;
 	rpMatch = memMatch(rpPerfect, minPerfect, rDna, endDna - rDna);
 	if (rpMatch == NULL)
 	    break;
 	fPos = fpMatch - (fPrimerSize - minPerfect) - seq->dna;
 	rPos = rpMatch + rPrimerSize - seq->dna;
+
+	/* deal with primers dangling off either end of the target sequence */
+	if (fPos < 0)
+	    {
+	    fTrim = 0 - fPos;
+	    fPos = 0;
+	    }
+	else
+	    fTrim = 0;
+
+	if (rPos > seq->size)
+	    {
+	    rTrim = rPos - seq->size;
+	    rPos = seq->size;
+	    }
+	else
+	    rTrim = 0;
+
 	fGoodPos = fpMatch - goodSize - seq->dna;
 	rGoodPos = rpMatch + minPerfect - seq->dna;
+
+	fGoodPos = max(fGoodPos, 0);
+	rGoodPos = min(rGoodPos, seq->size);
+
 	matchSize = rPos - fPos;
+
+	int fGoodSize = fGoodPos - fPos;
+	int rGoodSize = rPos - rGoodPos;
+	fGoodSize = min(fGoodSize, goodSize);
+	rGoodSize = min(rGoodSize, goodSize);
+
         if (rPos >= 0 && fPos >= 0 && fPos < seq->size && matchSize <= maxSize)
 	    {
 	    /* If matches well enough create output record. */
-	    if (goodMatch(seq->dna + fGoodPos, fpPerfect - goodSize, goodSize) &&
-	        goodMatch(seq->dna + rGoodPos, rpPerfect + minPerfect, goodSize))
+	    if (goodMatch(seq->dna + fGoodPos, fpPerfect - fGoodSize, fGoodSize) &&
+	        goodMatch(seq->dna + rGoodPos, rpPerfect + minPerfect, rGoodSize))
 		{
+
+		/* Truncate the copy of the primers going into the out-> record using rTrim and fTrim if needed. */
 		AllocVar(out);
 		out->name  = cloneString(pcrName);
-		out->fPrimer = cloneString(fPrimer);
-		out->rPrimer = cloneString(rPrimer);
-		reverseComplement(out->rPrimer, rPrimerSize);
+		out->fPrimer = cloneString(fPrimer + fTrim);
+		out->rPrimer = cloneStringZ(rPrimer, rPrimerSize - rTrim);
+		reverseComplement(out->rPrimer, rPrimerSize - rTrim);
 		out->seqName = cloneString(seqName);
 		out->seqSize = seqSize;
 		out->fPos = fPos + seqOffset;
 		out->rPos = rPos + seqOffset;
 		out->strand = strand;
 		out->dna = cloneStringZ(seq->dna + fPos, matchSize);
+		
 
 		/* Dealing with the strand of darkness....  Here we just have to swap
 		 * forward and reverse primers to flip strands, and reverse complement

@@ -8,6 +8,7 @@
        rather than just being good for stepSize 11.
      o (in 34x6) Fixed negative strand pcr psl output
      o (in 34x7) Made it check and error out if the same name is reused in the target database.
+     o (in 34x8) Truncate in output PCR primers that dangle off target chrom ends.
      
 
 34:
