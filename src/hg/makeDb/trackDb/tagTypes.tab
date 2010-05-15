@@ -7,6 +7,10 @@
 # subsequent words are types it is allowed in.  Wildcards are allowed in the types.
 # This file was generate initially with src/hg/oneShot/makeTrackDbTypeTags and then
 # edited lightly by hand.
+#
+# Note that type "customTracks" is used to reserve a symbol that can be in a
+# custom track track line.  It is easier if this shares the same symbold space
+# as trackDb.
 
 accession *
 aggregate bigWig wig bedGraph
@@ -22,8 +26,10 @@ baseColorUseCds bed psl genePred
 baseColorUseSequence *
 bedFilter bed
 bedNameLabel bed
+bigDataUrl customTracks
 blastRef psl
 boxedCfg *
+browserLines customTracks
 canPack *
 cdsDrawDefault psl bed genePred
 cdsDrawOptions psl
@@ -50,11 +56,13 @@ compositeTrack *
 configurable *
 container *
 controlledVocabulary *
+dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
 dbProfile *
+dbTrackType customTracks
 defaultGeneTracks bed
 defaultLinkedTables genePred
 dimensionAchecked *
@@ -79,10 +87,12 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
+fieldCount customTracks
 filePos *
 filterBy genePred bed
 filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
+firstItemPos customTracks
 frames wigMaf
 gClass_2way_consensus_pseudogene genePred
 gClass_Artifact bed genePred
@@ -122,6 +132,7 @@ gClass_main genePred
 gClass_putative genePred
 gainColor bed
 geneClasses bed genePred
+genome customTracks
 graphType bed5FloatScore bedGraph
 graphTypeDefault wig
 gridDefault bed bedGraph wig
@@ -131,12 +142,16 @@ hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
 html *
+htmlFile customTracks
+htmlUrl customTracks
 idInUrlSql altGraphX genePred
 idXref genePred
 indelDoubleInsert psl bam
 indelPolyA psl bam
 indelQueryInsert psl bam
 informant genePred
+initialPos customTracks
+inputType customTracks
 interTable encodeFiveC
 interTableKind encodeFiveC
 intronGap psl
@@ -144,6 +159,7 @@ irows wigMaf
 itemAttrTbl genePred
 itemBigImagePath bed
 itemClassTbl bed genePred
+itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
 itemRgb bedGraph bed
@@ -154,10 +170,12 @@ lossColor bed
 macaqueDb bed
 mafDot wigMaf
 mafDotDefault wigMaf
+mafFile customTracks
 mafTrack bed
 mapDispatcher expRatio
 matrix netAlign bed chain
 matrixHeader netAlign bed chain
+maxChromName customTracks
 maxHeightPixels *
 maxItems *
 maxLimit *
@@ -178,10 +196,12 @@ noInherit *
 noScoreFilter bedGraph bed
 notNCBI bed
 ococci bed
+offset customTracks
 oldToNew genePred
 onlyVisibility wigMafProt wigMaf bed
 orangDb bed
 origAssembly *
+origTrackLine customTracks
 otherDb *
 otherDbTable bed
 otherOrg netAlign chain
@@ -275,6 +295,7 @@ superTrack *
 symbolTable bed genePred
 thickDrawItem bed
 table *
+tdbType customTracks
 track *
 transMapGene psl
 transMapInfo psl
@@ -297,7 +318,9 @@ viewUi *
 visibility *
 visibilityViewDefaults *
 wgEncode *
+wibFile customTracks
 wigColorBy wig
+wigFile customTracks
 wiggle wigMaf
 windowingFunction *
 yalePseudoAssoc *
