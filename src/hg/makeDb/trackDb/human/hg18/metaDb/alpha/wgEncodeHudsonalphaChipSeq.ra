@@ -10065,7 +10065,7 @@ dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz
 grant Myers
-inputType GM12878/None/Input/PCR1x
+inputType K562/None/Input/PCR1x
 lab HudsonAlpha
 labVersion SL646
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sp1Pcr1x
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -1245899007
+# MAGIC: -1245899189
