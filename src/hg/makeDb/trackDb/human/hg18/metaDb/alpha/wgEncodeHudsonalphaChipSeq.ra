@@ -8836,6 +8836,29 @@ subId 67
 treatment None
 view RawData
 
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL516
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878InputPcr1x
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+subId 1191
+treatment None
+view RawData
+
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Irf4
 objType file
 antibody IRF4
@@ -8928,6 +8951,29 @@ subId 804
 treatment None
 view RawData
 
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x
+objType file
+antibody Pbx3
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL615
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3Pcr1x
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1191
+treatment None
+view RawData
+
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol24h8Pcr1x
 objType file
 antibody Pol2-4H8
@@ -8974,6 +9020,29 @@ subId 52
 treatment None
 view RawData
 
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x
+objType file
+antibody POU2F2
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL614
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pou2f2Pcr1x
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1191
+treatment None
+view RawData
+
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sin3ak20Pcr2x
 objType file
 antibody Sin3Ak-20
@@ -9004,19 +9073,20 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-17
-dateUnrestricted 2010-09-16
+dateResubmitted 2010-05-14
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-04-20
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
 grant Myers
 inputType GM12878/None/Input/PCR1x
 lab HudsonAlpha
-labVersion SL746
+labVersion SL612
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
 setType exp
-subId 830
+subId 1191
 treatment None
 view RawData
 
@@ -9040,6 +9110,52 @@ protocol PCR2x
 replicate 1
 setType exp
 subId 71
+treatment None
+view RawData
+
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x
+objType file
+antibody TAF1
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL288
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1Pcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 1191
+treatment None
+view RawData
+
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x
+objType file
+antibody TCF12
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL673
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12Pcr1x
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1191
 treatment None
 view RawData
 
@@ -9938,6 +10054,29 @@ subId 768
 treatment None
 view RawData
 
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x
+objType file
+antibody SP1
+cell K562
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL646
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sp1Pcr1x
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 1191
+treatment None
+view RawData
+
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1K562SrfPcr2x
 objType file
 antibody SRF
@@ -10397,6 +10536,29 @@ subId 67
 treatment None
 view RawData
 
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL517
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878InputPcr1x
+project wgEncode
+protocol PCR1x
+replicate 2
+setType input
+subId 1191
+treatment None
+view RawData
+
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Irf4
 objType file
 antibody IRF4
@@ -10512,6 +10674,29 @@ subId 806
 treatment None
 view RawData
 
+metaObject wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x
+objType file
+antibody Pbx3
+cell GM12878
+composite wgEncodeHudsonalphaChipSeq
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-05-14
+dateUnrestricted 2011-02-14
+fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz
+grant Myers
+inputType GM12878/None/Input/PCR1x
+lab HudsonAlpha
+labVersion SL647
+parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3Pcr1x
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 1191
+treatment None
+view RawData
+
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol24h8Pcr1x
 objType file
 antibody Pol2-4H8
@@ -10565,8 +10750,9 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-04-20
+dateResubmitted 2010-05-14
+dateSubmitted 2009-12-17
+dateUnrestricted 2010-09-16
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -10577,7 +10763,7 @@ project wgEncode
 protocol PCR1x
 replicate 2
 setType exp
-subId 880
+subId 1191
 treatment None
 view RawData
 
@@ -16382,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 522800921
+# MAGIC: -1245899007
