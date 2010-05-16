@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: regCluster.c,v 1.3 2010/05/05 00:50:37 kent Exp $";
+static char const rcsid[] = "$Id: regCluster.c,v 1.4 2010/05/16 21:41:42 kent Exp $";
 
 int clDims = 1;
 double clScoreScale = 1.0;
@@ -309,9 +309,11 @@ for (range = rangeList; range != NULL; range = range->next)
 	struct slRef *ref, *refList=cluster->itemRefList;
 	++clusterIx;
 	struct regItem *item = refList->val;
+	struct hash *uniqHash = hashNew(0);
 	for (ref = refList; ref != NULL; ref = ref->next)
 	    {
 	    item = ref->val;
+	    hashStore(uniqHash, item->source->dataSource);
 	    fprintf(fCluster, "%d\t%s\t", clusterIx, item->chrom);
 	    fprintf(fCluster, "%d\t%d\t", item->chromStart, item->chromEnd);
 	    fprintf(fCluster, "%g", item->score);
@@ -323,7 +325,8 @@ for (range = rangeList; range != NULL; range = range->next)
 	double score = clScoreScale * cluster->maxSubScore;
 	if (score > 1000) score = 1000;
 	fprintf(fBed, "%s\t%d\t%d\t%d\t%g\n", chrom, 
-		cluster->chromStart, cluster->chromEnd, slCount(refList), score);
+		cluster->chromStart, cluster->chromEnd, uniqHash->elCount, score);
+	hashFree(&uniqHash);
 	}
     }
 lmCleanup(&lm);
