@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.969 2010/05/15 00:04:03 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.970 2010/05/16 21:43:12 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8313,6 +8313,178 @@ noInherit on
         subGroups view=zRawSig factor=CTCF cellType=WERIRb1 rank=2nd
         type wig 1.00 3005.00
         metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=WERI-Rb-1 antibody=CTCF fragLength=350 view=RawSignal rank=2nd replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=407 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wig.gz
+
+# ENCODE Integrated Regulation Track (wranger Jim)
+
+track wgEncodeReg
+superTrack on
+shortLabel ENCODE Regulation
+longLabel Integrated Regulation Track Based on ENCODE Data
+group regulation
+
+    track wgEncodeRegMarkEnhancer
+    # compositeTrack on
+    container multiWig
+    noInherit on
+    type bigWig 0 40
+    superTrack wgEncodeReg full
+    aggregate solidOverlay
+    shortLabel Enhancer H3K4Me1
+    longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    configurable on
+    visibility full
+    maxHeightPixels 100:50:11
+    priority 1
+
+	track jkEnhGm12878
+	shortLabel	Gm12878
+	longLabel Enhancer mark (H3K4Me1) on Gm12878 cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	type bigWig 0 40
+	color 255,128,128
+
+	track jkEnhH1hesc
+	shortLabel	H1 ES
+	longLabel Enhancer mark (H3K4Me1) on H1 ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 255,223,128
+
+	track jkEnhHmec
+	shortLabel	HMEC
+	longLabel Enhancer mark (H3K4Me1) on HMEC ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 191,255,128
+
+	track jkEnhHsmm
+	shortLabel	HSMM
+	longLabel Enhancer mark (H3K4Me1) on HSMM ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 128,255,159
+
+	track jkEnhHuvec
+	shortLabel	HUVEC
+	longLabel Enhancer mark (H3K4Me1) on HUVEC ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 128,255,255
+
+	track jkEnhK562
+	shortLabel	K562
+	longLabel Enhancer mark (H3K4Me1) on K562 ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 128,159,255
+
+	track jkEnhNhek
+	shortLabel	NHEK
+	longLabel Enhancer mark (H3K4Me1) on NHEK ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 191,128,255
+
+	track jkEnhNhlf
+	shortLabel	NHLF
+	longLabel Enhancer mark (H3K4Me1) on NHLF ES cells from ENCODE 
+	parent wgEncodeRegMarkEnhancer
+	color 255,128,223
+
+
+    track wgEncodeRegMarkPromoter
+    container multiWig
+    superTrack wgEncodeReg full
+    aggregate transparentOverlay
+    shortLabel Promoter H3K4Me3
+    longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    type wig 0 30000
+    viewLimits 0:40
+    configurable on
+    visibility full
+    maxHeightPixels 100:50:11
+    priority 1
+
+	track wgEncodeRegMarkPromoterGm12878
+        table wgEncodeBroadChipSeqSignalGm12878H3k4me3
+	shortLabel	Gm12878
+	longLabel Promoter mark (H3K4Me3) on Gm12878 cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 100593.50
+	color 255,128,128
+
+	track wgEncodeRegMarkPromoterH1hesc
+        table wgEncodeBroadChipSeqSignalH1hescH3k4me3
+	shortLabel	H1 ES
+	longLabel Promoter mark (H3K4Me3) on H1 ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 12434.00
+	color 255,223,128
+
+	track wgEncodeRegMarkPromoterHmec
+        table wgEncodeBroadChipSeqSignalHmecH3k4me3
+	shortLabel	HMEC
+	longLabel Promoter mark (H3K4Me3) on HMEC ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 15838.00
+	color 191,255,128
+
+	track wgEncodeRegMarkPromoterHsmm
+        table wgEncodeBroadChipSeqSignalHsmmH3k4me3
+	shortLabel	HSMM
+	longLabel Promoter mark (H3K4Me3) on HSMM ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 42282.00
+	color 128,255,159
+
+	track wgEncodeRegMarkPromoterHuvec
+        table wgEncodeBroadChipSeqSignalHuvecH3k4me3
+	shortLabel	HUVEC
+	longLabel Promoter mark (H3K4Me3) on HUVEC ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 9954.75
+	color 128,255,255
+
+	track wgEncodeRegMarkPromoterK562
+        table wgEncodeBroadChipSeqSignalK562H3k4me3
+	shortLabel	K562
+	longLabel Promoter mark (H3K4Me3) on K562 ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 16145.25
+	color 128,159,255
+
+	track wgEncodeRegMarkPromoterNhek
+        table wgEncodeBroadChipSeqSignalNhekH3k4me3
+	shortLabel	NHEK
+	longLabel Promoter mark (H3K4Me3) on NHEK ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 12229.50
+	color 191,128,255
+
+	track wgEncodeRegMarkPromoterNhlf
+        table wgEncodeBroadChipSeqSignalNhlfH3k4me3
+	shortLabel	NHLF
+	longLabel Promoter mark (H3K4Me3) on NHLF ES cells from ENCODE 
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 28587.00
+	color 255,128,223
+
+
+    track wgEncodeRegDnaseClustered
+    shortLabel DNase Clusters
+    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters
+    type bed 5 .
+    superTrack wgEncodeReg dense
+    inputTracks wgEncodeUwDnaseSeq
+    inputTracksSubgroupSelect view=aPeaks
+    inputTracksSubgroupDisplay cellType rank
+    visibility dense
+    useScore 1
+    priority 2
+
+    track wgEncodeRegTfbsClustered
+    shortLabel Txn Factor ChIP
+    longLabel ENCODE Transcription Factor ChIP-SEQ 
+    type factorSource
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCells
+    visibility dense
+    useScore 1
+    priority 3
 
 
 # U of Washington DGF (wrangler: Melissa)
