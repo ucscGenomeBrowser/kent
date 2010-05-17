@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1623 2010/05/15 21:03:21 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1624 2010/05/17 02:30:20 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3622,6 +3622,10 @@ else if (wordCount > 0)
     else if (sameString(type, "bigWig"))
         {
 	genericBigWigClick(conn, tdb, item, start);
+	}
+    else if (sameString(type, "factorSource"))
+        {
+	doFactorSource(conn, tdb, item, start);
 	}
     else if (sameString(type, "bed5FloatScore") ||
              sameString(type, "bed5FloatScoreWithFdr"))

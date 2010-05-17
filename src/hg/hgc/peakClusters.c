@@ -1,4 +1,14 @@
-/* Stuff to display details on tracks that are clusters of peaks (items) in other tracks. */
+/* Stuff to display details on tracks that are clusters of peaks (items) in other tracks. 
+ * In particular peaks in either ENCODE narrowPeak or broadPeak settings, and residing in
+ * composite tracks. 
+ *
+ * These come in two main forms currently:
+ *     DNAse hypersensitive clusters - peaks clustered across cell lines stored in bed 5
+ *                                     with no special type
+ *     Transcription Factor Binding Sites (TFBS) - peaks from transcription factor ChIP-seq
+ *                   across a number of transcription factors and cell lines. Stored in bed 15
+ *                   plus sourceTable with type factorSource */
+ 
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"
@@ -8,93 +18,93 @@
 #include "web.h"
 #include "cart.h"
 #include "trackDb.h"
+#include "hui.h"
 #include "hgc.h"
 #include "encode/encodePeak.h"
+#include "expRecord.h"
 
 
-static boolean pairInList(struct slPair *pair, struct slPair *list)
-/* Return TRUE if pair is in list. */
-{
-struct slPair *el;
-for (el = list; el != NULL; el = el->next)
-    if (sameString(pair->name, el->name) && sameString(pair->val, el->val))
-        return TRUE;
-return FALSE;
-}
-
-static boolean selGroupListMatch(struct trackDb *tdb, struct slPair *selGroupList)
-/* Return TRUE if tdb has match to every item in selGroupList */
+char *findGroupTagVal(struct trackDb *tdb, char *tag)
+/* Find value of given tag inside of subgroups field. */ 
 {
 char *subGroups = trackDbSetting(tdb, "subGroups");
-if (subGroups == NULL)
-    return FALSE;
-struct slPair *groupList = slPairFromString(subGroups);
-struct slPair *selGroup;
-for (selGroup = selGroupList; selGroup != NULL; selGroup = selGroup->next)
+struct slPair *el, *list = slPairFromString(subGroups);
+char *val = NULL;
+for (el = list; el != NULL; el = el->next)
     {
-    if (!pairInList(selGroup, groupList))
-        return FALSE;
+    if (sameString(el->name, tag))
+	{
+        val = el->val;
+	break;
+	}
     }
-return TRUE;
+return val;
 }
 
-static void rAddMatching(struct trackDb *tdb, struct slPair *selGroupList, struct slName **pList)
-/* Add track and any descendents that match selGroupList to pList */
+char *mustFindGroupTagVal(struct trackDb *tdb, char *tag)
+/* Find value of given tag inside of subgroups field or abort with error message. */ 
 {
-if (selGroupListMatch(tdb, selGroupList))
-    slNameAddHead(pList, tdb->track);
-struct trackDb *sub;
-for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
-    rAddMatching(sub, selGroupList, pList);
+char *val = findGroupTagVal(tdb, tag);
+if (val == NULL)
+    errAbort("Couldn't find %s in subGroups tag of %s", tag, tdb->track);
+return val;
 }
 
-static struct slName *findMatchingSubtracks(struct slName *inTrackList, struct slPair *selGroupList)
-/* Look in track and it's descendents for tracks with groups that match all values 
- * in selGroupList. */
+char *findGroupLabel(struct trackDb *tdb, char *group)
+/* Given name of group, ruffle through all subGroupN tags, looking for one that
+ * matches group */
 {
-struct slName *matchList = NULL;
-struct slName *inTrack;
-for (inTrack = inTrackList; inTrack != NULL; inTrack = inTrack->next)
+char *groupId = mustFindGroupTagVal(tdb, group);
+return compositeGroupLabel(tdb, group, groupId);
+}
+
+static void printClusterTableHeader(struct slName *displayGroupList)
+/* Print out header fields table */
+{
+webPrintLabelCell("#");
+webPrintLabelCell("signal");
+struct slName *displayGroup;
+for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displayGroup->next)
     {
-    struct trackDb *tdb = hashFindVal(trackHash, inTrack->name);
-    if (tdb == NULL)
-        errAbort("Can't find track %s which is in inputTracks", inTrack->name);
-    rAddMatching(tdb,  selGroupList, &matchList);
+    webPrintLabelCell(displayGroup->name);
     }
-return matchList;
+webPrintLabelCell("description");
+printf("</TR><TR>\n");
 }
 
 static void printTableInfo(struct trackDb *tdb, struct trackDb *clusterTdb,
     struct slName *displayGroupList)
 /* Print out info on table. */
 {
-webPrintLinkCell(tdb->shortLabel);
+struct slName *displayGroup;
+for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displayGroup->next)
+    {
+    char *label = findGroupLabel(tdb, displayGroup->name);
+    char *linkedLabel = compositeLabelWithVocabLink(database, tdb, tdb, displayGroup->name, label);
+    webPrintLinkCell(linkedLabel);
+    }
 webPrintLinkCell(tdb->longLabel);
 }
 
 static void showOnePeak(struct trackDb *tdb, struct bed *cluster, struct trackDb *clusterTdb,
-	struct encodePeak *peak, struct slName *displayGroupList, int *pIx)
+	struct encodePeak *peakList, struct slName *displayGroupList, int *pIx)
 /* Show info on track and peak.  Peak may be NULL in which case n/a's will be printed
  * as appropriate. */
 {
+struct encodePeak *peak;
 *pIx += 1;
 webPrintIntCell(*pIx);
-if (peak)
-    {
-    webPrintIntCell(peak->score);
-    int overlap = positiveRangeIntersection(peak->chromStart, peak->chromEnd, 
-    	cluster->chromStart, cluster->chromEnd);
-    double overlapRatio = (double)overlap/(cluster->chromEnd - cluster->chromStart);
-    webPrintLinkCellRightStart();
-    printf("%4.1f%%", overlapRatio*100);
-    webPrintLinkCellEnd();
-    }
+webPrintLinkCellRightStart();
+printf("%g", peakList->signalValue);
+for (peak = peakList->next; peak != NULL; peak = peak->next)
+    printf(",%g", peak->signalValue);
+webPrintLinkCellEnd();
 printTableInfo(tdb, clusterTdb, displayGroupList);
+printf("</TR><TR>\n");
 }
 
 static boolean showMatchingTrack(char *track, struct bed *cluster, struct sqlConnection *conn,
-	struct trackDb *clusterTdb, struct slName *displayGroupList,
-	boolean showIfTrue, boolean showIfFalse, int *pRowIx)
+	struct trackDb *clusterTdb, struct slName *displayGroupList, int *pRowIx)
 /* put out a line in an html table that describes the given track. */ 
 {
 struct trackDb *tdb = hashMustFindVal(trackHash, track);
@@ -103,26 +113,16 @@ char **row;
 int rowOffset = 0;
 struct sqlResult *sr = hRangeQuery(conn, tdb->table, 
 	cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, &rowOffset);
-boolean gotData = FALSE;
+struct encodePeak *peakList = NULL;
+struct slDouble *slDoubleNew(double x);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     enum encodePeakType pt = encodePeakInferTypeFromTable(database, tdb->table, tdb->type);
     struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-    if (showIfTrue)
-	{
-	showOnePeak(tdb, cluster, clusterTdb, peak, displayGroupList, pRowIx);
-	result = TRUE;
-	}
-    gotData = TRUE;
+    slAddTail(&peakList, peak);
     }
-if (!gotData)
-    {
-    if (showIfFalse)
-	{
-	showOnePeak(tdb, cluster, clusterTdb, NULL, displayGroupList, pRowIx);
-	result = TRUE;
-	}
-    }
+if (peakList)
+    showOnePeak(tdb, cluster, clusterTdb, peakList, displayGroupList, pRowIx);
 sqlFreeResult(&sr);
 return result;
 }
@@ -142,7 +142,7 @@ struct sqlConnection *conn = hAllocConn(database);
 char title[256];
 safef(title, sizeof(title), "%s item details", tdb->shortLabel);
 cartWebStart(cart, database, title);
-sprintf(query,
+safef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -165,36 +165,95 @@ if (cluster != NULL)
     char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
     struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
 
-    /* Get list of tracks that match and make a table out of them. */
-    struct slName *matchTrackList = findMatchingSubtracks(inTrackList, selGroupList);
+    /* Get list of tracks that match criteria. */
+    struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
     struct slName *matchTrack;
 
+    /* Print out some information about the cluster overall. */
     printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, slCount(matchTrackList));
-    printf("<B>Maximum Item Score (out of 1000):</B> %d<BR>\n", cluster->score);
+    printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
     printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
-
+    /* In a new section put up list of hits. */
+    webNewSection("List of Items in Cluster");
     webPrintLinkTableStart();
+    printClusterTableHeader(displayGroupList);
     int rowIx = 0;
     for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
         {
-	if (showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
-		TRUE, FALSE, &rowIx))
-	    printf("</TR><TR>\n");
+	showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
+		&rowIx);
 	}
     webPrintLinkTableEnd();
-
-
-    uglyf("<B>inputTracks:</B> %s<BR>\n", inputTracks);
-    uglyf("<B>inputTracksSubgroupSelect:</B> %s<BR>\n", inputTracksSubgroupSelect);
-    uglyf("<B>inputTracksSubgroupDisplay:</B> %s<BR>\n", inputTracksSubgroupDisplay);
-
-    uglyf("<B>matchingTracks:</B> %d<BR>\n", slCount(matchTrackList));
-    uglyf("<B>displayGroupList:</B> %d<BR>\n", slCount(displayGroupList));
-
-
     }
+webNewSection("Track Description");
 printTrackHtml(tdb);
 hFreeConn(&conn);
+}
+
+char *findFactorId(struct slName *trackList, char *label)
+/* Given factor label, find factor id. */
+{
+struct slName *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    struct trackDb *tdb = hashMustFindVal(trackHash, track->name);
+    char *factorId = compositeGroupId(tdb, "factor", label);
+    if (factorId != NULL)
+        return factorId;
+    }
+errAbort("Couldn't find factor labeled %s", label);
+return NULL;
+}
+
+void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start)
+/* Display detailed info about a cluster of peaks from other tracks. */
+{
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+char **row;
+struct sqlResult *sr;
+char query[256];
+safef(query, sizeof(query),
+	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	tdb->table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+struct bed *cluster = NULL;
+if (row != NULL)
+    cluster = bedLoadN(row + rowOffset, 15);
+sqlFreeResult(&sr);
+
+
+if (cluster != NULL)
+    {
+    printf("<B>Factor:</B> %s<BR>\n", cluster->name);
+    printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
+    printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+
+    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+    uglyf("<B>sourceTable:</B> %s<BR>\n", sourceTable);
+
+    /* Get list of tracks we'll look through for input. */
+    char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
+    struct slName *inTrackList = stringToSlNames(inputTracks);
+    uglyf("<B>inputTracks:</B> %s (%d)<BR>\n", inputTracks, slCount(inTrackList));
+
+    /* Get list of subgroups to select on */
+    char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
+    struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
+    uglyf("<B>inputTracksSubgroupSelect:</B> %s (%d)<BR>\n", inputTracksSubgroupSelect, slCount(selGroupList));
+
+    /* Figure out factor ID and add it as selection criteria*/
+    char *factorId = findFactorId(inTrackList, cluster->name);
+    uglyf("<B>cluster->id:</B> %s  <B>factorId:</B> %s<BR>\n", cluster->name, factorId);
+    struct slPair *factorSel = slPairNew("factor", cloneString(factorId));
+    slAddHead(&selGroupList, factorSel);
+
+    /* Get list of tracks that match criteria. */
+    struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
+    // struct slName *matchTrack;
+    uglyf("<B>matchTrackList:</B> %d elements<BR>\n", slCount(matchTrackList));
+
+    }
 }
 
