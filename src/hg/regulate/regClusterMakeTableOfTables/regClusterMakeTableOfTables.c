@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "hmmstats.h"
 
-static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.3 2010/05/05 00:50:37 kent Exp $";
+static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.4 2010/05/17 02:21:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -106,10 +106,11 @@ FILE *f = mustOpen(output, "w");
 struct slName *in, *inList = readAllLines(input);
 int commonPrefix = commonPrefixSize(inList);
 int commonSuffix = commonSuffixSize(inList);
+int scoreColIx = 6;
 for (in = inList; in != NULL; in = in->next)
     {
-    fprintf(f, "%s\t0\t1\t2\t6\t", in->name);
-    fprintf(f, "%g\t", calcNormScoreFactor(in->name, 6));
+    fprintf(f, "%s\t0\t1\t2\tscoreColIx\t", in->name);
+    fprintf(f, "%g\t", calcNormScoreFactor(in->name, scoreColIx));
     char *s = in->name;
     int len = strlen(s);
     char *midString = cloneStringZ(s+commonPrefix, len - commonPrefix - commonSuffix);
