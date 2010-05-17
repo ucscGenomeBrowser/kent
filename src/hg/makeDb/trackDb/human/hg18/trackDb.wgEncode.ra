@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.971 2010/05/17 02:25:08 kent Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.972 2010/05/17 07:10:22 rhead Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8494,7 +8494,6 @@ group regulation
 
 track wgEncodeUwDGF
 compositeTrack on
-release alpha,beta
 shortLabel UW DNase DGF
 longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
 group regulation
@@ -8522,7 +8521,6 @@ wgEncode 1
     minGrayLevel 2
 
         track wgEncodeUwDGFHotspotsGm06990
-        release alpha,beta
         subTrack wgEncodeUwDGFViewHotspots off
         shortLabel GM06990 Hspot
         longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in GM06990 cells)
@@ -8531,7 +8529,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Hotspots labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFHotspotsGm06990 fileName=wgEncodeUwDGFHotspotsGm06990.broadPeak.gz
 
         track wgEncodeUwDGFHotspotsK562
-        release alpha,beta
         subTrack wgEncodeUwDGFViewHotspots on
         shortLabel K562 Hspot
         longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in K562 cells)
@@ -8541,7 +8538,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=K562 view=Hotspots labVersion=Hotspot-v5.1 dataVersion="ENCODE Jan 2010 Freeze" subId=1027 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFHotspotsK562 fileName=wgEncodeUwDGFHotspotsK562.broadPeak.gz
 
         track wgEncodeUwDGFHotspotsHepg2
-        release alpha,beta
         subTrack wgEncodeUwDGFViewHotspots on
         shortLabel HepG2 Hspot
         color 189,0,157
@@ -8551,7 +8547,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Hotspots labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFHotspotsHepg2 fileName=wgEncodeUwDGFHotspotsHepg2.broadPeak.gz
 
         track wgEncodeUwDGFHotspotsSknshra
-        release alpha,beta
         subTrack wgEncodeUwDGFViewHotspots off
         shortLabel SK-N-SH_RA Hspot
         longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in SK-N-SH_RA cells)
@@ -8560,7 +8555,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Hotspots labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFHotspotsSknshra fileName=wgEncodeUwDGFHotspotsSknshra.broadPeak.gz
 
         track wgEncodeUwDGFHotspotsTh1
-        release alpha,beta
         subTrack wgEncodeUwDGFViewHotspots off
         shortLabel Th1 Hspot
         longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in Th1 cells)
@@ -8580,7 +8574,6 @@ wgEncode 1
     minGrayLevel 3
 
         track wgEncodeUwDGFPeaksGm06990
-        release alpha,beta
         subTrack wgEncodeUwDGFViewPeaks off
         shortLabel GM06990 Pk
         longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 0.5%) (in GM06990 cells)
@@ -8589,7 +8582,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Peaks labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFPeaksGm06990 fileName=wgEncodeUwDGFPeaksGm06990.narrowPeak.gz
 
         track wgEncodeUwDGFPeaksK562
-        release alpha,beta
         subTrack wgEncodeUwDGFViewPeaks on
         shortLabel K562 Pk
         longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 0.5%) (in K562 cells)
@@ -8599,7 +8591,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=K562 view=Peaks labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Jan 2010 Freeze" subId=1027 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFPeaksK562 fileName=wgEncodeUwDGFPeaksK562.narrowPeak.gz
 
         track wgEncodeUwDGFPeaksHepg2
-        release alpha,beta
         subTrack wgEncodeUwDGFViewPeaks on
         shortLabel HepG2 Pk
         color 189,0,157
@@ -8609,7 +8600,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Peaks labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFPeaksHepg2 fileName=wgEncodeUwDGFPeaksHepg2.narrowPeak.gz
 
         track wgEncodeUwDGFPeaksSknshra
-        release alpha,beta
         subTrack wgEncodeUwDGFViewPeaks off
         shortLabel SK-N-SH_RA Pk
         longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 0.5%) (in SK-N-SH_RA cells)
@@ -8618,7 +8608,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Peaks labVersion="lmax-v1.0, FDR 0.5%" dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFPeaksSknshra fileName=wgEncodeUwDGFPeaksSknshra.narrowPeak.gz
 
         track wgEncodeUwDGFPeaksTh1
-        release alpha,beta
         subTrack wgEncodeUwDGFViewPeaks off
         shortLabel Th1 Pk
         longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 0.5%) (in Th1 cells)
@@ -8639,7 +8628,6 @@ wgEncode 1
     windowingFunction maximum
 
         track wgEncodeUwDGFSignalGm06990
-        release alpha,beta
         subTrack wgEncodeUwDGFViewSignal off
         shortLabel GM06990 Sig
         longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in GM06990 cells)
@@ -8648,7 +8636,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=Signal dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalGm06990 fileName=wgEncodeUwDGFSignalGm06990.bedGraph4.gz
 
         track wgEncodeUwDGFSignalK562
-        release alpha,beta
         subTrack wgEncodeUwDGFViewSignal on
         shortLabel K562 Sig
         longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in K562 cells)
@@ -8658,7 +8645,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=K562 view=Signal dataVersion="ENCODE Jan 2010 Freeze" subId=1027 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalK562 fileName=wgEncodeUwDGFSignalK562.bedGraph4.gz
 
         track wgEncodeUwDGFSignalHepg2
-        release alpha,beta
         subTrack wgEncodeUwDGFViewSignal on
         shortLabel HepG2 Sig
         color 189,0,157
@@ -8670,7 +8656,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalHepg2 fileName=wgEncodeUwDGFSignalHepg2.bedGraph4.gz
 
         track wgEncodeUwDGFSignalSknshra
-        release alpha,beta
         subTrack wgEncodeUwDGFViewSignal off
         shortLabel SK-N-SH_RA Sig
         longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (SK-N-SH_RA cells)
@@ -8681,7 +8666,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalSknshra fileName=wgEncodeUwDGFSignalSknshra.bedGraph4.gz
 
         track wgEncodeUwDGFSignalTh1
-        release alpha,beta
         subTrack wgEncodeUwDGFViewSignal off
         shortLabel Th1 Sig
         longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in Th1 cells)
@@ -8704,7 +8688,6 @@ wgEncode 1
     windowingFunction maximum
 
         track wgEncodeUwDGFRawSignalGm06990
-        release alpha,beta
         subTrack wgEncodeUwDGFViewRawSignal off
         shortLabel GM06990 Raw
         longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in GM06990 cells)
@@ -8713,7 +8696,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=GM06990 view=RawSignal labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=1054 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFRawSignalGm06990 fileName=wgEncodeUwDGFRawSignalGm06990.wig.gz
 
         track wgEncodeUwDGFRawSignalK562
-        release alpha,beta
         subTrack wgEncodeUwDGFViewRawSignal on
         shortLabel K562 Raw
         longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in K562 cells)
@@ -8723,7 +8705,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=K562 view=RawSignal labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Jan 2010 Freeze" subId=1027 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-13 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFRawSignalK562 fileName=wgEncodeUwDGFRawSignalK562.wig.gz
 
         track wgEncodeUwDGFRawSignalHepg2
-        release alpha,beta
         subTrack wgEncodeUwDGFViewRawSignal on
         shortLabel HepG2 Raw
         color 189,0,157
@@ -8733,7 +8714,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=RawSignal labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFRawSignalHepg2 fileName=wgEncodeUwDGFRawSignalHepg2.wig.gz
 
         track wgEncodeUwDGFRawSignalSknshra
-        release alpha,beta
         subTrack wgEncodeUwDGFViewRawSignal off
         shortLabel SK-N-SH_RA Raw
         longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in SK-N-SH_RA cells)
@@ -8742,7 +8722,6 @@ wgEncode 1
         metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=RawSignal labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFRawSignalSknshra fileName=wgEncodeUwDGFRawSignalSknshra.wig.gz
 
         track wgEncodeUwDGFRawSignalTh1
-        release alpha,beta
         subTrack wgEncodeUwDGFViewRawSignal off
         shortLabel Th1 Raw
         longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in Th1 cells)
