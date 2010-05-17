@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.287 2010/05/14 18:37:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.288 2010/05/17 02:28:45 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2687,6 +2687,7 @@ tdbExtrasAddOrUpdate(childTdb,SUBTRACK_MEMBERSHIP_KEY,membership);
 return membership;
 }
 
+
 static boolean membershipInAllCurrentABCs(membership_t *membership,membersForAll_t*membersForAll)
 /* looks for a match between a membership set and ABC dimensions currently checked */
 {
@@ -2727,6 +2728,38 @@ return TRUE; // passed all tests so must be on all
 //    freez(membership);
 //    }
 //}
+
+char *compositeGroupLabel(struct trackDb *tdb, char *group, char *id)
+/* Given ID from group, return corresponding label,  looking through parent's subGroupN's */
+/* Given group ID, return group label,  looking through parent's subGroupN's */
+{
+members_t *members = subgroupMembersGet(tdb, group);
+char *result = NULL;
+int i;
+for (i=0; i<members->count; ++i)
+    {
+    if (sameString(members->tags[i], id))
+	result = cloneString(members->titles[i]);
+    }
+subgroupMembersFree(&members);
+return result;
+}
+
+char *compositeGroupId(struct trackDb *tdb, char *group, char *label)
+/* Given label, return id,  looking through parent's subGroupN's */
+{
+members_t *members = subgroupMembersGet(tdb, group);
+char *result = NULL;
+int i;
+for (i=0; i<members->count; ++i)
+    {
+    if (sameString(members->titles[i], label))
+	result = cloneString(members->tags[i]);
+    }
+subgroupMembersFree(&members);
+return result;
+}
+
 
 boolean subtrackInAllCurrentABCs(struct trackDb *childTdb,membersForAll_t*membersForAll)
 /* looks for a match between a membership set and ABC dimensions currently checked */
@@ -2775,6 +2808,7 @@ if(members==NULL)
 //subgroupMembersFree(&members);
 return TRUE;
 }
+
 void subgroupFree(char **value)
 /* frees subgroup memory */
 {
@@ -5523,7 +5557,8 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
-static char *labelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb, char *vocabType, char *label)
+char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb, 
+	char *vocabType, char *label)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 {
@@ -5621,7 +5656,7 @@ if(dimensionX)
         if(tdbsX[ixX] != NULL)
             {
             char *label =replaceChars(dimensionX->titles[ixX]," (","<BR>(");
-            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->groupTag,label));
+            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",compositeLabelWithVocabLink(db,parentTdb,tdbsX[ixX],dimensionX->groupTag,label));
             freeMem(label);
             cntX++;
             }
@@ -5698,11 +5733,11 @@ if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of
     char objName[SMALLBUF];
     printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
     if(left)
-        printf("%s&nbsp;",labelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
+        printf("%s&nbsp;",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     safef(objName, sizeof(objName), "plus_all_%s", dimensionY->tags[ixY]);
     buttonsForOne( objName, dimensionY->tags[ixY] );
     if(!left)
-        printf("&nbsp;%s",labelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
+        printf("&nbsp;%s",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     puts("</TH>");
     }
 else if (dimensionX)
@@ -5712,7 +5747,7 @@ else if (dimensionX)
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)
-    printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
+    printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
 }
 
 static int displayABCdimensions(char *db,struct cart *cart, struct trackDb *parentTdb, struct slRef *subtrackRefList, membersForAll_t* membersForAll)
@@ -5765,7 +5800,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
             safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",membersForAll->members[ix]->tags[aIx]);
             // TODO Set classes properly (if needed!!!)  The class abc works but what about a b or c?
             cgiMakeCheckBoxJS(objName,alreadySet,javascript);
-            printf("%s",labelWithVocabLink(db,parentTdb,tdbs[aIx],membersForAll->members[ix]->groupTag,membersForAll->members[ix]->titles[aIx]));
+            printf("%s",compositeLabelWithVocabLink(db,parentTdb,tdbs[aIx],membersForAll->members[ix]->groupTag,membersForAll->members[ix]->titles[aIx]));
             puts("</TH>");
             }
         }

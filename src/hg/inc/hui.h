@@ -881,6 +881,17 @@ void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
  * var with that name so it looks like it was pressed. */
 
+char *compositeGroupLabel(struct trackDb *childTdb, char *group, char *id);
+/* Given ID from group, return corresponding label,  looking through parent's subGroupN's */
+
+char *compositeGroupId(struct trackDb *tdb, char *group, char *id);
+/* Given label, return id,  looking through parent's subGroupN's */
+
+char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb, 
+	char *vocabType, char *label);
+/* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
+   then label will be wrapped with the link to display it.  Return string is cloned. */
+
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
                                 int visibleChild);
 /* Displays hide/show dropdown for supertrack.
