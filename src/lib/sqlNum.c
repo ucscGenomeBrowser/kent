@@ -7,7 +7,7 @@
 #include "common.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: sqlNum.c,v 1.16 2005/12/09 22:39:36 hiram Exp $";
+static char const rcsid[] = "$Id: sqlNum.c,v 1.17 2010/05/17 18:01:41 hiram Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about
@@ -24,7 +24,7 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     res += c - '0';
     }
 if (c != '\0')
-    errAbort("invalid unsigned number: \"%s\"", s);
+    errAbort("invalid unsigned integer: \"%s\"", s);
 return res;
 }
 
@@ -43,7 +43,7 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     res += c - '0';
     }
 if (c != '\0')
-    errAbort("invalid unsigned number: \"%s\"", s);
+    errAbort("invalid unsigned integer: \"%s\"", s);
 return res;
 }
 
@@ -65,7 +65,7 @@ while ((*p >= '0') && (*p <= '9'))
     }
 /* test for invalid character, empty, or just a minus */
 if ((*p != '\0') || (p == p0))
-    errAbort("invalid signed number: \"%s\"", s);
+    errAbort("invalid signed integer: \"%s\"", s);
 if (*s == '-')
     return -res;
 else
@@ -90,7 +90,7 @@ while ((*p >= '0') && (*p <= '9'))
     }
 /* test for invalid character, empty, or just a minus */
 if ((*p != '\0') || (p == p0))
-    errAbort("invalid signed number: \"%s\"", s);
+    errAbort("invalid signed integer: \"%s\"", s);
 if (*s == '-')
     return -res;
 else
