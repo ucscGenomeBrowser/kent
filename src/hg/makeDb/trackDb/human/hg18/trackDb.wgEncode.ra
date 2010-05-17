@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.972 2010/05/17 07:10:22 rhead Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.973 2010/05/17 19:04:50 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4185,7 +4185,7 @@ wgEncode 1
         subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
         color 120,0,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=crgMapabilityAlign36mer.bw.gz
+        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeMapabilityAlign36mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign40mer
         release alpha
@@ -4195,7 +4195,7 @@ wgEncode 1
         subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
         color 120,0,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=crgMapabilityAlign40mer.bw.gz
+        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeMapabilityAlign40mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign50mer
         release alpha
@@ -4205,7 +4205,7 @@ wgEncode 1
         subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
         color 120,0,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=crgMapabilityAlign50mer.bw.gz
+        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeMapabilityAlign50mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign75mer
         release alpha
@@ -4215,7 +4215,7 @@ wgEncode 1
         subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
         color 120,0,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=crgMapabilityAlign75mer.bw.gz
+        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeMapabilityAlign75mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign100mer
         release alpha
@@ -4225,7 +4225,7 @@ wgEncode 1
         subGroups view=CRGMAP win=w100
         type bigWig 0.00 1.00
         color 120,0,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=crgMapabilityAlign100mer.bw.gz
+        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeMapabilityAlign100mer.bw.gz
 
 track wgEncodeMapability
 release beta,public
