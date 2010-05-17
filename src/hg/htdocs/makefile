@@ -31,7 +31,8 @@ beta:
 # this queries CVS to find out the list of files to install, so
 # avoid the usual crud that collects in directories.
 doInstall: doRsync
-#	ln -sf ENCODE ${DEST}/encode
+	ln -sf ENCODE ${DEST}/encode
+	ln -sf Branchiostoma_lanceolatum.jpg ${DEST}/images/Branchiostoma_floridae.jpg
 
 doInstallCancerPublic: doRsync
 	mv ${DEST}/index.html ${DEST}/index.html.org
