@@ -118,7 +118,7 @@ struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
 
-struct hash *hashThisEqThatLine(char *line, int lineIx, boolean firstStartsWIthLetter);
+struct hash *hashThisEqThatLine(char *line, int lineIx, boolean firstStartsWithLetter);
 /* Return a symbol table from a line of form:
  *   1-this1=val1 2-this='quoted val2' var3="another val" 
  * If firstStartsWithLetter is true, then the left side of the equals must start with
