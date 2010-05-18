@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1625 2010/05/18 00:04:40 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1626 2010/05/18 17:52:41 ann Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3948,8 +3948,8 @@ puts(
      "Use this page to highlight features in genomic DNA text. "
      "DNA covered by a particular track can be highlighted by "
      "case, underline, bold, italic, or color.  See below for "
-     "details about color, and for examples. Tracks in &quot;hide&quot; "
-     "display mode are not shown in the grid below. <P>");
+     "details about color, and for examples. <B>Tracks in "
+     "&quot;hide&quot; display mode are not shown in the grid below.</B> <P>");
 
 if (cgiBooleanDefined("hgSeq.revComp"))
     {
