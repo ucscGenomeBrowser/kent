@@ -6,7 +6,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafFetch.c,v 1.4 2008/09/03 19:20:37 markd Exp $";
+static char const rcsid[] = "$Id: mafFetch.c,v 1.5 2010/05/18 21:27:18 galt Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -18,7 +18,7 @@ errAbort(
   "\n"
   "Select MAF records overlapping records in the BED using the\n"
   "the database table to lookup the file and record offset.\n"
-  "Only the first 3 columns are requried in the bed.\n"
+  "Only the first 3 columns are required in the bed.\n"
   "\n"
   "Options:\n"
   );
