@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.wgEncode.ra,v 1.2 2010/05/18 21:11:01 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.wgEncode.ra,v 1.3 2010/05/18 23:38:16 cricket Exp $
 
 
 # Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler: Cricket)
@@ -94,7 +94,7 @@ wgEncode 1
 		#### Submission 1168 ####
     		track wgEncodeSydhHistMelInputIggyaleSig
     		release alpha
-    		subTrack wgEncodeSydhHist 
+    		subTrack wgEncodeSydhHistViewSig 
     		shortLabel MEL Input Sg 
     		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (Input in MEL cells)
     		subGroups view=Signal factor=zInput cellType=MEL control=IGGYale treatment=None
@@ -105,7 +105,7 @@ wgEncode 1
 		#### Submision 1194 ####
    		track wgEncodeSydhHistCh12H3k4me3IggyaleSig
     		release alpha
-    		subTrack wgEncodeSydhHist 
+    		subTrack wgEncodeSydhHistViewSig 
     		shortLabel CH12 H3K4me3 Sg
     		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (H3K4me3 in CH12 cells)
     		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
@@ -116,7 +116,7 @@ wgEncode 1
 		#### Submission 1195 #####
 		track wgEncodeSydhHistCh12InputIggyaleSig
 		release alpha
-    		subTrack wgEncodeSydhHist 
+    		subTrack wgEncodeSydhHistViewSig 
     		shortLabel CH12 Input Sg
     		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (Input in CH12 cells)
     		subGroups view=Signal factor=zInput cellType=CH12 control=IGGYale treatment=None
@@ -317,7 +317,7 @@ wgEncode 1
 		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 Input Sg
-		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in CH12 cells)
+		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IGGRab Input in CH12 cells)
 		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGrab treatment=None
 		type bigWig 1 66328
 		color 153,38,0
@@ -350,7 +350,7 @@ wgEncode 1
     		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal ( IGGmus Input in CH12 cells)
     		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 71455
     		color 153,38,0
@@ -427,7 +427,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IGGmus Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 78618
     		color 46,0,184
@@ -450,7 +450,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IggRab Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGrab treatment=None
     		type bigWig 1 103648
     		color 46,0,184
@@ -472,7 +472,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IGGRat Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGrat treatment=None
     		type bigWig 1 90844
     		color 46,0,184
@@ -482,7 +482,7 @@ wgEncode 1
 		##### Submission 1192 #####
     		track wgEncodeSydhTfbsMelJundIggrabSig
     		release alpha
-    		subTrack wgEncodeSydhTfbs off
+    		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL JunD Sg
     		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in MEL cells)
     		subGroups view=Signal factor=JUND cellType=MEL control=IGGrab treatment=None
@@ -493,7 +493,7 @@ wgEncode 1
 		#### Submission 1193 #####
     		track wgEncodeSydhTfbsMelE2f4IggrabSig
     		release alpha
-    		subTrack wgEncodeSydhTfbs off
+    		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL E2F4 Sg
     		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (E2F4 in MEL cells)
     		subGroups view=Signal factor=E2F4 cellType=MEL control=IGGrab treatment=None
