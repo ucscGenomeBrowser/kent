@@ -74,5 +74,9 @@ void hgPositionsHelpHtml(char *organism, char *database);
 /* Display contents of dbDb.htmlPath for database, or print an HTML comment 
  * explaining what's missing. */
 
+char *hCarefulTrackOpenVis(char *db, char *trackName);
+/* If track is already in full mode, return full; otherwise, return
+ * hTrackOpenVis. */
+
 #endif /* HGFIND_H */
 
