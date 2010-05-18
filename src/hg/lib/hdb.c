@@ -26,6 +26,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 #include "twoBit.h"
+#include "ra.h"
 #include "genbank.h"
 #include "chromInfo.h"
 #ifndef GBROWSE
@@ -36,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.427 2010/05/11 22:15:41 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.428 2010/05/18 20:05:31 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -217,7 +218,7 @@ for(; tdbList; tdbList = tdbList->next)
     {
     if (hTableExists(sqlGetDatabase(conn), tdbList->name))
         {
-        char query[2048];
+        char query[1024];
         safef(query, sizeof query,
             "select tableName from %s where type like '%s'", tdbList->name, type);
 
@@ -3747,6 +3748,53 @@ if (tdb != NULL)
     }
 hFreeConn(&conn);
 return ret;
+}
+
+static struct hash *makeDbTableToTrackHash(char *db)
+/* Create a hash based on trackDb tables in given database that 
+ * will give you a track name given a table name as a key. */
+{
+struct hash *hash = hashNew(0);
+struct slName *trackTable, *trackTableList = hTrackDbList();
+struct sqlConnection *conn = hAllocConn(db);
+for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->next)
+    {
+    if (hTableExists(db, trackTable->name))
+        {
+	char query[512];
+	safef(query, sizeof(query), "select settings from %s", trackTable->name);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    struct hash *settings = raFromString(row[0]);
+	    char *track = hashMustFindVal(settings, "track");
+	    char *table = hashFindVal(settings, "table");
+	    if (table == NULL)
+	         table = track;
+	    hashAdd(hash, table, track);
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+slNameFreeList(&trackTableList);
+hFreeConn(&conn);
+return hash;
+}
+
+char *hGetTrackForTable(char *db, char *table)
+/* Given a table name, get first track associated with it. */
+{
+static struct hash *dbHash = NULL;
+if (dbHash == NULL)
+    dbHash = hashNew(0);
+struct hash *tableToTrackHash = hashFindVal(dbHash, db);
+if (tableToTrackHash == NULL)
+    {
+    tableToTrackHash = makeDbTableToTrackHash(db);
+    hashAdd(dbHash, db, tableToTrackHash);
+    }
+return hashFindVal(tableToTrackHash, table);
 }
 
 static struct dbDb *hGetIndexedDbsMaybeClade(char *theDb)
