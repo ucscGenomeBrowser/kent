@@ -188,6 +188,7 @@ for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->n
     showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, &rowIx);
     }
 webPrintLinkTableEnd();
+cartWebEnd();
 }
 
 void doPeakClusters(struct trackDb *tdb, char *item)
@@ -247,6 +248,7 @@ printf("List all items assayed");
 webNewSection("Track Description");
 printf("</A><BR>\n");
 printTrackHtml(tdb);
+cartWebEnd();
 hFreeConn(&conn);
 }
 
