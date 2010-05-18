@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.228 2010/05/18 18:58:20 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.229 2010/05/18 20:06:39 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1239,6 +1239,7 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 fprintf(f, "%s", pos->description);
 }
 
+#ifdef OLD
 static void makeGbTrackTableName(char *db, char *tableName, size_t tnSize, char *base)
 /* Now we have to watch out for scaffold-based browsers where 
  * the track is all_{mrna,est} not {mrna,est}. */
@@ -1251,6 +1252,7 @@ if (hTableExists(db, splitTable))
 else
     safef(tableName, tnSize, "all_%s", base);
 }
+#endif /* OLD */
 
 char *hCarefulTrackOpenVis(char *db, char *trackName)
 /* If track is already in full mode, return full; otherwise, return
@@ -1311,6 +1313,7 @@ if (startsWith("all_", tableName))
 	tableName += 4;
     }
 table->name = cloneString(tableName);
+char *trackName = hGetTrackForTable(db, table->name);
 slSort(&pslList, pslCmpScore);
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
@@ -1324,7 +1327,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     pos->browserName = cloneString(psl->qName);
     dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
 		   hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
-		   tableName, hCarefulTrackOpenVis(db, tableName));
+		   trackName, hCarefulTrackOpenVis(db, trackName));
     if (ui != NULL)
 	dyStringPrintf(dy, "&%s", ui);
     dyStringPrintf(dy, "%s\">", hgp->extraCgi);
@@ -1648,14 +1651,9 @@ for (el = *pAccList; el != NULL; el = el->next)
         }
     else
         {
-	char tableName[64];
-	if (isXeno)
-	    safef(tableName, sizeof(tableName), "xenoMrna");
-	else
-	    makeGbTrackTableName(db, tableName, sizeof(tableName), "mrna");
         /* display mRNA details page -- need to add dummy CGI variables*/
         dyStringPrintf(dy, "<A HREF=\"%s%cg=%s&i=%s&c=0&o=0&l=0&r=0",
-		       hgcName(), hgAppCombiner, tableName, acc);
+		       hgcName(), hgAppCombiner, mrnaTable, acc);
         }
     if (ui != NULL)
         dyStringPrintf(dy, "&%s", ui);
@@ -1714,13 +1712,7 @@ if (alignCount > 0)
 			aligns ?  "A" : "Una");
     freeMem(organism);
     table->description = cloneString(title);
-    if (isXeno)
-	table->name = cloneString("xenoMrna");
-    else
-	{
-	struct hTableInfo *hti = hFindTableInfo(db, NULL, "mrna");
-	table->name = cloneString((hti && hti->isSplit) ? "mrna" : "all_mrna");
-	}
+    table->name = cloneString(mrnaTable);
     table->htmlOnePos = mrnaKeysHtmlOnePos;
     slAddHead(&hgp->tableList, table);
     }
@@ -2412,10 +2404,11 @@ if (useWeb)
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
-    char *vis = hCarefulTrackOpenVis(db, table->name);
-    char *parent = hGetParent(db, table->name);
     if (table->posList != NULL)
 	{
+	char *parent = hGetParent(db, table->name);
+	char *trackName = hGetTrackForTable(db, table->name);
+	char *vis = hCarefulTrackOpenVis(db, trackName);
 	boolean excludeTable = FALSE;
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
@@ -2438,7 +2431,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		if (parent)
 		    fprintf(f, "%s=%s&", parent, vis);
 		else
-		    fprintf(f, "%s=%s&", table->name, vis);
+		    fprintf(f, "%s=%s&", trackName, vis);
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
 		htmTextOut(f, pos->name);
 		fprintf(f, " at %s</A>", range);
