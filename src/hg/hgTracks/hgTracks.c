@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1647 2010/05/11 01:43:27 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1648 2010/05/18 19:01:16 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -199,7 +199,7 @@ for (group = groupList; group != NULL; group = group->next)
     for (tr = group->trackList; tr != NULL; tr = tr->next)
         {
         struct track *track = tr->track;
-            struct trackDb *tdb = track->tdb;
+	struct trackDb *tdb = track->tdb;
         if (changeVis == -1)
                 {
                 if(tdbIsComposite(tdb))
@@ -3953,6 +3953,39 @@ if(tdbIsSuperTrackChild(track->tdb))
     }
 }
 
+struct track *rFindTrackWithTable(char *tableName, struct track *trackList)
+/* Recursively search through track list looking for first one that matches table. */
+{
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (sameString(tableName, track->table))
+         return track;
+    struct track *subTrack = rFindTrackWithTable(tableName, track->subtracks);
+    if (subTrack != NULL)
+         return subTrack;
+    }
+return NULL;
+}
+
+static void setSearchedTrackToPackOrFull(struct track *trackList)
+/* Open track associated with search position if any.   Also open its parents
+ * if any.  At the moment parents include composites but not supertracks. */
+{
+if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
+    {
+    char *tableName = hgp->tableList->name;
+    struct track *matchTrack = rFindTrackWithTable(tableName, trackList);
+    if (matchTrack != NULL)
+	{
+	struct track *track;
+	for (track = matchTrack; track != NULL; track = track->parent)
+	    cartSetString(cart, track->track, hCarefulTrackOpenVis(database, track->track));
+	}
+    }
+}
+
+
 struct track *getTrackList( struct group **pGroupList, int vis)
 /* Return list of all tracks, organizing by groups.
  * If vis is -1, restore default groups to tracks.
@@ -3975,7 +4008,7 @@ if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList, vis);
-
+setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
 
@@ -5103,17 +5136,6 @@ if (isGenome(position) || NULL ==
         if(hgp != NULL && position != defaultPosition)
             cartSetString(cart, "position", position);
         }
-    }
-
-if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
-    {
-    char *trackName = hgp->tableList->name;
-    char *parent = hGetParent(database, trackName); // This only works for a composite track (not superTrack)
-    if (parent)                           // TODO: Therefore I wonder about the need for this code.
-        trackName = cloneString(parent);
-    char *vis = cartOptionalString(cart, trackName);
-    if (vis == NULL || differentString(vis, "full"))
-    cartSetString(cart, trackName, hTrackOpenVis(database, trackName));
     }
 
 /* After position is found set up hash of matches that should

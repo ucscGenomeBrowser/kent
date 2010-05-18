@@ -201,6 +201,7 @@ struct track
                                 loaded and drawn by this track.  This
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
+    struct track *parent;	/* Parent track if any */
 
     void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */

@@ -76,6 +76,7 @@ for (subtdb = tdb->subtracks; subtdb != NULL; subtdb = subtdb->next)
     if (handler != NULL)
 	handler(subtrack);
     slAddHead(&track->subtracks, subtrack);
+    subtrack->parent = track;
     if (subtdb->subtracks != NULL)
 	makeContainerTrack(subtrack, subtdb);
     }

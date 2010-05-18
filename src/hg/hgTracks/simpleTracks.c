@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.139 2010/05/11 01:43:28 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.140 2010/05/18 19:01:17 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10965,6 +10965,7 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subtrack->shortLabel = subTdb->shortLabel;
     subtrack->longLabel = subTdb->longLabel;
     subtrack->priority = subTdb->priority;
+    subtrack->parent = track;
 
     /* Add color gradient. */
     if (finalR || finalG || finalB)
