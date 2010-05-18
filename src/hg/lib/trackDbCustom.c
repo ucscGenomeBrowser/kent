@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.88 2010/05/11 19:07:24 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.89 2010/05/18 20:04:52 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -316,7 +316,7 @@ return tdb->settingsHash;
 
 static struct hash *trackDbSettingsFromString(char *string)
 /* Return hash of key/value pairs from string.  Differs
- * from raSettingsFromString in that it passes the key/val
+ * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
 {
 char *dupe = cloneString(string);
