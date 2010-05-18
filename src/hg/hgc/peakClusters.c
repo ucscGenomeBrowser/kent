@@ -242,7 +242,7 @@ if (cluster != NULL)
 	}
     webPrintLinkTableEnd();
     }
-printf("<A HREF=\"%s&g=hgcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
+printf("<A HREF=\"%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
 	tdb->track);
 printf("List all items assayed");
 webNewSection("Track Description");

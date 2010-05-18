@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1627 2010/05/18 22:07:52 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1628 2010/05/18 22:39:08 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6505,6 +6505,7 @@ char **row;
 struct psl *psl;
 struct dnaSeq *rnaSeq;
 char *type;
+char *rootTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
@@ -6516,6 +6517,7 @@ chopSuffix(accChopped);
 writeFramesetType();
 puts("<HTML>");
 type = cartString(cart, "aliTrack");
+rootTable = hGetTableForTrack(database,type);
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, type);
 
 /* Get some environment vars. */
@@ -6539,7 +6541,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
     }
 
 /* Look up alignments in database */
-hFindSplitTable(database, seqName, type, table, &hasBin);
+hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
 	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -22124,7 +22126,7 @@ else if (sameWord(table, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
-else if (sameWord(table, "hgcListItemsAssayed"))
+else if (sameWord(table, "htcListItemsAssayed"))
     {
     doPeakClusterListItemsAssayed();
     }
