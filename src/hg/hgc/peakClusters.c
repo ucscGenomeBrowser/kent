@@ -59,10 +59,23 @@ return compositeGroupLabel(tdb, group, groupId);
 }
 
 static void printClusterTableHeader(struct slName *displayGroupList)
-/* Print out header fields table */
+/* Print out header fields table of tracks in cluster */
 {
 webPrintLabelCell("#");
 webPrintLabelCell("signal");
+struct slName *displayGroup;
+for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displayGroup->next)
+    {
+    webPrintLabelCell(displayGroup->name);
+    }
+webPrintLabelCell("description");
+printf("</TR><TR>\n");
+}
+
+static void printOutOfClusterTableHeader(struct slName *displayGroupList)
+/* Print out header fields for table of tracks not in cluster */
+{
+webPrintLabelCell("#");
 struct slName *displayGroup;
 for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displayGroup->next)
     {
@@ -86,25 +99,27 @@ for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displ
 webPrintLinkCell(tdb->longLabel);
 }
 
-static void showOnePeak(struct trackDb *tdb, struct bed *cluster, struct trackDb *clusterTdb,
+static void showOnePeakOrMiss(struct trackDb *tdb, struct trackDb *clusterTdb,
 	struct encodePeak *peakList, struct slName *displayGroupList, int *pIx)
-/* Show info on track and peak.  Peak may be NULL in which case n/a's will be printed
- * as appropriate. */
+/* Show info on track and peak.  Peak may be NULL in which case fewer columns will be printed. */
 {
 struct encodePeak *peak;
 *pIx += 1;
 webPrintIntCell(*pIx);
-webPrintLinkCellRightStart();
-printf("%g", peakList->signalValue);
-for (peak = peakList->next; peak != NULL; peak = peak->next)
-    printf(",%g", peak->signalValue);
-webPrintLinkCellEnd();
+if (peakList)
+    {
+    webPrintLinkCellRightStart();
+    printf("%g", peakList->signalValue);
+    for (peak = peakList->next; peak != NULL; peak = peak->next)
+	printf(",%g", peak->signalValue);
+    webPrintLinkCellEnd();
+    }
 printTableInfo(tdb, clusterTdb, displayGroupList);
 printf("</TR><TR>\n");
 }
 
 static boolean showMatchingTrack(char *track, struct bed *cluster, struct sqlConnection *conn,
-	struct trackDb *clusterTdb, struct slName *displayGroupList, int *pRowIx)
+	struct trackDb *clusterTdb, struct slName *displayGroupList, boolean invert, int *pRowIx)
 /* put out a line in an html table that describes the given track. */ 
 {
 struct trackDb *tdb = hashMustFindVal(trackHash, track);
@@ -121,10 +136,58 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
     slAddTail(&peakList, peak);
     }
-if (peakList)
-    showOnePeak(tdb, cluster, clusterTdb, peakList, displayGroupList, pRowIx);
+if (invert)
+    {
+    if (!peakList)
+        showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, pRowIx);
+    }
+else
+    {
+    if (peakList)
+	showOnePeakOrMiss(tdb, clusterTdb, peakList, displayGroupList, pRowIx);
+    }
 sqlFreeResult(&sr);
 return result;
+}
+
+static struct slName *findMatchingSubtracks(struct trackDb *tdb)
+/* Find subtracks that match inputTracks tags. */
+{
+/* Get list of tracks we'll look through for input. */
+char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
+struct slName *inTrackList = stringToSlNames(inputTracks);
+
+/* Get list of subgroups to select on */
+char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
+struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
+
+struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
+return matchTrackList;
+}
+
+
+void doPeakClusterListItemsAssayed()
+/* Put up a page that shows all experiments associated with a cluster track. */
+{
+struct trackDb *clusterTdb = tdbForTableArg();
+struct slName *matchTrackList = findMatchingSubtracks(clusterTdb);
+struct slName *matchTrack;
+
+char title[256];
+safef(title, sizeof(title), "List of items assayed in %s", clusterTdb->shortLabel);
+cartWebStart(cart, database, title);
+
+char *inputTracksSubgroupDisplay = trackDbRequiredSetting(clusterTdb, "inputTracksSubgroupDisplay");
+struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
+webPrintLinkTableStart();
+printOutOfClusterTableHeader(displayGroupList);
+int rowIx = 0;
+for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, matchTrack->name);
+    showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, &rowIx);
+    }
+webPrintLinkTableEnd();
 }
 
 void doPeakClusters(struct trackDb *tdb, char *item)
@@ -153,20 +216,12 @@ sqlFreeResult(&sr);
 
 if (cluster != NULL)
     {
-    /* Get list of tracks we'll look through for input. */
-    char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
-    struct slName *inTrackList = stringToSlNames(inputTracks);
-
-    /* Get list of subgroups to select on */
-    char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
-    struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
-
     /* Get list of subgroups to display */
     char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
     struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
 
     /* Get list of tracks that match criteria. */
-    struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
+    struct slName *matchTrackList = findMatchingSubtracks(tdb);
     struct slName *matchTrack;
 
     /* Print out some information about the cluster overall. */
@@ -182,11 +237,15 @@ if (cluster != NULL)
     for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
         {
 	showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
-		&rowIx);
+		FALSE, &rowIx);
 	}
     webPrintLinkTableEnd();
     }
+printf("<A HREF=\"%s&g=hgcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
+	tdb->track);
+printf("List all items assayed");
 webNewSection("Track Description");
+printf("</A><BR>\n");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -243,6 +302,10 @@ if (cluster != NULL)
     struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
     uglyf("<B>inputTracksSubgroupSelect:</B> %s (%d)<BR>\n", inputTracksSubgroupSelect, slCount(selGroupList));
 
+    /* Get list of subgroups to display */
+    char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
+    struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
+
     /* Figure out factor ID and add it as selection criteria*/
     char *factorId = findFactorId(inTrackList, cluster->name);
     uglyf("<B>cluster->id:</B> %s  <B>factorId:</B> %s<BR>\n", cluster->name, factorId);
@@ -251,9 +314,34 @@ if (cluster != NULL)
 
     /* Get list of tracks that match criteria. */
     struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
-    // struct slName *matchTrack;
+    struct slName *matchTrack;
     uglyf("<B>matchTrackList:</B> %d elements<BR>\n", slCount(matchTrackList));
 
+    /* In a new section put up list of hits. */
+    webNewSection("List of %s Items in Cluster", cluster->name);
+    webPrintLinkTableStart();
+    printClusterTableHeader(displayGroupList);
+    int rowIx = 0;
+    for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
+        {
+	showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
+		FALSE, &rowIx);
+	}
+    webPrintLinkTableEnd();
+
+
+    webNewSection("List of cells assayed with %s but without hits in cluster", cluster->name);
+    webPrintLinkTableStart();
+    printOutOfClusterTableHeader(displayGroupList);
+    rowIx = 0;
+    for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
+        {
+	showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
+		TRUE, &rowIx);
+	}
+    webPrintLinkTableEnd();
+
+    webNewSection("Track Description");
     }
 }
 

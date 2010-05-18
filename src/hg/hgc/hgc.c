@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1624 2010/05/17 02:30:20 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1625 2010/05/18 00:04:40 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22122,6 +22122,11 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+else if (sameWord(track, "hgcListItemsAssayed"))
+    {
+    doPeakClusterListItemsAssayed();
+    }
+
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
  else if (loweLabClick(track, item, tdb))

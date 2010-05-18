@@ -67,6 +67,9 @@ void hgcAnchor(char *group, char *item, char *other);
 /* Generate an anchor that calls click processing program with item 
  * and other parameters. */
 
+struct trackDb *tdbForTableArg();
+/* get trackDb for track passed in table arg */
+
 void writeFramesetType();
 /* Write document type that shows a frame set, rather than regular HTML. */
 
@@ -232,6 +235,9 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 
 void doPeakClusters(struct trackDb *tdb, char *item);
 /* Display detailed info about a cluster of peaks from other tracks. */
+
+void doPeakClusterListItemsAssayed();
+/* Put up a page that shows all experiments associated with a cluster track. */
 
 void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start);
 /* Display detailed info about a cluster of peaks from other tracks. */
