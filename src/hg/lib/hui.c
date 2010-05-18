@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.288 2010/05/17 02:28:45 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.289 2010/05/18 06:31:44 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2303,11 +2303,13 @@ static void subgroupMembersFree(members_t **members)
 {
 if(members && *members)
     {
+    //assert((*members)->selected == NULL);     // This should only get set through membersForAll which will not be freed.
+    //assert((*members)->subtrackList == NULL); // This should only get set through membersForAll which will not be freed.
+    if((*members)->selected != NULL || (*members)->subtrackList != NULL)
+    	return;
     freeMem((*members)->setting);
     freeMem((*members)->tags);
     freeMem((*members)->titles);
-    assert((*members)->selected == NULL);     // This should only get set through membersForAll which will not be freed.
-    assert((*members)->subtrackList == NULL); // This should only get set through membersForAll which will not be freed.
     freez(members);
     }
 }
