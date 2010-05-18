@@ -207,6 +207,11 @@ struct hash *trackDbHashSettings(struct trackDb *tdb);
 /* Force trackDb to hash up it's settings.  Usually this is just
  * done on demand. Returns settings hash. */
 
+struct hash *trackDbSettingsFromString(char *string);
+/* Return hash of key/value pairs from string.  Differs
+ * from raFromString in that it passes the key/val
+ * pair through the backwards compatability routines. */
+
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 
