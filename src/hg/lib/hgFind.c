@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.227 2010/04/26 23:17:41 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.228 2010/05/18 18:58:20 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1252,7 +1252,7 @@ else
     safef(tableName, tnSize, "all_%s", base);
 }
 
-static char *carefulTrackOpenVis(char *db, char *trackName)
+char *hCarefulTrackOpenVis(char *db, char *trackName)
 /* If track is already in full mode, return full; otherwise, return
  * hTrackOpenVis. */
 {
@@ -1324,7 +1324,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     pos->browserName = cloneString(psl->qName);
     dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
 		   hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
-		   tableName, carefulTrackOpenVis(db, tableName));
+		   tableName, hCarefulTrackOpenVis(db, tableName));
     if (ui != NULL)
 	dyStringPrintf(dy, "&%s", ui);
     dyStringPrintf(dy, "%s\">", hgp->extraCgi);
@@ -2412,7 +2412,7 @@ if (useWeb)
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
-    char *vis = carefulTrackOpenVis(db, table->name);
+    char *vis = hCarefulTrackOpenVis(db, table->name);
     char *parent = hGetParent(db, table->name);
     if (table->posList != NULL)
 	{
