@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.196 2010/05/14 23:32:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.197 2010/05/19 00:52:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -904,7 +904,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             hashAdd(uniqHash, wig->table, NULL);
             }
 	}
-    if (tdbIsComposite(track))
+    if (track->subtracks)
         {
         struct slName *subList = NULL;
 	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
@@ -956,10 +956,12 @@ if (useJoiner)
 	}
     slNameSort(&nameList);
     }
-name = slNameNew(trackTable);
-if (!tdbIsComposite(track))
-    /* suppress for composite tracks -- only the subtracks have tables */
+/* suppress for parent tracks -- only the subtracks have tables */
+if (track->subtracks == NULL)
+    {
+    name = slNameNew(trackTable);
     slAddHead(&nameList, name);
+    }
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
 hashFree(&uniqHash);
 return nameList;
