@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.23 2010/04/06 23:42:59 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.24 2010/05/19 18:51:13 hiram Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -31,7 +31,9 @@ errAbort(
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
   "and chrom.sizes is two column: <chromosome name> <size in bases>\n"
   "and out.bb is the output indexed big bed file.\n"
-  "The in.bed file must be sorted by chromosome,start.\n"
+  "The in.bed file must be sorted by chromosome,start,\n"
+  "  to sort a bed file, use the unix sort command:\n"
+  "     sort -k1,1 -k2,2 unsorted.bed > sorted.bed\n"
   "\n"
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
