@@ -9,7 +9,7 @@
 # edited lightly by hand.
 #
 # Note that type "customTracks" is used to reserve a symbol that can be in a
-# custom track track line.  It is easier if this shares the same symbold space
+# custom track track line.  It is easier if this shares the same symbol space
 # as trackDb.
 
 accession *
