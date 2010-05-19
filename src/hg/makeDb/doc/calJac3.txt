@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.12 2010/05/18 23:52:28 mary Exp $
+#	$Id: calJac3.txt,v 1.13 2010/05/19 22:27:18 chinhli Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1390,8 +1390,8 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
     rm multiz13way*.tab
 
     # create some downloads
-    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/download/maf
-    cd /hive/data/genomes/calJac3/bed/multiz13way/download/maf
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
     time cp -p ../../anno/maf/*.maf .
     #   real    37m48.902s
     time gzip --rsyncable *.maf
@@ -1510,8 +1510,185 @@ find -name "*.html" | xargs grep 2007
 
 # downloads
 cd /usr/local/apache/htdocs/goldenPath/calJac3
-find -name "README.txt" | xargs grep 2007
+find -name "*" | xargs grep 2007
 
 # hgcentral
 hgsql hgcentraltest
 update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3"
+
+
+############################################################################
+## Annotate 13-way multiple alignment with gene annotations
+##              DONE - 2010-05-17 - Chin)
+    # Gene frames
+    ## survey all genomes to see what type of gene track to use
+    ssh hgwdev
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/frames
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    #
+    #   survey all the genomes to find out what kinds of gene tracks
+    #   they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+            $table == "knownGene" || $table == "xenoRefGene" ) then
+                set count = `hgsql $db -N -e "select count(*) from $table"`
+                echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql calJac3 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql calJac3 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+
+    ./showGenes.csh
+    # calJac3: xenoRefGene: 235146, Mrnas: 3722
+    # ponAbe2: ensGene: 30230, refGene: 3466, xenoRefGene: 224711, Mrnas: 0
+    # hg19: ensGene: 143123, knownGene: 77614, mgcGenes: 31354, 
+            refGene: 35776, xenoRefGene: 126698, Mrnas: 287363
+    # panTro2: ensGene: 40215, refGene: 743, xenoRefGene: 217765, Mrnas: 1535
+    # gorGor2: xenoRefGene: 223719, Mrnas: 1
+    # rheMac2: ensGene: 41617, refGene: 939, xenoRefGene: 285046, Mrnas: 5227
+    # papHam1: xenoRefGene: 249401, Mrnas: 70
+    # tarSyr1: ensGene: 44646, Mrnas: 8
+    # micMur1: ensGene: 36501, Mrnas: 43
+    # otoGar1: ensGene: 35274, Mrnas: 0
+    # mm9: ensGene: 83124, knownGene: 54042, mgcGenes: 26582, 
+           refGene: 27131, xenoRefGene: 122280, Mrnas: 258076
+    # canFam2: ensGene: 30299, refGene: 1039, xenoRefGene: 210336, Mrnas: 3211
+    # monDom5: ensGene: 34745, refGene: 392, xenoRefGene: 213342, Mrnas: 1605
+
+
+    #   rearrange that output to create 3 sections:
+    #1. knownGenes: hg19 mm9
+    #2. ensGene: ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
+    #3. xenoRefGene: calJac3 papHam1 gorGor2
+
+
+    mkdir genes
+    # knownGene
+    echo "hg19 mm9" \
+    | sed -e "s/  */ /g" > knownGene.list
+
+
+    for DB in hg19 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    echo "ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5" \
+    | sed -e "s/  */ /g" > ensGene.list
+
+    # ensGene
+    for DB in  ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    echo "calJac3 papHam1 gorGor2" > xenoRef.list 
+    # xenoRefGene
+    for DB in  calJac3 papHam1 gorGor2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    #   turn it into a kluster job
+    ssh swarm
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set C = $1
+set G = $2
+
+cat ../run/maf/${C}.maf | genePredToMafFrames calJac3 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    ls ../run/maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" | grep -v calJac3 > gene.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=8g create jobList
+    para try ... check ... push
+# Completed: 3072 of 3072 jobs
+# CPU time in finished jobs:       5599s      93.32m     1.56h    0.06d  0.000 y
+# IO & Wait Time:                279159s    4652.65m    77.54h    3.23d  0.009 y
+# Average job time:                  93s       1.54m     0.03h    0.00d
+# Longest finished job:            1292s      21.53m     0.36h    0.01d
+# Submission to last job:          1380s      23.00m     0.38h    0.02d
+
+    # see what it looks like in terms of number of annotations per DB:
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
+   
+   cat annotation.survey.txt
+   #   159735 tarSyr1
+   #   202861 panTro2
+   #   203073 rheMac2
+   #   205358 ponAbe2
+   #   205679 hg19
+   #   206899 micMur1
+   #   211208 papHam1
+   #   211692 monDom5
+   #   213918 otoGar1
+   #   217594 gorGor2
+   #   233938 mm9
+   #   240194 canFam2
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz13wayFrames.bed 
+    
+    hgLoadMafFrames calJac3 multiz13wayFrames multiz13wayFrames.bed
+
+    featureBits -countGaps calJac3 multiz13wayFrames.bed
+    #   40132771 bases of 2914958544 (1.377%) in intersection
+
+    #   enable the trackDb entries:
+# frames multiz13wayFrames
+# irows on
+    #   appears to work OK
+
