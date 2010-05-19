@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.14 2010/05/13 21:38:33 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.15 2010/05/19 22:23:46 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -751,7 +751,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 
 #####################################################################
-## 6-Way Multiz (DONE - 2010-04-19 - Chin)
+## 6-Way Multiz (DONE - 2010-05-07 - Chin)
 # use /cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh 
     mkdir /hive/data/genomes/felCatV17e/bed/multiz6way
     cd /hive/data/genomes/felCatV17e/bed/multiz6way
@@ -974,6 +974,9 @@ popd > /dev/null
     gensub2 chr.part.list single template jobList
     para -ram=8g create jobList
 
+XXXX TODO: 05-14 Chin: a script to check the integrity of the maf file
+      (i.e. hearde, size existence etc
+
     #   put the split mafs back together into a single result
     head -q -n 1 maf/000.maf > felCatV17e.6way.maf
     for F in maf/*.maf
@@ -1116,8 +1119,8 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCatV17e/felCatV17e.2bit $o
     rm multiz6way*.tab
 
     # create some downloads
-    mkdir -p /hive/data/genomes/felCatV17e/bed/multiz6way/download/maf
-    cd /hive/data/genomes/felCatV17e/bed/multiz6way/download/maf
+    mkdir -p /hive/data/genomes/felCatV17e/bed/multiz6way/downloads/maf
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/downloads/maf
     # time cp -p ../../anno/maf/chr*.maf .
     time cp -p ../../anno/maf/*.maf .
     #   real    6m55.315s
@@ -1300,9 +1303,19 @@ chainOne $(path1)
 
 ############################################################################
 ## Annotate 6-way multiple alignment with gene annotations
-##              (working 2010-05-07 - Chin)
+##              (Done 2010-05-07 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
+    ## Rules to decide which genes to use in order:
+    ##    1. ucscGene
+    ##    2. ensGene
+    ##    3. refSeq
+    ##    4. Other include mRNA
+    ## Based on this, 
+    #   hg19, mm9  ucscGene
+    #   monDom5, canFam2:  ensGene
+    #   ailMel1: mRNA
+
     ssh hgwdev
     mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/frames
     cd /hive/data/genomes/felCatV17e/bed/multiz6way/frames
@@ -1335,15 +1348,26 @@ end
 '_EOF_'
     # << happy emacs
     chmod +x ./showGenes.csh
-    #   rearrange that output to create four sections:
-    #   1. knownGenes for felCatV17e, mm9, rn4
-    #   2. ensGene for almost everything else
-    #   3. xenoRefGene for calJac1, petMar1, loxAfr3, papHam1, macEug1,
-    #   oryCun2
+    ./showGenes.csh
+
+    # felCatV17e: refGene: 351, xenoRefGene: 210753, Mrnas: 2163
+    # canFam2: ensGene: 30299, refGene: 1039, xenoRefGene: 210152, Mrnas: 3211
+    # ailMel1: xenoRefGene: 200505, Mrnas: 51
+    # hg19: ensGene: 143123, knownGene: 77614, mgcGenes: 31354, 
+    #       refGene: 35655, xenoRefGene: 126675, Mrnas: 287241
+    # mm9: ensGene: 83124, knownGene: 54042, mgcGenes: 26582, 
+    #      refGene: 27122, xenoRefGene: 122159, Mrnas: 258055
+    # monDom5: ensGene: 34745, refGene: 392, xenoRefGene: 213164, Mrnas: 1605
+    #
+    #   Based on this, use
+    #    1. knownGenes for hg19, mm9
+    #    2. ensGene for monDom5, canFam2
+    #    3, xenoRefGene for ailMel1, felCatV17e
 
     mkdir genes
     # knownGene
-    for DB in felCatV17e mm9 rn4
+
+    for DB in hg19 mm9
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1352,21 +1376,11 @@ do
     echo "${DB} done"
 done
 
-    echo "panTro2 gorGor1 ponAbe2 rheMac2 tarSyr1 micMur1 otoGar1 \
-        tupBel1 dipOrd1 cavPor3 speTri1 ochPri2 vicPac1 turTru1 \
-        bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 \
-        proCap1 echTel1 dasNov2 choHof1 monDom5 ornAna1 galGal3 \
-        taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6" \
+    echo "monDom5 canFam2" \
     | sed -e "s/  */ /g" > ensGene.list
 
-
-do  
     # ensGene 
-    for DB in panTro2 gorGor1 ponAbe2 rheMac2 tarSyr1 micMur1 otoGar1 \
-        tupBel1 dipOrd1 cavPor3 speTri1 ochPri2 vicPac1 turTru1 \
-        bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 \
-        proCap1 echTel1 dasNov2 choHof1 monDom5 ornAna1 galGal3 \
-        taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6
+    for DB in monDom5 canFam2
 do  
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1375,10 +1389,12 @@ do
     echo "${DB} done"
 done
 
-    echo "calJac1 petMar1 loxAfr3 papHam1 macEug1 oryCun2" > xenoRef.list
 
     # xenoRefGene
-    for DB in calJac1 petMar1 loxAfr3 papHam1 macEug1 oryCun2
+    echo "ailMel1 felCatV17e2" \
+            | sed -e "s/  */ /g" > xenoRef.list
+
+    for DB in ailMel1 felCatV17e
 do  
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1390,13 +1406,13 @@ done
     #   the following single command doesn't work on any 32 Gb computer,
     #   requires much more memory, turn it into a kluster job, see below
     #   ...
-
+#### Skipped begin ====>
     #   Create this command with this script:
     cat << '_EOF_' > mkCmd.sh
 #!/bin/sh
 
 echo "time (cat ../maf/*.maf | nice -n +19 genePredToMafFrames felCatV17e stdin stdout \\"
-for G in mm9 rn4
+for G in hg19 mm9
 do  
     if [ ! -s genes/${G}.gp.gz ]; then
         echo "missing genes/${G}.gp.gz"
@@ -1404,6 +1420,15 @@ do
     fi
     echo -n "${G} genes/${G}.gp.gz "
 done 
+echo "\\"
+for D in `sort ensGene.list`
+do
+    if [ ! -s genes/${D}.gp.gz ]; then
+        echo "missing genes/${D}.gp.gz"
+        exit 255
+    fi
+    echo -n "${D} genes/${D}.gp.gz "
+done
 echo "\\"
 for D in `sort xenoRef.list`
 do
@@ -1422,11 +1447,11 @@ echo "    | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1"
     #   this doesn't work on any 32 Gb computer, requires much more
     #   memory
     #   turn it into a kluster job, see below
-    time (cat ../maf/*.maf | nice -n +19 genePredToMafFrames felCatV17e stdin stdout \
-mm9 genes/mm9.gp.gz rn4 genes/rn4.gp.gz \
-panTro2 genes/panTro2.gp.gz gorGor1 genes/gorGor1.gp.gz ponAbe2 genes/ponAbe2.gp.gz rheMac2 genes/rheMac2.gp.gz tarSyr1 genes/tarSyr1.gp.gz micMur1 genes/micMur1.gp.gz otoGar1 genes/otoGar1.gp.gz tupBel1 genes/tupBel1.gp.gz dipOrd1 genes/dipOrd1.gp.gz cavPor3 genes/cavPor3.gp.gz speTri1 genes/speTri1.gp.gz ochPri2 genes/ochPri2.gp.gz vicPac1 genes/vicPac1.gp.gz turTru1 genes/turTru1.gp.gz bosTau4 genes/bosTau4.gp.gz equCab2 genes/equCab2.gp.gz felCat3 genes/felCat3.gp.gz canFam2 genes/canFam2.gp.gz myoLuc1 genes/myoLuc1.gp.gz pteVam1 genes/pteVam1.gp.gz eriEur1 genes/eriEur1.gp.gz sorAra1 genes/sorAra1.gp.gz proCap1 genes/proCap1.gp.gz echTel1 genes/echTel1.gp.gz dasNov2 genes/dasNov2.gp.gz choHof1 genes/choHof1.gp.gz monDom5 genes/monDom5.gp.gz ornAna1 genes/ornAna1.gp.gz galGal3 genes/galGal3.gp.gz taeGut1 genes/taeGut1.gp.gz anoCar1 genes/anoCar1.gp.gz xenTro2 genes/xenTro2.gp.gz tetNig2 genes/tetNig2.gp.gz fr2 genes/fr2.gp.gz gasAcu1 genes/gasAcu1.gp.gz oryLat2 genes/oryLat2.gp.gz danRer6 genes/danRer6.gp.gz \
-calJac1 genes/calJac1.gp.gz petMar1 genes/petMar1.gp.gz loxAfr3 genes/loxAfr3.gp.gz papHam1 genes/papHam1.gp.gz macEug1 genes/macEug1.gp.gz oryCun2 genes/oryCun2.gp.gz \
+    time (cat ../run/maf/*.maf | nice -n +19 genePredToMafFrames felCatV17e stdin stdout \
+mm9 genes/mm9.gp.gz hg19 genes/hg19.gp.gz ailMel1 genes/ailMel1  \
+canFam2 genes/canFam2.gp.gz monDom5 genes/monDom5 \
     | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
+#### Skipped end  <====== 
 
     #   that doesn't work on any 32 Gb computer, requires much more
     #   memory
@@ -1439,13 +1464,13 @@ calJac1 genes/calJac1.gp.gz petMar1 genes/petMar1.gp.gz loxAfr3 genes/loxAfr3.gp
 set C = $1
 set G = $2
 
-cat ../maf/${C}.maf | genePredToMafFrames felCatV17e stdin stdout \
+cat ../run/maf/${C}.maf | genePredToMafFrames felCatV17e stdin stdout \
         ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
 '_EOF_'
     # << happy emacs
     chmod +x runOne
 
-    ls ../maf | sed -e "s/.maf//" > chr.list
+    ls ../run/maf | sed -e "s/.maf//" > chr.list
     ls genes | sed -e "s/.gp.gz//" | grep -v felCatV17e > gene.list
 
     cat << '_EOF_' > template
@@ -1459,65 +1484,30 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     gensub2 chr.list gene.list template jobList
     para -ram=8g create jobList
     para try ... check ... push
-# Completed: 4185 of 4185 jobs
-# CPU time in finished jobs:      72491s    1208.19m    20.14h    0.84d
-# 0.002 y
-# IO & Wait Time:               1462162s   24369.36m   406.16h   16.92d
-# 0.046 y
-# Average job time:                 367s       6.11m     0.10h    0.00d
-# Longest finished job:            3165s      52.75m     0.88h    0.04d
-# Submission to last job:          6364s     106.07m     1.77h    0.07d
+
+    para time
+# Completed: 1280 of 1280 jobs
+# CPU time in finished jobs:        653s      10.88m     0.18h    0.01d  0.000 y
+# IO & Wait Time:                 11158s     185.97m     3.10h    0.13d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:           138s       2.30m     0.04h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
 
     # see what it looks like in terms of number of annotations per DB:
     find ./parts -type f | while read F
 do
     zcat ${F}
 done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
-  79191 rn4
- 108287 petMar1
- 139581 gorGor1
- 140487 taeGut1
- 143058 choHof1
- 143233 vicPac1
- 150073 anoCar1
- 154462 tarSyr1
- 163930 sorAra1
- 164575 galGal3
- 171191 macEug1
- 174221 felCat3
- 175831 dasNov2
- 177622 ornAna1
- 190729 eriEur1
- 192285 tupBel1
- 198052 speTri1
- 199639 micMur1
- 201731 papHam1
- 201961 panTro2
- 206170 oryCun2
- 209327 ponAbe2
- 209504 otoGar1
- 210860 rheMac2
- 212533 proCap1
- 212848 myoLuc1
- 213146 dipOrd1
- 213479 calJac1
- 215995 echTel1
- 220341 ochPri2
- 225132 loxAfr3
- 226689 turTru1
- 230903 monDom5
- 232025 pteVam1
- 232831 equCab2
- 236945 cavPor3
- 238167 bosTau4
- 239857 mm9
- 255727 canFam2
- 316850 xenTro2
- 359507 danRer6
- 375156 oryLat2
- 390076 fr2
- 426532 gasAcu1
- 434619 tetNig2
+
+   cat annotation.survey.txt
+   #   157202 monDom5
+   #   180207 mm9
+   #   188394 hg19
+   #   189876 canFam2
+   #   201403 ailMel1
+
 
     #   load the resulting file
     ssh hgwdev
@@ -1530,7 +1520,7 @@ done | sort -k1,1 -k2,2n > multiz6wayFrames.bed
     hgLoadMafFrames felCatV17e multiz6wayFrames stdin
 
     featureBits -countGaps felCatV17e multiz6wayFrames.bed
-    #   57146632 bases of 3137161264 (1.822%) in intersection
+    #   30677403 bases of 3160303948 (0.971%) in intersection
 
     #   enable the trackDb entries:
 # frames multiz6wayFrames
@@ -1554,6 +1544,7 @@ do
     echo "done upstream${S}.maf.gz"
 done
 
+    mkdir -p /usr/local/apache/htdocs/goldenPath/felCatV17e/multiz6way/maf
     cd /usr/local/apache/htdocs/goldenPath/felCatV17e/multiz6way/maf
     ln -s /hive/data/genomes/felCatV17e/bed/multiz6way/downloads/maf/up*.gz .
     md5sum up*.gz >> md5sum.txt

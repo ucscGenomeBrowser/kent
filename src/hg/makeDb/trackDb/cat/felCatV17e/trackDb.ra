@@ -30,8 +30,8 @@ autoScale Off
 windowingFunction mean
 pairwiseHeight 12
 yLineOnOff Off
-# frames multiz6wayFrames
-# irows on
+frames multiz6wayFrames
+irows on
 summary multiz6waySummary
 speciesCodonDefault felCatV17e
 speciesGroups Vertebrate

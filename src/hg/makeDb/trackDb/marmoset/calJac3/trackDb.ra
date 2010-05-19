@@ -24,8 +24,8 @@ autoScale Off
 windowingFunction mean
 pairwiseHeight 12
 yLineOnOff Off
-# frames multiz8wayFrames
-# irows on
+#   frames multiz8wayFrames
+#   irows on
 summary multiz8waySummary
 speciesCodonDefault calJac1
 speciesGroups Primates Vertebrate
@@ -61,8 +61,8 @@ autoScale Off
 windowingFunction mean
 pairwiseHeight 12
 yLineOnOff Off
-# frames multiz13wayFrames
-# irows on
+frames multiz13wayFrames
+irows on
 summary multiz13waySummary
 speciesCodonDefault calJac1
 speciesGroups Primates Vertebrate
