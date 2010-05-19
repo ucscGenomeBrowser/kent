@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.229 2010/05/18 20:06:39 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.230 2010/05/19 20:46:09 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1306,12 +1306,6 @@ table->htmlOnePos = mrnaHtmlOnePos;
 slAddHead(&hgp->tableList, table);
 dyStringPrintf(dy, "%s Alignments in %s", acc, shortLabel);
 table->description = cloneString(dy->string);
-if (startsWith("all_", tableName))
-    {
-    struct hTableInfo *hti = hFindTableInfo(db, NULL, tableName+4);
-    if (hti && hti->isSplit)
-	tableName += 4;
-    }
 table->name = cloneString(tableName);
 char *trackName = hGetTrackForTable(db, table->name);
 slSort(&pslList, pslCmpScore);
