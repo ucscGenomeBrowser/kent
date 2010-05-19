@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.26 2010/04/06 23:42:59 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.27 2010/05/19 19:08:42 hiram Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -32,6 +32,8 @@ errAbort(
   "      <chrom> <start> <end> <value>\n"
   "and chrom.sizes is two column: <chromosome name> <size in bases>\n"
   "and out.bw is the output indexed big wig file.\n"
+  "The input bedGraph file must be sorted, use the unix sort command:\n"
+  "  sort -k1,1 -k2,2 unsorted.bedGraph > sorted.bedGraph\n"
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
