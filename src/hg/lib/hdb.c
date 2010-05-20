@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.431 2010/05/20 19:03:07 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.432 2010/05/20 23:10:05 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3812,10 +3812,18 @@ struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct hash *settings = hel->val;
-    char *track = hashMustFindVal(settings, "track");
+    char *track = hel->name;
     char *table = hashFindVal(settings, "table");
     if (table == NULL)
-	 table = track;
+	{
+	// backwards compatibility with older trackDb:
+	if (sameString(track, "mrna"))
+	    table = "all_mrna";
+	else if (sameString(track, "est"))
+	    table = "all_est";
+	else
+	    table = track;
+	}
     hashAdd(tableToTrackHash, table, track);
     }
 hFreeConn(&conn);
