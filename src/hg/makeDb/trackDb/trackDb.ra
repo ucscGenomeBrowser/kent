@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.631 2010/05/13 01:26:16 kent Exp $";
+#	"$Id: trackDb.ra,v 1.632 2010/05/20 18:31:05 hiram Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -496,6 +496,18 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+
+# track text2Genome
+track t2g
+shortLabel Text2Genome
+longLabel Text2Genome
+group x
+priority 800
+visibility hide
+color 20,50,100
+articleTable t2gArticle
+sequenceTable t2gSequence
+type bed 12
 
 searchTable mgcFullMrna
 searchType psl
