@@ -7,6 +7,7 @@
 #include "trackDb.h"
 #include "web.h"
 #include "hash.h"
+#include "obscure.h"
 
 void printPubmedLink(char* pmid) 
 {
@@ -78,24 +79,12 @@ void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,  char* docId)
 void doT2gDetails(struct trackDb *tdb, char *item)
 /* text2genome.org custom display */
 {
+int start = cgiInt("o");
+int end = cgiInt("t");
 char versionString[256];
 char dateReference[256];
 char headerTitle[512];
-char **row = NULL;
-char query[512];
-struct sqlResult *sr = NULL;
-struct sqlConnection *conn = hAllocConn(database); // where the heck does "database" come from?
-safef(query, sizeof(query), "select chrom,chromStart,chromEnd,strand from %s "
-      "where name = '%s'", tdb->table, item);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-char *chr = cloneString(row[0]);
-int start = sqlUnsigned(row[1]);
-int end = sqlUnsigned(row[2]);
-char strand[2];
-strand[0] = row[3][0];
-strand[1] = (char)NULL;
-sqlFreeResult(&sr);
+struct sqlConnection *conn = hAllocConn(database);
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
@@ -130,8 +119,17 @@ else
     safef(headerTitle, sizeof(headerTitle), "%s", item);
 
 genericHeader(tdb, headerTitle);
-printPos(chr, start, end, strand, FALSE, item);
-freeMem(chr);
+
+printf("<B>Position:</B>&nbsp;"
+           "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), database, seqName, start+1, end);
+char startBuf[64], endBuf[64];
+sprintLongWithCommas(startBuf, start + 1);
+sprintLongWithCommas(endBuf, end);
+printf("%s:%s-%s</A><BR>\n", seqName, startBuf, endBuf);
+long size = end - start;
+sprintLongWithCommas(startBuf, size);
+printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
 
 char* docId = printArticleInfo(conn, tdb, item);
 
