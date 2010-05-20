@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.110 2010/05/20 19:52:32 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.111 2010/05/20 21:04:36 kent Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -848,40 +848,67 @@ for (x1 = 0; x1 < width; ++x1)
 		    if (dataValue < 0)
 		        {
 			int scaledMin = scaleHeightToPixels(p->min);
-			int boxHeight = max(1,scaledMin-zeroPos);
-			hvGfxBox(hvg, x,zeroPos,1, boxHeight, lightColor);
+			int lightHeight = max(1,scaledMin-zeroPos);
+			int mediumHeight = lightHeight;
 			if (!isnan(std))
 			    { // Test needed due to bug in version 1.5 bigWiles
 			    int scaledMinus = scaleHeightToPixels(dataValue-std);
-			    int boxHeight = max(1,scaledMinus-zeroPos);
-			    hvGfxBox(hvg, x, zeroPos, 1, boxHeight, mediumColor);
+			    mediumHeight = max(1,scaledMinus-zeroPos);
 			    }
-			boxHeight = max(1,scaledVal - zeroPos);
+			int darkHeight = max(1,scaledVal - zeroPos);
 			if (zeroPos == (yOff+h))  // bottom pixel special case
 			    zeroPos -= 1;
-		        if (((zeroPos-yOff)+boxHeight) == 0)
-			    boxHeight += 1;	  // top pixel special case
-			hvGfxBox(hvg, x, zeroPos,1, boxHeight, drawColor);
+		        if (((zeroPos-yOff)+darkHeight) == 0)
+			    darkHeight += 1;	  // top pixel special case
+			hvGfxBox(hvg, x,zeroPos,1, darkHeight, drawColor);
+			hvGfxBox(hvg, x, zeroPos+darkHeight, 1, mediumHeight-darkHeight, 
+				mediumColor);
+			hvGfxBox(hvg, x, zeroPos+mediumHeight,1, lightHeight-mediumHeight, 
+				lightColor);
 			}
 		    else
 		        {
-			int scaledMax = scaleHeightToPixels(p->max);
-			if (scaledMax == (h+yOff))
-			    scaledMax = (h+yOff) - 1;
-			int boxHeight = max(1,zeroPos-scaledMax);
-			hvGfxBox(hvg,x,scaledMax,1,boxHeight, lightColor);
-			if (!isnan(std))
-			    { // Test needed due to bug in version 1.5 bigWiles
-			    int scaledPlus = scaleHeightToPixels(dataValue+std);
-			    int boxHeight = max(1,zeroPos-scaledPlus);
-			    hvGfxBox(hvg, x, scaledPlus, 1, boxHeight, mediumColor);
-			    }
-			boxHeight = max(1,zeroPos - scaledVal);
+			/* The calculations here are a little convoluted because
+			 * of the history.  Originally it drew from the baseline
+			 * up to the max first in the lightest color, then from the
+			 * baseline to the mean+std in medium color, and finally
+			 * from baseline to mean in dark color.  This ended up 
+			 * drawing the same pixels up to three times which messed
+			 * things up in transparent overlay mode.   The code was
+			 * refactored to accomplish this without having to worry
+			 * about +/- 1 differences.   In particular be aware the
+			 * xyzHeight calculations are done assuming the other end is
+			 * the baseline. */
+
+			/* Calculate dark part from smoothed mean. */
+			int boxHeight = max(1,zeroPos - scaledVal);
 			if (scaledVal == (yOff+h))  // bottom pixel special case
 			    scaledVal -= 1;
 		        if (((scaledVal-yOff)+boxHeight) == 0)
 			    boxHeight += 1;	    // top pixel special case
-			hvGfxBox(hvg,x,scaledVal,1, boxHeight, drawColor);
+			int darkTop = scaledVal, darkHeight = boxHeight;
+
+			/* Calculate medium part from smoothed mean + std */
+			int mediumTop = darkTop, mediumHeight = darkHeight;
+			if (!isnan(std))
+			    { // Test needed due to bug in version 1.5 bigWiles
+			    int scaledPlus = scaleHeightToPixels(dataValue+std);
+			    int boxHeight = max(1,zeroPos-scaledPlus);
+			    mediumTop = scaledPlus, mediumHeight = boxHeight;
+			    }
+
+			/* Calculate light part from max. */
+			int scaledMax = scaleHeightToPixels(p->max);
+			if (scaledMax == (h+yOff))
+			    scaledMax = (h+yOff) - 1;
+			boxHeight = max(1,zeroPos-scaledMax);
+			int lightTop = scaledMax, lightHeight = boxHeight;
+
+			/* Draw, making sure not to overwrite pixels since 
+			 * would mess up transparent drawing. */
+			hvGfxBox(hvg,x,darkTop,1, darkHeight, drawColor);
+			hvGfxBox(hvg, x, mediumTop, 1, mediumHeight-darkHeight, mediumColor);
+			hvGfxBox(hvg,x,lightTop,1,lightHeight-mediumHeight, lightColor);
 			}
 		    }
 		else
