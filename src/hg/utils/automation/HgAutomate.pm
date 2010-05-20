@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.28 2010/05/20 22:58:58 braney Exp $
+# $Id: HgAutomate.pm,v 1.29 2010/05/20 23:13:33 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -478,6 +478,8 @@ sub processCommonOptions {
 
 
 #########################################################################
+#	These items should come from a configuration file so this
+#	business can be easily set up in other environments.
 # Hardcoded paths/command sequences:
 use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
 		$clusterData $trackBuild $goldenPath $images $gbdb
@@ -497,7 +499,7 @@ $cvs = "/usr/bin/cvs";
 $clusterData = '/hive/data/genomes';
 $trackBuild = 'bed';
 my $apacheRoot = '/usr/local/apache';
-$goldenPath = "$apacheRoot/htdocs-download/goldenPath";
+$goldenPath = "$apacheRoot/htdocs-hgdownload/goldenPath";
 $images = "$apacheRoot/htdocs/images";
 $gbdb = '/gbdb';
 
