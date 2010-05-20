@@ -82,6 +82,9 @@ void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,  char* docId)
 void doT2gDetails(struct trackDb *tdb, char *item)
 /* text2genome.org custom display */
 {
+char versionString[256];
+char dateReference[256];
+char headerTitle[512];
 char **row = NULL;
 char query[512];
 struct sqlResult *sr = NULL;
@@ -90,17 +93,50 @@ safef(query, sizeof(query), "select chrom,chromStart,chromEnd,strand from %s "
       "where name = '%s'", tdb->table, item);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-char *chr = row[0];
+char *chr = cloneString(row[0]);
 int start = sqlUnsigned(row[1]);
 int end = sqlUnsigned(row[2]);
 char strand[2];
 strand[0] = row[3][0];
 strand[1] = (char)NULL;
-//cartWebStart(cart, database, "Article information ");
-genericHeader(tdb, "Article information");
-printf("<B>Item:</B>&nbsp;%s<BR>\n", item);
-printPos(chr, start, end, strand, TRUE, item);
 sqlFreeResult(&sr);
+
+/* see if hgFixed.trackVersion exists */
+boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+
+if (trackVersionExists)
+    {
+    char query[256];
+    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' AND name = 't2g' order by updateTime DESC limit 1", database);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+
+    /* in case of NULL result from the table */
+    versionString[0] = 0;
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	safef(versionString, sizeof(versionString), "version %s",
+		row[0]);
+	safef(dateReference, sizeof(dateReference), "%s",
+		row[1]);
+	}
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    versionString[0] = 0;
+    dateReference[0] = 0;
+    }
+
+if (versionString[0])
+    safef(headerTitle, sizeof(headerTitle), "%s - %s", item, versionString);
+else
+    safef(headerTitle, sizeof(headerTitle), "%s", item);
+
+genericHeader(tdb, headerTitle);
+
+printPos(chr, start, end, strand, TRUE, item);
+freeMem(chr);
 char* docId=0;
 docId = printArticleInfo(conn, tdb, item);
 
@@ -110,3 +146,4 @@ if (docId!=0)
 }
 hFreeConn(&conn);
 }
+
