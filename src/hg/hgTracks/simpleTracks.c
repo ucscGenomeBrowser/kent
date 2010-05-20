@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.140 2010/05/18 19:01:17 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.141 2010/05/20 19:53:22 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -4039,7 +4039,6 @@ boolean genePredClassFilter(struct track *tg, void *item)
 /* Returns true if an item should be added to the filter. */
 {
 struct linkedFeatures *lf = item;
-char *classString;
 char *classType = NULL;
 enum acemblyOptEnum ct;
 struct sqlConnection *conn = NULL;
@@ -4051,7 +4050,6 @@ char *classTable = NULL;
 boolean sameClass = TRUE;
 classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 
-AllocVar(classString);
 if (classTable != NULL && hTableExists(database, classTable))
     {
     filterBy_t *filterBySet = filterBySetGet(tg->tdb,cart,NULL);
@@ -4079,10 +4077,11 @@ if (classTable != NULL && hTableExists(database, classTable))
         return passesThroughFilter;
         }
 
-    classString = addSuffix(tg->table, ".type");
     if (sameString(tg->table, "acembly"))
         {
+	char *classString = addSuffix(tg->track, ".type");
         classType = cartUsualString(cart, classString, acemblyEnumToString(0));
+	freeMem(classString);
         ct = acemblyStringToEnum(classType);
         if (ct == acemblyAll)
             return sameClass;
@@ -4102,7 +4101,6 @@ if (classTable != NULL && hTableExists(database, classTable))
         }
     sqlFreeResult(&sr);
     }
-freeMem(classString);
 hFreeConn(&conn);
 return sameClass;
 }

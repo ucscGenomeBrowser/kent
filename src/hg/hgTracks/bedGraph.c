@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.23 2010/05/11 01:43:26 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.24 2010/05/20 19:53:22 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -57,7 +57,7 @@ struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
 int graphColumn = 5;
 char *tableName;
 
-if(sameString(tg->track, "affyTranscription"))
+if(sameString(tg->table, "affyTranscription"))
     wigCart->colorTrack = "affyTransfrags";
 graphColumn = wigCart->graphColumn;
 
