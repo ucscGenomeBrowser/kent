@@ -22,7 +22,7 @@
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.64 2010/05/11 01:43:25 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.65 2010/05/20 16:19:43 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -327,7 +327,7 @@ static void printTrackHtml(struct trackDb *tdb)
 {
 if (tdb != NULL && isNotEmpty(tdb->html))
     {
-    webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->table);
+    webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->track);
     puts(tdb->html);
     }
 }

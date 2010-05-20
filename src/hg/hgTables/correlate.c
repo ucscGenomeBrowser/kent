@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.79 2010/05/11 01:43:25 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.80 2010/05/20 16:19:43 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -503,6 +503,7 @@ for (group = groupList; group != NULL; group = group->next)
 hPrintf("</SELECT>\n");
 return selGroup;
 }
+
 static char *showTable2FieldLimited(struct trackDb *track, char *table)
 /* Show table control and label. */
 {
