@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.974 2010/05/17 19:09:51 hartera Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.975 2010/05/20 03:24:11 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8328,12 +8328,14 @@ group regulation
     noInherit on
     type bigWig 0 40
     superTrack wgEncodeReg full
-    aggregate solidOverlay
     shortLabel Enhancer H3K4Me1
     longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
     configurable on
     visibility full
-    maxHeightPixels 100:50:11
+    maxHeightPixels 100:30:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    windowingFunction mean
     priority 1
 
 	track jkEnhGm12878
@@ -8389,14 +8391,16 @@ group regulation
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
-    aggregate transparentOverlay
     shortLabel Promoter H3K4Me3
     longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
     type wig 0 30000
     viewLimits 0:40
     configurable on
     visibility full
-    maxHeightPixels 100:50:11
+    maxHeightPixels 100:30:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    windowingFunction mean
     priority 1
 
 	track wgEncodeRegMarkPromoterGm12878
@@ -8466,7 +8470,7 @@ group regulation
 
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
-    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters
+    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters (# Out of 77 Assays)
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTracks wgEncodeUwDnaseSeq
