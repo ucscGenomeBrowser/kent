@@ -157,6 +157,10 @@ void bigWigCustomClick(struct trackDb *tdb);
 
 void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		     char *item, int start, int bedSize);
+
+void doT2gDetails(struct trackDb *tdb, char *item);
+/* Handle text2Genome track clicks in t2g.c */
+
 /* Handle click in generic bigBed track. */
 
 void bigBedCustomClick(struct trackDb *tdb);

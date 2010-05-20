@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1629 2010/05/20 03:21:11 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1630 2010/05/20 18:30:00 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -23154,6 +23154,10 @@ else if (startsWith("gwasCatalog", table))
 else if (sameString("par", table))
     {
     doParDetails(tdb, item);
+    }
+else if (sameString("t2g", table))
+    {
+    doT2gDetails(tdb, item);
     }
 else if (tdb != NULL)
     {
