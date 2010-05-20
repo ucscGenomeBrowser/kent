@@ -44,9 +44,9 @@ char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* it
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	printLinks(row[0], row[1]);
-	printf("<b>%s</b><p>", row[2]);
-	printf("<small>%s</small><p>", row[3]);
-	printf("<small>%s</small>", row[4]);
+	printf("<b>%s</b>", row[2]);
+	printf("<p style=\"font-size:96%%\">%s</p>", row[3]);
+	printf("<p style=\"font-size:92%%\">%s</p>", row[4]);
         docId = row[1];
 	}
     sqlFreeResult(&sr);
