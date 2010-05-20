@@ -2653,13 +2653,13 @@ identifier consIndelsId
 
 identifier text2GenomeArticle
 "Article abstracts from publications"
-    $hg.t2g.name
-    $hg.t2gArticle.displayId
+    $gbd.t2g.name dupeOk
+    $gbd.t2gArticle.displayId minCheck=0.82
 
 identifier text2GenomeSequence
 "Article to sequence relationship as mapped from publications"
-    $hg.t2gArticle.pmcId
-    $hg.t2gSequence.pmcId
+    $gbd.t2gArticle.pmcId
+    $gbd.t2gSequence.pmcId minCheck=0.99
 
 # Dependencies not already captured in identifiers
 
