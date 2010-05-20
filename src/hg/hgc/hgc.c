@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1628 2010/05/18 22:39:08 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1629 2010/05/20 03:21:11 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -768,6 +768,7 @@ if (item != NULL && item[0] != 0)
     cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, database, "%s", tdb->longLabel);
+didCartHtmlStart = TRUE;
 }
 
 static struct dyString *subMulti(char *orig, int subCount,
@@ -3667,8 +3668,10 @@ hFreeConn(&conn);
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info */
 {
+#ifdef OLD /* Called now by cartWebStart... */
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js",NULL);
+#endif /* OLD */
 genericClickHandlerPlus(tdb, item, itemForUrl, NULL);
 }
 
@@ -5177,14 +5180,14 @@ return ((psl->tStart == startFirst) && sameString(psl->tName, seqName)) == isCli
 }
 
 void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
-                           char *typeName, char *itemIn)
+                           char *trackName, char *itemIn)
 /* Print list of mRNA alignments, don't add extra textual link when
  * doesn't honor hgcCommand. */
 {
 struct psl *psl;
 int aliCount = slCount(pslList);
 boolean isClicked;
-if (pslList == NULL || typeName == NULL)
+if (pslList == NULL || trackName == NULL)
     return;
 
 if (aliCount > 1)
@@ -5203,7 +5206,7 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	if (isPslToPrintByClick(psl, startFirst, isClicked))
 	    {
             char otherString[512];
-	    safef(otherString, sizeof(otherString), "%d&aliTrack=%s", psl->tStart, typeName);
+	    safef(otherString, sizeof(otherString), "%d&aliTrack=%s", psl->tStart, trackName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
@@ -5220,27 +5223,28 @@ printf("</TT></PRE>");
 }
 
 void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
-		     char *typeName, char *itemIn)
+		     char *trackName, char *itemIn)
 /* Print list of mRNA alignments. */
 {
-if (pslList == NULL || typeName == NULL)
+if (pslList == NULL || trackName == NULL)
     return;
-printAlignmentsSimple(pslList, startFirst, hgcCommand, typeName, itemIn);
+char *tableName = hTableForTrack(database, trackName);
+printAlignmentsSimple(pslList, startFirst, hgcCommand, trackName, itemIn);
 
 struct psl *psl = pslList;
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     if ( pslTrimToTargetRange(psl, winStart, winEnd) != NULL
 	&&
-	!startsWith("xeno", typeName)
-	&& !(startsWith("user", typeName) && pslIsProtein(psl))
+	!startsWith("xeno", tableName)
+	&& !(startsWith("user", tableName) && pslIsProtein(psl))
 	&& psl->tStart == startFirst
         && sameString(psl->tName, seqName)
 	)
 	{
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
-	      psl->tStart, typeName);
+	      psl->tStart, trackName);
 	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
 			   otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
@@ -21540,7 +21544,7 @@ if (startsWith("psl", tdb->type))
 	if (hGenBankHaveSeq(database, itemName, NULL))
 	    {
 	    printf("<H3>%s/Genomic Alignments</H3>", name);
-	    printAlignments(psl, start, "htcCdnaAli", tdb->table,
+	    printAlignments(psl, start, "htcCdnaAli", tdb->track,
 			    encodedName);
 	    }
 	else
