@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.429 2010/05/18 22:36:36 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.430 2010/05/20 16:18:45 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4726,7 +4726,12 @@ if (isCustomTrack(table))
         tdb = ct->tdb;
     }
 else
-    tdb = tdbFindOrCreate(db,parent,table);
+    {
+    char *track = hGetTrackForTable(db, table);
+    if (track == NULL)
+        return NULL;
+    tdb = tdbFindOrCreate(db,parent,track);
+    }
 return tdb;
 }
 
