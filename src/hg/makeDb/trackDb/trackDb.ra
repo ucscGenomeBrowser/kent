@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.632 2010/05/20 18:31:05 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.633 2010/05/20 18:43:21 hiram Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -499,9 +499,9 @@ showCdsMaxZoom 10000.0
 
 # track text2Genome
 track t2g
-shortLabel Text2Genome
-longLabel Text2Genome
-group x
+shortLabel Publications
+longLabel Mapped sequences from publications
+group map
 priority 800
 visibility hide
 color 20,50,100
