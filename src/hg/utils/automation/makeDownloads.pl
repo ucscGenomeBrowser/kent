@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.26 2010/04/16 20:58:58 angie Exp $
+# $Id: makeDownloads.pl,v 1.27 2010/05/20 23:25:12 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -954,6 +954,7 @@ sub doCompress {
   $bossScript->add(<<_EOF_
 rm -rf bigZips database
 mkdir bigZips database
+ln -s $topDir/$db.2bit bigZips
 mkdir -p liftOver
 
 _EOF_
@@ -1006,7 +1007,7 @@ mkdir -p $gp
 foreach d (bigZips $chromGz database)
   rm -rf $gp/\$d
   mkdir $gp/\$d
-  ln -s $runDir/\$d/*.{gz,txt} $gp/\$d/
+  ln -s $runDir/\$d/*.{gz,txt,2bit} $gp/\$d/
 end
 # Don't blow away all of liftOver, just the README -- there may be
 # pre-existing links that are not regenerated above.
