@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.430 2010/05/20 16:18:45 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.431 2010/05/20 19:03:07 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3765,14 +3765,13 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
     if (hTableExists(db, trackTable->name))
         {
 	char query[512];
-	safef(query, sizeof(query), "select settings from %s", trackTable->name);
+	safef(query, sizeof(query), "select tableName,settings from %s", trackTable->name);
 	struct sqlResult *sr = sqlGetResult(conn, query);
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    struct hash *settings = trackDbSettingsFromString(row[0]);
-	    char *track = hashMustFindVal(settings, "track");
-	    hashAdd(hash, track, settings);
+	    struct hash *settings = trackDbSettingsFromString(row[1]);
+	    hashAdd(hash, row[0], settings);
 	    }
 	sqlFreeResult(&sr);
 	}
