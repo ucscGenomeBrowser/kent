@@ -557,8 +557,8 @@ identifier encodePseudogeneUcsc dependency
 
 identifier ucscRetroInfo dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    $hg.ucscRetroInfo.name unique
-    $hg.ucscRetroAli.qName minCheck=0.04 unique
+    $hg,mm9.ucscRetroInfo.name unique
+    $hg,mm9.ucscRetroAli.qName unique
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
