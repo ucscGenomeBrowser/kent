@@ -2651,6 +2651,16 @@ identifier consIndelsId
     hg17,hg18.consIndelsHgMmCanFam.name
     hg17,hg18.consIndelsHgMmCanFamConf.id
 
+identifier text2GenomeArticle
+"Article abstracts from publications"
+    $hg.t2g.name
+    $hg.t2gArticle.displayId
+
+identifier text2GenomeSequence
+"Article to sequence relationship as mapped from publications"
+    $hg.t2gArticle.pmcId
+    $hg.t2gSequence.pmcId
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
