@@ -3,6 +3,9 @@
 track xenoRefGene override
 visibility hide
 
+track mrna override
+visibility hide
+
 track nscanGene override
 informant Cat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
 

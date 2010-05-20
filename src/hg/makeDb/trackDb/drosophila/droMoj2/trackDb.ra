@@ -12,6 +12,10 @@ track netDm2 override
 priority 134
 visibility dense
 
+track mrna override
+shortLabel D. moj. mRNAs
+visibility dense
+
 
 
 searchTable genscan

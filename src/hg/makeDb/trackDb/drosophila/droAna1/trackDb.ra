@@ -8,6 +8,10 @@ track netDm2 override
 priority 134
 visibility dense
 
+track mrna override
+shortLabel D. anan. mRNAs
+visibility dense
+
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
 longLabel $o_Organism ($o_date) BDGP Genes Mapped to $Organism

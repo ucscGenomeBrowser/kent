@@ -9,6 +9,12 @@ color 0,100,180
 type genePred bdgpLiftGenePep
 otherDb dm1
 
+track est override
+shortLabel D. pseudo. ESTs
+
+track mrna override
+shortLabel D. pseudo. mRNAs 
+visibility dense
 
 searchTable bdgpLiftGene
 searchMethod exact

@@ -12,7 +12,8 @@ track netDm2 override
 priority 134
 visibility dense
 
-
+track mrna
+visibility dense
 
 searchTable genscan
 searchType genePred

@@ -22,8 +22,11 @@ color 100,75,50
 type genePred genewisePep
 
 track mrna override
-shortLabel D.pseudo. mRNAs
+shortLabel D. pseudo. mRNAs
 spectrum on
+
+track est override
+shortLabel D. pseudo. ESTs
 
 track chainDm2 override
 shortLabel D.mel. Chain

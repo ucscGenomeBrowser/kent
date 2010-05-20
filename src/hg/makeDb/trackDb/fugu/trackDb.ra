@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.82 2010/05/11 01:42:13 kent Exp $";
+#	"$Id: trackDb.ra,v 1.83 2010/05/20 04:16:15 rhead Exp $";
 
 include trackDb.chainNet.ra
 
@@ -39,6 +39,9 @@ visibility dense
 
 track mrna override
 spectrum on
+
+track est override
+visibility dense
 
 track intronEst
 #replaces record intronEst in parent dir missing/extra maxItems

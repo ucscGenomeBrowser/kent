@@ -15,6 +15,13 @@ color 0,100,180
 type genePred bdgpLiftGenePep
 otherDb dm1
 
+track mrna override
+shortLabel A. mel. mRNAs
+visibility dense
+
+track est override
+shortLabel A. mel. ESTs
+
 track intronEst
 #replaces record intronEst in parent dir missing/extra maxItems
 shortLabel Spliced ESTs
