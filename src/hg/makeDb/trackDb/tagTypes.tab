@@ -262,6 +262,7 @@ showCdsMaxZoom psl
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
 showNames bam
+showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak
 signalFilterLimits bed narrowPeak
