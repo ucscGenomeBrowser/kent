@@ -892,6 +892,10 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
+	boolean embeddedInText,boolean showLongLabel);
+/* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
+
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
                                 int visibleChild);
 /* Displays hide/show dropdown for supertrack.

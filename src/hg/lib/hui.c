@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.289 2010/05/18 06:31:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.290 2010/05/20 03:17:21 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -86,7 +86,8 @@ if (hTableOrSplitExists(db, tdb->table))
 return FALSE;
 }
 
-static boolean metadataToggle(char *db,struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
+boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
+	boolean embeddedInText,boolean showLongLabel)
 /* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
 {
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
@@ -157,7 +158,7 @@ if(downloadLink)
         printf(",");
     }
 if (metadataLink)
-    metadataToggle(db,tdb,"metadata", TRUE, TRUE);
+    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE);
 
 if(moreThanOne)
     printf("</td></tr></table>");
@@ -1680,7 +1681,7 @@ for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
     struct trackDb *tdb = trackEl->val;
     char *dupe = cloneString(tdb->type);
     char *type = firstWordInLine(dupe);
-    if ((sameString(type, "genePred")) && (!sameString(tdb->track, "tigrGeneIndex") && !tdbIsComposite(tdb)))
+    if ((sameString(type, "genePred")) && (!sameString(tdb->table, "tigrGeneIndex") && !tdbIsComposite(tdb)))
 	{
 	AllocVar(name);
 	name->name = tdb->track;
@@ -3610,6 +3611,7 @@ static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *pa
 /* Display list of subtracks and descriptions with checkboxes to control visibility and possibly other
  * nice things including links to schema and metadata and a release date. */
 {
+boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 struct trackDb *subtrack;
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
 char htmlIdentifier[SMALLBUF];
@@ -3675,10 +3677,15 @@ if (!primarySubtrack)
             }
         }
 
+    int colspan = 3;
+    if (sortOrder != NULL)
+        colspan = sortOrder->count+2;
+    if (doColorPatch)
+        colspan += 1;
     printf("<TR");
     if(useDragAndDrop)
         printf(" id=\"noDrag\" class='nodrop nodrag'");
-    printf("><TD colspan='%d'><B>List subtracks:&nbsp;",(sortOrder != NULL?sortOrder->count+2:3));
+    printf("><TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
@@ -3801,6 +3808,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf("<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%.0f\">", htmlIdentifier, htmlIdentifier, priority); // keeing track of priority
                 }
 
+	    if (doColorPatch)
+		{
+		printf("<TD BGCOLOR='#");
+		printf("%2X%2X%2X", subtrack->colorR, subtrack->colorG, subtrack->colorB);
+		printf("'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
+		}
             if(sortOrder != NULL)
                 {
                 int sIx=0;
@@ -3836,7 +3849,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-            metadataToggle(db,subtrack,"...",TRUE,FALSE);
+            compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE);
             printf("</div>");
 
             if(cType != cfgNone)
