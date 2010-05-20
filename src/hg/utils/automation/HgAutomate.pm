@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.27 2009/06/08 18:40:49 hiram Exp $
+# $Id: HgAutomate.pm,v 1.28 2010/05/20 22:58:58 braney Exp $
 package HgAutomate;
 
 use warnings;
@@ -497,7 +497,7 @@ $cvs = "/usr/bin/cvs";
 $clusterData = '/hive/data/genomes';
 $trackBuild = 'bed';
 my $apacheRoot = '/usr/local/apache';
-$goldenPath = "$apacheRoot/htdocs/goldenPath";
+$goldenPath = "$apacheRoot/htdocs-download/goldenPath";
 $images = "$apacheRoot/htdocs/images";
 $gbdb = '/gbdb';
 
