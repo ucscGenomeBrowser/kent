@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.172 2010/05/11 01:43:30 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.173 2010/05/20 03:14:17 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -270,9 +270,8 @@ else if (isGsid)
     printf("</TD></TR></TABLE>\n");
     }
 else if (dbIsFound)
-{
-
-puts(
+    {
+    puts(
        "<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
        "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
