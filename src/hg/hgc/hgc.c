@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1630 2010/05/20 18:30:00 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1631 2010/05/20 23:23:04 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6678,7 +6678,8 @@ if (startsWith("user", track))
 else
     {
     /* Look up alignments in database */
-    hFindSplitTable(database, seqName, track, table, &hasBin);
+    struct trackDb *tdb = hashMustFindVal(trackHash, track);
+    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
     safef(query, sizeof(query),
 	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
 	  table, acc, seqName, start);
@@ -6690,7 +6691,6 @@ else
 
     if (startsWith("ucscRetroAli", track) || startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
 	{
-        struct trackDb *tdb = hashMustFindVal(trackHash, track);
         rnaSeq = NULL;
         char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
         char *specCopy = cloneString(spec);
