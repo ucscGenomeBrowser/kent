@@ -10,29 +10,25 @@
 
 void printPubmedLink(char* pmid) 
 {
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PubMed</A>", pmid);
+    printf("<B>PubMed:</B>&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\" TARGET=_blank>%s</A><BR>\n", pmid, pmid);
 }
 
 void printPmcLink(char* pmcId) 
 {
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/pmc/articles/PMC%s/?tool=pubmed\">PubmedCentral</A>", pmcId);
+    printf("<B>PubMed&nbsp;Central:</B>&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/pmc/articles/PMC%s/?tool=pubmed\" TARGET=_blank>%s</A><BR>\n", pmcId, pmcId);
 }
 
 void printT2gLink(char* pmcId) 
 {
-    printf("<A HREF=\"http://kumiho.smith.man.ac.uk/bergman/text2genome/inspector.cgi?pmcId=%s\">text2genome</A>", pmcId);
+    printf("<B>Text2Genome:</B>&nbsp;<A HREF=\"http://kumiho.smith.man.ac.uk/bergman/text2genome/inspector.cgi?pmcId=%s\" TARGET=_blank>%s</A><BR>\n", pmcId, pmcId);
 }
 
 void printLinks(char* pmid, char* pmcId) 
 {
-    printf("Links: ");
-    printf("<SMALL>");
     printT2gLink(pmcId);
-    printf(", ");
     printPubmedLink(pmid);
-    printf(", ");
     printPmcLink(pmcId);
-    printf("</SMALL><P>");
+    printf("<BR>\n");
 }
 
 char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* item) 
@@ -134,11 +130,11 @@ else
     safef(headerTitle, sizeof(headerTitle), "%s", item);
 
 genericHeader(tdb, headerTitle);
-
-printPos(chr, start, end, strand, TRUE, item);
+printPos(chr, start, end, strand, FALSE, item);
 freeMem(chr);
-char* docId=0;
-docId = printArticleInfo(conn, tdb, item);
+
+char* docId = printArticleInfo(conn, tdb, item);
+
 
 if (docId!=0) 
 {
