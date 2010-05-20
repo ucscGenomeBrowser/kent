@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.290 2010/05/20 03:17:21 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.291 2010/05/20 19:54:18 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1407,8 +1407,8 @@ cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions),
 static char *aggregateLabels[] =
     {
     "none",
-    "transparent overlay",
-    "solid overlay",
+    "transparent",
+    "solid",
     };
 
 static char *aggregateValues[] =
@@ -4007,7 +4007,7 @@ char *aggregate = trackDbSetting(tdb, "aggregate");
 if (aggregate != NULL && tdb->subtracks)
     {
     char *aggregateVal = cartOrTdbString(cart, tdb, "aggregate", NULL);
-    printf("<TR valign=center><th align=right>Aggregation method:</th><td align=left>");
+    printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
     safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
     aggregateDropDown(option, aggregateVal);
     puts("</td></TR>");
