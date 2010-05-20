@@ -188,6 +188,7 @@ for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->n
     showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, &rowIx);
     }
 webPrintLinkTableEnd();
+cartWebEnd();
 }
 
 void doPeakClusters(struct trackDb *tdb, char *item)
@@ -241,12 +242,13 @@ if (cluster != NULL)
 	}
     webPrintLinkTableEnd();
     }
-printf("<A HREF=\"%s&g=hgcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
+printf("<A HREF=\"%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
 	tdb->track);
 printf("List all items assayed");
 webNewSection("Track Description");
 printf("</A><BR>\n");
 printTrackHtml(tdb);
+cartWebEnd();
 hFreeConn(&conn);
 }
 

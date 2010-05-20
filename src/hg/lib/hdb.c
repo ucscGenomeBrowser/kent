@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.428 2010/05/18 20:05:31 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.430 2010/05/20 16:18:45 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3750,9 +3750,12 @@ hFreeConn(&conn);
 return ret;
 }
 
-static struct hash *makeDbTableToTrackHash(char *db)
-/* Create a hash based on trackDb tables in given database that 
- * will give you a track name given a table name as a key. */
+static struct hash *makeTrackSettingsHash(char *db)
+/* Create  a hash of hashes with all track settings for database.
+ * The returned hash is keyed by track.   The contained hashes
+ * are keyed by tags and contain generic text values, corresponding
+ * to the trackDb.ra settings for that track. Generally you want to
+ * call the version that caches results below instead. */
 {
 struct hash *hash = hashNew(0);
 struct slName *trackTable, *trackTableList = hTrackDbList();
@@ -3767,12 +3770,9 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    struct hash *settings = raFromString(row[0]);
+	    struct hash *settings = trackDbSettingsFromString(row[0]);
 	    char *track = hashMustFindVal(settings, "track");
-	    char *table = hashFindVal(settings, "table");
-	    if (table == NULL)
-	         table = track;
-	    hashAdd(hash, table, track);
+	    hashAdd(hash, track, settings);
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -3780,6 +3780,47 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
 slNameFreeList(&trackTableList);
 hFreeConn(&conn);
 return hash;
+}
+
+struct hash *hTdbGetTrackSettingsHash(char *db)
+/* Get a hash of hashes with all track settings for database.
+ * The returned hash is keyed by track.   The contained hashes
+ * are keyed by tags and contain generic text values, corresponding
+ * to the trackDb.ra settings for that track.  The result returned
+ * is cached, and should not be altered. */
+{
+static struct hash *dbHash = NULL;
+if (dbHash == NULL)
+    dbHash = hashNew(0);
+struct hash *hoh = hashFindVal(dbHash, db);
+if (hoh == NULL)
+    {
+    hoh = makeTrackSettingsHash(db);
+    hashAdd(dbHash, db, hoh);
+    }
+return hoh;
+}
+
+static struct hash *makeDbTableToTrackHash(char *db)
+/* Create a hash based on trackDb tables in given database that 
+ * will give you a track name given a table name as a key. */
+{
+struct hash *hoh = hTdbGetTrackSettingsHash(db);
+struct hash *tableToTrackHash = hashNew(0);
+struct sqlConnection *conn = hAllocConn(db);
+struct hashCookie cookie = hashFirst(hoh);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct hash *settings = hel->val;
+    char *track = hashMustFindVal(settings, "track");
+    char *table = hashFindVal(settings, "table");
+    if (table == NULL)
+	 table = track;
+    hashAdd(tableToTrackHash, table, track);
+    }
+hFreeConn(&conn);
+return tableToTrackHash;
 }
 
 char *hGetTrackForTable(char *db, char *table)
@@ -3795,6 +3836,19 @@ if (tableToTrackHash == NULL)
     hashAdd(dbHash, db, tableToTrackHash);
     }
 return hashFindVal(tableToTrackHash, table);
+}
+
+char *hGetTableForTrack(char *db, char *track)
+/* Given a track name, get table associated with it. */
+{
+struct hash *hoh = hTdbGetTrackSettingsHash(db);
+struct hash *settings = hashFindVal(hoh, track);
+if (settings == NULL)
+    errAbort("Couldn't find settigns for track %s in hGetTableForTrack", track);
+char *table = hashFindVal(settings, "table");
+if (table == NULL)
+    table = track;
+return table;
 }
 
 static struct dbDb *hGetIndexedDbsMaybeClade(char *theDb)
@@ -4672,7 +4726,12 @@ if (isCustomTrack(table))
         tdb = ct->tdb;
     }
 else
-    tdb = tdbFindOrCreate(db,parent,table);
+    {
+    char *track = hGetTrackForTable(db, table);
+    if (track == NULL)
+        return NULL;
+    tdb = tdbFindOrCreate(db,parent,track);
+    }
 return tdb;
 }
 

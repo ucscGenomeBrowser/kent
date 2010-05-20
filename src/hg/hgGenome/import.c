@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.21 2010/05/18 06:20:55 galt Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.20 2010/05/14 23:30:24 kent Exp $";
 
 /* from hgTables.c */
 
@@ -327,13 +327,11 @@ if (trackDupe != NULL && trackDupe[0] != 0)
         }
     if (tdbIsComposite(track))
         {
+        struct trackDb *subTdb;
         struct slName *subList = NULL;
-        struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
-        slSort(&tdbRefList, trackDbRefCmp);
-        struct slRef *tdbRef;
-        for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+        slSort(&(track->subtracks), trackDbCmp);
+        for (subTdb = track->subtracks; subTdb != NULL; subTdb = subTdb->next)
             {
-            struct trackDb *subTdb = tdbRef->val;
             name = slNameNew(subTdb->table);
             slAddTail(&subList, name);
             hashAdd(uniqHash, subTdb->table, NULL);
@@ -343,6 +341,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
     }
 freez(&trackDupe);
 }
+
 
 
 struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner)
@@ -355,8 +354,10 @@ char *trackTable = track->table;
 hashAdd(uniqHash, trackTable, NULL);
 if (useJoiner)
     {
+
     struct joinerPair *jpList, *jp;
     jpList = joinerRelate(allJoiner, database, trackTable);
+
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
         struct joinerDtf *dtf = jp->b;
@@ -376,18 +377,20 @@ if (useJoiner)
             slAddHead(&nameList, name);
             }
         }
+
     slNameSort(&nameList);
     }
+
 name = slNameNew(trackTable);
-if (!tdbIsComposite(track))
+if (!tdbIsComposite(track) && !trackDbLocalSetting(track, "container"))
     /* suppress for composite tracks -- only the subtracks have tables */
     slAddHead(&nameList, name);
+
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
+
 hashFree(&uniqHash);
 return nameList;
 }
-
-
 
 static char *findSelectedTable(struct trackDb *track, char *var)
 /* Find selected table.  Default to main track table if none
@@ -809,11 +812,14 @@ if (track == NULL)
 else
     nameList = tablesForTrack(track, useJoiner);
 
+
 /* filter out non-positional tables, chains and nets, and other untouchables */
 for (name = nameList; name != NULL; name = next)
     {
+
     next = name->next;
     boolean isCt = isCustomTrack(name->name);
+
     if (strchr(name->name, '.'))
 	    continue;  /* filter out anything starting with database, e.g. db.name (like Locus Variants) */
     if (!isCt)  /* all custom tracks are positional */
@@ -822,9 +828,7 @@ for (name = nameList; name != NULL; name = next)
 	if (!hti)
 	    continue;  /* filter out tables that don't exist anymore */
 	if (!htiIsPositional(hti) &&
-	    (!track ||
-		(!startsWith("bam", track->type) && !startsWith("big", track->type)))
-	    )
+	    !startsWith("bam", track->type) && !startsWith("big", track->type))
 	    continue;  /* filter out non-positional, do not add it to new list */
 	}
     slAddHead(&newList,name);
@@ -878,6 +882,7 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" NAME=\"mainForm\" METHOD=\"%s\">",
 cartSaveSession(cart);
 
 jsWriteFunctions();
+
 
 allJoiner = joinerRead("all.joiner");
 initGroupsTracksTables();

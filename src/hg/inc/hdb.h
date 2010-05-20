@@ -579,6 +579,9 @@ char *hGetParent(char *db, char *subtrackName);
 char *hGetTrackForTable(char *db, char *table);
 /* Given a table name, get first track associated with it. */
 
+char *hGetTableForTrack(char *db, char *track);
+/* Given a track name, get table associated with it. */
+
 char *hTrackOpenVis(char *db, char *trackName);
 /* Return "pack" if track is packable, otherwise "full". */
 

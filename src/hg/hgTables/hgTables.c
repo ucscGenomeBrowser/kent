@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.196 2010/05/14 23:32:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.198 2010/05/19 01:37:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -709,7 +709,7 @@ return list;
 }
 
 
-struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
+static struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
 	struct grp *group)
 /* Find named track that is in group (NULL for any group).
  * Return NULL if can't find it. */
@@ -767,8 +767,6 @@ if (name != NULL)
     /* getFullTrackList tweaks tdb->table mrna to all_mrna, so in
      * case mrna is passed in (e.g. from hgc link to schema page)
      * tweak it here too: */
-    if (sameString(name, "mrna"))
-	name = "all_mrna";
     track = findTrackInGroup(name, trackList, group);
     }
 if (track == NULL)
@@ -904,7 +902,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             hashAdd(uniqHash, wig->table, NULL);
             }
 	}
-    if (tdbIsComposite(track))
+    if (track->subtracks)
         {
         struct slName *subList = NULL;
 	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
@@ -956,10 +954,12 @@ if (useJoiner)
 	}
     slNameSort(&nameList);
     }
-name = slNameNew(trackTable);
-if (!tdbIsComposite(track))
-    /* suppress for composite tracks -- only the subtracks have tables */
+/* suppress for parent tracks -- only the subtracks have tables */
+if (track->subtracks == NULL)
+    {
+    name = slNameNew(trackTable);
     slAddHead(&nameList, name);
+    }
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
 hashFree(&uniqHash);
 return nameList;

@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1626 2010/05/18 17:52:41 ann Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1628 2010/05/18 22:39:08 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6505,6 +6505,7 @@ char **row;
 struct psl *psl;
 struct dnaSeq *rnaSeq;
 char *type;
+char *rootTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
@@ -6516,6 +6517,7 @@ chopSuffix(accChopped);
 writeFramesetType();
 puts("<HTML>");
 type = cartString(cart, "aliTrack");
+rootTable = hGetTableForTrack(database,type);
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, type);
 
 /* Get some environment vars. */
@@ -6539,7 +6541,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
     }
 
 /* Look up alignments in database */
-hFindSplitTable(database, seqName, type, table, &hasBin);
+hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
 	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -22106,1044 +22108,1046 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
 	}
     }
 
-if (sameWord(track, "getDna"))
+/* Start of 1000+ line dispatch on table involving 100+ if/elses. */
+char *table = (tdb ? tdb->table : track);
+if (sameWord(table, "getDna"))
     {
     doGetDna1();
     }
-else if (sameWord(track, "htcGetDna2"))
+else if (sameWord(table, "htcGetDna2"))
     {
     doGetDna2();
     }
-else if (sameWord(track, "htcGetDna3"))
+else if (sameWord(table, "htcGetDna3"))
     {
     doGetDna3();
     }
-else if (sameWord(track, "htcGetDnaExtended1"))
+else if (sameWord(table, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
-else if (sameWord(track, "hgcListItemsAssayed"))
+else if (sameWord(table, "htcListItemsAssayed"))
     {
     doPeakClusterListItemsAssayed();
     }
 
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
- else if (loweLabClick(track, item, tdb))
+ else if (loweLabClick(table, item, tdb))
    {
      /* do nothing, everything handled in loweLabClick */
    }
 #endif
-else if (sameWord(track, G_DELETE_WIKI_ITEM))
+else if (sameWord(table, G_DELETE_WIKI_ITEM))
     {
     doDeleteWikiItem(item, seqName, winStart, winEnd);
     }
-else if (sameWord(track, G_ADD_WIKI_COMMENTS))
+else if (sameWord(table, G_ADD_WIKI_COMMENTS))
     {
     doAddWikiComments(item, seqName, winStart, winEnd);
     }
-else if (sameWord(track, G_CREATE_WIKI_ITEM))
+else if (sameWord(table, G_CREATE_WIKI_ITEM))
     {
     doCreateWikiItem(item, seqName, winStart, winEnd);
     }
-else if (startsWith("transMapAln", track) || startsWith("reconTransMapAln", track))
+else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", table))
     transMapClickHandler(tdb, item);
-else if (startsWith("hgcTransMapCdnaAli", track))
+else if (startsWith("hgcTransMapCdnaAli", table))
     {
     tdb = hashMustFindVal(trackHash, cartString(cart, "aliTrack"));
     transMapShowCdnaAli(tdb, item);
     }
-else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
-	 startsWith("all_mrna",track) ||
-	 sameWord(track, "all_est") ||
-	 sameWord(track, "celeraMrna") ||
-         sameWord(track, "est") || sameWord(track, "intronEst") ||
-         sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-         startsWith("mrnaBlastz",track ) || startsWith("mrnaBad",track ) ||
-         sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
-         sameWord(track, "xenoEst") || sameWord(track, "psu") ||
-         sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
-	 sameWord(track, "blatzHg17KG") || sameWord(track, "mapHg17KG")
+else if (sameWord(table, "mrna") || sameWord(table, "mrna2") ||
+	 startsWith("all_mrna",table) ||
+	 sameWord(table, "all_est") ||
+	 sameWord(table, "celeraMrna") ||
+         sameWord(table, "est") || sameWord(table, "intronEst") ||
+         sameWord(table, "xenoMrna") || sameWord(table, "xenoBestMrna") ||
+         startsWith("mrnaBlastz",table ) || startsWith("mrnaBad",table ) ||
+         sameWord(table, "xenoBlastzMrna") || sameWord(table, "sim4") ||
+         sameWord(table, "xenoEst") || sameWord(table, "psu") ||
+         sameWord(table, "tightMrna") || sameWord(table, "tightEst") ||
+	 sameWord(table, "blatzHg17KG") || sameWord(table, "mapHg17KG")
          )
     {
     doHgRna(tdb, item);
     }
-else if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track )
-        || sameWord("pseudoUcsc",track))
+else if (startsWith("pseudoMrna",table ) || startsWith("pseudoGeneLink",table )
+        || sameWord("pseudoUcsc",table))
     {
     doPseudoPsl(tdb, item);
     }
-else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track )|| startsWith("retroCds",track )|| startsWith("ucscRetro",track ))
+else if (startsWith("retroMrna",table ) || startsWith("retroAugust",table )|| startsWith("retroCds",table )|| startsWith("ucscRetro",table ))
     {
     retroClickHandler(tdb, item);
     }
-else if (sameString(track, "hgcRetroCdnaAli"))
+else if (sameString(table, "hgcRetroCdnaAli"))
     retroShowCdnaAli(item);
-else if (sameWord(track, "affyU95")
-	|| sameWord(track, "affyU133")
-	|| sameWord(track, "affyU74")
-	|| sameWord(track, "affyRAE230")
-	|| sameWord(track, "affyZebrafish")
-	|| sameWord(track, "affyGnf1h")
-	|| sameWord(track, "affyMOE430v2")
-	|| sameWord(track, "affyGnf1m") )
+else if (sameWord(table, "affyU95")
+	|| sameWord(table, "affyU133")
+	|| sameWord(table, "affyU74")
+	|| sameWord(table, "affyRAE230")
+	|| sameWord(table, "affyZebrafish")
+	|| sameWord(table, "affyGnf1h")
+	|| sameWord(table, "affyMOE430v2")
+	|| sameWord(table, "affyGnf1m") )
     {
     doAffy(tdb, item, NULL);
     }
-else if (sameWord(track, WIKI_TRACK_TABLE))
+else if (sameWord(table, WIKI_TRACK_TABLE))
     doWikiTrack(item, seqName, winStart, winEnd);
-else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
+else if (sameWord(table, OLIGO_MATCH_TRACK_NAME))
     doOligoMatch(item);
-else if (sameWord(track, "refFullAli"))
+else if (sameWord(table, "refFullAli"))
     {
     doTSS(tdb, item);
     }
-else if (sameWord(track, "rikenMrna"))
+else if (sameWord(table, "rikenMrna"))
     {
     doRikenRna(tdb, item);
     }
-else if (sameWord(track, "cgapSage"))
+else if (sameWord(table, "cgapSage"))
     {
     doCgapSage(tdb, item);
     }
-else if (sameWord(track, "ctgPos") || sameWord(track, "ctgPos2"))
+else if (sameWord(table, "ctgPos") || sameWord(table, "ctgPos2"))
     {
     doHgContig(tdb, item);
     }
-else if (sameWord(track, "clonePos"))
+else if (sameWord(table, "clonePos"))
     {
     doHgCover(tdb, item);
     }
-else if (sameWord(track, "bactigPos"))
+else if (sameWord(table, "bactigPos"))
     {
     doBactigPos(tdb, item);
     }
-else if (sameWord(track, "hgClone"))
+else if (sameWord(table, "hgClone"))
     {
     tdb = hashFindVal(trackHash, "clonePos");
     doHgClone(tdb, item);
     }
-else if (sameWord(track, "gold"))
+else if (sameWord(table, "gold"))
     {
     doHgGold(tdb, item);
     }
-else if (sameWord(track, "gap"))
+else if (sameWord(table, "gap"))
     {
     doHgGap(tdb, item);
     }
-else if (sameWord(track, "tet_waba"))
+else if (sameWord(table, "tet_waba"))
     {
     doHgTet(tdb, item);
     }
-else if (sameWord(track, "wabaCbr"))
+else if (sameWord(table, "wabaCbr"))
     {
     doHgCbr(tdb, item);
     }
-else if (startsWith("rmsk", track))
+else if (startsWith("rmsk", table))
     {
     doHgRepeat(tdb, item);
     }
-else if (sameWord(track, "isochores"))
+else if (sameWord(table, "isochores"))
     {
     doHgIsochore(tdb, item);
     }
-else if (sameWord(track, "simpleRepeat"))
+else if (sameWord(table, "simpleRepeat"))
     {
     doSimpleRepeat(tdb, item);
     }
-else if (startsWith("cpgIsland", track))
+else if (startsWith("cpgIsland", table))
     {
     doCpgIsland(tdb, item);
     }
-else if (sameWord(track, "illuminaProbes"))
+else if (sameWord(table, "illuminaProbes"))
     {
     doIlluminaProbes(tdb, item);
     }
-else if (sameWord(track, "htcIlluminaProbesAlign"))
+else if (sameWord(table, "htcIlluminaProbesAlign"))
     {
     htcIlluminaProbesAlign(item);
     }
-else if (sameWord(track, "switchDbTss"))
+else if (sameWord(table, "switchDbTss"))
     {
     doSwitchDbTss(tdb, item);
     }
-else if (sameWord(track, "omimAv"))
+else if (sameWord(table, "omimAv"))
     {
     doOmimAv(tdb, item);
     }
-else if (sameWord(track, "rgdGene"))
+else if (sameWord(table, "rgdGene"))
     {
     doRgdGene(tdb, item);
     }
-else if (sameWord(track, "rgdGene2"))
+else if (sameWord(table, "rgdGene2"))
     {
     doRgdGene2(tdb, item);
     }
-else if (sameWord(track, "rgdEst"))
+else if (sameWord(table, "rgdEst"))
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "rgdSslp"))
+else if (sameWord(table, "rgdSslp"))
     {
     doRgdSslp(tdb, item, NULL);
     }
-else if (sameWord(track, "gad"))
+else if (sameWord(table, "gad"))
     {
     doGad(tdb, item, NULL);
     }
-else if (sameWord(track, "decipher"))
+else if (sameWord(table, "decipher"))
     {
     doDecipher(tdb, item, NULL);
     }
-else if (sameWord(track, "omimGene"))
+else if (sameWord(table, "omimGene"))
     {
     doOmimGene(tdb, item);
     }
-else if (sameWord(track, "rgdQtl") || sameWord(track, "rgdRatQtl"))
+else if (sameWord(table, "rgdQtl") || sameWord(table, "rgdRatQtl"))
     {
     doRgdQtl(tdb, item);
     }
-else if (sameWord(track, "superfamily"))
+else if (sameWord(table, "superfamily"))
     {
     doSuperfamily(tdb, item, NULL);
     }
-else if (sameWord(track, "ensGene") || sameWord (track, "ensGeneNonCoding"))
+else if (sameWord(table, "ensGene") || sameWord (table, "ensGeneNonCoding"))
     {
     doEnsemblGene(tdb, item, NULL);
     }
-else if (sameWord(track, "xenoRefGene"))
+else if (sameWord(table, "xenoRefGene"))
     {
     doRefGene(tdb, item);
     }
-else if (sameWord(track, "refGene"))
+else if (sameWord(table, "refGene"))
     {
     doRefGene(tdb, item);
     }
-else if (sameWord(track, "ccdsGene"))
+else if (sameWord(table, "ccdsGene"))
     {
     doCcdsGene(tdb, item);
     }
-else if (sameWord(track, "mappedRefSeq"))
+else if (sameWord(table, "mappedRefSeq"))
     /* human refseqs on chimp browser */
     {
     doRefGene(tdb, item);
     }
-else if (sameWord(track, "mgcGenes") || sameWord(track, "mgcFullMrna"))
+else if (sameWord(table, "mgcGenes") || sameWord(table, "mgcFullMrna"))
     {
     doMgcGenes(tdb, item);
     }
-else if (sameWord(track, "orfeomeGenes") || sameWord(track, "orfeomeMrna"))
+else if (sameWord(table, "orfeomeGenes") || sameWord(table, "orfeomeMrna"))
     {
     doOrfeomeGenes(tdb, item);
     }
-else if (startsWith("viralProt", track))
+else if (startsWith("viralProt", table))
     {
     doViralProt(tdb, item);
     }
-else if (sameWord("otherSARS", track))
+else if (sameWord("otherSARS", table))
     {
     doPslDetailed(tdb, item);
     }
-else if (sameWord(track, "softberryGene"))
+else if (sameWord(table, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
     }
-else if (sameWord(track, "borkPseudo"))
+else if (sameWord(table, "borkPseudo"))
     {
     doPseudoPred(tdb, item);
     }
-else if (sameWord(track, "borkPseudoBig"))
+else if (sameWord(table, "borkPseudoBig"))
     {
     doPseudoPred(tdb, item);
     }
-else if (startsWith("encodePseudogene", track))
+else if (startsWith("encodePseudogene", table))
     {
     doEncodePseudoPred(tdb,item);
     }
-else if (sameWord(track, "sanger22"))
+else if (sameWord(table, "sanger22"))
     {
     doSangerGene(tdb, item, "sanger22pep", "sanger22mrna", "sanger22extra");
     }
-else if (sameWord(track,"tRNAs"))
+else if (sameWord(table,"tRNAs"))
     {
     doTrnaGenesGb(tdb, item);
     }
-else if (sameWord(track, "sanger20"))
+else if (sameWord(table, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
     }
-else if (sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene") )
+else if (sameWord(table, "vegaGene") || sameWord(table, "vegaPseudoGene") )
     {
     doVegaGene(tdb, item, NULL);
     }
-else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists(database, "vegaInfoZfish"))
+else if ((sameWord(table, "vegaGene") || sameWord(table, "vegaPseudoGene")) && hTableExists(database, "vegaInfoZfish"))
     {
     doVegaGeneZfish(tdb, item);
     }
-else if (sameWord(track, "genomicDups"))
+else if (sameWord(table, "genomicDups"))
     {
     doGenomicDups(tdb, item);
     }
-else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
-	 || sameWord(track, "blastzTest") || sameWord(track, "blastzTest2"))
+else if (sameWord(table, "blatMouse") || sameWord(table, "bestMouse")
+	 || sameWord(table, "blastzTest") || sameWord(table, "blastzTest2"))
     {
     doBlatMouse(tdb, item);
     }
-else if (startsWith("multAlignWebb", track))
+else if (startsWith("multAlignWebb", table))
     {
-    doMultAlignZoo(tdb, item, &track[13] );
+    doMultAlignZoo(tdb, item, &table[13] );
     }
-else if (sameWord(track, "exaptedRepeats"))
+else if (sameWord(table, "exaptedRepeats"))
     {
     doExaptedRepeats(tdb, item);
     }
 /*
   Generalized code to show strict chain blastz alignments in the zoo browsers
 */
-else if (containsStringNoCase(track, "blastzStrictChain")
+else if (containsStringNoCase(table, "blastzStrictChain")
          && containsStringNoCase(database, "zoo"))
     {
     int len = strlen("blastzStrictChain");
-    char *orgName = &track[len];
+    char *orgName = &table[len];
     char dbName[32] = "zoo";
     strcpy(&dbName[3], orgName);
     len = strlen(orgName);
     strcpy(&dbName[3 + len], "3");
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
- else if (sameWord(track, "blatChimp") ||
-         sameWord(track, "chimpBac") ||
-         sameWord(track, "bacChimp"))
+ else if (sameWord(table, "blatChimp") ||
+         sameWord(table, "chimpBac") ||
+         sameWord(table, "bacChimp"))
     {
     longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
     }
-else if (sameWord(track, "htcLongXenoPsl2"))
+else if (sameWord(table, "htcLongXenoPsl2"))
     {
-    htcLongXenoPsl2(track, item);
+    htcLongXenoPsl2(table, item);
     }
-else if (sameWord(track, "htcCdnaAliInWindow"))
+else if (sameWord(table, "htcCdnaAliInWindow"))
     {
     htcCdnaAliInWindow(item);
     }
-else if (sameWord(track, "htcPseudoGene"))
+else if (sameWord(table, "htcPseudoGene"))
     {
-    htcPseudoGene(track, item);
+    htcPseudoGene(table, item);
     }
-else if (sameWord(track, "tfbsConsSites"))
+else if (sameWord(table, "tfbsConsSites"))
     {
     tfbsConsSites(tdb, item);
     }
-else if (sameWord(track, "tfbsCons"))
+else if (sameWord(table, "tfbsCons"))
     {
     tfbsCons(tdb, item);
     }
-else if (startsWith("atom", track) && !startsWith("atomMaf", track))
+else if (startsWith("atom", table) && !startsWith("atomMaf", table))
     {
     doAtom(tdb, item);
     }
-else if (sameWord(track, "firstEF"))
+else if (sameWord(table, "firstEF"))
     {
     firstEF(tdb, item);
     }
-else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
-        startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") ||
-        sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") ||
-        sameWord(track, "blastCe4SG") || sameWord(track, "blastCe6SG") ||
-        sameWord(track, "blastCe3WB") || sameWord(track, "blastHg18KG") )
+else if ( sameWord(table, "blastHg16KG") ||  sameWord(table, "blatHg16KG" ) ||
+        startsWith("blastDm",  table) || sameWord(table, "blastMm6KG") ||
+        sameWord(table, "blastSacCer1SG") || sameWord(table, "blastHg17KG") ||
+        sameWord(table, "blastCe4SG") || sameWord(table, "blastCe6SG") ||
+        sameWord(table, "blastCe3WB") || sameWord(table, "blastHg18KG") )
     {
     blastProtein(tdb, item);
     }
-else if (sameWord(track, "chimpSimpleDiff"))
+else if (sameWord(table, "chimpSimpleDiff"))
     {
     doSimpleDiff(tdb, "Chimp");
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be
  * above this point! */
-else if (startsWith("map", track) ||startsWith("blastz", track) || startsWith("blat", track) || startsWith("tblast", track) || endsWith(track, "Blastz"))
+else if (startsWith("map", table) ||startsWith("blastz", table) || startsWith("blat", table) || startsWith("tblast", table) || endsWith(table, "Blastz"))
     {
     char *genome = "Unknown";
-    if (startsWith("tblast", track))
-        genome = &track[6];
-    if (startsWith("map", track))
-        genome = &track[3];
-    if (startsWith("blat", track))
-        genome = &track[4];
-    if (startsWith("blastz", track))
-        genome = &track[6];
-    else if (endsWith(track,"Blastz"))
+    if (startsWith("tblast", table))
+        genome = &table[6];
+    if (startsWith("map", table))
+        genome = &table[3];
+    if (startsWith("blat", table))
+        genome = &table[4];
+    if (startsWith("blastz", table))
+        genome = &table[6];
+    else if (endsWith(table,"Blastz"))
         {
-        genome = track;
+        genome = table;
         *strstr(genome, "Blastz") = 0;
         }
     if (hDbExists(genome))
         {
-        /* handle tracks that include other database name
+        /* handle table that include other database name
          * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3...
          * Uses genome column from database table as display text */
         genome = hGenome(genome);
         }
     doAlignCompGeno(tdb, item, genome);
     }
-else if (sameWord(track, "rnaGene"))
+else if (sameWord(table, "rnaGene"))
     {
     doRnaGene(tdb, item);
     }
-else if (sameWord(track, "RfamSeedFolds")
-	 || sameWord(track, "RfamFullFolds")
-	 || sameWord(track, "rfamTestFolds")
-	 || sameWord(track, "evofold")
-	 || sameWord(track, "evofoldRaw")
-	 || sameWord(track, "encode_tba23EvoFold")
-	 || sameWord(track, "encodeEvoFold")
-	 || sameWord(track, "rnafold")
-	 || sameWord(track, "rnaTestFolds")
-	 || sameWord(track, "rnaTestFoldsV2")
-	 || sameWord(track, "rnaTestFoldsV3")
-	 || sameWord(track, "mcFolds")
-	 || sameWord(track, "rnaEditFolds")
-	 || sameWord(track, "altSpliceFolds")
-         || stringIn(track, "rnaSecStr"))
+else if (sameWord(table, "RfamSeedFolds")
+	 || sameWord(table, "RfamFullFolds")
+	 || sameWord(table, "rfamTestFolds")
+	 || sameWord(table, "evofold")
+	 || sameWord(table, "evofoldRaw")
+	 || sameWord(table, "encode_tba23EvoFold")
+	 || sameWord(table, "encodeEvoFold")
+	 || sameWord(table, "rnafold")
+	 || sameWord(table, "rnaTestFolds")
+	 || sameWord(table, "rnaTestFoldsV2")
+	 || sameWord(table, "rnaTestFoldsV3")
+	 || sameWord(table, "mcFolds")
+	 || sameWord(table, "rnaEditFolds")
+	 || sameWord(table, "altSpliceFolds")
+         || stringIn(table, "rnaSecStr"))
     {
     doRnaSecStr(tdb, item);
     }
-else if (sameWord(track, "fishClones"))
+else if (sameWord(table, "fishClones"))
     {
     doFishClones(tdb, item);
     }
-else if (sameWord(track, "stsMarker"))
+else if (sameWord(table, "stsMarker"))
     {
     doStsMarker(tdb, item);
     }
-else if (sameWord(track, "stsMapMouse"))
+else if (sameWord(table, "stsMapMouse"))
     {
     doStsMapMouse(tdb, item);
     }
-else if (sameWord(track, "stsMapMouseNew")) /*steal map rat code for new mouse sts track. */
+else if (sameWord(table, "stsMapMouseNew")) /*steal map rat code for new mouse sts table. */
     {
     doStsMapMouseNew(tdb, item);
     }
-else if(sameWord(track, "stsMapRat"))
+else if(sameWord(table, "stsMapRat"))
     {
     doStsMapRat(tdb, item);
     }
-else if (sameWord(track, "stsMap"))
+else if (sameWord(table, "stsMap"))
     {
     doStsMarker(tdb, item);
     }
-else if (sameWord(track, "rhMap"))
+else if (sameWord(table, "rhMap"))
     {
     doZfishRHmap(tdb, item);
     }
-else if (sameWord(track, "yaleBertoneTars"))
+else if (sameWord(table, "yaleBertoneTars"))
     {
     doYaleTars(tdb, item, NULL);
     }
-else if (sameWord(track, "recombRate"))
+else if (sameWord(table, "recombRate"))
     {
     doRecombRate(tdb);
     }
-else if (sameWord(track, "recombRateRat"))
+else if (sameWord(table, "recombRateRat"))
     {
     doRecombRateRat(tdb);
     }
-else if (sameWord(track, "recombRateMouse"))
+else if (sameWord(table, "recombRateMouse"))
     {
     doRecombRateMouse(tdb);
     }
-else if (sameWord(track, "genMapDb"))
+else if (sameWord(table, "genMapDb"))
     {
     doGenMapDb(tdb, item);
     }
-else if (sameWord(track, "mouseSynWhd"))
+else if (sameWord(table, "mouseSynWhd"))
     {
     doMouseSynWhd(tdb, item);
     }
-else if (sameWord(track, "ensRatMusHom"))
+else if (sameWord(table, "ensRatMusHom"))
     {
     doEnsPhusionBlast(tdb, item);
     }
-else if (sameWord(track, "mouseSyn"))
+else if (sameWord(table, "mouseSyn"))
     {
     doMouseSyn(tdb, item);
     }
-else if (sameWord(track, "mouseOrtho"))
+else if (sameWord(table, "mouseOrtho"))
     {
     doMouseOrtho(tdb, item);
     }
-else if (sameWord(track, USER_PSL_TRACK_NAME))
+else if (sameWord(table, USER_PSL_TRACK_NAME))
     {
-    doUserPsl(track, item);
+    doUserPsl(table, item);
     }
-else if (sameWord(track, PCR_RESULT_TRACK_NAME))
+else if (sameWord(table, PCR_RESULT_TRACK_NAME))
     {
-    doPcrResult(track, item);
+    doPcrResult(table, item);
     }
-else if (sameWord(track, "softPromoter"))
+else if (sameWord(table, "softPromoter"))
     {
-    hgSoftPromoter(track, item);
+    hgSoftPromoter(table, item);
     }
-else if (isCustomTrack(track))
+else if (isCustomTrack(table))
     {
-    hgCustom(track, item);
+    hgCustom(table, item);
     }
-else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih") || sameWord(track, "snpMap"))
+else if (sameWord(table, "snpTsc") || sameWord(table, "snpNih") || sameWord(table, "snpMap"))
     {
     doSnpOld(tdb, item);
     }
-else if (sameWord(track, "snp"))
+else if (sameWord(table, "snp"))
     {
     doSnp(tdb, item);
     }
-else if (snpVersion(track) >= 125)
+else if (snpVersion(table) >= 125)
     {
-    doSnpWithVersion(tdb, item, snpVersion(track));
+    doSnpWithVersion(tdb, item, snpVersion(table));
     }
-else if (sameWord(track, "cnpIafrate"))
+else if (sameWord(table, "cnpIafrate"))
     {
     doCnpIafrate(tdb, item);
     }
-else if (sameWord(track, "cnpLocke"))
+else if (sameWord(table, "cnpLocke"))
     {
     doCnpLocke(tdb, item);
     }
-else if (sameWord(track, "cnpIafrate2"))
+else if (sameWord(table, "cnpIafrate2"))
     {
     doCnpIafrate2(tdb, item);
     }
-else if (sameWord(track, "cnpSebat"))
+else if (sameWord(table, "cnpSebat"))
     {
     doCnpSebat(tdb, item);
     }
-else if (sameWord(track, "cnpSebat2"))
+else if (sameWord(table, "cnpSebat2"))
     {
     doCnpSebat2(tdb, item);
     }
-else if (sameWord(track, "cnpSharp"))
+else if (sameWord(table, "cnpSharp"))
     {
     doCnpSharp(tdb, item);
     }
-else if (sameWord(track, "cnpSharp2"))
+else if (sameWord(table, "cnpSharp2"))
     {
     doCnpSharp2(tdb, item);
     }
-else if (sameWord(track, "delHinds2"))
+else if (sameWord(table, "delHinds2"))
     {
     doDelHinds2(tdb, item);
     }
-else if (sameWord(track, "delConrad2"))
+else if (sameWord(table, "delConrad2"))
     {
     doDelConrad2(tdb, item);
     }
-else if (sameWord(track, "dgv"))
+else if (sameWord(table, "dgv"))
     {
     doDgv(tdb, item);
     }
-else if (sameWord(track, "affy120K"))
+else if (sameWord(table, "affy120K"))
     {
     doAffy120K(tdb, item);
     }
-else if (sameWord(track, "affy10K"))
+else if (sameWord(table, "affy10K"))
     {
     doAffy10K(tdb, item);
     }
-else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
+else if (sameWord(table, "uniGene_2") || sameWord(table, "uniGene"))
     {
-    doSageDataDisp(track, item, tdb);
+    doSageDataDisp(table, item, tdb);
     }
-else if (sameWord(track, "uniGene_3"))
+else if (sameWord(table, "uniGene_3"))
     {
     doUniGene3(tdb, item);
     }
-else if (sameWord(track, "vax003") || sameWord(track, "vax004"))
+else if (sameWord(table, "vax003") || sameWord(table, "vax004"))
     {
     doVax003Vax004(tdb, item);
     }
-else if (sameWord(track, "tigrGeneIndex"))
+else if (sameWord(table, "tigrGeneIndex"))
     {
     doTigrGeneIndex(tdb, item);
     }
-else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")) || (sameWord(track, "bacEndSingles")))
+else if ((sameWord(table, "bacEndPairs")) || (sameWord(table, "bacEndPairsBad")) || (sameWord(table, "bacEndPairsLong")) || (sameWord(table, "bacEndSingles")))
     {
-    doLinkedFeaturesSeries(track, item, tdb);
+    doLinkedFeaturesSeries(table, item, tdb);
     }
-else if ((sameWord(track, "fosEndPairs")) || (sameWord(track, "fosEndPairsBad")) || (sameWord(track, "fosEndPairsLong")))
+else if ((sameWord(table, "fosEndPairs")) || (sameWord(table, "fosEndPairsBad")) || (sameWord(table, "fosEndPairsLong")))
     {
-    doLinkedFeaturesSeries(track, item, tdb);
+    doLinkedFeaturesSeries(table, item, tdb);
     }
- else if ((sameWord(track, "earlyRep")) || (sameWord(track, "earlyRepBad")))
+ else if ((sameWord(table, "earlyRep")) || (sameWord(table, "earlyRepBad")))
     {
-    doLinkedFeaturesSeries(track, item, tdb);
+    doLinkedFeaturesSeries(table, item, tdb);
     }
-else if (sameWord(track, "cgh"))
+else if (sameWord(table, "cgh"))
     {
-    doCgh(track, item, tdb);
+    doCgh(table, item, tdb);
     }
-else if (sameWord(track, "mcnBreakpoints"))
+else if (sameWord(table, "mcnBreakpoints"))
     {
-    doMcnBreakpoints(track, item, tdb);
+    doMcnBreakpoints(table, item, tdb);
     }
-else if (sameWord(track, "htcChainAli"))
+else if (sameWord(table, "htcChainAli"))
     {
     htcChainAli(item);
     }
-else if (sameWord(track, "htcChainTransAli"))
+else if (sameWord(table, "htcChainTransAli"))
     {
     htcChainTransAli(item);
     }
-else if (sameWord(track, "htcCdnaAli"))
+else if (sameWord(table, "htcCdnaAli"))
     {
     htcCdnaAli(item);
     }
-else if (sameWord(track, "htcUserAli"))
+else if (sameWord(table, "htcUserAli"))
     {
     htcUserAli(item);
     }
-else if (sameWord(track, "htcGetBlastPep"))
+else if (sameWord(table, "htcGetBlastPep"))
     {
     doGetBlastPep(item, cartString(cart, "aliTrack"));
     }
-else if (sameWord(track, "htcProteinAli"))
+else if (sameWord(table, "htcProteinAli"))
     {
     htcProteinAli(item, cartString(cart, "aliTrack"));
     }
-else if (sameWord(track, "htcBlatXeno"))
+else if (sameWord(table, "htcBlatXeno"))
     {
     htcBlatXeno(item, cartString(cart, "aliTrack"));
     }
-else if (sameWord(track, "htcExtSeq"))
+else if (sameWord(table, "htcExtSeq"))
     {
     htcExtSeq(item);
     }
-else if (sameWord(track, "htcTranslatedProtein"))
+else if (sameWord(table, "htcTranslatedProtein"))
     {
     htcTranslatedProtein(item);
     }
-else if (sameWord(track, "htcTranslatedPredMRna"))
+else if (sameWord(table, "htcTranslatedPredMRna"))
     {
     htcTranslatedPredMRna(tdbForTableArg(), item);
     }
-else if (sameWord(track, "htcTranslatedMRna"))
+else if (sameWord(table, "htcTranslatedMRna"))
     {
     htcTranslatedMRna(tdbForTableArg(), item);
     }
-else if (sameWord(track, "htcGeneMrna"))
+else if (sameWord(table, "htcGeneMrna"))
     {
     htcGeneMrna(item);
     }
-else if (sameWord(track, "htcRefMrna"))
+else if (sameWord(table, "htcRefMrna"))
     {
     htcRefMrna(item);
     }
-else if (sameWord(track, "htcDisplayMrna"))
+else if (sameWord(table, "htcDisplayMrna"))
     {
     htcDisplayMrna(item);
     }
-else if (sameWord(track, "htcGeneInGenome"))
+else if (sameWord(table, "htcGeneInGenome"))
     {
     htcGeneInGenome(item);
     }
-else if (sameWord(track, "htcDnaNearGene"))
+else if (sameWord(table, "htcDnaNearGene"))
     {
     htcDnaNearGene(item);
     }
-else if (sameWord(track, "getMsBedAll"))
+else if (sameWord(table, "getMsBedAll"))
     {
     getMsBedExpDetails(tdb, item, TRUE);
     }
-else if (sameWord(track, "getMsBedRange"))
+else if (sameWord(table, "getMsBedRange"))
     {
     getMsBedExpDetails(tdb, item, FALSE);
     }
-else if (sameWord(track, "perlegen"))
+else if (sameWord(table, "perlegen"))
     {
     perlegenDetails(tdb, item);
     }
-else if (sameWord(track, "haplotype"))
+else if (sameWord(table, "haplotype"))
     {
     haplotypeDetails(tdb, item);
     }
-else if (sameWord(track, "mitoSnps"))
+else if (sameWord(table, "mitoSnps"))
     {
     mitoDetails(tdb, item);
     }
-else if(sameWord(track, "loweProbes"))
+else if (sameWord(table, "loweProbes"))
     {
     doProbeDetails(tdb, item);
     }
-else if  (sameWord(track, "chicken13k"))
+else if (sameWord(table, "chicken13k"))
     {
     doChicken13kDetails(tdb, item);
     }
-else if( sameWord(track, "ancientR"))
+else if( sameWord(table, "ancientR"))
     {
     ancientRDetails(tdb, item);
     }
-else if( sameWord(track, "gcPercent"))
+else if( sameWord(table, "gcPercent"))
     {
     doGcDetails(tdb, item);
     }
-else if (sameWord(track, "htcTrackHtml"))
+else if (sameWord(table, "htcTrackHtml"))
     {
     htcTrackHtml(tdbForTableArg());
     }
 
 /*Evan's stuff*/
-else if (sameWord(track, "genomicSuperDups"))
+else if (sameWord(table, "genomicSuperDups"))
     {
     doGenomicSuperDups(tdb, item);
     }
-else if (sameWord(track, "celeraDupPositive"))
+else if (sameWord(table, "celeraDupPositive"))
     {
     doCeleraDupPositive(tdb, item);
     }
 
-else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameWord(track, "transfacHit") )
+else if (sameWord(table, "triangle") || sameWord(table, "triangleSelf") || sameWord(table, "transfacHit") )
     {
     doTriangle(tdb, item, "dnaMotif");
     }
-else if (sameWord(track, "esRegGeneToMotif"))
+else if (sameWord(table, "esRegGeneToMotif"))
     {
     doTriangle(tdb, item, "esRegMotif");
     }
-else if (sameWord(track, "transRegCode"))
+else if (sameWord(table, "transRegCode"))
     {
     doTransRegCode(tdb, item, "transRegCodeMotif");
     }
-else if (sameWord(track, "transRegCodeProbe"))
+else if (sameWord(table, "transRegCodeProbe"))
     {
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
     	"transRegCodeCondition", "growthCondition");
     }
-else if (sameWord(track, "wgEncodeRegDnaseClustered"))
+else if (sameWord(table, "wgEncodeRegDnaseClustered"))
     {
     doPeakClusters(tdb, item);
     }
 
-else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
+else if( sameWord( table, "humMusL" ) || sameWord( table, "regpotent" ))
     {
     humMusClickHandler( tdb, item, "Mouse", "mm2", "blastzBestMouse", 0);
     }
-else if( sameWord( track, "musHumL" ))
+else if( sameWord( table, "musHumL" ))
     {
     humMusClickHandler( tdb, item, "Human", "hg12", "blastzBestHuman_08_30" , 0);
     }
-else if( sameWord( track, "mm3Rn2L" ))
+else if( sameWord( table, "mm3Rn2L" ))
     {
     humMusClickHandler( tdb, item, "Rat", "rn2", "blastzBestRat", 0 );
     }
-else if( sameWord( track, "hg15Mm3L" ))
+else if( sameWord( table, "hg15Mm3L" ))
     {
     humMusClickHandler( tdb, item, "Mouse", "mm3", "blastzBestMm3", 0 );
     }
-else if( sameWord( track, "mm3Hg15L" ))
+else if( sameWord( table, "mm3Hg15L" ))
     {
     humMusClickHandler( tdb, item, "Human", "hg15", "blastzNetHuman" , 0);
     }
-else if( sameWord( track, "footPrinter" ))
+else if( sameWord( table, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
     }
-else if (sameWord(track, "jaxQTL3"))
+else if (sameWord(table, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
     }
-else if (startsWith("jaxQTL", track) || startsWith("jaxQtl", track))
+else if (startsWith("jaxQTL", table) || startsWith("jaxQtl", table))
     {
     doJaxQTL(tdb, item);
     }
-else if (startsWith("jaxAllele", track))
+else if (startsWith("jaxAllele", table))
     {
     doJaxAllele(tdb, item);
     }
-else if (startsWith("jaxPhenotype", track))
+else if (startsWith("jaxPhenotype", table))
     {
     doJaxPhenotype(tdb, item);
     }
-else if (startsWith("jaxRepTranscript", track))
+else if (startsWith("jaxRepTranscript", table))
     {
     doJaxAliasGenePred(tdb, item);
     }
-else if (sameWord(track, "wgRna"))
+else if (sameWord(table, "wgRna"))
     {
     doWgRna(tdb, item);
     }
-else if (sameWord(track, "ncRna"))
+else if (sameWord(table, "ncRna"))
     {
     doNcRna(tdb, item);
     }
-else if (sameWord(track, "gbProtAnn"))
+else if (sameWord(table, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
     }
-else if (sameWord(track, "h1n1Gene"))
+else if (sameWord(table, "h1n1Gene"))
     {
     doH1n1Gene(tdb, item);
     }
-else if (startsWith("h1n1_", track) || startsWith("h1n1b_", track))
+else if (startsWith("h1n1_", table) || startsWith("h1n1b_", table))
     {
     doH1n1Seq(tdb, item);
     }
-else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
+else if (sameWord(table, "bdgpGene") || sameWord(table, "bdgpNonCoding"))
     {
     doBDGPGene(tdb, item);
     }
-else if (sameWord(track, "flyBaseGene") || sameWord(track, "flyBaseNoncoding"))
+else if (sameWord(table, "flyBaseGene") || sameWord(table, "flyBaseNoncoding"))
     {
     doFlyBaseGene(tdb, item);
     }
-else if (sameWord(track, "bgiGene"))
+else if (sameWord(table, "bgiGene"))
     {
     doBGIGene(tdb, item);
     }
-else if (sameWord(track, "bgiSnp"))
+else if (sameWord(table, "bgiSnp"))
     {
     doBGISnp(tdb, item);
     }
-else if (sameWord(track, "encodeRna"))
+else if (sameWord(table, "encodeRna"))
     {
     doEncodeRna(tdb, item);
     }
-else if (sameWord(track, "encodeRegions"))
+else if (sameWord(table, "encodeRegions"))
     {
     doEncodeRegion(tdb, item);
     }
-else if (sameWord(track, "encodeErgeHssCellLines"))
+else if (sameWord(table, "encodeErgeHssCellLines"))
     {
     doEncodeErgeHssCellLines(tdb, item);
     }
-else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVitroFoot")  || \
-	 sameWord(track, "encodeErgeDNAseI")  || sameWord(track, "encodeErgeMethProm")     || \
-	 sameWord(track, "encodeErgeExpProm") || sameWord(track, "encodeErgeStableTransf") || \
-	 sameWord(track, "encodeErgeBinding") || sameWord(track, "encodeErgeTransTransf")  || \
-	 sameWord(track, "encodeErgeSummary"))
+else if (sameWord(table, "encodeErge5race")   || sameWord(table, "encodeErgeInVitroFoot")  || \
+	 sameWord(table, "encodeErgeDNAseI")  || sameWord(table, "encodeErgeMethProm")     || \
+	 sameWord(table, "encodeErgeExpProm") || sameWord(table, "encodeErgeStableTransf") || \
+	 sameWord(table, "encodeErgeBinding") || sameWord(table, "encodeErgeTransTransf")  || \
+	 sameWord(table, "encodeErgeSummary"))
     {
     doEncodeErge(tdb, item);
     }
-else if(sameWord(track, "HInvGeneMrna"))
+else if(sameWord(table, "HInvGeneMrna"))
     {
     doHInvGenes(tdb, item);
     }
-else if(sameWord(track, "sgdClone"))
+else if(sameWord(table, "sgdClone"))
     {
     doSgdClone(tdb, item);
     }
-else if (sameWord(track, "sgdOther"))
+else if (sameWord(table, "sgdOther"))
     {
     doSgdOther(tdb, item);
     }
-else if (sameWord(track, "vntr"))
+else if (sameWord(table, "vntr"))
     {
     doVntr(tdb, item);
     }
-else if (sameWord(track, "luNega") || sameWord (track, "luPosi") || sameWord (track, "mRNARemains") || sameWord(track, "pseudoUcsc2"))
+else if (sameWord(table, "luNega") || sameWord (table, "luPosi") || sameWord (table, "mRNARemains") || sameWord(table, "pseudoUcsc2"))
     {
     doPutaFrag(tdb, item);
     }
-else if (sameWord(track, "potentPsl") || sameWord(track, "rcntPsl") )
+else if (sameWord(table, "potentPsl") || sameWord(table, "rcntPsl") )
     {
-    potentPslAlign(track, item);
+    potentPslAlign(table, item);
     }
-else if (startsWith("zdobnov", track))
+else if (startsWith("zdobnov", table))
     {
     doZdobnovSynt(tdb, item);
     }
-else if (startsWith("deweySynt", track))
+else if (startsWith("deweySynt", table))
     {
     doDeweySynt(tdb, item);
     }
-else if (startsWith("eponine", track))
+else if (startsWith("eponine", table))
     {
     doBed6FloatScore(tdb, item);
     printTrackHtml(tdb);
     }
-else if (sameWord(organism, "fugu") && startsWith("ecores", track))
+else if (sameWord(organism, "fugu") && startsWith("ecores", table))
     {
     doScaffoldEcores(tdb, item);
     }
-else if (startsWith("pscreen", track))
+else if (startsWith("pscreen", table))
     {
     doPscreen(tdb, item);
     }
-else if (startsWith("flyreg", track))
+else if (startsWith("flyreg", table))
     {
     doFlyreg(tdb, item);
     }
-/* ENCODE tracks */
-else if (startsWith("encodeGencodeIntron", track) &&
+/* ENCODE table */
+else if (startsWith("encodeGencodeIntron", table) &&
 	 sameString(tdb->type, "bed 6 +"))
     {
     doGencodeIntron(tdb, item);
     }
-else if (sameWord(track, "encodeIndels"))
+else if (sameWord(table, "encodeIndels"))
     {
     doEncodeIndels(tdb, item);
     }
-else if (startsWith("encodeStanfordPromoters", track))
+else if (startsWith("encodeStanfordPromoters", table))
     {
     doEncodeStanfordPromoters(tdb, item);
     }
-else if (startsWith("encodeStanfordRtPcr", track))
+else if (startsWith("encodeStanfordRtPcr", table))
     {
     doEncodeStanfordRtPcr(tdb, item);
     }
-else if (startsWith("encodeHapMapAlleleFreq", track))
+else if (startsWith("encodeHapMapAlleleFreq", table))
     {
     doEncodeHapMapAlleleFreq(tdb, item);
     }
-else if (sameString("cutters", track))
+else if (sameString("cutters", table))
     {
     doCutters(item);
     }
-else if (sameString("anoEstTcl", track))
+else if (sameString("anoEstTcl", table))
     {
     doAnoEstTcl(tdb, item);
     }
-else if (sameString("interPro", track))
+else if (sameString("interPro", table))
     {
     doInterPro(tdb, item);
     }
-else if (sameString("dvBed", track))
+else if (sameString("dvBed", table))
     {
     doDv(tdb, item);
     }
-else if (startsWith("hapmapSnps", track) &&
-	 (strlen(track) == 13 ||
-	  (endsWith(track, "PhaseII") && strlen(track) == 20)))
+else if (startsWith("hapmapSnps", table) &&
+	 (strlen(table) == 13 ||
+	  (endsWith(table, "PhaseII") && strlen(table) == 20)))
     {
     doHapmapSnps(tdb, item);
     }
-else if (startsWith("hapmapAllelesChimp", track) ||
-         startsWith("hapmapAllelesMacaque", track))
+else if (startsWith("hapmapAllelesChimp", table) ||
+         startsWith("hapmapAllelesMacaque", table))
     {
     doHapmapOrthos(tdb, item);
     }
-else if (sameString("snpArrayAffy250Nsp", track) ||
-         sameString("snpArrayAffy250Sty", track) ||
-         sameString("snpArrayAffy5", track) ||
-         sameString("snpArrayAffy6", track) ||
-         sameString("snpArrayAffy10", track) ||
-         sameString("snpArrayAffy10v2", track) ||
-         sameString("snpArrayAffy50HindIII", track) ||
-         sameString("snpArrayAffy50XbaI", track))
+else if (sameString("snpArrayAffy250Nsp", table) ||
+         sameString("snpArrayAffy250Sty", table) ||
+         sameString("snpArrayAffy5", table) ||
+         sameString("snpArrayAffy6", table) ||
+         sameString("snpArrayAffy10", table) ||
+         sameString("snpArrayAffy10v2", table) ||
+         sameString("snpArrayAffy50HindIII", table) ||
+         sameString("snpArrayAffy50XbaI", table))
     {
     doSnpArray(tdb, item, "Affy");
     }
-else if (sameString("snpArrayIllumina300", track) ||
-         sameString("snpArrayIllumina550", track) ||
-	 sameString("snpArrayIllumina650", track) ||
-	 (sameString("snpArrayIllumina1M", track) && startsWith("rs", item) ) ||
-	 (sameString("snpArrayIlluminaHuman660W_Quad", track) && startsWith("rs", item) ) ||
-	 (sameString("snpArrayIlluminaHumanOmni1_Quad", track) && startsWith("rs", item) ) ||
-	 (sameString("snpArrayIlluminaHumanCytoSNP_12", track) && startsWith("rs", item) ) )
+else if (sameString("snpArrayIllumina300", table) ||
+         sameString("snpArrayIllumina550", table) ||
+	 sameString("snpArrayIllumina650", table) ||
+	 (sameString("snpArrayIllumina1M", table) && startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHuman660W_Quad", table) && startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanOmni1_Quad", table) && startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanCytoSNP_12", table) && startsWith("rs", item) ) )
     {
     doSnpArray(tdb, item, "Illumina");
     }
 else if (
-	 (sameString("snpArrayIlluminaHuman660W_Quad", track) && !startsWith("rs", item) ) ||
-	 (sameString("snpArrayIlluminaHumanOmni1_Quad", track) && !startsWith("rs", item) ) ||
-	 (sameString("snpArrayIlluminaHumanCytoSNP_12", track) && !startsWith("rs", item) ) )
+	 (sameString("snpArrayIlluminaHuman660W_Quad", table) && !startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanOmni1_Quad", table) && !startsWith("rs", item) ) ||
+	 (sameString("snpArrayIlluminaHumanCytoSNP_12", table) && !startsWith("rs", item) ) )
     {
     /* special processing for non-dbSnp entries of the 3 new Illumina arrays */
     doSnpArray2(tdb, item, "Illumina");
     }
-else if (sameString("pgVenter", track) ||
-         sameString("pgWatson", track) ||
-         sameString("pgYri", track)    ||
-         sameString("pgCeu", track)    ||
-         sameString("pgChb", track)    ||
-         sameString("pgJpt", track)    ||
-	 sameString("pgSjk", track)    ||
-	 startsWith("pgYoruban", track) ||
-	 (startsWith("pgNA", track) && isdigit(track[4])) ||
-         sameString("hbPgTest", track) ||
-         sameString("hbPgWild", track) ||
-	 sameString("pgYh1", track) ||
-         sameString("pgKb1", track) ||
-         sameString("pgNb1", track) || sameString("pgNb1Indel", track) ||
-         sameString("pgTk1", track) || sameString("pgTk1Indel", track) ||
-         sameString("pgMd8", track) || sameString("pgMd8Indel", track) ||
-         sameString("pgKb1Illum", track) ||
-         sameString("pgKb1454", track) || sameString("pgKb1Indel", track) ||
-         sameString("pgKb1Comb", track) ||
-         sameString("pgAbtSolid", track) ||
-         sameString("pgAbt", track) || sameString("pgAbt454", track) ||
-         sameString("pgAbt454indels", track) ||
-         sameString("pgAbtIllum", track) ||
-         sameString("pgAk1", track) ||
-         sameString("pgQuake", track) ||
-         sameString("pgSaqqaq", track) ||
-         sameString("pgSaqqaqHc", track) ||
-         sameString("pgTest", track) )
+else if (sameString("pgVenter", table) ||
+         sameString("pgWatson", table) ||
+         sameString("pgYri", table)    ||
+         sameString("pgCeu", table)    ||
+         sameString("pgChb", table)    ||
+         sameString("pgJpt", table)    ||
+	 sameString("pgSjk", table)    ||
+	 startsWith("pgYoruban", table) ||
+	 (startsWith("pgNA", table) && isdigit(table[4])) ||
+         sameString("hbPgTest", table) ||
+         sameString("hbPgWild", table) ||
+	 sameString("pgYh1", table) ||
+         sameString("pgKb1", table) ||
+         sameString("pgNb1", table) || sameString("pgNb1Indel", table) ||
+         sameString("pgTk1", table) || sameString("pgTk1Indel", table) ||
+         sameString("pgMd8", table) || sameString("pgMd8Indel", table) ||
+         sameString("pgKb1Illum", table) ||
+         sameString("pgKb1454", table) || sameString("pgKb1Indel", table) ||
+         sameString("pgKb1Comb", table) ||
+         sameString("pgAbtSolid", table) ||
+         sameString("pgAbt", table) || sameString("pgAbt454", table) ||
+         sameString("pgAbt454indels", table) ||
+         sameString("pgAbtIllum", table) ||
+         sameString("pgAk1", table) ||
+         sameString("pgQuake", table) ||
+         sameString("pgSaqqaq", table) ||
+         sameString("pgSaqqaqHc", table) ||
+         sameString("pgTest", table) )
     {
     doPgSnp(tdb, item);
     }
-else if (sameString("gvPos", track))
+else if (sameString("gvPos", table))
     {
     doGv(tdb, item);
     }
-else if (sameString("protVarPos", track))
+else if (sameString("protVarPos", table))
     {
     doProtVar(tdb, item);
     }
-else if (sameString("oreganno", track))
+else if (sameString("oreganno", table))
     {
     doOreganno(tdb, item);
     }
-else if (sameString("oregannoOther", track))
+else if (sameString("oregannoOther", table))
     {
     /* Regions from another species lifted and displayed in current */
-    /* same table structure, just different table name/track */
+    /* same table structure, just different table name/table */
     doOreganno(tdb, item);
     }
-else if (sameString("allenBrainAli", track))
+else if (sameString("allenBrainAli", table))
     {
     doAllenBrain(tdb, item);
     }
-else if (sameString("dless", track) || sameString("encodeDless", track))
+else if (sameString("dless", table) || sameString("encodeDless", table))
     {
     doDless(tdb, item);
     }
-else if (sameString("mammalPsg", track))
+else if (sameString("mammalPsg", table))
    {
      doMammalPsg(tdb, item);
    }
-else if (sameString("igtc", track))
+else if (sameString("igtc", table))
     {
     doIgtc(tdb, item);
     }
-else if (startsWith("komp", track) || startsWith("ikmc", track))
+else if (startsWith("komp", table) || startsWith("ikmc", table))
     {
     doKomp(tdb, item);
     }
-else if (startsWith("dbRIP", track))
+else if (startsWith("dbRIP", table))
     {
     dbRIP(tdb, item, NULL);
     }
-else if (sameString("omicia", track)) //Auto", track) || sameString("omiciaHand", track))
+else if (sameString("omicia", table)) //Auto", table) || sameString("omiciaHand", table))
     {
     doOmicia(tdb, item);
     }
-else if ( sameString("expRatioUCSFDemo", track) || sameString("cnvLungBroadv2", track) || sameString("CGHBreastCancerUCSF", track) || sameString("expBreastCancerUCSF", track))
+else if ( sameString("expRatioUCSFDemo", table) || sameString("cnvLungBroadv2", table) || sameString("CGHBreastCancerUCSF", table) || sameString("expBreastCancerUCSF", table))
     {
     doUCSFDemo(tdb, item);
     }
-else if (startsWith("consIndels", track))
+else if (startsWith("consIndels", table))
     {
     doConsIndels(tdb,item);
     }
-else if (startsWith(KIDD_EICHLER_DISC_PREFIX, track))
+else if (startsWith(KIDD_EICHLER_DISC_PREFIX, table))
     {
     doKiddEichlerDisc(tdb, item);
     }
-else if (startsWith("hgdpGeo", track))
+else if (startsWith("hgdpGeo", table))
     {
     doHgdpGeo(tdb, item);
     }
-else if (startsWith("gwasCatalog", track))
+else if (startsWith("gwasCatalog", table))
     {
     doGwasCatalog(tdb, item);
     }
-else if (sameString("par", track))
+else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
@@ -23156,6 +23160,8 @@ else
     cartWebStart(cart, database, "%s", track);
     printf("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
+/* End of 1000+ line dispatch on table involving 100+ if/elses. */
+
 if (didCartHtmlStart)
     cartHtmlEnd();
 }
