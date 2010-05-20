@@ -69,7 +69,6 @@ for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displ
     webPrintLabelCell(displayGroup->name);
     }
 webPrintLabelCell("description");
-printf("</TR><TR>\n");
 }
 
 static void printOutOfClusterTableHeader(struct slName *displayGroupList)
@@ -82,7 +81,6 @@ for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displ
     webPrintLabelCell(displayGroup->name);
     }
 webPrintLabelCell("description");
-printf("</TR><TR>\n");
 }
 
 static void printTableInfo(struct trackDb *tdb, struct trackDb *clusterTdb,
@@ -96,7 +94,10 @@ for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displ
     char *linkedLabel = compositeLabelWithVocabLink(database, tdb, tdb, displayGroup->name, label);
     webPrintLinkCell(linkedLabel);
     }
-webPrintLinkCell(tdb->longLabel);
+webPrintLinkCellStart();
+printf("%s ", tdb->longLabel);
+compositeMetadataToggle(database, tdb, "...", TRUE, FALSE);
+webPrintLinkCellEnd();
 }
 
 static void showOnePeakOrMiss(struct trackDb *tdb, struct trackDb *clusterTdb,
@@ -105,6 +106,7 @@ static void showOnePeakOrMiss(struct trackDb *tdb, struct trackDb *clusterTdb,
 {
 struct encodePeak *peak;
 *pIx += 1;
+printf("</TR><TR>\n");
 webPrintIntCell(*pIx);
 if (peakList)
     {
@@ -115,7 +117,6 @@ if (peakList)
     webPrintLinkCellEnd();
     }
 printTableInfo(tdb, clusterTdb, displayGroupList);
-printf("</TR><TR>\n");
 }
 
 static boolean showMatchingTrack(char *track, struct bed *cluster, struct sqlConnection *conn,
@@ -245,8 +246,8 @@ if (cluster != NULL)
 printf("<A HREF=\"%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
 	tdb->track);
 printf("List all items assayed");
-webNewSection("Track Description");
 printf("</A><BR>\n");
+webNewSection("Track Description");
 printTrackHtml(tdb);
 cartWebEnd();
 hFreeConn(&conn);
@@ -291,18 +292,13 @@ if (cluster != NULL)
     printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
     printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
-    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
-    uglyf("<B>sourceTable:</B> %s<BR>\n", sourceTable);
-
     /* Get list of tracks we'll look through for input. */
     char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
     struct slName *inTrackList = stringToSlNames(inputTracks);
-    uglyf("<B>inputTracks:</B> %s (%d)<BR>\n", inputTracks, slCount(inTrackList));
 
     /* Get list of subgroups to select on */
     char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
     struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
-    uglyf("<B>inputTracksSubgroupSelect:</B> %s (%d)<BR>\n", inputTracksSubgroupSelect, slCount(selGroupList));
 
     /* Get list of subgroups to display */
     char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
@@ -310,14 +306,12 @@ if (cluster != NULL)
 
     /* Figure out factor ID and add it as selection criteria*/
     char *factorId = findFactorId(inTrackList, cluster->name);
-    uglyf("<B>cluster->id:</B> %s  <B>factorId:</B> %s<BR>\n", cluster->name, factorId);
     struct slPair *factorSel = slPairNew("factor", cloneString(factorId));
     slAddHead(&selGroupList, factorSel);
 
     /* Get list of tracks that match criteria. */
     struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
     struct slName *matchTrack;
-    uglyf("<B>matchTrackList:</B> %d elements<BR>\n", slCount(matchTrackList));
 
     /* In a new section put up list of hits. */
     webNewSection("List of %s Items in Cluster", cluster->name);
@@ -344,6 +338,26 @@ if (cluster != NULL)
     webPrintLinkTableEnd();
 
     webNewSection("Track Description");
+
+    /* Print out table of abbreviations. */
+    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+    printf("<B>Table of abbreviations for cells</B><BR>\n");
+    safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    webPrintLinkTableStart();
+    webPrintLabelCell("Symbol");
+    webPrintLabelCell("Cell Type");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	printf("</TR><TR>\n");
+	char *name = row[0];
+	char *description = row[1];
+	webPrintLinkCell(name);
+	webPrintLinkCell(description);
+	}
+    sqlFreeResult(&sr);
+    webPrintLinkTableEnd();
+
     }
 }
 
