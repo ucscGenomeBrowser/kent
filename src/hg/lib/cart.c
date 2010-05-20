@@ -13,6 +13,7 @@
 #include "web.h"
 #include "hdb.h"
 #include "jksql.h"
+#include "jsHelper.h"
 #include "trashDir.h"
 #ifndef GBROWSE
 #include "customFactory.h"
@@ -22,7 +23,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.119 2010/05/11 01:43:29 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.120 2010/05/20 03:15:51 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1344,6 +1345,8 @@ va_list args;
 va_start(args, format);
 cartVaWebStart(cart, db, format, args);
 va_end(args);
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
 }
 
 void cartWebEnd()
