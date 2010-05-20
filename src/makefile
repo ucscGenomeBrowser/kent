@@ -60,7 +60,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
 	faToTwoBit gtfToGenePred htmlCheck nibFrag stringify \
 	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
 
-HG_APPLIST = liftOver bedItemOverlapCount encode/validateFiles \
+HG_APPLIST = bedSort liftOver bedItemOverlapCount encode/validateFiles \
 	ratStuff/mafsInRegion ratStuff/mafSpeciesSubset pslCDnaFilter
 
 HG_UTILS_APPLIST = bedExtendRanges
