@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.289 2010/05/18 06:31:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.289.2.1 2010/05/20 21:56:17 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2693,23 +2693,30 @@ return membership;
 static boolean membershipInAllCurrentABCs(membership_t *membership,membersForAll_t*membersForAll)
 /* looks for a match between a membership set and ABC dimensions currently checked */
 {
-int mIx,aIx;
-for (aIx = dimA; aIx <membersForAll->dimMax;aIx++)
+int mIx,aIx,tIx;
+for (aIx = dimA; aIx < membersForAll->dimMax; aIx++)  // for each ABC subGroup
     {
-    if(membersForAll->checkedTags[aIx] == NULL) // None checked
-        return FALSE;
-    if(differentWord("All",membersForAll->checkedTags[aIx])) // Not all checked
-        { // Have to walk through the checked tags and compare
-        for (mIx = 0; mIx <membership->count;mIx++)
-            {
-            //int gix = membersSubGroupIx(membersForAll->members[aIx],membership->membership[mIx]);
-            //if(gix < 0 || membersForAll->members[aIx]->selected[gix] == FALSE)
-            //    return FALSE; // Not in one of the ABC dims
+    assert(membersForAll->members[aIx]->selected);
 
-            if(NULL == findWordByDelimiter(membership->membership[mIx],',',membersForAll->checkedTags[aIx]));
-                return FALSE; // Not in one of the ABC dims
+    // must find atleast one selected tag that we have membership in
+    boolean matched = FALSE;
+    for (mIx = 0; mIx <membersForAll->members[aIx]->count;mIx++) // for each tag of that subgroup
+        {
+        if(membersForAll->members[aIx]->selected[mIx])  // The particular subgroup tag is selected
+            {
+            for(tIx=0;tIx<membership->count;tIx++)  // what we are members of
+                {
+                if(sameString(membersForAll->members[aIx]->groupTag, membership->subgroups[tIx])   // subTrack belongs to subGroup
+                &&   sameWord(membersForAll->members[aIx]->tags[mIx],membership->membership[tIx])) // and tags match
+                    {
+                    matched = TRUE;
+                    break;
+                    }
+                }
             }
         }
+        if(!matched)
+            return FALSE;
     }
 return TRUE; // passed all tests so must be on all
 }
@@ -5559,7 +5566,7 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
-char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb, 
+char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb,
 	char *vocabType, char *label)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
