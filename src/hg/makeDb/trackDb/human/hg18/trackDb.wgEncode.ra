@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.977 2010/05/21 02:48:47 vanessa Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.978 2010/05/21 20:37:20 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -20581,7 +20581,7 @@ compositeTrack on
 shortLabel GIS RNA-seq
 longLabel ENCODE Genome Institute of Singapore RNA-seq
 group expression
-subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 5-SplitAlign=SplitAlign
+subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 5-SplitAlign=Split_Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 H1-hESC=H1-hESC K562=K562
 subGroup3 rep Replicate 1=1 2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
@@ -20796,7 +20796,7 @@ wgEncode 1
         track wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL1
-        longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in K562 cytosol)
+        longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
         subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=1
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
@@ -20811,7 +20811,7 @@ wgEncode 1
         track wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL2
-        longLabel ENCODE GIS RNA-seq Tags Rep 2 (PolyA+ RNA in K562 cytosol)
+        longLabel ENCODE GIS RNA-seq Alignments Rep 2 (PolyA+ RNA in K562 cytosol)
         subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=2
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
@@ -20826,7 +20826,7 @@ wgEncode 1
         track wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel GM12 cyto A+ AL1
-        longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in GM12878 cytosol)
+        longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in GM12878 cytosol)
         subGroups view=4-Alignments cellType=GM12878 rnaExtract=longPolyA  rep=1
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
@@ -20841,7 +20841,7 @@ wgEncode 1
         track wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel hESC cell A+ AL1
-        longLabel ENCODE GIS RNA-seq Tags Rep 1 (PolyA+ RNA in H1-hESC cell)
+        longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)
         subGroups view=4-Alignments cellType=H1-hESC rnaExtract=longPolyA  rep=1
         color 0,107,27
         colorByStrand 46,0,184 238,85,34
@@ -20854,7 +20854,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
 
     track wgEncodeGisRnaSeqView5-SplitAlign
-    shortLabel SplitAlign
+    shortLabel Split Alignments
     view 5-SplitAlign
     visibility hide
     subTrack wgEncodeGisRnaSeq
@@ -20862,7 +20862,7 @@ wgEncode 1
         track wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel K562 cyto A+ SA1
-        longLabel ENCODE GIS RNA-seq Split Tags Rep 1 (PolyA+ RNA in K562 cytosol)
+        longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
         subGroups view=5-SplitAlign cellType=K562 rnaExtract=longPolyA  rep=1
     #    type pairedTagAlign
         colorByStrand 46,0,184 238,85,34
@@ -20879,7 +20879,7 @@ wgEncode 1
         track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel hESC cell A+ SA1
-        longLabel ENCODE GIS RNA-seq Split Tags Rep 1 (PolyA+ RNA in H1-hESC cell)
+        longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)
         subGroups view=5-SplitAlign cellType=H1-hESC rnaExtract=longPolyA  rep=1
     #    type pairedTagAlign
         colorByStrand 46,0,184 238,85,34
