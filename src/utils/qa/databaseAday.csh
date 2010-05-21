@@ -13,7 +13,7 @@ source `which qaConfig.csh`
 ########################## 
 
 set choice=''
-set outPath='/usr/local/apache/htdocs/qa/test-results'
+set outPath='/usr/local/apache/htdocs-genecats/qa/test-results'
 set todaysDb=''
 set yestDb=''
 set list=''
@@ -24,7 +24,7 @@ if ( $#argv < 1  || $#argv > 2 ) then
   echo " call with 'today' to find out the database we are monitoring today"
   echo
   echo "    usage:  today | yesterday | init | next [path]"
-  echo "            path defaults to /usr/local/apache/htdocs/qa/test-results"
+  echo "            path defaults to /usr/local/apache/htdocs-genecats/qa/test-results"
   echo
   exit 1
 else

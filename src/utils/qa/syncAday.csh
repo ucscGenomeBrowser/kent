@@ -27,12 +27,12 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-set basePath='/usr/local/apache/htdocs/qa/test-results/sync'
+set basePath='/usr/local/apache/htdocs-genecats/qa/test-results/sync'
 set db=`databaseAday.csh today`
 rm -f $basePath/$db
 echo "\n$db\n" >> $basePath/$db
 # checkSync.csh $db times >> $basePath/$db
 checkSync.csh $db hgwbeta hgw2 times >> $basePath/$db
 cat $basePath/$db
-echo "http://hgwdev.cse.ucsc.edu/qa/test-results/sync/$db" | mail -s "sync for today" $USER@soe.ucsc.edu
+echo "http://genecats.cse.ucsc.edu/qa/test-results/sync/$db" | mail -s "sync for today" $USER@soe.ucsc.edu
 

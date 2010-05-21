@@ -38,10 +38,10 @@ set directory="hgcentral"
 # set file paths and URLs
 # set today="2008-05-05"
 set today=`date +%Y-%m-%d`
-set dirPath="/usr/local/apache/htdocs/qa/test-results/$directory"
+set dirPath="/usr/local/apache/htdocs-genecats/qa/test-results/$directory"
 rm -rf $dirPath/$today/
 mkdir -p $dirPath/$today
-set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/$directory/$today"
+set urlPath="http://genecats.cse.ucsc.edu/qa/test-results/$directory/$today"
 
 # remove last year's dir
 set lastYr=`date +%Y-%m --date='1 year  ago'`

@@ -103,7 +103,7 @@ else
 endif
 
 sort xxfullListxx > gbdb.$db.$todayDate
-cp gbdb.$db.$todayDate /usr/local/apache/htdocs/qa/test-results/gbdb
+cp gbdb.$db.$todayDate /usr/local/apache/htdocs-genecats/qa/test-results/gbdb
 
 # clean up
 rm -f xxAssembliesxx

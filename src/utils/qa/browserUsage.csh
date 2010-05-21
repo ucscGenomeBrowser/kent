@@ -10,7 +10,7 @@ source `which qaConfig.csh`
 #
 ############################################
 
-set fileLocation="/usr/local/apache/htdocs/qa/test-results/browserUsage"
+set fileLocation="/usr/local/apache/htdocs-genecats/qa/test-results/browserUsage"
 set fileName='monthly.report.html'
 set lineNum=0
 set shortFile=''
@@ -23,7 +23,7 @@ if ( $argv != 'go' ) then
   echo
   echo " Checks stats for browser and o/s usage."
   echo " Places report here:\
-         http://hgwdev.cse.ucsc.edu/qa/test-results/browserUsage"
+         http://genecats.cse.ucsc.edu/qa/test-results/browserUsage"
   echo "  usage: go"
   echo
   exit
@@ -76,7 +76,7 @@ echo "</BODY></HTML>" >> shortestFile
 chmod 775 shortestFile
 
 # move the file to the test-results location
-mv shortestFile /usr/local/apache/htdocs/qa/test-results/browserUsage/$today.html
+mv shortestFile /usr/local/apache/htdocs-genecats/qa/test-results/browserUsage/$today.html
 
 # remove all the intermediate files
 rm shortFile

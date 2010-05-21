@@ -40,8 +40,8 @@ if ($mode != "go" && $mode != "override") then
 endif
 
 set todayDate=`date +%Y%m%d`
-set outpath="/usr/local/apache/htdocs/qa/test-results/gbdb"
-set urlpath="http://hgwdev.cse.ucsc.edu/qa/test-results/gbdb"
+set outpath="/usr/local/apache/htdocs-genecats/qa/test-results/gbdb"
+set urlpath="http://genecats.cse.ucsc.edu/qa/test-results/gbdb"
 
 # get the two files to compare or create if none for today
 if ($mode == "override" ) then

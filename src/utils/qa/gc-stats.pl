@@ -2,15 +2,15 @@
 
 # Program: gc-stats.pl
 # Purpose: parses output of gene-check script into summary statistics
-# Test Protocal: http://hgwdev.cse.ucsc.edu/qa/test-protocols/gene-check.protocol.html
-# Summary results: http://hgwdev.cse.ucsc.edu/qa/test-results/gene-check.results.html
+# Test Protocal: http://genecats.cse.ucsc.edu/qa/test-protocols/gene-check.protocol.html
+# Summary results: http://genecats.cse.ucsc.edu/qa/test-results/gene-check.results.html
 # Author: Jennifer Jackson
 # Int Date: 2005-11-14
 # Rev Date: 2005-11-XX
 
 
 $documentation = "See test protocol documentation
-        http://hgwdev.cse.ucsc.edu/qa/test-protocols/gene-check.protocol.html";
+        http://genecats.cse.ucsc.edu/qa/test-protocols/gene-check.protocol.html";
 
 if ($#ARGV != 2) { die
 "\nUSAGE: $0 <genePreds_table> <gc-details> <gc-summary>
@@ -24,9 +24,9 @@ if ($#ARGV != 2) { die
         <gc-report>       file name format: pred_table.db.server.YYMMDD.gc-report
 	\nWhen complete, do the following to save your results ......	
 	1)Save the <gc-report> file in report directory:
-        /usr/local/apache/htdocs/qa/test-results/gc-stats.results 
+        /usr/local/apache/htdocs-genecats/qa/test-results/gc-stats.results 
         2)Add the html contents of <gc-stats> into results file:
-	/usr/local/apache/htdocs/qa/test-results/gc-stats.results.html
+	/usr/local/apache/htdocs-genecats/qa/test-results/gc-stats.results.html
         3)Keep working files until QA complete in work directory, then delete:
         /cluster/store9/qa/gene-check
         $documentation\n\n";}
@@ -114,9 +114,9 @@ open STAT, ">$stat_file";
 open REPORT,  ">$report_file";
 print STAT   "$0 gc-stats file for $in_preds\n\n";
 print STAT   "Paste the html formated results below into file:\n"; 
-print STAT   "/usr/local/apache/htdocs/qa/test-results/gc-stats.results.html\n\n";
+print STAT   "/usr/local/apache/htdocs-genecats/qa/test-results/gc-stats.results.html\n\n";
 print REPORT "$0 gc-report file for $in_preds\n\n";
-print REPORT "Save file at /usr/local/apache/htdocs/qa/test-results/gc-stats.reports\n\n";
+print REPORT "Save file at /usr/local/apache/htdocs-genecats/qa/test-results/gc-stats.reports\n\n";
 
 
 # in preds, count up ids & preds per id

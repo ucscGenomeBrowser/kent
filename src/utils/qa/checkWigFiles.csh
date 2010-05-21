@@ -27,7 +27,7 @@ if ( $#argv < 3 || $#argv > 4 ) then
  echo "   fileName includes path of wig download file "
  echo "    (.txt and/or .gz files are OK)"
  echo
- echo "    e.g. /usr/local/apache/htdocs/goldenPath/<db>/wig/fileName.wig"
+ echo "    e.g. /usr/local/apache/htdocs-hgdownload/goldenPath/<db>/wig/fileName.wig"
  echo
  echo "    add rm if you would like the output files to be removed."
  echo

@@ -26,13 +26,13 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-set outPath='/usr/local/apache/htdocs/qa/test-results/metadata'
+set outPath='/usr/local/apache/htdocs-genecats/qa/test-results/metadata'
 cd $outPath/details
 rm -f $outPath/details/*
 set db=`databaseAday.csh today`
 rm -f $outPath/$db
 checkMetaData.csh $db hgwbeta rr >> $outPath/$db
 echo "\n   details in \
-  http://hgwdev.cse.ucsc.edu/qa/test-results/metadata/details\n" \
+  http://genecats.cse.ucsc.edu/qa/test-results/metadata/details\n" \
   >> $outPath/$db
 cat $outPath/$db 

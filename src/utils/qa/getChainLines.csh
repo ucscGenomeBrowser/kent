@@ -40,8 +40,8 @@ endif
 set Db1=`echo $db1 | perl -wpe '$_ = ucfirst($_)'`
 set Db2=`echo $db2 | perl -wpe '$_ = ucfirst($_)'`
 
-set out1=`grep -s "Chain minimum score" /data/apache/htdocs/goldenPath/$db1/vs$Db2/README.txt`
-set out2=`grep -s "Chain minimum score" /data/apache/htdocs/goldenPath/$db2/vs$Db1/README.txt`
+set out1=`grep -s "Chain minimum score" /data/apache/htdocs-hgdownload/goldenPath/$db1/vs$Db2/README.txt`
+set out2=`grep -s "Chain minimum score" /data/apache/htdocs-hgdownload/goldenPath/$db2/vs$Db1/README.txt`
 
 if ( "$out1" != "") then
   set fullLine="$out1"

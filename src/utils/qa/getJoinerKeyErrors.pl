@@ -2,13 +2,13 @@
 
 # Program : getJoinerKeyErrors.pl
 # Purpose : parses output of joinerCheck and captures Errors and associated lines
-# Results : http://hgwdev.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/
+# Results : http://genecats.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/
 # Author  : Jennifer Jackson
 # Int Date: 2005-03-04
 # Rev Date: 2005-11-XX
 # Author  : Ann Zweig
 # Rev Date: 2006-02-13 - added results to HTML page
-# Results : http://hgwdev.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.YYMMDD
+# Results : http://genecats.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.YYMMDD
 
 use File::Copy;
 
@@ -21,7 +21,7 @@ if ($#ARGV != 0) { die
        	report is in target directory: joinerKeyErrors.YYMMDD 
 	STDERR is sent to screen
 	reports can be viewed online at:
-	http://hgwdev.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/YYYYMM/*\n\n";}
+	http://genecats.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/YYYYMM/*\n\n";}
 
 # State the program has started
 print STDERR "PROCESSING: $0 program started, locating directory & input files\n";
@@ -130,6 +130,6 @@ closedir(DIR);
 
 # copy results to html location
 $oldlocation = "joinerKeyErrors.$p_year$p_month$p_day";
-$newlocation = "/usr/local/apache/htdocs/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.$p_year$p_month$p_day";
+$newlocation = "/usr/local/apache/htdocs-genecats/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.$p_year$p_month$p_day";
 copy($oldlocation, $newlocation);
 

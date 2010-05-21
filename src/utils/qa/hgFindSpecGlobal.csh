@@ -54,8 +54,8 @@ set dbs=`getAssemblies.csh hgFindSpec hgwbeta \
 # set file paths and URLs
 set today=`date +%Y-%m-%d`
 # set today="2005-01-23"
-set dirPath="/usr/local/apache/htdocs/qa/test-results/hgFindSpec"
-set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/hgFindSpec"
+set dirPath="/usr/local/apache/htdocs-genecats/qa/test-results/hgFindSpec"
+set urlPath="http://genecats.cse.ucsc.edu/qa/test-results/hgFindSpec"
 mkdir -p $dirPath/$today
 set summaryFile=$dirPath/$today/$today.hgFindSpec.html
 set summaryUrl=$urlPath/$today/$today.hgFindSpec.html
