@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.10 2010/05/18 22:14:42 braney Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.11 2010/05/21 23:45:38 braney Exp $";
 
 
 char *bigBedFileName(char *table, struct sqlConnection *conn)
@@ -599,8 +599,11 @@ if (as == NULL)
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
 hPrintf("<B>Big Bed File:</B> %s", fileName);
-hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Item Count:</B> ");
-printLongWithCommas(stdout, bigBedItemCount(bbi));
+if (bbi->version >= 2)
+    {
+    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Item Count:</B> ");
+    printLongWithCommas(stdout, bigBedItemCount(bbi));
+    }
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 
