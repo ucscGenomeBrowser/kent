@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.224 2010/05/11 20:25:02 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.225 2010/05/21 17:38:00 braney Exp $
 
 use warnings;
 use strict;
@@ -181,7 +181,7 @@ our %validators = (
 sub validateFiles {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
-    my ($files, $type, $track, $daf) = @_;
+    my ($files, $type, $track, $daf, $cell) = @_;
     my @newFiles;
     my @errors;
     my $regex = "\`\|\\\|\|\"\|\'";
@@ -213,7 +213,7 @@ sub validateFiles {
         } elsif(!(-r $file)) {
             pushError(\@errors, "File \'$file\' is un-readable");
         } else {
-            pushError(\@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file));
+            pushError(\@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file, $cell));
         }
     }
     $files = \@newFiles;
@@ -759,11 +759,27 @@ sub validateSAM
 
 sub validateBam
 {
-    my ($path, $file, $type) = @_;
+    my ($path, $file, $type, $cell) = @_;
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromDb=$daf->{assembly} $file"]);
+    my $sex = $terms{'Cell Line'}->{$cell}->{'sex'};
+    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
+    my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
+    my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
+    if ($sex ne "F")  {
+        $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
+        $twoBitFile =  "$downloadDir/male.$assembly.2bit";
+    }
+
+    # index the BAM file
+    my $safe = SafePipe->new(CMDS => ["samtools index $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed samtools index : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateBam for '$file'");
+    }
+    $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -952,11 +968,11 @@ sub validatePsl
 
 sub validateDdfField {
     # validate value for type of field
-    my ($type, $val, $track, $daf) = @_;
+    my ($type, $val, $track, $daf, $cell) = @_;
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        return $validators{$type}->($val, $type, $track, $daf);
+        return $validators{$type}->($val, $type, $track, $daf, $cell);
     } else {
         return $validators{'default'}->($val, $type, $track, $daf); # Considers the term controlled vocab
     }
@@ -964,7 +980,7 @@ sub validateDdfField {
 
 sub checkDataFormat {
     # validate file type
-    my ($format, $file) = @_;
+    my ($format, $file, $cell) = @_;
     HgAutomate::verbose(3, "Checking data format for $file: $format\n");
     my $type = $format;
     if ($format =~ m/(bed) (\d+)/) {
@@ -974,7 +990,7 @@ sub checkDataFormat {
         $format = $1;
     }
     $formatCheckers{$format} || return "Data format \'$format\' is unknown\n";
-    return $formatCheckers{$format}->($submitPath, $file, $type);
+    return $formatCheckers{$format}->($submitPath, $file, $type, $cell);
     HgAutomate::verbose(3, "Done checking data format for $file: $format\n");
 }
 
@@ -1465,7 +1481,8 @@ while (@{$lines}) {
         $line{files} = \@filenames;
         my @metadataErrors;
         for my $field (keys %line) {
-            push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf));
+            my $cell = $line{cell};
+            push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf, $cell));
         }
         if(@metadataErrors) {
             pushError(\@errors, @metadataErrors);
