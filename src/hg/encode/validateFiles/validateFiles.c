@@ -12,8 +12,8 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.41 2010/05/11 02:06:22 braney Exp $";
-static char *version = "$Revision: 1.41 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.42 2010/05/21 18:05:14 braney Exp $";
+static char *version = "$Revision: 1.42 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -136,7 +136,7 @@ boolean checkMismatch(int ch1, int ch2)
 //   by default unless nMatch is set, in which case we don't call
 //   it a mismatch
 {
-if (ch1 != 'n')
+if ((ch1 != 'n') && (ch2 != 'n'))
     return ch1 != ch2;
 
 return !nMatch;
@@ -1234,7 +1234,7 @@ char strand = bamIsRc(bam) ? '-' : '+';
    if (! checkCigarMismatches(file, bd->count, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
-    warn("align: ciglen %d cigar %s qlen %d pos %d lenght %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
+    warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
 
     if (++(*errs) >= maxErrors)
         errAbort("Aborting .. found %d errors\n", *errs);
