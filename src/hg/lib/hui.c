@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.292 2010/05/20 22:24:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.293 2010/05/21 17:42:49 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3251,7 +3251,7 @@ int count = slCount(filterBySet);
 if(count == 1)
     puts("<BR><TABLE cellpadding=3><TR valign='top'>");
 else
-    printf("<BR><B>Filter by</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
+    printf("<BR><B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 filterBy_t *filterBy = NULL;
 #ifdef FILTER_COMPOSITE
 #define FILTER_BY_PLUGIN
