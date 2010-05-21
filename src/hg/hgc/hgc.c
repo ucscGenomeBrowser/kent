@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1631 2010/05/20 23:23:04 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1632 2010/05/21 02:22:58 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2612,7 +2612,7 @@ if (!isCustomTrack(tdb->track))
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
-    if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
+    if ((tableName = hGetTableForTrack(database, tdb->track)) != NULL)
 	{
 	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 
@@ -5228,7 +5228,7 @@ void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
 {
 if (pslList == NULL || trackName == NULL)
     return;
-char *tableName = hTableForTrack(database, trackName);
+char *tableName = hGetTableForTrack(database, trackName);
 printAlignmentsSimple(pslList, startFirst, hgcCommand, trackName, itemIn);
 
 struct psl *psl = pslList;
