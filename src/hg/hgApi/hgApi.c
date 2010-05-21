@@ -6,7 +6,7 @@
 #include "hPrint.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgApi.c,v 1.1 2010/05/21 20:26:48 larrym Exp $";
+static char const rcsid[] = "$Id: hgApi.c,v 1.2 2010/05/21 22:29:49 larrym Exp $";
 
 static void fail(char *msg)
 {
@@ -28,21 +28,22 @@ char tabs[100];
 makeIndent(tabs, sizeof(tabs), indent);
 if((*count)++)
     dyStringPrintf(json, ",\n");
-dyStringPrintf(json, "%s\"%s\": {\n", tabs, tdb->track);
+dyStringPrintf(json, "%s{\n", tabs);
 makeIndent(tabs, sizeof(tabs), indent + 1);
-dyStringPrintf(json, "%s\"shortLabel\": \"%s\",\n%s\"longLabel\": \"%s\",\n%s\"group\": \"%s\"",
+dyStringPrintf(json, "%s\"track\": \"%s\",\n%s\"shortLabel\": \"%s\",\n%s\"longLabel\": \"%s\",\n%s\"group\": \"%s\"",
+               tabs, tdb->track,
                tabs, javaScriptLiteralEncode(tdb->shortLabel), tabs, javaScriptLiteralEncode(tdb->longLabel),
                tabs, javaScriptLiteralEncode(tdb->grp));
 if(tdbIsComposite(tdb) && tdb->subtracks != NULL)
     {
     struct trackDb *ptr;
-    dyStringPrintf(json, ",\n%s\"subtracks\": {\n", tabs);
+    dyStringPrintf(json, ",\n%s\"subtracks\":\n%s[\n", tabs, tabs);
     int count = 0;
     for (ptr = tdb->subtracks; ptr != NULL; ptr = ptr->next)
         {
         trackJson(json, ptr, &count, indent + 2);
         }
-    dyStringPrintf(json, "\n%s}", tabs);
+    dyStringPrintf(json, "\n%s]", tabs);
     }
 makeIndent(tabs, sizeof(tabs), indent);
 dyStringPrintf(json, "\n%s}", tabs);
@@ -66,14 +67,14 @@ if(!strcmp(cmd, "trackList"))
         {
         struct trackDb *tdb, *tdbList = NULL;
         tdbList = hTrackDb(database, NULL);
-        dyStringPrintf(output, "{\n");
+        dyStringPrintf(output, "[\n");
         int count = 0;
         for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             {
             trackJson(output, tdb, &count, 1);
             count++;
             }
-        dyStringAppend(output, "\n}\n");
+        dyStringAppend(output, "\n]\n");
         }
     else
         {
