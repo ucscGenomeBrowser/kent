@@ -1,12 +1,12 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.wgEncode.ra,v 1.3 2010/05/18 23:38:16 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.wgEncode.ra,v 1.4 2010/05/21 22:53:47 vsmalladi Exp $
 
 
-# Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler: Cricket)
+# Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler: Cricket and vsmalladi)
 track wgEncodeSydhHist
 release alpha
 compositeTrack on
-shortLabel SDYH Histone
-longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard 
+shortLabel Stan/Yale Histone
+longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale
 group regulation
 priority 0
 type bed 3
@@ -46,7 +46,7 @@ wgEncode 1
    		release alpha
     		subTrack wgEncodeSydhHistViewPeaks 
     		shortLabel MEL H3K4me3 Pk
-    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Peaks (H3K4me3 in MEL cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale Peaks (H3K4me3 in MEL cells)
     		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
     		type narrowPeak
     		color 46,0,184 
@@ -59,7 +59,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHist 
     		shortLabel CH12 H3K4me3 Pk
-    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Peaks (H3K4me3 in CH12 cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale Peaks (H3K4me3 in CH12 cells)
     		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -85,7 +85,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHistViewSig 
     		shortLabel MEL H3K4me3 Sg
-    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (H3K4me3 in MEL cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale Signal (H3K4me3 in MEL cells)
     		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
     		type bigWig 1 38729
     		color 46,0,184 
@@ -96,7 +96,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHistViewSig 
     		shortLabel MEL Input Sg 
-    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (Input in MEL cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale Signal (Input in MEL cells)
     		subGroups view=Signal factor=zInput cellType=MEL control=IGGYale treatment=None
     		type bigWig 1 80497
     		color 46,0,184
@@ -107,7 +107,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHistViewSig 
     		shortLabel CH12 H3K4me3 Sg
-    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (H3K4me3 in CH12 cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale Signal (H3K4me3 in CH12 cells)
     		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
     		type bigWig 1.000000 45491.000000
     		color 153,38,0
@@ -118,18 +118,18 @@ wgEncode 1
 		release alpha
     		subTrack wgEncodeSydhHistViewSig 
     		shortLabel CH12 Input Sg
-    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale/UCD/Harvard Signal (Input in CH12 cells)
+    		longLabel ENCODE Histone Modifications by ChIP-seq Stanford/Yale Signal (Input in CH12 cells)
     		subGroups view=Signal factor=zInput cellType=CH12 control=IGGYale treatment=None
     		type bigWig 1.000000 59055.000000
     		color 153,38,0
     		metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-Yale control=IgG-Yale view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1195 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhHist tableName=wgEncodeSydhHistCh12InputIggyaleSig fileName=wgEncodeSydhHistCh12InputIggyaleSig.bigWig.gz
 
-# Yale ChIP-seq (wrangler: tdreszer and cricket)
+# Yale ChIP-seq (wrangler: tdreszer, cricket, vsmalladi)
 track wgEncodeSydhTfbs
 release alpha
 compositeTrack on
-shortLabel SYDH TFBS
-longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale/UC-Davis/Harvard
+shortLabel Stan/Yale TFBS
+longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale
 group regulation
 priority 0
 type bed 3
@@ -168,7 +168,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewPeaks
     		shortLabel CH12  JunD Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (JunD in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (JunD in CH12 cells)
     		subGroups view=Peaks factor=JUND cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -179,7 +179,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs
     		shortLabel CH12  E2F4 Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (E2F4 in CH12 cells)
     		subGroups view=Peaks factor=E2F4 cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -190,7 +190,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs
     		shortLabel CH12  Pol2 Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (Pol2 in CH12 cells)
     		subGroups view=Peaks factor=POL2 cellType=CH12 control=IGGmus treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -201,7 +201,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs
     		shortLabel CH12   TBP Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (TBP in CH12 cells)
     		subGroups view=Peaks factor=TBP cellType=CH12 control=IGGmus treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -212,7 +212,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs
     		shortLabel CH12 c-Jun Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (c-Jun in CH12 cells)
     		subGroups view=Peaks factor=cJUN cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
@@ -223,18 +223,18 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs
     		shortLabel CH12 c-Myc Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (c-Myc in CH12 cells)
     		subGroups view=Peaks factor=cMYC cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabPk fileName=wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPe
+    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabPk fileName=wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPeak.gz
 		
 		#### Submission 1160 ####
     		track wgEncodeSydhTfbsMelTbpIggmusPk
     		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL   TBP Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (TBP in MEL cells)
     		subGroups view=Peaks factor=TBP cellType=MEL control=IGGmus treatment=None
     		type narrowPeak
     		color 46,0,184
@@ -245,7 +245,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL  Pol2 Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (Pol2 in MEL cells)
     		subGroups view=Peaks factor=POL2 cellType=MEL control=IGGmus treatment=None
     		type narrowPeak
     		color 46,0,184
@@ -257,7 +257,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL c-Myc Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (c-Myc in MEL cells)
     		subGroups view=Peaks factor=cMYC cellType=MEL control=IGGrab treatment=None
     		type narrowPeak
     		color 46,0,184
@@ -269,7 +269,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL GATA-1 Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (GATA-1 in MEL cells)
     		subGroups view=Peaks factor=GATA1 cellType=MEL control=IGGrat treatment=None
     		type narrowPeak
     		color 46,0,184
@@ -282,7 +282,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs off
 		shortLabel MEL JunD Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (JunD in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (JunD in MEL cells)
     		subGroups view=Peaks factor=JUND cellType=MEL control=IGGrab treatment=None
     		type narrowPeak
     		color 46,0,184
@@ -293,7 +293,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL E2F4 Pk
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (E2F4 in MEL cells)
     		subGroups view=Peaks factor=E2F4 cellType=MEL control=IGGrab treatment=None
     		type narrowPeak
     		color 46,0,184
@@ -317,7 +317,7 @@ wgEncode 1
 		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 Input Sg
-		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IGGRab Input in CH12 cells)
+		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (IGGRab Input in CH12 cells)
 		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGrab treatment=None
 		type bigWig 1 66328
 		color 153,38,0
@@ -328,7 +328,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig 
     		shortLabel CH12  JunD Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (JunD in CH12 cells)
     		subGroups view=Signal factor=JUND cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 63771
     		color 153,38,0
@@ -339,7 +339,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig
     		shortLabel CH12  E2F4 Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (E2F4 in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (E2F4 in CH12 cells)
     		subGroups view=Signal factor=E2F4 cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 79444
     		color 153,38,0
@@ -350,7 +350,7 @@ wgEncode 1
     		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal ( IGGmus Input in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal ( IGGmus Input in CH12 cells)
     		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 71455
     		color 153,38,0
@@ -361,7 +361,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig
     		shortLabel CH12  Pol2 Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (Pol2 in CH12 cells)
     		subGroups view=Signal factor=POL2 cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 14925
     		color 153,38,0
@@ -372,7 +372,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig
     		shortLabel CH12   TBP Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (TBP in CH12 cells)
     		subGroups view=Signal factor=TBP cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 52209
     		color 153,38,0
@@ -383,7 +383,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig 
     		shortLabel CH12 c-Jun Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Jun in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (c-Jun in CH12 cells)
     		subGroups view=Signal factor=cJUN cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 57353
     		color 153,38,0
@@ -394,7 +394,7 @@ wgEncode 1
 		release alpha
     		subTrack wgEncodeSydhTfbsViewSig
     		shortLabel CH12 c-Myc Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Myc in CH12 cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (c-Myc in CH12 cells)
     		subGroups view=Signal factor=cMYC cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 56356
     		color 153,38,0
@@ -405,7 +405,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL   TBP Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (TBP in MEL cells)
     		subGroups view=Signal factor=TBP cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 60278
     		color 46,0,184
@@ -416,7 +416,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL  Pol2 Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (Pol2 in MEL cells)
     		subGroups view=Signal factor=POL2 cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 13695
     		color 46,0,184
@@ -427,7 +427,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IGGmus Input in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (IGGmus Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 78618
     		color 46,0,184
@@ -438,7 +438,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL c-Myc Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Myc in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (c-Myc in MEL cells)
     		subGroups view=Signal factor=cMYC cellType=MEL control=IGGrab treatment=None
     		type bigWig 1 61932
     		color 46,0,184
@@ -450,7 +450,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IggRab Input in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (IggRab Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGrab treatment=None
     		type bigWig 1 103648
     		color 46,0,184
@@ -461,7 +461,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL GATA-1 Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (GATA-1 in MEL cells)
     		subGroups view=Signal factor=GATA1 cellType=MEL control=IGGrat treatment=None
     		type bigWig 1 56526
     		color 46,0,184
@@ -472,7 +472,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL Input Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IGGRat Input in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (IGGRat Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGrat treatment=None
     		type bigWig 1 90844
     		color 46,0,184
@@ -484,7 +484,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL JunD Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (JunD in MEL cells)
     		subGroups view=Signal factor=JUND cellType=MEL control=IGGrab treatment=None
     		type bigWig 1.000000 71501.000000
     		color 46,0,184
@@ -495,12 +495,11 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL E2F4 Sg
-    		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (E2F4 in MEL cells)
+    		longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (E2F4 in MEL cells)
     		subGroups view=Signal factor=E2F4 cellType=MEL control=IGGrab treatment=None
     		type bigWig 1.000000 91713.000000
     		color 46,0,184
 		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabSig fileName=wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig.gz
-
 
 
 
