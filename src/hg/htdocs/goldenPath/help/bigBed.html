@@ -46,19 +46,25 @@ that is most approriate for the type of data you have.
 
 <P>Note that the <TT>bedToBigBed</TT> utility uses a substantial amount of 
 memory; somewhere on the order of 1/4 times more RAM than the 
-uncompressed bed input file.</P>
+uncompressed BED input file.</P>
 
 <P>
 To create a bigBed track, follow these steps:<BR>
 
 <OL>
- <LI> Create a bed format file following the directions 
+ <LI> Create a BED format file following the directions 
   <A HREF="customTrack.html#BED">here</A>.  
-  Note that when converting a bed file to a bigBed file, you are limited to 
-  one track of data in your input file; you must create a separate bed file
-  for each data track. Note that this is the file that is referred to as
+   <UL>
+    <LI> When converting a BED file to a bigBed file, you are limited to 
+    one track of data in your input file; you must create a separate BED file
+    for each data track. 
+    <LI> Your BED file must be sorted by chrom then chromStart. You can use
+    the UNIX sort command to do this: 
+    <TT>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</TT>
+    <LI> This is the file that is referred to as
   <TT>input.bed</TT> in <EM>step 5</EM> below.
- <LI> Remove any existing 'track' or 'browser' lines from your bed file
+   </UL>
+ <LI> Remove any existing 'track' or 'browser' lines from your BED file
   so that it contains only data.
  <LI> Download the <TT>bedToBigBed</TT> program from the 
   <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</A> 
@@ -68,7 +74,7 @@ To create a bigBed track, follow these steps:<BR>
   to create the chrom.sizes file for the UCSC database you are working with 
   (e.g. hg19).  Note that this is the file that is referred to as
   <TT>chrom.sizes</TT> in <EM>step 5</EM> below.
- <LI> Create the bigBed file from your bed file using the <TT>bedToBigBed</TT>
+ <LI> Create the bigBed file from your sorted BED file using the <TT>bedToBigBed</TT>
   utility like so: 
   <TT><B>bedToBigBed</B> input.bed chrom.sizes myBigBed.bb</TT><BR>
  <LI> Move the newly created bigBed file (<TT>myBigBed.bb</TT>) to a http, 
@@ -115,7 +121,7 @@ listing to view the bigBed track in the Genome Browser.</P>
 bed file.
 
 <UL>
- <LI> Save this <A HREF="bedExample.txt">bed file</A> 
+ <LI> Save this <A HREF="bedExample.txt">BED file</A> 
   to your machine 
   (this satisfies <EM>steps 1</EM> and <EM>2</EM> above).
  <LI> Save this <A HREF="hg19.chrom.sizes">text file</A> to your machine.
@@ -131,16 +137,16 @@ bed file.
   (see <EM>step 7</EM>).
  <LI> Create the custom track on the human assembly hg19 (Feb. 2009), and 
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
-  bed file contains data on only chromsome 21.
+  BED file contains data on only chromsome 21.
 </UL>
 
 <H3>Example Three</H3>
 <P>In this example, you will create your own bigBed file from a fully-featured
-existing bed file that contains the standard bed fields up to and including 
+existing BED file that contains the standard BED fields up to and including 
 the color field (field 9), plus two additional non-standard fields (two 
 alternate names for each item in the file).  
 BigBed files can store extra fields in addition to the 
-<A HREF="customTrack.html#BED">predefined bed fields</A>.  
+<A HREF="customTrack.html#BED">predefined BED fields</A>.  
 If you add extra fields to your bigBed file, you must include
 a <TT>.as</TT> (AutoSQL) format file describing the fields.  See
 <A HREF="http://www.linuxjournal.com/article/5949" TARGET=_blank>this paper</A>
@@ -149,15 +155,15 @@ for information on AutoSQL.  There are several sample <TT>.as</TT> files
 </P>
 
 <UL>
- <LI> Save this <A HREF="bedExample2.bed">bed file</A> 
+ <LI> Save this <A HREF="bedExample2.bed">BED file</A> 
   to your machine 
   (this satisfies <EM>steps 1</EM> and <EM>2</EM> above).
  <LI> Save this <A HREF="hg18.chrom.sizes">text file</A> to your machine.
   It contains the chrom.sizes for the human (hg18) assembly 
   (this satisfies <EM>step 4</EM> above).
  <LI> Save this <A HREF="bedExample2.as">.as file</A> to your machine.  
-  The <TT>.as</TT> file contains a description of the fields in the bed file.  
-  This is required when the bed file contains a field for color.
+  The <TT>.as</TT> file contains a description of the fields in the BED file.  
+  This is required when the BED file contains a field for color.
  <LI> Download the <TT>bedToBigBed</TT> utility (see <EM>step 3</EM>).
  <LI> Run the utility to create the bigBed output file
   (see <EM>step 5</EM>):<BR>
@@ -175,7 +181,7 @@ for information on AutoSQL.  There are several sample <TT>.as</TT> files
    bigDataUrl=http://yourWebAddress/myBigBed2.bb</TT>
  <LI> Create the custom track on the human assembly hg18 (Mar. 2006), and
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
-  bed file contains data only on chromsome 7.
+  BED file contains data only on chromsome 7.
 </UL>
 
 <H3>Sharing Your Data with Others</H3>
