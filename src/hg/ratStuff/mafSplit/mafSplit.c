@@ -9,7 +9,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafSplit.c,v 1.6 2010/03/17 00:42:39 braney Exp $";
+static char const rcsid[] = "$Id: mafSplit.c,v 1.7 2010/05/21 01:24:24 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +31,10 @@ errAbort(
   "                     output filename, expect each target sequence name to\n"
   "                     end with a unique number and use that number as the\n"
   "                     integer to tack onto outRoot.\n"
+  "   -useFullSequenceName  For use only with -byTarget.\n"
+  "                     Instead of auto-incrementing an integer to determine\n"
+  "                     output filename, use the target sequence name\n"
+  "                     to tack onto outRoot.\n"
   "   -useHashedName=N  For use only with -byTarget.\n"
   "                     Instead of auto-incrementing an integer or requiring\n"
   "                     a unique number in the sequence name, use a hash\n"
@@ -50,6 +54,7 @@ static struct optionSpec options[] = {
    {"byTarget", OPTION_BOOLEAN},
    {"outDirDepth", OPTION_INT},
    {"useSequenceName", OPTION_BOOLEAN},
+   {"useFullSequenceName", OPTION_BOOLEAN},
    {"useHashedName", OPTION_INT},
    {NULL, 0},
 };
@@ -58,6 +63,7 @@ static struct optionSpec options[] = {
 static boolean byTarget = FALSE;
 static int outDirDepth = 0;
 static boolean useSequenceName = FALSE;
+static boolean useFullSequenceName = FALSE;
 static int hashedNameBits = 0;
 
 
@@ -80,7 +86,7 @@ unsigned mask = (1 << hashedNameBits) - 1;
 return hashedName & mask;
 }
 
-static char *mkOutPath(char *outRootDir, char *outRootFile, int seqNum)
+static char *mkOutPath(char *outRootDir, char *outRootFile, int seqNum, char *target)
 /* formulate pathname, using seqNum if outDirDepth > 0 */
 {
 struct dyString *dy = dyStringNew(1024);
@@ -100,11 +106,17 @@ if (outDirDepth > 0)
 	dyStringPrintf(dy, "%d/", seqNumMasked);
 	makeDir(dy->string);
 	}
-    dyStringPrintf(dy, "%s%05d.maf", outRootFile, seqNum);
+    if (target)
+	dyStringPrintf(dy, "%s%s.maf", outRootFile, target);
+    else
+	dyStringPrintf(dy, "%s%05d.maf", outRootFile, seqNum);
     }
 else
     {
-    dyStringPrintf(dy, "%s/%s%03d.maf", outRootDir, outRootFile, seqNum);
+    if (target)
+	dyStringPrintf(dy, "%s/%s%s.maf", outRootDir, outRootFile, target);
+    else
+	dyStringPrintf(dy, "%s/%s%03d.maf", outRootDir, outRootFile, seqNum);
     }
 return dyStringCannibalize(&dy);
 }
@@ -138,7 +150,7 @@ while ((maf = mafNext(mf)) != NULL)
 	    /* Hash paths by themselves instead of by target, because 
 	     * we may end up reusing a path for several targets. */
 	    int tHashed = numberFromHashedName(targetName, hashedNameBits);
-	    path = mkOutPath(outRootDir, outRootFile, tHashed);
+	    path = mkOutPath(outRootDir, outRootFile, tHashed, NULL);
 	    path = (char *)hashFindVal(pathHash, path);
 	    }
 	else
@@ -157,7 +169,18 @@ while ((maf = mafNext(mf)) != NULL)
 		seqNum = numberFromName(targetName);
 	    else if (hashedNameBits > 0)
 		seqNum = numberFromHashedName(targetName, hashedNameBits);
-	    path = mkOutPath(outRootDir, outRootFile, seqNum);
+	    if (useFullSequenceName)
+		{
+		/* skip over db. prefix if any */
+		char *target = strchr(targetName,'.');
+		if (target)
+		    ++target;
+		else
+		    target = targetName;
+		path = mkOutPath(outRootDir, outRootFile, seqNum, target);
+		}
+	    else
+		path = mkOutPath(outRootDir, outRootFile, seqNum, NULL);
 	    verbose(3, "Opening path %s for writing and adding it to hash "
 		    "for %s\n", path, targetName);
 	    f = mustOpen(path, "w");
@@ -330,12 +353,16 @@ optionInit(&argc, argv, options);
 byTarget = optionExists("byTarget");
 outDirDepth = optionInt("outDirDepth", outDirDepth);
 useSequenceName = optionExists("useSequenceName");
+useFullSequenceName = optionExists("useFullSequenceName");
 hashedNameBits = optionInt("useHashedName", hashedNameBits);
 if (outDirDepth > 0 && !byTarget)
     errAbort("-outDirDepth=N can be specified only when -byTarget is "
 	     "specified.");
 if (useSequenceName && !byTarget)
     errAbort("-useSequenceName can be specified only when -byTarget is "
+	     "specified.");
+if (useFullSequenceName && !byTarget)
+    errAbort("-useFullSequenceName can be specified only when -byTarget is "
 	     "specified.");
 if (hashedNameBits > 0 && !byTarget)
     errAbort("-useHashedName can be specified only when -byTarget is "
