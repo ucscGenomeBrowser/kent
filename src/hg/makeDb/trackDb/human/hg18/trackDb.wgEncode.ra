@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.979 2010/05/21 21:18:32 vanessa Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.980 2010/05/21 22:17:35 pauline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4469,7 +4469,6 @@ wgEncode 1
         metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Sv40 fileName=wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
 
 # Riken CAGE (wrangler: braney)
-include wgEncodeRikenCage.new.ra
 include wgEncodeRikenCage.ra
 
 # Duke Affy Exon (wrangler: braney)
