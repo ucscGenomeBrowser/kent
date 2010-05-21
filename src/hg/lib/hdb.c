@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.432 2010/05/20 23:10:05 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.433 2010/05/21 16:39:57 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2897,25 +2897,24 @@ if (hash == NULL)
     }
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
-    if (chrom != NULL)
+    if ((sameString(rootName, "mrna") && sqlTableExists(conn, "all_mrna")) ||
+	(sameString(rootName, "est") && sqlTableExists(conn, "all_est")))
 	{
-	safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
-	if (sqlTableExists(conn, fullName))
-	    isSplit = TRUE;
+	safef(fullName, sizeof(fullName), "all_%s", rootName);
+	rootName = fullName;
 	}
-    if (!isSplit)
-        {
-	safef(fullName, sizeof(fullName), "%s", rootName);
-	if (!sqlTableExists(conn, fullName))
+    else
+	{
+	if (chrom != NULL)
 	    {
-	    if (sameString(rootName, "mrna") || sameString(rootName, "est"))
-	        {
-		safef(fullName, sizeof(fullName), "all_%s", rootName);
-		rootName = fullName;
-		if (!sqlTableExists(conn, rootName))
-		    return NULL;
-		}
-	    else
+	    safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
+	    if (sqlTableExists(conn, fullName))
+		isSplit = TRUE;
+	    }
+	if (!isSplit)
+	    {
+	    safecpy(fullName, sizeof(fullName), rootName);
+	    if (!sqlTableExists(conn, fullName))
 		return NULL;
 	    }
 	}
