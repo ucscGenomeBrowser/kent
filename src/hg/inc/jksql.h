@@ -290,6 +290,9 @@ struct slDouble *sqlQuickDoubleList(struct sqlConnection *conn, char *query);
 /* Return a list of slDoubles for a single column query.
  * Do a slFreeList on result when done. */
 
+void sqlRenameTable(struct sqlConnection *sc, char *table1, char *table2);
+/* Rename table */
+
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */
 

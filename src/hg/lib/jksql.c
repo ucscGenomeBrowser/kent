@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.139 2010/03/18 01:50:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.140 2010/05/22 02:18:28 braney Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -887,6 +887,14 @@ deltaTime = monitorLeave();
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
 return res;
+}
+
+void sqlRenameTable(struct sqlConnection *sc, char *table1, char *table2)
+/* Rename table1 to table2 */
+{
+char query[256];
+safef(query, sizeof(query), "rename table %s to %s", table1, table2);
+sqlUpdate(sc, query);
 }
 
 void sqlDropTable(struct sqlConnection *sc, char *table)
