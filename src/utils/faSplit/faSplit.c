@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.35 2007/03/31 19:38:16 markd Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.36 2010/05/22 18:50:33 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,7 +52,7 @@ errAbort(
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
   "              default is size-1 (only suppresses pieces that are all N).\n"
   "    -oneFile - Put output in one file. Only used with size\n"
-  "    -extra   - Add extra bytes at the end to form overlapping pieces.  Only used with size.\n"
+  "    -extra=N - Add N extra bytes at the end to form overlapping pieces.  Only used with size.\n"
   "    -out=outFile Get masking from outfile.  Only used with size.\n"
   "    -lift=file.lft Put info on how to reconstruct sequence from\n"
   "                   pieces in file.lft.  Only used with size and gap.\n"
