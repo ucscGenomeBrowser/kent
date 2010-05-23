@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.111 2010/05/20 21:04:36 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.112 2010/05/23 20:12:32 kent Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -604,7 +604,12 @@ for (i = 0; i < preDrawSize; ++i)
 		break;
 	}
 	if (transformFunc == wiggleTransformFuncLog)
-	    dataValue = log(1+dataValue);
+	    {
+	    if (dataValue >= 0)
+		dataValue = log(1+dataValue);
+	    else
+	        dataValue = -log(1-dataValue);
+	    }
 	preDraw[i].plotValue = dataValue;
 	preDraw[i].smooth = dataValue;
 	}
@@ -809,6 +814,7 @@ for (x1 = 0; x1 < width; ++x1)
 	lightColor = somewhatLighterColor(hvg, mediumColor);
 	oldDrawColor = drawColor;
         }
+
 
     /*	count is non-zero meaning valid data exists here	*/
     if (p->count)
@@ -1247,6 +1253,7 @@ if (pixelsPerBase > 0.0)
 itemCount = 0;
 
 preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+
 usingDataSpan = wigFindSpan(tg, basesPerPixel);
 
 /*	walk through all the data and prepare the preDraw array	*/
