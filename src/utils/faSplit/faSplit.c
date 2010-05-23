@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.36 2010/05/22 18:50:33 galt Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.37 2010/05/23 03:13:53 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -464,6 +464,10 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	int thisSize = seq.size - pos;
 	if (thisSize > (pieceSize + extra)) 
 	    thisSize = pieceSize + extra;
+
+	if ((thisSize <= extra) && (pos > 0))
+	    break;  /* nobody wants duplicate smaller than extra overhang */
+
 	if (bitCountRange(bits, pos, thisSize) <= maxN)
 	    {
 	    if (!oneFile)
