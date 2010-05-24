@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1633 2010/05/21 16:34:26 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1634 2010/05/24 20:19:22 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2498,9 +2498,9 @@ if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
     if (sameString("protein", subType))
-        printAlignments(pslList, start, "htcProteinAli", tdb->track, item);
+        printAlignments(pslList, start, "htcProteinAli", tdb->table, item);
     else
-        printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
+        printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
     }
 else
     {
@@ -5180,14 +5180,14 @@ return ((psl->tStart == startFirst) && sameString(psl->tName, seqName)) == isCli
 }
 
 void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
-                           char *trackName, char *itemIn)
+                           char *tableName, char *itemIn)
 /* Print list of mRNA alignments, don't add extra textual link when
  * doesn't honor hgcCommand. */
 {
 struct psl *psl;
 int aliCount = slCount(pslList);
 boolean isClicked;
-if (pslList == NULL || trackName == NULL)
+if (pslList == NULL || tableName == NULL)
     return;
 
 if (aliCount > 1)
@@ -5206,7 +5206,7 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	if (isPslToPrintByClick(psl, startFirst, isClicked))
 	    {
             char otherString[512];
-	    safef(otherString, sizeof(otherString), "%d&aliTrack=%s", psl->tStart, trackName);
+	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
@@ -5223,13 +5223,12 @@ printf("</TT></PRE>");
 }
 
 void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
-		     char *trackName, char *itemIn)
+		     char *tableName, char *itemIn)
 /* Print list of mRNA alignments. */
 {
-if (pslList == NULL || trackName == NULL)
+if (pslList == NULL || tableName == NULL)
     return;
-char *tableName = hGetTableForTrack(database, trackName);
-printAlignmentsSimple(pslList, startFirst, hgcCommand, trackName, itemIn);
+printAlignmentsSimple(pslList, startFirst, hgcCommand, tableName, itemIn);
 
 struct psl *psl = pslList;
 for (psl = pslList; psl != NULL; psl = psl->next)
@@ -5243,8 +5242,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	)
 	{
         char otherString[512];
-	safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
-	      psl->tStart, trackName);
+	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
+	      psl->tStart, tableName);
 	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
 			   otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
@@ -5382,7 +5381,7 @@ printf("<H3>%s/Genomic Alignments</H3>", type);
 if (startsWith("mrnaBlastz",tdb->table))
     slSort(&pslList, pslCmpScoreDesc);
 
-printAlignments(pslList, start, "htcCdnaAli", track, acc);
+printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -5402,7 +5401,7 @@ char *fsize = "+1"; /* specifies font size */
 if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
-    printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
+    printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
     }
 else
     {
@@ -6508,8 +6507,7 @@ struct sqlResult *sr;
 char **row;
 struct psl *psl;
 struct dnaSeq *rnaSeq;
-char *type;
-char *rootTable;
+char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
@@ -6520,9 +6518,8 @@ chopSuffix(accChopped);
 /* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
-type = cartString(cart, "aliTrack");
-rootTable = hGetTableForTrack(database,type);
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, type);
+aliTable = cartString(cart, "aliTable");
+printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, aliTable);
 
 /* Get some environment vars. */
 start = cartInt(cart, "o");
@@ -6545,7 +6542,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
     }
 
 /* Look up alignments in database */
-hFindSplitTable(database, seqName, rootTable, table, &hasBin);
+hFindSplitTable(database, seqName, aliTable, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
 	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -6555,7 +6552,7 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 
 /* get bz rna snapshot for blastz alignments */
-if (sameString("mrnaBlastz", type) || sameString("pseudoMrna", type))
+if (sameString("mrnaBlastz", aliTable) || sameString("pseudoMrna", aliTable))
     {
     struct sqlConnection *conn = hAllocConn(database);
     unsigned retId = 0;
@@ -6564,7 +6561,7 @@ if (sameString("mrnaBlastz", type) || sameString("pseudoMrna", type))
         rnaSeq = hRnaSeq(database, acc);
     hFreeConn(&conn);
     }
-else if (sameString("HInvGeneMrna", type))
+else if (sameString("HInvGeneMrna", aliTable))
     {
     /* get RNA accession for the gene id in the alignment */
     sprintf(query, "select mrnaAcc from HInv where geneId='%s'", acc);
@@ -6573,7 +6570,7 @@ else if (sameString("HInvGeneMrna", type))
 else
     rnaSeq = hRnaSeq(database, acc);
 
-if (startsWith("xeno", type))
+if (startsWith("xeno", aliTable))
     showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 else
     showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
@@ -6590,7 +6587,7 @@ struct sqlResult *sr;
 char **row;
 struct psl *wholePsl, *partPsl;
 struct dnaSeq *rnaSeq;
-char *track;
+char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
@@ -6599,14 +6596,14 @@ safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
 
 /* Get some environment vars. */
-track = cartString(cart, "aliTrack");
+aliTable = cartString(cart, "aliTable");
 start = cartInt(cart, "o");
 
 /* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n",
-       accChopped, track);
+       accChopped, aliTable);
 
 /* Get cds start and stop, if available */
 conn = hAllocConn(database);
@@ -6627,7 +6624,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
     sqlFreeResult(&sr);
     }
 
-if (startsWith("user", track))
+if (startsWith("user", aliTable))
     {
     char *pslName, *faName, *qName;
     struct lineFile *lf;
@@ -6678,8 +6675,8 @@ if (startsWith("user", track))
 else
     {
     /* Look up alignments in database */
-    struct trackDb *tdb = hashMustFindVal(trackHash, track);
-    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+    // struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);	// ugly
+    hFindSplitTable(database, seqName, aliTable, table, &hasBin);
     safef(query, sizeof(query),
 	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
 	  table, acc, seqName, start);
@@ -6689,9 +6686,11 @@ else
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    if (startsWith("ucscRetroAli", track) || startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
+    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable))
 	{
         rnaSeq = NULL;
+	char *trackName = hGetTrackForTable(database, aliTable);
+	struct trackDb *tdb = hashMustFindVal(trackHash, trackName);
         char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
         char *specCopy = cloneString(spec);
 
@@ -6702,7 +6701,7 @@ else
             errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
         rnaSeq = hDnaSeqGet(database, acc, words[1], words[2]);
 	}
-    else if (sameString("HInvGeneMrna", track))
+    else if (sameString("HInvGeneMrna", aliTable))
 	{
 	/* get RNA accession for the gene id in the alignment */
 	safef(query, sizeof(query), "select mrnaAcc from HInv where geneId='%s'",
@@ -6718,7 +6717,7 @@ if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
 else
     partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
 
-if (startsWith("xeno", track))
+if (startsWith("xeno", aliTable))
     errAbort("htcCdnaAliInWindow does not support translated alignments.");
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
@@ -7869,7 +7868,7 @@ printCustomUrl(tdb, item, TRUE);
 puts("<P>");
 puts("<B>Alignment Summary:</B><BR>\n");
 pslList = getAlignments(conn, tdb->table, item);
-printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
 puts("<P>");
 total = 0;
@@ -9135,7 +9134,7 @@ printf("</H3>");
 /* print alignments that track was based on */
 struct psl *pslList = getAlignments(conn, aliTbl, item);
 printf("<H3>Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 hFreeConn(&conn);
 
 printTrackHtml(tdb);
@@ -9161,7 +9160,7 @@ printf("</H3>\n");
 /* print alignments that track was based on */
 struct psl *pslList = getAlignments(conn, aliTbl, item);
 printf("<H3>Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", tdb->track, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 hFreeConn(&conn);
 
 printTrackHtml(tdb);
@@ -10212,7 +10211,7 @@ if (hTableExists(database, "all_mrna"))
 
     if (pslList != NULL)
         {
-        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "mrna", \
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "all_mrna", \
                 pg->name);
         htmlHorizontalLine();
         safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",\
@@ -11404,7 +11403,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", tdb->track, itemName);
+printAlignments(pslList, start, "htcBlatXeno", tdb->table, itemName);
 printTrackHtml(tdb);
 }
 
@@ -11982,7 +11981,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", tdb->track, itemName);
+printAlignments(pslList, start, "htcBlatXeno", tdb->table, itemName);
 printTrackHtml(tdb);
 }
 
@@ -12017,7 +12016,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcCdnaAli", tdb->track, itemName);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, itemName);
 printTrackHtml(tdb);
 }
 
@@ -18737,11 +18736,11 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	{
 	if (isPslToPrintByClick(psl, start, isClicked))
 	    {
-	    printf("<A HREF=\"%s&o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&pred=%s\">",
+	    printf("<A HREF=\"%s&o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTable=%s&pred=%s\">",
 		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
 		psl->tStart, psl->tEnd, database,tdb->track, pred);
 	    printf("alignment</A> ");
-	    printf("<A HREF=\"%s&o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s\">",
+	    printf("<A HREF=\"%s&o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTable=%s\">",
 		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
 		psl->tStart, psl->tEnd, database,tdb->track);
 	    printf("peptide</A> ");
@@ -21544,7 +21543,7 @@ if (startsWith("psl", tdb->type))
 	if (hGenBankHaveSeq(database, itemName, NULL))
 	    {
 	    printf("<H3>%s/Genomic Alignments</H3>", name);
-	    printAlignments(psl, start, "htcCdnaAli", tdb->track,
+	    printAlignments(psl, start, "htcCdnaAli", tdb->table,
 			    encodedName);
 	    }
 	else
@@ -22158,7 +22157,9 @@ else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", tabl
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))
     {
-    tdb = hashMustFindVal(trackHash, cartString(cart, "aliTrack"));
+    char *aliTable = cartString(cart, "aliTable");
+    char *track = hGetTrackForTable(database, aliTable);
+    tdb = hashMustFindVal(trackHash, track);
     transMapShowCdnaAli(tdb, item);
     }
 else if (sameWord(table, "mrna") || sameWord(table, "mrna2") ||
@@ -22708,15 +22709,15 @@ else if (sameWord(table, "htcUserAli"))
     }
 else if (sameWord(table, "htcGetBlastPep"))
     {
-    doGetBlastPep(item, cartString(cart, "aliTrack"));
+    doGetBlastPep(item, cartString(cart, "aliTable"));
     }
 else if (sameWord(table, "htcProteinAli"))
     {
-    htcProteinAli(item, cartString(cart, "aliTrack"));
+    htcProteinAli(item, cartString(cart, "aliTable"));
     }
 else if (sameWord(table, "htcBlatXeno"))
     {
-    htcBlatXeno(item, cartString(cart, "aliTrack"));
+    htcBlatXeno(item, cartString(cart, "aliTable"));
     }
 else if (sameWord(table, "htcExtSeq"))
     {
@@ -23193,7 +23194,7 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", "addp", "pred", NULL};
+char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTable", "addp", "pred", NULL};
 
 int main(int argc, char *argv[])
 {

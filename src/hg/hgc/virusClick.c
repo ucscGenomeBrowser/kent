@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: virusClick.c,v 1.8 2009/10/20 22:36:36 galt Exp $";
+static char const rcsid[] = "$Id: virusClick.c,v 1.9 2010/05/24 20:19:22 kent Exp $";
 
 static void h1n1DownloadPdb(char *item, char *pdbUrl, struct tempName *tmpPdb)
 /* uncompress PDB to trash */
@@ -534,9 +534,6 @@ char **row;
 char *geneSymbol=NULL;
 genericHeader(tdb, item);
 
-/*pslList = getAlignments(conn, track, item);
-printAlignmentsSimple(pslList, start, "h1n1Seq", track, item);
-*/
 sprintf(query, "select seqId, geneSymbol, strain, islId from h1n1SeqXref where seqId = '%s'", item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

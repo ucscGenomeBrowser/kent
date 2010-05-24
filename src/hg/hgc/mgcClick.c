@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
-static char const rcsid[] = "$Id: mgcClick.c,v 1.33 2010/05/11 01:43:29 kent Exp $";
+static char const rcsid[] = "$Id: mgcClick.c,v 1.34 2010/05/24 20:19:22 kent Exp $";
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
@@ -455,7 +455,7 @@ webPrintLinkCell(psl->strand);
 // mRNA location, linked to aligment viewer
 webPrintLinkCellStart();
 char other[128];
-safef(other, sizeof(other), "%d&aliTrack=%s", psl->tStart, pslTbl);
+safef(other, sizeof(other), "%d&aliTable=%s", psl->tStart, pslTbl);
 hgcAnchorSomewhere("htcCdnaAli", psl->qName, other, psl->tName);
 printf("%s:%d-%d</A>", psl->qName, psl->qStart+1, psl->qEnd);
 webPrintLinkCellEnd();

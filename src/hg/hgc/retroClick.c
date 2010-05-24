@@ -633,29 +633,31 @@ if (hTableExists(database, "rbRetroParent"))
 printf("</TBODY></TABLE>\n");
 }
 
-void printRetroAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
-		     char *typeName, char *itemIn)
+static void printRetroAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+		     char *aliTable, char *itemIn)
 /* Print list of mRNA alignments. */
 {
-if (pslList == NULL || typeName == NULL)
+if (pslList == NULL || aliTable == NULL)
     return;
-printAlignmentsSimple(pslList, startFirst, hgcCommand, typeName, itemIn);
+printAlignmentsSimple(pslList, startFirst, hgcCommand, aliTable, itemIn);
 
+#ifdef UNUSED /* Does nothing in face in the end except trim the psls that nobody looks at. */
 struct psl *psl = pslList;
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     if ( pslTrimToTargetRange(psl, winStart, winEnd) != NULL 
 	&& 
-	!startsWith("xeno", typeName)
-	&& !(startsWith("user", typeName) && pslIsProtein(psl))
+	!startsWith("xeno", aliTable)
+	&& !(startsWith("user", aliTable) && pslIsProtein(psl))
 	&& psl->tStart == startFirst
 	)
 	{
         char otherString[512];
-	safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
-	      psl->tStart, typeName);
+	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
+	      psl->tStart, aliTable);
 	}
     }
+#endif /* DOES_NOTHING */
 
 }
 
@@ -771,7 +773,7 @@ return psl;
 void retroShowCdnaAli(char *mappedId)
 /* Show alignment for accession, mostly ripped off from htcCdnaAli */
 {
-char *track = cartString(cart, "aliTrack");
+char *track = cartString(cart, "aliTable");
 struct trackDb *tdb = hashMustFindVal(trackHash, track);
 char *table = cartString(cart, "table");
 int start = cartInt(cart, "o");
@@ -808,8 +810,8 @@ char *extTable = words[2];
 rnaSeq = hDnaSeqGet(database, acc, seqTable, extTable);
 if (rnaSeq == NULL)
     {
-    safef(acc, sizeof(acc), "%s.%d",mi->seqId, mi->gbCurVer);
-    rnaSeq = hDnaSeqGet(database, acc, "seq", "extFile");
+    char *acc = mi->seqId;
+    rnaSeq = hExtSeq(database, acc);
     if (rnaSeq == NULL)
         errAbort("can't get mRNA sequence from %s prefix %s for %s from %s mappedId %s", 
             database, mi->geneSet, acc, track, mappedId);

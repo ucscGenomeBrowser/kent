@@ -191,7 +191,7 @@ static void displayAligns(struct trackDb *tdb, struct transMapBag *bag)
 {
 int start = cartInt(cart, "o");
 printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->track, bag->info->mappedId);
+printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->table, bag->info->mappedId);
 }
 
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)
