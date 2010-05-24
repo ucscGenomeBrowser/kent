@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.29 2010/03/16 00:36:32 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.30 2010/05/24 20:42:20 tdreszer Exp $
 
 var debug = false;
 
@@ -260,6 +260,16 @@ function aryFind(ary,val)
         }
     }
     return -1;
+}
+
+function aryRemoveVals(ary,vals)
+{ // removes one or more variables that are found in the array
+    for(var vIx=0;vIx<vals.length;vIx++) {
+        var ix = aryFind(ary,vals[vIx]);
+        if(ix != -1)
+            ary.splice(ix,1);
+    }
+    return ary;
 }
 
 function aryRemove(ary,val)
