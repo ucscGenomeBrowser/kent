@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.981 2010/05/24 17:53:22 vanessa Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.982 2010/05/24 20:51:09 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8220,50 +8220,50 @@ group regulation
 
 	track jkEnhGm12878
 	shortLabel	Gm12878
-	longLabel Enhancer mark (H3K4Me1) on Gm12878 cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	type bigWig 0 40
 	color 255,128,128
 
 	track jkEnhH1hesc
 	shortLabel	H1 ES
-	longLabel Enhancer mark (H3K4Me1) on H1 ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 255,223,128
 
 	track jkEnhHmec
 	shortLabel	HMEC
-	longLabel Enhancer mark (H3K4Me1) on HMEC ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on HMEC ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 191,255,128
 
 	track jkEnhHsmm
 	shortLabel	HSMM
-	longLabel Enhancer mark (H3K4Me1) on HSMM ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on HSMM ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 128,255,159
 
 	track jkEnhHuvec
 	shortLabel	HUVEC
-	longLabel Enhancer mark (H3K4Me1) on HUVEC ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on HUVEC ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 128,255,255
 
 	track jkEnhK562
 	shortLabel	K562
-	longLabel Enhancer mark (H3K4Me1) on K562 ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on K562 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 128,159,255
 
 	track jkEnhNhek
 	shortLabel	NHEK
-	longLabel Enhancer mark (H3K4Me1) on NHEK ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on NHEK ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 191,128,255
 
 	track jkEnhNhlf
 	shortLabel	NHLF
-	longLabel Enhancer mark (H3K4Me1) on NHLF ES cells from ENCODE 
+	longLabel Enhancer mark (H3K4Me1) on NHLF ES cells from ENCODE
 	parent wgEncodeRegMarkEnhancer
 	color 255,128,223
 
@@ -8286,7 +8286,7 @@ group regulation
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
 	shortLabel	Gm12878
-	longLabel Promoter mark (H3K4Me3) on Gm12878 cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 100593.50
 	color 255,128,128
@@ -8294,7 +8294,7 @@ group regulation
 	track wgEncodeRegMarkPromoterH1hesc
         table wgEncodeBroadChipSeqSignalH1hescH3k4me3
 	shortLabel	H1 ES
-	longLabel Promoter mark (H3K4Me3) on H1 ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12434.00
 	color 255,223,128
@@ -8302,7 +8302,7 @@ group regulation
 	track wgEncodeRegMarkPromoterHmec
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
 	shortLabel	HMEC
-	longLabel Promoter mark (H3K4Me3) on HMEC ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on HMEC ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 15838.00
 	color 191,255,128
@@ -8310,7 +8310,7 @@ group regulation
 	track wgEncodeRegMarkPromoterHsmm
         table wgEncodeBroadChipSeqSignalHsmmH3k4me3
 	shortLabel	HSMM
-	longLabel Promoter mark (H3K4Me3) on HSMM ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on HSMM ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 42282.00
 	color 128,255,159
@@ -8318,7 +8318,7 @@ group regulation
 	track wgEncodeRegMarkPromoterHuvec
         table wgEncodeBroadChipSeqSignalHuvecH3k4me3
 	shortLabel	HUVEC
-	longLabel Promoter mark (H3K4Me3) on HUVEC ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on HUVEC ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 9954.75
 	color 128,255,255
@@ -8326,7 +8326,7 @@ group regulation
 	track wgEncodeRegMarkPromoterK562
         table wgEncodeBroadChipSeqSignalK562H3k4me3
 	shortLabel	K562
-	longLabel Promoter mark (H3K4Me3) on K562 ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on K562 ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 16145.25
 	color 128,159,255
@@ -8334,7 +8334,7 @@ group regulation
 	track wgEncodeRegMarkPromoterNhek
         table wgEncodeBroadChipSeqSignalNhekH3k4me3
 	shortLabel	NHEK
-	longLabel Promoter mark (H3K4Me3) on NHEK ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on NHEK ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12229.50
 	color 191,128,255
@@ -8342,7 +8342,7 @@ group regulation
 	track wgEncodeRegMarkPromoterNhlf
         table wgEncodeBroadChipSeqSignalNhlfH3k4me3
 	shortLabel	NHLF
-	longLabel Promoter mark (H3K4Me3) on NHLF ES cells from ENCODE 
+	longLabel Promoter mark (H3K4Me3) on NHLF ES cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 28587.00
 	color 255,128,223
@@ -8362,7 +8362,7 @@ group regulation
 
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
-    longLabel ENCODE Transcription Factor ChIP-SEQ 
+    longLabel ENCODE Transcription Factor ChIP-SEQ
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
@@ -16207,7 +16207,7 @@ dimensionCchecked aNONE
 dimensionAchecked 1GM,1K5
 dimensionBchecked CTCF,FOXP2
 filterComposite dimD=one dimE=one
-sortOrder cellType=+ factor=+ prot=+ treat=+ rep=+ view=+
+sortOrder cellType=+ factor=+ treat=+ prot=+ rep=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody prot=protocol treat=treatment
 noInherit on
