@@ -40,6 +40,10 @@
 	background-color: #39f;
 }
 
+.multiCb-item-excluded label {
+	color: #444400;
+}
+
 .multiCb-item-disabled label {
 	color: #ccc;
 }
