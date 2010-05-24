@@ -451,8 +451,8 @@
             // ensure the drop container is not less than the control width (would be ugly)
             var dropWidth = dropCalculatedSize.width < controlOuterWidth ? controlOuterWidth : dropCalculatedSize.width;
 
-            $(dropWrapper).css({
-                width: dropWidth + "px",
+            $(dropWrapper).css({       // Extra pixels for width so that Safari and Chrom don't add scrollbar
+                width: dropWidth + 10 + "px",
                 height: dropHeight + "px"
             });
 
