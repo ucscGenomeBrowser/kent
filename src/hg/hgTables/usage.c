@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.19 2008/09/25 21:16:19 ann Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.20 2010/05/24 21:55:07 bristor Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -118,6 +118,9 @@ hPrintf("%s",
 "        <LI><B>Send output to Galaxy:</B> displays results of query in \n"
 "        <A HREF=\"http://g2.bx.psu.edu\">Galaxy</A>, a framework for \n"
 "        interactive genome analysis.\n"
+"        <LI><B>Send output to GREAT:</B> displays the functional enrichments of the \n"
+"        query results in <A HREF=\"http://great.stanford.edu\">GREAT</A>, a tool for\n"
+"        analysis of the biological function of cis-regulatory regions.\n"
 "        <LI><B>file type returned: </B>When a filename is entered in the \n"
 "	 &quot;output file&quot; text box, specifies the format of the output file:\n"
 "        <UL>\n"

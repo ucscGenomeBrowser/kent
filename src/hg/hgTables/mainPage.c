@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.152 2010/05/24 18:42:37 bristor Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.153 2010/05/24 21:55:07 bristor Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -933,7 +933,7 @@ hPrintf("%s",
   "MySQL server</A>. "
   "To examine the biological function of your set through annotation "
   "enrichments, send the data to "
-  "<A HREF=\"http://great.stanford.edu/public\">GREAT</A>. Refer to the "
+  "<A HREF=\"http://great.stanford.edu\">GREAT</A>. Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data.");
 
