@@ -1,12 +1,13 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.239 2010/05/13 17:43:31 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.240 2010/05/24 18:57:44 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
 type Cell Line
 organism Human
 description lymphoblastoid
+tissue Blood
 vendorName Coriell
 vendorId GM12878
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
@@ -24,6 +25,7 @@ tag K562
 type Cell Line
 organism Human
 description leukemia
+tissue Blood
 vendorName ATCC
 vendorId CCL-243
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
@@ -40,6 +42,7 @@ term K562b
 tag K562b
 type Cell Line
 organism Human
+tissue Blood
 description leukemia (UCDavis alternate)
 vendorName ATCC
 vendorId CCL-243
@@ -57,6 +60,7 @@ term HepG2
 tag HepG2
 type Cell Line
 organism Human
+tissue Liver
 description liver carcinoma
 vendorName ATCC
 vendorId HB-8065
@@ -75,6 +79,7 @@ tag HepG2b
 type Cell Line
 organism Human
 description liver carcinoma (UCDavis alternate)
+tissue Liver
 vendorName ATCC
 vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
@@ -92,6 +97,7 @@ tag HeLaS3
 type Cell Line
 organism Human
 description cervical carcinoma
+tissue Cervix
 vendorName ATCC
 vendorId CCL-2.2
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
@@ -109,6 +115,7 @@ protocol HeLa-S3:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_
 #description cervical carcinoma (Interferon gamma treatment)
 #type Cell Line
 #organism Human
+#tissue Cervix
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
 #vendorName ATCC
 #vendorId CCL-2.2
@@ -125,6 +132,7 @@ tag HUVEC
 type Cell Line
 organism Human
 description Human Umbilical Vein Endothelial Cell
+tissue Endothelium
 vendorName Lonza
 vendorId CC-2517
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
@@ -142,6 +150,7 @@ tag NHEK
 type Cell Line
 organism Human
 description Normal Human Epidermal Keratinocytes
+tissue Skin
 vendorName Lonza
 vendorId CC-2501
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10&cpgnum=1)/.do
@@ -159,6 +168,7 @@ tag H1hESC
 type Cell Line
 organism Human
 description Human Embryonic Stem Cells
+tissue EmbryonicStemCell
 vendorName Cellular Dynamics
 vendorId
 orderUrl http://www.cellulardynamics.com/
@@ -177,6 +187,7 @@ tag A549
 type Cell Line
 organism Human
 description epithelial cell line derived from a lung carcinoma tissue
+tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
@@ -192,6 +203,7 @@ term AG04449
 tag AG04449
 type Cell Line
 description Fetal buttock/thigh fibroblast
+tissue Skin
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
@@ -203,6 +215,7 @@ term AG04450
 tag AG04450
 type Cell Line
 description Fetal lung fibroblast
+tissue Lung
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
@@ -214,6 +227,7 @@ term AG09309
 tag AG09309
 type Cell Line
 description Adult human toe fibroblast
+tissue Skin
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
@@ -225,6 +239,7 @@ term AG09319
 tag AG09319
 type Cell Line
 description Adult human gum tissue fibroblasts
+tissue Gingival
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
@@ -236,6 +251,7 @@ term AG10803
 tag AG10803
 type Cell Line
 description Adult human abdominal skin fibroblasts
+tissue Skin
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
@@ -248,6 +264,7 @@ tag AOSMC
 type Cell Line
 organism Human
 description aortic smooth muscle cells
+tissue Heart
 vendorName Lonza
 vendorId CC-2571
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
@@ -261,6 +278,7 @@ tag Astrocy
 type Cell Line
 organism Human
 description Normal human astrocytes
+tissue Brain
 vendorName Lonza
 vendorId CC-2565
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
@@ -277,6 +295,7 @@ tag BE2C
 type Cell Line
 organism Human
 description Human neuroblastoma
+tissue Brain
 vendorName ATCC
 vendorId CRL-2268
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2268&Template=cellBiology
@@ -291,6 +310,7 @@ tag BG02ES
 type Cell Line
 organism Human
 description H9 Conditioned Medium
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
@@ -305,6 +325,7 @@ tag BG02ESEBD
 type Cell Line
 organism Human
 description BG02 EmbryoidBody-Derived
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
@@ -319,6 +340,7 @@ tag BJ
 type Cell Line
 organism Human
 description skin fibroblast
+tissue Skin
 vendorName ATCC
 vendorId CRL-2522
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2522&Template=cellBiology
@@ -335,6 +357,7 @@ tag BJ5ta
 type Cell Line
 organism Human
 description Skin Fibroblast
+tissue Skin
 vendorName ATCC
 vendorId CRL-4001
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
@@ -351,6 +374,7 @@ tag BJHRas
 type Cell Line
 organism Human
 description Skin Fibroblast
+tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-HRas
 orderUrl https://struhl.med.harvard.edu/
@@ -368,6 +392,7 @@ tag BJT
 type Cell Line
 organism Human
 description Skin Fibroblast
+tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-T
 orderUrl https://struhl.med.harvard.edu/
@@ -384,6 +409,7 @@ tag Caco2
 type Cell Line
 organism Human
 description colorectal adenocarcinoma
+tissue Colon
 vendorName ATCC
 vendorId HTB-37
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-37&Template=cellBiology
@@ -400,6 +426,7 @@ tag Chorion
 type Cell Line
 organism Human
 description Chorion cells (outermost of two fetal membranes)
+tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 #vendorId TIB-152
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
@@ -415,6 +442,7 @@ term CMK
 tag CMK
 type Cell Line
 description Human Acute Megakaryocytic Leukemia Cells
+tissue Blood
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
@@ -427,6 +455,7 @@ tag Decidua
 type Cell Line
 organism Human
 description Decidua cells (part of the mucous membrane lining uterus)
+tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 #vendorId TIB-152
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
@@ -443,6 +472,7 @@ tag Fibrobl
 type Cell Line
 organism Human
 description Normal child fibroblast; donor sex: female
+tissue Skin
 vendorName Coriell
 vendorId AG08470
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&PgId=166
@@ -459,6 +489,7 @@ tag FIBROP
 type Cell Line
 organism Human
 description normal fibroblasts taken from individuals with Parkinson's disease
+tissue Skin
 vendorName Paul Tesar (Case Western)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
@@ -470,6 +501,7 @@ tag Gliobla
 type Cell Line
 organism Human
 description (aka H54) Glioblastoma
+tissue Brain
 vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
@@ -482,6 +514,7 @@ tag GM06990
 type Cell Line
 organism Human
 description lymphoblastoid (CEPH)
+tissue Blood
 vendorName Coriell
 vendorId GM06990
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
@@ -497,6 +530,7 @@ term GM10847
 tag GM10847
 type Cell Line
 description Lymphoblastoid International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
@@ -511,6 +545,7 @@ tag GM12801
 type Cell Line
 organism Human
 description B-Lymphocyte (CEPH)
+tissue Blood
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
@@ -527,6 +562,7 @@ tag GM12864
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12864
@@ -542,6 +578,7 @@ tag GM12865
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12865
@@ -557,6 +594,7 @@ tag GM12872
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12872
@@ -572,6 +610,7 @@ tag GM12873
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12873
@@ -587,6 +626,7 @@ tag GM12874
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12874
@@ -602,6 +642,7 @@ tag GM12875
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12875
@@ -617,6 +658,7 @@ tag GM12891
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1463, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM12891
@@ -632,6 +674,7 @@ tag GM12892
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype CEPH/UTAH PEDIGREE 1463, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM12892
@@ -646,6 +689,7 @@ term GM15510
 tag GM15510
 type Cell Line
 description Lymphoblastoid NIGMS Human Genetic Cell Repository; DNA POLYMORPHISM DISCOVERY RESOURCE COLLECTION; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
@@ -660,6 +704,7 @@ tag GM18505
 type Cell Line
 organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
@@ -674,6 +719,7 @@ tag GM18507
 type Cell Line
 organism Human
 description lymphoblastoid
+tissue Blood
 vendorName Coriell
 vendorId GM18507
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
@@ -689,6 +735,7 @@ term GM18526
 tag GM18526
 type Cell Line
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - HAN CHINESE IN BEIJING, CHINA; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
@@ -702,6 +749,7 @@ term GM18951
 tag GM18951
 type Cell Line
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - JAPANESE IN TOKYO, JAPAN; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
@@ -716,6 +764,7 @@ tag GM19099
 type Cell Line
 organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
@@ -730,6 +779,7 @@ tag GM19193
 type Cell Line
 organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - YORUBA IN IBADAN, NIGERIA; Epstein-Barr Virus
+tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
@@ -744,6 +794,7 @@ tag GM19238
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype YORUBA, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM19238
@@ -759,6 +810,7 @@ tag GM19239
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype YORUBA, Epstein-Barr Virus, Male
 vendorName Coriell
 vendorId GM19239
@@ -774,6 +826,7 @@ tag GM19240
 type Cell Line
 organism Human
 description B-Lymphocyte
+tissue Blood
 karyotype YORUBA, Epstein-Barr Virus, Female
 vendorName Coriell
 vendorId GM19240
@@ -800,6 +853,7 @@ tag H9ES
 type Cell Line
 organism Human
 description H9 human ES cells
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -814,6 +868,7 @@ tag H9ESE
 type Cell Line
 organism Human
 description H9 Endoderm
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -828,6 +883,7 @@ tag H9ESAFPPlus
 type Cell Line
 organism Human
 description H9 AFP+ human ESCells-derived
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -842,6 +898,7 @@ tag H9ESAFPMinus
 type Cell Line
 organism Human
 description H9 AFP- human ESCells-derived
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -856,6 +913,7 @@ tag H9ESEB
 type Cell Line
 organism Human
 description H9 Embryoid Bodies
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -870,6 +928,7 @@ tag H9ESEBD
 type Cell Line
 organism Human
 description H9 EmbryoidBody-Derived
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -884,6 +943,7 @@ tag H9ESCM
 type Cell Line
 organism Human
 description H9 Conditioned Medium
+tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
@@ -897,6 +957,7 @@ term HAEpiC
 tag HAE
 type Cell Line
 description Human Amniotic Epithelial Cells
+tissue Epithelium
 vendorName ScienCell
 vendorId 7100
 orderUrl http://www.sciencellonline.com/site/products/7100.php
@@ -909,6 +970,7 @@ tag HAL
 type Cell Line
 organism Human
 description Human Adult Liver
+tissue Liver
 tier 3
 lineage Genomic DNA purified from surgically excised adult human liver was purchased from Asterand, Inc. (Detroit, MI).
 color 189,0,157
@@ -922,6 +984,7 @@ term HCF
 tag HCF
 type Cell Line
 description Human Cardiac Fibroblasts
+tissue Heart
 vendorName ScienCell
 vendorId 6300
 orderUrl http://www.sciencellonline.com/site/products/6300.php
@@ -933,6 +996,7 @@ term HCM
 tag HCM
 type Cell Line
 description Human Cardiac Myocytes
+tissue Heart
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/products/6200.php
@@ -944,6 +1008,7 @@ term HCPEpiC
 tag HCPE
 type Cell Line
 description Human Choroid Plexus Epithelial Cells
+tissue Epithelium
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/products/1310.php
@@ -956,6 +1021,7 @@ tag HCT116
 type Cell Line
 organism Human
 description colorectal carcinoma
+tissue Colon
 vendorName ATCC
 vendorId CCL-247
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
@@ -971,6 +1037,7 @@ term HEEpiC
 tag HEE
 type Cell Line
 description Human Esophageal Epithelial Cells
+tissue Epithelium
 vendorName ScienCell
 vendorId 2700
 orderUrl http://www.sciencellonline.com/site/products/2700.php
@@ -983,6 +1050,7 @@ tag HEK293
 type Cell Line
 organism Human
 description embryonic kidney
+tissue Kidney
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
@@ -999,6 +1067,7 @@ tag HEK293b
 type Cell Line
 organism Human
 description embryonic kidney (alternate protocol)
+tissue Kidney
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
@@ -1014,6 +1083,7 @@ term HFL11W
 tag HFL11W
 type Cell Line
 organism Human
+tissue Liver
 description Human Fetal Liver 11 weeks
 tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
@@ -1025,6 +1095,7 @@ term HFL24W
 tag HFL24W
 type Cell Line
 organism Human
+tissue Liver
 description Human Fetal Liver 24 weeks
 tier 3
 lineage Consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
@@ -1037,6 +1108,7 @@ tag HGF
 type Cell Line
 organism Human
 description Human Gingival Fibroblasts
+tissue Gingiva
 vendorName ScienCell
 vendorId 2620
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
@@ -1052,6 +1124,7 @@ term HIPEpiC
 tag HIPE
 type Cell Line
 description Human Iris Pigment Epithelial Cells
+tissue Eye
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/products/6560.php
@@ -1064,6 +1137,7 @@ tag HL60
 type Cell Line
 organism Human
 description Human promyelocytic leukemia cells
+tissue Blood
 vendorName ATCC
 vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
@@ -1080,6 +1154,7 @@ tag HMEC
 type Cell Line
 organism Human
 description Human Mammary Epithelial Cells
+tissue Breast
 vendorName Lonza
 vendorId CC-3150
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1FDC0AF834F18C7C001A4B525E10&cpgnum=1)/.do
@@ -1095,6 +1170,7 @@ term HNPCEpiC
 tag HNPCE
 type Cell Line
 description Human Non-Pigment Ciliary Epithelial Cells
+tissue Epithelium
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/products/6580.php
@@ -1107,6 +1183,7 @@ tag HRCE
 type Cell Line
 organism Human
 description Human Renal Cortical Epithelial cells (normal)
+tissue Epithelium
 vendorName ScienCell
 vendorId #4110
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_32&products_id=44
@@ -1123,6 +1200,7 @@ tag HRE
 type Cell Line
 organism Human
 description Human Renal Epithelial cells (normal)
+tissue Epithelium
 vendorName Lonza
 vendorId CC-2556
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA20FB87F582F18C7C001A4B525E10&cpgnum=1)/.do
@@ -1138,6 +1216,7 @@ term HRPEpiC
 tag HRPE
 type Cell Line
 description Human Retinal Pigment Epithelial Cells
+tissue Epithelium
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/products/6540.php
@@ -1150,6 +1229,7 @@ tag HSMM
 type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myoblasts
+tissue Muscle
 vendorName Lonza
 vendorId CC-2580
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
@@ -1165,6 +1245,7 @@ tag HSMMt
 type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myotubes
+tissue Muscle
 vendorName Lonza
 vendorId CC-2580
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
@@ -1180,6 +1261,7 @@ tag HT1080
 type Cell Line
 organism Human
 description HT-1080 is an epithelial cell line derived from a fibrosarcoma.
+tissue Epithelium
 karyotype pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
 vendorName ATCC
 vendorId CCL­121
@@ -1195,6 +1277,7 @@ tag HTB11
 type Cell Line
 organism Human
 description Human neuroblastoma
+tissue Brain
 vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
@@ -1210,6 +1293,7 @@ tag Jurkat
 type Cell Line
 organism Human
 description T lymphoblastoid cell line derived from an acute T cell leukemia
+tissue Blood
 vendorName ATCC
 vendorId TIB-152
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
@@ -1226,6 +1310,7 @@ tag LHSR
 type Cell Line
 organism Human
 description Human prostate epithelial cells (PrEC) were infected with amphotropic retroviruses encoding the SV40 large T antigen (L), the telomerase catalytic subunit hTERT (H), the SV40 small T antigen (S) and an oncogenic allele of H-ras (R) to create LHSR cells.
+tissue Epithelium
 vendorName Genetically engineered in the lab of William Hahn at the Dana Farber Cancer Institute, Boston, MA.
 #vendorId TIB-152
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
@@ -1242,6 +1327,7 @@ tag LNCaP
 type Cell Line
 organism Human
 description prostate adenocarcinoma
+tissue Prostate
 vendorName ATCC
 vendorId CRL-1740
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
@@ -1259,6 +1345,7 @@ tag MCF7
 type Cell Line
 organism Human
 description mammary gland, adenocarcinoma
+tissue Breast
 vendorName ATCC
 vendorId HTB-22
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-22&Template=cellBiology
@@ -1275,6 +1362,7 @@ protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Far
 #type Cell Line
 #organism Human
 #description mammary gland, fibrocystic disease
+#tissue Breast
 #vendorName ATCC
 #vendorId CRL-10317
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-10317&Template=cellBiology
@@ -1291,6 +1379,7 @@ tag MCF10AES
 type Cell Line
 organism Human
 description mammary gland, non-tumorigenic epithelial, inducible cell line
+tissue Breast
 vendorName Struhl laboratory
 vendorId MCF10A-Er-Src
 orderUrl https://struhl.med.harvard.edu/
@@ -1307,6 +1396,7 @@ tag MDA
 type Cell Line
 organism Human
 description breast adenocarcinoma; epithelial cell line
+tissue Breast
 vendorName ATCC
 vendorId HTB-26
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-26&Template=cellBiology
@@ -1324,6 +1414,7 @@ tag Medullo
 type Cell Line
 organism Human
 description Medulloblastoma
+tissue Brain
 vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
@@ -1336,6 +1427,7 @@ tag MELANO
 type Cell Line
 organism Human
 description melanocytes
+tissue Skin
 vendorName ScienCell
 vendorId 2200
 orderUrl http://www.sciencellonline.com/site/products/2200.php
@@ -1348,6 +1440,7 @@ term Myometr
 tag MYOMETR
 type Cell Line
 organism Human
+tissue Myometrium
 description Myometrial cells
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
@@ -1359,6 +1452,7 @@ term NB4
 tag NB4
 type Cell Line
 organism Human
+tissue Blood
 description acute promyelocytic leukemia cell line
 vendorName Refer to protocol documents for differing sources
 #Stam:DSMZ DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/
@@ -1377,6 +1471,7 @@ term NHBE
 tag NHBE
 type Cell Line
 organism Human
+tissue Epithelium
 description normal human bronchial epithelial cells
 vendorName Lonza
 vendorId CC-2541
@@ -1389,6 +1484,7 @@ protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
 term NHDF-neo
 tag NHDF-neo
 type Cell Line
+tissue Skin
 description Neonatal Human Dermal Fibroblasts
 vendorName Lonza
 vendorId CC-2509
@@ -1401,6 +1497,7 @@ term NHLF
 tag NHLF
 type Cell Line
 organism Human
+tissue Lung
 description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
@@ -1417,6 +1514,7 @@ term NT2-D1
 tag NT2D1
 type Cell Line
 organism Human
+tissue Testis
 description malignant pluripotent embryonal carcinoma (Ntera2)
 vendorName ATCC
 vendorId CRL-1973
@@ -1434,6 +1532,7 @@ tag Osteobl
 type Cell Line
 organism Human
 description Normal human osteoblasts (NHOst)
+tissue Bone
 vendorName Lonza
 vendorId CC-2538
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2166EFB7B0F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
@@ -1450,6 +1549,7 @@ tag ovcar3
 type Cell Line
 organism Human
 description ovarian adenocarcinoma
+tissue Ovary
 vendorName ATCC
 vendorId HTB-161
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-161&Template=cellBiology
@@ -1466,6 +1566,7 @@ tag PANC1
 type Cell Line
 organism Human
 description pancreatic carcinoma
+tissue Pancreas
 vendorName ATCC
 vendorId CRL-1469
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
@@ -1482,6 +1583,7 @@ tag PanIslets
 type Cell Line
 organism Human
 description human pancreatic islets
+tissue Pancreas
 vendorName Refer to protocol documents for differing sources
 vendorId
 orderUrl
@@ -1496,6 +1598,7 @@ tag PFSK1
 type Cell Line
 organism Human
 description neuroectodermal cell line derived from a human cerebral brain tumor
+tissue Brain
 vendorName ATCC
 vendorId CRL-2060
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
@@ -1512,6 +1615,7 @@ tag pHTE
 type Cell Line
 organism Human
 description Primary Human Tracheal Epithelial Cells
+tissue Epithelium
 vendorName Dr. Cal Cotton at Case Western Reserve University
 vendorId
 orderUrl
@@ -1527,6 +1631,7 @@ tag ProgFib
 type Cell Line
 organism Human
 description HGPS (HGADFN167, progeria research foundation)
+tissue Skin
 vendorName Progeria Research Foundation
 vendorId
 orderUrl http://www.progeriaresearch.org/
@@ -1543,6 +1648,7 @@ tag prostate
 type Cell Line
 organism Human
 description prostate tissue purchased for Gingeras project (provisional)
+tissue Prostate
 vendorName ATCC
 vendorId
 orderUrl http://www.atcc.org/
@@ -1559,6 +1665,7 @@ tag SAEC
 type Cell Line
 organism Human
 description Small Airway Epithelial Cells
+tissue Epithelium
 vendorName Lonza
 vendorId CC-2547
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA173DD30B73F18C7C001A4B525E10&cpgnum=1)/.do
@@ -1575,6 +1682,7 @@ tag SKNMC
 type Cell Line
 organism Human
 description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor
+tissue Brain
 vendorName ATCC
 vendorId HTB-10
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
@@ -1592,6 +1700,7 @@ tag SKNSHRA
 type Cell Line
 organism Human
 description neuroblastoma cell line differentiated w/ retinoic acid
+tissue Brain
 vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
@@ -1608,6 +1717,7 @@ tag SKMC
 type Cell Line
 organism Human
 description Human Skeletal Muscle Cells
+tissue Muscle
 vendorName Lonza
 vendorId CC-2561
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA21A59CABF8F18C7C001A4B525E10&cpgnum=1)/.do
@@ -1625,6 +1735,7 @@ type Cell Line
 organism Human
 description T98G is a fibroblast cell line derived from a glioblastoma multiforme.
 karyotype hyper-pentaploid male with a modal chromosome number around 128 to 132. There are numerous chromosome abnormalities and marker chromosomes.
+tissue Brain
 vendorName ATCC
 vendorId CRL­1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
@@ -1640,6 +1751,7 @@ type Cell Line
 organism Human
 description Trachea and bronchial epithelial cells
 vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
+tissue Epithelium
 #vendorId TIB-152
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
 lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells. Donor: 21 y.o. male
@@ -1654,6 +1766,7 @@ term Th1
 tag Th1
 type Cell Line
 organism Human
+tissue Blood
 description primary human Th1 T cells
 vendorName
 vendorId None (primary pheresis of single normal subject)
@@ -1671,6 +1784,7 @@ tag Th2
 type Cell Line
 organism Human
 description Primary human Th2 T cells
+tissue Blood
 vendorName
 vendorId None (primary pheresis of single normal subject)
 orderUrl
@@ -1687,6 +1801,7 @@ tag U87
 type Cell Line
 organism Human
 description human glioblastoma; astrocytoma
+tissue Brain
 vendorName ATCC
 vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
@@ -1702,6 +1817,7 @@ tag WERIRb1
 type Cell Line
 organism Human
 description retinoblastoma
+tissue Eye
 vendorName ATCC
 vendorId HTB-169
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-169&Template=cellBiology
@@ -1719,6 +1835,7 @@ term CH12
 tag CH12
 type Cell Line
 organism Mouse
+tissue Unknown
 Category L
 description
 vendorName
@@ -1735,6 +1852,7 @@ tag MEL
 type Cell Line
 organism Mouse
 description leukemia (K562 analog)
+tissue Blood
 color 46,0,184
 
 # Gene types
