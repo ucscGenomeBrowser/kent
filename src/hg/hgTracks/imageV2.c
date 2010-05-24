@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.29 2010/05/14 21:34:15 kent Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.30 2010/05/24 19:24:58 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -772,7 +772,7 @@ return sliceGetMap(slice,FALSE); // Map could belong to image or could be slice 
 }
 
 int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id)
-/* Will add a map item to an imgTrack's appropriate slice's map.  Since a map item may span 
+/* Will add a map item to an imgTrack's appropriate slice's map.  Since a map item may span
  * slices, the imgTrack is in the best position to determine where to put the map item
  * returns count of map items added, which could be 0, 1 or more than one if item spans slices
  * NOTE: Precedence is given to first map item when adding items with same coordinates! */
@@ -1498,7 +1498,10 @@ if(map)
     useMap = imageMapDraw(map,name);
 else if(slice->link != NULL)
     {
-    hPrintf("  <A HREF='%s'",slice->link);
+    if(strchr(slice->link,' ') != NULL)
+        hPrintf("  <A HREF=%s",slice->link);
+    else
+        hPrintf("  <A HREF='%s'",slice->link);
     if(slice->title != NULL)
         hPrintf(" TITLE='Click for %s'", slice->title );
     hPrintf(">\n" );
