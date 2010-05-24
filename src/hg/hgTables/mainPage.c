@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.151 2010/05/19 01:37:13 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.152 2010/05/24 18:42:37 bristor Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -441,12 +441,12 @@ for (ot = otList; ot != NULL; ot = ot->next)
 hPrintf("</SELECT>\n");
 hPrintf(" ");
 hPrintf(" Send output to ");
-cgiMakeCheckBoxIdAndJS("sendToGalaxy", FALSE,
+cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
     "checkboxGalaxy",
     "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
 hPrintf("<A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</A>\n");
 nbSpaces(2);
-cgiMakeCheckBoxIdAndJS("sendToGreat", FALSE,
+cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
     "checkboxGreat",
     "onclick=\"return onSelectGreat();\"");
 hPrintf(" <A HREF=\"http://great.stanford.edu/help/index.php/Main_Page\" target=_BLANK>GREAT</A>");
