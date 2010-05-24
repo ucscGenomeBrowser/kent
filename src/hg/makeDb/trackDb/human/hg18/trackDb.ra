@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.488 2010/05/24 18:56:19 braney Exp $";
+#	"$Id: trackDb.ra,v 1.489 2010/05/24 20:33:37 braney Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -3871,6 +3871,7 @@ type bed 3
     shortLabel Alignments
     view ALN
     parent ucsfBrainMethyl
+    visibility hide
   
       track ucsfMedipSeqBrainHs1821Reads
       shortLabel Brain MeDIP Reads
@@ -3923,6 +3924,7 @@ type bed 3
     maxLimit 1000
     viewLimits 0:100
     parent ucsfBrainMethyl
+    visibility full
   
       track ucsfChipSeqH3K4me3BrainHs0367Coverage
       shortLabel Brain H3K4me3 Coverage
@@ -3987,6 +3989,7 @@ type bed 3
     maxLimit 1000
     viewLimits 0:100
     parent ucsfBrainMethyl
+    visibility full
   
       track ucsfMedipSeqBrainHs1821CpG
       shortLabel Brain MeDIP CpG
