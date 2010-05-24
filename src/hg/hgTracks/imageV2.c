@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.30 2010/05/24 19:24:58 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.31 2010/05/24 19:40:06 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1399,9 +1399,19 @@ for(;item!=NULL;item=item->next)
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
-        hPrintf(" HREF='%s%s'",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
+        {
+        if(skipToSpaces(item->linkVar) != NULL)
+            hPrintf(" HREF=%s%s",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
+        else
+            hPrintf(" HREF='%s%s'",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
+        }
     else if(item->linkVar != NULL)
-        hPrintf(" HREF='%s'",item->linkVar);
+        {
+        if(skipToSpaces(item->linkVar) != NULL)
+            hPrintf(" HREF='%s'",item->linkVar);
+        else
+            hPrintf(" HREF=%s",item->linkVar);
+        }
     else
         warn("map item has no url!");
 
@@ -1498,7 +1508,7 @@ if(map)
     useMap = imageMapDraw(map,name);
 else if(slice->link != NULL)
     {
-    if(strchr(slice->link,' ') != NULL)
+    if(skipToSpaces(slice->link) != NULL)
         hPrintf("  <A HREF=%s",slice->link);
     else
         hPrintf("  <A HREF='%s'",slice->link);
