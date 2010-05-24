@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.55 2010/05/24 21:12:17 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.56 2010/05/24 23:01:21 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -1110,22 +1110,21 @@ function filterCompositeExcludeOptions(obj)
         });
         if( $ (possibleSelections).length > 0) // clean out tags from other dimensions
             possibleSelections = aryRemoveVals(possibleSelections,allSelectedTags);
-        possibleSelections.push('All'); // All should be allowed
     }
 
     // Walk through all options in this filterBox to set excluded class
     //warn(possibleSelections,toString());
     var updated = false;
     var opts = $(obj).children("option");
-    for(var ix = 0;ix < $(opts).length;ix++) {
-        if(possibleSelections.length > 0 && aryFind(possibleSelections,opts[ix].value) > -1) {
-            if($(opts[ix]).hasClass('excluded')) {
+    for(var ix = 1;ix < $(opts).length;ix++) { // All is always allowwed
+        if(!oneEmpty && possibleSelections.length > 0 && aryFind(possibleSelections,opts[ix].value) == -1) {
+            if($(opts[ix]).hasClass('excluded') == false) {
+                $(opts[ix]).addClass('excluded');
+                updated = true;
+        } else if($(opts[ix]).hasClass('excluded')) {
                 $(opts[ix]).removeClass('excluded');
                 updated = true;
             }
-        } else if($(opts[ix]).hasClass('excluded') == false) {
-            $(opts[ix]).addClass('excluded');
-            updated = true;
         }
     }
     return updated;
