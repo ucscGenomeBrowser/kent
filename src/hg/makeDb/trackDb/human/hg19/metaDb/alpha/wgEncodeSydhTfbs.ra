@@ -130,6 +130,140 @@ tableName wgEncodeSydhTfbsGm12878WhipIggmusSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam.gz
+grant Snyder
+inputType GM12878/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1203
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam.gz
+grant Snyder
+inputType GM12878/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1203
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdPk
+objType table
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
+grant Snyder
+inputType GM12878/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
+project wgEncode
+setType exp
+subId 1203
+tableName wgEncodeSydhTfbsGm12878Znf274UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1.fastq.gz
+grant Snyder
+inputType GM12878/None/Input/UCDavis
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1203
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2.fastq.gz
+grant Snyder
+inputType GM12878/None/Input/UCDavis
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1203
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdSig
+objType table
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig.gz
+grant Snyder
+inputType GM12878/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1203
+tableName wgEncodeSydhTfbsGm12878Znf274UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsH1hescInputUcdAln
 objType file
 antibody Input
@@ -191,6 +325,138 @@ project wgEncode
 setType input
 subId 1176
 tableName wgEncodeSydhTfbsH1hescInputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdAlnRep1
+objType file
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep1.bam.gz
+grant Snyder
+inputType H1-hESC/None/Input/UCDavis
+lab Stanford
+parentTable wgEncodeSydhTfbsH1hescMaxUcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1206
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdAlnRep2
+objType file
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep2.bam.gz
+grant Snyder
+inputType H1-hESC/None/Input/UCDavis
+lab Stanford
+parentTable wgEncodeSydhTfbsH1hescMaxUcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1206
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdPk
+objType table
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsH1hescMaxUcdPk.narrowPeak.gz
+grant Snyder
+inputType H1-hESC/None/Input/UCDavis
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1206
+tableName wgEncodeSydhTfbsH1hescMaxUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdRawDataRep1
+objType file
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsH1hescMaxUcdRawDataRep1.fastq.gz
+grant Snyder
+inputType H1-hESC/None/Input/UCDavis
+lab Stanford
+parentTable wgEncodeSydhTfbsH1hescMaxUcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1206
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdRawDataRep2
+objType file
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsH1hescMaxUcdRawDataRep2.fastq.gz
+grant Snyder
+inputType H1-hESC/None/Input/UCDavis
+lab Stanford
+parentTable wgEncodeSydhTfbsH1hescMaxUcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1206
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdSig
+objType table
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsH1hescMaxUcdSig.bigWig.gz
+grant Snyder
+inputType H1-hESC/None/Input/UCDavis
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1206
+tableName wgEncodeSydhTfbsH1hescMaxUcdSig
 treatment None
 view Signal
 
@@ -1646,6 +1912,204 @@ tableName wgEncodeSydhTfbsHepg2Znf274UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHuvecGata2UcdAlnRep1
+objType file
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsHuvecGata2UcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1204
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdAlnRep2
+objType file
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsHuvecGata2UcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1204
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdPk
+objType table
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1204
+tableName wgEncodeSydhTfbsHuvecGata2UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdRawDataRep1
+objType file
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep1.fastq.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1204
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdRawDataRep2
+objType file
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep2.fastq.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1204
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdSig
+objType table
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1204
+tableName wgEncodeSydhTfbsHuvecGata2UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHuvecInputUcdAln
+objType file
+antibody Input
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecInputUcdAln.bam.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsHuvecInputUcdAln
+project wgEncode
+setType input
+subId 1207
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHuvecInputUcdRawData
+objType file
+antibody Input
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecInputUcdRawData.fastq.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+parentTable wgEncodeSydhTfbsHuvecInputUcdRawSignal
+project wgEncode
+setType input
+subId 1207
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHuvecInputUcdSig
+objType table
+antibody Input
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
+grant Snyder
+inputType HUVEC/None/Input/UCDavis
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 1207
+tableName wgEncodeSydhTfbsHuvecInputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsK562Ccnt2StdAlnRep1
 objType file
 antibody CCNT2
@@ -2636,4 +3100,4 @@ tableName wgEncodeSydhTfbsK562Usf2StdSig
 treatment None
 view Signal
 
-# MAGIC: 1510301657
+# MAGIC: 2102702047
