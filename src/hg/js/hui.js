@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.54 2010/05/24 20:36:16 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.55 2010/05/24 21:12:17 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -1074,7 +1074,7 @@ function filterCompositeExcludeOptions(obj)
 { // Will mark all options in one filterComposite boxes that are inconsistent with the current
   // selections in other filterComposite boxes.  Mark is class ".excluded"
 
-    if($(obj).hasClass('filterComp') == false)
+    if($(obj).hasClass('filterBy'))
         return false;
 
     // Walk through all other dimensions and narrow list of subCBs that are selected
