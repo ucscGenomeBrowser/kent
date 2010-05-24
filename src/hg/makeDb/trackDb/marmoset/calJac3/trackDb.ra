@@ -83,5 +83,12 @@ showTopScorers 200
 type bed 5 .
 
 track nscanGene override
+visibility pack
 informant Marmoset N-SCAN used mouse (mm9) as the informant for conservation. PASA clustered human ESTs were mapped to the marmoset genome with the use of the human/marmoset synteny chain track. These remapped clusters were then filtered for splice sites, and used as the EST track on marmoset.
 
+# make mRNA and EST tracks not on by default (nothing there for RHO gene)
+track mrna override
+visibility hide
+
+track intronEst override
+visibility hide
