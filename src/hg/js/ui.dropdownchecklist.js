@@ -120,7 +120,7 @@
             return wrapper;
         },
         // Creates a drop item that coresponds to an option element in the source select
-        _createDropItem: function(index, value, text, checked, disabled, indent) {
+        _createDropItem: function(index, value, text, checked, disabled, excluded, indent) {
             var self = this;
             // the item contains a div that contains a checkbox input and a span for text
             // the div
@@ -149,6 +149,9 @@
                 .text(text);
                 if (indent) {
                     item.addClass("multiCb-indent");
+                }
+                if (excluded) {
+                    item.addClass("multiCb-item-excluded");
                 }
                 if (disabled) {
                     item.addClass("multiCb-item-disabled");
@@ -219,9 +222,21 @@
             dropContainerDiv.css({ "float": "" }); // set it back
             return { width: divWidth, height: divHeight };
         },
+        _updateOptions: function() {
+            // Updates CSS item CSS classes to reflect option CSS classes
+            var self = this, sourceSelect = this.sourceSelect, dropWrapper = this.dropWrapper;
+            var allCheckboxes = dropWrapper.find("input:not([disabled])");
+            var selectOptions = sourceSelect.get(0).options;
+            allCheckboxes.each(function(index) {
+                if($(selectOptions[index]).hasClass('excluded'))
+                    $(this).parent().addClass("multiCb-item-excluded");
+                else if($(this).parent().hasClass("multiCb-item-excluded"))
+                    $(this).parent().removeClass("multiCb-item-excluded");
+            });
+        },
         _appendOptions: function(parent, container, parentIndex, indent) {
-                var self = this;
-                parent.children("option").each(function(index) {
+            var self = this;
+            parent.children("option").each(function(index) {
                 var option = $(this);
                 var childIndex = (parentIndex + "." + index);
                 self._appendOption(option, container, childIndex, indent);
@@ -233,7 +248,8 @@
             var value = option.val();
             var selected = option.attr("selected");
             var disabled = option.attr("disabled");
-            var item = self._createDropItem(index, value, text, selected, disabled, indent);
+            var excluded = option.hasClass("excluded");
+            var item = self._createDropItem(index, value, text, selected, disabled, excluded, indent);
             container.append(item);
         },
         // Synchronizes the items checked and the source select
@@ -292,25 +308,33 @@
             var allSelected = null != firstSelect && firstSelect.attr("selected");
             var selectOptions = sourceSelect.find("option");
             var text = self._formatText(selectOptions, options.firstItemChecksAll, allSelected);
-            var controlLabel = controlWrapper.find(".multiCb-text");
-            controlLabel.html(text);
-            //controlLabel.attr("title", text);
-            var newheight = text.split('<BR>').length * 20;
-            controlLabel.css('height',newheight);
-            controlLabel.css('color','black');
-            var controlContainer = controlLabel.parent();
-
-            controlContainer.css('height',newheight); // Why is this needed?
-            //alert($(controlContainer).attr('type'));
+            if(text.length <= 0)
+                self._emptyControlText();
+             else
+                self._selectedControlText(text);
         },
         // Updates the text shown in the control depending on the checked (selected) items
         _defaultControlText: function() {
-            //var self = this, sourceSelect = this.sourceSelect, options = this.options, controlWrapper = this.controlWrapper;
             var controlLabel = this.controlWrapper.find(".multiCb-text");
             controlLabel.text("Select multiple...");
             controlLabel.css('height',20);
             controlLabel.css('color','#000088');
-            controlLabel.parent().css('height',20); // Needed?
+            controlLabel.parent().css('height',20);
+        },
+        _selectedControlText: function(selectedText) {
+            var controlLabel = this.controlWrapper.find(".multiCb-text");
+            controlLabel.html(selectedText);
+            var newheight = selectedText.split('<BR>').length * 20;
+            controlLabel.css('height',newheight);
+            controlLabel.css('color','black');
+            controlLabel.parent().css('height',newheight);
+        },
+        _emptyControlText: function() {
+            var controlLabel = this.controlWrapper.find(".multiCb-text");
+            controlLabel.text("Select...");
+            controlLabel.css('height',20);
+            controlLabel.css('color','#AA0000');
+            controlLabel.parent().css('height',20);
         },
         // Formats the text that is shown in the control
         _formatText: function(selectOptions, firstItemChecksAll, allSelected) {
@@ -337,9 +361,9 @@
             var self = this, dropWrapper = this.dropWrapper, controlWrapper = this.controlWrapper;
             // hides the last shown drop container
             var hide = function() {
-                // Add here to fill the text control
-                self._updateControlText();
                 var instance = $.ui.dropdownchecklist.drop;
+                // Add here to fill the text control
+                instance._updateControlText();
                 if (null != instance) {
                     instance.dropWrapper.css({
                         top: "-3300px",
@@ -380,10 +404,13 @@
                 instance.dropWrapper.drop = true;
                 $.ui.dropdownchecklist.drop = instance;
                 $(document).bind("click", hide);
-                self.sourceSelect.trigger("focus");
+                //self.sourceSelect.trigger("focus");
+                if(filterCompositeExcludeOptions(self.sourceSelect)) {
+                    self._updateOptions();
+                }
             }
             if (dropWrapper.drop) {
-                hide(self);
+                hide();
             } else {
                 show(self);
             }
@@ -393,6 +420,9 @@
             var options = this.options, dropWrapper = this.dropWrapper, controlWrapper = this.controlWrapper;
 
             var controlWidth;
+            var controlMinWidth = 100;
+            if(this.minWidth)
+                controlMinWidth = this.minWidth;
             // use the width from options if set, otherwise set the same width as the drop container
             if (options.width) {
                 controlWidth = parseInt(options.width);
@@ -406,7 +436,8 @@
             }
             //var controlHeight = min(sourceSelect.children(":selected"),1) * 20;
             controlWrapper.find(".multiCb-text").css({
-                width: controlWidth + "px"
+                width: controlWidth + "px",
+                minWidth: controlMinWidth + "px"
             });
                 //height: controlHeight + "px"
 

@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.53 2010/05/14 18:34:39 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.54 2010/05/24 20:36:16 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -214,6 +214,8 @@ function filterCompositeSelectionChanged(obj)
             }
             //alert("filterComp:"+filterComp.length);
         }
+        // FIXME: What about mat dimensions?
+
         // What to do now?
         if (subCBsToSelect.length > 0)
             subCBsToSelect = $(subCBsToSelect).not(":checked");
@@ -411,12 +413,12 @@ function objsFilterByClasses(objs,keep,classes)
 // Accepts an obj list and an array of classes, then filters successively by that list
     if( classes != undefined && classes.length > 0 ) {
         if(keep == "and") {
-            objs = $( objs ).filter( '.' + classes.join('.') ); // filter('class1.class2') is same as filter('.class1').filter('.class2')
+            objs = $( objs ).filter( '.' + classes.join('.') ); // Must belong to all
         } else if(keep == "or") {
-            objs = $( objs ).filter( '.' + classes.join(',.') ); // filter('class1.class2') is same as filter('.class1').filter('.class2')
+            objs = $( objs ).filter( '.' + classes.join(',.') ); // Must belong to one or more
         } else if(keep == "not") {
             for(var cIx=classes.length-1;cIx>-1;cIx--) {
-                objs = $( objs ).not( '.' + classes[cIx] );   // not('class1.class2') is different from not('.class1').not('.class2')
+                objs = $( objs ).not( '.' + classes[cIx] ); // not('class1.class2') is different from not('.class1').not('.class2')
             }
         }
     }
@@ -1068,6 +1070,67 @@ function multiSelectBlur(obj)
     }*/
 }
 
+function filterCompositeExcludeOptions(obj)
+{ // Will mark all options in one filterComposite boxes that are inconsistent with the current
+  // selections in other filterComposite boxes.  Mark is class ".excluded"
+
+    if($(obj).hasClass('filterComp') == false)
+        return false;
+
+    // Walk through all other dimensions and narrow list of subCBs that are selected
+    // NOTE: narrowing the list should by each dimension other than current one is the same as
+    // getting the selected CB list if the current dimension selected all
+    var allSelectedTags = [ ];  // empty array
+    var oneEmpty = false;
+    var subCBs = $("input.subCB");
+    var filterComp = $("select.filterComp").not("#"+$(obj).attr('id')); // Exclude self from list
+    $( filterComp ).each( function (i)  {
+        if( $( subCBs ).length > 0 ) {
+            var selectedTags = $( this ).val();
+            if( !selectedTags || selectedTags.length == 0)
+                oneEmpty = true;
+            else if( selectedTags && selectedTags.length > 0 && selectedTags[0] != "All" ) {
+                subCBs = objsFilterByClasses(subCBs,"or",selectedTags);  // must belong to one or more
+                allSelectedTags = allSelectedTags.concat(selectedTags);
+            }
+        }
+    });
+    // FIXME: What about mat dimensions?
+
+    // Walk through all selected subCBs to get other related tags
+    var possibleSelections = [ ];  // empty array
+    if(!oneEmpty) {
+        $( subCBs ).each( function (i)  {
+
+            var possibleClasses = $( this ).attr("class").split(" ");
+            if( $(possibleClasses).length > 0)
+                possibleClasses = aryRemoveVals(possibleClasses,[ "subCB" ]);
+            if( $(possibleClasses).length > 0)
+                possibleSelections = possibleSelections.concat(possibleClasses);
+        });
+        if( $ (possibleSelections).length > 0) // clean out tags from other dimensions
+            possibleSelections = aryRemoveVals(possibleSelections,allSelectedTags);
+        possibleSelections.push('All'); // All should be allowed
+    }
+
+    // Walk through all options in this filterBox to set excluded class
+    //warn(possibleSelections,toString());
+    var updated = false;
+    var opts = $(obj).children("option");
+    for(var ix = 0;ix < $(opts).length;ix++) {
+        if(possibleSelections.length > 0 && aryFind(possibleSelections,opts[ix].value) > -1) {
+            if($(opts[ix]).hasClass('excluded')) {
+                $(opts[ix]).removeClass('excluded');
+                updated = true;
+            }
+        } else if($(opts[ix]).hasClass('excluded') == false) {
+            $(opts[ix]).addClass('excluded');
+            updated = true;
+        }
+    }
+    return updated;
+}
+
 function multiSelectFocus(obj,sizeWhenOpen)
 { // Opens multiselect whenever it gets focus
     if($(obj).attr('size') != sizeWhenOpen) {
@@ -1075,7 +1138,7 @@ function multiSelectFocus(obj,sizeWhenOpen)
     $(obj).attr('size',sizeWhenOpen);
     //warn("Selected:"+$(obj).children("option").filter(":selected").length);
     }
-//return false;
+    //return false;
 }
 
 function multiSelectClick(obj,sizeWhenOpen)
