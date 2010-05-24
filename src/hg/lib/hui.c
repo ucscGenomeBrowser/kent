@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.293 2010/05/21 17:42:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.294 2010/05/24 20:34:22 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5859,8 +5859,8 @@ printf("<TABLE><TR valign='top'>\n");
 int dimIx=dimA;
 for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
     {
-    printf("<TD align='right'><B>%s:</B></TD><TD align='left'>\n",membersForAll->members[dimIx]->groupTitle); // FIXME Should be link to cv for all terms in multiselect!
-    //printf("<TD align='left'><B>%s:</B><BR>\n",membersForAll->members[dimIx]->title); // FIXME Should be link to cv for all terms in multiselect!
+    //printf("<TD align='right'><B>%s:</B></TD><TD align='left'>\n",membersForAll->members[dimIx]->groupTitle); // FIXME Should be link to cv for all terms in multiselect!
+    printf("<TD align='left'><B>%s:</B><BR>\n",membersForAll->members[dimIx]->groupTitle); // FIXME Should be link to cv for all terms in multiselect!
 
     int fullSize = membersForAll->members[dimIx]->count;
     if(membersForAll->members[dimIx]->fcType != fctOneOnly)
