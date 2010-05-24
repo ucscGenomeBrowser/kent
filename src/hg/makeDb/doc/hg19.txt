@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.112 2010/05/16 20:34:35 hartera Exp $";
+#	"$Id: hg19.txt,v 1.113 2010/05/24 15:41:40 chinhli Exp $";
 
 #############################################################################
 
@@ -5533,6 +5533,7 @@ XXX - ready to go here - 2009-07-06
     mkdir /hive/data/genomes/hg19/bed/multiz46way/cons/ss
     mkdir -p /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split/2009-10-19
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split/2009-10-19
+    mkdir ss
 
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
