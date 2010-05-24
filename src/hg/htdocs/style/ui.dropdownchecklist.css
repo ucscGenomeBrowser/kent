@@ -1,35 +1,27 @@
 .multiCb {
 	height: 20px;
-	border: 1px solid gray;
-	/*border: 1px solid #ddd;*/
-	/*border-right: 0;*/
+	border: 2px ridge gray;
 	background: white;
-	/*background: #fff; url(dropdown.png) no-repeat center right;*/
 }
 .multiCb-hover, .multiCb-active {
-	/*background-image: url(dropdown_hover.png);*/
-	border-color: #000088;
-    /*border-color: #5794bf;*/
+	border: 2px inset #000088;
 }
 
 .multiCb-text {
 	font-size: 14px;
 	height: 20px;
 	line-height: 20px;
-	/*margin-right: 17px; /* background dropdown.png image */
 }
 
 .multiCb-label {
 	font-size: 14px;
 	height: 20px;
 	line-height: 20px;
-	/*margin-right: 17px; /* background dropdown.png image */
 }
 
 .multiCb-dropcontainer {
 	background-color: #fff;
 	border: 1px solid #000088;
-	/*border: 1px solid #999;*/
 }
 
 .multiCb-item {
