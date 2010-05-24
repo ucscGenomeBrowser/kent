@@ -327,6 +327,7 @@
             var newheight = selectedText.split('<BR>').length * 20;
             controlLabel.css('height',newheight);
             controlLabel.css('color','black');
+            controlLabel.attr('title','Click to select...');
             controlLabel.parent().css('height',newheight);
         },
         _emptyControlText: function() {
@@ -334,17 +335,17 @@
             controlLabel.text("Select...");
             controlLabel.css('height',20);
             controlLabel.css('color','#AA0000');
+            controlLabel.attr('title','Must select...');
             controlLabel.parent().css('height',20);
         },
         // Formats the text that is shown in the control
         _formatText: function(selectOptions, firstItemChecksAll, allSelected) {
-            var text;
+            var text = "";
             if (firstItemChecksAll && allSelected) {
                 // just set the text from the first item
-                text = selectOptions.filter(":first").text();
+                text += selectOptions.filter(":first").text();
             } else {
                 // concatenate the text from the checked items
-                text = "";
                 selectOptions.each(function() {
                     if ($(this).attr("selected")) {
                         text += $(this).text() + '<BR>';
