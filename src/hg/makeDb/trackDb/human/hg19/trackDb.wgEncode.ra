@@ -816,7 +816,7 @@ origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2  H1hESC=H1-hESC HUVEC=HUVEC uK562=K562_<i>IFN&alpha;_30min</i> vK562=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Factor  cJUN=c-Jun CCNT2=CCNT2 ELK4=ELK4 GATA2=GATA2 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 POL2=Pol2 NRF1=Nrf1 RAD21=Rad21 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP ZNF274=ZNF274  zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup3 factor Factor  cJUN=c-Jun CCNT2=CCNT2 ELK4=ELK4 GATA2=GATA2 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 MAX=Max POL2=Pol2 NRF1=Nrf1 RAD21=Rad21 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP ZNF274=ZNF274  zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit UCD=UC_Davis 
 subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
@@ -1056,6 +1056,16 @@ wgEncode 1
         type narrowPeak
         color 224,75,0
         metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdPk fileName=wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
+
+        track wgEncodeSydhTfbsH1hescMaxUcdPk
+        release alpha
+        subTrack wgEncodeSydhTfbsViewPeaks off
+        shortLabel H1-hESC Max   Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Max in H1-hESC cells)
+        subGroups view=Peaks factor=MAX cellType=H1hESC control=UCD treatment=aNone
+        type narrowPeak
+        color 0,107,27
+        metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=H1-hESC antibody=Max setType=exp treatment=None inputType=H1-hESC/None/Input/UCDavis control=UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1206 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescMaxUcdPk fileName=wgEncodeSydhTfbsH1hescMaxUcdPk.narrowPeak.gz
 
 	#Signal Track SYDH TFBS#
 	#Short Labels for signal =Sg # 
@@ -1324,6 +1334,26 @@ wgEncode 1
         type bigWig 1.000000 14280.000000
         color 224,75,0
         metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdSig fileName=wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsH1hescMaxUcdSig
+        release alpha
+        subTrack wgEncodeSydhTfbsViewSignal off
+        shortLabel H1-hESC Max   Sg
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Max in H1-hESC cells)
+        subGroups view=Signal factor=MAX cellType=H1hESC control=UCD treatment=aNone
+        type bigWig 1.000000 4069.000000
+        color 0,107,27
+        metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=H1-hESC antibody=Max setType=exp treatment=None inputType=H1-hESC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1206 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescMaxUcdSig fileName=wgEncodeSydhTfbsH1hescMaxUcdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsHuvecInputUcdSig
+        release alpha
+        subTrack wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC   Input Sg
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HUVEC cells)
+        subGroups view=Signal factor=zInputucd cellType=HUVEC control=UCD treatment=aNone
+        type bigWig 1.000000 21529.000000
+        color 224,75,0
+        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=Input setType=input treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1207 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecInputUcdSig fileName=wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
 
 # Stanford/Yale/UCD/Harvard Histone ChIP-seq (wrangler: vsmalladi)
 track wgEncodeSydhHistone
