@@ -9,7 +9,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.31 2010/05/24 19:40:06 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.32 2010/05/24 19:53:42 hiram Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1400,17 +1400,17 @@ for(;item!=NULL;item=item->next)
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
         {
-        if(skipToSpaces(item->linkVar) != NULL)
+        if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s%s",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
         else
             hPrintf(" HREF='%s%s'",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
         }
     else if(item->linkVar != NULL)
         {
-        if(skipToSpaces(item->linkVar) != NULL)
-            hPrintf(" HREF='%s'",item->linkVar);
-        else
+        if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
+	else
+            hPrintf(" HREF='%s'",item->linkVar);
         }
     else
         warn("map item has no url!");
