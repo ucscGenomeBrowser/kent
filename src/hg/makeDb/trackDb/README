@@ -209,9 +209,11 @@ The format of the type fields:
       yLineOnOff        on|off         # default is off (draw y=yLineMark line)
       windowingFunction maximum|mean|minimum # default is mean
       smoothingWindow   off|[2-16]           # default is off
+      transformFunc	NONE|LOG	     # default is NONE
       wigColorBy        <bed table>          # use colors in bed for wiggle
                                              #   in overlapping regions
-      spanList          s1,s2,s3...          # list of spans in the loaded table
+      spanList          first		     # Sets spans to just be the first span in table
+                        s1,s2,s3...          # list of spans in the loaded table
 		#	you can find the spans by doing:
 		#	"select span from <table> group by span"
 		#	typically spanList is only one:
@@ -220,6 +222,7 @@ The format of the type fields:
 		#	spanList 1,1000
 		#	special efforts must be made to load extra spans
 		#	into the table for special purposes.
+
 15. type bedGraph [column]
    Same type of graphing function as #14 above 'type wig'
    In this case, the data table is a bed type of table loaded
@@ -542,6 +545,17 @@ Some settings used by various tracks:
     o bedFilter - If the hgTrackUi call is using bedUi to support it and bedFilter
       is set then the bed names will be filtered based on the settings entered by
       the user on the hgTrackUi page.
+    o inputTracks - for tracks that are clusters or other processed data that is
+      in other tracks, a list of the track names (typically composite parent tracks)
+      that this track uses for source data.  Used in the details display of 
+      factorSource tracks, and also the DNAse hypersensitivity cluster tracks.
+    o inputTracksSubgroupSelect - used with inputTracks.  A list of var=val pairs
+      that selects which subtracks of the input tracks to use, matching on the
+      subGroup/subGroups tags.  Example
+           inputTracksSubgroupSelect view=aPeaks
+    o inputTracksSubgroupDisplay - used with inputTracks.  A list of group types
+      (just the left size of the var=val pairs in the subGroupN line of the parent)
+      to display as columns in the details display table.
 
 Specific, optional settings used only by snp125, snp126, and so on:
     o chimpMacaqueOrthoTable table - table contains orthologous
