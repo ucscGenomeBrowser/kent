@@ -18,7 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.112 2010/05/23 20:12:32 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.113 2010/05/25 17:50:51 kent Exp $";
 
 #define SMALLBUF 128
 #define LARGEBUF 256
@@ -567,6 +567,20 @@ for (i = 0; i < *preDrawSize; ++i)
 return preDraw;
 }
 
+static double doTransform(double x, enum wiggleTransformFuncEnum transformFunc)
+/* Do log-type transformation if asked. */
+{
+if (transformFunc == wiggleTransformFuncLog)
+    {
+    if (x >= 0)
+	x = log(1+x);
+    else
+	x = -log(1-x);
+    }
+return x;
+}
+
+
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
 	enum wiggleWindowingEnum windowingFunction,
 	enum wiggleTransformFuncEnum transformFunc)
@@ -580,36 +594,30 @@ for (i = 0; i < preDrawSize; ++i)
     double dataValue;
     if (preDraw[i].count)
 	{
-    switch (windowingFunction)
-	{
-	case (wiggleWindowingMin):
+	switch (windowingFunction)
+	    {
+	    case wiggleWindowingMin:
 		if (fabs(preDraw[i].min)
 				< fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
 		else
 		    dataValue = preDraw[i].max;
 		break;
-	case (wiggleWindowingMean):
-	case (wiggleWindowingWhiskers):
+	    case wiggleWindowingMean:
+	    case wiggleWindowingWhiskers:
 		dataValue =
 		    preDraw[i].sumData / preDraw[i].count;
 		break;
-	default:
-	case (wiggleWindowingMax):
+	    default:
+	    case wiggleWindowingMax:
 		if (fabs(preDraw[i].min)
 			> fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
 		else
 		    dataValue = preDraw[i].max;
 		break;
-	}
-	if (transformFunc == wiggleTransformFuncLog)
-	    {
-	    if (dataValue >= 0)
-		dataValue = log(1+dataValue);
-	    else
-	        dataValue = -log(1-dataValue);
 	    }
+	dataValue = doTransform(dataValue, transformFunc);
 	preDraw[i].plotValue = dataValue;
 	preDraw[i].smooth = dataValue;
 	}
@@ -791,11 +799,10 @@ Color oldDrawColor = colorArray[0] + 1;	/* Just to be different from 1st drawCol
 Color mediumColor = MG_BLACK;	// Will be overriden
 Color lightColor = MG_BLACK;	// Will be overriden
 Color clipColor = MG_MAGENTA;
+enum wiggleTransformFuncEnum transformFunc = wigCart->transformFunc;
 enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 			&& width < winEnd-winStart);
-
-/* Return gray shade corresponding to a number from 50 - 100 */
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
@@ -850,18 +857,20 @@ for (x1 = 0; x1 < width; ++x1)
 		    int zeroPos = max(0,scaleHeightToPixels(0));
 		    int scaledVal = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
+		    double mean = p->sumData/p->count;
 
 		    if (dataValue < 0)
 		        {
-			int scaledMin = scaleHeightToPixels(p->min);
+			int scaledMin = scaleHeightToPixels(doTransform(p->min, transformFunc));
 			int lightHeight = max(1,scaledMin-zeroPos);
 			int mediumHeight = lightHeight;
 			if (!isnan(std))
 			    { // Test needed due to bug in version 1.5 bigWiles
-			    int scaledMinus = scaleHeightToPixels(dataValue-std);
+			    double minus = doTransform(mean - std, transformFunc);
+			    int scaledMinus = scaleHeightToPixels(minus);
 			    mediumHeight = max(1,scaledMinus-zeroPos);
 			    }
-			int darkHeight = max(1,scaledVal - zeroPos);
+			int darkHeight = max(1,scaledVal-zeroPos);
 			if (zeroPos == (yOff+h))  // bottom pixel special case
 			    zeroPos -= 1;
 		        if (((zeroPos-yOff)+darkHeight) == 0)
@@ -898,13 +907,14 @@ for (x1 = 0; x1 < width; ++x1)
 			int mediumTop = darkTop, mediumHeight = darkHeight;
 			if (!isnan(std))
 			    { // Test needed due to bug in version 1.5 bigWiles
-			    int scaledPlus = scaleHeightToPixels(dataValue+std);
+			    double plus = doTransform(mean + std, transformFunc);
+			    int scaledPlus = scaleHeightToPixels(plus);
 			    int boxHeight = max(1,zeroPos-scaledPlus);
 			    mediumTop = scaledPlus, mediumHeight = boxHeight;
 			    }
 
 			/* Calculate light part from max. */
-			int scaledMax = scaleHeightToPixels(p->max);
+			int scaledMax = scaleHeightToPixels(doTransform(p->max, transformFunc));
 			if (scaledMax == (h+yOff))
 			    scaledMax = (h+yOff) - 1;
 			boxHeight = max(1,zeroPos-scaledMax);
@@ -941,19 +951,19 @@ for (x1 = 0; x1 < width; ++x1)
 		{	/*	draw a 3 pixel height box	*/
 		if (whiskers)
 		    {
-		    int scaledMin = scaleHeightToPixels(p->min);
-		    int scaledMax = scaleHeightToPixels(p->max);
+		    int scaledMin = scaleHeightToPixels(doTransform(p->min, transformFunc));
+		    int scaledMax = scaleHeightToPixels(doTransform(p->max, transformFunc));
+		    double mean = p->sumData/p->count;
 		    int boxHeight = max(1,scaledMin - scaledMax);
 		    hvGfxBox(hvg, x, scaledMax, 1, boxHeight, lightColor);
 		    int scaledMean = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
 		    if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
 			{
-			int scaledMeanPlus = scaleHeightToPixels(dataValue+std);
-			int scaledMeanMinus = scaleHeightToPixels(dataValue-std);
-			int boxHeight = max(1,scaledMeanMinus - scaledMeanPlus);
-			hvGfxBox(hvg, x, scaledMeanPlus, 1,
-				boxHeight, mediumColor);
+			int scaledPlus = scaleHeightToPixels(doTransform(mean+std, transformFunc));
+			int scaledMinus = scaleHeightToPixels(doTransform(mean-std, transformFunc));
+			int boxHeight = max(1,scaledMinus - scaledPlus);
+			hvGfxBox(hvg, x, scaledPlus, 1, boxHeight, mediumColor);
 			}
 		    hvGfxBox(hvg, x, scaledMean, 1, 1, drawColor);
 		    }
