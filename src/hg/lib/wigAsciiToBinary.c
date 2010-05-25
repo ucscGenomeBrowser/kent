@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.33 2009/09/30 22:11:03 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.34 2010/05/25 19:45:34 kent Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -442,7 +442,7 @@ while (lineFileNext(lf, &line, NULL))
 	    validLines = 0;	/*	to cause reset for first offset	*/
 	    }
 	stepSize = 1;	/*	default step size	*/
-	dataSpan = 1;	/* default bases spanned per data point */
+	dataSpan = 0;	/*      this will match step size if not set*/
 	for(i = 1; i < wordCount; ++i)
 	    {
 	    if (startsWith("chrom",words[i]))
@@ -463,6 +463,8 @@ while (lineFileNext(lf, &line, NULL))
 		errAbort("illegal specification on variableStep at line %lu: %s",
 		    lineCount, words[i]);
 	    }
+	if (dataSpan == 0)
+	    dataSpan = stepSize;
 	if (!foundChrom)
 	    errAbort("missing chrom=<name> specification on fixedStep declaration at line %lu", lineCount);
 	if (!foundStart)
