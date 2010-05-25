@@ -75,7 +75,7 @@ def get_gbdb_pathname(database, table_name):
         else:
             return None
 
-def same_file(x, y):
+def same_file(x, y, do_md5=True):
     """checks if two files are the same with various definitions of same"""
     if os.path.samefile(x, y):
         return True     # same inode
@@ -83,21 +83,24 @@ def same_file(x, y):
         if os.path.getsize(x) != os.path.getsize(y):
             return False    # different sizes
         else:   # now check md5s of the two files
-            md5_x = md5.new()
-            file_x = open(x)
-            block = file_x.read(2**24)
-            while block != "":
-                md5_x.update(block)
+            if do_md5:
+                md5_x = md5.new()
+                file_x = open(x)
                 block = file_x.read(2**24)
+                while block != "":
+                    md5_x.update(block)
+                    block = file_x.read(2**24)
 
-            md5_y = md5.new()
-            file_y = open(y)
-            block = file_y.read(2**24)
-            while block != "":
-                md5_y.update(block)
+                md5_y = md5.new()
+                file_y = open(y)
                 block = file_y.read(2**24)
+                while block != "":
+                    md5_y.update(block)
+                    block = file_y.read(2**24)
 
-            return md5_x.digest() == md5_y.digest()
+                return md5_x.digest() == md5_y.digest()
+            else:
+                return True
 
 #### Main ######################################################################
 
@@ -117,6 +120,7 @@ def main(argv=None):
         help="the English name of track, by default this is \"ENCODE [composite-name]\"", metavar="N", default=None)
     parser.add_option("--files", dest="files_path", help="dump list of new files to F", metavar="F")
     parser.add_option("--tables", dest="tables_path", help="dump list of new tablesto F", metavar="F")
+    parser.add_option("--disable-md5-checks", dest="do_md5_checks", action="store_false", help="disable MD5 checks on files", default=True)
 
     global options
     (options, args) = parser.parse_args()
@@ -185,6 +189,9 @@ def main(argv=None):
     new_files_list  = []
     new_gbdbs_list  = []
 
+    if not options.do_md5_checks:
+        warnings.append("Use of MD5 checksums to verify unchanged files has been disabled.")
+
     # process the list of unchanged files
     for f in unchanged_files:
         name, type, extension = f.split(".")
@@ -195,7 +202,7 @@ def main(argv=None):
         if next_version(stem, version) in new_files:
             raise ValueError, "Unimplemented: newer version of %s found, can't deal with this yet" % name
         # check to make sure the files are really the same
-        if not same_file(os.path.join(current_release_dir, f), os.path.join(prev_release_dir, f)):
+        if not same_file(os.path.join(current_release_dir, f), os.path.join(prev_release_dir, f), options.do_md5_checks):
             warn = "file %s in %s and %s don't appear to be the same (type=%s)" % \
                 (name, current_release_dir, prev_release_dir, type)
             warnings.append(warn)
