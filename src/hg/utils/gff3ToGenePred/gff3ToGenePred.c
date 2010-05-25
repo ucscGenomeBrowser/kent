@@ -6,7 +6,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.6 2010/03/26 22:03:18 markd Exp $";
+static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.7 2010/05/25 03:45:04 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +26,9 @@ errAbort(
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
   "annotation.  Up to 50 conversion errors are reported before aborting.\n"
+  "\n"
+  "Input file must conform to the GFF3 specification:\n"
+  "   http://www.sequenceontology.org/gff3.shtml\n"
   );
 }
 
