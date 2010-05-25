@@ -9,7 +9,7 @@
 #include "wikiTrack.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.27 2010/02/10 21:41:36 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.29 2010/05/25 23:53:59 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -330,7 +330,7 @@ boolean wikiTrackEnabled(char *database, char **wikiUserName)
 {
 static boolean done = FALSE;
 static boolean status = FALSE;
-static boolean wikiUp = FALSE;
+static boolean wikiUp = TRUE;
 static char *userName = NULL;
 
 /* do not repeat this query */
@@ -388,9 +388,9 @@ if (validDb && wikiLinkEnabled() &&
 		page = fetchEditPage(TEST_EMAIL_VERIFIED);
 		}
 	    errCatchEnd(errCatch);
-	    if (! errCatch->gotError)
+	    if (errCatch->gotError) // we think it is supposed to be there
 		{
-		wikiUp = TRUE;
+		wikiUp = FALSE;		// but it will not respond
 		}
 	    errCatchFree(&errCatch);
 	    char *loginExpired = NULL;
@@ -1085,7 +1085,7 @@ char *wikiUrl(struct wikiTrack *item)
 {
 char *siteUrl = cfgOptionDefault(CFG_WIKI_URL, NULL);
 struct dyString *itemUrl = dyStringNew(64);
-dyStringPrintf(itemUrl, "%s/index.php/%s\" TARGET=_blank", siteUrl,
+dyStringPrintf(itemUrl, "%s/index.php/%s TARGET=_blank", siteUrl,
         item->descriptionKey);
 return dyStringCannibalize(&itemUrl);
 }
