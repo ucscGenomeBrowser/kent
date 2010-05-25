@@ -199,7 +199,7 @@ sub slurpAutoSql {
 	}
 	if ($table ne "") {
 	  if (defined $tableAS{$table}) {
-	    die "Duplicate autoSql def for table $table (" .
+	    warn "Duplicate autoSql def for table $table (" .
 	      $tableAS{$table}->{filename} . " vs. $filename)";
 	  }
 	  $tableAS{$table} = { fields => &simplifyFields($fields),
@@ -208,7 +208,7 @@ sub slurpAutoSql {
 			       filename => $filename, };
 	} elsif ($object ne "") {
 	  if (defined $objectAS{$table}) {
-	    die "Duplicate autoSql def for object $object (" .
+	    warn "Duplicate autoSql def for object $object (" .
 	      $objectAS{$object}->{filename} . " vs. $filename)";
 	  }
 	  $objectAS{$object} = { autoSql => $as,
