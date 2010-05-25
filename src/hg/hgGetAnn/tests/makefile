@@ -32,7 +32,7 @@ chrRangePslSplit: mkdirs
 
 # range psl keep bin, include spaces in query
 chrRangePslKeepBin: mkdirs
-	hgGetAnn -keepBin ${DB} mrna "chr5 112272300 112280228" output/$@.psl
+	hgGetAnn -keepBin ${DB} blatFugu "chr5 112272300 112280228" output/$@.psl
 	diff expected/$@.psl output/$@.psl
 
 # range genePred with headers
