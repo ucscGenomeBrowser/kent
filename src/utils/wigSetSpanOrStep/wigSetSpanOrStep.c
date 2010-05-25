@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: wigSetSpanOrStep.c,v 1.1 2010/05/24 18:09:14 kent Exp $";
+static char const rcsid[] = "$Id: wigSetSpanOrStep.c,v 1.2 2010/05/25 17:11:49 kent Exp $";
 
 boolean gotStep = FALSE;
 boolean gotSpan = FALSE;
@@ -21,7 +21,7 @@ errAbort(
   "options:\n"
   "   -span=N set span variable to given value\n"
   "   -step=N set step variable to given value\n"
-  "either step or span should be used\n"
+  "Either step or span must be used with fixedStep format wigs,  only span with variableStep.\n"
   );
 }
 
