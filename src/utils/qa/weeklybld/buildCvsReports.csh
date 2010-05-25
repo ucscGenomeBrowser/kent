@@ -63,10 +63,8 @@ endif
 
 # Keep a history of cvs-reports by creating a new directory, and setting a symlink (cvs-reports-latest) to it. 
 # The webserver has symlinks to the latest one and the history:
-#   /usr/local/apache/htdocs-genecats
-/cvs-reports -> /hive/groups/qa/cvs-reports-latest
-#   /usr/local/apache/htdocs-genecats
-/cvs-reports-history -> /hive/groups/qa/cvs-reports-history
+#   /usr/local/apache/htdocs-genecats/cvs-reports -> /hive/groups/qa/cvs-reports-latest
+#   /usr/local/apache/htdocs-genecats/cvs-reports-history -> /hive/groups/qa/cvs-reports-history
 
 # The script which builds the repoerts (cvs-reports-delta) also has a setting which points to this: 
 #     'CVS_REPORTS_BASE=/hive/groups/qa/cvs-reports-latest'
@@ -148,8 +146,7 @@ echo "cvs-reports-delta done on $HOST [${0}: `date`]"
 cd $WEEKLYBLD
 
 # fix main report page /cvs-reports/index.html to have dates
-cd /usr/local/apache/htdocs-genecats
-/cvs-reports/
+cd /usr/local/apache/htdocs-genecats/cvs-reports/
 echo "<html><head><title>cvs-reports</title></head><body>" > index.html
 echo "<h1>CVS changes: kent</h1>" >> index.html
 echo "<ul>" >> index.html
