@@ -152,14 +152,14 @@ if (numWordsRet != NULL)
 return words;
 }
 
-struct gff3AttrVals *gff3AnnFindAttr(struct gff3Ann *g3a, char *attr)
+struct gff3Attr *gff3AnnFindAttr(struct gff3Ann *g3a, char *tag)
 /* find a user attribute, or NULL */
 {
-struct gff3AttrVals *av;
-for (av = g3a->attrs; av != NULL; av = av->next)
+struct gff3Attr *attr;
+for (attr = g3a->attrs; attr != NULL; attr = attr->next)
     {
-    if (sameString(av->attr, attr))
-        return av;
+    if (sameString(attr->tag, tag))
+        return attr;
     }
 return NULL;
 }
@@ -322,48 +322,64 @@ else
     }
 }
 
-static struct slName *parseAttrVals(struct gff3Ann *g3a, char *attr, char *valsStr)
+/* check that an attribute tag name is valid. */
+static boolean checkAttrTag(struct gff3Ann *g3a, char *tag)
+{
+// FIXME: spec is not clear on what is a valid tag.
+char *tc = tag;
+boolean isOk = isalpha(*tc);
+for (tc++; isOk && (*tc != '\0'); tc++)
+    isOk = (*tc == '_') || isalnum(*tc);
+if (!isOk)
+    gff3AnnErr(g3a, "invalid attribute tag, must start with an alphabetic character and be composed of alphanumeric or underscore characters: %s", tag);
+return isOk;
+}
+
+static struct slName *parseAttrVals(struct gff3Ann *g3a, char *tag, char *valsStr)
 /* parse an attribute into its values */
 {
 int i, numVals = chopString(valsStr, ",", NULL, 0);
 char **vals = needMem((numVals+1)*sizeof(char**)); // +1 allows for no values
 chopString(valsStr, ",", vals, numVals);
-struct slName *escVals = NULL;
+struct slName *unescVals = NULL;
 for (i = 0; i < numVals; i++)
-    slSafeAddHead(&escVals, unescapeSlName(g3a, vals[i]));
+    slAddHead(&unescVals, unescapeSlName(g3a, vals[i]));
+if (unescVals == NULL)
+    slAddHead(&unescVals, slNameNew(""));  // empty value
 freeMem(vals);
-slReverse(&escVals);
-return escVals;
+slReverse(&unescVals);
+return unescVals;
 }
 
-static void addAttrVals(struct gff3Ann *g3a, char *attr, char *valStr)
+static void addAttr(struct gff3Ann *g3a, char *tag, char *valStr)
 /* Add an attribute to the list of attributes.  If attribute has already been
  * specified, values are merged.  Attribute name must already be unescaped,
  * attribute values will be split and then unescaped. */
 {
-struct gff3AttrVals *attrVals = gff3AnnFindAttr(g3a, attr);
-if (attrVals == NULL)
+struct gff3Attr *attr = gff3AnnFindAttr(g3a, tag);
+if (attr == NULL)
     {
-    attrVals = gff3FileAlloc(g3a->file, sizeof(struct gff3AttrVals));
-    attrVals->attr = gff3FileCloneStr(g3a->file, attr);
-    slAddHead(&g3a->attrs, attrVals);
+    attr = gff3FileAlloc(g3a->file, sizeof(struct gff3Attr));
+    attr->tag = gff3FileCloneStr(g3a->file, tag);
+    slAddHead(&g3a->attrs, attr);
     }
-attrVals->vals = slCat(attrVals->vals, parseAttrVals(g3a, attr, valStr));
+attr->vals = slCat(attr->vals, parseAttrVals(g3a, tag, valStr));
 }
 
-static void parseAttrVal(struct gff3Ann *g3a, char *attrValsStr)
-/* parse one attribute and value from an annotation record */
+static void parseAttr(struct gff3Ann *g3a, char *attrStr)
+/* parse one attribute from an annotation record */
 {
-char *eq = strchr(attrValsStr, '=');
-if ((eq == NULL) || (eq == attrValsStr))
-    gff3AnnErr(g3a, "expected name=value: %s", attrValsStr);
+char *eq = strchr(attrStr, '=');
+if ((eq == NULL) || (eq == attrStr))
+    gff3AnnErr(g3a, "expected name=value: %s", attrStr);
 else
     {
-    char *attr = attrValsStr;
+    char *tag = attrStr;
     char *vals = eq+1;
     *eq = '\0';
-    unescapeStr(g3a, attr, attr);
-    addAttrVals(g3a, attr, vals);
+    unescapeStr(g3a, tag, tag);
+    if (checkAttrTag(g3a, tag))
+        addAttr(g3a, tag, vals);
     }
 }
 
@@ -371,30 +387,30 @@ static void parseAttrs(struct gff3Ann *g3a, char *attrsCol)
 /* parse the attribute column in an annotation record */
 {
 int i, numAttrs = chopString(attrsCol, ";", NULL, 0);
-char **attrVals = needMem(numAttrs*sizeof(char**));
-chopString(attrsCol, ";", attrVals, numAttrs);
+char **attrStrs = needMem(numAttrs*sizeof(char**));
+chopString(attrsCol, ";", attrStrs, numAttrs);
 for (i = 0; i < numAttrs; i++)
     {
-    char *av = trimSpaces(attrVals[i]);
-    if (strlen(av) > 0)
-        parseAttrVal(g3a, av);
+    char *attrStr = trimSpaces(attrStrs[i]);
+    if (strlen(attrStr) > 0)
+        parseAttr(g3a, attrStr);
     }
-freeMem(attrVals);
+freeMem(attrStrs);
 slReverse(&g3a->attrs);
 }
 
-static void checkSingleValAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void checkSingleValAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* validate that an attribute has only one value */
 {
-if (attrVals->vals->next != NULL)
-    gff3AnnErr(g3a, "attribute %s must have a single value, found multiple comma-separated values", attrVals->attr);
+if (attr->vals->next != NULL)
+    gff3AnnErr(g3a, "attribute %s must have a single value, found multiple comma-separated values", attr->tag);
 }
 
-static void parseIDAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseIDAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the ID attribute */
 {
-checkSingleValAttr(g3a, attrVals);
-char *id = attrVals->vals->name;
+checkSingleValAttr(g3a, attr);
+char *id = attr->vals->name;
 struct hashEl *hel = hashStore(g3a->file->byId, id);
 if (hel->val != NULL)
     gff3AnnErr(g3a, "duplicate annotation record with ID: %s", id);
@@ -402,33 +418,33 @@ hel->val = g3a;
 g3a->id = id;
 }
 
-static void parseNameAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseNameAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Name attribute */
 {
-checkSingleValAttr(g3a, attrVals);
-g3a->name = attrVals->vals->name;
+checkSingleValAttr(g3a, attr);
+g3a->name = attr->vals->name;
 }
 
-static void parseAliasAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseAliasAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Alias attribute */
 {
-g3a->aliases = attrVals->vals;
+g3a->aliases = attr->vals;
 }
 
-static void parseParentAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseParentAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Parent attribute */
 {
-g3a->parentIds = attrVals->vals;
+g3a->parentIds = attr->vals;
 }
 
-static void parseTargetAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseTargetAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Target attribute */
 {
-checkSingleValAttr(g3a, attrVals);
+checkSingleValAttr(g3a, attr);
 
 // target_id start end [strand]
 int numWords;
-char **words = dynChopStringWhite(g3a->file, attrVals->vals->name, 3, 4, &numWords,
+char **words = dynChopStringWhite(g3a->file, attr->vals->name, 3, 4, &numWords,
                                   "Target attribute in the form \"target_id start end [strand]\"");
 if (words == NULL)
     return;  // got an error
@@ -440,64 +456,64 @@ if (numWords > 3)
 freeMem(words);
 }
 
-static void parseGapAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseGapAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Gap attribute */
 {
-checkSingleValAttr(g3a, attrVals);
-g3a->gap = attrVals->vals->name;
+checkSingleValAttr(g3a, attr);
+g3a->gap = attr->vals->name;
 }
 
-static void parseDerivesFromAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseDerivesFromAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Derives_from attribute */
 {
-g3a->derivesFromId = attrVals->vals->name;
+g3a->derivesFromId = attr->vals->name;
 }
 
-static void parseNoteAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseNoteAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Note attribute */
 {
-g3a->notes = attrVals->vals;
+g3a->notes = attr->vals;
 }
 
-static void parseDbxrefAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseDbxrefAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Dbxref attribute */
 {
-g3a->dbxrefs = attrVals->vals;
+g3a->dbxrefs = attr->vals;
 }
 
-static void parseOntologyTermAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseOntologyTermAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Ontology_term attribute */
 {
-g3a->ontologyTerms = attrVals->vals;
+g3a->ontologyTerms = attr->vals;
 }
 
-static void parseStdAttr(struct gff3Ann *g3a, struct gff3AttrVals *attrVals)
+static void parseStdAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* Parse one of the standard specified attributes (those starting with upper
  * case) into fields. Multiple specifications of an attribute should have been
  * merged before calling this function. */
 {
-if (sameString(attrVals->attr, gff3AttrID))
-    parseIDAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrName))
-    parseNameAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrAlias))
-    parseAliasAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrParent))
-    parseParentAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrTarget))
-    parseTargetAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrGap))
-    parseGapAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrDerivesFrom))
-    parseDerivesFromAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrNote))
-    parseNoteAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrDbxref))
-    parseDbxrefAttr(g3a, attrVals);
-else if (sameString(attrVals->attr, gff3AttrOntologyTerm))
-    parseOntologyTermAttr(g3a, attrVals);
+if (sameString(attr->tag, gff3AttrID))
+    parseIDAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrName))
+    parseNameAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrAlias))
+    parseAliasAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrParent))
+    parseParentAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrTarget))
+    parseTargetAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrGap))
+    parseGapAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrDerivesFrom))
+    parseDerivesFromAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrNote))
+    parseNoteAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrDbxref))
+    parseDbxrefAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrOntologyTerm))
+    parseOntologyTermAttr(g3a, attr);
 else
-    gff3AnnErr(g3a, "unknown standard attribute, user defined attributes must start with a lower-case letter: %s", attrVals->attr);
+    gff3AnnErr(g3a, "unknown standard attribute, user defined attributes must start with a lower-case letter: %s", attr->tag);
 }
 
 static void parseStdAttrs(struct gff3Ann *g3a)
@@ -505,11 +521,11 @@ static void parseStdAttrs(struct gff3Ann *g3a)
  * have been parsed into attribute list, which would have  merged multiply
  * specified attributes. */
 {
-struct gff3AttrVals *av;
-for (av = g3a->attrs; av != NULL; av = av->next)
+struct gff3Attr *attr;
+for (attr = g3a->attrs; attr != NULL; attr = attr->next)
     {
-    if (isupper(av->attr[0]))
-        parseStdAttr(g3a, av);
+    if (isupper(attr->tag[0]))
+        parseStdAttr(g3a, attr);
     }
 }
 
@@ -531,16 +547,15 @@ parseStdAttrs(g3a);
 slAddHead(&g3f->anns, g3a);
 }
 
-
-static void writeAttrVals(struct gff3AttrVals *av, FILE *fh)
+static void writeAttr(struct gff3Attr *attr, FILE *fh)
 /* write one attribute and it's values */
 {
-writeEscaped(av->attr, fh);
+writeEscaped(attr->tag, fh);
 fputc('=', fh);
 struct slName *val;
-for (val = av->vals; val != NULL; val = val->next)
+for (val = attr->vals; val != NULL; val = val->next)
     {
-    if (val != av->vals)
+    if (val != attr->vals)
         fputc(',', fh);
     writeEscaped(val->name, fh);
     }
@@ -549,12 +564,12 @@ for (val = av->vals; val != NULL; val = val->next)
 static void writeAttrs(struct gff3Ann *g3a, FILE *fh)
 /* write annotation record attributes */
 {
-struct gff3AttrVals *av;
-for (av = g3a->attrs; av != NULL; av = av->next)
+struct gff3Attr *attr;
+for (attr = g3a->attrs; attr != NULL; attr = attr->next)
     {
-    if (av != g3a->attrs)
+    if (attr != g3a->attrs)
         fputc(';', fh);
-    writeAttrVals(av, fh);
+    writeAttr(attr, fh);
     }
 }
 

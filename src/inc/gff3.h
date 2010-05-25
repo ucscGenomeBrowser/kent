@@ -120,7 +120,7 @@ struct gff3Ann
 
     struct slName *ontologyTerms; /* cross reference to ontology terms. */
 
-    struct gff3AttrVals *attrs;  /* attributes, both user-define and spec-defined,
+    struct gff3Attr *attrs;  /* attributes, both user-define and spec-defined,
                                   * parsed into one or more values */
 
     struct gff3AnnRef *children;  /* child nodes */
@@ -141,12 +141,12 @@ struct gff3AnnRef
     struct gff3Ann *ann;       /* reference to object */
 };
 
-struct gff3AttrVals
+struct gff3Attr
 /* an attribute and string values */
 {
-    struct gff3AttrVals *next;  /* next attribute in the list */
-    char *attr;                 /* name of attribute */
-    struct slName *vals;        /* value for the attribute */
+    struct gff3Attr *next;     /* next attribute in the list */
+    char *tag;                 /* name of attribute */
+    struct slName *vals;       /* values for the attribute */
 };
 
 struct gff3SeqRegion
@@ -190,7 +190,7 @@ struct gff3File
 };
 
 
-/* standard attribute names */
+/* standard attribute tags */
 extern char *gff3AttrID;
 extern char *gff3AttrName;
 extern char *gff3AttrAlias;
@@ -224,7 +224,7 @@ void gff3FileFree(struct gff3File **g3fPtr);
 struct gff3Ann *gff3FileFindAnn(struct gff3File *g3f, char *id);
 /* find an annotation record by id, or NULL if not found. */
 
-struct gff3AttrVals *gff3AnnFindAttr(struct gff3Ann *g3a, char *attr);
+struct gff3Attr *gff3AnnFindAttr(struct gff3Ann *g3a, char *tag);
 /* find a user attribute, or NULL */
 
 void gff3FileWrite(struct gff3File *g3f, char *fileName);

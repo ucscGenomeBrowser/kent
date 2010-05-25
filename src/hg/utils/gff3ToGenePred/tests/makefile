@@ -8,7 +8,7 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest multCdsOutOfExonTest \
-	noIdTest errCases1Test
+	noIdTest errCases1Test bogusQuotesTest
 
 
 geneMRnaTest: mkout
@@ -36,6 +36,11 @@ noIdTest: mkout
 # error cases that should be handled
 errCases1Test: mkout
 	if ! ${gff3ToGenePred} input/errCases1.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else ${cmdShouldFail} ; fi
+	diff expected/$@.out output/$@.out
+
+# error cases involving quotes
+bogusQuotesTest: mkout
+	if ! ${gff3ToGenePred} input/bogusQuotes.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else ${cmdShouldFail} ; fi
 	diff expected/$@.out output/$@.out
 
 
