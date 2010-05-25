@@ -307,7 +307,7 @@ transMapGene psl
 transMapInfo psl
 transMapSrc psl
 transMapTypeDesc psl
-transformFunc bed bedGraph
+transformFunc bed bedGraph wig bigWig
 treeImage wigMaf
 txInfo genePred
 type *
