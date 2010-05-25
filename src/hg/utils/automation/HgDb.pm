@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.8 2010/02/02 20:18:47 larrym Exp $
+# $Id: HgDb.pm,v 1.9 2010/05/25 00:52:56 krish Exp $
 
 package HgDb;
 
@@ -147,6 +147,13 @@ sub getChromSizes
     while(my @row = $sth->fetchrow_array()) {
         $chromInfo->{$row[0]} = $row[1];
     }
+}
+
+sub quote
+{
+# Returns a quoted and escaped version of $string
+    my ($db, $string) = (@_);
+    return $db->{DBH}->quote($string) or die "escaping '$string' failed; error: " . $db->{DBH}->errstr;
 }
 
 1;
