@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.985 2010/05/25 21:52:14 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.986 2010/05/25 22:35:49 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12051,7 +12051,6 @@ wgEncode 1
 
 # Yale ChIP-seq (wrangler: tdreszer)
 track wgEncodeYaleChIPseq
-release alpha,beta
 compositeTrack on
 shortLabel Yale TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Yale/UC-Davis/Harvard
@@ -12073,7 +12072,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
 
     track wgEncodeYaleChIPseqViewPeaks
-    release alpha,beta
     shortLabel Peaks
     view Peaks
     visibility pack
@@ -12087,7 +12085,6 @@ wgEncode 1
     qValueFilterLimits 0:300
 
         track wgEncodeYaleChIPseqPeaksGm12878JundV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 JunD Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
@@ -12096,7 +12093,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878MaxV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 Max Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
@@ -12105,7 +12101,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878NfkbTnfa
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB in GM12878 cells)
@@ -12114,7 +12109,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878Pol2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
@@ -12123,7 +12117,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878Pol3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 Pol3 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol3 in GM12878 cells)
@@ -12132,7 +12125,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878CfosV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 c-Fos Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
@@ -12141,7 +12133,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksHct116Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HCT116 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HCT-116 cells)
@@ -12150,7 +12141,6 @@ wgEncode 1
         color 0,55,219
 
         track wgEncodeYaleChIPseqPeaksHct116Tcf4V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HCT116 TCF7L2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF7L2 in HCT-116 cells)
@@ -12159,7 +12149,6 @@ wgEncode 1
         color 0,55,219
 
         track wgEncodeYaleChIPseqPeaksHek293Pol2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HEK293 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
@@ -12168,7 +12157,6 @@ wgEncode 1
         color 133,0,173
 
         track wgEncodeYaleChIPseqPeaksHelas3Ap2alpha
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa AP-2a Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (AP-2alpha in HeLa-S3 cells)
@@ -12177,7 +12165,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Ap2gamma
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa AP-2g Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (AP-2gamma in HeLa-S3 cells)
@@ -12186,7 +12173,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3E2f4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa E2F4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in HeLa-S3 cells)
@@ -12195,7 +12181,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3E2f6
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa E2F6 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in HeLa-S3 cells)
@@ -12204,7 +12189,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Ha
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa HA-E2F1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in HeLa-S3 cells)
@@ -12213,7 +12197,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Max
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa Max Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in HeLa-S3 cells)
@@ -12222,7 +12205,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Pol2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
@@ -12231,7 +12213,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Tr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa TR4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in HeLa-S3 cells)
@@ -12240,7 +12221,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3ifngStat1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa/Ig3 STAT1 P
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in HeLa/IFNg30 cells)
@@ -12249,7 +12229,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Cfos
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa c-Fos Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in HeLa-S3 cells)
@@ -12258,7 +12237,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Cmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa c-Myc Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
@@ -12267,7 +12245,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Largefragment
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa LgFrag Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Frag Control in HeLa cells)
@@ -12276,7 +12253,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Mouseigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa IgG-mus Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Input/IgG-mus in HeLa cells)
@@ -12285,7 +12261,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHepg2Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2p Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2/pravastatin cells)
@@ -12294,7 +12269,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Srebp1a
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2p SREBP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/pravastatin cells)
@@ -12303,7 +12277,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Srebp2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2 SREBP2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP2 in HepG2 cells)
@@ -12312,7 +12285,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2bTr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2b TR4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in HepG2b cells)
@@ -12321,7 +12293,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksK562Bdp1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 BDP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BDP1 in K562 cells)
@@ -12330,7 +12301,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Brf1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 BRF1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF1 in K562 cells)
@@ -12339,7 +12309,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562JundV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562 JunD Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
@@ -12348,7 +12317,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562MaxV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562 Max Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
@@ -12357,7 +12325,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Nfe2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 NF-E2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
@@ -12366,7 +12333,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Nfya
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 NF-YA Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-YA in K562 cells)
@@ -12375,7 +12341,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Nfyb
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 NF-YB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-YB in K562 cells)
@@ -12384,7 +12349,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Pol2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
@@ -12393,7 +12357,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna30Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia3 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562/IFNa30 cells)
@@ -12402,7 +12365,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna6hPol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia6 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562/IFNa6h cells)
@@ -12411,7 +12373,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifng6hPol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ig6 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562/IFNg6h cells)
@@ -12420,7 +12381,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Pol3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562 Pol3 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol3 in K562 cells)
@@ -12429,7 +12389,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Rad21
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Rad21 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in K562 cells)
@@ -12438,7 +12397,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Rpc155
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 RPC155 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (RPC155 in K562 cells)
@@ -12447,7 +12405,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Sirt6
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 SIRT6 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SIRT6 in K562 cells)
@@ -12456,7 +12413,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna30Stat1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia3 STAT1 P
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNa30 cells)
@@ -12465,7 +12421,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna6hStat1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia6 STAT1 P
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNa6h cells)
@@ -12474,7 +12429,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna30Stat2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia3 STAT2 P
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT2 in K562/IFNa30 cells)
@@ -12483,7 +12437,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna6hStat2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia6 STAT2 P
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT2 in K562/IFNa6h cells)
@@ -12492,7 +12445,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Xrcc4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 XRCC4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (XRCC4 in K562 cells)
@@ -12501,7 +12453,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562CfosV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562 c-Fos Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
@@ -12510,7 +12461,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562CjunV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 c-Jun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
@@ -12519,7 +12469,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna6hCjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia6 cJun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562/IFNa6h cells)
@@ -12528,7 +12477,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifng30Cjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ig3 cJun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562/IFNg30 cells)
@@ -12537,7 +12485,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifng6hCjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ig6 cJun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562/IFNg6h cells)
@@ -12546,7 +12493,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562CmycV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 c-Myc Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
@@ -12555,7 +12501,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna30Cmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia3 cMyc Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562/IFNa30 cells)
@@ -12564,7 +12509,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifna6hCmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ia6 cMyc Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562/IFNa6h cells)
@@ -12573,7 +12517,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ifng6hCmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/Ig6 cMyc Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562/IFNg6h cells)
@@ -12582,7 +12525,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bE2f4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b E2F4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in K562b cells)
@@ -12591,7 +12533,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bE2f6
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b E2F6 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in K562b cells)
@@ -12600,7 +12541,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bGata1V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b GATA-1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562b cells)
@@ -12609,7 +12549,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bGata2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b GATA-2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-2 in K562b cells)
@@ -12618,7 +12557,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bSetdb1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b SETDB1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in K562b cells)
@@ -12627,7 +12565,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bTr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562b TR4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in K562b cells)
@@ -12636,7 +12573,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bYy1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562b YY1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in K562b cells)
@@ -12645,7 +12581,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bZnf263V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b ZNF263 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562b cells)
@@ -12654,7 +12589,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksMcf7Hae2f1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel MCF7 HA-E2F1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in MCF-7 cells)
@@ -12662,7 +12596,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksNb4Pol2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel NB4 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
@@ -12671,7 +12604,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksNt2d1Suz12
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel NT2D1 SUZ12 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SUZ12 in NT2-D1 cells)
@@ -12679,7 +12611,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksNt2d1Yy1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel NT2D1 YY1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in NT2-D1 cells)
@@ -12687,7 +12618,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm12878Yy1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 YY1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in GM12878 cells)
@@ -12696,7 +12626,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksK562bZnf274
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562b ZNF274 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in K562b cells)
@@ -12705,7 +12634,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562/M SETDB1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in K562b/MNase cells)
@@ -12714,7 +12642,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksGm12878Tr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 TR4 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in GM12878 cells)
@@ -12723,7 +12650,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksHelas3E2f1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa E2F1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F1 in HeLa-S3 cells)
@@ -12732,7 +12658,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksGm10847NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM10847 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM10847 cells)
@@ -12740,7 +12665,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm10847Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM10847 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM10847 cells)
@@ -12748,7 +12672,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12878 cells)
@@ -12757,7 +12680,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM12878 cells)
@@ -12766,7 +12688,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12891NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12891 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12891 cells)
@@ -12774,7 +12695,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm12891Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12891 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM12891 cells)
@@ -12782,7 +12702,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm12892NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12892 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12892 cells)
@@ -12790,7 +12709,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm12892Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12892 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM12892 cells)
@@ -12798,7 +12716,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm15510NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM15510 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM15510 cells)
@@ -12806,7 +12723,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm15510Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM15510 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM15510 cells)
@@ -12814,7 +12730,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm18505NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18505 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM18505 cells)
@@ -12822,7 +12737,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm18505Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18505 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM18505 cells)
@@ -12830,7 +12744,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm18526NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18526 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM18526 cells)
@@ -12838,7 +12751,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm18526Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18526 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM18526 cells)
@@ -12846,7 +12758,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm18951NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18951 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM18951 cells)
@@ -12854,7 +12765,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm18951Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM18951 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM18951 cells)
@@ -12862,7 +12772,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm19099NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM19099 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM19099 cells)
@@ -12870,7 +12779,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm19099Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM19099 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM19099 cells)
@@ -12878,7 +12786,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm19193NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM19193 NFKB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM19193 cells)
@@ -12886,7 +12793,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksGm19193Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM19193 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM19193 cells)
@@ -12894,7 +12800,6 @@ wgEncode 1
         type narrowPeak
 
         track wgEncodeYaleChIPseqPeaksK562Brg1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Brg1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in K562 cells)
@@ -12903,7 +12808,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Ini1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Ini1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG-mus in K562 cells)
@@ -12912,7 +12816,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel K562 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in K562 cells)
@@ -12921,7 +12824,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksHelas3Ini1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa Ini1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG-mus in HeLa-S3 cells)
@@ -12930,7 +12832,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Nrf1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa Nrf1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Nrf1/IgG-mus in HeLa-S3 cells)
@@ -12939,7 +12840,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3CjunRabigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa c-Jun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun/IgG-rab in HeLa-S3 cells)
@@ -12948,7 +12848,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3JundRabigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa JunD Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD/IgG-rab in HeLa-S3 cells)
@@ -12957,7 +12856,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHepg2Srebp1aInsln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2i SREBP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/insolin cells)
@@ -12966,7 +12864,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Hsf1Forskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f HSF1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HSF1 in HepG2/forskolin cells)
@@ -12975,7 +12872,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2ErraForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f ERRA Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ERRA in HepG2/forskolin cells)
@@ -12984,7 +12880,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Hnf4aForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f HNF4A Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HNF4A in HepG2/forskolin cells)
@@ -12993,7 +12888,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Pol2Forskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2/forskolin cells)
@@ -13002,7 +12896,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Pgc1aForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f PGC1A Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (PGC1A in HepG2/forskolin cells)
@@ -13011,7 +12904,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2CebpbForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f CEBPB Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (CEBPB in HepG2/forskolin cells)
@@ -13020,7 +12912,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHepg2Grp20Forskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HepG2f GRp20 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GRp20 in HepG2/forskolin cells)
@@ -13029,7 +12920,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqPeaksHelas3Baf155Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa BAF155 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF155/IgG-mus in HeLa-S3 cells)
@@ -13038,7 +12928,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Baf170Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa BAF170 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF170/IgG-mus in HeLa-S3 cells)
@@ -13047,7 +12936,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksK562Ifng30Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Pol2 in K562/IFNg30 cells)
@@ -13056,7 +12944,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Stat1Ifng30
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 STAT1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNg30 cells)
@@ -13065,7 +12952,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Stat1Ifng6h
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 STAT1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNg6h cells)
@@ -13074,7 +12960,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksHuvecPol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HUVEC Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HUVEC cells)
@@ -13083,7 +12968,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqPeaksHuvecCjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HUVEC c-Jun Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in HUVEC cells)
@@ -13092,7 +12976,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqPeaksHuvecMax
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HUVEC Max Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in HUVEC cells)
@@ -13101,7 +12984,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqPeaksGm12878Rad21Iggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 Rad21 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21/IgG-rab in GM12878 cells)
@@ -13110,7 +12992,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878Zzz3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 ZZZ3 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZZZ3 in GM12878 cells)
@@ -13119,7 +13000,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksK562Nelfe
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 NELFe Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NELFe in K562 cells)
@@ -13128,7 +13008,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksHelas3Bdp1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa BDP1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BDP1 in HeLa-S3 cells)
@@ -13137,7 +13016,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Brf1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa BRF1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF1 in HeLa-S3 cells)
@@ -13146,7 +13024,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Brf2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa BRF2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF2 in HeLa-S3 cells)
@@ -13155,7 +13032,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Rpc155
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa RPC155 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (RPC155 in HeLa-S3 cells)
@@ -13164,7 +13040,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksHelas3Tfiiic
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa TFIIIC Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TFIIIC-110 in HeLa-S3 cells)
@@ -13173,7 +13048,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqPeaksK562Atf3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 ATF3 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ATF3 in K562 cells)
@@ -13182,7 +13056,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Gtf2b
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 GTF2B Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GTF2B in K562 cells)
@@ -13191,7 +13064,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Brf2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 BRF2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF2 in K562 cells)
@@ -13200,7 +13072,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksK562Tfiiic
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel K562 TFIIIC Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TFIIIC-110 in K562 cells)
@@ -13209,7 +13080,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel HeLa Brg1 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in HeLa-S3 cells)
@@ -13218,7 +13088,6 @@ wgEncode 1
         color 0,119,158
 
     track wgEncodeYaleChIPseqViewSignal
-    release alpha,beta
     shortLabel Signal
     view Signal
     visibility full
@@ -13231,7 +13100,6 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Jund
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 JunD Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in GM12878 cells)
@@ -13240,7 +13108,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Max
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 Max Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
@@ -13249,7 +13116,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12878NfkbTnfa
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB in GM12878 cells)
@@ -13258,7 +13124,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
@@ -13267,7 +13132,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12878Pol3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 Pol3 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol3 in GM12878 cells)
@@ -13276,7 +13140,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Cfos
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 c-Fos Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
@@ -13285,7 +13148,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 Inp Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
@@ -13294,7 +13156,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalHct116Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HCT116 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HCT-116 cells)
@@ -13303,7 +13164,6 @@ wgEncode 1
         color 0,55,219
 
         track wgEncodeYaleChIPseqRel2SignalHct116Tcf4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HCT116 TCF7L2 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF7L2 in HCT-116 cells)
@@ -13312,7 +13172,6 @@ wgEncode 1
         color 0,55,219
 
         track wgEncodeYaleChIPseqRel2SignalHct116Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HCT116 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
@@ -13321,7 +13180,6 @@ wgEncode 1
         color 0,55,219
 
         track wgEncodeYaleChIPseqRel2SignalHek293Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HEK293 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HEK293 cells)
@@ -13330,7 +13188,6 @@ wgEncode 1
         color 133,0,173
 
         track wgEncodeYaleChIPseqRel2SignalHek293Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HEK293 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
@@ -13340,7 +13197,6 @@ wgEncode 1
         cell HEK293(b)
 
         track wgEncodeYaleChIPseqSignalHelas3Ap2alpha
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa AP-2a Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (AP-2alpha in HeLa-S3 cells)
@@ -13349,7 +13205,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Ap2gamma
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa AP-2g Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (AP-2gamma in HeLa-S3 cells)
@@ -13358,7 +13213,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3E2f4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa E2F4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F4 in HeLa-S3 cells)
@@ -13367,7 +13221,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3E2f6
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa E2F6 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in HeLa-S3 cells)
@@ -13376,7 +13229,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Ha
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa HA-E2F1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in HeLa-S3 cells)
@@ -13385,7 +13237,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Max
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa3 Max Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in HeLa-S3 cells)
@@ -13394,7 +13245,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqRel2SignalHelas3Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HeLa cells)
@@ -13403,7 +13253,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeYaleChIPseqSignalHelas3Tr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa TR4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in HeLa-S3 cells)
@@ -13412,7 +13261,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa/Ig3 STAT1 S
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in HeLa/IFNg30 cells)
@@ -13421,7 +13269,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Cfos
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa c-Fos Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in HeLa-S3 cells)
@@ -13430,7 +13277,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Cmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa c-Myc Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in HeLa-S3 cells)
@@ -13439,7 +13285,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqRel2SignalHelas3Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
@@ -13448,7 +13293,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa/Ig30 Inp Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa/IFNg30 cells)
@@ -13457,7 +13301,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeYaleChIPseqSignalHelas3LargefragmentV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa LgFrag Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Frag Control in HeLa cells)
@@ -13466,7 +13309,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3MnaseV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa MNase Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (MNase Control in HeLa cells)
@@ -13475,7 +13317,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3MouseiggV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in HeLa cells)
@@ -13484,7 +13325,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3NakeddnaV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa DNA Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA, HeLa cells)
@@ -13493,7 +13333,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHepg2Pol2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
@@ -13502,7 +13341,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Srebp1aV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2p SREBP1 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/pravastatin cells)
@@ -13511,7 +13349,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Srebp2V2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2 SREBP2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP2 in HepG2 cells)
@@ -13520,7 +13357,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqRel2SignalHepg2Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
@@ -13529,7 +13365,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2bTr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2b TR4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in HepG2b cells)
@@ -13538,7 +13373,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2bInput
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2b Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2b cells)
@@ -13547,7 +13381,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalK562Bdp1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 BDP1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BDP1 in K562 cells)
@@ -13556,7 +13389,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Brf1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 BRF1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF1 in K562 cells)
@@ -13565,7 +13397,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Jund
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562 JunD Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in K562 cells)
@@ -13574,7 +13405,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Max
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562 Max Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in K562 cells)
@@ -13583,7 +13413,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Nfe2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 NF-E2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
@@ -13592,7 +13421,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Nfya
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 NF-YA Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-YA in K562 cells)
@@ -13601,7 +13429,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Nfyb
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 NF-YB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-YB in K562 cells)
@@ -13610,7 +13437,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562 cells)
@@ -13619,7 +13445,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna30Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia3 Pol2 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNa30 cells)
@@ -13628,7 +13453,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna6hPol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia6 Pol2 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNa6h cells)
@@ -13637,7 +13461,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifng6hPol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ig6 Pol2 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNg6h cells)
@@ -13646,7 +13469,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Pol3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562 Pol3 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol3 in K562 cells)
@@ -13655,7 +13477,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Rad21
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Rad21 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21 in K562 cells)
@@ -13664,7 +13485,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Rpc155
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 RPC155 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (RPC155 in K562 cells)
@@ -13673,7 +13493,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Sirt6
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 SIRT6 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SIRT6 in K562 cells)
@@ -13682,7 +13501,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna30Stat1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia3 STAT1 S
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNa30 cells)
@@ -13691,7 +13509,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna6hStat1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia6 STAT1 S
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNa6h cells)
@@ -13700,7 +13517,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna30Stat2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia3 STAT2 S
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT2 in K562/IFNa30 cells)
@@ -13709,7 +13525,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna6hStat2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia6 STAT2 S
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT2 in K562/IFNa6h cells)
@@ -13718,7 +13533,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Xrcc4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 XRCC4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (XRCC4 in K562 cells)
@@ -13727,7 +13541,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Cfos
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562 c-Fos Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in K562 cells)
@@ -13736,7 +13549,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Cjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 c-Jun Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562 cells)
@@ -13745,7 +13557,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna6hCjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia6 cJun Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562/IFNa6h cells)
@@ -13754,7 +13565,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifng30Cjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ig30 cJun S
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562/IFNg30 cells)
@@ -13763,7 +13573,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifng6hCjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ig6 cJun Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562/IFNg6h cells)
@@ -13772,7 +13581,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562Cmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 c-Myc Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562 cells)
@@ -13781,7 +13589,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna30Cmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia3 cMyc Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562/IFNa30 cells)
@@ -13790,7 +13597,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna6hCmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia6 cMyc Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562/IFNa6h cells)
@@ -13799,7 +13605,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifng6hCmyc
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ig6 cMyc Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562/IFNg6h cells)
@@ -13808,7 +13613,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalRep1K562InputV2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
@@ -13817,7 +13621,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna30Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia3 Inp Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNa30 cells)
@@ -13826,7 +13629,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifna6hInput
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ia6 Inp Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNa6h cells)
@@ -13835,7 +13637,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifng30Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ig3 Inp Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNg30 cells)
@@ -13844,7 +13645,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ifng6hInput
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/Ig6 Inp Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNg6h cells)
@@ -13853,7 +13653,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bE2f4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b E2F4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F4 in K562b cells)
@@ -13862,7 +13661,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bE2f6
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b E2F6 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in K562b cells)
@@ -13871,7 +13669,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562bGata1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b GATA1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562b cells)
@@ -13880,7 +13677,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bGata2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b GATA-2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in K562b cells)
@@ -13889,7 +13685,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bSetdb1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b SETDB1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in K562b cells)
@@ -13898,7 +13693,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bTr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562b TR4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in K562b cells)
@@ -13907,7 +13701,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bYy1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562b YY1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in K562b cells)
@@ -13916,7 +13709,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqRel2SignalK562bZnf263
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 ZNF263 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
@@ -13925,7 +13717,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562bInput
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562b cells)
@@ -13934,7 +13725,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalMcf7Hae2f1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel MCF7 HA-E2F1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in MCF-7 cells)
@@ -13942,7 +13732,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqRel2SignalNb4Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel NB4 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
@@ -13951,7 +13740,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqRel2SignalNb4Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel NB4 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
@@ -13960,7 +13748,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalNt2d1Suz12
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel NT2D1 SUZ12 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in NT2-D1 cells)
@@ -13968,7 +13755,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalNt2d1Yy1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel NT2D1 YY1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in NT2-D1 cells)
@@ -13976,7 +13762,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalNt2d1Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel NT2D1 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NT2-D1 cells)
@@ -13984,7 +13769,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12878Yy1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 YY1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in GM12878 cells)
@@ -13993,7 +13777,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalK562bZnf274
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562b ZNF274 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in K562b cells)
@@ -14001,26 +13784,7 @@ wgEncode 1
         type bedGraph 4
         color 46,0,184
 
-        track wgEncodeYaleChIPseqSignalK562Mouseigg
-        release alpha,beta
-        parent wgEncodeYaleChIPseqViewSignal off
-        shortLabel K562 mIgG Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in K562 cells)
-        subGroups view=Signal factor=yIGm cellType=t1K562
-        type bedGraph 4
-        color 46,0,184
-
-        track wgEncodeYaleChIPseqSignalHelas3Baf155
-        release alpha,beta
-        parent wgEncodeYaleChIPseqViewSignal off
-        shortLabel HeLa BAF155 Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF155 in HeLa-S3 cells)
-        subGroups view=Signal factor=BAF155 cellType=t2HeLa
-        type bedGraph 4
-        color 0,119,158
-
         track wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562/M SETDB1 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in K562b/MNase cells)
@@ -14029,7 +13793,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalGm12878Tr4
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 TR4 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in GM12878 cells)
@@ -14038,7 +13801,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalHelas3E2f1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa E2F1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F1 in HeLa-S3 cells)
@@ -14047,7 +13809,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalGm10847MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM10847 cells)
@@ -14055,7 +13816,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm10847NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM10847 cells)
@@ -14063,7 +13823,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm10847Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM10847 cells)
@@ -14071,7 +13830,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12878MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12878 cells)
@@ -14080,7 +13838,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12878NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12878 cells)
@@ -14089,7 +13846,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12878Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM12878 cells)
@@ -14098,7 +13854,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12891MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12891 cells)
@@ -14106,7 +13861,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12891NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12891 cells)
@@ -14114,7 +13868,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12891Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM12891 cells)
@@ -14122,7 +13875,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12892MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12892 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12892 cells)
@@ -14130,7 +13882,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12892NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12892 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12892 cells)
@@ -14138,7 +13889,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12892Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12892 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM12892 cells)
@@ -14146,7 +13896,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm15510MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM15510 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM15510 cells)
@@ -14154,7 +13903,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm15510NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM15510 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM15510 cells)
@@ -14162,7 +13910,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm15510Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM15510 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM15510 cells)
@@ -14170,7 +13917,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18505MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18505 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM18505 cells)
@@ -14178,7 +13924,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18505NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18505 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM18505 cells)
@@ -14186,7 +13931,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18505Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18505 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM18505 cells)
@@ -14194,7 +13938,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18526MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18526 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM18526 cells)
@@ -14202,7 +13945,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18526NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18526 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM18526 cells)
@@ -14210,7 +13952,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18526Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18526 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM18526 cells)
@@ -14218,7 +13959,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18951MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18951 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM18951 cells)
@@ -14226,7 +13966,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18951NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18951 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM18951 cells)
@@ -14234,7 +13973,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18951Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18951 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM18951 cells)
@@ -14242,7 +13980,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19099MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19099 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM19099 cells)
@@ -14250,7 +13987,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19099NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19099 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM19099 cells)
@@ -14258,7 +13994,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19099Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19099 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM19099 cells)
@@ -14266,7 +14001,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19193MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19193 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM19193 cells)
@@ -14274,7 +14008,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19193NfkbIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19193 NFKB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM19193 cells)
@@ -14282,7 +14015,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19193Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19193 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM19193 cells)
@@ -14290,7 +14022,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalK562Brg1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Brg1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in K562 cells)
@@ -14299,7 +14030,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562MusiggMusigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 mIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in K562 cells)
@@ -14308,7 +14038,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Ini1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Ini1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG-mus in K562 cells)
@@ -14317,7 +14046,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Pol2Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in K562 cells)
@@ -14326,7 +14054,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalHelas3Ini1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa Ini1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG-mus in HeLa-S3 cells)
@@ -14335,7 +14062,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa Nrf1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Nrf1/IgG-mus in HeLa-S3 cells)
@@ -14344,7 +14070,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Rabigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-rab in HeLa-S3 cells)
@@ -14353,7 +14078,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3CjunRabigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa c-Jun Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun/IgG-rab in HeLa-S3 cells)
@@ -14362,7 +14086,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3JundRabigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa JunD Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD/IgG-rab in HeLa-S3 cells)
@@ -14371,7 +14094,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHepg2ControlInsln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2i Ctrl Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/insolin cells)
@@ -14380,7 +14102,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Srebp1aInsln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2i SREBP1 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/insolin cells)
@@ -14389,7 +14110,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2ControlForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f Ctrl Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/forskolin cells)
@@ -14398,7 +14118,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Hsf1Forskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f HSF1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HSF1 in HepG2/forskolin cells)
@@ -14407,7 +14126,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2ErraForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f ERRA Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ERRA in HepG2/forskolin cells)
@@ -14416,7 +14134,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Hnf4aForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f HNF4A Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HNF4A in HepG2/forskolin cells)
@@ -14425,7 +14142,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Pol2Forskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2/forskolin cells)
@@ -14434,7 +14150,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Pgc1aForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f PGC1A Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (PGC1A in HepG2/forskolin cells)
@@ -14443,7 +14158,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2CebpbForskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f CEBPB Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (CEBPB in HepG2/forskolin cells)
@@ -14452,7 +14166,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHepg2Grp20Forskln
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HepG2f GRp20 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GRp20 in HepG2/forskolin cells)
@@ -14461,7 +14174,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeYaleChIPseqSignalHelas3Baf155Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa BAF155 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF155/IgG-mus in HeLa-S3 cells)
@@ -14470,7 +14182,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Baf170Musigg
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa BAF170 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF170/IgG-mus in HeLa-S3 cells)
@@ -14479,7 +14190,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalK562Ifng30Pol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Pol2 in K562/IFNg30 cells)
@@ -14488,7 +14198,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Stat1Ifng30
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 STAT1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNg30 cells)
@@ -14497,7 +14206,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Stat1Ifng6h
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 STAT1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNg6h cells)
@@ -14506,7 +14214,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalHuvecPol2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HUVEC Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HUVEC cells)
@@ -14515,7 +14222,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqSignalHuvecCjun
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HUVEC c-Jun Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HUVEC cells)
@@ -14524,7 +14230,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqSignalHuvecMax
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HUVEC Max Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in HUVEC cells)
@@ -14533,7 +14238,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqSignalGm12878Rad21Iggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 Rad21 Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21/IgG-rab in GM12878 cells)
@@ -14542,7 +14246,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12878Zzz3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 ZZZ3 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZZZ3 in GM12878 cells)
@@ -14551,7 +14254,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalK562Nelfe
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 NELFe Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NELFe in K562 cells)
@@ -14560,7 +14262,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalHelas3Bdp1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa BDP1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BDP1 in HeLa-S3 cells)
@@ -14569,7 +14270,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Brf1
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa BRF1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF1 in HeLa-S3 cells)
@@ -14578,7 +14278,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Brf2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa BRF2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF2 in HeLa-S3 cells)
@@ -14587,7 +14286,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Rpc155
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa RPC155 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (RPC155 in HeLa-S3 cells)
@@ -14596,7 +14294,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalHelas3Tfiiic
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa TFIIIC Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TFIIIC-110 in HeLa-S3 cells)
@@ -14605,7 +14302,6 @@ wgEncode 1
         color 0,119,158
 
         track wgEncodeYaleChIPseqSignalK562Atf3
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 ATF3 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ATF3 in K562 cells)
@@ -14614,7 +14310,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Gtf2b
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 GTF2B Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GTF2B in K562 cells)
@@ -14623,7 +14318,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Brf2
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 BRF2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF2 in K562 cells)
@@ -14632,7 +14326,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalK562Tfiiic
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel K562 TFIIIC Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TFIIIC-110 in K562 cells)
@@ -14641,7 +14334,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeYaleChIPseqSignalMcf7Input
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel MCF7 Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in MCF-7 cells)
@@ -14649,7 +14341,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm10847InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM10847 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM10847 cells)
@@ -14657,7 +14348,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12878InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12878 cells)
@@ -14666,7 +14356,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12892InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12892 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12892 cells)
@@ -14674,7 +14363,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm12891InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12891 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12891 cells)
@@ -14682,7 +14370,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm15510InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM15510 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM15510 cells)
@@ -14690,7 +14377,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18505InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18505 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18505 cells)
@@ -14698,7 +14384,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18526InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18526 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18526 cells)
@@ -14706,7 +14391,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm18951InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM18951 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18951 cells)
@@ -14714,7 +14398,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19099InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19099 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM19099 cells)
@@ -14722,7 +14405,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalGm19193InputIggrab
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM19193 rIgG Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM19193 cells)
@@ -14730,7 +14412,6 @@ wgEncode 1
         type bedGraph 4
 
         track wgEncodeYaleChIPseqSignalHuvecInputStd
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HUVEC Input Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input in HUVEC cells)
@@ -14739,7 +14420,6 @@ wgEncode 1
         color 224,75,0
 
         track wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus
-        release alpha,beta
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel HeLa Brg1 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in HeLa-S3 cells)
