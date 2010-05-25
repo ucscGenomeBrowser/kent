@@ -84,9 +84,19 @@ def same_file(x, y):
             return False    # different sizes
         else:   # now check md5s of the two files
             md5_x = md5.new()
-            md5_x.update(open(x).read())
+            file_x = open(x)
+            block = file_x.read(2**24)
+            while block != "":
+                md5_x.update(block)
+                block = file_x.read(2**24)
+
             md5_y = md5.new()
-            md5_y.update(open(y).read())
+            file_y = open(y)
+            block = file_y.read(2**24)
+            while block != "":
+                md5_y.update(block)
+                block = file_y.read(2**24)
+
             return md5_x.digest() == md5_y.digest()
 
 #### Main ######################################################################
@@ -141,7 +151,7 @@ def main(argv=None):
     # if new relase, add the full path to all files
     path_prefix = ""
     if prev_release_dir == "-":
-        path_prefix = "/usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" \
+        path_prefix = "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" \
             % (database, options.composite_name, current_release_dir)
 
     # generate the list of files
@@ -401,9 +411,9 @@ D) Additional items of note
         assert len(unchanged_gbdbs_list) == 0
     else:
         print "    current location on alpha:"
-        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
+        print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
         print "    on RR:"
-        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+        print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
         print
         unchanged_files_list.sort()
         for i in unchanged_files_list:
@@ -430,9 +440,9 @@ D) Additional items of note
         print "    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR)."
         print "    This list is provided for completeness. Any files marked here as in gbdb may be eliminated."
         print "    current location on alpha:"
-        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, prev_release_dir)
+        print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, prev_release_dir)
         print "    on RR:"
-        print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+        print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
         print
 
         removed_files_list.sort()
@@ -455,9 +465,9 @@ D) Additional items of note
     print "C') New files (%d downloadables, %d gbdbs):" % (len(new_files_list),
                                                          len(new_gbdbs_list))
     print "    current location on alpha:"
-    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
+    print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    NOT on RR but must be placed in:"
-    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+    print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
 
     new_files_list.sort()
@@ -472,9 +482,9 @@ D) Additional items of note
 
     print "D) Additional items:"
     print "    current location on alpha:"
-    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
+    print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    should be placed on the RR in (overwritting any existing copy):"
-    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+    print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
     for f in addition_files:
         print f
