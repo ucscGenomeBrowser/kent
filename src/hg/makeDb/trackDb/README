@@ -556,6 +556,9 @@ Some settings used by various tracks:
     o inputTracksSubgroupDisplay - used with inputTracks.  A list of group types
       (just the left size of the var=val pairs in the subGroupN line of the parent)
       to display as columns in the details display table.
+    o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
+      a table of tracks and this is set, a small patch of color indicating the track color
+      is part of the table.
 
 Specific, optional settings used only by snp125, snp126, and so on:
     o chimpMacaqueOrthoTable table - table contains orthologous
