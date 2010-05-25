@@ -19,8 +19,8 @@ use strict;
 #
 # Default behaviors, changeable by command line args:
 #
-my $kentSrc   = "/cluster/home/angie/kentclean/src";
-my $gbdDPath  = "/cluster/home/angie/browser/goldenPath/gbdDescriptions.html";
+my $kentSrc   = "/cluster/home/galt/kentclean/src";
+my $gbdDPath  = "/cluster/home/galt/browser/goldenPath/gbdDescriptions.html";
 my $noLoad    = 0;
 my $verbose   = 0;
 
