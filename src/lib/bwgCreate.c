@@ -15,7 +15,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.23 2010/04/06 23:42:10 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.24 2010/05/25 19:24:16 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -435,7 +435,7 @@ else
     errAbort("Unknown type %s\n", typeWord);
 
 /* Set up defaults for values we hope to parse out of rest of line. */
-int span = 1;
+int span = 0;
 bits32 step = 0;
 bits32 start = 0;
 char *chrom = NULL;
@@ -482,6 +482,8 @@ if (type == bwgTypeFixedStep)
 	errAbort("Missing start= setting line %d of %s\n", lf->lineIx, lf->fileName);
     if (step == 0)
 	errAbort("Missing step= setting line %d of %s\n", lf->lineIx, lf->fileName);
+    if (span == 0)
+	span = step;
     parseFixedStepSection(lf, clipDontDie, lm, itemsPerSlot, 
     	chrom, chromSize, span, start-1, step, pSectionList);
     }
@@ -491,6 +493,8 @@ else
 	errAbort("Extra start= setting line %d of %s\n", lf->lineIx, lf->fileName);
     if (step != 0)
 	errAbort("Extra step= setting line %d of %s\n", lf->lineIx, lf->fileName);
+    if (span == 0)
+	span = 1;
     parseVariableStepSection(lf, clipDontDie, lm, itemsPerSlot, 
     	chrom, chromSize, span, pSectionList);
     }
