@@ -9,7 +9,7 @@
 #include "wikiTrack.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.27 2010/02/10 21:41:36 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.28 2010/05/25 23:39:07 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -1085,7 +1085,7 @@ char *wikiUrl(struct wikiTrack *item)
 {
 char *siteUrl = cfgOptionDefault(CFG_WIKI_URL, NULL);
 struct dyString *itemUrl = dyStringNew(64);
-dyStringPrintf(itemUrl, "%s/index.php/%s\" TARGET=_blank", siteUrl,
+dyStringPrintf(itemUrl, "%s/index.php/%s TARGET=_blank", siteUrl,
         item->descriptionKey);
 return dyStringCannibalize(&itemUrl);
 }
