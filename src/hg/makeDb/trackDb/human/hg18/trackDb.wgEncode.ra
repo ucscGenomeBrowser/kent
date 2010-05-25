@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.986 2010/05/25 22:35:49 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.987 2010/05/25 23:08:58 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -8210,6 +8210,7 @@ group regulation
     superTrack wgEncodeReg full
     shortLabel Transcription
     longLabel Transcription levels assayed by RNA-seq from ENCODE work of Wold lab at Cal Tech
+    release alpha
     configurable on
     visibility full
     maxHeightPixels 100:30:11
@@ -8223,6 +8224,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
 	shortLabel	Gm12878
 	longLabel Transcription of Gm12878 cells from ENCODE
+        release alpha
 	parent wgEncodeRegTxn
         type wig 0.00 2446.53
 	color 255,128,128
@@ -8231,6 +8233,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75
 	shortLabel	H1 ES
 	longLabel Transcription of H1 ES cells from ENCODE 
+        release alpha
 	parent wgEncodeRegTxn
         type wig 0.00 3686.36
 	color 255,223,128
@@ -8239,6 +8242,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1HuvecCellPapBb2R2x75
 	shortLabel	HUVEC
 	longLabel Transcription of HUVEC cells from ENCODE 
+        release alpha
 	parent wgEncodeRegTxn
         type wig 0.00 1889.44
 	color 128,255,255
@@ -8247,6 +8251,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75
 	shortLabel	K562
 	longLabel Transcription of K562 cells from ENCODE 
+        release alpha
 	parent wgEncodeRegTxn
         type wig 0.00 2716.04
 	color 128,159,255
@@ -8255,6 +8260,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1NhekCellPapBb2R2x75
 	shortLabel	NHEK
 	longLabel Transcription of NHEK cells from ENCODE 
+        release alpha
 	parent wgEncodeRegTxn
 	type wig 0.00 4417.02
 	color 191,128,255
