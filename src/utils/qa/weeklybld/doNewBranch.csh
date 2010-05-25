@@ -145,7 +145,7 @@ echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e CvsReports.ok ) then
     echo "CVS Reports finished ok. [${0}: `date`]"
     echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
-    echo "Ready for pairings, day 9, CVS reports completed for v${BRANCHNN} review http://hgwdev.cse.ucsc.edu/cvs-reports/ (history at http://hgwdev.cse.ucsc.edu/cvs-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
+    echo "Ready for pairings, day 9, CVS reports completed for v${BRANCHNN} review http://genecats.cse.ucsc.edu/cvs-reports/ (history at http://genecats.cse.ucsc.edu/cvs-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
 else
     echo "CVS Reports had some error, no ok file found. [${0}: `date`]"
 endif
