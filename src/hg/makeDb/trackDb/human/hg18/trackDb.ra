@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.489 2010/05/24 20:33:37 braney Exp $";
+#	"$Id: trackDb.ra,v 1.490 2010/05/25 19:14:04 kent Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -1524,7 +1524,7 @@ shortLabel SNP Arrays
 longLabel SNP Genotyping Arrays
 group varRep
 priority 101
-visibility dense
+visibility hide
 type bed 4 .
 
     track snpArrayAffy6
@@ -3322,7 +3322,7 @@ priority 103.29
     sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 calJac1 tarSyr1 micMur1 otoGar1
     sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr2 proCap1 echTel1 dasNov2 choHof1
     sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 gasAcu1 oryLat2 danRer5 petMar1
-    speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
+    speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 otoGar1 equCab2 tarSyr1 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
     itemFirstCharCase noChange
     treeImage phylo/hg18_44way.gif
     priority 100
@@ -3332,7 +3332,7 @@ priority 103.29
     view phyloP
     visibility full
     parent cons44way
-    viewLimits -.3:2
+    viewLimits -0.5:3.0
     viewLimitsMax -15.41:7.13
 
         # PhyloP conservation
@@ -3345,10 +3345,8 @@ priority 103.29
         configurable on
         type wig -8.17 .99
         maxHeightPixels 100:50:11
-        viewLimits -.3:2
         autoScale off
         spanList 1
-        windowingFunction mean
         color 10,10,70
         altColor 70,10,10
         priority 1
@@ -3362,10 +3360,7 @@ priority 103.29
         configurable on
         type wig -14.42 3.46
         maxHeightPixels 100:50:11
-        viewLimits -.3:2
-        autoScale off
         spanList 1
-        windowingFunction mean
         color 25,25,95
         altColor 95,25,25
         priority 3
@@ -3379,8 +3374,6 @@ priority 103.29
         configurable on
         type wig -15.41 7.13
         maxHeightPixels 100:50:11
-        viewLimits -.3:2
-        autoScale off
         spanList 1
         windowingFunction mean
         color 40,40,120
@@ -3388,57 +3381,54 @@ priority 103.29
         priority 4
 
         # PhyloP V2 conservation (chrX-specific tree)
-        track phyloP44wayPrimates_v2
-        parent cons44wayViewphyloP off
-        subGroups view=phyloP clade=primate
-        shortLabel Primate Cons2
-        longLabel Primate Basewise Conservation by PhyloP V2
-        noInherit on
-        configurable on
-        type wig -7.87 .69
-        maxHeightPixels 100:50:11
-        viewLimits -.3:2
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 10,10,70
-        altColor 70,10,10
-        priority 5
+        #track phyloP44wayPrimates_v2
+        #parent cons44wayViewphyloP off
+        #subGroups view=phyloP clade=primate
+        #shortLabel Primate Cons2
+        #longLabel Primate Basewise Conservation by PhyloP V2
+        #noInherit on
+	#visibility hide
+        #configurable on
+        #type wig -7.87 .69
+        #maxHeightPixels 100:50:11
+        #autoScale off
+        #spanList 1
+        #windowingFunction mean
+        #color 10,10,70
+        #altColor 70,10,10
+        #priority 5
 
-        track phyloP44wayPlacental_v2
-        parent cons44wayViewphyloP on
-        subGroups view=phyloP clade=mammal
-        shortLabel Mammal Cons2
-        longLabel Placental Mammal Basewise Conservation by PhyloP V2
-	visibility hide
-        noInherit on
-        configurable on
-        type wig -14.12 3.15
-        maxHeightPixels 100:50:11
-        viewLimits -.3:2
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 25,25,95
-        altColor 95,25,25
-        priority 6
+        #track phyloP44wayPlacental_v2
+        #parent cons44wayViewphyloP on
+        #subGroups view=phyloP clade=mammal
+        #shortLabel Mammal Cons2
+        #longLabel Placental Mammal Basewise Conservation by PhyloP V2
+        #noInherit on
+        #configurable on
+        #type wig -14.12 3.15
+        #maxHeightPixels 100:50:11
+        #autoScale off
+        #spanList 1
+        #windowingFunction mean
+        #color 25,25,95
+        #altColor 95,25,25
+        #priority 6
 
-        track phyloP44way_v2
-        parent cons44wayViewphyloP off
-        subGroups view=phyloP clade=vert
-        shortLabel Vertebrate Cons2
-        longLabel Vertebrate Basewise Conservation by PhyloP V2
-        noInherit on
-        configurable on
-        type wig -15.11 6.83
-        maxHeightPixels 100:50:11
-        viewLimits -.3:2
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 40,40,120
-        altColor 120,40,40
-        priority 8
+        #track phyloP44way_v2
+        #parent cons44wayViewphyloP off
+        #subGroups view=phyloP clade=vert
+        #shortLabel Vertebrate Cons2
+        #longLabel Vertebrate Basewise Conservation by PhyloP V2
+        #noInherit on
+        #configurable on
+        #type wig -15.11 6.83
+        #maxHeightPixels 100:50:11
+        #autoScale off
+        #spanList 1
+        #windowingFunction mean
+        #color 40,40,120
+        #altColor 120,40,40
+        #priority 8
 
     track cons44wayViewphastcons
     shortLabel Element Conservation (phastCons)
