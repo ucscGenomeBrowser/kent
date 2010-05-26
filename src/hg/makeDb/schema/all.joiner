@@ -2113,6 +2113,25 @@ identifier snpExceptions130
     $gbd.snp130ExceptionDesc.exception
     $gbd.snp130Exceptions.exception
 
+identifier snpName131
+"dbSNP version 131 rs* identifiers"
+    $gbd.snp131.name dupeOk
+    $gbd.snp131Exceptions.name minCheck=.999
+    $gbd.snp131Seq.acc minCheck=.98
+    $gbd.snp131CodingDbSnp.name minCheck=.90
+    $hg.snp131OrthoPt2Pa2Rm2.name
+    hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
+    hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
+    hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
+    # gwasCatalog SNPs were mapped to genome using snp131.  Move this and update trackDb
+    # settings if we remap to new version:
+    $hg.gwasCatalog.name minCheck=0.99
+
+identifier snpExceptions131
+"Annotations of unusual conditions in dbSNP version 131"
+    $gbd.snp131ExceptionDesc.exception
+    $gbd.snp131Exceptions.exception
+
 # Other NCBI Identifiers
 
 identifier locusLinkId external=LocusLink
