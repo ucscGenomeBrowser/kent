@@ -14,6 +14,7 @@
 #include "versionInfo.h"
 #include "web.h"
 #include "cds.h"
+#include "ra.h"
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -87,6 +88,61 @@ retVal = setting && strlen(setting) &&
 return retVal;
 }
 
+// XXXX got this code from hgEncodeVocab.c; it should be moved into a library (kent/src/hg/lib/encode.c?)
+
+static char *cv_file()
+{
+static char filePath[PATH_LEN];
+safef(filePath, sizeof(filePath), "%s/encode/cv.ra", hCgiRoot());
+if(!fileExists(filePath))
+    errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
+return filePath;
+}
+
+static int termCmp(const void *va, const void *vb)
+/* Compare controlled vocab based on term value */
+{
+const struct hash *a = *((struct hash **)va);
+const struct hash *b = *((struct hash **)vb);
+char *termA = hashMustFindVal((struct hash *)a, "term");
+char *termB = hashMustFindVal((struct hash *)b, "term");
+return (strcasecmp(termA, termB));
+}
+
+static int getTermList(struct hash *cvHash, char ***terms, char *type)
+{
+// Pull out all term fields from ra entries with given type
+// Returns count of items found and items via the terms argument.
+
+struct hashCookie hc;
+struct hashEl *hEl;
+struct slList *termList = NULL;
+struct hash *ra;
+int i, count = 0;
+char **retval;
+
+hc = hashFirst(cvHash);
+while ((hEl = hashNext(&hc)) != NULL)
+    {
+    ra = (struct hash *) hEl->val;
+    if(sameString(hashMustFindVal(ra, "type"), type))
+        {
+        slAddTail(&termList, ra);
+        count++;
+        }
+    }
+slSort(&termList, termCmp);
+retval = needMem(sizeof(char *) * (count + 1));
+retval[0] = cloneString("Any");
+for(i=0; termList != NULL;termList = termList->next, i++)
+    {
+    ra = (struct hash *) termList;
+    retval[i+1] = cloneString(hashMustFindVal(ra, "term"));
+    }
+*terms = retval;
+return count + 1;
+}
+
 void doSearchTracks(struct group *groupList)
 {
 struct group *group;
@@ -107,6 +163,11 @@ char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
 char *metaName = cartOptionalString(cart, "hgt.metaName");
 char *metaOp = cartOptionalString(cart, "hgt.metaOp");
 char *metaSearch = cartOptionalString(cart, "hgt.metaSearch");
+char *antibodySearch = cartOptionalString(cart, "hgt.antibodySearch");
+char *cellSearch = cartOptionalString(cart, "hgt.cellSearch");
+char **terms;
+int len;
+struct hash *cvHash = raReadAll(cv_file(), "term");
 
 // struct track *trackList = 
 getTrackList(&groupList, -2);
@@ -138,9 +199,20 @@ hPrintf("</td>\n<td><input type='text' name='hgt.descSearch' value='%s'></td></t
 
 hPrintf("<tr><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td>is</td>\n<td>\n");
-
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
+hPrintf("</td></tr>\n");
 
+
+hPrintf("<tr><td>and</td>\n");
+hPrintf("<td><b>Antibody</b></td><td>is</td>\n<td>\n");
+len = getTermList(cvHash, &terms, "Antibody");
+cgiMakeDropListFull("hgt.antibodySearch", terms, terms, len, antibodySearch, NULL);
+hPrintf("</td></tr>\n");
+
+hPrintf("<tr><td>and</td>\n");
+hPrintf("<td><b>Cell Line</b></td><td>is</td>\n<td>\n");
+len = getTermList(cvHash, &terms, "Cell Line");
+cgiMakeDropListFull("hgt.cellSearch", terms, terms, len, cellSearch, NULL);
 hPrintf("</td></tr>\n");
 
 hPrintf("<tr><td>and</td><td>\n");
@@ -168,7 +240,15 @@ if(metaSearch != NULL && !strlen(metaSearch))
     {
     metaSearch = NULL;
     }
-if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || metaSearch != NULL)
+if(antibodySearch != NULL && sameString(antibodySearch, "Any"))
+    {
+    antibodySearch = NULL;
+    }
+if(cellSearch != NULL && sameString(cellSearch, "Any"))
+    {
+    cellSearch = NULL;
+    }
+if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || metaSearch != NULL || antibodySearch != NULL || cellSearch != NULL)
     {
     for (group = groupList; group != NULL; group = group->next)
         {
@@ -182,6 +262,8 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
                     struct track *track = tr->track;
                     if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) && 
                        (isEmpty(descSearch) || isDescriptionMatch(track, descSearch, descOp)) &&
+                       (isEmpty(antibodySearch) || isMetaMatch(track, "antibody", "is", antibodySearch)) &&
+                       (isEmpty(cellSearch) || isMetaMatch(track, "cell", "is", cellSearch)) &&
                        (isEmpty(metaName) || isEmpty(metaSearch) || isMetaMatch(track, metaName, metaOp, metaSearch)))
                         {
                         tracksFound++;
@@ -198,6 +280,8 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
 //                            fprintf(stderr, "search track: %s\n", subTrack->shortLabel);
                             if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
                                (isEmpty(descSearch) || isDescriptionMatch(subTrack, descSearch, descOp)) &&
+                               (isEmpty(antibodySearch) || isMetaMatch(subTrack, "antibody", "is", antibodySearch)) &&
+                               (isEmpty(cellSearch) || isMetaMatch(subTrack, "cell", "is", cellSearch)) &&
                                (isEmpty(metaName) || isEmpty(metaSearch) || isMetaMatch(subTrack, metaName, metaOp, metaSearch)))
                                 {
                                 // XXXX to parent hash. - use tdb->parent instead.
@@ -221,6 +305,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
         hPrintf("<p>%d tracks found:</p>\n", tracksFound);
         hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
         hButton("submit", "save");
+        hButtonWithOnClick("hgt.ignoreme", "show all", "show all found tracks", "alert('show all not yet implemented'); return false;");
         hPrintf("<table>\n");
         hPrintf("<tr bgcolor='#666666'><td><b>Name</b></td><td><b>Description</b></td><td><b>Group</b></td><td><br /></td></tr>\n");
         struct slRef *ptr;
@@ -230,7 +315,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
             // trackDbOutput(track->tdb, stderr, ',', '\n');
             hPrintf("<tr bgcolor='#EEEEEE'>\n");
             hPrintf("<td>%s</td>\n", track->shortLabel);
-            hPrintf("<td>%s</td>\n", track->longLabel);
+            hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->mapName, NULL), track->longLabel);
             // How do we get subtrack's parent?
             struct track *parent = NULL;
             if(hashLookup(parents, track->track) != NULL)
