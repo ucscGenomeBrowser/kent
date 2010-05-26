@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.226 2010/05/25 19:46:57 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.227 2010/05/26 18:25:20 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1385,6 +1385,7 @@ my $ddfFile = Encode::newestFile(@glob);
 die "ERROR: Can't find DDF file\n" unless -e $ddfFile;
 my $ddfFileTime = (stat($ddfFile))->ctime;
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($ddfFileTime);
+my $dateSubmitted    = sprintf("%04d-%02d-%02d", 1900 + $year, $mon + 1, $mday);
 
 HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 my $lines = Encode::readFile($ddfFile);
@@ -1691,6 +1692,7 @@ $ddfLineNumber = 1;
 # use pi.ra file to map pi/lab/institution/grant/project for metadata line
 my $labRef = Encode::getLabs($configPath);
 my %labs = %{$labRef};
+my $subId = 0;
 
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
@@ -1746,8 +1748,11 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " origAssembly=$ddfLine->{origAssembly}" if $ddfLine->{origAssembly};
     $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
     if($submitDir =~ /(\d+)$/) {
-        $metadata .= " subId=$1";
+        $subId = $1;
+    } elsif($submitDir =~ /(\d+)/) {
+        $subId = $1;
     }
+    $metadata .= " subId=$subId";
     if (defined($daf->{dataVersion}) && $daf->{dataVersion} > 1) {
         die "Need dataVersionComment in DAF when dataVersion is supplied\n" if (!defined($daf->{dataVersionComment}));
         $metadata .= ' submittedDataVersion="' . "V$daf->{dataVersion}" . " - $daf->{dataVersionComment}" . '"';
@@ -1887,7 +1892,6 @@ foreach my $ddfLine (@ddfLines) {
     $tableName =~ s/[^A-Za-z0-9]//g;
 
     my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($ddfFileTime); # Use DDF time
-    my $dateSubmitted    = sprintf("%04d-%02d-%02d", 1900 + $year, $mon + 1, $mday);
     my $dateUnrestricted = sprintf("%04d-%02d-%02d", 1900 + $rYear, $rMon + 1, $rMDay);
 
 
@@ -2048,10 +2052,6 @@ foreach my $ddfLine (@ddfLines) {
         } else {
             print TRACK_RA "    type $type\n";
         }
-        # Obsolete: now in metadata
-        # print TRACK_RA sprintf("    dateSubmitted %04d-%02d-%02d\n", 1900 + $year, $mon + 1, $mday);
-        # print TRACK_RA sprintf("    dateUnrestricted %04d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
-        # print TRACK_RA sprintf("    dataVersion %s\n", $Encode::dataVersion);
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
         }
@@ -2068,6 +2068,7 @@ foreach my $ddfLine (@ddfLines) {
         # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
         # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
         print MDB_TXT sprintf("metadata %s\n", $metadata);
+        print TRACK_RA sprintf("    # subId=%s dateSubmitted=%s\n", $subId,$dateSubmitted);
         print TRACK_RA "\n";
     }
 }
