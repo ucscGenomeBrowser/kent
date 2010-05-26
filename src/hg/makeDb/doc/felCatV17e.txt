@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCatV17e.txt,v 1.15 2010/05/19 22:23:46 chinhli Exp $
+#       $Id: felCatV17e.txt,v 1.16 2010/05/26 15:35:31 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB V17e/felCatV17e (2009-05-25)
   
@@ -77,7 +77,7 @@ S=Primary_Assembly/unplaced_scaffolds
 zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > ucscChr/chrUn.agp
    # append the gap records
 zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
-        | sed -e "s/^/chrUn_/" >> ucscChr/chrUn.agp
+        | sed -e "s/^/chrUn_/"  >> ucscChr/chrUn.agp
 gzip ucscChr/chrUn.agp &
 
 zcat ${S}/FASTA/unplaced.scaf.fa.gz \
@@ -752,6 +752,8 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 #####################################################################
 ## 6-Way Multiz (DONE - 2010-05-07 - Chin)
+##  (Redo mafSplit and all steps followed working 2010-05-23 - Chin)
+ 
 # use /cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh 
     mkdir /hive/data/genomes/felCatV17e/bed/multiz6way
     cd /hive/data/genomes/felCatV17e/bed/multiz6way
@@ -889,21 +891,21 @@ close (FH);
     # N50 for ailMel1 is 1281781 (less than 10 ~ 20 MB) use rbest
     ln -s ../../lastz.ailMel1/mafRBestNet/felCatV17e.ailMel1.rbest.maf.gz .
 
-
+XXXX 05-24 mafSplit new option mafSplit -byTarget -useFullSequenceName
     # to use rbest or net, use n50.pl chrom.size to tell
     mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/splitMaf
     cd /hive/data/genomes/felCatV17e/bed/multiz6way/splitMaf
     for D in ailMel1
 do
     mkdir ${D}
-    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+    mafSplit -useFullSequenceName -byTarget /dev/null ${D}/ \
         ../singleMafs/felCatV17e.${D}.rbest.maf.gz
 done
 
 for D in hg19 mm9 canFam2 monDom5
 do
     mkdir ${D}
-    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+    mafSplit -useFullSequenceName -byTarget /dev/null ${D}/ \
         ../singleMafs/felCatV17e.${D}.synNet.maf.gz
 done
 
@@ -1303,7 +1305,7 @@ chainOne $(path1)
 
 ############################################################################
 ## Annotate 6-way multiple alignment with gene annotations
-##              (Done 2010-05-07 - Chin)
+##              (DONE 2010-05-07 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ## Rules to decide which genes to use in order:
@@ -1404,58 +1406,7 @@ do
 done
 
     #   the following single command doesn't work on any 32 Gb computer,
-    #   requires much more memory, turn it into a kluster job, see below
-    #   ...
-#### Skipped begin ====>
-    #   Create this command with this script:
-    cat << '_EOF_' > mkCmd.sh
-#!/bin/sh
-
-echo "time (cat ../maf/*.maf | nice -n +19 genePredToMafFrames felCatV17e stdin stdout \\"
-for G in hg19 mm9
-do  
-    if [ ! -s genes/${G}.gp.gz ]; then
-        echo "missing genes/${G}.gp.gz"
-        exit 255
-    fi
-    echo -n "${G} genes/${G}.gp.gz "
-done 
-echo "\\"
-for D in `sort ensGene.list`
-do
-    if [ ! -s genes/${D}.gp.gz ]; then
-        echo "missing genes/${D}.gp.gz"
-        exit 255
-    fi
-    echo -n "${D} genes/${D}.gp.gz "
-done
-echo "\\"
-for D in `sort xenoRef.list`
-do
-    if [ ! -s genes/${D}.gp.gz ]; then
-        echo "missing genes/${D}.gp.gz"
-        exit 255
-    fi
-    echo -n "${D} genes/${D}.gp.gz "
-done
-echo "\\"
-echo "    | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1"
-'_EOF_'
-    # << happy emacs
-    chmod +x ./mkCmd.sh
-
-    #   this doesn't work on any 32 Gb computer, requires much more
-    #   memory
-    #   turn it into a kluster job, see below
-    time (cat ../run/maf/*.maf | nice -n +19 genePredToMafFrames felCatV17e stdin stdout \
-mm9 genes/mm9.gp.gz hg19 genes/hg19.gp.gz ailMel1 genes/ailMel1  \
-canFam2 genes/canFam2.gp.gz monDom5 genes/monDom5 \
-    | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
-#### Skipped end  <====== 
-
-    #   that doesn't work on any 32 Gb computer, requires much more
-    #   memory
-    #   turn it into a kluster job
+    #   requires much more memory, turn it into a kluster job
     ssh swarm
     cd /hive/data/genomes/felCatV17e/bed/multiz6way/frames
     cat << '_EOF_' > runOne
@@ -1544,12 +1495,335 @@ do
     echo "done upstream${S}.maf.gz"
 done
 
-    mkdir -p /usr/local/apache/htdocs/goldenPath/felCatV17e/multiz6way/maf
-    cd /usr/local/apache/htdocs/goldenPath/felCatV17e/multiz6way/maf
+    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/felCatV17e/multiz6way/maf
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/felCatV17e/multiz6way/maf
     ln -s /hive/data/genomes/felCatV17e/bed/multiz6way/downloads/maf/up*.gz .
     md5sum up*.gz >> md5sum.txt
 
 
+#############################################################################
+# phastCons 6-way (working - 2010-05-20 - Chin)
+    #   was unable to split the full chrom MAF files, now working on the
+    #   maf files as they were split up during multiz
+    
+    # split 6way mafs into 10M chunks and generate sufficient
+    # statistics 
+    # files for # phastCons
+    ssh swarm
+    mkdir -p /hive/data/genomes/felCatV17e/bed/multiz6way/cons/msa.split
+    mkdir /hive/data/genomes/felCatV17e/bed/multiz6way/cons/ss
+    mkdir -p /hive/data/genomes/felCatV17e/bed/multiz6way/cons/msa.split/2010-05-21
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/msa.split/2010-05-21
+    mkdir ss
+    
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/felCatV17e/bed/multiz6way/anno/maf/*.maf
+set WINDOWS = /hive/data/genomes/felCatV17e/bed/multiz6way/cons/msa.split/2010-05-21/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   do the easy ones first to see some immediate results
+    ls -1S -r ../../../anno/maf | sed -e "s/.maf//; s/felCatV17e_//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+# Completed: 503 of 504 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      14171s     236.18m     3.94h    0.16d
+# 0.000 y
+# IO & Wait Time:                188193s    3136.55m    52.28h    2.18d
+# 0.006 y
+# Average job time:                 402s       6.71m     0.11h    0.00d
+# Longest finished job:            1597s      26.62m     0.44h    0.02d
+# Submission to last job:          2586s      43.10m     0.72h    0.03d
+    #   the one crashed job is felCatV17e_chr18_gl000207_random.00.maf
+
+    #   XXX - this did not work
+    #   this takes a really long time.  memk was down to 2 usable
+    #   machines - got it finished manually on a combination of
+    #   hgwdevnew CPUs
+    #   and other machines
+
+    # Estimate phastCons parameters
+    #   experimented with this as a parasol job on hgwdevnew to try a
+    #   number
+    #   of SS files.  With a command of:
+
+/cluster/bin/phast/x86_64/phyloFit -i SS ${SS} \
+--tree "(((((((((((((((((felCatV17e,panTro2),gorGor1),ponAbe2),rheMac2),calJac1),tarSyr1),(micMur1,otoGar1)),tupBel1),(((((mm9,rn4),dipOrd1),cavPor3),speTri1),(oryCun1,ochPri2))),(((vicPac1,(turTru1,bosTau4)),((equCab2,(felCat3,canFam2)),(myoLuc1,pteVam1))),(eriEur1,sorAra1))),(((loxAfr2,proCap1),echTel1),(dasNov2,choHof1))),monDom4),ornAna1),((galGal3,taeGut1),anoCar1)),xenTro2),(((tetNig1,fr2),(gasAcu1,oryLat2)),danRer5)),petMar1)" \
+--out-root=$OUT/starting_tree
+
+    #   running over the input files ../ss/*/*.ss results to
+#.../genomes/felCatV17e/bed/multiz6way/cons/startingTree/result/*/starting-tree.mod
+
+    # add up the C and G: 
+    find ./result -type f | xargs ls -rt | while read F
+do  
+    D=`dirname $F`
+    echo -n `basename $D`" - " 
+    grep BACKGROUND ${F} | awk '{printf "%0.3f\n", $3 + $4;}'
+done
+    #   counting number of species seen in the maf file:
+    find ./result -type f | xargs ls -rt | while read F
+do  
+    D=`dirname $F`
+    echo -n `basename $D`" - "
+    grep TREE $F | sed -e \
+"s/TREE: //; s/(//g; s/)//g; s/[0-9].[0-9][0-9][0-9][0-9][0-9][0-9]//g; s/://g"  | tr ',' '\n' | wc -l
+done
 
 
-####################################################################
+    # Run phastCons
+    #   This job is I/O intensive in its output files, beware where this
+    #   takes place or do not run too many at once.
+    ssh swarm
+    mkdir -p /hive/data/genomes/felCatV17e/bed/multiz6way/cons/run.cons
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/run.cons
+
+    #   there are going to be several different phastCons runs using
+    #   this same script.  They trigger off of the current working
+    #   directory
+    #   $cwd:t which is the "grp" in this script.  It is one of:
+    #   all primates placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe 
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/felCatV17e/bed/multiz6way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+if ( $cX == "chrX" ) then
+    set useGrp = "$grp.chrX.mod"
+endif
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp 
+  ln -s $cons/$grp/$grp.chrX.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/msa.split/2009-10-21/ss/$c/$f.ss $tmp
+else 
+  ln -s $ssSrc/msa.split/2009-10-21/ss/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp 
+  ln -s $cons/$grp/$grp.chrX.mod $tmp
+endif 
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $useGrp \ 
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $useGrp \ 
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #   this template will serve for all runs
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls -1S ../msa.split/2009-10-21/ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons
+    mkdir -p all
+    cd all
+    #   Using the two different .mod tree 
+    cp -p ../../4dNoX/phyloFit.NoChrX.mod ./all.mod
+    cp -p ../../4dX/phyloFit.chrX.mod ./all.chrX.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList 
+    para try ... check ... push ... etc.
+# Completed: 581 of 581 jobs
+# CPU time in finished jobs:      41877s     697.95m    11.63h    0.48d
+# 0.001 y
+# IO & Wait Time:                 39172s     652.87m    10.88h    0.45d
+# 0.001 y
+# Average job time:                 139s       2.32m     0.04h    0.00d
+# Longest finished job:             329s       5.48m     0.09h    0.00d
+# Submission to last job:          2240s      37.33m     0.62h    0.03d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/all
+    cut -f1 ../../../../chrom.sizes | while read C
+do  
+    ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+/cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/all
+    time nice -n +19 hgLoadBed felCatV17e phastConsElements6way mostConserved.bed
+    #   Loaded 5163775 elements of size 6
+    #   real     1m44.439s
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    featureBits felCatV17e -enrichment refGene:cds phastConsElements6way
+    #   --rho 0.3 --expected-length 45 --target-coverage 0.3
+    #   refGene:cds 1.187%, phastConsElements6way 5.065%,
+    #   both 0.884%, cover 74.46%, enrich 14.70x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/all
+    mkdir downloads
+    cat << '_EOF_' > phastCat.sh 
+#!/bin/sh
+
+mkdir -p downloads
+cut -f1 ../../../../chrom.sizes | while read C
+do
+    echo -n "${C} ... working ... "
+    ls -d pp/${C}.[0-9][0-9] 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.pp | sed -e "s/chrom=${C}.[0-9][0-9]/chrom=${C}/"
+    done | gzip > downloads/${C}.phastCons6way.wigFix.gz
+    echo "done"
+done
+'_EOF_'
+    #   << happy emacs
+    chmod +x phastCat.sh
+    time nice -n +19 ./phastCat.sh
+    #   real    30m2.623s
+    
+    #   encode those files into wiggle data
+    zcat downloads/*.wigFix.gz \
+        | wigEncode stdin phastCons6way.wig phastCons6way.wib
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    18m37.881s
+    du -hsc *.wi?
+    #   2.7G    phastCons6way.wib
+    #   271M    phastCons6way.wig
+    #   3.0G    total
+    
+    #   encode into a bigWig file:
+    #   (warning wigToBigWig process grows to about 36 Gb)
+    #   in bash, to avoid the 32 Gb memory limit:
+sizeG=188743680
+export sizeG
+ulimit -d $sizeG
+ulimit -v $sizeG
+    zcat downloads/*.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons6way.bw
+    #   real    52m36.142s
+# -rw-rw-r--   1 21667535139 Oct 20 13:59 phastCons6way.bw
+    mkdir /gbdb/felCatV17e/bbi
+    ln -s `pwd`/phastCons6way.bw /gbdb/felCatV17e/bbi
+    #   if you wanted to use the bigWig file, loading bigWig table:
+    hgsql felCatV17e -e 'drop table if exists phastCons6way; \
+            create table phastCons6way (fileName varchar(255) not null); \
+            insert into phastCons6way values
+        ("/gbdb/felCatV17e/bbi/phastCons6way.bw");'
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/all
+    ln -s `pwd`/phastCons6way.wib /gbdb/felCatV17e/multiz6way/phastCons6way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/felCatV17e/multiz6way felCatV17e \
+        phastCons6way phastCons6way.wig
+    #   real    1m45.381s
+
+    wigTableStats.sh felCatV17e phastCons6way
+# db.table      min max mean count sumData
+# felCatV17e.phastCons6way     0 1 0.103653 2845303719 2.94924e+08
+#       stdDev viewLimits
+#       0.230184 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/felCatV17e/bed/multiz6way/cons/all
+    time nice -n +19 hgWiggle -doHistogram -db=felCatV17e \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            phastCons6way > histogram.data 2>&1
+    #   real    7m37.212s
+
+    #   create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phastCons6way track"
+set xlabel " phastCons6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics 
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #   << happy emacs
+
+    display histo.png &
+
+
+
+#############################################################################

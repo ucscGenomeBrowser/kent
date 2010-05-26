@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: calJac3.txt,v 1.13 2010/05/19 22:27:18 chinhli Exp $
+#	$Id: calJac3.txt,v 1.14 2010/05/26 15:35:31 chinhli Exp $
 
 # Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
@@ -1040,6 +1040,8 @@ TMPDIR=/scratch/tmp
 
 #####################################################################
 ## 13-Way Multiz (DONE - 2010-02-23 - Hiram)
+##  (Redo mafSplit and all steps followed working 2010-05-23 - Chin)
+
     mkdir /hive/data/genomes/calJac3/bed/multiz13way
     cd /hive/data/genomes/calJac3/bed/multiz13way
 
@@ -1173,6 +1175,7 @@ close (FH);
     ln -s ../../lastz.canFam2/axtChain/calJac3.canFam2.synNet.maf.gz .
     ln -s ../../lastz.monDom5/axtChain/calJac3.monDom5.synNet.maf.gz .
 
+XXXX 05-24 mafSplit new option mafSplit -byTarget -useFullSequenceName
     mkdir /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
     cd /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
     for D in gorGor2 tarSyr1 papHam1 otoGar1 micMur1
@@ -1259,6 +1262,8 @@ do
 done
     tail -q -n 1 maf/000.maf >> calJac3.13way.maf
 
+XXXX 05-24 split the /hive/data/genomes/calJac3/bed/multiz13way/run
+     calJac3.13way.maf to other folder with fullName for phastCons
     # load tables for a look
     mkdir -p /gbdb/calJac3/multiz13way/maf
     cd /hive/data/genomes/calJac3/bed/multiz13way/run
@@ -1284,7 +1289,7 @@ done
     #   Loading complete
     #   real    38m46.339s
 
-    # Gap Annotation
+    # Gap Annotation (DONE 2010-05-12 - chin)
     # prepare bed files with gap info
     mkdir /hive/data/genomes/calJac3/bed/multiz13way/anno
     cd /hive/data/genomes/calJac3/bed/multiz13way/anno
@@ -1509,7 +1514,7 @@ cd /cluster/home/mary/kent/src/hg/makeDb/trackDb/marmoset
 find -name "*.html" | xargs grep 2007
 
 # downloads
-cd /usr/local/apache/htdocs/goldenPath/calJac3
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3
 find -name "*" | xargs grep 2007
 
 # hgcentral
@@ -1692,3 +1697,359 @@ done | sort -k1,1 -k2,2n > multiz13wayFrames.bed
 # irows on
     #   appears to work OK
 
+
+#############################################################################
+## create upstream refGene maf files
+    cd /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits calJac3 xenoRefGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags calJac3 multiz13way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/calJac3/bed/multiz13way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf/up*.gz .
+
+    md5sum up*.gz >> md5sum.txt
+
+
+#############################################################################
+# phastCons 13-way (working 2010-05-24 - Chin)
+    #   was unable to split the full chrom MAF files, now working on the
+    #   maf files as they were split up during multiz
+    
+    # re-split the with new -useFullSequenceName option
+    cd /hive/data/genomes/calJac3/bed/multiz13way/run
+    mkdir mafSplit-2010-05-24
+    cd mafSplit-2010-05-24
+    mafSplit -byTarget -useFullSequenceName /dev/null . ../calJac3.13way.maf
+
+    # split 13way mafs into 10M chunks and generate sufficient
+    # statistics 
+    # files for # phastCons
+    ssh swarm
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split
+    
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf 
+set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   do the easy ones first to see some immediate results
+    ls -1S -r ../../run/mafSplit-2010-05-24 \
+        | sed -e "s/.maf//; s/calJac3_//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+    # Completed: 10769 of 10770 jobs
+    # Crashed: 1 jobs (chrUn_GL286217, rerun OK)
+    # CPU time in finished jobs:   4171s      69.52m     1.16h    0.05d  0.000 y
+    # IO & Wait Time:            147369s    2456.15m    40.94h    1.71d  0.005 y
+    # Average job time:                  14s       0.23m     0.00h    0.00d
+    # Longest finished job:             570s       9.50m     0.16h    0.01d
+    # Submission to last job:          1351s      22.52m     0.38h    0.02d
+
+    # some scaffolds were too small to produce output. 
+    # expected 10769, found 4749
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss
+    find -type f | wc -l
+    #  4749
+    cd ../..
+    rm *.done
+
+
+======= Skip begin =======>
+    # Estimate phastCons parameters
+    #   experimented with this as a parasol job on hgwdevnew to try a
+    #   number
+    #   of SS files.  With a command of:
+
+/cluster/bin/phast/x86_64/phyloFit -i SS ${SS} \
+--tree "(((((((((((((((((calJac3,panTro2),gorGor1),ponAbe2),rheMac2),calJac1),tarSyr1),(micMur1,otoGar1)),tupBel1),(((((mm9,rn4),dipOrd1),cavPor3),speTri1),(oryCun1,ochPri2))),(((vicPac1,(turTru1,bosTau4)),((equCab2,(felCat3,canFam2)),(myoLuc1,pteVam1))),(eriEur1,sorAra1))),(((loxAfr2,proCap1),echTel1),(dasNov2,choHof1))),monDom4),ornAna1),((galGal3,taeGut1),anoCar1)),xenTro2),(((tetNig1,fr2),(gasAcu1,oryLat2)),danRer5)),petMar1)" \
+--out-root=$OUT/starting_tree
+
+    #   running over the input files ../ss/*/*.ss results to
+#.../genomes/calJac3/bed/multiz13way/cons/startingTree/result/*/starting-tree.mod
+
+    # add up the C and G: 
+    find ./result -type f | xargs ls -rt | while read F
+do  
+    D=`dirname $F`
+    echo -n `basename $D`" - " 
+    grep BACKGROUND ${F} | awk '{printf "%0.3f\n", $3 + $4;}'
+done
+    #   counting number of species seen in the maf file:
+    find ./result -type f | xargs ls -rt | while read F
+do  
+    D=`dirname $F`
+    echo -n `basename $D`" - "
+    grep TREE $F | sed -e \
+"s/TREE: //; s/(//g; s/)//g; s/[0-9].[0-9][0-9][0-9][0-9][0-9][0-9]//g; s/://g"  | tr ',' '\n' | wc -l
+done
+<======= Skip end ==========
+
+    # Run phastCons
+    #   This job is I/O intensive in its output files, beware where this
+    #   takes place or do not run too many at once.
+    ssh swarm
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/run.cons
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/run.cons
+
+    #   there are going to be several different phastCons runs using
+    #   this same script.  They trigger off of the current working
+    #   directory
+    #   $cwd:t which is the "grp" in this script.  It is one of:
+    #   all primates placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe 
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/calJac3/bed/multiz13way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+if ( $cX == "chrX" ) then
+    set useGrp = "$grp.chrX.mod"
+endif
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp 
+  ln -s $cons/$grp/$grp.chrX.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/msa.split/2009-10-21/ss/$c/$f.ss $tmp
+else 
+  ln -s $ssSrc/msa.split/2009-10-21/ss/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp 
+  ln -s $cons/$grp/$grp.chrX.mod $tmp
+endif 
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $useGrp \ 
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $useGrp \ 
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #   this template will serve for all runs
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls -1S ../msa.split/2009-10-21/ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons
+    mkdir -p all
+    cd all
+    #   Using the two different .mod tree 
+    cp -p ../../4dNoX/phyloFit.NoChrX.mod ./all.mod
+    cp -p ../../4dX/phyloFit.chrX.mod ./all.chrX.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList 
+    para try ... check ... push ... etc.
+# Completed: 581 of 581 jobs
+# CPU time in finished jobs:      41877s     697.95m    11.63h    0.48d
+# 0.001 y
+# IO & Wait Time:                 39172s     652.87m    10.88h    0.45d
+# 0.001 y
+# Average job time:                 139s       2.32m     0.04h    0.00d
+# Longest finished job:             329s       5.48m     0.09h    0.00d
+# Submission to last job:          2240s      37.33m     0.62h    0.03d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+    cut -f1 ../../../../chrom.sizes | while read C
+do  
+    ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+/cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+    time nice -n +19 hgLoadBed calJac3 phastConsElements13way mostConserved.bed
+    #   Loaded 5163775 elements of size 6
+    #   real     1m44.439s
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    featureBits calJac3 -enrichment refGene:cds phastConsElements13way
+    #   --rho 0.3 --expected-length 45 --target-coverage 0.3
+    #   refGene:cds 1.187%, phastConsElements13way 5.065%,
+    #   both 0.884%, cover 74.46%, enrich 14.70x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+    mkdir downloads
+    cat << '_EOF_' > phastCat.sh 
+#!/bin/sh
+
+mkdir -p downloads
+cut -f1 ../../../../chrom.sizes | while read C
+do
+    echo -n "${C} ... working ... "
+    ls -d pp/${C}.[0-9][0-9] 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.pp | sed -e "s/chrom=${C}.[0-9][0-9]/chrom=${C}/"
+    done | gzip > downloads/${C}.phastCons13way.wigFix.gz
+    echo "done"
+done
+'_EOF_'
+    #   << happy emacs
+    chmod +x phastCat.sh
+    time nice -n +19 ./phastCat.sh
+    #   real    30m2.623s
+    
+    #   encode those files into wiggle data
+    zcat downloads/*.wigFix.gz \
+        | wigEncode stdin phastCons13way.wig phastCons13way.wib
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    18m37.881s
+    du -hsc *.wi?
+    #   2.7G    phastCons13way.wib
+    #   271M    phastCons13way.wig
+    #   3.0G    total
+    
+    #   encode into a bigWig file:
+    #   (warning wigToBigWig process grows to about 36 Gb)
+    #   in bash, to avoid the 32 Gb memory limit:
+sizeG=188743680
+export sizeG
+ulimit -d $sizeG
+    zcat downloads/*.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons13way.bw
+    #   real    52m36.142s
+# -rw-rw-r--   1 21667535139 Oct 20 13:59 phastCons13way.bw
+    mkdir /gbdb/calJac3/bbi
+    ln -s `pwd`/phastCons13way.bw /gbdb/calJac3/bbi
+    #   if you wanted to use the bigWig file, loading bigWig table:
+    hgsql calJac3 -e 'drop table if exists phastCons13way; \
+            create table phastCons13way (fileName varchar(255) not null); \
+            insert into phastCons13way values
+        ("/gbdb/calJac3/bbi/phastCons13way.bw");'
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+    ln -s `pwd`/phastCons13way.wib /gbdb/calJac3/multiz13way/phastCons13way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/calJac3/multiz13way calJac3 \
+        phastCons13way phastCons13way.wig
+    #   real    1m45.381s
+
+    wigTableStats.sh calJac3 phastCons13way
+# db.table      min max mean count sumData
+# calJac3.phastCons13way     0 1 0.103653 2845303719 2.94924e+08
+#       stdDev viewLimits
+#       0.230184 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+    time nice -n +19 hgWiggle -doHistogram -db=calJac3 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            phastCons13way > histogram.data 2>&1
+    #   real    7m37.212s
+
+    #   create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phastCons13way track"
+set xlabel " phastCons13way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics 
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #   << happy emacs
+
+    display histo.png &
+
+
+
+#############################################################################
