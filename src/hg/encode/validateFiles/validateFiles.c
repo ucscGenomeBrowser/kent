@@ -12,8 +12,8 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.42 2010/05/21 18:05:14 braney Exp $";
-static char *version = "$Revision: 1.42 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.43 2010/05/26 13:35:31 braney Exp $";
+static char *version = "$Revision: 1.43 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -593,99 +593,6 @@ if ( n != expected)
 return TRUE;
 }
 
-boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, unsigned int *cigarPacked, int nCigar)
-{
-static char cacheChrom[1024];
-static struct dnaSeq *cacheSeq = NULL;
-
-if (!genome)
-    errAbort("Need to specify genome if checking BAM files");
-
-if ((line % mmCheckOneInN) != 0)
-    return TRUE; // dont check if this is not one in N
-
-// read the whole chrom
-if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
-    {
-    freeDnaSeq(&cacheSeq);
-    int size =  twoBitSeqSize(genome, chrom);
-    cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
-    strcpy(cacheChrom, chrom);
-    verbose(2, "read in chrom %s size %d\n",cacheChrom, size);
-    }
-
-
-int curPosGenome = chromStart;
-int i, j;
-int mm = 0;
-char dna[10000], *dnaPtr = dna;
-for (i = 0;   (i < nCigar);  i++)
-    {
-    char op;
-    int size = bamUnpackCigarElement(cigarPacked[i], &op);
-    switch (op)
-	{
-	case 'M': // match or mismatch (gapless aligned block)
-            for (j=0 ; j < size; ++j)
-                {
-                *dnaPtr++ = cacheSeq->dna[curPosGenome];
-                curPosGenome++;
-                }
-	    break;
-	case 'I': // inserted in query
-	case 'S': // skipped query bases at beginning or end ("soft clipping")
-            for(j=0; j < size; j++)
-                *dnaPtr++ = '-';
-	    break;
-	case 'D': // deleted from query
-	case 'N': // long deletion from query (intron as opposed to small del)
-	    curPosGenome += size;
-	    break;
-	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
-	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
-	    break;
-	default:
-	    errAbort("unrecognized CIGAR op %c -- update me", op);
-	}
-    }
-
-int length = strlen(seq);
-if (matchFirst && (matchFirst < length))
-    length = matchFirst;
-int checkLength = length;
-
-int start, incr;
-if (strand == '-')
-    {
-    start = strlen(seq) - 1;
-    incr = -1;
-    }
-else
-    {
-    start = 0;
-    incr = 1;
-    }
-
-for (i = start; (strand == '-') ? i <= 0 : i < strlen(seq); i += incr)
-    {
-    char c = tolower(seq[i]);
-    if ((dna[i] == '-') || (checkMismatch(c,  dna[i])))
-        ++mm;
-
-    if (--length == 0)
-        break;
-    }
-
-
-if (mm > mismatches)
-    {
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d  query %s  dna %s )\n",
-         file, line, mm, checkLength, mismatches, chrom, chromStart, seq, dna);
-    return FALSE;
-    }
-
-return TRUE;
-}
 
 
 boolean checkMismatchesSeq(char *file, int line, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq)
@@ -1216,6 +1123,103 @@ struct bamCallbackData
     int *errs;
     int count;
     };
+
+boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, unsigned int *cigarPacked, int nCigar)
+{
+static char cacheChrom[1024];
+static struct dnaSeq *cacheSeq = NULL;
+
+if (!genome)
+    errAbort("Need to specify genome if checking BAM files");
+
+if ((line % mmCheckOneInN) != 0)
+    return TRUE; // dont check if this is not one in N
+
+// read the whole chrom
+if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
+    {
+    freeDnaSeq(&cacheSeq);
+    int size =  twoBitSeqSize(genome, chrom);
+    cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
+    strcpy(cacheChrom, chrom);
+    verbose(2, "read in chrom %s size %d\n",cacheChrom, size);
+    }
+
+
+int curPosGenome = chromStart;
+int i, j;
+int mm = 0;
+char dna[10000], *dnaPtr = dna;
+for (i = 0;   (i < nCigar);  i++)
+    {
+    char op;
+    int size = bamUnpackCigarElement(cigarPacked[i], &op);
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+            //printf("grabbing %d from %d\n",size,curPosGenome);
+            for (j=0 ; j < size; ++j)
+                {
+                *dnaPtr++ = cacheSeq->dna[curPosGenome];
+                curPosGenome++;
+                }
+	    break;
+	case 'I': // inserted in query
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+            for(j=0; j < size; j++)
+                *dnaPtr++ = '-';
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    curPosGenome += size;
+	    break;
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("unrecognized CIGAR op %c -- update me", op);
+	}
+    }
+
+*dnaPtr = 0;
+
+int length = strlen(seq);
+if (matchFirst && (matchFirst < length))
+    length = matchFirst;
+int checkLength = length;
+
+int start, incr;
+if (strand == '-')
+    {
+    start = strlen(seq) - 1;
+    incr = -1;
+    }
+else
+    {
+    start = 0;
+    incr = 1;
+    }
+
+for (i = start; (strand == '-') ? i <= 0 : i < strlen(seq); i += incr)
+    {
+    char c = tolower(seq[i]);
+    if ((dna[i] == '-') || (checkMismatch(c,  dna[i])))
+        ++mm;
+
+    if (--length == 0)
+        break;
+    }
+
+
+if (mm > mismatches)
+    {
+    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d  query %s  dna %s )\n",
+         file, line, mm, checkLength, mismatches, chrom, chromStart, seq, dna);
+    return FALSE;
+    }
+
+return TRUE;
+}
 
 int parseBamRecord(const bam1_t *bam, void *data)
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
