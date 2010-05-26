@@ -11,6 +11,7 @@ priority 0
 type bigWig 0.00 1.00
 viewLimits 0:1
 autoScale off
+canPack  On
 windowingFunction mean
 maxHeightPixels 100:32:16
 visibility hide
