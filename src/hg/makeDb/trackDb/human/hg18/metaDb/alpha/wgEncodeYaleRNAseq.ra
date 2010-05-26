@@ -201,23 +201,6 @@ subId 543
 treatment IFNg6h
 view RawData
 
-metaObject wgEncodeYaleRnaSeqPolyaRel2RawSignalK562
-objType table
-cell K562
-composite wgEncodeYaleRNAseq
-dataType RnaSeqPolyaRel2
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-05-08
-dateUnrestricted 2010-02-07
-fileName wgEncodeYaleRnaSeqPolyaRel2RawSignalK562.wig.gz
-grant Snyder
-lab Yale
-project wgEncode
-subId 331
-tableName wgEncodeYaleRnaSeqPolyaRel2RawSignalK562
-type wig
-view RawSignal
-
 metaObject wgEncodeYaleRnaSeqPolyaSignalGm12878
 objType table
 cell GM12878
@@ -324,4 +307,4 @@ tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 treatment IFNg6h
 view Signal
 
-# MAGIC: 1141849345
+# MAGIC: 1444430197
