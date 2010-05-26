@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.240 2010/05/24 18:57:44 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.241 2010/05/26 20:10:56 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -202,6 +202,7 @@ protocol HudsonAlpha:A549_protocol.pdf
 term AG04449
 tag AG04449
 type Cell Line
+organism Human
 description Fetal buttock/thigh fibroblast
 tissue Skin
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
@@ -214,6 +215,7 @@ protocol UW_Stam:AG04449_Stam_protocol.pdf
 term AG04450
 tag AG04450
 type Cell Line
+organism Human
 description Fetal lung fibroblast
 tissue Lung
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
@@ -226,6 +228,7 @@ protocol UW_Stam:AG04450_Stam_protocol.pdf
 term AG09309
 tag AG09309
 type Cell Line
+organism Human
 description Adult human toe fibroblast
 tissue Skin
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
@@ -238,6 +241,7 @@ protocol UW_Stam:AG09309_Stam_protocol.pdf
 term AG09319
 tag AG09319
 type Cell Line
+organism Human
 description Adult human gum tissue fibroblasts
 tissue Gingival
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
@@ -250,6 +254,7 @@ protocol UW_Stam:AG09319_Stam_protocol.pdf
 term AG10803
 tag AG10803
 type Cell Line
+organism Human
 description Adult human abdominal skin fibroblasts
 tissue Skin
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
@@ -441,6 +446,7 @@ protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 term CMK
 tag CMK
 type Cell Line
+organism Human
 description Human Acute Megakaryocytic Leukemia Cells
 tissue Blood
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
@@ -529,6 +535,7 @@ protocol UW_Stam:Stam_15_protocols.pdf
 term GM10847
 tag GM10847
 type Cell Line
+organism Human
 description Lymphoblastoid International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
 tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
@@ -688,6 +695,7 @@ protocol Open_Chromatin:GM12892_Crawford_protocol.pdf
 term GM15510
 tag GM15510
 type Cell Line
+organism Human
 description Lymphoblastoid NIGMS Human Genetic Cell Repository; DNA POLYMORPHISM DISCOVERY RESOURCE COLLECTION; Epstein-Barr Virus
 tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
@@ -734,6 +742,7 @@ protocol Open_Chromatin:GM18507_protocol.pdf
 term GM18526
 tag GM18526
 type Cell Line
+organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - HAN CHINESE IN BEIJING, CHINA; Epstein-Barr Virus
 tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
@@ -748,6 +757,7 @@ protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
 term GM18951
 tag GM18951
 type Cell Line
+organism Human
 description Lymphoblastoid INTERNATIONAL HAPMAP PROJECT - JAPANESE IN TOKYO, JAPAN; Epstein-Barr Virus
 tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
@@ -840,6 +850,7 @@ protocol Open_Chromatin:GM19240_Crawford_protocol.pdf
 term H7-hESC
 tag H7es
 type Cell Line
+organism Human
 description Undifferentiated human embryonic stem cells
 vendorName WiCell
 vendorId WA07 (H7)
@@ -956,6 +967,7 @@ protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 term HAEpiC
 tag HAE
 type Cell Line
+organism Human
 description Human Amniotic Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
@@ -983,6 +995,7 @@ protocol HudsonAlpha:HAL_Myers_protocol.pdf
 term HCF
 tag HCF
 type Cell Line
+organism Human
 description Human Cardiac Fibroblasts
 tissue Heart
 vendorName ScienCell
@@ -995,6 +1008,7 @@ protocol UW_Stam:HCF_Stam_protocol.pdf
 term HCM
 tag HCM
 type Cell Line
+organism Human
 description Human Cardiac Myocytes
 tissue Heart
 vendorName ScienCell
@@ -1007,6 +1021,7 @@ protocol UW_Stam:HCM_Stam_protocol.pdf
 term HCPEpiC
 tag HCPE
 type Cell Line
+organism Human
 description Human Choroid Plexus Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
@@ -1036,6 +1051,7 @@ protocol Yale_TFSB:HCT-116_protocol.pdf
 term HEEpiC
 tag HEE
 type Cell Line
+organism Human
 description Human Esophageal Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
@@ -1123,6 +1139,7 @@ protocol UW_Stam:HGF_Stam_protocol.pdf
 term HIPEpiC
 tag HIPE
 type Cell Line
+organism Human
 description Human Iris Pigment Epithelial Cells
 tissue Eye
 vendorName ScienCell
@@ -1169,6 +1186,7 @@ protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_
 term HNPCEpiC
 tag HNPCE
 type Cell Line
+organism Human
 description Human Non-Pigment Ciliary Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
@@ -1215,6 +1233,7 @@ protocol UW_Stam:HRE_Stam_protocol.pdf
 term HRPEpiC
 tag HRPE
 type Cell Line
+organism Human
 description Human Retinal Pigment Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
@@ -1484,6 +1503,7 @@ protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
 term NHDF-neo
 tag NHDF-neo
 type Cell Line
+organism Human
 tissue Skin
 description Neonatal Human Dermal Fibroblasts
 vendorName Lonza
