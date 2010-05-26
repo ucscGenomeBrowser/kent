@@ -70,6 +70,7 @@ doSymLink: doRsync
 	ln -sfn /gbdb/visiGene ${destDir}/visiGene
 	ln -sfn ENCODE ${destDir}/encode
 	ln -sfn Branchiostoma_lanceolatum.jpg ${destDir}/images/Branchiostoma_floridae.jpg
+	ln -sfn Rhesus_macaque.jpg ${destDir}/images/Macaca_mulatta.jpg
 	mkdir -p ${destDir}/RNA-img
 	ln -sfn /gbdb/hg18/RNA-img ${destDir}/RNA-img/hg18
 	ln -sfn /gbdb/hg19/RNA-img ${destDir}/RNA-img/hg19
