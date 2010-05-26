@@ -1043,7 +1043,7 @@ by a single Makefile. This is available from:
 
 
 #########################################################################
-## 6-Way Multiz (WORKING - 2010-02-01 - Galt)
+## 6-Way Multiz (DONE - 2010-02-01 - Galt)
     ssh hgwdev
     mkdir /cluster/data/danRer6/bed/multiz6way
     cd /cluster/data/danRer6/bed/multiz6way
@@ -1378,4 +1378,369 @@ done
     doSameSpeciesLiftOver.pl -debug danRer6 danRer5
     cd /hive/data/genomes/danRer6/bed/blat.danRer5.2010-04-02
     doSameSpeciesLiftOver.pl danRer6 danRer5 >& do.log & tail -f do.log
+
+
+#########################################################################
+# Phylogenetic tree from 6-way (DONE 2010-05-20 galt)
+# 	We need one tree for all chroms
+
+    cd /hive/data/genomes/danRer6/bed/multiz6way/
+    mkdir mafSplit
+    cd mafSplit
+    mafSplit -byTarget -useFullSequenceName /dev/null . ../multiz6way.maf
+    # got 6660 mafs named after their chrom/scaff .maf
+    # although there are over 11,000 chroms and scaffolds,
+    # some are too small or have nothing aligning.
+
+    mkdir /hive/data/genomes/danRer6/bed/multiz6way/4d
+    cd /hive/data/genomes/danRer6/bed/multiz6way/4d
+
+    # danRer6 cannot be too picky, dropping this clause: 
+    #   refSeqStatus.status='Reviewed' 
+    hgsql danRer6 -Ne \
+    "select * from refGene,refSeqStatus where refGene.name=refSeqStatus.mrnaAcc and mol='mRNA'" \
+	| cut -f 2-20 | egrep -E -v "chrM" \
+	> refSeqReviewed.gp
+    wc -l refSeqReviewed.gp
+    # 15261 refSeqReviewed.gp
+    genePredSingleCover refSeqReviewed.gp stdout | sort > refSeqReviewedNR.gp
+    wc -l refSeqReviewedNR.gp
+    # 14609 refSeqReviewedNR.gp
+
+    ssh memk
+    mkdir /hive/data/genomes/danRer6/bed/multiz6way/4d/run
+    cd /hive/data/genomes/danRer6/bed/multiz6way/4d/run
+    mkdir ../mfa
+
+# whole chrom mafs version, using new version of 
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+#	mjhubisz at gmail.com
+
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set r = "/hive/data/genomes/danRer6/bed/multiz6way"
+set c = $1
+set infile = $r/mafSplit/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4d/refSeqReviewedNR.gp > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+    $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/danRer6/bed/multiz6way/mafSplit/*.maf | \
+        egrep -E -v "chrM" \
+	| sed -e "s#.*multiz6way/mafSplit/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check ... push ... etc
+    para time
+# Completed: 23 of 23 jobs
+# CPU time in finished jobs:       9032s     150.53m     2.51h    0.10d  0.000 y
+# IO & Wait Time:                   672s      11.21m     0.19h    0.01d  0.000 y
+# Average job time:                 422s       7.03m     0.12h    0.00d
+# Longest finished job:             860s      14.33m     0.24h    0.01d
+# Submission to last job:          1210s      20.17m     0.34h    0.01d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/bed/multiz6way/4d
+    # but first clean out junk 1-byte leftovers from above process.
+    cd mfa
+    find -type f -size 1c | xargs -iX rm X
+    find -type f -size 0c | xargs -iX rm X
+    cd ..
+    #want comma-less species.lst
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate "`cat ../species.lst`" mfa/*.mfa | sed s/"> "/">"/ \
+	> 4d.all.mfa
+
+    # fix order in case it helps:
+    #((danRer6,(tetNig2,gasAcu1)),(xenTro2,(mm9,hg19)))
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree ../tree-commas.nh 4d.all.mfa
+
+
+#############################################################################
+# phastCons 6-way (WORKING - 2010-05-13 - Galt)
+    #	was unable to split the full chrom MAF files, now working on the
+    #	maf files as they were split up during multiz
+
+    # split 6way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+
+    ssh swarm
+    mkdir -p /hive/data/genomes/danRer6/bed/multiz6way/cons/msa.split/2010-05-18
+    cd /hive/data/genomes/danRer6/bed/multiz6way/cons/msa.split/2010-05-18
+    mkdir ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/danRer6/bed/multiz6way/mafSplit/$c.maf
+set WINDOWS = /hive/data/genomes/danRer6/bed/multiz6way/cons/msa.split/2010-05-18/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../../mafSplit | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+
+# Completed: 6660 of 6660 jobs
+# CPU time in finished jobs:        520s       8.67m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                 47106s     785.10m    13.08h    0.55d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              41s       0.68m     0.01h    0.00d
+# Submission to last job:           667s      11.12m     0.19h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+
+    # some scaffolds were too small to produce output. 
+    # expected 6660, found 4273.
+    cd ss
+    find -type f | wc -l
+    #4273
+    cd ..
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh swarm
+    mkdir -p /hive/data/genomes/danRer6/bed/multiz6way/cons/run.cons
+    cd /hive/data/genomes/danRer6/bed/multiz6way/cons/run.cons
+
+    #	there are going to be only one phastCons run using
+    #	this same script.  It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is:
+    #	all 
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/danRer6/bed/multiz6way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/msa.split/2010-05-18/ss/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls -1S ../msa.split/2010-05-18/ss/*/* | sed -e 's/.ss$//' > ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/danRer6/bed/multiz6way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/phyloFit.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+# Completed: 4273 of 4273 jobs
+# CPU time in finished jobs:       2323s      38.72m     0.65h    0.03d  0.000 y
+# IO & Wait Time:                 68627s    1143.78m    19.06h    0.79d  0.002 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest finished job:              37s       0.62m     0.01h    0.00d
+# Submission to last job:           338s       5.63m     0.09h    0.00d
+
+
+    # create Most Conserved track
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/bed/multiz6way/cons/all
+
+    cat bed/*/*.bed | sort -k1,1 -k2,2n \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    	> tmpMostConserved.bed
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    nice hgLoadBed danRer6 phastConsElements6way mostConserved.bed
+    # Loaded 881975 elements of size 5
+    # Saving bed.tab
+    # start -1, end 426 out of range in findBin (max is 512M)
+[hgwdev:all> cat mostConserved.bed | gawk '{if ($3 == 426) print $0 }'
+Zv8_NA5813      -1      426     lod=93  380
+# there's only one record like this with chromStart == -1 
+
+it is the first record of a set
+[hgwdev:all> grep Zv8_NA5813 mostConserved.bed
+Zv8_NA5813      -1      426     lod=93  380
+Zv8_NA5813      520     666     lod=41  286
+Zv8_NA5813      742     832     lod=28  242
+
+[hgwdev:all> grep Zv8_NA5813 tmpMostConserved.bed
+Zv8_NA5813      -1      426     lod=93  93
+Zv8_NA5813      520     666     lod=41  41
+
+[hgwdev:all> cat bed/Zv8_NA5813/Zv8_NA5813.0-6928.bed
+Zv8_NA5813      -1      426     Zv8_NA5813.1    93      +
+Zv8_NA5813      520     666     Zv8_NA5813.1    41      +
+Zv8_NA5813      742     832     Zv8_NA5813.2    28      +
+
+# I have manually patched mostConserved.bed changing the -1 to 0 for 
+# Zv8_NA5813      -1      426     lod=93  93
+# and re-ran the same load command above this time without error.
+
+# also manually patched pp/Zv8_NA5813/Zv8_NA5813.0-6928.pp
+# and pp/Zv8_NA6933/Zv8_NA6933.0-2411.pp
+# so that it has in first line start=1 instead of start=0
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    featureBits danRer6 -enrichment refGene:cds phastConsElements6way
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    #   refGene:cds 1.244%, phastConsElements6way 12.225%, 
+    #   both 1.029%, cover 82.75%, enrich 6.77x
+
+    # hg19 for comparison
+    #	refGene:cds 1.187%, phastConsElements46way 5.065%,
+    #	both 0.884%, cover 74.46%, enrich 14.70x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/danRer6/bed/multiz6way/cons/all
+    mkdir downloads
+
+    cat pp/*/*.pp | gzip > downloads/phastCons6way.wigFix.gz
+
+
+    #	encode those files into wiggle data
+    zcat downloads/phastCons6way.wigFix.gz \
+	| wigEncode stdin phastCons6way.wig phastCons6way.wib
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    du -hsc *.wi?
+    # 453M    phastCons6way.wib
+    # 97M     phastCons6way.wig
+    # 549M    total
+
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons6way.wib /gbdb/danRer6/multiz6way/phastCons6way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/danRer6/multiz6way danRer6 \
+	phastCons6way phastCons6way.wig
+
+  # *** BOOKMARK ***
+
+  # use to set trackDb.ra entries for wiggle min and max
+
+    wigTableStats.sh danRer6 phastCons6way
+# db.table             min max mean   count     sumData     stdDev   viewLimits
+#danRer6.phastCons6way   0 1 0.712241 237215280 1.68955e+08 0.337377 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -db=danRer6 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons6way >& histogram.data 
+
+    #	create plot of histogram:
+
+#orig set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish danRer6 Histogram phastCons6way track"
+set xlabel " phastCons6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
