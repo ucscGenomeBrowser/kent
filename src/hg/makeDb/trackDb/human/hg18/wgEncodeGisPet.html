@@ -9,7 +9,7 @@ from different
 localizations</A> 
 in different 
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
-The RNA-PET information provided in this track is composed of two different PET length versions based on how the PETs were extracted.  The cloning-based PET (18 bp and 16 bp) is an earlier version and the detail information can be found from the reference (Ng et al. 2006).  The cloning-free PET (25 bp and 25 bp) is a recently modified version which uses Type II enzyme EcoP15I to generate a longer length of PET (unpublished), which results in a significant enhancement in both library construction and mapping efficiency.
+The RNA-PET information provided in this track is composed of two different PET length versions based on how the PETs were extracted.  The cloning-based PET (18 bp and 16 bp) is an earlier version and detailed information can be found from reference (Ng et al. 2006).  The cloning-free PET (25 bp and 25 bp) is a recently modified version which uses Type II enzyme EcoP15I to generate a longer length of PET (unpublished), which results in a significant enhancement in both library construction and mapping efficiency.
 Both versions of PET templates were sequenced by Solexa platform at 2 x 36 bp Paired End sequencing.
 See the Methods and References sections below for more details.
 </P>
@@ -42,7 +42,9 @@ distinguishing between the different cell types and compartments.</P>
 <DT><i>Minus Raw Signal</i>
 <DD>The Minus Raw Signal view graphs the base-by-base density of tags on the - strand.
 <DT><i>Alignments</i>
-<DD>The Alignments view shows alignment of individual PET sequences.
+<DD>The Alignments view shows alignment of individual PET sequences. Sequences determined to be transcribed on the positive
+     strand are shown in blue. Sequences determined to be transcribed on the negative strand are shown in orange. 
+     Sequences for which the direction of transcription was not able to be determined are shown in *black*.
 <DT><i>Clusters</i>
 <DD>The Clusters view shows clusters built from the alignments.
 </DL>
@@ -53,7 +55,7 @@ distinguishing between the different cell types and compartments.</P>
 Cells were grown according to the approved 
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture
 protocols</A>.
-Two different GIS RNA-PET protocols were used to generate the full length transcriptome PETs, one is based on a cloning-free RNA-PET library construction and sequencing strategy
+Two different GIS RNA-PET protocols were used to generate the full length transcriptome PETs: one is based on a cloning-free RNA-PET library construction and sequencing strategy
 (unpublished), and the other is a cloning-based library construction (Ng <i>et al.</i>
 2005) and recent Solexa paired end sequencing.
 </P>
@@ -61,7 +63,7 @@ Two different GIS RNA-PET protocols were used to generate the full length transc
 <h3>Cloning-free RNA-PET (50 bp reads, 25 bp and 25 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
-The cloning-free RNA-PET libraries were generated from polyA mRNA samples, constructed using a recently modified GIS protocol (unpublished). Total RNA in good quality was used as starting material and purified through MACs polyT column to obtain full length polyA mRNAs. Approximate 5 microgram enriched polyA mRNA was used for reverse transcription to convert polyA mRNA to full length cDNA. The obtained full length cDNA was modified and ligated with specific linker sequences, followed by circularization through ligation to generate circular cDNA molecules. The 25 bp tag from each end of the full length cDNA was extracted by type II enzyme EcoP15I digestion. The resulting PETs was ligated with sequencing adaptors at the both ends, then, amplified by PCR, further purified as complex templates for paired end (PE) sequencing using Solexa or SOLiD platforms.  Most data displayed in this track are sequenced from Solexa platform.
+The cloning-free RNA-PET libraries were generated from polyA mRNA samples and constructed using a recently modified GIS protocol (unpublished). Total RNA in good quality was used as starting material and purified through MACs polyT column to obtain full length polyA mRNAs. Approximately 5 microgram enriched polyA mRNA was used for reverse transcription to convert polyA mRNA to full length cDNA. The obtained full length cDNA was modified and ligated with specific linker sequences, followed by circularization through ligation to generate circular cDNA molecules. The 25 bp tag from each end of the full length cDNA was extracted by type II enzyme EcoP15I digestion. The resulting PETs were ligated with sequencing adaptors at the both ends, amplified by PCR, and further purified as complex templates for paired end (PE) sequencing using Solexa or SOLiD platforms.  Most data displayed in this track are sequenced using Solexa.
 </P>
 <P>
 <B>Data:</B>
@@ -71,7 +73,7 @@ Data: The sequenced RNA-PETs are unified in 25/25 bp length from each end of a c
 <h3>Cloning-based RNA-PET (34 bp reads, 18 bp and 16 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
-The cloning-based RNA-PET (GIS-PET) libraries were generated from polyA RNA samples, constructed using the protocol described by Ng et al. (2005). Total RNA in good quality was used as starting material and further purified through MACs polyT column to enrich polyA mRNA and remove any contaminants (e.g., rRNA, tRNA, DNA, protein etc). Approximate 10 microgram polyA mRNA was then used for reverse transcription to convert polyA mRNA into full length cDNA. The obtained full length cDNA was modified with specific linker sequences, then, ligated to a GIS-developed (pGIS4) vector to form a complex full length cDNA library, which was cloned into E. coli. The plasmid DNA was then isolated from the library, followed by MmeI (a type II enzyme) digestion to generate a final length of 18 bp/16 bp ditags from each end of the full length cDNA. The single ditag (or called PET) was then ligated to form a diPET structure (a concatemer with two unrelated PET linked by a linker sequence) to facilitate Solexa Paired End sequencing. 
+The cloning-based RNA-PET (GIS-PET) libraries were generated from polyA RNA samples, constructed using the protocol described by Ng et al. (2005). Total RNA in good quality was used as starting material and further purified through MACs polyT column to enrich polyA mRNA and remove any contaminants (e.g., rRNA, tRNA, DNA, protein etc). Approximately 10 microgram polyA mRNA was then used for reverse transcription to convert polyA mRNA into full length cDNA. The obtained full length cDNA was modified with specific linker sequences, then, ligated to a GIS-developed (pGIS4) vector to form a complex full length cDNA library, which was cloned into E. coli. The plasmid DNA was then isolated from the library, followed by MmeI (a type II enzyme) digestion to generate a final length of 18 bp/16 bp ditags from each end of the full length cDNA. The single ditag (or called PET) was then ligated to form a diPET structure (a concatemer with two unrelated PET linked by a linker sequence) to facilitate Solexa Paired End sequencing. 
 </P>
 <P>
 <B>Data:</B>
@@ -87,7 +89,7 @@ PETs mapping to 2-10 locations are also included and may represent duplicated ge
 <h3>Clusters</h3>
 To cluster the PETs the following procedure was applied: the mapping location of the 5' and 3' tag of a given PET was extended by 100 bp in both directions creating 5' and 3' search windows.  If the 5' and 3' tags of a second PET mapped within the 5' and 3' search window of the first PET then the two PETs were clustered and the search windows were adjusted so that they contained the tag extensions of the second PET.  PETs which subsequently maped with their 5' and 3' tags within the adjusted 5' and 3' search window, respectively, were also assigned to this cluster and search window readjusted.  This iterative process continued till no new PET was found to fall within the search window, at which stage all the found PETs are classified as belonging to a single cluster.   This process is repeated till all PETs are assigned to a cluster.
 <H2>Verification</H2>
-To assess overall PET quality and mapping specificity, the top ten most abundant PET clusters that mapped to well-characterized known genes were examined. Over 99% of the PETs represented full-length transcripts, and the majority fell within ten bp of the known 5' and 3' boundaries of these transcripts. The PET mapping was further verified by confirming the existence of physical cDNA clones represented by the ditags. PCR primers were designed based on the PET sequences and amplified the corresponding cDNA inserts either from full length cDNA library (cloning-based PET) or from total RNA isolate (cloning-free PET) for sequencing confirmation. 
+To assess overall PET quality and mapping specificity, the top ten most abundant PET clusters that mapped to well-characterized known genes were examined. Over 99% of the PETs represented full-length transcripts, and the majority fell within 10 bp of the known 5' and 3' boundaries of these transcripts. The PET mapping was further verified by confirming the existence of physical cDNA clones represented by the ditags. PCR primers were designed based on the PET sequences and amplified the corresponding cDNA inserts either from full length cDNA library (cloning-based PET) or from total RNA isolate (cloning-free PET) for sequencing confirmation. 
 </P>
 
 <H2>Credits</H2>
@@ -98,24 +100,31 @@ scientists Xiaoan Ruan, Atif Shahab, Chialin Wei, and Yijun Ruan at the
 Singapore</A>. 
 </P>
 Contact:
-<A HREF="http://www.gis.a-star.edu.sg/internet/site/investigators.php?f=cv&user_id=19">Yijun Ruan</A>
+<A HREF="mailto:&#114;ua&#110;&#121;&#106;&#64;&#103;&#105;&#115;.
+&#97;&#45;st&#97;r.
+&#101;&#100;&#117;.
+&#115;&#103;">
+&#114;ua&#110;&#121;&#106;&#64;&#103;&#105;&#115;.
+&#97;&#45;st&#97;r.
+&#101;&#100;&#117;.
+&#115;&#103;</A>
 
 <H2>References</H2>
 
 <P>Ng P, Tan JJ, Ooi HS, Lee YL, Chiu KP, Fullwood MJ, Srinivasan KG, Perbost C,
-Du L, Sung WK, et al., Multiplex sequencing of paired-end ditags (MS-PET): 
-a strategy for the ultra-high-throughput analysis of transcriptomes and genomes.
+Du L, Sung WK, et al., <A HREF="http://nar.oxfordjournals.org/cgi/content/full/34/12/e84">Multiplex sequencing of paired-end ditags (MS-PET): 
+a strategy for the ultra-high-throughput analysis of transcriptomes and genomes.</A>
 <EM>Nucleic Acids Res</EM>. 2006;34:e84.
 </P>
 <P>Ng P, Wei CL, Sung WK, Chiu KP, Lipovich L, Ang CC, Gupta S, Shahab A, 
-Ridwan A, Wong CH, et al., Gene identification signature (GIS) analysis for 
-transcriptome characterization and genome annotation. 
+Ridwan A, Wong CH, et al., <A HREF="http://www.nature.com/nmeth/journal/v2/n2/full/nmeth733.html">Gene identification signature (GIS) analysis for 
+transcriptome characterization and genome annotation.</A> 
 <EM>Nat Methods</EM>. 2005;2:105-111.
 </P>
 <P>Ruan Y, Ooi HS, Choo SW, Chiu KP, Zhao XD, Srinivasan KG, Yao F, Choo CY, 
-Liu J, Ariyaratne P, et al., Fusion transcripts and transcribed retrotransposed 
+Liu J, Ariyaratne P, et al., <A HREF="http://genome.cshlp.org/content/17/6/828.full">Fusion transcripts and transcribed retrotransposed 
 loci discovered through comprehensive transcriptome analysis using Paired-End 
-diTags (PETs). 
+diTags (PETs). </A>
 <EM>Genome Res</EM>. 2007;17:828-838.
 
 <H2> Data Release Policy </H2>
