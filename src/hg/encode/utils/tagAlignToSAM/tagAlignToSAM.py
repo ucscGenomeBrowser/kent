@@ -114,7 +114,7 @@ for line in tagAlign_f:
     # Handle reverse complement case
     #   in SAM format everything is forward strand
     SEQ = rc(SEQ)
-    FLAG != 0x10 # strand of the query
+    FLAG |= 0x10 # strand of the query
   else:
     print >> sys.stderr, "Error: Invalid strand in '%s'" % line
 
