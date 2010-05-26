@@ -9,8 +9,9 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 #include "errCatch.h"
+#include "sig.h"
 
-static char const rcsid[] = "$Id: wigCorrelate.c,v 1.1 2010/05/26 04:43:30 kent Exp $";
+static char const rcsid[] = "$Id: wigCorrelate.c,v 1.2 2010/05/26 18:24:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -179,6 +180,7 @@ void bbiIntervalCorrelatePair(struct bbiInterval *a, struct bbiInterval *b, stru
 int overlap = rangeIntersection(a->start, a->end, b->start, b->end);
 assert(overlap > 0);
 correlateNextMulti(c, a->val, b->val, overlap);
+// correlateNext(c, a->val, b->val);
 }
 
 void bbiIntervalCorrelatePairWrapper(void *a, void *b, void *context)
@@ -186,25 +188,6 @@ void bbiIntervalCorrelatePairWrapper(void *a, void *b, void *context)
 {
 bbiIntervalCorrelatePair(a, b, context);
 }
-
-#ifdef OLD
-void bwgCorrelatePair(struct bwgSection *a, struct bwgSection *b, struct correlate *c)
-/* Update c with information from bits of a and b that overlap. */
-{
-struct lm *lm = lmInit(0);
-struct bbiInterval *aIntervals = sectionToIntervals(a, lm);
-struct bbiInterval *bIntervals = sectionToIntervals(b, lm);
-sortedApplyOverlapping(aIntervals, bIntervals, slListNextWrapper, 
-	bbiIntervalCmpEnd, bbiIntervalOverlap, bbiIntervalCorrelatePairWrapper, c);
-lmCleanup(&lm);
-}
-
-void bwgCorrelatePairWrapper(void *a, void *b, void *context)
-/* Wrap voidness around bwgCorrelatePair */
-{
-bwgCorrelatePair(a,b, context);
-}
-#endif /* OLD */
 
 enum metaWigType 
     {
@@ -226,20 +209,17 @@ struct metaWig
     struct bbiFile *bwf;
     };
 
-struct bbiFile *bigWigMayOpen(char *fileName)
-/* Wrap error catching around bigWigFileOpen and return NULL if there was
- * a problem. */
+boolean isBigWig(char *fileName)
+/* Peak at a file to see if it's bigWig */
 {
-struct errCatch *errCatch = errCatchNew();
-struct bbiFile *bwf = NULL;
-if (errCatchStart(errCatch))
-    {
-    bwf = bigWigFileOpen(fileName);
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    bwf = NULL;	// necessary??
-return bwf;
+FILE *f = mustOpen(fileName, "rb");
+bits32 sig;
+mustReadOne(f, sig);
+fclose(f);
+if (sig == bigWigSig)
+    return TRUE;
+sig = byteSwap32(sig);
+return sig == bigWigSig;
 }
 
 struct hash *hashSectionChroms(struct bwgSection *sectionList)
@@ -261,16 +241,30 @@ struct metaWig *metaWigOpen(char *fileName, struct lm *lm)
 {
 struct metaWig *mw;
 lmAllocVar(lm, mw);
-mw->bwf = bigWigMayOpen(fileName);
-if (mw->bwf == NULL)
+if (isBigWig(fileName))
+    {
+    mw->type = mwtBigWig;
+    mw->bwf = bigWigFileOpen(fileName);
+    }
+else
     {
     mw->sectionList = bwgParseWig(fileName, FALSE, NULL, 512, lm);
     mw->chromHash = hashSectionChroms(mw->sectionList);
     mw->type = mwtSections;
     }
-else
-    mw->type = mwtBigWig;
 return mw;
+}
+
+void metaWigClose(struct metaWig **pMw)
+/* Close up metaWig file */
+{
+struct metaWig *mw = *pMw;
+if (mw != NULL)
+    {
+    bigWigFileClose(&mw->bwf);
+    *pMw = NULL;
+    /* note mw is in local memory. */
+    }
 }
 
 struct slName *metaWigChromList(struct metaWig *mw)
@@ -337,12 +331,14 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     struct lm *lm = lmInit(0);
     struct bbiInterval *aList = metaIntervalsForChrom(a, chrom->name, lm);
     struct bbiInterval *bList = metaIntervalsForChrom(b, chrom->name, lm);
+    verbose(2, "%s a(%d) b(%d)\n", chrom->name, slCount(aList), slCount(bList));
     sortedApplyOverlapping(aList, bList, slListNextWrapper, 
 	    bbiIntervalCmpEnd, bbiIntervalOverlap, bbiIntervalCorrelatePairWrapper, c);
     lmCleanup(&lm);
     }
 slFreeList(&chromList);
 double result = correlateResult(c);
+verbose(2, "correlate: r %g, sumX %g, sumY %g, n %lld\n", result, c->sumX, c->sumY, c->n);
 correlateFree(&c);
 return result;
 }
@@ -352,27 +348,29 @@ void wigCorrelate(int inCount, char **inNames, char *outName)
 {
 int i,j;
 FILE *f = mustOpen(outName, "w");
-uglyTime(NULL);
+verboseTimeInit();
 for (i=0; i<inCount; ++i)
     {
     char *iName = inNames[i];
     struct lm *iLm = lmInit(0);
     struct metaWig *iMeta = metaWigOpen(iName, iLm);
-    uglyTime("parsed %s into %p", iName, iMeta);
+    verboseTime(2, "parsed %s into %p", iName, iMeta);
     for (j=i+1; j<inCount; ++j)
         {
 	char *jName = inNames[j];
 	struct lm *jLm = lmInit(0);
 	struct metaWig *jMeta = metaWigOpen(jName, jLm);
-	uglyTime("parsed %s into %p", jName, jMeta);
+	verboseTime(2, "parsed %s into %p", jName, jMeta);
 	fprintf(f, "%s\t%s\t", iName, jName);
 	fflush(f);
 	double r = correlatePair(iMeta, jMeta);
 	fprintf(f, "%g\n", r);
 	fflush(f);
-	uglyTime("correlated %g from %s and %s", r, iName, jName);
+	verboseTime(2, "correlated %g from %s and %s", r, iName, jName);
+	metaWigClose(&jMeta);
 	lmCleanup(&jLm);
 	}
+    metaWigClose(&iMeta);
     lmCleanup(&iLm);
     }
 carefulClose(&f);
