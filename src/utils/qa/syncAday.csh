@@ -11,7 +11,6 @@ source `which qaConfig.csh`
 ################################
 
 
-
 if ( $#argv != 1 ) then
   echo
   echo "  checks for table sync on all machines for database of the day."
@@ -34,5 +33,6 @@ echo "\n$db\n" >> $basePath/$db
 # checkSync.csh $db times >> $basePath/$db
 checkSync.csh $db hgwbeta hgw2 times >> $basePath/$db
 cat $basePath/$db
-echo "http://genecats.cse.ucsc.edu/qa/test-results/sync/$db" | mail -s "sync for today" $USER@soe.ucsc.edu
+echo "http://genecats.cse.ucsc.edu/qa/test-results/sync/$db" 
+echo 
 
