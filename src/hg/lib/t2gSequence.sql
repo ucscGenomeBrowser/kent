@@ -1,8 +1,8 @@
 #Text to Genome project sequence data table
 CREATE TABLE t2gSequence (
-    pmcId bigint not null,	# PMC ID
-    seqId int not null,		# display ID
-    sequence blob not null,	# list of sequences
+    pmcId bigint not null,	# PubMedCentral ID of article
+    seqId int not null,		# number of sequence in article
+    sequence blob not null,	# sequences
               #Indices
     KEY docIdIdx(pmcId)
 );

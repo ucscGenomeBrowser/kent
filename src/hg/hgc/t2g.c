@@ -4,10 +4,13 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgc.h"
+#include "hgColors.h"
 #include "trackDb.h"
 #include "web.h"
 #include "hash.h"
 #include "obscure.h"
+
+#define PMCURL "http://www.ncbi.nlm.nih.gov/pmc/articles/PMC"
 
 void printPubmedLink(char* pmid) 
 {
@@ -16,7 +19,7 @@ void printPubmedLink(char* pmid)
 
 void printPmcLink(char* pmcId) 
 {
-    printf("<B>PubMed&nbsp;Central:</B>&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/pmc/articles/PMC%s/?tool=pubmed\" TARGET=_blank>%s</A><BR>\n", pmcId, pmcId);
+    printf("<B>PubMed&nbsp;Central:</B>&nbsp;<A HREF=\"%s%s\" TARGET=_blank>PMC%s</A><BR>\n", PMCURL, pmcId, pmcId);
 }
 
 void printT2gLink(char* pmcId) 
@@ -26,9 +29,9 @@ void printT2gLink(char* pmcId)
 
 void printLinks(char* pmid, char* pmcId) 
 {
-    printT2gLink(pmcId);
     printPubmedLink(pmid);
     printPmcLink(pmcId);
+    printT2gLink(pmcId);
     printf("<BR>\n");
 }
 
@@ -45,7 +48,7 @@ char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* it
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	printLinks(row[0], row[1]);
-	printf("<b>%s</b>", row[2]);
+        printf("<A HREF=\"%s%s\"><b>%s</b></A>", PMCURL, row[1], row[2]);
 	printf("<p style=\"font-size:96%%\">%s</p>", row[3]);
 	printf("<p style=\"font-size:92%%\">%s</p>", row[4]);
         docId = row[1];
@@ -54,26 +57,59 @@ char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* it
     return docId;
 }
 
-void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,  char* docId) {
+void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,
+    char* docId, char* item, char* seqName, int start)
+{
     /* print table of sequences */
+
+    /* get all sequences for paper identified by docId*/
     char query[512];
     char* sequenceTable = hashMustFindVal(tdb->settingsHash, "sequenceTable");
-    safef(query, sizeof(query), "SELECT seqId, sequence FROM %s WHERE pmcId='%s'", sequenceTable, docId);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
+    safef(query, sizeof(query), "SELECT concat_ws('|',seqId, sequence) FROM %s WHERE pmcId='%s'", sequenceTable, docId);
+    struct slName *seqList = sqlQuickList(conn, query);
+
+    /* get sequence-Ids for feature that was clicked on (item&startPos are unique) and put into hash */
+    // there must be an easier way to do this...
+    // couldn't find a function that splits a string and converts it to a list
+    safef(query, sizeof(query), "SELECT seqIds,'' FROM t2g WHERE name='%s' "
+	"and chrom='%s' and chromStart=%d", item, seqName, start);
+    char* seqIdsString = sqlQuickString(conn, query);
+    char* seqIds[1024];
+    int partCount = chopString(seqIdsString, ",", seqIds, ArraySize(seqIds));
+    int i;
+    struct hash *seqIdHash = NULL;
+    seqIdHash = newHash(0);
+    for (i=0; i<partCount; i++) 
+	hashAdd(seqIdHash, seqIds[i], NULL);
+    freeMem(seqIdsString);
 
     webNewSection("Sequences in article");
-	webPrintLinkTableStart();
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-        webPrintLinkCell(row[1]);
-        webPrintLinkTableNewRow();
-        //printf("%s<br>", row[1]);
-	}
-	webPrintLinkTableEnd();
+    printf("<small>Sequences that map to the feature that was clicked "
+	"are highlighted in bold</small>");
+    webPrintLinkTableStart();
 
-    sqlFreeResult(&sr);
+    struct slName *listEl = seqList;
+    while (listEl != NULL)
+        {
+        char* parts[2];
+        chopString(listEl->name, "|", parts, 2);
+        char* seqId    = parts[0];
+        char* seq      = parts[1];
+
+        if (hashLookup(seqIdHash, seqId)) 
+            printf("<TD BGCOLOR=\"#%s\"><TT><B>%s</B></TT></TD>",
+		HG_COL_TABLE, seq);
+        else
+            printf("<TD BGCOLOR=\"#%s\"><TT><FONT COLOR=\"#CCCCCC\">%s"
+		"</FONT></TT></TD>", HG_COL_TABLE, seq);
+        webPrintLinkTableNewRow();
+        listEl=listEl->next;
+        }
+	webPrintLinkTableEnd();
     printTrackHtml(tdb);
+
+    slFreeList(seqList);
+    freeHash(&seqIdHash);
 }
 
 void doT2gDetails(struct trackDb *tdb, char *item)
@@ -133,11 +169,8 @@ printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
 
 char* docId = printArticleInfo(conn, tdb, item);
 
-
 if (docId!=0) 
-{
-    printSeqInfo(conn, tdb, docId);
-}
+    printSeqInfo(conn, tdb, docId, item, seqName, start);
 hFreeConn(&conn);
 }
 
