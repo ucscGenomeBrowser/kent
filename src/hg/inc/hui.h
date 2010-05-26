@@ -1112,7 +1112,7 @@ struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
    if 'column' is provided, and there are multiple filterBy columns, only the named column's clause is returned.
    The 'and' param and dyString in/out allows stringing multiple where clauses together
 */
-boolean makeDownloadsLink(struct trackDb *tdb);
+boolean makeDownloadsLink(char *database, struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);

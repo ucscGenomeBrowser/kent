@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.294 2010/05/24 20:34:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.295 2010/05/26 22:21:30 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -47,7 +47,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.294 2010/05/24 20:34:22 tdreszer Exp
 
 
 
-static boolean makeNamedDownloadsLink(struct trackDb *tdb,char *name)
+static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
 // Downloads directory if this is ENCODE
@@ -55,7 +55,7 @@ if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
     printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
-            trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
+            trackDbSettingOrDefault(tdb, "origAssembly",database),
             ENCODE_DCC_DOWNLOADS,
             tdb->track,name);
     return TRUE;
@@ -63,10 +63,10 @@ if(trackDbSetting(tdb, "wgEncode") != NULL)
 return FALSE;
 }
 
-boolean makeDownloadsLink(struct trackDb *tdb)
+boolean makeDownloadsLink(char *database, struct trackDb *tdb)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-return makeNamedDownloadsLink(tdb,"Downloads");
+return makeNamedDownloadsLink(database, tdb,"Downloads");
 }
 
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
@@ -111,7 +111,7 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     if(sameString(mdbVar->var,"fileName"))
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
-        makeNamedDownloadsLink(trackDbTopLevelSelfOrParent(tdb), mdbVar->val);
+        makeNamedDownloadsLink(db, trackDbTopLevelSelfOrParent(tdb), mdbVar->val);
         printf("</td></tr>");
         }
     else
@@ -153,7 +153,7 @@ if(schemaLink)
 if(downloadLink)
     {
     struct trackDb *trueTdb = trackDbTopLevelSelfOrParent(tdb);
-    makeNamedDownloadsLink(trueTdb,(moreThanOne ? "downloads":"Downloads"));
+    makeNamedDownloadsLink(db, trueTdb,(moreThanOne ? "downloads":"Downloads"));
     if(metadataLink)
         printf(",");
     }
