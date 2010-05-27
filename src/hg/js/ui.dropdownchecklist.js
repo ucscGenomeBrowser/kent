@@ -264,19 +264,22 @@
                     allCheckboxes.attr("checked", senderCheckbox.attr("checked"));
                 } else {
                     // check the first checkbox if all the other checkboxes are checked
-                    var allChecked;
-                    allChecked = true;
+                    var allChecked = true;
+                    var noneChecked = true;
                     allCheckboxes.each(function(index) {
                         if (index > 0) {
-                            var checked = $(this).attr("checked");
-                            if (!checked) allChecked = false;
+                            if ($(this).attr("checked"))
+                                noneChecked = false;
+                            else
+                                allChecked = false;
                         }
                     });
                     var firstCheckbox = allCheckboxes.filter(":first");
                     firstCheckbox.attr("checked", false);
-                    if (allChecked) {
+                    if (allChecked)
                         firstCheckbox.attr("checked", true);
-                    }
+                    else if(noneChecked && options.noneIsAll)
+                        firstCheckbox.attr("checked", true);
                 }
             }
             // do the actual synch with the source select
@@ -308,9 +311,16 @@
             var allSelected = null != firstSelect && firstSelect.attr("selected");
             var selectOptions = sourceSelect.find("option");
             var text = self._formatText(selectOptions, options.firstItemChecksAll, allSelected);
-            if(text.length <= 0)
-                self._emptyControlText();
-             else
+            if(text.length <= 0) {
+                if(options.noneIsAll) {
+                    var allCheckboxes = this.dropWrapper.find("input:not([disabled])");
+                    $(allCheckboxes[0]).attr("checked", true);
+                    var selectOptions = sourceSelect.get(0).options;
+                    $(selectOptions[0]).attr("selected", true);
+                    self._selectedControlText("All");
+                } else
+                    self._emptyControlText();
+            } else
                 self._selectedControlText(text);
         },
         // Updates the text shown in the control depending on the checked (selected) items

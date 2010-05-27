@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.56 2010/05/24 23:01:21 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.57 2010/05/27 16:41:47 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -169,7 +169,7 @@ function matSetMatrixCheckBoxes(state)
 }
 
 function filterCompositeSelectionChanged(obj)
-{ // filterComposite:onchange Set subtrack selection based upon the changed filter
+{ // filterComposite:onchange Set subtrack selection based upon the changed filter  [Not called for filterBy]
 
     if($(obj).val() != undefined
     && $(obj).val().toString().indexOf("All,") != -1) {
@@ -1184,5 +1184,7 @@ $(document).ready(function()
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
-    $('.filterComp').dropdownchecklist({ firstItemChecksAll: true, emptyText: 'Please select ...' });
+    $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
+        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy') });
+    });
 });
