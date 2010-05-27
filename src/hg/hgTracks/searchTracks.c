@@ -315,7 +315,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
             // trackDbOutput(track->tdb, stderr, ',', '\n');
             hPrintf("<tr bgcolor='#EEEEEE'>\n");
             hPrintf("<td>%s</td>\n", track->shortLabel);
-            hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->mapName, NULL), track->longLabel);
+            hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->track, NULL), track->longLabel);
             // How do we get subtrack's parent?
             struct track *parent = NULL;
             if(hashLookup(parents, track->track) != NULL)
