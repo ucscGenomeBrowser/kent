@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.241 2010/05/26 20:10:56 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.242 2010/05/27 17:15:58 vsmalladi Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1679,6 +1679,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 sex M
 #protocol ???
+
+term Raji
+tag Raji
+type Cell Line
+organism Human
+description B lymphocyte
+tissue Blood
+#tissue Hematopoietic
+vendorName ATCC
+vendorId CCl-86
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-86&Template=cellBiology
+lineage "The Raji line of lymphoblast-like cells was established by R.J.V. Pulvertaft in 1963 from a Burkitt's lymphoma of the left maxilla of an 11-year-old Black male." - ATCC
+karyotype cancer
+termId BTO:0001154
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001154&termName=RAJI%20cell
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):Raji_Farnham_protocol.pdf
 
 term SAEC
 tag SAEC
