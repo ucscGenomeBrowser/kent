@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1648 2010/05/18 19:01:16 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1649 2010/05/27 21:13:24 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3186,7 +3186,6 @@ else if (sameString(type, "encodePeak"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
-#ifdef USE_BAM
 else if (sameString(type, "bam"))
     {
     tg = trackFromTrackDb(tdb);
@@ -3201,7 +3200,6 @@ else if (sameString(type, "bam"))
     hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
-#endif//def USE_BAM
 else if (sameString(type, "makeItems"))
     {
     tg = trackFromTrackDb(tdb);
@@ -4024,7 +4022,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    cartSetString(cart, track->track, s);
 	    }
 	}
-    if (s != NULL)
+    if (s != NULL && !track->limitedVisSet)
 	track->visibility = hTvFromString(s);
     if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
 	{

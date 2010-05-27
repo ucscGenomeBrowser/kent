@@ -18,7 +18,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.31 2010/05/11 01:43:26 kent Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.32 2010/05/27 21:13:24 angie Exp $";
 
 struct bamTrackData
     {
@@ -690,4 +690,62 @@ track->nextPrevExon = NULL;
 track->colorShades = shadesOfGray;
 }
 
-#endif /* USE_BAM */
+#else /* no USE_BAM */
+
+#include "common.h"
+#include "hgTracks.h"
+// If code was not built with USE_BAM=1, but there are bam tracks, display a message
+// in place of the tracks (instead of annoying "No track handler" warning messages).
+
+void drawUseBamWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+                 int xOff, int yOff, int width, MgFont *font, Color color,
+                 enum trackVisibility vis)
+/* Draw a message saying that the code needs to be built with USE_BAM=1. */
+{
+char message[512];
+safef(message, sizeof(message),
+      "Get samtools(.sourceforge.net) and recompile kent/src with USE_BAM=1");
+Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
+}
+
+static void dontLoadItems(struct track *tg)
+/* Don't load anything, just draw warning. */
+{
+return;
+}
+
+void bamMethods(struct track *track)
+/* Methods for BAM alignment files. */
+{
+linkedFeaturesMethods(track);
+track->loadItems = dontLoadItems;
+track->drawItems = drawUseBamWarning;
+// Following few lines taken from hgTracks.c getTrackList, because this is called earlier
+// but needs to know track vis from tdb+cart:
+char *s = cartOptionalString(cart, track->track);
+if (cgiOptionalString("hideTracks"))
+    {
+    s = cgiOptionalString(track->track);
+    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+	{
+	cartSetString(cart, track->track, s);
+	}
+    }
+// end stuff copied from hgTracks.c
+enum trackVisibility trackVis = track->tdb->visibility;
+if (s != NULL)
+    trackVis = hTvFromString(s);
+if (trackVis != tvHide)
+    {
+    track->visibility = tvDense;
+    track->limitedVis = tvDense;
+    track->limitedVisSet = TRUE;
+    }
+track->nextItemButtonable = track->nextExonButtonable = FALSE;
+track->nextPrevItem = NULL;
+track->nextPrevExon = NULL;
+}
+
+#endif /* no USE_BAM */
