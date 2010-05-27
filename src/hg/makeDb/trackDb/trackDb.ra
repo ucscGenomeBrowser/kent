@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.634 2010/05/27 14:45:59 angie Exp $";
+#	"$Id: trackDb.ra,v 1.635 2010/05/27 17:18:14 baertsch Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -2633,23 +2633,24 @@ searchType refGene
 searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
 
-searchTable retroMrnaInfo
+searchTable ucscRetroInfo
 searchType bed
 searchMethod prefix
 searchPriority 3.5
 
-searchName retroMrnaInfoRefSeq
-searchTable retroMrnaInfo
+searchName ucscRetroInfoRefSeq
+searchTable ucscRetroInfo
+searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
 query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
 xrefTable refLink
 xrefQuery select mrnaAcc, name from %s where name like '%s%%'
-searchPriority 3.51
+searchPriority 3.52
 
-searchTable pseudoGeneLink
-query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
-xrefTable refLink
-xrefQuery select mrnaAcc, name from %s where name like '%s%%'
-searchPriority 2.5
+searchName ucscRetroInfoMrna
+searchTable ucscRetroInfo
+searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
+query select chrom, chromStart,chromEnd, name from %s where name like '%s%%'
+searchPriority 3.51
 
 searchName pseudoGeneUniProt
 searchTable pseudoGeneLink
