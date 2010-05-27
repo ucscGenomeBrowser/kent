@@ -24,7 +24,7 @@
  *    TODO:  tags=a,b,c    : Display rows for listed terms, using tags as identifiers.  Must use with 'type'.
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.31 2010/03/24 20:35:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.32 2010/05/27 19:24:58 tdreszer Exp $";
 
 //options that apply to all vocab types
 
@@ -126,29 +126,14 @@ else
     puts("  <TH>Term</TH><TH>Description</TH>");
 }
 
-void doTypeRow(struct hash *ra, char *type, int *total)
+boolean doTypeRow(struct hash *ra, char *type)
 {
 char *term;
 char *s, *t, *u;
 
-// Skip all rows that do not match term or tag if specified
-char *optVal = termOpt;
-char *optType = "term";
-if (tagOpt)
-    {
-    optVal = tagOpt;
-    optType = "tag";
-    }
-if (optVal)
-    {
-    (void)stripChar(optVal,'\"');
-    if (differentWord(optVal, hashMustFindVal(ra, optType)))
-        return;
-    }
 term = (char *)hashMustFindVal(ra, "term");
 if (sameString(type,"Antibody"))
     {
-    ++(*total);
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "targetDescription");
@@ -192,7 +177,6 @@ if (sameString(type,"Antibody"))
     }
 else if (sameString(type,"ripAntibody"))
     {
-    ++(*total);
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "antibodyDescription");
@@ -214,7 +198,6 @@ else if (sameString(type,"ripAntibody"))
     }
 else if (sameString(type,"ripTgtProtein"))
     {
-    ++(*total);
     puts("<TR>");
     s = hashFindVal(ra, "url");
     if (s)
@@ -229,7 +212,6 @@ else if (sameString(type,"ripTgtProtein"))
     }
 else if (sameString(type,"localization"))
     {
-    ++(*total);
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashMustFindVal(ra, "description");
@@ -251,18 +233,18 @@ else if (sameString(type,"Cell Line"))
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
     s = hashFindVal(ra, "organism");
     if (s && differentString(s, organismOpt))
-        return;
+        return FALSE;
     if (cgiOptionalInt("tier",0))
         {
         if (hashFindVal(ra,"tier") == NULL)
-            return;
+            return FALSE;
         if (atoi(hashFindVal(ra,"tier"))!=cgiOptionalInt("tier",0))
-            return;
+            return FALSE;
         }
     if (cgiOptionalString("tiers"))
         {
         if (hashFindVal(ra,"tier") == NULL)
-            return;
+            return FALSE;
         boolean found=FALSE;
         char *tiers=cloneString(cgiOptionalString("tiers"));
         char *tier;
@@ -276,9 +258,8 @@ else if (sameString(type,"Cell Line"))
                 }
             }
         if(!found)
-            return;
+            return FALSE;
         }
-    ++(*total);
     puts("<TR>");
 
     printf("  <TD>%s</TD>\n", term);
@@ -326,7 +307,6 @@ else
     s = hashFindVal(ra, "description");
     if(s != NULL)
         {
-        ++(*total);
         puts("<TR>");
         printf("  <TD>%s</TD>\n", term);
         printf("  <TD>%s</TD>\n", s);
@@ -338,6 +318,7 @@ else
         errAbort("Error: Unrecognised type (%s)\n", type);
         }
     }
+return TRUE;
 }
 
 static char *normalizeType(char *type)
@@ -355,7 +336,7 @@ else if (sameWord(type,"Factor"))
 return type;
 }
 
-static char *findType(struct hash *cvHash)
+static char *findType(struct hash *cvHash,char **requested,int requestCount,char *termOrTag)
 /* returns the type that was requested or else the type associated with the term requested */
 {
 struct hashCookie hc = hashFirst(cvHash);
@@ -363,26 +344,20 @@ struct hashEl *hEl;
 struct hash *ra;
 char *type = typeOpt;
 
-if (type == NULL)    // If not type, but term (or tag), then search for match and use its type
+if (requested != NULL) // if no type, finds it from requested terms.  Will validate that terms match type
     {
-    char *optType = "tag";
-    char *optVal = tagOpt;
-    if (optVal == NULL)
-        {
-        optVal = termOpt;
-        if (optVal == NULL)
-            errAbort("Error: Required 'term', 'tag', or 'type' optument not found\n");
-        optType = "term";
-        }
-    (void)stripChar(optVal,'\"');
     while ((hEl = hashNext(&hc)) != NULL)
         {
         ra = (struct hash *)hEl->val;
-        char *val = hashMustFindVal(ra, optType);
-        if (sameWord(val, optVal))
+        int ix = stringArrayIx(hashMustFindVal(ra, termOrTag),requested,requestCount);
+        if(ix != -1) // found
             {
-            type = hashMustFindVal(ra, "type");
-            break;
+            char *thisType = hashMustFindVal(ra, "type");
+            if(type == NULL)
+                type = thisType;
+            else if(differentWord(type,thisType))  // ignores terms not in hash, but catches this:
+                errAbort("Error: Requested %ss of type '%s'.  But '%s' has type '%s'\n",
+                         termOrTag,type,requested[ix],thisType);
             }
         }
     }
@@ -399,29 +374,54 @@ struct hashEl *hEl;
 struct slList *termList = NULL;
 struct hash *ra;
 char *type;
-int total = 0;
+int totalPrinted = 0;
+
+// Prepare an array of selected terms (if any)
+int requestCount = 0;
+char **requested = NULL;
+char *requestVal = termOpt;
+char *termOrTag = "term";
+if (tagOpt)
+    {
+    requestVal = tagOpt;
+    termOrTag = "tag";
+    }
+if (requestVal)
+    {
+    (void)stripChar(requestVal,'\"');
+    requestCount = chopCommas(requestVal,NULL);
+    requested = needMem(requestCount * sizeof(char *));
+    chopByChar(requestVal,',',requested,requestCount);
+    }
 
 puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
 puts("<TR style=\"background:#D9E4F8\">");
-type = findType(cvHash);
+type = findType(cvHash,requested,requestCount,termOrTag);
 doTypeHeader(type);
 puts("</TR>");
+
+// Get just the terms that match type and requested, then sort them
 while ((hEl = hashNext(&hc)) != NULL)
     {
     ra = (struct hash *)hEl->val;
     if (differentString(hashMustFindVal(ra, "type"), type))
         continue;
+    // Skip all rows that do not match term or tag if specified
+    if(requested && -1 == stringArrayIx(hashMustFindVal(ra, termOrTag),requested,requestCount))
+        continue;
     slAddTail(&termList, ra);
     }
 slSort(&termList, termCmp);
+
+// Print out the terms
 while((ra = slPopHead(&termList)) != NULL)
     {
-    // TODO: Add check for unknown tags in cv.ra
-    doTypeRow(ra, type, &total);
+    if(doTypeRow(ra, type))
+        totalPrinted++;
     }
 puts("</TABLE><BR>");
-if(total > 1)
-    printf("Total = %d\n", total);
+if(totalPrinted > 1)
+    printf("Total = %d\n", totalPrinted);
 }
 
 int main(int argc, char *argv[])
