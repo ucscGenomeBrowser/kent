@@ -95,7 +95,7 @@ for line in tagAlign_f:
   FLAG = 0
   RNAME = '*'
   POS = 0
-  MAPQ = 0
+  MAPQ = 255
   CIGAR = '*'
   MRNM = '*'
   MPOS = 0
@@ -117,14 +117,6 @@ for line in tagAlign_f:
     FLAG |= 0x10 # strand of the query
   else:
     print >> sys.stderr, "Error: Invalid strand in '%s'" % line
-
-  # MAPQ = 0 indicates map pos query is not available
-  # MAPQ = 255 indicates map quality not available
-  # MAPQ = [0, 255] while tagAlign score is uint32?
-  if score < 255:
-    MAPQ = score
-  else:
-    MAPQ = 254
 
   print_sam(output_f, QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
             SEQ, QUAL, TAG)
