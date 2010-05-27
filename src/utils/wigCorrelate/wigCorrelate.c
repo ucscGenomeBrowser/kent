@@ -11,7 +11,9 @@
 #include "errCatch.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: wigCorrelate.c,v 1.2 2010/05/26 18:24:20 kent Exp $";
+static char const rcsid[] = "$Id: wigCorrelate.c,v 1.3 2010/05/27 08:24:46 kent Exp $";
+boolean gotClampMax = FALSE;
+double clampMax = 100;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +25,12 @@ errAbort(
   "This works on bigWig as well as wig files.\n"
   "The output is to stdout\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -clampMax=N - values larger than this are clipped to this value\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"clampMax", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -174,12 +177,21 @@ struct bbiInterval *a = va, *b = vb;
 return rangeIntersection(a->start, a->end, b->start, b->end);
 }
 
+double clamp(double x)
+/* Apply some clamping constraints to x. */
+{
+if (gotClampMax)
+    if (x > clampMax)
+        x = clampMax;
+return x;
+}
+
 void bbiIntervalCorrelatePair(struct bbiInterval *a, struct bbiInterval *b, struct correlate *c)
 /* Update c with information from bits of a and b that overlap. */
 {
 int overlap = rangeIntersection(a->start, a->end, b->start, b->end);
 assert(overlap > 0);
-correlateNextMulti(c, a->val, b->val, overlap);
+correlateNextMulti(c, clamp(a->val), clamp(b->val), overlap);
 // correlateNext(c, a->val, b->val);
 }
 
@@ -349,7 +361,7 @@ void wigCorrelate(int inCount, char **inNames, char *outName)
 int i,j;
 FILE *f = mustOpen(outName, "w");
 verboseTimeInit();
-for (i=0; i<inCount; ++i)
+for (i=0; i<inCount-1; ++i)
     {
     char *iName = inNames[i];
     struct lm *iLm = lmInit(0);
@@ -382,6 +394,11 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 3)
     usage();
+if (optionExists("clampMax"))
+    {
+    gotClampMax = TRUE;
+    clampMax = optionDouble("clampMax", clampMax);
+    }
 wigCorrelate(argc-1, argv+1, "stdout");
 return 0;
 }
