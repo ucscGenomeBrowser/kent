@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.635 2010/05/27 17:18:14 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.636 2010/05/27 21:15:23 rhead Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -926,7 +926,7 @@ shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54
-visibility pack
+visibility dense
 type psl .
 baseColorUseCds genbank
 baseColorUseSequence genbank
