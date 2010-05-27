@@ -60,7 +60,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
 	faToTwoBit gtfToGenePred htmlCheck nibFrag stringify \
 	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
 
-HG_APPLIST = bedSort liftOver bedItemOverlapCount encode/validateFiles \
+HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 	ratStuff/mafsInRegion ratStuff/mafSpeciesSubset pslCDnaFilter
 
 HG_UTILS_APPLIST = bedExtendRanges
@@ -81,6 +81,7 @@ clean:
 	cd hg && ${MAKE} clean
 	cd jkOwnLib && ${MAKE} clean
 	cd utils && ${MAKE} clean
+	cd webBlat && ${MAKE} clean
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 	rm -f tags TAGS
