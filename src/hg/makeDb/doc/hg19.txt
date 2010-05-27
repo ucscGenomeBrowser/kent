@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.114 2010/05/26 16:17:24 angie Exp $";
+#	"$Id: hg19.txt,v 1.115 2010/05/27 23:52:00 angie Exp $";
 
 #############################################################################
 
@@ -9833,6 +9833,136 @@ EOF
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp131CodingDbSnp.bed
 #Loaded 443454 elements of size 11
+
+
+############################################################################
+# SNPMASKED SEQUENCE FOR SNP131 (DONE 5/27/10 angie)
+    mkdir /hive/data/genomes/hg19/snp131Mask
+    cd /hive/data/genomes/hg19/snp131Mask
+
+    # Identify rsIds with various problems -- we will exclude those.
+    # MultipleAlignments is kinda broad because anything that maps on
+    # both chrN and chrN_foo_hap1 will be excluded... similarly, extra
+    # matches on chrN_random might disqualify good matches on chrN.
+    # Well, erring on the side of caution is good.
+    awk '$5 ~ /^MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved$/ {print $4;}' \
+      /hive/data/outside/dbSNP/131/human/snp131Exceptions.bed \
+      | sort -u \
+      > snp131ExcludeRsIds.txt
+    time grep -vFwf snp131ExcludeRsIds.txt \
+      /hive/data/outside/dbSNP/131/human/snp131.bed \
+      > snp131Cleaned.bed
+#193.507u 5.203s 4:07.62 80.2%   0+0k 0+0io 0pf+0w
+
+    # Substitutions:
+    mkdir substitutions
+    snpMaskSingle snp131Cleaned.bed /hive/data/genomes/hg19/hg19.2bit stdout \
+    | faSplit byname stdin substitutions/
+    # 180 warnings about differing observed strings at same base position --
+    # saved as diffObserved.txt.
+#Masked 17377658 snps in 17377491 out of 3099287100 genomic bases
+#/hive/data/genomes/hg19/hg19.2bit has 3137161264 total bases, but the total number of bases in sequences for which we masked snps is 3099287100 (difference is 37874164)
+#52.903u 10.964s 4:49.08 22.0%   0+0k 0+0io 3pf+0w
+    # Check that 37874164 is the total #bases in sequences with nothing in snp131Cleaned:
+    grep -Fw single snp131Cleaned.bed | cut -f 1 | uniq > /tmp/1
+    grep -vwf /tmp/1 ../chrom.sizes
+    grep -vwf /tmp/1 ../chrom.sizes \
+    | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
+#37874164
+#TODO: send list to dbSNP.
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      faCmp -softMask $f ../[1-9UMXY]*/$f:t |& grep -v "that differ"
+    end
+#chr1 in substitutions/chr1.fa differs from chr1 at ../1/chr1.fa at base 10491 (y != c)
+#chr10 in substitutions/chr10.fa differs from chr10 at ../10/chr10.fa at base 61004 (r != a)
+#...
+#(output OK -- ambiguous bases replacing [agct] at SNP positions)
+    foreach f (substitutions/chr*.fa)
+      echo $f:t:r
+      mv $f $f:r.subst.fa
+      gzip $f:r.subst.fa
+    end
+
+    # Insertions:
+    mkdir insertions
+    snpMaskAddInsertions snp131Cleaned.bed /hive/data/genomes/hg19/hg19.2bit stdout \
+    | faSplit byname stdin insertions/
+#Added 2496221 snps totaling 5939697 bases to 3098816404 genomic bases
+#/hive/data/genomes/hg19/hg19.2bit has 3137161264 total bases, but the total number of bases in sequences for which we masked snps is 3098816404 (difference is 38344860)
+#52.764u 12.593s 3:55.47 27.7%   0+0k 0+0io 2pf+0w
+    # Again, that just means that some chroms didn't have filtered SNPs.
+    # Make sure that all sizes have increased relative to original:
+    foreach f (insertions/chr*.fa)
+      echo -n "${f:t:r}: "
+      faCmp -softMask $f ../[1-9UMXY]*/$f:t |& grep -v "that differ" \
+      |& perl -we '$_=<>; \
+           if (/^\w+ in \S+ has (\d+) bases.  \w+ in \S+ has (\d+) bases/) { \
+             if ($1 > $2) {print "OK: ins size $1 > $2\n";} \
+             else {die "ERROR: ins size $1 <= $2\n";} \
+           } else {die $_;}'
+    end
+#chr1: OK: ins size 249717078 > 249250621
+#chr10: OK: ins size 135805198 > 135534747
+#...
+#(output OK -- new sizes > old)
+    foreach f (insertions/chr*.fa)
+      mv $f $f:r.ins.fa
+      gzip $f:r.ins.fa
+    end
+
+    # Deletions:
+    mkdir deletions
+    snpMaskCutDeletions snp131Cleaned.bed /hive/data/genomes/hg19/hg19.2bit stdout \
+    | faSplit byname stdin deletions/
+#Cut 1522178 snps totaling 3455905 bases from 3098701788 genomic bases
+#/hive/data/genomes/hg19/hg19.2bit has 3137161264 total bases, but the total number of bases in sequences for which we masked snps is 3098701788 (difference is 38459476)
+#114.251u 20.911s 4:24.26 51.1%  0+0k 0+0io 3pf+0w
+    # Again, that just means that some chroms didn't have filtered SNPs.
+    # Make sure that all sizes have decreased relative to original:
+    foreach f (deletions/chr*.fa)
+      echo -n "${f:t:r}: "
+      faCmp -softMask $f ../[1-9UMXY]*/$f:t |& grep -v "that differ" \
+      |& perl -we '$_=<>; \
+           if (/^\w+ in \S+ has (\d+) bases.  \w+ in \S+ has (\d+) bases/) { \
+             if ($1 < $2) {print "OK: del size $1 < $2\n";} \
+             else {die "ERROR: del size $1 >= $2\n";} \
+           } else {die $_;}'
+    end
+#chr1: OK: del size 248968549 < 249250621
+#chr10: OK: del size 135378065 < 135534747
+#...
+#(output OK -- del sizes < old)
+    foreach f (deletions/chr*.fa)
+      mv $f $f:r.del.fa
+      gzip $f:r.del.fa
+    end
+
+    # Clean up and prepare for download:
+    gzip snp131Cleaned.bed
+    foreach d (substitutions insertions deletions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+        cp /hive/data/genomes/hg18/snp130Mask/$d/README.txt .
+      popd
+    end
+    # Edit the README.txt in each subdir.
+
+    # Create download links on hgwdev.
+    # NOTE: Currently we offer only the substitutions.
+    # If we get any user requests, then maybe we can put the insertions
+    # and deletions out there.
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp131Mask
+    ln -s /hive/data/genomes/hg19/snp131Mask/substitutions/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp131Mask/
+## If there is user demand for ins & del, then start over with an empty
+## goldenPath/snp131Mask and do this:
+##    foreach type (substitutions insertions deletions)
+##      mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp131Mask/$type
+##      ln -s /hive/data/genomes/hg19/snp131Mask/$type/* \
+##        /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp131Mask/$type/
+##    end
 
 
 ##############################################################################
