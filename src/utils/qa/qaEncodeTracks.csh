@@ -110,11 +110,15 @@ echo "it can't find a shortLabel at all)"
 foreach table ( $tables )
  set num=`tdbQuery "select shortLabel from $db where track = '$table'" \
   | sed -e 's/shortLabel //' | sed -e '/^[ ]*$/d' | awk '{print length}'`
- if ( $maxShortLabel < $num || 0 == $num ) then
-  if ( 0 == $num ) then
-   echo "ERROR: can't find a shortLabel for $table"
-  else
-   echo "ERROR: $table shortLabel is $num characters"
+ if ( '' == $num ) then
+  echo "ERROR: can't find entry in trackDb for $table"
+ else
+  if ( $maxShortLabel < $num || 0 == $num ) then
+   if ( 0 == $num ) then
+    echo "ERROR: can't find a shortLabel for $table"
+   else
+    echo "ERROR: $table shortLabel is $num characters"
+   endif
   endif
  endif
 end
@@ -127,11 +131,15 @@ echo "it can't find a longLabel at all)"
 foreach table ( $tables )
  set num=`tdbQuery "select longLabel from $db where track = '$table'" \
   | sed -e 's/longLabel //' | sed -e '/^[ ]*$/d' | awk '{print length}'`
- if ( $maxLongLabel < $num || 0 == $num ) then
-  if ( 0 == $num ) then
-   echo "ERROR: can't find a longLabel for $table"
-  else
-   echo "ERROR: $table longLabel is $num characters"
+ if ( '' == $num ) then
+  echo "ERROR: can't find entry in trackDb for $table"
+ else
+  if ( $maxLongLabel < $num || 0 == $num ) then
+   if ( 0 == $num ) then
+    echo "ERROR: can't find a longLabel for $table"
+   else
+    echo "ERROR: $table longLabel is $num characters"
+   endif
   endif
  endif
 end
