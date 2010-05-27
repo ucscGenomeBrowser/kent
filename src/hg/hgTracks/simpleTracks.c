@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.141 2010/05/20 19:53:22 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.142 2010/05/27 21:07:39 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2254,7 +2254,7 @@ void findTrackColors(struct hvGfx *hvg, struct track *trackList)
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (track->limitedVis != tvHide) 
+    if (track->limitedVis != tvHide)
 	{
 	track->ixColor = hvGfxFindRgb(hvg, &track->color);
 	track->ixAltColor = hvGfxFindRgb(hvg, &track->altColor);
@@ -4062,12 +4062,13 @@ if (classTable != NULL && hTableExists(database, classTable))
             passesThroughFilter = TRUE;
         else
             {
-            safef(query, sizeof(query),
-                "select class from %s where name = \"%s\" and %s", classTable, lf->name,clause);
+            struct dyString *dyQuery = dyStringCreate("select class from %s where name = \"%s\" and ", classTable, lf->name);
+            dyStringAppend(dyQuery, clause);
+
             freeMem(clause);
 
             conn = hAllocConn(database);
-            sr = sqlGetResult(conn, query);
+            sr = sqlGetResult(conn, dyStringCannibalize(&dyQuery));
             if ((row = sqlNextRow(sr)) != NULL)
                 passesThroughFilter = TRUE;
             sqlFreeResult(&sr);
