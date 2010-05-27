@@ -120,6 +120,77 @@ knownToEnsembl yes
     # 46705616 bases of 2571531505 (1.816%) in intersection
 
 ############################################################################
+# bosTau4 was broken - finished manually (DONE - 2010-05-27 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau4
+    cat << '_EOF_' > bosTau4.ensGene.ra
+# required db variable
+db bosTau4
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9UX][0-9n]*\)/chr\1/; s/^MT/chrM/"
+# cause SQL tables to be fetched to see if chrUn can be fixed up
+# geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=58 bosTau4.ensGene.ra
+    #	broken during processing, fix doProcess.csh to eliminate AAFC03011182
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau4/bed/ensGene.58/process
+    mv allGenes.gtf.gz allGenes.gtf.gz.0
+    zcat ../download/Bos_taurus.Btau_4.0.58.gtf.gz \
+        | sed -e "s/^\([0-9UX][0-9n]*\)/chr\1/; s/^MT/chrM/" \
+        | grep -v AAFC03011182 | gzip > allGenes.gtf.gz
+    gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \
+	| gzip > bosTau4.allGenes.gp.gz
+    /cluster/bin/scripts/extractGtf.pl infoOut.txt > ensGtp.tab
+    genePredCheck -db=bosTau4 bosTau4.allGenes.gp.gz
+    cd /hive/data/genomes/bosTau4
+    doEnsGeneUpdate.pl  -ensVersion=58 -continue=load bosTau4.ensGene.ra \
+	> ens.58.load  2>&1
+    featureBits bosTau4 ensGene
+    # 42306079 bases of 2731830700 (1.549%) in intersection
+
+############################################################################
+#  gasAcu1 - Stickleback - Ensembl Genes version 58  (DONE - 2010-05-27 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/gasAcu1
+    cat << '_EOF_' > gasAcu1.ensGene.ra
+# required db variable
+db gasAcu1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^group\([IUVX]\)/chr\1/; s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=58 gasAcu1.ensGene.ra
+
+    # requires extra attention after the all database for loop attempt
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.58/process
+    mv gasAcu1.allGenes.gp.gz gasAcu1.allGenes.gp.beforeLift.gz
+    zcat gasAcu1.allGenes.gp.beforeLift.gz \
+	| liftUp -extGenePred -type=.gp gasAcu1.scaffolds.gp \
+	    ../../../jkStuff/contigsToScaffolds.lft carry stdin
+    liftUp -extGenePred gasAcu1.allGenes.gp \
+	../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft carry \
+	    gasAcu1.scaffolds.gp
+    gzip gasAcu1.scaffolds.gp
+    gzip gasAcu1.allGenes.gp
+    #	verify OK
+    genePredCheck -db=gasAcu1 gasAcu1.allGenes.gp.gz
+    #	checked: 29245 failed: 0
+
+    #	then continue with the load
+    cd /hive/data/genomes/gasAcu1
+    doEnsGeneUpdate.pl -continue=load -ensVersion=58 gasAcu1.ensGene.ra \
+	> ens.58.load 2>&1
+
+    featureBits gasAcu1 ensGene
+    # 36792090 bases of 446627861 (8.238%) in intersection
+
+############################################################################
 ############################################################################
 # ensembl 57 update (DONE - 2010-04-02 - Hiram)
 
