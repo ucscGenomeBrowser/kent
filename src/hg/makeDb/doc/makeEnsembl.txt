@@ -6,7 +6,122 @@
 #
 
 ############################################################################
-# ensembl 57 update (WORKING - 2010-04-02 - Hiram)
+# ensembl 58 update (WORKING - 2010-05-27 - Hiram)
+
+############################################################################
+#  mm9 - Mouse - Ensembl Genes version 58  (DONE - 2010-05-27 - hiram)
+    cd /hive/data/genomes/mm9
+    cat << '_EOF_' > mm9.ensGene.ra
+# required db variable
+db mm9
+# optional liftRandoms yes/no or absent
+liftRandoms yes
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=58 mm9.ensGene.ra
+
+    cd /hive/data/genomes/mm9/bed/ensGene.58
+    #	ran into trouble with the ensGtp table load, the names of
+    #	the proteins have gotten longer and the standard sql definition
+    #	was no longer adequate.  So, after the load failed, increase
+    #	protein char and index size to 22:
+    cat << '_EOF_' > ensGtp.sql
+# This creates the table holding the relationship between
+# ensemble genes, transcripts, and peptides.
+CREATE TABLE ensGtp (
+  gene char(20) NOT NULL,
+  transcript char(20) NOT NULL,
+  protein char(23) NOT NULL,
+# INDICES
+  INDEX(gene(19)),
+  UNIQUE(transcript(19)),
+  INDEX(protein(23))
+) 
+'_EOF_'
+    # << happy emacs
+
+    #	Then, running the rest of the load script, with this line fixed up:
+    #	hgLoadSqlTab mm9 ensGtp ensGtp.sql process/ensGtp.tab
+    ./finiLoad.csh > finiLoad.log 2>&1
+
+    cd /hive/data/genomes/mm9
+    doEnsGeneUpdate.pl -ensVersion=58 -verbose=2 -continue=cleanup \
+	mm9.ensGene.ra > ens.58.cleanup
+
+    featureBits mm9 ensGene
+    #	79466978 bases of 2620346127 (3.033%) in intersection
+
+############################################################################
+#  hg19 - Human - Ensembl Genes version 58  (DONE - 2010-04-06 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/hg19
+    cat << '_EOF_' > hg19.ensGene.ra
+# required db variable
+db hg19
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
+# changing names for the odd bits in Ensembl 58
+liftUp /hive/data/genomes/hg19/jkStuff/ens.57.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=58 hg19.ensGene.ra
+    #	New problems in v58: LRG genome sequence, see also:
+    #	http://www.lrg-sequence.org/
+    #	and as was in v57, four of their genes cross the boundaries of
+    #	the haplotypes into the chromosomes.
+    #	We can't manage these, so, fixup doProcess.csh:
+    cd /hive/data/genomes/hg19/bed/ensGene.58/process
+    gunzip hg19.allGenes.gp.gz
+    egrep -v "LRG_|ENST00000436611|ENST00000436232|ENST00000436870" \
+        hg19.allGenes.gp | gzip -c > hg19.allGenes.gp.gz
+    genePredCheck -db=hg19 hg19.allGenes.gp.gz
+    checked: 151222 failed: 0
+    mv hg19.allGenes.gp hg19.allGenes.gp.broken
+
+    cd /hive/data/genomes/hg19
+    #	and finish it off:
+    doEnsGeneUpdate.pl -ensVersion=58 -continue=load \
+	hg19.ensGene.ra > ens.58.load 2>&1
+    featureBits hg19 ensGene
+    # 104402177 bases of 2897316137 (3.603%) in intersection
+
+############################################################################
+#  rn4 - Rat - Ensembl Genes version 58  (DONE - 2010-05-27 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/rn4
+    cat << '_EOF_' > rn4.ensGene.ra
+# required db variable
+db rn4
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=58 rn4.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/rn4/bed/ensGene.58
+    featureBits rn4 ensGene
+    # 46705616 bases of 2571531505 (1.816%) in intersection
+
+############################################################################
+############################################################################
+# ensembl 57 update (DONE - 2010-04-02 - Hiram)
 
 ############################################################################
 #  susScr1 - Pig - Ensembl Genes version 57  (DONE - 2010-04-05 - hiram)
