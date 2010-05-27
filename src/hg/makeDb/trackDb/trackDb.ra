@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.633 2010/05/20 18:43:21 hiram Exp $";
+#	"$Id: trackDb.ra,v 1.634 2010/05/27 14:45:59 angie Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -921,6 +921,22 @@ indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
 
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+type psl .
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
+release public
+
 track tightMrna
 shortLabel Tight mRNAS
 longLabel Tightly Filtered $Organism mRNAs from GenBank
@@ -966,6 +982,21 @@ baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
+
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+maxItems 300
+release public
 
 track interPro
 shortLabel InterPro
