@@ -124,7 +124,8 @@ for line in tagAlign_f:
   #   MAPQ = 255 indicates map quality not available
   #   MAPQ = [0, 255]
   # However the tagAlign score was largely undefined
-  #   Typically in the range of 0-1000
+  #   Typically integers in the range of 0-1000
+  #   But many labs/groups have utilized this field in different ways
   MAPQ = 255
 
   print_sam(output_f, QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
