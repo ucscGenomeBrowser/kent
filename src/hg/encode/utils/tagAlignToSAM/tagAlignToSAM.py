@@ -95,7 +95,7 @@ for line in tagAlign_f:
   FLAG = 0
   RNAME = '*'
   POS = 0
-  MAPQ = 255
+  MAPQ = 0
   CIGAR = '*'
   MRNM = '*'
   MPOS = 0
@@ -117,6 +117,15 @@ for line in tagAlign_f:
     FLAG |= 0x10 # strand of the query
   else:
     print >> sys.stderr, "Error: Invalid strand in '%s'" % line
+
+  # Note: Add code here to change the reported MAPQ value
+  # From the SAM file format spec:
+  #   MAPQ = 0 indicates map pos query is not available
+  #   MAPQ = 255 indicates map quality not available
+  #   MAPQ = [0, 255]
+  # However the tagAlign score was largely undefined
+  #   Typically in the range of 0-1000
+  MAPQ = 255
 
   print_sam(output_f, QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE,
             SEQ, QUAL, TAG)
