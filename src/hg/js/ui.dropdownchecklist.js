@@ -373,9 +373,9 @@
             // hides the last shown drop container
             var hide = function() {
                 var instance = $.ui.dropdownchecklist.drop;
-                // Add here to fill the text control
-                instance._updateControlText();
                 if (null != instance) {
+                    // Add here to fill the text control
+                    instance._updateControlText();
                     instance.dropWrapper.css({
                         top: "-3300px",
                         left: "-3300px"
