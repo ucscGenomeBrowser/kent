@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.242 2010/05/27 17:15:58 vsmalladi Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.243 2010/05/28 20:51:00 cricket Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3471,6 +3471,13 @@ alternativeSymbols HBP; SLBP
 description stem-loop binding protein (Homo sapiens)
 url http://view.ncbi.nlm.nih.gov/gene/7884
 
+term CELF1
+tag CELF1
+type ripTgtProtein
+alternativeSymbols CUG-BP1; BRUNOL2 
+description Embryo deadenylation element-binding protein homolog (Homo sapiens) 
+url http://www.ncbi.nlm.nih.gov/gene/10658
+
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
 tag AUF1
@@ -3481,8 +3488,8 @@ vendorName Millipore
 vendorId 07-260
 orderUrl http://www.millipore.com/catalogue/item/07-260
 
-term CUGBP1
-tag CUGBP1
+term Mil_05621 
+tag MIL05621
 type ripAntibody
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
 targetDescription CELF1
