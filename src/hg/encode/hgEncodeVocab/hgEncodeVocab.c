@@ -24,7 +24,7 @@
  *    TODO:  tags=a,b,c    : Display rows for listed terms, using tags as identifiers.  Must use with 'type'.
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.32 2010/05/27 19:24:58 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.33 2010/05/28 23:17:01 tdreszer Exp $";
 
 //options that apply to all vocab types
 
@@ -95,43 +95,56 @@ int termCmp(const void *va, const void *vb)
 {
 const struct hash *a = *((struct hash **)va);
 const struct hash *b = *((struct hash **)vb);
+char *typeA = hashMustFindVal((struct hash *)a, "type");
+char *typeB = hashMustFindVal((struct hash *)b, "type");
 char *termA = hashMustFindVal((struct hash *)a, "term");
 char *termB = hashMustFindVal((struct hash *)b, "term");
+int ret = strcasecmp(typeA, typeB);
+if(ret != 0)
+    return ret;
 return (strcasecmp(termA, termB));
 }
 
 void doTypeHeader(char *type)
 {
-if (sameString(type,"Antibody"))
+if (sameString(type,"Cell Line"))
     {
-    puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH>");
+    printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>",type);
+    }
+else if (sameString(type,"Antibody"))
+    {
+    printf("  <TH>%s</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH>",type);
     }
 else if (sameString(type,"ripAntibody"))
     {
-    puts("  <TH>Term</TH><TH>Antibody Description</TH><TH>Target Description</TH><TH>Vendor ID</TH>");
+    printf("  <TH>%s</TH><TH>Antibody Description</TH><TH>Target Description</TH><TH>Vendor ID</TH>",type);
     }
 else if (sameString(type,"ripTgtProtein"))
     {
-    puts("  <TH>Term</TH><TH>Alternative Symbols</TH><TH>Description</TH>");
-    }
-else if (sameString(type,"localization"))
-    {
-    puts("  <TH>Term</TH><TH>Description</TH><TH>GO ID</TH>");
-    }
-else if (sameString(type,"Cell Line"))
-    {
-        puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
+    printf("  <TH>%s</TH><TH>Alternative Symbols</TH><TH>Description</TH>",type);
     }
 else
-    puts("  <TH>Term</TH><TH>Description</TH>");
+    {
+    char *caplitalized = cloneString(type);
+    toUpperN(caplitalized,1);
+
+    if (sameString(type,"localization"))
+        {
+        printf("  <TH>%s</TH><TH>Description</TH><TH>GO ID</TH>",caplitalized);
+        }
+    else
+        printf("  <TH>%s</TH><TH>Description</TH>",caplitalized);
+
+    freeMem(caplitalized);
+    }
 }
 
-boolean doTypeRow(struct hash *ra, char *type)
+boolean doTypeRow(struct hash *ra)
 {
-char *term;
+char *term = (char *)hashMustFindVal(ra, "term");
+char *type = (char *)hashMustFindVal(ra, "type");
 char *s, *t, *u;
 
-term = (char *)hashMustFindVal(ra, "term");
 if (sameString(type,"Antibody"))
     {
     puts("<TR>");
@@ -309,7 +322,7 @@ else
         {
         puts("<TR>");
         printf("  <TD>%s</TD>\n", term);
-        printf("  <TD>%s</TD>\n", s);
+        printf("  <TD colspan=40>%s</TD>\n", s); // Control term might be printed with other (e.g. Antibody)
         puts("</TR>");
         }
     else
@@ -355,7 +368,7 @@ if (requested != NULL) // if no type, finds it from requested terms.  Will valid
             char *thisType = hashMustFindVal(ra, "type");
             if(type == NULL)
                 type = thisType;
-            else if(differentWord(type,thisType))  // ignores terms not in hash, but catches this:
+            else if(differentWord(type,thisType) && differentWord("control",thisType))  // ignores terms not in hash, but catches this:
                 errAbort("Error: Requested %ss of type '%s'.  But '%s' has type '%s'\n",
                          termOrTag,type,requested[ix],thisType);
             }
@@ -404,8 +417,6 @@ puts("</TR>");
 while ((hEl = hashNext(&hc)) != NULL)
     {
     ra = (struct hash *)hEl->val;
-    if (differentString(hashMustFindVal(ra, "type"), type))
-        continue;
     // Skip all rows that do not match term or tag if specified
     if(requested && -1 == stringArrayIx(hashMustFindVal(ra, termOrTag),requested,requestCount))
         continue;
@@ -416,7 +427,7 @@ slSort(&termList, termCmp);
 // Print out the terms
 while((ra = slPopHead(&termList)) != NULL)
     {
-    if(doTypeRow(ra, type))
+    if(doTypeRow( ra ))
         totalPrinted++;
     }
 puts("</TABLE><BR>");
