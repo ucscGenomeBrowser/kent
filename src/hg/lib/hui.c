@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.295 2010/05/26 22:21:30 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.296 2010/05/28 19:14:31 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2575,7 +2575,7 @@ for(ix=0;ix<membersForAll->dimMax;ix++)
 return -1;
 }
 
-static const members_t*membersFindByTag(struct trackDb *parentTdb, char *tag)
+const members_t*membersFindByTag(struct trackDb *parentTdb, char *tag)
 { // Uses membersForAll which may be in tdbExtraCache.  Do not free
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
 if(membersForAll == NULL)
@@ -2809,8 +2809,8 @@ boolean subgroupFindTitle(struct trackDb *parentTdb, char *name,char **value)
 {
 if(value != (void*)NULL)
     *value = NULL;
-//members_t*members=subgroupMembersGet(parentTdb, name);
-const members_t *members = membersFindByTag(parentTdb,name);
+members_t*members=subgroupMembersGet(parentTdb, name);
+//const members_t *members = membersFindByTag(parentTdb,name); // Can't use because of dimension dependence
 if(members==NULL)
     return FALSE;
 *value = cloneString(members->groupTitle);
