@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.32 2009/05/19 20:38:57 angie Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.33 2010/05/28 18:48:07 angie Exp $";
 
 char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount)
 /* Look for a setting that specifies a table with orthologous alleles.
@@ -394,13 +394,14 @@ char *snp125FuncCart[] = {
 static char *locusSyn[] =
     {"locus",		"gene-segment", "near-gene-3", "near-gene-5", NULL};
 static char *nonsynonSyn[] =
-    {"coding-nonsynon",	"nonsense", "missense", "frameshift", NULL};
+    {"coding-nonsynon",	"nonsense", "missense", "frameshift", "cds-indel",
+     "coding-synonymy-unknown", NULL};
 static char *untranslatedSyn[] =
     {"untranslated",	"untranslated-3", "untranslated-5", NULL};
 static char *spliceSyn[] =
     {"splice-site",	"splice-3", "splice-5", NULL};
 static char *cdsRefSyn[] =
-    {"cds-reference",	"coding", "coding-synonymy-unknown",
+    {"cds-reference",	"coding",
      NULL};
 char **snp125FuncDataSynonyms[] = {
     locusSyn,
