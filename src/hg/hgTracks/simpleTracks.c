@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.143 2010/05/27 21:13:24 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.144 2010/05/28 19:50:34 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5127,6 +5127,49 @@ sqlFreeResult(&sr);
 return(decipherBuffer);
 }
 
+Color decipherColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw DECIPHER entry */
+{
+struct bed *bedItem = item;
+int col = tg->ixColor;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char cond_str[256];
+char *decipherId = NULL;
+
+/* color scheme:
+	RED:	If the entry is a deletion (mean ratio < 0)
+	GREEN:	If the entry is a duplication (mean ratio > 0)
+*/
+sprintf(cond_str, "name='%s' ", bedItem->name);
+decipherId = sqlGetField(database, "decipher", "name", cond_str);
+if (decipherId != NULL)
+    {
+    if (hTableExists(database, "decipherRaw"))
+    	{
+    	sprintf(query, "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
+    	sr = sqlGetResult(conn, query);
+    	if ((row = sqlNextRow(sr)) != NULL)
+            {
+	    if (sameWord(row[0], "1"))
+	    	{
+	    	col = MG_GREEN;
+	    	}
+	    else
+		{
+	    	col = MG_RED;
+		}
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+
+hFreeConn(&conn);
+return(col);
+}
+
 static void decipherDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -5145,7 +5188,7 @@ if (w < 1)
     w = 1;
 if (color)
     {
-    hvGfxBox(hvg, x1, y, w, heightPer, color);
+    hvGfxBox(hvg, x1, y, w, heightPer, decipherColor(tg, item, hvg));
 
     if (vis == tvFull)
         {
@@ -5183,10 +5226,10 @@ if (tg->subType == lfWithBarbs)
 	}
     }
 }
-
 void decipherMethods(struct track *tg)
 /* Methods for DECIPHER track. */
 {
+tg->itemColor   = decipherColor;
 tg->drawItemAt 	= decipherDrawAt;
 }
 
