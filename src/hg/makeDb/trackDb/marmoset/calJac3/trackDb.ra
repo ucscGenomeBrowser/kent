@@ -108,3 +108,8 @@ group map
 priority 60
 visibility hide
 type bed 12
+
+searchTable bacEnds
+searchType bed
+searchMethod exact
+searchPriority 50
