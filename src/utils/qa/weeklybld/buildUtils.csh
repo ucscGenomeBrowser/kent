@@ -43,6 +43,13 @@ if ( ! -d ~/bin/${MACHTYPE}.cluster ) then
  exit 1
 endif
 
+# Hiram changed default script location
+# which we must now over-ride.
+# wonder if we should put this into 
+# the sandbox config thing like we do for
+# the SSH and BAM configs
+setenv SCRIPTS /cluster/bin/scripts
+
 # Symlink Trick safe now
 echo "Symlink Trick. on $HOST [${0}: `date`]"
 ./symtrick.csh
@@ -55,7 +62,7 @@ if ( "$HOST" != "$BOX32" ) then
     # -j is having a side-effect?
     make $MAKEPARAMS utils >& make.utils.log
 else
-    make -j 8 $MAKEPARAMS utils >& make.utils.log
+    make -j 16 $MAKEPARAMS utils >& make.utils.log
 endif
 echo "After make utils on $HOST [${0}: `date`]"
 make $MAKEPARAMS blatSuite >>& make.utils.log
