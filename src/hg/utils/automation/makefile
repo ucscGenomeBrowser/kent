@@ -5,6 +5,7 @@ include ../../../inc/common.mk
 all: scripts
 
 scripts:
+	${MKDIR} ${SCRIPTS}
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
 	    rm -f ${SCRIPTS}/$${F}; \
