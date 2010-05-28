@@ -87,6 +87,7 @@ subGroup1 sample Sample Han=Han Papuan=Papuan Yoruba=Yoruba San=San French=Frenc
 sortOrder sample=+
 dragAndDrop subTracks
 allButtonPair on
+dimensions dimensionX=sample
 
     track bamMMS4
     parent ntModernHumans

@@ -20,6 +20,7 @@ subGroup1 sample Sample All=All Feld1=Feld1 Mez1=Mez1 Sid1253=Sid1253 Vi33dot16=
 allButtonPair on
 sortOrder sample=+
 dragAndDrop subTracks
+dimensions dimensionX=sample
 
     track bamAll
     parent ntSeqContigs on
@@ -86,6 +87,7 @@ subGroup1 sample Sample Feld1=Feld1 Mez1=Mez1 Sid1253=Sid1253 Vi33dot16=Vi33.16 
 sortOrder sample=+
 dragAndDrop subTracks
 allButtonPair on
+dimensions dimensionX=sample
 
     track bamSLFeld1
     parent ntSeqReads
