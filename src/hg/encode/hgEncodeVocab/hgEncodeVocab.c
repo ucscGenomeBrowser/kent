@@ -24,7 +24,7 @@
  *    TODO:  tags=a,b,c    : Display rows for listed terms, using tags as identifiers.  Must use with 'type'.
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.33 2010/05/28 23:17:01 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.34 2010/05/28 23:28:06 tdreszer Exp $";
 
 //options that apply to all vocab types
 
@@ -417,6 +417,9 @@ puts("</TR>");
 while ((hEl = hashNext(&hc)) != NULL)
     {
     ra = (struct hash *)hEl->val;
+    char *thisType = hashMustFindVal(ra,"type");
+    if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,"control")))
+        continue;
     // Skip all rows that do not match term or tag if specified
     if(requested && -1 == stringArrayIx(hashMustFindVal(ra, termOrTag),requested,requestCount))
         continue;
