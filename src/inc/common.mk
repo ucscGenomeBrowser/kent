@@ -70,7 +70,7 @@ endif
 CFLAGS += ${HG_WARN}
 
 ifeq (${SCRIPTS},)
-    SCRIPTS=/cluster/bin/scripts
+    SCRIPTS=${HOME}/bin/scripts
 endif
 ifeq (${CGI_BIN},)
     CGI_BIN=/usr/local/apache/cgi-bin
