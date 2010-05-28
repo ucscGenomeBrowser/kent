@@ -48,9 +48,9 @@ char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* it
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	printLinks(row[0], row[1]);
-        printf("<A HREF=\"%s%s\"><b>%s</b></A>", PMCURL, row[1], row[2]);
-	printf("<p style=\"font-size:96%%\">%s</p>", row[3]);
-	printf("<p style=\"font-size:92%%\">%s</p>", row[4]);
+	printf("<A HREF=\"%s%s\"><b>%s</b></A>\n", PMCURL, row[1], row[2]);
+	printf("<p style=\"width:800px; font-size:96%%\">%s</p>\n", row[3]);
+	printf("<p style=\"width:800px; font-size:92%%\">%s</p>\n", row[4]);
         docId = row[1];
 	}
     sqlFreeResult(&sr);
@@ -83,6 +83,7 @@ void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,
 	hashAdd(seqIdHash, seqIds[i], NULL);
     freeMem(seqIdsString);
 
+    // output table
     webNewSection("Sequences in article");
     printf("<small>Sequences that map to the feature that was clicked "
 	"are highlighted in bold</small>");
@@ -100,8 +101,8 @@ void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,
             printf("<TD BGCOLOR=\"#%s\"><TT><B>%s</B></TT></TD>",
 		HG_COL_TABLE, seq);
         else
-            printf("<TD BGCOLOR=\"#%s\"><TT><FONT COLOR=\"#CCCCCC\">%s"
-		"</FONT></TT></TD>", HG_COL_TABLE, seq);
+            printf("<TD BGCOLOR=\"#%s\"><TT><FONT COLOR=\"#AAAAAA\">%s"
+		"</FONT></TT></TD>\n", HG_COL_TABLE, seq);
         webPrintLinkTableNewRow();
         listEl=listEl->next;
         }
@@ -173,4 +174,3 @@ if (docId!=0)
     printSeqInfo(conn, tdb, docId, item, seqName, start);
 hFreeConn(&conn);
 }
-
