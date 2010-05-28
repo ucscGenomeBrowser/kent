@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.994 2010/05/28 18:32:58 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.995 2010/05/28 21:24:44 hartera Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -380,7 +380,7 @@ wgEncode 1
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
-        color 120,0,0
+        color 12,12,120
         metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeMapabilityAlign36mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign40mer
@@ -390,7 +390,7 @@ wgEncode 1
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
-        color 120,0,0
+        color 12,12,120
         metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeMapabilityAlign40mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign50mer
@@ -400,7 +400,7 @@ wgEncode 1
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
-        color 120,0,0
+        color 12,12,120
         metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeMapabilityAlign50mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign75mer
@@ -410,7 +410,7 @@ wgEncode 1
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
-        color 120,0,0
+        color 12,12,120
         metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeMapabilityAlign75mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign100mer
@@ -420,7 +420,7 @@ wgEncode 1
         longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
         subGroups view=CRGMAP win=w100
         type bigWig 0.00 1.00
-        color 120,0,0
+        color 12,12,120
         metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeMapabilityAlign100mer.bw.gz
 
 track wgEncodeMapability
@@ -454,7 +454,6 @@ wgEncode 1
 
         track wgEncodeBroadMapabilityAlign36mer
         release public
-        subTrack wgEncodeMapabilityViewALN
         shortLabel Broad Align 36
         longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
         subGroups view=ALN win=w036

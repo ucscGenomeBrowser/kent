@@ -22,7 +22,7 @@ origAssembly hg19
     subTrack wgEncodeMapability
     shortLabel CRG Align 24
     longLabel Mapability - CRG GEM Alignability of 24mers with no more than 2 mismatches
-    color 120,0,0
+    color 12,12,120
     priority 1
     metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=24mer uniqueness="no more than 2 mismatches" dataVersion="April 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign24mer fileName=wgEncodeCrgMapabilityAlign24mer.bw.gz
     
@@ -30,7 +30,7 @@ origAssembly hg19
     subTrack wgEncodeMapability
     shortLabel CRG Align 36
     longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
-    color 120,0,0
+    color 12,12,120
     priority 2
     metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeCrgMapabilityAlign36mer.bw.gz
 
@@ -38,7 +38,7 @@ origAssembly hg19
     subTrack wgEncodeMapability
     shortLabel CRG Align 40
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
-    color 120,0,0
+    color 12,12,120
     priority 3
     metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeCrgMapabilityAlign40mer.bw.gz
     
@@ -46,7 +46,7 @@ origAssembly hg19
     subTrack wgEncodeMapability
     shortLabel CRG Align 50
     longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
-    color 120,0,0
+    color 12,12,120
     priority 4
     metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeCrgMapabilityAlign50mer.bw.gz
 
@@ -54,7 +54,7 @@ origAssembly hg19
     subTrack wgEncodeMapability
     shortLabel CRG Align 75
     longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
-    color 120,0,0
+    color 12,12,120
     priority 5
     metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeCrgMapabilityAlign75mer.bw.gz
 
@@ -62,7 +62,7 @@ origAssembly hg19
     subTrack wgEncodeMapability
     shortLabel CRG Align 100
     longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
-    color 120,0,0
+    color 12,12,120
     priority 6
     metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeCrgMapabilityAlign100mer.bw.gz
 
