@@ -437,6 +437,8 @@ wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf
 wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
 wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf
 wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
+wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
+wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 
 C') New files (487 downloadables, 190 gbdbs):
     current location on alpha:
