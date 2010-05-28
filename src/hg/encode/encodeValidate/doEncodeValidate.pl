@@ -17,9 +17,10 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.228 2010/05/28 19:43:41 krish Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.229 2010/05/28 20:00:16 krish Exp $
 
 use warnings;
+use warnings FATAL => 'all';
 use strict;
 
 use File::stat;
