@@ -114,6 +114,8 @@ etags-all:
 	find . -name '*.[ch]' | etags -
 
 utils: libs
+	${MKDIR} ${SCRIPTS}
+	${MKDIR} ${DESTDIR}${BINDIR}
 	@for D in $(DIRS) x; do \
             if test "$$D" != "x" ; then \
                 ( cd $$D && echo $$D && $(MAKE) ) ;\
