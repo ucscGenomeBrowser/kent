@@ -11,7 +11,7 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
-    Tables: 357
+    Tables: 358
     Files: 500
     Gbdbs: 191
 
@@ -59,7 +59,18 @@ wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz
 
 
-B) Deprecated tables (0):
+B) Deprecated tables (11):
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2
+wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2
+wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2Extended
+wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
+wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii
+wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
+wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
 
 B') Deprecated files (25 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
@@ -96,7 +107,7 @@ wgEncodeHudsonalphaChipSeqRawDataRep2K562Nrsf.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz
 
 
-C) New tables (340):
+C) New tables (342):
 wgEncodeHudsonalphaChipSeqPeaksA549Gr
 wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xDexa
 wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02
