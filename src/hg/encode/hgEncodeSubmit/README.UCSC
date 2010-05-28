@@ -14,21 +14,27 @@ Setting up a development environment:
 5. Build application:
         rake db:migrate
 
-6. Start server:
-        ruby script/server -p 300? & (choose unused port)
-            OR
-        mongrel_rails start -p 300?
+6. Customize configuration files and scripts
+        database.yml
+        go (from go.sample, chose unused port in 3000 range)
+        stop (from stop.sample)
+
+7. Start server:
+        ./go
+
+8. Check status:
+        ~galt/kentFix/src/hg/encode/hgEncodeSubmit/status
 
 -------------------------------
 To update server:
 
-1. mongrel_rails stop  (or use ./stop batch file)
+1. ./stop
 
 2. cd /kent/src/hg/encode; cvsup   (only if you know that all checked in changes are good)
 
 3. rake db:migrate  (skip this unless there were database structure changes)
 
-4. mongrel_rails start -p <yourPort> -d  (or use ./go batch file)
+4. ./go
 
 --------------------------------
 
