@@ -8,7 +8,8 @@ CONFIG_FILES = \
 	fields.ra \
 	labs.ra \
 	cv.ra \
-	hg18_chromInfo.txt
+	hg18_chromInfo.txt \
+        expVars.ra
 
 CV = cv.ra
 

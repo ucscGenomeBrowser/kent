@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.227 2010/05/26 18:25:20 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.228 2010/05/28 19:43:41 krish Exp $
 
 use warnings;
 use strict;
@@ -764,6 +764,11 @@ sub validateBam
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
+    if (not defined $terms{'Cell Line'}->{$cell}) {
+	print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
+	# don't show end-user pipe error(s)
+	return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
+    }
     my $sex = $terms{'Cell Line'}->{$cell}->{'sex'};
     my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
     my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";

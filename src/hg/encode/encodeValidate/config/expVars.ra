@@ -5,4 +5,5 @@ composite wgEncodeYaleChIPseq
 expVar1 cell
 expVar2 antibody
 expVar3 treatment
+expVar4 control
 
