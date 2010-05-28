@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.243 2010/05/28 20:51:00 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.244 2010/05/28 23:37:28 cricket Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3488,6 +3488,24 @@ vendorName Millipore
 vendorId 07-260
 orderUrl http://www.millipore.com/catalogue/item/07-260
 
+term Mil_AB3790
+tag MILAB3790
+type ripAntibody
+antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG) 
+targetDescription T7Tag
+vendorName Millipore
+vendorId AB3790 
+orderUrl http://www.millipore.com/catalogue/item/ab3790
+
+term Mil_061376
+tag MIL061376
+type ripAntibody
+antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
+targetDescription SLBP 
+vendorName Millipore
+vendorId 06-1376
+orderUrl http://www.millipore.com/catalogue/item/06-1376
+
 term Mil_05621 
 tag MIL05621
 type ripAntibody
@@ -3622,6 +3640,16 @@ targetDescription RPS6KA1
 vendorName Millipore
 vendorId 07-1477
 orderUrl http://www.millipore.com/catalogue/item/07-1477
+
+
+term SC_26522
+tag SC26522
+type ripAntibody
+antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin 
+targetDescription SLPB 
+vendorName Santa Cruz Biotech
+vendorId sc-26522 
+orderUrl http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html
 
 term SC_5261
 tag SC5261
