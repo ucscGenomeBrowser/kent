@@ -19,7 +19,7 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.141 2010/05/11 01:43:24 kent Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.142 2010/05/28 23:04:56 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -91,7 +91,7 @@ if (hIsGsidServer())
   puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/bigBed.html'>bigBed</A>,\n"
-  " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>BEDGRAPH</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>bedGraph</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
@@ -112,7 +112,7 @@ else
   puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/bigBed.html'>bigBed</A>,\n"
-  " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>BEDGRAPH</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>bedGraph</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>,\n"
