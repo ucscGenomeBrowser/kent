@@ -39,7 +39,7 @@ longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
 group phenDis
 priority 29.6
 visibility hide
-color 200,0,100
+color 0,0,0
 type bed 4
 
 track caseControl
@@ -339,7 +339,7 @@ type bed 12 .
 track omim
 shortLabel OMIM
 longLabel NIH's Online Mendelian Inheritance in Man
-url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=$$
+url http://www.ncbi.nlm.nih.gov/omim/$$
 group varRep
 priority 146
 visibility hide
@@ -2770,7 +2770,7 @@ visibility hide
 color 0, 0, 200
 type bed 4
 hgsid on
-url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=
+url http://www.ncbi.nlm.nih.gov/omim/
 
 searchTable wgRnaOld
 searchMethod fuzzy

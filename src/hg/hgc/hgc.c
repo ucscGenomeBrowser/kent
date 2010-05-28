@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1634 2010/05/24 20:19:22 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1635 2010/05/28 17:22:18 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -401,7 +401,7 @@ static void printOmimUrl(FILE *f, char *term)
 {
 if (term != NULL)
     {
-    fprintf(f, "\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu\"", term);
+    fprintf(f, "\"http://www.ncbi.nlm.nih.gov/omim/%s\"", term);
     }
 }
 
@@ -8663,7 +8663,7 @@ if (url != NULL && url[0] != 0)
     while (row != NULL)
     	{
 	printf("<A HREF=\"%s%s\" target=_blank>",
-		"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=", row[0]);
+		"http://www.ncbi.nlm.nih.gov/omim/", row[0]);
 	printf("%s</B></A> %s\n", row[0], row[1]);
 	row = sqlNextRow(sr);
         }
