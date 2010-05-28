@@ -101,3 +101,10 @@ priority 10
 visibility hide
 type ctgPos
 
+track bacEnds
+shortLabel Bac Ends
+longLabel Marmoset BAC Ends
+group map
+priority 60
+visibility hide
+type bed 12
