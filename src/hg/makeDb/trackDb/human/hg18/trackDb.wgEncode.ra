@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.996 2010/05/28 21:47:38 hartera Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.997 2010/05/28 21:53:36 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5592,7 +5592,7 @@ wgEncode 1
         color 46,0,184
         metadata project=wgEncode grant=Weng lab=UMassHA dataType=TfbsValid cell=K562 view=TestedSites dataVersion="ENCODE Sep 2009 Freeze" subId=689 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeUmasshaTfbsValid tableName=wgEncodeUmasshaTfbsValidTestedSitesK562 fileName=wgEncodeUmasshaTfbsValidTestedSitesK562.bed6+.gz
 
-include wgEncodeGisPet.alpha.ra
+include wgEncodeGisPet.ra
 
 include wgEncodeHudsonalphaRnaSeq.alpha.ra
 
