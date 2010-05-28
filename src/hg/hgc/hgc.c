@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1635 2010/05/28 17:22:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1636 2010/05/28 21:32:26 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8797,6 +8797,10 @@ struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
+struct sqlConnection *conn2 = hAllocConn(database);
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 char *strand={"+"};
 
 printf("<H3>Patient %s </H3>", itemName);
@@ -8820,12 +8824,13 @@ if (row != NULL)
 sqlFreeResult(&sr);
 
 /* link to Ensembl DECIPHER Patient View page */
+printf("<B>Patient View: </B>\n");
 printf("For more details of patient %s, click ", itemName);
 printf("<A HREF=\"%s%s\" target=_blank>",
        "https://decipher.sanger.ac.uk/application/patient/", itemName);
 printf("here</A>.<BR><BR>");
 
-/* print position inof */
+/* print position info */
 safef(query, sizeof(query),
       "select chrom, chromStart, chromEnd from decipher where name ='%s'", itemName);
 sr = sqlMustGetResult(conn, query);
@@ -8838,7 +8843,7 @@ sqlFreeResult(&sr);
 
 /* print UCSC Genes in the reported region */
 safef(query, sizeof(query),
-      "select distinct geneSymbol, kgId, description from decipher d, kgXref x, knownToDecipher t where value ='%s' and t.name=kgId", itemName);
+      "select distinct t.name from knownToDecipher t where value ='%s'", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -8846,16 +8851,25 @@ if (row != NULL)
     printf("<BR><B>UCSC Gene(s) in this genomic region: </B><UL>");
     while (row != NULL)
     	{
-	printf("<LI>");
-        printf("<A HREF=\"%s%s\" target=_blank>","./hgGene\?hgg_chrom=none&hgg_gene=", row[1]);
-        printf("%s (%s)</A> ", row[0], row[1]);
-	printf(" %s", row[2]);
+	safef(query2, sizeof(query2),
+        "select geneSymbol, kgId, description from kgXref where kgId ='%s'", row[0]);
+	sr2 = sqlMustGetResult(conn2, query2);
+	row2 = sqlNextRow(sr2);
+	if (row2 != NULL)
+    	    {
+	    printf("<LI>");
+            printf("<A HREF=\"%s%s\" target=_blank>","./hgGene\?hgg_chrom=none&hgg_gene=", row2[1]);
+            printf("%s (%s)</A> ", row2[0], row2[1]);
+	    printf(" %s", row2[2]);fflush(stdout);
+	    }
+        sqlFreeResult(&sr2);
 	row = sqlNextRow(sr);
-        }
+	}
+    sqlFreeResult(&sr);
     printf("</UL>");
     }
-sqlFreeResult(&sr);
 hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 void doDecipher(struct trackDb *tdb, char *item, char *itemForUrl)
