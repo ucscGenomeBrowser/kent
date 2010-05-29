@@ -8,8 +8,9 @@
 #include "errabort.h"
 #include "portable.h"
 #include "linefile.h"
+#include "hash.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.148 2010/04/20 15:56:50 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.149 2010/05/29 20:23:41 larrym Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -797,6 +798,21 @@ while (lineFileNextReal(lf, &line))
 lineFileClose(&lf);
 slReverse(&lines);
 return lines;
+}
+
+struct slName *slNameIntersection(struct slName *a, struct slName *b)
+/* return intersection of two slName lists.  */
+{
+struct hash *hashA = newHash(0);
+struct slName *el, *retval = NULL;
+
+for (el = a; el != NULL; el = el->next)
+    hashAddInt(hashA, el->name, 1);
+for (el = b; el != NULL; el = el->next)
+    if(hashLookup(hashA, el->name) != NULL)
+        slNameAddHead(&retval, el->name);
+hashFree(&hashA);
+return retval;
 }
 
 struct slRef *refOnList(struct slRef *refList, void *val)

@@ -572,6 +572,9 @@ struct slName *slNameLoadReal(char *fileName);
 /* load file lines that are not blank or start with a '#' into a slName
  * list */
 
+struct slName *slNameIntersection(struct slName *a, struct slName *b);
+/* return intersection of two slName lists.  */
+
 struct slRef
 /* Singly linked list of generic references. */
     {
