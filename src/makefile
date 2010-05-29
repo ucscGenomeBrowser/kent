@@ -1,3 +1,6 @@
+include inc/common.mk
+
+
 all: utils cgi blatSuite
 
 alpha: clean utils-alpha cgi-alpha blatSuite
