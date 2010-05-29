@@ -7,7 +7,7 @@
 #include "ra.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: trackDbPatch.c,v 1.5 2010/05/11 01:43:30 kent Exp $";
+static char const rcsid[] = "$Id: trackDbPatch.c,v 1.6 2010/05/29 22:19:50 kent Exp $";
 
 char *clPatchDir = NULL;
 char *clKey = "track";
@@ -103,9 +103,10 @@ return fileList;
 }
 
 
-static struct slName *makeFileList(char *filesAndPos)
+static struct slName *makeFileList(struct lineFile *lf, char *filesAndPos)
 /* Convert something that looks like "file # file #" to a list of files.  This
- * writes zeroes into the filesAndPos input. */
+ * writes zeroes into the filesAndPos input.  The lf parameter is just for
+ * error reporting. */
 {
 struct slName *list = NULL;
 char *word;
@@ -113,8 +114,9 @@ while ((word = nextWord(&filesAndPos)) != NULL)
     {
     slNameAddTail(&list, word);
     word = nextWord(&filesAndPos);
-    if (word == NULL && !isdigit(word[0]))
-        errAbort("Expecting number in makeFileList, got %s", word);
+    if (word == NULL || !isdigit(word[0]))
+        errAbort("Expecting number in filePos tag, got %s, line %d of %s", word,
+		lf->lineIx, lf->fileName);
     }
 return list;
 }
@@ -145,7 +147,7 @@ for (tag = tagList; tag != NULL; tag = next)
 	}
     else if (sameString(tag->name, "filePos"))
         {
-	patch->fileList = makeFileList(tag->val);
+	patch->fileList = makeFileList(lf, tag->val);
 	int fileCount = slCount(patch->fileList);
 	if (fileCount != 1)
 	    {
@@ -309,11 +311,14 @@ for (;;)
 	else
 	    {
 	    verbose(3, "Got patch %s with %d tags starting %s %s\n", patch->track, slCount(patch->tagList), patch->tagList->name, (char *)patch->tagList->val);
-	    int indent = 0;
-	    struct hash *appliedHash = hashNew(0);
+	    struct hash *appliedHash = hashNew(0);	// keep track of tags patched in
+
+	    /* Go through stanza looking for tags to update. */
+	    char *lineStart = NULL;	// At end of loop points to last line
+	    int indent = 0;	// # of whitespace chars 
 	    for (line = stanza; line != NULL; line = line->next)
 		{
-		char *lineStart = line->name;
+		lineStart = line->name;
 		char *tagStart = skipLeadingSpaces(lineStart);
 		boolean copyLine = TRUE;
 		if (tagStart[0] != 0 && tagStart[0] != '#')
@@ -325,7 +330,7 @@ for (;;)
 			if (startsWithWord(tagPatch->name, tagStart))
 			    {
 			    copyLine = FALSE;
-			    spaceOut(f, indent);
+			    mustWrite(f, lineStart, indent);
 			    fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
 			    verbose(2, "Applying patch '%s' to modify %s'\n", (char*)tagPatch->val, tagStart);
 			    ++glPatchFieldModifyCount;
@@ -339,14 +344,16 @@ for (;;)
 		    fprintf(f, "%s\n", line->name);
 		    }
 		}
+
+	    /* Go through and add any tags not already patched in. */
 	    struct slPair *tagPatch;
 	    for (tagPatch = patch->tagList; tagPatch != NULL; tagPatch = tagPatch->next)
 		{
 		if (!hashLookup(appliedHash, tagPatch->name))
 		    {
-		    spaceOut(f, indent);
 		    ++glPatchFieldAddCount;
 		    verbose(2, "Applying patch to %s adding %s %s\n", patch->track, tagPatch->name, (char*)tagPatch->val);
+		    mustWrite(f, lineStart, indent);
 		    fprintf(f, "%s %s\n", tagPatch->name, (char*)tagPatch->val);
 		    hashAdd(appliedHash, tagPatch->name, NULL);
 		    }
