@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.997 2010/05/28 21:53:36 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.998 2010/05/29 22:18:49 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -1852,7 +1852,7 @@ group regulation
     # compositeTrack on
     container multiWig
     noInherit on
-    type bigWig 0 40
+    type wig 0 10000
     superTrack wgEncodeReg full
     shortLabel Enhancer H3K4Me1
     longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
@@ -1864,63 +1864,77 @@ group regulation
     showSubtrackColorOnUi on
     priority 2
 
-	track jkEnhGm12878
+	track wgEncodeRegMarkEnhancerGm12878
 	shortLabel	Gm12878
 	longLabel Enhancer mark (H3K4Me1) on Gm12878 cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkEnhancer
-	type bigWig 0 40
+	type wig 0.00 9323.50
 	color 255,128,128
+	table wgEncodeBroadChipSeqSignalGm12878H3k4me1
 
-	track jkEnhH1hesc
+	track wgEncodeRegMarkEnhancerH1hesc
 	shortLabel	H1 ES
 	longLabel Enhancer mark (H3K4Me1) on H1 ES cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 255,223,128
+	table wgEncodeBroadChipSeqSignalH1hescH3k4me1
+	type wig 0.00 12286.00
 
-	track jkEnhHmec
+	track wgEncodeRegMarkEnhancerHmec
 	shortLabel	HMEC
 	longLabel Enhancer mark (H3K4Me1) on HMEC cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 191,255,128
+	table wgEncodeBroadChipSeqSignalHmecH3k4me1
+	type wig 0.00 13574.00
 
-	track jkEnhHsmm
+	track wgEncodeRegMarkEnhancerHsmm
 	shortLabel	HSMM
 	longLabel Enhancer mark (H3K4Me1) on HSMM cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 128,255,159
+	table wgEncodeBroadChipSeqSignalHsmmH3k4me1
+	type wig 0.00 10412.00
 
-	track jkEnhHuvec
+	track wgEncodeRegMarkEnhancerHuvec
 	shortLabel	HUVEC
 	longLabel Enhancer mark (H3K4Me1) on HUVEC cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 128,255,255
+	table wgEncodeBroadChipSeqSignalHuvecH3k4me1
+	type wig 0.00 5259.25
 
-	track jkEnhK562
+	track wgEncodeRegMarkEnhancerK562
 	shortLabel	K562
 	longLabel Enhancer mark (H3K4Me1) on K562 cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 128,159,255
+	table wgEncodeBroadChipSeqSignalK562H3k4me1
+	type wig 0.00 8682.25
 
-	track jkEnhNhek
+	track wgEncodeRegMarkEnhancerNhek
 	shortLabel	NHEK
 	longLabel Enhancer mark (H3K4Me1) on NHEK cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 191,128,255
+	table wgEncodeBroadChipSeqSignalNhekH3k4me1
+	type wig 0.00 4240.50
 
-	track jkEnhNhlf
+	track wgEncodeRegMarkEnhancerNhlf
 	shortLabel	NHLF
 	longLabel Enhancer mark (H3K4Me1) on NHLF cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkEnhancer
 	color 255,128,223
-
+	table wgEncodeBroadChipSeqSignalNhlfH3k4me1
+	type wig 0.00 14639.00
 
     track wgEncodeRegMarkPromoter
     container multiWig
