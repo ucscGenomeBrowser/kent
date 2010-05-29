@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.244 2010/05/28 23:37:28 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.245 2010/05/29 01:49:57 cricket Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3523,6 +3523,15 @@ targetDescription CELF2
 vendorName Millipore
 vendorId 04-047
 orderUrl http://www.millipore.com/catalogue/item/04-047
+
+term Input
+tag Input
+type ripAntibody
+antibodyDescription  No antibody, just Input.
+targetDescription None
+vendorName None
+vendorId None
+orderUrl None
 
 term EF1-alpha
 tag EF1alpha
