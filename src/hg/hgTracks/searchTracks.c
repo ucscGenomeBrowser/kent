@@ -11,10 +11,11 @@
 #include "htmshell.h"
 #include "cart.h"
 #include "hgTracks.h"
-#include "versionInfo.h"
 #include "web.h"
-#include "cds.h"
-#include "ra.h"
+#include "jksql.h"
+#include "hdb.h"
+
+#define ANYLABEL "Any"
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -47,100 +48,95 @@ return str && strlen(str) &&
     (sameString(op, "contains") && containsStringNoCase(track->longLabel, str) != NULL));
 }
 
-static boolean isDescriptionMatch(struct track *track, char *str, char *op)
+static boolean isDescriptionMatch(struct track *track, char *str)
 {
-// XXXX obviously very primitive; s/d ignore html markup and do stemming etc.
+// We parse str and look for every word ANYWHERE in track description (i.e. google style).
+// XXXX currently quite primitive; do stemming, strip html markup ??
+// Also, we should fold all metadata into the description of every track.
 char *html = track->tdb->html;
+boolean found = FALSE;
 if((!html || !strlen(html)) && track->tdb->parent)
     {
     // XXXX is there a cleaner way to find parent?
     html = track->tdb->parent->html;
     }
-
-// fprintf(stderr, "description: %s; %s\n", str, html);
-return str && strlen(str) && sameString(op, "contains") && (strstrNoCase(html, str) != NULL);
-}
-
-static boolean isMetaMatch(struct track *track, char *name, char *op, char *val)
-{
-boolean retVal = FALSE;
-char *setting = NULL;
-char buf[100];
-char *metadata = trackDbSetting(track->tdb, "metadata");
-if(metadata)
+if(str && strlen(str))
     {
-    char *ptr;
-    safef(buf, sizeof(buf), "%s=", name);
-    ptr = strstr(metadata, buf);
-    if(ptr)
+    char *tmp = cloneString(str);
+    char *val = nextWord(&tmp);
+    while (val != NULL)
         {
-        ptr += strlen(buf);
-        setting = ptr;
-        ptr = skipToSpaces(ptr);
-        if(*ptr)
-            *ptr = 0;
+        if(strstrNoCase(html, val) == NULL)
+            {
+            found = FALSE;
+            break;
+            }
+        else
+            {
+            found = TRUE;
+            val = nextWord(&tmp);
+            }
         }
     }
-// fprintf(stderr, "%s; setting: %s\n", track->track, setting);
-retVal = setting && strlen(setting) &&
-    ((sameString(op, "is") && !strcasecmp(setting, val)) ||
-     (sameString(op, "contains") && containsStringNoCase(setting, val) != NULL));
-return retVal;
+return found;
 }
 
-// XXXX got this code from hgEncodeVocab.c; it should be moved into a library (kent/src/hg/lib/encode.c?)
-
-static char *cv_file()
-{
-static char filePath[PATH_LEN];
-safef(filePath, sizeof(filePath), "%s/encode/cv.ra", hCgiRoot());
-if(!fileExists(filePath))
-    errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
-return filePath;
-}
-
-static int termCmp(const void *va, const void *vb)
-/* Compare controlled vocab based on term value */
-{
-const struct hash *a = *((struct hash **)va);
-const struct hash *b = *((struct hash **)vb);
-char *termA = hashMustFindVal((struct hash *)a, "term");
-char *termB = hashMustFindVal((struct hash *)b, "term");
-return (strcasecmp(termA, termB));
-}
-
-static int getTermList(struct hash *cvHash, char ***terms, char *type)
+static int getTermList(struct sqlConnection *conn, char ***terms, char *type)
 {
 // Pull out all term fields from ra entries with given type
 // Returns count of items found and items via the terms argument.
-
-struct hashCookie hc;
-struct hashEl *hEl;
-struct slList *termList = NULL;
-struct hash *ra;
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char query[256];
+struct slName *termList = NULL;
 int i, count = 0;
 char **retval;
 
-hc = hashFirst(cvHash);
-while ((hEl = hashNext(&hc)) != NULL)
+safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", type);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    ra = (struct hash *) hEl->val;
-    if(sameString(hashMustFindVal(ra, "type"), type))
-        {
-        slAddTail(&termList, ra);
-        count++;
-        }
+    slNameAddHead(&termList, row[0]);
+    count++;
     }
-slSort(&termList, termCmp);
-retval = needMem(sizeof(char *) * (count + 1));
-retval[0] = cloneString("Any");
-for(i=0; termList != NULL;termList = termList->next, i++)
+sqlFreeResult(&sr);
+slSort(&termList, slNameCmpCase);
+count++; // make room for "Any"
+retval = needMem(sizeof(char *) * count);
+retval[0] = cloneString(ANYLABEL);
+for(i=1; termList != NULL;termList = termList->next, i++)
     {
-    ra = (struct hash *) termList;
-    retval[i+1] = cloneString(hashMustFindVal(ra, "term"));
+    retval[i] = cloneString(termList->name);
     }
 *terms = retval;
-return count + 1;
+return count;
+}
+
+static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char *val, char *op)
+{
+// Search the assemblies metaDb table; If name == NULL, we search every metadata field.
+struct slName *retval = NULL;
+char query[256];
+struct sqlResult *sr = NULL;
+char **row = NULL;
+
+if(strcmp(op, "contains"))
+    if(name == NULL)
+        safef(query, sizeof(query), "select distinct obj from metaDb where val = '%s'", val);
+    else
+        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val = '%s'", name, val);
+else
+    if(name == NULL)
+        safef(query, sizeof(query), "select obj from metaDb where val like  '%%%s%%'", val);
+    else
+        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val like  '%%%s%%'", name, val);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    slNameAddHead(&retval, row[0]);
+    }
+sqlFreeResult(&sr);
+return retval;
 }
 
 void doSearchTracks(struct group *groupList)
@@ -153,12 +149,11 @@ char *metaValues[] = {"antibody", "cell"};
 char *groups[128];
 char *labels[128];
 int numGroups = 1;
-groups[0] = "any";
-labels[0] = "Any";
+groups[0] = ANYLABEL;
+labels[0] = ANYLABEL;
 char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
 char *nameOp = cartOptionalString(cart, "hgt.nameOp");
 char *descSearch = cartOptionalString(cart, "hgt.descSearch");
-char *descOp = cartOptionalString(cart, "hgt.descOp");
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
 char *metaName = cartOptionalString(cart, "hgt.metaName");
 char *metaOp = cartOptionalString(cart, "hgt.metaOp");
@@ -166,10 +161,12 @@ char *metaSearch = cartOptionalString(cart, "hgt.metaSearch");
 char *antibodySearch = cartOptionalString(cart, "hgt.antibodySearch");
 char *cellSearch = cartOptionalString(cart, "hgt.cellSearch");
 char **terms;
-int len;
-struct hash *cvHash = raReadAll(cv_file(), "term");
+struct sqlConnection *conn = hAllocConn(database);
+boolean metaDbExists = sqlTableExists(conn, "metaDb");
+struct slRef *tracks = NULL;
+int tracksFound = 0;
+struct hash *parents = newHash(4);
 
-// struct track *trackList = 
 getTrackList(&groupList, -2);
 slSort(&groupList, gCmpGroup);
 for (group = groupList; group != NULL; group = group->next)
@@ -184,44 +181,46 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-cartWebStart(cart, database, "Search/Select Annotation Tracks (very rough prototype!)");
+cartWebStart(cart, database, "Track Search (prototype!)");
 
 hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
 hPrintf("<table>\n");
 
-hPrintf("<tr><td></td><td><b>Name:</b></td><td>\n");
+hPrintf("<tr><td></td><td><b>Description:</b></td><td>contains</td>\n");
+hPrintf("<td><input type='text' name='hgt.descSearch' value='%s'></td></tr>\n", descSearch == NULL ? "" : descSearch);
+
+hPrintf("<tr><td>and</td><td><b>Track Name:</b></td><td>\n");
 cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
 hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
-
-hPrintf("<tr><td>and</td><td><b>Description:</b></td><td>\n");
-cgiMakeDropListFull("hgt.descOp", op_labels, ops, ArraySize(ops), descOp == NULL ? "contains" : descOp, NULL);
-hPrintf("</td>\n<td><input type='text' name='hgt.descSearch' value='%s'></td></tr>\n", descSearch == NULL ? "" : descSearch);
 
 hPrintf("<tr><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td>is</td>\n<td>\n");
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
 hPrintf("</td></tr>\n");
 
+if(metaDbExists)
+    {
+    int len;
+    hPrintf("<tr><td>and</td>\n");
+    hPrintf("<td><b>Antibody</b></td><td>is</td>\n<td>\n");
+    len = getTermList(conn, &terms, "antibody");
+    cgiMakeDropListFull("hgt.antibodySearch", terms, terms, len, antibodySearch, NULL);
+    hPrintf("</td></tr>\n");
 
-hPrintf("<tr><td>and</td>\n");
-hPrintf("<td><b>Antibody</b></td><td>is</td>\n<td>\n");
-len = getTermList(cvHash, &terms, "Antibody");
-cgiMakeDropListFull("hgt.antibodySearch", terms, terms, len, antibodySearch, NULL);
-hPrintf("</td></tr>\n");
+    hPrintf("<tr><td>and</td>\n");
+    hPrintf("<td><b>Cell Line</b></td><td>is</td>\n<td>\n");
+    len = getTermList(conn, &terms, "cell");
+    cgiMakeDropListFull("hgt.cellSearch", terms, terms, len, cellSearch, NULL);
+    hPrintf("</td></tr>\n");
 
-hPrintf("<tr><td>and</td>\n");
-hPrintf("<td><b>Cell Line</b></td><td>is</td>\n<td>\n");
-len = getTermList(cvHash, &terms, "Cell Line");
-cgiMakeDropListFull("hgt.cellSearch", terms, terms, len, cellSearch, NULL);
-hPrintf("</td></tr>\n");
-
-hPrintf("<tr><td>and</td><td>\n");
-cgiMakeDropListFull("hgt.metaName", metaNames, metaValues, ArraySize(metaNames), metaName, NULL);
-hPrintf("</td><td>\n");
-cgiMakeDropListFull("hgt.metaOp", op_labels, ops, ArraySize(ops), metaOp == NULL ? "contains" : metaOp, NULL);
-hPrintf("</td><td>\n");
-hPrintf("<input type='text' name='hgt.metaSearch' value='%s'></td></tr>\n", metaSearch == NULL ? "" : metaSearch);
-hPrintf("</td></tr>\n");
+    hPrintf("<tr><td>and</td><td>\n");
+    cgiMakeDropListFull("hgt.metaName", metaNames, metaValues, ArraySize(metaNames), metaName, NULL);
+    hPrintf("</td><td>\n");
+    cgiMakeDropListFull("hgt.metaOp", op_labels, ops, ArraySize(ops), metaOp == NULL ? "contains" : metaOp, NULL);
+    hPrintf("</td><td>\n");
+    hPrintf("<input type='text' name='hgt.metaSearch' value='%s'></td></tr>\n", metaSearch == NULL ? "" : metaSearch);
+    hPrintf("</td></tr>\n");
+    }
 
 hPrintf("</table>\n");
 
@@ -229,27 +228,45 @@ hPrintf("<input type='submit' name='%s' value='Search'>\n", searchTracks);
 hPrintf("<input type='submit' name='submit' value='Cancel'>\n");
 hPrintf("</form>\n");
 
-struct slRef *tracks = NULL;
-int tracksFound = 0;
-struct hash *parents = newHash(4);
-if(groupSearch != NULL && sameString(groupSearch, "any"))
-    {
+if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
-    }
 if(metaSearch != NULL && !strlen(metaSearch))
-    {
     metaSearch = NULL;
-    }
-if(antibodySearch != NULL && sameString(antibodySearch, "Any"))
-    {
+if(antibodySearch != NULL && sameString(antibodySearch, ANYLABEL))
     antibodySearch = NULL;
-    }
-if(cellSearch != NULL && sameString(cellSearch, "Any"))
-    {
+if(cellSearch != NULL && sameString(cellSearch, ANYLABEL))
     cellSearch = NULL;
-    }
 if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || metaSearch != NULL || antibodySearch != NULL || cellSearch != NULL)
     {
+    // First do the metaDb searches, which can be quickly done for all tracks with db queryies.
+    struct hash *matchingTracks = newHash(0);
+    struct slName *el, *metaTracks = NULL;
+    boolean checkMeta = FALSE;
+    if(antibodySearch != NULL)
+        {
+        metaTracks = metaDbSearch(conn, "antibody", antibodySearch, "is");
+        checkMeta++;
+        }
+    if(cellSearch != NULL)
+        {
+        struct slName *tmp = metaDbSearch(conn, "cell", cellSearch, "is");
+        if(metaTracks == NULL)
+            metaTracks = tmp;
+        else
+            metaTracks = slNameIntersection(metaTracks, tmp);
+        checkMeta++;
+        }
+    if(metaSearch != NULL && strlen(metaSearch) && metaName != NULL && strlen(metaName))
+        {
+        struct slName *tmp = metaDbSearch(conn, metaName, metaSearch, metaOp);
+        if(metaTracks == NULL)
+            metaTracks = tmp;
+        else
+            metaTracks = slNameIntersection(metaTracks, tmp);
+        checkMeta++;
+        }
+    for (el = metaTracks; el != NULL; el = el->next)
+        hashAddInt(matchingTracks, el->name, 1);
     for (group = groupList; group != NULL; group = group->next)
         {
         if(groupSearch == NULL || !strcmp(group->name, groupSearch))
@@ -261,37 +278,25 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
                     {
                     struct track *track = tr->track;
                     if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) && 
-                       (isEmpty(descSearch) || isDescriptionMatch(track, descSearch, descOp)) &&
-                       (isEmpty(antibodySearch) || isMetaMatch(track, "antibody", "is", antibodySearch)) &&
-                       (isEmpty(cellSearch) || isMetaMatch(track, "cell", "is", cellSearch)) &&
-                       (isEmpty(metaName) || isEmpty(metaSearch) || isMetaMatch(track, metaName, metaOp, metaSearch)))
+                       (isEmpty(descSearch) || isDescriptionMatch(track, descSearch)) &&
+                       (!checkMeta || hashLookup(matchingTracks, track->track) != NULL))
                         {
                         tracksFound++;
-                        if(tracks == NULL)
-                            tracks = slRefNew(track);
-                        else 
-                            refAdd(&tracks, track);
+                        refAdd(&tracks, track);
                         }
                     if (track->subtracks != NULL)
                         {
                         struct track *subTrack;
                         for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                             {
-//                            fprintf(stderr, "search track: %s\n", subTrack->shortLabel);
                             if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
-                               (isEmpty(descSearch) || isDescriptionMatch(subTrack, descSearch, descOp)) &&
-                               (isEmpty(antibodySearch) || isMetaMatch(subTrack, "antibody", "is", antibodySearch)) &&
-                               (isEmpty(cellSearch) || isMetaMatch(subTrack, "cell", "is", cellSearch)) &&
-                               (isEmpty(metaName) || isEmpty(metaSearch) || isMetaMatch(subTrack, metaName, metaOp, metaSearch)))
+                               (isEmpty(descSearch) || isDescriptionMatch(subTrack, descSearch)) &&
+                               (!checkMeta || hashLookup(matchingTracks, subTrack->track) != NULL))
                                 {
                                 // XXXX to parent hash. - use tdb->parent instead.
                                 hashAdd(parents, subTrack->track, track);
-//                                fprintf(stderr, "found subtrack: %s\n", subTrack->shortLabel);
                                 tracksFound++;
-                                if(tracks == NULL)
-                                    tracks = slRefNew(subTrack);
-                                else 
-                                    refAdd(&tracks, subTrack);
+                                refAdd(&tracks, subTrack);
                                 }
                             }                        
                         }
