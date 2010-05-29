@@ -1,12 +1,13 @@
 /* correlate - calculate r, also known as Pearson's correlation
  * coefficient.  r*r has the nice property that it explains
  * how much of one variable's variation can be explained as
- * a linear function of the other variable's variation. */
+ * a linear function of the other variable's variation.  Beware
+ * the weight of extreme outliers though! */
 
 #include "common.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.2 2008/09/17 17:56:37 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.3 2010/05/29 22:25:51 kent Exp $";
 
 struct correlate *correlateNew()
 /* Return new correlation handler. */
@@ -30,6 +31,20 @@ c->sumXY += x*y;
 c->sumY += y;
 c->sumYY += y*y;
 c->n += 1; 
+}
+
+void correlateNextMulti(struct correlate *c, double x, double y, int count)
+/* Do same thing as calling correlateNext with x and y count times. */
+{
+double ct = count;	/* Do type conversion once. */
+double cx = ct*x;
+double cy = ct*y;
+c->sumX += cx;
+c->sumXX += cx*x;
+c->sumXY += cx*y;
+c->sumY += cy;
+c->sumYY += cy*y;
+c->n += count;
 }
 
 double correlateResult(struct correlate *c)

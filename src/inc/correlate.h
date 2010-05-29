@@ -14,7 +14,7 @@ struct correlate
     double sumXY;		/* Sum of all X*Y */
     double sumXX;		/* Sum of all X*X */
     double sumYY;		/* Sum of all Y*Y */
-    int n;			/* Number of samples. */
+    long long n;		/* Number of samples. */
     };
 
 struct correlate *correlateNew();
@@ -25,6 +25,9 @@ void correlateFree(struct correlate **pC);
 
 void correlateNext(struct correlate *c, double x, double y);
 /* Add next sample to correlation. */
+
+void correlateNextMulti(struct correlate *c, double x, double y, int count);
+/* Do same thing as calling correlateNext with x and y count times. */
 
 double correlateResult(struct correlate *c);
 /* Returns correlation (aka R) */
