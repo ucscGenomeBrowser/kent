@@ -551,11 +551,11 @@ if (start >= end)
     return result;
 bzero(summary, summarySize * sizeof(summary[0]));
 
-/* Figure out what size of data we want.  We actually want to get 4 data points per summary
+/* Figure out what size of data we want.  We actually want to get 2 data points per summary
  * value if possible to minimize the effect of a data point being split between summary pixels. */
 bits32 baseSize = end - start; 
 int fullReduction = (baseSize/summarySize);
-int zoomLevel = fullReduction/4;
+int zoomLevel = fullReduction/2;
 if (zoomLevel < 0)
     zoomLevel = 0;
 
