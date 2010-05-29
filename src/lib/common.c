@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.149 2010/05/29 20:23:41 larrym Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.150 2010/05/29 22:24:53 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -20,7 +20,7 @@ memcpy(newPt, pt, size);
 return newPt;
 }
 
-static char *cloneStringZExt(char *s, int size, int copySize)
+static char *cloneStringZExt(const char *s, int size, int copySize)
 /* Make a zero terminated copy of string in memory */
 {
 char *d = needMem(copySize+1);
@@ -30,13 +30,13 @@ d[copySize] = 0;
 return d;
 }
 
-char *cloneStringZ(char *s, int size)
+char *cloneStringZ(const char *s, int size)
 /* Make a zero terminated copy of string in memory */
 {
 return cloneStringZExt(s, strlen(s), size);
 }
 
-char *cloneString(char *s)
+char *cloneString(const char *s)
 /* Make copy of string in dynamic memory */
 {
 int size = 0;
@@ -616,6 +616,17 @@ const struct slName *a = *((struct slName **)va);
 const struct slName *b = *((struct slName **)vb);
 return strcmp(a->name, b->name);
 }
+
+int slNameCmpStringsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+return cmpStringsWithEmbeddedNumbers(a->name, b->name);
+}
+
+
 
 void slNameSort(struct slName **pList)
 /* Sort slName list. */
@@ -1386,7 +1397,7 @@ while (*s++ == c)
 return count;
 }
 
-int countLeadingDigits(char *s)
+int countLeadingDigits(const char *s)
 /* Return number of leading digits in s */
 {
 int count = 0;
@@ -1398,7 +1409,7 @@ while (isdigit(*s))
 return count;
 }
 
-int countLeadingNondigits(char *s)
+int countLeadingNondigits(const char *s)
 /* Count number of leading non-digit characters in s. */
 {
 int count = 0;
@@ -1412,7 +1423,7 @@ while ((c = *s++) != 0)
 return count;
 }
 
-int cmpStringsWithEmbeddedNumbers(char *a, char *b)
+int cmpStringsWithEmbeddedNumbers(const char *a, const char *b)
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
 {
@@ -1453,7 +1464,7 @@ for (;;)
    }
 }
 
-int cmpWordsWithEmbeddedNumbers(char *a, char *b)
+int cmpWordsWithEmbeddedNumbers(const char *a, const char *b)
 /* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
 {
 char *A = cloneString(a);

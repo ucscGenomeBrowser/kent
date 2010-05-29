@@ -517,6 +517,10 @@ int slNameCmpCase(const void *va, const void *vb);
 int slNameCmp(const void *va, const void *vb);
 /* Compare two slNames. */
 
+int slNameCmpStringsWithEmbeddedNumbers(const void *va, const void *vb);
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+
 void slNameSortCase(struct slName **pList);
 /* Sort slName list, ignore case. */
 
@@ -640,10 +644,10 @@ void gentleFree(void *pt);
 
 /*******  Some stuff for processing strings. *******/
 
-char *cloneStringZ(char *s, int size);
+char *cloneStringZ(const char *s, int size);
 /* Make a zero terminated copy of string in memory */
 
-char *cloneString(char *s);
+char *cloneString(const char *s);
 /* Make copy of string in dynamic memory */
 
 char *cloneLongString(char *s);
@@ -681,11 +685,11 @@ int differentStringNullOk(char *a, char *b);
 #define isEmpty(string) (string == NULL || string[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
-int cmpStringsWithEmbeddedNumbers(char *a, char *b);
+int cmpStringsWithEmbeddedNumbers(const char *a, const char *b);
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
 
-int cmpWordsWithEmbeddedNumbers(char *a, char *b);
+int cmpWordsWithEmbeddedNumbers(const char *a, const char *b);
 /* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
 
 boolean startsWith(const char *start, const char *string);
@@ -798,10 +802,10 @@ int countCharsN(char *s, char c, int size);
 int countLeadingChars(char *s, char c);
 /* Count number of characters c at start of string. */
 
-int countLeadingDigits(char *s);
+int countLeadingDigits(const char *s);
 /* Return number of leading digits in s */
 
-int countLeadingNondigits(char *s);
+int countLeadingNondigits(const char *s);
 /* Count number of leading non-digit characters in s. */
 
 int countSame(char *a, char *b);
