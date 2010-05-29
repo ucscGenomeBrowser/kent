@@ -15,70 +15,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.24 2010/05/25 19:24:16 kent Exp $";
-
-struct bwgBedGraphItem
-/* An bedGraph-type item in a bwgSection. */
-    {
-    struct bwgBedGraphItem *next;	/* Next in list. */
-    bits32 start,end;		/* Range of chromosome covered. */
-    float val;			/* Value. */
-    };
-
-struct bwgVariableStepItem
-/* An variableStep type item in a bwgSection. */
-    {
-    struct bwgVariableStepItem *next;	/* Next in list. */
-    bits32 start;		/* Start position in chromosome. */
-    float val;			/* Value. */
-    };
-
-struct bwgVariableStepPacked
-/* An variableStep type item in a bwgSection. */
-    {
-    bits32 start;		/* Start position in chromosome. */
-    float val;			/* Value. */
-    };
-
-struct bwgFixedStepItem
-/* An fixedStep type item in a bwgSection. */
-    {
-    struct bwgFixedStepItem *next;	/* Next in list. */
-    float val;			/* Value. */
-    };
-
-struct bwgFixedStepPacked
-/* An fixedStep type item in a bwgSection. */
-    {
-    float val;			/* Value. */
-    };
-
-union bwgItem
-/* Union of item pointers for all possible section types. */
-    {
-    struct bwgBedGraphItem *bedGraphList;		/* A linked list */
-    struct bwgFixedStepPacked *fixedStepPacked;		/* An array */
-    struct bwgVariableStepPacked *variableStepPacked;	/* An array */
-    /* No packed format for bedGraph... */
-    };
-
-struct bwgSection
-/* A section of a bigWig file - all on same chrom.  This is a somewhat fat data
- * structure used by the bigWig creation code.  See also bwgSection for the
- * structure returned by the bigWig reading code. */
-    {
-    struct bwgSection *next;		/* Next in list. */
-    char *chrom;			/* Chromosome name. */
-    bits32 start,end;			/* Range of chromosome covered. */
-    enum bwgSectionType type;
-    union bwgItem items;		/* List/array of items in this section. */
-    bits32 itemStep;			/* Step within item if applicable. */
-    bits32 itemSpan;			/* Item span if applicable. */
-    bits16 itemCount;			/* Number of items in section. */
-    bits32 chromId;			/* Unique small integer value for chromosome. */
-    bits64 fileOffset;			/* Offset of section in file. */
-    };
-
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.25 2010/05/29 22:28:44 kent Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -200,7 +137,7 @@ return bufSize;
 }
 
 
-static int bwgSectionCmp(const void *va, const void *vb)
+int bwgSectionCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start,end.  */
 {
 const struct bwgSection *a = *((struct bwgSection **)va);
@@ -468,7 +405,7 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
  * rest of section. */
 if (chrom == NULL)
     errAbort("Missing chrom= setting line %d of %s\n", lf->lineIx, lf->fileName);
-bits32 chromSize = hashIntVal(chromSizeHash, chrom);
+bits32 chromSize = (chromSizeHash ? hashIntVal(chromSizeHash, chrom) : BIGNUM);
 if (start >= chromSize)
     {
     warn("line %d of %s: chromosome %s has %u bases, but item starts at %u",
@@ -550,7 +487,7 @@ while (lineFileNextReal(lf, &line))
         {
 	lmAllocVar(chromHash->lm, chrom);
 	hashAddSaveName(chromHash, chromName, chrom, &chrom->name);
-	chrom->size = hashIntVal(chromSizeHash, chromName);
+	chrom->size = (chromSizeHash ? hashIntVal(chromSizeHash, chromName) : BIGNUM);
 	slAddHead(&chromList, chrom);
 	}
 
@@ -865,12 +802,12 @@ struct bbiChromInfo *chromInfoArray;
 int chromCount, maxChromNameSize;
 bwgMakeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 
-/* Figure out initial summary level - starting with a summary 20 times the amount
+/* Figure out initial summary level - starting with a summary 10 times the amount
  * of the smallest item.  See if summarized data is smaller than half input data, if
  * not bump up reduction by a factor of 2 until it is, or until further summarying
  * yeilds no size reduction. */
 int  minRes = bwgAverageResolution(sectionList);
-int initialReduction = minRes*20;
+int initialReduction = minRes*10;
 bits64 fullSize = bwgTotalSectionSize(sectionList);
 bits64 maxReducedSize = fullSize/2;
 struct bbiSummary *firstSummaryList = NULL, *summaryList = NULL;
@@ -881,8 +818,7 @@ for (;;)
     bits64 summarySize = bbiTotalSummarySize(summaryList);
     if (doCompress)
 	{
-        summarySize *= 4;	// Compensate for summary not compressing as well as primary data
-	initialReduction *= 4;
+        summarySize *= 2;	// Compensate for summary not compressing as well as primary data
 	}
     if (summarySize >= maxReducedSize && summarySize != lastSummarySize)
         {
@@ -1061,8 +997,12 @@ freez(&chromInfoArray);
 carefulClose(&f);
 }
 
-struct bwgSection *bwgParseWig(char *fileName, boolean clipDontDie, struct hash *chromSizeHash,
-	int maxSectionSize, struct lm *lm)
+struct bwgSection *bwgParseWig(
+	char *fileName,       /* Name of ascii wig file. */
+	boolean clipDontDie,  /* Skip items outside chromosome rather than aborting. */
+	struct hash *chromSizeHash,  /* If non-NULL items checked to be inside chromosome. */
+	int maxSectionSize,   /* Biggest size of a section.  100 - 100,000 is usual range. */
+	struct lm *lm)	      /* Memory pool to allocate from. */
 /* Parse out ascii wig file - allocating memory in lm. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
