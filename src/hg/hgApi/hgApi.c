@@ -6,7 +6,7 @@
 #include "hPrint.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgApi.c,v 1.2 2010/05/21 22:29:49 larrym Exp $";
+static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
 static void fail(char *msg)
 {
@@ -51,35 +51,74 @@ dyStringPrintf(json, "\n%s}", tabs);
 
 int main(int argc, char *argv[])
 {
-struct dyString *output = newDyString(1000);
+struct dyString *output = newDyString(10000);
 char *database = cgiOptionalString("db");
 char *cmd = cgiOptionalString("cmd");
 char *jsonp = cgiOptionalString("jsonp");
 if(database)
+    {
     database = sqlEscapeString(database);
+    if(!hDbExists(database))
+        fail("Invalid database");
+    }
+else
+    fail("Missing 'db' parameter");
 
 if(!cmd)
     fail("Missing 'cmd' parameter");
 
 if(!strcmp(cmd, "trackList"))
     {
-    if(database)
+    // Return trackList for this assembly
+    // e.g. http://genome.ucsc.edu/hgApi?db=hg18&cmd=trackList
+
+    struct trackDb *tdb, *tdbList = NULL;
+    tdbList = hTrackDb(database, NULL);
+    dyStringPrintf(output, "[\n");
+    int count = 0;
+    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
-        struct trackDb *tdb, *tdbList = NULL;
-        tdbList = hTrackDb(database, NULL);
+        trackJson(output, tdb, &count, 1);
+        count++;
+        }
+    dyStringAppend(output, "\n]\n");
+    }
+else if(!strcmp(cmd, "metaDb"))
+    {
+    // Return list of values for given metaDb var
+    // e.g. http://genome.ucsc.edu/hgApi?db=hg18&cmd=metaDb&var=cell
+
+    struct sqlConnection *conn = hAllocConn(database);
+    boolean metaDbExists = sqlTableExists(conn, "metaDb");
+    if(metaDbExists)
+        {
+        char query[256];
+        struct sqlResult *sr = NULL;
+        char **row;
+        int i;
+        struct slName *el, *termList = NULL;
+        char *var = cgiOptionalString("var");
+        if(var)
+            var = sqlEscapeString(var);
+        else
+            fail("Missing var parameter");
+        safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", var);
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            slNameAddHead(&termList, row[0]);
+        sqlFreeResult(&sr);
+        slSort(&termList, slNameCmpCase);
         dyStringPrintf(output, "[\n");
-        int count = 0;
-        for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+        for (el = termList, i = 0; el != NULL; el = el->next, i++)
             {
-            trackJson(output, tdb, &count, 1);
-            count++;
+            if(i)
+                dyStringPrintf(output, ",\n");
+            dyStringPrintf(output, "'%s'", javaScriptLiteralEncode(el->name));
             }
-        dyStringAppend(output, "\n]\n");
+        dyStringPrintf(output, "\n]\n");
         }
     else
-        {
-        fail("Missing 'db' parameter");
-        }
+        fail("Assembly does not support metaDb");
     }
 else
     fail("Unsupported 'cmd' parameter");
