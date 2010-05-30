@@ -15,11 +15,11 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: searchTracks.c,v 1.7 2010/05/30 04:00:39 larrym Exp $";
+static char const rcsid[] = "$Id: searchTracks.c,v 1.8 2010/05/30 22:38:13 larrym Exp $";
 
 #define ANYLABEL "Any"
-#define METADATA_NAME_PREFIX "hgt.metaDataName"
-#define METADATA_VALUE_PREFIX "hgt.metaDataValue"
+#define METADATA_NAME_PREFIX "hgt.metadataName"
+#define METADATA_VALUE_PREFIX "hgt.metadataValue"
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -132,7 +132,8 @@ return count;
 
 static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char *val, char *op)
 {
-// Search the assemblies metaDb table; If name == NULL, we search every metadata field.
+// Search the assembly's metaDb table for var; If name == NULL, we search every metadata field.
+// Search is via mysql, so it's case-insensitive.
 struct slName *retval = NULL;
 char query[256];
 struct sqlResult *sr = NULL;
@@ -198,10 +199,10 @@ boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 struct slRef *tracks = NULL;
-int numMetaDataSelects, tracksFound = 0;
-int numMetaDataNonEmpty = 0;
-char **metaDataName;
-char **metaDataValue;
+int numMetadataSelects, tracksFound = 0;
+int numMetadataNonEmpty = 0;
+char **metadataName;
+char **metadataValue;
 struct hash *parents = newHash(4);
 
 getTrackList(&groupList, -2);
@@ -239,48 +240,48 @@ hPrintf("</td></tr>\n");
 
 // figure out how many metadata selects are visible.
 
-for(numMetaDataSelects = 0;;)
+for(numMetadataSelects = 0;;)
     {
     char buf[256];
-    safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetaDataSelects + 1);
+    safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
     char *str = cartOptionalString(cart, buf);
     if(isEmpty(str))
         break;
     else
-        numMetaDataSelects++;
+        numMetadataSelects++;
     }
 
-if(numMetaDataSelects)
+if(numMetadataSelects)
     {
-    metaDataName = needMem(sizeof(char *) * numMetaDataSelects);
-    metaDataValue = needMem(sizeof(char *) * numMetaDataSelects);
+    metadataName = needMem(sizeof(char *) * numMetadataSelects);
+    metadataValue = needMem(sizeof(char *) * numMetadataSelects);
     int i;
-    for(i = 0; i < numMetaDataSelects; i++)
+    for(i = 0; i < numMetadataSelects; i++)
         {
         char buf[256];
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + 1);
-        metaDataName[i] = cartOptionalString(cart, buf);
+        metadataName[i] = cartOptionalString(cart, buf);
         safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + 1);
-        metaDataValue[i] = cartOptionalString(cart, buf);
-        if(!strcmp(metaDataValue[i], ANYLABEL))
-            metaDataValue[i] = NULL;
-        if(!isEmpty(metaDataValue[i]))
-            numMetaDataNonEmpty++;
+        metadataValue[i] = cartOptionalString(cart, buf);
+        if(!strcmp(metadataValue[i], ANYLABEL))
+            metadataValue[i] = NULL;
+        if(!isEmpty(metadataValue[i]))
+            numMetadataNonEmpty++;
         }
     }
 else
     {
     // create defaults
-    numMetaDataSelects = 2;
-    metaDataName = needMem(sizeof(char *) * numMetaDataSelects);
-    metaDataValue = needMem(sizeof(char *) * numMetaDataSelects);
-    metaDataName[0] = "cell";
-    metaDataName[1] = "antibody";
-    metaDataValue[0] = ANYLABEL;
-    metaDataValue[1] = ANYLABEL;
+    numMetadataSelects = 2;
+    metadataName = needMem(sizeof(char *) * numMetadataSelects);
+    metadataValue = needMem(sizeof(char *) * numMetadataSelects);
+    metadataName[0] = "cell";
+    metadataName[1] = "antibody";
+    metadataValue[0] = ANYLABEL;
+    metadataValue[1] = ANYLABEL;
     }
 
-fprintf(stderr, "numMetaDataSelects: %d: %d\n", numMetaDataSelects, numMetaDataNonEmpty);
+fprintf(stderr, "numMetadataSelects: %d: %d\n", numMetadataSelects, numMetadataNonEmpty);
 
 if(metaDbExists)
     {
@@ -288,7 +289,7 @@ if(metaDbExists)
     char **metaValues = NULL;
     int count = metaDbVars(conn, &metaValues);
 
-    for(i = 0; i < numMetaDataSelects; i++)
+    for(i = 0; i < numMetadataSelects; i++)
         {
         char **terms;
         char buf[256];
@@ -297,12 +298,12 @@ if(metaDbExists)
         hPrintf("<tr><td>and</td>\n");
         hPrintf("</td><td>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metaDataName[i], 
-                                                   NULL, NULL, "onchange=metaPulldownChanged(this)");
+        cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metadataName[i], 
+                                                   NULL, NULL, "onchange=metadataSelectChanged(this)");
         hPrintf("</td><td>is</td>\n<td>\n");
-        len = getTermList(conn, &terms, metaDataName[i]);
+        len = getTermList(conn, &terms, metadataName[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, terms, terms, len, metaDataValue[i], NULL);
+        cgiMakeDropListFull(buf, terms, terms, len, metadataValue[i], NULL);
         hPrintf("</td></tr>\n");
         }
     }
@@ -317,18 +318,18 @@ if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
 if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
-if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || numMetaDataNonEmpty))
+if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty))
     {
     // First do the metaDb searches, which can be done quickly for all tracks with db queries.
     struct hash *matchingTracks = newHash(0);
     struct hash *trackMetadata = newHash(0);
     struct slName *el, *metaTracks = NULL;
     int i;
-    for(i = 0; i < numMetaDataSelects; i++)
+    for(i = 0; i < numMetadataSelects; i++)
         {
-        if(!isEmpty(metaDataValue[i]))
+        if(!isEmpty(metadataValue[i]))
             {
-            struct slName *tmp = metaDbSearch(conn, metaDataName[i], metaDataValue[i], "is");
+            struct slName *tmp = metaDbSearch(conn, metadataName[i], metadataValue[i], "is");
             if(metaTracks == NULL)
                 metaTracks = tmp;
             else
@@ -366,7 +367,7 @@ if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL
                     struct track *track = tr->track;
                     if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) && 
                        (isEmpty(descSearch) || isDescriptionMatch(track, descSearch, trackMetadata)) &&
-                       (!numMetaDataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
+                       (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                         {
                         tracksFound++;
                         refAdd(&tracks, track);
@@ -378,7 +379,7 @@ if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL
                             {
                             if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
                                (isEmpty(descSearch) || isDescriptionMatch(subTrack, descSearch, trackMetadata)) &&
-                               (!numMetaDataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
+                               (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
                                 {
                                 // XXXX to parent hash. - use tdb->parent instead.
                                 hashAdd(parents, subTrack->track, track);
@@ -437,4 +438,5 @@ if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL
         hPrintf("<p>No tracks found</p>\n");
         }
     }
+webEndSectionTables();
 }
