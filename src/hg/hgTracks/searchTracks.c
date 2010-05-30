@@ -15,9 +15,11 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: searchTracks.c,v 1.6 2010/05/30 01:38:17 larrym Exp $";
+static char const rcsid[] = "$Id: searchTracks.c,v 1.7 2010/05/30 04:00:39 larrym Exp $";
 
 #define ANYLABEL "Any"
+#define METADATA_NAME_PREFIX "hgt.metaDataName"
+#define METADATA_VALUE_PREFIX "hgt.metaDataValue"
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -54,7 +56,7 @@ static boolean isDescriptionMatch(struct track *track, char *str, struct hash *t
 {
 // We parse str and look for every word ANYWHERE in track description (i.e. google style).
 // XXXX currently quite primitive; do stemming, strip html markup ??
-// Also, we should fold all metadata into the description of every track.
+// trackMetaData contains tracks already found via metadata searches.
 boolean found = FALSE;
 
 if(str && strlen(str))
@@ -120,7 +122,7 @@ slSort(&termList, slNameCmpCase);
 count++; // make room for "Any"
 retval = needMem(sizeof(char *) * count);
 retval[0] = cloneString(ANYLABEL);
-for(i=1; termList != NULL;termList = termList->next, i++)
+for(i = 1; termList != NULL;termList = termList->next, i++)
     {
     retval[i] = cloneString(termList->name);
     }
@@ -192,15 +194,14 @@ char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
 char *nameOp = cartOptionalString(cart, "hgt.nameOp");
 char *descSearch = cartOptionalString(cart, "hgt.descSearch");
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
-char *metaName = cartUsualString(cart, "hgt.metaName", "cell");
-char *metaOp = cartOptionalString(cart, "hgt.metaOp");
-char *metaSearch = cartOptionalString(cart, "hgt.metaSearch");
-char *antibodySearch = cartOptionalString(cart, "hgt.antibodySearch");
-char **terms;
+boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 struct slRef *tracks = NULL;
-int tracksFound = 0;
+int numMetaDataSelects, tracksFound = 0;
+int numMetaDataNonEmpty = 0;
+char **metaDataName;
+char **metaDataValue;
 struct hash *parents = newHash(4);
 
 getTrackList(&groupList, -2);
@@ -217,12 +218,11 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-// cartWebStart(cart, database, );
+hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
+
 webStartWrapperDetailedNoArgs(cart, database, "", "Track Search (prototype!)", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
-
-hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
 hPrintf("<table>\n");
 
 hPrintf("<tr><td></td><td><b>Description:</b></td><td>contains</td>\n");
@@ -237,26 +237,74 @@ hPrintf("<td><b>Group</b></td><td>is</td>\n<td>\n");
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
 hPrintf("</td></tr>\n");
 
+// figure out how many metadata selects are visible.
+
+for(numMetaDataSelects = 0;;)
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetaDataSelects + 1);
+    char *str = cartOptionalString(cart, buf);
+    if(isEmpty(str))
+        break;
+    else
+        numMetaDataSelects++;
+    }
+
+if(numMetaDataSelects)
+    {
+    metaDataName = needMem(sizeof(char *) * numMetaDataSelects);
+    metaDataValue = needMem(sizeof(char *) * numMetaDataSelects);
+    int i;
+    for(i = 0; i < numMetaDataSelects; i++)
+        {
+        char buf[256];
+        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + 1);
+        metaDataName[i] = cartOptionalString(cart, buf);
+        safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + 1);
+        metaDataValue[i] = cartOptionalString(cart, buf);
+        if(!strcmp(metaDataValue[i], ANYLABEL))
+            metaDataValue[i] = NULL;
+        if(!isEmpty(metaDataValue[i]))
+            numMetaDataNonEmpty++;
+        }
+    }
+else
+    {
+    // create defaults
+    numMetaDataSelects = 2;
+    metaDataName = needMem(sizeof(char *) * numMetaDataSelects);
+    metaDataValue = needMem(sizeof(char *) * numMetaDataSelects);
+    metaDataName[0] = "cell";
+    metaDataName[1] = "antibody";
+    metaDataValue[0] = ANYLABEL;
+    metaDataValue[1] = ANYLABEL;
+    }
+
+fprintf(stderr, "numMetaDataSelects: %d: %d\n", numMetaDataSelects, numMetaDataNonEmpty);
+
 if(metaDbExists)
     {
-    int len;
+    int i;
     char **metaValues = NULL;
     int count = metaDbVars(conn, &metaValues);
 
-    hPrintf("<tr><td>and</td>\n");
-    hPrintf("<td><b>Antibody</b></td><td>is</td>\n<td>\n");
-    len = getTermList(conn, &terms, "antibody");
-    cgiMakeDropListFull("hgt.antibodySearch", terms, terms, len, antibodySearch, NULL);
-    hPrintf("</td></tr>\n");
+    for(i = 0; i < numMetaDataSelects; i++)
+        {
+        char **terms;
+        char buf[256];
+        int len;
 
-    hPrintf("<tr><td>and</td>\n");
-    hPrintf("</td><td>\n");
-    cgiMakeDropListClassWithStyleAndJavascript("hgt.metaName", metaValues, count, metaName, 
-                                               NULL, NULL, "onchange=metaPulldownChanged(this)");
-    hPrintf("</td><td>is</td>\n<td>\n");
-    len = getTermList(conn, &terms, metaName);
-    cgiMakeDropListFull("hgt.metaSearch", terms, terms, len, metaSearch, NULL);
-    hPrintf("</td></tr>\n");
+        hPrintf("<tr><td>and</td>\n");
+        hPrintf("</td><td>\n");
+        safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
+        cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metaDataName[i], 
+                                                   NULL, NULL, "onchange=metaPulldownChanged(this)");
+        hPrintf("</td><td>is</td>\n<td>\n");
+        len = getTermList(conn, &terms, metaDataName[i]);
+        safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
+        cgiMakeDropListFull(buf, terms, terms, len, metaDataValue[i], NULL);
+        hPrintf("</td></tr>\n");
+        }
     }
 
 hPrintf("</table>\n");
@@ -269,30 +317,23 @@ if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
 if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
-if(metaSearch != NULL && (!strlen(metaSearch) || sameString(metaSearch, ANYLABEL)))
-    metaSearch = NULL;
-if(antibodySearch != NULL && sameString(antibodySearch, ANYLABEL))
-    antibodySearch = NULL;
-if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || metaSearch != NULL || antibodySearch != NULL)
+if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || numMetaDataNonEmpty))
     {
     // First do the metaDb searches, which can be done quickly for all tracks with db queries.
     struct hash *matchingTracks = newHash(0);
     struct hash *trackMetadata = newHash(0);
     struct slName *el, *metaTracks = NULL;
-    boolean checkMeta = FALSE;
-    if(antibodySearch != NULL)
+    int i;
+    for(i = 0; i < numMetaDataSelects; i++)
         {
-        metaTracks = metaDbSearch(conn, "antibody", antibodySearch, "is");
-        checkMeta++;
-        }
-    if(metaSearch != NULL && strlen(metaSearch) && metaName != NULL && strlen(metaName))
-        {
-        struct slName *tmp = metaDbSearch(conn, metaName, metaSearch, metaOp);
-        if(metaTracks == NULL)
-            metaTracks = tmp;
-        else
-            metaTracks = slNameIntersection(metaTracks, tmp);
-        checkMeta++;
+        if(!isEmpty(metaDataValue[i]))
+            {
+            struct slName *tmp = metaDbSearch(conn, metaDataName[i], metaDataValue[i], "is");
+            if(metaTracks == NULL)
+                metaTracks = tmp;
+            else
+                metaTracks = slNameIntersection(metaTracks, tmp);
+            }
         }
     for (el = metaTracks; el != NULL; el = el->next)
         hashAddInt(matchingTracks, el->name, 1);
@@ -325,7 +366,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
                     struct track *track = tr->track;
                     if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) && 
                        (isEmpty(descSearch) || isDescriptionMatch(track, descSearch, trackMetadata)) &&
-                       (!checkMeta || hashLookup(matchingTracks, track->track) != NULL))
+                       (!numMetaDataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                         {
                         tracksFound++;
                         refAdd(&tracks, track);
@@ -337,7 +378,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
                             {
                             if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
                                (isEmpty(descSearch) || isDescriptionMatch(subTrack, descSearch, trackMetadata)) &&
-                               (!checkMeta || hashLookup(matchingTracks, subTrack->track) != NULL))
+                               (!numMetaDataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
                                 {
                                 // XXXX to parent hash. - use tdb->parent instead.
                                 hashAdd(parents, subTrack->track, track);
@@ -389,7 +430,7 @@ if((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSear
             }
         hPrintf("</table>\n");
         hButton("submit", "save");
-        hPrintf("</form>\n");
+        hPrintf("\n</form>\n");
         } 
     else
         {
