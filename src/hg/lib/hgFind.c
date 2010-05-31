@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.230 2010/05/19 20:46:09 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.231 2010/05/31 22:42:33 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2402,6 +2402,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	{
 	char *parent = hGetParent(db, table->name);
 	char *trackName = hGetTrackForTable(db, table->name);
+        if (trackName == NULL)
+            errAbort("no track for table \"%s\" found via a findSpec", table->name); // wish we had searchName
 	char *vis = hCarefulTrackOpenVis(db, trackName);
 	boolean excludeTable = FALSE;
 	if (table->htmlStart) 
