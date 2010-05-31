@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.16 2010/03/30 23:25:04 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.17 2010/05/31 04:02:04 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -123,6 +123,7 @@ while (@row = $sth->fetchrow_array()) {
     $experiment{"project"} = "unknown";
     $experiment{"projectPi"} = "unknown";
     $experiment{"labPi"} = "unknown";
+    $experiment{"tableName"} = $tableName;
 
     my $lab = "unknown";
     if (defined($metadata{"lab"})) {
@@ -439,6 +440,11 @@ while (@row = $sth->fetchrow_array()) {
 $sth->finish;
 $dbh->{DBH}->disconnect;
 
+our $pushqDb = "qapushq";
+our $pushqHost = "mysqlbeta";
+my $releaseDate;
+$dbh = HgDb->new(DB => $pushqDb, HOST => $pushqHost);
+
 # fill in statuses for those experiments missing them, and print out results
 foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
@@ -464,7 +470,15 @@ foreach my $key (keys %experiments) {
             $experiment{"releaseDate"} = $submissionUpdated{$subId}
         };
     }
-    die "undefined status" unless defined($experiment{"status"});
+    # look in pushQ for release date
+    if (defined($experiment{"tableName"}) && $experiment{"status"} eq "released") {
+        $releaseDate =
+            $dbh->quickQuery("select qadate from pushQ where tbls like ? and  priority = ?",
+                "\%$experiment{tableName}\%", "L");
+        if (defined($releaseDate)) {
+            $experiment{"releaseDate"} = $releaseDate;
+        }
+    }
 
     # Cosmetics so that auto-generated spreadsheet matches old manual version
     # map dataType tag to term from cv.ra
