@@ -3482,6 +3482,12 @@ priority 0
 track cpgIslandExt override
 priority 0
 
+searchName decipherId
+searchTable decipher
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
 searchTable ensGene
 searchType genePred
 termRegex ENS([A-Z]{3})?T[0-9]+(\.[0-9]+)?
