@@ -14,9 +14,9 @@ subGroup3 localization Localization 0-cell=Cell
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
 subGroup5 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 blowBlat=Bowtie0.98+BLAT bow098=Bowtie_0.981 erng3b=Erange_3.0b erng32a=erng32a BB2=Bowtie0.10.0+BLAT
 subGroup6 readType Read_Type 1x32=Single_32nt 2x75=Paired_75nt r1x75=Single_75nt r1x75D=Single_Directed_75nt r2x75=Paired_75nt
-#dimensions dimensionX=cellType dimensionY=mapAlgorithm dimensionZ=readType
+dimensions dimensionX=cellType dimensionY=mapAlgorithm dimensionZ=readType
 #dimensionZchecked 1x32,2x75
-dimensions dimensionX=cellType dimensionY=mapAlgorithm
+#dimensions dimensionX=cellType dimensionY=mapAlgorithm
 sortOrder cellType=+ mapAlgorithm=+ readType=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
 dragAndDrop subTracks
