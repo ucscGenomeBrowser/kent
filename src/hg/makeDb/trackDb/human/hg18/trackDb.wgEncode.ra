@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.998 2010/05/29 22:18:49 kent Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.999 2010/06/01 17:25:14 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -455,6 +455,7 @@ wgEncode 1
         track wgEncodeBroadMapabilityAlign36mer
         release public
         shortLabel Broad Align 36
+        parent wgEncodeMapabilityViewALN
         longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
         subGroups view=ALN win=w036
         type wig 0.00 1.00
