@@ -1,4 +1,4 @@
-# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.3 $
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.4 $
 
 # Lab and general info
 grant             Myers
@@ -27,6 +27,6 @@ required         no
 
 view             RawSignal
 longLabelPrefix  HudsonAlpha ChIP-Seq Raw Signal
-type             bigWig
+type             wig
 hasReplicates    yes
 required         no
