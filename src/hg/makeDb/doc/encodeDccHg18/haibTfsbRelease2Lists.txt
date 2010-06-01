@@ -12,7 +12,7 @@ D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
     Tables: 358
-    Files: 500
+    Files: 505
     Gbdbs: 190
 
 A) Untouched Tables (24):
