@@ -8,7 +8,7 @@
 #include "textOut.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: great.c,v 1.2 2010/04/28 22:07:49 bristor Exp $";
+static char const rcsid[] = "$Id: great.c,v 1.3 2010/06/01 20:09:36 galt Exp $";
 
 static struct dyString *getRequestName()
 {
@@ -123,18 +123,29 @@ void doGetGreatOutput(void (*dispatch)())
 {
 char hgsid[64];
 struct tempName tn;
-FILE *saveStdout = stdout;
+int saveStdout;
+FILE *f;
 
 safef(hgsid, sizeof(hgsid), "%u", cartSessionId(cart));
 trashDirFile(&tn, "great", hgsid, ".bed");
-stdout = fopen(tn.forCgi, "w");
+f = fopen(tn.forCgi, "w");
 
-dispatch();
-
+/* We want to capture hgTables stdout output to a trash file
+ * which will later be fetched by Great via URL. */
+/* Workaround because stdout stream is not assignable on some operating systems */
 fflush(stdout);
-fclose(stdout);
+saveStdout = dup(STDOUT_FILENO);
+dup2(fileno(f),STDOUT_FILENO);   /* closes STDOUT before setting it again */
+fclose(f);
+
+dispatch();  /* this writes to stdout */
+
+/* restore stdout */
+fflush(stdout);
+dup2(saveStdout ,STDOUT_FILENO);  /* closes STDOUT before setting it back to saved descriptor */
+close(saveStdout);
+
 cartRemove(cart, hgtaDoGreatOutput);
-stdout = saveStdout;
 htmlOpen("Table Browser integration with GREAT");
 doSubmitToGreat(tn.forCgi);
 htmlClose();
