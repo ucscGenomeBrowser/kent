@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.144 2010/05/28 19:50:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.145 2010/06/01 18:35:32 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5163,9 +5163,21 @@ if (decipherId != NULL)
 		}
 	    }
 	sqlFreeResult(&sr);
+    	/* add more logic here to check for mean_ratio = 0 
+	   (which is a problem to be fixed by DECIPHER */
+
+	sprintf(query, "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
+    	sr = sqlGetResult(conn, query);
+    	if ((row = sqlNextRow(sr)) != NULL)
+            {
+	    if (sameWord(row[0], "1"))
+	    	{
+	    	col = MG_GRAY;
+	    	}
+	    }
+	sqlFreeResult(&sr);
 	}
     }
-
 hFreeConn(&conn);
 return(col);
 }
