@@ -28663,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.420 2010/05/16 20:34:30 hartera Exp $
+# $Id: hg18.txt,v 1.421 2010/06/01 17:56:24 fanhsu Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28711,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.420 2010/05/16 20:34:30 hartera Exp $
+# $Id: hg18.txt,v 1.421 2010/06/01 17:56:24 fanhsu Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -30134,4 +30134,39 @@ nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
     # Modern Human Seq:	bamMMS4 bamMMS5 bamMMS6 bamMMS7 bamMMS8
     # Neandertal Mito:	ntMito
 
+#############################################################################
+# BUILD DECIPHER TRACK (DONE, 6/1/10, Fan)
+
+ssh hgwdev
+
+# Received raw DECIPHER data file, daa_28-05-10_ucsc.txt, 
+# from Manuel Corpas [mc10@sanger.ac.uk] and place it under
+# /hive/data/outside/decipher/
+
+cd /hive/data/genomes/gs.19/build36/bed
+mkdir decipher
+cd decipher
+
+cp -p /hive/data/outside/decipher/daa_28-05-10_ucsc.txt .
+
+hgsql hg18 -e 'drop table decipherRaw'
+hgsql hg18 < ~/src/hg/lib/decipherRaw.sql
+
+# load into decipherRaw table
+hgsql hg18 -e \
+'load data local infile "daa_28-05-10_ucsc.txt" into table decipherRaw ignore 1 lines'
+
+# construct the bed file, decipher.bed
+hgsql hg18 -N -e 'select "chr", chr, start-1, end, id from decipherRaw ' |\
+sed -e 's/chr\t/chr/' |sort -u>j.tmp
+# fix some out of range of entries
+cat j.tmp|sed -e 's/243000000/242951149/' |\
+sed -e 's/115090019/114142980/' >decipher.bed
+rm j.tmp
+
+# load the bed track.
+hgLoadBed hg18 decipher decipher.bed
+
+# create knownToDecipher table.
+hgMapToGene -all hg18 decipher knownGene knownToDecipher
 #############################################################################
