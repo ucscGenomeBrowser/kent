@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.66 2010/05/25 19:02:15 tdreszer Exp $
+# $Id: Encode.pm,v 1.67 2010/06/01 23:47:57 braney Exp $
 
 package Encode;
 
@@ -57,6 +57,7 @@ our @extendedTypes = ("narrowPeak", "broadPeak", "gappedPeak",  "bed5FloatScore"
 # You also have to make sure the .as file is copied into the $sqlCreate directory.
 our @bigBedTypes = ("pairedTagAlign","tagAlign");
 our @bigWigTypes = ("bigWig");
+our @bamTypes = ("bam");
 
 sub newestFile
 {
