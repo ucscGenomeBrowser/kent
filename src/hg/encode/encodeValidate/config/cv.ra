@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.247 2010/05/29 02:25:14 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.248 2010/06/01 02:50:47 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -1849,6 +1849,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol HudsonAlpha:U-87_Myers_protocol.pdf
+
+
+term U2OS
+tag U2OS
+type Cell Line
+organism Human
+description Osteosarcoma;Bone sarcoma from the tibia of a human female
+tissue bone
+vendorName ATCC
+vendorId HTB-96
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-96&Template=cellBiology
+lineage J. Ponten and E. Saksela derived this line (originally 2T) in 1964 from a moderately differentiated sarcoma of the tibia of a 15 year old girl. Viruses were not detected during co-cultivation with WI-38 cells or in CF tests against SV40, RSV or adenoviruses. Mycoplasma contamination was detected and eliminated in 1972.
+karyotype Cancer
+termId BTO:0000970
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000970&termName=osteosarcoma%20cell
+sex F
+tier 3
+protocol SYDH_TFBS(Farnham):U2OS_Farnham_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRb1
