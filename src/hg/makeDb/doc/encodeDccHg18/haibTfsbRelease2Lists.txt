@@ -13,9 +13,9 @@ D) Additional items of note
 Summary total counts for release2 (new+untouched):
     Tables: 358
     Files: 500
-    Gbdbs: 191
+    Gbdbs: 190
 
-A) Untouched Tables (16):
+A) Untouched Tables (24):
 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
@@ -32,8 +32,16 @@ wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
 wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
 wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
 wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
 
-A') Untouched Files (18 downloadables, 0 gbdbs):
+A') Untouched Files (18 downloadables, 8 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/
     on RR:
@@ -57,6 +65,16 @@ wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol2.tagAlign.gz
 wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Srf.tagAlign.gz
 wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz
+
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp.wib
+
 
 
 B) Deprecated tables (6):
@@ -103,7 +121,7 @@ wgEncodeHudsonalphaChipSeqRawDataRep2K562Nrsf.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz
 
 
-C) New tables (342):
+C) New tables (334):
 wgEncodeHudsonalphaChipSeqPeaksA549Gr
 wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xDexa
 wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02
@@ -273,20 +291,16 @@ wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
-wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
-wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3
-wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
-wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
@@ -330,15 +344,11 @@ wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
 wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
@@ -447,7 +457,7 @@ wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
 wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 
-C') New files (487 downloadables, 190 gbdbs):
+C') New files (487 downloadables, 182 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/
     NOT on RR but must be placed in:
@@ -963,20 +973,16 @@ wgEncodeHudsonalphaChipSeqRawDataSknmcControl.fastq.gz
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33.wib
@@ -1019,15 +1025,11 @@ wgEncodeHudsonalphaChipSeqRawDataSknmcControl.fastq.gz
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control.wib
