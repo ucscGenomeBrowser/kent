@@ -35,7 +35,7 @@
 #endif//def USE_BAM
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.125 2010/06/01 20:35:36 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1318,7 +1318,7 @@ if (dbRequested)
     struct pipeline *dataPipe = wigLoaderPipe(track);
     FILE *in = mustOpen(wigAscii, "r");
     FILE *out = pipelineFile(dataPipe);
-    int c;
+    int c;  /* fgetc and fputc work with int. char type cannot represent EOF properly. */
     int fputcErr = 0;
 
     unlink(wigAscii);/* stays open, disappears when close or pipe fail */
