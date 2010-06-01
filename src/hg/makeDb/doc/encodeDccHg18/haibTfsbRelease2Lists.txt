@@ -59,16 +59,14 @@ wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz
 
 
-B) Deprecated tables (9):
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2
-wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2
-wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2Extended
+B) Deprecated tables (6):
 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
-wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii
+wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii (not displayed as part of release1 b/c were not listed in trackDb, but exists on beta & rr)
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii (not displayed as part of release1 b/c were not listed in trackDb, but exists on beta & rr)
+
 
 B') Deprecated files (25 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
