@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.636 2010/05/27 21:15:23 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.637 2010/06/01 01:22:34 baertsch Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -2639,25 +2639,37 @@ searchMethod prefix
 searchPriority 3.5
 
 searchName ucscRetroInfoRefSeq
-searchTable ucscRetroInfo
+searchTable ucscRetroAli
 searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
-query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
-xrefTable refLink
-xrefQuery select mrnaAcc, name from %s where name like '%s%%'
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna
-searchTable ucscRetroInfo
+searchTable ucscRetroAli
 searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
-query select chrom, chromStart,chromEnd, name from %s where name like '%s%%'
-searchPriority 3.51
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
 
-searchName pseudoGeneUniProt
-searchTable pseudoGeneLink
-query select chrom, chromStart,chromEnd, kgName from %s where kgName = '%s'
-xrefTable kgXref
-xrefQuery select kgID, spDisplayID from %s where spDisplayID = '%s'
-searchPriority 2.6
+searchName ucscRetroUniProt
+searchTable ucscRetroAli
+searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo
+xrefQuery select ucscRetroInfo.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene
+searchTable ucscRetroAli
+searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo
+xrefQuery select ucscRetroInfo.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
 
 searchTable pseudoYaleEncode
 searchType genePred
