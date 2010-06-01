@@ -710,6 +710,12 @@ identifier mrnaBlastzName
     $hg,!hg16.pseudoMrna.qName
     hg16.pseudoMrna.qName minCheck=0.76
 
+identifier decipherId
+"DECIPHER ID"
+$hg.decipher.name dupeOk
+$hg.decipherRaw.id
+$hg.knownToDecipher.value
+
 # Microarray stuff.
 
 identifier agilentHumanProbeId external=agilent fuzzy
