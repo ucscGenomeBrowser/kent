@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.119 2010/06/02 22:36:10 mary Exp $";
+#	"$Id: trackDb.ra,v 1.120 2010/06/02 23:01:11 angie Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -9,6 +9,10 @@ visibility hide
 
 track gap override
 visibility hide
+
+track gwasCatalog override
+snpTable snp131
+snpVersion 131
 
 track tRNAs
 shortLabel tRNA Genes
