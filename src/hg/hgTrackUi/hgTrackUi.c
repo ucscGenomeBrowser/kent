@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.525 2010/05/13 21:39:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.526 2010/06/02 04:09:10 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -311,7 +311,7 @@ cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
 snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
 printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
 cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
-printf("<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
+printf("&nbsp;<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
 
 printf("<A name=\"filterControls\"><HR>\n"
        "<B>Filter by Attribute</B><BR>\n"
@@ -395,13 +395,15 @@ safef(javascript, sizeof(javascript),
       "document."MAIN_FORM".action='%s'; %s document."MAIN_FORM".submit();",
       cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
 cgiMakeOnClickSubmitButton(javascript, defaultButton, JS_DEFAULTS_BUTTON_LABEL);
-printf("<BR><BR>\n");
-printf("The selected feature above has the following values below.  \n");
-printf("For each value, a selection of colors is available.\n");
-printf("If a SNP has more than one of these properties, resulting in\n");
-printf("more than one color, then the stronger color will override the\n");
-printf("weaker color.  In order from strongest to weakest, the colors are\n");
-printf("red, green, blue, gray, black.<BR><BR>\n");
+printf("<BR><BR>\n"
+       "The selected &quot;Feature for Color Specification&quot; above has the\n"
+       "selection of colors below for each attribute. Only the color\n"
+       "options for the feature selected above will be used to color items;\n"
+       "color options for other features will not be shown. If a SNP has more\n"
+       "than one of these attributes, the stronger color will override the\n"
+       "weaker color. The order of colors, from strongest to weakest, is red,\n"
+       "green, blue, gray, and black.\n"
+       "<BR><BR>\n");
 
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
     {
