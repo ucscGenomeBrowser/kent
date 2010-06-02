@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.638 2010/06/01 21:09:48 rhead Exp $";
+#	"$Id: trackDb.ra,v 1.639 2010/06/02 23:52:30 mary Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -1574,6 +1574,7 @@ exonArrows on
 type bed 6 .
 
 track snp131
+release alpha,beta
 shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
