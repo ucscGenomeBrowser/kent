@@ -3,8 +3,8 @@
 #ifndef METAWIG_H
 #define METAWIG_H
 
-#ifndef BWGINTERNAL_H
-#include "bwgInternal.h"
+#ifndef BBIFILE_H
+#include "bbiFile.h"
 #endif
 
 enum metaWigType 
