@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.53 2010/05/11 01:43:25 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.54 2010/06/03 18:53:59 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -212,7 +212,7 @@ else
 
 if (!wigOptions)
     {
-    boolean bigWig = isBigWig(curTable);
+    boolean bigWig = isBigWigTable(curTable);
     hPrintf("<H4>Intersect bases covered by %s and/or %s:</H4>\n",
 	    name, iName);
     if (!bigWig)

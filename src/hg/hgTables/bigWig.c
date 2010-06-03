@@ -20,9 +20,9 @@
 #include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigWig.c,v 1.6 2009/08/12 21:20:25 galt Exp $";
+static char const rcsid[] = "$Id: bigWig.c,v 1.7 2010/06/03 18:53:59 kent Exp $";
 
-boolean isBigWig(char *table)
+boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
 {
 return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
