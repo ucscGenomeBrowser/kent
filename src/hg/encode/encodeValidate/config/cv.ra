@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.248 2010/06/01 02:50:47 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.249 2010/06/03 03:18:01 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -4317,3 +4317,78 @@ type dataType
 term V2
 tag V2
 type version
+
+### Strain
+
+term C57BL/6
+tag C57BL6
+type strain
+description C57 black 6, the most common inbred strain of laboratory mouse
+
+term 129
+tag S129
+type strain
+description Strain 129, has widely available embryonic stem cells
+
+### Age
+
+term E11.5
+tag E11_5
+type age
+Stage Embryonic
+Description Embryonic day 11.5
+
+term E13.5
+tag E13_5
+type age
+Stage Embryonic
+Description Embryonic day 13.5
+
+term E14
+tag E14
+type age
+Stage Embryonic
+Description Embryonic day 14
+
+term E14.5
+tag E14_5
+type age
+Stage Embryonic
+Description Embryonic day 14.5
+
+term E18
+tag E118
+type age
+Stage Embryonic
+Description Embryonic day 18
+
+term adult-8wks
+tag adult_8wks
+type age
+Stage Adult
+Description Adult 8 weeks
+
+### Sex
+
+term M
+tag M
+type sex
+description Male
+
+term F
+tag F
+type sex
+description Female
+
+term B
+tag B
+type sex
+description Both
+
+term U
+tag U
+type sex
+description Unknown
+
+
+
