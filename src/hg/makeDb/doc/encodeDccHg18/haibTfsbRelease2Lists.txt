@@ -13,7 +13,7 @@ D) Additional items of note
 Summary total counts for release2 (new+untouched):
     Tables: 358
     Files: 505
-    Gbdbs: 190
+    Gbdbs: 196
 
 A) Untouched Tables (24):
 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
@@ -457,7 +457,7 @@ wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
 wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 
-C') New files (487 downloadables, 182 gbdbs):
+C') New files (487 downloadables, 188 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/
     NOT on RR but must be placed in:
@@ -1133,6 +1133,12 @@ wgEncodeHudsonalphaChipSeqRawDataSknmcControl.fastq.gz
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalSknmcControl.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm.wib
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm.wib
 
 D) Additional items:
     current location on alpha:
