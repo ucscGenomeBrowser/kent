@@ -10,7 +10,7 @@
 #include "errCatch.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: wigCorrelate.c,v 1.6 2010/06/03 16:53:24 kent Exp $";
+static char const rcsid[] = "$Id: wigCorrelate.c,v 1.7 2010/06/03 17:09:12 kent Exp $";
 boolean gotClampMax = FALSE;
 double clampMax = 100;
 
@@ -62,27 +62,6 @@ struct slList *p = v;
 if (p == NULL || p->next == NULL)
     return NULL;
 return p->next;
-}
-
-int bwgSectionOverlap(struct bwgSection *a, struct bwgSection *b)
-/* Return amount two sections overlap, or <= 0 for no overlap. */
-{
-if (!sameString(a->chrom, b->chrom))
-    return -1;
-return rangeIntersection(a->start, a->end, b->start, b->end);
-}
-
-int bwgSectionOverlapWrapper(void *a, void *b)
-/* Wrap voidness around bwgSectionOverlap */
-{
-return bwgSectionOverlap(a, b);
-}
-
-int bwgSectionCmpEnd(void *va, void *vb)
-/* Wrap voidness around bwgSectionCmp */
-{
-struct bwgSection *a = va, *b = vb;
-return a->end - b->end;
 }
 
 int bbiIntervalCmpEnd(void *va, void *vb)
@@ -154,14 +133,12 @@ verboseTimeInit();
 for (i=0; i<inCount-1; ++i)
     {
     char *iName = inNames[i];
-    struct lm *iLm = lmInit(0);
-    struct metaWig *iMeta = metaWigOpen(iName, iLm);
+    struct metaWig *iMeta = metaWigOpen(iName);
     verboseTime(2, "parsed %s into %p", iName, iMeta);
     for (j=i+1; j<inCount; ++j)
         {
 	char *jName = inNames[j];
-	struct lm *jLm = lmInit(0);
-	struct metaWig *jMeta = metaWigOpen(jName, jLm);
+	struct metaWig *jMeta = metaWigOpen(jName);
 	verboseTime(2, "parsed %s into %p", jName, jMeta);
 	fprintf(f, "%s\t%s\t", iName, jName);
 	fflush(f);
@@ -170,10 +147,8 @@ for (i=0; i<inCount-1; ++i)
 	fflush(f);
 	verboseTime(2, "correlated %g from %s and %s", r, iName, jName);
 	metaWigClose(&jMeta);
-	lmCleanup(&jLm);
 	}
     metaWigClose(&iMeta);
-    lmCleanup(&iLm);
     }
 carefulClose(&f);
 }

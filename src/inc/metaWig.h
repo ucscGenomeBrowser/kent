@@ -20,14 +20,15 @@ struct metaWig
     enum metaWigType type;
 
     /* For type mwtSections */
-    struct bwgSection *sectionList;
-    struct hash *chromHash; /* Hash value is first section in that chrom */
+    struct bwgSection *sectionList;	/* List of all sections. */
+    struct hash *chromHash; 		/* Hash value is first section in that chrom */
+    struct lm *lm;			/* Where sectionList is allocated. */
 
     /* For type mwtBigWig */
     struct bbiFile *bwf;
     };
 
-struct metaWig *metaWigOpen(char *fileName, struct lm *lm);
+struct metaWig *metaWigOpen(char *fileName);
 /* Wrap self around file.  Read all of it if it's wig, just header if bigWig. */
 
 void metaWigClose(struct metaWig **pMw);

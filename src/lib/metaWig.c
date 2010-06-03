@@ -20,11 +20,11 @@ for (section = sectionList; section != NULL; section = section->next)
 return hash;
 }
 
-struct metaWig *metaWigOpen(char *fileName, struct lm *lm)
+struct metaWig *metaWigOpen(char *fileName)
 /* Wrap self around file.  Read all of it if it's wig, just header if bigWig. */
 {
 struct metaWig *mw;
-lmAllocVar(lm, mw);
+AllocVar(mw);
 if (isBigWig(fileName))
     {
     mw->type = mwtBigWig;
@@ -32,7 +32,8 @@ if (isBigWig(fileName))
     }
 else
     {
-    mw->sectionList = bwgParseWig(fileName, FALSE, NULL, 512, lm);
+    mw->lm = lmInit(0);
+    mw->sectionList = bwgParseWig(fileName, FALSE, NULL, 512, mw->lm);
     mw->chromHash = hashSectionChroms(mw->sectionList);
     mw->type = mwtSections;
     }
@@ -46,8 +47,8 @@ struct metaWig *mw = *pMw;
 if (mw != NULL)
     {
     bigWigFileClose(&mw->bwf);
-    *pMw = NULL;
-    /* note mw is in local memory. */
+    lmCleanup(&mw->lm);
+    freez(pMw);
     }
 }
 
