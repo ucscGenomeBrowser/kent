@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.250 2010/06/03 17:50:46 vsmalladi Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.251 2010/06/03 19:39:11 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3455,13 +3455,6 @@ validation missing
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 
-term None
-tag None
-type ripTgtProtein
-alternativeSymbols None
-description  Total Input for comparison
-url none
-
 term T7Tag
 tag T7Tag
 type ripTgtProtein
@@ -3500,8 +3493,8 @@ url http://view.ncbi.nlm.nih.gov/gene/7884
 term CELF1
 tag CELF1
 type ripTgtProtein
-alternativeSymbols CUG-BP1; BRUNOL2 
-description Embryo deadenylation element-binding protein homolog (Homo sapiens) 
+alternativeSymbols CUG-BP1; BRUNOL2
+description Embryo deadenylation element-binding protein homolog (Homo sapiens)
 url http://www.ncbi.nlm.nih.gov/gene/10658
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
@@ -3517,22 +3510,22 @@ orderUrl http://www.millipore.com/catalogue/item/07-260
 term Mil_AB3790
 tag MILAB3790
 type ripAntibody
-antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG) 
+antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG)
 targetDescription T7Tag
 vendorName Millipore
-vendorId AB3790 
+vendorId AB3790
 orderUrl http://www.millipore.com/catalogue/item/ab3790
 
 term Mil_061376
 tag MIL061376
 type ripAntibody
 antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
-targetDescription SLBP 
+targetDescription SLBP
 vendorName Millipore
 vendorId 06-1376
 orderUrl http://www.millipore.com/catalogue/item/06-1376
 
-term Mil_05621 
+term Mil_05621
 tag MIL05621
 type ripAntibody
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
@@ -3671,10 +3664,10 @@ orderUrl http://www.millipore.com/catalogue/item/07-1477
 term SC_26522
 tag SC26522
 type ripAntibody
-antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin 
-targetDescription SLPB 
+antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
+targetDescription SLPB
 vendorName Santa Cruz Biotech
-vendorId sc-26522 
+vendorId sc-26522
 orderUrl http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html
 
 term SC_5261
