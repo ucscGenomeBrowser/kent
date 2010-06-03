@@ -11,7 +11,7 @@
 #include "errCatch.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: wigCorrelate.c,v 1.3 2010/05/27 08:24:46 kent Exp $";
+static char const rcsid[] = "$Id: wigCorrelate.c,v 1.4 2010/06/03 16:38:20 kent Exp $";
 boolean gotClampMax = FALSE;
 double clampMax = 100;
 
@@ -43,7 +43,7 @@ void sortedApplyOverlapping(void *aList, void *bList,
 	void *context)
 /* Step through aList and bList, which are sorted, and call apply function
  * on each pair that overlaps between lists.  The context parameter is
- * passed to the appy function, but is otherwise unused. */
+ * passed to the apply function, but is otherwise unused. */
 {
 while (aList != NULL && bList != NULL)
     {
