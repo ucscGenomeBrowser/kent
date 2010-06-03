@@ -47,9 +47,8 @@ wgEncode 1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=0-PlusRawSignal cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
-        accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol labVersion=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya
         subTrack wgEncodeGisPetView0-PlusRawSignal off
@@ -274,9 +273,8 @@ wgEncode 1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=1-MinusRawSignal cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
-        accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol labVersion=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1Helas3NucleusLongpolya
         subTrack wgEncodeGisPetView1-MinusRawSignal off
@@ -500,7 +498,6 @@ wgEncode 1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=2-Alignments cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
         type bigBed 6
-        accession SAT2G_version_2.0
         color 224,75,0
         colorByStrand 46,0,184 238,85,34
         baseColorDefault diffBases
@@ -508,7 +505,7 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya fileName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya.pairedTagAlign.gz
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol labVersion=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya fileName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1Helas3NucleusLongpolya
         subTrack wgEncodeGisPetView2-Alignments off
