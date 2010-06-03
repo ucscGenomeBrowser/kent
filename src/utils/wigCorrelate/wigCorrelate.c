@@ -6,12 +6,11 @@
 #include "localmem.h"
 #include "correlate.h"
 #include "bbiFile.h"
-#include "bigWig.h"
-#include "bwgInternal.h"
+#include "metaWig.h"
 #include "errCatch.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: wigCorrelate.c,v 1.5 2010/06/03 16:51:56 kent Exp $";
+static char const rcsid[] = "$Id: wigCorrelate.c,v 1.6 2010/06/03 16:53:24 kent Exp $";
 boolean gotClampMax = FALSE;
 double clampMax = 100;
 
