@@ -113,22 +113,22 @@ ARCHIVED_DBS = \
 
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
-	./makeMetaDb alpha metaDb_${USER} ${DBS}
+	./checkMetaDb alpha metaDb_${USER} ${DBS}
 
 alpha: clean
 	${CVS} -q up -d -P .
 	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
-	./makeMetaDb alpha metaDb ${DBS}
+	./checkMetaDb alpha metaDb ${DBS}
 
 beta: clean
 	${CVS} -q up -d -P .
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
-	./makeMetaDb beta metaDb ${DBS}
+	./checkMetaDb beta metaDb ${DBS}
 
 public: clean
 	${CVS} -q up -d -P .
 	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
-	./makeMetaDb public metaDb ${DBS}
+	./checkMetaDb public metaDb ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

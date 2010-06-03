@@ -1,5 +1,5 @@
 #!/bin/bash -e
-usage='makeMetaDb  directory metaDb db0 ...'
+usage='makeMetaDb db metaDb file [file ..]'
 
 UNAME_N=`uname -n`
 UNAME_N=${UNAME_N/.cse.ucsc.edu/}
@@ -9,9 +9,9 @@ if [ $# -lt 3 ] ; then
     exit 1
 fi
 
-directory="$1"; shift
+db="$1"; shift
 metaDb="$1"; shift
-dbs="$@"
+files="$@"
 
 # check if a database exists, print note and return non-zero if it doesn't
 dbExists() {
@@ -32,13 +32,7 @@ dbExists() {
 # load metaDb for a database
 loadMetaDb() {
     local db="$1"
-    local dbpath=$(ls -1 -d */$db)
-    local org=$(echo $dbpath | sed -e 's/\/.*//')
-    local metaDir=$dbpath/metaDb/$directory
-    if test \! -d $metaDir
-    then
-        return;
-    fi
+    local metaDb="$2"
     local tmpTable=$metaDb"_tmp";
     local bakTable=$metaDb"_back";
 
@@ -46,11 +40,11 @@ loadMetaDb() {
     echo $cmd
     eval $cmd 
 
-    local cmd="rm -f $metaDir/allRas; touch $metaDir/allRas; cat $metaDir/*.ra >> $metaDir/allRas; mdbUpdate -recreate $db -table=$tmpTable $metaDir/allRas"
+    local cmd="rm -f allRas; touch allRas; cat $files >> allRas; mdbUpdate -recreate $db -table=$tmpTable allRas"
     echo $cmd
     eval $cmd 
 
-    local cmd="rm $metaDir/allRas"
+    local cmd="rm allRas"
     echo $cmd
     eval $cmd 
 
@@ -59,10 +53,5 @@ loadMetaDb() {
     eval $cmd 
 }
 
-# load for all specified databases
-for db in $dbs ; do
-    if dbExists $db ; then
-        loadMetaDb $db
-    fi
-done
+loadMetaDb $db $metaDb $files
 
