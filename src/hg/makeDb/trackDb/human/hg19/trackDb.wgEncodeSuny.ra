@@ -1,0 +1,174 @@
+
+track wgEncodeSunyAlbanyGeneST
+compositeTrack on
+shortLabel SunyAlbany RipChip
+longLabel ENCODE SunyAlbany Tenenbaum RipChip
+group regulation
+subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
+subGroup2 cellType Cell_Line  GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2
+subGroup3 ripTgtProtein RipTgtProtein CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
+dimensions dimensionX=cellType dimensionY=ripTgtProtein
+sortOrder cellType=+ ripTgtProtein=+ view=+
+controlledVocabulary encode/cv.ra cellType ripTgtProtein
+dragAndDrop subTracks
+visibilityViewDefaults  RbpAssocRna=hide 
+useScore 1
+noInherit on
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeSunyAlbanyRipChipView
+    shortLabel SunyAlbany RipChip
+    view RbpAssocRna
+    visibility pack
+    viewUi on
+    subTrack wgEncodeSunyAlbanyGeneST
+    pValueFilter 0.0
+    pValueFilterLimits 0:5
+    scoreFilter 2
+    scoreFilterLimits 1:800
+    scoreMin 95
+
+
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878RipinputRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 Input
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=ripInput
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 T7tag
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=T7Tag
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878Pabpc1RbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 Pabpc1
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=PABPC1
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878SlbpRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 SLBP
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=SLBP
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878Elavl1RbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 ELAVL1
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=ELAVL1
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878Igf2bp1RbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 IGF2BP1
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=IGF2BP1
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTGm12878Celf1RbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel GM12878 CELF1
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
+    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=CELF1
+    	type broadPeak
+    	color 153,38,0
+    	# subId=1237 dateSubmitted=2010-06-01
+	
+    	track wgEncodeSunyAlbanyGeneSTK562RipinputRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel K562 Input
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
+    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=ripInput
+    	type broadPeak
+    	color 46,0,184
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel K562 T7tag
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
+    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=T7Tag
+    	type broadPeak
+    	color 46,0,184
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTK562Pabpc1RbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel K562 PABPC1
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
+    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=PABPC1
+    	type broadPeak
+    	color 46,0,184
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTK562SlbpRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel K562 SLBP
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
+    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=SLBP
+    	type broadPeak
+    	color 46,0,184
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTK562Elavl1RbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView
+    	shortLabel K562 ELAVL1
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
+    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=ELAVL1
+    	type broadPeak
+    	color 46,0,184
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTHelas3RipinputRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView off
+    	shortLabel HeLa-S3 Input
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HeLa-S3 cells)
+    	subGroups view=RbpAssocRna cellType=HeLaS3 ripTgtProtein=ripInput
+    	type broadPeak
+    	color 0,119,158
+    	# subId=1237 dateSubmitted=2010-06-01
+
+    	track wgEncodeSunyAlbanyGeneSTHepg2RipinputRbpAssocRna
+    	release alpha
+    	subTrack wgEncodeSunyAlbanyRipChipView off
+    	shortLabel HepG2 Input
+    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HepG2 cells)
+    	subGroups view=RbpAssocRna cellType=HepG2 ripTgtProtein=ripInput
+    	type broadPeak
+    	color 189,0,157
+    	# subId=1237 dateSubmitted=2010-06-01
+
