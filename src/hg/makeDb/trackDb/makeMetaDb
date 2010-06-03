@@ -35,6 +35,10 @@ loadMetaDb() {
     local dbpath=$(ls -1 -d */$db)
     local org=$(echo $dbpath | sed -e 's/\/.*//')
     local metaDir=$dbpath/metaDb/$directory
+    if test \! -d $metaDir
+    then
+        return;
+    fi
     local tmpTable=$metaDb"_tmp";
     local bakTable=$metaDb"_back";
 
@@ -42,7 +46,7 @@ loadMetaDb() {
     echo $cmd
     eval $cmd 
 
-    local cmd="cat $metaDir/*.ra > $metaDir/allRas; mdbUpdate -recreate $db -table=$tmpTable $metaDir/allRas"
+    local cmd="rm -f $metaDir/allRas; touch $metaDir/allRas; cat $metaDir/*.ra >> $metaDir/allRas; mdbUpdate -recreate $db -table=$tmpTable $metaDir/allRas"
     echo $cmd
     eval $cmd 
 
