@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.58 2010/06/02 19:16:37 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.59 2010/06/03 20:27:26 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -1095,6 +1095,7 @@ function filterCompositeSet(obj,all)
     if(vars.length > 0) {
         setCartVars(vars,vals);
     }
+    matSubCBsSelected(); // Be sure to update the counts!
 }
 
 function filterCompositeExcludeOptions(obj)
@@ -1148,10 +1149,10 @@ function filterCompositeExcludeOptions(obj)
             if($(opts[ix]).hasClass('excluded') == false) {
                 $(opts[ix]).addClass('excluded');
                 updated = true;
-        } else if($(opts[ix]).hasClass('excluded')) {
-                $(opts[ix]).removeClass('excluded');
-                updated = true;
             }
+        } else if($(opts[ix]).hasClass('excluded')) {
+            $(opts[ix]).removeClass('excluded');
+            updated = true;
         }
     }
     return updated;
