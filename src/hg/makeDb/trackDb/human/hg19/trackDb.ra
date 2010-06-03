@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.121 2010/06/02 23:52:30 mary Exp $";
+#	"$Id: trackDb.ra,v 1.122 2010/06/03 20:21:09 mary Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -393,14 +393,14 @@ html hg19primateChainNet
         type chain papHam1
         otherDb papHam1
 
-        track chainCalJac1
+        track chainCalJac3
     #replaces record chainCalJac1 in parent dir missing/extra group,priority,visibility,color,altColor,matrixHeader,matrix,spectrum
         subTrack primateChainNetViewchain off
         subGroups view=chain species=Marmoset clade=cHaplo
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain calJac1
-        otherDb calJac1
+        type chain calJac3
+        otherDb calJac3
 
         track chainTarSyr1
         subTrack primateChainNetViewchain off
@@ -477,14 +477,14 @@ html hg19primateChainNet
         type netAlign papHam1 chainPapHam1
         otherDb papHam1
 
-        track netCalJac1
+        track netCalJac3
     #replaces record netCalJac1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet on 
         subGroups view=net species=Marmoset clade=cHaplo
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign calJac1 chainCalJac1
-        otherDb calJac1
+        type netAlign calJac3 chainCalJac3
+        otherDb calJac3
 
         track netTarSyr1
         subTrack primateChainNetViewnet off
