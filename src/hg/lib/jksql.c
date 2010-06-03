@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.140 2010/05/22 02:18:28 braney Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.141 2010/06/03 05:14:39 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -2188,11 +2188,11 @@ sqlFreeResult(&sr);
 return ret;
 }
 
-int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
+time_t sqlTableUpdateTime(struct sqlConnection *conn, char *table)
 /* Get last update time for table. */
 {
 char *date = sqlTableUpdate(conn, table);
-int time = sqlDateToUnixTime(date);
+time_t time = sqlDateToUnixTime(date);
 freeMem(date);
 return time;
 }
