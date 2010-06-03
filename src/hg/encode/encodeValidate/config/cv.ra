@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.251 2010/06/03 19:39:11 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.252 2010/06/03 22:59:34 cricket Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -3455,6 +3455,13 @@ validation missing
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 
+term ripInput
+tag ripInput
+type ripTgtProtein
+alternativeSymbols None                     
+description Total input for comparison                   
+url 
+
 term T7Tag
 tag T7Tag
 type ripTgtProtein
@@ -3493,9 +3500,9 @@ url http://view.ncbi.nlm.nih.gov/gene/7884
 term CELF1
 tag CELF1
 type ripTgtProtein
-alternativeSymbols CUG-BP1; BRUNOL2
-description Embryo deadenylation element-binding protein homolog (Homo sapiens)
-url http://www.ncbi.nlm.nih.gov/gene/10658
+alternativeSymbols CUG-BP1; BRUNOL2 
+description Embryo deadenylation element-binding protein homolog (Homo sapiens) 
+url http://view.ncbi.nlm.nih.gov/gene/10658
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
