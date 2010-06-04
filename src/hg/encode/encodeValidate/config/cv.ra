@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.252 2010/06/03 22:59:34 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.253 2010/06/04 18:08:05 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -472,6 +472,40 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
+
+term ECC-1
+tag ECC1
+type Cell Line
+organism Human
+description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma.
+tissue luminal epithelium
+vendorName ATCC
+vendorId CRL-2923
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
+#lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
+karyotype unknown
+#termId BTO:0001360
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
+sex F
+tier 3
+protocol HudsonAlpha:ECC-1_Myers_protocol.pdf
+
+term T-47D
+tag T47D
+type Cell Line
+organism Human
+description T-47D is a human epithelial cell line derived from an mammary ductal carcinoma.
+tissue duct
+vendorName ATCC
+vendorId HTB-133
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
+#lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
+karyotype hypotriploid
+termId BTO:0001248
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
+sex F
+tier 3
+protocol HudsonAlpha:T-47D_Myers_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -3458,9 +3492,9 @@ validation missing
 term ripInput
 tag ripInput
 type ripTgtProtein
-alternativeSymbols None                     
-description Total input for comparison                   
-url 
+alternativeSymbols None
+description Total input for comparison
+url
 
 term T7Tag
 tag T7Tag
@@ -3500,8 +3534,8 @@ url http://view.ncbi.nlm.nih.gov/gene/7884
 term CELF1
 tag CELF1
 type ripTgtProtein
-alternativeSymbols CUG-BP1; BRUNOL2 
-description Embryo deadenylation element-binding protein homolog (Homo sapiens) 
+alternativeSymbols CUG-BP1; BRUNOL2
+description Embryo deadenylation element-binding protein homolog (Homo sapiens)
 url http://view.ncbi.nlm.nih.gov/gene/10658
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
