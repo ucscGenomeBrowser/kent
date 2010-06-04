@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1002 2010/06/03 20:49:46 vanessa Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1003 2010/06/04 17:58:30 kent Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -1690,7 +1690,7 @@ group regulation
     type wig 0 10000
     superTrack wgEncodeReg full
     shortLabel Enhancer H3K4Me1
-    longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    longLabel Enhancer histone mark (H3K4Me1) on 8 cell lines from ENCODE
     release alpha
     configurable on
     visibility full
@@ -1775,7 +1775,7 @@ group regulation
     container multiWig
     superTrack wgEncodeReg full
     shortLabel Promoter H3K4Me3
-    longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE work of Bernstein lab at Broad.
+    longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE
     release alpha
     type wig 0 30000
     viewLimits 0:70
