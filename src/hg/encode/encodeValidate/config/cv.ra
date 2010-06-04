@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.253 2010/06/04 18:08:05 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.254 2010/06/04 18:09:37 tdreszer Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -489,23 +489,6 @@ karyotype unknown
 sex F
 tier 3
 protocol HudsonAlpha:ECC-1_Myers_protocol.pdf
-
-term T-47D
-tag T47D
-type Cell Line
-organism Human
-description T-47D is a human epithelial cell line derived from an mammary ductal carcinoma.
-tissue duct
-vendorName ATCC
-vendorId HTB-133
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
-#lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
-karyotype hypotriploid
-termId BTO:0001248
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
-sex F
-tier 3
-protocol HudsonAlpha:T-47D_Myers_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -1867,6 +1850,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol UW_Stam:Th2_Stam_protocol.pdf
+
+term T-47D
+tag T47D
+type Cell Line
+organism Human
+description T-47D is a human epithelial cell line derived from an mammary ductal carcinoma.
+tissue duct
+vendorName ATCC
+vendorId HTB-133
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
+#lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
+karyotype hypotriploid
+termId BTO:0001248
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
+sex F
+tier 3
+protocol HudsonAlpha:T-47D_Myers_protocol.pdf
 
 term U87
 tag U87
