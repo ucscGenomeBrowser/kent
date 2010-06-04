@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.2 2010/06/03 21:49:54 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.3 2010/06/04 17:48:05 tdreszer Exp $
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 
@@ -14,17 +14,17 @@ subGroup3 factor Factor BATF=BATF BCL03=BCL3 BCL11A=BCL11A BHLHE40=BHLHE40 CTCF=
 subGroup4 rep Replicate rep1=1 rep2=2
 subGroup5 prot Protocol PCR1x=PCR_1x PCR2x=PCR_2x
 subGroup6 treat Treatment aNONE=None Betamethasone=Betamethasone_100nM DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX_500pM DMSO02=DMSO_0.02pct EtOH02=EtOH_0.02pct Prednis=Prednisolone_100nM
-#dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=prot dimC=treat
-#dimensionAchecked rep1
-#dimensionBchecked PCR1x,PCR2x
-#dimensionCchecked aNONE
-dimensions dimA=cellType dimB=factor dimC=treat dimD=prot dimE=rep
-dimensionEchecked rep1
-dimensionDchecked PCR1x,PCR2x
+dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=prot dimC=treat
+dimensionAchecked rep1
+dimensionBchecked PCR1x,PCR2x
 dimensionCchecked aNONE
-dimensionAchecked 1GM,1K5
-dimensionBchecked CTCF,FOXP2
-filterComposite dimD=one dimE=one
+#dimensions dimA=cellType dimB=factor dimC=treat dimD=prot dimE=rep
+#dimensionEchecked rep1
+#dimensionDchecked PCR1x,PCR2x
+#dimensionCchecked aNONE
+#dimensionAchecked 1GM,1K5
+#dimensionBchecked CTCF,FOXP2
+#filterComposite dimD=one dimE=one
 sortOrder cellType=+ factor=+ treat=+ prot=+ rep=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody prot=protocol treat=treatment
