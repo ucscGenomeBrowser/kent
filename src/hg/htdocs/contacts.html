@@ -58,6 +58,15 @@
 	<input TYPE="submit" VALUE="Submit">
 	</FORM>
 	<LI>
+	<FORM name="googleForm4" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm4.q.value=document.googleForm4.qq.value+'   site:genomewiki.ucsc.edu/index.php';">
+	Search the Genome Browser Wiki Site: &nbsp;
+	<input type="hidden" name="q" value="">
+	<input type="hidden" name="num" value="10">
+	<input type="hidden" name="filter" value="0">
+	<INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+	<input TYPE="submit" VALUE="Submit">
+	</FORM>
+	<LI>
 	<FORM name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:lists.soe.ucsc.edu/pipermail/genome';">
 	Search the Genome mailing list archives: &nbsp;
 	<input type="hidden" name="q" value="">
