@@ -141,6 +141,7 @@ DIRS = \
 	upper \
 	venn \
 	weedLines \
+	wigCorrelate \
 	wigToBigWig \
 	wigTestMaker \
 	wordLine
