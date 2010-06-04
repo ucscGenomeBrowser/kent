@@ -13,7 +13,7 @@ source `which qaConfig.csh`
 
 set db=''
 set tableList=''
-set maxShortLabel='16'
+set maxShortLabel='17'
 set maxLongLabel='80'
 
 if ($#argv != 2 ) then
@@ -104,8 +104,8 @@ end
 
 # check the length of the shortLabel for each track
 echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "*** MAX length of shortLabel should be 16 ***"
-echo "(Only prints if shortLabel is greater than 16 characters, or if"
+echo "*** MAX length of shortLabel should be 17 ***"
+echo "(Only prints if shortLabel is greater than 17 characters, or if"
 echo "it can't find a shortLabel at all)"
 foreach table ( $tables )
  set num=`tdbQuery "select shortLabel from $db where track = '$table'" \
