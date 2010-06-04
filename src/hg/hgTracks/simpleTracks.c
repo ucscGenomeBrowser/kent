@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.146 2010/06/04 18:08:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.147 2010/06/04 21:37:53 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -227,7 +227,7 @@ trackLayoutInit(&tl, cart);
 leftLabelWidthChars = cartUsualInt(cart, "hgt.labelWidth", leftLabelWidthDefaultChars);
 if (leftLabelWidthChars < 2)
     leftLabelWidthChars = leftLabelWidthDefaultChars;
-tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
+tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth + 3;
 int maxLabelWidth = 0.5*tl.picWidth;
 if (tl.leftLabelWidth  > maxLabelWidth)
     {
