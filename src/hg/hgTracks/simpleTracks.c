@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.147 2010/06/04 21:37:53 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.148 2010/06/04 21:57:00 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9746,9 +9746,7 @@ loadBed9(tg);
 char cartVarName[256];
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tg->tdb->track);
 char *incOrExc = cartUsualString(cart, cartVarName, NULL);
-safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tg->tdb->track);
-struct slName *filterPmIds = cartOptionalSlNameList(cart, cartVarName);
-if (isNotEmpty(incOrExc) && filterPmIds != NULL)
+if (isNotEmpty(incOrExc))
     filterItems(tg, dgvFilter, incOrExc);
 }
 
