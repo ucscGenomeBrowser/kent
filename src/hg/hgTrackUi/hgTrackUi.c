@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.526 2010/06/02 04:09:10 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.527 2010/06/04 21:54:56 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2115,7 +2115,6 @@ cgiMakeRadioButton(cartVarName, "exclude", !isInclude);
 printf("exclude<BR>\n");
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->track);
 struct slName *checked = cartOptionalSlNameList(cart, cartVarName);
-boolean setAll = (checked == NULL && isInclude);
 #define MAX_DGV_REFS 128
 char *labelArr[MAX_DGV_REFS], *valueArr[MAX_DGV_REFS];
 int refCount = 0;
@@ -2131,8 +2130,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     valueArr[refCount++] = cloneString(pmId);
     if (refCount >= MAX_DGV_REFS)
 	errAbort("dgvUi: %s has too many references (max %d)", tdb->track, MAX_DGV_REFS);
-    if (setAll)
-	slAddHead(&checked, slNameNew(pmId));
     }
 sqlFreeResult(&sr);
 jsMakeCheckboxGroupSetClearButton(cartVarName, TRUE);
