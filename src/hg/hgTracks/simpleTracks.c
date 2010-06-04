@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.145 2010/06/01 18:35:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.146 2010/06/04 18:08:14 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -4935,7 +4935,9 @@ char *diseaseClassCode;
 int i=0;
 conn = hAllocConn(database);
 
-sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", item->name);
+safef(query, sizeof(query), 
+"select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", 
+item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -4945,12 +4947,12 @@ while ((row != NULL) && i<20)
     {
     if (i != 0)
 	{
-	sprintf(chp, ",");
+	safef(chp, 2, ",");
 	chp++;
 	}
     diseaseClassCode = row[0];
 
-    sprintf(chp, "%s", diseaseClassCode);
+    safef(chp, 100, "%s", diseaseClassCode);
     chp = chp+strlen(diseaseClassCode);
     row = sqlNextRow(sr);
     i++;
@@ -4958,7 +4960,7 @@ while ((row != NULL) && i<20)
 
 if ((i == 20) && (row != NULL))
     {
-    sprintf(chp, " ...");
+    safef(chp, 4, " ...");
     chp++;chp++;chp++;chp++;
     }
 
@@ -4984,7 +4986,8 @@ int i=0;
 
 conn = hAllocConn(database);
 
-sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", item->name);
+safef(query, sizeof(query),
+"select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -5094,7 +5097,7 @@ int i=0;
 
 conn = hAllocConn(database);
 
-sprintf(query,
+safef(query,sizeof(query),
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -5105,10 +5108,10 @@ while ((row != NULL) && i<20)
     {
     if (i != 0)
 	{
-	sprintf(chp, "; ");
+	safef(chp, 3, "; ");
 	chp++;chp++;
 	}
-    sprintf(chp, "%s", row[0]);
+    safef(chp, 100, "%s", row[0]);
     chp = chp+strlen(row[0]);
     row = sqlNextRow(sr);
     i++;
@@ -5116,7 +5119,7 @@ while ((row != NULL) && i<20)
 
 if ((i == 20) && (row != NULL))
     {
-    sprintf(chp, " ...");
+    safef(chp, 5, " ...");
     chp++;chp++;chp++;chp++;
     }
 
@@ -5143,13 +5146,13 @@ char *decipherId = NULL;
 	RED:	If the entry is a deletion (mean ratio < 0)
 	GREEN:	If the entry is a duplication (mean ratio > 0)
 */
-sprintf(cond_str, "name='%s' ", bedItem->name);
+safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
 if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	sprintf(query, "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
+    	safef(query, sizeof(query), "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -5166,7 +5169,8 @@ if (decipherId != NULL)
     	/* add more logic here to check for mean_ratio = 0 
 	   (which is a problem to be fixed by DECIPHER */
 
-	sprintf(query, "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
+	safef(query, sizeof(query), 
+	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
