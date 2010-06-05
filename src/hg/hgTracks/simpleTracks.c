@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.148 2010/06/04 21:57:00 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 braney Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3296,13 +3296,13 @@ if (baseWidth <= 25000000)
 countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts, hvg->rc);
 
 grayThreshold(useCounts, width);
-hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,useCounts,TRUE);
+hvGfxVerticalSmear8(hvg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 if (gapUseCounts != NULL)
     {
     int midY = yOff + (tg->heightPer>>1);
     grayThreshold(gapUseCounts, width);
-    hvGfxVerticalSmear(hvg,xOff,midY,width,1,gapUseCounts,TRUE);
+    hvGfxVerticalSmear8(hvg,xOff,midY,width,1,gapUseCounts,TRUE);
     freeMem(gapUseCounts);
     }
 }
@@ -6339,12 +6339,12 @@ for(ii=0; ii < 52; ii++)
     for(jj=0; jj < width + 2; jj++)
 	{
 	if (buf[jj] == 255) buf[jj] = 0;
-	else if (buf[jj] == 0x44)buf[jj] = MG_RED;
+	else if (buf[jj] == 0x44)buf[jj] = brickColor;
 	else if (buf[jj] == 0x69)buf[jj] = greenColor;
 	else if (buf[jj] == 0x5e)buf[jj] = blueColor;
 	}
 
-    hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1,buf,TRUE);
+    hvGfxVerticalSmear8(hvg,xOff,yOff+ii,width ,1,buf,TRUE);
     }
 hvGfxUnclip(hvg);
 

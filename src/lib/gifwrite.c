@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gifcodes.h"
 
-static char const rcsid[] = "$Id: gifwrite.c,v 1.8 2009/08/19 22:28:36 angie Exp $";
+static char const rcsid[] = "$Id: gifwrite.c,v 1.9 2010/06/05 19:29:53 braney Exp $";
 
 static char gifsig[] = "GIF87a";
 
@@ -58,7 +58,7 @@ if (fwrite(&gim, sizeof(gim), 1, gif_file) < 1)
     goto TRUNCOUT;
 fputc(8,gif_file);
 fflush(gif_file);
-i = gif_compress_data(8, screen->pixels, gif_wcount, gif_file);
+i = gif_compress_data(8, (unsigned char*)screen->pixels, gif_wcount, gif_file);
 switch (i)
     {
     case 0:

@@ -7,7 +7,9 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: vGif.c,v 1.5 2009/08/19 22:28:36 angie Exp $";
+static char const rcsid[] = "$Id: vGif.c,v 1.6 2010/06/05 19:29:54 braney Exp $";
+
+#ifndef COLOR32
 
 struct memGif
 /* Something that handles a gif. */
@@ -59,3 +61,4 @@ vg->data = gif;
 return vg;
 }
 
+#endif

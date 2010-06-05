@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.23 2009/09/24 16:07:58 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.24 2010/06/05 19:29:48 braney Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -1597,8 +1597,13 @@ if (psOutput)
     }
 else
     {
+#ifdef USE_PNG
+    trashDirFile(&gifTn, "pbt", "pbt", ".png");
+    vg = vgOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+#else
     trashDirFile(&gifTn, "pbt", "pbt", ".gif");
     vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+#endif
     }
 
 /* Put up horizontal scroll controls. */

@@ -433,7 +433,7 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
-hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
+hvGfxVerticalSmear8(hvg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }

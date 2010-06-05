@@ -16,7 +16,7 @@
 #include "histogram.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.17 2010/04/22 19:35:38 kent Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.18 2010/06/05 19:29:41 braney Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -40,7 +40,11 @@ if ((width > 0) && (height > 0))
     mgHoriz = mgNew(height, width);
     mgTextCentered(mgHoriz, 0, 0, height, width, colorIx, font, string);
      */
+#ifdef USE_PNG
+    vgHoriz = vgOpenPng(height, width, "/dev/null", FALSE);
+#else
     vgHoriz = vgOpenGif(height, width, "/dev/null", FALSE);
+#endif
     vgTextCentered(vgHoriz, 0, 0, height, width, colorIx, font, string);
     /*	now, blit from the horizontal to the vertical, rotate -90 (CCW) */
     for (i = 0; i < height; ++i)	/* xSrc -> yDest */
@@ -399,7 +403,11 @@ totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
 trashDirFile(&gifFileName, "hgtData", "hgtaScatter", ".gif");
 
+#ifdef USE_PNG
+vg = vgOpenPng(totalWidth, totalHeight, gifFileName.forCgi, FALSE);
+#else
 vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi, FALSE);
+#endif
 
 /*	x,y, w,h, drawing area only	*/
 vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
@@ -597,7 +605,11 @@ totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
 trashDirFile(&gifFileName, "hgtData", "hgtaResidual", ".gif");
 
+#ifdef USE_PNG
+vg = vgOpenPng(totalWidth, totalHeight, gifFileName.forCgi, FALSE);
+#else
 vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi, FALSE);
+#endif
 
 /*	x,y, w,h, drawing area only	*/
 vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
@@ -740,7 +752,12 @@ bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
+#ifdef USE_PNG
+vg = vgOpenPng(totalWidth, totalHeight, histoFileName->forCgi, FALSE);
+#else
 vg = vgOpenGif(totalWidth, totalHeight, histoFileName->forCgi, FALSE);
+#endif
+
 /*	x,y, w,h, drawing area only	*/
 vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
 

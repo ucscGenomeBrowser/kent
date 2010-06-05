@@ -55,13 +55,16 @@ struct vGfx
     struct rgbColor (*colorIxToRgb)(void *v, int colorIx);
     /* Return rgb values for given color index. */
 
+    void (*setWriteMode)(void *v, unsigned int writeMode);
+    /* Set write mode. */
+
     void (*setClip)(void *v, int x, int y, int width, int height);
     /* Set clipping rectangle. */
 
     void (*unclip)(void *v);
     /* Set clipping rect cover full thing. */
 
-    void (*verticalSmear)(void *v,
+    void (*verticalSmear8)(void *v,
 	    int xOff, int yOff, int width, int height, 
 	    unsigned char *dots, boolean zeroClear);
     /* Put a series of one 'pixel' width vertical lines. */
@@ -90,17 +93,19 @@ struct vGfx
     /* How wide is a string? */
     };
 
+#ifndef USE_PNG
 struct vGfx *vgOpenGif(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that will write out a GIF file upon vgClose.
  * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
-
+#else
 struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that will write out a PNG file upon vgClose.  
  * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
+#endif
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */
@@ -139,6 +144,10 @@ void vgClose(struct vGfx **pVg);
 #define vgColorIxToRgb(v,colorIx) v->colorIxToRgb(v->data, colorIx)
 /* Return rgb values for given color index. */
 
+#define vgSetWriteMode(v, writeMode)    \
+	v->setWriteMode(v->data, writeMode)
+/* Set write mode. */
+
 #define vgSetClip(v,x,y,width,height) \
 	v->setClip(v->data, x, y, width, height)
 /* Set clipping rectangle. */
@@ -151,8 +160,8 @@ void vgClose(struct vGfx **pVg);
  * The only portable way to do this is to strictly pair up
  * the setClip/unclip calls and not to nest them. */
 
-#define vgVerticalSmear(v,x,y,w,h,dots,zeroClear) \
-	v->verticalSmear(v->data,x,y,w,h,dots,zeroClear)
+#define vgVerticalSmear8(v,x,y,w,h,dots,zeroClear) \
+	v->verticalSmear8(v->data,x,y,w,h,dots,zeroClear)
 /* Take array of dots and smear them vertically. */
 
 #define vgFillUnder(v,x1,y1,x2,y2,bottom,color) \

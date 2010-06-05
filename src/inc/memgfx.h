@@ -15,6 +15,27 @@
 #include "gfxPoly.h"
 #endif
 
+#ifdef COLOR32
+typedef unsigned int Color;
+
+#define MG_WHITE   0xffffffff
+#define MG_BLACK   0xff000000
+#define MG_RED     0xff0000ff
+#define MG_GREEN   0xff00ff00
+#define MG_BLUE    0xffff0000
+#define MG_CYAN    0xffffff00
+#define MG_MAGENTA 0xffff00ff
+#define MG_YELLOW  0xff00ffff
+#define MG_GRAY    0xff808080
+
+#ifndef USE_PNG
+#error ------ ERROR ----- you must define USE_PNG if you define COLOR32
+#endif
+
+
+#else /* 8-bit color */
+typedef unsigned char Color;
+
 #define MG_WHITE 0
 #define MG_BLACK 1
 #define MG_RED 2
@@ -26,8 +47,12 @@
 #define MG_GRAY 8
 #define MG_FREE_COLORS_START 9
 
+#endif /* COLOR32 */
 
-typedef unsigned char Color;
+
+
+#define MG_WRITE_MODE_NORMAL    0
+#define MG_WRITE_MODE_MULTIPLY  (1 << 0)
 
 struct rgbColor
     {
@@ -66,6 +91,7 @@ struct memGfx
     int clipMinX, clipMaxX;
     int clipMinY, clipMaxY;
     struct colHash *colorHash;	/* Hash for fast look up of color. */
+    unsigned int writeMode;
     };
 
 struct memGfx *mgNew(int width, int height);
@@ -111,7 +137,27 @@ int mgColorsFree(struct memGfx *mg);
 /* Unclipped get a dot, you do not want to use this, this is special for
  * verticalText only */
 
-#define mgPutDot(mg,x,y,color) if ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) _mgPutDot(mg,x,y,color)
+void _mgPutDotMultiply(struct memGfx *mg, int x, int y,Color color);
+
+INLINE void mgPutDot(struct memGfx *mg, int x, int y,Color color)
+{
+if ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) 
+    {
+        switch(mg->writeMode)
+        {
+        case MG_WRITE_MODE_NORMAL:
+            {
+            _mgPutDot(mg,x,y,color);
+            }
+            break;
+        case MG_WRITE_MODE_MULTIPLY:
+            {
+            _mgPutDotMultiply(mg,x,y,color);
+            }
+            break;
+        }
+    }
+}
 /* Clipped put dot */
 
 #define mgGetDot(mg,x,y) ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) ? _mgGetDot(mg,x,y) : 0

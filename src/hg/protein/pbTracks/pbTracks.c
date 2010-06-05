@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.59 2009/08/19 23:16:13 angie Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.60 2010/06/05 19:29:51 braney Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -208,8 +208,13 @@ if (psOutput2)
     }
 else
     {
+#ifdef USE_PNG
+    trashDirFile(&gifTn2, "pbt", "pbt", ".png");
+    vg2 = vgOpenPng(pixWidth, pixHeight, gifTn2.forCgi, FALSE);
+#else
     trashDirFile(&gifTn2, "pbt", "pbt", ".gif");
     vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi, FALSE);
+#endif
     }
 
 g_vg = vg2;

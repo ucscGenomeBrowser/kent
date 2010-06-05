@@ -231,7 +231,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1636 2010/05/28 21:32:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1637 2010/06/05 19:29:44 braney Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17981,8 +17981,13 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
+#ifdef USE_PNG
+trashDirFile(&gifTn, "hgc", "hgc", ".png");
+hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+#else
 trashDirFile(&gifTn, "hgc", "hgc", ".gif");
 hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+#endif /* USE_PNG */
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
