@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.34 2010/05/25 19:45:34 kent Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.35 2010/06/05 00:47:47 kent Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -320,6 +320,7 @@ boolean bedData = FALSE;		/* in bed format data */
 boolean variableStep = FALSE;		/* in variableStep data */
 boolean fixedStep = FALSE;		/* in fixedStep data */
 char *prevChromName = (char *)NULL;	/* to watch for chrom name changes */
+int trackCount = 0;			/* We abort if we see more than one track. */
 
 if ((wigAscii == (char *)NULL) || (wigFile == (char *)NULL) ||
     (wibFile == (char *)NULL))
@@ -383,9 +384,18 @@ while (lineFileNext(lf, &line, NULL))
 
     wordCount = chopByWhite(line, words, ArraySize(words));
 
-    if (sameWord("track",words[0]) || sameWord("browser",words[0]))
+    if (sameWord("track",words[0]))
 	{
-	continue;	/* ignore track,browser lines if present	*/
+	/* Allow (and ignore) one track line, but no more. */
+	++trackCount;
+	if (trackCount > 1)
+	    errAbort("Multiple tracks seen, second at line %d of %s, can only handle one.",
+	    	lf->lineIx, lf->fileName);
+	continue;	
+	}
+    else if (sameWord("browser", words[0]))
+        {
+	continue;	/* ignore browser lines if present */
 	}
     else if (sameWord("variableStep",words[0]))
 	{
