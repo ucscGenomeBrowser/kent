@@ -1,0 +1,47 @@
+# Data Agreement File for UW DNaseI Hypersensitivity $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Stam
+lab               UW
+dataType          DnaseSeq
+compositeSuffix   UwDnase
+group             regulation
+variables         cell
+assembly          hg19
+
+validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2
+
+# Track/view definition
+view             Hotspots
+longLabelPrefix  UW DNaseI HS Hotspots
+type             broadPeak
+required         yes
+hasReplicates    yes
+
+view             Peaks
+longLabelPrefix  UW DNaseI HS Peaks
+type             narrowPeak
+required         yes
+hasReplicates    yes
+
+view             RawSignal
+longLabelPrefix  UW DNaseI HS Raw Signal
+type             bigWig
+required         yes
+hasReplicates    yes
+
+view             Alignments
+longLabelPrefix  UW DNaseI HS Tags
+type             bam
+required         yes
+hasReplicates    yes
+
+view             RawData
+type             fastq
+required         no
+hasReplicates    yes
