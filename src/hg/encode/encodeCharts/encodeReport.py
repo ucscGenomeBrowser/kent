@@ -103,7 +103,7 @@ def main():
 
     template_vars['chart_config'] = json.dumps(chart_config)
 
-    encodeReportLib.renderHtml(template_vars, 0)
+    encodeReportLib.renderHtml(template_vars, 0, 0)
 
     return
 
