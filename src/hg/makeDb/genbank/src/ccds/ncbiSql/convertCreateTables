@@ -9,7 +9,7 @@
 !skip {
     $0 = gensub("\\[dbo\\]\\.", "", "g", $0);
     $0 = gensub("\\[([^\\[]+)\\]", "\\1", "g", $0);
-    $0 = gensub("IDENTITY \\(1, 1\\) NOT FOR REPLICATION ", "PRIMARY KEY ", "g", $0);
+    $0 = gensub("IDENTITY *\\(1, *1\\) NOT FOR REPLICATION ", "PRIMARY KEY ", "g", $0);
     $0 = gensub("CREATE TABLE ([a-zA-Z_]+)","DROP TABLE IF EXISTS \\1;\n&", "g", $0);
     $0 = gensub("ON PRIMARY.*$", "", "g", $0);
     $0 = gensub("COLLATE Latin1_General_BIN ", "", "g", $0);

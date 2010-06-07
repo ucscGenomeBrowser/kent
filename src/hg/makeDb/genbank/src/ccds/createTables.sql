@@ -216,3 +216,63 @@ CREATE TABLE BuildQualityTests (
 ) 
 ;
 
+DROP TABLE IF EXISTS ProspectiveGroups;
+CREATE TABLE ProspectiveGroups (
+        group_version_uid int NOT NULL,
+        ensembl_gene_id varchar(64) NULL,
+        nomenclature_id varchar(32) NULL,
+        assembly_problem_id varchar(64) NULL,
+        completeness varchar(16) NULL,
+        swiss_prot_acc varchar(64) NULL,
+        swiss_prot_length int NULL,
+        has_annot_overlap tinyint(1) NOT NULL,
+        overlap_type varchar(16) NOT NULL,
+        ncbi_prot_length int NULL,
+        ensembl_prot_length int NULL,
+        prev_reject_reason varchar(64) NULL,
+        withdrawn_ccds_uid int NULL,
+        refseq_status varchar(16) NULL,
+        chr_start int NOT NULL ,
+        chr_stop int NOT NULL ,
+        prospective_status_val_uid int NOT NULL
+) 
+;
+
+DROP TABLE IF EXISTS ProspectiveAnnotCompare;
+CREATE TABLE ProspectiveAnnotCompare (
+        prospective_uid int NOT NULL ,
+        prot_length_diff int NOT NULL ,
+        coverage_pct float NOT NULL ,
+        matched_splice_count int NOT NULL ,
+        unmatched_splice_count int NOT NULL ,
+        total_splice_count int NOT NULL ,
+        matched_splice_pct float NOT NULL ,
+        identity_pct float NULL
+) 
+;
+
+DROP TABLE IF EXISTS ReportTypes;
+CREATE TABLE ReportTypes (
+        report_type_uid int PRIMARY KEY  NOT NULL ,
+        report_type varchar (128) NOT NULL
+) 
+;
+
+DROP TABLE IF EXISTS ReportQueries;
+CREATE TABLE ReportQueries (
+    query_uid int PRIMARY KEY NOT NULL,
+    report_type_uid int NOT NULL,
+    report_sort_order int NULL,
+    name varchar(64) NOT NULL,
+    where_conditions varchar(1024) NULL,
+    order_by_columns varchar(256) NULL
+) 
+;
+
+DROP TABLE IF EXISTS ProspectiveStatusVals;
+CREATE TABLE ProspectiveStatusVals (
+	prospective_status_val_uid int PRIMARY KEY  NOT NULL ,
+	prospective_status varchar (50) NOT NULL 
+) 
+;
+
