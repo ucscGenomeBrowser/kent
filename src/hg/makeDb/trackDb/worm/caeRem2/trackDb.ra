@@ -1,0 +1,18 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+priority 9
+
+#Overrides from priority.ra
+
+track chainCaePb1 override
+priority 136
+
+track netCaePb1 override
+priority 136.1
+
+track chainCb3 override
+priority 137
+
+track netCb3 override
+priority 137.1
+

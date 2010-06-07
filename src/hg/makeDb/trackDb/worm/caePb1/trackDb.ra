@@ -1,0 +1,5 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+shortLabel Scaffolds
+longLabel Assembly Scaffolds (Supercontigs)
+priority 9

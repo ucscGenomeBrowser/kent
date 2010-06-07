@@ -1,0 +1,30 @@
+bptMakeStringToBits64 test.tab test.bpt
+bptLookupStringToBits64 test.bpt one > test.out
+bptLookupStringToBits64 test.bpt two >> test.out
+bptLookupStringToBits64 test.bpt three >> test.out
+bptLookupStringToBits64 test.bpt four >> test.out
+bptLookupStringToBits64 test.bpt five >> test.out
+bptLookupStringToBits64 test.bpt six >> test.out
+bptLookupStringToBits64 test.bpt seven >> test.out
+bptLookupStringToBits64 test.bpt eight >> test.out
+bptLookupStringToBits64 test.bpt nine >> test.out
+bptLookupStringToBits64 test.bpt ten >> test.out
+bptLookupStringToBits64 test.bpt eleven >> test.out
+bptLookupStringToBits64 test.bpt twelve >> test.out
+bptLookupStringToBits64 test.bpt thirteen >> test.out
+bptLookupStringToBits64 test.bpt fourteen >> test.out
+bptLookupStringToBits64 test.bpt fifteen >> test.out
+bptLookupStringToBits64 test.bpt sixteen >> test.out
+bptLookupStringToBits64 test.bpt seventeen >> test.out
+bptLookupStringToBits64 test.bpt eighteen >> test.out
+bptLookupStringToBits64 test.bpt nineteen >> test.out
+bptLookupStringToBits64 test.bpt twenty >> test.out
+bptLookupStringToBits64 test.bpt twentyone >> test.out
+bptLookupStringToBits64 test.bpt twentytwo >> test.out
+bptLookupStringToBits64 test.bpt twentythree >> test.out
+bptLookupStringToBits64 test.bpt twentyfour >> test.out
+bptLookupStringToBits64 test.bpt twentyfive >> test.out
+bptLookupStringToBits64 test.bpt twentysix >> test.out
+bptLookupStringToBits64 test.bpt twentyseven >> test.out
+bptLookupStringToBits64 test.bpt twentyeight >>& test.out
+cmp test.out expected.out

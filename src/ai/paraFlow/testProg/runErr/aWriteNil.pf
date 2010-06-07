@@ -1,0 +1,3 @@
+
+array of int a;
+a[0] = 3;

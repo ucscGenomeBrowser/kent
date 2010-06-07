@@ -1,0 +1,104 @@
+include trackDb.chainNet.ra
+
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+track multiz8way
+shortLabel 8-Way Conservation
+longLabel 8-Way Multiz Alignment & Conservation 
+group compGeno
+priority 103.4
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons8way
+spanList 1
+autoScale Off
+windowingFunction mean
+pairwiseHeight 12
+yLineOnOff Off
+#   frames multiz8wayFrames
+#   irows on
+summary multiz8waySummary
+speciesCodonDefault calJac1
+speciesGroups Primates Vertebrate
+sGroup_Primates rheMac2 ponAbe2 panTro2 hg19
+sGroup_Vertebrate mm9 canFam2 monDom5
+itemFirstCharCase noChange
+treeImage phylo/calJac1_8way.gif
+
+track phastConsElements13way
+shortLabel 13-Way Most Conserved
+longLabel PhastCons Conserved Elements, 13-Way Vertebrate Multiz Alignment
+color 170,100,50
+group compGeno
+priority 104.2
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track multiz13way
+shortLabel 13-Way Conservation
+longLabel 13-Way Multiz Alignment & Conservation 
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons13way
+spanList 1
+autoScale Off
+windowingFunction mean
+pairwiseHeight 12
+yLineOnOff Off
+frames multiz13wayFrames
+irows on
+summary multiz13waySummary
+speciesCodonDefault calJac1
+speciesGroups Primates Vertebrate
+sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
+sGroup_Vertebrate mm9 canFam2 monDom5
+itemFirstCharCase noChange
+treeImage phylo/calJac1_13way.gif
+
+track nscanGene override
+visibility pack
+informant Marmoset N-SCAN used mouse (mm9) as the informant for conservation. PASA clustered human ESTs were mapped to the marmoset genome with the use of the human/marmoset synteny chain track. These remapped clusters were then filtered for splice sites, and used as the EST track on marmoset.
+
+# make mRNA and EST tracks not on by default (nothing there for RHO gene)
+track mrna override
+visibility hide
+
+track intronEst override
+visibility hide
+
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
+type ctgPos
+
+track bacEnds
+shortLabel Bac Ends
+longLabel Marmoset BAC Ends
+group map
+priority 60
+visibility hide
+type bed 12
+
+searchTable bacEnds
+searchType bed
+searchMethod exact
+searchPriority 50

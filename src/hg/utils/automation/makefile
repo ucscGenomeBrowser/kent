@@ -1,0 +1,52 @@
+# Build all directories in utils
+
+include ../../../inc/common.mk
+
+all: scripts
+
+scripts:
+	${MKDIR} ${SCRIPTS}
+	@for F in ${SCRIPT_FILES}; do \
+	    chmod +x $$F; \
+	    rm -f ${SCRIPTS}/$${F}; \
+	    echo cp -p $$F ${SCRIPTS}; \
+	    cp -p $$F ${SCRIPTS}; \
+	 done
+
+alpha: scripts
+
+clean:
+
+SCRIPT_FILES = \
+	blastz-make-joblist \
+	blastz-normalizeLav \
+	blastz-run-ucsc \
+	doBlastzChainNet.pl \
+	doEnsGeneUpdate.pl \
+	doHgNearBlastp.pl \
+	synBlastp.csh \
+	doRecipBest.pl \
+	doRepeatMasker.pl \
+	doWindowMasker.pl \
+	doSimpleRepeat.pl \
+	doSameSpeciesLiftOver.pl \
+	ensVersions \
+	extractNestedRepeats.pl \
+	extractGtf.pl \
+	Encode.pm \
+	EnsGeneAutomate.pm \
+	HgAutomate.pm \
+	HgDb.pm \
+	HgRemoteScript.pm \
+	HgStepManager.pm \
+	liftRMAlign.pl \
+	makeDownloads.pl \
+	makeGenomeDb.pl \
+	makePushQSql.pl \
+	monthlyUpdateIgtc.csh \
+	simplePartition.pl \
+	partitionSequence.pl \
+	RAFile.pm \
+	SafePipe.pm \
+	updateIgtc.pl
+

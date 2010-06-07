@@ -1,0 +1,4 @@
+to f(var x) into (var y)
+{
+y = x;
+}

@@ -1,0 +1,28 @@
+<H2>Description</H2>
+This track depicts gaps in the assembly.
+
+<P>
+Gaps are represented as black boxes in this track.
+If the relative order and orientation of the contigs on either side
+of the gap is supported by read pair data, 
+it is a <em>bridged</em> gap and a white line is drawn 
+through the black box representing the gap. 
+</P>
+<P>This assembly contains the following principal types of gaps:
+<UL>
+
+<LI><B>contig</B> - gaps between the Whole Genome Shotgun contigs of a 
+scaffold.  (In this context, a contig is a set of overlapping sequence reads.  
+A scaffold is a set of contigs ordered and oriented during the 
+Whole Genome Shotgun process using paired-end reads.)
+These are represented by varying numbers of <em>N</em>s  in the assembly.  
+Fragment gap sizes are usually taken from read pair data.  
+<LI><B>scaffold</B> - gaps between scaffolds linked by the fingerprint map.  
+In general, these are represented by 500 <em>N</em>s  in the assembly.
+<LI><B>centromere</B> - gaps for centromeres were included when they could be 
+reasonably localized.  These are represented by 500,000 <em>N</em>s  in the 
+assembly.
+<LI><B>other</B> - unknown bases marked 'N' in the sequence that were not
+	in the assembly AGP file definition of gaps.
+</UL></P>
+

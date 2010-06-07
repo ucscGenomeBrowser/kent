@@ -1,0 +1,83 @@
+A traversable suffix array is an elegant structure suitable for searching text or DNA rapidly.
+It is a suffix array with an additional table, the traverse table, that allows one to
+traverse the suffix array as if it were a suffix tree.  While in practice this is no faster
+than searching a straight suffix array with a binary search, in some contexts having the
+implicit tree structure is helpful.  In particular searching while allowing for a small
+number of mismatches is faster with a traversable suffix array than with a straight
+suffix array.
+
+Here's an example of a traversable suffix array, on the string attacagattacacatttt:
+
+8 Acacatttt$ 11
+2 aCagattacacatttt$ 4
+1 acAtttt$ 13
+1 aGattacacatttt$ 6
+3 aTtacacatttt$ 8
+2 atTacagattacacatttt$ 1
+1 attTt$ 15
+3 Cacatttt$ 12
+2 cAgattacacatttt$ 5
+1 caTttt$ 14
+1 Gattacacatttt$ 7
+8 Tacagattacacatttt$ 3
+1 tAcacatttt$ 10
+5 tTacacatttt$ 9
+1 ttAcagattacacatttt$ 2
+2 ttTt$ 16
+1 ttt$ 17
+1 tT$ 18
+1 T$ 19
+
+The fields are:
+    traverse - the contents of the traverse array.
+    sequence - the alphabetized sequence of all prefixes.  The "cursor" position is capitalized.
+               The end of string is denoted by $. 
+    suffix - the contents of the suffix array.
+
+The key to the traverse array is the cursor position, which advances by one character in the 
+sequence each time you move down the table as long as the next sequence's prefix up to the cursor 
+position matches the current sequences prefix up to the cursor position. The cursor position does 
+not need to be explicitly stored, it is in fact just the position within the query sequence during the
+traversal phase. The traverse array itself contains the distance to where the prefix does change.
+
+The pseudocode for something traversing the tree to match a query sequence is:
+      arrayPos = 0
+      startPos = 0
+      endPos = arraySize
+      for cursor = 0 to querySize
+          while sequenceArray[arrayPos][cursor] != query[cursor]
+	      arrayPos = arrayPos + traverseArray[arrayPos]
+	      if arrayPos >= endPos
+	          finish(startPos, endPos)
+	      startPos = arrayPos
+	  endPos = arrayPos + traverseArray[arrayPos]
+	  if traverseArray[arrayPos] <= 1
+	      finish(startPos, endPos)
+	  arrayPos = arrayPos+1
+      finish(startPos, endPos)
+
+The "finish" indicates that the search terminates.  When this happens the array positions from 
+startPos to endPos have to be checked for matches to the tail of the query sequence.  (The 
+traversal loop already has assured that there are matches to the head of the sequence).
+
+Building the traverse array is relatively straightforward if you already have the suffix
+array.  A straightforward implementation using a stack that must be as long as the longest
+shared prefix/2 (typically the longest run of polyA or polyT in genome sequence) runs in
+time proportional to O(N*R) where N is the length of the genome, and R is the average shared prefix
+size, which is about 17 for the human genome.  Here's pseudocode for the algorithm
+
+      depth = 0
+      for arrayPos = 0 to arraySize
+          dnaOffset = suffixArray[arrayPos]
+	  for d = 0 to depth
+	      prevPos = stack[d]
+	      prevDnaOffset =suffixArray[prevPos]
+	      if dna[dnaOffset+d] != dna[prevDnaOffset+d]
+	          for stackIx=d to depth
+		      prevPos = stack[stackIx]
+		      traverseArray[prevPos] = arrayPos - prevPos
+		  depth = d
+	   stack[depth] = arrayPos
+	   depth = depth + 1
+
+

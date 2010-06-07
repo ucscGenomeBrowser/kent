@@ -1,0 +1,5 @@
+
+global to add2(int a, int b) into int c
+    {
+    c = a + b;
+    }

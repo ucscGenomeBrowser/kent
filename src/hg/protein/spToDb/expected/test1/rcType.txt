@@ -1,0 +1,2 @@
+1	STRAIN
+2	TISSUE

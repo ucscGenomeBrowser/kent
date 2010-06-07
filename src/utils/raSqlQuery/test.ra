@@ -1,0 +1,14 @@
+name one
+val 1
+
+name minusOne
+val -1
+
+name minusHalf
+val -0.5
+
+name twoOrThree
+val 2
+
+name array
+val 0 1 2 3 4

@@ -1,0 +1,2124 @@
+# for emacs: -*- mode: sh; -*-
+
+#	$Id: calJac3.txt,v 1.15 2010/06/04 23:29:32 chinhli Exp $
+
+# Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
+# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
+#	Callithrix_jacchus/Callithrix_jacchus-3.2
+#	Callithrix jacchus
+
+##########################################################################
+# Download sequence (DONE - 2010-02-04 - Hiram)
+    mkdir /hive/data/genomes/calJac3
+    cd /hive/data/genomes/calJac3
+    mkdir genbank
+    cd genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Callithrix_jacchus/Callithrix_jacchus-3.2/*"
+
+    mkdir ucscChr
+    cd ucscChr
+    #	fixup the accession names to become UCSC chrom names
+zcat ../Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+    | sed -e "s/^>.*gb|\([A-Z]*[0-9]*\).1.*/>chrUn_\1/" > chrUn.fa
+
+zcat ../Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+    | sed -e "s/^\([A-Z]*[0-9]*\).1/chrUn_\1/" > chrUn.agp
+
+find ../Primary_Assembly/unlocalized_scaffolds/FASTA -type f \
+        | grep "unlocalized.scaf.fa.gz$" | head -1 | while read F
+do
+    C=`basename ${F}`
+    C=${C/.unlocalized.scaf.fa.gz}
+    zcat "${F}" | sed -e "s/^>.*gb|\([A-Z]*[0-9]*\).1.*/>${C}_\1_random/"
+done > chr_randoms.fa
+
+find ../Primary_Assembly/unlocalized_scaffolds/AGP -type f | grep ".agp.gz$" \
+| while read F
+do
+    C=`basename ${F}`
+    echo -n "${C} "
+    C=${C/.unlocalized.scaf.agp.gz}
+    echo "${C}"
+    zcat "${F}" | sed -e "s/^\([A-Z]*[0-9]*\).1/${C}_\1_random/"
+done > chr_randoms.agp
+
+AC="../Primary_Assembly/assembled_chromosomes"
+for F in ${AC}/FASTA/chr*.fa.gz
+do
+    C=`basename $F`
+    C=${C/.fa.gz}
+    echo -n "${C} "
+    H=`zcat "${F}" | head -1`
+    chrN=`echo $H | sed -e "s/.*Callithrix jacchus chromosome /chr/; s/,
+.*//"`
+    A=`echo $H | sed -e "s/. Callithrix.*//; s/.*gb.//"`
+    echo $chrN $A
+    zcat ${AC}/AGP/${chrN}.comp.agp.gz \
+        | sed -e "s/^${A}/${chrN}/" > ${chrN}.agp
+    echo ">${chrN}" > ${chrN}.fa
+    zcat ${AC}/FASTA/${chrN}.fa.gz | grep -v "^>" >> ${chrN}.fa
+done
+
+##########################################################################
+# Initial genome build (DONE - 2009-12-17 - Hiram)
+    cd /hive/data/genomes/calJac3
+
+    cat << '_EOF_' > calJac3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db calJac3
+clade mammal
+genomeCladePriority 16
+scientificName Callithrix jacchus
+commonName Marmoset
+assemblyDate Mar. 2009
+assemblyLabel WUSTL 3.2 (GCA_000004665.1)
+orderKey 40
+mitoAcc none
+fastaFiles /hive/data/genomes/calJac3/genbank/ucscChr/*.fa
+agpFiles /hive/data/genomes/calJac3/genbank/ucscChr/*.agp
+# qualFiles none
+dbDbSpeciesDir marmoset
+taxId 9483
+'_EOF_'
+
+    makeGenomeDb.pl -workhorse=hgwdev -stop=seq calJac3.config.ra > seq.out 2>&1
+#	real    4m5.924s
+    makeGenomeDb.pl -continue=agp -stop=agp calJac3.config.ra > agp.out 2>&1
+#	real    0m20.968s
+    makeGenomeDb.pl -continue=db -stop=db calJac3.config.ra > db.out 2>&1
+#	real    5m39.181s
+    #	XXX - chromInfo doesn't have large enough fields for the name keys
+    #	been fixed in later versions of makeGenomeDb.pl
+    makeGenomeDb.pl -continue=dbDb -stop=dbDb calJac3.config.ra > dbDb.out 2>&1
+    makeGenomeDb.pl -continue=trackDb -stop=trackDb calJac3.config.ra > trackDb.out 2>&1
+
+##########################################################################
+# running repeat masker (DONE - 2010-02-02 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/repeatMasker
+    cd /hive/data/genomes/calJac3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk calJac3 > do.log 2>&1 &
+    #	real    443m55.891s
+    cat faSize.rmsk.txt
+# 2914958544 bases (162452744 N's 2752505800 real 1439949519 upper 1312556281
+#	lower) in 14205 sequences in 1 files
+# %45.03 masked total, %47.69 masked real
+
+##########################################################################
+# running simple repeat (DONE - 2010-02-02 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/simpleRepeat
+    cd /hive/data/genomes/calJac3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	calJac3 > do.log 2>&1 &
+    #	real    198m33.953s
+    cat fb.simpleRepeat 
+    #	66211508 bases of 2752505800 (2.405%) in intersection
+
+    cd /hive/data/genomes/calJac3
+    twoBitMask calJac3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed calJac3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa calJac3.2bit stdout | faSize stdin > faSize.calJac3.2bit.txt
+    cat faSize.calJac3.2bit.txt
+# 2914958544 bases (162452744 N's 2752505800 real 1439244378 upper
+#	1313261422 lower) in 14205 sequences in 1 files
+#	%45.05 masked total, %47.71 masked real
+
+    rm /gbdb/calJac3/calJac3.2bit
+    ln -s `pwd`/calJac3.2bit /gbdb/calJac3/calJac3.2bit
+
+#########################################################################
+# MAKE 11.OOC FILES FOR BLAT (DONE - 2010-02-03 - Hiram)
+    ssh kolossus
+    # numerator is calJac3 gapless bases "real" as reported by faSize 
+    # denominator is hg17 gapless bases as reported by featureBits,
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2752505800 / 2897310462 \) \* 1024
+    #	( 2752505800 / 2897310462 ) * 1024 = 972.821510
+    # ==> use -repMatch=950 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50
+    cd /hive/data/genomes/calJac3
+    blat calJac3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/calJac3.11.ooc -repMatch=950
+    #	Wrote 32908 overused 11-mers to jkStuff/calJac3.11.ooc
+
+    mkdir /hive/data/staging/data/calJac3
+    cp -p calJac3.2bit chrom.sizes jkStuff/calJac3.11.ooc \
+	/hive/data/staging/data/calJac3
+
+    gapToLift -bedFile=jkStuff/nonBridgedGaps.bed calJac3 \
+	jkStuff/calJac3.nonBridged.lft
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-12-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("calJac3", "blat12", "17804", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("calJac3", "blat12", "17805", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="chr15:67439781-67471107" where name="calJac3";' \
+	hgcentraltest
+
+############################################################################
+# genbank run (DONE - 2010-02-04 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    # edit etc/genbank.conf to add this section just before calJac1:
+# Marmoset
+calJac3.serverGenome = /hive/data/genomes/calJac3/calJac3.2bit
+calJac3.clusterGenome = /scratch/data/calJac3/calJac3.2bit
+calJac3.ooc = /scratch/data/calJac3/calJac3.11.ooc
+calJac3.lift = no
+calJac3.perChromTables = no
+calJac3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+calJac3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+calJac3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+calJac3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+calJac3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+calJac3.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+calJac3.downloadDir = calJac3
+calJac3.refseq.mrna.native.load  = yes
+calJac3.refseq.mrna.xeno.load = yes
+calJac3.refseq.mrna.xeno.loadDesc  = yes
+
+    cvs ci -m "adding marmoset calJac3" etc/genbank.conf
+    make etc-update
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial  calJac3 &
+    #	var/build/logs/2010.02.10-09:19:20.calJac3.initalign.log
+    #	real    238m59.390s
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad calJac3 &
+    #	logFile: var/dbload/hgwdev/logs/2010.02.11-10:41:22.dbload.log
+    #	real    25m55.474s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add calJac3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Adding calJac3 - Marmoset - Callithrix jacchus" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+    #	done - 2010-02-11 - Hiram
+
+############################################################################
+# running cpgIsland business (DONE - 2010-02-11 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/cpgIsland
+    cd /hive/data/genomes/calJac3/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    #	needed to fixup this source, adding include to readseq.c:
+#include "string.h"
+    #	and to cpg_lh.c:
+#include "unistd.h"
+#include "stdlib.h"
+    # and fixing a declaration in cpg_lh.c
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../ 
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../calJac3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/calJac3/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 14205 of 14205 jobs
+# CPU time in finished jobs:        205s       3.41m     0.06h    0.00d  0.000 y
+# IO & Wait Time:                 38701s     645.02m    10.75h    0.45d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              23s       0.38m     0.01h    0.00d
+# Submission to last job:           202s       3.37m     0.06h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    cd /hive/data/genomes/calJac3/bed/cpgIsland
+    hgLoadBed calJac3 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+
+# Reading cpgIsland.bed
+# Loaded 32732 elements of size 10
+# Sorted
+# Saving bed.tab
+# Loading calJac3
+
+    #	cleanup
+    rm -fr hardMaskedFa
+
+############################################################################
+# LASTZ Human Swap (DONE - 2010-02-11 - Hiram)
+    #	original alignment on hg19:
+    cd /hive/data/genomes/hg19/bed/lastzCalJac3.2010-02-11
+    cat fb.hg19.chainCalJac3Link.txt 
+    #	2047068864 bases of 2897316137 (70.654%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    120m42.991s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
+# LASTZ Rhesus Swap (DONE - 2010-02-11 - Hiram)
+    #	original alignment to rheMac2
+    cd /hive/data/genomes/rheMac2/bed/lastzCalJac3.2010-02-11
+    cat fb.rheMac2.chainCalJac3Link.txt 
+    #	1871513554 bases of 2646704109 (70.711%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.rheMac2.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.rheMac2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rheMac2/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    142m34.894s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	1916431926 bases of 2752505800 (69.625%) in intersection
+
+############################################################################
+# LASTZ Chimp Swap (DONE - 2010-02-11 - Hiram)
+    #	original alignment to panTro2
+    cd /hive/data/genomes/panTro2/bed/lastzCalJac3.2010-02-11
+    cat fb.panTro2.chainCalJac3Link.txt 
+    #	2016331285 bases of 2909485072 (69.302%) in intersection
+
+    # and this swap run
+    mkdir /hive/data/genomes/calJac3/bed/blastz.panTro2.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.panTro2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro2/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    118m42.203s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	1990168262 bases of 2752505800 (72.304%) in intersection
+
+############################################################################
+# LASTZ Orangutan Swap (DONE - 2010-02-11 - Hiram)
+    # original alignment to ponAbe2
+    cd /hive/data/genomes/ponAbe2/bed/lastzCalJac3.2010-02-11
+    cat fb.ponAbe2.chainCalJac3Link.txt 
+    #	2086557592 bases of 3093572278 (67.448%) in intersection
+
+    # and this swap run
+    mkdir /hive/data/genomes/calJac3/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzCalJac3.2010-02-11/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    146m12.301s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	1978857628 bases of 2752505800 (71.893%) in intersection
+#####################################################################
+# lastz Dog CanFam2 Swap (DONE - 2010-02-14 - Hiram)
+    #	original alignment
+    cd /hive/data/genomes/canFam2/bed/lastzCalJac3.2010-02-12
+    cat fb.canFam2.chainCalJac3Link.txt 
+    #	1363307334 bases of 2384996543 (57.162%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/canFam2/bed/lastzCalJac3.2010-02-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    129m56.144s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	1397333116 bases of 2752505800 (50.766%) in intersection
+
+#########################################################################
+# lastz Mouse Mm9 Swap (DONE - 2010-02-14 - Hiram)
+    #	original alignment to mouse
+    cd /hive/data/genomes/mm9/bed/lastzCalJac3.2010-02-12
+    cat fb.mm9.chainCalJac3Link.txt 
+    #	859869647 bases of 2620346127 (32.815%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.mm9.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzCalJac3.2010-02-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    90m38.739s
+    cat fb.calJac3.chainHg19Link.txt 
+    #	861811978 bases of 2752505800 (31.310%) in intersection
+
+#####################################################################
+# lastz Opossum monDom5 Swap (DONE - 2010-02-14 - Hiram)
+    #	original alignment to Opossum
+    cd /hive/data/genomes/monDom5/bed/lastzCalJac3.2010-02-12
+    cat fb.monDom5.chainCalJac3Link.txt 
+    #	216197506 bases of 3501660299 (6.174%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/monDom5/bed/lastzCalJac3.2010-02-12/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    110m13.435s
+    cat fb.calJac3.chainMonDom5Link.txt 
+    #	217614612 bases of 2752505800 (7.906%) in intersection
+
+##############################################################################
+# HUMAN (hg18) PROTEINS TRACK (working braney...)
+    # bash  if not using bash shell already
+
+    cd /cluster/data/calJac3
+    mkdir /cluster/data/calJac3/blastDb
+
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  calJac3.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  calJac3.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+    rm temp.fa less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 3275
+
+
+    mkdir -p /cluster/data/calJac3/bed/tblastn.hg18KG
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 3275 query.lst
+
+   # we want around 350000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(350000/`wc query.lst | awk '{print $1}'`\)
+
+# 36727/(350000/3275) = 343.659786
+
+   mkdir -p kgfa
+   split -l 344 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   wc kg.lst
+#   107  107 1391 kg.lst
+
+
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/calJac3/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/calJac3/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+# Completed: 100076 of 100076 jobs
+# CPU time in finished jobs:    2219419s   36990.31m   616.51h   25.69d  0.070 y
+# IO & Wait Time:                445463s    7424.39m   123.74h    5.16d  0.014 y
+# Average job time:                  27s       0.44m     0.01h    0.00d
+# Longest finished job:             319s       5.32m     0.09h    0.00d
+# Submission to last job:          2791s      46.52m     0.78h    0.03d
+
+    ssh swarm
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=12000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 254 of 254 jobs
+# CPU time in finished jobs:     590077s    9834.62m   163.91h    6.83d  0.019 y
+# IO & Wait Time:                 20749s     345.81m     5.76h    0.24d  0.001 y
+# Average job time:                2405s      40.08m     0.67h    0.03d
+# Longest finished job:           36592s     609.87m    10.16h    0.42d
+# Submission to last job:         36604s     610.07m    10.17h    0.42d
+
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+# checked: 38517 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/calJac3/bed/tblastn.hg18KG
+    hgLoadPsl calJac3 blastHg18KG.psl
+
+    # check coverage
+    featureBits calJac3 blastHg18KG 
+# 18646943 bases of 332311746 (5.611%) in intersection
+
+    featureBits calJac3 blastHg18KG ensGene  -enrichment
+# blastHg18KG 5.611%, ensGene 9.520%, both 4.993%, cover 88.97%, enrich 9.35x
+
+    rm -rf blastOut
+#end tblastn
+
+##############################################################################
+# papHam1 Baboon LASTZ/CHAIN/NET (DONE - 2010-02-15 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15
+    cd /hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15
+
+    cat << '_EOF_' > DEF
+# baboon vs. marmoset
+# same paramters as human hg19 vs marmoset calJac3
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Baboon papHam1
+SEQ2_DIR=/scratch/data/papHam1/papHam1.2bit
+SEQ2_LEN=/scratch/data/papHam1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	failed lastz run, finished manually
+    #	real    287m24.258s
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+	-continue=cat \
+	-verbose=2 -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+    #	real    158m17.502s
+    cat fb.calJac3.chainPapHam1Link.txt 
+    #	1928203329 bases of 2752505800 (70.053%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 papHam1 > rbest.log 2>&1
+    #	real 232m
+
+    mkdir /hive/data/genomes/papHam1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/papHam1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzPapHam1.2010-02-15/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    791m46.765s
+    cat fb.papHam1.chainCalJac3Link.txt 
+    #	1908519637 bases of 2741867288 (69.607%) in intersection
+
+##############################################################################
+# tarSyr1 Tarsier LASTZ/CHAIN/NET (DONE - 2010-02-21 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21
+    cd /hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21
+
+    cat << '_EOF_' > DEF
+# tarsier vs. marmoset
+# same paramters as human hg19 vs tarsier tarSyr1
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=50
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Tarsier tarSyr1
+SEQ2_DIR=/scratch/data/tarSyr1/tarSyr1.2bit
+SEQ2_LEN=/scratch/data/tarSyr1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21
+TMPDIR=/scratch/tmp
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    cat fb.calJac3.chainTarSyr1Link.txt 
+    #	1286219755 bases of 2752505800 (46.729%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 tarSyr1 > rbest.log 2>&1 &
+    #	real 532m
+
+    mkdir /hive/data/genomes/tarSyr1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/tarSyr1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzTarSyr1.2010-02-21/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running Wed Feb 24 14:36:31 PST 2010
+    #	real    120m42.991s
+    cat fb.tarSyr1.chainCalJac3Link.txt 
+    #	2030475813 bases of 2752505800 (73.768%) in intersection
+
+#####################################################################
+# micMur1 Mouse lemur LASTZ/CHAIN/NET (DONE - 2010-02-17,22 - Hiram)
+# Mouse lemur ( Microcebus murinus)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
+    cd /hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
+
+    cat << '_EOF_' > DEF
+# mouse lemur vs. marmoset
+# same paramters as human hg19 vs Mouse lemur micMur1
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=5
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse lemur micMur1
+SEQ2_DIR=/hive/data/genomes/micMur1/micMur1.2bit
+SEQ2_LEN=/hive/data/genomes/micMur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    5502m6.707s
+    #	some kluster difficulties, finished cat run manually, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=chainRun `pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> chainRun.log 2>&1 &
+    #	real    374m19.587s calJac3 micMur1 02-17
+    cat fb.calJac3.chainMicMur1Link.txt 
+    #	1258616069 bases of 2752505800 (45.726%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` calJac3 micMur1 > rbest.log 2>&1
+    #	real    235m55.179s calJac3 micMur1
+
+    mkdir /hive/data/genomes/micMur1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/micMur1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzMicMur1.2010-02-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    455m11.215s micMur1 calJac3 swap
+    cat fb.micMur1.chainCalJac3Link.txt 
+    #	1243785262 bases of 1852394361 (67.145%) in intersection
+
+#####################################################################
+# otoGar1 Bushbaby LASTZ/CHAIN/NET (DONE - 2010-02-17,22 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
+    cd /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
+
+    cat << '_EOF_' > DEF
+# bushbaby vs. marmoset
+# same paramters as human hg19 vs Bushbaby otoGar1
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=5
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Bushbaby otoGar1
+SEQ2_DIR=/scratch/data/otoGar1/otoGar1.rmsk.2bit
+SEQ2_LEN=/scratch/data/otoGar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    4722m38.163s
+    #	memk failed at the cat run, finish it manually, then, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=chainRun `pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> chainRun.log 2>&1 &
+    #	real    285m58.314s
+    cat fb.calJac3.chainOtoGar1Link.txt 
+    #	1176505967 bases of 2752505800 (42.743%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 otoGar1 > rbest.log 2>&1 &
+    #	real    332m14.375s calJac3 otoGar1
+
+    mkdir /hive/data/genomes/otoGar1/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/otoGar1/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    310m4.077s
+    cat fb.otoGar1.chainCalJac3Link.txt 
+    #	1158531484 bases of 1969052059 (58.837%) in intersection
+
+#####################################################################
+## 8-Way Multiz (DONE - 2009-06-09,2009-11-10 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/multiz8way
+    cd /hive/data/genomes/calJac3/bed/multiz8way
+
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=calJac1,hg19,panTro2,rheMac2,ponAbe2,mm9,canFam2,monDom5 \
+      --rename="calJac1 -> calJac3 " \
+/hive/data/genomes/hg19/bed/multiz46way/fixedTree/46wayFixed.nh  > 8way.nh
+    # *carefully* edit 8way.nh to get calJac3 at the top of this picture
+    #	resulting in this tree:
+
+(calJac3:0.066389,((rheMac2:0.057695,(ponAbe2:0.018342,
+(hg19:0.006591,panTro2:0.006639):0.012126):0.014256):0.010000,
+(mm9:0.352605,(canFam2:0.193569,monDom5:0.581923):0.020666)
+:0.088210):0.000001);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/calJac3_8way.gif
+
+    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    #	Use this output to create the table below, with this perl script:
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "grep -y calJac3 8way.distances.txt | sort -k3,3n|") or
+        die "can not read 8way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($calJac3, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/calJac3/bed/lastz.$D/fb.calJac3." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.calJac3/fb.${D}.chainCalJac3Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist, 
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                  chainCalJac3Link 
+#    distance                    on calJac3   on other
+# 01  0.1090 - Orangutan ponAbe2 (% 71.893) (% 67.448)
+# 02  0.1094 - Human hg19        (% 73.768) (% 70.654)
+# 03  0.1094 - Chimp panTro2     (% 72.304) (% 69.302)
+# 04  0.1341 - Rhesus rheMac2    (% 69.625) (% 70.711)
+# 05  0.3688 - Dog canFam2       (% 50.766) (% 57.162)
+# 06  0.5072 - Mouse mm9         (% 31.310) (% 32.815)
+# 07  0.7572 - Opossum monDom5   (%  7.906) (%  6.174)
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    #	bash shell syntax here ...
+    mkdir -p mafLinks
+H="/hive/data/genomes/calJac3/bed/"
+for S in `sed -e "s/calJac3 //" species.list`
+do
+    echo $S
+    ls -og ${H}/lastz.${S}/axtChain/calJac3.${S}.synNet.maf.gz
+    ln -s ${H}/lastz.${S}/axtChain/calJac3.${S}.synNet.maf.gz \
+        mafLinks/${S}.maf.gz
+done
+
+HERE=`pwd`
+export HERE
+PATH=${HERE}/penn:${PATH}
+export PATH
+rm -fr tmp
+mkdir -p tmp
+cd mafLinks
+time ../penn/autoMZ + T=${HERE}/tmp \
+	E=calJac3 "`cat ../tree.nh`" *.sing.maf result.maf
+    #	real    3584m8.094s
+    mkdir /gbdb/calJac3/multiz8way
+    ln -s `pwd`/mafLinks/result.maf /gbdb/calJac3/multiz8way/multiz8way.maf
+    cd /scratch/tmp
+# Loaded 7475045 mafs in 1 files from /gbdb/calJac3/multiz8way
+
+    time nice -n +19 hgLoadMaf calJac3 multiz8way
+    time nice -n +19 hgLoadMafSummary -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 calJac3 multiz8waySummary multiz8way.maf
+	| hgLoadMafSummary calJac1 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz9waySummary stdin
+    #	Created 1313222 summary blocks from 34128178 components
+    #	and 7475045 mafs from multiz8way.maf
+    #	real    8m36.016s
+
+##############################################################################
+# gorGor2 Bushbaby LASTZ/CHAIN/NET (DONE - 2010-02-22,24 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-22
+    cd /hive/data/genomes/calJac3/bed/lastzOtoGar1.2010-02-22
+
+    cat << '_EOF_' > DEF
+# Gorilla vs. marmoset
+# same paramters as human hg19 vs other nearby primates
+#       without all the extra blastz parameters
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Marmoset (calJac3)
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_LIMIT=20
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor2
+SEQ2_DIR=/scratch/data/gorGor2/gorGor2.2bit
+SEQ2_LEN=/scratch/data/gorGor2/chrom.sizes
+SEQ2_CHUNK=12000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzGorGor2.2010-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-verbose=2 -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	Elapsed time: 1956m3.678s
+    cat fb.calJac3.chainGorGor2Link.txt 
+    #	2101356280 bases of 2752505800 (76.343%) in intersection
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+	calJac3 gorGor2 > rbest.log 2>&1
+    #	about 4h16m
+
+    mkdir /hive/data/genomes/gorGor2/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/gorGor2/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzGorGor2.2010-02-22/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    250m57.089s
+    cat fb.gorGor2.chainCalJac3Link.txt 
+    #	2135885920 bases of 2829687208 (75.481%) in intersection
+
+#####################################################################
+## 13-Way Multiz (DONE - 2010-02-23 - Hiram)
+##  (Redo mafSplit and all steps followed working 2010-05-23 - Chin)
+
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way
+    cd /hive/data/genomes/calJac3/bed/multiz13way
+
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=calJac1,hg19,panTro2,rheMac2,ponAbe2,gorGor1,micMur1,otoGar1,papHam1,tarSyr1,mm9,canFam2,monDom5 \
+      --rename="calJac1 -> calJac3 ; gorGor1 -> gorGor2 " \
+/hive/data/genomes/hg19/bed/multiz46way/fixedTree/46wayFixed.nh  > 13way.nh
+
+    #	rearrange calJac3 to the top, get some help from tree_doctor:
+    /cluster/bin/phast/tree_doctor --name-ancestors --reroot calJac3 \
+        --with-branch 13way.nh
+    #	edit out the ancestors, and move calJac3 from the bottom to
+    #	the top, resulting in this tree:
+
+(calJac3:0.066389,(((((hg19:0.006591,panTro2:0.006639):0.002184,
+gorGor2:0.009411):0.009942,ponAbe2:0.018342):0.014256,
+(rheMac2:0.036199,papHam1:0.040000):0.021496):0.010000,
+((((monDom5:0.581923,canFam2:0.193569):0.020666,mm9:0.352605):0.019992,
+(micMur1:0.091452,otoGar1:0.128984):0.035463):0.011307,
+tarSyr1:0.135169):0.056911):0.000001);
+
+    #	more rearranging after seeing what the distance table looks like
+    #	below to get them appearing as much as possible in their
+    #	distance order top to bottom:
+(calJac3:0.066389,(((ponAbe2:0.018342,
+((hg19:0.006591,panTro2:0.006639):0.002184,
+gorGor2:0.009411):0.009942):0.014256,
+(rheMac2:0.036199,papHam1:0.040000):0.021496):0.010000,
+(tarSyr1:0.135169,((micMur1:0.091452,otoGar1:0.128984):0.035463,
+(mm9:0.352605,
+(canFam2:0.193569,monDom5:0.581923):0.020666):0.019992):0.011307):0.056911)
+:0.000001);
+
+    #	Use this specification in the phyloGif tool after changing the names:
+    /cluster/bin/phast/tree_doctor \
+--rename="calJac3 -> Marmoset ; ponAbe2 -> Orangutan ; hg19 -> Human ; panTro2 -> Chimp ; gorGor2 -> Gorilla ; rheMac2 -> Rhesus ; papHam1 -> Baboon ; tarSyr1 -> Tarsier ; micMur1 -> Mouse_lemur ; otoGar1 -> Bushbaby ; canFam2 -> Dog ; mm9 -> Mouse ; monDom5 -> Opossum " 13way.nh
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/calJac3_13way.gif
+
+    /cluster/bin/phast/all_dists 13way.nh > 13way.distances.txt
+    # make sure all symlinks lastz.DB -> lastzDb-date
+    #	exist here and at the swap locations, the perl script expects this
+    #	in order to find featureBits numbers.
+    #	Use 13way.distances.txt to create the table below
+    #	with this perl script:
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+
+open (FH, "grep -y calJac3 13way.distances.txt | sort -k3,3n|") or
+        die "can not read 13way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($calJac3, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/calJac3/bed/lastz.$D/fb.calJac3." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.calJac3/fb.${D}.chainCalJac3Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist, 
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+# 01  0.1090 - Orangutan ponAbe2   (% 71.893) (% 67.448)
+# 02  0.1094 - Human hg19          (% 73.768) (% 70.654)
+# 03  0.1094 - Chimp panTro2       (% 72.304) (% 69.302)
+# 04  0.1100 - Gorilla gorGor2     (% 76.343) (% 75.481)
+# 05  0.1341 - Rhesus rheMac2      (% 69.625) (% 70.711)
+# 06  0.1379 - Baboon papHam1      (% 70.053) (% 69.607)
+# 07  0.2585 - Tarsier tarSyr1     (% 46.729) (N/A)
+# 08  0.2615 - Mouse lemur micMur1 (% 45.726) (% 67.145)
+# 09  0.2991 - Bushbaby otoGar1    (% 42.743) (% 58.837)
+# 10  0.3688 - Dog canFam2         (% 50.766) (% 57.162)
+# 11  0.5072 - Mouse mm9           (% 31.310) (% 32.815)
+# 12  0.7572 - Opossum monDom5     (%  7.906) (%  6.174)
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	13way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    #	collect the single whole mafs into one place for splitting:
+    mkdir singleMafs
+    cd singleMafs
+    ln -s ../../lastz.ponAbe2/axtChain/calJac3.ponAbe2.synNet.maf.gz .
+    ln -s ../../lastz.hg19/axtChain/calJac3.hg19.synNet.maf.gz .
+    ln -s ../../lastz.panTro2/axtChain/calJac3.panTro2.synNet.maf.gz .
+    ln -s ../../lastz.gorGor2/axtChain/calJac3.gorGor2.synNet.maf.gz .
+    ln -s ../../lastz.rheMac2/axtChain/calJac3.rheMac2.synNet.maf.gz .
+    ln -s ../../lastz.papHam1/mafRBestNet/calJac3.papHam1.rbest.maf.gz .
+    ln -s ../../lastz.tarSyr1/mafRBestNet/calJac3.tarSyr1.rbest.maf.gz .
+    ln -s ../../lastz.micMur1/mafRBestNet/calJac3.micMur1.rbest.maf.gz .
+    ln -s ../../lastz.otoGar1/mafRBestNet/calJac3.otoGar1.rbest.maf.gz .
+    ln -s ../../lastz.mm9/axtChain/calJac3.mm9.synNet.maf.gz .
+    ln -s ../../lastz.canFam2/axtChain/calJac3.canFam2.synNet.maf.gz .
+    ln -s ../../lastz.monDom5/axtChain/calJac3.monDom5.synNet.maf.gz .
+
+XXXX 05-24 mafSplit new option mafSplit -byTarget -useFullSequenceName
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
+    for D in gorGor2 tarSyr1 papHam1 otoGar1 micMur1
+do
+    mkdir ${D}
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+        ../singleMafs/calJac3.${D}.rbest.maf.gz
+done
+for D in ponAbe2 hg19 panTro2 rheMac2 mm9 canFam2 monDom5
+do
+    mkdir ${D}
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
+        ../singleMafs/calJac3.${D}.synNet.maf.gz
+done
+
+    cd /hive/data/genomes/calJac3/bed/multiz13way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = calJac3
+set topDir = /hive/data/genomes/$db/bed/multiz13way
+set c = $1
+set result = $2
+set pennBin = $topDir/penn
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = $topDir/splitMaf
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p $topDir/tree.nh $topDir/species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/^$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($pennBin $path); rehash
+$pennBin/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/calJac3/bed/multiz13way/run/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    find ../splitMaf -type f | grep "/[0-9][0-9][0-9].maf" \
+	| xargs -L 1 basename | sort -u > chr.part.list
+    gensub2 chr.part.list single template jobList
+    mkdir maf
+    para -ram=8g create jobList
+
+    #	put the split mafs back together into a single result
+    ssh hgwdev
+    cd  /hive/data/genomes/calJac3/bed/multiz13way/run
+
+    head -q -n 1 maf/000.maf > calJac3.13way.maf
+    for F in maf/*.maf
+do
+    grep -h -v "^#" ${F} >> calJac3.13way.maf
+done
+    tail -q -n 1 maf/000.maf >> calJac3.13way.maf
+
+XXXX 05-24 split the /hive/data/genomes/calJac3/bed/multiz13way/run
+     calJac3.13way.maf to other folder with fullName for phastCons
+    # load tables for a look
+    mkdir -p /gbdb/calJac3/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/run
+    ln -s `pwd`/calJac3.13way.maf \
+	/gbdb/calJac3/multiz13way/maf/multiz13way.maf
+
+    # this generates an immense multiz13way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
+    #   Loading multiz13way into database
+    #   Loaded 27583585 mafs in 257 files from /gbdb/calJac3/multiz13way/maf
+    #   real    34m38.042s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
+	| hgLoadMafSummary calJac3 -minSize=30000 -verbose=2 \
+		-mergeGap=1500 -maxSize=200000  multiz13waySummary stdin
+    #   Created 4661062 summary blocks from 199318324 components 
+    #   and 27583585 mafs from stdin
+    #   Loading into calJac3 table multiz13waySummary...
+    #   Loading complete
+    #   real    38m46.339s
+
+    # Gap Annotation (DONE 2010-05-12 - chin)
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/anno
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno
+    mkdir maf run
+
+    #   most of these will already exist from previous multiple
+    #   alignments
+    #   remove the echo from in front of the twoBitInfo command to get
+    #   them
+    #   to run if this loop appears to be correct
+    for DB in `cat ../species.list`
+do
+    CDIR="/hive/data/genomes/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+        echo "creating ${DB}.N.bed"
+        echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+        ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    # rm -f nBeds sizes
+    for DB in `sed -e "s/calJac3 //" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    #   the annotation step requires large memory, run on memk nodes
+    ssh memk
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno/run
+    ls ../../run/maf | sed -e "s/.maf//" > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../run/maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    gensub2 chr.list single template jobList
+    para -ram=30g create jobList
+    #   specify lots of ram to get one job per node
+    para -ram=30g push
+    #   
+    #  para check
+    #  256 jobs in batch
+    #  0 jobs (including everybody's) in Parasol queue or running.
+    #  Checking finished jobs
+    #  ...
+    #  ranOk: 256
+    #  total jobs in batch: 256
+
+
+    ssh hgwdev
+    rm -fr /gbdb/calJac3/multiz13way/maf
+    mkdir /gbdb/calJac3/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno/maf
+    ln -s `pwd`/*.maf /gbdb/calJac3/multiz13way/maf/
+    #   by loading this into the table multiz13way, it will replace the
+    #   previously loaded table with the unannotated mafs
+    #   huge temp files are made, do them on local disk
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+        -pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
+    #  Loaded 14259674 mafs in 256 files from /gbdb/calJac3/multiz13way/maf
+    #  real    15m41.804s
+
+    time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
+        | hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
+                 -maxSize=200000  multiz13waySummary stdin
+    #   Indexing and tabulating stdin
+    #   Created 2330531 summary blocks from 99659162 components 
+    #   and 14259674 mafs from stdin
+    #   Loading into calJac3 table multiz13waySummary...
+    #   Loading complete
+    #   real    17m17.229s
+
+    #   by loading this into the table multiz13waySummary, it will
+    #   replace
+    #   the previously loaded table with the unannotated mafs
+    #   remove the multiz13way*.tab files in this /data/tmp directory
+    #   -rw-rw-r-- 1 727501509 May 11 16:48 multiz13way.tab
+    #   -rw-rw-r-- 1 113079736 May 12 08:57 multiz13waySummary.tab
+    wc -l multiz13way*.tab
+    #    14259674 multiz13way.tab
+    #     2330531 multiz13waySummary.tab
+    #    16590205 total
+    rm multiz13way*.tab
+
+    # create some downloads
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
+    time cp -p ../../anno/maf/*.maf .
+    #   real    37m48.902s
+    time gzip --rsyncable *.maf
+    #   real    64m55.554s
+    time md5sum *.gz > md5sum.txt
+    #   real    2m41.707s
+
+#####################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=calJac3 -all all.joiner
+
+    mkdir /hive/data/genomes/calJac3/goldenPath
+    cd /hive/data/genomes/calJac3/goldenPath
+    time nice -n +19 makeDownloads.pl calJac3 > do.log 2>&1
+    #	real    22m30.329s
+
+    #	now ready for pushQ entry
+    mkdir /hive/data/genomes/calJac3/pushQ
+    cd /hive/data/genomes/calJac3/pushQ
+    time nice -n +19 makePushQSql.pl calJac3 > calJac3.pushQ.sql 2> stderr.out
+    real    2m52.193s
+
+    #	check for errors in stderr.out, some are OK, e.g.:
+# WARNING: calJac3 does not have seq
+# WARNING: calJac3 does not have extFile
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  bosTau4ChainPileUp
+
+    #	copy it to hgwbeta
+    scp -p calJac3.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < calJac3.pushQ.sql
+    #	in that pushQ entry walk through each entry and see if the
+    #	sizes will set properly
+
+############################################################################
+# ctgPos2 track - showing clone sequence locations on chromosomes
+#	(DONE - 2010-04-01 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/ctgPos2
+    cd /hive/data/genomes/calJac3/bed/ctgPos2
+    cat << '_EOF_' > agpToCtgPos2.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
+    exit 255;
+}
+
+my $agpFile = shift;
+
+open (FH, "<$agpFile") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[4] =~ m/^N$/);
+    my $chrSize = $a[2]-$a[1]+1;
+    my $ctgSize = $a[7]-$a[6]+1;
+    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+export S=../../genbank/Primary_Assembly/assembled_chromosomes/AGP
+cut -f2 ${S}/chr2acc | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/"
+done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
+
+    hgLoadSqlTab calJac3 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+############################################################################
+# N-SCAN gene predictions (nscanGene) - (2010-04-26 markd)
+
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/calJac3/bed/nscan
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/calJac3/readme.txt
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/calJac3/calJac3.prot.fa
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/calJac3/calJac3.gtf
+    gzip calJac3.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt calJac3.gtf.gz stdout | hgLoadGenePred -genePredExt calJac3 nscanGene stdin
+    hgPepPred calJac3 generic nscanPep calJac3.prot.fa.gz
+    rm *.tab
+
+    # marmoset/calJac3/trackDb.ra, add:
+    track nscanGene override
+    informant Marmoset N-SCAN used mouse (mm9) as the informant for conservation. PASA clustered human ESTs were mapped to the marmoset genome with the use of the human/marmoset synteny chain track. These remapped clusters were then filtered for splice sites, and used as the EST track on marmoset.
+
+    # veryify top-level search spec, should produce no results:
+    hgsql -Ne 'select name from nscanGene' calJac3 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+############################################################################
+# Fixing references to old calJac1 date to be to March 2009 - (2010-05-12 mary)
+
+# trackDb
+cd /cluster/home/mary/kent/src/hg/makeDb/trackDb/marmoset
+find -name "*.html" | xargs grep 2007
+
+# downloads
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3
+find -name "*" | xargs grep 2007
+
+# hgcentral
+hgsql hgcentraltest
+update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3"
+
+
+############################################################################
+## Annotate 13-way multiple alignment with gene annotations
+##              DONE - 2010-05-17 - Chin)
+    # Gene frames
+    ## survey all genomes to see what type of gene track to use
+    ssh hgwdev
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/frames
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    #
+    #   survey all the genomes to find out what kinds of gene tracks
+    #   they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+            $table == "knownGene" || $table == "xenoRefGene" ) then
+                set count = `hgsql $db -N -e "select count(*) from $table"`
+                echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql calJac3 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql calJac3 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+
+    ./showGenes.csh
+    # calJac3: xenoRefGene: 235146, Mrnas: 3722
+    # ponAbe2: ensGene: 30230, refGene: 3466, xenoRefGene: 224711, Mrnas: 0
+    # hg19: ensGene: 143123, knownGene: 77614, mgcGenes: 31354, 
+            refGene: 35776, xenoRefGene: 126698, Mrnas: 287363
+    # panTro2: ensGene: 40215, refGene: 743, xenoRefGene: 217765, Mrnas: 1535
+    # gorGor2: xenoRefGene: 223719, Mrnas: 1
+    # rheMac2: ensGene: 41617, refGene: 939, xenoRefGene: 285046, Mrnas: 5227
+    # papHam1: xenoRefGene: 249401, Mrnas: 70
+    # tarSyr1: ensGene: 44646, Mrnas: 8
+    # micMur1: ensGene: 36501, Mrnas: 43
+    # otoGar1: ensGene: 35274, Mrnas: 0
+    # mm9: ensGene: 83124, knownGene: 54042, mgcGenes: 26582, 
+           refGene: 27131, xenoRefGene: 122280, Mrnas: 258076
+    # canFam2: ensGene: 30299, refGene: 1039, xenoRefGene: 210336, Mrnas: 3211
+    # monDom5: ensGene: 34745, refGene: 392, xenoRefGene: 213342, Mrnas: 1605
+
+
+    #   rearrange that output to create 3 sections:
+    #1. knownGenes: hg19 mm9
+    #2. ensGene: ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
+    #3. xenoRefGene: calJac3 papHam1 gorGor2
+
+
+    mkdir genes
+    # knownGene
+    echo "hg19 mm9" \
+    | sed -e "s/  */ /g" > knownGene.list
+
+
+    for DB in hg19 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    echo "ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5" \
+    | sed -e "s/  */ /g" > ensGene.list
+
+    # ensGene
+    for DB in  ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    echo "calJac3 papHam1 gorGor2" > xenoRef.list 
+    # xenoRefGene
+    for DB in  calJac3 papHam1 gorGor2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    #   turn it into a kluster job
+    ssh swarm
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set C = $1
+set G = $2
+
+cat ../run/maf/${C}.maf | genePredToMafFrames calJac3 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    ls ../run/maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" | grep -v calJac3 > gene.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=8g create jobList
+    para try ... check ... push
+# Completed: 3072 of 3072 jobs
+# CPU time in finished jobs:       5599s      93.32m     1.56h    0.06d  0.000 y
+# IO & Wait Time:                279159s    4652.65m    77.54h    3.23d  0.009 y
+# Average job time:                  93s       1.54m     0.03h    0.00d
+# Longest finished job:            1292s      21.53m     0.36h    0.01d
+# Submission to last job:          1380s      23.00m     0.38h    0.02d
+
+    # see what it looks like in terms of number of annotations per DB:
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
+   
+   cat annotation.survey.txt
+   #   159735 tarSyr1
+   #   202861 panTro2
+   #   203073 rheMac2
+   #   205358 ponAbe2
+   #   205679 hg19
+   #   206899 micMur1
+   #   211208 papHam1
+   #   211692 monDom5
+   #   213918 otoGar1
+   #   217594 gorGor2
+   #   233938 mm9
+   #   240194 canFam2
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz13wayFrames.bed 
+    
+    hgLoadMafFrames calJac3 multiz13wayFrames multiz13wayFrames.bed
+
+    featureBits -countGaps calJac3 multiz13wayFrames.bed
+    #   40132771 bases of 2914958544 (1.377%) in intersection
+
+    #   enable the trackDb entries:
+# frames multiz13wayFrames
+# irows on
+    #   appears to work OK
+
+
+#############################################################################
+## create upstream refGene maf files
+    cd /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits calJac3 xenoRefGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags calJac3 multiz13way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/calJac3/bed/multiz13way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf/up*.gz .
+
+    md5sum up*.gz >> md5sum.txt
+
+#########################################################################
+# Phylogenetic tree from 13-way (DONE 2010-05-28 - Chin)
+#       We need one tree for all chroms
+
+    # use the /hive/data/genomes/calJac3/bed/multiz13way/run/calJac3.13way.maf
+    # to split
+
+    cd /hive/data/genomes/calJac3/bed/multiz13way/
+    mkdir mafSplit
+    cd mafSplit
+    mafSplit -byTarget -useFullSequenceName /dev/null . ../run/calJac3.13way.maf
+    # got 10771 mafs named after their chrom/scaff .maf
+    # although there are over 14205 chroms and scaffolds (wc -l
+    # chrom.sizes),
+    # some are too small or have nothing aligning.
+
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/4d
+    cd /hive/data/genomes/calJac3/bed/multiz13way/4d
+
+    # calJac3 does not have refGene; but has
+    #    237116 xenoRefGene and 28723 nscanGene. 
+    #   use nscanGene
+    hgsql calJac3 -Ne \
+    "select * from nscanGene;" \
+        | cut -f 2-20 > nscanGene.gp
+    wc -l nscanGene.gp
+    # 28723 nscanGene.gp
+    # make sure no redundent gene name
+    cat nscanGene.gp  | awk '{print $1}' | sort | uniq | wc -l
+    #  28723
+
+    genePredSingleCover nscanGene.gp stdout | sort > nscanGeneNR.gp
+    wc -l nscanGeneNR.gp 
+    #  28723 nscanGeneNR.gp
+
+    ssh memk
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/4d/run
+    cd /hive/data/genomes/calJac3/bed/multiz13way/4d/run
+    mkdir ../mfa
+
+# whole chrom mafs version, using new version of 
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+#       mjhubisz at gmail.com
+
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set r = "/hive/data/genomes/calJac3/bed/multiz13way"
+set c = $1
+set infile = $r/mafSplit/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
+awk -v C=$c '$2 == C {print}' $r/4d/nscanGene.gp > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+    $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/calJac3/bed/multiz13way/mafSplit/*.maf | \
+        egrep -E -v "chrUn" \
+        | sed -e "s#.*multiz13way/mafSplit/##" \
+        > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+   
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check ... push ... etc
+    para time
+    # Completed: 2604 of 2604 jobs
+    # CPU time in finished jobs:  2490s      41.49m     0.69h    0.03d  0.000 y
+    # IO & Wait Time:             8357s     139.29m     2.32h    0.10d  0.000 y
+    # Average job time:              4s       0.07m     0.00h    0.00d
+    # Longest finished job:        253s       4.22m     0.07h    0.00d
+    # Submission to last job:      668s      11.13m     0.19h    0.01d
+    # Manually run 4d.csh for chr11_ACFV01197442_random, result in do.log
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/4d
+    # but first clean out junk 1-byte leftovers from above process.
+    # Only 24 (real chrom) out of 2623 files have real data. 
+    cd mfa
+    find -type f -size 1c | xargs -iX rm X
+    find -type f -size 0c | xargs -iX rm X
+    cd /hive/data/genomes/calJac3/bed/multiz13way/4d
+
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+        --aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+        > 4d.all.mfa
+
+    # fix order in case it helps:
+    #((calJac3,(tetNig2,gasAcu1)),(xenTro2,(mm9,hg19)))
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+        --EM --precision MED --msa-format FASTA --subst-mod REV \
+        --tree ../tree-commas.nh 4d.all.mfa
+    # Reading alignment from 4d.all.mfa ...
+    # Extracting sufficient statistics ...
+    # Compacting sufficient statistics ...
+    # Fitting tree model to 4d.all.mfa using REV ...
+    # Writing model to phyloFit.mod ...
+    # Done.
+
+
+
+
+#############################################################################
+# phastCons 13-way (working 2010-05-24 - Chin)
+    #   was unable to split the full chrom MAF files, now working on the
+    #   maf files as they were split up during multiz
+    
+    # re-split the with new -useFullSequenceName option
+    cd /hive/data/genomes/calJac3/bed/multiz13way/run
+    mkdir mafSplit-2010-05-24
+    cd mafSplit-2010-05-24
+    mafSplit -byTarget -useFullSequenceName /dev/null . ../calJac3.13way.maf
+
+    # split 13way mafs into 10M chunks and generate sufficient
+    # statistics 
+    # files for # phastCons
+    ssh swarm
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split
+    
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf 
+set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   do the easy ones first to see some immediate results
+    ls -1S -r ../../run/mafSplit-2010-05-24 \
+        | sed -e "s/.maf//; s/calJac3_//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+    # Completed: 10769 of 10770 jobs
+    # Crashed: 1 jobs (chrUn_GL286217, rerun OK)
+    # CPU time in finished jobs:   4171s      69.52m     1.16h    0.05d  0.000 y
+    # IO & Wait Time:            147369s    2456.15m    40.94h    1.71d  0.005 y
+    # Average job time:                  14s       0.23m     0.00h    0.00d
+    # Longest finished job:             570s       9.50m     0.16h    0.01d
+    # Submission to last job:          1351s      22.52m     0.38h    0.02d
+
+    # some scaffolds were too small to produce output. 
+    # expected 10769, found 4749
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss
+    find -type f | wc -l
+    #  4749
+    cd ../..
+    rm *.done
+
+    # Run phastCons
+    #   This job is I/O intensive in its output files, beware where this
+    #   takes place or do not run too many at once.
+    ssh swarm
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/run.cons
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/run.cons
+
+    #   there are going to be several different phastCons runs using
+    #   this same script.  They trigger off of the current working
+    #   directory
+    #   $cwd:t which is the "grp" in this script.  It is
+    #   all 
+
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/calJac3/bed/multiz13way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/msa.split/2010-05-24/ss/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #   this template will serve for all runs
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls -1S ../msa.split/2010-05-24/ss/*/* | sed -e 's/.ss$//' > ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons
+    mkdir -p all
+    cd all
+    #   Using the .mod tree
+    cp -p ../../4d/phyloFit.mod ./all.mod
+XXXX 06-03
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+Completed: 4749 of 4749 jobs
+CPU time in finished jobs:       7452s     124.21m     2.07h    0.09d  0.000 y
+IO & Wait Time:                 69529s    1158.81m    19.31h    0.80d  0.002 y
+Average job time:                  16s       0.27m     0.00h    0.00d
+Longest finished job:             100s       1.67m     0.03h    0.00d
+Submission to last job:           381s       6.35m     0.11h    0.00d
+
+# Completed: 4273 of 4273 jobs
+# CPU time in finished jobs:       2323s      38.72m     0.65h    0.03d
+# 0.000 y
+# IO & Wait Time:                 68627s    1143.78m    19.06h    0.79d
+# 0.002 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest finished job:              37s       0.62m     0.01h    0.00d
+# Submission to last job:           338s       5.63m     0.09h    0.00d
+
+
+    # create Most Conserved track
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+
+    cat bed/*/*.bed | sort -k1,1 -k2,2n \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    nice hgLoadBed calJac3 phastConsElements13way mostConserved.bed
+    # Reading mostConserved.bed
+    # Loaded 1725260 elements of size 5
+    # Sorted
+    # Creating table definition for phastConsElements13way
+    # Saving bed.tab
+    # Loading calJac3
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    featureBits calJac3 -enrichment refGene:cds phastConsElements13way
+    # refGene:cds 0.000%, phastConsElements13way 5.136%, 
+    # both 0.000%, cover 72.10%, enrich 14.04x
+
+    # hg19 for comparison
+    #   refGene:cds 1.187%, phastConsElements413way 5.065%,
+    #   both 0.884%, cover 74.46%, enrich 14.70x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/all
+    mkdir downloads
+
+    cat pp/*/*.pp | sed "s/start=0/start=1/" \ 
+         |  gzip > downloads/phastCons13way.wigFix.gz
+
+
+    #   encode those files into wiggle data
+    zcat downloads/phastCons13way.wigFix.gz \
+        | wigEncode stdin phastCons13way.wig phastCons13way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #Ignore the following comments
+    # Found start=0 at line 1192229703, the first chrom position is 1, not 0
+    # So we have the same problem as danRer6, may need to fix it before reach
+    # this step. Use:
+    #     zcat downloads/phastCons13way.wigFix.gz | grep start=0
+    #   found only one problem: 
+    #     fixedStep chrom=chr20_GL285852_random start=0 step=1
+    #   Back and fixed pp/chr20_GL285852_random/ first line
+    #    fixedStep chrom=chr20_GL285852_random start=0 step=1
+    #  or we can use the filter sed "s/start=0/start=1/" in the step above
+
+
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    du -hsc *.wi?
+    # 2.2G    phastCons13way.wib
+    # 257M    phastCons13way.wig
+    # 2.4G    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons13way.wib /gbdb/calJac3/multiz13way/phastCons13way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/calJac3/multiz13way calJac3 \
+        phastCons13way phastCons13way.wig
+    # Connected to database calJac3 for track phastCons13way
+    # Creating wiggle table definition in calJac3.phastCons13way
+    # Saving wiggle.tab
+    # Loading calJac3
+
+
+  # use to set trackDb.ra entries for wiggle min and max
+
+    wigTableStats.sh calJac3 phastCons13way
+    # # db.table      min max mean count sumData stdDev viewLimits
+    # calJac3.phastCons13way  0 1 0.128672 2299091936 2.95829e+08 0.24795 
+    #     viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -db=calJac3 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            phastCons13way >& histogram.data
+
+XXXX 06-04 PM stopped here
+    #   create plot of histogram:
+
+
+#orig set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish calJac3 Histogram phastCons13way track"
+set xlabel " phastCons13way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #   << happy emacs
+
+    display histo.png &
+
+
+
+
+#############################################################################

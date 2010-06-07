@@ -1,0 +1,18 @@
+#	"$Id: trackDb.chainNet.ra,v 1.6 2010/02/02 02:16:37 kuhn Exp $";
+
+track chainNetRn3 override
+shortLabel $o_Organism Chain/Net
+chainMinScore 1000
+chainLinearGap loose
+
+track chainNetMm6 override
+shortLabel $o_Organism Chain/Net
+
+	track chainMm6 override
+	shortLabel $o_Organism Chain
+
+	track netMm6 override
+	shortLabel $o_Organism Net
+
+track chainNetFr1 override
+shortLabel $o_Organism Chain/Net

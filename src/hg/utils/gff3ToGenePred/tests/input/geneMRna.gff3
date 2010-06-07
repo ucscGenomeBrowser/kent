@@ -1,0 +1,55 @@
+##gff-version 3
+U	annotation	gene	47255	51910	0	+	.	ID=DMG6-chrU.1.008;Name=DMG6-chrU.1.008
+U	annotation	mRNA	47255	51910	8	+	.	ID=DMG6-chrU.1.008.a;Parent=DMG6-chrU.1.008;Name=DMG6-chrU.1.008.a
+U	annotation	exon	47255	49536	8	+	.	Parent=DMG6-chrU.1.008.a
+U	annotation	exon	51190	51910	8	+	.	Parent=DMG6-chrU.1.008.a
+U	annotation	five_prime_UTR	47255	47470	8	+	0	Parent=DMG6-chrU.1.008.a
+U	annotation	start_codon	47471	47473	8	+	0	Parent=DMG6-chrU.1.008.a
+U	annotation	CDS	47471	49536	8	+	0	Parent=DMG6-chrU.1.008.a
+U	annotation	CDS	51190	51910	8	+	1	Parent=DMG6-chrU.1.008.a
+U	annotation	stop_codon	51908	51910	8	+	0	Parent=DMG6-chrU.1.008.a
+3R	annotation	gene	27864175	27865401	0	+	.	ID=chr3R.pasa.11501;Name=chr3R.pasa.11501
+3R	annotation	mRNA	27864175	27865401	0	+	.	ID=chr3R.pasa.11501.a;Parent=chr3R.pasa.11501;Name=chr3R.pasa.11501.a
+3R	annotation	exon	27864175	27865069	0	+	.	Parent=chr3R.pasa.11501.a
+3R	annotation	exon	27865120	27865401	0	+	.	Parent=chr3R.pasa.11501.a
+3R	annotation	five_prime_UTR	27864175	27864204	0	+	0	Parent=chr3R.pasa.11501.a
+3R	annotation	start_codon	27864205	27864207	0	+	0	Parent=chr3R.pasa.11501.a
+3R	annotation	CDS	27864205	27865069	0	+	0	Parent=chr3R.pasa.11501.a
+3R	annotation	CDS	27865120	27865151	0	+	2	Parent=chr3R.pasa.11501.a
+3R	annotation	stop_codon	27865149	27865151	0	+	0	Parent=chr3R.pasa.11501.a
+3R	annotation	three_prime_UTR	27865152	27865401	0	+	0	Parent=chr3R.pasa.11501.a
+
+2L	confirmed	mRNA	9836	18583	0	-	.	ID=CG2671-RC.a
+2L	confirmed	three_prime_UTR	9836	11214	0	-	.	Parent=CG2671-RC.a
+2L	confirmed	CDS	11218	11344	0	-	1	Parent=CG2671-RC.a
+2L	confirmed	CDS	11410	11518	0	-	2	Parent=CG2671-RC.a
+2L	confirmed	CDS	11779	12221	0	-	1	Parent=CG2671-RC.a
+2L	confirmed	CDS	12286	12928	0	-	2	Parent=CG2671-RC.a
+2L	confirmed	CDS	13520	13625	0	-	0	Parent=CG2671-RC.a
+2L	confirmed	CDS	13683	14874	0	-	1	Parent=CG2671-RC.a
+2L	confirmed	CDS	14933	15711	0	-	0	Parent=CG2671-RC.a
+2L	confirmed	CDS	17053	17136	0	-	0	Parent=CG2671-RC.a
+2L	confirmed	five_prime_UTR	17137	17212	0	-	.	Parent=CG2671-RC.a
+2L	confirmed	five_prime_UTR	18261	18583	0	-	.	Parent=CG2671-RC.a
+
+3R	MB6	gene	5646246	5646921	0	-	.	ID=DMG6-chr3R.10.010;Name=DMG6-chr3R.10.010
+3R	MB6	mRNA	5646246	5646921	.	-	.	ID=DMG6-chr3R.10.010.a;Parent=DMG6-chr3R.10.010;Name=DMG6-chr3R.10.010.a
+3R	MB6	exon	5646246	5646674	.	-	.	Parent=DMG6-chr3R.10.010.a
+3R	MB6	exon	5646732	5646921	.	-	.	Parent=DMG6-chr3R.10.010.a
+3R	MB6	three_prime_UTR	5646246	5646350	.	-	.	Parent=DMG6-chr3R.10.010.a
+3R	MB6	CDS	5646351	5646674	.	-	0	Parent=DMG6-chr3R.10.010.a
+3R	MB6	CDS	5646732	5646824	.	-	0	Parent=DMG6-chr3R.10.010.a
+3R	MB6	start_codon	5646822	5646824	.	-	0	Parent=DMG6-chr3R.10.010.a
+3R	MB6	five_prime_UTR	5646825	5646921	.	-	.	Parent=DMG6-chr3R.10.010.a
+
+3R	annotation	gene	25571061	25573235	0	+	.	ID=chr3R.pasa.11277;Name=chr3R.pasa.11277
+3R	annotation	mRNA	25571061	25573235	0	+	.	ID=chr3R.pasa.11277.a;Parent=chr3R.pasa.11277;Name=chr3R.pasa.11277.a
+3R	annotation	exon	25571061	25571405	0	+	.	Parent=chr3R.pasa.11277.a
+3R	annotation	exon	25571485	25572459	0	+	.	Parent=chr3R.pasa.11277.a
+3R	annotation	exon	25572515	25573235	0	+	.	Parent=chr3R.pasa.11277.a
+3R	annotation	five_prime_UTR	25571061	25571191	0	+	0	Parent=chr3R.pasa.11277.a
+3R	annotation	CDS	25571192	25571405	0	+	0	Parent=chr3R.pasa.11277.a
+3R	annotation	CDS	25571485	25572459	0	+	2	Parent=chr3R.pasa.11277.a
+3R	annotation	CDS	25572515	25573119	0	+	2	Parent=chr3R.pasa.11277.a
+3R	annotation	stop_codon	25573117	25573119	0	+	0	Parent=chr3R.pasa.11277.a
+3R	annotation	three_prime_UTR	25573120	25573235	0	+	0	Parent=chr3R.pasa.11277.a

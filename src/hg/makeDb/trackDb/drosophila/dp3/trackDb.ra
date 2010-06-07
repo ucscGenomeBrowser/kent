@@ -1,0 +1,117 @@
+
+track flyBaseGene
+shortLabel FlyBase
+longLabel FlyBase Gene Annotations (Mapped Proteins)
+group genes
+priority 34
+visibility pack
+color 0,100,180
+type genePred flyBasePep
+symbolTable flyBase2004Xref
+
+track twinscan override
+longLabel Twinscan Gene Predictions From FlyBase
+
+track genewise
+shortLabel Genewise
+longLabel Genewise Gene Predictions From FlyBase
+group genes
+priority 46
+visibility hide
+color 100,75,50
+type genePred genewisePep
+
+track mrna override
+shortLabel D. pseudo. mRNAs
+spectrum on
+
+track est override
+shortLabel D. pseudo. ESTs
+
+track chainDm2 override
+shortLabel D.mel. Chain
+priority 133
+ 
+track netDm2 override
+shortLabel D.mel. Net
+priority 134
+visibility dense
+
+track blastDm1FB override
+shortLabel D.mel. Proteins (dm1)
+longLabel $o_Organism ($o_date) Proteins
+otherDb dm1
+
+track blastDm2FB override
+shortLabel D. mel. Proteins
+longLabel $o_Organism ($o_date) Proteins
+visibility pack
+otherDb dm2
+
+searchTable flyBaseGene
+searchMethod exact
+termRegex GA[0-9]+-R.
+searchType genePred
+searchPriority 1
+
+searchName flyBaseGenePrefix
+searchTable flyBaseGene
+searchMethod exact
+termRegex GA[0-9]+
+dontCheck GA[0-9]+-R[A-Z]
+query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
+searchPriority 1.1
+
+searchName flyBaseGeneFBgn
+searchTable flyBaseGene
+searchMethod exact
+searchType genePred
+termRegex FBgn[0-9]{7}[0-9]*
+shortCircuit 1
+xrefTable flyBase2004Xref
+xrefQuery select name,fbgn from %s where fbgn like '%s'
+searchDescription FlyBase FBgn ID of FlyBase Gene
+searchPriority 1.2
+
+searchName flyBaseGeneFBtr
+searchTable flyBaseGene
+searchMethod exact
+searchType genePred
+termRegex FBtr[0-9]{7}[0-9]*
+shortCircuit 1
+xrefTable flyBase2004Xref
+xrefQuery select name,fbtr from %s where fbtr like '%s'
+searchDescription FlyBase FBtr ID of FlyBase Gene
+searchPriority 1.2
+
+searchName flyBaseGeneFBpp
+searchTable flyBaseGene
+searchMethod exact
+searchType genePred
+termRegex FBpp[0-9]{7}[0-9]*
+shortCircuit 1
+xrefTable flyBase2004Xref
+xrefQuery select name,fbpp from %s where fbpp like '%s'
+searchDescription FlyBase FBpp ID of FlyBase Gene
+searchPriority 1.2
+
+searchName flyBaseGeneFBan
+searchTable flyBaseGene
+searchMethod exact
+searchType genePred
+termRegex FBan[0-9]{7}[0-9]*
+shortCircuit 1
+xrefTable flyBase2004Xref
+xrefQuery select name,fban from %s where fban like '%s'
+searchDescription FlyBase FBan ID of FlyBase Gene
+searchPriority 1.2
+
+searchName flyBaseGeneSymbol
+searchTable flyBaseGene
+searchMethod fuzzy
+searchType genePred
+termRegex [^[:space:]]+
+xrefTable flyBase2004Xref
+xrefQuery select name,symbol from %s where symbol like '%%%s%%'
+searchPriority 1.3
+

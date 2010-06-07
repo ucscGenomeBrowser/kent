@@ -1,0 +1,13 @@
+#	"$Id: trackDb.ra,v 1.36 2010/02/11 18:45:58 kuhn Exp $";
+
+include trackDb.chainNet.ra
+
+track bacEndPairs
+#replaces record bacEndPairs in parent dir missing/extra color,altColor,exonArrows
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+

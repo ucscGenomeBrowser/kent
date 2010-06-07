@@ -1,0 +1,16 @@
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.pipeline.ra,v 1.1 2010/04/27 23:25:21 kate Exp $
+
+# This file contains browser tracks from the automated (adapted from ENCODE) pipeline
+
+track uMassMedBrainDevHistoneChipSeq
+compositeTrack on
+shortLabel UMassMed Neur Dev
+longLabel Developmental regulation of cortical neuron H3K4me3, ChIP-seq from Univ. Mass. Med. Center
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line PFC=PFC
+subGroup3 factor Antibody H3K4me3=H3K4me3
+sortOrder cellType=+ view=+
+dragAndDrop subTracks
+priority 0
+type bed 3

@@ -1,0 +1,158 @@
+include trackDb.chainNet.ra
+
+track knownGene override
+shortLabel Known Genes
+longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
+
+track multiz9way
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 101.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons9way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScale Off
+windowingFunction mean
+summary multiz9waySummary
+frames multiz9wayFrames
+irows on
+speciesCodonDefault rn4
+speciesGroups mammal vertebrate
+sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
+sGroup_vertebrate galGal2 xenTro1 danRer3
+speciesDefaultOff bosTau2 danRer3
+treeImage phylo/rn4_9way.gif
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
+noScoreFilter .
+
+track phastConsElements9way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
+group compGeno
+priority 101.3
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track nscanGene override
+visibility pack
+informant Rat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
+
+track snp125
+#replaces record snp125 in parent dir missing/extra maxWindowToDraw
+shortLabel SNPs
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 125)
+group varRep
+priority 143.1
+visibility dense
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+type bed 6 +
+
+track atom97565
+shortLabel atom97565
+longLabel atom97565 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom992
+shortLabel atom992
+longLabel atom992 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+# ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
+track wgEncodeNhgriBip
+shortLabel NHGRI BiP
+longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
+visibility hide
+group regulation
+type bed 8 +
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+dataVersion ENCODE Feb 2009 Freeze
+priority 0
+noScoreFilter on
+#scoreFilterByRange on
+compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
+wgEncode 1
+metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rn4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rn4.bed8.gz
+
+searchTable gold
+searchMethod prefix
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+shortCircuit 1
+termRegex [AB][A-Z]+[0-9]+(\.[0-9]+)?|chr(M|Un|[0-9UnXY]+_random)_[0-9]+
+searchPriority 8
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+termRegex ENSRNOG[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+termRegex ENSRNOP[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
+
+searchName snp125Short
+searchTable snp125
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName snp125Long
+searchTable snp125
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16
+padding 250

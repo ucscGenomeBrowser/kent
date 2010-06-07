@@ -1,0 +1,57 @@
+#!/bin/bash -e
+usage='makeMetaDb db metaDb file [file ..]'
+
+UNAME_N=`uname -n`
+UNAME_N=${UNAME_N/.cse.ucsc.edu/}
+
+if [ $# -lt 3 ] ; then
+    echo "wrong # args: $usage" >&2
+    exit 1
+fi
+
+db="$1"; shift
+metaDb="$1"; shift
+files="$@"
+
+# check if a database exists, print note and return non-zero if it doesn't
+dbExists() {
+    local db="$1"
+    if [ -n "$local" ] ; then
+	local dbChk=$(hgsqlLocal -Ne 'show databases like "'$db'"')
+    else 
+	local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    fi
+    if [ -z "$dbChk" ] ; then
+        echo "Note: database $db does not exist, skipping"
+        return 1
+    else
+        return 0
+    fi
+}
+
+# load metaDb for a database
+loadMetaDb() {
+    local db="$1"
+    local metaDb="$2"
+    local tmpTable=$metaDb"_tmp";
+    local bakTable=$metaDb"_back";
+
+    local cmd="hgsql -e \"drop table if exists $tmpTable;\" $db"
+    echo $cmd
+    eval $cmd 
+
+    local cmd="rm -f allRas; touch allRas; cat $files >> allRas; mdbUpdate -recreate $db -table=$tmpTable allRas"
+    echo $cmd
+    eval $cmd 
+
+    local cmd="rm allRas"
+    echo $cmd
+    eval $cmd 
+
+    local cmd="hgsqlSwapTables -okNoTable2 -dropTable3 $db $tmpTable $metaDb $bakTable"
+    echo $cmd
+    eval $cmd 
+}
+
+loadMetaDb $db $metaDb $files
+

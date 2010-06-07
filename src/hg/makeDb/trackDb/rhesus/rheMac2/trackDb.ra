@@ -1,0 +1,170 @@
+track ctgPos override
+shortLabel Contigs
+longLabel Assembly Contigs
+
+track exoniphy
+shortLabel Exoniphy
+longLabel Exoniphy lifted from Hg17 using chains
+group genes
+priority 50.9
+visibility pack
+color 173,17,162
+type genePred
+
+track refGeneBlatz
+shortLabel Human RefSeq Blatz
+longLabel Human mRNAs aligned with Blatz ident > 83% nearBest .5%
+group genes
+priority 35.1
+visibility pack
+color 12,12,120
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+track augustusAbinitio
+shortLabel Augustus Ab Initio
+longLabel Augustus Ab Initio Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred
+
+track augustusHints
+shortLabel Augustus using Hints
+longLabel Augustus using transMapped RefSeqs
+group genes
+priority 51.7
+visibility dense
+color 186,85,211
+type genePred
+
+track multiz6waySyn
+shortLabel Conservation
+longLabel Human/Chimp/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic Alignments
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+#wiggle phastCons6way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScale Off
+#summary multiz6waySummary
+#frames multiz6wayFrames
+#irows on
+speciesCodonDefault rheMac2
+speciesGroups mammal
+sGroup_mammal hg18 panTro2 mm8 rn4 canFam2
+#speciesDefaultOff
+#treeImage phylo/rheMac2_6waySyn.jpg
+
+track multiz5waySyn
+shortLabel Conservation
+longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using Syntenic Alignments
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScale Off
+summary multiz5waySummary
+frames multiz5wayFrames
+#irows on
+speciesCodonDefault rheMac2
+speciesGroups mammal
+sGroup_mammal hg18 mm8 rn4 canFam2
+#speciesDefaultOff
+treeImage phylo/rheMac2_5waySyn.jpg
+
+track phastConsElements5way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Human/Dog/Mouse/Rat Multiz Alignment
+group compGeno
+priority 104.3
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track xenoRefGene override
+visibility pack
+
+track quality override
+type wig 0 60
+
+track chainSelf
+shortLabel Self Chain
+longLabel $Organism Chained Self Alignments
+group varRep
+priority 400
+visibility hide
+color 100,50,0
+altColor 255,240,200
+chainColor Normalized Score
+spectrum on
+type chain rheMac2
+otherDb rheMac2
+
+track netSelf
+shortLabel Self Net
+longLabel $Organism Chained Self Alignment Net
+group varRep
+priority 401
+visibility hide
+spectrum on
+type netAlign rheMac2 chainSelf
+otherDb rheMac2
+
+track atom97565
+shortLabel atom97565
+longLabel atom97565 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom992
+shortLabel atom992
+longLabel atom992 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+# ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
+track wgEncodeNhgriBip
+shortLabel NHGRI BiP
+longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
+visibility hide
+group regulation
+type bed 8 +
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+dataVersion ENCODE Feb 2009 Freeze
+priority 0
+noScoreFilter on
+#scoreFilterByRange on
+compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
+wgEncode 1
+metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rheMac2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rheMac2.bed8.gz
+
+track nscanGene override
+informant Rhesus N-SCAN uses mouse (mm8) as the informant and iterative pseudogene masking.
+visibility dense
+
+track chainNetMonDom5 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+

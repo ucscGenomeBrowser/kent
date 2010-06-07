@@ -1,0 +1,49 @@
+# downloaded from ftp://ftp.sanger.ac.uk/pub/gencode/gencode.4.DCC.tgz
+# on 2010-05-07
+cd /hive/groups/encode/dcc/data/gencodeV4
+
+# create tables from 
+hgsql hg19
+
+create table wgEncodeGencodeAutoV4 select * from wgEncodeGencodeAutoV3 limit 0;
+create table wgEncodeGencodeClassesV4 select * from wgEncodeGencodeClassesV3 limit 0;
+create table wgEncodeGencodeManualV4 select * from wgEncodeGencodeManualV3 limit 0;
+create table wgEncodeGencodePolyaV4 select * from wgEncodeGencodePolyaV3 limit 0;
+
+echo "LOAD DATA LOCAL INFILE 'gencode_v4.annotation.GRCh37.level_1_2.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+echo "LOAD DATA LOCAL INFILE 'gencode_v4.annotation.GRCh37.level_3.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+echo "LOAD DATA LOCAL INFILE 'gencode.v4.tRNAs.GRCh37.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+echo "LOAD DATA LOCAL INFILE 'gencode.v4.polyAs.GRCh37.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+echo "LOAD DATA LOCAL INFILE 'gencode.v3.2wayconspseudos.GRCh37.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+
+ldHgGene -gtf -genePredExt hg19 wgEncodeGencodeManualV4 gencode_v4.annotation.GRCh37.level_1_2.gtf > reload_manual.out 2>&1
+# Reading gencode_v4.annotation.GRCh37.level_1_2.gtf
+# Read 101466 transcripts in 1322945 lines in 1 files
+  # 101466 groups 24 seqs 1 sources 6 feature types
+  # 101466 gene predictions
+
+ldHgGene -gtf -genePredExt hg19 wgEncodeGencodeAutoV4 gencode_v4.annotation.GRCh37.level_3.gtf > reload_auto_level3.out 2>&1 
+# Read 41171 transcripts in 811166 lines in 1 files
+  # 41171 groups 25 seqs 1 sources 6 feature types
+  # 41171 gene predictions
+
+ldHgGene  -exon=tRNAscan  -genePredExt -oldTable hg19 wgEncodeGencodeAutoV4 gencode.v4.tRNAs.GRCh37.gtf > reload_auto_level_tRNAs.out 2>&1 
+#Reading gencode.v4.tRNAs.GRCh37.gtf
+# Read 622 transcripts in 622 lines in 1 files
+#   622 groups 24 seqs 1 sources 1 feature types
+#   622 gene predictions
+
+grep -v polyA_signal gencode.v4.polyAs.GRCh37.gtf | grep -v pseudo_polyA | grep -v polyA_site > gencode.v4.polyAs.GRCh37.header.gtf
+cp gencode.v4.polyAs.GRCh37.header.gtf gencode.v4.polyAs.GRCh37.signal.gtf
+cp gencode.v4.polyAs.GRCh37.header.gtf gencode.v4.polyAs.GRCh37.pseudo.gtf
+cp gencode.v4.polyAs.GRCh37.header.gtf gencode.v4.polyAs.GRCh37.site.gtf
+grep polyA_signal gencode.v4.polyAs.GRCh37.gtf >> gencode.v4.polyAs.GRCh37.signal.gtf
+grep pseudo_polyA gencode.v4.polyAs.GRCh37.gtf >> gencode.v4.polyAs.GRCh37.pseudo.gtf
+grep polyA_site gencode.v4.polyAs.GRCh37.gtf >> gencode.v4.polyAs.GRCh37.site.gtf
+
+ldHgGene -exon=polyA_signal -genePredExt -noncoding -oldTable hg19 wgEncodeGencodePolyaV4 gencode.v4.polyAs.GRCh37.signal.gtf > load_polyA.out 2>&1
+ldHgGene -exon=pseudo_polyA -genePredExt -noncoding -oldTable hg19 wgEncodeGencodePolyaV4 gencode.v4.polyAs.GRCh37.pseudo.gtf >> load_polyA.out 2>&1
+ldHgGene -exon=polyA_site -genePredExt -noncoding -oldTable hg19 wgEncodeGencodePolyaV4 gencode.v4.polyAs.GRCh37.site.gtf >> load_polyA.out 2>&1 
+
+
+

@@ -1,0 +1,30 @@
+
+#	$Id: vertebrates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
+
+#  Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
+
+macEug	Euteleostomi; Mammalia; Metatheria; Diprotodontia; Macropodidae; Macropus
+
+monDom	Euteleostomi; Mammalia; Metatheria; Didelphimorphia; Didelphidae; Monodelphis
+
+ornAna	Euteleostomi; Mammalia; Monotremata; Ornithorhynchidae; Ornithorhynchus
+
+galGal	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
+
+taeGut	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia
+
+anoCar	Euteleostomi; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
+
+xenTro	Euteleostomi; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus; Silurana
+
+GasAcu	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Gasterosteiformes; Gasterosteidae; Gasterosteus
+
+fr	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes; Tetradontoidea; Tetraodontidae; Takifugu
+
+danRer	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Ostariophysi; Cypriniformes; Cyprinidae; Danio
+
+tetNig	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes; Tetradontoidea; Tetraodontidae; Tetraodon
+
+oryLat	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Atherinomorpha; Beloniformes; Adrianichthyidae; Oryziinae; Oryzias
+
+petMar	Hyperoartia; Petromyzontiformes; Petromyzontidae; Petromyzon

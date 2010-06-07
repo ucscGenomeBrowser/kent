@@ -1,0 +1,58 @@
+#	"$Id: trackDb.chainNet.ra,v 1.13 2010/06/03 23:00:28 mary Exp $";
+
+track chainNetRn4 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetPanTro2 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetRheMac2 override
+chainMinScore 5000
+chainLinearGap loose
+
+track chainNetPonAbe2 override
+chainMinScore 5000
+
+track chainNetGalGal2 override
+priority 580.3
+shortLabel $o_db Chain/Net
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+    track chainGalGal2 override
+    shortLabel $o_db Chain
+
+    track netGalGal2 override
+    shortLabel $o_db Net
+
+track chainNetMm8 override
+shortLabel $o_db Chain/Net
+
+track chainNetCalJac1 override
+shortLabel $o_Organism Chain/Net
+
+    track chainCalJac1 override
+    shortLabel $o_Organism Chain
+
+    track netCalJac1 override
+    shortLabel $o_Organism Net
+
+track chainNetHg18 override
+shortLabel $o_Organism Chain/Net
+
+    track chainHg18 override
+    shortLabel $o_Organism Chain
+
+    track netHg18 override
+    shortLabel $o_Organism Net
+
+track chainNetOrnAna1 override
+chainMinScore 5000
+
+track chainNetDanRer4 override
+shortLabel $o_Organism Chain/Net

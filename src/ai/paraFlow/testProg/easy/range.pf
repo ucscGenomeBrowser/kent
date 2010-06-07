@@ -1,0 +1,3 @@
+int end = 10;
+for (i in 0 til 10)
+    print(i);

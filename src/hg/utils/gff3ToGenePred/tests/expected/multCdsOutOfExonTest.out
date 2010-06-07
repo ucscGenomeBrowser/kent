@@ -1,0 +1,3 @@
+Error: no exon in FBtr0302238 contains CDS 6306887-6307962
+Error: no exon in FBtr0302239 contains CDS 8502213-8502372
+2 errors converting GFF3 file: input/multCdsOutOfExon.gff3

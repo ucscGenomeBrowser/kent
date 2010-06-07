@@ -1,0 +1,11 @@
+# Project Information File for Sanger Genes
+
+# Lab info
+lab	Sanger
+project	Genes
+variables	Gene_Type_REF
+active	yes
+
+# Tracks
+track	Gene
+type	genePred

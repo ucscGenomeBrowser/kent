@@ -1,0 +1,197 @@
+#	"$Id: trackDb.ra,v 1.83 2010/05/20 04:16:15 rhead Exp $";
+
+include trackDb.chainNet.ra
+
+track gold override
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+visibility pack
+
+track blastHg17KG
+shortLabel Human Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
+group genes
+priority 30
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
+release beta,public
+
+track blastHg17KG
+shortLabel Human Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
+group genes
+priority 30
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
+release alpha
+
+track ensGene override
+visibility dense
+
+track genscan override
+visibility dense
+
+track mrna override
+spectrum on
+
+track est override
+visibility dense
+
+track intronEst
+#replaces record intronEst in parent dir missing/extra maxItems
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+
+track xenoMrna override
+visibility dense
+
+track blatTetra override
+shortLabel $o_Organism BLAT
+longLabel $o_Organism ($o_date) Translated BLAT Alignments
+priority 227
+otherDb tetNig1
+
+track blatHg16
+shortLabel $o_Organism BLAT
+longLabel $o_Organism ($o_date) Translated BLAT Alignments
+group compGeno
+priority 130
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno hg16
+otherDb hg16
+colorChromDefault off
+
+track tbaFishBirdCFTR
+shortLabel Non-Mammal CFTR
+longLabel CFTR Region TBA Alignments (human,mouse,rat,dog,fugu,chicken)
+group compGeno
+priority 124
+visibility full
+type maf
+
+track ecoresMm3
+shortLabel Mouse Ecores
+longLabel Fugu/$o_Organism ($o_date) Evolutionary Conserved Regions
+group compGeno
+priority 209
+visibility hide
+color 0,60,120
+altColor 200,220,255
+type bed 12 .
+otherDb mm3
+
+track ecoresRn3
+shortLabel Rat Ecores
+longLabel Fugu/$o_Organism ($o_date) Evolutionary Conserved Regions
+group compGeno
+priority 225.2
+visibility hide
+color 0,60,120
+altColor 200,220,255
+type bed 12 .
+otherDb rn3
+
+track ecoresHg16
+shortLabel Human Ecores
+longLabel Fugu/$o_Organism ($o_date) Evolutionary Conserved Regions
+group compGeno
+priority 125.3
+visibility hide
+color 0,60,120
+altColor 200,220,255
+type bed 12 .
+otherDb hg16
+
+searchTable gold
+searchType gold
+shortCircuit 1
+termRegex scaffold_[0-9]+
+searchPriority 5
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex ENSTRUT[0-9]+
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex ENSTRUG[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex ENSTRUP[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+track blastzDanRer2
+shortLabel $o_Organism Blastz
+longLabel $o_Organism ($o_date) Blastz Alignments
+group compGeno
+priority 226.1
+visibility hide
+color 0,0,0
+altColor 50,128,50
+spectrum on
+type psl xeno danRer2
+otherDb danRer2
+
+track blastzDanRer1
+shortLabel $o_db Blastz
+longLabel $o_Organism ($o_date) Blastz Alignments
+group compGeno
+priority 226.0
+visibility hide
+color 0,0,0
+altColor 50,128,50
+spectrum on
+type psl xeno danRer1
+otherDb danRer1
+
+track cpgIsland override
+visibility dense
+
+track gcPercent override
+visibility dense
+
+track simpleRepeat override
+visibility dense
+
+track blatHg15 override
+visibility dense
+
+track rmsk override
+visibility dense
+
+track ctgPos override
+visibility dense
+

@@ -1,0 +1,16 @@
+{"color":{"red":0,"green":1,"blue":2},"pointCount":3,"points":[0,1,2]}
+
+{"color":{"red":1,"green":2,"blue":3},"pointCount":3,"points":[1,2,3]}
+
+{"x":0,"y":1,"z":2}
+
+{"x":1,"y":2,"z":3}
+
+{"x":2,"y":3,"z":4}
+
+{"faceCount":2,"faces":[{"color":{"red":0,"green":1,"blue":2},"pointCount":3,"points":[0,1,2]},{"color":{"red":1,"green":2,"blue":3},"pointCount":3,"points":[1,2,3]}],"pointCount":3,"points":[{"x":0,"y":1,"z":2},{"x":1,"y":2,"z":3},{"x":2,"y":3,"z":4}]}
+
+{"name":"Joe Bob","address":"Some Street","city":"Any Town","zipCode":12345,"state":"CA"}
+
+{"id":12345,"sex":"male","skills":"cProg"}
+

@@ -1,0 +1,82 @@
+This file describes tdbQuery, in particular the RQL language, in more detail than the
+usage statement you get from running tdbQuery with no parameters.
+
+The trackDb system stores the track settings for the UCSC Genome Browser in a collection of
+.ra files.  The .ra files have a fairly simple syntax.  Each field in a record takes up a line.
+Records are separated by blank lines.  The first word in a field line is the field name, and
+the rest of the line is the field value.   Here's an example of a .ra file with two records:
+    track littleFeatures
+    type bed 6 +
+    shortLabel Little Features
+    longLabel A bunch of little features with strand and score information
+
+    track myGenes
+    type genePred
+    shortLabel Plank Genes
+    longLabel Output of the latest gene predictor from Max Plank
+The output of tdbQuery is also in .ra format.
+
+The trackDb .ra files exist in three levels of directories - root, organism, and assembly.  The 
+assembly level corresponds to a particular "genome database" like hg19, currently the latest 
+human.  Records at the lower levels override and extend records at higher levels.  In addition 
+to the inheritance implied by the directory hierarchy, there is also inheritance defined by the 
+"subTrack" field in a record, which if it exists specifies the parent track.   A third type of 
+inheritance also exists, the "view" level.   The trackDb system is explained in more detail 
+in the README file in the trackDb root directory at kent/src/hg/makeDb/trackDb.
+
+TdbQuery is a convenient way to see what's in this system, which has grown to the point where
+it is difficult to scan by eye.  It procedes in three steps.  First it parses the relevant
+.ra files,  second it applies all of the inheritances so that a record includes all the fields
+from it's parents as well as the fields defined in the record itself, third it applies the
+query language statement to each record, printing the relevant part of each matching record.
+
+The query language, RQL, is much like SQL.  A statement in this language is made up of multiple
+clauses:  select, from, where, and limit.  Some of the clauses are optional.  An example of
+a statement with all the clauses is:
+    select track,shortLabel,type from hg18,hg19 where type = 'bedGraph 4' limit 10
+The select clause comes first, and specifies which fields should be printed.  It is possible to use the wildcard characters * and ? in the select clause, which work like they do in the Unix file 
+system.   The statement
+    select * from hg18 where track='knownGene'
+selects all fields from the knownGene track.  Unlike SQL, you can used more nuanced wildcards in
+this clause, so that
+    select *Label from hg18 where track='knownGene'
+will print all fields ending with Label.   As with SQL you can count the number of records with
+    select count(*) from hg18
+and it is possible to add a where clause with count(*) as well.
+
+The from clause in RQL is a list of genome databases to query. This is quite different from SQL in
+that the different items in the where clause are just searched one after the other, rather than
+"joined" together.  Wildcards are permitted in the from clause as well.  The statement
+    select count(*) from *
+will count all records in all databases.
+
+The where clause is optional, but it can be complex.  If present the "where" is followed by a 
+logical expression.  The select statement is only applied to records where the where clause 
+evaluates to true.  The items in the expression can be number, strings, and fields from the
+record.   Numbers evaluate to true if they are non-zero.  Strings evaluate to true if they are 
+non-empty.  Fields evaluate to TRUE if they exist in the record.  This last is particularly
+useful in practice.  The statement
+     select * from hg18 where autoScale
+for instance prints out all records where there is an autoScale field.   
+
+Items in a where clause can be combined with comparison and logical operations.  The comparison
+operators are = != > < >= <= and can be used with numbers and strings.  For strings the greater
+than and less than operations apply to the alphabetical order (case sensitive) of the strings.
+String can also be compared to wildcards using the 'like' and 'not like' operations.   As in 
+SQL the wildcards are '%' for match any number of characters (the equivalent to '*' in 
+field and file wildcards) and '_' to match a single character (the equivalent to '?').  The
+statement
+    select * from hg18 where shortLabel like "%Gene"
+returns all fields from all records where the shortLabel ends in Gene.   The logical operators are
+"or" and "and" and "not" which have the usual meanings.  The or operator has, as is traditional,
+lower precedence than the and operator.  Because of this the following two statements are
+equivalent
+    select * from hg18 where a > 0 and a < 10 or b > 0 and b < 10
+    select * from hg18 where (a > 0 and a < 10) or (b > 0 and b < 10)
+The where clause also supports array indexes.  These are used to fetch whitespace delimited
+words within a string.   A common use is to specify the first word in the type line:
+    select * from hg18 where type[0] = "wig"
+
+The limit clause is very straightforward, it is just the word "limit" followed by a positive number
+which specifies the maximum number of records to return.
+

@@ -1,0 +1,91 @@
+'3T3-L1'	fat	0 1
+'B-cells marginal zone'	immune	12 13
+'Baf3'	immune	10 11
+'C2C12'	muscle	20 21
+'C3H 10T1 2'	embryo	22 23
+'NK cells'	immune	122 123
+'RAW 264 7'	immune	146 147
+'T-cells CD4+'	immune	164 165
+'T-cells CD8+'	immune	166 167
+'T-cells foxP3+'	immune	168 169
+'adipose brown'	fat	2 3
+'adipose white'	fat	4 5
+'adrenal gland'	gland	6 7
+'amygdala'	brain	8 9
+'bladder'	other	14 15
+'bone'	other	16 17
+'bone marrow'	immune	18 19
+'cerebellum'	brain	24 25
+'cerebral cortex'	brain	26 27
+'cerebral cortex prefrontal'	brain	28 29
+'ciliary bodies'	eye	30 31
+'common myeloid progenitor'	immune	32 33
+'cornea'	eye	34 35
+'dendritic cells lymphoid CD8a+'	nerve	36 37
+'dendritic cells myeloid CD8a-'	nerve	38 39
+'dendritic plasmacytoid B220+'	nerve	40 41
+'dorsal root ganglia'	nerve	42 43
+'dorsal striatum'	brain	44 45
+'embryonic stem line Bruce4 p13'	embryo	46 47
+'embryonic stem line V26 2 p16'	embryo	48 49
+'epidermis'	other	50 51
+'eyecup'	eye	52 53
+'follicular B-cells'	immune	54 55
+'granulo mono progenitor'	skin	56 57
+'granulocytes mac1+gr1+'	skin	58 59
+'heart'	muscle	60 61
+'hippocampus'	brain	62 63
+'hypothalamus'	brain	64 65
+'intestine large'	digestion	66 67
+'intestine small'	digestion	68 69
+'iris'	eye	70 71
+'kidney'	organ	72 73
+'lacrimal gland'	gland	74 75
+'lens'	eye	76 77
+'liver'	organ	78 79
+'lung'	organ	80 81
+'lymph nodes'	immune	82 83
+'mIMCD-3'	organ	114 115
+'macrophage bone marrow 0hr'	immune	84 85
+'macrophage bone marrow 24h LPS'	immune	86 87
+'macrophage bone marrow 2hr LPS'	immune	88 89
+'macrophage bone marrow 6hr LPS'	immune	90 91
+'macrophage peri LPS thio 0hrs'	immune	92 93
+'macrophage peri LPS thio 1hrs'	immune	94 95
+'macrophage peri LPS thio 7hrs'	immune	96 97
+'mammary gland  lact'	gland	98 99
+'mammary gland non-lactating'	gland	100 101
+'mast cells'	immune	102 103
+'mast cells IgE'	immune	104 105
+'mast cells IgE+antigen 1hr'	immune	106 107
+'mast cells IgE+antigen 6hr'	immune	108 109
+'mega erythrocyte progenitor'	blood	110 111
+'microglia'	nerve	112 113
+'min6'	organ	116 117
+'neuro2a'	nerve	118 119
+'nih 3T3'	fat	120 121
+'nucleus accumbens'	brain	124 125
+'olfactory bulb'	brain	126 127
+'osteoblast day14'	bone	128 129
+'osteoblast day21'	bone	130 131
+'osteoblast day5'	bone	132 133
+'osteoclasts'	bone	134 135
+'ovary'	germ	136 137
+'pancreas'	digestion	138 139
+'pituitary'	gland	140 141
+'placenta'	embryo	142 143
+'prostate'	gland	144 145
+'retina'	eye	148 149
+'retinal pigment epithelium'	eye	150 151
+'salivary gland'	digestion	152 153
+'skeletal muscle'	muscle	154 155
+'spinal cord'	nerve	156 157
+'spleen'	immune	158 159
+'stem cells  HSC'	blood	160 161
+'stomach'	digestion	162 163
+'testis'	germ	170 171
+'thymocyte DP CD4+CD8+'	immune	172 173
+'thymocyte SP CD4+'	immune	174 175
+'thymocyte SP CD8+'	immune	176 177
+'umbilical cord'	embryo	178 179
+'uterus'	muscle	180 181

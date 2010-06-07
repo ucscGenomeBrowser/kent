@@ -1,0 +1,139 @@
+#!/usr/bin/tclsh
+
+# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# edit ~/kent/src/hg/utils/automation/blastz-make-joblist instead.
+
+# Written by Scott Schwartz
+
+# $Id: blastz-make-joblist,v 1.1 2006/10/09 20:44:33 angie Exp $
+
+
+lappend argv DEF
+set def [lindex $argv 0]
+
+
+proc say {s} { puts stderr $s }
+proc overlapping_intervals {a z d o} {
+    set r {}
+    set n 1
+    set i $a
+    for {set j [expr $a+$d-1]} {$i <= $z} {set i [expr $j+1]; incr j $d} {
+        set k [expr $j + $o]
+        if {$k > $z} {set k $z}
+        lappend r [list $n $i $k]
+        incr n
+    }
+    return $r
+}
+
+proc loadsize {file var} {
+    global $var
+    set f [open $file]
+    array set $var [read $f]
+    close $f
+}
+
+proc loadvars {file} {
+    global env
+    set HOME [set env(HOME)]
+    set a {}; set b {};
+    set f [open $file]
+    set line {}
+    while {[gets $f line] >= 0} {
+        if {[string match "#*" $line]} {continue}
+        if {[string match "export*" $line]} {continue}
+        if {[scan $line { %[A-Z_0-9]=%s } a b]!=2} {continue}
+        # puts stdout "set $a $b ; [subst $b]"
+        global $a
+        set $a [subst $b]
+    }
+    close $f
+}
+
+proc needfile {file} {
+  return [expr {!([file exists $file] && [file size $file])}]
+}
+
+proc make_lenfile {seqdir lenfile seqfiles} {
+    set files [lsort -dictionary [glob -nocomplain $seqdir/*.nib]]
+    if {[llength $files]!=0} {
+        if { [needfile $lenfile] } {
+	    eval exec [concat nibSize $files >$lenfile]
+        }
+    } else {
+        set files [lsort -dictionary [glob $seqdir/*.fa]]
+        if { [needfile $lenfile] } {
+	    eval exec [concat faSize -detailed=off $files >$lenfile]
+        }
+    }
+    upvar $seqfiles f
+    set f $files
+}
+
+proc set_var {new old dflt} {
+    upvar $new v
+    upvar $old w
+    if [info exists w] { set v $w } else { set v $dflt }
+}
+
+# -- main --
+
+loadvars $def
+
+if ![string equal [file pathtype $DEF] absolute] {
+    error "DEF must be absolute";
+}
+
+file mkdir $BASE
+
+set_var seq1chunk SEQ1_CHUNK [expr 10*1000*1000]
+set_var seq1lap   SEQ1_LAP   10000
+set_var seq2chunk SEQ2_CHUNK [expr 30*1000*1000]
+set_var seq2lap   SEQ2_LAP   0
+set_var seq2_in_contigs SEQ2_IN_CONTIGS 0
+
+say "Computing genome sizes"
+
+set seq1files {}
+set seq2files {}
+make_lenfile $SEQ1_DIR $SEQ1_LEN seq1files
+make_lenfile $SEQ2_DIR $SEQ2_LEN seq2files
+
+loadsize $SEQ1_LEN seq1len
+loadsize $SEQ2_LEN seq2len
+
+say "Writing mkdir script: $BASE/xdir.sh"
+set dirsh [open "$BASE/xdir.sh" w]
+say "Writing job list"
+foreach s1 $seq1files {
+    set f1 [file tail $s1]
+    set f1r [file rootname $f1]
+    set D "$RAW/$f1r"
+
+    puts $dirsh "mkdir -p $D"
+    puts stderr "." nonewline
+
+    set l1 $seq1len($f1r)
+    foreach i1 [overlapping_intervals 1 $l1 $seq1chunk $seq1lap] {
+        set n1 [lindex $i1 0]
+        set a1 [lindex $i1 1]
+        set z1 [lindex $i1 2]
+        puts $dirsh "mkdir $D/$a1.$z1"
+        foreach s2 $seq2files {
+            set f2 [file tail $s2]
+	    if $seq2_in_contigs {
+	        puts stdout "$ALIGN $f1 $a1 $z1 $f2 0 0 $DEF"
+	    } else {
+                set l2 $seq2len([file rootname $f2])
+                foreach i2 [overlapping_intervals 1 $l2 $seq2chunk $seq2lap] {
+                    set n2 [lindex $i2 0]
+                    set a2 [lindex $i2 1]
+                    set z2 [lindex $i2 2] 
+	            puts stdout "$ALIGN $f1 $a1 $z1 $f2 $a2 $z2 $DEF"
+		}
+            }
+        }
+    }
+}
+close $dirsh
+puts stderr "."

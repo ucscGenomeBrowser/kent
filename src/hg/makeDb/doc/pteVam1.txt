@@ -1,0 +1,153 @@
+# for emacs: -*- mode: sh; -*-
+
+# Pteropus vampyrus
+
+#########################################################################
+# DOWNLOAD SEQUENCE 
+    ssh kkstore05
+    mkdir /cluster/store12/pteVam1
+    ln -s /cluster/store12/pteVam1 /cluster/data
+    mkdir /cluster/data/pteVam1/broad
+    cd /cluster/data/pteVam1/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
+
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin pteVam1.qual.qac
+
+    cut -f 1 assembly.agp | uniq -c | wc -l 
+# Number of scaffolds: 96944
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl
+    ssh kolossus
+    cd /cluster/data/pteVam1
+cat << _EOF_ >pteVam1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db pteVam1
+clade mammal
+genomeCladePriority 35
+scientificName Pteropus vampyrus
+commonName Megabat
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute pteVam1 
+orderKey 233.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/pteVam1/broad/assembly.bases.gz
+agpFiles /cluster/data/pteVam1/broad/assembly.agp
+qualFiles /cluster/data/pteVam1/broad/pteVam1.qual.qac
+dbDbSpeciesDir megabat
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -workhorse kolossus pteVam1.config.ra > makeGenomeDb.out 2>&1 &
+
+    cut -f 2 chrom.sizes | ave stdin
+# Q1 1162.000000
+# median 1777.000000
+# Q3 9074.500000
+# average 20589.994327
+# min 601.000000
+# max 1019178.000000
+# count 96944
+# total 1996076410.000000
+# standard deviation 54685.855293
+
+#########################################################################
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/pteVam1/bed/repeatMasker
+    cd /hive/data/genomes/pteVam1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` pteVam1 > do.log 2>&1 &
+    #	real    806m48.065s
+    twoBitToFa pteVam1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+    #	1996076410 bases (156639750 N's 1839436660 real 1256029530 upper
+    #	583407130 lower) in 96944 sequences in 1 files
+    #	%29.23 masked total, %31.72 masked real
+
+#########################################################################
+# SIMPLE REPEATS TRF (WORKING - 2008-10-15 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /cluster/data/pteVam1/bed/simpleRepeat
+    cd /cluster/data/pteVam1/bed/simpleRepeat
+    # 
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/pteVam1/bed/simpleRepeat pteVam1 > do.log 2>&1 &
+    #	real    98m59.097
+    cat fb.simpleRepeat
+    #	33179383 bases of 1839436660 (1.804%) in intersection
+
+XXX - waiting for RM to complete 2008-10-15 13:32
+    #	after RM run is done, add this mask:
+    cd /hive/data/genomes/pteVam1
+    rm pteVam1.2bit
+    twoBitMask pteVam1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed pteVam1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa pteVam1.2bit stdout | faSize stdin > pteVam1.2bit.faSize.txt
+# 1996076410 bases (156639750 N's 1839436660 real 1255425444 upper 584011216
+# lower) in 96944 sequences in 1 files
+# %29.26 masked total, %31.75 masked rea
+
+    #	link to gbdb
+    ln -s `pwd`/pteVam1.2bit /gbdb/pteVam1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-16 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	pteVam1: 1839436660
+    # thus: 1024 * 1839436660/2881421696 = 653
+    #	rounding up to 700 for a bit more conservative masking
+    cd /hive/data/genomes/pteVam1
+    time blat pteVam1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=pteVam1.11.ooc -repMatch=700
+    #	Wrote 19840 overused 11-mers to pteVam1.11.ooc
+    #	real    1m44.676s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/pteVam1
+    cp -p pteVam1.2bit chrom.sizes pteVam1.11.ooc \
+	/hive/data/staging/data/pteVam1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute pteVam1 (NCBI project 20325, ABRP01000000)" where name="pteVam1";' hgcentraltest
+
+############################################################################
+#  pteVam1 - Megabat - Ensembl Genes version 51  (DONE - 2008-12-02 - hiram)
+    ssh kkr14u07
+    cd /hive/data/genomes/pteVam1
+    cat << '_EOF_' > pteVam1.ensGene.ra
+# required db variable
+db pteVam1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the two genes that have invalid structures from Ensembl:
+#       6381: ENSPVAT00000012919 no exonFrame on CDS exon 14
+#       23522: ENSPVAT00000010661 no exonFrame on CDS exon 0
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 pteVam1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/pteVam1/bed/ensGene.51
+    featureBits pteVam1 ensGene
+    # 28722584 bases of 1839436660 (1.561%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/pteVam1/bed/ensGene.51
+
+############################################################################

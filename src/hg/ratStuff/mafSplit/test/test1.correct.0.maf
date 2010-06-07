@@ -1,0 +1,13 @@
+##maf version=1
+a score=0.000000
+s ce6.chrII         14647617 1 +  15279323 T
+s caeJap1.chrUn     36688157 1 + 156378573 T
+i caeJap1.chrUn    C 0 C 0
+s caePb2.chrUn      64299583 1 + 194283334 T
+i caePb2.chrUn     C 0 C 0
+s caeRem3.chrUn    119044755 1 + 149111736 T
+i caeRem3.chrUn    C 0 C 0
+s cb3.chrII_random     54243 1 +   2252910 T
+i cb3.chrII_random C 0 C 0
+e priPac1.chrUn    113224058 579 - 174852139 I
+

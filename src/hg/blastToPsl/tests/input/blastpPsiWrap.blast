@@ -1,0 +1,245 @@
+BLASTP 2.2.16 [Mar-25-2007]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+
+Reference for composition-based statistics:
+Schaffer, Alejandro A., L. Aravind, Thomas L. Madden,
+Sergei Shavirin, John L. Spouge, Yuri I. Wolf,  
+Eugene V. Koonin, and Stephen F. Altschul (2001), 
+"Improving the accuracy of PSI-BLAST protein database searches with 
+composition-based statistics and other refinements",  Nucleic Acids Res. 29:2994-3005.
+
+Query= Q9HB50
+         (74 letters)
+
+Database: para.tmp/uniprot.xeno.fa 
+           6,121,393 sequences; 1,813,306,667 total letters
+
+Searching..................................................done
+
+
+Results from round 1
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+A6BM01 9767 Balaenoptera acutorostrata                                122   6e-27
+B1NL88 9544 Macaca mulatta                                             51   2e-05
+
+>A6BM01 9767 Balaenoptera acutorostrata
+          Length = 503
+
+ Score =  122 bits (306), Expect = 6e-27,   Method: Composition-based stats.
+ Identities = 53/73 (72%), Positives = 63/73 (86%)
+
+Query: 1  MDLIPNFAMETWVLVATSLVLLYIYGTHSHKLFKKLGIPGPTPLPFLGTILFYLRGLWNF 60
+          MDLIP+F++ETWVL+ATSLVLLY+YGT+SH LFKKLGIPGP PLP+ G IL Y +GLW F
+Sbjct: 1  MDLIPSFSVETWVLLATSLVLLYLYGTYSHGLFKKLGIPGPRPLPYFGNILSYRKGLWEF 60
+
+Query: 61 DRECNEKYGEMWG 73
+          D  C +KYG+MWG
+Sbjct: 61 DNRCFKKYGKMWG 73
+
+
+>B1NL88 9544 Macaca mulatta
+          Length = 454
+
+ Score = 50.8 bits (120), Expect = 2e-05,   Method: Composition-based stats.
+ Identities = 23/24 (95%), Positives = 24/24 (100%)
+
+Query: 1  MDLIPNFAMETWVLVATSLVLLYI 24
+          MDLIPNFAMETWVLVATSLVLLY+
+Sbjct: 1  MDLIPNFAMETWVLVATSLVLLYM 24
+
+
+Searching..................................................done
+
+
+Results from round 2
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+Sequences used in model and found again:
+
+A6BM01 9767 Balaenoptera acutorostrata                                150   3e-35
+B1NLA2 9598 Pan troglodytes                                            50   3e-05
+B1NL88 9544 Macaca mulatta                                             48   1e-04
+
+Sequences not found previously or not previously below threshold:
+
+P47787 9823 Sus scrofa                                                 79   6e-14
+Q2PG45 9541 Macaca fascicularis                                        78   1e-13
+
+>A6BM01 9767 Balaenoptera acutorostrata
+          Length = 503
+
+ Score =  150 bits (379), Expect = 3e-35,   Method: Composition-based stats.
+ Identities = 53/73 (72%), Positives = 63/73 (86%)
+
+Query: 1  MDLIPNFAMETWVLVATSLVLLYIYGTHSHKLFKKLGIPGPTPLPFLGTILFYLRGLWNF 60
+          MDLIP+F++ETWVL+ATSLVLLY+YGT+SH LFKKLGIPGP PLP+ G IL Y +GLW F
+Sbjct: 1  MDLIPSFSVETWVLLATSLVLLYLYGTYSHGLFKKLGIPGPRPLPYFGNILSYRKGLWEF 60
+
+Query: 61 DRECNEKYGEMWG 73
+          D  C +KYG+MWG
+Sbjct: 61 DNRCFKKYGKMWG 73
+
+
+>P47787 9823 Sus scrofa
+          Length = 534
+
+ Score = 79.2 bits (195), Expect = 6e-14,   Method: Composition-based stats.
+ Identities = 18/50 (36%), Positives = 27/50 (54%)
+
+Query: 24 IYGTHSHKLFKKLGIPGPTPLPFLGTILFYLRGLWNFDRECNEKYGEMWG 73
+           Y T +    +KLGI  P P PF+G + F+ +G W    E  ++YG + G
+Sbjct: 30 WYSTSAFSRLEKLGIRHPKPSPFIGNLTFFRQGFWESHMELRKQYGPLSG 79
+
+
+>Q2PG45 9541 Macaca fascicularis
+          Length = 534
+
+ Score = 78.5 bits (193), Expect = 1e-13,   Method: Composition-based stats.
+ Identities = 17/50 (34%), Positives = 27/50 (54%)
+
+Query: 24 IYGTHSHKLFKKLGIPGPTPLPFLGTILFYLRGLWNFDRECNEKYGEMWG 73
+           Y T +    +KLG+  P P PF+G ++F+ +G W    E  + YG + G
+Sbjct: 31 WYSTSAFSRLEKLGLRHPKPSPFIGNLMFFRQGFWESQMELRKLYGPLCG 80
+
+
+>B1NLA2 9598 Pan troglodytes
+          Length = 33
+
+ Score = 50.3 bits (120), Expect = 3e-05,   Method: Composition-based stats.
+ Identities = 26/33 (78%), Positives = 28/33 (84%)
+
+Query: 1  MDLIPNFAMETWVLVATSLVLLYIYGTHSHKLF 33
+          MDLIPNFAMETWVLVATSLVLLYI  + S+  F
+Sbjct: 1  MDLIPNFAMETWVLVATSLVLLYITLSISYPSF 33
+
+
+>B1NL88 9544 Macaca mulatta
+          Length = 454
+
+ Score = 48.4 bits (115), Expect = 1e-04,   Method: Composition-based stats.
+ Identities = 23/24 (95%), Positives = 24/24 (100%)
+
+Query: 1  MDLIPNFAMETWVLVATSLVLLYI 24
+          MDLIPNFAMETWVLVATSLVLLY+
+Sbjct: 1  MDLIPNFAMETWVLVATSLVLLYM 24
+
+
+Searching..................................................done
+
+
+Results from round 3
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+Sequences used in model and found again:
+
+A6BM01 9767 Balaenoptera acutorostrata                                132   5e-30
+B1NL88 9544 Macaca mulatta                                             48   2e-04
+B1NLA2 9598 Pan troglodytes                                            44   0.002
+
+Sequences not found previously or not previously below threshold:
+
+Q0GBX3 7719 Ciona intestinalis                                         63   4e-09
+Q9QZ50 10036 Mesocricetus auratus                                      62   1e-08
+
+>A6BM01 9767 Balaenoptera acutorostrata
+          Length = 503
+
+ Score =  132 bits (334), Expect = 5e-30,   Method: Composition-based stats.
+ Identities = 53/73 (72%), Positives = 63/73 (86%)
+
+Query: 1  MDLIPNFAMETWVLVATSLVLLYIYGTHSHKLFKKLGIPGPTPLPFLGTILFYLRGLWNF 60
+          MDLIP+F++ETWVL+ATSLVLLY+YGT+SH LFKKLGIPGP PLP+ G IL Y +GLW F
+Sbjct: 1  MDLIPSFSVETWVLLATSLVLLYLYGTYSHGLFKKLGIPGPRPLPYFGNILSYRKGLWEF 60
+
+Query: 61 DRECNEKYGEMWG 73
+          D  C +KYG+MWG
+Sbjct: 61 DNRCFKKYGKMWG 73
+
+
+>Q0GBX3 7719 Ciona intestinalis
+          Length = 509
+
+ Score = 63.1 bits (153), Expect = 4e-09,   Method: Composition-based stats.
+ Identities = 18/71 (25%), Positives = 38/71 (53%), Gaps = 4/71
+(5%)
+
+Query: 7  FAMETWVLVATSLVLLYIYGTHSHKLFKKLGIPGPTPLPF-LGTILFYLR---GLWNFDR 62
+           ++ETW+L+ TS +L+ IY     ++ K + IP   P    +G ++  ++    ++    
+Sbjct: 8  LSLETWILILTSFILVRIYIHKKWQVLKNINIPHDPPTILGVGNMMGIIKDPNQMFLSYF 67
+
+Query: 63 ECNEKYGEMWG 73
+          +  +KYG ++G
+Sbjct: 68 KMKKKYGLVYG 78
+
+
+>Q9QZ50 10036 Mesocricetus auratus
+          Length = 494
+
+ Score = 61.6 bits (149), Expect = 1e-08,   Method: Composition-based stats.
+ Identities = 19/65 (29%), Positives = 30/65 (46%), Gaps = 1/65 (1%)
+
+Query: 8  AMETWVLVATSLVLLYIYGTHSHKLFKKLGIPGPTPLPFLGTILFYL-RGLWNFDRECNE 66
+          +    V V   LV+L +      +       PGPTPLPF+G  L      ++N   + +E
+Sbjct: 4  SGLLLVTVLAFLVVLILMSVWKQRKLSGKLPPGPTPLPFIGNYLQLNTEQMYNSLMKISE 63
+
+Query: 67 KYGEM 71
+          +YG +
+Sbjct: 64 RYGPV 68
+
+
+  Database: para.tmp/uniprot.xeno.fa
+    Posted date:  Apr 11, 2009  1:32 PM
+  Number of letters in database: 999,999,610
+  Number of sequences in database:  3,169,277
+  
+  Database: para.tmp/uniprot.xeno.fa.01
+    Posted date:  Apr 11, 2009  1:35 PM
+  Number of letters in database: 813,307,057
+  Number of sequences in database:  2,952,116
+  
+Lambda     K      H
+   0.314    0.182    0.600 
+
+Lambda     K      H
+   0.267   0.0553    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 1,229,960,682
+Number of Sequences: 6121393
+Number of extensions: 63250405
+Number of successful extensions: 322599
+Number of sequences better than 10.0: 500
+Number of HSP's better than 10.0 without gapping: 2278
+Number of HSP's successfully gapped in prelim test: 2004
+Number of HSP's that attempted gapping in prelim test: 319425
+Number of HSP's gapped (non-prelim): 4375
+length of query: 74
+length of database: 1,813,306,667
+effective HSP length: 45
+effective length of query: 29
+effective length of database: 1,537,843,982
+effective search space: 44597475478
+effective search space used: 44597475478
+T: 11
+A: 40
+X1: 16 ( 7.2 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 40 (20.6 bits)
+S2: 73 (32.3 bits)

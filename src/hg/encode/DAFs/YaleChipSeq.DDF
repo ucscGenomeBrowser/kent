@@ -1,0 +1,9 @@
+files	view	cell	antibody	replicate	accession	labVersion
+HeLa-S3_Pol2_tagAlign_rep1_lane*.bed	Alignments	HeLa-S3	Pol2	1	GSE12781	
+HeLa-S3_Pol2_tagAlign_rep2_lane*.bed	Alignments	HeLa-S3	Pol2	2	GSE12781	
+HeLa-S3_Pol2_tagAlign_rep3_lane*.bed	Alignments	HeLa-S3	Pol2	3	GSE12781	
+HeLa-S3_Pol2.wig	Signal	HeLa-S3	Pol2	1		PeakSeq1.0
+HeLa-S3_Pol2_narrowPeak.pk	Peaks	HeLa-S3	Pol2	1	GSE12781	PeakSeq1.0
+HeLa-S3_Pol2_sequence_rep1_lane*.fastq	RawData	HeLa-S3	Pol2	1	GSE12781	
+HeLa-S3_Pol2_sequence_rep2_lane*.fastq	RawData	HeLa-S3	Pol2	2	GSE12781	
+HeLa-S3_Pol2_sequence_rep3_lane*.fastq	RawData	HeLa-S3	Pol2	3	GSE12781	

@@ -1,0 +1,69 @@
+# Data Agreement File for RNA-seq project $Revision: 1.2 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Gingeras
+lab               GIS
+dataType          RnaSeq
+compositeSuffix   GisRnaSeq
+group             expression
+variables         cell, localization, rnaExtract
+assembly          hg19
+
+validationSettings validateFiles.pairedTagAlign:mmCheckOneInN=100000,mismatches=4,matchFirst=25,mmPerPair;validateFiles.tagAlign:mmCheckOneInN=100000,mismatches=3,matchFirst=25
+# noAutoCreate     yes
+
+
+# Track/view definition
+view             Transfrags
+longLabelPrefix  GIS RNA-Seq Transfrags
+type             broadPeak
+hasReplicates    yes
+required         no
+
+view             PlusRawSignal
+longLabelPrefix  GIS RNA-Seq Plus Strand Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+view             MinusRawSignal
+longLabelPrefix  GIS RNA-Seq Minus Strand Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+# Alignments of reads which are not split on the genome
+view             Alignments
+longLabelPrefix  GIS RNA-Seq Tags
+type             tagAlign
+hasReplicates    yes
+required         yes
+
+# Alignments of reads which are split on the genome (eg, spliced)
+view             SplitAlign
+longLabelPrefix  GIS RNA-Seq Split Tags
+type             pairedTagAlign
+hasReplicates    yes
+required         no
+
+# Raw data for SOLID
+view             RawData
+type             csfasta
+hasReplicates    yes
+required         no
+
+view             RawData2
+type             csqual
+hasReplicates    yes
+required         no
+
+# Raw data for Solexa
+view             RawData3
+type             fastq
+hasReplicates    yes
+required         no

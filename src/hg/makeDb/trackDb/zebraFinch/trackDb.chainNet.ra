@@ -1,0 +1,24 @@
+#	"$Id: trackDb.chainNet.ra,v 1.3 2010/02/08 19:28:54 rhead Exp $";
+
+track chainNetGalGal3 override
+priority 210.3
+chainMinScore 2000
+
+track chainNetHg19 override
+priority 580.3
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetHg18 override
+priority 580.3
+shortLabel $o_db Chain/Net
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+    track chainHg18 override
+    shortLabel $o_db Chain
+
+    track netHg18 override
+    shortLabel $o_db Net

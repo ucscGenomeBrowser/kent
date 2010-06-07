@@ -1,0 +1,50 @@
+<H2>Description</H2>
+<P>
+This track is a graph of the density of the chain alignments from Cow bosTau4.
+There are some unusual pile-ups between these two genomes.
+</P>
+<H2>Methods</H2>
+<P>
+A bed file of the chains was made:
+<PRE>
+$$ zcat susScr2.bosTau4.all.chain.gz | grep "^chain " \
+        | awk '{printf "%s\\t%d\\t%d\\t%s\\t%s\\t%s\\n", $$3, $$6, $$7, $$8, $$2, $$5}' \
+        &gt; bosTau4.chain.bed
+</PRE>
+The chain scores were scanned with ave, to find the range of scores:
+<PRE>
+  ave -col=5 bosTau4.chain.bed
+Q1 5300.000000
+median 8265.000000
+Q3 14079.000000
+average 12729.401671
+min 3000.000000
+max 1506828099.000000
+count 144157201
+total 1835034915327.000000
+standard deviation 419128.061072
+</PRE>
+The bed file scores were normalized to the range 0-1000 and an
+overlap count bedGraph file was calculated, and turned into a bigWig:
+<PRE>
+$$  awk '
+  {printf "%s\\t%d\\t%d\\t%s\\t%d\\t%s\\n", $$1,$$2,$$3,$$4,(1000*$$5)/1506828099, $$6}' \
+        bosTau4.chain.bed | sort -k1,1 -k2,2n &gt; bosTau4.chain.normalized.bed
+$$  bedItemOverlapCount susScr2 bosTau4.chain.normalized.bed \
+    &gt; bosTau4.overlap.wigVar
+$$  bedGraphToBigWig bosTau4.overlap.wigVar susScr2.chrom.sizes bosTau4ChainPileUp.bw
+$$  bigWigInfo bosTau4ChainPileUp.bw
+version: 3
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 188,237,695
+primaryIndexSize: 1,267,372
+zoomLevels: 10
+chromCount: 20
+basesCovered: 2,255,615,700
+mean: 28.797958
+min: 1.000000
+max: 14674.000000
+std: 202.526527
+</PRE>
+</P>

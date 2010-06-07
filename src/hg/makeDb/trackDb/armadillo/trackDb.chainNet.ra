@@ -1,0 +1,16 @@
+#	"$Id: trackDb.chainNet.ra,v 1.2 2010/01/04 19:59:31 hiram Exp $";
+
+track chainNetLoxAfr1 override
+priority 240.3
+chainMinScore 1000
+chainLinearGap loose
+
+track chainNetMm9 override
+priority 410.3
+
+track chainNetMm7 override
+priority 410.3
+shortLabel $o_db Chain/Net
+
+track chainNetHg18 override
+priority 520.3

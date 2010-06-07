@@ -1,0 +1,68 @@
+#	"$Id: trackDb.chainNet.ra,v 1.17 2010/02/10 03:13:03 kuhn Exp $";
+
+track chainNetPanTro1 override
+shortLabel $o_Organism Chain/Net
+
+    track chainPanTro1 override
+    shortLabel $o_Organism Chain
+
+    track netPanTro1 override
+    shortLabel $o_Organism Net
+
+track chainNetRheMac1 override
+shortLabel $o_Organism Chain/Net
+
+    track chainRheMac1 override
+    shortLabel $o_Organism Chain
+
+    track netRheMac1 override
+    shortLabel $o_Organism Net
+
+track chainNetRn3 override
+shortLabel $o_Organism Chain/Net
+
+track chainNetBosTau2 override
+shortLabel $o_Organism Chain/Net
+
+    track chainBosTau2 override
+    shortLabel $o_Organism Chain
+
+    track netBosTau2 override
+    shortLabel $o_Organism Net
+
+track chainNetHg18 override
+shortLabel $o_Organism Chain/Net
+
+    track chainHg18 override
+    shortLabel $o_Organism Chain
+
+    track netHg18 override
+    shortLabel $o_Organism Net
+
+track chainNetXenTro1 override
+shortLabel $o_Organism Chain/Net
+
+    track chainXenTro1 override
+    shortLabel $o_Organism Chain
+
+    track netXenTro1 override
+    shortLabel $o_Organism Net
+
+track chainNetDanRer3 override
+shortLabel $o_Organism Chain/Net
+
+	track chainDanRer3 override
+	shortLabel $o_Organism Chain
+
+	track netDanRer3 override
+	shortLabel $o_Organism Net
+
+track chainNetFr1 override
+shortLabel $o_Organism Chain/Net
+
+	track chainFr1 override
+	shortLabel $o_Organism Chain
+
+	track netFr1 override
+	shortLabel $o_Organism Net
+

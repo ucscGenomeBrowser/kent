@@ -1,0 +1,158 @@
+# Tupaia belangeri -- 2X Tree Shrew 2X assembly from the Broad
+# Assembly named:  tupBel1
+# Sequence downloaded and masked by Robert Baertsch, 12/06
+################################################
+
+# DOWNLOADS (2007-06-05 kate)
+#  Posted masked sequence to download site since
+#  it is used in the 28way multiz on hg18
+
+    ssh kkstore05
+    cd /cluster/data/tupBel1
+    mkdir bigZips
+    cd bigZips
+    nice twoBitToFa ../tupBel1.2bit tupBel1.fa
+    nice gzip tupBel1.fa
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath
+    set bd = /cluster/data/tupBel1
+    cp $d/sorAra1/bigZips/README.txt $bd/bigZips
+    # EDIT
+    mkdir -p $d/tupBel1/bigZips
+    ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/tupBel1/bigZips
+   
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-11 - markd)
+# ERROR:  chainMm9Link failed, build not complete
+    ssh hgwdev
+    mkdir /cluster/data/tupBel1/bed/blastz.mm9.swap
+    cd /cluster/data/tupBel1/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.tupBel1/DEF >& swap.out&
+
+    # GOT ERROR:
+    load data local infile 'link.tab' into table chainMm9Link
+    mySQL error 1114: The table 'chainMm9Link' is full
+
+    # fb.tupBel1.chainMm9Link.txt:
+    #   
+
+############################################################################
+##  BLASTZ swap from hg18 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/tupBel1/bed/blastz.hg18.swap
+    cd /cluster/data/tupBel1/bed/blastz.hg18.swap
+    ln -s blastz.hg18.swap ../blastz.hg18
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/hg18/bed/blastz.tupBel1/DEF >& swap.out&
+# crashed: could be out of memory
+
+    # fb.tupBel1.chainHg18Link.txt:
+    #   
+
+#########################################################################
+## Repeat Masker (WORKING - 2008-10-14 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/tupBel1/bed/repeatMasker
+    cd /hive/data/genomes/tupBel1/bed/repeatMasker
+    time doRepeatMasker.pl -workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` tupBel1 > do.log 2>&1 &
+    #	real    660m58.642s
+    #	failed in doMask.csh due to no tupBel1.unmasked.2bit file ?
+    #	which was there at the beginning, now it is gone ?
+    #	the broken doRepeatMasker.pl script removed it due to hive confusion
+    #	went back to the jkStuff/makeUnmasked script and re-ran part of that.
+    #	then ran the doMask.csh script to finish that, and continuing:
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-continue=install -workhorse=hgwdev -bigClusterHub=swarm \
+        -buildDir=`pwd` tupBel1 > install.log 2>&1 &
+    #	real    23m37.870s
+    twoBitToFa tupBel1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 3660774957 bases (1523549481 N's 2137225476 real 1701215604 upper 436009872
+# lower) in 150851 sequences in 1 files
+# %11.91 masked total, %20.40 masked real
+
+###########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-10-15 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /cluster/data/tupBel1/bed/simpleRepeat
+    cd /cluster/data/tupBel1/bed/simpleRepeat
+    # 
+    time  $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/tupBel1/bed/simpleRepeat \
+	tupBel1 > do.log 2>&1 &
+    #	real    81m6.278s
+    cat fb.simpleRepeat
+    #	77116433 bases of 2137225476 (3.608%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/tupBel1
+    rm tupBel1.2bit
+    twoBitMask tupBel1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed tupBel1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa tupBel1.2bit stdout | faSize stdin > tupBel.2bit.faSize.txt
+# 3660774957 bases (1523549481 N's 2137225476 real 1700569122 upper 436656354
+# lower) in 150851 sequences in 1 files
+#	%11.93 masked total, %20.43 masked real
+
+    #	link to gbdb
+    ln -s `pwd`/tupBel1.2bit /gbdb/tupBel1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-15 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	turTru1: 2137225476
+    # thus: 1024 * 2137225476/2881421696 = 759
+    #	rounding up to 800 to be conservative
+    cd /hive/data/genomes/tupBel1
+    time blat tupBel1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=tupBel1.11.ooc -repMatch=800
+    #	real    2m18.283s
+    #	Wrote 27284 overused 11-mers to tupBel1.11.ooc
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/tupBel1
+    cp -p tupBel1.2bit chrom.sizes tupBel1.11.ooc \
+	/hive/data/staging/data/tupBel1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+############################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute tupBel1 (NCBI project 13971, AAPY01000000)" where name="tupBel1";' hgcentraltest
+
+############################################################################
+#  tupBel1 - TreeShrew - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kkr14u07
+    cd /hive/data/genomes/tupBel1
+    cat << '_EOF_' > tupBel1.ensGene.ra
+# required db variable
+db tupBel1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# after geneScaffold conversions, change Ensembl chrom names to UCSC names
+liftUp /cluster/data/tupBel1/jkStuff/ensGene.lft
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the two genes that have invalid structures from Ensembl:
+# 2993: ENSTBET00000015831 no exonFrame on CDS exon 11
+# 3556: ENSTBET00000013522 no exonFrame on CDS exon 1
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 tupBel1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/tupBel1/bed/ensGene.51
+    featureBits tupBel1 ensGene
+    # 22746299 bases of 2137225476 (1.064%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/tupBel1/bed/ensGene.51
+
+############################################################################

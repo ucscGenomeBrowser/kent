@@ -1,0 +1,11 @@
+##gff-version 3
+#
+U	FlyBase	gene	8502214	8502369	.	+	.	ID=FBgn0261335;Name=CG42620;Ontology_term=SO:0000010,SO:0000087;Dbxref=FlyBase_Annotation_IDs:CG42620
+U	FlyBase	mRNA	8502214	8502369	.	+	.	ID=FBtr0302239;Name=CG42620-RA;Parent=FBgn0261335;Dbxref=FlyBase_Annotation_IDs:CG42620-RA;score_text=Moderately Supported;score=6
+U	FlyBase	exon	8502214	8502369	.	+	.	ID=FBgn0261335:1;Name=CG42620:1;Parent=FBtr0302239
+U	FlyBase	CDS	8502214	8502372	.	+	0	ID=CDS_FBgn0261335:1_932;Name=CG42620-cds;Parent=FBtr0302239
+#
+U	FlyBase	gene	6306888	6307959	.	+	.	ID=FBgn0085546;Name=CG40968;Alias=FBan0040968;Ontology_term=SO:0000010,SO:0000087;Dbxref=GB:AJ784384,FlyBase_Annotation_IDs:CG40968
+U	FlyBase	mRNA	6306888	6307959	.	+	.	ID=FBtr0302238;Name=CG40968-RB;Parent=FBgn0085546;Dbxref=FlyBase_Annotation_IDs:CG40968-RB;score_text=Moderately Supported;score=6
+U	FlyBase	exon	6306888	6307959	.	+	.	ID=FBgn0085546:1;Name=CG40968:1;Parent=FBtr0302238
+U	FlyBase	CDS	6306888	6307962	.	+	0	ID=CDS_FBgn0085546:1_932;Name=CG40968-cds;Parent=FBtr0302238

@@ -1,0 +1,27 @@
+# Data Agreement File for Myers/HudsonAlpha Methyl-seq experiments $Revision: 1.2 $
+
+dafVersion      2.0
+
+# Lab info		
+grant	        Myers
+lab	        HudsonAlpha
+dataType	MethylRrbs
+compositeSuffix HaibMethylRrbs
+group           regulation
+variables	cell
+assembly	hg19
+
+validationSettings validateFiles.tagAlign:mmCheckOneInN=10000,mismatches=2,matchFirst=32,nMatch
+
+# Track/view definition
+view             Sites
+longLabelPrefix  HudsonAlpha Methyl-RRBS Sites
+type             bed 9
+hasReplicates    yes
+required         no
+
+view             RawData
+type             fastq
+hasReplicates    yes 
+required         no
+

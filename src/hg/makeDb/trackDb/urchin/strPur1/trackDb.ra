@@ -1,0 +1,16 @@
+
+track blastHg17KG override
+longLabel Hg17 Proteins
+priority 201
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
+
+#track repeatScout
+#shortLabel RepeatScout
+#longLabel RepeatMasker using RepeatScout denovo library 
+#group varRep
+#priority 149.3
+#visibility hide
+#spectrum on
+#type rmsk
+#canPack off

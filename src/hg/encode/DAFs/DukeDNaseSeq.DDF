@@ -1,0 +1,12 @@
+files	view	cell	labVersion	replicate
+UCSC_submission/GM12878_DukeDNaseSeq_rep1.fastq	RawData	GM12878		1
+UCSC_submission/GM12878_DukeDNaseSeq_rep2.fastq	RawData	GM12878		2
+UCSC_submission/GM12878_DukeDNaseSeq_rep3.fastq	RawData	GM12878		3
+UCSC_submission/Raw_GM12878_DukeDNaseSeq_rep1.taf	Alignments	GM12878		1
+UCSC_submission/Raw_GM12878_DukeDNaseSeq_rep2.taf	Alignments	GM12878		2
+UCSC_submission/Raw_GM12878_DukeDNaseSeq_rep3.taf	Alignments	GM12878		3
+UCSC_submission/GM12878_DukeDNaseSeq_rep1_*.wig	RawSignal	GM12878		1
+UCSC_submission/GM12878_DukeDNaseSeq_rep2_*.wig	RawSignal	GM12878		2
+UCSC_submission/GM12878_DukeDNaseSeq_rep3_*.wig	RawSignal	GM12878		3
+UCSC_submission/GM12878_DukeDNaseSeq_chr*.wig	Signal	GM12878	1.0	1
+UCSC_submission/GM12878_DukeDNaseSeq.pk	Peaks	GM12878	1.0	1

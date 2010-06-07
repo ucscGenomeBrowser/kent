@@ -1,0 +1,26 @@
+track chainDm1 override
+shortLabel D. mel. Chain ($o_db)
+
+track chainDm2 override
+priority 133
+
+track netDm2 override
+priority 134
+visibility dense
+
+track mrna override
+spectrum on
+
+track xenoMrna override
+visibility dense
+
+track blastDm1FB override
+shortLabel D. mel. Proteins (dm1)
+longLabel $o_Organism ($o_date) Proteins
+otherDb dm1
+
+track blastDm2FB override
+shortLabel D. mel. Proteins
+longLabel $o_Organism ($o_date) Proteins
+otherDb dm2
+

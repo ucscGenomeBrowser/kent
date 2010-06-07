@@ -1,0 +1,21 @@
+#Some mosquito-specific stuff.
+
+track mrna override
+spectrum on
+
+track blastDm1FB override
+shortLabel D. mel. Proteins (dm1)
+longLabel $o_Organism ($o_date) Proteins
+visibility pack
+otherDb dm1
+
+track blastDm2FB override
+shortLabel D. mel. Proteins
+longLabel $o_Organism ($o_date) Proteins
+otherDb dm2
+
+#Overrides from visibility.ra
+
+track ensGene override
+visibility dense
+

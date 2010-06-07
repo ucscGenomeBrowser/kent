@@ -1,0 +1,57 @@
+
+#	$Id: placentals.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
+
+# Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
+# 	Euteleostomi; Mammalia;
+
+tupBel	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
+
+speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xerinae; Marmotini; Spermophilus
+
+oryCun	Eutheria; Euarchontoglires; Glires; Lagomorpha; Leporidae; Oryctolagus
+
+ochPri	Eutheria; Euarchontoglires; Glires; Lagomorpha; Ochotonidae; Ochotona
+
+cavPor	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Caviidae; Cavia
+
+dipOrd	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Heteromyidae; Dipodomyinae; Dipodomys
+
+mm	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Mus
+
+rn	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Rattus
+
+equCab	Eutheria; Laurasiatheria; Perissodactyla; Equidae; Equus
+
+turTru	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinidae; Tursiops
+
+vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna
+
+bosTau	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
+
+oviAri	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Caprinae; Ovis
+
+susScr	Eutheria; Laurasiatheria; Cetartiodactyla; Suina; Suidae; Sus
+
+pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
+
+myoLuc	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
+
+felCat	Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis
+
+canFam	Eutheria; Laurasiatheria; Carnivora; Caniformia; Canidae; Canis
+
+ailMel	Eutheria; Laurasiatheria; Carnivora; Caniformia; Ursidae; Ailuropoda
+
+eriEur	Eutheria; Laurasiatheria; Insectivora; Erinaceidae; Erinaceinae; Erinaceus
+
+sorAra	Eutheria; Laurasiatheria; Insectivora; Soricidae; Soricinae; Sorex
+
+choHof	Eutheria; Xenarthra; Megalonychidae; Choloepus
+
+dasNov	Eutheria; Xenarthra; Dasypodidae; Dasypus
+
+loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
+
+proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
+
+echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops

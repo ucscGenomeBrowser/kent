@@ -1,0 +1,6 @@
+displayId
+   .acc info.acc
+   .acc accToTaxon.acc hide
+      .taxon taxon.id
+   .acc description.acc
+      .val text

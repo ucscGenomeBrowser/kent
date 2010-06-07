@@ -1,0 +1,28 @@
+#!/bin/bash -e
+
+# Script to copy download files from the build server to the the download
+# server ( server)  This attempts an rsync
+
+set -e  # errors terminate
+trap "echo Error: `hostname` download copy failed >&2; exit 1" ERR
+exec </dev/null
+
+# initialize
+gbRoot=/genbank
+cd $gbRoot
+. $gbRoot/lib/gbCommon.sh
+
+# location of the genbank root and files on the remote build server
+gbBuildServer=genbank-10
+rsyncPort="rsh"
+gbBuildRoot=/cluster/data/genbank
+gbDownloadBuildDir=${gbBuildRoot}/data/ftp
+
+goldenPathDir=/mirrordata/apache/htdocs/goldenPath
+
+# Checking for an existing lock file, Silently exits if lock file exists
+# and is less than one day old,  error if older.
+gbCheckLock $gbRoot/var/downloadcp/$(hostname)/run/downloadcp.lock
+
+gbCopyDownload -rsyncPort=$rsyncPort $gbBuildServer $gbDownloadBuildDir $goldenPathDir
+

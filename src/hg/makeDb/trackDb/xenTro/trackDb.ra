@@ -1,0 +1,73 @@
+#	"$Id: trackDb.ra,v 1.32 2010/02/08 19:28:53 rhead Exp $";
+
+include trackDb.chainNet.ra
+
+track mgcFullMrna override
+#track mgcGenes
+shortLabel XGC Genes
+longLabel Xenopus Gene Collection Full ORF mRNAs
+visibility pack
+
+track jgiFilteredModels
+shortLabel JGI Genes
+longLabel JGI Filtered Genes
+group genes
+priority 35.5
+visibility pack
+color 12,120,12
+type genePred
+url http://genome.jgi-psf.org/cgi-bin/dispGeneModel.v4?db=Xentr3&id=$$
+
+track intronEst
+#replaces record intronEst in parent dir missing/extra maxItems
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+
+track xenLaeRna
+shortLabel X. laevis mRNAs
+longLabel Xenopus Laevis mRNAs Mapped with Blatz
+group rna
+priority 58
+visibility pack
+spectrum on
+type psl xeno
+
+track oldXenLaeRna
+shortLabel Old Laevis mRNAs
+longLabel Old Xenopus Laevis mRNAs Mapped with Blatz
+group rna
+priority 59
+visibility pack
+spectrum on
+type psl xeno
+
+track nibbEstContigs
+shortLabel NIBB Laevis Ests
+longLabel Xenopus laevis ESTs from NIBB XDB Assembled into Contigs and Mapped with Blatz
+group rna
+priority 60
+visibility hide
+spectrum on
+type psl xeno
+
+track nibbPics
+shortLabel NIBB In Situs
+longLabel Japanese Nat. Inst. of Basic Biology X. Laevis mRNA in situs
+group regulation
+priority 88
+visibility pack
+color 65,20,100
+type psl xeno
+# url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511&XL001c18
+url http://xenopus.nibb.ac.jp/cgi-bin/showIHS?Contig036511
+

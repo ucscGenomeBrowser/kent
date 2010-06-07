@@ -1,0 +1,230 @@
+# Fields (columns) in ENCODE metadata files (DAF and DDF)
+# file should be "dafHeader", "dafList" or "ddf"
+
+# DDF fields
+
+field files
+file ddf
+type string
+required yes
+
+field view
+file ddf
+type string
+required yes
+
+field labVersion
+file ddf
+type string
+required no
+
+field accession
+file ddf
+type string
+required no
+
+field replicate
+file ddf
+type int
+required no
+
+field rank
+file ddf
+type int
+required no
+
+field fragLength
+file ddf
+type int
+required no
+
+field softwareVersion
+file ddf
+type string
+required no
+
+field restrictionEnzyme
+file ddf
+type string
+required no
+
+field treatment
+file ddf
+type string
+required no
+
+field protocol
+file ddf
+type string
+required no
+
+field phase
+file ddf
+type string
+required no
+
+field input
+file ddf
+type string
+required no
+
+field setType
+file ddf
+type string
+required no
+
+field inputType
+file ddf
+type string
+required no
+
+field origAssembly
+file ddf
+type string
+required no
+
+# required DAF header fields
+
+field dafVersion
+file dafHeader
+type string
+required yes
+
+field assembly
+file dafHeader
+type string
+required yes
+
+field grant
+file dafHeader
+type string
+required yes
+
+field lab
+file dafHeader
+type string
+required yes
+
+field dataType
+file dafHeader
+type string
+required yes
+
+field validationSettings
+file dafHeader
+type string
+required yes
+
+# In v.1, composite name was: wgEncode<lab><dataType>
+# In v.2, composite name is: enc<compositeNameSuffix>
+# Generally, composites should still include lab and dataType
+
+field compositeSuffix
+file dafHeader
+type string
+required yes
+
+# Use this for composites that include multiple data types
+# (e.g. Open Chromatin) or multiple labs (e.g. Duke)
+# In these cases, there will be multiple data agreements
+# folded into a shared composite.  The dataAgreementSuffix
+# is used to generate table and filenames that distinguish
+field dataAgreementSuffix
+file dafHeader
+type string
+required no
+
+# optional DAF header fields
+
+field variables
+file dafHeader
+type string
+required no
+
+field medianFragmentLength
+file dafHeader
+type int
+required no
+
+field dataVersion
+file dafHeader
+type int
+required no
+
+field dataVersionComment
+file dafHeader
+type string
+required no
+
+field fragmentLengthRange
+file dafHeader
+type int
+required no
+
+field group
+file dafHeader
+type string
+required no
+
+field noAutoCreate
+file dafHeader
+type bool
+required no
+
+# DAF list fields
+
+field longLabelPrefix
+file dafList
+type string
+required no
+
+field shortLabelPrefix
+file dafList
+type string
+required no
+
+field type
+file dafList
+type string
+required yes
+
+field hasReplicates
+file dafList
+type string
+required yes
+
+field required
+file dafList
+type bool
+required yes
+
+field order
+file dafList
+type int
+required no
+
+field downloadOnly
+file dafList
+type bool
+required no
+
+field options
+file dafList
+type string
+required no
+
+field sql
+file dafList
+type string
+required no
+
+# cv.ra fields
+#field term
+#file cv
+#type string
+#required yes
+
+#field type
+#file cv
+#type string
+#required yes

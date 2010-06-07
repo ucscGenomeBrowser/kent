@@ -1,0 +1,10 @@
+int i = -1;
+i = -i;
+float f = 10.0;
+string s = "hi";
+i = -f;
+bit bi = !"hi";
+i = ~i;
+
+if (!(i == f))
+    print("nope");

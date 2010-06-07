@@ -1,0 +1,8 @@
+include 'b'
+
+global to printA()
+{
+print("Hello from module A");
+}
+
+printB();

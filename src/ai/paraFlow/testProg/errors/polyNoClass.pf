@@ -1,0 +1,4 @@
+morph to hello()
+    {
+    print("Hello");
+    }

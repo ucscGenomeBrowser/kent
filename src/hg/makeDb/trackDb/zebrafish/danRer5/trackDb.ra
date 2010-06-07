@@ -1,0 +1,140 @@
+
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10.1
+visibility hide
+type ctgPos
+
+track vegaGene
+#replaces record vegaGene in parent dir missing/extra parent
+shortLabel Vega Genes
+longLabel Vega v28 Annotations
+group genes
+priority 37
+visibility hide
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25,Zv7_scaffold2498,Zv7_scaffold2509,Zv7_scaffold2516,Zv7_scaffold2572
+color 12,12,120
+type genePred vegaPep
+autoTranslate 0
+dataVersion VEGA Release 28
+url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
+
+track vegaPseudoGene
+#replaces record vegaPseudoGene in parent dir missing/extra parent
+shortLabel Vega Pseudogenes
+longLabel Vega v28 Annotated Pseudogenes 
+group genes
+priority 37.1
+visibility hide
+chromosomes chr2,chr3,chr4,chr5,chr9,chr12,chr13,chr18,chr19,chr20,chr22,chr24,Zv7_scaffold2509 
+color 12,12,120
+type genePred
+autoTranslate 0
+dataVersion VEGA Release 28
+url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
+
+track affyConsensusAndTargetZonWildType
+compositeTrack on
+shortLabel Wild Type Array
+longLabel Zon Lab Expression data for Wild Type Zebrafish
+group regulation
+priority 80
+visibility hide
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings affyZonWildTypeGroups
+    
+    track affyZonWildType
+    #replaces record affyZonWildType in parent dir missing/extra group,visibility,type,expScale,expStep,groupings
+    parent affyConsensusAndTargetZonWildType
+    shortLabel WT Array Cons
+    longLabel Zon Lab Expression for Wild Type Zfish (Consensus Seq.)
+    priority 1
+   
+    track affyTargetZonWildType
+    parent affyConsensusAndTargetZonWildType
+    shortLabel WT Array Targ
+    longLabel Zon Lab Expression for Wild Type Zfish (Target Seq.)
+    priority 2
+
+track affyZebrafish 
+compositeTrack on
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Sequences from Zebrafish Chip
+group regulation
+priority 89
+visibility hide
+type psl .
+
+    track affyZebrafishConsensus
+    parent affyZebrafish
+    shortLabel Affy Zfish Cons
+    longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+    priority 1
+    
+    track affyZebrafishTarget
+    parent affyZebrafish
+    shortLabel Affy Zfish Targ
+    longLabel Alignments of Affymetrix Target Sequences from Zebrafish Chip
+    priority 2 
+
+track rmsk
+#replaces record rmsk in parent dir missing/extra maxWindowToDraw
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 149.1
+visibility dense
+spectrum on
+type rmsk
+canPack off
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex (AC|AL|BX|CR|CT|Zv7_scaffold)[0-9\.]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchTable affyZebrafishConsensus
+searchMethod exact
+searchType psl
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+                                                                                
+searchName affyZebrafishConsAbbrev
+searchTable affyZebrafishConsensus
+searchMethod exact
+searchType psl
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+                                                                                
+searchName affyZebrafishTargFuzzy
+searchTable affyZebrafishTarget
+searchMethod fuzzy
+searchType psl
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+                                                                                
+searchName affyZebrafishTargExact
+searchTable affyZebrafishTarget
+searchMethod exact
+searchType psl
+termRegex tg:[Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+
+searchName affyZebrafishTargLong
+searchTable affyZebrafishTarget
+searchMethod fuzzy
+searchType psl
+termRegex Zebrafish:.+
+termPrefix Zebrafish:
+searchPriority 15
+
+track ensGene override
+priority 32.8
+

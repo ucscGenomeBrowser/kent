@@ -1,0 +1,5 @@
+class c
+   {
+   readable int a;
+   readable to eat() {}
+   }

@@ -1,0 +1,86 @@
+#	"$Id: trackDb.chainNet.ra,v 1.17 2010/03/19 18:18:47 antonio Exp $";
+
+track chainNetHg19 override
+priority 210.3
+chainMinScore 5000
+
+track chainNetHg18 override
+priority 210.3
+shortLabel $o_db Chain/Net
+chainMinScore 5000
+
+    track chainHg18 override
+    shortLabel $o_db Chain
+
+    track netHg18 override
+    shortLabel $o_db Net
+
+track chainNetHg17 override
+shortLabel $o_db Chain/Net
+
+    track chainHg17 override
+    shortLabel $o_db Chain
+
+    track netHg17 override
+    shortLabel $o_db Net
+
+track chainNetGalGal2 override
+priority 580.3  
+
+track chainNetGorGor1 override
+priority 220.3
+
+track chainNetPonAbe2 override
+priority 230.3
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetRheMac2 override
+priority 250.3
+chainMinScore 5000
+
+track chainNetCalJac3 override
+priority 260.3
+
+track chainNetCalJac1 override
+priority 260.3
+
+track chainNetRn4 override
+priority 360.3
+
+track chainNetMm9 override
+priority 370.3
+
+track chainNetMm8 override
+priority 370.3
+
+track chainNetCanFam2 override
+priority 420.3
+
+track chainNetEquCab1 override
+priority 440.3
+
+track chainNetMonDom5 override
+priority 540.3
+chainMinScore 1000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetMonDom4 override
+priority 540.3
+shortLabel $o_db Chain/Net
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+    track chainMonDom4 override
+    shortLabel $o_db Chain
+
+    track netMonDom4 override
+    shortLabel $o_db Net
+
+track chainNetDanRer4 override
+shortLabel $o_Organism Chain/Net
+priority 600.3
+
+track chainNetDanRer3 override
+priority 600.3

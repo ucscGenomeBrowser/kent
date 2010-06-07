@@ -1,0 +1,3 @@
+#!/bin/csh -ef
+xmlCat test/in1.xml test/in2.xml > test/out.xml
+diff test/expected.xml test/out.xml

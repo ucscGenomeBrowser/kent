@@ -1,0 +1,160 @@
+# for emacs: -*- mode: sh; -*-
+
+# Dipodomys ordii  Kangaroo rat
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
+    ssh kkstore05
+    mkdir /cluster/store12/dipOrd1
+    ln -s /cluster/store12/dipOrd1 /cluster/data
+    mkdir /cluster/data/dipOrd1/broad
+    cd /cluster/data/dipOrd1/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/Dipord1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/Dipord1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/Dipord1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
+
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin dipOrd1.qual.qac
+
+   cut -f 1 assembly.agp | uniq -c | wc -l 
+   # Number of scaffolds: 210053
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl (DONE braney 2008-10-07)
+    ssh kolossus
+    cd /cluster/data/dipOrd1
+cat << _EOF_ >dipOrd1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db dipOrd1
+clade mammal
+genomeCladePriority 35
+scientificName  Dipodomys ordii  
+commonName Kangaroo rat
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/dipOrd1/broad/assembly.bases.gz
+agpFiles /cluster/data/dipOrd1/broad/assembly.agp
+qualFiles /cluster/data/dipOrd1/broad/dipOrd1.qual.qac
+dbDbSpeciesDir kangarooRat
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -workhorse kolossus dipOrd1.config.ra > makeGenomeDb.out 2>&1 &
+
+    cut -f 2 chrom.sizes | ave stdin
+# Q1 1417.000000
+# median 2509.000000
+# Q3 8139.000000
+# average 10275.987955
+# min 554.000000
+# max 11421927.000000
+# count 210053
+# total 2158502098.000000
+# standard deviation 40860.463605
+
+#########################################################################
+## Repeat Masker (DONE - 2008-10-14 - Hiram)
+    screen	# to manage this job
+    mkdir /hive/data/genomes/dipOrd1/bed/repeatMasker
+    cd /hive/data/genomes/dipOrd1/bed/repeatMasker
+    time doRepeatMasker.pl -workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` dipOrd1 > do.log 2>&1 &
+    #	real    663m46.841s
+    #	failed in doMask.csh due to no dipOrd1.unmasked.2bit file ?
+    #	which was there at the beginning, now it is gone ?
+    #	the broken doRepeatMasker.pl script removed it due to hive confusion
+    #	went back to the jkStuff/makeUnmasked script and re-ran part of that.
+    #	then ran the doMask.csh script to finish that, and continuing:
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-continue=install -workhorse=hgwdev -bigClusterHub=swarm \
+        -buildDir=`pwd` dipOrd1 > install.log 2>&1 &
+    #	real    15m17.199s
+    twoBitToFa dipOrd1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2158502098 bases (313540677 N's 1844961421 real 1404133178 upper 440828243
+# lower) in 210053 sequences in 1 files
+# %20.42 masked total, %23.89 masked real
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-10-17 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /cluster/data/dipOrd1/bed/simpleRepeat
+    cd /cluster/data/dipOrd1/bed/simpleRepeat
+    # 
+    time  $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/dipOrd1/bed/simpleRepeat \
+	dipOrd1 > do.log 2>&1 &
+    #	real    2630m12.078s
+
+    featureBits dipOrd1 simpleRepeat
+    #	211605979 bases of 1844961421 (11.469%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/dipOrd1
+    twoBitMask dipOrd1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed dipOrd1.2bit
+
+    twoBitToFa dipOrd1.2bit stdout | faSize stdin > dipOrd1.2bit.faSize.txt
+# 2158502098 bases (313540677 N's 1844961421 real 1323236442 upper 521724979
+# lower) in 210053 sequences in 1 files
+# %24.17 masked total, %28.28 masked real
+
+    #	link to gbdb
+    ln -s `pwd`/dipOrd1.2bit /gbdb/dipOrd1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-17 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	dipOrd1: 1844961421
+    # thus: 1024 * 1844961421/2881421696 = 655
+    #	rounding up to 700 to be a bit conservative
+    cd /hive/data/genomes/dipOrd1
+    time blat dipOrd1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=dipOrd1.11.ooc -repMatch=700
+    #	Wrote 33062 overused 11-mers to dipOrd1.11.ooc
+    #	real    1m34.993s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/dipOrd1
+    cp -p dipOrd1.2bit chrom.sizes dipOrd1.11.ooc \
+	/hive/data/staging/data/dipOrd1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute dipOrd1 (NCBI project 20385, ABRO01000000)" where name="dipOrd1";' hgcentraltest
+
+###########################################################################
+#  dipOrd1 - Kangaroo rat - Ensembl Genes version 51  (DONE - 2008-12-02 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/dipOrd1
+    cat << '_EOF_' > dipOrd1.ensGene.ra
+# required db variable
+db dipOrd1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that have invalid structures from Ensembl:
+# 11275: ENSDORT00000004734 no exonFrame on CDS exon 12
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 dipOrd1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/dipOrd1/bed/ensGene.51
+    featureBits dipOrd1 ensGene
+    # 25129085 bases of 1844961421 (1.362%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/dipOrd1/bed/ensGene.51
+
+############################################################################
+

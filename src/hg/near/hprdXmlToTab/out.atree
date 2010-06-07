@@ -1,0 +1,71 @@
+entrySet #level #version $xmlns $xmlns:xsi $xsi:schemaLocation
+  entry
+    source
+      names
+        $shortLabel
+        $fullName?
+        $alias* $type $typeAc
+      bibref
+        xref
+          primaryRef $db $id $dbAc? $refType? $refTypeAc?
+          secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+    availabilityList
+      $availability #id
+    experimentList
+      experimentDescription* #id
+        bibref
+          xref
+            primaryRef $db $id $dbAc? $refType? $refTypeAc?
+            secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+        interactionDetectionMethod
+          names
+            $shortLabel
+            $fullName?
+            $alias* $type $typeAc
+          xref
+            primaryRef $db $id $dbAc? $refType? $refTypeAc?
+            secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+      #experimentRef*
+    interactorList
+      interactor+ $id
+        names
+          $shortLabel
+          $fullName?
+          $alias* $type $typeAc
+        xref
+          primaryRef $db $id $dbAc? $refType? $refTypeAc?
+          secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+        interactorType
+          names
+            $shortLabel
+            $fullName?
+            $alias* $type $typeAc
+          xref
+            primaryRef $db $id $dbAc? $refType? $refTypeAc?
+            secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+        organism #ncbiTaxId
+          names
+            $shortLabel
+            $fullName?
+            $alias* $type $typeAc
+        $sequence
+    interactionList
+      interaction+ #id
+        experimentList
+          experimentDescription* #id
+            bibref
+              xref
+                primaryRef $db $id $dbAc? $refType? $refTypeAc?
+                secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+            interactionDetectionMethod
+              names
+                $shortLabel
+                $fullName?
+                $alias* $type $typeAc
+              xref
+                primaryRef $db $id $dbAc? $refType? $refTypeAc?
+                secondaryRef* $db $id $dbAc? $refType? $refTypeAc?
+          #experimentRef*
+        participantList
+          participant+ #id
+            $interactorRef

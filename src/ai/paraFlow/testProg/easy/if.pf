@@ -1,0 +1,29 @@
+int a,b=1;
+string s;
+
+if (b >= 0)
+    s = "+";
+else
+    s = "-";
+
+if (b > 0)
+    s = "+";
+else if (b < 0)
+    s = "-";
+else
+    s = "?";
+
+if (b != 0)
+    {
+    print("Hi");
+    print("I'm good");
+    }
+else
+    {
+    print("Bye");
+    print("I'm all done");
+    }
+
+if (a == b)
+   ;
+

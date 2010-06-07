@@ -1,0 +1,8 @@
+#00ffff 1
+#33ddff 2
+#55bbff 3
+#7799ff 4
+#9977ff 5
+#bb66ff 6
+#ee44ff 7
+#ff00ff	8

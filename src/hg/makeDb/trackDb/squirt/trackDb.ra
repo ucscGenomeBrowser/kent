@@ -1,0 +1,49 @@
+track refGene
+#replaces record refGene in parent dir missing/extra baseColorUseCds
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred refPep refMrna
+idXref refLink mrnaAcc name
+
+track mrna override
+spectrum on
+
+track intronEst
+#replaces record intronEst in parent dir missing/extra maxItems
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+
+track xenoMrna override
+visibility dense
+
+track rmsk
+#replaces record rmsk in parent dir missing/extra maxWindowToDraw
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 149.1
+visibility dense
+spectrum on
+type rmsk
+canPack off
+
+
+#Overrides from visibility.ra
+
+track blastHg16KG override
+visibility pack
+

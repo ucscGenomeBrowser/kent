@@ -1,0 +1,10 @@
+
+to fly()
+    {
+    print("fly");
+    }
+
+para jump()
+    {
+    fly();
+    }

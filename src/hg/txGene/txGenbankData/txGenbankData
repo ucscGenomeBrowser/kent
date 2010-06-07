@@ -1,0 +1,65 @@
+#!/bin/sh -e
+
+usage="txGenbankData db
+
+
+Get GenBankand RefSeq alignments and metadata, and ReqSeq peptide sequences
+for input to the UCSC Genes pipeline.  Outputs the following files in the
+current directory:
+
+   mrna.psl
+   mrna.ra
+   mrna.fa
+   refSeq.psl
+   refSeq.ra
+   refSeq.fa
+   refPep.fa
+   mgcStatus.tab
+"
+
+if [ $# != 1 ] ; then
+    echo "Wrong # args: $usage" >&2
+    exit 1
+fi
+db="$1"
+
+gbRoot=/cluster/data/genbank
+gbGetSeqs=${gbRoot}/bin/$(uname -m)/gbGetSeqs
+
+# function to get alignments and metadata.
+doGet() {
+    local srcDb="$1" outPre="$2"
+    (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=psl -db=$db -native $srcDb mrna $outPre.psl)
+    (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=ra  -db=$db -native $srcDb mrna $outPre.ra)
+    (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=seq -db=$db -native $srcDb mrna $outPre.fa)
+}
+
+doGet refseq refSeq
+(set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=seq -db=$db -native refseq pep refPep.fa)
+doGet genbank mrna
+
+# create mgcStatus.tab, in the format of the retired mgcFullStatus table, from
+# the mrna.ra file.  This has two columns, the acc and a status of either
+# fullLength or fullLengthSynthetic.
+awk '
+BEGIN {OFS="\t"}
+
+$1=="acc" {
+    acc = $2;
+    isMgc = isSyn = 0;
+}
+/^key .*mgc(\.$|;.*)/ {
+    isMgc = 1;
+}
+/^org synthetic/ {
+    isSyn = 1;
+}
+/^$/ && isMgc {
+    if (isSyn) {
+        print acc,"fullLengthSynthetic";
+    } else {
+        print acc,"fullLength";
+    }
+}
+' mrna.ra >mgcStatus.tab.tmp
+mv -f mgcStatus.tab.tmp mgcStatus.tab

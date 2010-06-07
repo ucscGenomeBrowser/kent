@@ -1,0 +1,2 @@
+#!/bin/tcsh
+cvs status |& cvsStatusFilter | grep -v Up-to-date

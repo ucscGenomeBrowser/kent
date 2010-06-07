@@ -1,0 +1,7 @@
+#	"$Id: trackDb.ra,v 1.45 2010/02/09 02:16:09 rhead Exp $";
+
+include trackDb.chainNet.ra
+
+track blatFr1 override
+priority 120.1
+

@@ -1,0 +1,37 @@
+#!/usr/bin/awk -f
+
+# takes a list of tables and a trackDb.ra file, and removes the line
+# "release alpha" from the corresponding block.  Writes results to stdout.
+
+BEGIN {
+  if (ARGC != 3) {
+    print "wrong # args: removeAlphas tableList trackDb.ra" > "/dev/stderr"
+    print "Takes a list of tables and a trackDb.ra file, and removes the release" > "/dev/stderr"
+    print "alpha lines from the corresponding blocks.  Writes whole file to stdout." > "/dev/stderr"
+    exit 1
+  }
+  tblFile = ARGV[1]
+  ARGV[1] = ""
+  while ((status = getline tbl <tblFile) > 0) {
+    tables[tbl] = 1
+  }
+  if (status < 0) {
+    print "Error: cannot read " tblFile > "/dev/stderr"
+    exit 1
+  }
+  close(tblFile)
+  inTblBlock = 0
+}
+
+($1 == "track") && tables[$2] {
+  inTblBlock = 1
+}
+
+NF == 0 {
+  inTblBlock = 0
+}
+
+(inTblBlock && ($1 != "release") && ($2 != "alpha")) || !inTblBlock {
+  print $0
+}
+

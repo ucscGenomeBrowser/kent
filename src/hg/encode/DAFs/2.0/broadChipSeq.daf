@@ -1,0 +1,42 @@
+# Data Agreement File for Broad ChipSeq project  $Revision: 1.3 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant            Bernstein
+lab              Broad
+dataType         ChipSeq
+compositeSuffix  BroadChipSeq
+group            regulation
+variables        cell, antibody
+assembly         hg19
+
+medianFragmentLength 300
+validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=25
+
+# Track/view definition
+view             Peaks
+longLabelPrefix  Histone Mods, Broad ChIP-seq Peaks
+type             broadPeak
+hasReplicates    no
+required         yes
+
+view             Signal
+longLabelPrefix  Histone Mods, Broad ChIP-seq Signal
+type             wig
+hasReplicates    no
+required         yes
+
+view             Alignments
+longLabelPrefix  Histone Mods, Broad ChIP-seq Alignments
+type             tagAlign
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         yes

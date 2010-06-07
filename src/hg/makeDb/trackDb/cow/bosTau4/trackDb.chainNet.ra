@@ -1,0 +1,10 @@
+#	"$Id: trackDb.chainNet.ra,v 1.2 2010/02/08 19:28:33 rhead Exp $";
+
+track chainNetHg18 override
+shortLabel $o_db Chain/Net
+
+    track chainHg18 override
+    shortLabel $o_db Chain
+
+    track netHg18 override
+    shortLabel $o_db Net

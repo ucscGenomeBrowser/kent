@@ -1,0 +1,29 @@
+#	"$Id: trackDb.chainNet.ra,v 1.5 2010/02/03 07:02:22 kuhn Exp $";
+
+track chainNetMonDom4 override
+priority 250.3
+shortLabel $o_db Chain/Net
+
+    track chainMonDom4 override
+    shortLabel $o_db Chain
+
+    track netMonDom4 override
+    shortLabel $o_db Net
+
+track chainNetEquCab1 override
+shortLabel $o_db Chain/Net
+
+    track chainEquCab1 override
+    shortLabel $o_db Chain
+
+    track netEquCab1 override
+    shortLabel $o_db Net
+
+track chainNetMm8 override
+shortLabel $o_db Chain/Net
+
+    track chainMm8 override
+    shortLabel $o_db Chain
+
+    track netMm8 override
+    shortLabel $o_db Net

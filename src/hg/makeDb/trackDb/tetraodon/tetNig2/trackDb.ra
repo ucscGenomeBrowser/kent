@@ -1,0 +1,19 @@
+#	"$Id: trackDb.ra,v 1.5 2010/02/23 04:34:14 hiram Exp $";
+
+include trackDb.chainNet.ra
+
+# Local declaration so that local gold.html is picked up.
+track gold override
+shortLabel Scaffolds
+longLabel Assembly Scaffolds (Supercontigs)
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+track gaze override
+type genePred gazePep
+visibility pack
+baseColorDefault genomicCodons

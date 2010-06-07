@@ -1,0 +1,25 @@
+# Data Agreement File for the Elnitski Negative Regulatory Elements project
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+ # Lab and general info
+ grant             Elnitski
+ lab               NHGRI
+ dataType          NRE
+ variables         cell, promoter
+ assembly          hg18
+ dafVersion        0.2.2
+
+ # Track/view definition
+ view             Silencers
+ longLabelPrefix  Elnitski Negative Regulatory Elements - Silencers (NRE-Si)
+ type             bed 6
+ hasReplicates    no
+ required         no
+
+ view             Enhancer Blockers
+ longLabelPrefix  Elnitski Negative Regulatory Elements - Enhancer Blockers (NRE-EBs)
+ type             bed 6
+ hasReplicates    no
+ required         no

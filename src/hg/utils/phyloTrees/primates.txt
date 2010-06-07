@@ -1,0 +1,25 @@
+
+#	$Id: primates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
+
+# Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
+#	Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Primates;
+
+hg	Haplorrhini; Catarrhini; Hominidae; Homo
+
+panTro	Haplorrhini; Catarrhini; Hominidae; Pan
+
+gorGor	Haplorrhini; Catarrhini; Hominidae; Gorilla
+
+ponAbe	Haplorrhini; Catarrhini; Hominidae; Pongo
+
+rheMac	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Macaca
+
+papHam	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Papio
+
+calJac	Haplorrhini; Platyrrhini; Cebidae; Callitrichinae; Callithrix
+
+tarSyr	Haplorrhini; Tarsiiformes; Tarsiidae; Tarsius
+
+micMur	Strepsirrhini; Lemuriformes; Cheirogaleidae; Microcebus
+
+otoGar	Strepsirrhini; Lorisiformes; Galagidae; Otolemur

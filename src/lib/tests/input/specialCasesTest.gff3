@@ -1,0 +1,11 @@
+##gff-version 3
+##sequence-region 2L 1 23011544
+##organism 2L Drosophila melanogaster
+# Target attribute
+2L	blastx_masked_aa_SPTR.dmel	match	22229583	22229699	.	-	.	ID=:1577877_blastx_masked_aa_SPTR.dmel;Name=Q9VKH2-AE003783.4-aa_SPTR.dmel-blastx_masked;program=blastx_masked;programversion=1.0;sourcename=aa_SPTR.dmel;Target=Q9VKH2 596 629 +
+2L	blastx_masked_aa_SPTR.dmel	match	22229583	22229699	.	-	.	ID=:1577939_blastx_masked_aa_SPTR.dmel;Name=P39770-AE003783.4-aa_SPTR.dmel-blastx_masked;program=blastx_masked;programversion=1.0;sourcename=aa_SPTR.dmel;Target=P39770 596 629 +
+2L	blastx_masked_aa_SPTR.dmel	match_part	22229583	22229699	48	-	.	Name=:5411425;Parent=:1577877_blastx_masked_aa_SPTR.dmel;target_type=protein;Target=Q9VKH2 596 629
+2L	blastx_masked_aa_SPTR.dmel	match_part	22229583	22229699	48	-	.	Name=:5411530;Parent=:1577939_blastx_masked_aa_SPTR.dmel;target_type=protein;Target=P39770 596 629
+
+# empty attr value
+chr	RNA	RNA	788298	788656	.	+	.	ID=tmRNA;Name=;Note=regulatory ncRNA

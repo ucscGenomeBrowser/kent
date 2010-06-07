@@ -1,0 +1,16 @@
+include ../../inc/common.mk
+
+JKSRCDIR = /cluster/home/ctrople/kent/src
+JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
+
+L += $(MYSQLLIBS) -lm 
+MYLIBS =  $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a
+
+O = makeSeqs.o
+
+makeSeqs: $O 
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
+	mv ${AOUT} makeSeqs
+	${STRIP} makeSeqs${EXE}
+	chmod a+rx makeSeqs
+	cp makeSeqs ${BINDIR}

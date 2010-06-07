@@ -1,0 +1,16 @@
+class name
+   {
+   string name;
+   }
+
+to hi() into string hi
+   {
+   hi = "hi!";
+   }
+
+name n = ("hello");
+print(n);
+n = hi();
+print(n);
+n = "My name is Floyd.";
+print(n);

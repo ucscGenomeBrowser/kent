@@ -1,0 +1,46 @@
+#	"$Id: trackDb.ra,v 1.16 2010/05/07 05:35:51 kent Exp $";
+
+include trackDb.chainNet.ra
+
+track syntenicNet
+shortLabel Syntenic Nets
+longLabel Syntenic Alignment Nets for Human, Mouse, and Dog
+compositeTrack on
+group compGeno
+priority 300
+visibility hide
+spectrum on
+type netAlign
+
+    track netSyntenyHg18
+    parent syntenicNet
+    shortLabel Human Syntenic Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
+    group compGeno
+    priority 300.1
+    visibility hide
+    spectrum on
+    type netAlign hg18 chainHg18
+    otherDb hg18
+
+    track netSyntenyMm8
+    parent syntenicNet
+    shortLabel Mouse Syntenic Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
+    group compGeno
+    priority 300.2
+    visibility hide
+    spectrum on
+    type netAlign mm8 chainMm8
+    otherDb mm8
+
+    track netSyntenyCanFam2
+    parent syntenicNet
+    shortLabel Dog Syntenic Net
+    longLabel $o_Organism ($o_date) Syntenic Alignment Net
+    group compGeno
+    priority 300.3
+    visibility hide
+    spectrum on
+    type netAlign canFam2 chainCanFam2
+    otherDb canFam2

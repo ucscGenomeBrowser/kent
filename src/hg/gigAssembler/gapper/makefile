@@ -1,0 +1,16 @@
+include ../../../inc/common.mk
+
+
+L += $(MYSQLLIBS) -lm
+MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+
+O = gapper.o 
+
+gapper: $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/gapper $O $(MYLIBS) $L
+
+
+lib:
+	cd ../../lib && ${MAKE}
+	cd ../../../lib && ${MAKE}

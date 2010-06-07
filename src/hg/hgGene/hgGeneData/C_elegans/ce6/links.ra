@@ -1,0 +1,6 @@
+name wormBase
+shortLabel WormBase
+tables sangerGene
+idSql select WBGeneID from sangerGeneToWBGeneID where sangerGene = '%s'
+url http://wormbase.org/db/gene/gene?name=%s;class=Gene
+priority 10

@@ -1,0 +1,233 @@
+# for emacs: -*- mode: sh; -*-
+
+# Vicugna pacos
+
+#########################################################################
+# DOWNLOAD SEQUENCE  (DONE braney 2008-10-07)
+    ssh kolossus
+    screen
+    mkdir /hive/data/genomes/vicPac1
+    ln -s /hive/data/genomes/vicPac1 /cluster/data
+    mkdir /cluster/data/vicPac1/broad
+    cd /cluster/data/vicPac1/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/alpaca/VicPac1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/alpaca/VicPac1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/alpaca/VicPac1.0/assembly.quals.gz 
+
+    qaToQac assembly.quals.gz stdout | \
+	qacAgpLift assembly.agp stdin vicPac1.qual.qac
+
+    cut -f 1 assembly.agp | uniq -c | wc -l 
+# Number of scaffolds: 298413
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl (working braney...
+    cd /cluster/data/vicPac1
+cat << _EOF_ >vicPac1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db vicPac1
+clade mammal
+genomeCladePriority 35
+scientificName  Vicugna vicugna
+commonName Alpaca
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute vicPac1 
+orderKey 233.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/vicPac1/broad/assembly.bases.gz
+agpFiles /cluster/data/vicPac1/broad/assembly.agp
+qualFiles /cluster/data/vicPac1/broad/vicPac1.qual.qac
+dbDbSpeciesDir alpaca
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -workhorse kolossus -verbose=2 vicPac1.config.ra > makeGenomeDb.out 2>&1 &
+
+# 'ctl-a ctl -d' returns to previous shell
+cut -f 2 chrom.sizes | ave stdin
+# Q1 1042.000000
+# median 1372.000000
+# Q3 2292.000000
+# average 9926.690888
+# min 555.000000
+# max 5516956.000000
+# count 298413
+# total 2962253608.000000
+# standard deviation 67785.419160
+
+#########################################################################
+# REPEATMASKER (not done)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/vicPac1/bed/repeatMasker
+    cd /cluster/data/vicPac1/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=/cluster/data/vicPac1/bed/repeatMasker \
+        vicPac1 > do.log 2>&1 &
+
+    # Note: can run simpleRepeats simultaneously
+    #### When done with RM:
+    ssh pk
+    para time
+
+# Completed: 7141 of 7141 jobs
+# CPU time in finished jobs:   19375689s  322928.14m  5382.14h  224.26d  0.614 y
+# IO & Wait Time:                185390s    3089.84m    51.50h    2.15d  0.006 y
+# Average job time:                2739s      45.65m     0.76h    0.03d
+# Longest finished job:           13925s     232.08m     3.87h    0.16d
+# Submission to last job:        175075s    2917.92m    48.63h    2.03d
+
+    time nice -n +19 featureBits vicPac1 rmsk > fb.vicPac1.rmsk.txt 2>&1 &
+    # 614774346 bases of 1923010363 (31.969%) in intersection
+
+    # RepeatMasker and lib version from do.log:
+    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
+    # CC   RELEASE 20080611;     
+
+#########################################################################
+# SIMPLE REPEATS TRF (not done)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/vicPac1/bed/simpleRepeat
+    cd /cluster/data/vicPac1/bed/simpleRepeat
+    # had to change genus/species to "vicugna genus" in dummyRun
+    doSimpleRepeat.pl -buildDir=/cluster/data/vicPac1/bed/simpleRepeat \
+	vicPac1 > do.log 2>&1 &
+
+    #### When done
+    ssh pk
+    para time
+# Completed: 60 of 60 jobs
+# CPU time in finished jobs:      71877s    1197.95m    19.97h    0.83d  0.002 y
+# IO & Wait Time:                  2811s      46.85m     0.78h    0.03d  0.000 y
+# Average job time:                1245s      20.75m     0.35h    0.01d
+# Longest finished job:           12819s     213.65m     3.56h    0.15d
+# Submission to last job:         13133s     218.88m     3.65h    0.15d
+
+    featureBits vicPac1 simpleRepeat
+    # 77931003 bases of 1923010363 (4.053%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/vicPac1
+    twoBitMask vicPac1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed vicPac1.2bit
+
+    twoBitToFa vicPac1.2bit stdout | faSize stdin
+# 2962350360 bases (1039339997 N's 1923010363 real 1305704427 upper 617305936
+# lower) in 298420 sequences in 1 files
+# Total size: mean 9926.8 sd 67784.7 min 600 (scaffold_298419) max 5516956
+(scaffold_0) median 1372
+# N count: mean 3482.8 sd 21549.2
+# U count: mean 4375.4 sd 33856.2
+# L count: mean 2068.6 sd 15148.2
+# %20.84 masked total, %32.10 masked real
+
+    twoBitToFa vicPac1.rmsk.2bit stdout | faSize stdin
+
+# 2962350360 bases (1039339997 N's 1923010363 real 1309436724 upper 613573639
+# lower) in 298420 sequences in 1 files
+# Total size: mean 9926.8 sd 67784.7 min 600 (scaffold_298419) max 5516956
+# (scaffold_0) median 1372
+# N count: mean 3482.8 sd 21549.2
+# U count: mean 4387.9 sd 33863.9
+# L count: mean 2056.1 sd 15140.4
+# %20.71 masked total, %31.91 masked real
+
+    ln -s /cluster/data/vicPac1/vicPac1.2bit /gbdb/vicPac1/vicPac1.2bit
+
+    cp /cluster/data/vicPac1/vicPac1.2bit /san/sanvol1/scratch/vicPac1
+    cp /cluster/data/vicPac1/chrom.sizes /san/sanvol1/scratch/vicPac1
+
+#########################################################################
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/vicPac1/bed/repeatMasker
+    cd /hive/data/genomes/vicPac1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` vicPac1 > do.log 2>&1 &
+    #	real    292m6.556s
+
+    twoBitToFa vicPac1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2962253608 bases (1039343173 N's 1922910435 real 1306779321 upper 616131114
+# lower) in 298413 sequences in 1 files
+# %20.80 masked total, %32.04 masked real
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-10-17 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /hive/data/genomes/vicPac1/bed/simpleRepeat
+    cd /hive/data/genomes/vicPac1/bed/simpleRepeat
+    # 
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/vicPac1/bed/simpleRepeat vicPac1 > do.log 2>&1 &
+    #	real    74m17.044s
+    cat fb.simpleRepeat
+    #	77925712 bases of 1922910435 (4.052%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /hive/data/genomes/vicPac1
+    rm vicPac1.2bit
+    twoBitMask vicPac1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed vicPac1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa vicPac1.2bit stdout | faSize stdin > vicPac1.2bit.faSize.txt
+# 2962253608 bases (1039343173 N's 1922910435 real 1303047359 upper 619863076
+# lower) in 298413 sequences in 1 files
+# %20.93 masked total, %32.24 masked rea
+
+    #	link to gbdb
+    ln -s `pwd`/vicPac1.2bit /gbdb/vicPac1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-22 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	vicPac1: 1922910435
+    # thus: 1024 * 1922910435/2881421696 = 683
+    #	rounding up to 700 for a more conservative masking
+    cd /hive/data/genomes/vicPac1
+    time blat vicPac1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=vicPac1.11.ooc -repMatch=700
+    #	Wrote 25830 overused 11-mers to vicPac1.11.ooc
+    #	real    2m8.728s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/vicPac1
+    cp -p vicPac1.2bit chrom.sizes vicPac1.11.ooc \
+	/hive/data/staging/data/vicPac1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# fix the scientific name (DONE - 2008-10-22 - Hiram)
+    hgsql -e 'update dbDb set
+scientificName="Vicugna pacos" where name="vicPac1";' hgcentraltest
+
+############################################################################
+#  vicPac1 - Alpaca - Ensembl Genes version 51  (DONE - 2008-12-04 - hiram)
+    ssh swarm
+    cd /hive/data/genomes/vicPac1
+    cat << '_EOF_' > vicPac1.ensGene.ra
+# required db variable
+db vicPac1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the 53 genes that do not translate properly to UCSC coordinates
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 vicPac1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/vicPac1/bed/ensGene.51
+    featureBits vicPac1 ensGene
+    # 17730015 bases of 1922910435 (0.922%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/vicPac1/bed/ensGene.51
+
+############################################################################

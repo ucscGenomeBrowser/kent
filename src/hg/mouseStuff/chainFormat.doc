@@ -1,0 +1,37 @@
+The chain format describes a pairwise alignment which can allow
+gaps in both sequences simultaniously.   It is deliberately
+quite dense.  Here's a section of a file:
+
+chain 4900 chrY 58368225 + 25985403 25985638 chr5 151006098 - 43257292 43257528 1
+9       1       0
+10      0       5
+61      4       0
+16      0       4
+42      3       0
+16      0       8
+14      1       0
+3       7       0
+48
+
+chain 4900 chrY 58368225 + 25985406 25985566 chr5 151006098 - 43549808 43549970 2
+16      0       2
+60      4       0
+10      0       4
+70
+
+The chains start with a header line that starts with the word 'chain' and
+end with a blank line.   The lines after the header contain the size of
+the ungapped alignment,  the difference between the end of this
+block and the beginning of the next block in the human side (dt),  and
+the difference in the mouse side (dq).   The last line contains only
+the ungapped alignment size of the last block.
+
+The header line contains the chain score,  the human chromosome,
+chromosome size, strand, and chain extents,  the mouse chromosome,
+chromosome size, strand and chain extents, and the chain id number.
+The extents are as zero-based half open intervals, meaning
+the first 100 bases of a sequence are represented as 0 100, while 
+the next 100 bases are represented as 100 200.  When the strand is
+'-' the coordinates are in terms of the reverse-complemented sequence.
+
+

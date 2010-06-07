@@ -1,0 +1,9 @@
+track chainNetMm7 override
+shortLabel $o_Organism Chain/Net
+
+        track chainMm7 override
+        shortLabel $o_Organism Chain
+
+        track netMm7 override
+        shortLabel $o_Organism Net
+

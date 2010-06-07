@@ -1,0 +1,17 @@
+<html>
+<head>
+<link rel="stylesheet" href="/stylesheets/encode.css" type="text/css">
+</head>
+
+<body>
+<table><tr>
+<td><img align="left" height=50 width=100 src="/images/encode_logo.png">
+<div id="header"> Contacting the ENCODE DCC </div>
+</td>
+</tr></table>
+<p>
+<div id="content">
+<b>Email:</b>&nbsp;&nbsp;&nbsp; <%= "#{ActiveRecord::Base.configurations[RAILS_ENV]['emailDCC']}" -%>
+</div>
+</p>
+</body>

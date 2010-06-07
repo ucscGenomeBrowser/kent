@@ -1,0 +1,3 @@
+#LOOP
+bin/runCDnaLastz /cluster/data/galGal3/galGal3.2bit/$(path1) $(path2) {check out exists runs/cdna-lastz/results/$(path1)/$(lastDirs2=2)/$(root2).psl}
+#ENDLOOP

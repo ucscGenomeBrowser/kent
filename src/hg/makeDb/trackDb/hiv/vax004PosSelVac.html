@@ -1,0 +1,235 @@
+<H2>Description</H2>
+<P>
+This track displays Positive Selection analysis results (by vaccine/placebo)
+of VAX004 HIV-1 gp120 nucleotide sequences.  Each positive selection site is 
+labeled by the corresponding amino acid of the consensus sequence.
+</P>
+
+<H2>Methods</H2>
+<P>The standard method for detecting adaptive molecular evolution in
+protein-coding DNA sequences is through comparison of nonsynonymous
+(amino acid changing; <i>d</i><sub>N</sub>) and synonymous
+(silent; <i>d</i><sub>S</sub>) substitution rates through the
+<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio [&omega; or acceptance rate].
+&omega; measures the difference between both rates based on a codon
+substitution model. If an amino acid substitution is neutral, it will be fixed
+at the same rate as a synonymous mutation, with &omega; = 1.  If the amino
+acid change is deleterious, purifying or negative selection (i.e., natural
+selection against deleterious mutations with negative selection coefficients)
+will reduce its fixation rate, thus &omega; &lt; 1.  Only when the amino acid
+change offers a selective advantage is it fixed at higher rate than a
+synonymous mutation, with &omega; &gt; 1.  Therefore, an &omega; ratio
+significantly higher than one is convincing evidence for adaptive or
+diversifying selection. In the HIV context, this is the
+principle means of identifying changes and therefore sites under antigenic
+selection and therefore most important in vaccine targets. Here
+<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratios in each subtype and
+placebo and vaccine samples were compared using methods implemented in
+PAML v3.14.  &omega; and the proportion of sites (&rho;) with &omega;
+&gt; 1 were estimated under the site-specific models of
+Goldman <em>et al</em>. (1994) and Yang (2000).
+Tests of positive selection were performed by comparing likelihood scores
+(likelihood ratio test) between the M1 (neutral) and M2 (selection) and
+between the M7 (beta) and M8 (beta&&omega;) per-site nested models.
+More stringent models in PAML (M0) of per-gene selection were also
+estimated for comparison. If adaptive selection was identified, we then
+applied the Bayesian test developed by Yang <em>et al</em>. and implemented
+in PAML to identify the potential sites under diversifying selection as
+indicated by a posterior probability &gt; 0.95. Maximum likelihood trees
+were estimated for each subtype using PhyML under the best-fit substitution
+models. Each analysis was run twice under &omega; = 1.5 and 0.5.
+</P>
+
+<P>
+Simulations published by Anisimova <em>et al</em>. (2003) and Shriner
+<em>et al</em>. (2003) assessed the accuracy and power of the LRT and Bayes
+test implemented in PAML in the presence of recombination. General conclusions
+from these analyses indicate that excessive recombination (&rho; = 0.01),
+like usually observed in HIV sequences, can cause false positives in the Bayes
+test and makes the LRT unrealistic as it often mistakes recombination as
+evidence for positive selection. The LRT test that compares models M7 and M8
+seems to be more robust to recombination and the detection of sites under
+positive selection seems to be less affected by recombination.
+Nevertheless, a new coalescent model has been recently described that estimates
+the <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio in the presence of
+recombination and hence generates simultaneous estimates of &omega; and &rho;
+using Bayesian inference (Wilson <em>et al</em>. 2006).
+Such a model is implemented in omegaMap and has been
+applied to our subtype and vaccine and placebo samples. We ran omegaMap under
+a constant model for variation (i.e., all sites are assumed to share common
+&omega; and &rho;) and the following parameter settings:
+<LI>N&#176; orders = 10</LI>
+<LI>N&#176; iterations = 10<super>6</super></LI>
+<LI>thinning = 100</LI>
+<LI>priors = improper inverse</LI>
+</P>
+
+<H3>Results</H3>
+
+<TABLE BORDER=1>
+ <TR>
+  <TD>Subtype B</TD>
+  <TD>Ns</TD>
+  <TD>&omega;<sub>MO</sub></TD>
+  <TD>-lnL<sub>M1</sub></TD>
+  <TD>-lnL<sub>M2</sub></TD>
+  <TD>&omega;<sub>M2</sub></TD>
+  <TD>&rho;<sub>M2</sub></TD>
+  <TD>n<sub>M2</sub></TD>
+  <TD>-lnL<sub>M7</sub></TD>
+  <TD>-lnL<sub>M8</sub></TD>
+  <TD>&omega;<sub>M8</sub></TD>
+  <TD>&rho;<sub>M8</sub></TD>
+  <TD>n<sub>M8</sub></TD>
+ </TR>
+
+ <TR>
+  <TD>All</TD>
+  <TD>344</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+  <TD>&nbsp;</TD>
+ </TR>
+
+ <TR>
+  <TD>Placebo</TD>
+  <TD>120</TD>
+  <TD>0.443</TD>
+  <TD>41672.3</TD>
+  <TD>40929.9</TD>
+  <TD>3.33</TD>
+  <TD>0.116</TD>
+  <TD>40</TD>
+  <TD>41222.3</TD>
+  <TD>40654.8</TD>
+  <TD>2.87</TD>
+  <TD>0.097</TD>
+  <TD>40</TD>
+ </TR>
+
+ <TR>
+  <TD>Vaccine</TD>
+  <TD>224</TD>
+  <TD>0.413</TD>
+  <TD>73313.3</TD>
+  <TD>72136.5</TD>
+  <TD>3.22</TD>
+  <TD>0.107</TD>
+  <TD>37</TD>
+  <TD>72338.8</TD>
+  <TD>71486.4</TD>
+  <TD>2.72</TD>
+  <TD>0.098</TD>
+  <TD>37</TD>
+ </TR>
+</TABLE>
+
+<P><B>Table 1.</B> Test of adaptive selection for the USA subtype B 
+subgroups in PAML. All model comparisons in PAML were significant 
+(P &lt; 0.001). These estimates were obtained using one clone per 
+individual.
+</P>
+
+<TABLE BORDER=1>
+ <TR>
+  <TD>HIV-1 Subtype B</TD>
+  <TD>&theta;</TD>
+  <TD>&rho;</TD>
+  <TD>&omega;<sub>PAML</sub></TD>
+  <TD>&omega;<sub>SNAP</sub></TD>
+ </TR>
+
+ <TR>
+  <TD>Placebo</TD>
+  <TD>0.004</TD>
+  <TD>5.47</TD>
+  <TD>0.85</TD>
+  <TD>0.75</TD>
+ </TR>
+
+ <TR>
+  <TD>Vaccine</TD>
+  <TD>0.004</TD>
+  <TD>4.58</TD>
+  <TD>0.87</TD>
+  <TD>0.71</TD>
+ </TR>
+
+</TABLE>
+
+
+
+<P><B>Table 2.</B> Mean genetic diversity (&theta;), population recombination 
+rate (&rho;), and selection (&omega;) estimates (as estimated in PAML and SNAP) 
+for the USA subtype B subgroups. These estimates were obtained using 
+all the clones from an individual and then averaging over all 
+individuals in each subgroup.
+</P>
+
+<H2>Credits</H2>
+<P>
+The data for this track were provided by Keith A. Crandall at 
+<A HREF="http://www.genoma-llc.com" TARGET=_BLANK>Genoma LLC</A>.
+</P>
+
+<H2>References</H2>
+<P>Anisimova M, Nielsen R, Yang Z.
+<A HREF="http://www.genetics.org/cgi/content/abstract/164/3/1229" TARGET=_blank>Effect of recombination on the accuracy of the likelihood method for detecting positive selection at amino acid sites</A>.
+<EM>Genetics</EM>. 2003 Jul;164(3):1229-36.
+</P>
+
+<P>
+Crandall KA, Kelsey CR, Imamichi H, Lane HC, Salzman NP.
+<A HREF="http://mbe.oxfordjournals.org/cgi/reprint/16/3/372.pdf" TARGET=_blank>Parallel evolution of drug resistance in HIV: failure of nonsynonymous/synonymous substitution rate ratio to detect selection</A>.
+<EM>Mol Biol Evol</EM>. 1999 Mar;16(3):372-82.
+</P>
+
+<P>
+Goldman N, Yang Z.
+<A HREF="http://mbe.oxfordjournals.org/cgi/content/abstract/11/5/725" TARGET=_blank>A codon-based model of nucleotide substitution for protein-coding DNA sequences</A>.
+<EM>Mol Biol Evol</EM>. 1994 Sep;11(5):725-36.
+</P>
+
+<P>
+Miyata T, Yasunaga T.
+<A HREF="http://www.springerlink.com/content/v2645n103qu42633/" TARGET=_blank>Molecular evolution of mRNA: a method for estimating evolutionary rates of synonymous and amino acid substitutions from homologous nucleotide sequences and its application</A>.
+<EM>J Mol Evol</EM>. 1980 Mar;16(1):23-36.
+</P>
+
+<P>
+Shriner, D., D. C. Nickle, M. A. Jensen, and J. I. Mullins.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/12872913" TARGET=_blank>Potential impact of recombination on sitewise approaches for detecting positive natural selection</A>.
+<EM>Genet Res</EM>. 2003 Apr;81(2):115-21.
+</P>
+
+<P>
+Wilson DJ, McVean G.
+<A HREF="http://www.genetics.org/cgi/content/abstract/172/3/1411" TARGET=_blank>Estimating diversifying selection and functional constraint in the presence of recombination</A>.
+<EM>Genetics</EM>. 2006 Mar;172(3):1411-25.
+</P>
+
+<P>
+Yang Z.
+<A HREF="http://mbe.oxfordjournals.org/cgi/content/abstract/24/8/1586" TARGET=_blank>PAML 4: Phylogenetic Analysis by Maximum Likelihood</A>.
+<EM>Mol Biol Evol</EM>. 2007 Aug;24(8):1586-91.
+</P>
+
+<P>
+Yang Z, Nielsen R, Goldman N, Pedersen A-MK.
+<A HREF="http://www.genetics.org/cgi/content/abstract/155/1/431" TARGET=_blank>Codon-substitution models for heterogeneous selection pressure at amino acid sites</A>.
+<EM>Genetics</EM>. 2000 May;155(1):431-449.
+</P>
+
+<P>
+Yang Z, Wong WSW, Nielsen R.
+<A HREF="http://mbe.oxfordjournals.org/cgi/content/abstract/msi097v1?ct" TARGET=_blank>Bayes empirical bayes inference of amino acid sites under positive selectioni</A>.
+<EM>Mol Biol Evol</EM>. 2005 Apr;22(4):1107-18.
+</P>

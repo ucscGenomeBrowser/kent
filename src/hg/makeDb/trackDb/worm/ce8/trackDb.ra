@@ -1,0 +1,37 @@
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+
+track multiz5way
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (5 nematodes)
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons5way
+# spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz5wayFrames
+# irows on
+autoScale Off
+windowingFunction mean
+summary multiz5waySummary
+speciesOrder caeRem3 cb3 caePb2 caeJap2
+treeImage phylo/ce8_5way.gif
+speciesCodonDefault ce8
+
+track phastConsElements5way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 5-way Multiz Alignment
+group compGeno
+priority 104.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .

@@ -1,0 +1,73 @@
+######## ISPY ##################
+
+track ispyMipCGH
+shortLabel ispy CGH by MIP
+longLabel Koei(Gray lab) CGH by MIP (~20K) 
+group cancerGenomics
+priority 41
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings ispyMipCGHGroups
+
+track ispyAgiExp
+shortLabel ispy gene expression by agilent
+longLabel ispy gene expression measured on agilent whole genome array 44K
+group cancerGenomics
+priority 920
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ispyAgiExpGroups
+
+track ispyAgiExpT1
+shortLabel ispy gene expression TP= T1 by agilent
+longLabel ispy gene expression time point=T1 measured on agilent whole genome array 44K
+group cancerGenomics
+priority 42
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ispyAgiExpT1Groups
+
+track ispyAgiDeltaT2
+shortLabel ispy gene expression T2-T1 by agilent
+longLabel ispy gene expression difference between time point T1 and T2 measured on agilent whole genome array 44K
+group cancerGenomics
+priority 42.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings ispyAgiDeltaT2Groups
+
+track ispyAgiDeltaT4
+shortLabel ispy gene expression T4-T1 by agilent
+longLabel ispy gene expression difference between time point T1 and T4 measured on agilent whole genome array 44K
+group cancerGenomics
+priority 42.2
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings ispyAgiDeltaT4Groups
+
+track ISPYproteomics
+shortLabel ispy proteomics
+longLabel ispy proteomics data from Petricoin lab
+group cancerGenomics
+priority 43
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 5.0
+expStep 0.2
+groupings ISPYproteomicsGroups

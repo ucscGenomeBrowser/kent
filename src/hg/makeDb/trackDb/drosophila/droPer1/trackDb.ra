@@ -1,0 +1,13 @@
+
+track chainDm2 override
+priority 133
+
+track netDm2 override
+priority 134
+visibility dense
+
+track blastDm2FB override
+shortLabel D. mel. Proteins 
+longLabel D. melanogaster Proteins
+
+

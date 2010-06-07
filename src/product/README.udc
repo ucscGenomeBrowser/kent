@@ -1,0 +1,32 @@
+
+udcCache means URL-Data-Cache
+
+BBI files use the udcCache.
+BBI means Big Binary Indexed and includes
+file types such as BigBed (.bb) and BigWig (.bw).
+
+UCSC BAM file support may also use the udcCache
+
+The udcCache allows tracks that are either installed tracks
+or custom tracks of the above mentioned types to cache data 
+that they have already fetched via URL.  This allows data to 
+reside elsewhere and only download the parts
+needed on demand.  The datablocks are usually
+compressed and have an efficient random access
+index. They are accessed from a remote location
+via URLs such as HTTP, HTTPS, FTP.
+
+By default, udcCache stores files in /tmp/udcCache
+
+Howver, you may include the following in your hg.conf
+and then let your regular trash cleaning scripts
+clean out the old udcCache automatically as well:
+
+# directory for temporary bbi file caching
+udc.cacheDir=../trash/udcCache
+
+Notice that this path is relative to your 
+cgi executable directory which is the 
+current directory when the cgi starts up.
+On some systems this directory is called cgi-bin/.
+

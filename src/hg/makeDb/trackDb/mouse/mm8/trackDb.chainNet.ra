@@ -1,0 +1,37 @@
+#	"$Id: trackDb.chainNet.ra,v 1.12 2010/02/08 19:28:45 rhead Exp $";
+
+track chainNetRn4 override
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg18 override
+shortLabel $o_Organism Chain/Net
+
+    track chainHg18 override
+    shortLabel $o_Organism Chain
+
+    track netHg18 override
+    shortLabel $o_Organism Net
+
+track chainNetGalGal2 override
+shortLabel $o_db Chain/Net
+
+    track chainGalGal2 override
+    shortLabel $o_db Chain
+
+    track netGalGal2 override
+    shortLabel $o_db Net
+
+track chainNetOrnAna1 override
+chainMinScore 1000
+
+track chainNetDanRer4 override
+shortLabel $o_Organism Chain/Net
+
+track chainNetGasAcu1 override
+chainMinScore 2000
+
+track chainNetFr1 override
+shortLabel $o_Organism Chain/Net
+
+track chainNetXenTro1 override
+shortLabel $o_db Chain/Net

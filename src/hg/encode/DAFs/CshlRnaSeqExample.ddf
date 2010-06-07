@@ -1,0 +1,14 @@
+files	view	cell	localization	rnaExtract	accession	softwareVersion	replicate
+transfrags.bed	Transfrags	K562	nucleus	short	GEO123	peakCaller_1.0	
+pooledNorm+.wig	PlusSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	
+pooledNorm-.wig	MinusSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	
+rep1+.wig	PlusRawSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	1
+rep2+.wig	PlusRawSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	2
+backgrd+.wig	PlusRawSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	
+rep1-.wig	MinusRawSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	1
+rep2-.wig	MinusRawSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	2
+backgrd-.wig	MinusRawSignal	K562	nucleus	short	GEO123	wiggleSofware_1.0	
+tagmaps.bed	Alignments	K562	nucleus	short	GEO123	ELAN_1.0_orWhatever		
+rep1.fastq	download	nucleus	short	GEO123		1
+rep2.fastq	download	nucleus	short	GEO123		2
+backgrd.fastq	download	nucleus	short	GEO123		

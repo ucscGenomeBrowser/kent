@@ -1,0 +1,17 @@
+##gff-version 3
+# bad attributes from:
+# ftp://ftp.vectorbase.org/public_data/organism_data/agambiae/Geneset/agambiae.BASEFEATURES_PEST-AgamP3.5.gff3.gz
+vectorbase|X	VectorBase	contig	1	24393108	.	+	.	ID=X; Name=Anopheles gambiae; molecule_type=dsDNA; Dbxref=taxon:180454; organism_name=Anopheles gambiae; strain=PEST; translation_table=1;
+vectorbase|X	VectorBase	gene	582	16387	.	-	.	ID=vectorbase|AGAP000002; description=WW domain-containing protein [Source:VB_Community_Symbol;Acc:KIBRLG]; 
+vectorbase|X	VectorBase	mRNA	582	16387	.	-	.	ID=vectorbase|AGAP000002-RA; stable_id=AGAP000002-RA.1; Parent=vectorbase|AGAP000002;  description=hypothetical protein; Dbxref=RefSeq_peptide:XP_001237378; Dbxref=RefSeq_peptide:XP_001687751; Dbxref=RefSeq_peptide:XP_311158; Dbxref=RefSeq_dna_predicted:XM_001237377; Dbxref=RefSeq_dna_predicted:XM_001687699; Dbxref=RefSeq_dna_predicted:XM_311158; Dbxref=EntrezGene:5666737; Dbxref=EntrezGene:4576126; Dbxref=EntrezGene:1272272; Dbxref=UniGene:Aga.19012; Dbxref=UniGene:Aga.29661; Dbxref=ARRAY_JHSPH_AGGAMBER_15k_v1:ENSANGT00000020424; Dbxref=ARRAY_JHSPH_AGGAMBER_15k_v1:ENSANGT00000020424; 
+vectorbase|X	VectorBase	exon	15747	16387	.	-	.	ID=vectorbase|E000006; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	exon	3459	3760	.	-	.	ID=vectorbase|E055064; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	exon	3211	3370	.	-	.	ID=vectorbase|E054952; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	exon	950	3120	.	-	.	ID=vectorbase|E000003; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	exon	582	865	.	-	.	ID=vectorbase|E000002; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	five_prime_utr	15872	16387	.	-	.	Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	CDS	15747	15871	.	-	.	ID=vectorbase|AGAP000002-PA; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	CDS	3459	3760	.	-	.	ID=vectorbase|AGAP000002-PA; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	CDS	3211	3370	.	-	.	ID=vectorbase|AGAP000002-PA; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	CDS	950	3120	.	-	.	ID=vectorbase|AGAP000002-PA; Parent=vectorbase|AGAP000002-RA;
+vectorbase|X	VectorBase	CDS	582	865	.	-	.	ID=vectorbase|AGAP000002-PA; Parent=vectorbase|AGAP000002-RA;

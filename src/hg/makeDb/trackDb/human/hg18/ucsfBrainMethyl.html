@@ -1,0 +1,84 @@
+<H2>Description</H2>
+
+<P>
+Genome wide methylation (MeDIP-seq and MRE-seq), histone H4 lysine 4 trimethylation 
+(H3K4me3) and gene expression (RNA-seq) data were generated from primary human brain 
+tissue to investigate the role that intragenic tissue-specific CpG island methylation 
+plays in controlling gene expression (Maunakea et al. 2010) </P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+The following views are in this track:
+<DL>
+<DT><I>Alignments</I>
+<DD>The Alignments view shows reads mapped to the genome. Alignments are colored by strand.
+<DT><I>Coverage</I>
+<DD>Density graph of mapped reads
+<DT><I>CpG score</I>
+<DD>DNA methylation score on CpG sites.
+</DL>
+
+<H2>Methods</H2>
+
+<P> 
+DNA, RNA and native chromatin were extracted using standard methods. Methylated DNA 
+immunoprecipitation and sequencing (MeDIP-seq) uses antibody-based immunoprecipitation 
+of 5-methylcytosine (1 mg/ml, Eurogentec, catalog # BI-MECY-0100) and sequencing to 
+map the methylated fraction of the genome. Methyl-sensitive restriction enzyme-seq 
+(MRE-seq) identifies unmethylated CpG sites at single CpG site resolution by sequencing 
+size-selected fragments from parallel DNA digestions with the MREs HpaII, Hin6I, and 
+AciI (Fermentas). Chromatin immunoprecipitation was carried out either with anti-histone 
+H3 trimethyl K4 (H3K4me3) antibody (ab8580, Abcam), or normal rabbit IgG antibody 
+(12-370, Upstate Biotechnology) to assess fold enrichment. A ChIP-seq library was 
+constructed as previously described1 using 11-35 ng of immunoprecipitated DNA. 
+For RNA-seq, 100 ng of total RNA was used to synthesize full-length single-stranded 
+cDNAs using the SMART PCR cDNA Synthesis Kit (Clontech) following the protocol as 
+described by Morin et al2. MRE-seq, MeDIP-seq, H3K4me3 ChIP-seq and RNA-seq libraries 
+were sequenced with an Illumina Genome Analyzer II. Computational and statistical 
+analyses were performed with R package and ad hoc programs.
+</P>
+
+<H2>Verification</H2>
+<P>
+MeDIP enrichment was verified by 4 locus-specific PCRs (2 methylated and 2 unmethylated 
+loci). MeDIP-seq and MRE-seq methylation profiles met expectations for methylation 
+patterns at loci with known methylation states, and reads were infrequent in ~1 kb 
+regions devoid of the dinucleotide CpG. 
+</P>
+
+<H2>Credits</H2>
+
+<P>
+UCSF: Joseph Costello, Raman Nagarajan, Shaun Fouse, Brett Johnson, Chibo Hong, Ksenya Shchors, Vivi M. Heine, David H. Rowitch
+</P>
+<P>
+Genome Sciences Centre, BC Cancer Agency: Mikhail Bilenky, Cletus D'Souza, Cydney Nielsen, Yongjun Zhao, Allen Delaney, Richard Varhol, Nina Thiessen, Steven S.J. Jones, Marco A. Marra, Martin Hirst
+</P>
+<P>
+Washington University, St. Louis, MO: Ting Wang, Xiaoyun Xing, Chris Fiore, Maximiliaan Schillebeeckx
+</P>
+<P>
+UCSC: Tracy J. Ballinger, David Haussler
+</P>
+<P>
+McGill: Gustavo Turecki
+</P>
+
+<H2>References</H2>
+
+<P>
+Maunakea A. et al., Conserved Role of Intragenic DNA Methylation in Regulating Alternative Promoters. In press, Nature, (2010)
+</P>
+<P>
+Robertson, G. et al., Genome-wide profiles of STAT1 DNA association using chromatin immunoprecipitation and massively parallel sequencing. Nat Methods 4 (8), 651-657 (2007).
+</P>
+<P>
+Morin, R. et al., Profiling the HeLa S3 transcriptome using randomly primed cDNA and massively parallel short-read sequencing. Biotechniques 45 (1), 81-94 (2008).
+</P>
+
+<H2> Data Release Policy </H2>
+

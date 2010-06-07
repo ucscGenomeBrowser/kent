@@ -1,0 +1,16 @@
+files	view	cell	localization	rnaExtract	accession	labVersion
+S0033_20080723_2_I10_EA_F3.csfasta.gz	RawData	prostate	cell	longNonPolyA		
+S0033_20080723_2_I10_EA_F3.qual.gz	RawData2	prostate	cell	longNonPolyA		
+S0033_20080723_2_I22_EA_F3.csfasta.gz	RawData	K562	cytosol	longNonPolyA		
+S0033_20080723_2_I22_EA_F3.qual.gz	RawData2	K562	cytosol	longNonPolyA		
+S0033_20080723_2_I23_EA_F3.csfasta.gz	RawData	K562	nucleus	longNonPolyA		
+S0033_20080723_2_I23_EA_F3.qual.gz	RawData2	K562	nucleus	longNonPolyA		
+I10_genome_mapping.bed.gz	Alignments	prostate	cell	longNonPolyA		Nexalign 1.3.3
+I22_genome_mapping.bed.gz	Alignments	K562	cytosol	longNonPolyA		Nexalign 1.3.3
+I23_genome_mapping.bed.gz	Alignments	K562	nucleus	longNonPolyA		Nexalign 1.3.3
+I10_+.bed.gz	PlusClusters	prostate	cell	longNonPolyA		Nexalign 1.3.3
+I10_-.bed.gz	MinusClusters	prostate	cell	longNonPolyA		Nexalign 1.3.3
+I22_+.bed.gz	PlusClusters	K562	cytosol	longNonPolyA		Nexalign 1.3.3
+I22_-.bed.gz	MinusClusters	K562	cytosol	longNonPolyA		Nexalign 1.3.3
+I23_+.bed.gz	PlusClusters	K562	nucleus	longNonPolyA		Nexalign 1.3.3
+I23_-.bed.gz	MinusClusters	K562	nucleus	longNonPolyA		Nexalign 1.3.3

@@ -1,0 +1,3 @@
+#inId	selectId	inOverlap	selectOverlap	overBases	similarity	inBases	selectBases
+D31716	NM_001206	1	0.998	4838	0.999	4838	4850
+S72504	NM_001206	1	0.276	1340	0.433	1340	4850

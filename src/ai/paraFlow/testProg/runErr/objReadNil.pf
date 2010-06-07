@@ -1,0 +1,8 @@
+
+class point
+   {
+   double x,y;
+   }
+
+point pt;
+double x = pt.x;

@@ -1,0 +1,106 @@
+# valgrind uppressions for expected memory leaks from kent/src/lib modules.
+# specify this file to  valgrind with something like:
+#    --suppressions=../lib/valgrind.suppress
+# if you need to create new suppressions, run your program with valgrind using
+# the --gen-suppressions=yes option.  This will interactive prompt you to
+# and output the suppressions that you must edit and add to this file.
+# Name the option and delete lower-level calling context entries so that
+# the last function in the list the the particular library entry point.
+# 
+#  valgrind --tool=memcheck --suppressions=../lib/valgrind.suppress --num-callers=100 --leak-check=full --leak-resolution=high --show-reachable=yes  yourProg yourArgs ...
+#
+{
+   options1
+   Memcheck:Leak
+   fun:malloc
+   fun:defaultAlloc
+   fun:needMem
+   fun:lmInit
+   fun:newHash
+   fun:parseOptions
+   fun:optionInit
+}
+{
+   options2
+   Memcheck:Leak
+   fun:malloc
+   fun:defaultAlloc
+   fun:needMem
+   fun:newHash
+   fun:parseOptions
+   fun:optionInit
+}
+{
+   options3
+   Memcheck:Leak
+   fun:malloc
+   fun:defaultAlloc
+   fun:needLargeMem
+   fun:needLargeZeroedMem
+   fun:newBlock
+   fun:lmAlloc
+   fun:hashAddN
+   fun:hashAdd
+   fun:parseAnOption
+   fun:parseOptions
+   fun:optionInit
+}
+{
+   options4
+   Memcheck:Leak
+   fun:malloc
+   fun:defaultAlloc
+   fun:needLargeMem
+   fun:needLargeZeroedMem
+   fun:newBlock
+   fun:lmInit
+   fun:newHash
+   fun:parseOptions
+   fun:optionInit
+}
+{
+   options5
+   Memcheck:Leak
+   fun:malloc
+   fun:defaultAlloc
+   fun:needLargeMem
+   fun:needLargeZeroedMem
+   fun:newBlock
+   fun:lmAlloc
+   fun:newHash
+   fun:parseOptions
+   fun:optionInit
+}
+{
+   sqlUnsignedArray
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:defaultRealloc
+   fun:needLargeMemResize
+   fun:needLargeZeroedMemResize
+   fun:needMoreMem
+   fun:sqlUnsignedStaticArray
+}
+{
+   sqlSignedArray   
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:defaultRealloc
+   fun:needLargeMemResize
+   fun:needLargeZeroedMemResize
+   fun:needMoreMem
+   fun:sqlSignedStaticArray
+}
+{
+   sqlFloatArray
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:defaultRealloc
+   fun:needLargeMemResize
+   fun:needLargeZeroedMemResize
+   fun:needMoreMem
+   fun:sqlFloatStaticArray
+}

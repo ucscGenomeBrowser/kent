@@ -1,0 +1,75 @@
+<H2>Description</H2>
+<P>
+The FOX2 CLIP-seq track shows adaptor-trimmed CLIP-seq reads that mapped
+uniquely to the repeat-masked human genome (hg17).  The reads were converted 
+to hg18 coordinates using the UCSC LiftOver tool.  Reads on the forward 
+strand are displayed in blue; those on the reverse strand are shown in red.
+</P>
+
+<H2>Methods</H2>
+<P>
+Cross-linking immunoprecipitation coupled with high-throughput
+sequencing (CLIP-seq) of cell type-specific splicing regulator FOX2
+(also known as RBM9) was performed in human embryonic stem cells.
+MosaikAligner was utilized to align the reads to the repeat-masked
+genome.
+</P>
+<P>
+Briefly, HUES6 human embryonic stem cells were treated with UV irradiation to 
+stabilize in vivo protein-RNA interactions, followed by antibody-mediated 
+precipitation of specific RNA-protein complexes.  SDS-PAGE was then utilized 
+to isolate protein-RNA adducts after RNA trimming with nuclease, 3'RNA linkers 
+were ligated, and nucleotides were 5' end labeled with &gamma;-<SUP>32</SUP>P-ATP.  
+Recovered RNA was ligated to a 5' linker before amplification by RT-PCR.  
+Both linkers were designed to be compatible with Illumina 1G genome analyzer 
+sequencing.  Approximately 4 million reads were uniquely mapped to the 
+repeat-masked human genome by MosaikAligner.
+</P>
+<P>
+To identify CLIP clusters, we performed the following steps: (i) CLIP reads
+were associated with protein-coding genes as defined by the region from the
+annotated transcriptional start to the end of each gene locus. (ii) CLIP reads
+were separated into the categories of sense or antisense to the transcriptional
+direction of the gene. (iii) Sense CLIP reads were extended by 100 nt in the
+5'-to-3' direction. The height of each nucleotide position is the number of
+reads that overlap that position. (iv) The count distribution of heights is as
+follows from 1, 2, ...<EM>h</EM>, ...<EM>H-1</EM>, <EM>H</EM>: {<EM>n</EM><SUB>1</SUB>, 
+<EM>n</EM><SUB>2</SUB>, ...<EM>n<SUB>h</SUB></EM>, ...<EM>n<SUB>H-1</SUB></EM>,
+<EM>n<SUB>H</SUB></EM>; <EM>N</EM> = &Sigma;<EM>n<SUB>i</SUB></EM>
+(<EM>i</EM> = 1:<EM>H</EM>)}. For a particular height, <EM>h</EM>, the associated 
+probability of observing a height of at least <EM>h</EM> is 
+<EM>P<SUB>h</SUB></EM> = &Sigma;<EM>n<SUB>i</SUB></EM>(<EM>i</EM> = <EM>h</EM>:<EM>H</EM>)
+/<EM>N</EM>. (v) We computed the background frequency after randomly placing the same number of 
+extended reads within the gene for 100 iterations. This controls for the length of the gene
+and the number of reads. For each iteration, the count distribution and
+probabilities for the randomly placed reads (<EM>P<SUB>h</EM>,random</SUB>) was generated as in
+step (iv). (vi) Our modified FDR for a peak height was computed as FDR(<EM>h</EM>) =
+(&mu;<SUB>h</SUB> + &sigma;<SUB>h</SUB>)/P<SUB>h</SUB>, where &mu;<SUB>h</SUB> and 
+&sigma;<SUB>h</SUB> is the average and s.d., respectively, of <EM>P<SUB>h</EM>,random</SUB> 
+across the 100 iterations. For each gene loci, we chose a threshold peak height <EM>h*</EM> 
+as the smallest height equivalent to FDR(<EM>h*</EM>) < 0.001.
+We identified FOX2 binding clusters by grouping nucleotide positions satisfying
+<EM>h</EM> > <EM>h*</EM> and occurred within 50 nt of each other.
+<P>
+For further details of the method used to generate this annotation
+please refer to Yeo <EM>et al</EM>. (2009).
+</P>
+
+<H2>Credits</H2>
+<P>
+Thanks to Gene Yeo at the University of California, San Diego for
+providing this annotation. For additional information on FOX2 CLIP-seq reads,
+please contact <A HREF="mailto:&#103;e&#110;&#101;&#121;&#101;o&#64;&#117;cs&#100;.
+&#101;&#100;&#117;">
+&#103;e&#110;&#101;&#121;&#101;o&#64;&#117;cs&#100;.
+&#101;&#100;&#117;</A> directly.
+<!-- above address is geneyeo at ucsd.edu -->
+</P>
+
+<H2>References</H2>
+<P>
+Yeo GW, Coufal NG, Liang YL, Peng GE, Fu XD, Gage FH.  
+<A HREF="http://www.nature.com/nsmb/journal/v16/n2/abs/nsmb.1545.html"  TARGET=_BLANK>
+An RNA code for the FOX2 splicing regulator revealed by mapping RNA-protein
+interactions in stem cells</A>. <em>Nat. Struct. Mol. Biol</em>. 2009 Jan 11;16:130-137.
+</P>

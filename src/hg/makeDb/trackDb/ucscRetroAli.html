@@ -1,0 +1,68 @@
+<H2>Description</H2>
+<P>
+Retrotransposition is a process involving the copying of DNA by a group 
+of enzymes that have the ability to reverse transcribe spliced mRNAs, 
+resulting in single-exon copies of genes and sometime chimeric genes. 
+RetroGenes can be either 
+functional genes that have acquired a promoter from a neighboring gene, 
+non-functional pseudogenes, or transcribed pseudogenes.</P>
+
+<H2>Methods</H2>
+<P>
+All mRNAs of a species from GenBank were aligned to the genome using blastz. 
+mRNAs that aligned twice in the genome (once with introns and once without 
+introns) were initially screened. Next, a series of features were scored to 
+determine candidates for retrotranspostion events. These features include
+position and length of the polyA tail, degree of synteny with mouse, coverage 
+of repetitive elements, number of exons that can still be aligned to the 
+retroGene and degree of divergence from the parent gene. Retrogenes are 
+classified using a threshold score function that is a linear combination 
+of this set of features. RetroGenes in the final set have a score threshold 
+based on a ROC plot against the Vega annotated pseudogenes.
+<P>
+The "type" field has the following possible values: 
+<UL>
+<LI><EM>pseudogene</EM> indicates that the parent gene has been annotated
+by one of refSeq, knownGene or MGC.</LI>
+<LI><EM>mrna</EM> indicates that the parent gene is a spliced mrna that 
+has no annotation in NCBI refSeq, UCSC knownGene or Mammalian Gene Collection 
+(MGC).</LI>
+<LI><EM>expressed weak</EM> indicates that there is a mrna overlapping 
+the retrogene, indicating possible transcription.</LI>
+<LI><EM>expressed strong</EM> indicates that there is a mrna overlapping 
+the retrogene, and at least five spliced Ests indicating probable transcription.</LI>
+<LI><EM>expressed strong shuffle</EM> indicates that the retro was inserted into a pre-existing annotated gene.
+</LI></UL>
+These features can be downloaded from the table retroMrnaInfo in many 
+formats using the Table Browser option on the blue bar. </P>
+
+<H2>Credits</H2>
+<P>
+The RetroFinder program and browser track were developed by 
+<A HREF="mailto:&#98;a&#101;r&#116;&#115;&#99;&#104;&#64;&#115;&#111;&#101;.
+&#117;&#99;sc.&#101;&#100;&#117;">Robert Baertsch</A> at UCSC.</P>
+<!-- above address is baertsch at soe.ucsc.edu -->
+
+<H2>References</H2>
+        
+<P>
+Baertsch R, Diekhans M, Kent J, Haussler D, Brosius J. 
+<a href="http://www.biomedcentral.com/1471-2164/9/466">Retrocopy contributions to the evolution of the human genome.</a>
+<I>BMC Genomics</I> 2008 Oct 8;9:466.
+<P>
+Deyou Zheng, Adam Frankish, Robert Baertsch, Philipp Kapranov, Alexandre Reymond , Siew Woh Choo , Yontao Lu , France Denoeud , Stylianos E Antonarakis , Michael Snyder , Yijun Ruan, Chia-Lin Wei , Thomas R. Gingeras , Roderic Guigo , Jennifer Harrow , and Mark B. Gerstein 
+<a href="http://genome.cshlp.org/cgi/content/full/17/6/839">Pseudogenes in the ENCODE Regions: Consensus Annotation, Analysis of Transcription and Evolution.</a>
+<I>Genome Res.</i> 2007 Jun;17(6):839-51.
+<P>
+Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
+<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
+TARGET=_blank>Evolution's cauldron: 
+Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
+<I>Proc Natl Acad Sci USA</I> <B>100</B>(20), 11484-11489 (2003).
+<P>
+Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
+Haussler, D., and Miller, W.
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" TARGET=_blank>Human-Mouse 
+Alignments with BLASTZ</A>. <em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).
+</P>
+

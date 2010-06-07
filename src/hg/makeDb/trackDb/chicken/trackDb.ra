@@ -1,0 +1,28 @@
+#	"$Id: trackDb.ra,v 1.26 2010/02/11 18:45:57 kuhn Exp $";
+
+include trackDb.chainNet.ra
+
+track bgiSnp
+shortLabel BGI SNPs
+longLabel SNPs from Beijing Genomics Institute
+group varRep
+priority 20
+visibility dense
+color 170,20,20
+type bed 4 +
+
+track bgiCov
+shortLabel BGI Coverage
+longLabel Regions Covered by Beijing Genomics Institute SNP Reads
+group varRep
+priority 21
+visibility hide
+color 50,50,50
+type bed 4 +
+
+searchTable bgiSnp
+searchType bed
+shortCircuit 1
+termRegex snp\.[0-9]+\.[0-9]+\.[0-9]+\.[IDS]\.[1-3]
+searchPriority 20
+

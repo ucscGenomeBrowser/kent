@@ -1,0 +1,12 @@
+files	view	cell	softwareVersion	replicate
+UCSC_submission/GM12878_UncFAIREseq_rep1.fastq	RawData	GM12878		1
+UCSC_submission/GM12878_UncFAIREseq_rep2.fastq	RawData	GM12878		2
+UCSC_submission/GM12878_UncFAIREseq_rep3.fastq	RawData	GM12878		3
+UCSC_submission/Raw_GM12878_UncFAIREseq_rep1.taf	Alignments	GM12878		1
+UCSC_submission/Raw_GM12878_UncFAIREseq_rep2.taf	Alignments	GM12878		2
+UCSC_submission/Raw_GM12878_UncFAIREseq_rep3.taf	Alignments	GM12878		3
+UCSC_submission/GM12878_UncFAIREseq_rep1_*.wig	RawSignal	GM12878		1
+UCSC_submission/GM12878_UncFAIREseq_rep2_*.wig	RawSignal	GM12878		2
+UCSC_submission/GM12878_UncFAIREseq_rep3_*.wig	RawSignal	GM12878		3
+UCSC_submission/GM12878_UncFAIREseq_*.wig	Signal	GM12878	1.0		1
+UCSC_submission/GM12878_UncFAIREseq.pk	Peaks	GM12878	1.0		1

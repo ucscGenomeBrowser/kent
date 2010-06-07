@@ -1,0 +1,14 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+visibility hide
+
+track refGene override
+visibility pack
+
+track xenoRefGene override
+visibility hide

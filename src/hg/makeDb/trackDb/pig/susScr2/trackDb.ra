@@ -1,0 +1,60 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+track bosTau4ChainPileUpBroken
+shortLabel broken bigWig
+longLabel illustrating broken bigWig behavior bosTau4 chain pile up bigWig format
+group x
+priority 600
+visibility hide
+type bigWig 0 14674
+minLimit 0
+maxLimit 14674
+
+track bosTau4ChainPileUp
+shortLabel bosTau4 pile bigWig
+longLabel bosTau4 chain pile up bigWig format
+group x
+priority 603
+visibility hide
+type bigWig 0 14674
+minLimit 0
+maxLimit 14674
+
+track bosTau4PileUpWig
+shortLabel pile up wiggle
+longLabel bosTau4 chain pile up wiggle format
+group x
+priority 605
+visibility hide
+type wig 0 14674
+autoScale off
+viewLimits 0:14674
+windowingFunction maximum
+spanList 1
+html bosTau4ChainPileUp
+
+track bosTau4PileUpBedGraph
+shortLabel pile up bedGraph
+longLabel bosTau4 chain pile up bedGraph format
+group x
+priority 615
+visibility hide
+type bedGraph 4
+minLimit 0
+maxLimit 14674
+autoScale off
+viewLimits 0:14674
+windowingFunction maximum
+spanList 1
+html bosTau4ChainPileUp
+
+track nscanGene override
+informant Pig N-SCAN uses human (hg19) as the informant, updated with PASA clusters of pig cDNAs.
+
+

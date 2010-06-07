@@ -1,0 +1,396 @@
+track etemadmoghadam2009_CGH
+shortLabel Ovarian Cancer CGH (Etemadmoghadam 2009)
+longLabel Ovarian Cancer CGH (Etemadmoghadam 2009)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings etemadmoghadam2009_CGHGroups
+
+track etemadmoghadam2009_exp
+shortLabel Ovarian Cancer Expression (Etemadmoghadam 2009)
+longLabel Ovarian Cancer Expression (Etemadmoghadam 2009)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings etemadmoghadam2009_expGroups
+
+track miller2005
+shortLabel Breast Expression (Miller 2005)
+longLabel Breast Cancer Expression (Miller 2005)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings miller2005Groups
+
+track TARGETcnv
+shortLabel Leukemia CGH (TARGET)
+longLabel Leukemia CGH (TARGET)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings TARGETcnvGroups
+
+track TARGETexp
+shortLabel Leukemia Expression (TARGET)
+longLabel Leukemia Expression (TARGET)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings TARGETexpGroups
+
+track kotliarov2006
+shortLabel glioma CGH (Kotliarov 2006)
+longLabel glioma CGH (Kotliarov 2006)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings kotliarov2006Groups
+
+#track maserGBM
+#shortLabel CGH profiles
+#longLabel CGH profiles
+#group x
+#priority 45
+#visibility hide
+#type expRatio
+#logicalDb localDb
+#expScale 1.0
+#expStep 0.2
+#groupings maserGBMGroups
+
+track COSMICsummary
+shortLabel COSMIC Proportion Data
+longLabel COSMIC Proportion Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICsummaryGroups
+
+track COSMICcounts
+shortLabel COSMIC Count Data
+longLabel COSMIC Count Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICcountsGroups
+
+track cutler2007
+shortLabel Inbred Mice CGH (Cutler 2007)
+longLabel Inbred Mice CGH (Cutler 2007)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings cutler2007Groups
+
+track haverty2008
+shortLabel Breast cancer CGH (Haverty 2008)
+longLabel Breast cancer CGH (Haverty 2008)
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings haverty2008Groups
+
+
+track ucsfNeveExp
+shortLabel Breast Cell Line Expression (Neve. et.al)
+longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ucsfNeveExpGroups
+
+track ucsfNeveCGH
+shortLabel Breast Cell Line CGH (Neve. et.al)
+longLabel breast cancer cell line CGH (Neve et.al.Cancer Cell 2006)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ucsfNeveCGHGroups
+
+track maserCGH
+shortLabel Multi-tissue CGH (Maser et. al 2007)
+longLabel Multi-tissue CGH from DFCI (Maser et. al 2007)
+group cancerGenomics
+priority 45.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings maserCGHGroups
+
+track maserMouseCGH
+shortLabel TKO Lymphoma CGH (Maser et. al 2007)
+longLabel TKO Lymphoma Mice CGH from DFCI (Maser et. al 2007)
+group cancerGenomics
+priority 45.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings maserMouseCGHGroups
+
+track maserAllCGH
+shortLabel Hs Vs. Mm CGH (Maser et. al 2007)
+longLabel Human Multi-tissue Cancer vs. TKO Lymphoma Mice CGH (Maser et. al 2007)
+group cancerGenomics
+priority 45.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings maserAllCGHGroups
+
+track lin2008Exp
+shortLabel Melanoma Gene Expression (Lin. et.al 2008)
+longLabel Melanoma Gene Expression (Lin et. al 2008)
+group cancerGenomics
+priority 46.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008ExpGroups
+
+track lin2008cnv250K
+shortLabel Melanoma 250K CNV (Lin. et.al 2008)
+longLabel Melanoma 250K CNV (Lin et. al 2008)
+group cancerGenomics
+priority 46.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008cnv250KGroups
+
+track weir2007
+shortLabel Lung CNV (Weir. et.al 2007)
+longLabel Lung CNV (Weir et. al 2007)
+group cancerGenomics
+priority 47.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings weir2007Groups
+
+track wang2005Exp
+shortLabel  Breast Cancer Gene Expression (Wang et. al. Lancet 2005)
+longLabel Lymph-Node-Negative Breast Cancer Gene Exp. (Wang et. al. Lancet 2005)
+group cancerGenomics
+priority 44
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings wang2005ExpGroups
+
+track chin2006Exp
+shortLabel  Breast Cancer Gene Expression (Chin et. al Cancer Cell 2006)
+longLabel Breast Cancer Gene Expression (Chin et. al. Cancer Cell 2006)
+group cancerGenomics
+priority 45
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings chin2006ExpGroups
+
+track ucsfChinCGH2006
+shortLabel  Breast Cancer CGH (Chin et. al Cancer Cell 2006)
+longLabel Breast Cancer CGH (Chin et. al. Cancer Cell 2006)
+group cancerGenomics
+priority 46
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 1.0
+expStep 0.2
+groupings ucsfChinCGH2006Groups
+
+track chinSFGenomeBio2007
+shortLabel Breast Cancer Tumor CGH (ChinSF et al. 2007)
+longLabel Breast Cancer Tumor CGH (ChinSF et al. Genome Bio 2007)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings chinSFGenomeBio2007Groups
+
+track naderi2007Exp
+shortLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+longLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+group cancerGenomics
+priority 46
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings naderi2007ExpGroups
+
+track kaiser2007
+shortLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+longLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+group cancerGenomics
+priority 47
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings kaiser2007Groups
+
+track ding2008
+shortLabel Gene Expression (Ding et al. 2008)
+longLabel Gene Expression (Ding et al. 2008)
+group cancerGenomics
+priority 48
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings ding2008Groups
+
+track harada2008
+shortLabel CGH (Harada et al. 2008)
+longLabel CGH (Harada et al. 2008)
+group cancerGenomics
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings harada2008Groups
+
+track jones2008cgh
+shortLabel CGH (Jones et al. 2008)
+longLabel CGH (Jones et al. 2008)
+group cancerGenomics
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings jones2008cghGroups
+
+track parsons2008cgh
+shortLabel CGH (Parsons et al. 2008)
+longLabel CGH (Parsons et al. 2008)
+group cancerGenomics
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings parsons2008cghGroups
+
+track mullighan2008_500K
+shortLabel CGH (Mullighan et al. 2008)
+longLabel CGH (Mullighan et al. 2008)
+group cancerGenomics
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings mullighan2008_500KGroups
+
+track mullighan2008_SNP6
+shortLabel CGH (Mullighan et al. 2008)
+longLabel CGH (Mullighan et al. 2008)
+group cancerGenomics
+priority 50
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings mullighan2008_SNP6Groups
+
+track bardeesy2006
+shortLabel CGH (Bardeesy et al. 2006)
+longLabel CGH (Bardeesy et al. 2006)
+group cancerGenomics
+priority 50
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings bardeesy2006Groups
+
+track balagurunathan2008
+shortLabel Gene Expression (Balagurunathan et al. 2008)
+longLabel Gene Expression (Balagurunathan et al. 2008)
+group cancerGenomics
+priority 50
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings balagurunathan2008Groups

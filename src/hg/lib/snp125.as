@@ -1,0 +1,21 @@
+table snp125
+"Polymorphism data from dbSnp database or genotyping arrays"
+    (
+    string   chrom;      "Reference sequence chromosome or scaffold"
+    uint     chromStart; "Start position in chrom"
+    uint     chromEnd;   "End position in chrom"
+    string   name;       "dbSNP Reference SNP identifier"
+    uint     score;      "Not used"
+    string   strand;     "Which DNA strand contains the observed alleles"
+    lstring  refNCBI;  	 "Reference genomic sequence from dbSNP"
+    lstring  refUCSC;    "Reference genomic sequence from UCSC lookup of chrom,chromStart,chromEnd"
+    string   observed;   "The sequences of the observed alleles from rs-fasta files"
+    string   molType;    "Sample type from exemplar submitted sequence (ss)"
+    string   class;      "Class of variant (single, in-del, named, mixed, etc.)"
+    string   valid;      "Validation status of the SNP"
+    float    avHet;      "Average heterozygosity from all observations"
+    float    avHetSE;    "Standard Error for the average heterozygosity"
+    string   func;       "Functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.)"
+    string   locType;    "Type of mapping inferred from size on reference; may not agree with class"
+    uint     weight;     "The quality of the alignment: 1 = unique mapping, 2 = non-unique, 3 = many matches"
+    )

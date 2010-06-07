@@ -1,0 +1,186 @@
+
+track gcPercent override
+shortLabel GC% 20K
+
+track gc5Base
+#replaces record gc5Base in parent dir missing/extra spanList
+shortLabel GC Percent
+longLabel Percentage GC in 5-Base Windows
+group map
+priority 23.5
+visibility hide
+autoScale Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 30:70
+type wig 0 100 
+
+track twinscan override
+altColor 0,50,50
+
+track blastzHg16
+shortLabel Human Blastz
+longLabel $o_Organism ($o_date) All Blastz Alignments
+group compGeno
+priority 114
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg16
+otherDb hg16
+
+track chainHg16 override
+shortLabel Human Chain
+priority 115
+
+track netHg16 override
+shortLabel Human Net
+priority 116
+
+track blastzBestHg16
+shortLabel Human Best
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
+group compGeno
+priority 117
+visibility hide
+color 0,100,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg16
+otherDb hg16
+
+track blastzTightHg16
+shortLabel Human Tight
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
+group compGeno
+priority 117.5
+visibility hide
+color 0,100,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg16
+otherDb hg16
+
+track syntenyHg16
+shortLabel Human Synteny
+longLabel $Organism/$o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
+group compGeno
+priority 117
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 +
+otherDb hg16
+
+track syntenyNetHg16
+shortLabel Human Syntenic Net
+longLabel $o_Organism ($o_date) Syntenic Alignment Net
+group compGeno
+priority 118
+visibility hide
+spectrum on
+type netAlign hg16 chainHg16
+otherDb hg16
+
+track blastzRn3
+shortLabel Rat Blastz
+longLabel $o_Organism ($o_date) All Blastz Alignments
+group compGeno
+priority 259.9
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track blastzBestRn3
+shortLabel Rat Best
+longLabel $o_Organism ($o_date) Blastz Best-in-Genome Alignments
+group compGeno
+priority 259.95
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track blastzTightRn3
+shortLabel Rat Tight
+longLabel $o_Organism ($o_date) Blastz Tight Subset of Best Alignments
+group compGeno
+priority 259.96
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track syntenyRn3
+shortLabel Rat Synteny
+longLabel $Organism/$o_Organism ($o_date) Synteny Using Blastz Single Coverage (100k window)
+group compGeno
+priority 260.11
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 +
+otherDb rn3
+
+track rmsk
+#replaces record rmsk in parent dir missing/extra maxWindowToDraw
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 147
+visibility dense
+spectrum on
+type rmsk
+canPack off
+
+track leptin
+shortLabel Leptin TBA
+longLabel Leptin Region TBA Alignments (mouse,rat,human,chimp,baboon,cow,pig,cat,dog)
+group compGeno
+priority 300
+visibility full
+color 100,50,0
+altColor 255,240,200
+type maf
+
+track phyloHMM_leptin
+shortLabel PhyloHMMcons Leptin
+longLabel Phylo-HMM-based conservation
+group compGeno
+priority 310
+visibility full
+color 175,150,128
+type wig 0.0 1.0
+
+track leptinMouse90
+shortLabel PhyloHMMcons Leptin 90
+longLabel Phylo-HMM-based conservation, Leptin, 90 percent
+group compGeno
+priority 320
+visibility pack
+type bed 3 .
+
+track NIAGene
+shortLabel NIA Gene Index
+longLabel NIA Mouse Gene Index Version 3
+group genes
+priority 54
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+url http://lgsun.grc.nia.nih.gov/geneindex3/bin/giT.cgi?genename=$$
+

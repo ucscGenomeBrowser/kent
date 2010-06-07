@@ -1,0 +1,386 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+use Getopt::Long;
+use Cwd;
+
+use lib "/cluster/bin/scripts";
+use Encode;
+use RAFile;
+use HgAutomate;
+use HgDb;
+
+# maps metadata terms to the terms used in cv.ra
+my %expVarCVMapper = (
+    "cell" => "Cell Line",
+    "antibody" => "Antibody",
+    "treatment" => "treatment",
+    "control" => "control",
+);
+
+# for each metadata term, what fields do we want to output
+my %expVarDetails = (
+    "cell"      => ["organism", "description", "karyotype", "lineage", "sex"],
+    "antibody"  => ["antibodyDescription", "targetDescription", "vendorName"],
+    "treatment" => ["description"],
+    "control"   => ["description"],
+);
+
+# translates cv.ra fields into english labels
+my %detailsCleaner = (
+    "antibodyDescription" => "description",
+    "targetDescription"   => "target description",
+    "vendorName"          => "vendor name",
+);
+
+# takes dirty metadata and outputs normalized form
+my %dataTypeCleaner = (
+    "ChIPseq"   => "ChIP-seq",
+    "ChipSeq"   => "ChIP-seq",
+    "DNaseSeq"  => "DNase-seq",
+    "FAIREseq"  => "FAIRE-seq",
+);
+
+# given a normalized datatype (see above), give the molecle involved
+my %dataTypeMolecule = (
+    "ChIP-seq"  => "genomic DNA",
+    "DNase-seq" => "genomic DNA",
+    "FAIRE-seq" => "genomic DNA",
+);
+
+# given a normalized datatype, give the library strategy
+my %dataTypeLibraryStrategy = (
+    "ChIP-seq"  => "ChIP-Seq",
+);
+
+# given a normalized datatype, give the library source
+my %dataTypeLibrarySource = (
+    "ChIP-seq"  => "genomic",
+);
+
+# given a normalized datatype, give the library selection method
+my %dataTypeLibrarySelection = (
+    "ChIP-seq"  => "ChIP",
+);
+
+use vars qw/
+    $opt_configDir
+    $opt_verbose
+    $opt_instance
+    /;
+
+sub usage {
+    print STDERR <<END;
+usage: encodeMkGeoPkg database composite
+    -instance=s         Use ENCODE pipeline instance s (default prod).
+    -configDir=dir      Path of configuration directory, containing metadata
+                        .ra files (default: /hive/groups/encode/dcc/pipeline/encpipeline_prod/config/)
+    -verbose=num        Set verbose level to num (default 1).
+END
+exit 1;
+}
+
+############################################################################
+# Function
+
+sub getObjMetadata {
+    my ($db, $obj) = @_;
+    my $results = $db->execute("SELECT var, val FROM metaDb WHERE obj = '$obj'");
+    my %metadata = ();
+    if($results) {
+        while(my @row = $results->fetchrow_array()) {
+            my $key = $row[0];
+            my $value = $row[1];
+            $metadata{$key} =  $value;
+            #print "\t$key = $value\n";
+        }
+    }
+
+    return %metadata;
+}
+
+sub getObjsMatching {
+    my ($db, $var, $val) = @_;
+    # get the list of objects matching var=val
+    my $results = $db->execute("SELECT obj FROM metaDb WHERE var = \"$var\" and val = \"$val\"");
+    my @objects = ();
+    if($results) {
+        while(my @row = $results->fetchrow_array()) {
+            my $obj = $row[0];
+            push @objects, $obj;
+        }
+    }
+
+    return @objects;
+}
+
+sub nextTuple(\@\@) {
+    my $current = $_[0];
+    my $last = $_[1];
+    
+    my $i = scalar(@{$current}) - 1;
+    while ($i >= 0 and @{$current}[$i] == @{$last}[$i] - 1) {
+        @{$current}[$i] = 0;
+        --$i;
+    }
+    if ($i < 0) {
+        return 0
+    } else {
+        ++@{$current}[$i];
+        return 1;
+    }
+}
+
+sub getSameMetadata {
+    my $field = shift;
+    my @metadataList = @_;
+
+    my %metadata;
+
+    %metadata = %{$metadataList[0]};
+    my $firstValue = $metadata{$field};
+    for (my $i = 1; $i < scalar(@metadataList); ++$i) {
+        %metadata = %{$metadataList[$i]};
+        die "$firstValue != $metadata{$field}" unless $firstValue eq $metadata{$field};
+    }
+    return $firstValue;
+}
+
+############################################################################
+# Main
+
+my $now = time();
+my $wd = cwd();
+my $ok = GetOptions("instance=s",
+                    "configDir=s",
+                    "verbose=i"
+                    );
+# parse options
+usage() if (!$ok);
+usage() if (scalar(@ARGV) < 3);
+# get options or set defaults
+if (not defined $opt_instance) {
+    $opt_instance = "prod";
+}
+my $configPath;
+if (defined $opt_configDir) {
+    if ($opt_configDir =~ /^\//) {
+        $configPath = $opt_configDir;
+    } else {
+        $configPath = "$wd/$opt_configDir";
+    }
+} else {
+    $configPath = "/hive/groups/encode/dcc/pipeline/encpipeline_$opt_instance/config/";
+}
+if(!(-d $configPath)) {
+    die "configPath '$configPath' is invalid; Can't find the config directory\n";
+}
+if (not defined $opt_verbose) {
+    $opt_verbose = 1;
+}
+HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
+
+my $database  = $ARGV[0];
+my $compositeName = $ARGV[1];
+my $instrument = $ARGV[2];
+
+# some counters we use
+my $i;
+my $j;
+my $c;
+my $f;
+my $o;
+
+# get the project dir
+my $compositeDir = "/hive/groups/encode/dcc/analysis/ftp/pipeline/$database/$compositeName";
+
+# read the cv.ra file
+my %cvTerms = Encode::getControlledVocab($configPath);
+
+# connect to the database and read the metadata table for the obj
+my $dbHandle = HgDb->new(DB => $database);
+
+# read the experimental variables from expVars.ra
+my @expVars = Encode::getExpVars($configPath, $compositeName);
+my $numDim = scalar(@expVars);
+
+# read all the possible experiment variables
+#my @expSpace;
+#my @currentTuple;
+#my @lastTuple;
+#for($i = 0; $i < $numDim; ++$i) {
+#    push @expSpace, [];
+#    push @currentTuple, 0;
+#    my $var = $expVars[$i];
+#    my $results = $dbHandle->execute("SELECT val FROM metaDb WHERE obj IN (SELECT obj FROM metaDb WHERE var = \"composite\" and val = \"$compositeName\") AND var = \"$var\" GROUP BY val;");
+#    if($results) {
+#        while(my @row = $results->fetchrow_array()) {
+#            my $val = $row[0];
+#            push @{$expSpace[$i]}, $val;
+#        }
+#    }
+#    push @{$expSpace[$i]}, "";
+#    push @lastTuple, scalar(@{$expSpace[$i]});
+#}
+
+#$, = "\t";
+#print @currentTuple, "\n";
+#while(nextTuple(@currentTuple, @lastTuple)) {
+#    print @currentTuple, "\n";
+#}
+#print @lastTuple, "\n";
+#exit;
+
+# get the list of objects of this composite and store it in a set (hash)
+my %objsSet = map { $_ => 0 } getObjsMatching($dbHandle, "composite", $compositeName);
+my @objects = keys %objsSet;
+
+print STDERR "Number of objects in composite track: ", scalar(keys %objsSet), "\n";
+print STDERR "Number of experimental variables: ", scalar(@expVars), "\n";
+for $i (@expVars) {
+    print STDERR "\t", $i, "\n";
+}
+
+# while there are objects left
+while(scalar(keys %objsSet) > 0) {
+    # get the 1st object
+    my $firstObject = (keys(%objsSet))[0];
+    my @currentObjects = ($firstObject);
+    delete $objsSet{$firstObject};
+
+    my %metadata;
+    # get the experimental variables for that object
+    %metadata = getObjMetadata($dbHandle, $firstObject);
+    my @currentMetadata = {%metadata};
+    my @currentExpVars;
+    print $firstObject, "\n";
+    for $i (@expVars) {
+        defined $metadata{$i} or die "can't find field for experimental variable " . $i;
+        push @currentExpVars, $metadata{$i};
+    }
+
+    #for($i = 0; $i < scalar(@expVars); ++$i) {
+    #    print $expVars[$i], ": ", $currentExpVars[$i], "\t";
+    #}
+    #print "\n";
+    
+    # get other objs with the same metadata
+    for $o (keys %objsSet) {
+        %metadata = getObjMetadata($dbHandle, $o);
+        my $match = 1;
+        for($i = 0; $i < scalar(@expVars); ++$i) {
+            defined $metadata{$expVars[$i]} or die "can't find field for experimental variable " . $i;
+            if ($metadata{$expVars[$i]} ne $currentExpVars[$i]) {
+                $match = 0;
+            }
+        }
+        if ($match) {
+            push @currentObjects, $o;
+            push @currentMetadata, {%metadata};
+            delete $objsSet{$o};
+        }
+    }
+    #for $o (@currentObjects) {
+    #    print "\t", $o, "\n";
+    #}
+    #for my $objectName (@currentObjects) {
+    #    my %metadata = getObjMetadata($dbHandle, $objectName);
+    #    print $objectName, "\n";
+    #    for my $k (keys %metadata) {
+    #        print "\t", $k, " = ", $metadata{$k}, "\n";
+    #    }
+    #}
+
+    my $grant = getSameMetadata("grant", @currentMetadata);
+    my $sample_identifier = $grant . "_" . join "_", @currentExpVars;
+    my $sample_title = $sample_identifier;
+
+    # read the organism for this cell line
+    my $cell = getSameMetadata("cell", @currentMetadata);
+    my %cellLines = %{$cvTerms{"Cell Line"}};
+    my %cellLineInfo = %{$cellLines{$cell}};
+    my $organism = $cellLineInfo{"organism"};
+    my $provider = $cellLineInfo{"vendorName"};
+    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/" . $cellLineInfo{"protocol"};
+    my $growthProtocol = "Cells were grown according to ENCODE cell culture protocols: $growthProtocolUrl";
+
+    my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
+    my $extractProtocol    = "For extraction protocol details see: $extractProtocolUrl";
+
+    my $dataProcessingUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
+    my $dataProcessing    = "For data processing details see: $dataProcessingUrl";
+
+    my $dataType = $dataTypeCleaner{getSameMetadata("dataType", @currentMetadata)};
+    my $molecule = $dataTypeMolecule{$dataType};
+
+    my $libraryStrategy = $dataTypeLibraryStrategy{$dataType};
+    my $ibrarySource    = $dataTypeLibrarySource{$dataType};
+    my $ibrarySelection = $dataTypeLibrarySelection{$dataType};
+
+    # generate the POST
+    print "^SAMPLE=$sample_identifier" . "\n";
+    print "!Sample_title = $sample_title" . "\n";
+    print "!Sample_source_name = $cell" . "\n";
+    print "!Sample_organism = $organism" . "\n";
+    # iterate over exp vars
+    for ($i = 0; $i < scalar(@expVars); ++$i) {
+        my $e = getSameMetadata($expVars[$i], @currentMetadata);
+        # output the base exp var value
+        print "!Sample_characteristics = $expVars[$i]: $e" . "\n";
+        # if the currnet exp var is none
+        if ($currentExpVars[$i] eq "None" or
+            $currentExpVars[$i] eq "none" or
+            ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Input")) {
+            # do nothing more
+        } else {
+            # otherwise output the fields given by %expVarDetails from the cv.ra
+            my %cvType = %{$cvTerms{$expVarCVMapper{$expVars[$i]}}};
+            my %cvData = %{$cvType{$currentExpVars[$i]}};
+            for $j (@{$expVarDetails{$expVars[$i]}}) {
+                # if there's a better label for this term use it
+                if (defined $detailsCleaner{$j}) {
+                    print "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
+                } else {
+                    print "!Sample_characteristics = $expVars[$i] $j: ",  $cvData{$j}, "\n";
+                }
+            }
+        }
+    }
+    print "!Sample_biomaterial_provider = $provider" . "\n";
+    print "!Sample_growth_protocol = $growthProtocol" . "\n";
+    print "!Sample_molecule = $molecule" . "\n";
+    print "!Sample_extract_protocol = $extractProtocol" . "\n";
+    print "!Sample_data_processing = $dataProcessing" . "\n";
+    print "!Sample_library_strategy = $libraryStrategy" . "\n";
+    print "!Sample_library_source = $ibrarySource" . "\n";
+    print "!Sample_library_selection = $ibrarySelection" . "\n";
+    print "!Sample_instrument_model = $instrument" . "\n";
+    my $rawCount = 1;
+    for $i (@currentMetadata) {
+        my %metadata = %{$i};
+        my $filename = $metadata{"fileName"};
+        if ($metadata{"view"} eq "RawData") {
+            my ($name, $type, $compression) = split(/\./, $filename);
+            my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
+            print "!Sample_raw_file_$rawCount = $filename" . "\n";
+            print "!Sample_raw_file_type_$rawCount = $type" . "\n";
+            print "!Sample_raw_file_checksum_$rawCount = $checksum" . "\n";
+            ++$rawCount;
+        }
+    }
+    my $supplementCount = 1;
+    for $i (@currentMetadata) {
+        my %metadata = %{$i};
+        my $filename = $metadata{"fileName"};
+        if ($metadata{"view"} ne "RawData") {
+            my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
+            print "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
+            print "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
+            print "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
+            ++$supplementCount;
+        }
+    }
+    print "\n";
+}

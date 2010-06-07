@@ -1,0 +1,3 @@
+prin("About to redefine the print function\n");
+to print(var v) {}
+print("you should not see anything");

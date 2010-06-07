@@ -1,0 +1,5 @@
+#	"$Id: trackDb.chainNet.ra,v 1.2 2010/02/03 05:58:08 kuhn Exp $";
+
+track chainNetDanRer4 override
+priority 240.3
+shortLabel $o_Organism Chain/Net

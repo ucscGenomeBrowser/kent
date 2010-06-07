@@ -1,0 +1,100 @@
+<!-- This file was created by autoDtd based on HPRD_SINGLE_PSIMI_070609.xml -->
+
+<!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->
+<!ENTITY % INTEGER "#PCDATA">
+<!ENTITY % REAL "#PCDATA">
+
+<!-- Now some entities for numeric attributes. NCBI doesn't define these but we do. -->
+<!ENTITY % int "CDATA">
+<!ENTITY % float "CDATA">
+
+<!-- Now the data structure in HPRD_SINGLE_PSIMI_070609.xml. -->
+<!ELEMENT entrySet (entry)>
+<!ATTLIST entrySet level %int; #REQUIRED>
+<!ATTLIST entrySet version %int; #REQUIRED>
+<!ATTLIST entrySet xmlns CDATA #REQUIRED>
+<!ATTLIST entrySet xmlns:xsi CDATA #REQUIRED>
+<!ATTLIST entrySet xsi:schemaLocation CDATA #REQUIRED>
+
+<!ELEMENT entry (
+	source, 
+	availabilityList, 
+	experimentList, 
+	interactorList, 
+	interactionList
+)>
+
+<!ELEMENT source (names, bibref)>
+
+<!ELEMENT names (shortLabel, fullName?, alias*)>
+
+<!ELEMENT shortLabel (#PCDATA)>
+
+<!ELEMENT fullName (#PCDATA)>
+
+<!ELEMENT alias (#PCDATA)>
+<!ATTLIST alias type CDATA #REQUIRED>
+<!ATTLIST alias typeAc CDATA #REQUIRED>
+
+<!ELEMENT bibref (xref)>
+
+<!ELEMENT xref (primaryRef, secondaryRef*)>
+
+<!ELEMENT primaryRef ()>
+<!ATTLIST primaryRef db CDATA #REQUIRED>
+<!ATTLIST primaryRef id CDATA #REQUIRED>
+<!ATTLIST primaryRef dbAc CDATA #IMPLIED>
+<!ATTLIST primaryRef refType CDATA #IMPLIED>
+<!ATTLIST primaryRef refTypeAc CDATA #IMPLIED>
+
+<!ELEMENT secondaryRef ()>
+<!ATTLIST secondaryRef db CDATA #REQUIRED>
+<!ATTLIST secondaryRef id CDATA #REQUIRED>
+<!ATTLIST secondaryRef dbAc CDATA #IMPLIED>
+<!ATTLIST secondaryRef refType CDATA #IMPLIED>
+<!ATTLIST secondaryRef refTypeAc CDATA #IMPLIED>
+
+<!ELEMENT availabilityList (availability)>
+
+<!ELEMENT availability (#PCDATA)>
+<!ATTLIST availability id %int; #REQUIRED>
+
+<!ELEMENT experimentList (experimentDescription*, experimentRef*)>
+
+<!ELEMENT experimentDescription (bibref, interactionDetectionMethod)>
+<!ATTLIST experimentDescription id %int; #REQUIRED>
+
+<!ELEMENT interactionDetectionMethod (names, xref)>
+
+<!ELEMENT experimentRef (#PCDATA)>
+
+<!ELEMENT interactorList (interactor+)>
+
+<!ELEMENT interactor (
+	names, 
+	xref, 
+	interactorType, 
+	organism, 
+	sequence
+)>
+<!ATTLIST interactor id CDATA #REQUIRED>
+
+<!ELEMENT interactorType (names, xref)>
+
+<!ELEMENT organism (names)>
+<!ATTLIST organism ncbiTaxId %int; #REQUIRED>
+
+<!ELEMENT sequence (#PCDATA)>
+
+<!ELEMENT interactionList (interaction+)>
+
+<!ELEMENT interaction (experimentList, participantList)>
+<!ATTLIST interaction id %int; #REQUIRED>
+
+<!ELEMENT participantList (participant+)>
+
+<!ELEMENT participant (interactorRef)>
+<!ATTLIST participant id CDATA #REQUIRED>
+
+<!ELEMENT interactorRef (#PCDATA)>
+

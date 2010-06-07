@@ -1,0 +1,54 @@
+# Data Agreement File for DGF (Digital Genomic Footprinting) $Revision: 1.2 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Stam
+lab               UW
+dataType          DnaseDgf
+compositeSuffix   UwDgf
+group             regulation
+variables         cell
+assembly          hg19
+
+validationSettings validateFiles.tagAlign:mmCheckOneInN=1000,mismatches=2
+
+# Track/view definition
+view             Footprints
+longLabelPrefix  UW Digital Genomic Footprinting - Footprints
+type             bed 6 +
+required         no
+hasReplicates    no
+
+view             Hotspots
+longLabelPrefix  UW Digital Genomic Footprinting - Hotspots
+type             broadPeak
+required         yes
+hasReplicates    no
+
+view             Peaks
+longLabelPrefix  UW Digital Genomic Footprinting - Peaks
+type             narrowPeak
+required         yes
+hasReplicates    no
+
+view             Signal
+longLabelPrefix  UW Digital Genomic Footprinting - Per-base acc signal
+type             bedGraph 4
+required         yes
+hasReplicates    no
+
+view             RawSignal
+longLabelPrefix  UW Digital Genomic Footprinting - Raw Signal
+type             wig
+required         no
+hasReplicates    no
+
+view             Alignments
+longLabelPrefix  UW Digital Genomic Footprinting - Tags
+type             tagAlign
+required         yes
+hasReplicates    no

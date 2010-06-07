@@ -1,0 +1,17 @@
+
+List of some GFF3 files that might be useful in testing is here:
+     http://www.sequenceontology.org/resources/databases.html
+
+   
+Examples found from here:
+          ftp://ftp.wormbase.org/pub/wormbase/genomes/c_elegans/genome_feature_tables/GFF3/current.gff3.gz
+          http://downloads.yeastgenome.org/chromosomal_feature/saccharomyces_cerevisiae.gff
+          http://paramecium.cgm.cnrs-gif.fr/download/gff/parameciumDB.gff3.gz
+          ftp://ftp.vectorbase.org/public_data/organism_data/agambiae/Geneset/agambiae.BASEFEATURES_PEST-AgamP3.5.gff3.gz
+          ftp://ftp.vectorbase.org/public_data/organism_data/aaegypti/Geneset/aaegypti.BASEFEATURES-AaegL1.2.gff3.gz
+          ftp://ftp.vectorbase.org/public_data/organism_data/cquinquefasciatus/Geneset/cquinquefasciatus.BASEFEATURES_Johannesburg-Cpip1.2.gff3.gz
+          ftp://ftp.arabidopsis.org/Genes/TAIR9_genome_release/TAIR9_gff3
+          ftp://ftp.sgn.cornell.edu/tomato_genome/annotation/ITAG_current/ITAG_devel_all_genomic.gff3
+          ftp://ftp.sgn.cornell.edu/tomato_genome/annotation/ITAG_current/ITAG_devel_cdna_alignments.gff3
+          ftp://ftp.sgn.cornell.edu/tomato_genome/annotation/ITAG_current/ITAG_devel_de_novo_gene_finders.gff3
+          ftp://ftp.sgn.cornell.edu/tomato_genome/annotation/ITAG_current/ITAG_devel_gene_models.gff3

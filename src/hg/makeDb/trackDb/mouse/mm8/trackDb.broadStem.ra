@@ -1,0 +1,283 @@
+# Broad Stem cell Chromatin IP tracks
+### These are subtracks not displayed and left behind during move to trackDb.ra
+
+#    track broadStemChipAlignmentsH3K4me1Es
+#    shortLabel H3K4me1 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me1 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m1 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,110,0
+#    priority 4
+
+#    track broadStemChipAlignmentsH3K4me1Np
+#    shortLabel H3K4me1 NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me1 ab, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m1 CEL=NP view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,110,0
+#    priority 14
+
+#    track broadStemChipAlignmentsH3K4me2Es
+#    shortLabel H3K4me2 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m2 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,130,0
+#    priority 24
+
+#    track broadStemChipAlignmentsH3K4me2Np
+#    shortLabel H3K4me2 NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m2 CEL=NP view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,130,0
+#    priority 34
+
+#    track broadStemChipAlignmentsH3K4me2Brain
+#    shortLabel H3K4me2 WB Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Whole Brain)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m2 CEL=WBR view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,130,0
+#    priority 44
+    
+#    track broadStemChipAlignmentsH3K4Me3Es
+#    shortLabel H3K4me3 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m3 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,150,0
+#    priority 54
+
+#    track broadStemChipAlignmentsH3K4Me3Mef
+#    shortLabel H3K4me3 MEF Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Fibroblasts (MEF))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m3 CEL=MEF view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,150,0
+#    priority 64
+
+#    track broadStemChipAlignmentsH3K4Me3Np
+#    shortLabel H3K4Me3me3 NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m3 CEL=NP view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,150,0
+#    priority 74
+    
+#    track broadStemChipAlignmentsH3K4Me3EsHyb
+#    shortLabel H3K4me3 ESh Aln
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m3 CEL=EShyb view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,150,0
+#    priority 84
+
+#    track broadStemChipAlignmentsH3K4me3Brain
+#    shortLabel H3K4me3 WB Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Whole Brain)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K04m3 CEL=WBR view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,150,0
+#    priority 94
+
+#    track broadStemChipAlignmentsH3K9Me3Es
+#    shortLabel H3K9me3 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K09m3 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 100,0,0
+#    priority 104
+
+#    track broadStemChipAlignmentsH3K9Me3Mef
+#    shortLabel H3K9me3 MEF Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Embryonic Fibroblasts (MEF))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K09m3 CEL=MEF view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 100,0,0
+#    priority 114
+
+#    track broadStemChipAlignmentsH3K9Me3Np
+#    shortLabel H3K9me3 NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K09m3 CEL=NP view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 100,0,0
+#    priority 124
+
+#    track broadStemChipAlignmentsH3K9Me3EsHyb
+#    shortLabel H3K9me3 ESh Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K09m3 CEL=EShyb view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 100,0,0
+#    priority 134
+
+#    track broadStemChipAlignmentsH4K20Me3Es
+#    shortLabel H4K20me3 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H4K20me3 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K20m3 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 150,0,0
+#    priority 144
+
+#    track broadStemChipAlignmentsH3K27Me3Es
+#    shortLabel H3K27me3 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K27m3 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 255,0,0
+#    priority 154
+
+#    track broadStemChipAlignmentsH3K27Me3Mef
+#    shortLabel H3K27me3 MEF Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Embryonic Fibroblasts (MEF))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K27m3 CEL=MEF view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 255,0,0
+#    priority 164
+
+#    track broadStemChipAlignmentsH3K27Me3Np
+#    shortLabel H3K27me3 NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K27m3 CEL=NP view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 255,0,0
+#    priority 174
+
+#    track broadStemChipAlignmentsH3K27me3Brain
+#    shortLabel H3K27me3 WB Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Whole Brain)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K27m3 CEL=WBR view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 255,0,0
+#    priority 184
+    
+#    track broadStemChipAlignmentsH3K36Me3Es
+#    shortLabel H3K36me3 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K36m3 CEL=ES view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,150
+#    priority 194
+
+#    track broadStemChipAlignmentsH3K36Me3Mef
+#    shortLabel H3K36me3 MEF Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Embryonic Fibroblasts (MEF))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K36m3 CEL=MEF view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,150
+#    priority 204
+
+#    track broadStemChipAlignmentsH3K36Me3Np
+#    shortLabel H3K36me3 NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K36m3 CEL=NP view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,150
+#    priority 214
+
+#    track broadStemChipAlignmentsH3K36Me3EsHyb
+#    shortLabel H3K36me3 ESh Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
+#    parent broadChromatinChIPSeq
+#    subGroups FAC=K36m3 CEL=EShyb view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,150
+#    priority 224
+
+#    track broadStemChipAlignmentsH3panEs
+#    shortLabel pan-H3 ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (pan-H3 ab, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups CEL=ES FAC=PAN view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color  0,0,0
+#    priority 234
+
+#    track broadStemChipAlignmentsWceEs
+#    shortLabel WCE ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (Whole Cell Extract, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups CEL=ES FAC=WCE view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,0
+#    priority 244
+
+#    track broadStemChipAlignmentsWceMef
+#    shortLabel WCE MEF Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (Whole Cell Extract, Embryonic Fibroblasts (MEF))
+#    parent broadChromatinChIPSeq
+#    subGroups CEL=MEF FAC=WCE view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,0
+#    priority 254
+
+#    track broadStemChipAlignmentsWceNp
+#    shortLabel WCE NP Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (Whole Cell Extract, Neural Progenitor (NP) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups CEL=NP FAC=WCE view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,0,0
+#    priority 264
+
+#    track broadStemChipAlignmentsRPolEs
+#    shortLabel RPolII ES Align
+#    longLabel Broad Stem Cell Chromatin IP Alignments (RNA Polymerase II, Embryonic Stem (ES) cells)
+#    parent broadChromatinChIPSeq
+#    subGroups CEL=ES FAC=RPOL view=ALN
+#    type bed 9 +
+#    noInherit on
+#    color 0,100,0
+#    priority 274
+

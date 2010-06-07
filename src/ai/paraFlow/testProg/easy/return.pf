@@ -1,0 +1,12 @@
+to factorial(int n) into float r
+{
+r = 1;
+for (;;)
+   {
+   r *= n;
+   n -= 1;
+   if (n <= 1)
+       return;
+   }
+}
+

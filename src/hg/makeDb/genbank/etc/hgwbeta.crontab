@@ -1,0 +1,17 @@
+#
+# dbload of hgwbeta
+#
+
+SHELL=/bin/sh
+MAILTO=genbank@cse.ucsc.edu
+
+# mon-fri AM, load mRNAs
+# poll every hour 0-6
+15 0-6 * * 0-4	/genbank/etc/hgwbeta-dbload
+
+# sat,sun AM both mRNAs and ESTS
+# poll every hour midnight to 4pm
+15 0-14 * * 5-6	/genbank/etc/hgwbeta-dbload -inclEsts
+# -extFileUpdate
+
+

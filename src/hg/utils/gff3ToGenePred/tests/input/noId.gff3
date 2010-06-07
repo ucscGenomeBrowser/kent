@@ -1,0 +1,12 @@
+##gff-version 3
+C00.1_contig1	ITAG_geneid_tomato	gene	856	5168	0.26	-	.	ID=C00.1_contig1_1;Name=C00.1_contig1_1
+C00.1_contig1	ITAG_geneid_tomato	mRNA	856	5168	0.26	-	.	ID=mRNA_C00.1_contig1_1;Parent=C00.1_contig1_1
+C00.1_contig1	ITAG_geneid_tomato	CDS	856	977	0.27	-	2	ID=cds_C00.1_contig1_1.2;Parent=mRNA_C00.1_contig1_1;Target=geneid_v1.3_predicted_protein_C00.1_contig1_1 26 66;exon_type=Terminal;acceptor_score=3.93;coding_potential=3.52
+#
+C00.1_contig1	ITAG	clone	1	133977	.	+	.	Name=C00HBa0076I13.1;Target=C00HBa0076I13.1 1 133977 +
+C00.1_contig13	ITAG	clone	1	128122	.	+	.	Name=C00HBa0081D06.1;Target=C00HBa0081D06.1 1 128122 +
+C00.1_contig13	ITAG_infernal	tRNA	17373	17446	60.00	+	.	Name=RF00005
+C00.1_contig13	ITAG_infernal	UTR_region	97652	97691	20.36	+	.	Name=RF00556
+C00.1_contig13	ITAG_infernal	tRNA	115561	115642	45.40	-	.	Name=RF00005
+C00.1_contig13	ITAG_infernal	U5_snRNA	116965	117071	72.74	+	.	Name=RF00020
+C00.1_contig13	ITAG_infernal	tRNA	121311	121384	59.87	-	.	Name=RF00005

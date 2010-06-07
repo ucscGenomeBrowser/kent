@@ -1,0 +1,40 @@
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments
+
+# Lab info		
+grant	BadGrant
+lab	HudsonAlpha
+dataType	ChipSeq
+variables	cell, antibody, badvariable
+assembly	hg17
+dafVersion      0.2.2.2
+
+# Track/view definition
+view             Peaks
+longLabelPrefix  HudsonAlpha ChIP/Seq Peaks
+type             narrowPeak
+hasReplicates    no
+required         yes
+badField	 blah
+
+view             Signal
+longLabelPrefix  HudsonAlpha ChIP/Seq Signal
+type             wig
+hasReplicates    no
+required         no
+
+view             RawSignal
+longLabelPrefix  HudsonAlpha ChIP-Seq Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+view             Alignments
+longLabelPrefix  HudsonAlpha ChIP-Seq Sites
+type             tagAlign
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes 
+required         blah
