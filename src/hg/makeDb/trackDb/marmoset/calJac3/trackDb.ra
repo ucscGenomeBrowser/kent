@@ -36,7 +36,7 @@ treeImage phylo/calJac1_8way.gif
 
 track phastConsElements13way
 shortLabel 13-Way Most Conserved
-longLabel PhastCons Conserved Elements, 13-way Vertebrate Multiz Alignment
+longLabel PhastCons Conserved Elements, 13-Way Vertebrate Multiz Alignment
 color 170,100,50
 group compGeno
 priority 104.2
@@ -46,10 +46,10 @@ showTopScorers 200
 type bed 5 .
 
 track multiz13way
-shortLabel 13-way Conservation
+shortLabel 13-Way Conservation
 longLabel 13-Way Multiz Alignment & Conservation 
 group compGeno
-priority 103.4
+priority 104.1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
