@@ -1,4 +1,4 @@
-# Data Agreement File $Revision: 1.2 $
+# Data Agreement File $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -11,106 +11,91 @@ lab               Caltech
 dataType          RnaSeq
 compositeSuffix   CaltechRnaSeq
 group             expression
-variables         cell, localization, rnaExtract, mapAlgorithm, readType
+variables         cell,readType,mapAlgorithm,insertLength
 assembly          hg19
 
 validationSettings validateFiles.fastq:mmCheckOneInN=100 
 
 # Track/view definition
 view             Signal
-longLabelPrefix  Caltech RNA-seq Map Algorithm Signal
+longLabelPrefix  Caltech RNA-seq Signal
 type             wig
 hasReplicates    yes
 required         no
 
-view             MinusRawSignal
-longLabelPrefix  Caltech RNA-seq Minus Raw Signal
+view             MinusSignal
+longLabelPrefix  Caltech RNA-seq Minus Signal
 type             wig
 hasReplicates    yes
 required         no
 
-view             PlusRawSignal
-longLabelPrefix  Caltech RNA-seq Plus Raw Signal
-type             wig
-hasReplicates    yes
-required         no
-
-view             RawSignal
-longLabelPrefix  Caltech RNA-seq Raw Signal
+view             PlusSignal
+longLabelPrefix  Caltech RNA-seq Plus Signal
 type             wig
 hasReplicates    yes
 required         no
 
 view             Splices
-longLabelPrefix  Caltech RNA-seq Map Algorithm Splice Alignments
-type             bed 12
+longLabelPrefix  Caltech RNA-seq Splice Alignments
+type             bam
 hasReplicates    yes 
 required         no
 
 view             Aligns
-longLabelPrefix  Caltech RNA-seq Map Algorithm Alignments
-type             bed 12
+longLabelPrefix  Caltech RNA-seq Alignments
+type             bam
 hasReplicates    yes
 required         no
 
 view             Paired
-longLabelPrefix  Caltech RNA-seq Map Algorithm Paired Alignments
-type             bed 12
+longLabelPrefix  Caltech RNA-seq Paired Alignments
+type             bam
 hasReplicates    yes
 required         no
 
-# For 2x75 datasets, raw Illumina reads (RawData, fasta format, query75.txt files) are run through bowtie 0.9.8.1 with up to 2 mismatches 
-# and the resulting mappings are stored (RawData2, bowtie format, hg18sp75spike.bowtie.txt files) for up to ten matches per-read to the genome, 
-# spiked controls and UCSC knownGene splice junctions. Reads that were not mapped by bowtie (RawData3, fasta format, unmapped.fa files) 
-# are then mapped onto the genome using blat and filtered using pslReps (RawData4, psl format, bowtierej.hg18.blatbetter files). 
-# The bowtie and blat mappings are then analyzed by ERANGE3.0.2 to generate wiggles (RawSignal, wiggle format, .graph files), 
-# bed files of all reads and splices (Aligns, PairedAligns, bed format, all.bed files), 
-# all bowtie and blat splices (Splices, bed format, allsplices.bed files), 
-# and blat-only splices (Splices, bed format, blatsplices.bed), 
-# as well as RPKM expression level measurements at the gene-level (RawData5, rpkm format, final.rpkm), 
-# exon-level (RawData6, rpkm format, gencode_exon.rpkm), and candidate novel exons (RawData7, rpkm format, accepted.rpkm).
+# the following views are download only
 
-# query75.txt 
-view             RawData
-type             fasta
+view             GeneRPKM
+longLabelPrefix  Caltech RNA-seq Gencode Gene Expression
+type             rpkm1
 hasReplicates    yes
 required         no
+downloadOnly     yes
 
-# hg18sp75spike.bowtie.txt
-view             RawData2
-type             bowtie
+view             TranscriptRPKM
+longLabelPrefix  Caltech RNA-seq Gencode Transcript Expression
+type             rpkm2
 hasReplicates    yes
 required         no
+downloadOnly     yes
 
-# unmapped.fa
-view             RawData3
-type             fasta
+view             GeneDeNovo
+longLabelPrefix  Caltech RNA-seq Gencode Gene de novo Expression
+type             rpkm1
 hasReplicates    yes
 required         no
+downloadOnly     yes
 
-# bowtierej.hg18.blatbetter
-view             RawData4
-type             psl
+view             TranscriptDeNovo
+longLabelPrefix  Caltech RNA-seq Gencode Transcript de novo Expression
+type             rpkm2
 hasReplicates    yes
 required         no
+downloadOnly     yes
 
-# final.rpkm
-view             RawData5
-type             rpkm
+view             GeneModel
+longLabelPrefix  Caltech RNA-seq Gene Models from Cufflinks
+type             gtf
 hasReplicates    yes
 required         no
+downloadOnly     yes
 
-# gencode_exon
-view             RawData6
-type             rpkm
+view             InsLength
+longLabelPrefix  Caltech RNA-seq Insert Length Distribution
+type             insdist
 hasReplicates    yes
 required         no
-
-# accepted.rpkm
-view             RawData7
-type             rpkm
-hasReplicates    yes
-required         no
+downloadOnly     yes
 
 # fastq
 # single ended fastq data
