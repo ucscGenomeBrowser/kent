@@ -1,4 +1,4 @@
-tablename encTestChipSeqK562Foxp2AlignmentsRep1
+tablename wgEncodeTestChipSeqK562Foxp2AlnRep1
 view Alignments
 type tagAlign
 assembly hg19
@@ -6,7 +6,7 @@ files FoxP2_SL167.align_25.hg18.1.txt.BED FoxP2_SL167.align_25.hg18.2.txt.BED
 downloadOnly 1
 pushQDescription FOXP2 in K562 Replicate 1
 
-tablename encTestChipSeqK562Foxp2Peaks
+tablename wgEncodeTestChipSeqK562Foxp2Pk
 view Peaks
 type broadPeak
 assembly hg19
@@ -14,7 +14,7 @@ files SL_167_peak_caller.ChIP.peaks
 downloadOnly 0
 pushQDescription FOXP2 in K562
 
-tablename encTestChipSeqK562Foxp2RawDataRep1
+tablename wgEncodeTestChipSeqK562Foxp2RawDataRep1
 view RawData
 type fastq
 assembly hg19
@@ -22,7 +22,7 @@ files FoxP2_SL167.fastq
 downloadOnly 1
 pushQDescription FOXP2 in K562 Replicate 1
 
-tablename encTestChipSeqK562Foxp2RawSignalRep1
+tablename wgEncodeTestChipSeqK562Foxp2RawRep1
 view RawSignal
 type wig
 assembly hg19
