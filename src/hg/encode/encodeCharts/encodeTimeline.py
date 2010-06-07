@@ -132,7 +132,7 @@ def main():
   template_vars['title'] = "ENCODE Cumulative Release and Submit Timeline"
   template_vars['packageName'] = 'annotatedtimeline'
   template_vars['visClass'] = 'AnnotatedTimeLine'
-  template_vars['style'] = 'style="width:854; height:480"'
+  template_vars['style'] = 'style="width:854px; height:480px"'
 
   # Set the chart specific configuration options
   chart_config = {}
@@ -145,7 +145,7 @@ def main():
   chart_config['height'] = 480
   template_vars['chart_config'] = json.dumps(chart_config)
 
-  encodeReportLib.renderHtml(template_vars, 0)
+  encodeReportLib.renderHtml(template_vars, 0, 0)
 
   return
 
