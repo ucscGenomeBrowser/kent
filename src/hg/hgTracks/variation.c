@@ -4,7 +4,7 @@
 #include "variation.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.147 2010/05/11 01:43:28 kent Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.148 2010/06/07 16:54:21 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -484,7 +484,7 @@ for (i=0; i < snp125FuncCartSize; i++)
     hashAddInt(snp125FuncCartColorHash, snp125FuncDataName[i],
 	       stringArrayIx(snp125FuncCart[i],
 			     snp125ColorLabel, snp125ColorLabelSize));
-    /* Similarly, map names.  Self-mapping here, others below. */
+    /* Similarly, map names.  Self-mapping here, synonyms below. */
     hashAdd(snp125FuncCartNameHash, snp125FuncDataName[i],
 	    snp125FuncDataName[i]);
     snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
