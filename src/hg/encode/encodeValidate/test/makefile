@@ -11,7 +11,7 @@ DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 # Put the working dataType's into DIRS
 DIRS = chipseq
 BAD = badDaf badDdf
-FILES = load.ra trackDb.ra README.txt
+FILES = load.ra trackDb.ra fileDb.ra mdb.txt README.txt
 
 TMP_FILE_1 = 1.tmp
 TMP_FILE_2 = 2.tmp
@@ -32,7 +32,7 @@ test:
 	for dir in $(DIRS); do \
 		${PROG} -allowReloads -configDir=../config x input/$$dir && \
 		for file in $(FILES); do \
-                        #echo $$dir/$$file && \
+                        echo $$dir/$$file && \
 			rm -f ${TMP_FILE_1} ${TMP_FILE_2}; \
 			egrep -v '(priority|dateSubmitted|dateUnrestricted|dataVersion|data RESTRICTED)' input/$$dir/out/$$file > ${TMP_FILE_1}; \
 			egrep -v '(priority|dateSubmitted|dateUnrestricted|dataVersion|data RESTRICTED)' expected/$$dir/$$file > ${TMP_FILE_2}; \
