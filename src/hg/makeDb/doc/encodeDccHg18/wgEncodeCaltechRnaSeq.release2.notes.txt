@@ -1,10 +1,6 @@
 # generated with encodeMkChangeNotes 0.9
 This is a release2 of the "ENCODE wgEncodeCaltechRnaSeq"
 The composite track is wgEncodeCaltechRnaSeq
-# WARNINGS #################################################
-1 - file wgEncodeCaltechRnaSeqRawData4Rep2Gm12878CellLongpolyaBb12x75 in release2 and release1 don't appear to be the same (type=psl)
-2 - file wgEncodeCaltechRnaSeqRawDataRep2K562CellLongpolyaNa2x75 in release2 and release1 don't appear to be the same (type=fasta)
-############################################################
 
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
