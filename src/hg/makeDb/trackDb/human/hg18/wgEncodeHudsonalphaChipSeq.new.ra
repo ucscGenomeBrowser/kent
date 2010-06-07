@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.5 2010/06/07 23:06:13 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.6 2010/06/07 23:08:14 tdreszer Exp $
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 
@@ -7,7 +7,7 @@ compositeTrack on
 release alpha,beta
 shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
-longLabelClip all
+#longLabelClip all
 group regulation
 subGroup1 view Views Peaks=Peaks zRaw=Raw_Signal
 subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i> 2H1=H1-hESC&nbsp;<i>Tier2</i> 2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA U87=U87
