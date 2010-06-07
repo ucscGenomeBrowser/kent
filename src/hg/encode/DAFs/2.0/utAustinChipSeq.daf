@@ -1,4 +1,4 @@
-# Data Agreement File for UT-Austin ChIP-Seq project  $Revision: 1.4 $
+# Data Agreement File for UT-Austin ChIP-Seq project  $Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -7,8 +7,8 @@
 
 # Lab and general info
 grant            Crawford
-lab              UT-Austin
-dataType         ChipSeq
+lab              UT-A
+dataType         ChIP-seq
 compositeSuffix  OpenChromChiP
 group            regulation
 variables        cell, antibody
