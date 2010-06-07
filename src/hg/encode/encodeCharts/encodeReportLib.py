@@ -124,9 +124,22 @@ def dateIntToDateStr (date):
   return dateObj.strftime("%b %d, %Y")
 
 # Standard HTML template for ENCODE Report charts
-def renderHtml(template_vars, clickable):
+def renderHtml(template_vars, mouseover, clickable):
 
-  template_vars['mouseJS'] = ""
+  template_vars['mouseJS'] = """
+  """
+  if mouseover:
+    template_vars['mouseJS'] = """
+          google.visualization.events.addListener(viz, 'onmouseover', vizMouseOver);
+          google.visualization.events.addListener(viz, 'onmouseout', vizMouseOut);
+ 
+          function vizMouseOver(e) {
+            viz.setSelection([e]);
+          }
+          function vizMouseOut(e) {
+            viz.setSelection([{'row':null, 'column':null}]);
+          }
+    """
   if clickable:
     template_vars['mouseJS'] = """
           google.visualization.events.addListener(viz, 'onmouseover', vizMouseOver);
@@ -158,7 +171,11 @@ def renderHtml(template_vars, clickable):
   """ % (template_vars['keyField'], template_vars['species'], template_vars['norelease'])
 
   # The html template. Will be filled in by string subs
+  # Added <!DOCTYPE> tag to fix IE8 issues
   page_template = """
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+
   <html>
     <head>
       <script type='text/javascript' src='http://www.google.com/jsapi'></script>
