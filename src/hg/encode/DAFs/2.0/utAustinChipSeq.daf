@@ -1,4 +1,4 @@
-# Data Agreement File for UT-Austin ChIP-Seq project  $Revision: 1.5 $
+# Data Agreement File for UT-Austin ChIP-Seq project  $Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,7 +9,7 @@
 grant            Crawford
 lab              UT-A
 dataType         ChIP-seq
-compositeSuffix  OpenChromChiP
+compositeSuffix  OpenChromChip
 group            regulation
 variables        cell, antibody
 assembly         hg19
@@ -22,7 +22,7 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=3
  longLabelPrefix  Open Chromatin, UT-Austin ChIP-seq Peaks
  type             narrowPeak
  hasReplicates    no
- required         yes
+ required         no
 
  view             Signal
  longLabelPrefix  Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal
@@ -40,5 +40,13 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=3
  longLabelPrefix  Open Chromatin, UT-Austin ChIP-seq Alignments
  type             bam
  hasReplicates    yes
- required         yes
+ required	  yes
+ downloadOnly	  yes
+
+ view             RawData
+ type             fastq
+ hasReplicates    yes
+ required         no
+
+
 
