@@ -1,4 +1,4 @@
-# Data Agreement File for UNC (Duke) FAIRE-Seq project  $Revision: 1.6 $
+# Data Agreement File for UNC (Duke) FAIRE-Seq project  $Revision: 1.7 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -40,10 +40,11 @@ longLabelPrefix  Open Chromatin, UNC FAIRE-seq Alignments
 type             bam
 hasReplicates    yes
 required         yes
+downloadOnly	 yes
 
 
 view             RawData
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 
