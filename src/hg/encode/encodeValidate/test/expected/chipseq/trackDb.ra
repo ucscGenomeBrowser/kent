@@ -1,4 +1,4 @@
-track encTestChipSeq
+track wgEncodeTestChipSeq
 compositeTrack on
 shortLabel Test ChipSeq
 longLabel ENCODE Test Myers ChipSeq
@@ -15,23 +15,23 @@ priority 0
 type bed 3
 wgEncode 1
 
-    track encTestChipSeqK562Foxp2Peaks
+    track wgEncodeTestChipSeqK562Foxp2Pk
     release alpha
-    subTrack encTestChipSeq off
+    subTrack wgEncodeTestChipSeq off
     shortLabel K562 FOXP2 Pk
     longLabel ENCODE HudsonAlpha ChIP-Seq Peaks (FOXP2 in K562 cells)
     subGroups view=Peaks factor=FOXP2 cellType=K562
     type broadPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 view=Peaks dataVersion="ENCODE Jan 2010 Freeze" dateSubmitted=2009-10-10 dateUnrestricted=2010-07-10 composite=encTestChipSeq tableName=encTestChipSeqPeaksK562Foxp2 fileName=encTestChipSeqPeaksK562Foxp2.broadPeak.gz
+    # subId=0 dateSubmitted=2010-04-20
 
-    track encTestChipSeqK562Foxp2RawSignalRep1
+    track wgEncodeTestChipSeqK562Foxp2RawRep1
     release alpha
-    subTrack encTestChipSeq off
+    subTrack wgEncodeTestChipSeq off
     shortLabel K562 FOXP2 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in K562 cells)
     subGroups view=RawSignal factor=FOXP2 cellType=K562
-    type wig ENCTESTCHIPSEQK562FOXP2RAWSIGNALREP1_MINMAXRANGE
+    type wig WGENCODETESTCHIPSEQK562FOXP2RAWREP1_MINMAXRANGE
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" dateSubmitted=2009-10-10 dateUnrestricted=2010-07-10 composite=encTestChipSeq tableName=encTestChipSeqRawSignalRep1K562Foxp2 fileName=encTestChipSeqRawSignalRep1K562Foxp2.wig.gz
-
+    # subId=0 dateSubmitted=2010-04-20
+  
