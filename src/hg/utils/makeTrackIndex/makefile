@@ -8,10 +8,9 @@ A = makeTrackIndex
 
 O = $A.o
 
-$A: ${O}
-	@${MKDIR} "${DESTDIR}${BINDIR}"
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+dir = /cluster/home/larrym/kent/src/hg/utils/makeTrackIndex
 
-clean:
-	rm -f $O
+include ../../../inc/cgi_build_rules.mk
+
+compile: $O
+	${CC} -o $A $O ${MYLIBS} ${L}
