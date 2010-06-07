@@ -1,6 +1,6 @@
-setenv BRANCHNN 232
-setenv TODAY 2010-05-25       # v232 final
-setenv LASTWEEK 2010-05-18    # v231 final
+setenv BRANCHNN 233
+setenv TODAY 2010-06-07       # v233 final
+setenv LASTWEEK 2010-05-25    # v232 final
 setenv REVIEWDAY 2010-06-01      # v233 preview
 setenv LASTREVIEWDAY 2010-05-25  # v232 preview
 
