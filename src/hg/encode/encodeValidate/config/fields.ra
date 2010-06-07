@@ -58,6 +58,11 @@ file ddf
 type string
 required no
 
+field growthProtocol
+file ddf
+type string
+required no
+
 field phase
 file ddf
 type string
