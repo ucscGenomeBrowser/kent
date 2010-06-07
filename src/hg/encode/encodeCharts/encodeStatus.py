@@ -153,14 +153,15 @@ def main():
   chart_config['titleY'] = "# of Submissions"
   chart_config['tooltipFontSize'] = 16
   chart_config['enableTooltip'] = 'true'
-  colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+  # Can't specify 'orange' since IE8 doesn't support CSS 2.1
+  colors = ['red', '#ffa500', 'yellow', 'green', 'blue', 'purple']
   colors = colors[0:len(statusLabel)]
   colors.reverse()
   chart_config['colors'] = colors
 
   template_vars['chart_config'] = json.dumps(chart_config)
 
-  encodeReportLib.renderHtml(template_vars, 1)
+  encodeReportLib.renderHtml(template_vars, 0, 1)
 
   return
 

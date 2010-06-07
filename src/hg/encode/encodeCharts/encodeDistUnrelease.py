@@ -155,13 +155,14 @@ def main():
   chart_config['tooltipFontSize'] = 16
 
   if (keyField == 'freeze' or keyField == 'status'):
-    colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+    # Can't support "orange" since IE8 doesn't support CSS2.1
+    colors = ['red', '#ffa500', 'yellow', 'green', 'blue', 'indigo', 'violet']
     colors = colors[0:len(labels)]
     chart_config['colors'] = colors
 
   template_vars['chart_config'] = json.dumps(chart_config)
 
-  encodeReportLib.renderHtml(template_vars, 0)
+  encodeReportLib.renderHtml(template_vars, 1, 0)
 
   return
 
