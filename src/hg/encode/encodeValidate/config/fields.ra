@@ -28,6 +28,11 @@ file ddf
 type int
 required no
 
+field rank
+file ddf
+type int
+required no
+
 field fragLength
 file ddf
 type int
