@@ -34,6 +34,8 @@ def main():
   keyValue = form.getvalue('value')
   if not keyValue:
     keyValue = 'HudsonAlpha'
+  if keyValue == "post Jan-2010":
+    keyValue = "post ENCODE Jan 2010 Freeze"
 
   status = form.getvalue('status')
   if not status:
