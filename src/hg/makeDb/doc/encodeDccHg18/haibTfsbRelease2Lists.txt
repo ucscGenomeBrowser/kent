@@ -86,7 +86,7 @@ wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii (not displayed as part of release1 
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii (not displayed as part of release1 b/c were not listed in trackDb, but exists on beta & rr)
 
 
-B') Deprecated files (25 downloadables, 0 gbdbs):
+B') Deprecated files (25 downloadables, 2 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
     This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
@@ -120,6 +120,8 @@ wgEncodeHudsonalphaChipSeqRawDataRep2K562Gabp.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Nrsf.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz
 
+wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii.wib
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib
 
 C) New tables (334):
 wgEncodeHudsonalphaChipSeqPeaksA549Gr
