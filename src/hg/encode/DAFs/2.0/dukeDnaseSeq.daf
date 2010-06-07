@@ -1,4 +1,4 @@
-# Data Agreement File for Duke DNase-Seq project  $Revision: 1.3 $
+# Data Agreement File for Duke DNase-Seq project  $Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,13 +9,12 @@ dafVersion       2.0
 grant            Crawford
 lab              Duke
 dataType         DNaseSeq
-compositeSuffix  OpenChrom
-dataAgreementSuffix DNase
+compositeSuffix  OpenChromDNase
 group            regulation
 variables        cell
 assembly         hg19
 
-validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=25,privateData
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=32;
 
 # Track/view definition
 view             Peaks
@@ -26,19 +25,19 @@ required         yes
 
 view             Signal
 longLabelPrefix  Open Chromatin, Duke DNase-seq F-Seq Density Signal
-type             wig
+type             bigWig
 hasReplicates    no
 required         yes
 
 view             Base_Overlap_Signal
 longLabelPrefix  Open Chromatin, Duke DNase-seq Base Overlap Signal
-type             wig
+type             bigWig
 hasReplicates    no
 required         yes
 
 view             Alignments
 longLabelPrefix  Open Chromatin, Duke DNase-seq Alignments
-type             tagAlign
+type             bam
 hasReplicates    yes
 required         yes
 
