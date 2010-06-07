@@ -20,7 +20,7 @@ int isinf(double x) { return !finite(x) && x==x; }
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.29 2010/06/05 19:29:53 braney Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.28 2010/03/31 00:07:43 kent Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -269,7 +269,7 @@ pscmBox(pscm, x, y, 1, 1, color);
 
 
 
-static void pscmVerticalSmear8(struct pscmGfx *pscm,
+static void pscmVerticalSmear(struct pscmGfx *pscm,
 	int xOff, int yOff, int width, int height, 
 	unsigned char *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
@@ -767,7 +767,7 @@ vg->findColorIx = (vg_findColorIx)pscmFindColorIx;
 vg->colorIxToRgb = (vg_colorIxToRgb)pscmColorIxToRgb;
 vg->setClip = (vg_setClip)pscmSetClip;
 vg->unclip = (vg_unclip)pscmUnclip;
-vg->verticalSmear8 = (vg_verticalSmear8)pscmVerticalSmear8;
+vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 vg->setHint = (vg_setHint)pscmSetHint;

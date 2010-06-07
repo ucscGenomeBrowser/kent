@@ -1,4 +1,4 @@
-# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.5 $
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.4 $
 
 # Lab and general info
 grant             Myers
@@ -6,7 +6,6 @@ lab               HudsonAlpha
 dataType          ChipSeq
 variables         cell, antibody, protocol, treatment
 compositeSuffix   HaibTfbs
-group             regulation
 assembly          hg19
 medianFragmentLength 225
 fragmentLengthRange  150-300

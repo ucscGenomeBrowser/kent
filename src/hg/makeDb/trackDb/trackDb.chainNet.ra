@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.95 2010/06/03 23:00:28 mary Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.94 2010/05/18 23:55:56 mary Exp $";
 
 track chainNetAplCal1
 compositeTrack on
@@ -3753,7 +3753,7 @@ html chainNet
 
 track chainNetCalJac1
 compositeTrack on
-shortLabel $o_db Chain/Net
+shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
@@ -3782,7 +3782,7 @@ html chainNet
         track chainCalJac1
         parent chainNetCalJac1Viewchain
         subGroups view=chain
-        shortLabel $o_db Chain
+        shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain calJac1
         html chainNet
@@ -3796,7 +3796,7 @@ html chainNet
         track netCalJac1
         parent chainNetCalJac1Viewnet
         subGroups view=net
-        shortLabel $o_db Net
+        shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
         type netAlign calJac1 chainCalJac1
         html chainNet

@@ -24,9 +24,6 @@ ifeq (${USE_PNG},1)
     L+=${PNGLIB}
     HG_DEFS+=-DUSE_PNG
     HG_INC+=${PNGINCL}
-    ifeq (${COLOR32},1)
-        HG_DEFS+=-DCOLOR32
-    endif
 endif
 
 # libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default

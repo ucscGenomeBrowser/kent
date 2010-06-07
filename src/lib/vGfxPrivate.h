@@ -29,9 +29,8 @@ typedef void (*vg_textCentered)(void *v, int x, int y, int width, int height,
 typedef int (*vg_findColorIx)(void *v, int r, int g, int b);
 typedef struct rgbColor (*vg_colorIxToRgb)(void *v, int colorIx);
 typedef void (*vg_setClip)(void *v, int x, int y, int width, int height);
-typedef void (*vg_setWriteMode)(void *v, unsigned int writeMode);
 typedef void (*vg_unclip)(void *v);
-typedef void (*vg_verticalSmear8)(void *v,
+typedef void (*vg_verticalSmear)(void *v,
 	    int xOff, int yOff, int width, int height, 
 	    unsigned char *dots, boolean zeroClear);
 typedef void (*vg_fillUnder)(void *v, int x1, int y1, 

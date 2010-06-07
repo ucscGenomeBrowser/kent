@@ -415,7 +415,7 @@ char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
 char *sqlTableUpdate(struct sqlConnection *conn, char *table);
 /* Get last update time for table as an SQL string */
 
-time_t sqlTableUpdateTime(struct sqlConnection *conn, char *table);
+int sqlTableUpdateTime(struct sqlConnection *conn, char *table);
 /* Get last update time for table (in Unix terms). */
 
 char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table);

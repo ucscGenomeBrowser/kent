@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.75 2010/06/03 18:53:59 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.74 2010/05/11 01:43:24 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -369,7 +369,7 @@ if (!doGreat())
     setting = cgiUsualString(hgtaCtDesc, buf);
     cgiMakeTextVar(hgtaCtDesc, setting, 50);
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");
-    if (isWiggle(database, table) || isBigWigTable(table))
+    if (isWiggle(database, table) || isBigWig(table))
         {
         setting = cartCgiUsualString(cart, hgtaCtVis, ctVisWigMenu[2]);
         cgiMakeDropList(hgtaCtVis, ctVisWigMenu, ctVisWigMenuSize, setting);
@@ -385,7 +385,7 @@ if (!doGreat())
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>");
     hPrintf("%s\n", "</TD></TR></TABLE>");
 }
-if (isWiggle(database, table) || isBedGraph(table) || isBigWigTable(table) )
+if (isWiggle(database, table) || isBedGraph(table) || isBigWig(table) )
     {
     char *setting = NULL;
     hPrintf("<P> <B> Select type of data output: </B> <BR>\n");
@@ -536,7 +536,7 @@ int fields = hTableInfoBedFieldCount(hti);
 boolean gotResults = FALSE;
 struct region *region, *regionList = getRegions();
 boolean isBedGr = isBedGraph(curTable);
-boolean isBgWg = isBigWigTable(curTable);
+boolean isBgWg = isBigWig(curTable);
 boolean needSubtrackMerge = anySubtrackMerge(database, curTable);
 boolean doDataPoints = FALSE;
 boolean isWig = isWiggle(database, table);

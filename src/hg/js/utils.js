@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.31 2010/06/02 19:11:53 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.30 2010/05/24 20:42:20 tdreszer Exp $
 
 var debug = false;
 
@@ -428,43 +428,9 @@ function metadataShowHide(tableName)
     return false;
 }
 
-function warnBoxJsSetup()
-{   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
-    var html = "";
-    html += "<center>";
-    html += "<div id='warnBox' style='display:none; background-color:Beige; ";
-    html += "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; ";
-    html += "text-align:left;'>";
-    html += "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER>";
-    html += "<UL id='warnList'></UL>";
-    html += "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>";
-    html += "</div></center>";
-
-    html += "<script type='text/javascript'>";
-    html += "function showWarnBox() {";
-    html += "document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';";
-    html += "var warnBox=document.getElementById('warnBox');";
-    html += "warnBox.style.display=''; warnBox.style.width='65%%';";
-    html += "document.getElementById('warnHead').innerHTML='Error(s):';";
-    html += "}";
-    html += "function hideWarnBox() {";
-    html += "var warnBox=document.getElementById('warnBox');";
-    html += "warnBox.style.display='none';warnBox.innerHTML='';";
-    html += "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);";
-    html += "if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }";
-    html += "}";
-    html += "</script>";
-
-    $('body').prepend(html);
-}
-
 function warn(msg)
 { // adds warnings to the warnBox
     var warnList = $('#warnList'); // warnBox contains warnList
-    if( warnList == undefined || $(warnList).length == 0 ) {
-        warnBoxJsSetup();
-        warnList = $('#warnList');
-    }
     if( $(warnList).length == 0 )
         alert(msg);
     else {
@@ -552,84 +518,4 @@ function getSizeFromCoordinates(position)
         return a[2] - a[1] + 1;
     }
     return null;
-}
-
-// This code is intended to allow setting up a wait cursor while waiting on the function
-var gWaitFuncArgs = [];
-var gWaitFunc;
-
-function _launchWaitOnFunction()
-{ // should ONLY be called by waitOnFunction()
-  // Launches the saved function
-    var func = gWaitFunc;
-    gWaitFunc = null;
-    var funcArgs = gWaitFuncArgs;
-    gWaitFuncArgs = [];
-
-    if(func == undefined || !jQuery.isFunction(func))
-        warn("_launchWaitOnFunction called without a function");
-    else {
-        if(funcArgs.length == 0)
-            func();
-        else if (funcArgs.length == 1)
-            func(funcArgs[0]);
-        else if (funcArgs.length == 2)
-            func(funcArgs[0],funcArgs[1]);
-        else if (funcArgs.length == 3)
-            func(funcArgs[0],funcArgs[1],funcArgs[2]);
-        else if (funcArgs.length == 4)
-            func(funcArgs[0],funcArgs[1],funcArgs[2],funcArgs[3]);
-        else if (funcArgs.length == 5)
-            func(funcArgs[0],funcArgs[1],funcArgs[2],funcArgs[3],funcArgs[4]);
-        else
-            warn("_launchWaitOnFunction called with " + funcArgs.length + " arguments.  Only 5 are supported.");
-    }
-    // Special if the first var is an obj
-    if(funcArgs.length > 0 && funcArgs[0].type != undefined) {
-        if(funcArgs[0].type == 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
-            $(funcArgs[0]).css('borderStyle',"outset");
-        }
-    }
-    // Now we can get rid of the wait cursor
-    $('#waitMask').css('display','none');
-}
-
-function waitOnFunction(func)
-{ // sets the waitMask (wait cursor and no clicking), then launches the function with up to 5 arguments
-    if(!jQuery.isFunction(func)) {
-        warn("waitOnFunction called without a function");
-        return false;
-    }
-    if(arguments.length > 6) {
-        warn("waitOnFunction called with " + arguments.length - 1 + " arguments.  Only 5 are supported.");
-        return false;
-    }
-
-    // Find or create the waitMask (which masks the whole page)
-    var  waitMask = $('#waitMask');
-    if( waitMask == undefined || waitMask.length != 1) {
-        // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
-        waitMask = $('#waitMask');
-        // Special for IE
-        if ($.browser.msie)
-            $(waitMask).css('filter','alpha(opacity= 0)');
-    }
-    $(waitMask).css('display','block');
-
-    // Special if the first var is an obj
-    if(arguments.length > 1 && arguments[1].type != undefined) {
-        if(arguments[1].type == 'button' && $(arguments[1]).hasClass('inOutButton')) {
-            $(arguments[1]).css( 'borderStyle',"inset");
-        }
-    }
-
-    // Build up the aruments array
-    for(var aIx=1;aIx<arguments.length;aIx++) {
-        gWaitFuncArgs.push(arguments[aIx])
-    }
-    gWaitFunc = func;
-
-    setTimeout('_launchWaitOnFunction();',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
-
 }

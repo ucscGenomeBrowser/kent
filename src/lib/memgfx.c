@@ -12,30 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-#define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
-
-static char const rcsid[] = "$Id: memgfx.c,v 1.54 2010/06/05 19:29:53 braney Exp $";
-
-Color multiply(Color src, Color new)
-{
-#ifdef COLOR32
-unsigned char rs = (src >> 0) & 0xff;
-unsigned char gs = (src >> 8) & 0xff;
-unsigned char bs = (src >> 16) & 0xff;
-unsigned char rn = (new >> 0) & 0xff;
-unsigned char gn = (new >> 8) & 0xff;
-unsigned char bn = (new >> 16) & 0xff;
-
-unsigned char ro = ((unsigned) rn * rs) / 255;
-unsigned char go = ((unsigned) gn * gs) / 255;
-unsigned char bo = ((unsigned) bn * bs) / 255;
-return MAKECOLOR_32(ro, go, bo);
-#else
-/* no multiply write mode in 8 bit */
-return new;
-#endif /* COLOR32 */
-}
-
+static char const rcsid[] = "$Id: memgfx.c,v 1.53 2010/04/22 19:35:38 kent Exp $";
 
 #ifndef min3
 #define min3(x,y,z) (min(x,min(y,z)))
@@ -47,20 +24,10 @@ return new;
 /* Return max of x,y, and z. */
 #endif
 
-void _mgPutDotMultiply(struct memGfx *mg, int x, int y,Color color)
-{
-Color src = *_mgPixAdr(mg,x,y);
-*_mgPixAdr(mg,x,y) = multiply(src, color);
-}
-
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
-#ifdef COLOR32
-    return;
-#else
-
 /* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
 int i;
 for (i=0; i<ArraySize(mgFixedColors); ++i)
@@ -68,16 +35,8 @@ for (i=0; i<ArraySize(mgFixedColors); ++i)
     struct rgbColor *c = &mgFixedColors[i];
     mgAddColor(mg, c->r, c->g, c->b);
     }
-#endif
 }
 
-
-
-void mgSetWriteMode(struct memGfx *mg, unsigned int writeMode)
-/* Set write mode */
-{
-mg->writeMode = writeMode;
-}
 
 void mgSetClip(struct memGfx *mg, int x, int y, int width, int height)
 /* Set clipping rectangle. */
@@ -111,12 +70,10 @@ struct memGfx *mgNew(int width, int height)
 struct memGfx *mg;
 
 mg = needMem(sizeof(*mg));
+mg->pixels = needLargeMem(width*height);
 mg->width = width;
 mg->height = height;
-mg->pixels = needLargeMem(width*height*sizeof(Color));
-#ifndef COLOR32
 mg->colorHash = colHashNew();
-#endif
 mgSetDefaultColorMap(mg);
 mgUnclip(mg);
 return mg;
@@ -125,11 +82,7 @@ return mg;
 void mgClearPixels(struct memGfx *mg)
 /* Set all pixels to background. */
 {
-#ifdef COLOR32
-memset((unsigned char *)mg->pixels, 0xff, mg->width*mg->height*sizeof(unsigned int));
-#else
 zeroBytes(mg->pixels, mg->width*mg->height);
-#endif
 }
 
 Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
@@ -137,40 +90,24 @@ Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned 
  * already exist in color map and there's room, it will create
  * exact color in map. */
 {
-#ifdef COLOR32
-return MAKECOLOR_32(r,g,b);
-#else
 struct colHashEl *che;
 if ((che = colHashLookup(mg->colorHash, r, g, b)) != NULL)
     return che->ix;
 if (mgColorsFree(mg))
     return mgAddColor(mg, r, g, b);
 return mgClosestColor(mg, r, g, b);
-#endif
 }
 
 
 struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
 /* Return rgb value at color index. */
 {
-#ifdef COLOR32
-static struct rgbColor rgb;
-rgb.r = (colorIx >> 0) & 0xff;
-rgb.g = (colorIx >> 8) & 0xff;
-rgb.b = (colorIx >> 16) & 0xff;
-
-return rgb;
-#else
 return mg->colorMap[colorIx];
-#endif
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to r,g,b */
 {
-#ifdef COLOR32
-return MAKECOLOR_32(r,g,b);
-#else
 struct rgbColor *c = mg->colorMap;
 int closestDist = 0x7fffffff;
 int closestIx = -1;
@@ -192,16 +129,12 @@ for (i=0; i<mg->colorsUsed; ++i)
     ++c;
     }
 return closestIx;
-#endif
 }
 
 
 Color mgAddColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Adds color to end of color map if there's room. */
 {
-#ifdef COLOR32
-return MAKECOLOR_32(r,g,b);
-#else
 int colIx = mg->colorsUsed;
 if (colIx < 256)
     {
@@ -213,17 +146,12 @@ if (colIx < 256)
     colHashAdd(mg->colorHash, r, g, b, colIx);
     }
 return (Color)colIx;
-#endif
 }
 
 int mgColorsFree(struct memGfx *mg)
 /* Returns # of unused colors in color map. */
 {
-#ifdef COLOR32
-return 1 << 23;
-#else
 return 256-mg->colorsUsed;
-#endif
 }
 
 void mgFree(struct memGfx **pmg)
@@ -233,15 +161,13 @@ if (mg != NULL)
     {
     if (mg->pixels != NULL)
 	freeMem(mg->pixels);
-    if (mg->colorHash)
-        colHashFree(&mg->colorHash);
+    colHashFree(&mg->colorHash);
     zeroBytes(mg, sizeof(*mg));
     freeMem(mg);
     }
 *pmg = NULL;
 }
 
-#ifndef COLOR32
 static void nonZeroCopy(Color *d, Color *s, int width)
 /* Copy non-zero colors. */
 {
@@ -253,14 +179,11 @@ for (i=0; i<width; ++i)
         d[i] = c;
     }
 }
-#endif
 
-static void mgPutSegMaybeZeroClear8(struct memGfx *mg, int x, int y, int width, unsigned char *dots, boolean zeroClear)
+static void mgPutSegMaybeZeroClear(struct memGfx *mg, int x, int y, int width, Color *dots, boolean zeroClear)
 /* Put a series of dots starting at x, y and going to right width pixels.
  * Possibly don't put zero dots though. */
 {
-#ifdef COLOR32
-#else
 int x2;
 Color *pt;
 if (y < mg->clipMinY || y > mg->clipMaxY)
@@ -280,28 +203,23 @@ if (width > 0)
     if (zeroClear)
         nonZeroCopy(pt, dots, width);
     else
-        {
-        width *= sizeof(Color);
-        memcpy(pt, dots, width * sizeof(int));
-        }
+	memcpy(pt, dots, width);
     }
-#endif /* COLOR32 */
 }
 
-void mgVerticalSmear8(struct memGfx *mg,
+void mgVerticalSmear(struct memGfx *mg,
 	int xOff, int yOff, int width, int height, 
 	unsigned char *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
 {
 while (--height >= 0)
     {
-    mgPutSegMaybeZeroClear8(mg, xOff, yOff, width, dots, zeroClear);
+    mgPutSegMaybeZeroClear(mg, xOff, yOff, width, dots, zeroClear);
     ++yOff;
     }
 }
 
-
-void mgDrawBoxNormal(struct memGfx *mg, int x, int y, int width, int height, Color color)
+void mgDrawBox(struct memGfx *mg, int x, int y, int width, int height, Color color)
 {
 int i;
 Color *pt;
@@ -326,62 +244,11 @@ if (width > 0 && height > 0)
     wrapCount = _mgBpr(mg) - width;
     while (--height >= 0)
 	{
-        //Color src = *pt;
 	i = width;
 	while (--i >= 0)
 	    *pt++ = color;
 	pt += wrapCount;
 	}
-    }
-}
-
-void mgDrawBoxMultiply(struct memGfx *mg, int x, int y, int width, int height, Color color)
-{
-int i;
-Color *pt;
-int x2 = x + width;
-int y2 = y + height;
-int wrapCount;
-
-if (x < mg->clipMinX)
-    x = mg->clipMinX;
-if (y < mg->clipMinY)
-    y = mg->clipMinY;
-if (x2 > mg->clipMaxX)
-    x2 = mg->clipMaxX;
-if (y2 > mg->clipMaxY)
-    y2 = mg->clipMaxY;
-width = x2-x;
-height = y2-y;
-if (width > 0 && height > 0)
-    {
-    pt = _mgPixAdr(mg,x,y);
-    wrapCount = _mgBpr(mg) - width;
-    while (--height >= 0)
-	{
-        Color src = *pt;
-	i = width;
-	while (--i >= 0)
-	    *pt++ = multiply(src, color);
-	pt += wrapCount;
-	}
-    }
-}
-
-void mgDrawBox(struct memGfx *mg, int x, int y, int width, int height, Color color)
-{
-switch(mg->writeMode)
-    {
-    case MG_WRITE_MODE_NORMAL:
-        {
-        mgDrawBoxNormal(mg,x,y, width, height, color);
-        }
-        break;
-    case MG_WRITE_MODE_MULTIPLY:
-        {
-        mgDrawBoxMultiply(mg,x,y, width, height, color);
-        }
-        break;
     }
 }
 
@@ -519,17 +386,17 @@ void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2,
 mgBrezy(mg, x1, y1, x2, y2, color, bottom, TRUE);
 }
 
-void mgPutSeg8(struct memGfx *mg, int x, int y, int width, unsigned char *dots)
+void mgPutSeg(struct memGfx *mg, int x, int y, int width, Color *dots)
 /* Put a series of dots starting at x, y and going to right width pixels. */
 {
-mgPutSegMaybeZeroClear8(mg, x, y, width, dots, FALSE);
+mgPutSegMaybeZeroClear(mg, x, y, width, dots, FALSE);
 }
 
-void mgPutSegZeroClear8(struct memGfx *mg, int x, int y, int width, unsigned char *dots)
+void mgPutSegZeroClear(struct memGfx *mg, int x, int y, int width, Color *dots)
 /* Put a series of dots starting at x, y and going to right width pixels.
  * Don't put zero dots though. */
 {
-mgPutSegMaybeZeroClear8(mg, x, y, width, dots, TRUE);
+mgPutSegMaybeZeroClear(mg, x, y, width, dots, TRUE);
 }
 
 
@@ -592,7 +459,7 @@ void mgTextBlit(int width, int height, int bitX, int bitY,
 	Color color, Color backgroundColor)
 {
 UBYTE *inLine;
-Color *outLine;
+UBYTE *outLine;
 UBYTE inLineBit;
 
 if (!mgClipForBlit(&width, &height, &bitX, &bitY, dest, &destX, &destY))
@@ -604,7 +471,7 @@ outLine = _mgPixAdr(dest,destX,destY);
 while (--height >= 0)
     {
     UBYTE *in = inLine;
-    Color *out = outLine;
+    UBYTE *out = outLine;
     UBYTE inBit = inLineBit;
     UBYTE inByte = *in++;
     int i = width;
@@ -630,7 +497,7 @@ void mgTextBlitSolid(int width, int height, int bitX, int bitY,
 	Color color, Color backgroundColor)
 {
 UBYTE *inLine;
-Color *outLine;
+UBYTE *outLine;
 UBYTE inLineBit;
 
 if (!mgClipForBlit(&width, &height, &bitX, &bitY, dest, &destX, &destY))
@@ -641,7 +508,7 @@ outLine = _mgPixAdr(dest,destX,destY);
 while (--height >= 0)
     {
     UBYTE *in = inLine;
-    Color *out = outLine;
+    UBYTE *out = outLine;
     UBYTE inBit = inLineBit;
     UBYTE inByte = *in++;
     int i = width;
@@ -914,10 +781,9 @@ vg->textRight = (vg_textRight)mgTextRight;
 vg->textCentered = (vg_textCentered)mgTextCentered;
 vg->findColorIx = (vg_findColorIx)mgFindColor;
 vg->colorIxToRgb = (vg_colorIxToRgb)mgColorIxToRgb;
-vg->setWriteMode = (vg_setWriteMode)mgSetWriteMode;
 vg->setClip = (vg_setClip)mgSetClip;
 vg->unclip = (vg_unclip)mgUnclip;
-vg->verticalSmear8 = (vg_verticalSmear8)mgVerticalSmear8;
+vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
 vg->setHint = (vg_setHint)mgSetHint;

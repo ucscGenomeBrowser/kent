@@ -1,5 +1,3 @@
----------------------- Primary keys ------------------------
-
 ALTER TABLE [dbo].[AccessionRejectionCriteria] ADD 
 	CONSTRAINT [PK_AccessionRejectionCriteria] PRIMARY KEY  CLUSTERED 
 	(
@@ -157,34 +155,6 @@ ALTER TABLE [dbo].[BuildQualityTests] ADD
                 [build_uid],
                 [qa_analysis_id]
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
-go
-
-ALTER TABLE [dbo].[ProspectiveGroups] ADD
-        CONSTRAINT [PK_ProspectiveGroups] PRIMARY KEY  CLUSTERED
-        (
-                [group_version_uid]
-        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
-go
-
-ALTER TABLE [dbo].[ReportTypes] ADD
-        CONSTRAINT [PK_reportTypeVals] PRIMARY KEY  CLUSTERED
-        (
-                [report_type_uid]
-        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
-go
-
-ALTER TABLE [dbo].[ReportQueries] ADD
-        CONSTRAINT [PK_query] PRIMARY KEY CLUSTERED
-        (
-                [query_uid] ASC
-        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
-go
-
-ALTER TABLE [dbo].[ProspectiveStatusVals] ADD 
-	CONSTRAINT [PK_prospectiveStatusVals] PRIMARY KEY  CLUSTERED 
-	(
-		[prospective_status_val_uid]
-	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 go
 
 ---------------------- Foreign keys ------------------------
@@ -396,33 +366,6 @@ ALTER TABLE [dbo].[BuildQualityTests] ADD
                 [acc_rejection_uid]
         ) REFERENCES [dbo].[AccessionRejectionCriteria] (
                 [acc_rejection_uid]
-        )
-go
-
-ALTER TABLE [dbo].[ProspectiveGroups] ADD
-        CONSTRAINT [FK_ProspectiveGroups] FOREIGN KEY
-        (
-                [group_version_uid]
-        ) REFERENCES [dbo].[GroupVersions] (
-                [group_version_uid]
-        )
-go
-
-ALTER TABLE [dbo].[ReportQueries] ADD
-        CONSTRAINT [FK_ReportQueries_ReportTypes] FOREIGN KEY
-        (       
-                [report_type_uid]
-        ) REFERENCES [dbo].[ReportTypes] (
-                [report_type_uid]
-        )
-go
-
-ALTER TABLE [dbo].[ProspectiveGroups] ADD
-        CONSTRAINT [FK_ProspectiveGroups_Status] FOREIGN KEY
-        (
-                [prospective_status_val_uid]
-        ) REFERENCES [dbo].[ProspectiveStatusVals] (
-                [prospective_status_val_uid]
         )
 go
 

@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.59 2010/06/03 20:27:26 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.57 2010/05/27 16:41:47 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -1070,34 +1070,6 @@ function multiSelectBlur(obj)
     }*/
 }
 
-function filterCompositeSet(obj,all)
-{ // Will set all filter composites via [+] or [-] buttons
-
-    matSubCBsCheck(all);
-    var vars = [];
-    var vals = [];
-    var filterComp = $("select.filterComp").not(".filterBy");
-    if(all) {
-        $(filterComp).each(function(i) {
-            $(this).trigger("checkAll");
-            $(this).val("All");
-            //vars.push($(this).attr('name'));  // Don't bother ajaxing this over
-            //vals.push($(this).val());
-        });
-    } else {
-        $(filterComp).each(function(i) {
-            $(this).trigger("uncheckAll");
-            $(this).val("");
-            vars.push($(this).attr('name'));
-            vals.push("[empty]");
-        });
-    }
-    if(vars.length > 0) {
-        setCartVars(vars,vals);
-    }
-    matSubCBsSelected(); // Be sure to update the counts!
-}
-
 function filterCompositeExcludeOptions(obj)
 { // Will mark all options in one filterComposite boxes that are inconsistent with the current
   // selections in other filterComposite boxes.  Mark is class ".excluded"
@@ -1149,10 +1121,10 @@ function filterCompositeExcludeOptions(obj)
             if($(opts[ix]).hasClass('excluded') == false) {
                 $(opts[ix]).addClass('excluded');
                 updated = true;
-            }
         } else if($(opts[ix]).hasClass('excluded')) {
-            $(opts[ix]).removeClass('excluded');
-            updated = true;
+                $(opts[ix]).removeClass('excluded');
+                updated = true;
+            }
         }
     }
     return updated;

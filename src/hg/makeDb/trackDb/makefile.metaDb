@@ -1,3 +1,0 @@
-
-metaDb: ${LIST}
-	../../../../makeMetaDb ${DB} ${TABLE} ${LIST}

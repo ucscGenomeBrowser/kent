@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.81 2010/06/03 18:53:59 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.80 2010/05/20 16:19:43 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -810,7 +810,7 @@ vector = dataVectorNew(region->chrom, regionSize);
  *	    intersections and data value limits will
  *	    function in getWiggleData().
  */
-if (isBigWigTable(table->tableName))
+if (isBigWig(table->tableName))
     {
     bigWigFillDataVector(table->tableName, region, conn, vector);
     }

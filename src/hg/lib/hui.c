@@ -24,7 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.296 2010/05/28 19:14:31 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2147,8 +2147,8 @@ if(dimensions && *dimensions)
 
 #define SUBGROUP_MAX 9
 
-#define FILTER_COMPOSITE_ONLYONE
-#ifdef FILTER_COMPOSITE_ONLYONE
+#define FILTER_COMPOSITE
+#ifdef FILTER_COMPOSITE
 // FIXME: do we even support anything but multi???  If not, this is a boolean
 enum filterCompositeType
 /* How to look at a track. */
@@ -2158,7 +2158,7 @@ enum filterCompositeType
     fctOneOnly=2,   // filter composite by only one
     fctMulti=3,     // filter composite by multiselect: all, one or many
     };
-#endif///def FILTER_COMPOSITE_ONLYONE
+#endif ///FILTER_COMPOSITE
 
 typedef struct _members {
     int count;
@@ -2171,9 +2171,9 @@ typedef struct _members {
     int *subtrackCount;              // count of subtracks
     int *currentlyVisible;           // count of visible subtracks
     struct slRef **subtrackList;     // set of subtracks belonging to each subgroup member
-#ifdef FILTER_COMPOSITE_ONLYONE
+#ifdef FILTER_COMPOSITE
     enum filterCompositeType fcType; // fctNone,fctOne,fctMulti
-#endif///def FILTER_COMPOSITE_ONLYONE
+#endif ///FILTER_COMPOSITE
 } members_t;
 
 int subgroupCount(struct trackDb *parentTdb)
@@ -2397,7 +2397,9 @@ enum
 typedef struct _membersForAll {
     int abcCount;
     int dimMax;
+#ifdef FILTER_COMPOSITE
     boolean filters;
+#endif///def FILTER_COMPOSITE
     dimensions_t *dimensions;
     members_t* members[27];
     char* checkedTags[27];  // FIXME: Should move checkedTags into membersForAll->members[ix]->selected;
@@ -2410,6 +2412,7 @@ char settingName[SMALLBUF];
 int mIx;
 if (members->selected == NULL)
     members->selected = needMem(members->count * sizeof(boolean));
+#ifdef FILTER_COMPOSITE
 safef(settingName, sizeof(settingName), "%s.filterComp.%s",parentTdb->track,members->groupTag);
 struct slName *options = cartOptionalSlNameList(cart,settingName);
 if(options != NULL)
@@ -2423,6 +2426,7 @@ if(options != NULL)
         }
     return slNameListToString(options,',');
     }
+#endif///def FILTER_COMPOSITE
 struct dyString *currentlyCheckedTags = NULL;
 // Need a string of subGroup tags which are currently checked
 safef(settingName,sizeof(settingName),"dimension%cchecked",letter);
@@ -2520,7 +2524,8 @@ membersForAll->abcCount = membersForAll->dimMax - dimA;
 
 membersForAll = membersForAllSubGroupsWeedOutEmpties(parentTdb, membersForAll, cart);
 
-// NOTE: Dimensions must be defined for filterComposite.  Filter dimensioms are all and only ABCs.  Use dimensionAchecked to define selected
+#ifdef FILTER_COMPOSITE
+// NOTE: Dimensions must be defined for filterComposite.  Filter dimensioms are ABCs only.  Use dimensionAchecked to define selected
 char *filtering = trackDbSettingOrDefault(parentTdb,"filterComposite",NULL);
 if(filtering && !sameWord(filtering,"off"))
     {
@@ -2528,7 +2533,6 @@ if(filtering && !sameWord(filtering,"off"))
         errAbort("If 'filterComposite' defined, must define 'dimensions' also.");
 
     membersForAll->filters = TRUE;
-#ifdef FILTER_COMPOSITE_ONLYONE
     // Default all to multi
     for(ix=dimA;ix<membersForAll->dimMax;ix++)
         {
@@ -2551,8 +2555,8 @@ if(filtering && !sameWord(filtering,"off"))
                 membersForAll->members[abcIx]->fcType = fctOneOnly;
             }
         }
-#endif///def FILTER_COMPOSITE_ONLYONE
     }
+#endif///def FILTER_COMPOSITE
 
 if(cart != NULL) // Only save this if it is fully populated!
     tdbExtrasAddOrUpdate(parentTdb,MEMBERS_FOR_ALL_KEY,membersForAll);
@@ -3248,13 +3252,16 @@ if(count == 1)
     puts("<BR><TABLE cellpadding=3><TR valign='top'>");
 else
     printf("<BR><B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
-
 filterBy_t *filterBy = NULL;
+#ifdef FILTER_COMPOSITE
+#define FILTER_BY_PLUGIN
+#endif///def FILTER_COMPOSITE
+#ifdef FILTER_BY_PLUGIN
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
-
 int ix=0;
+#endif///def FILTER_BY_PLUGIN
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     puts("<TD>");
@@ -3262,13 +3269,20 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         printf("<B>Filter by %s</B> (select multiple items - %s)<BR>\n",filterBy->title,FILTERBY_HELP_LINK);
     else
         printf("<B>%s</B><BR>\n",filterBy->title);
-
-    // TODO: Scroll long lists
-    //#define FILTER_COMPOSITE_OPEN_SIZE 16
-    // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
+#ifdef FILTER_BY_PLUGIN
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
+#else///ifndef FILTER_BY_PLUGIN
+    int fullSize = slCount(filterBy->slValues)+1;
+    int openSize = min(20,fullSize);
+    int closedSize = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
+    //#define MULTI_SELECT_WITH_JS "<div class='multiSelectContainer'><SELECT name='%s.filterBy.%s' multiple=true size=%d openSize=%d style='display: none' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this,%d);' class='normalText filterBy'></div><BR>\n"
+    //    printf(MULTI_SELECT_WITH_JS,tdb->track,filterBy->column,closedSize,openSize,openSize,openSize);
+    //#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onkeydown='this.size=%d' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this);' class='filterBy'><BR>\n"
+    #define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple size=%d onkeydown='this.size=%d' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this);' onblur='multiSelectFocus(this,%d);' class='filterBy'><BR>\n"
+    printf(MULTI_SELECT_WITH_JS,tdb->track,filterBy->column,closedSize,openSize,openSize,openSize);
+#endif///ndef FILTER_BY_PLUGIN
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
@@ -5826,70 +5840,8 @@ fprintf(f, "<BR>\n");
 }
 #endif /* DEBUG */
 
-static char *labelWithVocabLinkForMultiples(char *db,struct trackDb *parentTdb, members_t* members)
-/* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
-   then label will be wrapped with the link to all relevent terms.  Return string is cloned. */
-{
-assert(members->subtrackList != NULL);
-char *vocab = cloneString(trackDbSetting(parentTdb, "controlledVocabulary"));
-if(vocab == NULL)
-    return cloneString(members->groupTitle); // No link wrapping!
-
-char *words[15];
-int count,ix;
-boolean found=FALSE;
-if((count = chopByWhite(vocab, words,15)) <= 1) // vocab now contains just the file name
-    return cloneString(members->groupTitle);
-
-#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\""
-#define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
-struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab);
-char *mdbVar = NULL;
-
-// Find mdb var to look up based upon the groupTag and cv setting
-for(ix=1;ix<count && !found;ix++)
-    {
-    if(sameString(members->groupTag,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
-        {
-        mdbVar = members->groupTag;
-        break;
-        }
-    else if(startsWithWordByDelimiter(members->groupTag,'=',words[ix]))
-        {
-        mdbVar = words[ix] + strlen(members->groupTag) + 1;
-        break;
-        }
-    }
-if(mdbVar == NULL)
-    {
-    dyStringFree(&dyLink);
-    freeMem(vocab);
-    return cloneString(members->groupTitle);
-    }
-
-// Now build the comma delimited string of mdb vals (all have same mdb var)
-boolean first = TRUE;
-for(ix=0;ix<members->count;ix++)
-    {
-    if(members->subtrackList[ix] != NULL && members->subtrackList[ix]->val != NULL)
-        {
-        struct trackDb *childTdb = members->subtrackList[ix]->val;
-        (void)metadataForTable(db,childTdb,NULL); // Makes sure this has been populated
-        const char * mdbVal = metadataFindValue(childTdb,mdbVar); // one for each is enough
-        if(mdbVal != NULL)
-            {
-            if(!first)
-                dyStringAppendC(dyLink,',');
-            dyStringAppend(dyLink,(char *)mdbVal);
-            first = FALSE;
-            }
-        }
-    }
-dyStringPrintf(dyLink,VOCAB_MULTILINK_END,members->groupTitle,members->groupTitle);
-freeMem(vocab);
-return dyStringCannibalize(&dyLink);
-}
-
+#ifdef FILTER_COMPOSITE
+#define FILTER_COMPOSITE_OPEN_SIZE 16
 static boolean hCompositeUiByFilter(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: filter subgroups by multiselects to select subtracks. */
 {
@@ -5900,50 +5852,28 @@ jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
 
-// TODO:
-// 1) Make this work with matrix
-// 2) Scroll long lists should be configurable through tdb setting
-//    #define FILTER_COMPOSITE_OPEN_SIZE 16
-// 3) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-
+// TODO: openSize should be configurabe through tdb setting
+// TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 printf("<B>Filter subtracks by:</B> (select multiple %sitems - %s)<BR>\n",(membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
 printf("<TABLE><TR valign='top'>\n");
-
-// Do All [+][-] buttons
-if(membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL) // No matrix
-    {
-    #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' onclick=\"waitOnFunction(filterCompositeSet,this,%s); return false;\" id='btn_%s' value='%c'>"
-    printf("<TD align='left' width='50px'><B>All:</B><BR>");
-    printf(PM_BUTTON_FILTER_COMP,"true",  "plus_fc",'+');
-    printf(PM_BUTTON_FILTER_COMP,"false","minus_fc",'-');
-    //#define PM_BUTTON2_FILTER_COMP "<IMG height=18 width=18 onclick=\"filterCompositeSet(%s);\" id='btn_%s' src='../images/%s'>"
-    //printf(PM_BUTTON2_FILTER_COMP,"true",  "plus_fc",   "add_sm.gif");
-    //printf(PM_BUTTON2_FILTER_COMP,"false","minus_fc","remove_sm.gif");
-    printf("</TD>\n");
-    }
-
-// Now make a filterComp box for each ABC dimension
 int dimIx=dimA;
 for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
     {
-  //printf("<TD align='right'><B>%s:</B></TD><TD align='left'>\n",labelWithVocabLinkForMultiples(db,parentTdb,membersForAll->members[dimIx]));
-    printf("<TD align='left'><B>%s:</B><BR>\n",labelWithVocabLinkForMultiples(db,parentTdb,membersForAll->members[dimIx]));
+    //printf("<TD align='right'><B>%s:</B></TD><TD align='left'>\n",membersForAll->members[dimIx]->groupTitle); // FIXME Should be link to cv for all terms in multiselect!
+    printf("<TD align='left'><B>%s:</B><BR>\n",membersForAll->members[dimIx]->groupTitle); // FIXME Should be link to cv for all terms in multiselect!
 
-    #ifdef FILTER_COMPOSITE_OPEN_SIZE
     int fullSize = membersForAll->members[dimIx]->count;
-    #ifdef FILTER_COMPOSITE_ONLYONE
     if(membersForAll->members[dimIx]->fcType != fctOneOnly)
-    #endif///def FILTER_COMPOSITE_ONLYONE
         fullSize++; // Room for "All"
-    #endif///def FILTER_COMPOSITE_OPEN_SIZE
-
+    int closedSize = 1;
+    if(membersForAll->checkedTags[dimIx] != NULL)
+        closedSize += countChars(membersForAll->checkedTags[dimIx],',');
+//#define FILTER_COMPOSITE_FORMAT "<SELECT name='%s.filterComp.%s' %ssize=%d onkeydown='this.size=%d;' onclick='return multiSelectClick(this,%d);' onchange='filterCompositeSelectionChanged(this);' onblur='multiSelectBlur(this);' style='min-width: 100px;' class='filterComp'><BR>\n"
+//#define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %ssize=%d onkeydown='this.size=%d;' onfocus='return multiSelectFocus(this,%d);' onchange='filterCompositeSelectionChanged(this);' onblur='multiSelectBlur(this);' style='min-width: 100px;' class='filterComp'><BR>\n"
 #define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none;' class='filterComp'><BR>\n"
     printf(FILTER_COMPOSITE_FORMAT,dimIx,parentTdb->track,membersForAll->members[dimIx]->groupTag,"multiple");
-
-    #ifdef FILTER_COMPOSITE_ONLYONE
-    // DO we support anything besides multi? (membersForAll->members[dimIx]->fcType == fctMulti?"multiple ":""));
+        // FIXME: DO we support anything besides multi? (membersForAll->members[dimIx]->fcType == fctMulti?"multiple ":""));
     if(membersForAll->members[dimIx]->fcType != fctOneOnly)
-    #endif///def FILTER_COMPOSITE_ONLYONE
         printf("<OPTION%s>All</OPTION>\n",(sameWord("All",membersForAll->checkedTags[dimIx])?" SELECTED":"") );
 
     int ix=0;
@@ -5953,21 +5883,20 @@ for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
         printf("<OPTION%s value=%s>%s</OPTION>\n",(alreadySet?" SELECTED":""),
                membersForAll->members[dimIx]->tags[ix],membersForAll->members[dimIx]->titles[ix]);
         }
-    printf("</SELECT>");
-
-    #ifdef FILTER_COMPOSITE_ONLYONE
-    if(membersForAll->members[dimIx]->fcType == fctOneOnly)
-        printf(" (select only one)");
-    #endif///def FILTER_COMPOSITE_ONLYONE
-
-    printf("</TD><TD width='20'></TD>\n");
+      printf("</SELECT>%s</TD><TD width='20'></TD>\n",(membersForAll->members[dimIx]->fcType == fctOneOnly?" (select only one)":""));
     }
 printf("</TR></TABLE>\n");
 
 puts("<BR>\n");
 
+// TOBEDONE:
+// 1) Make this work with matrix
+// 2) scroll long lists
+// 3) CV for all
+
 return TRUE;
 }
+#endif ///def FILTER_COMPOSITE
 
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
@@ -6031,7 +5960,9 @@ if (dimensionX || dimensionY) // Must be an X or Y dimension
         }
     }
 
+#ifdef FILTER_COMPOSITE
 if(!hCompositeUiByFilter(db, cart, parentTdb, formName))
+#endif///def FILTER_COMPOSITE
     {
     char javascript[JBUFSIZE];
     //puts("<B>Select subtracks by characterization:</B><BR>");

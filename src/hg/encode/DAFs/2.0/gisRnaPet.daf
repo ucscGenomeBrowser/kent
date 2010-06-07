@@ -1,4 +1,4 @@
-# Data Agreement File for PET Ditag project $Revision: 1.4 $
+# Data Agreement File for PET Ditag project $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -13,7 +13,7 @@ compositeSuffix   GisPet
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
-validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=3,mmPerPair
+validationSettings validateFiles.pairedTagAlign:mmCheckOneInN=10000,mismatches=3,mmPerPair
 noAutoCreate     yes
 
 
@@ -41,3 +41,16 @@ longLabelPrefix  GIS PET Clusters
 type             bed 12
 hasReplicates    yes
 required         no
+
+view             FastqRd1
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             FastqRd2
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+

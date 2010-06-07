@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.29 2010/06/03 18:54:00 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.28 2009/05/20 20:59:57 mikep Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -375,7 +375,7 @@ void doSummaryStats(struct sqlConnection *conn)
 hgBotDelay();
 if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
-else if (isBigWigTable(curTable))
+else if (isBigWig(curTable))
     doSummaryStatsBigWig(conn);
 else if (isChromGraph(findTdbForTable(database, curTrack, curTable, ctLookupName)))
     doSummaryStatsChromGraph(conn);

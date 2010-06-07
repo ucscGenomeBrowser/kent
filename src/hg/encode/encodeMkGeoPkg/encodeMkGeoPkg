@@ -330,9 +330,7 @@ while(scalar(keys %objsSet) > 0) {
         # output the base exp var value
         print "!Sample_characteristics = $expVars[$i]: $e" . "\n";
         # if the currnet exp var is none
-        if ($currentExpVars[$i] eq "None" or
-            $currentExpVars[$i] eq "none" or
-            ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Input")) {
+        if ($currentExpVars[$i] eq "None" or $currentExpVars[$i] eq "none") {
             # do nothing more
         } else {
             # otherwise output the fields given by %expVarDetails from the cv.ra
@@ -383,4 +381,6 @@ while(scalar(keys %objsSet) > 0) {
         }
     }
     print "\n";
+    
+    exit;
 }

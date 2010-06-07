@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.254 2010/06/04 18:09:37 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.248 2010/06/01 02:50:47 cline Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -472,23 +472,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
-
-term ECC-1
-tag ECC1
-type Cell Line
-organism Human
-description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma.
-tissue luminal epithelium
-vendorName ATCC
-vendorId CRL-2923
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
-#lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
-karyotype unknown
-#termId BTO:0001360
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
-sex F
-tier 3
-protocol HudsonAlpha:ECC-1_Myers_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -1851,23 +1834,6 @@ sex U
 tier 3
 protocol UW_Stam:Th2_Stam_protocol.pdf
 
-term T-47D
-tag T47D
-type Cell Line
-organism Human
-description T-47D is a human epithelial cell line derived from an mammary ductal carcinoma.
-tissue duct
-vendorName ATCC
-vendorId HTB-133
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
-#lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
-karyotype hypotriploid
-termId BTO:0001248
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
-sex F
-tier 3
-protocol HudsonAlpha:T-47D_Myers_protocol.pdf
-
 term U87
 tag U87
 type Cell Line
@@ -1984,7 +1950,7 @@ validation missing
 term AP-2gamma
 tag AP2gamma
 type Antibody
-antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping within an internal region of AP-2Y of human origin.
+santibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping within an internal region of AP-2Y of human origin.
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
 vendorName Santa Cruz Biotech
 vendorId sc-8977
@@ -3489,12 +3455,12 @@ validation missing
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 
-term ripInput
-tag ripInput
+term None
+tag None
 type ripTgtProtein
 alternativeSymbols None
-description Total input for comparison
-url
+description  Total Input for comparison
+url none
 
 term T7Tag
 tag T7Tag
@@ -3534,9 +3500,9 @@ url http://view.ncbi.nlm.nih.gov/gene/7884
 term CELF1
 tag CELF1
 type ripTgtProtein
-alternativeSymbols CUG-BP1; BRUNOL2
-description Embryo deadenylation element-binding protein homolog (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/10658
+alternativeSymbols CUG-BP1; BRUNOL2 
+description Embryo deadenylation element-binding protein homolog (Homo sapiens) 
+url http://www.ncbi.nlm.nih.gov/gene/10658
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
@@ -3551,22 +3517,22 @@ orderUrl http://www.millipore.com/catalogue/item/07-260
 term Mil_AB3790
 tag MILAB3790
 type ripAntibody
-antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG)
+antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG) 
 targetDescription T7Tag
 vendorName Millipore
-vendorId AB3790
+vendorId AB3790 
 orderUrl http://www.millipore.com/catalogue/item/ab3790
 
 term Mil_061376
 tag MIL061376
 type ripAntibody
 antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
-targetDescription SLBP
+targetDescription SLBP 
 vendorName Millipore
 vendorId 06-1376
 orderUrl http://www.millipore.com/catalogue/item/06-1376
 
-term Mil_05621
+term Mil_05621 
 tag MIL05621
 type ripAntibody
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
@@ -3705,10 +3671,10 @@ orderUrl http://www.millipore.com/catalogue/item/07-1477
 term SC_26522
 tag SC26522
 type ripAntibody
-antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
-targetDescription SLPB
+antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin 
+targetDescription SLPB 
 vendorName Santa Cruz Biotech
-vendorId sc-26522
+vendorId sc-26522 
 orderUrl http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html
 
 term SC_5261
@@ -4351,78 +4317,3 @@ type dataType
 term V2
 tag V2
 type version
-
-### Strain
-
-term C57BL/6
-tag C57BL6
-type strain
-description C57 black 6, the most common inbred strain of laboratory mouse
-
-term 129
-tag S129
-type strain
-description Strain 129, has widely available embryonic stem cells
-
-### Age
-
-term E11.5
-tag E11_5
-type age
-Stage Embryonic
-Description Embryonic day 11.5
-
-term E13.5
-tag E13_5
-type age
-Stage Embryonic
-Description Embryonic day 13.5
-
-term E14
-tag E14
-type age
-Stage Embryonic
-Description Embryonic day 14
-
-term E14.5
-tag E14_5
-type age
-Stage Embryonic
-Description Embryonic day 14.5
-
-term E18
-tag E118
-type age
-Stage Embryonic
-Description Embryonic day 18
-
-term adult-8wks
-tag adult_8wks
-type age
-Stage Adult
-Description Adult 8 weeks
-
-### Sex
-
-term M
-tag M
-type sex
-description Male
-
-term F
-tag F
-type sex
-description Female
-
-term B
-tag B
-type sex
-description Both
-
-term U
-tag U
-type sex
-description Unknown
-
-
-

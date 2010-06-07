@@ -20,7 +20,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.24 2010/06/03 18:08:37 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.23 2009/11/12 23:15:52 kent Exp $";
 
 struct bbiFile *bigWigFileOpen(char *fileName)
 /* Open up big wig file. */
@@ -386,18 +386,5 @@ double bigWigSingleSummary(struct bbiFile *bwf, char *chrom, int start, int end,
 double arrayOfOne = defaultVal;
 bigWigSummaryArray(bwf, chrom, start, end, summaryType, 1, &arrayOfOne);
 return arrayOfOne;
-}
-
-boolean isBigWig(char *fileName)
-/* Peak at a file to see if it's bigWig */
-{
-FILE *f = mustOpen(fileName, "rb");
-bits32 sig;
-mustReadOne(f, sig);
-fclose(f);
-if (sig == bigWigSig)
-    return TRUE;
-sig = byteSwap32(sig);
-return sig == bigWigSig;
 }
 

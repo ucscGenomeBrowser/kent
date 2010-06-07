@@ -29,7 +29,6 @@ test:
 	cd faToTwoBit && ${MAKE} test
 	cd twoBitToFa && ${MAKE} test
 	cd twoBitInfo && ${MAKE} test
-	cd pslLiftSubrangeBlat && ${MAKE} test
 
 clean:
 	touch non-empty-rm.o
@@ -107,7 +106,6 @@ DIRS = \
 	nibFrag \
 	nibSize \
 	nt4Frag \
-	pslLiftSubrangeBlat \
 	pslToPslx \
 	pslToXa \
 	randomLines \
@@ -141,7 +139,6 @@ DIRS = \
 	upper \
 	venn \
 	weedLines \
-	wigCorrelate \
 	wigToBigWig \
 	wigTestMaker \
 	wordLine

@@ -19,20 +19,18 @@ struct hvGfx
     int clipMaxY;
 };
 
-#ifndef USE_PNG
 struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that we'll write out as a GIF someday.
  * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
-#else
+
 
 struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that we'll write out as a PNG someday.
  * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
-#endif /* USE_PNG */
 
 struct hvGfx *hvGfxOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */
@@ -134,12 +132,6 @@ INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int he
 vgTextCentered(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx, font, text);
 }
 
-INLINE void hvGfxSetWriteMode(struct hvGfx *hvg, int writeMode)
-/* set write mode */
-{
-vgSetWriteMode(hvg->vg, writeMode);
-}
-
 INLINE void hvGfxSetClip(struct hvGfx *hvg, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
@@ -164,12 +156,12 @@ hvg->clipMaxY = hvg->height;
 vgUnclip(hvg->vg);
 }
 
-INLINE void hvGfxVerticalSmear8(struct hvGfx *hvg,
+INLINE void hvGfxVerticalSmear(struct hvGfx *hvg,
                                int xOff, int yOff, int width, int height, 
                                unsigned char *dots, boolean zeroClear)
-/* Put a series of one '8-bit pixel' width vertical lines. */
+/* Put a series of one 'pixel' width vertical lines. */
 {
-vgVerticalSmear8(hvg->vg, hvGfxAdjXW(hvg, xOff, width), yOff, width, height, dots, zeroClear);
+vgVerticalSmear(hvg->vg, hvGfxAdjXW(hvg, xOff, width), yOff, width, height, dots, zeroClear);
 }
 
 INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2, 

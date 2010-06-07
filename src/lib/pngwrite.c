@@ -9,7 +9,7 @@
 #include "common.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: pngwrite.c,v 1.4 2010/06/05 19:29:53 braney Exp $";
+static char const rcsid[] = "$Id: pngwrite.c,v 1.3 2009/11/01 01:11:13 markd Exp $";
 
 static void pngAbort(png_structp png, png_const_charp errorMessage)
 /* type png_error wrapper around errAbort */
@@ -61,18 +61,12 @@ if (setjmp(png_jmpbuf(png)))
 
 // Configure PNG output params:
 png_init_io(png, png_file);
-#ifdef COLOR32
 png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
-             PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
-             PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-#else
-png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
-             PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
-             PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+	     PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
+	     PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 png_set_PLTE(png, info,
-             (png_color *)(mg->colorMap), // png_color is same as struct rgbColor!
-             mg->colorsUsed);
-#endif
+	     (png_color *)(mg->colorMap), // png_color is same as struct rgbColor!
+	     mg->colorsUsed);
 if (useTransparency)
     {
     // First palette color is assumed to be background/transparent, so
@@ -86,11 +80,10 @@ if (useTransparency)
 // Write header/params, write pixels, close and clean up.
 // PNG wants a 2D array of pointers to byte offsets into palette/colorMap.
 // mg has a 1D array of byte offsets.  Make row pointers for PNG:
-
 png_byte **row_pointers = needMem(mg->height * sizeof(png_byte *));
 int i;
 for (i = 0;  i < mg->height;  i++)
-    row_pointers[i] = (unsigned char *)&(mg->pixels[i*mg->width]);
+    row_pointers[i] = &(mg->pixels[i*mg->width]);
 png_set_rows(png, info, row_pointers);
 png_write_png(png, info, PNG_TRANSFORM_IDENTITY, // no transform
 	      NULL); // unused as of PNG 1.2

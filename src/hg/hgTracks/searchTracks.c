@@ -15,7 +15,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: searchTracks.c,v 1.9 2010/06/03 05:52:42 larrym Exp $";
+static char const rcsid[] = "$Id: searchTracks.c,v 1.8 2010/05/30 22:38:13 larrym Exp $";
 
 #define ANYLABEL "Any"
 #define METADATA_NAME_PREFIX "hgt.metadataName"
@@ -139,16 +139,16 @@ char query[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 
-if(sameString(op, "contains"))
-    if(name == NULL)
-        safef(query, sizeof(query), "select obj from metaDb where val like  '%%%s%%'", val);
-    else
-        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val like  '%%%s%%'", name, val);
-else
+if(strcmp(op, "contains"))
     if(name == NULL)
         safef(query, sizeof(query), "select distinct obj from metaDb where val = '%s'", val);
     else
         safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val = '%s'", name, val);
+else
+    if(name == NULL)
+        safef(query, sizeof(query), "select obj from metaDb where val like  '%%%s%%'", val);
+    else
+        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val like  '%%%s%%'", name, val);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -191,10 +191,9 @@ char *labels[128];
 int numGroups = 1;
 groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
-char *currentTab = cartUsualString(cart, "hgt.currentSearchTab", "simpleTab");
 char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
 char *nameOp = cartOptionalString(cart, "hgt.nameOp");
-char *descSearch;
+char *descSearch = cartOptionalString(cart, "hgt.descSearch");
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
 boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
 struct sqlConnection *conn = hAllocConn(database);
@@ -205,20 +204,6 @@ int numMetadataNonEmpty = 0;
 char **metadataName;
 char **metadataValue;
 struct hash *parents = newHash(4);
-boolean simpleSearch;
-
-if(sameString(currentTab, "simpleTab"))
-    {
-    descSearch = cartOptionalString(cart, "hgt.simpleSearch");
-    simpleSearch = TRUE;
-    freez(&nameSearch);
-    freez(&groupSearch);
-    }
-else
-    {
-    descSearch = cartOptionalString(cart, "hgt.descSearch");
-    simpleSearch = FALSE;
-    }
 
 getTrackList(&groupList, -2);
 slSort(&groupList, gCmpGroup);
@@ -234,35 +219,21 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-hPrintf("<form action='%s' name='SearchTracks' method='get'>\n\n", hgTracksName());
+hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
 
 webStartWrapperDetailedNoArgs(cart, database, "", "Track Search (prototype!)", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
-fprintf(stderr, "currentTab: %s\n",  currentTab);
-hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='hgt.currentSearchTab' value='%s'>\n", currentTab);
+hPrintf("<table>\n");
 
-hPrintf("<div id='tabs'>\n"
-        "<ul>\n"
-        "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced Search</span></a></li>\n"
-        "</ul>\n"
-        "<div id='simpleTab'>\n");
-
-hPrintf("<input type='text' name='hgt.simpleSearch' value='%s' size='80'>\n", descSearch == NULL ? "" : descSearch);
-
-hPrintf("</div>\n"
-        "<div id='advancedTab'>\n"
-        "<table>\n");
-
-hPrintf("<tr><td></td><td></td><td><b>Description:</b></td><td>contains</td>\n");
+hPrintf("<tr><td></td><td><b>Description:</b></td><td>contains</td>\n");
 hPrintf("<td><input type='text' name='hgt.descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
 
-hPrintf("<tr><td></td><td>and</td><td><b>Track Name:</b></td><td>\n");
+hPrintf("<tr><td>and</td><td><b>Track Name:</b></td><td>\n");
 cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
 hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
 
-hPrintf("<tr><td></td><td>and</td>\n");
+hPrintf("<tr><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td>is</td>\n<td>\n");
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
 hPrintf("</td></tr>\n");
@@ -290,15 +261,12 @@ if(numMetadataSelects)
         char buf[256];
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + 1);
         metadataName[i] = cartOptionalString(cart, buf);
-        if(!simpleSearch)
-            {
-            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + 1);
-            metadataValue[i] = cartOptionalString(cart, buf);
-            if(sameString(metadataValue[i], ANYLABEL))
-                metadataValue[i] = NULL;
-            if(!isEmpty(metadataValue[i]))
-                numMetadataNonEmpty++;
-            }
+        safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + 1);
+        metadataValue[i] = cartOptionalString(cart, buf);
+        if(!strcmp(metadataValue[i], ANYLABEL))
+            metadataValue[i] = NULL;
+        if(!isEmpty(metadataValue[i]))
+            numMetadataNonEmpty++;
         }
     }
 else
@@ -327,14 +295,7 @@ if(metaDbExists)
         char buf[256];
         int len;
 
-        hPrintf("<tr><td>\n");
-
-        if(i == 0)
-            hPrintf("&nbsp;\n");
-        else
-            hButtonWithOnClick("hgt.ignoreme", "+", "add a select", "alert('add a select is not yet implemented'); return false;");
-
-        hPrintf("</td><td>and</td>\n");
+        hPrintf("<tr><td>and</td>\n");
         hPrintf("</td><td>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
         cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metadataName[i], 
@@ -348,9 +309,6 @@ if(metaDbExists)
     }
 
 hPrintf("</table>\n");
-//  hPrintf("<u><a onclick=\"alert('add a select not yet implemented')\" title=\"add a select\">+</a></u>");
-
-hPrintf("</div>\n</div>\n");
 
 hPrintf("<input type='submit' name='%s' value='Search'>\n", searchTracks);
 hPrintf("<input type='submit' name='submit' value='Cancel'>\n");
@@ -399,7 +357,7 @@ if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL
 
     for (group = groupList; group != NULL; group = group->next)
         {
-        if(groupSearch == NULL || sameString(group->name, groupSearch))
+        if(groupSearch == NULL || !strcmp(group->name, groupSearch))
             {
             if (group->trackList != NULL)
                 {
@@ -442,13 +400,20 @@ if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL
         hButton("submit", "save");
         hButtonWithOnClick("hgt.ignoreme", "show all", "show all found tracks", "alert('show all not yet implemented'); return false;");
         hPrintf("<table>\n");
-        hPrintf("<tr bgcolor='#666666'><td><br /></td><td><b>Name</b></td><td><b>Description</b></td><td><b>Group</b></td></tr>\n");
+        hPrintf("<tr bgcolor='#666666'><td><b>Name</b></td><td><b>Description</b></td><td><b>Group</b></td><td><br /></td></tr>\n");
         struct slRef *ptr;
         while((ptr = slPopHead(&tracks)))
             {
             struct track *track = (struct track *) ptr->val;
             // trackDbOutput(track->tdb, stderr, ',', '\n');
             hPrintf("<tr bgcolor='#EEEEEE'>\n");
+            hPrintf("<td>%s</td>\n", track->shortLabel);
+            hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->track, NULL), track->longLabel);
+            // How do we get subtrack's parent?
+            struct track *parent = NULL;
+            if(hashLookup(parents, track->track) != NULL)
+                parent = (struct track *) hashLookup(parents, track->track)->val;
+            hPrintf("<td>%s</td>\n", parent != NULL ? parent->longLabel : track->group != NULL ? track->group->label : "");
             hPrintf("<td>\n");
             if (tdbIsSuper(track->tdb))
                 {
@@ -462,15 +427,7 @@ if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL
                                         "hiddenText" : "normalText", 
                                         trackDbSetting(track->tdb, "onlyVisibility"));
                 }
-            hPrintf("</td>\n");
-            hPrintf("<td>%s</td>\n", track->shortLabel);
-            hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->track, NULL), track->longLabel);
-            // How do we get subtrack's parent?
-            struct track *parent = NULL;
-            if(hashLookup(parents, track->track) != NULL)
-                parent = (struct track *) hashLookup(parents, track->track)->val;
-            hPrintf("<td>%s</td>\n", parent != NULL ? parent->longLabel : track->group != NULL ? track->group->label : "");
-            hPrintf("</tr>\n");
+            hPrintf("</td></tr>\n");
             }
         hPrintf("</table>\n");
         hButton("submit", "save");

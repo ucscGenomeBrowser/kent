@@ -1,7 +1,5 @@
 include ../../inc/common.mk
-# ${SCRIPTS} is ${HOME}/bin/scripts (defined in kent/src/inc/common.mk)
-# to install in /cluster/bin/scripts/, run in this directory:
-# make SCRIPTS=/cluster/bin/scripts
+# ${SCRIPTS} is /cluster/bin/scripts (defined in kent/src/inc/common.mk)
 
 install:
 
@@ -57,7 +55,6 @@ install:
 	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findBlatServer.csh      ${SCRIPTS}
-	cp -p --remove-destination findBrokenLinks.csh     ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination findKgTableSet.csh      ${SCRIPTS}
 	cp -p --remove-destination findLevel               ${SCRIPTS}

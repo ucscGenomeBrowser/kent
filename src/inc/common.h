@@ -849,10 +849,6 @@ int chopByChar(char *in, char chopper, char *outArray[], int outSize);
 /* Chop string by commas. */
 
 
-char *skipBeyondDelimit(char *s,char delimit);
-/* Returns NULL or pointer to first char beyond one (or more contiguous) delimit char.
-   If delimit is ' ' then skips beyond first patch of whitespace. */
-
 char *skipLeadingSpaces(char *s);
 /* Return first non-white space */
 

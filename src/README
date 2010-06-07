@@ -151,7 +151,7 @@ o - serv* and port* - Adapt the code to the peculiarities of
 
 CODE CONVENTIONS
 
-INDENTATION AND SPACING:
+INDENTATION:
 
 The code follows an indentation convention that is a bit
 unusual for C.  Opening and closing braces are on
@@ -164,8 +164,7 @@ level as the block they enclose:
 	}
 Tab stops are set to 8.  Each block of code is 
 indented by 4 from the previous block.  (In the
-vi editor set ts=8  set sw=4.)  Lines are no more than
-100 characters wide.
+vi editor set ts=8  set sw=4)
 
 NAMES
 
@@ -322,4 +321,4 @@ return twoBit;
 }
 
 ====================================================================
-This file last updated: $Date: 2010/06/03 16:48:53 $
+This file last updated: $Date: 2010/05/05 23:34:03 $

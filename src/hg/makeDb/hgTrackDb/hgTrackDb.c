@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.71 2010/06/03 18:08:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.70 2010/05/14 23:31:04 kent Exp $";
 
 
 void usage()
@@ -30,6 +30,7 @@ errAbort(
   "   hgTrackDb [options] org database trackDb_$(USER) trackDb.sql hgRoot\n"
   "\n"
   "Options:\n"
+  "  -hideFirst - Before applying vis.ra, set all visibilities to hide.\n"
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n"
@@ -42,6 +43,7 @@ errAbort(
 static struct optionSpec optionSpecs[] = {
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
+    {"hideFirst", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
     {"settings", OPTION_BOOLEAN},
     {NULL,      0}

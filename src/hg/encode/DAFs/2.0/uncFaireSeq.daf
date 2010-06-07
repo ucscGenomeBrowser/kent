@@ -1,4 +1,4 @@
-# Data Agreement File for UNC (Duke) FAIRE-Seq project  $Revision: 1.5 $
+# Data Agreement File for UNC (Duke) FAIRE-Seq project  $Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,12 +9,13 @@ dafVersion       2.0
 grant            Crawford
 lab              UNC
 dataType         FaireSeq
-compositeSuffix  OpenChromFaire
+compositeSuffix  OpenChrom
+dataAgreementSuffix Faire
 group            regulation
 variables        cell
 assembly         hg19
 
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=32;
+validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=25
 
 # Track/view definition
 view             Peaks
@@ -25,19 +26,19 @@ required         yes
 
 view             Signal
 longLabelPrefix  Open Chromatin, UNC FAIRE-seq F-Seq Density Signal
-type             bigWig
+type             wig
 hasReplicates    no
 required         yes
 
 view             Base_Overlap_Signal
 longLabelPrefix  Open Chromatin, UNC FAIRE-seq Base Overlap Signal
-type             bigWig
+type             wig
 hasReplicates    no
 required         yes
 
 view             Alignments
 longLabelPrefix  Open Chromatin, UNC FAIRE-seq Alignments
-type             bam
+type             tagAlign
 hasReplicates    yes
 required         yes
 

@@ -1,10 +1,5 @@
 # Genome-wide ENCODE tracks
 
-include trackDb.wgEncodeSuny.ra
-
-
-
-
 track wgEncodeMapability
 compositeTrack on
 shortLabel Mapability

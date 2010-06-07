@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.231 2010/06/07 16:10:46 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.229 2010/05/28 20:00:16 krish Exp $
 
 use warnings;
 use warnings FATAL => 'all';
@@ -166,13 +166,11 @@ our %validators = (
     softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
     replicate => \&validateNoValidation,
-    rank => \&validateNoValidation,
     fragLength => \&validateNoValidation,
     setType => \&validateSetType,
     cell => \&validateControlledVocabOrControl,
     antibody => \&validateControlledVocabOrControl,
     ripAntibody => \&validateControlledVocabOrControl,
-    ripTgtProtein => \&validateControlledVocabOrControl,
     treatment => \&validateControlledVocabOrControl,
     protocol => \&validateControlledVocabOrControl,
     phase => \&validateControlledVocabOrControl,

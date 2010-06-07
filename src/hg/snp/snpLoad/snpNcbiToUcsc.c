@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.12 2010/06/04 05:36:03 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.11 2009/08/31 23:38:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -144,18 +144,17 @@ boolean locTypeStringsUsed[MAX_LOCTYPE+1];
 
 /* These strings and their positions must correspond to the values in
  * $ftpBcp/SnpValidationCode.bcp.gz / ASN. */
-#define VALID_BITS 6
-#define VALID_1KG 5
-#define MAX_VALID ((1<<VALID_BITS)-1)
+#define MAX_VALID 31
+#define VALID_BITS 5
 char *validBitStrings[] = {
 "by-cluster",
 "by-frequency",
 "by-submitter",
 "by-2hit-2allele",
 "by-hapmap",
-"by-1000genomes",
+"by-1000genomes", // UCSC's local addition
 };
-boolean validBitStringsUsed[VALID_BITS];
+boolean validBitStringsUsed[VALID_BITS+1];
 
 /* These strings and their positions must correspond to the values in
  * $ftpBcp/SnpFunctionCode.bcp.gz / ASN (but ASN doesn't have
@@ -192,8 +191,7 @@ char *functionStrings[] = {
 /* 42 */ "missense",
 /* 43 */ NULL,
 /* 44 */ "frameshift",
-/* 45 */ "cds-indel",
-/*46*/NULL,/*47*/NULL,/*48*/NULL,/*49*/NULL,
+/*45*/NULL,/*46*/NULL,/*47*/NULL,/*48*/NULL,/*49*/NULL,
 /* fifties: extensions of 5 above (untranslated): */
 /*50*/NULL,/*51*/NULL,/*52*/NULL,
 /* 53 */ "untranslated-3",
@@ -231,7 +229,7 @@ for (i = 0;  i < MAX_CLASS+2+1;  i++)
     classStringsUsed[i] = FALSE;
 for (i = 0;  i < MAX_LOCTYPE+1;  i++)
     locTypeStringsUsed[i] = FALSE;
-for (i = 0;  i < VALID_BITS;  i++)
+for (i = 0;  i < VALID_BITS+1;  i++)
     validBitStringsUsed[i] = FALSE;
 for (i = 0;  i < MAX_FUNC+1;  i++)
     functionStringsUsed[i] = FALSE;
@@ -304,7 +302,7 @@ writeCodes(f, classStrings, classStringsUsed, MAX_CLASS+2+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  valid set(");
-writeCodes(f, validBitStrings, validBitStringsUsed, VALID_BITS+1);
+writeCodes(f, validBitStrings, validBitStringsUsed, VALID_BITS+1+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  avHet float NOT NULL default '0',\n"
@@ -673,8 +671,8 @@ if (validList == NULL)
 dyStringClear(validList);
 if (oneKGenomesRsIds != NULL && is1000Genomes(rsId))
     {
-    dyStringPrintf(validList, "%s,", validBitStrings[VALID_1KG]); // UCSC "by-1000genomes"
-    validBitStringsUsed[VALID_1KG] = TRUE;
+    dyStringPrintf(validList, "%s,", validBitStrings[VALID_BITS]); // UCSC "by-1000genomes"
+    validBitStringsUsed[VALID_BITS] = TRUE;
     }
 if (validNum > 0)
     {
@@ -1214,17 +1212,17 @@ const char *observedIndelFormat =
 const char *observedHetFormat =
     "^\\(HETEROZYGOUS\\)(\\/[ACGT])*$";
 const char *observedMicrosatFormat =
-    "^(\\/?\\(["IUPAC"]+\\)[0-9]*)+(\\/[0-9]+)*(\\/-)?(\\/[ACGT]+)*$";
+    "^\\(["IUPAC"]+\\)[0-9]+(\\/[0-9]+)*(\\/-)?(\\/[ACGT]+)*$";
 const char *observedNamedFormat =
     "^\\((LARGE(INSERTION|DELETION))|"
     "[0-9]+ ?BP ((INDEL|INSERTION|DELETED))?\\)"
     "\\/-(\\/[ACGT]+)*$";
 const char *observedNamedOddballFormat =
-    "^\\([A-Z0-9 ]+\\)?(\\/\\([A-Z0-9 ]+\\))*" /* there's all sorts of stuff in there now */
-    "(\\/-)?(\\/\\(?[A-Z0-9 ]+)*\\)*$";
+    "^\\([A-Z0-9 ]+\\)" /* there's all sorts of stuff in there now */
+    "(\\/-)?(\\/\\(?[A-Z0-9 ]+)*\\)?$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
-    "^-\\/[ACGTN]+(\\/["IUPAC"]+)+$";
+    "^-\\/[ACGT]+(\\/["IUPAC"]+)+$";
 const char *observedMnpFormat =
     "^[ACGTN]+(\\/["IUPAC"]+)+$";
 /* there is only one instance of iupac ambiguous */
@@ -1560,44 +1558,14 @@ slAddHead(&mappings[rsId], mapping);
 void reportMultipleMappings()
 /* Print exceptions for SNPs that have multiple mappings to the genome. */
 {
-int chromCounts[nextChrId];
-int id, i;
+int id;
 for (id = 0;  id <= lastRsId;  id++)
     if (mappings && slCount(mappings[id]) > 1)
 	{
-	boolean gotMult = FALSE;
-	char chromBase[256];
-	chromBase[0] = '\0';
-	for (i = 0;  i < nextChrId;  i++)
-	    chromCounts[i] = 0;
 	struct coords *map;
 	for (map = mappings[id];  map != NULL;  map = map->next)
-	    {
-	    // Is it mapped to multiple chroms, *not* including _hap's?
-	    char *chrom = idChrs[map->chrId];
-	    if (isEmpty(chromBase))
-		{
-		safecpy(chromBase, sizeof(chromBase), chrom);
-		if (strstr(chromBase, "_hap"))
-		    {
-		    char *p = strchr(chromBase, '_');
-		    *p = '\0';
-		    }
-		}
-	    // Is it mapped more than one time to the same chrom?
-	    chromCounts[map->chrId]++;
-	    if (!startsWith(chromBase, chrom) || chromCounts[map->chrId] > 1)
-		{
-		gotMult = TRUE;
-		break;
-		}
-	    }
-	if (gotMult)
-	    {
-	    for (map = mappings[id];  map != NULL;  map = map->next)
-		writeExceptionDetailed(idChrs[map->chrId], map->start, map->end,
-				       id, MultipleAlignments);
-	    }
+	    writeExceptionDetailed(idChrs[map->chrId], map->start, map->end,
+				   id, MultipleAlignments);
 	}
 }
 

@@ -35,14 +35,11 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	{
 	int height = subtrack->totalHeight(subtrack, vis);
 	hvGfxSetClip(hvg, xOff, y, width, height);
-        if (sameString(WIG_AGGREGATE_TRANSPARENT, aggregate))
-            hvGfxSetWriteMode(hvg, MG_WRITE_MODE_MULTIPLY);
 	if (overlay)
 	    subtrack->lineHeight = tg->lineHeight;
 	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
 	if (!overlay)
 	    y += height + 1;
-        hvGfxSetWriteMode(hvg, MG_WRITE_MODE_NORMAL);
 	hvGfxUnclip(hvg);
 	}
     }

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.154 2010/06/03 18:53:59 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.153 2010/05/24 21:55:07 bristor Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -637,7 +637,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = htiIsPositional(hti);
         }
     isWig = isWiggle(database, curTable);
-    if (isBigWigTable(curTable))
+    if (isBigWig(curTable))
         {
         isPositional = TRUE;
         isWig = TRUE;

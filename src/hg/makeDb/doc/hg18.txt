@@ -28663,7 +28663,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.422 2010/06/02 23:00:02 angie Exp $
+# $Id: hg18.txt,v 1.421 2010/06/01 17:56:24 fanhsu Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28711,7 +28711,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.422 2010/06/02 23:00:02 angie Exp $
+# $Id: hg18.txt,v 1.421 2010/06/01 17:56:24 fanhsu Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -29607,8 +29607,7 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 6/2/10)
-# Updated 5/12/10
+# NHGRI GWAS CATALOG (DONE 5/12/10)
 # Updated 4/1/10
 # Updated 3/1/10
 # Originally done 1/19/10
@@ -29620,9 +29619,8 @@ see doc/builds.txt for specific details.
     cut -f 1-4 ../snp130/snp130.bed \
     | sort -k4,4 \
     > snp130Coords.bed
-    set today = `date +%y%m%d`
-    mkdir /hive/data/genomes/hg18/bed/gwasCatalog/$today
-    cd /hive/data/genomes/hg18/bed/gwasCatalog/$today
+    mkdir /hive/data/genomes/hg18/bed/gwasCatalog/100512
+    cd /hive/data/genomes/hg18/bed/gwasCatalog/100512
     wget http://www.genome.gov/admin/gwascatalog.txt
     # Column headers:
 #  1 Date Added to Catalog
@@ -29680,18 +29678,17 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 3545 elements of size 22
+#Loaded 3461 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asking corresp. author Teri Manolio.
-    hgsql hg18 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
-                     from gwasCatalog as gc, snp130 as snp \
-                     where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
-                           gc.name = snp.name and snp.observed in ("C/G", "A/T") \
-                     order by gc.name;' > ambigStrand.txt
-    wc -l ambigStrand.txt 
-#174 ambigStrand.txt
+    hgsql hg18 -e 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
+                   from gwasCatalog as gc, snp130 as snp \
+                   where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
+                         gc.name = snp.name and snp.observed in ("C/G", "A/T") \
+                   order by gc.name limit 20;'
+    # count(*) = 170
 
 
 #############################################################################

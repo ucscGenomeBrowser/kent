@@ -297,23 +297,6 @@
                 });
             }
         },
-        _checkAll: function(all) {
-            var self = this, options = this.options, sourceSelect = this.sourceSelect, dropWrapper = this.dropWrapper;
-            if( $(sourceSelect).hasClass('filterBy'))
-                return;
-            var allCheckboxes = dropWrapper.find("input:not([disabled])");
-            allCheckboxes.attr("checked", all);
-
-            // do the actual synch with the source select
-            var selectOptions = sourceSelect.get(0).options;
-            allCheckboxes.each(function(index) {
-                if(index == 0)
-                    $(selectOptions[index]).attr("selected", all );
-                else
-                    $(selectOptions[index]).attr("selected", false);
-            });
-            self._updateControlText();
-        },
         _sourceSelectChangeHandler: function(event) {
             var self = this, dropWrapper = this.dropWrapper;
             dropWrapper.find("input").val(self.sourceSelect.val());
@@ -521,18 +504,13 @@
             // updates the text shown in the control FIXME: Why doesn't this initialize to the correct size?
             self._updateControlText(controlWrapper, dropWrapper, sourceSelect);
 
-            $(self).addClass('ddcl');
-
-            // listen for change events on the source select element
-            // ensure we avoid processing internally triggered changes
-            self.sourceSelect.change(function(event, eventName) {
-                if (eventName != 'ddcl_internal') {
-                    self._sourceSelectChangeHandler(event);
-                }
-            });
-
-            self.sourceSelect.bind('checkAll',  function(e) { self._checkAll(true); });
-            self.sourceSelect.bind('uncheckAll',function(e) { self._checkAll(false); });
+          // listen for change events on the source select element
+          // ensure we avoid processing internally triggered changes
+          self.sourceSelect.change(function(event, eventName) {
+            if (eventName != 'ddcl_internal') {
+                self._sourceSelectChangeHandler(event);
+            }
+          });
         },
         enable: function() {
             this.controlWrapper.find(".multiCb").removeClass("multiCb-disabled");

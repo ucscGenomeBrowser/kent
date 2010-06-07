@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.123 2010/06/04 18:45:07 mary Exp $";
+#	"$Id: trackDb.ra,v 1.118 2010/05/11 23:28:09 hartera Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -9,10 +9,6 @@ visibility hide
 
 track gap override
 visibility hide
-
-track gwasCatalog override
-snpTable snp131
-snpVersion 131
 
 track tRNAs
 shortLabel tRNA Genes
@@ -393,14 +389,14 @@ html hg19primateChainNet
         type chain papHam1
         otherDb papHam1
 
-        track chainCalJac3
+        track chainCalJac1
     #replaces record chainCalJac1 in parent dir missing/extra group,priority,visibility,color,altColor,matrixHeader,matrix,spectrum
         subTrack primateChainNetViewchain off
         subGroups view=chain species=Marmoset clade=cHaplo
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain calJac3
-        otherDb calJac3
+        type chain calJac1
+        otherDb calJac1
 
         track chainTarSyr1
         subTrack primateChainNetViewchain off
@@ -477,14 +473,14 @@ html hg19primateChainNet
         type netAlign papHam1 chainPapHam1
         otherDb papHam1
 
-        track netCalJac3
+        track netCalJac1
     #replaces record netCalJac1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet on 
         subGroups view=net species=Marmoset clade=cHaplo
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign calJac3 chainCalJac3
-        otherDb calJac3
+        type netAlign calJac1 chainCalJac1
+        otherDb calJac1
 
         track netTarSyr1
         subTrack primateChainNetViewnet off
@@ -1421,7 +1417,6 @@ codingAnnoLabel_snp131CodingDbSnp dbSNP
 
 track snp130 override
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
-visibility hide
 chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2

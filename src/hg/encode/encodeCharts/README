@@ -1,42 +1,39 @@
 *) README
 
-Suite of CGI scripts that visualize the data in the latest report file
-found in: /hive/groups/encode/dcc/reports
+*) encodeTimeline.py
+   Now a cgi-bin python script.
 
-The Visualization API used is the Google Visualization API:
-  http://code.google.com/apis/visualization/interactive_charts.html
+   Notes: Uses the 2.6 version of python 
+            #!/hive/groups/recon/local/bin/python
+          Requires the gviz_api.py library
 
-File structure when properly installed:
+*) Deprecated - encodeTimeline.py [No longer a command-line program]
 
-In the "/hive/groups/encode/dcc/charts" dir:
-	important.dates.tab
-		tab-delimited file that lists the freeze dates
-	gviz_api.py
-		Google Viz API Python module
-		http://code.google.com/apis/visualization/documentation/dev/gviz_api_lib.html
-	encodeReportLib.py
-		Python module of shared functions for ENCODE Report charts
+Run the program:
+  $ encodeTimeline.py > timeline.html
 
-Installed in CGI-BIN directory:
-	encodeReport.py
-		Outputs the report file as raw text or as a spreadsheet
-	encodeTimeline.py
-		Outputs the releases and submissions as a timeline
-	encodeStatus.py
-		Bar chart of the submission status
-	encodeReportFilter.py
-		Shows the associated rows given filtering criteria
-	encodeDist.py
-		Outputs the amount of time until release
-	encodeDistUnrelease.py
-		Outputs the amount of time since submission
+  The program has hard-coded paths for 
+    the report directory
+    the important dates file
 
-*) The charts are all linked from the ENCODE wiki page here:
+  The program finds the most recent report file, parses it and
+  outputs an html file where the data is stored statically via Javascript.
 
-  http://encodewiki.ucsc.edu/EncodeDCC/index.php/ENCODE_Report_Charts
+*) Deprecated Instructions using old Perl script
 
-*) Additional notes
+Run the program:
 
-Uses the 2.6 version of python 
-  The first line of all the scripts is:
-    #!/hive/groups/recon/local/bin/python
+  $ encodeChart.pl newreport.2010-03-31.dcc.txt important.dates.tab > tab.out
+
+Logon to: http://docs.google.com
+
+Open the file: ENCODE Cumulative Submit and Release
+
+Copy and paste file "tab.out" into the spreadsheet
+
+Chart should be automatically updated
+
+
+Send any questions and comments to:
+  Bernard Suh, bsuh@soe.ucsc.edu
+

@@ -15,7 +15,7 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.19 2010/06/04 20:46:19 galt Exp $";
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.18 2010/05/11 01:43:29 kent Exp $";
 
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
@@ -213,7 +213,7 @@ return count;
 static char *findSnpTable(struct sqlConnection *conn)
 /* Return name of SNP table if any */
 {
-char *tables[] = {"snp134", "snp133", "snp132", "snp131", "snp130", "snp129", "snp128", "snp127", "snp126", "snp125", "snp"};
+char *tables[] = {"snp131", "snp130", "snp129", "snp128", "snp127", "snp126", "snp125", "snp"};
 int i;
 for (i=0; i<ArraySize(tables); ++i)
     if (sqlTableExists(conn, tables[i]))

@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.151 2010/06/02 19:06:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.150 2010/05/29 22:24:53 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1668,27 +1668,6 @@ return i;
 char crLfChopper[] = "\n\r";
 char whiteSpaceChopper[] = " \t\n\r";
 
-
-char *skipBeyondDelimit(char *s,char delimit)
-/* Returns NULL or pointer to first char beyond one (or more contiguous) delimit char.
-   If delimit is ' ' then skips beyond first patch of whitespace. */
-{
-if(s != NULL)
-    {
-    char *beyond = NULL;
-    if(delimit == ' ')
-        beyond = skipLeadingSpaces(skipToSpaces(s));
-    else
-        beyond = strchr(s,delimit);
-    if(beyond != NULL)
-        {
-        for(beyond++;*beyond == delimit;beyond++);
-        if(*beyond != '\0')
-            return beyond;
-        }
-    }
-return NULL;
-}
 
 char *skipLeadingSpaces(char *s)
 /* Return first non-white space. */

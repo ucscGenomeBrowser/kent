@@ -16,7 +16,7 @@
 #include <utime.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.48 2010/06/03 05:14:39 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.47 2010/03/19 19:11:24 angie Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -251,7 +251,7 @@ struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath)
 return listDirXExt(dir, pattern, fullPath, FALSE);
 }
 
-time_t fileModTime(char *pathName)
+unsigned long fileModTime(char *pathName)
 /* Return file last modification time.  The units of
  * these may vary from OS to OS, but you can depend on
  * later files having a larger time. */

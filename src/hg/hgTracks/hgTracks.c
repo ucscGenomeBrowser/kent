@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1650 2010/06/05 19:29:42 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1649 2010/05/27 21:13:24 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -585,13 +585,8 @@ if(doIdeo)
         }
     else
         {
-#ifdef USE_PNG
-        trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".png");
-        hvg = hvGfxOpenPng(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
-#else
         trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".gif");
         hvg = hvGfxOpenGif(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
-#endif
         }
     hvg->rc = revCmplDisp;
     initColors(hvg);

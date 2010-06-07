@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.117 2010/06/07 16:57:12 angie Exp $";
+#	"$Id: hg19.txt,v 1.115 2010/05/27 23:52:00 angie Exp $";
 
 #############################################################################
 
@@ -8366,29 +8366,27 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 6/2/10 angie)
-# Updated 5/12/10 (last one to use snp130)
+# NHGRI GWAS CATALOG (DONE 5/12/10 angie)
 # Updated 4/1/10
 # Updated 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
     # Done once, don't need to redo:
-    cut -f 1-4 ../snp131/snp131.bed \
+    cut -f 1-4 ../snp130/snp130.bed \
     | sort -k4,4 \
-      > snp131Coords.bed
-    set today = `date +%y%m%d`
-    mkdir /hive/data/genomes/hg19/bed/gwasCatalog/$today
-    cd /hive/data/genomes/hg19/bed/gwasCatalog/$today
+      > snp130Coords.bed
+    mkdir /hive/data/genomes/hg19/bed/gwasCatalog/100512
+    cd /hive/data/genomes/hg19/bed/gwasCatalog/100512
 
     # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-    join -t "	" -1 4 ../snp131Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
+    join -t "	" -1 4 ../snp130Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/100512/noCoords.tab \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 3852 elements of size 22
+#Loaded 3277 elements of size 22
 
 
 ######################################################################## 
@@ -9538,7 +9536,7 @@ EOF
 #count of snps with weight  3 = 2536961
 #count of snps with weight 10 = 1399430
 #Skipped 7 snp mappings due to errors -- see snp131Errors.bed
-#173.162u 5.982s 7:57.91 37.4%   0+0k 0+0io 3pf+0w
+#218.985u 11.475s 4:41.38 81.8%  0+0k 0+0io 0pf+0w
     head snp131Errors.bed
 #chr13   32953907        32954033        rs80359736      rs80359736 is 126 bases long but refNCBI is different length: CATCATCAGATTTATATTCTCTGTTAACAGAAGGAAAGAGATACAGAATTTATCATCTTGCAACTTCAAAATCTAAAAGTAAATCTGAAAGAGCTAACAT
 #chr17   41223118        41223133        rs80359888      Missing observed value (deleted SNP?).
@@ -9552,7 +9550,8 @@ EOF
 #        22 snp131.sql
 #         7 snp131Errors.bed
 #        18 snp131ExceptionDesc.tab
-#   4281351 snp131Exceptions.bed
+#   4859728 snp131Exceptions.bed
+#  23653726 snp131Seq.tab
     # 8M new snps, lots more exceptions than snp130 (had 2631563)
 
     # Make one big fasta file.
@@ -9584,7 +9583,7 @@ EOF
     hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
       hg19 snp131Exceptions -sqlTable=$HOME/kent/src/hg/lib/snp125Exceptions.sql -renameSqlTable \
       snp131Exceptions.bed
-#Loaded 4281351 elements of size 5
+#Loaded 4859728 elements of size 5
 #32.020u 2.006s 1:22.87 41.0%    0+0k 0+0io 0pf+0w
     hgLoadSqlTab hg19 snp131ExceptionDesc ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
       snp131ExceptionDesc.tab
@@ -9599,7 +9598,7 @@ EOF
     # Look at the breakdown of exception categories:
     cd /hive/data/outside/dbSNP/131/human
     cut -f 5 snp131Exceptions.bed | sort | uniq -c | sort -nr
-#3088435 MultipleAlignments
+#3666812 MultipleAlignments
 # 886159 ObservedMismatch
 #  92341 SingleClassTriAllelic
 #  70184 SingleClassZeroSpan
@@ -9623,11 +9622,7 @@ EOF
 
 
 ############################################################################
-# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP131 (DONE 6/3/10 angie)
-# First done 4/15/10.  Then found that SNPs that appeared on both a main chrom
-# (like chr6) and on a haplo chrom (like chr6_cox_hap2) were being flagged
-# as multiple alignments when they should be, excluding them from this.
-# Regenerated exceptions, then regenerated this.
+# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP131 (DONE 4/15/10 angie)
     mkdir /hive/data/genomes/hg19/bed/snp131Ortho
     cd /hive/data/genomes/hg19/bed/snp131Ortho
 
@@ -9646,8 +9641,7 @@ EOF
       > snp131Simple.bed
 #333.829u 11.879s 3:57.31 145.6% 0+0k 0+0io 0pf+0w
     wc -l snp131Simple.bed
-#17784981 snp131Simple.bed
-#with too many SNPs excluded, was: 17337248 snp131Simple.bed
+#17337248 snp131Simple.bed
 
     # Glom all human info that we need for the final table onto the
     # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
@@ -9658,6 +9652,8 @@ EOF
       snp131Simple.bed > snp131ForLiftOver.bed
 
     # Map coords to chimp using liftOver.
+    # I don't know why chimp took so much longer than macaque... the
+    # chimp .over has fewer chains and fewer bytes than the macaque .over.
     mkdir run.liftOChimp
     cd run.liftOChimp
     mkdir split out
@@ -9669,15 +9665,15 @@ EOF
         \{check out exists out/panTro2.$f:t.bed\} out/hg19.$f:t.unmapped \
         >> jobList
     end
-    ssh swarm
+    ssh pk
     cd /hive/data/genomes/hg19/bed/snp131Ortho/run.liftOChimp
     para make jobList
-#Completed: 712 of 712 jobs
-#CPU time in finished jobs:     127853s    2130.88m    35.51h    1.48d  0.004 y
-#IO & Wait Time:                 11528s     192.14m     3.20h    0.13d  0.000 y
-#Average job time:                 196s       3.26m     0.05h    0.00d
-#Longest finished job:             506s       8.43m     0.14h    0.01d
-#Submission to last job:           676s      11.27m     0.19h    0.01d
+#Completed: 694 of 694 jobs
+#CPU time in finished jobs:     114883s    1914.72m    31.91h    1.33d  0.004 y
+#IO & Wait Time:                  3183s      53.05m     0.88h    0.04d  0.000 y
+#Average job time:                 170s       2.84m     0.05h    0.00d
+#Longest finished job:             460s       7.67m     0.13h    0.01d
+#Submission to last job:           525s       8.75m     0.15h    0.01d
 
     # Map coords to orangutan using liftOver.
     mkdir ../run.liftOPon
@@ -9692,13 +9688,12 @@ EOF
         >> jobList
     end
     para make jobList
-# on pk:
-#Completed: 712 of 712 jobs
-#CPU time in finished jobs:     230882s    3848.03m    64.13h    2.67d  0.007 y
-#IO & Wait Time:                  3660s      61.00m     1.02h    0.04d  0.000 y
-#Average job time:                 329s       5.49m     0.09h    0.00d
-#Longest finished job:            1019s      16.98m     0.28h    0.01d
-#Submission to last job:          1667s      27.78m     0.46h    0.02d
+#Completed: 694 of 694 jobs
+#CPU time in finished jobs:     224315s    3738.58m    62.31h    2.60d  0.007 y
+#IO & Wait Time:                 18237s     303.95m     5.07h    0.21d  0.001 y
+#Average job time:                 349s       5.82m     0.10h    0.00d
+#Longest finished job:            1010s      16.83m     0.28h    0.01d
+#Submission to last job:          1024s      17.07m     0.28h    0.01d
 
     # Map coords to macaque using liftOver.
     mkdir ../run.liftOMac
@@ -9713,12 +9708,12 @@ EOF
         >> jobList
     end
     para make jobList
-#Completed: 712 of 712 jobs
-#CPU time in finished jobs:     281168s    4686.14m    78.10h    3.25d  0.009 y
-#IO & Wait Time:                 22164s     369.39m     6.16h    0.26d  0.001 y
-#Average job time:                 426s       7.10m     0.12h    0.00d
-#Longest finished job:             868s      14.47m     0.24h    0.01d
-#Submission to last job:           872s      14.53m     0.24h    0.01d
+#Completed: 694 of 694 jobs
+#CPU time in finished jobs:     289558s    4825.96m    80.43h    3.35d  0.009 y
+#IO & Wait Time:                 23402s     390.04m     6.50h    0.27d  0.001 y
+#Average job time:                 451s       7.52m     0.13h    0.01d
+#Longest finished job:             893s      14.88m     0.25h    0.01d
+#Submission to last job:           906s      15.10m     0.25h    0.01d
 
     cd /hive/data/genomes/hg19/bed/snp131Ortho
     # Concatenate the chimp results, sorting by chimp pos in order to
@@ -9736,12 +9731,9 @@ EOF
     | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
     | sort > rheMac2.orthoGlom.txt
     wc -l panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac2.orthoGlom.txt
-#  16641106 panTro2.orthoGlom.txt
-#  15796202 ponAbe2.orthoGlom.txt
-#  14289736 rheMac2.orthoGlom.txt
-#was:  16230258 panTro2.orthoGlom.txt
-#was:  15535287 ponAbe2.orthoGlom.txt
-#was:  13996256 rheMac2.orthoGlom.txt
+#  16230258 panTro2.orthoGlom.txt
+#  15535287 ponAbe2.orthoGlom.txt
+#  13996256 rheMac2.orthoGlom.txt
 
     # Use the glommed name field as a key to join up chimp and macaque
     # allele data.  Include glommed name from both files because if only
@@ -9774,18 +9766,17 @@ EOF
     | sort -k1,1 -k2n,2n > snp131OrthoPt2Pa2Rm2.bed
 #437.114u 37.309s 6:33.92 120.4% 0+0k 0+0io 0pf+0w
     wc -l snp131OrthoPt2Pa2Rm2.bed
-#17276174 snp131OrthoPt2Pa2Rm2.bed
-#was: 16842459 snp131OrthoPt2Pa2Rm2.bed
+#16842459 snp131OrthoPt2Pa2Rm2.bed
 
     hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
       -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
       hg19 snp131OrthoPt2Pa2Rm2 snp131OrthoPt2Pa2Rm2.bed
-#Loaded 17276174 elements of size 22
-#123.287u 13.079s 8:17.88 27.3%  0+0k 0+0io 0pf+0w
+#Loaded 16842459 elements of size 22
+#104.012u 12.931s 7:21.75 26.4%  0+0k 0+0io 0pf+0w
 
     # Cleanup:
     nice gzip snp131Simple.bed snp131ExcludeIds.txt snp131ForLiftOver.bed
-    rm -r run*/split tmp.txt *.orthoGlom.txt bed.tab
+    rm -r run*/split tmp.txt *.orthoGlom.txt
 
 
 ############################################################################

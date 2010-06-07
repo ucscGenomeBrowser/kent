@@ -33,6 +33,7 @@ wgEncode 1
     maxLimit 1035636
 
         track wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel HeS3 cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HeLa-S3 cytosol)
@@ -42,15 +43,18 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1HuvecCytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel HUVE cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=0-PlusRawSignal cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
+        accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol labVersion=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel HeS3 nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HeLa-S3 nucleus)
@@ -61,6 +65,7 @@ wgEncode 1
 
 
         track wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal on
         shortLabel GM12 cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in GM12878 cytosol)
@@ -72,6 +77,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal on
         shortLabel GM12 nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in GM12878 nucleus)
@@ -83,6 +89,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel hESC cell A+ +S1
         color 0,107,27
@@ -94,6 +101,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel HepG cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HepG2 cytosol)
@@ -105,6 +113,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel HepG nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HepG2 nucleus)
@@ -116,6 +125,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel HUVE nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in HUVEC nucleus)
@@ -127,6 +137,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 chrm to +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (total RNA in K562 chromatin)
@@ -138,6 +149,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
 
         track wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in K562 cytosol)
@@ -149,6 +161,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 nlos to +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (total RNA in K562 nucleolus)
@@ -160,6 +173,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 npls to +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (total RNA in K562 nucleoplasm)
@@ -171,6 +185,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal
 
         track wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in K562 nucleus)
@@ -182,6 +197,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 psom A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in K562 polysome)
@@ -193,6 +209,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel NHEK cyto A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in NHEK cytosol)
@@ -204,6 +221,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel NHEK nucl A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in NHEK nucleus)
@@ -215,6 +233,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
 
         track wgEncodeGisPetPlusRawSigRep1ProstateCellLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel pros cell A+ +S1
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (longPolyA RNA in prostate cell)
@@ -225,6 +244,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel K562 cyto A+ +S2
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 2 (longPolyA RNA in K562 cytosol)
@@ -236,6 +256,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
 
         track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView0-PlusRawSignal on
         shortLabel GM12 cyto A+ -S2
         longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 2 (longPolyA RNA in GM12878 cytosol)
@@ -259,6 +280,7 @@ wgEncode 1
     maxLimit 2196027
 
         track wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel HeS3 cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HeLa-S3 cytosol)
@@ -268,15 +290,18 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1HuvecCytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel HUVE cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=1-MinusRawSignal cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
+        accession SAT2G_version_2.0
         color 224,75,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol labVersion=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA type=bedGraph localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSignalRep1Helas3NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel HeS3 nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HeLa-S3 nucleus)
@@ -286,6 +311,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA type=bedGraph localization=nucleus view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal on
         shortLabel GM12 cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in GM12878 cytosol)
@@ -297,6 +323,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal on
         shortLabel GM12 nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in GM12878 nucleus)
@@ -308,6 +335,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel hESC cell A+ -S1
         color 0,107,27
@@ -319,6 +347,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel HepG cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HepG2 cytosol)
@@ -330,6 +359,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel HepG nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HepG2 nucleus)
@@ -341,6 +371,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel HUVE nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in HUVEC nucleus)
@@ -352,6 +383,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 chrm to -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (total RNA in K562 chromatin)
@@ -363,6 +395,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal
 
         track wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in K562 cytosol)
@@ -374,6 +407,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 nlos to -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (total RNA in K562 nucleolus)
@@ -385,6 +419,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 npls to -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (total RNA in K562 nucleoplasm)
@@ -396,6 +431,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal
 
         track wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in K562 nucleus)
@@ -407,6 +443,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 psom A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in K562 polysome)
@@ -418,6 +455,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel NHEK cyto A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in NHEK cytosol)
@@ -429,6 +467,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel NHEK nucl A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in NHEK nucleus)
@@ -440,6 +479,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
 
         track wgEncodeGisPetMinusRawSigRep1ProstateCellLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel pros cell A+ -S1
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (longPolyA RNA in prostate cell)
@@ -450,6 +490,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal on
         shortLabel GM12 cyto A+ -S2
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 2 (longPolyA RNA in GM12878 cytosol)
@@ -461,6 +502,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
 
         track wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel K562 cyto A+ -S2
         longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 2 (longPolyA RNA in K562 cytosol)
@@ -478,6 +520,7 @@ wgEncode 1
     subTrack wgEncodeGisPet 
 
         track wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel HeS3 cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HeLa-S3 cytosol)
@@ -493,11 +536,13 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=791 dateSubmitted=2009-12-05 dateUnrestricted=2010-09-05 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1HuvecCytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel HUVE cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HUVEC cytosol)
         subGroups view=2-Alignments cellType=HUVEC localization=20-cytosol rnaExtract=longPolyA
         type bigBed 6
+        accession SAT2G_version_2.0
         color 224,75,0
         colorByStrand 46,0,184 238,85,34
         baseColorDefault diffBases
@@ -505,9 +550,10 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol labVersion=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya fileName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya.pairedTagAlign.gz
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=793 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya fileName=wgEncodeGisPetAlignmentsHuvecCytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1Helas3NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel HeS3 nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HeLa-S3 nucleus)
@@ -523,6 +569,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=790 dateSubmitted=2009-12-04 dateUnrestricted=2010-09-04 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsHelas3NucleusLongpolya fileName=wgEncodeGisPetAlignmentsHelas3NucleusLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel HepG cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HepG2 cytosol)
@@ -538,6 +585,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel HepG nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HepG2 nucleus)
@@ -553,6 +601,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1K562ChromatinTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 chrm to AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (total RNA in K562 chromatin)
@@ -568,6 +617,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562ChromatinTotal fileName=wgEncodeGisPetAlignmentsRep1K562ChromatinTotal.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1K562NucleolusTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 nlos to AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (total RNA in K562 nucleolus)
@@ -583,6 +633,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562NucleolusTotal fileName=wgEncodeGisPetAlignmentsRep1K562NucleolusTotal.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1K562NucleoplasmTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 npls to AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (total RNA in K562 nucleoplasm)
@@ -598,6 +649,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562NucleoplasmTotal fileName=wgEncodeGisPetAlignmentsRep1K562NucleoplasmTotal.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in K562 nucleus)
@@ -613,6 +665,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 psom A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in K562 polysome)
@@ -628,6 +681,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 cyto A+ AL2
         longLabel ENCODE GIS PET Alignments Rep 2 (longPolyA RNA in K562 cytosol)
@@ -643,6 +697,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel pros cell A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in prostate cell)
@@ -657,6 +712,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya fileName=wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel GM12 nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in GM12878 nucleus)
@@ -672,6 +728,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel GM12 cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in GM12878 cytosol)
@@ -687,6 +744,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel GM12 cyto A+ AL2
         longLabel ENCODE GIS PET Alignments Rep 2 (longPolyA RNA in GM12878 cytosol)
@@ -702,6 +760,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel NHEK cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in NHEK cytosol)
@@ -717,6 +776,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel NHEK nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in NHEK nucleus)
@@ -732,6 +792,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel HUVE nucl A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in HUVEC nucleus)
@@ -748,6 +809,7 @@ wgEncode 1
 
 
         track wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel hESC cell A+ AL1
         color 0,107,27
@@ -763,6 +825,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya fileName=wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya
+        release alpha,beta,public
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel K562 cyto A+ AL1
         longLabel ENCODE GIS PET Alignments Rep 1 (longPolyA RNA in K562 cytosol)
@@ -785,6 +848,7 @@ wgEncode 1
     subTrack wgEncodeGisPet 
 
         track wgEncodeGisPetClustersRep1Gm12878CytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters on
         shortLabel GM12 cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in GM12878 cytosol)
@@ -794,6 +858,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Gm12878CytosolPap fileName=wgEncodeGisPetClustersRep1Gm12878CytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1Gm12878NucleusPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters on
         shortLabel GM12 nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in GM12878 nucleus)
@@ -803,6 +868,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Gm12878NucleusPap fileName=wgEncodeGisPetClustersRep1Gm12878NucleusPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1Hepg2CytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HepG cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in HepG2 cytosol)
@@ -812,6 +878,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Hepg2CytosolPap fileName=wgEncodeGisPetClustersRep1Hepg2CytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1Hepg2NucleusPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HepG nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in HepG2 nucleus)
@@ -821,6 +888,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Hepg2NucleusPap fileName=wgEncodeGisPetClustersRep1Hepg2NucleusPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1K562CytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in K562 cytosol)
@@ -830,6 +898,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562CytosolPap fileName=wgEncodeGisPetClustersRep1K562CytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1K562NucleusPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in K562 nucleus)
@@ -839,6 +908,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleusPap fileName=wgEncodeGisPetClustersRep1K562NucleusPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1K562PolysomePap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 psom A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in K562 polysome)
@@ -848,6 +918,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562PolysomePap fileName=wgEncodeGisPetClustersRep1K562PolysomePap.bed12.gz
 
         track wgEncodeGisPetClustersRep1K562ChromatinTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 chrm to CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (total RNA in K562 chromatin)
@@ -857,6 +928,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=chromatin view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562ChromatinTotal fileName=wgEncodeGisPetClustersRep1K562ChromatinTotal.bed12.gz
 
         track wgEncodeGisPetClustersRep1K562NucleoplasmTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 npls to CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (total RNA in K562 nucleoplasm)
@@ -866,6 +938,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleoplasm view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal fileName=wgEncodeGisPetClustersRep1K562NucleoplasmTotal.bed12.gz
 
         track wgEncodeGisPetClustersRep1K562NucleolusTotal
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 nlos to CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (total RNA in K562 nucleolus)
@@ -875,6 +948,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=total localization=nucleolus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1K562NucleolusTotal fileName=wgEncodeGisPetClustersRep1K562NucleolusTotal.bed12.gz
 
         track wgEncodeGisPetClustersRep1ProstateCellPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel pros cell A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in prostate cell)
@@ -883,6 +957,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1ProstateCellPap fileName=wgEncodeGisPetClustersRep1ProstateCellPap.bed12.gz
 
         track wgEncodeGisPetClustersRep2Gm12878CytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters on
         shortLabel GM12 cyto A+ CL2
         longLabel ENCODE GIS PET Clusters Rep 2 (longPolyA RNA in GM12878 cytosol)
@@ -892,6 +967,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep2Gm12878CytosolPap fileName=wgEncodeGisPetClustersRep2Gm12878CytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1HuvecCytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HUVE cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in HUVEC cytosol)
@@ -901,6 +977,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1HuvecCytosolPap fileName=wgEncodeGisPetClustersRep1HuvecCytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1HuvecNucleusPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HUVE nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in HUVEC nucleus)
@@ -910,6 +987,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1HuvecNucleusPap fileName=wgEncodeGisPetClustersRep1HuvecNucleusPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1Helas3CytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HeS3 cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in HeLa-S3 cytosol)
@@ -919,6 +997,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3CytosolPap fileName=wgEncodeGisPetClustersRep1Helas3CytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1Helas3NucleusPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel HeS3 nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in HeLa-S3 nucleus)
@@ -928,6 +1007,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HeLa-S3 rnaExtract=longPolyA localization=nucleus view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1Helas3NucleusPap fileName=wgEncodeGisPetClustersRep1Helas3NucleusPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1H1hescCellPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel hESC cell A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in H1-hESC cell)
@@ -937,6 +1017,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=cell view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1H1hescCellPap fileName=wgEncodeGisPetClustersRep1H1hescCellPap.bed12.gz
 
         track wgEncodeGisPetClustersRep2K562CytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel K562 cyto A+ CL2
         longLabel ENCODE GIS PET Clusters Rep 2 (longPolyA RNA in K562 cytosol)
@@ -946,6 +1027,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Clusters replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep2K562CytosolPap fileName=wgEncodeGisPetClustersRep2K562CytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1NhekCytosolPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel NHEK cyto A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in NHEK cytosol)
@@ -955,6 +1037,7 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol view=Clusters replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1121 dateSubmitted=2010-03-08 dateUnrestricted=2010-12-08 composite=wgEncodeGisPet tableName=wgEncodeGisPetClustersRep1NhekCytosolPap fileName=wgEncodeGisPetClustersRep1NhekCytosolPap.bed12.gz
 
         track wgEncodeGisPetClustersRep1NhekNucleusPap
+        release alpha,beta,public
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel NHEK nucl A+ CL1
         longLabel ENCODE GIS PET Clusters Rep 1 (longPolyA RNA in NHEK nucleus)

@@ -135,7 +135,7 @@ int mustFork();
 int rawKeyIn();
 /* Read in an unbuffered, unechoed character from keyboard. */
 
-time_t fileModTime(char *pathName);
+unsigned long fileModTime(char *pathName);
 /* Return file last modification time.  The units of
  * these may vary from OS to OS, but you can depend on
  * later files having a larger time. */

@@ -22,7 +22,7 @@
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.82 2010/06/03 18:53:59 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.81 2010/04/13 04:42:00 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -893,7 +893,7 @@ struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean isSmallWig = isWiggle(db, table);
-boolean isWig = isSmallWig || isBigWigTable(table);
+boolean isWig = isSmallWig || isBigWig(table);
 boolean isBedGr = isBedGraph(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
 

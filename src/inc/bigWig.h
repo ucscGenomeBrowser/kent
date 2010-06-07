@@ -66,8 +66,5 @@ double bigWigSingleSummary(struct bbiFile *bwf, char *chrom, int start, int end,
     enum bbiSummaryType summaryType, double defaultVal);
 /* Return the summarized single value for a range. */
 
-boolean isBigWig(char *fileName);
-/* Peak at a file to see if it's bigWig */
-
 #endif /* BIGWIG_H */
 

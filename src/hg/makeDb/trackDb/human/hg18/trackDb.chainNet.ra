@@ -1,4 +1,4 @@
-#	"$Id: trackDb.chainNet.ra,v 1.17 2010/06/03 23:00:28 mary Exp $";
+#	"$Id: trackDb.chainNet.ra,v 1.16 2010/02/07 06:50:02 kuhn Exp $";
 
 track chainNetPanTro1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -11,15 +11,8 @@ track chainNetRheMac2 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetCalJac1 override
-shortLabel $o_Organism Chain/Net
 priority 260.3
 chainMinScore 3000
-
-	track chainCalJac1 override
-	shortLabel $o_Organism Net
-
-	track netCalJac1 override
-	shortLabel $o_Organism Chain
 
 track chainNetFr1 override
 shortLabel $o_db Chain/Net

@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 braney Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.145 2010/06/01 18:35:32 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -227,7 +227,7 @@ trackLayoutInit(&tl, cart);
 leftLabelWidthChars = cartUsualInt(cart, "hgt.labelWidth", leftLabelWidthDefaultChars);
 if (leftLabelWidthChars < 2)
     leftLabelWidthChars = leftLabelWidthDefaultChars;
-tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth + 3;
+tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
 int maxLabelWidth = 0.5*tl.picWidth;
 if (tl.leftLabelWidth  > maxLabelWidth)
     {
@@ -3296,13 +3296,13 @@ if (baseWidth <= 25000000)
 countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts, hvg->rc);
 
 grayThreshold(useCounts, width);
-hvGfxVerticalSmear8(hvg,xOff,yOff,width,lineHeight,useCounts,TRUE);
+hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 if (gapUseCounts != NULL)
     {
     int midY = yOff + (tg->heightPer>>1);
     grayThreshold(gapUseCounts, width);
-    hvGfxVerticalSmear8(hvg,xOff,midY,width,1,gapUseCounts,TRUE);
+    hvGfxVerticalSmear(hvg,xOff,midY,width,1,gapUseCounts,TRUE);
     freeMem(gapUseCounts);
     }
 }
@@ -4935,9 +4935,7 @@ char *diseaseClassCode;
 int i=0;
 conn = hAllocConn(database);
 
-safef(query, sizeof(query), 
-"select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", 
-item->name);
+sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -4947,12 +4945,12 @@ while ((row != NULL) && i<20)
     {
     if (i != 0)
 	{
-	safef(chp, 2, ",");
+	sprintf(chp, ",");
 	chp++;
 	}
     diseaseClassCode = row[0];
 
-    safef(chp, 100, "%s", diseaseClassCode);
+    sprintf(chp, "%s", diseaseClassCode);
     chp = chp+strlen(diseaseClassCode);
     row = sqlNextRow(sr);
     i++;
@@ -4960,7 +4958,7 @@ while ((row != NULL) && i<20)
 
 if ((i == 20) && (row != NULL))
     {
-    safef(chp, 4, " ...");
+    sprintf(chp, " ...");
     chp++;chp++;chp++;chp++;
     }
 
@@ -4986,8 +4984,7 @@ int i=0;
 
 conn = hAllocConn(database);
 
-safef(query, sizeof(query),
-"select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", item->name);
+sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -5097,7 +5094,7 @@ int i=0;
 
 conn = hAllocConn(database);
 
-safef(query,sizeof(query),
+sprintf(query,
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -5108,10 +5105,10 @@ while ((row != NULL) && i<20)
     {
     if (i != 0)
 	{
-	safef(chp, 3, "; ");
+	sprintf(chp, "; ");
 	chp++;chp++;
 	}
-    safef(chp, 100, "%s", row[0]);
+    sprintf(chp, "%s", row[0]);
     chp = chp+strlen(row[0]);
     row = sqlNextRow(sr);
     i++;
@@ -5119,7 +5116,7 @@ while ((row != NULL) && i<20)
 
 if ((i == 20) && (row != NULL))
     {
-    safef(chp, 5, " ...");
+    sprintf(chp, " ...");
     chp++;chp++;chp++;chp++;
     }
 
@@ -5146,13 +5143,13 @@ char *decipherId = NULL;
 	RED:	If the entry is a deletion (mean ratio < 0)
 	GREEN:	If the entry is a duplication (mean ratio > 0)
 */
-safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
+sprintf(cond_str, "name='%s' ", bedItem->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
 if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
+    	sprintf(query, "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -5169,8 +5166,7 @@ if (decipherId != NULL)
     	/* add more logic here to check for mean_ratio = 0 
 	   (which is a problem to be fixed by DECIPHER */
 
-	safef(query, sizeof(query), 
-	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
+	sprintf(query, "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -6339,12 +6335,12 @@ for(ii=0; ii < 52; ii++)
     for(jj=0; jj < width + 2; jj++)
 	{
 	if (buf[jj] == 255) buf[jj] = 0;
-	else if (buf[jj] == 0x44)buf[jj] = brickColor;
+	else if (buf[jj] == 0x44)buf[jj] = MG_RED;
 	else if (buf[jj] == 0x69)buf[jj] = greenColor;
 	else if (buf[jj] == 0x5e)buf[jj] = blueColor;
 	}
 
-    hvGfxVerticalSmear8(hvg,xOff,yOff+ii,width ,1,buf,TRUE);
+    hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1,buf,TRUE);
     }
 hvGfxUnclip(hvg);
 
@@ -9746,7 +9742,9 @@ loadBed9(tg);
 char cartVarName[256];
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tg->tdb->track);
 char *incOrExc = cartUsualString(cart, cartVarName, NULL);
-if (isNotEmpty(incOrExc))
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tg->tdb->track);
+struct slName *filterPmIds = cartOptionalSlNameList(cart, cartVarName);
+if (isNotEmpty(incOrExc) && filterPmIds != NULL)
     filterItems(tg, dgvFilter, incOrExc);
 }
 

@@ -181,16 +181,6 @@ identifier UniProtId external=UniProt
      dm1.bdgpSwissProt.spSymbol minCheck=0.80
      dm1.flyBaseSwissProt.spSymbol minCheck=0.80
 
-identifier ProteomeTaxonId external=Proteome
-"Proteome Taxon ID"
-     proteome.taxonName.id
-     proteome.spXref3.division minCheck=.90
-
-identifier ProteomeAccession external=Proteome
-"Proteome  Accession"
-     proteome.spXref3.accession dupeOk
-     proteome.hgncXref.uniProt minCheck=.65
-
 identifier UniProtAccession external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) Accession"
      uniProt.displayId.acc
@@ -770,22 +760,6 @@ identifier affyRatExonSampleId
     $rn.affyExonTissues.expIds comma full
     $rn.affyExonTissues.expScores comma indexOf full
 
-identifier affyExonTissuesGsId
-"UCSC Gene IDs for affyExonTissuesGs."
-    $hg.affyExonTissuesGs.name
-    $hg.knownGene.name minCheck=0.95
-
-identifier affyExonTissuesGsMedianId
-"UCSC Gene IDs for affyExonTissuesGsMedian."
-    $hg.affyExonTissuesGsMedian.name
-    $hg.knownGene.name minCheck=0.95
-
-identifier affyExonTissuesGsMedianDistId
-"UCSC Gene IDs for affyExonTissuesGsMedianDist."
-    $hg.affyExonTissuesGsMedianDist.query dupeOk
-    $hg.affyExonTissuesGsMedianDist.target
-    $hg.knownGene.name minCheck=0.95
-
 identifier gnfHumanAtlas2
 "Novartis GNF Human gene probe ID"
     hgFixed.gnfHumanAtlas2All.name
@@ -1319,17 +1293,9 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     hg19.geneNetworkId.id
     rn3.geneNetworkId.id minCheck=0.40
 
-identifier kgOldId
-"Old Known Gene ID - the genbank accession of the representative mRNA"
-    hg17.kgOld.name dupeOk
-    hg17.kgXrefOld.kgId  minCheck=.95
-
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
-    hg16.hg17Kg.name minCheck=.30
-    $kgDb2.knownExpDistance.query
-    $kgDb2.knownExpDistance.target
     $kgDb.bioCycPathway.kgID
     $kgDb.ceBlastTab.query
     $kgDb.hgBlastTab.query
@@ -1418,8 +1384,6 @@ identifier knownGeneOld2Id dependency
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
     $kgDb.knownGeneOld2.name dupeOk
     $kgDb.kgXrefOld2.kgID full
-    $kgDb.humanBlastTab.query
-    $kgDb.humanBlastTab.target
 
 identifier knownToHprdName
 "Dependencies on knownToHprd.name"
@@ -1459,21 +1423,6 @@ identifier ccdsGeneId
     $ccdsDb.ccdsGene.name dupeOk
     $ccdsDb.ccdsInfo.ccds full
     $ccdsDb.ccdsKgMap.ccdsId
-
-identifier ctdGeneSymbol
-"CTD Gene Symbol"
-    hgFixed.ctdSorted.GeneSymbol dupeOk
-    $hg.kgXref.geneSymbol minCheck=0.30
-
-identifier gadId
-"GAD Gene ID"
-    $hg.kgXref.geneSymbol dupeOk
-    $hg.gad.name minCheck=0.95
-
-identifier gadAllId
-"GAD Gene Symbol in raw input"
-    $hg.kgXref.geneSymbol dupeOk
-    $hg.gadAll.geneSymbol minCheck=0.95
 
 identifier hugeId
 "HuGE Gene ID"
@@ -1848,11 +1797,6 @@ identifier sgdIsoformCluster
 "Overlapping (after splicing) SGD (Yeast) transcripts"
     $sacCer.sgdCanonical.clusterId
     $sacCer.sgdIsoforms.clusterId full
-
-identifier sgdProtHomologId
-"sacCer protHomolog protein ID"
-    $sacCer.protHomolog.proteinID dupeOk
-    $sacCer.samSubdir.proteinId
 
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"

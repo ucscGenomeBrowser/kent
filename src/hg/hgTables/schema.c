@@ -22,7 +22,7 @@
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.65 2010/05/20 16:19:43 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -357,18 +357,7 @@ hPrintf("<BR>\n");
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
 describeFields(db, splitTable, asObj, conn);
-if (tdbForConn != NULL)
-    {
-    char *type = tdbForConn->type;
-    if (startsWithWord("bigWig", type))
-	printf("<BR>This table simply points to a file in "
-	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
-	       "BigWig</A> format.<BR>\n");
-    else if (startsWithWord("bam", type))
-	printf("<BR>This table simply points to a file in "
-	       "<A HREF=\"http://samtools.sourceforge.net/SAM1.pdf\" TARGET=_BLANK>"
-	       "BAM</A> format.<BR>\n");
-    }
+
 jpList = joinerRelate(joiner, db, table);
 
 /* sort and unique list */

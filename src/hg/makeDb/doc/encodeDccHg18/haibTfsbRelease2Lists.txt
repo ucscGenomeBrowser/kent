@@ -13,7 +13,7 @@ D) Additional items of note
 Summary total counts for release2 (new+untouched):
     Tables: 358
     Files: 505
-    Gbdbs: 196
+    Gbdbs: 190
 
 A) Untouched Tables (24):
 wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
@@ -86,7 +86,7 @@ wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii (not displayed as part of release1 
 wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii (not displayed as part of release1 b/c were not listed in trackDb, but exists on beta & rr)
 
 
-B') Deprecated files (25 downloadables, 4 gbdbs):
+B') Deprecated files (25 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
     This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
@@ -120,10 +120,6 @@ wgEncodeHudsonalphaChipSeqRawDataRep2K562Gabp.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Nrsf.fastq.gz
 wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz
 
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii.wib
-wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib
-wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib
-wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib
 
 C) New tables (334):
 wgEncodeHudsonalphaChipSeqPeaksA549Gr
@@ -461,7 +457,7 @@ wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
 wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 
-C') New files (487 downloadables, 188 gbdbs):
+C') New files (487 downloadables, 182 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/
     NOT on RR but must be placed in:
@@ -1137,12 +1133,6 @@ wgEncodeHudsonalphaChipSeqRawDataSknmcControl.fastq.gz
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf.wib
 /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalSknmcControl.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm.wib
-/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm.wib
 
 D) Additional items:
     current location on alpha:

@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.20 2010/06/03 18:53:59 kent Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.19 2010/05/11 01:43:25 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -170,7 +170,7 @@ hCompositeUi(database, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainF
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
 struct trackDb *primary = subTdbFind(curTrack,curTable);
-if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWigTable(curTable))
+if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable))
     showWiggleMergeOptions(primary->longLabel);
 else
     showBedMergeOptions();
@@ -198,7 +198,7 @@ dyStringPrintf(dy, "Subtrack merge, primary table = %s (%s)\n",
 	       curTable, primary->longLabel);
 dyStringAppend(dy, linePrefix);
 dyStringPrintf(dy, "Subtrack merge operation: ");
-if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWigTable(curTable))
+if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable))
     {
     char *op = cartString(cart, hgtaSubtrackMergeWigOp);
     dyStringPrintf(dy, "%s of %s and selected subtracks:\n", op, curTable);
