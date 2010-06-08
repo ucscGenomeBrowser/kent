@@ -21,13 +21,12 @@
 #include "flyreg.h"
 #include "flyreg2.h"
 
-static void printSpacedDna(char *dna, int size)
-/* Print string with spaces between each letter. */
+static void printDnaCells(char *dna, int size)
+/* Print string with each letter in a separate cell. */
 {
 int i;
-printf("  ");
 for (i=0; i<size; ++i)
-    printf("  %c   ", dna[i]);
+    printf("<td align='center'>%c</td>", dna[i]);
 }
 
 static void printConsensus(struct dnaMotif *motif)
@@ -37,7 +36,6 @@ static void printConsensus(struct dnaMotif *motif)
 int i, size = motif->columnCount;
 char c;
 float best;
-printf("  ");
 for (i=0; i<size; ++i)
     {
     c = 'a';
@@ -57,7 +55,7 @@ for (i=0; i<size; ++i)
 	best = motif->tProb[i];
 	c = 't';
 	}
-    printf("  ");
+    printf("<td align='center'>");
     if (best >= 0.90)
 	printf("<B>%c</B>", toupper(c));
     else if (best >= 0.75)
@@ -68,11 +66,30 @@ for (i=0; i<size; ++i)
         printf("<FONT COLOR=\"#A0A0A0\">%c</FONT>", tolower(c));
     else
         printf("<FONT COLOR=\"#A0A0A0\">.</FONT>");
-    printf("   ");
+    printf("</td>");
     }
 }
 
-static struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable)
+static void printProbRow(FILE *f, char *label, float *p, int pCount)
+/* Print one row of a probability profile. */
+{
+int i;
+fprintf(f, "<tr><td width='20' align='center'>%s</td>", label);
+for (i=0; i < pCount; ++i)
+    fprintf(f, "<td align='center'>%5.2f</td>", p[i]);
+printf("<td></td></tr>\n");
+}
+
+static void dnaMotifPrintProbTable(struct dnaMotif *motif, FILE *f)
+/* Print DNA motif probabilities. */
+{
+printProbRow(f, "A", motif->aProb, motif->columnCount);
+printProbRow(f, "C", motif->cProb, motif->columnCount);
+printProbRow(f, "G", motif->gProb, motif->columnCount);
+printProbRow(f, "T", motif->tProb, motif->columnCount);
+}
+
+struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable)
 /* Load dnaMotif from table. */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -85,33 +102,37 @@ return motif;
 }
 
 
-static void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
+void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
 /* Print out section about motif. */
 {
 webNewSection("Motif:");
-printf("<PRE>");
+printf("<PRE>\n");
+printf("<table>\n");
 if (motif != NULL)
     {
     struct tempName pngTn;
     dnaMotifMakeProbabalistic(motif);
     makeTempName(&pngTn, "logo", ".png");
     dnaMotifToLogoPng(motif, 47, 140, NULL, "../trash", pngTn.forCgi);
-    printf("   ");
+    printf("<tr><td></td><td colspan='%d'>", seq->size);
     printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
-    printf("\n");
+    printf("</td><td></td></tr>\n");
     }
 if (seq != NULL)
     {
+    printf("<tr><td></td>");
     touppers(seq->dna);
-    printSpacedDna(seq->dna, seq->size);
-    printf("this occurence\n");
+    printDnaCells(seq->dna, seq->size);
+    printf("<td>this occurrence</td></tr>\n");
     }
 if (motif != NULL)
     {
+    printf("<tr><td></td>");
     printConsensus(motif);
-    printf("motif consensus\n");
-    dnaMotifPrintProb(motif, stdout);
+    printf("<td>motif consensus</td></tr>\n");
+    dnaMotifPrintProbTable(motif, stdout);
     }
+printf("</table>\n");
 printf("</PRE>");
 }
 

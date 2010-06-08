@@ -32,6 +32,7 @@
 #include "wikiTrack.h"
 #endif
 #include "hgdpGeo.h"
+#include "dnaMotif.h"
 
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
@@ -225,6 +226,12 @@ struct customTrack *lookupCt(char *name);
 
 void doRnaSecStr(struct trackDb *tdb, char *itemName);
 /* Handle click on rnaSecStr type elements. */
+
+void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif);
+/* Print out section about motif. */
+
+struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable);
+/* Load dnaMotif from table. */
 
 void doTriangle(struct trackDb *tdb, char *item, char *motifTable);
 /* Display detailed info on a regulatory triangle item. */
