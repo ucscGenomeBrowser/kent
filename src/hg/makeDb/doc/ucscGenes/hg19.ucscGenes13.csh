@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes13.csh,v 1.3 2010/04/22 01:36:35 cline Exp $"
+#	"$Id: hg19.ucscGenes13.csh,v 1.4 2010/06/08 01:57:08 cline Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -155,9 +155,6 @@ end
 # move this endif statement past business that has been successfully completed
 endif # BRACKET
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 
 # Get list of accessions that are associated with antibodies from database.
 # This will be a good list but not 100% complete.  Cluster these to get
@@ -214,6 +211,11 @@ end
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     txBedToGraph -prefix=e$c. est/$c.bed est est/$c.txg
 end
+
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Create an evidence weight file
 cat > trim.weights <<end
