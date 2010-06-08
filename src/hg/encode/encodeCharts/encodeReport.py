@@ -2,7 +2,8 @@
 # Requires Python 2.6, current default python on hgwdev is 2.4
 
 """CGI script that outputs the ENCODE report file as either a text file
-or a Google Visualization Table.
+or a Google Visualization Table or a Google Visualization API JSON
+Query Response.
 """
 
 import cgi, cgitb
@@ -25,14 +26,15 @@ def main():
   form = cgi.FieldStorage()
 
   # CGI variables:
-  #   format = raw or pretty
+  #   format = raw or pretty or google
   #     raw = Output file as plain text
   #     pretty = Output file as Google Visualization Table
+  #     google = Google Data Source Protocol
 
   format = form.getvalue('format')
   if format == None:
     format = 'pretty'
-  if format != 'pretty' and format != 'raw':
+  if format != 'pretty' and format != 'raw' and format != 'google':
     format = 'pretty'
 
   reportFile, currentDate = encodeReportLib.getRecentReport()
@@ -55,7 +57,7 @@ def main():
 
     return
 
-  elif format == 'pretty':
+  elif format == 'pretty' or format == 'google':
     # Output the file as Google Visualization Table
     description = []
     dataMatrix = []
@@ -82,6 +84,13 @@ def main():
 
     data_table = gviz_api.DataTable(description)
     data_table.LoadData(dataMatrix)
+
+    if format == 'google':
+      print "Content-type: text/plain"
+      print
+      print data_table.ToJSonResponse(req_id=1)
+
+      return
 
     jscode = data_table.ToJSCode("jscode_data")
 
