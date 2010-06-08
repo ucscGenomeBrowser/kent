@@ -1,3 +1,27 @@
+metaObject wgEncodeSydhTfbsGm12878InputStdAlnRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-03
+dateUnrestricted 2011-03-03
+fileName wgEncodeSydhTfbsGm12878InputStdAlnRep1.bam.gz
+grant Snyder
+inputType GM12878/None/Input/std
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+parentTable wgEncodeSydhTfbsGm12878InputStdAlnRep1
+project wgEncode
+replicate 1
+setType input
+subId 1246
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1
 objType file
 antibody WHIP
@@ -3296,4 +3320,4 @@ tableName wgEncodeSydhTfbsRajiPol2UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1912076649
+# MAGIC: 1833991509
