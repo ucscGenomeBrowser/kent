@@ -1,0 +1,533 @@
+metaObject wgEncodeHaibMethylRrbsAg04449SitesRep1
+objType table
+cell AG04449
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg04449SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg04449SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg04449SitesRep2
+objType table
+cell AG04449
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg04449SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg04449SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg04450SitesRep1
+objType table
+cell AG04450
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg04450SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg04450SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg04450SitesRep2
+objType table
+cell AG04450
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg04450SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg04450SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg09309SitesRep1
+objType table
+cell AG09309
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg09309SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg09309SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg09309SitesRep2
+objType table
+cell AG09309
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg09309SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg09309SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg09319SitesRep1
+objType table
+cell AG09319
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg09319SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg09319SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg09319SitesRep2
+objType table
+cell AG09319
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg09319SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg09319SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg10803SitesRep1
+objType table
+cell AG10803
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg10803SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg10803SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsAg10803SitesRep2
+objType table
+cell AG10803
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-27
+dateUnrestricted 2011-02-27
+fileName wgEncodeHaibMethylRrbsAg10803SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1217
+tableName wgEncodeHaibMethylRrbsAg10803SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm12878SitesRep1
+objType table
+cell GM12878
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsGm12878SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1219
+tableName wgEncodeHaibMethylRrbsGm12878SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm12878SitesRep2
+objType table
+cell GM12878
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsGm12878SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1219
+tableName wgEncodeHaibMethylRrbsGm12878SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm19239SitesRep1
+objType table
+cell GM19239
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsGm19239SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1219
+tableName wgEncodeHaibMethylRrbsGm19239SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm19239SitesRep2
+objType table
+cell GM19239
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsGm19239SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1219
+tableName wgEncodeHaibMethylRrbsGm19239SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm19240SitesRep1
+objType table
+cell GM19240
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsGm19240SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1219
+tableName wgEncodeHaibMethylRrbsGm19240SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm19240SitesRep2
+objType table
+cell GM19240
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsGm19240SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1219
+tableName wgEncodeHaibMethylRrbsGm19240SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHaeSitesRep1
+objType table
+cell HAEpiC
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHaeSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1219
+tableName wgEncodeHaibMethylRrbsHaeSitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHaeSitesRep2
+objType table
+cell HAEpiC
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHaeSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1219
+tableName wgEncodeHaibMethylRrbsHaeSitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHcfSitesRep1
+objType table
+cell HCF
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHcfSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1219
+tableName wgEncodeHaibMethylRrbsHcfSitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHcfSitesRep2
+objType table
+cell HCF
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHcfSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1219
+tableName wgEncodeHaibMethylRrbsHcfSitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHct116SitesRep1
+objType table
+cell HCT-116
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHct116SitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1222
+tableName wgEncodeHaibMethylRrbsHct116SitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHct116SitesRep2
+objType table
+cell HCT-116
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHct116SitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1222
+tableName wgEncodeHaibMethylRrbsHct116SitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHreSitesRep1
+objType table
+cell HRE
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHreSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1222
+tableName wgEncodeHaibMethylRrbsHreSitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHreSitesRep2
+objType table
+cell HRE
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHreSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1222
+tableName wgEncodeHaibMethylRrbsHreSitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHrpeSitesRep1
+objType table
+cell HRPEpiC
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHrpeSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1222
+tableName wgEncodeHaibMethylRrbsHrpeSitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHrpeSitesRep2
+objType table
+cell HRPEpiC
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsHrpeSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1222
+tableName wgEncodeHaibMethylRrbsHrpeSitesRep2
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsJurkatSitesRep1
+objType table
+cell Jurkat
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsJurkatSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1222
+tableName wgEncodeHaibMethylRrbsJurkatSitesRep1
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsJurkatSitesRep2
+objType table
+cell Jurkat
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-05-31
+dateUnrestricted 2011-03-03
+fileName wgEncodeHaibMethylRrbsJurkatSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1222
+tableName wgEncodeHaibMethylRrbsJurkatSitesRep2
+view Sites
+
+# MAGIC: 1647743736
