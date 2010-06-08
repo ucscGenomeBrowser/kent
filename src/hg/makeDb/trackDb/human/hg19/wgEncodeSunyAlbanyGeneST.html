@@ -2,7 +2,7 @@
 <P>This track is produced as part of the ENCODE Project.
 This track displays transcriptional fragments associated with RNA binding proteins in different
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>,
-using RIP-Chip(Ribonomic) profiling on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays.
+using RIP-Chip(Ribonomic) profiling on Affymetrix GeneChip Human Gene 1.0 ST Arrays.
 The <i>RBP Assoc RNA</i> view shows the genomic location of transcripts
 associated with the array probes.
 Data for this track was produced as part of the
@@ -32,8 +32,8 @@ This track is initially released with a single view:
 </P>
 <DL>
 <DT><i>RBP Assoc RNA</i>
-<DD>The RBP Assoc RNA view shows the genomic extent of the transcriptional segments
-associated with the Affymetrix Tiling Array probes.
+<DD>The RBP Assoc RNA view shows the genomic extent of the transcripts
+associated with the Affymetrix Gene Array probes.
 </DL>
 Instructions for configuring multi-view tracks are
 
@@ -42,24 +42,39 @@ Instructions for configuring multi-view tracks are
 <H2>Methods</H2>
 <P>RBP-mRNA complexes were purified from cells grown according to the approved
 <A HREF="../../ENCODE/protocols/cell">ENCODE cell culture protocols </A>.
-The associated transcriptional fragments were identified using Affymetrix GeneChip ENCODE 2.0R Tiling Arrays.
-Arrays were analyzed using Affymetrix Tiling Analysis Software (TAS) version 1.1.
+The associated transcripts were identified using GeneChip Human Gene 1.0 ST Arrays.
+Arrays were analyzed using Agilent's GeneSpringGX software (version 11.0).
 </P>
 <P>
-Totals and T7Tag (negative control)
-tracks were each developed by single sample analysis of their respective triplicate sets with quantile normalization and linear
-scaling applied.  Probe signals were calculated using the Hodges-Lehmann estimator with a bandwidth of 100 bases.
-Resulting signal files were examined to develop percentiles.  Interval analysis was performed using a minimum cut-off
-equal to the 95th percentile signal score, a minimum run of 21(3 * platform resolution) and max gap of 63(9 * platform resolution).
+Arrays for Totals (input RNA) were summarized by applying the Iterative PLIER16 algorithm using quantile normalization.
+Probesets whose normalized expression levels fell within the  18 to 98 percentile in at least two of the three replicates
+were retained for further analysis.  These probesets were then subjected to a TTest against zero and a p-value
+cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate algorithm was applied and a corrected
+p-value is also provided.
 </P>
 <P>
-Treatment RIP tracks(e.g., ELAVL1, PABC1) were developed by two sample analysis with T7Tag used as
-the control.  Quantile normalization and scaling was applied to these sample groups individually.
-Probe signals were calculated with the Hodges-Lehmann estimator using signal log (log2) ratios and a bandwidth of 100 bases.
-Resulting signal files were examined to develop percentiles.  Interval analysis was performed using a minimum cut-off
-equal to the 95th percentile signal ratio score, a minimum run of 21(3 * platform resolution) and max gap of 63(9 * platform resolution).
+Arrays for T7Tag(background/negative control) RIPs were summarized with those for totals, also using the PLIER16 Iterative
+algorithm with quantile normalization.  Probesets whose normalized expression levels fell within the 18 to 98 percentile in at
+least two of three replicates in either group (totals or T7Tag RIPs) were retained for further analysis.  Probesets
+were then filtered for those that showed a minimum 2 fold increase of expression in T7Tag versus total.  An unpaired TTest
+was applied to these probesets and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate
+algorithm was applied and a corrected p-value is also provided.
+</P>
+<P>
+Arrays for treatment RIP samples were summarized together with those for totals and T7Tag RIPs.  Again, this was done using
+Iterative PLIER16 with quantile normalization. Probesets whose normalized expression levels fell within the 18 to 98 percentile in at
+least two of three replicates in any group (treatment RIPs, totals or T7Tag RIPs) were retained for further analysis.
+<br/>A list of probesets was produced of those that showed a minimum 2 fold increase of expression in treatment over total.
+A oneway ANOVA was applied and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate algorithm was applied
+and a corrected p-value is also provided.
+<br/>A similar list was produced for probesets showing the same enrichment in the T7Tag RIP set.  Probesets which appeared in both
+treatment and negative control at these cutoff stringencies were subtracted from the treatment results as background noise, yielding the
+final result data track.
+</P>
 
-</P>
+
+
+
 <P>For additional RIP methods detail, see
 Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008; Penalva
 <EM>et al.</EM> 2004, below.
