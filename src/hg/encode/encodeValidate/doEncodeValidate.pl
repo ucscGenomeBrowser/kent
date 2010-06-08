@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.231 2010/06/07 16:10:46 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.232 2010/06/08 23:26:10 tdreszer Exp $
 
 use warnings;
 use warnings FATAL => 'all';
@@ -1457,9 +1457,14 @@ while (@{$lines}) {
     my $i = 0;
     my %line;
     for my $val (split('\t', $line)) {
-        if($ddfHeader[$i] ne "files" && $val =~ / /) {
-            $val =~ s/\"/\\"/g if $val =~ /\"/;
-            $val = '"' . $val . '"';
+        if($ddfHeader[$i] ne "files" && $val =~ / / ) {
+            if($val !~ /^\"/ || $val !~ /\"$/ ) {  # Only if not already quoted
+                $val =~ s/\"/\\"/g if $val =~ /\"/;
+                $val = '"' . $val . '"';
+            }
+        }
+        if($ddfHeader[$i] ne "files" && $val =~ /\;/ ) { # Replace ; with .
+            $val =~ s/;/\./g;
         }
         $line{$ddfHeader[$i]} = $val;
         $i++;
