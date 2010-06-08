@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.641 2010/06/07 19:53:26 mary Exp $";
+#	"$Id: trackDb.ra,v 1.642 2010/06/08 17:59:56 baertsch Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -2601,11 +2601,6 @@ searchTable xenoRefGene
 searchType refGene
 searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
-
-searchTable ucscRetroInfo
-searchType bed
-searchMethod prefix
-searchPriority 3.5
 
 searchName ucscRetroInfoRefSeq
 searchTable ucscRetroAli
