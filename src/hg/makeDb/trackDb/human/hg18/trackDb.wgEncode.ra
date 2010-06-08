@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1003 2010/06/04 17:58:30 kent Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1004 2010/06/08 23:25:55 cricket Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5509,7 +5509,7 @@ noInherit on
 track wgEncodeBuOrchid
 compositeTrack on
 shortLabel BU ORChID
-longLabel ENCODE BU ORChID
+longLabel ENCODE ORChID Predicted DNA Cleavage Sites from Boston Univ. (Tullius lab)
 group map
 subGroup1 view Views Signal=Signal
 #subGroup2 cellType Cell_Line GM12878=GM12878
@@ -5537,7 +5537,7 @@ noInherit on
 	release alpha
 	subTrack wgEncodeBuOrchidSignalView
 	shortLabel ORChID v1
-	longLabel ORChID Version 1
+	longLabel ·OH Radical Cleavage Intensity Database(ORChID) Version 1
 	subGroups view=Signal
 	type bigWig 0 10000
 	autoScale on
@@ -5549,7 +5549,7 @@ noInherit on
 	release alpha
 	subTrack wgEncodeBuOrchidSignalView
 	shortLabel ORChID v2
-	longLabel ORChID Version 2
+	longLabel ·OH Radical Cleavage Intensity Databas (ORChID) Version 2
 	subGroups view=Signal
 	type bigWig 0 10000
 	configurable on
