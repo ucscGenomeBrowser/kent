@@ -142,6 +142,195 @@ urlLabel GDP Strain ID:
 url http://flypush.imgen.bcm.tmc.edu/pscreen/plqlsearch2.cgi?gene=&mapping=&chromosome=Any&bg=$$&remarks=&orderby=Chromosome&submit=%20%20%20%20Start%20Query%20%20%20%20
 noScoreFilter .
 
+track affyDrosDevSignal
+compositeTrack on
+shortLabel Affy Signal
+longLabel Affymetrix Drosophila Development Signal
+group regulation
+priority 70.01
+visibility hide
+type wig -1019.0 2277.25
+spanList 1
+maxHeightPixels 128:16:16
+autoScale off
+viewLimits 0:25
+
+    track affyDrosDevSignal1
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 0-2h
+    longLabel Affymetrix Drosophila Development Signal, 0-2 hours
+    color 50,50,130
+    priority 1
+
+    track affyDrosDevSignal2
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 2-4h
+    longLabel Affymetrix Drosophila Development Signal, 2-4 hours
+    color 50,50,140
+    priority 2
+
+    track affyDrosDevSignal3
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 4-6h
+    longLabel Affymetrix Drosophila Development Signal, 4-6 hours
+    color 50,50,150
+    priority 3
+
+    track affyDrosDevSignal4
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 6-8h
+    longLabel Affymetrix Drosophila Development Signal, 6-8 hours
+    color 50,50,160
+    priority 4
+
+    track affyDrosDevSignal5
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 8-10h
+    longLabel Affymetrix Drosophila Development Signal, 8-10 hours
+    color 50,50,170
+    priority 5
+
+    track affyDrosDevSignal6
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 10-12h
+    longLabel Affymetrix Drosophila Development Signal, 10-12 hours
+    color 50,50,180
+    priority 6
+
+    track affyDrosDevSignal7
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 12-14h
+    longLabel Affymetrix Drosophila Development Signal, 12-14 hours
+    color 50,50,190
+    priority 7
+
+    track affyDrosDevSignal8
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 14-16h
+    longLabel Affymetrix Drosophila Development Signal, 14-16 hours
+    color 50,50,200
+    priority 8
+
+    track affyDrosDevSignal9
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 16-18h
+    longLabel Affymetrix Drosophila Development Signal, 16-18 hours
+    color 50,50,210
+    priority 9
+
+    track affyDrosDevSignal10
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 18-20h
+    longLabel Affymetrix Drosophila Development Signal, 18-20 hours
+    color 50,50,220
+    priority 10
+
+    track affyDrosDevSignal11
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 20-22h
+    longLabel Affymetrix Drosophila Development Signal, 20-22 hours
+    color 50,50,230
+    priority 11
+
+    track affyDrosDevSignal12
+    parent affyDrosDevSignal
+    shortLabel Affy Devel 22-24h
+    longLabel Affymetrix Drosophila Development Signal, 22-24 hours
+    color 50,50,240
+    priority 12
+
+track affyDrosDevTransfrags
+compositeTrack on
+shortLabel Affy Transfrags
+longLabel Affymetrix Drosophila Development Transfrags
+group regulation
+priority 70.02
+visibility hide
+type bed 3 .
+
+    track affyDrosDevTransfrags1
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 0-2h
+    longLabel Affymetrix Drosophila Development Transfrags, 0-2 hours
+    color 50,50,130
+    priority 1
+
+    track affyDrosDevTransfrags2
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 2-4h
+    longLabel Affymetrix Drosophila Development Transfrags, 2-4 hours
+    color 50,50,140
+    priority 2
+
+    track affyDrosDevTransfrags3
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 4-6h
+    longLabel Affymetrix Drosophila Development Transfrags, 4-6 hours
+    color 50,50,150
+    priority 3
+
+    track affyDrosDevTransfrags4
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 6-8h
+    longLabel Affymetrix Drosophila Development Transfrags, 6-8 hours
+    color 50,50,160
+    priority 4
+
+    track affyDrosDevTransfrags5
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 8-10h
+    longLabel Affymetrix Drosophila Development Transfrags, 8-10 hours
+    color 50,50,170
+    priority 5
+
+    track affyDrosDevTransfrags6
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 10-12h
+    longLabel Affymetrix Drosophila Development Transfrags, 10-12 hours
+    color 50,50,180
+    priority 6
+
+    track affyDrosDevTransfrags7
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 12-14h
+    longLabel Affymetrix Drosophila Development Transfrags, 12-14 hours
+    color 50,50,190
+    priority 7
+
+    track affyDrosDevTransfrags8
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 14-16h
+    longLabel Affymetrix Drosophila Development Transfrags, 14-16 hours
+    color 50,50,200
+    priority 8
+
+    track affyDrosDevTransfrags9
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 16-18h
+    longLabel Affymetrix Drosophila Development Transfrags, 16-18 hours
+    color 50,50,210
+    priority 9
+
+    track affyDrosDevTransfrags10
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 18-20h
+    longLabel Affymetrix Drosophila Development Transfrags, 18-20 hours
+    color 50,50,220
+    priority 10
+
+    track affyDrosDevTransfrags11
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 20-22h
+    longLabel Affymetrix Drosophila Development Transfrags, 20-22 hours
+    color 50,50,230
+    priority 11
+
+    track affyDrosDevTransfrags12
+    parent affyDrosDevTransfrags
+    shortLabel Affy Devel 22-24h
+    longLabel Affymetrix Drosophila Development Transfrags, 22-24 hours
+    color 50,50,240
+    priority 12
 
 searchTable nscanPasaGene
 searchType genePred
