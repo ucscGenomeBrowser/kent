@@ -12,8 +12,8 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.43 2010/05/26 13:35:31 braney Exp $";
-static char *version = "$Revision: 1.43 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.44 2010/06/08 04:37:31 braney Exp $";
+static char *version = "$Revision: 1.44 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -32,6 +32,7 @@ boolean nMatch;
 boolean isSort;
 boolean privateData;
 boolean allowOther;
+boolean allowBadLength;
 int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
@@ -104,6 +105,7 @@ errAbort(
 //"   -acceptDot                   Accept '.' as 'N' in DNA sequence\n"
   "   -version                     Print version\n"
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
+  "   -allowBadLength              allow chromosomes that have the wrong length\n"
   , MAX_ERRORS);
 }
 
@@ -128,6 +130,7 @@ static struct optionSpec options[] = {
    {"isSort", OPTION_BOOLEAN},
    {"version", OPTION_BOOLEAN},
    {"allowOther", OPTION_BOOLEAN},
+   {"allowBadLength", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -1203,7 +1206,7 @@ else
 for (i = start; (strand == '-') ? i <= 0 : i < strlen(seq); i += incr)
     {
     char c = tolower(seq[i]);
-    if ((dna[i] == '-') || (checkMismatch(c,  dna[i])))
+    if ((dna[i] != '-') && (checkMismatch(c,  dna[i])))
         ++mm;
 
     if (--length == 0)
@@ -1213,8 +1216,18 @@ for (i = start; (strand == '-') ? i <= 0 : i < strlen(seq); i += incr)
 
 if (mm > mismatches)
     {
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d  query %s  dna %s )\n",
-         file, line, mm, checkLength, mismatches, chrom, chromStart, seq, dna);
+    char match[10000];
+
+    for(i = 0; i < checkLength; i++)
+        {
+        if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
+            match[i] = ' ';
+        else
+            match[i] = 'x';
+        }
+    match[i] = 0;
+    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+         file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
     return FALSE;
     }
 
@@ -1235,7 +1248,13 @@ unsigned int *cigarPacked = bam1_cigar(bam);
 char *query = bamGetQuerySequence(bam, FALSE);
 char strand = bamIsRc(bam) ? '-' : '+';
 
-   if (! checkCigarMismatches(file, bd->count, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
+if (bam->core.l_qseq == 0)
+    {
+    warn("zero length sequence on line %d\n", bd->count);
+    if (++(*errs) >= maxErrors)
+        errAbort("Aborting .. found %d errors\n", *errs);
+    }
+else if (! checkCigarMismatches(file, bd->count, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
     warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
@@ -1273,21 +1292,20 @@ for(ii=0; ii < head->n_targets; ii++)
     verbose(2,"has chrom %s\n", head->target_name[ii]);
     if ( (size = hashFindVal(chrHash, head->target_name[ii])) == NULL)
 	{
+        warn("BAM contains invalid chromosome name: %s\n", 
+            head->target_name[ii]);
 	if (!allowOther)
-	    {
-	    warn("BAM contains invalid chromosome name: %s\n", 
-		head->target_name[ii]);
-	    errs++;
-	    }
+            errs++;
 	}
     else
 	{
 	if (*size != head->target_len[ii])
 	    {
-	    warn("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
-		head->target_name[ii],
-		*size, head->target_len[ii]);
-	    errs++;
+            warn("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+                head->target_name[ii],
+                *size, head->target_len[ii]);
+            if (!allowBadLength)
+                errs++;
 	    }
 	}
     }
@@ -1418,6 +1436,7 @@ mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
 quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 allowOther     = optionExists("allowOther");
+allowBadLength = optionExists("allowBadLength");
 
 initArrays();
 dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.
