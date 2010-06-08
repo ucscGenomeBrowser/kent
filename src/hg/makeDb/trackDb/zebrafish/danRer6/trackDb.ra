@@ -36,7 +36,7 @@ irows on
 autoScale Off
 windowingFunction mean
 summary multiz6waySummary
-speciesCodonDefault gasAcu1
+speciesCodonDefault danRer6
 speciesGroups vertebrate
 sGroup_vertebrate gasAcu1 tetNig2 xenTro2 mm9 hg19
 treeImage phylo/danRer6_6way.gif
