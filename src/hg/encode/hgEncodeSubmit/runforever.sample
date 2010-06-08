@@ -1,6 +1,6 @@
 #!/bin/tcsh
-if ("$USER" != "qateam") then
-    echo "must be qateam"
+if ("$USER" != "encodeteam") then
+    echo "must be encodeteam"
     exit 1
 endif
 @ sleepTime = 60
