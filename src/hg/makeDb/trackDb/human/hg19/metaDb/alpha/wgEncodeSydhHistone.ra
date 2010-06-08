@@ -210,7 +210,7 @@ fileName wgEncodeSydhHistoneNt2d1H3k27me3StdRawDataRep1.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD(Farnham)
-labVersion Method of Chromatin Fragmentation:  Sonication; Method of Immunoprecipitation: Protein G magnetic beads;
+labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -233,7 +233,7 @@ fileName wgEncodeSydhHistoneNt2d1H3k27me3StdRawDataRep2.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD(Farnham)
-labVersion Method of Chromatin Fragmentation:  Sonication; Method of Immunoprecipitation: Protein G magnetic beads;
+labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -344,7 +344,7 @@ fileName wgEncodeSydhHistoneNt2d1H3k4me3StdRawDataRep1.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab Stanford
-labVersion Method of Chromatin Fragmentation:  Sonication.;  Method of Immunoprecipitation:  Protein; G magnetic beads.
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein. G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -367,7 +367,7 @@ fileName wgEncodeSydhHistoneNt2d1H3k4me3StdRawDataRep2.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab Stanford
-labVersion Method of Chromatin Fragmentation:  Sonication.; Method of Immunoprecipitation:Protein;G magnetic beads.
+labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation:Protein.G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -478,7 +478,7 @@ fileName wgEncodeSydhHistoneNt2d1H3k9acStdRawDataRep1.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCDavis
-labVersion Method of Chromatin Fragmentation: Sonication; Method of Immunoprecipitation: Protein G magnetic beads;
+labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -501,7 +501,7 @@ fileName wgEncodeSydhHistoneNt2d1H3k9acStdRawDataRep2.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCDavis
-labVersion Method of Chromatin Fragmentation: Sonication; Method of Immunoprecipitation: Protein G magnetic beads;
+labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -596,4 +596,4 @@ tableName wgEncodeSydhHistoneNt2d1InputStdSig
 treatment None
 view Signal
 
-# MAGIC: -251946677
+# MAGIC: -251946977
