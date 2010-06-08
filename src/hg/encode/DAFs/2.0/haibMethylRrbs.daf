@@ -1,4 +1,4 @@
-# Data Agreement File for Myers/HudsonAlpha Methyl-seq experiments $Revision: 1.2 $
+# Data Agreement File for Myers/HudsonAlpha Methyl-seq experiments $Revision: 1.3 $
 
 dafVersion      2.0
 
@@ -8,7 +8,7 @@ lab	        HudsonAlpha
 dataType	MethylRrbs
 compositeSuffix HaibMethylRrbs
 group           regulation
-variables	cell
+variables	cell,treatment,growthProtocol
 assembly	hg19
 
 validationSettings validateFiles.tagAlign:mmCheckOneInN=10000,mismatches=2,matchFirst=32,nMatch
