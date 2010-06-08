@@ -2,14 +2,14 @@
 track wgEncodeSunyAlbanyGeneST
 compositeTrack on
 shortLabel SunyAlbany RipChip
-longLabel ENCODE SunyAlbany Tenenbaum RipChip
+longLabel ENCODE SUNY Albany (Tenenbaum Lab) RBP Associated RNA by GeneST
 group regulation
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
 subGroup2 cellType Cell_Line  GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2
 subGroup3 ripTgtProtein RipTgtProtein CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
 dimensions dimensionX=cellType dimensionY=ripTgtProtein
-sortOrder cellType=+ ripTgtProtein=+ view=+
-controlledVocabulary encode/cv.ra cellType ripTgtProtein
+sortOrder cellType=+ ripTgtProtein=+ 
+controlledVocabulary encode/cv.ra cellType=cell ripTgtProtein=ripTgtProtein
 dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide 
 useScore 1
