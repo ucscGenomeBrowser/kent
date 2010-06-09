@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1006 2010/06/09 00:17:23 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1007 2010/06/09 17:27:25 vanessa Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4019,7 +4019,6 @@ wgEncode 1
 
 # Wold Lab (Caltech) RNA-seq (wrangler: braney)
 
-include wgEncodeCaltechRnaSeq.new.ra
 include wgEncodeCaltechRnaSeq.ra
 
 # GIS RNA-seq (wrangler: braney)
