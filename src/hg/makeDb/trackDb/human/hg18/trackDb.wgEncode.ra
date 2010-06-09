@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1005 2010/06/08 23:58:37 cricket Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1006 2010/06/09 00:17:23 cricket Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3237,7 +3237,7 @@ wgEncode 1
 track wgEncodeYaleRNAseq
 release alpha
 compositeTrack on
-shortLabel Yale PolyA
+shortLabel Yale RNA-seq
 longLabel ENCODE Poly-A Tail Expression by RNA-seq from Yale/UC-Davis/Harvard
 group expression
 priority 0
