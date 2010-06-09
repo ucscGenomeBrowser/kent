@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.49 2009/12/04 23:50:23 markd Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.50 2010/06/09 23:09:48 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -387,7 +387,16 @@ hubCommandAndPrint("pstat");
 void pstat2()
 /* Send status command to hub and print. */
 {
-hubCommandAndPrint("pstat2");
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char defaultResults[512];
+
+getcwd(curDir, sizeof(curDir));
+safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
+char *results = optionVal("results", defaultResults);
+dyStringPrintf(dy, "pstat2 %s %s", userName, results);
+hubCommandAndPrint(dy->string);
+dyStringFree(&dy);
 }
 
 
