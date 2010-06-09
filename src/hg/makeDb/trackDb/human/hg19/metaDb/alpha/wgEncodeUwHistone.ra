@@ -6,8 +6,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneBjCtcfStdAlnRep1.bam.gz
 fragLength 350
 grant Stam
@@ -31,8 +32,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-19
 fileName wgEncodeUwHistoneBjCtcfStdAlnRep2.bam.gz
 fragLength 350
 grant Stam
@@ -56,8 +58,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneBjCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -81,8 +84,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-19
 fileName wgEncodeUwHistoneBjCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -106,8 +110,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneBjCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -156,8 +161,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneBjCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -180,8 +186,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneBjCtcfStdRawRep1.bigWig.gz
 fragLength 350
 grant Stam
@@ -205,8 +212,9 @@ composite wgEncodeUwHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
+dateResubmitted 2010-06-07
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-19
 fileName wgEncodeUwHistoneBjCtcfStdRawRep2.bigWig.gz
 fragLength 350
 grant Stam
@@ -1874,4 +1882,4 @@ subId 1264
 tableName wgEncodeUwHistoneK562CtcfStdRawRep2
 view RawSignal
 
-# MAGIC: -1828115105
+# MAGIC: 1605516838
