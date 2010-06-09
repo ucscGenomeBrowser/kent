@@ -32,7 +32,7 @@ noInherit on
 	release alpha
 	subTrack wgEncodeBuOrchidSignalView
 	shortLabel ORChID v1
-	longLabel ENCODE OH Radical Cleavage Intensity Database(ORChID) Version 1
+	longLabel ENCODE OH Radical Cleavage Intensity Database (ORChID) Version 1
 	subGroups view=Signal
 	type bigWig 0 10000
 	autoScale on
@@ -44,7 +44,7 @@ noInherit on
 	release alpha
 	subTrack wgEncodeBuOrchidSignalView
 	shortLabel ORChID v2
-	longLabel ENCODE OH Radical Cleavage Intensity Databas (ORChID) Version 2
+	longLabel ENCODE OH Radical Cleavage Intensity Database (ORChID) Version 2
 	subGroups view=Signal
 	type bigWig 0 10000
 	configurable on
