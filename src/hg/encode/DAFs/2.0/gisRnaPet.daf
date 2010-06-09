@@ -1,7 +1,10 @@
-# Data Agreement File for PET Ditag project $Revision: 1.4 $
+# Data Agreement File for PET Ditag project $Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
+
+# The header for the associated .ddf should look like this
+# files   view    cell    localization    rnaExtract 
 
 dafVersion        2.0
 
@@ -9,7 +12,7 @@ dafVersion        2.0
 grant             Gingeras
 lab               GIS
 dataType          RnaPet
-compositeSuffix   GisPet
+compositeSuffix   GisRnaPet
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
