@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1007 2010/06/09 17:27:25 vanessa Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1008 2010/06/09 21:53:49 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5503,57 +5503,4 @@ noInherit on
 	color 153,38,0
 	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
 
-
-# Orchid tracks (wranger: braney)
-track wgEncodeBuOrchid
-compositeTrack on
-shortLabel BU ORChID
-longLabel ENCODE ORChID Predicted DNA Cleavage Sites from Boston Univ. (Tullius lab)
-group map
-subGroup1 view Views Signal=Signal
-#subGroup2 cellType Cell_Line GM12878=GM12878
-#subGroup1 cellType Cell_Line GM12878=GM12878
-#dimensions dimensionX=cellType
-sortOrder view=+
-controlledVocabulary encode/cv.ra cellType
-dragAndDrop subTracks
-#visibilityViewDefaults  Signal=full
-priority 0
-type bed 3
-wgEncode 1
-noInherit on
-
-    track wgEncodeBuOrchidSignalView
-    shortLabel Signal
-    view Signal
-    visibility full
-    subTrack wgEncodeBuOrchid
-    maxHeightPixels 100:24:16
-    windowingFunction maximum
-    autoScale on
-
-	track wgEncodeBuOrchidSignalRep1Gm12878
-	release alpha
-	subTrack wgEncodeBuOrchidSignalView
-	shortLabel ORChID v1
-	longLabel OH Radical Cleavage Intensity Database(ORChID) Version 1
-	subGroups view=Signal
-	type bigWig 0 10000
-	autoScale on
-	configurable on
-	color 153,38,0
-	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep1Gm12878 fileName=wgEncodeBuOrchidSignalRep1Gm12878.bw
-
-	track wgEncodeBuOrchidSignalRep2Gm12878
-	release alpha
-	subTrack wgEncodeBuOrchidSignalView
-	shortLabel ORChID v2
-	longLabel OH Radical Cleavage Intensity Databas (ORChID) Version 2
-	subGroups view=Signal
-	type bigWig 0 10000
-	configurable on
-	autoScale on
-	color 153,38,0
-	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep2Gm12878 fileName=wgEncodeBuOrchidSignalRep2Gm12878.bw
-
-
+include wgEncodeBuOrchid.ra
