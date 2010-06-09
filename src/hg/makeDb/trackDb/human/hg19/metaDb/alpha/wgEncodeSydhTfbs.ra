@@ -80,7 +80,7 @@ fileName wgEncodeSydhTfbsGm12878WhipIggmusPk.narrowPeak.gz
 grant Snyder
 inputType GM12878/None/Input/IgG-mus
 lab Stanford
-labVersion PeakSeq1.0; Although this dataset barely misses the establish ENCODE standard for data agreement with 77% agreement between replicates instead of 80%, we have submitted it because it appears to be of high quality and because it is from the GM12878 cell line where we and others have generally observed weaker ChIP signal.
+labVersion PeakSeq1.0. Although this dataset barely misses the establish ENCODE standard for data agreement with 77% agreement between replicates instead of 80%, we have submitted it because it appears to be of high quality and because it is from the GM12878 cell line where we and others have generally observed weaker ChIP signal.
 project wgEncode
 setType exp
 subId 1178
@@ -212,7 +212,7 @@ fileName wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
 grant Snyder
 inputType GM12878/None/Input/UCDavis
 lab UCD
-labVersion PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
+labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
 subId 1203
@@ -234,7 +234,7 @@ fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
 inputType GM12878/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -257,7 +257,7 @@ fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
 inputType GM12878/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -564,7 +564,7 @@ fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep1.fastq.gz
 grant Snyder
 inputType H1-hESC/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  Staph A
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
 parentTable wgEncodeSydhTfbsH1hescSuz12UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -587,7 +587,7 @@ fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep2.fastq.gz
 grant Snyder
 inputType H1-hESC/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  Staph A
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
 parentTable wgEncodeSydhTfbsH1hescSuz12UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -1860,7 +1860,7 @@ fileName wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 grant Snyder
 inputType HepG2/None/Input/UCDavis
 lab UCD
-labVersion PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
+labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
 subId 1190
@@ -1882,7 +1882,7 @@ fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
 inputType HepG2/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -1905,7 +1905,7 @@ fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
 inputType HepG2/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -2016,7 +2016,7 @@ fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep1.fastq.gz
 grant Snyder
 inputType HUVEC/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -2039,7 +2039,7 @@ fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep2.fastq.gz
 grant Snyder
 inputType HUVEC/None/Input/UCDavis
 lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication;  Method of Immunoprecipitation:  StaphA
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -3320,4 +3320,4 @@ tableName wgEncodeSydhTfbsRajiPol2UcdSig
 treatment None
 view Signal
 
-# MAGIC: 624837259
+# MAGIC: 624837116
