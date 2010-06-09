@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.232 2010/06/08 23:26:10 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.233 2010/06/09 23:52:42 vsmalladi Exp $
 
 use warnings;
 use warnings FATAL => 'all';
@@ -1885,8 +1885,9 @@ foreach my $ddfLine (@ddfLines) {
             }
             $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
-        if(defined($replicate) && ($daf->{lab} eq "HudsonAlpha" || $daf->{lab} eq "Uw") || $daf->{lab} eq "Gis") {
-            $subGroups .= " rep=rep$replicate"; # UGLY special casing
+	#  if(defined($replicate) && ($daf->{lab} eq "HudsonAlpha" || $daf->{lab} eq "Uw") || $daf->{lab} eq "Gis") {
+           if(defined($replicate)) { 
+	    $subGroups .= " rep=rep$replicate"; # UGLY special casing
         }
     }
 
