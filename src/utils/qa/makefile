@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 # ${SCRIPTS} is ${HOME}/bin/scripts (defined in kent/src/inc/common.mk)
-# to install in /cluster/bin/scripts/, run in this directory:
+# to install in /cluster/bin/scripts/, run (in this directory):
 # make SCRIPTS=/cluster/bin/scripts
 
 install:
@@ -94,6 +94,7 @@ install:
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination graph.csh               ${SCRIPTS}
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
+	cp -p --remove-destination idHitter.csh            ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination kgTables                ${SCRIPTS}
