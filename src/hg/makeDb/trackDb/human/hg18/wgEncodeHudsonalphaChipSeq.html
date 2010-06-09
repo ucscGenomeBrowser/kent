@@ -1,4 +1,6 @@
 <h2> Description </h2>
+
+<DIV style='max-width: 900px'>
 <p>This track displays binding sites of the specified transcription factors
 in the given cell types as identified by chromatin immunoprecipitation
 followed by high-throughput sequencing (ChIP-Seq &mdash; see Johnson DS,
@@ -51,8 +53,8 @@ protocols are the number of cells and magnetic beads used for IP, the the
 method of sonication used to fragment DNA, and the number of cycles of PCR
 used to amplify the sequencing library.  The most current protocol used by
 the Myers Lab can be found
-<a href="http://myers.hudsonalpha.org/myers-lab/protocols"
-TARGET=_blank title="http://myers.hudsonalpha.org/myers-lab/protocols"
+<a href="http://myers.hudsonalpha.org/content/protocols.html"
+TARGET=_blank title="http://myers.hudsonalpha.org/content/protocols.html"
 rel="nofollow">here</a>. The sequencing libraries labeled as PCR2x were
 made with two rounds of amplification (25 and 15 cycles) and those labeled
 as PCR1x were made with one 15-cycle round of amplification.  Biological
@@ -77,9 +79,9 @@ see Valouev A, <em>et al.</em>, 2008) or Model-based Analysis of ChIP-Seq (
 title="http://liulab.dfci.harvard.edu/MACS/00README.html" rel="nofollow">MACS</a>,
 see Zhang Y, <em>et al.</em>, 2008).  Experiments for which peak calling was completed
 using MACS are labeled as "<i>softwareVersion:</i> MACS" in the list above and
-can be found by clicking on "?." for the Peaks record.  Experiments for which
-QuEST was used do not have a software version annotated.  QuEST is based on the
-kernel density estimation approach, which uses ChIP-seq data to determine
+can be found by clicking on the metadata link "..." for the Peaks record.  Experiments
+for which QuEST was used do not have a software version annotated.  QuEST is based
+on the kernel density estimation approach, which uses ChIP-seq data to determine
 positions where protein complexes contact DNA.  QuEST uses data in the form of
 genome coordinates ('tags') obtained from mapping several million sequencing
 reads to a reference genome.  Tags from forward and reverse reads cluster on
@@ -124,7 +126,7 @@ experiments were called using "Input <i>(PCR2x)</i>" for background.
 
 <h2>Release Notes</h2>
 <P>
-This is Release 2 (May 2010) of this track, which includes 61 new experiments
+This is Release 2 (May 2010) of this track, which includes 67 new experiments
 covering 13 new cell lines and 27 antibodies.  Additionally, DEX and EtOH
 treatments have been included on the A549 cell line.  The HepG2/SRF experiment
 currently only has the first replicate.  For A549/GR, data from the two
@@ -156,7 +158,9 @@ e&#100;&#117;">Rami Rauch</A>-->
 
 <p>
 Fields S. <a href='http://www.sciencemag.org/cgi/content/summary/316/5830/1441'
-TARGET=_blank>Molecular biology: Site-seeing by sequencing</a>.
+  class="external text"
+  title="http://www.sciencemag.org/cgi/content/summary/316/5830/1441" rel="nofollow"
+  TARGET=_blank>Molecular biology: Site-seeing by sequencing</a>.
 <em>Science</em>. 2007 Jun 8;316(5830):1441-2.
 </p>
 <p>
@@ -166,17 +170,31 @@ TARGET=_blank>Genome-wide mapping of in vivo protein-DNA interactions</a>.
 <em>Science</em>. 2007 Jun 8;316(5830):1497-502.
 </p>
 <p>
+Johnson DS, Li W, Gordon DB, Bhattacharjee A, Curry B, Ghosh J, Brizuela L,
+Carroll JS, Brown M, Flicek P, <EM>et al.</EM>
+<a href='http://genome.cshlp.org/content/18/3/393.long'
+  class="external text"
+  title="http://genome.cshlp.org/content/18/3/393.long" rel="nofollow"
+  TARGET=_blank>Systematic evaluation of variability in ChIP-chip experiments
+using predefined DNA targets</a>.
+<em>Genome Res</em>. 2008 Mar;18(3):393-403. Epub 2008 Feb 7.
+</p>
+<p>
 Valouev A, Johnson DS, Sundquist A, Medina C, Anton E, Batzoglou S, Myers RM,
 Sidow A.
 <a href='http://www.nature.com/nmeth/journal/v5/n9/abs/nmeth.1246.html'
-TARGET=_blank>Genome-wide analysis of transcription factor binding sites based
+  class="external text"
+  title="http://www.nature.com/nmeth/journal/v5/n9/abs/nmeth.1246.html" rel="nofollow"
+  TARGET=_blank>Genome-wide analysis of transcription factor binding sites based
 on ChIP-Seq data</a>. <em>Nat Methods</em>. 2008 Sep;5(9):829-834. Epub 2008 Aug 17.
 </p>
 <p>
 Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein B, Nussbaum C,
 Myers RM, Brown M, Li W, Liu S.
 <a href='http://genomebiology.com/2008/9/9/R137'
-TARGET=_blank>Model-based Analysis of ChIP-Seq (MACS)</a>.
+  class="external text"
+  title="http://genomebiology.com/2008/9/9/R137" rel="nofollow"
+  TARGET=_blank>Model-based Analysis of ChIP-Seq (MACS)</a>.
 <em>Genome Biology</em>. 2008 Sep; 9:R137. Epub 2008 Sep 17.
 
 <H2> Data Release Policy </H2>
@@ -187,3 +205,5 @@ nine months following the release of the dataset.  This date is listed in
 the <EM>Restricted Until</EM> column on the track configuration page and
 the download page.  The full data release policy for ENCODE is available
 <A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
+
+</DIV>
