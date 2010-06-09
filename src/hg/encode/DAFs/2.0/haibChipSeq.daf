@@ -1,4 +1,4 @@
-# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.5 $
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.6 $
 
 # Lab and general info
 grant             Myers
@@ -15,19 +15,19 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=3
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  HudsonAlpha ChIP-Seq Peaks
+longLabelPrefix  HudsonAlpha ChIP-seq Peaks
 type             broadPeak
 hasReplicates    yes
 required         no
 
 view             Alignments
-longLabelPrefix  HudsonAlpha ChIP-Seq Alignments
+longLabelPrefix  HudsonAlpha ChIP-seq Alignments
 type             bam
 hasReplicates    yes
 required         no
 
 view             RawSignal
-longLabelPrefix  HudsonAlpha ChIP-Seq Raw Signal
+longLabelPrefix  HudsonAlpha ChIP-seq Raw Signal
 type             wig
 hasReplicates    yes
 required         no
