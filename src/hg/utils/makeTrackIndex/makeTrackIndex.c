@@ -6,8 +6,9 @@
 #include "grp.h"
 #include "hui.h"
 #include "ra.h"
+#include "jsHelper.h"
 
-static char const rcsid[] = "$Id: makeTrackIndex.c,v 1.1 2010/06/03 23:41:29 larrym Exp $";
+static char const rcsid[] = "$Id: makeTrackIndex.c,v 1.2 2010/06/09 22:26:24 larrym Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,20 +28,24 @@ char **row = NULL;
 char *metadataList[] = {"longLabel", NULL}; // include a fixed set of metadata (i.e. not stuff like subGroup).
 int i;
 char *grpLabel, *tmp;
+boolean metaDbExists = sqlTableExists(conn, "metaDb");
 
 printf("%s ", tdb->track);
-safef(query, sizeof(query), "select val from metaDb where obj = '%s'", tdb->track);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if(metaDbExists)
     {
-    printf("%s ", row[0]);
+    safef(query, sizeof(query), "select val from metaDb where obj = '%s'", tdb->track);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("%s ", row[0]);
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 
-// XXXX Jim want's cv data after short/long label
-// XXXX Kate says we also need to include the long descriptions for these terms (get them from the .ra file??)
+// We include the long descriptions for these terms, b/c we assume people will search for the long labels.
+// Jim want's cv data after short/long label
 
-if(cvHash)
+if(metaDbExists && cvHash)
     {
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -71,14 +76,18 @@ printf("%s ", grpLabel);
 
 
 if(html == NULL)
+    {
     html = tdb->html;
+    if(html != NULL)
+        // strip out html markup
+        html = stripRegEx(html, "<[^>]*>", REG_ICASE);
+    }
 if(html != NULL)
     {
     char *tmp = cloneString(html);
     char *val = nextWord(&tmp);
     while(val != NULL)
         {
-        // XXXX strip html markup.
         printf("%s ", val);
         val = nextWord(&tmp);
         }
@@ -92,6 +101,7 @@ if(tdb->subtracks != NULL)
     {
     struct trackDb *subtrack;
     for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        // We have decided NOT to populate html down to children.
         printTrack(database, conn, subtrack, NULL, grpHash, cvHash);
     }
 }
@@ -114,8 +124,6 @@ struct sqlConnection *conn = hAllocConn(database);
 grps = hLoadGrps(database);
 for (grp = grps; grp != NULL; grp = grp->next)
     hashAdd(grpHash, grp->name, grp->label);
-
-// XXXX cvHash is work in progress...
 
 safef(filePath, sizeof(filePath), "/usr/local/apache/cgi-bin/encode/cv.ra");
 if(!fileExists(filePath))
