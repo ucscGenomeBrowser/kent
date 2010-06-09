@@ -1,7 +1,13 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.2 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files   view    cell    localization    rnaExtract      replicate 
+
+
+
 
 dafVersion        2.0
 
@@ -9,40 +15,40 @@ dafVersion        2.0
 grant             Gingeras
 lab               CSHL
 dataType          LongRnaSeq
-compositeSuffix   CshlRnaSeq
+compositeSuffix   CshlLongRnaSeq
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
 
 noAutoCreate     yes
-validationSettings none
+validationSettings validateFiles.bam:mismatches=2
 
 # Track/view definition
 view             PlusRawSig
-longLabelPrefix  CSHL Long RNA-Seq Plus Strand Raw Signal
+longLabelPrefix  CSHL Long RNA-seq Plus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
 required         yes
 
 view             MinusRawSig
-longLabelPrefix  CSHL Long RNA-Seq Minus Strand Raw Signal
+longLabelPrefix  CSHL Long RNA-seq Minus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
 required         yes
 
 view             AllRawSig
-longLabelPrefix  CSHL Long RNA-Seq All Alignments Raw Signal
+longLabelPrefix  CSHL Long RNA-seq All Alignments Raw Signal
 type             bigWig
 hasReplicates    yes
 required         yes
 
 view             Alignments
-longLabelPrefix  CSHL Long RNA-Seq Tags
-type             bigBed
+longLabelPrefix  CSHL Long RNA-seq Alignments
+type             bam
 hasReplicates    yes
 required         yes
 
 view             RawData
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
