@@ -2857,4 +2857,157 @@ dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
     end
     rm wiggle.tab
 
+#########################################################################
+# AFFYMETRIX TIMECOURSE (DONE 6/10/10 Fan)
 
+    ssh hgwdev
+    mkdir /hive/data/genomes/dm3/bed/affyDrosDev
+    cd /hive/data/genomes/dm3/bed/affyDrosDev
+
+# First, build the "Affymetrix Drosophila Development Transfrags" track
+
+# get dm2 to dm3 lift over file
+
+    zcat /gbdb/dm2/liftOver/dm2ToDm3.over.chain.gz > dm2ToDm3.over.chain
+
+# lift dm2 affyDrosDevTransfrags$t.bed to dm3 affyDrosDevTransfrags$t.bed
+
+foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+    liftOver /hive/data/genomes/dm2/bed/affyDrosDev/affyDrosDevTransfrags$t.bed dm2ToDm3.over.chain dm3.affyDrosDevTransfrags$t.bed  unMappedi$t.bed
+end
+
+#load tables into dm3 db
+
+foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+    hgLoadBed dm3 affyDrosDevTransfrags$t dm3.affyDrosDevTransfrags$t.bed
+end
+
+# Copy over the affyDrosDevTransfrags section of 
+# kent/src/hg/makeDb/trackDb/drosophila/dm2/trackDb.ra and insert it into
+# kent/src/hg/makeDb/trackDb/drosophila/dm3/trackDb.ra
+
+# Copy kent/src/hg/makeDb/trackDb/drosophila/dm2/affyDrosDevTransfrags.html to
+# kent/src/hg/makeDb/trackDb/drosophila/dm3/affyDrosDevTransfrags.html and 
+# add a sentence in the Methods section to indicate it is based on dm2 data 
+# lifted over to dm3.
+ 
+# make update DBS=dm3
+
+# Now, build the "Affymetrix Drosophila Development Signal" track
+
+# make a dm2 subdirectory with associated subdirs of dm2 chroms to store some intermediate data
+
+foreach chr (`awk '{print $1;}' /hive/data/genomes/dm2/chrom.sizes`)
+    mkdir  -p dm2/$chr
+end
+
+# create a temp table signalTemp in dm3 with:
+cat << '_EOF_' > signalTemp.sql
+CREATE TABLE signalTemp (
+  pos int(10) unsigned NOT NULL default '0',
+  val varchar(255)
+) TYPE=MyISAM;
+'_EOF_'
+
+hgsql dm3 <signalTemp.sql
+
+# create a simple script, genBed4:
+
+cat << '_EOF_' > genBed4
+hgsql dm3 -e 'delete from signalTemp'
+echo processing $1 $2
+hgsql dm3 -e \
+"load data local infile '/hive/data/genomes/dm2/bed/affyDrosDev/${1}/Dro_Total_AS_${2}_C01.sig.gr' into table signalTemp"
+
+hgsql dm3 -N -e "select '${1}', pos-1, pos, val from signalTemp " > dm2/$1/affyDrosDevSignal$2.bed
+'_EOF_'
+
+# create bed 4 files for dm2 affyDrosDevSignal data so that we can lift them to dm3
+
+foreach chr (`awk '{print $1;}' /hive/data/genomes/dm2/chrom.sizes`)
+    foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+        genBed4 $chr $t
+    end
+end
+
+# lift over the dm2 bed 4 files into dm3 coordinates
+
+foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+    mkdir -p dm3/$t
+    foreach chr (`awk '{print $1;}' /hive/data/genomes/dm2/chrom.sizes`)
+        echo
+        echo processing $t $chr ... 
+        liftOver  dm2/$chr/affyDrosDevSignal$t.bed dm2ToDm3.over.chain  dm3/$t/$t.dm2_$chr.affyDrosDevSignal.bed  \
+        dm3/$t/unMapped.$t.dm2.$chr.bed
+    end
+    cat dm3/$t/$t.dm2_*.affyDrosDevSignal.bed|bedSort stdin dm3/$t.sorted.bed
+end
+
+# The lift overed data contains overlapping data points, when converted to wig files, 
+# they will failure during subsequent wig file processing.  So, we need to 
+# remove overlapping data points in the bed files first.
+
+# create a script, genSortedUniq.  This script removes the duplicate entries with identical chrom and chromStart
+
+cat << '_EOF_' > genSortedUniq
+cut -f1-3 $1.sorted.bed  >j1
+cut -f1,2 $1.sorted.bed  |sed -e 's/\t/_/' >j2
+cut -f4  $1.sorted.bed  >j3
+paste j1 j2 j3  >$1.tmp.bed
+
+hgsql dm3 -e 'delete from affyTTmp'
+hgsql dm3 -e "load data local infile '${1}.tmp.bed' into table affyTTmp"
+
+hgsql dm3 -N -e 'select name, chrom, chromStart, chromEnd, val from affyTTmp' > j.in
+rmDupCol1 j.in >j.tmp
+bedSort j.tmp $1.sorted.uniq.bed
+rm $1.tmp.bed
+'_EOF_' 
+
+# Run genSortedUniq on each time interval
+cd dm3
+foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+    echo processing $t
+    ../genSortedUniq $t
+end
+cd ..
+
+# encode wig files.  wigEncode actually works with bed 4 file as input.
+
+foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+    wigEncode dm3/$t.sorted.uniq.bed affyDrosDevSignal$t.wi{g,b}
+end
+
+#Converted dm3/1.sorted.uniq.bed, upper limit 1156.00, lower limit -860.00
+#Converted dm3/2.sorted.uniq.bed, upper limit 1499.75, lower limit -580.50
+#Converted dm3/3.sorted.uniq.bed, upper limit 1627.50, lower limit -586.00
+#Converted dm3/4.sorted.uniq.bed, upper limit 1794.50, lower limit -718.50
+#Converted dm3/5.sorted.uniq.bed, upper limit 2277.25, lower limit -913.00
+#Converted dm3/6.sorted.uniq.bed, upper limit 2095.25, lower limit -864.00
+#Converted dm3/7.sorted.uniq.bed, upper limit 1071.75, lower limit -560.50
+#Converted dm3/8.sorted.uniq.bed, upper limit 1182.50, lower limit -1019.00
+#Converted dm3/9.sorted.uniq.bed, upper limit 2028.75, lower limit -942.50
+#Converted dm3/10.sorted.uniq.bed, upper limit 1212.00, lower limit -779.00
+#Converted dm3/11.sorted.uniq.bed, upper limit 1456.75, lower limit -454.50
+#Converted dm3/12.sorted.uniq.bed, upper limit 1203.50, lower limit -459.50
+
+mkdir /gbdb/dm3/affyDrosDev
+ln -s /hive/data/genomes/dm3/bed/affyDrosDev/affyDrosDevSignal*.wib \
+   /gbdb/dm3/affyDrosDev
+
+# load tables
+foreach t (1 2 3 4 5 6 7 8 9 10 11 12)
+    hgLoadWiggle dm3 affyDrosDevSignal$t \
+        -pathPrefix=/gbdb/dm3/affyDrosDev affyDrosDevSignal$t.wig
+end
+rm bed.tab wiggle.tab
+
+# Copy over the affyDrosDevSignal section of 
+# kent/src/hg/makeDb/trackDb/drosophila/dm2/trackDb.ra and insert it into
+# kent/src/hg/makeDb/trackDb/drosophila/dm3/trackDb.ra
+
+# Copy kent/src/hg/makeDb/trackDb/drosophila/dm2/affyDrosDevSignal.html to
+# kent/src/hg/makeDb/trackDb/drosophila/dm3/affyDrosDevSignal.html and 
+# add a sentence in the Methods section to indicate it is based on dm2 data 
+# lifted over to dm3.
+#######################################################################################
