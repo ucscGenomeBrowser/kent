@@ -200,6 +200,10 @@ void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f);
 void lineFileSetUniqueMetaData(struct lineFile *lf);
 /* suppress duplicate lines in metadata */
 
+
+void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
+/* remove initial browser and track lines */
+
 #endif /* LINEFILE_H */
 
 
