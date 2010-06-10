@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.137 2010/05/12 23:05:01 baertsch Exp $"
+#	"$Id: mm9.txt,v 1.138 2010/06/10 16:32:49 chinhli Exp $"
 #
 
 #######################################################################
@@ -10285,10 +10285,10 @@ TMPDIR=/scratch/tmp
     #	861811978 bases of 2752505800 (31.310%) in intersection
 
 #######################################################################
-# felCatV17e Cat BLASTZ/CHAIN/NET (DONE  - 2010-03-22 - Chin)
+# felCat4 Cat BLASTZ/CHAIN/NET (DONE  - 2010-06-07 - Chin)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
-    cd /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
+    mkdir /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07
+    cd /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07
 
     cat << '_EOF_' > DEF
 # dog vs. cat
@@ -10302,14 +10302,14 @@ SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 SEQ1_LIMIT=5
 
-# QUERY: Cat (felCatV17e)
-SEQ2_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
-SEQ2_LEN=/scratch/data/felCatV17e/chrom.sizes
+# QUERY: Cat (felCat4)
+SEQ2_DIR=/scratch/data/felCat4/felCat4.2bit
+SEQ2_LEN=/scratch/data/felCat4/chrom.sizes
 SEQ2_LIMIT=50
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22
+BASE=/hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -10320,19 +10320,43 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
         > do.log 2>&1 &
-    #   real   1581m41s
-    cat fb.mm9.chainFelCatV17eLink.txt
+    # real    1272m46.726s
+
+    # doBlastzChainNet from step chainRun after para stop, para freeBatch 
+    # After para stop para freeBatch in 
+    # /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07/axtChain/run] 
+    # rm the run directory,  and use memk/swarm this time
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+         -continue chainRun \
+         -syntenicNet -noDbNameCheck \
+         -chainMinScore=3000 -chainLinearGap=medium \
+         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+         > do_chainRun.log 2>&1 &
+    # real    337m31.606s
+    #  *** All done !  Elapsed time: 337m32s
+    #  *** Make sure that goldenPath/mm9/vsFelCat4/README.txt is accurate.
+    # *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
+
+    cat fb.mm9.chainFelCat4Link.txt
     #   637007193 bases of 2620346127 (24.310%) in intersection
 
-    mkdir /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
-    cd /hive/data/genomes/felCatV17e/bed/blastz.mm9.swap
+    # swap 
+    mkdir /hive/data/genomes/felCat4/bed/blastz.mm9.swap
+    cd /hive/data/genomes/felCat4/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm9/bed/lastzFelCatV17e.2010-03-22/DEF \
+        /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real   125m37.926s 
-    cat fb.felCatV17e.chainMm9Link.txt
+    # real    176m42.490s
+    # *** All done !  Elapsed time: 176m42s
+    # *** Make sure that goldenPath/felCat4/vsMm9/README.txt is accurate.
+    # *** Add {chain,net}Mm9 tracks to trackDb.ra if necessary.
+
+    #   real   ???? 125m37.926s 
+    cat fb.felCat4.chainMm9Link.txt
     #   616529959 bases of 1990635005 (30.972%) in intersection
 
 
