@@ -3087,25 +3087,22 @@ TMPDIR=/scratch/tmp
     cat fb.calJac3.chainHg19Link.txt 
     #	1397333116 bases of 2752505800 (50.766%) in intersection
 #####################################################################
-# LASTZ Dog Swap (DONE - 2010-03-22 - Chin)
-    cd /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22
-    cat fb.canFam2.chainFelCatV17eLink.txt
-    #  1481040604 bases of 2384996543 (62.098%) in intersection
-    
-    mkdir /hive/data/genomes/felCatV17e/bed/blastz.canFam2.swap
-    cd /hive/data/genomes/felCatV17e/bed/blastz.canFam2.swap
+# LASTZ Dog Swap (DONE 2010-06-01 - Chin)
+
+   cd /hive/data/genomes/canFam2/bed/lastzFelCat4.2010-06-01
+   cat fb.canFam2.chainFelCat4Link.txt
+
+    mkdir /hive/data/genomes/felCat4/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/felCat4/bed/blastz.canFam2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/canFam2/bed/lastzFelCatV17e.2010-03-22/DEF \
+        /hive/data/genomes/canFam2/bed/lastzFelCat4.2010-06-01/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 & 
-    #   real    251m14.341s 
-    # *** All done !  Elapsed time: 251m14s
-    # *** Make sure that goldenPath/felCatV17e/vsCanFam2/README.txt is
-    # accurate.
-    # *** Add {chain,net}CanFam2 tracks to trackDb.ra if necessary.
-    cat fb.felCatV17e.chainCanFam2Link.txt
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    327m42.053s
+
+    cat fb.felCat4.chainCanFam2Link.txt
     # 1467506008 bases of 1990635005 (73.720%) in intersection
-    
+
 #####################################################################
 
