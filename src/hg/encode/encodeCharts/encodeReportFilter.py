@@ -18,22 +18,28 @@ __version__ = "1.0.0"
 
 cgitb.enable()
 
+def printErrorMsg(errorMsg):
+  print "Content-type: text/plain"
+  print 
+  print errorMsg
+  return
+
 def main():
   form = cgi.FieldStorage()
   # CGI variables:
   #   key       = project, lab, data, freeze, or status
   #   value     = values based on "key"
-  #   status    = loaded, displayed, approved, reviewing or released
+  #   status    = loaded, displayed, approved, reviewing, released or all
   #   species   = human, mouse or all
   #   norelease = 0 or 1
 
   keyField = form.getvalue('key')
-  if not keyField:
-    keyField = 'project'
-
   keyValue = form.getvalue('value')
-  if not keyValue:
-    keyValue = 'HudsonAlpha'
+
+  if not keyField or not keyValue:
+    printErrorMsg("Error: Must specify both key and value variables")
+    return
+
   if keyValue == "post Jan-2010":
     keyValue = "post ENCODE Jan 2010 Freeze"
 
@@ -49,6 +55,10 @@ def main():
   if not norelease:
     norelease = 0
   norelease = int(norelease)
+
+  freeze = form.getvalue('freeze')
+  if not freeze:
+    freeze = 'all'
 
   switch = {'project':0, 'lab':1, 'data':2, 'freeze':5, 'status':8}
   titleTag = {'project':"Project", 'lab':"Lab", 'data':"Data_Type", 
@@ -89,7 +99,15 @@ def main():
       else:
         continue
 
-    if splitArray[keyIndex] == keyValue and splitArray[8] == status:
+    if splitArray[keyIndex] == keyValue:
+      if status == 'all' or splitArray[8] == status:
+        pass
+      else:
+        continue
+      if freeze == 'all' or splitArray[5] == freeze:
+        pass
+      else:
+        continue
       print line
       rowCount += 1
   f.close()
