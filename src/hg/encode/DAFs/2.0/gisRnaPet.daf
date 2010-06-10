@@ -1,4 +1,4 @@
-# Data Agreement File for PET Ditag project $Revision: 1.5 $
+# Data Agreement File for PET Ditag project $Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -22,25 +22,25 @@ noAutoCreate     yes
 
 # Track/view definition
 view             PlusRawSig
-longLabelPrefix  GIS PET Raw Signal (plus strand)
-type             wig
+longLabelPrefix  GIS RNA PET Raw Signal (plus strand)
+type             bigWig
 hasReplicates    yes
 required         no
 
 view             MinusRawSig
-longLabelPrefix  GIS PET Raw Signal (minus strand)
-type             wig
+longLabelPrefix  GIS RNA PET Raw Signal (minus strand)
+type             bigWig
 hasReplicates    yes
 required         no
 
 view             Alignments
-longLabelPrefix  GIS PET Alignments
+longLabelPrefix  GIS RNA PET Alignments
 type             bam
 hasReplicates    yes
 required         no
 
 view             Clusters
-longLabelPrefix  GIS PET Clusters
+longLabelPrefix  GIS RNA PET Clusters
 type             bed 12
 hasReplicates    yes
 required         no
