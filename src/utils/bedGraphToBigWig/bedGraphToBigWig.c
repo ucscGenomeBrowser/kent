@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.27 2010/05/19 19:08:42 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.28 2010/06/10 20:14:14 braney Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -75,6 +75,9 @@ int resTry;
 for (resTry = 0; resTry < resTryCount; ++resTry)
     resEnds[resTry] = 0;
 struct dyString *stream = dyStringNew(0);
+
+/* remove initial browser and track lines */
+lineFileRemoveInitialCustomTrackLines(lf);
 
 for (;;)
     {
@@ -149,6 +152,9 @@ for (;;)
 	    {
 	    usage = usage->next;
 	    assert(usage != NULL);
+            if (!sameString(row[0], usage->name))
+                errAbort("read %s, expecting %s on line %d in file %s\n", 
+                    row[0], usage->name, lf->lineIx, lf->fileName);
 	    assert(sameString(row[0], usage->name));
 	    lastB = NULL;
 	    for (resTry = 0; resTry < resTryCount; ++resTry)
@@ -225,6 +231,10 @@ writeOne(f, initialReductionCount);
 boolean firstRow = TRUE;
 
 struct bbiSumOutStream *stream = bbiSumOutStreamOpen(itemsPerSlot, f, doCompress);
+
+/* remove initial browser and track lines */
+lineFileRemoveInitialCustomTrackLines(lf);
+
 for (;;)
     {
     /* Get next line of input if any. */
