@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1008 2010/06/09 21:53:49 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1009 2010/06/10 16:56:36 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5503,4 +5503,5 @@ noInherit on
 	color 153,38,0
 	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
 
+# BU ORChID (wrangler: Brian)
 include wgEncodeBuOrchid.ra
