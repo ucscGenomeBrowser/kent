@@ -14,8 +14,9 @@
 #include "web.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "trix.h"
 
-static char const rcsid[] = "$Id: searchTracks.c,v 1.9 2010/06/03 05:52:42 larrym Exp $";
+static char const rcsid[] = "$Id: searchTracks.c,v 1.10 2010/06/10 20:24:01 larrym Exp $";
 
 #define ANYLABEL "Any"
 #define METADATA_NAME_PREFIX "hgt.metadataName"
@@ -52,17 +53,17 @@ return str && strlen(str) &&
     (sameString(op, "contains") && containsStringNoCase(track->longLabel, str) != NULL));
 }
 
-static boolean isDescriptionMatch(struct track *track, char *str, struct hash *trackMetadata)
-{
+static boolean isDescriptionMatch(struct track *track, char **words, int wordCount)
 // We parse str and look for every word ANYWHERE in track description (i.e. google style).
 // XXXX currently quite primitive; do stemming, strip html markup ??
 // trackMetaData contains tracks already found via metadata searches.
+{
 boolean found = FALSE;
 
-if(str && strlen(str))
+if(words)
     {
     char *html = track->tdb->html;
-    if(html == NULL || !strlen(html))
+    if(isEmpty(html))
         {
         // XXXX is there a cleaner way to find parent?
         struct trackDb *parent = track->tdb->parent;
@@ -72,43 +73,35 @@ if(str && strlen(str))
             html = parent->html;
         }
 
-    if(html && strlen(html))
+    if(!isEmpty(html))
         {
-        char *tmp = cloneString(str);
-        char *val = nextWord(&tmp);
-        while (val != NULL)
+        int i;
+        for(i = 0; i < wordCount; i++)
             {
+            char *val = words[i];
             if(strstrNoCase(html, val) == NULL)
                 {
-                struct hashEl *el;
                 found = FALSE;
-                for(el = hashLookup(trackMetadata, track->track); el != NULL; el = hashLookupNext(el))
-                    if(sameWord((char *) el->val, val))
-                        break;
-                found = el != NULL;
+                break;
                 }
             else
                 found = TRUE;
-            if(found)
-                val = nextWord(&tmp);
-            else
-                break;
             }
         }
     }
 return found;
 }
 
-static int getTermList(struct sqlConnection *conn, char ***terms, char *type)
-{
+static int getTermArray(struct sqlConnection *conn, char ***terms, char *type)
 // Pull out all term fields from ra entries with given type
 // Returns count of items found and items via the terms argument.
+{
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
 struct slName *termList = NULL;
 int i, count = 0;
-char **retval;
+char **retVal;
 
 safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", type);
 sr = sqlGetResult(conn, query);
@@ -120,21 +113,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slSort(&termList, slNameCmpCase);
 count++; // make room for "Any"
-retval = needMem(sizeof(char *) * count);
-retval[0] = cloneString(ANYLABEL);
+AllocArray(retVal, count);
+retVal[0] = cloneString(ANYLABEL);
 for(i = 1; termList != NULL;termList = termList->next, i++)
     {
-    retval[i] = cloneString(termList->name);
+    retVal[i] = cloneString(termList->name);
     }
-*terms = retval;
+*terms = retVal;
 return count;
 }
 
 static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char *val, char *op)
-{
 // Search the assembly's metaDb table for var; If name == NULL, we search every metadata field.
 // Search is via mysql, so it's case-insensitive.
-struct slName *retval = NULL;
+{
+struct slName *retVal = NULL;
 char query[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -152,32 +145,32 @@ else
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    slNameAddHead(&retval, row[0]);
+    slNameAddHead(&retVal, row[0]);
     }
 sqlFreeResult(&sr);
-return retval;
+return retVal;
 }
 
 static int metaDbVars(struct sqlConnection *conn, char *** metaValues)
-{
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
+{
 char query[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int i;
 struct slName *el, *varList = NULL;
-char **retval;
+char **retVal;
 
 safef(query, sizeof(query), "select distinct var from metaDb");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&varList, row[0]);
 sqlFreeResult(&sr);
-retval = needMem(sizeof(char *) * slCount(varList));
+retVal = needMem(sizeof(char *) * slCount(varList));
 slNameSort(&varList);
 for (el = varList, i = 0; el != NULL; el = el->next, i++)
-    retval[i] = el->name;
-*metaValues = retval;
+    retVal[i] = el->name;
+*metaValues = retVal;
 return i;
 }
 
@@ -206,6 +199,10 @@ char **metadataName;
 char **metadataValue;
 struct hash *parents = newHash(4);
 boolean simpleSearch;
+struct trix *ix;
+char ixFile[HDB_MAX_PATH_STRING];
+char **descWords = NULL;
+int descWordCount = 0;
 
 if(sameString(currentTab, "simpleTab"))
     {
@@ -220,6 +217,8 @@ else
     simpleSearch = FALSE;
     }
 
+safef(ixFile, sizeof(ixFile), "/gbdb/%s/trackDb.ix", database);
+ix = trixOpen(ixFile);
 getTrackList(&groupList, -2);
 slSort(&groupList, gCmpGroup);
 for (group = groupList; group != NULL; group = group->next)
@@ -234,12 +233,11 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-hPrintf("<form action='%s' name='SearchTracks' method='get'>\n\n", hgTracksName());
+hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
 webStartWrapperDetailedNoArgs(cart, database, "", "Track Search (prototype!)", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
-fprintf(stderr, "currentTab: %s\n",  currentTab);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='hgt.currentSearchTab' value='%s'>\n", currentTab);
 
 hPrintf("<div id='tabs'>\n"
@@ -249,18 +247,18 @@ hPrintf("<div id='tabs'>\n"
         "</ul>\n"
         "<div id='simpleTab'>\n");
 
-hPrintf("<input type='text' name='hgt.simpleSearch' value='%s' size='80'>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80'>\n", descSearch == NULL ? "" : descSearch);
 
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
         "<table>\n");
 
 hPrintf("<tr><td></td><td></td><td><b>Description:</b></td><td>contains</td>\n");
-hPrintf("<td><input type='text' name='hgt.descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
 
 hPrintf("<tr><td></td><td>and</td><td><b>Track Name:</b></td><td>\n");
 cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
-hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
+hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
 
 hPrintf("<tr><td></td><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td>is</td>\n<td>\n");
@@ -313,8 +311,6 @@ else
     metadataValue[1] = ANYLABEL;
     }
 
-fprintf(stderr, "numMetadataSelects: %d: %d\n", numMetadataSelects, numMetadataNonEmpty);
-
 if(metaDbExists)
     {
     int i;
@@ -340,7 +336,7 @@ if(metaDbExists)
         cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metadataName[i], 
                                                    NULL, NULL, "onchange=metadataSelectChanged(this)");
         hPrintf("</td><td>is</td>\n<td>\n");
-        len = getTermList(conn, &terms, metadataName[i]);
+        len = getTermArray(conn, &terms, metadataName[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
         cgiMakeDropListFull(buf, terms, terms, len, metadataValue[i], NULL);
         hPrintf("</td></tr>\n");
@@ -348,11 +344,10 @@ if(metaDbExists)
     }
 
 hPrintf("</table>\n");
-//  hPrintf("<u><a onclick=\"alert('add a select not yet implemented')\" title=\"add a select\">+</a></u>");
 
 hPrintf("</div>\n</div>\n");
 
-hPrintf("<input type='submit' name='%s' value='Search'>\n", searchTracks);
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search'>\n", searchTracks);
 hPrintf("<input type='submit' name='submit' value='Cancel'>\n");
 hPrintf("</form>\n");
 
@@ -360,126 +355,175 @@ if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
 if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
-if(doSearch && ((nameSearch != NULL && strlen(nameSearch)) || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty))
+
+if(!isEmpty(descSearch))
     {
-    // First do the metaDb searches, which can be done quickly for all tracks with db queries.
-    struct hash *matchingTracks = newHash(0);
-    struct hash *trackMetadata = newHash(0);
-    struct slName *el, *metaTracks = NULL;
+    char *tmp = cloneString(descSearch);
+    char *val = nextWord(&tmp);
+    struct slName *el, *descList = NULL;
     int i;
-    for(i = 0; i < numMetadataSelects; i++)
-        {
-        if(!isEmpty(metadataValue[i]))
-            {
-            struct slName *tmp = metaDbSearch(conn, metadataName[i], metadataValue[i], "is");
-            if(metaTracks == NULL)
-                metaTracks = tmp;
-            else
-                metaTracks = slNameIntersection(metaTracks, tmp);
-            }
-        }
-    for (el = metaTracks; el != NULL; el = el->next)
-        hashAddInt(matchingTracks, el->name, 1);
 
-    if(metaDbExists && !isEmpty(descSearch))
+    while (val != NULL)
         {
-        // Load all metadata words for each track to facilitate metadata search.
-        char query[256];
-        struct sqlResult *sr = NULL;
-        char **row;
-        safef(query, sizeof(query), "select obj, val from metaDb");
-        sr = sqlGetResult(conn, query);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            char *str = cloneString(row[1]);
-            hashAdd(trackMetadata, row[0], str);
-            }
-        sqlFreeResult(&sr);
+        slNameAddTail(&descList, val);
+        val = nextWord(&tmp);
         }
+    descWordCount = slCount(descList);
+    descWords = needMem(sizeof(char *) * descWordCount);
+    for(i = 0, el = descList; el != NULL; i++, el = el->next)
+        descWords[i] = strLower(el->name);
 
-    for (group = groupList; group != NULL; group = group->next)
+    }
+
+if(doSearch)
+    {
+    if(simpleSearch)
         {
-        if(groupSearch == NULL || sameString(group->name, groupSearch))
+        struct trixSearchResult *tsList;
+        struct hash *trackHash = newHash(0);
+
+        // Create a hash of tracks, so we can map the track name into a track struct.
+        for (group = groupList; group != NULL; group = group->next)
             {
-            if (group->trackList != NULL)
+            struct trackRef *tr;
+            for (tr = group->trackList; tr != NULL; tr = tr->next)
                 {
-                struct trackRef *tr;
-                for (tr = group->trackList; tr != NULL; tr = tr->next)
+                struct track *track = tr->track;
+                hashAdd(trackHash, track->track, track);
+                struct track *subTrack = track->subtracks;
+                for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
+                    hashAdd(trackHash, subTrack->track, subTrack);
+                }
+            }
+        for(tsList = trixSearch(ix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
+            {
+            struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
+            refAdd(&tracks, track);
+            tracksFound++;
+            }
+        slReverse(&tracks);
+        }
+    else if(!isEmpty(nameSearch) || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
+        {
+        // First do the metaDb searches, which can be done quickly for all tracks with db queries.
+        struct hash *matchingTracks = newHash(0);
+        struct hash *trackMetadata = newHash(0);
+        struct slName *el, *metaTracks = NULL;
+        int i;
+
+        for(i = 0; i < numMetadataSelects; i++)
+            {
+            if(!isEmpty(metadataValue[i]))
+                {
+                struct slName *tmp = metaDbSearch(conn, metadataName[i], metadataValue[i], "is");
+                if(metaTracks == NULL)
+                    metaTracks = tmp;
+                else
+                    metaTracks = slNameIntersection(metaTracks, tmp);
+                }
+            }
+        for (el = metaTracks; el != NULL; el = el->next)
+            hashAddInt(matchingTracks, el->name, 1);
+
+        if(metaDbExists && !isEmpty(descSearch))
+            {
+            // Load all metadata words for each track to facilitate metadata search.
+            char query[256];
+            struct sqlResult *sr = NULL;
+            char **row;
+            safef(query, sizeof(query), "select obj, val from metaDb");
+            sr = sqlGetResult(conn, query);
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                char *str = cloneString(row[1]);
+                hashAdd(trackMetadata, row[0], str);
+                }
+            sqlFreeResult(&sr);
+            }
+
+        for (group = groupList; group != NULL; group = group->next)
+            {
+            if(groupSearch == NULL || sameString(group->name, groupSearch))
+                {
+                if (group->trackList != NULL)
                     {
-                    struct track *track = tr->track;
-                    if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) && 
-                       (isEmpty(descSearch) || isDescriptionMatch(track, descSearch, trackMetadata)) &&
-                       (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
+                    struct trackRef *tr;
+                    for (tr = group->trackList; tr != NULL; tr = tr->next)
                         {
-                        tracksFound++;
-                        refAdd(&tracks, track);
-                        }
-                    if (track->subtracks != NULL)
-                        {
-                        struct track *subTrack;
-                        for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
+                        struct track *track = tr->track;
+                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) && 
+                           (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
+                           (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                             {
-                            if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
-                               (isEmpty(descSearch) || isDescriptionMatch(subTrack, descSearch, trackMetadata)) &&
-                               (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
+                            tracksFound++;
+                            refAdd(&tracks, track);
+                            }
+                        if (track->subtracks != NULL)
+                            {
+                            struct track *subTrack;
+                            for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
-                                // XXXX to parent hash. - use tdb->parent instead.
-                                hashAdd(parents, subTrack->track, track);
-                                tracksFound++;
-                                refAdd(&tracks, subTrack);
-                                }
-                            }                        
+                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
+                                   (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount)) &&
+                                   (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
+                                    {
+                                    // XXXX to parent hash. - use tdb->parent instead.
+                                    hashAdd(parents, subTrack->track, track);
+                                    tracksFound++;
+                                    refAdd(&tracks, subTrack);
+                                    }
+                                }                        
+                            }
                         }
                     }
                 }
             }
+        slSort(&tracks, gCmpTrack);
         }
-    slSort(&tracks, gCmpTrack);
-    if(tracksFound)
+    }
+
+if(tracksFound)
+    {
+    hPrintf("<p>%d tracks found:</p>\n", tracksFound);
+    hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
+    hButton("submit", "save");
+    hButtonWithOnClick("hgt.ignoreme", "show all", "show all found tracks", "alert('show all not yet implemented'); return false;");
+    hPrintf("<table>\n");
+    hPrintf("<tr bgcolor='#666666'><td><br /></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
+    struct slRef *ptr;
+    while((ptr = slPopHead(&tracks)))
         {
-        hPrintf("<p>%d tracks found:</p>\n", tracksFound);
-        hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
-        hButton("submit", "save");
-        hButtonWithOnClick("hgt.ignoreme", "show all", "show all found tracks", "alert('show all not yet implemented'); return false;");
-        hPrintf("<table>\n");
-        hPrintf("<tr bgcolor='#666666'><td><br /></td><td><b>Name</b></td><td><b>Description</b></td><td><b>Group</b></td></tr>\n");
-        struct slRef *ptr;
-        while((ptr = slPopHead(&tracks)))
+        struct track *track = (struct track *) ptr->val;
+        // trackDbOutput(track->tdb, stderr, ',', '\n');
+        hPrintf("<tr bgcolor='#EEEEEE'>\n");
+        hPrintf("<td>\n");
+        if (tdbIsSuper(track->tdb))
             {
-            struct track *track = (struct track *) ptr->val;
-            // trackDbOutput(track->tdb, stderr, ',', '\n');
-            hPrintf("<tr bgcolor='#EEEEEE'>\n");
-            hPrintf("<td>\n");
-            if (tdbIsSuper(track->tdb))
-                {
-                superTrackDropDown(cart, track->tdb,
-                                   superTrackHasVisibleMembers(track->tdb));
-                }
-            else
-                {
-                hTvDropDownClassVisOnly(track->track, track->visibility,
-                                        track->canPack, (track->visibility == tvHide) ? 
-                                        "hiddenText" : "normalText", 
-                                        trackDbSetting(track->tdb, "onlyVisibility"));
-                }
-            hPrintf("</td>\n");
-            hPrintf("<td>%s</td>\n", track->shortLabel);
-            hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->track, NULL), track->longLabel);
-            // How do we get subtrack's parent?
-            struct track *parent = NULL;
-            if(hashLookup(parents, track->track) != NULL)
-                parent = (struct track *) hashLookup(parents, track->track)->val;
-            hPrintf("<td>%s</td>\n", parent != NULL ? parent->longLabel : track->group != NULL ? track->group->label : "");
-            hPrintf("</tr>\n");
+            superTrackDropDown(cart, track->tdb,
+                               superTrackHasVisibleMembers(track->tdb));
             }
-        hPrintf("</table>\n");
-        hButton("submit", "save");
-        hPrintf("\n</form>\n");
-        } 
-    else
-        {
-        hPrintf("<p>No tracks found</p>\n");
+        else
+            {
+            hTvDropDownClassVisOnly(track->track, track->visibility,
+                                    track->canPack, (track->visibility == tvHide) ? 
+                                    "hiddenText" : "normalText", 
+                                    trackDbSetting(track->tdb, "onlyVisibility"));
+            }
+        hPrintf("</td>\n");
+        hPrintf("<td>%s", track->shortLabel);
+        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE);
+        hPrintf("</td>\n");
+        hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->track, NULL), track->longLabel);
+        hPrintf("</tr>\n");
         }
+    hPrintf("</table>\n");
+    hButton("submit", "save");
+    hPrintf("\n</form>\n");
+    } 
+else
+    {
+    if(doSearch)
+        hPrintf("<p>No tracks found</p>\n");
     }
 webEndSectionTables();
 }
