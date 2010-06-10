@@ -1,10 +1,10 @@
-# Data Agreement File for PET Ditag project $Revision: 1.6 $
+# Data Agreement File for PET Ditag project $Revision: 1.7 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated .ddf should look like this
-# files   view    cell    localization    rnaExtract 
+# files   view    cell    localization    rnaExtract	replicate
 
 dafVersion        2.0
 
