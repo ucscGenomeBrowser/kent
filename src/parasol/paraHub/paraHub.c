@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.133 2010/01/12 09:09:15 markd Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.134 2010/06/10 00:23:38 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2730,10 +2730,13 @@ if (extended)
     if (thisBatch)
 	{
 	off_t resultsSize = fileSize(thisBatch->name);
-	pmClear(pm);
-	pmPrintf(pm, "Results Size: %llu", (unsigned long long) resultsSize); 
-	if (!pmSend(pm, rudpOut))
-	    return;
+        if (resultsSize != -1) // file exists
+	    {
+	    pmClear(pm);
+	    pmPrintf(pm, "Results Size: %lld", (long long) resultsSize); 
+	    if (!pmSend(pm, rudpOut))
+		return;
+	    }
 	}
     }
 pmSendString(pm, rudpOut, "");
