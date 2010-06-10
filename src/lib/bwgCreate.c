@@ -15,7 +15,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.26 2010/06/03 23:36:04 braney Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.27 2010/06/10 20:13:29 braney Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -1010,16 +1010,7 @@ char *line;
 struct bwgSection *sectionList = NULL;
 
 /* remove initial browser and track lines */
-while (lineFileNextReal(lf, &line))
-    {
-    if (!(startsWith("browser", line) || startsWith("track", line) ))
-        {
-        verbose(2, "found line not browser or track: %s\n", line);
-        lineFileReuse(lf);
-        break;
-        }
-    verbose(2, "skipping %s\n", line);
-    }
+lineFileRemoveInitialCustomTrackLines(lf);
 
 while (lineFileNextReal(lf, &line))
     {

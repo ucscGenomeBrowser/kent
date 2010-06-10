@@ -144,6 +144,9 @@ int lastStart = -1;
 bits32 id = 0;
 bits64 totalBases = 0, bedCount = 0;
 int minDiff = BIGNUM;
+
+lineFileRemoveInitialCustomTrackLines(lf);
+
 for (;;)
     {
     int rowSize = lineFileChopNext(lf, row, ArraySize(row));
