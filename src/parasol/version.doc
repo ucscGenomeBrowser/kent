@@ -309,3 +309,9 @@
 
         Added -env option to paraNode, to allow specifying arbitray environment variables
         for jobs.
+
+12.12   Added fix for results file does not exist yet to paraHub.  
+
+	Added support for -results=path/results option to parasol pstat2 command.
+	This will help make jobTree able to retrieve status quickly without 
+	bogging things down.
