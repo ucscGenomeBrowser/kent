@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.17 2010/05/31 04:02:04 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.18 2010/06/10 17:01:15 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -91,20 +91,20 @@ my %tags = Encode::getControlledVocabTags($configPath);
 my $labRef = Encode::getLabs($configPath);
 my %labs = %{$labRef};
 
-# parse all trackDb entries w/ metadata setting into hash of submissions
-#   key is lab+dataType+cell+vars
-
-my $dbh = HgDb->new(DB => $assembly);
-my $sth = $dbh->execute(
-        "select settings, tableName from trackDb_encodeReport where settings like \'\%metadata\%\'");
-my @row;
-my %experiments = ();
 printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Treatment", "Assembly");
+my %metaLines = ();
+
+# parse all trackDb entries w/ metadata setting into hash of submissions
+#   key is lab+dataType+cell+vars
+my $dbh = HgDb->new(DB => $assembly);
+my $sth = $dbh->execute(
+        "select settings, tableName from trackDb_encodeReport where settings like \'\%metadata\%\'");
+my @row;
 while (@row = $sth->fetchrow_array()) {
     my $settings = $row[0];
     my $tableName = $row[1];
@@ -112,12 +112,33 @@ while (@row = $sth->fetchrow_array()) {
     $settings =~ tr/\n/|/;
     $settings =~ s/^.*metadata //;  
     $settings =~ s/\|.*$//;
+    $metaLines{$tableName} = $settings;
+    print STDERR "     TABLENAME: $tableName   SETTINGS: $settings\n";
+}
+# parse metaDb table and merge in (when this is fully populated, we will not
+# look for these in trackDb).
+open(MDB, "mdbPrint $assembly -table=metaDb -all -line |") or die "Can't run mdbPrint\n";
+while (my $line = <MDB>) {
+    chomp $line;
+    next if ($line =~ /objType=file/);
+    $line =~ s/^.*metadata //;  
+    $line =~ s/objType=table //;  
+    (my $tableName, my $settings) = split(" ", $line, 2);
+    $metaLines{$tableName} = $settings;
+    print STDERR "     TABLENAME: $tableName   SETTINGS: $settings\n";
+    }
+
+# Create experiments hash
+my %experiments = ();
+
+foreach my $tableName (keys %metaLines) {
+    my $settings = $metaLines{$tableName};
+    print STDERR "     SETTINGS: $settings\n";
     my $ref = Encode::metadataLineToHash($settings);
     my %metadata =  %{$ref};
 
     # short-circuit if this didn't come in from pipeline
     next unless defined($metadata{"subId"});
-    print STDERR "     SETTINGS: $settings\n";
 
     my %experiment = ();
     $experiment{"project"} = "unknown";
@@ -130,6 +151,8 @@ while (@row = $sth->fetchrow_array()) {
         $lab = $metadata{"lab"};
         # strip off PI name in parens
         $lab =~ s/\(\w+\)//;
+        # TODO: fix when metadata is corrected (should be lab='UCD')
+        $lab = "UCD" if ($lab eq "UCDavis");
     }
     if (defined($labs{$lab})) {
         $experiment{"labPi"} = $labs{$lab}->{"pi"};
@@ -450,19 +473,19 @@ foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
     my %ids = %{$experiment{"ids"}};
     print STDERR "    IDs: " . join(",", keys %ids) . " KEY:  " . $key . "\n";
-    die "undefined project" unless defined($experiment{"project"});
-    die "undefined projectPi" unless defined($experiment{"projectPi"});
-    die "undefined lab" unless defined($experiment{"lab"});
-    die "undefined labPi" unless defined($experiment{"labPi"});
-    die "undefined dataType" unless defined($experiment{"dataType"});
-    die "undefined cell" unless defined($experiment{"cell"});
-    die "undefined vars" unless defined($experiment{"vars"});
-    die "undefined varLabels" unless defined($experiment{"varLabels"});
-    die "undefined factorLabels" unless defined($experiment{"factorLabels"});
-    die "undefined treatment" unless defined($experiment{"treatment"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
-    die "undefined submitDate" unless defined($experiment{"submitDate"});
-    die "undefined releaseDate" unless defined($experiment{"releaseDate"});
+    $experiment{"project"} = "unknown"  unless defined($experiment{"project"});
+    $experiment{"projectPi"} = "unknown"  unless defined($experiment{"projectPi"});
+    $experiment{"lab"} = "unknown" unless defined($experiment{"lab"});
+    $experiment{"labPi"} = "unknown" unless defined($experiment{"labPi"});
+    $experiment{"dataType"} = "unknown" unless defined($experiment{"dataType"});
+    $experiment{"cell"} = "unknown"  unless defined($experiment{"cell"});
+    $experiment{"vars"} = "unknown" unless defined($experiment{"vars"});
+    $experiment{"varLabels"} = "unknown" unless defined($experiment{"varLabels"});
+    $experiment{"factorLabels"} = "unknown" unless defined($experiment{"factorLabels"});
+    $experiment{"treatment"} = "unknown" unless defined($experiment{"treatment"});
+    $experiment{"freeze"} = "unknown" unless defined($experiment{"freeze"});
+    $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
+    $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
     foreach my $subId (keys %ids) {
         last if (defined $experiment{"status"});
         $experiment{"status"} = defined($submissionStatus{$subId}) ? $submissionStatus{$subId} : "unknown";
