@@ -1,11 +1,11 @@
-# Data Agreement File for Ren Lab ChIP-seq experiments  $Revision: 1.4 $
+# Data Agreement File for Ren Lab ChIP-seq experiments  $Revision: 1.5 $
 
 # Lab and general info
-grant             
-lab               Ren
+grant             Ren 
+lab               LICR
 dataType          ChipSeq
 variables         cell, antibody,sex,age,strain,control
-compositeSuffix   RenTfbs
+compositeSuffix   LicrChipSeq
 assembly          mm9
 medianFragmentLength 225
 dafVersion        2.0
@@ -13,19 +13,19 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=3
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  Ren ChIP-seq Peaks
+longLabelPrefix  LICR ChIP-seq Peaks
 type             broadPeak
 hasReplicates    no
 required         no
 
 view             Signal
-longLabelPrefix  Ren ChIP-seq Signal
+longLabelPrefix  LICR ChIP-seq Signal
 type             bigWig
 hasReplicates    no
 required         yes
 
 view             Alignments
-longLabelPrefix  Ren ChIP-seq Alignments
+longLabelPrefix  LICR ChIP-seq Alignments
 type             bam
 hasReplicates    yes
 required         yes
