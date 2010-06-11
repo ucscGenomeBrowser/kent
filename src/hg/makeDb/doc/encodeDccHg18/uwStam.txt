@@ -1898,4 +1898,441 @@ ln ../*.gz .
 Make uwDnaseSeq.release3.notes.txt
 Make pushQ entry covering 114 new tables, 191 new files and 38 new wibs; plus 3 versioned tables, 5 versioned files and 1 versioned wib
 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 915 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 916 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 917 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 918 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 919 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 921 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 922 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 923 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 924 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 925 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 926 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 927 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 929 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 930 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 931 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 932 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 935 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 936 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 937 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 938 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 944 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 948 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 949 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 961 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 962 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 963 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 964 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 965 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 966 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 967 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 968 reviewing
 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 896 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 906 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 907 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 908 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 909 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 910 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 911 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 912 reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 915 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 916 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 917 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 918 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 919 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 921 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 922 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 923 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 924 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 925 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 926 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 927 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 929 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 930 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 931 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 932 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 935 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 936 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 937 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 938 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 944 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 948 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 949 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 961 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 962 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 963 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 964 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 965 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 966 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 967 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 968 released
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 896 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 906 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 907 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 908 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 909 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 910 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 911 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 912 released
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  299 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  302 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  306 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  406 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  407 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  516 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  517 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  518 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  519 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  520 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  527 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  528 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  523 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  525 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  526 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  532 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  692 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  626 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  595 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  596 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  598 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  599 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  601 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  603 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  604 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  606 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  608 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  609 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  610 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  612 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  613 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  622 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  623 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  652 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  654 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  655 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  656 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  657 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  658 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  659 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  660 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  661 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  671 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  672 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  673 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  674 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  675 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  676 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  677 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  678 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  679 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  680 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  681 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  682 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  683 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  684 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  691 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  690 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  693 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  717 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  694 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  695 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  696 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  697 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  698 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  699 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  700 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  701 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  702 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  703 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  704 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  705 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  706 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  707 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  708 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  709 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  710 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  711 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  712 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  713 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  714 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  715 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  716 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  718 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  719 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  720 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  721 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  722 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  723 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  724 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  725 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  726 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  727 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  728 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  729 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  730 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  731 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  732 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  733 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  734 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  742 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  743 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  744 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  745 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  746 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  747 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  748 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  749 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  750 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  753 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1107 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  991 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  992 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  993 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  989 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  990 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  988 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  985 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  986 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  987 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  982 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  983 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  984 released
+
+2010-04-22 Move metadata to mdb!
+================================
+cd {hg18}
+grep metadata trackDb.wgEncode.ra | grep wgEncodeUwChIPSeq  > testing/mdbUwHist.txt
+wl testing/mdbUwHist.txt 340
+grep -v "\#metadata" testing/mdbUwHist.txt > testing/mdbUwHist2.txt 
+mv testing/mdbUwHist2.txt testing/mdbUwHist.txte
+wl testing/mdbUwHist.txt 293 
+mdbUpdate hg18 testing/mdbUwHist.txt
+Using table named 'hg18.mdb_tdreszer'.
+Read 293 metadata objects from hg18
+Affected 5597 row(s) in hg18.mdb_tdreszer
+cd {downlaodsDir}
+mdbUpdate hg18 fileDb.ra
+Using table named 'hg18.mdb_tdreszer'.
+The same variable appears twice: dateUnrestricted=2010-07-11 and dateUnrestricted=2010-06-29.  Ignoring second value.
+        project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=BJ antibody=H3K4me3 fragLength=350 view=Alignments rank=2nd replicate=2 labVersion="Eland (GAPipeline-1.4)" dataVersion="ENCODE Sep 2009 Freeze" subId=671 dateSubmitted=2009-10-12 dateUnrestricted=2010-07-11 dateUnrestricted=2010-06-29 composite=wgEncodeUwChIPSeq parentTable=wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3 fileName=wgEncodeUwChIPSeqAlignmentsRep2BjH3k4me3.tagAlign.gz
+Read 298 metadata objects from hg18
+Affected 4994 row(s) in hg18.mdb_tdreszer
+cd {hg18}
+mdbPrint hg18 -vars="composite=wgEncodeUwChIPSeq" -ra > testing/mdbUwHist.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:561  vars:10551
+mdbUpdate hg18 -table=mdb testing/mdbUwHist.ra
+Read 561 metadata objects from hg18
+Affected 10551 row(s) in hg18.mdb
+cp testing/mdbUwHist.ra .
+cvs add mdbUwHist.ra
+cvs ci -m "Adding Uw Histone metadata into mdb" mdbUwHist.ra
+
+# UW DNase
+grep metadata trackDb.wgEncode.ra | grep wgEncodeUwDnaseSeq > testing/mdbUwDnase.txt
+wl testing/mdbUwDnase.txt 234
+grep -v "\#metadata" testing/mdbUwDnase.txt > testing/mdbUwDnase2.txt 
+mv testing/mdbUwDnase2.txt testing/mdbUwDnase.txt
+wl testing/mdbUwDnase.txt 231 
+mdbUpdate hg18 testing/mdbUwDnase.txt
+Using table named 'hg18.mdb_tdreszer'.
+Read 231 metadata objects from hg18
+Affected 3960 row(s) in hg18.mdb_tdreszer
+cd {downlaodsDir}
+mdbUpdate hg18 fileDb.ra
+Using table named 'hg18.mdb_tdreszer'.
+Read 237 metadata objects from hg18
+Affected 2903 row(s) in hg18.mdb_tdreszer
+cd {hg18}
+mdbPrint hg18 -vars="composite=wgEncodeUwDnaseSeq" -ra > testing/mdbUwDnase.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:402  vars:6803
+mdbUpdate hg18 -table=mdb testing/mdbUwDnase.ra
+Read 402 metadata objects from hg18
+Affected 6803 row(s) in hg18.mdb
+cp testing/mdbUwDnase.ra .
+cvs add mdbUwDnase.ra
+cvs ci -m "Adding Uw DNase metadata into mdb" mdbUwDnase.ra
+
+cd {hg18}
+grep metadata trackDb.wgEncode.ra | grep wgEncodeUwDGF > testing/mdbUwDgf.txt
+wl testing/mdbUwDgf.txt 20
+grep -v "\#metadata" testing/mdbUwDgf.txt -ra > testing/mdbUwDgf2.txt 
+mv testing/mdbUwDgf2.txt testing/mdbUwDgf.txt
+wl testing/mdbUwDgf.txt 20
+mdbUpdate hg18 testing/mdbUwDgf.txt
+Using table named 'hg18.mdb_tdreszer'.
+Read 20 metadata objects from hg18
+Affected 295 row(s) in hg18.mdb_tdreszer
+cd {downlaodsDir}
+mdbUpdate hg18 wgEncodeUwDGF/fileDb.ra
+Using table named 'hg18.mdb_tdreszer'.
+Read 20 metadata objects from hg18
+Affected 117 row(s) in hg18.mdb_tdreszer
+cd {hg18}
+mdbPrint hg18 -vars="composite=wgEncodeUwDGF" -ra > testing/mdbUwDgf.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:28  vars:412
+mdbUpdate hg18 -table=mdb testing/mdbUwDgf.ra
+Read 28 metadata objects from hg18
+Affected 412 row(s) in hg18.mdb
+cp testing/mdbUwDgf.ra .
+cvs add mdbUwDgf.ra
+cvs ci -m "Adding Uw DGF metadata into mdb" mdbUwDgf.ra
+
+2010-04-23 Standardize to setType, inputType
+============================================
+mdbPrint hg18 -vars="composite=wgEncodeUwChIPSeq" -countObjs
+Using table named 'hg18.mdb_tdreszer'.
+561 objects
+
+mdbPrint hg18 -vars="composite=wgEncodeUwChIPSeq antibody=Input" -countObjs
+23 All are objType file!!
+
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq antibody=Input" -var=setType -val=input
+Affected 23 row(s) in hg18.mdb_tdreszer
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq antibody!=Input" -var=setType -val=exp
+Affected 538 row(s) in hg18.mdb_tdreszer
+
+select distinct t1.val cell from mdb_tdreszer t1 where t1.obj like "wgEncodeUwCh%"
+ and t1.var = "cell"
+ order by t1.val;
+23 rows in set (0.03 sec)
+
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=BJ        " -var=inputType val=BJ/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=Caco-2    " -var=inputType val=Caco-2/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM06990   " -var=inputType val=GM06990/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12801   " -var=inputType val=GM12801/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12864   " -var=inputType val=GM12864/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12865   " -var=inputType val=GM12865/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12872   " -var=inputType val=GM12872/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12873   " -var=inputType val=GM12873/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12874   " -var=inputType val=GM12874/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12875   " -var=inputType val=GM12875/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=GM12878   " -var=inputType val=GM12878/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HEK293    " -var=inputType val=HEK293/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HL-60     " -var=inputType val=HL-60/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HMEC      " -var=inputType val=HMEC/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HRE       " -var=inputType val=HRE/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HUVEC     " -var=inputType val=HUVEC/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HeLa-S3   " -var=inputType val=HeLa-S3/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=HepG2     " -var=inputType val=HepG2/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=K562      " -var=inputType val=K562/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=NHEK      " -var=inputType val=NHEK/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=SAEC      " -var=inputType val=SAEC/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=SK-N-SH_RA" -var=inputType val=SK-N-SH_RA/Input
+mdbUpdate hg18 -vars="composite=wgEncodeUwChIPSeq cell=WERI-Rb-1 " -var=inputType val=WERI-Rb-1/Input
+Affected 37 row(s) in hg18.mdb_tdreszer
+Affected 39 row(s) in hg18.mdb_tdreszer
+Affected 38 row(s) in hg18.mdb_tdreszer
+Affected 6 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+Affected 39 row(s) in hg18.mdb_tdreszer
+Affected 11 row(s) in hg18.mdb_tdreszer
+Affected 15 row(s) in hg18.mdb_tdreszer
+Affected 11 row(s) in hg18.mdb_tdreszer
+Affected 39 row(s) in hg18.mdb_tdreszer
+Affected 37 row(s) in hg18.mdb_tdreszer
+Affected 40 row(s) in hg18.mdb_tdreszer
+Affected 33 row(s) in hg18.mdb_tdreszer
+Affected 35 row(s) in hg18.mdb_tdreszer
+Affected 37 row(s) in hg18.mdb_tdreszer
+Affected 37 row(s) in hg18.mdb_tdreszer
+Affected 37 row(s) in hg18.mdb_tdreszer
+Affected 10 row(s) in hg18.mdb_tdreszer
+mdbPrint hg18 -vars="composite=wgEncodeUwChIPSeq inputType=?" -countObjs
+561 objects
+mdbPrint hg18 -vars="composite=wgEncodeUwChIPSeq" > mdbUwHist.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:561  vars:11673
+mdbUpdate hg18 -table=mdb mdbUwHist.ra
+Read 561 metadata objects from hg18
+Affected 1122 row(s) in hg18.mdb
+cvs ci -m "Extended setType and inputType to UW Histone" mdbUwHist.ra
+cd {downloadsDir}UwHist
+encodeDownloadsPage.pl -mdb=mdb index.html .
+
+# DNase?
+mdbPrint hg18 -vars="composite=wgEncodeUwDnaseSeq" -countObjs
+Using table named 'hg18.mdb_tdreszer'.
+402 objects
+mdbPrint hg18 -vars="composite=wgEncodeUwDnaseSeq antibody=Input" -countObjs
+0 objects
+
+# DGF?
+mdbPrint hg18 -vars="composite=wgEncodeUwDGF" -countObjs
+Using table named 'hg18.mdb_tdreszer'.
+28 objects
+mdbPrint hg18 -vars="composite=wgEncodeUwDGF antibody=Input" -countObjs
+0 objects
+## So done with UW: only dealing with ChIP data
+
+2010-06-08 Mini-freeze
+======================
+cd {t19}/metaDb/alpha/testing
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" > uwHistHg18.txt
+objects:561  vars:11673
+
+1280	   	hg19	   	UwChIPSeq-GM12874-DS10992-CTCF-2 jun10	   	 loaded 	   	John Stam	   	UwStam	   	2010-06-07 23:35  	    	about 17 hours ago
+1281	  	hg19	  	UwChIPSeq-GM12874-DS11503-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 23:49 	   	about 17 hours ago
+1277	  	hg19	  	UwChIPSeq-GM12872-DS10989-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 21:57 	   	about 19 hours ago
+1278	  	hg19	  	UwChIPSeq-GM12872-DS11500-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 22:32 	   	about 18 hours ago
+1275	  	hg19	  	UwChIPSeq-GM12865-DS11502-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 21:51 	   	about 19 hours ago
+1274	  	hg19	  	UwChIPSeq-GM12865-DS10991-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 20:51 	   	about 20 hours ago
+1273	  	hg19	  	UwChIPSeq-GM12864-DS11499-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 20:50 	   	about 20 hours ago
+1272	  	hg19	  	UwChIPSeq-GM12864-DS10988-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 20:11 	   	about 21 hours ago
+1271	  	hg19	  	UwChIPSeq-GM06990-DS11520-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 19:32 	   	about 21 hours ago
+1268	  	hg19	  	UwChIPSeq-GM06990-DS11518-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 18:30 	   	about 22 hours ago
+1269	  	hg19	  	UwChIPSeq-Caco-2-DS11675-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 18:46 	   	about 22 hours ago
+1267	  	hg19	  	UwChIPSeq-Caco-2-DS11674-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 18:24 	   	about 22 hours ago
+1266	  	hg19	  	UwChIPSeq-K562-DS11247-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 17:10 	   	about 24 hours ago
+1264	  	hg19	  	UwChIPSeq-K562-DS11508-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 16:44 	   	1 day ago
+1265	  	hg19	  	UwChIPSeq-GM12878-DS11165-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 17:00 	   	about 24 hours ago
+1263	  	hg19	  	UwChIPSeq-GM12878-DS11510-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 17:44 	   	about 23 hours ago
+
+1257	   	hg19	   	UwDnaseSeq-AG04449-DS12319-1 jun10	   	 loaded 	   	John Stam	   	UwStam	   	2010-06-07 12:55  	    	1 day ago
+1249	  	hg19	  	UwDnaseSeq-BJ-DS10018-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-06 09:58 	   	2 days ago
+
+rm tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=GM12874 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=GM12872 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=GM12865 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=GM12864 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=GM06990 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=K562 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=GM12878 antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+e tmp.txt # to add dateResubmitted and origAssembly
+chmod 755 tmp.txt
+./tmp.txt
+Command would affected 0 row(s) in hg19.metaDb
+mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwHistone" -countObjs
+0 objects
+mdbUpdate hg19 -table=metaDb wgEncodeUwHistone.ra 
+Read 73 metadata objects from hg19
+Affected 1678 row(s) in hg19.metaDb
+./tmp.txt
+Affected 3 row(s) in hg19.metaDb
+...
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeUwHistone" > wgEncodeUwHistone.ra
+
+# missed
+1255	  	hg19	  	UwChIPSeq-BJ-DS11560-CTCF-1 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 10:10 	   	1 day ago
+1262	  	hg19	  	UwChIPSeq-BJ-DS11562-CTCF-2 jun10	  	loaded 	  	John Stam	  	UwStam	  	2010-06-07 14:58 	   	1 day ago
+rm tmp.txt
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeUwChIPSeq cell=BJ antibody=CTCF" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" >> tmp.txt
+e tmp.txt # to add dateResubmitted and origAssembly
+chmod 755 tmp.txt
+./tmp.txt
+Affected 1 row(s) in hg19.metaDb
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeUwHistone" > wgEncodeUwHistone.ra

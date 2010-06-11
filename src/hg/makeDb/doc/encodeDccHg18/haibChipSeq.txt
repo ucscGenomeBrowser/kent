@@ -1619,3 +1619,1650 @@ lrwxrwxrwx 1 tdreszer protein 134 Feb 26 16:05 wgEncodeHudsonalphaChipSeqRawSign
 1) HepG2/SRF with rep 2 only.
 2) A549/GR/None with rep 1 only
 3) A549/GR/* with screwy input associations.  May have to add input variable to ALL metadata.
+
+## Problems with A549 all around!
+A549/Input/EtOH0.02pct SL475(subId=901) found, SL307(subId=813)  Where is this??  Found, marked as rep2  Get this fixed!!!
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02 to wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02;
+update wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02.wib";
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02.wib wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02.wib
+cd /gbdb/hg18/wib/
+rm wgEncodeHudsonalphaChipSeqRawSignalRep2A549ControlPcr2xEtoh02.wib
+ln -sf /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02.wib wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02.wib
+cd {downloadsDir}
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xEtoh02.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr2xEtoh02.tagAlign.gz
+cd release2
+rm wgEncodeHudsonalphaChipSeqAlignmentsRep2A549ControlPcr2xEtoh02.tagAlign.gz
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr2xEtoh02.tagAlign.gz .
+
+# subId=801 has SL878 and SL879 which should be A549/GR/EtOH0.02pct/PCR1x rep 1 and 2
+doEncodeValidate.pl -quick x /cluster/data/encode/pipeline/encpipeline_prod/801
+doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/801 > load_error 2>&1 &
+cd {downloadsDir}
+ll wgEncodeHudsonalphaChipSeq*A549GrPcr1xEtoh02.*.gz
+lrwxrwxrwx 1 tdreszer protein         70 Mar  1 16:20 wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xEtoh02.fastq.gz -> /cluster/data/encode/pipeline/encpipeline_prod/801/data/SL879.fastq.gz
+-rw-rw-r-- 1 tdreszer protein  395159252 Mar  1 16:24 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xEtoh02.tagAlign.gz
+lrwxrwxrwx 1 tdreszer protein         70 Mar  1 16:24 wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xEtoh02.fastq.gz -> /cluster/data/encode/pipeline/encpipeline_prod/801/data/SL878.fastq.gz
+-rw-rw-r-- 1 tdreszer protein  401648848 Mar  1 16:28 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xEtoh02.tagAlign.gz
+mv /cluster/data/encode/pipeline/encpipeline_prod/801/data/SL879.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xEtoh02.fastq.gz
+mv /cluster/data/encode/pipeline/encpipeline_prod/801/data/SL878.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xEtoh02.fastq.gz
+-rw-rw-r-- 1 tdreszer protein  395159252 Mar  1 16:24 wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xEtoh02.tagAlign.gz
+-rw-rw-r-- 1 tdreszer protein  401648848 Mar  1 16:28 wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xEtoh02.tagAlign.gz
+-rw-rw-r-- 1 qateam   protein 1098196387 Nov 30 07:20 wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xEtoh02.fastq.gz
+-rw-rw-r-- 1 qateam   protein 1128076619 Nov 30 07:26 wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xEtoh02.fastq.gz
+cd release2/
+ln ../wgEncodeHudsonalphaChipSeq*A549GrPcr1xEtoh02.*.gz 
+cd {pip}/801
+
+### Ouch!  Just lost tables:
+wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex5nm
+wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex5nm
+wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm
+wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm
+clusterAdmin (Victory) helped me.
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/801/out/fileDb.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html .
+cp index.html release2/
+cp preamble.html release2/
+cp fileDb.ra release2/
+cp files.txt release2/
+### Be sure and straighten this out as input when Tim Reddy straightens it out!!!
+
+### What is left?
+1) HepG2/SRF with rep 2 only.
+2) A549/GR/None is all screwy!!!  Mixed test and controls in submission  Tim Reddy confirms that these are actually as they should be
+3) A549/GR/* with screwy input associations.  May have to add input variable to ALL metadata.  Additionally subId=774 has unloaded SL787
+
+# Fix HepG2/SRF with rep 2 only: Rename to rep1
+cd {downloadsDir}
+ ~/bin/scripts/encRenameWig.sh . wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Srf wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
+in       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq
+moved    wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Srf.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Srf.tagAlign.gz
+in       /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb
+moved    wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Srf.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf.wib
+removed   /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Srf.wib
+in       /gbdb/hg18/wib
+created  wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf.wib
+link to  /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf.wib
+renamed  wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Srf to wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
+updated  wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf to point to /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf.wib
+Done.  Be sure to update metadata and trackDb.
+rename table wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Srf to wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf;
+mv wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Srf.broadPeak.gz wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf.broadPeak.gz
+cd release2/
+rm wgEncodeHudsonalphaChipSeq*Hepg2Srf*
+ln ../wgEncodeHudsonalphaChipSeq*Hepg2Srf* .
+cd ..
+e fileDb.ra to point to rep1
+e trackDb.wgEncode.ra to point to rep1
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html
+# confirmed fix
+
+2010-03-26 Special for garbled tagAligns
+========================================
+cd pip/741
+tar -tzf ../../ftp/prod/rrauch/GM-Control.tar.gz
+SL516.TagAlign
+SL517.TagAlign
+mkdir late;cd late
+mv ../../../ftp/prod/rrauch/GM-Control.tar.gz .
+tar -xzf GM-Control.tar.gz
+e load.ra to remove all but 
+wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control
+wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control
+wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
+wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
+# unfortunately, I will need to reload to make the RawSig, which means regenerating the autoRaw.beds !
+/cluster/bin/x86_64/bedExtendRanges hg18 225 late/SL516.TagAlign | sort -S 5G -T /data/tmp -k1,1 -k2,2n - | grep -v -E "^track" | bedItemOverlapCount hg18 stdin > manualRawSig.bed &
+/cluster/bin/x86_64/bedExtendRanges hg18 225 late/SL516.TagAlign | sort -S 5G -T /data/tmp -k1,1 -k2,2n - | bedItemOverlapCount hg18 stdin > SL516rawSig.bed &
+/cluster/bin/x86_64/bedExtendRanges hg18 225 late/SL517.TagAlign | sort -S 5G -T /data/tmp -k1,1 -k2,2n - | bedItemOverlapCount hg18 stdin > SL517rawSig.bed &
+e load.ra # to be sure to point to rawSig.beds
+cd dwnlds
+mkdir save 
+mv wgEncodeHudsonalphaChipSeq*Gm12878ControlV2.*.gz save
+cd pip/741
+
+~qateam/bin/scripts/doEncodeLoad.pl . /hive/groups/encode/dcc/pipeline/encpipeline_prod/741 > out/lateLoad.out &
+// of course it is misnamed
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2old; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2old; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2; 
+select count(*) from wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2;   |  2657945 | 
+select count(*) from wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2old;|  1328955 | 
+select count(*) from wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2;   |  2636311 | 
+select count(*) from wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2old;|  1235707 | 
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 limit 1;
+/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib 
+select file from wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 limit 1;
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib";
+cd wib
+ll wgEncodeHudsonalphaChipSeqRawSignalRep?Gm12878ControlV2.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib
+lrwxrwxrwx 1 tdreszer protein 139 Feb 26 11:28 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib -> /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib
+ll wgEncodeHudsonalphaChipSeqRawSignalRep?Gm12878Control.wib
+lrwxrwxrwx 1 tdreszer protein 111 Mar 26 15:32 wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib -> /hive/groups/encode/dcc/pipeline/encpipeline_prod/741/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib
+lrwxrwxrwx 1 tdreszer protein 111 Mar 26 15:49 wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib -> /hive/groups/encode/dcc/pipeline/encpipeline_prod/741/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib
+cd /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep?Gm12878ControlV2.wib old
+mv /hive/groups/encode/dcc/pipeline/encpipeline_prod/741/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib 
+mv /hive/groups/encode/dcc/pipeline/encpipeline_prod/741/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib /hive/groups/encode/dcc/pipeline/downloads/hg18/wgEncodeHudsonalphaChipSeq/gbdb/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib 
+cd /gbdb/hg18/wib 
+ll wgEncodeHudsonalphaChipSeqRawSignalRep?Gm12878Control*.wib
+rm wgEncodeHudsonalphaChipSeqRawSignalRep?Gm12878Control.wib
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wib";
+drop table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2old;
+drop table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2old;
+cd dwnldsDir
+rm gbdb/old/*.wib
+ll wgEncodeHudsonalphaChipSeq*Rep?Gm12878Control*.*.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wig.gz wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2.wig.gz
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wig.gz wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2.wig.gz
+cd release2/
+ll wgEncodeHudsonalphaChipSeq*Rep?Gm12878ControlV2.*.gz
+rm wgEncodeHudsonalphaChipSeq*Rep?Gm12878ControlV2.*.gz
+ln ../wgEncodeHudsonalphaChipSeq*Rep?Gm12878ControlV2.*.gz .
+cd ..
+rm -rf /save
+# Now all files should be updated and renamed properly!
+
+### Rerunning encodeDownloadsPage with -checksum so be sure to copy md5sum.txt again
+
+
+2010-04-12 Loadeing metaTbl for hg18
+====================================
+cd {tdb}
+grep metadata trackdDb.wgencode.ra | grep Hudson | grep Chip > testing/metaHaibTfbs.txt
+cd testing
+# edit remove the dups
+metaTblUpdate -db=hg18 metaHaibTfbs.txt
+Using table named 'hg18.metaTbl_tdreszer'.
+No obj found. This is not properly formatted metadata:
+metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 protocol=PCR1x antibody=BATF type=wig fragLength=225 view=RawSignal replicate=2 labVersion=8 dataVersion="ENCODE Sep 2009 Freeze" subId=741 dateSubmitted=2009-10-26 dateUnrestricted=2010-07-26 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Batf.tagAlign.gz
+# do file and tablename match??
+wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf 
+wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Batf.tagAlign.gz
+### Ouch!  The code doesn't handle the Alignments to RawSignal conversion!
+
+~/bin/x86_64/metaTblUpdate -db=hg18 metaHaibTfbs.txt
+Using table named 'hg18.metaTbl_tdreszer'.
+Read 358 metadata objects from metaHaibTfbs.txt
+Affected 6610 row(s) in hg18.metaTbl_tdreszer
+
+# check in code change
+metaTblUpdate -db=hg18 metaHaibTfbs.txt
+Using table named 'hg18.metaTbl_tdreszer'.
+Read 358 metadata objects from metaHaibTfbs.txt
+Affected 0 row(s) in hg18.metaTbl_tdreszer
+# notice 0 were affected because I just updated these.
+
+cd {downloads}
+metaTblUpdate -db=hg18 fileDb.ra
+# needed to edity fileDb.ra to replace some tableName vars with parentTable vars
+metaTblUpdate -db=hg18 fileDb.ra
+Using table named 'hg18.metaTbl_tdreszer'.
+Read 361 metadata objects from fileDb.ra
+Affected 6192 row(s) in hg18.metaTbl_tdreszer
+
+encodeDownloadsPage.pl -metaTbl=metaTbl_tdreszer meta.html .
+encodeDownloadsPage.pl -noMetaTbl noMeta.html .
+wl meta.html 
+537 meta.html
+wl noMeta.html 
+537 noMeta.html
+diff meta.html noMeta.html 
+# identical!
+
+cd {tdb}/testing
+metaTblPrint -db=hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" -ra > metaHaibTfbs.ra
+Using table named 'hg18.metaTbl_tdreszer'.
+objects:709  vars:12802
+
+# expected 497 objects  Difference?  Must be versioned tables and files which were in fileDb.ra but are no longer in the downloads dir. 
+# Clean extra entries?
+
+# get downloads dir list
+cd {downloads}
+ls -1 *.gz | sort > ~/kent/src/hg/makeDb/trackDb/human/hg18/testing/tmp.txt
+
+# get metaTbl list
+cd {tdb}/testing
+grep metaObject metaHaibTfbs.ra > tmp2.txt
+# edit tmp.txt tmp2.txt to strip down to obj names
+diff tmp.txt tmp2.txt > tmp3.txt
+# edit tmp3.txt to strip down to obj names
+wl tmp3.txt
+212 tmp3.txt
+
+#edit tmp3.txt as: metadata wgEncodeHudsonalphaChipSeqAlignmentsPfsk1Control delete
+metaTblUpdate -db=hg18 tmp3.txt
+Affected 3999 row(s) in hg18.metaTbl_tdreszer
+
+metaTblPrint -db=hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" -ra > metaHaibTfbs.ra
+Using table named 'hg18.metaTbl_tdreszer'.
+objects:497  vars:8803
+
+metaTblUpdate -db=hg18 -table=metaTbl metaHaibTfbs.ra
+Read 497 metadata objects from metaHaibTfbs.ra
+Affected 8803 row(s) in hg18.metaTbl
+
+metaTblUpdate -db=hg18 vars="tableName=" -delete
+Using table named 'hg18.metaTbl_tdreszer'.
+Affected 13965 row(s) in hg18.metaTbl_tdreszer
+
+metaTblPrint -db=hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" -ra > metaHaibTfbs.ra
+Using table named 'hg18.metaTbl_tdreszer'.
+objects:333  vars:5870
+### Screwed something up.  Return to first principles:
+
+metaTblUpdate -db=hg18 fileDb.ra -replace
+ Using table named 'hg18.metaTbl_tdreszer'.
+ Read 361 metadata objects from fileDb.ra
+ Affected 12238 row(s) in hg18.metaTbl_tdreszer
+metaTblUpdate -db=hg18 metaHaibTfbs.txt -replace
+ Using table named 'hg18.metaTbl_tdreszer'.
+ Read 358 metadata objects from metaHaibTfbs.txt
+ Affected 6796 row(s) in hg18.metaTbl_tdreszer
+metaTblUpdate -db=hg18 tmp3.txt
+ Using table named 'hg18.metaTbl_tdreszer'.
+ Read 212 metadata objects from tmp3.txt
+ Affected 3993 row(s) in hg18.metaTbl_tdreszer
+metaTblPrint -db=hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" -ra > metaHaibTfbs.ra
+ Using table named 'hg18.metaTbl_tdreszer'.
+ objects:497  vars:8799
+## Okay back to normal for HAIB, Now fix Yale, Broad and OpenChrom
+
+metaTblUpdate -db=hg18 metaYaleTfbs.ra -replace
+ Using table named 'hg18.metaTbl_tdreszer'.
+ Read 1073 metadata objects from metaYaleTfbs.ra
+ Affected 31803 row(s) in hg18.metaTbl_tdreszer
+metaTblUpdate -db=hg18 metaBroad.ra -replace
+ Using table named 'hg18.metaTbl_tdreszer'.
+ Read 177 metadata objects from metaBroad.ra
+ Affected 2562 row(s) in hg18.metaTbl_tdreszer
+metaTblUpdate -db=hg18 metaOpenChrom.ra -replace
+ Using table named 'hg18.metaTbl_tdreszer'.
+ Read 615 metadata objects from metaOpenChrom.ra
+ Affected 15361 row(s) in hg18.metaTbl_tdreszer
+
+## So how would I delete all of those tableNames??
+
+2010-04-20 Fix 'input' once and for all ??
+==========================================
+Wroking on:
+mdbPrint hg18 -vars="composite=wgEncodeHudsonalphaChipSeq input!=true" > haibInpUpdate.txt
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq treatment!=" -var=treatment -val=None -test -verbose=2
+Doesn't work.
+
+select distinct var,val from mdb_tdreszer where obj like "wgEncodeHudsonalpha%" and var in ("cell","treatment","antibody","protocol","input");
++-----------+--------------------+
+| var       | val                |
++-----------+--------------------+
+| antibody  | BATF               | 
+| antibody  | BCL11A             | 
+| antibody  | BCL3               | 
+| antibody  | BHLHE40            | 
+| antibody  | CTCF               | 
+| antibody  | EBF                | 
+| antibody  | Egr-1              | 
+| antibody  | FOSL2              | 
+| antibody  | FOXP2              | 
+| antibody  | GABP               | 
+| antibody  | GR                 | 
+| antibody  | HEY1               | 
+| antibody  | IRF4               | 
+| antibody  | Input              | 
+| antibody  | JunD               | 
+| antibody  | NRSF               | 
+| antibody  | PAX5-C20           | 
+| antibody  | PAX5-N19           | 
+| antibody  | POU2F2             | 
+| antibody  | PU.1               | 
+| antibody  | Pbx3               | 
+| antibody  | Pol2               | 
+| antibody  | Pol2-4H8           | 
+| antibody  | RXRA               | 
+| antibody  | SIX5               | 
+| antibody  | SP1                | 
+| antibody  | SRF                | 
+| antibody  | Sin3Ak-20          | 
+| antibody  | TAF1               | 
+| antibody  | TCF12              | 
+| antibody  | USF-1              | 
+| antibody  | ZBTB33             | 
+| antibody  | p300               | 
+| cell      | A549               | 
+| cell      | BE2_C              | 
+| cell      | GM12878            | 
+| cell      | GM12891            | 
+| cell      | GM12892            | 
+| cell      | H1-hESC            | 
+| cell      | HeLa-S3            | 
+| cell      | HepG2              | 
+| cell      | Jurkat             | 
+| cell      | K562               | 
+| cell      | PANC-1             | 
+| cell      | PFSK-1             | 
+| cell      | SK-N-MC            | 
+| cell      | SK-N-SH_RA         | 
+| cell      | U87                | 
+| Input     | A549/EtOH/GR/PCR1x | 
+| Input     | PCR2x              | 
+| Input     | Std                | 
+| Input     | true               | 
+| protocol  | PCR1x              | 
+| protocol  | PCR2x              | 
+| treatment | DEX_100nM          | 
+| treatment | DEX_500pM          | 
+| treatment | DEX_50nM           | 
+| treatment | DEX_5nM            | 
+| treatment | EtOH_0.02pct       | 
++-----------+--------------------+
+59 rows in set (0.11 sec)
+
+select distinct t1.val,t2.val,t3.val,t4.val from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4 where t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "protocol";
++------+--------------+-------+-------+
+| val  | val          | val   | val   |
++------+--------------+-------+-------+
+| A549 | DEX_100nM    | Input | PCR1x | 
+| A549 | DEX_100nM    | CTCF  | PCR1x | 
+| A549 | DEX_100nM    | Pol2  | PCR2x | 
+| A549 | DEX_100nM    | USF-1 | PCR1x | 
+| A549 | DEX_500pM    | GR    | PCR1x | 
+| A549 | DEX_50nM     | GR    | PCR1x | 
+| A549 | DEX_5nM      | GR    | PCR1x | 
+| A549 | EtOH_0.02pct | Input | PCR1x | 
+| A549 | EtOH_0.02pct | Input | PCR2x | 
+| A549 | EtOH_0.02pct | CTCF  | PCR1x | 
+| A549 | EtOH_0.02pct | GR    | PCR1x | 
+| A549 | EtOH_0.02pct | Pol2  | PCR2x | 
+| A549 | EtOH_0.02pct | USF-1 | PCR1x | 
++------+--------------+-------+-------+
+13 rows in set (0.05 sec)
+### won't work because lots of HAIB objs don't have treatment or protocol
+# Plan: print current mdb, update all haib objs to have default treatment=None and default protocol = PCR1x, THEN reupdate with current settings in file
+ mdbPrint hg18 -vars="grant=Myers" -ra > mdbHaib.ra
+ mdbUpdate hg18 -vars="grant=Myers" -var=treatment -val=None -test
+ mdbUpdate hg18 -vars="grant=Myers" -var=protocol -val=PCR1x -test
+ mdbUpdate hg18 mdbHaib.ra
+
+select distinct t1.val,t2.val,t3.val,t4.val from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4 where t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "protocol";
+105 rows in set (0.08 sec)
+# in business!
+
+select distinct t1.val,t2.val,t3.val,t4.val,t5.val from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4,mdb_tdreszer t5 where t1.obj like "wgEncodeHudson%"
+ and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj and t4.obj = t5.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "protocol" and t5.var = "input"
+ order by t1.val,t2.val,t3.val,t4.val,t5.val;
++------------+--------------+-----------+-------+--------------------+
+| val        | val          | val       | val   | val                |
++------------+--------------+-----------+-------+--------------------+
+| A549       | DEX_100nM    | CTCF      | PCR1x | Std                | 
+| A549       | DEX_100nM    | Input     | PCR1x | true               | 
+| A549       | DEX_100nM    | Pol2      | PCR2x | PCR2x              | 
+| A549       | DEX_100nM    | USF-1     | PCR1x | Std                | 
+| A549       | DEX_500pM    | GR        | PCR1x | A549/EtOH/GR/PCR1x | 
+| A549       | DEX_50nM     | GR        | PCR1x | A549/EtOH/GR/PCR1x | 
+| A549       | DEX_5nM      | GR        | PCR1x | A549/EtOH/GR/PCR1x | 
+| A549       | EtOH_0.02pct | CTCF      | PCR1x | Std                | 
+| A549       | EtOH_0.02pct | GR        | PCR1x | true               | 
+| A549       | EtOH_0.02pct | Input     | PCR1x | true               | 
+| A549       | EtOH_0.02pct | Input     | PCR2x | true               | 
+| A549       | EtOH_0.02pct | Pol2      | PCR2x | PCR2x              | 
+| A549       | EtOH_0.02pct | USF-1     | PCR1x | Std                | 
+| A549       | None         | GR        | PCR1x | Std                | 
+| A549       | None         | Input     | PCR1x | true               | 
+| BE2_C      | None         | Input     | PCR1x | true               | 
+| BE2_C      | None         | NRSF      | PCR1x | Std                | 
+| GM12878    | None         | BATF      | PCR1x | Std                | 
+| GM12878    | None         | BCL11A    | PCR1x | Std                | 
+| GM12878    | None         | BCL3      | PCR1x | Std                | 
+| GM12878    | None         | EBF       | PCR1x | Std                | 
+| GM12878    | None         | Egr-1     | PCR2x | PCR2x              | 
+| GM12878    | None         | GABP      | PCR2x | PCR2x              | 
+| GM12878    | None         | IRF4      | PCR1x | Std                | 
+| GM12878    | None         | Input     | PCR1x | true               | 
+| GM12878    | None         | Input     | PCR2x | true               | 
+| GM12878    | None         | NRSF      | PCR2x | PCR2x              | 
+| GM12878    | None         | PAX5-C20  | PCR1x | Std                | 
+| GM12878    | None         | PAX5-N19  | PCR1x | Std                | 
+| GM12878    | None         | POU2F2    | PCR1x | Std                | 
+| GM12878    | None         | PU.1      | PCR1x | Std                | 
+| GM12878    | None         | Pbx3      | PCR1x | Std                | 
+| GM12878    | None         | Pol2      | PCR2x | PCR2x              | 
+| GM12878    | None         | Pol2-4H8  | PCR1x | Std                | 
+| GM12878    | None         | SP1       | PCR1x | Std                | 
+| GM12878    | None         | SRF       | PCR2x | PCR2x              | 
+| GM12878    | None         | Sin3Ak-20 | PCR2x | PCR2x              | 
+| GM12878    | None         | TAF1      | PCR1x | Std                | 
+| GM12878    | None         | TCF12     | PCR1x | Std                | 
+| GM12878    | None         | USF-1     | PCR2x | PCR2x              | 
+| GM12878    | None         | ZBTB33    | PCR1x | Std                | 
+| GM12878    | None         | p300      | PCR1x | Std                | 
+| GM12891    | None         | Input     | PCR1x | true               | 
+| GM12891    | None         | POU2F2    | PCR1x | Std                | 
+| GM12891    | None         | PU.1      | PCR1x | Std                | 
+| GM12891    | None         | Pol2      | PCR1x | Std                | 
+| GM12891    | None         | Pol2-4H8  | PCR1x | Std                | 
+| GM12891    | None         | TAF1      | PCR1x | Std                | 
+| GM12892    | None         | Input     | PCR1x | true               | 
+| GM12892    | None         | Pol2      | PCR1x | Std                | 
+| GM12892    | None         | Pol2-4H8  | PCR1x | Std                | 
+| GM12892    | None         | TAF1      | PCR1x | Std                | 
+| H1-hESC    | None         | Input     | PCR1x | true               | 
+| H1-hESC    | None         | NRSF      | PCR1x | Std                | 
+| H1-hESC    | None         | Pol2      | PCR1x | Std                | 
+| H1-hESC    | None         | Pol2-4H8  | PCR1x | Std                | 
+| H1-hESC    | None         | TAF1      | PCR1x | Std                | 
+| HeLa-S3    | None         | GABP      | PCR1x | Std                | 
+| HeLa-S3    | None         | Input     | PCR1x | true               | 
+| HeLa-S3    | None         | Pol2      | PCR1x | Std                | 
+| HeLa-S3    | None         | TAF1      | PCR1x | Std                | 
+| HepG2      | None         | BHLHE40   | PCR1x | Std                | 
+| HepG2      | None         | FOSL2     | PCR1x | Std                | 
+| HepG2      | None         | GABP      | PCR1x | Std                | 
+| HepG2      | None         | GABP      | PCR2x | PCR2x              | 
+| HepG2      | None         | HEY1      | PCR1x | Std                | 
+| HepG2      | None         | Input     | PCR1x | true               | 
+| HepG2      | None         | JunD      | PCR1x | Std                | 
+| HepG2      | None         | NRSF      | PCR1x | Std                | 
+| HepG2      | None         | Pol2      | PCR1x | Std                | 
+| HepG2      | None         | RXRA      | PCR1x | Std                | 
+| HepG2      | None         | SRF       | PCR1x | Std                | 
+| HepG2      | None         | Sin3Ak-20 | PCR1x | Std                | 
+| HepG2      | None         | TAF1      | PCR1x | Std                | 
+| HepG2      | None         | USF-1     | PCR1x | Std                | 
+| HepG2      | None         | ZBTB33    | PCR1x | Std                | 
+| HepG2      | None         | p300      | PCR1x | Std                | 
+| Jurkat     | None         | Input     | PCR2x | true               | 
+| Jurkat     | None         | Pol2      | PCR2x | PCR2x              | 
+| K562       | None         | Egr-1     | PCR2x | PCR2x              | 
+| K562       | None         | GABP      | PCR2x | PCR2x              | 
+| K562       | None         | HEY1      | PCR1x | Std                | 
+| K562       | None         | Input     | PCR1x | true               | 
+| K562       | None         | Input     | PCR2x | true               | 
+| K562       | None         | NRSF      | PCR2x | PCR2x              | 
+| K562       | None         | PU.1      | PCR1x | Std                | 
+| K562       | None         | Pol2      | PCR2x | PCR2x              | 
+| K562       | None         | Pol2-4H8  | PCR1x | Std                | 
+| K562       | None         | SIX5      | PCR1x | Std                | 
+| K562       | None         | SRF       | PCR2x | PCR2x              | 
+| K562       | None         | Sin3Ak-20 | PCR2x | PCR2x              | 
+| K562       | None         | TAF1      | PCR1x | Std                | 
+| K562       | None         | USF-1     | PCR2x | PCR2x              | 
+| PANC-1     | None         | Input     | PCR1x | true               | 
+| PANC-1     | None         | NRSF      | PCR1x | Std                | 
+| PANC-1     | None         | NRSF      | PCR2x | PCR2x              | 
+| PFSK-1     | None         | FOXP2     | PCR1x | Std                | 
+| PFSK-1     | None         | Input     | PCR1x | true               | 
+| PFSK-1     | None         | NRSF      | PCR1x | Std                | 
+| SK-N-MC    | None         | FOXP2     | PCR1x | Std                | 
+| SK-N-MC    | None         | Input     | PCR1x | true               | 
+| SK-N-SH_RA | None         | Input     | PCR1x | true               | 
+| SK-N-SH_RA | None         | NRSF      | PCR1x | Std                | 
+| U87        | None         | Input     | PCR1x | true               | 
+| U87        | None         | NRSF      | PCR1x | Std                | 
++------------+--------------+-----------+-------+--------------------+
+105 rows in set (0.11 sec)
+
+# allows me to create these following commands:
+mdbUpdate hg18 -vars="cell=A549 treatment=DEX_100nM antibody=CTCF protocol=PCR1x" -var=input -val=A549/DEX_100nM/Input/PCR1x
+mdbUpdate hg18 -vars="cell=A549 treatment=DEX_100nM antibody=Pol2 protocol=PCR2x" -var=input -val=A549/DEX_100nM/Input/PCR1x
+mdbUpdate hg18 -vars="cell=A549 treatment=DEX_100nM antibody=USF-1 protocol=PCR1x" -var=input -val=A549/DEX_100nM/Input/PCR1x
+mdbUpdate hg18 -vars="cell=A549 treatment=EtOH_0.02pct antibody=CTCF protocol=PCR1x" -var=input -val=A549/EtOH/Input/PCR1x
+mdbUpdate hg18 -vars="cell=A549 treatment=EtOH_0.02pct antibody=Pol2 protocol=PCR2x" -var=input -val=A549/EtOH/Input/PCR2x
+mdbUpdate hg18 -vars="cell=A549 treatment=EtOH_0.02pct antibody=USF-1 protocol=PCR1x" -var=input -val=A549/EtOH/Input/PCR1x
+mdbUpdate hg18 -vars="cell=A549 treatment=None antibody=GR protocol=PCR1x" -var=input -val=A549/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=BE2_C treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=BE2_C/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=BATF protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=BCL11A protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=BCL3 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=EBF protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=Egr-1 protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=GABP protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=IRF4 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=NRSF protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=PAX5-C20 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=PAX5-N19 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=POU2F2 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=PU.1 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=Pbx3 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=Pol2 protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=Pol2-4H8 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=SP1 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=SRF protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=Sin3Ak-20 protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=TCF12 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=USF-1 protocol=PCR2x" -var=input -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=ZBTB33 protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12878 treatment=None antibody=p300  protocol=PCR1x" -var=input -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12891 treatment=None antibody=POU2F2 protocol=PCR1x" -var=input -val=GM12891/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12891 treatment=None antibody=PU.1 protocol=PCR1x" -var=input -val=GM12891/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12891 treatment=None antibody=Pol2 protocol=PCR1x" -var=input -val=GM12891/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12891 treatment=None antibody=Pol2-4H8 protocol=PCR1x" -var=input -val=GM12891/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12891 treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=GM12891/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12892 treatment=None antibody=Pol2 protocol=PCR1x" -var=input -val=GM12892/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12892 treatment=None antibody=Pol2-4H8 protocol=PCR1x" -var=input -val=GM12892/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=GM12892 treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=GM12892/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=H1-hESC treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=H1-hESC/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=H1-hESC treatment=None antibody=Pol2 protocol=PCR1x" -var=input -val=H1-hESC/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=H1-hESC treatment=None antibody=Pol2-4H8 protocol=PCR1x" -var=input -val=H1-hESC/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=H1-hESC treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=H1-hESC/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HeLa-S3 treatment=None antibody=GABP protocol=PCR1x" -var=input -val=HeLa-S3/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HeLa-S3 treatment=None antibody=Pol2 protocol=PCR1x" -var=input -val=HeLa-S3/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HeLa-S3 treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=HeLa-S3/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=BHLHE40 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=FOSL2 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=GABP protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=GABP protocol=PCR2x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=HEY1 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=JunD protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=Pol2 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=RXRA protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=SRF protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=Sin3Ak-20 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=USF-1 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=ZBTB33 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=HepG2 treatment=None antibody=p300 protocol=PCR1x" -var=input -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=Jurkat treatment=None antibody=Pol2 protocol=PCR2x" -var=input -val=Jurkat/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=Egr-1 protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=GABP protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=HEY1 protocol=PCR1x" -var=input -val=K562/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=NRSF protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=PU.1 protocol=PCR1x" -var=input -val=K562/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=Pol2 protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=Pol2-4H8 protocol=PCR1x" -var=input -val=K562/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=SIX5 protocol=PCR1x" -var=input -val=K562/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=SRF protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=Sin3Ak-20 protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=TAF1 protocol=PCR1x" -var=input -val=K562/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=K562 treatment=None antibody=USF-1 protocol=PCR2x" -var=input -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="cell=PANC-1 treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=PANC-1/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=PANC-1 treatment=None antibody=NRSF protocol=PCR2x" -var=input -val=PANC-1/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=PFSK-1 treatment=None antibody=FOXP2 protocol=PCR1x" -var=input -val=PFSK-1/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=PFSK-1 treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=PFSK-1/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=SK-N-MC treatment=None antibody=FOXP2 protocol=PCR1x" -var=input -val=SK-N-MC/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=SK-N-SH_RA treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=SK-N-SH_RA/None/Input/PCR1x
+mdbUpdate hg18 -vars="cell=U87 treatment=None antibody=NRSF protocol=PCR1x" -var=input -val=U87/None/Input/PCR1x
+
+select distinct t1.val,t2.val,t3.val,t4.val,t5.val from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4,mdb_tdreszer t5 where t1.obj like "wgEncodeHudson%"
+ and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj and t4.obj = t5.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "protocol" and t5.var = "input"
+ order by t1.val,t2.val,t3.val,t4.val,t5.val;
++------------+--------------+-----------+-------+-----------------------------+
+| val        | val          | val       | val   | val                         |
++------------+--------------+-----------+-------+-----------------------------+
+| A549       | DEX_100nM    | CTCF      | PCR1x | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_100nM    | Input     | PCR1x | true                        | 
+| A549       | DEX_100nM    | Pol2      | PCR2x | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_100nM    | USF-1     | PCR1x | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_500pM    | GR        | PCR1x | A549/EtOH/GR/PCR1x          | 
+| A549       | DEX_50nM     | GR        | PCR1x | A549/EtOH/GR/PCR1x          | 
+| A549       | DEX_5nM      | GR        | PCR1x | A549/EtOH/GR/PCR1x          | 
+| A549       | EtOH_0.02pct | CTCF      | PCR1x | A549/EtOH/Input/PCR1x       | 
+| A549       | EtOH_0.02pct | GR        | PCR1x | true                        | 
+| A549       | EtOH_0.02pct | Input     | PCR1x | true                        | 
+| A549       | EtOH_0.02pct | Input     | PCR2x | true                        | 
+| A549       | EtOH_0.02pct | Pol2      | PCR2x | A549/EtOH/Input/PCR2x       | 
+| A549       | EtOH_0.02pct | USF-1     | PCR1x | A549/EtOH/Input/PCR1x       | 
+| A549       | None         | GR        | PCR1x | A549/None/Input/PCR1x       | 
+| A549       | None         | Input     | PCR1x | true                        | 
+| BE2_C      | None         | Input     | PCR1x | true                        | 
+| BE2_C      | None         | NRSF      | PCR1x | BE2_C/None/Input/PCR1x      | 
+| GM12878    | None         | BATF      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | BCL11A    | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | BCL3      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | EBF       | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Egr-1     | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | GABP      | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | IRF4      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Input     | PCR1x | true                        | 
+| GM12878    | None         | Input     | PCR2x | true                        | 
+| GM12878    | None         | NRSF      | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | PAX5-C20  | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | PAX5-N19  | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | POU2F2    | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | PU.1      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Pbx3      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Pol2      | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | Pol2-4H8  | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | SP1       | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | SRF       | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | Sin3Ak-20 | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | TAF1      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | TCF12     | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | USF-1     | PCR2x | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | ZBTB33    | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | p300      | PCR1x | GM12878/None/Input/PCR1x    | 
+| GM12891    | None         | Input     | PCR1x | true                        | 
+| GM12891    | None         | POU2F2    | PCR1x | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | PU.1      | PCR1x | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | Pol2      | PCR1x | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | Pol2-4H8  | PCR1x | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | TAF1      | PCR1x | GM12891/None/Input/PCR1x    | 
+| GM12892    | None         | Input     | PCR1x | true                        | 
+| GM12892    | None         | Pol2      | PCR1x | GM12892/None/Input/PCR1x    | 
+| GM12892    | None         | Pol2-4H8  | PCR1x | GM12892/None/Input/PCR1x    | 
+| GM12892    | None         | TAF1      | PCR1x | GM12892/None/Input/PCR1x    | 
+| H1-hESC    | None         | Input     | PCR1x | true                        | 
+| H1-hESC    | None         | NRSF      | PCR1x | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | Pol2      | PCR1x | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | Pol2-4H8  | PCR1x | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | TAF1      | PCR1x | H1-hESC/None/Input/PCR1x    | 
+| HeLa-S3    | None         | GABP      | PCR1x | HeLa-S3/None/Input/PCR1x    | 
+| HeLa-S3    | None         | Input     | PCR1x | true                        | 
+| HeLa-S3    | None         | Pol2      | PCR1x | HeLa-S3/None/Input/PCR1x    | 
+| HeLa-S3    | None         | TAF1      | PCR1x | HeLa-S3/None/Input/PCR1x    | 
+| HepG2      | None         | BHLHE40   | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | FOSL2     | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | GABP      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | GABP      | PCR2x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | HEY1      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | Input     | PCR1x | true                        | 
+| HepG2      | None         | JunD      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | NRSF      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | Pol2      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | RXRA      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | SRF       | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | Sin3Ak-20 | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | TAF1      | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | USF-1     | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | ZBTB33    | PCR1x | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | p300      | PCR1x | HepG2/None/Input/PCR1x      | 
+| Jurkat     | None         | Input     | PCR2x | true                        | 
+| Jurkat     | None         | Pol2      | PCR2x | Jurkat/None/Input/PCR2x     | 
+| K562       | None         | Egr-1     | PCR2x | K562/None/Input/PCR2x       | 
+| K562       | None         | GABP      | PCR2x | K562/None/Input/PCR2x       | 
+| K562       | None         | HEY1      | PCR1x | K562/None/Input/PCR1x       | 
+| K562       | None         | Input     | PCR1x | true                        | 
+| K562       | None         | Input     | PCR2x | true                        | 
+| K562       | None         | NRSF      | PCR2x | K562/None/Input/PCR2x       | 
+| K562       | None         | PU.1      | PCR1x | K562/None/Input/PCR1x       | 
+| K562       | None         | Pol2      | PCR2x | K562/None/Input/PCR2x       | 
+| K562       | None         | Pol2-4H8  | PCR1x | K562/None/Input/PCR1x       | 
+| K562       | None         | SIX5      | PCR1x | K562/None/Input/PCR1x       | 
+| K562       | None         | SRF       | PCR2x | K562/None/Input/PCR2x       | 
+| K562       | None         | Sin3Ak-20 | PCR2x | K562/None/Input/PCR2x       | 
+| K562       | None         | TAF1      | PCR1x | K562/None/Input/PCR1x       | 
+| K562       | None         | USF-1     | PCR2x | K562/None/Input/PCR2x       | 
+| PANC-1     | None         | Input     | PCR1x | true                        | 
+| PANC-1     | None         | NRSF      | PCR1x | PANC-1/None/Input/PCR1x     | 
+| PANC-1     | None         | NRSF      | PCR2x | PANC-1/None/Input/PCR1x     | 
+| PFSK-1     | None         | FOXP2     | PCR1x | PFSK-1/None/Input/PCR1x     | 
+| PFSK-1     | None         | Input     | PCR1x | true                        | 
+| PFSK-1     | None         | NRSF      | PCR1x | PFSK-1/None/Input/PCR1x     | 
+| SK-N-MC    | None         | FOXP2     | PCR1x | SK-N-MC/None/Input/PCR1x    | 
+| SK-N-MC    | None         | Input     | PCR1x | true                        | 
+| SK-N-SH_RA | None         | Input     | PCR1x | true                        | 
+| SK-N-SH_RA | None         | NRSF      | PCR1x | SK-N-SH_RA/None/Input/PCR1x | 
+| U87        | None         | Input     | PCR1x | true                        | 
+| U87        | None         | NRSF      | PCR1x | U87/None/Input/PCR1x        | 
++------------+--------------+-----------+-------+-----------------------------+
+105 rows in set (0.09 sec)
+
+mdbPrint hg18 -vars="grant=Myers" -ra > mdbHaibTfbs.ra
+mdbUpdate hg18 -table=mdb mdbHaibTfbs.ra
+cvs ci -m "Fixed Haib Inputs (I hope)" mdbHaibTfbs.ra
+
+### Working with Yale, I am deciding to create a new term "inputType"  To pair: inputType=inputType and input=yes/no/both 
+insert into mdb_tdreszer (select t2.obj,"inputType",varType,val from mdb_tdreszer t2 where t2.obj like "wgEncodeHudson%" and var = "input");
+
+select distinct t1.val,t2.val,t3.val,t4.val,t5.val from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4,mdb_tdreszer t5 where t1.obj like "wgEncodeHudson%"
+   and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj and t4.obj = t5.obj
+  and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "protocol" and t5.var = "inputType" and t5.val = "true"
+  order by t1.val,t2.val,t3.val,t4.val,t5.val;
++------------+--------------+-------+-------+------+
+| val        | val          | val   | val   | val  |
++------------+--------------+-------+-------+------+
+| A549       | DEX_100nM    | Input | PCR1x | true | 
+| A549       | EtOH_0.02pct | GR    | PCR1x | true | 
+| A549       | EtOH_0.02pct | Input | PCR1x | true | 
+| A549       | EtOH_0.02pct | Input | PCR2x | true | 
+| A549       | None         | Input | PCR1x | true | 
+| BE2_C      | None         | Input | PCR1x | true | 
+| GM12878    | None         | Input | PCR1x | true | 
+| GM12878    | None         | Input | PCR2x | true | 
+| GM12891    | None         | Input | PCR1x | true | 
+| GM12892    | None         | Input | PCR1x | true | 
+| H1-hESC    | None         | Input | PCR1x | true | 
+| HeLa-S3    | None         | Input | PCR1x | true | 
+| HepG2      | None         | Input | PCR1x | true | 
+| Jurkat     | None         | Input | PCR2x | true | 
+| K562       | None         | Input | PCR1x | true | 
+| K562       | None         | Input | PCR2x | true | 
+| PANC-1     | None         | Input | PCR1x | true | 
+| PFSK-1     | None         | Input | PCR1x | true | 
+| SK-N-MC    | None         | Input | PCR1x | true | 
+| SK-N-SH_RA | None         | Input | PCR1x | true | 
+| U87        | None         | Input | PCR1x | true | 
++------------+--------------+-------+-------+------+
+21 rows in set (0.02 sec)
+
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=A549 treatment=DEX_100nM antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=A549/DEX_100nM/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=A549 treatment=EtOH_0.02pct antibody=GR protocol=PCR1x inputType=true" -var=inputType -val=A549/EtOH/GR/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=A549 treatment=EtOH_0.02pct antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=A549/EtOH/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=A549 treatment=EtOH_0.02pct antibody=Input protocol=PCR2x inputType=true" -var=inputType -val=A549/EtOH/Input/PCR2x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=A549 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=A549/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=BE2_C treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=BE2_C/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=GM12878 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=GM12878/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=GM12878 treatment=None antibody=Input protocol=PCR2x inputType=true" -var=inputType -val=GM12878/None/Input/PCR2x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=GM12891 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=GM12891/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=GM12892 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=GM12892/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=H1-hESC treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=H1-hESC/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=HeLa-S3 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=HeLa-S3/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=HepG2 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=HepG2/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=Jurkat treatment=None antibody=Input protocol=PCR2x inputType=true" -var=inputType -val=Jurkat/None/Input/PCR2x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=K562 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=K562/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=K562 treatment=None antibody=Input protocol=PCR2x inputType=true" -var=inputType -val=K562/None/Input/PCR2x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=PANC-1 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=PANC-1/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=PFSK-1 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=PFSK-1/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=SK-N-MC treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=SK-N-MC/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=SK-N-SH_RA treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=SK-N-SH_RA/None/Input/PCR1x
+mdbUpdate hg18 -vars="composite=wgEncodeHudsonalphaChipSeq cell=U87 treatment=None antibody=Input protocol=PCR1x inputType=true" -var=inputType -val=U87/None/Input/PCR1x
+
+update mdb_tdreszer set val="yes" where obj like "wgEncodeHudson%" and var = "input" and val = "true";
+update mdb_tdreszer set val="no" where obj like "wgEncodeHudson%" and var = "input" and val != "yes";
+
+update mdb_tdreszer t1, mdb_tdreszer t2 set t1.val="yes" where t1.obj like "wgEncodeHudson%" t1.obj = t2.obj and t1.var = "input" and t2.var = "antibody" and t2.val = "Input";
+
+select distinct t1.val cell,t2.val treatment,t3.val antibody,t4.val protocol,t5.val input,t6.val inputType from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4,mdb_tdreszer t5,mdb_tdreszer t6 where t1.obj like "wgEncodeHudson%"
+ and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj and t4.obj = t5.obj and t5.obj = t6.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "protocol" and t5.var = "input" and t6.var = "inputType"
+ order by t1.val,t2.val,t3.val,t4.val,t5.val,t6.val;
++------------+--------------+-----------+----------+-------+-----------------------------+
+| cell       | treatment    | antibody  | protocol | input | inputType                   |
++------------+--------------+-----------+----------+-------+-----------------------------+
+| A549       | DEX_100nM    | CTCF      | PCR1x    | no    | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_100nM    | Input     | PCR1x    | yes   | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_100nM    | Pol2      | PCR2x    | no    | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_100nM    | USF-1     | PCR1x    | no    | A549/DEX_100nM/Input/PCR1x  | 
+| A549       | DEX_500pM    | GR        | PCR1x    | no    | A549/EtOH/GR/PCR1x          | 
+| A549       | DEX_50nM     | GR        | PCR1x    | no    | A549/EtOH/GR/PCR1x          | 
+| A549       | DEX_5nM      | GR        | PCR1x    | no    | A549/EtOH/GR/PCR1x          | 
+| A549       | EtOH_0.02pct | CTCF      | PCR1x    | no    | A549/EtOH/Input/PCR1x       | 
+| A549       | EtOH_0.02pct | GR        | PCR1x    | yes   | A549/EtOH/GR/PCR1x          | 
+| A549       | EtOH_0.02pct | Input     | PCR1x    | yes   | A549/EtOH/Input/PCR1x       | 
+| A549       | EtOH_0.02pct | Input     | PCR2x    | yes   | A549/EtOH/Input/PCR2x       | 
+| A549       | EtOH_0.02pct | Pol2      | PCR2x    | no    | A549/EtOH/Input/PCR2x       | 
+| A549       | EtOH_0.02pct | USF-1     | PCR1x    | no    | A549/EtOH/Input/PCR1x       | 
+| A549       | None         | GR        | PCR1x    | no    | A549/None/Input/PCR1x       | 
+| A549       | None         | Input     | PCR1x    | yes   | A549/None/Input/PCR1x       | 
+| BE2_C      | None         | Input     | PCR1x    | yes   | BE2_C/None/Input/PCR1x      | 
+| BE2_C      | None         | NRSF      | PCR1x    | no    | BE2_C/None/Input/PCR1x      | 
+| GM12878    | None         | BATF      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | BCL11A    | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | BCL3      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | EBF       | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Egr-1     | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | GABP      | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | IRF4      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Input     | PCR1x    | yes   | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Input     | PCR2x    | yes   | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | NRSF      | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | PAX5-C20  | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | PAX5-N19  | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | POU2F2    | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | PU.1      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Pbx3      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | Pol2      | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | Pol2-4H8  | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | SP1       | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | SRF       | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | Sin3Ak-20 | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | TAF1      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | TCF12     | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | USF-1     | PCR2x    | no    | GM12878/None/Input/PCR2x    | 
+| GM12878    | None         | ZBTB33    | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12878    | None         | p300      | PCR1x    | no    | GM12878/None/Input/PCR1x    | 
+| GM12891    | None         | Input     | PCR1x    | yes   | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | POU2F2    | PCR1x    | no    | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | PU.1      | PCR1x    | no    | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | Pol2      | PCR1x    | no    | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | Pol2-4H8  | PCR1x    | no    | GM12891/None/Input/PCR1x    | 
+| GM12891    | None         | TAF1      | PCR1x    | no    | GM12891/None/Input/PCR1x    | 
+| GM12892    | None         | Input     | PCR1x    | yes   | GM12892/None/Input/PCR1x    | 
+| GM12892    | None         | Pol2      | PCR1x    | no    | GM12892/None/Input/PCR1x    | 
+| GM12892    | None         | Pol2-4H8  | PCR1x    | no    | GM12892/None/Input/PCR1x    | 
+| GM12892    | None         | TAF1      | PCR1x    | no    | GM12892/None/Input/PCR1x    | 
+| H1-hESC    | None         | Input     | PCR1x    | yes   | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | NRSF      | PCR1x    | no    | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | Pol2      | PCR1x    | no    | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | Pol2-4H8  | PCR1x    | no    | H1-hESC/None/Input/PCR1x    | 
+| H1-hESC    | None         | TAF1      | PCR1x    | no    | H1-hESC/None/Input/PCR1x    | 
+| HeLa-S3    | None         | GABP      | PCR1x    | no    | HeLa-S3/None/Input/PCR1x    | 
+| HeLa-S3    | None         | Input     | PCR1x    | yes   | HeLa-S3/None/Input/PCR1x    | 
+| HeLa-S3    | None         | Pol2      | PCR1x    | no    | HeLa-S3/None/Input/PCR1x    | 
+| HeLa-S3    | None         | TAF1      | PCR1x    | no    | HeLa-S3/None/Input/PCR1x    | 
+| HepG2      | None         | BHLHE40   | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | FOSL2     | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | GABP      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | GABP      | PCR2x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | HEY1      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | Input     | PCR1x    | yes   | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | JunD      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | NRSF      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | Pol2      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | RXRA      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | SRF       | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | Sin3Ak-20 | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | TAF1      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | USF-1     | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | ZBTB33    | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| HepG2      | None         | p300      | PCR1x    | no    | HepG2/None/Input/PCR1x      | 
+| Jurkat     | None         | Input     | PCR2x    | yes   | Jurkat/None/Input/PCR2x     | 
+| Jurkat     | None         | Pol2      | PCR2x    | no    | Jurkat/None/Input/PCR2x     | 
+| K562       | None         | Egr-1     | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| K562       | None         | GABP      | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| K562       | None         | HEY1      | PCR1x    | no    | K562/None/Input/PCR1x       | 
+| K562       | None         | Input     | PCR1x    | yes   | K562/None/Input/PCR1x       | 
+| K562       | None         | Input     | PCR2x    | yes   | K562/None/Input/PCR2x       | 
+| K562       | None         | NRSF      | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| K562       | None         | PU.1      | PCR1x    | no    | K562/None/Input/PCR1x       | 
+| K562       | None         | Pol2      | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| K562       | None         | Pol2-4H8  | PCR1x    | no    | K562/None/Input/PCR1x       | 
+| K562       | None         | SIX5      | PCR1x    | no    | K562/None/Input/PCR1x       | 
+| K562       | None         | SRF       | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| K562       | None         | Sin3Ak-20 | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| K562       | None         | TAF1      | PCR1x    | no    | K562/None/Input/PCR1x       | 
+| K562       | None         | USF-1     | PCR2x    | no    | K562/None/Input/PCR2x       | 
+| PANC-1     | None         | Input     | PCR1x    | yes   | PANC-1/None/Input/PCR1x     | 
+| PANC-1     | None         | NRSF      | PCR1x    | no    | PANC-1/None/Input/PCR1x     | 
+| PANC-1     | None         | NRSF      | PCR2x    | no    | PANC-1/None/Input/PCR1x     | 
+| PFSK-1     | None         | FOXP2     | PCR1x    | no    | PFSK-1/None/Input/PCR1x     | 
+| PFSK-1     | None         | Input     | PCR1x    | yes   | PFSK-1/None/Input/PCR1x     | 
+| PFSK-1     | None         | NRSF      | PCR1x    | no    | PFSK-1/None/Input/PCR1x     | 
+| SK-N-MC    | None         | FOXP2     | PCR1x    | no    | SK-N-MC/None/Input/PCR1x    | 
+| SK-N-MC    | None         | Input     | PCR1x    | yes   | SK-N-MC/None/Input/PCR1x    | 
+| SK-N-SH_RA | None         | Input     | PCR1x    | yes   | SK-N-SH_RA/None/Input/PCR1x | 
+| SK-N-SH_RA | None         | NRSF      | PCR1x    | no    | SK-N-SH_RA/None/Input/PCR1x | 
+| U87        | None         | Input     | PCR1x    | yes   | U87/None/Input/PCR1x        | 
+| U87        | None         | NRSF      | PCR1x    | no    | U87/None/Input/PCR1x        | 
++------------+--------------+-----------+----------+-------+-----------------------------+
+105 rows in set (0.12 sec)
+
+mdbPrint hg18 -vars="grant=Myers" -ra > mdbHaibTfbs.ra
+mdbUpdate hg18 -table=mdb mdbHaibTfbs.ra
+cvs ci -m "Fixed Haib Inputs further by adding inputType variable allowing pairing of exp.inputType = inp.inputType" mdbHaibTfbs.ra
+
+select distinct val from mdb_tdreszer where obj like "wgEncodeHudson%" and var = "inputType";
+21 rows in set (0.02 sec)
+select distinct t2.val from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj = t2.obj and t1.obj like "wgEncodeHudson%" and t1.var = "input" and t1.val = "yes" and t2.var = "inputType";
+21 rows in set (0.01 sec)
+select distinct t1.val input,t2.val inputType from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj = t2.obj and t1.obj like "wgEncodeHudson%" and t1.var = "input" and t2.var = "inputType" order by t2.val, t1.val;
++-------+-----------------------------+
+| input | inputType                   |
++-------+-----------------------------+
+| no    | A549/DEX_100nM/Input/PCR1x  | 
+| yes   | A549/DEX_100nM/Input/PCR1x  | 
+| no    | A549/EtOH/GR/PCR1x          | 
+| yes   | A549/EtOH/GR/PCR1x          | 
+| no    | A549/EtOH/Input/PCR1x       | 
+| yes   | A549/EtOH/Input/PCR1x       | 
+| no    | A549/EtOH/Input/PCR2x       | 
+| yes   | A549/EtOH/Input/PCR2x       | 
+| no    | A549/None/Input/PCR1x       | 
+| yes   | A549/None/Input/PCR1x       | 
+| no    | BE2_C/None/Input/PCR1x      | 
+| yes   | BE2_C/None/Input/PCR1x      | 
+| no    | GM12878/None/Input/PCR1x    | 
+| yes   | GM12878/None/Input/PCR1x    | 
+| no    | GM12878/None/Input/PCR2x    | 
+| yes   | GM12878/None/Input/PCR2x    | 
+| no    | GM12891/None/Input/PCR1x    | 
+| yes   | GM12891/None/Input/PCR1x    | 
+| no    | GM12892/None/Input/PCR1x    | 
+| yes   | GM12892/None/Input/PCR1x    | 
+| no    | H1-hESC/None/Input/PCR1x    | 
+| yes   | H1-hESC/None/Input/PCR1x    | 
+| no    | HeLa-S3/None/Input/PCR1x    | 
+| yes   | HeLa-S3/None/Input/PCR1x    | 
+| no    | HepG2/None/Input/PCR1x      | 
+| yes   | HepG2/None/Input/PCR1x      | 
+| no    | Jurkat/None/Input/PCR2x     | 
+| yes   | Jurkat/None/Input/PCR2x     | 
+| no    | K562/None/Input/PCR1x       | 
+| yes   | K562/None/Input/PCR1x       | 
+| no    | K562/None/Input/PCR2x       | 
+| yes   | K562/None/Input/PCR2x       | 
+| no    | PANC-1/None/Input/PCR1x     | 
+| yes   | PANC-1/None/Input/PCR1x     | 
+| no    | PFSK-1/None/Input/PCR1x     | 
+| yes   | PFSK-1/None/Input/PCR1x     | 
+| no    | SK-N-MC/None/Input/PCR1x    | 
+| yes   | SK-N-MC/None/Input/PCR1x    | 
+| no    | SK-N-SH_RA/None/Input/PCR1x | 
+| yes   | SK-N-SH_RA/None/Input/PCR1x | 
+| no    | U87/None/Input/PCR1x        | 
+| yes   | U87/None/Input/PCR1x        | 
++-------+-----------------------------+
+42 rows in set (0.08 sec)
+
+# So all is well!
+
+### Change input:yes/no to setType:input/exp
+select count(*) from mdb_tdreszer where var = "input";|     1764 | 
+
+mysql> select distinct t2.val from mdb_tdreszer t1, mdb_tdreszer t2 where t1.obj = t2.obj and t1.var = "input" and t2.var = "composite";
++----------------------------+
+| wgEncodeHudsonalphaChipSeq | 
+| wgEncodeYaleChIPseq        | 
++----------------------------+
+2 rows in set (0.08 sec)
+
+mysql> update mdb_tdreszer set var = "setType" where var = "input";Query OK, 1764 rows affected (0.21 sec)
+Rows matched: 1764  Changed: 1764  Warnings: 0
+
+mysql> update mdb_tdreszer set val = "input" where var = "setType" and val = "yes";
+Query OK, 287 rows affected (0.03 sec)
+Rows matched: 287  Changed: 287  Warnings: 0
+
+mysql> update mdb_tdreszer set val = "exp" where var = "setType" and val = "no";
+Query OK, 1477 rows affected (0.10 sec)
+Rows matched: 1477  Changed: 1477  Warnings: 0
+
+### Problem with 2 files differening between release1 and release2
+> > wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq
+> > wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2. fastq
+-rw-rw-r-- 2 larrym protein  395039662 Nov 25  2008 release1/wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
+-rw-rw-r-- 2 qateam protein 1062394426 Oct 18  2009 release2/wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
+
+subId=52 release1 submission with no fastq.  
+exp_data/SL240_K562_Rep1_hg18.TagAlign	Alignments	K562	Pol2	1		
+exp_data/SL241_K562_Rep2_hg18.TagAlign	Alignments	K562	Pol2	2
+# so SL240, SL241
+subId=768
+SL949.fastq.gz	RawData	K562	Pol2	1		3
+SL950.fastq.gz	RawData	K562	Pol2	2		4
+# so SL949, SL 950
+select * from project_files where file_name like "%SL240%";
++------+-------------------------------------------------------+-----------+---------------------+--------------------+---------------------+---------------------+
+| id   | file_name                                             | file_size | file_date           | project_archive_id | created_at          | updated_at          |
++------+-------------------------------------------------------+-----------+---------------------+--------------------+---------------------+---------------------+
+| 1806 | exp_data/SL240_K562_Rep1_hg18.TagAlign                | 681713580 | 2008-11-20 14:13:15 |                102 | 2008-11-20 14:13:34 | 2008-11-20 14:13:34 | 
+| 1807 | exp_data/SL240_RNAPol2_K562_Rep1_peakcalls.narrowPeak | 576700    | 2008-11-20 14:13:15 |                102 | 2008-11-20 14:13:35 | 2008-11-20 14:13:35 | 
++------+-------------------------------------------------------+-----------+---------------------+--------------------+---------------------+---------------------+
+select * from project_files where file_name like "%SL949%";
++-------+--------------------------------+------------+---------------------+--------------------+---------------------+---------------------+
+| id    | file_name                      | file_size  | file_date           | project_archive_id | created_at          | updated_at          |
++-------+--------------------------------+------------+---------------------+--------------------+---------------------+---------------------+
+| 24389 | data/SL949.TagAlign            | 1147755552 | 2009-10-21 23:12:14 |               1005 | 2009-10-21 23:12:14 | 2009-10-21 23:12:14 | 
+| 24390 | data/SL949_Peaks.bed.broadPeak | 1706164    | 2009-10-21 23:12:14 |               1005 | 2009-10-21 23:12:14 | 2009-10-21 23:12:14 | 
+| 24671 | SL949.fastq.gz                 | 1062394426 | 2009-11-07 19:31:55 |               1037 | 2009-11-07 19:31:55 | 2009-11-07 19:31:55 | 
++-------+--------------------------------+------------+---------------------+--------------------+---------------------+---------------------+
+# Now track down 949 tags and peaks.  Suspicion is that the 768 submission of fastqs mislabelled K562/Pol2 in the DDF.		
+select * from project_archives where id = 1005;
++------+--------------------------------+------------+---------------------+------------+---------------------+---------------------+------------+-------------+-----------------+
+| id   | file_name                      | file_size  | file_date           | project_id | created_at          | updated_at          | archive_no | status      | archives_active |
++------+--------------------------------+------------+---------------------+------------+---------------------+---------------------+------------+-------------+-----------------+
+| 1005 | 001_HA_ChIP_seq_Oct09_A.tar.gz | 4953478536 | 2009-10-21 23:12:13 |        741 | 2009-10-21 23:12:13 | 2009-10-21 23:12:13 |          1 | see current |                 | 
++------+--------------------------------+------------+---------------------+------------+---------------------+---------------------+------------+-------------+-----------------+
+m 741/*.DDF
+data/SL949.TagAlign     Alignments      K562    Pol2-4H8        1               3
+data/SL949_Peaks.bed.broadPeak  Peaks   K562    Pol2-4H8        1       MACS    3
+data/SL950.TagAlign     Alignments      K562    Pol2-4H8        2               4
+data/SL950_Peaks.bed.broadPeak  Peaks   K562    Pol2-4H8        2       MACS    4
+### So it appears that the release2 fastq's should have been labelled Pol2-4H8
+
+1) rename the release2 versions
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8.fastq.gz
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8.fastq.gz
+cd release2
+mv wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq release2/wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8.fastq
+mv wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq release2/wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8.fastq
+2) Bring back the old release1 files:
+cd ..
+ln release1/wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz .
+ln release1/wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz .
+cd release2
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz .
+3) Fix metadata:
+a) rename in metadata:
+select * from mdb_tdreszer where obj = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2";
+update mdb_tdreszer set obj = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2";
+Query OK, 21 rows affected (0.01 sec)
+update mdb_tdreszer set obj = "wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2";
+Query OK, 21 rows affected (0.00 sec)
+update mdb_tdreszer set val = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8.fastq.gz" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8" and var = "fileName";
+Query OK, 1 row affected (0.00 sec)
+update mdb_tdreszer set val = "wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8.fastq.gz" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8" and var = "fileName";
+Query OK, 1 row affected (0.00 sec)
+update mdb_tdreszer set val = "wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8" and var = "parentTable";
+Query OK, 1 row affected (0.00 sec)
+update mdb_tdreszer set val = "wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8" and var = "parentTable";
+Query OK, 1 row affected (0.00 sec)
+b) Add metadata for older version:
+grep wgEncodeHudsonalphaChipSeqRawDataRep?K562Pol2 release1/fileDb.ra > tmp.txt
+edit tmp.txt # for setType, inputType and parentTable
+mdbUpdate hg18 tmp.txt
+Using table named 'hg18.mdb_tdreszer'.
+Read 2 metadata objects from hg18
+Affected 34 row(s) in hg18.mdb_tdreszer
+update mdb_tdreszer set val = "Pol2-4H8" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8" and var = "antibody";
+update mdb_tdreszer set val = "Pol2-4H8" where obj = "wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8" and var = "antibody";
+mdbUpdate hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep%K562Pol24h8 -var=antibody -val=Pol2-4H8
+Affected 2 row(s) in hg18.mdb_tdreszer
+mdbPrint hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" > mdbHaibTfbs.ra 
+Using table named 'hg18.mdb_tdreszer'.
+objects:693  vars:15198
+mdbUpdate hg18 -table=mdb mdbHaibTfbs.ra
+cvs ci mdbHaibTfbs.ra
+
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz > tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8.fastq.gz >> tmp.txt
+edit md5sum.txt to replace the 2 for Pol2 and add the 2 for Pol2-4H8
+encodeDownloadsPage.pl -mdb=mdb index.html .
+wl index.html
+539 index.html
+wl release2/index.html
+537 release2/index.html
+cp index.html release2/
+cp files.txt release2/
+cp md5sum.txt release2/
+
+2010-04-29 Move HAIB TFBS into pushQ A!
+=======================================
+select id,name,status,user_id from projects where status = "approved" and user_id = 8 order by id;
++------+----------------------------------------------------+----------+---------+
+| id   | name                                               | status   | user_id |
++------+----------------------------------------------------+----------+---------+
+|    6 | HudsonAlpha PFSK-1/SK-N-MC Control                 | approved |       8 | 
+|    7 | HudsonAlpha PFSK-1/SK-N-MC FOXP2                   | approved |       8 | 
+|  259 | HudsonAlpha_ChIPSeq_Sin3Ak-20_K562_GM12878_Feb2709 | approved |       8 | 
+|  260 | HudsonAlpha_ChIPSeq_Egr-1_K562_GM12878_Feb2709     | approved |       8 | 
+|  261 | HudsonAlpha_ChIPSeq_USF-1_K562_GM12878_Feb2709     | approved |       8 | 
+|  262 | HudsonAlpha_ChIPSeq_CONTROL_K562_GM12878_Feb2709   | approved |       8 | 
+|  268 | HudsonAlpha_ChIP-Seq-FEB09_FASTQ                   | approved |       8 | 
+|  422 | HudsonAlpha_GM12878_Jul-09                         | approved |       8 | 
+|  432 | HudsonAlpha_HepG2_Jul-09                           | approved |       8 | 
+|  433 | HudsonAlpha_HeLa_Jul-09                            | approved |       8 | 
+|  434 | HudsonAlpha_U87_Jul-09                             | approved |       8 | 
+|  435 | HudsonAlpha_PANC1_Jul-09                           | approved |       8 | 
+|  436 | HudsonAlpha_PFSK1_Jul-09                           | approved |       8 | 
+|  437 | HudsonAlpha_BE2C_Jul-09                            | approved |       8 | 
+|  438 | HudsonAlpha_HTB11_Jul-09                           | approved |       8 | 
+|  741 | HudsonAlpha_ChIP-seq_Oct-09                        | approved |       8 | 
+|  756 | HudsonAlpha_ChIP-seq_Oct-09_noReps                 | approved |       8 | 
+|  759 | HudsonAlpha_ChIP-seq_Oct-09_RestOf                 | approved |       8 | 
+|  768 | HAIBChIPseq_RawData_Oct09                          | approved |       8 | 
+|  774 | HudsonAlpha_GR_ChIP-seq                            | approved |       8 | 
+|  776 | HudsonAlpha_ChIP-seq_HepG2_GABPa-Nov09             | approved |       8 | 
+|  780 | HudsonAlpha_ChIP-seq_HepG2_TAF250-Nov09            | approved |       8 | 
+|  781 | HudsonAlpha_ChIP-seq_HeLa_GABPa-Nov09              | approved |       8 | 
+|  782 | HudsonAlpha_ChIP-seq_HeLa_TAFIIp250-Nov09          | approved |       8 | 
+|  783 | HudsonAlpha_ChIP-seq_GM12878_Bcl11a-Nov09          | approved |       8 | 
+|  795 | HAIB_Chipseq_p300_GM12878-Nov09                    | approved |       8 | 
+|  798 | HudsonAlpha_Chipseq_ZBTB33_GM12878-Nov09           | approved |       8 | 
+|  801 | Hudsonalpha_Chipseq_A549_GR_5nMDex_09Dec           | approved |       8 | 
+|  802 | HudsonAlpha_Chipseq_A549_GR_50nMDex_Dec09          | approved |       8 | 
+|  803 | HudsonAlpha_Chipseq_A549_GR_500pMDex_Dec09         | approved |       8 | 
+|  804 | HudsonAlpha_Chipseq_GM12878_Pax5_c20_Dec09         | approved |       8 | 
+|  806 | HudsonAlpha_Chipseq_GM12878_Pax5-N19_Dec09         | approved |       8 | 
+|  807 | HudsonAlpha_Chipseq_K562_TAF1_Dec09                | approved |       8 | 
+|  809 | HudsonAlpha_Chipseq_A549_Pol2_Dex_Dec09            | approved |       8 | 
+|  812 | HudsonAlpha_Chipseq_GM12878_Bcl3_Dec09             | approved |       8 | 
+|  813 | HudsonAlpha_ChIPSeq_A549_Pol2_1hEtOH_Dec09         | approved |       8 | 
+|  814 | HudsonAlpha_Chipseq_hESC_NRSF_Dec09                | approved |       8 | 
+|  830 | HudsonAlpha_Chipseq_GM12878_Sp1                    | approved |       8 | 
+|  832 | HudsonAlpha_Chipseq_ZBTB33_HepG2                   | approved |       8 | 
+|  833 | HudsonAlpha_ChIPSeq_H1-hESC_Taf1                   | approved |       8 | 
+|  867 | HAIB_Chipseq_HepG2_FosL2                           | approved |       8 | 
+|  876 | HAIB_Chipseq_HepG2_HEY1_Dec09                      | approved |       8 | 
+|  878 | HAIB_Chipseq_HepG2_RXRA_Dec09                      | approved |       8 | 
+|  879 | HAIB_Chipseq_H1-hESC_Pol2_Dec09                    | approved |       8 | 
+|  880 | HAIB FASTQ_Submissions_Dec09                       | approved |       8 | 
+|  899 | HudsonAlpha_Chipseq_A549_CTCF_Jan10                | approved |       8 | 
+|  901 | HudsonAlpha__Chipseq_A549_USF1_Jan10               | approved |       8 | 
+|  902 | HudsonAlpha_RnaSeq_A549_Jan10                      | approved |       8 | 
+|  913 | HudsonAlpha_ChipSeq_USF1_A549_Dex_Jan10            | approved |       8 | 
+|  920 | HudsonAlpha_Chipseq_Pol2-4H8_GM12878_Jan10         | approved |       8 | 
+|  958 | HudsonAlpha_Chipseq_Pol2-4H8_hESC_Jan10            | approved |       8 | 
+|  973 | HudsonAlpha_ChIP-seq_GM12891_SPI1_Jan10            | approved |       8 | 
+|  976 | HAIB_Chipseq_pol2-4H8-GM12891                      | approved |       8 | 
+|  977 | HudsonAlpha_Chipseq_pol2WG-GM12891_Jan10           | approved |       8 | 
+|  978 | HudsonAlpha_Chipseq_Oct2_GM12891_Jan10             | approved |       8 | 
+|  979 | HudsonAlpha_ChIP-seq_GM12891_TAF1_Jan10            | approved |       8 | 
+|  980 | HudsonAlpha_ChIP-seq_GM12892_Pol2_Jan10            | approved |       8 | 
+|  981 | HudsonAlpha_ChIP-seq_GM12892_Pol2-4H8_Jan10        | approved |       8 | 
+|  994 | HudsonAlpha_ChIP-seq_GM12892_TAF1_Jan10            | approved |       8 | 
+| 1003 | HudsonAlpha_Chipseq_CTCF_A549_EtOH_Jan10           | approved |       8 | 
+| 1028 | HudsonAlpha_Chipseq_Jurkat_Pol2_Jan10              | approved |       8 | 
+| 1060 | HudsonAlpha_Chipseq_Dec1_HepG2_Jan10               | approved |       8 | 
+| 1084 | HudsonAlpha_RNAseq_Jurkat_Jan10                    | approved |       8 | 
++------+----------------------------------------------------+----------+---------+
+63 rows in set (0.00 sec)
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl    6 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl    7 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  259 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  260 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  261 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  262 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  268 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  422 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  432 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  433 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  434 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  435 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  436 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  437 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  438 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  741 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  756 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  759 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  768 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  774 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  776 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  780 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  781 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  782 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  783 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  795 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  798 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  801 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  802 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  803 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  804 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  806 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  807 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  809 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  812 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  813 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  814 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  830 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  832 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  833 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  867 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  876 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  878 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  879 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  880 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  899 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  901 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  913 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  920 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  958 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  973 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  976 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  977 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  978 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  979 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  980 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  981 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  994 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1003 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1028 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1060 reviewing
+
+
+2010-05-14 Loading newly submitted fastq's to hg18 through the back door
+========================================================================
+cd {pip}
+cd 1191
+edit DAF and DDF
+1) Fill anitbody column with "Input"
+2) Change DAF to only accept fastq
+update projects set status = "uploaded" where id = 1191;
+~qateam/bin/scripts/doEncodeValidate.pl -configDir=/cluster/home/qateam/kent/src/hg/encode/encodeValidate/config . /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191 > validate_err 2>&1 &
+~qateam/bin/scripts/doEncodeLoad.pl -configDir=/cluster/home/qateam/kent/src/hg/encode/encodeValidate/config . /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191 > load_err 2>&1 &
+
+cd out/
+grep metadata fileDb.ra > tmp.ra
+e tmp.ra
+1) add inputType and setType
+e tmp.ra
+mdbUpdate hg18 tmp.ra
+Using table named 'hg18.metaDb_tdreszer'.
+Read 10 metadata objects from hg18
+Affected 175 row(s) in hg18.metaDb_tdreszer
+
+cd {downloadsDir}/release2/
+# bad voodoo.  Old pipeline leaves these as symlinks!
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz  
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
+
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL673.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL516.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL648.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL647.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL646.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL517.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL615.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL614.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL612.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL288.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL648.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/1191/data/SL612.fastq.gz wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
+
+cd release2/
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x.fastq.gz .
+
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz .
+ln: creating hard link `./wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz' to `../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz': File exists
+ll wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+-rw-rw-r-- 2 qateam protein 1149980993 Oct 23  2009 wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+ll ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+-rw-rw-r-- 1 tdreszer protein 2441997045 May 14 17:27 ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+ll ../releae1/wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+# Take the more recent!
+rm wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz .
+
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz .
+ln: creating hard link `./wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz' to `../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz': File exists
+ll wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz 
+w-rw-r-- 1 qateam protein 1831089419 Dec 11 07:51 wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
+ll ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz 
+-rw-rw-r-- 1 tdreszer protein 2050488656 May 14 17:28 ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
+# Take the more recent!
+rm wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz 
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz .
+
+cd ..
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz > tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz >> tmp.txt
+md5sum wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x.fastq.gz >> tmp.txt
+cat tmp.txt >> md5sum.txt
+sort -k 2 md5sum.txt md5sum.txt.s
+tail md5sum.txt.s
+mv md5sum.txt.s md5sum.txt
+cp md5sum.txt release2/
+encodeDownloadsPage.pl -db=hg18 -mdb=metaDb_tdreszer index.html .
+cp index.html release2/
+cp files.txt release2/
+
+cd hg18/testing
+mdbPrint hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" -countObjs
+Using table named 'hg18.metaDb_tdreszer'.
+701 objects
+mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeHudsonalphaChipSeq" -countObjs
+693 objects
+mdbPrint hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" > ../metaDb/alpha/wgEncodeHudsonalphaChipSeq.ra 
+Using table named 'hg18.metaDb_tdreszer'.
+objects:701  vars:15166
+cd ../metaDb/alpha/
+cvs up
+cvs diff -w wgEncodeHudsonalphaChipSeq.ra | m
+< dateSubmitted 2009-12-17
+< dateUnrestricted 2010-09-16
+---
+> dateSubmitted 2010-05-14
+> dateUnrestricted 2011-02-14
+
+
+mdbUpdate hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x -setVars="dateUnrestricted=2010-09-16 dateSubmitted=2009-12-17 dateResubmitted=2010-05-14" -test
+mdbUpdate hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x -setVars="dateUnrestricted=2010-04-20 dateSubmitted=2010-01-15 dateResubmitted=2010-05-14" -test
+mdbUpdate hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x -setVars="dateUnrestricted=2010-09-16 dateSubmitted=2009-12-17 dateResubmitted=2010-05-14"
+mdbUpdate hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x -setVars="dateUnrestricted=2010-04-20 dateSubmitted=2010-01-15 dateResubmitted=2010-05-14"
+mdbPrint hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" > wgEncodeHudsonalphaChipSeq.ra 
+
+mdbUpdate hg18 -table=metaDb wgEncodeHudsonalphaChipSeq.ra
+Read 701 metadata objects from hg18
+Affected 177 row(s) in hg18.metaDb
+
+cvs up
+cvs ci -m "Arrival of some missing fastqs for hg18" wgEncodeHudsonalphaChipSeq.ra
+
+cd {docs} dir
+e haibTfsbRelease2Lists.txt
+doc
+
+mdbPrint hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x
+inputType GM12878/None/Input/PCR1x
+
+mdbUpdate hg18 -obj=wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x -setVars="inputType=K562/None/Input/PCR1x"
+cd hg18/metaDb/alpha
+mdbPrint hg18 -vars="composite=wgEncodeHudsonalphaChipSeq" > wgEncodeHudsonalphaChipSeq.ra 
+cvs up
+cvs diff -w wgEncodeHudsonalphaChipSeq.ra | m
+mdbUpdate hg18 -table=metaDb wgEncodeHudsonalphaChipSeq.ra
+Read 701 metadata objects from hg18
+Affected 1 row(s) in hg18.metaDb
+cvs up
+cvs ci -m "Fix one inputType" wgEncodeHudsonalphaChipSeq.ra
+
+cd {downloadsDir}
+encodeDownloadsPage.pl -db=hg18 -mdb=metaDb index.html .
+cp index.html release2/
+cp files.txt release2/
+
+## Finally all done with this except for informing QA and Preti
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1191 loaded
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1191 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1191 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1191 reviewing
+
+2010-06-08 Mini-freeze
+======================
+2 need failed validation for minor things.  Pipeline closed but should load.
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -database=hg19 -configDir=/hive/groups/encode/dcc/pipeline/encpipeline_prod/config x /hive/groups/encode/dcc/pipeline/encpipeline_prod/1261 > validate_error 2>&1
+view 'Peaks' has already been loaded as track 'wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep2'
+grep TAF1 ../1215/*.ddf | grep GM12878
+grep TAF1 ../1216/*.ddf | grep GM12878
+grep TAF1 ../1217/*.ddf | grep GM12878
+grep TAF1 ../1219/*.ddf | grep GM12878
+grep TAF1 ../1222/*.ddf | grep GM12878
+grep TAF1 ../1224/*.ddf | grep GM12878
+grep TAF1 ../1225/*.ddf | grep GM12878
+grep TAF1 ../1226/*.ddf | grep GM12878
+grep TAF1 ../1227/*.ddf | grep GM12878
+grep TAF1 ../1239/*.ddf | grep GM12878
+grep TAF1 ../1240/*.ddf | grep GM12878
+grep TAF1 ../1241/*.ddf | grep GM12878
+data/SL588_Peaks.bed.broadPeak  Peaks   GM12878 TAF1    PCR1x   None    2       MACS    SL588
+data/SL588.bam  Alignments      GM12878 TAF1    PCR1x   None    2               SL588
+grep TAF1 ../1242/*.ddf | grep GM12878
+grep TAF1 ../1251/*.ddf | grep GM12878
+grep TAF1 ../1252/*.ddf | grep GM12878
+grep TAF1 ../1253/*.ddf | grep GM12878
+grep TAF1 ../1254/*.ddf | grep GM12878
+# Rep 1 perhaps?
+#Thanks a lot for doing this. SL588 is rep1 and SL805 is rep2 for TAF1
+#in GM12878.
+#Thanks,
+#Preti
+## Go correct 1241
+rename table wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep2 to wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep1;
+Query OK, 0 rows affected (0.00 sec)
+cd downloadsDir
+mv wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep2.bam.gz wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep12.bam.gz
+mv wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep2.broadPeak.gz wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep1.broadPeak.gz
+cd {pip}1241/out
+e mdb.txt trackDb.ra unload.ra load.ra fileDb.ra
+# Change all references from rep2 to rep1 for TAF1
+cd ..
+e *.ddf
+cd ../1261
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -database=hg19 x /hive/groups/encode/dcc/pipeline/encpipeline_prod/1261 > validate_error 2>&1
+doEncodeLoad.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/1261 > load_error 2>&1
+encodeStatus.pl 1261 loaded
+
+doEncodeValidate.pl -database=hg19 -configDir=/hive/groups/encode/dcc/pipeline/encpipeline_prod/config x /hive/groups/encode/dcc/pipeline/encpipeline_prod/1258 > validate_error 2>&1
+doEncodeLoad.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/1258 > load_error 2>&1
+encodeStatus.pl 1258 loaded
+
+Things we should do before making index.html
+1) Clean up wig mess
+2) Update all remaps with origAssembly hg18
+3) Update dateSubmitted, dateResubmitted, dateUnrestricted by getting these dates from hg18
+
+mdbUpdate hg19 -table=tmpMdb -recreate
+mdbUpdate hg19 -table=tmpMdb 1215/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1216/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1217/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1219/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1222/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1224/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1225/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1226/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1227/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1239/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1240/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1241/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1242/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1251/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1252/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1253/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1254/out/mdb.txt
+mdbPrint hg19 -table=tmpMdb -all -countObjs
+277 objects
+mdbUpdate hg19 -table=tmpMdb -vars="grant=Myers" setVars="origAssembly=hg18" -test
+277 ### Why didn't A549/GR origAssembly get into mdb??  Because we never loaded it!!!
+mdbUpdate hg19 -table=tmpMdb -vars="grant=Myers" setVars="origAssembly=hg18"
+ 
+# Clean out wigs
+mdbPrint hg19 -table=tmpMdb -vars="view=RawSignal" -countObjs
+60 objects
+encpipeline_prod> mdbPrint hg19 -table=tmpMdb -vars="view=RawSignal" -line | grep -v wig | wl 
+objects:60  vars:1320
+0
+They are all wigs.  Get rid of them.
+mdbUpdate hg19 -table=tmpMdb -vars="view=RawSignal" -delete -test
+Command would affected 1320 row(s) in hg19.tmpMdb
+mdbUpdate hg19 -table=tmpMdb -vars="view=RawSignal" -delete
+Affected 1320 row(s) in hg19.tmpMdb
+mdbPrint hg19 -table=tmpMdb -all -countObjs
+217 objects
+
+# Add in 1258 and 1261 late
+mdbUpdate hg19 -table=tmpMdb 1258/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb 1261/out/mdb.txt
+mdbPrint hg19 -table=tmpMdb -all -countObjs -countVars
+235 objects
+5092 variables
+
+# Experiment defining vars?
+mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeHudsonalphaChipSeq" -countObjs -countVars
+701 objects
+15168 variables
+
+# Added special command to mdbPrint!!
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeHudsonalphaChipSeq" -updDb=hg19 -updMdb=tmpMdb -updExp="grant,cell,treatment,antibody,protocol,replicate,view" -updVars="dateSubmitted,dateUnrestricted" > hg18Mdb.txt
+wl hg18Mdb.txt 
+701 hg18Mdb.txt
+
+chmod 755 hg18Mdb.txt 
+./hg18Mdb.txt > mdbUp.out 2>&1
+
+e hg18Mdb.txt # remove '-test'
+./hg18Mdb.txt > mdbUp.out 2>&1
+
+# It all worked except!! Damn it, I forgot the dateResubmissted should be this date!
+
+The remapped submissions are
+1210*
+1224
+1225
+1226
+1227
+1239
+1240
+1241
+1242
+1252
+1258
+1261
+
+Newly submitted Chips by June 7th
+1130
+1143
+1150
+1151
+1158
+1171
+1172
+1180
+1188
+1215*
+1216*
+1251*
+1253*
+1254*
+
+mdbPrint hg19 -table=tmpMdb vars="subId=1215" | grep dateSubmitted
+# dates not updated so we are cool.  
+# remove origAssembly
+mdbUpdate hg19 -table=tmpMdb vars="subId=1215" var=origAssembly -delete -test
+mdbUpdate hg19 -table=tmpMdb vars="subId=1215" var=origAssembly -delete 
+mdbUpdate hg19 -table=tmpMdb vars="subId=1216" var=origAssembly -delete
+mdbUpdate hg19 -table=tmpMdb vars="subId=1251" var=origAssembly -delete
+mdbUpdate hg19 -table=tmpMdb vars="subId=1253" var=origAssembly -delete
+mdbUpdate hg19 -table=tmpMdb vars="subId=1254" var=origAssembly -delete
+
+# add the dateResubmitted that I accidentally left out!
+mdbUpdate hg19 -table=tmpMdb vars="subId=1217" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1219" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1222" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1224" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1225" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1226" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1227" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1239" -setVars="dateResubmitted=2010-06-04"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1240" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1241" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1242" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1252" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1258" -setVars="dateResubmitted=2010-06-07"
+mdbUpdate hg19 -table=tmpMdb vars="subId=1261" -setVars="dateResubmitted=2010-06-07"
+
+# Get the one remap submission that I did not load 
+mdbUpdate hg19 -table=tmpMdb 1210/out/mdb.txt
+mdbUpdate hg19 -table=tmpMdb -vars="view=RawSignal" -delete -test
+mdbUpdate hg19 -table=tmpMdb -vars="view=RawSignal" -delete
+Affected 42 row(s) in hg19.tmpMdb
+mdbPrint hg19 -table=tmpMdb -all -countObjs -countVars
+239 objects
+5365 variables
+# Limit the hg18 update to the 1210 exp.
+grep "H1-hESC" hg18Mdb.txt | grep Pol2 > hg18MdbH1.txt
+wl hg18MdbH1.txt
+16 hg18MdbH1.txt
+chmod 755 hg18MdbH1.txt
+./hg18MdbH1.txt
+Affected 0 row(s) in hg19.tmpMdb
+Affected 2 row(s) in hg19.tmpMdb
+Affected 0 row(s) in hg19.tmpMdb
+Affected 2 row(s) in hg19.tmpMdb
+Affected 0 row(s) in hg19.tmpMdb
+Affected 2 row(s) in hg19.tmpMdb
+Affected 0 row(s) in hg19.tmpMdb
+Affected 2 row(s) in hg19.tmpMdb
+...
+4 exps updated.
+mdbUpdate hg19 -table=tmpMdb vars="subId=1210" -setVars="dateResubmitted=2010-05-25"
+
+# Now go ahead and add all those non-remappings in:
+rm tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1130" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1143" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1150" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1151" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1158" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1171" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1172" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1180" >> tmp.ra
+mdbPrint hg19 metaDb -vars="subId=1188" >> tmp.ra
+mdbUpdate hg19 -table=tmpMdb tmp.ra
+Read 50 metadata objects from hg19
+Affected 1068 row(s) in hg19.tmpMdb
+# Scrup the wigs
+mdbUpdate hg19 -table=tmpMdb -vars="view=RawSignal" -delete -test
+mdbUpdate hg19 -table=tmpMdb -vars="view=RawSignal" -delete
+Affected 294 row(s) in hg19.tmpMdb
+mdbPrint hg19 -table=tmpMdb -all -countObjs -countVars
+
+# run encodeDownoladsPage.pl
+# These are still missing!
+wgEncodeHaibTfbsGm12878ControlV0416101AlnRep1.bam.gz	  866M	  2010-05-13  	type=bam
+wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep12.bam.gz	  1.2G	  2010-06-07  	type=bam
+wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1.bam.gz	  1021M	  2010-05-13  	type=bam
+wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1.bam.gz	  820M	  2010-05-13  	type=bam
+wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1.bam.gz	  1.1G	  2010-05-13  	type=bam
+wgEncodeHaibTfbsSknmcControlV0416101AlnRep1.bam.gz	  1.2G	  2010-05-13  	type=bam
+# Look for them in Venkat's mdb
+rm tmp.ra
+mdbPrint hg19 -table=metaDb_vsmalladi -obj=wgEncodeHaibTfbsGm12878ControlV0416101AlnRep1 >> tmp.ra
+mdbPrint hg19 -table=metaDb_vsmalladi -obj=wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep12      >> tmp.ra
+mdbPrint hg19 -table=metaDb_vsmalladi -obj=wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1 >> tmp.ra
+mdbPrint hg19 -table=metaDb_vsmalladi -obj=wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1 >> tmp.ra
+mdbPrint hg19 -table=metaDb_vsmalladi -obj=wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1   >> tmp.ra
+mdbPrint hg19 -table=metaDb_vsmalladi -obj=wgEncodeHaibTfbsSknmcControlV0416101AlnRep1   >> tmp.ra
+grep subId tmp.ra 
+subId 1189
+subId 1189
+subId 1189
+subId 1189
+subId 1189
+# None should be remaps!
+mdbUpdate hg19 -table=tmpMdb tmp.ra
+Read 5 metadata objects from hg19
+Affected 105 row(s) in hg19.tmpMdb
+# Still missing 1: wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep12  ### MY TYPO
+mv wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep12.bam.gz wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep1.bam.gz
+
+# All metadata is set.
+cd {t19}/metaDb/alpha
+mdbPrint hg19 -table=tmpMdb -all -countObjs -countVars
+280 objects
+6248 variables
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeHaibTfbs" -countObjs -countVars
+333 objects
+7121 variables
+
+Difference would seem to be the wigs
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeHaibTfbs view=RawSignal" -countObjs -countVars
+81 objects
+1701 variables
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeHaibTfbs view!=RawSignal" -countObjs -countVars
+252 objects
+5420 variables
+
+# I want to replace wgEncodeHaibTfbs.ra so
+mdbPrint hg19 -table=tmpMdb -all > wgEncodeHaibTfbs.ra
+
+# looks like some non-TFBS stuff was in the old one!
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeHaibMethylRrbs view!=RawSignal" > wgEncodeHaibMethylRrbs.ra
+
+# a mess so:
+rm wgEncodeHaibTfbs
+cvs up wgEncodeHaibTfbs.ra
+mdbUpdate hg19 -recreate table=metaDb_tdreszer wgEncodeHaibTfbs.ra
+mdbPrint hg19 -vars="composite=wgEncodeHaibMethylRrbs" > wgEncodeHaibMethylRrbs.ra
+Still only seems like TFBS, so...
+mdbPrint hg19 -vars="view=RawSignal" -countObjs -countVars
+mdbUpdate hg19 -vars="view=RawSignal" -delete      
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 1701 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -table=tmpMdb -all > wgEncodeHaibTfbs.test
+grep Methyl wgEncodeHaibTfbs.test | wl
+140
+So there is the infection.
+mdbUpdate hg19 table=metaDb_tdreszer wgEncodeHaibTfbs.test
+Read 280 metadata objects from hg19
+Affected 1167 row(s) in hg19.metaDb_tdreszer
+mdbPrint hg19 -vars="composite=wgEncodeHaibMethylRrbs" > wgEncodeHaibMethylRrbs.ra
+Using table named 'hg19.metaDb_tdreszer'.
+objects:28  vars:476
+mdbPrint hg19 -vars="composite=wgEncodeHaibTfbs" > wgEncodeHaibTfbs.ra
+Using table named 'hg19.metaDb_tdreszer'.
+objects:252  vars:5772
+mdbUpdate hg19 table=metaDb -replace wgEncodeHaibTfbs.ra
+

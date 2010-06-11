@@ -1691,3 +1691,196 @@ None!
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 826 approved
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 827 approved
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 828 approved
+
+2010-03-01 Prepare for release 3
+================================
+cd downloadsDir
+mkdir release3
+# todo:
+cd release3
+ln ../*.gz .
+cp ../index.html .
+cp ../protocol.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+cp ../fileDb.ra .
+ll *.gz > ../tmp3.txt
+cd ../release2
+ll *.gz > ../tmp2.txt
+cd ..
+diff -w tmp2.txt tmp3.txt | grep "<" > tmpOld.txt
+diff -w tmp2.txt tmp3.txt | grep ">" > tmpNew.txt
+e tmpOld.txt tmpNew.txt # remove the < & >
+diff -w tmp3.txt tmpNew.txt | grep "<" > tmpSame.txt
+
+e tmpOld.txt tmpNew.txt 
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 818  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 817  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 816  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 815  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 819  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 820  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 821  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 822  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 823  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 824  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 825  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 826  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 827  reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 828  reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 818 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 817 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 816 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 815 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 819 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 820 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 821 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 822 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 823 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 824 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 825 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 826 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 827 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 828 released
+
+2010-04-13 Loadeing metaTbl for hg18
+====================================
+cd {tdb}
+grep metadata trackdDb.wgencode.ra | grep Broad > testing/metaBroad.txt
+cd testing
+# edit remove the dups
+mdbUpdate hg18 metaBroad.txt
+
+cd {downloads}
+mdbUpdate hg18 fileDb.ra
+Using table named 'hg18.mdb_tdreszer'.
+The same variable appears twice: submittedDataVersion="V2 - corrected off-by-one error in end position" and submittedDataVersion="V2 - corrected off-by-one error in end position".  Ignoring second value.
+        project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K9ac fragLength=300 view=Alignments replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 submittedDataVersion="V2 - corrected off-by-one error in end position" dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 submittedDataVersion="V2 - corrected off-by-one error in end position" dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq parentTable=wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9acV2 fileName=wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
+The same variable appears twice: dateSubmitted=2009-01-06 and dateSubmitted=2009-01-06.  Ignoring second value.
+        project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K9ac fragLength=300 view=Alignments replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 submittedDataVersion="V2 - corrected off-by-one error in end position" dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 submittedDataVersion="V2 - corrected off-by-one error in end position" dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq parentTable=wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9acV2 fileName=wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
+The same variable appears twice: dateUnrestricted=2009-10-06 and dateUnrestricted=2009-10-06.  Ignoring second value.
+        project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K9ac fragLength=300 view=Alignments replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 submittedDataVersion="V2 - corrected off-by-one error in end position" dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 submittedDataVersion="V2 - corrected off-by-one error in end position" dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq parentTable=wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9acV2 fileName=wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
+Read 526 metadata objects from hg18
+Affected 7792 row(s) in hg18.mdb_tdreszer
+
+encodeDownloadsPage.pl -mdb=mdb_tdreszer mdb.html .
+encodeDownloadsPage.pl -noMdb noMdb.html .
+wl mdb.html noMdb.html 
+   586 mdb.html
+   586 noMdb.html
+diff mdb.html noMdb.html 
+# Only difference is error in old metadata
+
+cd {tdb}/testing
+mdbPrint hg18 -vars="lab=Broad" -ra > mdbBroad.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:641  vars:10531
+
+# Expected 549  Difference?  Must be versioned tables and files which were in fileDb.ra but are no longer in the downloads dir. 
+# Clean extra entries?
+
+# get downloads dir list
+cd {downloads}
+ls -1 *.gz | sort > ~/kent/src/hg/makeDb/trackDb/human/hg18/testing/tmp.txt
+
+# get metaTbl list
+cd {tdb}/testing
+grep metaObject mdbBroad.ra > tmp2.txt
+# edit tmp.txt tmp2.txt to strip down to obj names
+diff tmp.txt tmp2.txt > tmp3.txt
+# edit tmp3.txt to strip down to obj names
+wl tmp3.txt
+92 tmp3.txt
+
+#edit tmp3.txt as: metadata wgEncodeBroadChipSeqAlignmentsRep1Gm12878Control delete
+mdbUpdate hg18 tmp3.txt
+Affected 3999 row(s) in hg18.metaTbl_tdreszer
+
+mdbPrint hg18 -vars="lab=Broad" -ra > mdbBroad.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:549  vars:8967
+
+cd {downloads}
+encodeDownloadsPage.pl -mdb=mdb_tdreszer mdbNew.html .
+diff mdb.html mdbNew.html
+# no difference
+
+cd {tdb}/testing
+mv testing/mdbBroad.ra .
+mdbUpdate hg18 -table=mdb mdbBroad.ra 
+Read 549 metadata objects from hg18
+Affected 6228 row(s) in hg18.mdb
+
+cvs ci mdbBroad.ra
+
+
+2010-04-23 Standardize to setType, inputType
+============================================
+mdbPrint hg18 -vars="lab=Broad" -countObjs                 
+Using table named 'hg18.mdb_tdreszer'.
+549 objects
+mdbUpdate hg18 -vars="lab=Broad antibody=Input" -var=setType -val=input      
+Using table named 'hg18.mdb_tdreszer'.
+Affected 45 row(s) in hg18.mdb_tdreszer
+mdbUpdate hg18 -vars="lab=Broad antibody!=Input" -var=setType -val=exp      
+Using table named 'hg18.mdb_tdreszer'.
+Affected 504 row(s) in hg18.mdb_tdreszer
+
+#mdbUpdate hg18 -vars="lab=Broad setType=input" -var=inputType -val=?? -test
+#mdbUpdate hg18 -vars="lab=Broad setType=exp" -var=setType -val=exp -test
+
+select distinct t1.val cell,t2.val antibody from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj like "wgEncodeBroad%"
+ and t1.obj = t2.obj
+ and t1.var = "cell" and t2.var = "antibody"
+ order by t1.val,t2.val;
+93 rows in set (0.05 sec)
+
+select distinct t1.val cell from mdb_tdreszer t1 where t1.obj like "wgEncodeBroad%"
+ and t1.var = "cell"
+ order by t1.val;
++---------+
+| cell    |
++---------+
+| GM12878 | 
+| H1-hESC | 
+| HMEC    | 
+| HSMM    | 
+| HUVEC   | 
+| HepG2   | 
+| K562    | 
+| NHEK    | 
+| NHLF    | 
++---------+
+9 rows in set (0.03 sec)
+mdbUpdate hg18 -vars="lab=Broad cell=GM12878" -var=inputType val=GM12878/Input
+mdbUpdate hg18 -vars="lab=Broad cell=H1-hESC" -var=inputType val=H1-hESC/Input
+mdbUpdate hg18 -vars="lab=Broad cell=HMEC   " -var=inputType val=HMEC/Input
+mdbUpdate hg18 -vars="lab=Broad cell=HSMM   " -var=inputType val=HSMM/Input
+mdbUpdate hg18 -vars="lab=Broad cell=HUVEC  " -var=inputType val=HUVEC/Input
+mdbUpdate hg18 -vars="lab=Broad cell=HepG2  " -var=inputType val=HepG2/Input
+mdbUpdate hg18 -vars="lab=Broad cell=K562   " -var=inputType val=K562/Input
+mdbUpdate hg18 -vars="lab=Broad cell=NHEK   " -var=inputType val=NHEK/Input
+mdbUpdate hg18 -vars="lab=Broad cell=NHLF   " -var=inputType val=NHLF/Input
+Affected 59 row(s) in hg18.mdb_tdreszer
+Affected 53 row(s) in hg18.mdb_tdreszer
+Affected 59 row(s) in hg18.mdb_tdreszer
+Affected 59 row(s) in hg18.mdb_tdreszer
+Affected 71 row(s) in hg18.mdb_tdreszer
+Affected 47 row(s) in hg18.mdb_tdreszer
+Affected 71 row(s) in hg18.mdb_tdreszer
+Affected 71 row(s) in hg18.mdb_tdreszer
+Affected 59 row(s) in hg18.mdb_tdreszer
+Total: 549
+mdbPrint hg18 -vars="lab=Broad" > mdbBroad.ra
+Using table named 'hg18.mdb_tdreszer'.
+objects:549  vars:10065
+mdbUpdate hg18 table=mdb mdbBroad.ra
+Read 549 metadata objects from hg18
+Affected 1098 row(s) in hg18.mdb
+cvs ci -m "Extended setType and inputType to Broad" mdbBroad.ra
+cd {downloadsDir}
+encodeDownloadsPage.pl -mdb=mdb index.html .
+
+

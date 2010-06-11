@@ -4623,7 +4623,7 @@ select id,name,status,user_id,created_at from projects where status = "displayed
 ### Post call problems:
 1) ZZZ3 described as ZZ3 in cv.ra FIXED
 2) NF-YB is decribed as NF-YA in cv.ra FIXED
-3) TFIIIC needt to be converted to TFIIIC-110 in cv.ra and metadata  FIXED
+3) TFIIIC need to be converted to TFIIIC-110 in cv.ra and metadata  FIXED
 4) SREBP1A becomes SREBP1 FIXED
 5) Need new treatment pravastatin DONE
 6) HepG2/SREBP1 becomes HepG2/SREBP1/pravastatin DONE
@@ -4958,3 +4958,1700 @@ update projects set status = "revoked" where id in (891,950,995,1085);
 ### NOTE: Have tables/files for HUVEC and will revert to displayed/approved when input is available.
 ### NOTE: When Yale can resubmit HeLa-S3/Brg1/IgG-mus, then change from revoked -> loaded and then unload!
 
+2010-03-05 Loading newly submitted rabit IgGs through the back door
+===================================================================
+make submission named "YDH_GM10847_Rabbit_IgG"
+cd {pip}
+mkdir 1108
+cd 1108
+mv ../../ftp/prod/pcayting/GM10847_Rabbit_IgG.tgz .
+mv GM10847_Rabbit_IgG.tgz 001_YDH_GM10847_Rabbit_IgG.tgz
+tar -xzf 001_YDH_GM10847_Rabbit_IgG.tgz &
+edit DAF and DDF
+1) add input column to DDF and replace Rabbit_IgG with "IgG-rab"
+2) fill treatment column with "None"
+3) Fill anitbody column with "Input"
+4) Change DAF to add treatment, inptut to variables and quicken validation
+5) tagAligns, fastq has replicates
+6) Removed RawSignal from the DAF
+update projects set status = "uploaded" where id = 1108;
+# Success, so carry on with other IgG-rabs:
+mkdir 1109
+mkdir 1110
+mkdir 1111
+mkdir 1112
+mkdir 1113
+mkdir 1114
+mkdir 1115
+mkdir 1116
+mkdir 1117
+mv ../ftp/prod/pcayting/GM12878_Rabbit_IgG.tgz 1109/001_GM12878_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM12891_Rabbit_IgG.tgz 1111/001_GM12891_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM12892_Rabbit_IgG.tgz 1110/001_GM12892_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM15510_Rabbit_IgG.tgz 1112/001_GM15510_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM18505_Rabbit_IgG.tgz 1113/001_GM18505_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM18526_Rabbit_IgG.tgz 1114/001_GM18526_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM18951_Rabbit_IgG.tgz 1115/001_GM18951_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM19099_Rabbit_IgG.tgz 1116/001_GM19099_Rabbit_IgG.tgz
+mv ../ftp/prod/pcayting/GM19193_Rabbit_IgG.tgz 1117/001_GM19193_Rabbit_IgG.tgz
+cd 1109
+tar -xzf *.tgz &
+# stack up only 3 at at time
+update projects set status = "uploaded" where id >= 1109;
+# "validate" through the pipeline
+
+cd {downloadsDir}
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1108/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1109/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1110/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1111/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1112/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1113/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1114/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1115/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1116/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/1117/out/fileDb.ra | grep parentTable >> tmp.txt
+e tmp.txt
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1108 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1109 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1110 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1111 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1112 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1113 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1114 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1115 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1116 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1117 displayed
+
+# 3 more
+mkdir 1118
+mkdir 1119
+mkdir 1120
+mv ../ftp/prod/pcayting/HUVEC_IgG_Control.tgz 1118/001_HUVEC_IgG_Control.tgz
+mv ../ftp/prod/pcayting/HeLa_Brg1.tgz 1118/001_HeLa_Brg1.tgz
+mv ../ftp/prod/pcayting/HeLa_IgG_Control.tgz 1118/001_HeLa_IgG_Control.tgz
+cd 1118,1119,1120
+tar -xzf *.tgz &
+update projects set status = "uploaded" where id = 1118;
+update projects set status = "uploaded" where id = 1119;
+
+### Must edit fileDb.ra to reposition all those GM* which should point to IgG-rab instead of IgG-mus.
+Done.
+### Would be good to change the following names 
+rename table wgEncodeYaleChIPseqPeaksGm10847NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm10847NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm12878NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm12891NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm12891NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm12892NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm12892NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm15510NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm15510NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm18505NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm18505NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm18526NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm18526NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm18951NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm18951NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm19099NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm19099NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm19193NfkbMusigg    to wgEncodeYaleChIPseqPeaksGm19193NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm10847NfkbMusigg   to wgEncodeYaleChIPseqSignalGm10847NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm12878NfkbMusigg   to wgEncodeYaleChIPseqSignalGm12878NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm12891NfkbMusigg   to wgEncodeYaleChIPseqSignalGm12891NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm12892NfkbMusigg   to wgEncodeYaleChIPseqSignalGm12892NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm15510NfkbMusigg   to wgEncodeYaleChIPseqSignalGm15510NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm18505NfkbMusigg   to wgEncodeYaleChIPseqSignalGm18505NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm18526NfkbMusigg   to wgEncodeYaleChIPseqSignalGm18526NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm18951NfkbMusigg   to wgEncodeYaleChIPseqSignalGm18951NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm19099NfkbMusigg   to wgEncodeYaleChIPseqSignalGm19099NfkbIggrab;
+rename table wgEncodeYaleChIPseqSignalGm19193NfkbMusigg   to wgEncodeYaleChIPseqSignalGm19193NfkbIggrab;
+rename table wgEncodeYaleChIPseqPeaksGm12878Rad21         to wgEncodeYaleChIPseqPeaksGm12878Rad21Iggrab;
+rename table wgEncodeYaleChIPseqSignalGm12878Rad21        to wgEncodeYaleChIPseqSignalGm12878Rad21Iggrab;
+
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm10847NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm10847NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm12878NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm12878NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm12891NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm12891NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm12892NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm12892NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm15510NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm15510NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm18505NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm18505NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm18526NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm18526NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm18951NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm18951NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm19099NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm19099NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm19193NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1Gm19193NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm10847NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm10847NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm12878NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm12878NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm12891NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm12891NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm12892NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm12892NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm15510NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm15510NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm18505NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm18505NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm18526NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm18526NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm18951NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm18951NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm19099NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm19099NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm19193NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2Gm19193NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm10847NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm10847NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm12878NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm12878NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm12891NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm12891NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm12892NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm12892NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm15510NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm15510NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm18505NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm18505NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm18526NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm18526NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm18951NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm18951NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm19099NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm19099NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep3Gm19193NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep3Gm19193NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep4Gm10847NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep4Gm10847NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep4Gm15510NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep4Gm15510NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep4Gm18505NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep4Gm18505NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep4Gm18951NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep4Gm18951NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep5Gm10847NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep5Gm10847NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep5Gm15510NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep5Gm15510NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep5Gm18505NfkbMusigg.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep5Gm18505NfkbIggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksGm10847NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm10847NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm12878NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm12891NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm12891NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm12892NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm12892NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm15510NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm15510NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm18505NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm18505NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm18526NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm18526NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm18951NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm18951NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm19099NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm19099NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksGm19193NfkbMusigg.narrowPeak.gz        wgEncodeYaleChIPseqPeaksGm19193NfkbIggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm10847NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm10847NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm12878NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm12878NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm12891NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm12891NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm12892NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm12892NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm15510NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm15510NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm18505NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm18505NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm18526NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm18526NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm18951NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm18951NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm19099NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm19099NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm19193NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep1Gm19193NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm10847NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm10847NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm12878NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm12878NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm12891NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm12891NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm12892NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm12892NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm15510NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm15510NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm18505NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm18505NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm18526NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm18526NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm18951NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm18951NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm19099NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm19099NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm19193NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep2Gm19193NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm10847NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm10847NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm12878NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm12878NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm12891NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm12891NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm12892NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm12892NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm15510NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm15510NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm18505NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm18505NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm18526NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm18526NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm18951NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm18951NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm19099NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm19099NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep3Gm19193NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep3Gm19193NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep4Gm10847NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep4Gm10847NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep4Gm12878NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep4Gm12878NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep4Gm15510NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep4Gm15510NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep4Gm18505NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep4Gm18505NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep4Gm18951NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep4Gm18951NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep5Gm10847NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep5Gm10847NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep5Gm15510NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep5Gm15510NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep5Gm18505NfkbMusigg.fastq.gz       wgEncodeYaleChIPseqRawDataRep5Gm18505NfkbIggrab.fastq.gz
+mv wgEncodeYaleChIPseqSignalGm10847NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm10847NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm12878NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm12878NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm12891NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm12891NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm12892NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm12892NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm15510NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm15510NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm18505NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm18505NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm18526NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm18526NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm18951NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm18951NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm19099NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm19099NfkbIggrab.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalGm19193NfkbMusigg.bedGraph4.gz        wgEncodeYaleChIPseqSignalGm19193NfkbIggrab.bedGraph4.gz
+
+mv wgEncodeYaleChIPseqAlignmentsRep1Gm12878Rad21.tagAlign.gz      wgEncodeYaleChIPseqAlignmentsRep1Gm12878Rad21Iggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2Gm12878Rad21.tagAlign.gz      wgEncodeYaleChIPseqAlignmentsRep2Gm12878Rad21Iggrab.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksGm12878Rad21.narrowPeak.gz             wgEncodeYaleChIPseqPeaksGm12878Rad21Iggrab.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1Gm12878Rad21.fastq.gz            wgEncodeYaleChIPseqRawDataRep1Gm12878Rad21Iggrab.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2Gm12878Rad21.fastq.gz            wgEncodeYaleChIPseqRawDataRep2Gm12878Rad21Iggrab.fastq.gz
+mv wgEncodeYaleChIPseqSignalGm12878Rad21.bedGraph4.gz             wgEncodeYaleChIPseqSignalGm12878Rad21Iggrab.bedGraph4.gz
+Done.
+
+# edit trackDb.wgEncode.ra and fileDb.ra for name changes
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html .
+
+# take care of these:
+hg18.wgEncodeYaleChIPseqSignalGm10847InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm10847InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12891InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12892InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm15510InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18505InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18526InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm18951InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19099InputIggrab has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm19193InputIggrab has 1 records with end > chromSize.
+
+update wgEncodeYaleChIPseqSignalGm10847InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm12878InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm12891InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm12892InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm15510InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18505InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18526InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm18951InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19099InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalGm19193InputIggrab y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+
+### These 3 have some questions on them so I will not load them yet.
+1) Huvec input is probably std. confirm?  YES
+2) HeLa/Brg1 is probably paired with IgG-mus  YES
+3) HeLa/IgG is a mystery input... What should it be?
+# dropped 1120
+
+# unrevoke HUVEC
+cd {downloadsDir}
+mv revkedJan2010/*Huvec* .
+e fileDb.ra to dataVersion="post ENCODE Jan 2010 Freeze" and add 1118 submission Huvec input=std
+e trackDb.wgEncode.ra to uncomment out Huvecs, add "post" to dataVersion and add 1118 submission Huvec input=std
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html .
+
+e fileDb.ra to add 1119
+e trackDb.wgEncode.ra to add 1119
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html .
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1118 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1119 displayed
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 950 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 995 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 1085 displayed
+
+update projects set user_id = 39 where id in (1108,1109,1110,1111,1112,1113,1114,1115,1116,1117,1118,1119);
+
+### Need approval for these:
+|  950 | YDH_HUVEC_Pol2          | displayed |      39 | 
+|  995 | YDH_HUVEC_Jun           | displayed |      39 | 
+| 1085 | YDH_HUVEC_Max           | displayed |      39 | 
+| 1108 | YDH_GM10847_Rabbit_IgG  | displayed |      39 | 
+| 1109 | YDH_GM12878_Rabbit_IgG  | displayed |      39 | 
+| 1110 | YDH_GM12892_Rabbit_IgG  | displayed |      39 | 
+| 1111 | YDH_GM12891_Rabbit_IgG  | displayed |      39 | 
+| 1112 | YDH_GM15510_Rabbit_IgG  | displayed |      39 | 
+| 1113 | YDH_GM18505_Rabbit_IgG  | displayed |      39 | 
+| 1114 | YDH_GM18526_Rabbit_IgG  | displayed |      39 | 
+| 1115 | YDH_GM18951_Rabbit_IgG  | displayed |      39 | 
+| 1116 | YDH_GM19099_Rabbit_IgG  | displayed |      39 | 
+| 1117 | YDH_GM19193_Rabbit_IgG  | displayed |      39 | 
+| 1118 | YDH_HUVEC_IgG_Control   | displayed |      39 | 
+| 1119 | YDH_HeLa_Brg1           | displayed |      39 | 
+
+wgEncodeYaleChIPseqSignalHuvecInputStd
+wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus
+wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus
+update wgEncodeYaleChIPseqSignalHuvecInputStd y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+
+2010-03-25 Getting release3 ready
+===============================
+Seem to have lost 2 tables but not the files (subId=1046):
+wgEncodeYaleChIPseqPeaksGm19099Pol2Musigg
+wgEncodeYaleChIPseqSignalGm19099Pol2Musigg
+cd {downloadsDir}
+mkdir save
+mv wgEncodeYaleChIPseqPeaksGm19099Pol*.* save
+mv wgEncodeYaleChIPseqSignalGm19099Pol*.* save
+cd {pip}/1046
+
+e out/load.ra # remove all but peak and Signal
+~qateam/bin/scripts/doEncodeLoad.pl . /hive/groups/encode/dcc/pipeline/encpipeline_prod/1046
+# Confirm the tables are there.  Confirm the files are the same.  mv save/*.gz back to downloadsDir
+# confirm in browser.
+
+Add pushQ entry and put it in A at the end of the ENCODE list
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1108 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1109 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1110 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1111 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1112 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1113 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1114 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1115 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1116 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1117 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1118 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1119 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  633 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  634 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  669 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  739 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  757 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  787 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  853 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  860 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  861 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  862 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  863 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  864 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  865 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  888 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  890 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  892 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  893 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  894 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  895 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  900 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  928 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  933 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  941 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  942 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  943 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  945 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  946 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  947 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  951 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  952 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  956 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  957 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  959 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  974 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  975 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  996 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  997 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  999 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1008 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1016 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1020 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1024 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1025 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1029 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1030 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1031 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1032 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1044 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1045 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1046 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1047 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1048 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1050 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1051 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1052 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1053 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1058 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1059 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1062 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1063 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1066 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1067 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1068 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1069 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1070 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1071 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1072 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1073 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1076 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1077 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1078 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1081 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1082 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1083 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1085 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1086 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1087 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1088 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1090 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1108 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1109 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1110 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1111 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1112 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1113 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1114 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1115 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1116 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1117 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1118 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1119 reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 950 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 995 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 950 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 995 reviewing
+
+### Rerunning encodeDownloadsPage with -checksum so be sure to copy md5sum.txt again
+
+2010-04-12 Release 3 in pushQ
+=============================
+update wgEncodeYaleChIPseqSignalHelas3JundRabigg y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562Stat1Ifng6h y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+update wgEncodeYaleChIPseqSignalK562bSetdb1Mnase y,chromInfo c set y.chromEnd = c.size where y.chrom = c.chrom and y.chromEnd > c.size;
+
+
+2010-04-12 Loadeing metaTbl for hg18
+====================================
+cd {tdb}
+grep metadata trackdDb.wgencode.ra | grep Snyder > testing/metaYaleTfbs.txt
+cd testing
+# edit remove the dups
+metaTblUpdate -db=hg18 metaYaleTfbs.txt
+Using table named 'hg18.metaTbl_tdreszer'.
+Read 301 metadata objects from metaYaleTfbs.txt
+Affected 5006 row(s) in hg18.metaTbl_tdreszer
+
+cd {downloads}
+metaTblUpdate -db=hg18 fileDb.ra
+Read 861 metadata objects from fileDb.ra
+Affected 14951 row(s) in hg18.metaTbl_tdreszer
+
+encodeDownloadsPage.pl -metaTbl=metaTbl_tdreszer meta.html .
+encodeDownloadsPage.pl -noMetaTbl noMeta.html .
+wl meta.html 
+1112 meta.html
+wl noMeta.html 
+1112 noMeta.html
+diff meta.html noMeta.html 
+# identical!
+
+cd {tdb}/testing
+metaTblPrint -db=hg18 -vars="grant=Snyder" -ra > metaYaleTfbs.ra
+Using table named 'hg18.metaTbl_tdreszer'.
+objects:1160  vars:19957
+
+# Expected 1073  Difference?  Must be versioned tables and files which were in fileDb.ra but are no longer in the downloads dir. 
+# Clean extra entries?
+
+After doing some greps and diffs I have a list of 87 that are not the downloads dir
+
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep1Gm10847Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep1Gm12891Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep1Helas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep1Helas3Brg1Musigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep1K562Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep2Gm10847Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep2Gm12891Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep2Helas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep2Helas3Brg1Musigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep2K562Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqAlignmentsRep3Helas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep1Gm10847Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep1Gm12891Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep1Helas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep1Helas3Brg1Musigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep1K562Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep1K562Pol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep2Gm10847Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep2Gm12891Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep2Helas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep2Helas3Brg1Musigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep2K562Mouseigg
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep2K562Pol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawDataRep3Helas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalHepg2bInput
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalK562Ifna30Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalK562Ifna6hInput
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalK562Ifng30Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalK562Ifng6hInput
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalK562bInput
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalNt2d1Input
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1Hct116Pol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1Hepg2bTr4
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Bdp1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Brf1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna30Cmyc
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna30Pol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna30Stat1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna30Stat2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna6hCjun
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna6hCmyc
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna6hPol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna6hStat1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifna6hStat2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifng30Cjun
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifng6hCjun
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifng6hCmyc
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Ifng6hPol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Rpc155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562Sirt6
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562bE2f4
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562bE2f6
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562bSetdb1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1K562bTr4
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1Nt2d1Suz12
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep1Nt2d1Yy1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2Hct116Pol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2Hepg2bTr4
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Bdp1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Brf1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna30Cmyc
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna30Pol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna30Stat1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna30Stat2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna6hCjun
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna6hCmyc
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna6hPol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna6hStat1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifna6hStat2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifng30Cjun
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifng6hCjun
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifng6hCmyc
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Ifng6hPol2
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Rpc155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562Sirt6
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562bE2f4
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562bE2f6
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562bSetdb1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2K562bTr4
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2Nt2d1Suz12
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep2Nt2d1Yy1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep3K562Bdp1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRawSignalRep3K562Brf1
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqSignalHelas3Baf155
+metaTblUpdate -db=hg18 -delete -obj=wgEncodeYaleChIPseqSignalK562Mouseigg
+
+encodeDownloadsPage.pl -metaTbl=metaTbl_tdreszer meta.html .
+encodeDownloadsPage.pl -noMetaTbl noMeta.html .
+diff meta.html noMeta.html 
+# identical!
+
+cd {tdb}/testing
+metaTblPrint -db=hg18 -vars="grant=Snyder" -ra > metaYaleTfbs.ra
+Using table named 'hg18.metaTbl_tdreszer'.
+objects:1073  vars:18389
+
+metaTblUpdate -db=hg18 -table=metaTbl metaYaleTfbs.ra
+Read 1073 metadata objects from metaYaleTfbs.ra
+Affected 18389 row(s) in hg18.metaTbl
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 331 displayed
+
+2010-04-20 Fix 'input' once and for all ??
+==========================================
+select distinct var,val from mdb_tdreszer where obj like "wgEncodeYaleChIP%" and var in ("cell","treatment","antibody","protocol","input");
+95 rows in set (0.06 sec)  ## No protocol
+
+select distinct t1.val,t2.val,t3.val,t4.val from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4 where t1.obj like "wgEncodeYaleChIP%"
+ and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "input"
+ order by t1.val,t2.val,t3.val,t4.val;
+50 rows in set (0.08 sec)  ### Missing values!
+select count(*) from mdb_tdreszer where obj like "wgEncodeYaleChIP%" and var = "cell"; 1073, "antibody" 1073, "input" 1073, "treatment" 271
+
+# Plan: print current mdb, update all objs to have default treatment=None, THEN reupdate with current settings in file
+ mdbPrint hg18 -vars="composite=wgEncodeYaleChIPseq" -ra > mdbYale.ra
+ mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq" -var=treatment -val=None -test
+ mdbUpdate hg18 mdbYale.ra
+
+select distinct t1.val cell,t2.val treatment,t3.val antibody,t4.val input from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4 where t1.obj like "wgEncodeYaleChIP%"
+ and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "input"
+ order by t1.val,t2.val,t3.val,t4.val;
++-----------+-------------+------------+----------------+
+| cell      | treatment   | antibody   | input          |
++-----------+-------------+------------+----------------+
+| GM10847   | None        | Input      | IgG-mus        | 
+| GM10847   | None        | Input      | IgG-rab        | 
+| GM10847   | None        | NFKB       | IgG-rab        | 
+| GM10847   | None        | Pol2       | IgG-mus        | 
+| GM12878   | None        | Input      | IgG-mus        | 
+| GM12878   | None        | Input      | IgG-rab        | 
+| GM12878   | None        | Input      | std            | 
+| GM12878   | None        | JunD       | std            | 
+| GM12878   | None        | Max        | std            | 
+| GM12878   | None        | NFKB       | IgG-rab        | 
+| GM12878   | None        | Pol2       | IgG-mus        | 
+| GM12878   | None        | Pol2       | std            | 
+| GM12878   | None        | Pol3       | std            | 
+| GM12878   | None        | Rad21      | IgG-rab        | 
+| GM12878   | None        | TR4        | std            | 
+| GM12878   | None        | YY1        | std            | 
+| GM12878   | None        | ZZZ3       | std            | 
+| GM12878   | None        | c-Fos      | std            | 
+| GM12878   | TNFa        | NFKB       | std            | 
+| GM12891   | None        | Input      | IgG-mus        | 
+| GM12891   | None        | Input      | IgG-rab        | 
+| GM12891   | None        | NFKB       | IgG-rab        | 
+| GM12891   | None        | Pol2       | IgG-mus        | 
+| GM12892   | None        | Input      | IgG-mus        | 
+| GM12892   | None        | Input      | IgG-rab        | 
+| GM12892   | None        | NFKB       | IgG-rab        | 
+| GM12892   | None        | Pol2       | IgG-mus        | 
+| GM15510   | None        | Input      | IgG-mus        | 
+| GM15510   | None        | Input      | IgG-rab        | 
+| GM15510   | None        | NFKB       | IgG-rab        | 
+| GM15510   | None        | Pol2       | IgG-mus        | 
+| GM18505   | None        | Input      | IgG-mus        | 
+| GM18505   | None        | Input      | IgG-rab        | 
+| GM18505   | None        | NFKB       | IgG-rab        | 
+| GM18505   | None        | Pol2       | IgG-mus        | 
+| GM18526   | None        | Input      | IgG-mus        | 
+| GM18526   | None        | Input      | IgG-rab        | 
+| GM18526   | None        | NFKB       | IgG-mrabus     | 
+| GM18526   | None        | NFKB       | IgG-rab        | 
+| GM18526   | None        | Pol2       | IgG-mus        | 
+| GM18951   | None        | Input      | IgG-mus        | 
+| GM18951   | None        | Input      | IgG-rab        | 
+| GM18951   | None        | NFKB       | IgG-rab        | 
+| GM18951   | None        | Pol2       | IgG-mus        | 
+| GM19099   | None        | Input      | IgG-mus        | 
+| GM19099   | None        | Input      | IgG-rab        | 
+| GM19099   | None        | NFKB       | IgG-rab        | 
+| GM19099   | None        | Pol2       | IgG-mus        | 
+| GM19193   | None        | Input      | IgG-mus        | 
+| GM19193   | None        | Input      | IgG-rab        | 
+| GM19193   | None        | NFKB       | IgG-rab        | 
+| GM19193   | None        | Pol2       | IgG-mus        | 
+| HCT-116   | None        | Input      | UCDavis        | 
+| HCT-116   | None        | Pol2       | UCDavis        | 
+| HCT-116   | None        | TCF4       | UCDavis        | 
+| HCT-116   | None        | TCF7L2     | UCDavis        | 
+| HEK293(b) | None        | Input      | std            | 
+| HEK293(b) | None        | Pol2       | std            | 
+| HUVEC     | None        | Input      | std            | 
+| HUVEC     | None        | Max        | std            | 
+| HUVEC     | None        | Pol2       | std            | 
+| HUVEC     | None        | c-Jun      | std            | 
+| HeLa-S3   | IFNg        | STAT1      | std            | 
+| HeLa-S3   | IFNg30      | Input      | std            | 
+| HeLa-S3   | IFNg30      | STAT1      | std            | 
+| HeLa-S3   | None        | AP-2alpha  | std            | 
+| HeLa-S3   | None        | AP-2gamma  | std            | 
+| HeLa-S3   | None        | BAF155     | IgG-mus        | 
+| HeLa-S3   | None        | BAF170     | IgG-mus        | 
+| HeLa-S3   | None        | BDP1       | std            | 
+| HeLa-S3   | None        | BRF1       | std            | 
+| HeLa-S3   | None        | BRF2       | std            | 
+| HeLa-S3   | None        | Brg1       | IgG-mus        | 
+| HeLa-S3   | None        | E2F1       | std            | 
+| HeLa-S3   | None        | E2F4       | std            | 
+| HeLa-S3   | None        | E2F6       | std            | 
+| HeLa-S3   | None        | HA-E2F1    | std            | 
+| HeLa-S3   | None        | HA-F2F1    | std            | 
+| HeLa-S3   | None        | Ini1       | IgG-mus        | 
+| HeLa-S3   | None        | Input      | IgG-mus        | 
+| HeLa-S3   | None        | Input      | IgG-rab        | 
+| HeLa-S3   | None        | Input      | Large_Fragment | 
+| HeLa-S3   | None        | Input      | MNase          | 
+| HeLa-S3   | None        | Input      | Naked_DNA      | 
+| HeLa-S3   | None        | Input      | std            | 
+| HeLa-S3   | None        | JunD       | IgG-rab        | 
+| HeLa-S3   | None        | Max        | std            | 
+| HeLa-S3   | None        | Nrf1       | IgG-mus        | 
+| HeLa-S3   | None        | Pol2       | std            | 
+| HeLa-S3   | None        | RPC155     | std            | 
+| HeLa-S3   | None        | TFIIIC-110 | std            | 
+| HeLa-S3   | None        | TR4        | std            | 
+| HeLa-S3   | None        | c-Fos      | std            | 
+| HeLa-S3   | None        | c-Jun      | IgG-rab        | 
+| HeLa-S3   | None        | c-Myc      | std            | 
+| HepG2     | forskolin   | CEBPB      | std            | 
+| HepG2     | forskolin   | ERRA       | std            | 
+| HepG2     | forskolin   | GRp20      | std            | 
+| HepG2     | forskolin   | HNF4A      | std            | 
+| HepG2     | forskolin   | HSF1       | std            | 
+| HepG2     | forskolin   | Input      | std            | 
+| HepG2     | forskolin   | PGC1A      | std            | 
+| HepG2     | forskolin   | Pol2       | std            | 
+| HepG2     | insulin     | Input      | std            | 
+| HepG2     | insulin     | SREBP1     | std            | 
+| HepG2     | pravastatin | Input      | std            | 
+| HepG2     | pravastatin | Pol2       | std            | 
+| HepG2     | pravastatin | SREBP1     | std            | 
+| HepG2     | pravastatin | SREBP2     | std            | 
+| HepG2b    | None        | Input      | UCDavis        | 
+| HepG2b    | None        | TR4        | UCDavis        | 
+| K562      | IFNa30      | Input      | std            | 
+| K562      | IFNa30      | Pol2       | std            | 
+| K562      | IFNa30      | STAT1      | std            | 
+| K562      | IFNa30      | STAT2      | std            | 
+| K562      | IFNa30      | c-Myc      | std            | 
+| K562      | IFNa6h      | Input      | std            | 
+| K562      | IFNa6h      | Pol2       | std            | 
+| K562      | IFNa6h      | STAT1      | std            | 
+| K562      | IFNa6h      | STAT2      | std            | 
+| K562      | IFNa6h      | c-Jun      | std            | 
+| K562      | IFNa6h      | c-Myc      | std            | 
+| K562      | IFNg30      | Input      | std            | 
+| K562      | IFNg30      | Pol2       | std            | 
+| K562      | IFNg30      | STAT1      | std            | 
+| K562      | IFNg30      | c-Jun      | std            | 
+| K562      | IFNg6h      | Input      | std            | 
+| K562      | IFNg6h      | Pol2       | std            | 
+| K562      | IFNg6h      | STAT1      | std            | 
+| K562      | IFNg6h      | c-Jun      | std            | 
+| K562      | IFNg6h      | c-Myc      | std            | 
+| K562      | None        | ATF3       | std            | 
+| K562      | None        | BDP1       | std            | 
+| K562      | None        | BRF1       | std            | 
+| K562      | None        | BRF2       | std            | 
+| K562      | None        | Brg1       | IgG-mus        | 
+| K562      | None        | GTF2B      | std            | 
+| K562      | None        | Ini1       | IgG-mus        | 
+| K562      | None        | Input      | IgG-mus        | 
+| K562      | None        | Input      | std            | 
+| K562      | None        | JunD       | std            | 
+| K562      | None        | Max        | std            | 
+| K562      | None        | NELFe      | std            | 
+| K562      | None        | NF-E2      | std            | 
+| K562      | None        | NF-YA      | std            | 
+| K562      | None        | NF-YB      | std            | 
+| K562      | None        | Pol2       | IgG-mus        | 
+| K562      | None        | Pol2       | std            | 
+| K562      | None        | Pol3       | std            | 
+| K562      | None        | RPC155     | std            | 
+| K562      | None        | Rad21      | std            | 
+| K562      | None        | SIRT6      | std            | 
+| K562      | None        | TFIIIC-110 | std            | 
+| K562      | None        | XRCC4      | std            | 
+| K562      | None        | c-Fos      | std            | 
+| K562      | None        | c-Jun      | std            | 
+| K562      | None        | c-Myc      | std            | 
+| K562b     | None        | E2F4       | UCDavis        | 
+| K562b     | None        | E2F6       | UCDavis        | 
+| K562b     | None        | GATA-1     | UCDavis        | 
+| K562b     | None        | GATA-2     | UCDavis        | 
+| K562b     | None        | Input      | UCDavis        | 
+| K562b     | None        | SETDB1     | MNase          | 
+| K562b     | None        | SETDB1     | UCDavis        | 
+| K562b     | None        | TR4        | UCDavis        | 
+| K562b     | None        | YY1        | UCDavis        | 
+| K562b     | None        | ZNF263     | UCDavis        | 
+| K562b     | None        | ZNF274     | UCDavis        | 
+| MCF-7     | None        | HA-E2F1    | UCDavis        | 
+| MCF-7     | None        | Input      | UCDavis        | 
+| NB4       | None        | Input      | std            | 
+| NB4       | None        | Pol2       | std            | 
+| NT2-D1    | None        | Input      | UCDavis        | 
+| NT2-D1    | None        | SUZ12      | UCDavis        | 
+| NT2-D1    | None        | YY1        | UCDavis        | 
++-----------+-------------+------------+----------------+
+175 rows in set (0.14 sec)
+mdbUpdate hg18 -vars="cell=GM18526 treatment=None antibody=NFKB input=IgG-mrabus" -var=input -val=IgG-rab -test
+
+mdbPrint hg18 -vars="composite=wgEncodeYaleChIPseq" -ra > mdbYaleBefore.ra
+
+insert into mdb_tdreszer (select t2.obj,"inputType",varType,val from mdb_tdreszer t2 where t2.obj like "wgEncodeYale%" and var = "input");
+
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq antibody=Input" -var=input -val=yes
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq antibody!=Input" -var=input -val=no
+
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM10847 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM10847/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM10847 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM10847/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM12878/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM12878/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Input inputType=std" -var=inputType -val=GM12878/None/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12891 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM12891/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12891 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM12891/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12892 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM12892/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12892 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM12892/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM15510 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM15510/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM15510 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM15510/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18505 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM18505/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18505 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM18505/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18526 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM18526/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18526 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM18526/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18951 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM18951/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18951 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM18951/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19099 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM19099/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19099 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM19099/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19193 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=GM19193/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19193 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=GM19193/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HCT-116 treatment=None antibody=Input inputType=UCDavis" -var=inputType -val=HCT-116/None/Input/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HEK293(b) treatment=None antibody=Input inputType=std" -var=inputType -val=HEK293(b)/None/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HUVEC treatment=None antibody=Input inputType=std" -var=inputType -val=HUVEC/None/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=IFNg30 antibody=Input inputType=std" -var=inputType -val=HeLa-S3/IFNg30/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=HeLa-S3/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Input inputType=IgG-rab" -var=inputType -val=HeLa-S3/None/Input/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Input inputType=Large_Fragment" -var=inputType -val=HeLa-S3/None/Input/Large_Fragment
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Input inputType=MNase" -var=inputType -val=HeLa-S3/None/Input/MNase
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Input inputType=Naked_DNA" -var=inputType -val=HeLa-S3/None/Input/Naked_DNA
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Input inputType=std" -var=inputType -val=HeLa-S3/None/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=Input inputType=std" -var=inputType -val=HepG2/forskolin/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=insulin antibody=Input inputType=std" -var=inputType -val=HepG2/insulin/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=pravastatin antibody=Input inputType=std" -var=inputType -val=HepG2/pravastatin/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2b treatment=None antibody=Input inputType=UCDavis" -var=inputType -val=HepG2b/None/Input/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa30 antibody=Input inputType=std" -var=inputType -val=K562/IFNa30/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa6h antibody=Input inputType=std" -var=inputType -val=K562/IFNa6h/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg30 antibody=Input inputType=std" -var=inputType -val=K562/IFNg30/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg6h antibody=Input inputType=std" -var=inputType -val=K562/IFNg6h/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Input inputType=IgG-mus" -var=inputType -val=K562/None/Input/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Input inputType=std" -var=inputType -val=K562/None/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=Input inputType=UCDavis" -var=inputType -val=K562b/None/Input/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=MCF-7 treatment=None antibody=Input inputType=UCDavis" -var=inputType -val=MCF-7/None/Input/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=NB4 treatment=None antibody=Input inputType=std" -var=inputType -val=NB4/None/Input/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=NT2-D1 treatment=None antibody=Input inputType=UCDavis" -var=inputType -val=NT2-D1/None/Input/UCDavis
+
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM10847 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM10847/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM10847 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM10847/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=JunD inputType=std" -var=inputType -val=GM12878/None/JunD/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Max  inputType=std" -var=inputType -val=GM12878/None/Max/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM12878/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM12878/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Pol2 inputType=std" -var=inputType -val=GM12878/None/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Pol3 inputType=std" -var=inputType -val=GM12878/None/Pol3/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=Rad21inputType=IgG-rab" -var=inputType -val=GM12878/None/Rad21/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=TR4  inputType=std" -var=inputType -val=GM12878/None/TR4/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=YY1  inputType=std" -var=inputType -val=GM12878/None/YY1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=ZZZ3 inputType=std" -var=inputType -val=GM12878/None/ZZZ3/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=None antibody=c-FosinputType=std" -var=inputType -val=GM12878/None/c-Fos/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12878 treatment=TNFa antibody=NFKB inputType=std" -var=inputType -val=GM12878/TNFa/NFKB/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12891 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM12891/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12891 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM12891/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12892 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM12892/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM12892 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM12892/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM15510 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM15510/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM15510 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM15510/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18505 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM18505/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18505 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM18505/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18526 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM18526/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18526 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM18526/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18951 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM18951/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM18951 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM18951/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19099 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM19099/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19099 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM19099/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19193 treatment=None antibody=NFKB inputType=IgG-rab" -var=inputType -val=GM19193/None/NFKB/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=GM19193 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=GM19193/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HCT-116 treatment=None antibody=Pol2 inputType=UCDavis" -var=inputType -val=HCT-116/None/Pol2/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HCT-116 treatment=None antibody=TCF4 inputType=UCDavis" -var=inputType -val=HCT-116/None/TCF4/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HCT-116 treatment=None antibody=TCF7L2 inputType=UCDavis" -var=inputType -val=HCT-116/None/TCF7L2/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HEK293(b) treatment=None antibody=Pol2 inputType=std" -var=inputType -val=HEK293(b)/None/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HUVEC treatment=None antibody=Max inputType=std" -var=inputType -val=HUVEC/None/Max/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HUVEC treatment=None antibody=Pol2 inputType=std" -var=inputType -val=HUVEC/None/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HUVEC treatment=None antibody=c-Jun inputType=std" -var=inputType -val=HUVEC/None/c-Jun/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=IFNg antibody=STAT1 inputType=std" -var=inputType -val=HeLa-S3/IFNg/STAT1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=IFNg30 antibody=STAT1 inputType=std" -var=inputType -val=HeLa-S3/IFNg30/STAT1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=AP-2alpha inputType=std" -var=inputType -val=HeLa-S3/None/AP-2alpha/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=AP-2gamma inputType=std" -var=inputType -val=HeLa-S3/None/AP-2gamma/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=BAF155 inputType=IgG-mus" -var=inputType -val=HeLa-S3/None/BAF155/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=BAF170 inputType=IgG-mus" -var=inputType -val=HeLa-S3/None/BAF170/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=BDP1 inputType=std" -var=inputType -val=HeLa-S3/None/BDP1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=BRF1 inputType=std" -var=inputType -val=HeLa-S3/None/BRF1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=BRF2 inputType=std" -var=inputType -val=HeLa-S3/None/BRF2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Brg1 inputType=IgG-mus" -var=inputType -val=HeLa-S3/None/Brg1/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=E2F1 inputType=std" -var=inputType -val=HeLa-S3/None/E2F1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=E2F4 inputType=std" -var=inputType -val=HeLa-S3/None/E2F4/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=E2F6 inputType=std" -var=inputType -val=HeLa-S3/None/E2F6/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=HA-E2F1 inputType=std" -var=inputType -val=HeLa-S3/None/HA-E2F1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=HA-F2F1 inputType=std" -var=inputType -val=HeLa-S3/None/HA-F2F1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Ini1 inputType=IgG-mus" -var=inputType -val=HeLa-S3/None/Ini1/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=JunD inputType=IgG-rab" -var=inputType -val=HeLa-S3/None/JunD/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Max inputType=std" -var=inputType -val=HeLa-S3/None/Max/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Nrf1 inputType=IgG-mus" -var=inputType -val=HeLa-S3/None/Nrf1/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=Pol2 inputType=std" -var=inputType -val=HeLa-S3/None/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=RPC155 inputType=std" -var=inputType -val=HeLa-S3/None/RPC155/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=TFIIIC-110 inputType=std" -var=inputType -val=HeLa-S3/None/TFIIIC-110/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=TR4 inputType=std" -var=inputType -val=HeLa-S3/None/TR4/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=c-Fos inputType=std" -var=inputType -val=HeLa-S3/None/c-Fos/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=c-Jun inputType=IgG-rab" -var=inputType -val=HeLa-S3/None/c-Jun/IgG-rab
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HeLa-S3 treatment=None antibody=c-Myc inputType=std" -var=inputType -val=HeLa-S3/None/c-Myc/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=CEBPB inputType=std" -var=inputType -val=HepG2/forskolin/CEBPB/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=ERRA inputType=std" -var=inputType -val=HepG2/forskolin/ERRA/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=GRp20 inputType=std" -var=inputType -val=HepG2/forskolin/GRp20/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=HNF4A inputType=std" -var=inputType -val=HepG2/forskolin/HNF4A/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=HSF1 inputType=std" -var=inputType -val=HepG2/forskolin/HSF1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=PGC1A inputType=std" -var=inputType -val=HepG2/forskolin/PGC1A/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=forskolin antibody=Pol2 inputType=std" -var=inputType -val=HepG2/forskolin/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=insulin antibody=SREBP1 inputType=std" -var=inputType -val=HepG2/insulin/SREBP1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=pravastatin antibody=Pol2  inputType=std" -var=inputType -val=HepG2/pravastatin/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=pravastatin antibody=SREBP1 inputType=std" -var=inputType -val=HepG2/pravastatin/SREBP1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2 treatment=pravastatin antibody=SREBP2 inputType=std" -var=inputType -val=HepG2/pravastatin/SREBP2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=HepG2b treatment=None antibody=TR4 inputType=UCDavis" -var=inputType -val=HepG2b/None/TR4/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa30 antibody=Pol2 inputType=std" -var=inputType -val=K562/IFNa30/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa30 antibody=STAT1 inputType=std" -var=inputType -val=K562/IFNa30/STAT1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa30 antibody=STAT2 inputType=std" -var=inputType -val=K562/IFNa30/STAT2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa30 antibody=c-Myc inputType=std" -var=inputType -val=K562/IFNa30/c-Myc/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa6h antibody=Pol2 inputType=std" -var=inputType -val=K562/IFNa6h/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa6h antibody=STAT1 inputType=std" -var=inputType -val=K562/IFNa6h/STAT1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa6h antibody=STAT2 inputType=std" -var=inputType -val=K562/IFNa6h/STAT2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa6h antibody=c-Jun inputType=std" -var=inputType -val=K562/IFNa6h/c-Jun/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNa6h antibody=c-Myc inputType=std" -var=inputType -val=K562/IFNa6h/c-Myc/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg30 antibody=Pol2 inputType=std" -var=inputType -val=K562/IFNg30/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg30 antibody=STAT1 inputType=std" -var=inputType -val=K562/IFNg30/STAT1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg30 antibody=c-Jun inputType=std" -var=inputType -val=K562/IFNg30/c-Jun/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg6h antibody=Pol2 inputType=std" -var=inputType -val=K562/IFNg6h/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg6h antibody=STAT1 inputType=std" -var=inputType -val=K562/IFNg6h/STAT1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg6h antibody=c-Jun inputType=std" -var=inputType -val=K562/IFNg6h/c-Jun/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=IFNg6h antibody=c-Myc inputType=std" -var=inputType -val=K562/IFNg6h/c-Myc/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=ATF3 inputType=std" -var=inputType -val=K562/None/ATF3/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=BDP1 inputType=std" -var=inputType -val=K562/None/BDP1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=BRF1 inputType=std" -var=inputType -val=K562/None/BRF1/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=BRF2 inputType=std" -var=inputType -val=K562/None/BRF2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Brg1 inputType=IgG-mus" -var=inputType -val=K562/None/Brg1/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=GTF2B inputType=std" -var=inputType -val=K562/None/GTF2B/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Ini1 inputType=IgG-mus" -var=inputType -val=K562/None/Ini1/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=JunD inputType=std" -var=inputType -val=K562/None/JunD/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Max inputType=std" -var=inputType -val=K562/None/Max/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=NELFe inputType=std" -var=inputType -val=K562/None/NELFe/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=NF-E2 inputType=std" -var=inputType -val=K562/None/NF-E2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=NF-YA inputType=std" -var=inputType -val=K562/None/NF-YA/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=NF-YB inputType=std" -var=inputType -val=K562/None/NF-YB/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Pol2 inputType=IgG-mus" -var=inputType -val=K562/None/Pol2/IgG-mus
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Pol2 inputType=std" -var=inputType -val=K562/None/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Pol3 inputType=std" -var=inputType -val=K562/None/Pol3/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=RPC155 inputType=std" -var=inputType -val=K562/None/RPC155/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=Rad21 inputType=std" -var=inputType -val=K562/None/Rad21/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=SIRT6 inputType=std" -var=inputType -val=K562/None/SIRT6/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=TFIIIC-110 inputType=std" -var=inputType -val=K562/None/TFIIIC-110/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=XRCC4 inputType=std" -var=inputType -val=K562/None/XRCC4/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=c-Fos inputType=std" -var=inputType -val=K562/None/c-Fos/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=c-Jun inputType=std" -var=inputType -val=K562/None/c-Jun/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562 treatment=None antibody=c-Myc inputType=std" -var=inputType -val=K562/None/c-Myc/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=E2F4 inputType=UCDavis" -var=inputType -val=K562b/None/E2F4/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=E2F6 inputType=UCDavis" -var=inputType -val=K562b/None/E2F6/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=GATA-1 inputType=UCDavis" -var=inputType -val=K562b/None/GATA-1/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=GATA-2 inputType=UCDavis" -var=inputType -val=K562b/None/GATA-2/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=SETDB1 inputType=MNase" -var=inputType -val=K562b/None/SETDB1/MNase
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=SETDB1 inputType=UCDavis" -var=inputType -val=K562b/None/SETDB1/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=TR4 inputType=UCDavis" -var=inputType -val=K562b/None/TR4/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=YY1 inputType=UCDavis" -var=inputType -val=K562b/None/YY1/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=ZNF263 inputType=UCDavis" -var=inputType -val=K562b/None/ZNF263/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=K562b treatment=None antibody=ZNF274 inputType=UCDavis" -var=inputType -val=K562b/None/ZNF274/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=MCF-7 treatment=None antibody=HA-E2F1 inputType=UCDavis" -var=inputType -val=MCF-7/None/HA-E2F1/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=NB4 treatment=None antibody=Pol2 inputType=std" -var=inputType -val=NB4/None/Pol2/std
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=NT2-D1 treatment=None antibody=SUZ12 inputType=UCDavis" -var=inputType -val=NT2-D1/None/SUZ12/UCDavis
+mdbUpdate hg18 -vars="composite=wgEncodeYaleChIPseq cell=NT2-D1 treatment=None antibody=YY1 inputType=UCDavis" -var=inputType -val=NT2-D1/None/YY1/UCDavis
+
+### Note: had to do some manual changes
+
+select distinct t1.val cell,t2.val treatment,t3.val antibody,t4.val input,t5.val inputType from mdb_tdreszer t1,mdb_tdreszer t2,mdb_tdreszer t3,mdb_tdreszer t4,mdb_tdreszer t5 where t1.obj like "wgEncodeYaleChIP%"
+ and t1.obj = t2.obj and t2.obj = t3.obj and t3.obj = t4.obj and t4.obj = t5.obj
+ and t1.var = "cell" and t2.var = "treatment" and t3.var = "antibody" and t4.var = "input" and t5.var = "inputType"
+ order by t5.val,t4.val,t1.val,t2.val,t3.val;
++-----------+-------------+------------+-------+-----------------------------------+
+| cell      | treatment   | antibody   | input | inputType                         |
++-----------+-------------+------------+-------+-----------------------------------+
+| GM10847   | None        | Pol2       | no    | GM10847/None/Input/IgG-mus        | 
+| GM10847   | None        | Input      | yes   | GM10847/None/Input/IgG-mus        | 
+| GM10847   | None        | NFKB       | no    | GM10847/None/Input/IgG-rab        | 
+| GM10847   | None        | Input      | yes   | GM10847/None/Input/IgG-rab        | 
+| GM12878   | None        | Pol2       | no    | GM12878/None/Input/IgG-mus        | 
+| GM12878   | None        | Input      | yes   | GM12878/None/Input/IgG-mus        | 
+| GM12878   | None        | NFKB       | no    | GM12878/None/Input/IgG-rab        | 
+| GM12878   | None        | Rad21      | no    | GM12878/None/Input/IgG-rab        | 
+| GM12878   | None        | Input      | yes   | GM12878/None/Input/IgG-rab        | 
+| GM12878   | None        | JunD       | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | Max        | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | Pol2       | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | Pol3       | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | TR4        | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | YY1        | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | ZZZ3       | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | c-Fos      | no    | GM12878/None/Input/std            | 
+| GM12878   | None        | Input      | yes   | GM12878/None/Input/std            | 
+| GM12878   | TNFa        | NFKB       | no    | GM12878/TNFa/Input/std            | 
+| GM12891   | None        | Pol2       | no    | GM12891/None/Input/IgG-mus        | 
+| GM12891   | None        | Input      | yes   | GM12891/None/Input/IgG-mus        | 
+| GM12891   | None        | NFKB       | no    | GM12891/None/Input/IgG-rab        | 
+| GM12891   | None        | Input      | yes   | GM12891/None/Input/IgG-rab        | 
+| GM12892   | None        | Pol2       | no    | GM12892/None/Input/IgG-mus        | 
+| GM12892   | None        | Input      | yes   | GM12892/None/Input/IgG-mus        | 
+| GM12892   | None        | NFKB       | no    | GM12892/None/Input/IgG-rab        | 
+| GM12892   | None        | Input      | yes   | GM12892/None/Input/IgG-rab        | 
+| GM15510   | None        | Pol2       | no    | GM15510/None/Input/IgG-mus        | 
+| GM15510   | None        | Input      | yes   | GM15510/None/Input/IgG-mus        | 
+| GM15510   | None        | NFKB       | no    | GM15510/None/Input/IgG-rab        | 
+| GM15510   | None        | Input      | yes   | GM15510/None/Input/IgG-rab        | 
+| GM18505   | None        | Pol2       | no    | GM18505/None/Input/IgG-mus        | 
+| GM18505   | None        | Input      | yes   | GM18505/None/Input/IgG-mus        | 
+| GM18505   | None        | NFKB       | no    | GM18505/None/Input/IgG-rab        | 
+| GM18505   | None        | Input      | yes   | GM18505/None/Input/IgG-rab        | 
+| GM18526   | None        | Pol2       | no    | GM18526/None/Input/IgG-mus        | 
+| GM18526   | None        | Input      | yes   | GM18526/None/Input/IgG-mus        | 
+| GM18526   | None        | NFKB       | no    | GM18526/None/Input/IgG-rab        | 
+| GM18526   | None        | Input      | yes   | GM18526/None/Input/IgG-rab        | 
+| GM18951   | None        | Pol2       | no    | GM18951/None/Input/IgG-mus        | 
+| GM18951   | None        | Input      | yes   | GM18951/None/Input/IgG-mus        | 
+| GM18951   | None        | NFKB       | no    | GM18951/None/Input/IgG-rab        | 
+| GM18951   | None        | Input      | yes   | GM18951/None/Input/IgG-rab        | 
+| GM19099   | None        | Pol2       | no    | GM19099/None/Input/IgG-mus        | 
+| GM19099   | None        | Input      | yes   | GM19099/None/Input/IgG-mus        | 
+| GM19099   | None        | NFKB       | no    | GM19099/None/Input/IgG-rab        | 
+| GM19099   | None        | Input      | yes   | GM19099/None/Input/IgG-rab        | 
+| GM19193   | None        | Pol2       | no    | GM19193/None/Input/IgG-mus        | 
+| GM19193   | None        | Input      | yes   | GM19193/None/Input/IgG-mus        | 
+| GM19193   | None        | NFKB       | no    | GM19193/None/Input/IgG-rab        | 
+| GM19193   | None        | Input      | yes   | GM19193/None/Input/IgG-rab        | 
+| HCT-116   | None        | Pol2       | no    | HCT-116/None/Input/UCDavis        | 
+| HCT-116   | None        | TCF4       | no    | HCT-116/None/Input/UCDavis        | 
+| HCT-116   | None        | TCF7L2     | no    | HCT-116/None/Input/UCDavis        | 
+| HCT-116   | None        | Input      | yes   | HCT-116/None/Input/UCDavis        | 
+| HEK293(b) | None        | Pol2       | no    | HEK293/None/Input/std             | 
+| HEK293(b) | None        | Input      | yes   | HEK293/None/Input/std             | 
+| HUVEC     | None        | Max        | no    | HUVEC/None/Input/std              | 
+| HUVEC     | None        | Pol2       | no    | HUVEC/None/Input/std              | 
+| HUVEC     | None        | c-Jun      | no    | HUVEC/None/Input/std              | 
+| HUVEC     | None        | Input      | yes   | HUVEC/None/Input/std              | 
+| HeLa-S3   | IFNg        | STAT1      | no    | HeLa-S3/IFNg/Input/std            | 
+| HeLa-S3   | IFNg30      | STAT1      | no    | HeLa-S3/IFNg30/Input/std          | 
+| HeLa-S3   | IFNg30      | Input      | yes   | HeLa-S3/IFNg30/Input/std          | 
+| HeLa-S3   | None        | BAF155     | no    | HeLa-S3/None/Input/IgG-mus        | 
+| HeLa-S3   | None        | BAF170     | no    | HeLa-S3/None/Input/IgG-mus        | 
+| HeLa-S3   | None        | Brg1       | no    | HeLa-S3/None/Input/IgG-mus        | 
+| HeLa-S3   | None        | Ini1       | no    | HeLa-S3/None/Input/IgG-mus        | 
+| HeLa-S3   | None        | Nrf1       | no    | HeLa-S3/None/Input/IgG-mus        | 
+| HeLa-S3   | None        | Input      | yes   | HeLa-S3/None/Input/IgG-mus        | 
+| HeLa-S3   | None        | JunD       | no    | HeLa-S3/None/Input/IgG-rab        | 
+| HeLa-S3   | None        | c-Jun      | no    | HeLa-S3/None/Input/IgG-rab        | 
+| HeLa-S3   | None        | Input      | yes   | HeLa-S3/None/Input/IgG-rab        | 
+| HeLa-S3   | None        | Input      | yes   | HeLa-S3/None/Input/Large_Fragment | 
+| HeLa-S3   | None        | Input      | yes   | HeLa-S3/None/Input/MNase          | 
+| HeLa-S3   | None        | Input      | yes   | HeLa-S3/None/Input/Naked_DNA      | 
+| HeLa-S3   | None        | AP-2alpha  | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | AP-2gamma  | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | BDP1       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | BRF1       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | BRF2       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | E2F1       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | E2F4       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | E2F6       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | HA-E2F1    | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | HA-F2F1    | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | Max        | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | Pol2       | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | RPC155     | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | TFIIIC-110 | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | TR4        | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | c-Fos      | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | c-Myc      | no    | HeLa-S3/None/Input/std            | 
+| HeLa-S3   | None        | Input      | yes   | HeLa-S3/None/Input/std            | 
+| HepG2     | forskolin   | CEBPB      | no    | HepG2/forskolin/CEBPB/std         | 
+| HepG2     | forskolin   | ERRA       | no    | HepG2/forskolin/ERRA/std          | 
+| HepG2     | forskolin   | GRp20      | no    | HepG2/forskolin/Input/std         | 
+| HepG2     | forskolin   | HNF4A      | no    | HepG2/forskolin/Input/std         | 
+| HepG2     | forskolin   | HSF1       | no    | HepG2/forskolin/Input/std         | 
+| HepG2     | forskolin   | PGC1A      | no    | HepG2/forskolin/Input/std         | 
+| HepG2     | forskolin   | Pol2       | no    | HepG2/forskolin/Input/std         | 
+| HepG2     | forskolin   | Input      | yes   | HepG2/forskolin/Input/std         | 
+| HepG2     | insulin     | SREBP1     | no    | HepG2/insulin/Input/std           | 
+| HepG2     | insulin     | Input      | yes   | HepG2/insulin/Input/std           | 
+| HepG2     | pravastatin | SREBP2     | no    | HepG2/pravastatin//std            | 
+| HepG2     | pravastatin | Pol2       | no    | HepG2/pravastatin/Input/std       | 
+| HepG2     | pravastatin | SREBP1     | no    | HepG2/pravastatin/Input/std       | 
+| HepG2     | pravastatin | Input      | yes   | HepG2/pravastatin/Input/std       | 
+| HepG2b    | None        | TR4        | no    | HepG2b/None/Input/UCDavis         | 
+| HepG2b    | None        | Input      | yes   | HepG2b/None/Input/UCDavis         | 
+| K562      | IFNa30      | Pol2       | no    | K562/IFNa30/Input/std             | 
+| K562      | IFNa30      | STAT1      | no    | K562/IFNa30/Input/std             | 
+| K562      | IFNa30      | STAT2      | no    | K562/IFNa30/Input/std             | 
+| K562      | IFNa30      | c-Myc      | no    | K562/IFNa30/Input/std             | 
+| K562      | IFNa30      | Input      | yes   | K562/IFNa30/Input/std             | 
+| K562      | IFNa6h      | Pol2       | no    | K562/IFNa6h/Input/std             | 
+| K562      | IFNa6h      | STAT1      | no    | K562/IFNa6h/Input/std             | 
+| K562      | IFNa6h      | STAT2      | no    | K562/IFNa6h/Input/std             | 
+| K562      | IFNa6h      | c-Jun      | no    | K562/IFNa6h/Input/std             | 
+| K562      | IFNa6h      | c-Myc      | no    | K562/IFNa6h/Input/std             | 
+| K562      | IFNa6h      | Input      | yes   | K562/IFNa6h/Input/std             | 
+| K562      | IFNg30      | Pol2       | no    | K562/IFNg30/Input/std             | 
+| K562      | IFNg30      | STAT1      | no    | K562/IFNg30/Input/std             | 
+| K562      | IFNg30      | c-Jun      | no    | K562/IFNg30/Input/std             | 
+| K562      | IFNg30      | Input      | yes   | K562/IFNg30/Input/std             | 
+| K562      | IFNg6h      | Pol2       | no    | K562/IFNg6h/Input/std             | 
+| K562      | IFNg6h      | STAT1      | no    | K562/IFNg6h/Input/std             | 
+| K562      | IFNg6h      | c-Jun      | no    | K562/IFNg6h/Input/std             | 
+| K562      | IFNg6h      | c-Myc      | no    | K562/IFNg6h/Input/std             | 
+| K562      | IFNg6h      | Input      | yes   | K562/IFNg6h/Input/std             | 
+| K562      | None        | Brg1       | no    | K562/None/Input/IgG-mus           | 
+| K562      | None        | Ini1       | no    | K562/None/Input/IgG-mus           | 
+| K562      | None        | Input      | yes   | K562/None/Input/IgG-mus           | 
+| K562      | None        | ATF3       | no    | K562/None/Input/std               | 
+| K562      | None        | BDP1       | no    | K562/None/Input/std               | 
+| K562      | None        | BRF1       | no    | K562/None/Input/std               | 
+| K562      | None        | BRF2       | no    | K562/None/Input/std               | 
+| K562      | None        | GTF2B      | no    | K562/None/Input/std               | 
+| K562      | None        | JunD       | no    | K562/None/Input/std               | 
+| K562      | None        | Max        | no    | K562/None/Input/std               | 
+| K562      | None        | NELFe      | no    | K562/None/Input/std               | 
+| K562      | None        | NF-E2      | no    | K562/None/Input/std               | 
+| K562      | None        | NF-YA      | no    | K562/None/Input/std               | 
+| K562      | None        | NF-YB      | no    | K562/None/Input/std               | 
+| K562      | None        | Pol2       | no    | K562/None/Input/std               | 
+| K562      | None        | Pol3       | no    | K562/None/Input/std               | 
+| K562      | None        | RPC155     | no    | K562/None/Input/std               | 
+| K562      | None        | Rad21      | no    | K562/None/Input/std               | 
+| K562      | None        | SIRT6      | no    | K562/None/Input/std               | 
+| K562      | None        | TFIIIC-110 | no    | K562/None/Input/std               | 
+| K562      | None        | XRCC4      | no    | K562/None/Input/std               | 
+| K562      | None        | c-Fos      | no    | K562/None/Input/std               | 
+| K562      | None        | c-Jun      | no    | K562/None/Input/std               | 
+| K562      | None        | c-Myc      | no    | K562/None/Input/std               | 
+| K562      | None        | Input      | yes   | K562/None/Input/std               | 
+| K562      | None        | Pol2       | no    | K562/None/Pol2/IgG-mus            | 
+| K562b     | None        | SETDB1     | no    | K562b/None/Input/MNase            | 
+| K562b     | None        | E2F4       | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | E2F6       | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | GATA-1     | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | GATA-2     | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | SETDB1     | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | TR4        | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | YY1        | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | ZNF263     | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | ZNF274     | no    | K562b/None/Input/UCDavis          | 
+| K562b     | None        | Input      | yes   | K562b/None/Input/UCDavis          | 
+| MCF-7     | None        | HA-E2F1    | no    | MCF-7/None/Input/UCDavis          | 
+| MCF-7     | None        | Input      | yes   | MCF-7/None/Input/UCDavis          | 
+| NB4       | None        | Pol2       | no    | NB4/None/Input/std                | 
+| NB4       | None        | Input      | yes   | NB4/None/Input/std                | 
+| NT2-D1    | None        | SUZ12      | no    | NT2-D1/None/Input/UCDavis         | 
+| NT2-D1    | None        | YY1        | no    | NT2-D1/None/Input/UCDavis         | 
+| NT2-D1    | None        | Input      | yes   | NT2-D1/None/Input/UCDavis         | 
++-----------+-------------+------------+-------+-----------------------------------+
+174 rows in set (0.23 sec)
+
+select distinct val from mdb_tdreszer where obj like "wgEncodeYaleChIP%" and var = "inputType";
+52 rows in set (0.02 sec)
+select distinct t2.val from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj = t2.obj and t1.obj like "wgEncodeYaleChIP%" and t1.var = "input" and t1.val = "yes" and t2.var = "inputType";
+45 rows in set (0.02 sec)
+
+select distinct t1.val input,t2.val inputType from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj = t2.obj and t1.obj like "wgEncodeYaleChIP%" and t1.var = "input" and t2.var = "inputType" order by t2.val, t1.val;
+### Differences ?
++-------+-----------------------------------+
+| no    | GM12878/TNFa/Input/std            | 
+| no    | HeLa-S3/IFNg/Input/std            | 
+| yes   | HeLa-S3/None/Input/Large_Fragment | 
+| yes   | HeLa-S3/None/Input/MNase          | 
+| yes   | HeLa-S3/None/Input/Naked_DNA      | 
+| no    | HepG2/forskolin/CEBPB/std         | 
+| no    | HepG2/forskolin/ERRA/std          | 
+| no    | HepG2/pravastatin//std            | | no    | HepG2/pravastatin/Input/std       | 
+| no    | K562/None/Pol2/IgG-mus            | 
+| no    | K562b/None/Input/MNase            | 
++-------+-----------------------------------+
+
+select distinct val from mdb_tdreszer where obj like "wgEncodeYaleChIP%" and var = "inputType";
+46 rows in set (0.02 sec)
+select distinct t2.val from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj = t2.obj and t1.obj like "wgEncodeYaleChIP%" and t1.var = "input" and t1.val = "yes" and t2.var = "inputType";
+45 rows in set (0.02 sec)
+
+select distinct t1.val input,t2.val inputType from mdb_tdreszer t1,mdb_tdreszer t2 where t1.obj = t2.obj and t1.obj like "wgEncodeYaleChIP%" and t1.var = "input" and t2.var = "inputType" order by t2.val, t1.val;
++-------+-----------------------------------+
+| input | inputType                         |
++-------+-----------------------------------+
+| no    | GM10847/None/Input/IgG-mus        | 
+| yes   | GM10847/None/Input/IgG-mus        | 
+| no    | GM10847/None/Input/IgG-rab        | 
+| yes   | GM10847/None/Input/IgG-rab        | 
+| no    | GM12878/None/Input/IgG-mus        | 
+| yes   | GM12878/None/Input/IgG-mus        | 
+| no    | GM12878/None/Input/IgG-rab        | 
+| yes   | GM12878/None/Input/IgG-rab        | 
+| no    | GM12878/None/Input/std            | 
+| yes   | GM12878/None/Input/std            | 
+| no    | GM12891/None/Input/IgG-mus        | 
+| yes   | GM12891/None/Input/IgG-mus        | 
+| no    | GM12891/None/Input/IgG-rab        | 
+| yes   | GM12891/None/Input/IgG-rab        | 
+| no    | GM12892/None/Input/IgG-mus        | 
+| yes   | GM12892/None/Input/IgG-mus        | 
+| no    | GM12892/None/Input/IgG-rab        | 
+| yes   | GM12892/None/Input/IgG-rab        | 
+| no    | GM15510/None/Input/IgG-mus        | 
+| yes   | GM15510/None/Input/IgG-mus        | 
+| no    | GM15510/None/Input/IgG-rab        | 
+| yes   | GM15510/None/Input/IgG-rab        | 
+| no    | GM18505/None/Input/IgG-mus        | 
+| yes   | GM18505/None/Input/IgG-mus        | 
+| no    | GM18505/None/Input/IgG-rab        | 
+| yes   | GM18505/None/Input/IgG-rab        | 
+| no    | GM18526/None/Input/IgG-mus        | 
+| yes   | GM18526/None/Input/IgG-mus        | 
+| no    | GM18526/None/Input/IgG-rab        | 
+| yes   | GM18526/None/Input/IgG-rab        | 
+| no    | GM18951/None/Input/IgG-mus        | 
+| yes   | GM18951/None/Input/IgG-mus        | 
+| no    | GM18951/None/Input/IgG-rab        | 
+| yes   | GM18951/None/Input/IgG-rab        | 
+| no    | GM19099/None/Input/IgG-mus        | 
+| yes   | GM19099/None/Input/IgG-mus        | 
+| no    | GM19099/None/Input/IgG-rab        | 
+| yes   | GM19099/None/Input/IgG-rab        | 
+| no    | GM19193/None/Input/IgG-mus        | 
+| yes   | GM19193/None/Input/IgG-mus        | 
+| no    | GM19193/None/Input/IgG-rab        | 
+| yes   | GM19193/None/Input/IgG-rab        | 
+| no    | HCT-116/None/Input/UCDavis        | 
+| yes   | HCT-116/None/Input/UCDavis        | 
+| no    | HEK293/None/Input/std             | 
+| yes   | HEK293/None/Input/std             | 
+| no    | HUVEC/None/Input/std              | 
+| yes   | HUVEC/None/Input/std              | 
+| no    | HeLa-S3/IFNg30/Input/std          | 
+| yes   | HeLa-S3/IFNg30/Input/std          | 
+| no    | HeLa-S3/None/Input/IgG-mus        | 
+| yes   | HeLa-S3/None/Input/IgG-mus        | 
+| no    | HeLa-S3/None/Input/IgG-rab        | 
+| yes   | HeLa-S3/None/Input/IgG-rab        | 
+| yes   | HeLa-S3/None/Input/Large_Fragment | 
+| yes   | HeLa-S3/None/Input/MNase          | 
+| yes   | HeLa-S3/None/Input/Naked_DNA      | 
+| no    | HeLa-S3/None/Input/std            | 
+| yes   | HeLa-S3/None/Input/std            | 
+| no    | HepG2/forskolin/Input/std         | 
+| yes   | HepG2/forskolin/Input/std         | 
+| no    | HepG2/insulin/Input/std           | 
+| yes   | HepG2/insulin/Input/std           | 
+| no    | HepG2/pravastatin/Input/std       | 
+| yes   | HepG2/pravastatin/Input/std       | 
+| no    | HepG2b/None/Input/UCDavis         | 
+| yes   | HepG2b/None/Input/UCDavis         | 
+| no    | K562/IFNa30/Input/std             | 
+| yes   | K562/IFNa30/Input/std             | 
+| no    | K562/IFNa6h/Input/std             | 
+| yes   | K562/IFNa6h/Input/std             | 
+| no    | K562/IFNg30/Input/std             | 
+| yes   | K562/IFNg30/Input/std             | 
+| no    | K562/IFNg6h/Input/std             | 
+| yes   | K562/IFNg6h/Input/std             | 
+| no    | K562/None/Input/IgG-mus           | 
+| yes   | K562/None/Input/IgG-mus           | 
+| no    | K562/None/Input/std               | 
+| yes   | K562/None/Input/std               | 
+| no    | K562b/None/Input/MNase            | 
+| no    | K562b/None/Input/UCDavis          | 
+| yes   | K562b/None/Input/UCDavis          | 
+| no    | MCF-7/None/Input/UCDavis          | 
+| yes   | MCF-7/None/Input/UCDavis          | 
+| no    | NB4/None/Input/std                | 
+| yes   | NB4/None/Input/std                | 
+| no    | NT2-D1/None/Input/UCDavis         | 
+| yes   | NT2-D1/None/Input/UCDavis         | 
++-------+-----------------------------------+
+88 rows in set (0.09 sec)
+
+### Differences ?
++-------+-----------------------------------+
+| yes   | HeLa-S3/None/Input/Large_Fragment | 
+| yes   | HeLa-S3/None/Input/MNase          | 
+| yes   | HeLa-S3/None/Input/Naked_DNA      | 
+| no    | K562b/None/Input/MNase            |  ### This is a problem.  Farnham should comment
++-------+-----------------------------------+
+
+mdbPrint hg18 -vars="composite=wgEncodeYaleChIPseq" -ra > mdbYaleTfbs.ra
+mdbUpdate hg18 -table=mdb mdbYaleTfbs.ra
+cvs ci -m "Fixed Yale Inputs to match the HAIB model allowing pairing of exp.inputType = inp.inputType" mdbYaleTfbs.ra
+
+### Need to add 'control' term in to replace removed 'input'.  This is because Yale's experiments need 4 vars to be defined
+mdbUpdate hg18 -vars="grant=Snyder inputType=%std" -var=control -val=std -test
+mdbUpdate hg18 -vars="grant=Snyder inputType=%UCDavis" -var=control -val=UCDavis -test
+mdbUpdate hg18 -vars="grant=Snyder inputType=%MNase" -var=control -val=MNase -test
+mdbUpdate hg18 -vars="grant=Snyder inputType=%IgG-mus" -var=control -val=IgG-mus -test
+mdbUpdate hg18 -vars="grant=Snyder inputType=%IgG-rab" -var=control -val=IgG-rab -test
+mdbUpdate hg18 -vars="grant=Snyder inputType=%Naked_DNA" -var=control -val=Naked_DNA -test
+mdbUpdate hg18 -vars="grant=Snyder inputType=%Large_Fragment" -var=control -val=Large_Fragment -test
+Command would affected 559 row(s) in hg18.mdb_tdreszer
+Command would affected 108 row(s) in hg18.mdb_tdreszer
+Command would affected 11 row(s) in hg18.mdb_tdreszer
+Command would affected 215 row(s) in hg18.mdb_tdreszer
+Command would affected 167 row(s) in hg18.mdb_tdreszer
+Command would affected 7 row(s) in hg18.mdb_tdreszer
+Command would affected 6 row(s) in hg18.mdb_tdreszer
+1073!
+mdbUpdate hg18 -vars="grant=Snyder inputType=%std" -var=control -val=std
+mdbUpdate hg18 -vars="grant=Snyder inputType=%UCDavis" -var=control -val=UCDavis
+mdbUpdate hg18 -vars="grant=Snyder inputType=%MNase" -var=control -val=MNase
+mdbUpdate hg18 -vars="grant=Snyder inputType=%IgG-mus" -var=control -val=IgG-mus
+mdbUpdate hg18 -vars="grant=Snyder inputType=%IgG-rab" -var=control -val=IgG-rab
+mdbUpdate hg18 -vars="grant=Snyder inputType=%Naked_DNA" -var=control -val=Naked_DNA
+mdbUpdate hg18 -vars="grant=Snyder inputType=%Large_Fragment" -var=control -val=Large_Fragment
+mdbPrint hg18 -vars="grant=Snyder" -ra > mdbYaleTfbs.ra
+mdbUpdate hg18 -table=mdb mdbYaleTfbs.ra
+cvs ci mdbYaleTfbs.ra
+
+## Fix at last K562b/None/SETDB1/MNase
+# MNase in this case is a treatment (sort of)!
+# Register a treatment MNaseD (MNase is a control term!)
+mdbPrint hg18 -vars="grant=Snyder cell=K562b treatment=None antibody=SETDB1 inputType=%MNase" > tmpMNase.ra
+mdbUpdate hg18 -vars="grant=Snyder cell=K562b treatment=None antibody=SETDB1 inputType=%MNase" -var=treatment -val=MNaseD -test
+mdbUpdate hg18 -vars="grant=Snyder cell=K562b treatment=MNaseD antibody=SETDB1 inputType=%MNase" -var=inputType -val=K562b/None/Input/UCDavis -test
+mdbUpdate hg18 -vars="grant=Snyder cell=K562b treatment=MNaseD antibody=SETDB1" -var=control -val=UCDavis -test
+mdbPrint hg18 -vars="grant=Snyder cell=K562b treatment=MNaseD antibody=SETDB1" > tmpMNase2.ra
+diff tmpMNase.ra tmpMNase2.ra 
+mdbPrint hg18 -vars="grant=Snyder" > mdbYaleTfbs.ra 
+Using table named 'hg18.mdb_tdreszer'.
+objects:1073  vars:22410
+mdbUpdate hg18 -table=mdb mdbYaleTfbs.ra 
+Using table named 'hg18.mdb_tdreszer'.
+Read 1073 metadata objects from hg18
+Affected 0 row(s) in hg18.mdb_tdreszer
+cvs ci -m "Straightened out Yale K562/None/SETDB1/MNase at last" mdbYaleTfbs.ra
+# Peggy Farnham: "I'm happy!" 
+
+FIXME:
+1) Need to alter make to generate shared mdb off of the mdb*.ra files 
+   Necessary? I don't think so as long as users update shared mdb and mdb gets pushed to bta, public.
+   But doing this with makefile should ensure that mdb.ra files get checked in.
+2) Need an exp table (autoincrement,"cell-GM12878 treatment=None antibody=CTCF control=std")
+
+### Matrix too large:
+http://www.dotnetoutsource.com/Download/jQuery_FixedTable/JQuery_FixedTable.aspx
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery.fixedtable.js"></script>
+    <script type="text/javascript">
+    $(".tableDiv").each(function() {               // this "tableDiv" must be the table's class
+        var Id = $(this).get(0).id;
+        var maintbheight = 555;                    // ??? Can this be relative?
+        var maintbwidth = 911;                     // ??? Can this be relative (90%)
+
+        $("#" + Id + " .FixedTables").fixedTable({
+            width: maintbwidth,
+            height: maintbheight,
+            fixedColumns: 1,                       // ??? Can this be set to 2 and work with colspan=2 ?
+            classHeader: "fixedHead",              // header style
+            classFooter: "fixedFoot",              // footer style        
+            classColumn: "fixedColumn",            // fixed column on the left        
+            fixedColumnWidth: 150,                 // the width of fixed column on the left // ??? Does this have to be declaried?
+            outerId: Id,                           // table's parent div's id           
+            Contentbackcolor: "#FFFFFF",           // tds' in content area default background color                   
+            Contenthovercolor: "#99CCFF",          // tds' in content area background color while hover.  // ??? Can this be not set?     
+            fixedColumnbackcolor:"#187BAF",        // tds' in fixed column default background color   
+            fixedColumnhovercolor:"#99CCFF"        // tds' in fixed column background color while hover.  // ??? Can this be not set? 
+        });        
+    });
+    </script>
+    <div id="tableDiv_Arrays" class="tableDiv">        <!-- Important not to forget -->
+    <table id="Open_Text_Arrays" class="FixedTables">  <!-- Important not to forget -->
+            
+2010-05-26 Released the big one
+===============================
+select db,id,name,status,user_id from projects where user_id = 39 and db = 'hg18' and status = 'reviewing';
++------+------+--------------------------------+-----------+---------+
+| db   | id   | name                           | status    | user_id |
++------+------+--------------------------------+-----------+---------+
+| hg18 |  633 | YDH_tagAlign_update_v3         | reviewing |      39 | 
+| hg18 |  634 | YDH_tagAlign_update            | reviewing |      39 | 
+| hg18 |  669 | YDH_K562_Pol3                  | reviewing |      39 | 
+| hg18 |  739 | YDH_HeLa-S3_E2F6               | reviewing |      39 | 
+| hg18 |  757 | YDH_MCF-7_HA-E2F1              | reviewing |      39 | 
+| hg18 |  787 | YDH_tagAlign_update2           | reviewing |      39 | 
+| hg18 |  853 | YDH_GM12878_YY1                | reviewing |      39 | 
+| hg18 |  860 | YDH_K562b_ZNF274               | reviewing |      39 | 
+| hg18 |  861 | YDH_GM10847_IgG_Control        | reviewing |      39 | 
+| hg18 |  862 | YDH_GM10847_IgG_Pol2           | reviewing |      39 | 
+| hg18 |  863 | YDH_GM12891_IgG_Control        | reviewing |      39 | 
+| hg18 |  864 | YDH_K562_IgG_Control           | reviewing |      39 | 
+| hg18 |  865 | YDH_GM12891_IgG_Pol2           | reviewing |      39 | 
+| hg18 |  996 | YDH_GM15510_IgG_Control        | reviewing |      39 | 
+| hg18 |  997 | YDH_GM15510_IgG_Pol2           | reviewing |      39 | 
+| hg18 |  974 | YDH_K562_IFNg30_Pol2           | reviewing |      39 | 
+| hg18 | 1108 | YDH_GM10847_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1109 | YDH_GM12878_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1110 | YDH_GM12892_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1111 | YDH_GM12891_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1112 | YDH_GM15510_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1113 | YDH_GM18505_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1114 | YDH_GM18526_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1115 | YDH_GM18951_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1116 | YDH_GM19099_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1117 | YDH_GM19193_Rabbit_IgG         | reviewing |      39 | 
+| hg18 | 1118 | YDH_HUVEC_IgG_Control          | reviewing |      39 | 
+| hg18 | 1119 | YDH_HeLa_Brg1                  | reviewing |      39 | 
+| hg18 | 1090 | YDH_MCF-7_Input                | reviewing |      39 | 
+| hg18 | 1085 | YDH_HUVEC_Max                  | reviewing |      39 | 
+| hg18 | 1086 | YDH_HeLa-S3_Brf1               | reviewing |      39 | 
+| hg18 | 1087 | YDH_HeLa-S3_Brf2               | reviewing |      39 | 
+| hg18 | 1088 | YDH_K562b_MNase_SetDB1         | reviewing |      39 | 
+| hg18 | 1081 | YDH_K562_TFIIIC                | reviewing |      39 | 
+| hg18 | 1082 | YDH_HeLa-S3_RPC155             | reviewing |      39 | 
+| hg18 | 1083 | YDH_K562_Brf2                  | reviewing |      39 | 
+| hg18 | 1078 | YDH_HeLa-S3_Bdp1               | reviewing |      39 | 
+| hg18 | 1077 | YDH_HeLa-S3_TFIIIC             | reviewing |      39 | 
+| hg18 | 1076 | YDH_GM12878_Rad21              | reviewing |      39 | 
+| hg18 | 1073 | YHD_HepG2_Insulin_SREBP1       | reviewing |      39 | 
+| hg18 | 1069 | YHD_HepG2_Forskolin_HSF1       | reviewing |      39 | 
+| hg18 | 1070 | YHD_HepG2_Insulin_Control      | reviewing |      39 | 
+| hg18 | 1071 | YHD_HepG2_Forskolin_PGC1A      | reviewing |      39 | 
+| hg18 | 1072 | YHD_HepG2_Forskolin_Pol2       | reviewing |      39 | 
+| hg18 | 1066 | YHD_HepG2_Forskolin_Control    | reviewing |      39 | 
+| hg18 | 1067 | YHD_HepG2_Forskolin_GRp20      | reviewing |      39 | 
+| hg18 | 1068 | YHD_HepG2_Forskolin_HNF4A      | reviewing |      39 | 
+| hg18 | 1063 | YHD_HepG2_Forskolin_ERRA       | reviewing |      39 | 
+| hg18 | 1062 | YDH_HepG2_Forskolin_CEBPB      | reviewing |      39 | 
+| hg18 | 1058 | YDH_K562_IFNg30_STAT1          | reviewing |      39 | 
+| hg18 | 1059 | YDH_K562_IFNg6h_STAT1          | reviewing |      39 | 
+| hg18 | 1051 | YDH_GM12891_IgG_NFKB           | reviewing |      39 | 
+| hg18 | 1052 | YDH_GM15510_IgG_NFKB           | reviewing |      39 | 
+| hg18 | 1053 | YDH_GM18951_IgG_NFKB           | reviewing |      39 | 
+| hg18 | 1048 | YDH_GM19193_IgG_Pol2           | reviewing |      39 | 
+| hg18 | 1050 | YDH_GM10847_IgG_NFKB           | reviewing |      39 | 
+| hg18 | 1047 | YDH_GM19193_IgG_Control        | reviewing |      39 | 
+| hg18 | 1044 | YDH_GM18951_IgG_Control        | reviewing |      39 | 
+| hg18 | 1045 | YDH_GM19099_IgG_Control        | reviewing |      39 | 
+| hg18 | 1046 | YDH_GM19099_IgG_Pol2           | reviewing |      39 | 
+| hg18 | 1031 | YDH_HeLa-S3_IgG_Rabbit_c-Jun   | reviewing |      39 | 
+| hg18 | 1032 | YDH_HeLa-S3_IgG_Rabbit_JunD    | reviewing |      39 | 
+| hg18 | 1029 | YDH_GM18951_IgG_Pol2           | reviewing |      39 | 
+| hg18 | 1030 | YDH_HeLa-S3_IgG_Rabbit_Control | reviewing |      39 | 
+| hg18 | 1025 | YDH_GM18526_IgG_Control        | reviewing |      39 | 
+| hg18 | 1024 | YDH_GM18526_IgG_Pol2           | reviewing |      39 | 
+| hg18 | 1020 | YHD_GM18505_IgG_Control        | reviewing |      39 | 
+| hg18 | 1016 | YDH_GM18505_IgG_Pol2           | reviewing |      39 | 
+| hg18 | 1008 | YDH_GM12892_IgG_Pol2           | reviewing |      39 | 
+| hg18 |  999 | YDH_HeLa-S3_IgG_Nrf1           | reviewing |      39 | 
+| hg18 |  995 | YDH_HUVEC_Jun                  | reviewing |      39 | 
+| hg18 |  975 | YDH_K562_GTF2B                 | reviewing |      39 | 
+| hg18 |  888 | YDH_HeLa-S3_IgG_BAF155         | reviewing |      39 | 
+| hg18 |  890 | YDH_HeLa-S3_IgG_BAF170         | reviewing |      39 | 
+| hg18 |  892 | YDH_HeLa-S3_IgG_Ini1           | reviewing |      39 | 
+| hg18 |  893 | YDH_K562_IgG_Brg1              | reviewing |      39 | 
+| hg18 |  894 | YDH_K562_IgG_Ini1              | reviewing |      39 | 
+| hg18 |  895 | YDH_K562_IgG_Pol2              | reviewing |      39 | 
+| hg18 |  900 | YDH_GM12878_TR4                | reviewing |      39 | 
+| hg18 |  928 | YDH_HeLa-S3_E2F1               | reviewing |      39 | 
+| hg18 |  933 | YDH_GM12878_ZZZ3               | reviewing |      39 | 
+| hg18 |  941 | YDH_GM12892_IgG_NFKB           | reviewing |      39 | 
+| hg18 |  942 | YDH_GM18526_IgG_NFKB           | reviewing |      39 | 
+| hg18 |  943 | YDH_GM12878_IgG_NFKB           | reviewing |      39 | 
+| hg18 |  945 | YDH_GM18505_IgG_NFKB           | reviewing |      39 | 
+| hg18 |  946 | YDH_GM19099_IgG_NFKB           | reviewing |      39 | 
+| hg18 |  947 | YDH_GM19193_IgG_NFKB           | reviewing |      39 | 
+| hg18 |  950 | YDH_HUVEC_Pol2                 | reviewing |      39 | 
+| hg18 |  951 | YDH_K562_ATF3                  | reviewing |      39 | 
+| hg18 |  952 | YDH_K562_NELFe                 | reviewing |      39 | 
+| hg18 |  956 | YDH_GM12878_IgG_Control        | reviewing |      39 | 
+| hg18 |  957 | YDH_GM12878_IgG_Pol2           | reviewing |      39 | 
+| hg18 |  959 | YDH_GM12892_IgG_Control        | reviewing |      39 | 
++------+------+--------------------------------+-----------+---------+
+93 rows in set (0.00 sec)
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  633 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  634 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  669 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  739 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  757 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  787 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  853 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  860 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  861 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  862 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  863 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  864 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  865 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  996 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  997 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  974 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1108 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1109 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1110 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1111 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1112 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1113 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1114 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1115 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1116 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1117 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1118 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1119 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1090 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1085 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1086 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1087 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1088 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1081 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1082 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1083 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1078 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1077 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1076 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1073 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1069 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1070 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1071 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1072 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1066 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1067 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1068 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1063 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1062 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1058 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1059 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1051 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1052 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1053 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1048 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1050 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1047 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1044 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1045 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1046 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1031 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1032 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1029 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1030 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1025 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1024 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1020 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1016 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1008 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  999 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  995 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  975 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  888 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  890 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  892 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  893 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  894 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  895 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  900 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  928 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  933 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  941 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  942 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  943 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  945 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  946 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  947 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  950 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  951 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  952 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  956 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  957 released 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  959 released 
+
+select db,id,name,status,user_id from projects where user_id = 39 and db = 'hg18' and status = 'reviewing';
+Empty set (0.00 sec)
+
+2010-05-26 Yale PolyA
+=====================
+### Why isn't Yale RNA seq in the pushQ and dumped in Brian's lap???
+
+1) Had waited a long tome for description.  Have it now.  Closed.
+2) Mark all tracks as approved.
+select db,id,name,status,user_id from projects where db = 'hg18' and status not in ('reviewing','released','revoked','new') and user_id = 39;
++------+-----+----------------------------+-----------+---------+
+| db   | id  | name                       | status    | user_id |
++------+-----+----------------------------+-----------+---------+
+| hg18 | 276 | YHD_K562_PolyA_RNA         | displayed |      39 | 
+| hg18 | 331 | YDH_RNAseq_RawSignal_Regen | displayed |      39 | 
+| hg18 | 539 | YDH_GM12878_ds_cDNA        | displayed |      39 | 
+| hg18 | 540 | YDH_K562_IFNa30m_cDNA      | displayed |      39 | 
+| hg18 | 541 | YDH_K562_IFNa6h_cDNA       | displayed |      39 | 
+| hg18 | 542 | YDH_K562_IFNg30m_cDNA      | displayed |      39 | 
+| hg18 | 543 | YDH_K562_IFNg6h_cDNA       | displayed |      39 | 
+| hg18 | 788 | YDH_tagAlign_update_RNA    | displayed |      39 | 
++------+-----+----------------------------+-----------+---------+
+8 rows in set (0.00 sec)
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 276 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 331 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 539 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 540 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 541 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 542 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 543 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 788 approved
+
+3) Make release dir:
+cd {downloads}/wgEncodeYaleRNAseq/
+mkdir release1
+cd release1/
+ln ../*.gz .
+cd ..
+# edit preamble.html
+# verify that mdb is complete: nope...
+mdbUpdate hg18 fileDb.ra
+mdbUpdate hg18 yaleRna.txt # from trackDb
+encodeDownloadsPage.pl -mdb=metaDb_tdreszer -db=hg18 mdb.html
+# okay now
+mdbPrint hg18 -vars="composite=wgEncodeYaleRNAseq" > wgEncodeYaleRNAseq.ra
+cvs ci
+encodeDownloadsPage.pl -mdb=metaDb -db=hg18 -checksum index.html
+
+4) Put pushQ together:
+mdbPrint hg18 -vars="composite=wgEncodeYaleRNAseq objType=table" | grep metaObj
+metaObject wgEncodeYaleRnaSeqPolyaRel2RawSignalK562
+metaObject wgEncodeYaleRnaSeqPolyaSignalGm12878
+metaObject wgEncodeYaleRnaSeqPolyaSignalK562
+metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
+metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
+metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
+metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
+
+# remove the old and unneeded wgEncodeYaleRnaSeqPolyaRel2RawSignalK562
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 276 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 331 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 539 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 540 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 541 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 542 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 543 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 788 reviewing
+select db,id,name,status,user_id from projects where db = 'hg18' and status not in ('reviewing','released','revoked','new') and user_id = 39;
+Empty set (0.00 sec)
+
+
+2010-06-08 Mini-freeze
+======================
+There was only one submission!
+cd {t19}/metaDb/alpha
+mkdir testing
+cd testing
+~/bin/x86_64/mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeYaleChIPseq" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="grant,cell,treatment,antibody,control,replicate,view" -updVars="dateSubmitted,dateUnrestricted" > sydhTfbsHg18.txt
+objects:1075  vars:22450
+1075 sydhTfbsHg18.txt
+
+Possible remaps?
+Yale	Stanford	ChIP-seq	GM12878	None	Jun-2010	2010-06-03	none	loaded	hg19	1246
+Yale	Stanford	ChIP-seq	HepG2/None/Input/IgG-rab	Input	Jun-2010	2010-04-27	none	displayed	hg19	1136
+Yale	Stanford	ChIP-seq	K562/None/Input/IgG-rab	Input	Jun-2010	2010-04-27	none	displayed	hg19	1132
+
+Yale	Stanford	ChIP-seq	NT2-D1/None/Input/std	Input	Jun-2010	2010-05-04	none	displayed	hg19	1123
+Yale	UCD	ChIP-seq	HUVEC/None/Input/UCDavis	Input	Jun-2010	2010-05-20	none	displayed	hg19	1207
+Yale	UCD	ChIP-seq	HeLa-S3/None/Input/UCDavis	Jun-2010	2010-04-27	none	displayed	hg19	1140
+mdbPrint hg19 -table=metaDb -vars="subId=1246" -countObjs 
+1 object
+# all the rest have three
+None of the others are new
+grep GM12878 sydhTfbsHg18.txt | grep Input | grep None | grep std | grep Alignments | wl
+grep GM12878 sydhTfbsHg18.txt | grep Input | grep None | grep std | grep Alignments > sydhTfbsGm12878.txt
+e sydhTfbsGm12878.txt # add dateResubmitted=2010-06-03
+chmod 755 sydhTfbsGm12878.txt
+./sydhTfbsGm12878.txt
+Command would affected 0 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 wgEncodeSydhTfbs.ra
+Using table named 'hg19.metaDb_tdreszer'.
+Read 151 metadata objects from hg19
+Affected 3020 row(s) in hg19.metaDb_tdreszer
+./sydhTfbsGm12878.txt
+Command would affected 3 row(s) in hg19.metaDb_tdreszer
+e sydhTfbsGm12878.txt  # remove -test
+./sydhTfbsGm12878.txt
+Affected 3 row(s) in hg19.metaDb_tdreszer
+mdbPrint hg19 -vars="composite=wgEncodeSydhTfbs" -countObjs
+Using table named 'hg19.metaDb_tdreszer'.
+151 objects
+mdbPrint hg19 -vars="composite=wgEncodeSydhTfbs" > wgEncodeSydhTfbs.ra
+mdbUpdate hg19 -table=metaDb wgEncodeSydhTfbs.ra
+
+### Kates pet peeve semicolons
+mdbPrint hg19 -table=metaDb -vars="labVersion=%;%" -countObjs
+~/bin/x86_64/mdbPrint hg19 -table=metaDb -vars="labVersion=%;%" -updDb=hg19 -updMdb=metaDb_tdreszer -updExp="composite,cell,treatment,antibody,control,replicate,view" -updVars="labVersion" > tmp.txt
+# hand edit then force.
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+Affected 1 row(s) in hg19.metaDb
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeSydhTfbs" > wgEncodeSydhTfbs.ra
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeSydhHistone" > wgEncodeSydhHistone.ra
