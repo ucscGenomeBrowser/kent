@@ -4,7 +4,7 @@
 track wgEncodeBuOrchid
 compositeTrack on
 shortLabel BU ORChID
-longLabel ENCODE ORChID Predicted DNA Cleavage Sites from Boston Univ. (Tullius lab)
+longLabel ENCODE Boston Univ (Tullius Lab) ORChID Predicted DNA Cleavage Sites
 group map
 subGroup1 view Views Signal=Signal
 #subGroup2 cellType Cell_Line GM12878=GM12878
