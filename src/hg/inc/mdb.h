@@ -245,6 +245,8 @@ int mdbObjCount(struct mdbObj *mdbObjs, boolean objs);
 int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
+void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *expDefiningVars,char *varsToSet);
+// prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
 
 // ----------------- Utilities -----------------
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
@@ -258,6 +260,10 @@ boolean mdbByVarContains(struct mdbByVar *mdbByVar, char *val, char *obj);
 
 void mdbObjReorderVars(struct mdbObj *mdbObjs, char *vars,boolean back);
 // Reorders vars list based upon list of vars "cell antibody treatment".  Send to front or back.
+
+void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
+// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
+// Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.

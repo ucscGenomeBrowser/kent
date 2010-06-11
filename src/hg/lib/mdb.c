@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.7 2010/05/11 16:03:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -1476,6 +1476,93 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
 return count;
 }
 
+void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *varsToSelect,char *varsToSet)
+// prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
+{
+if(dbToUpdate == NULL || tableToUpdate == NULL || varsToSelect == NULL || varsToSet == NULL)
+    errAbort("mdbObjPrintUpdateLines is missing important parameter.\n");
+
+int selCount = 0;
+char **selectVars = NULL;
+if(differentWord(varsToSelect,"obj"))
+    {
+    // Sort objs to avoid duplicate mdbUpdate statements
+    mdbObjsSortOnVars(mdbObjs, varsToSelect);
+
+    // Parse list of selcting vars (could be simply expId or expId,replicate,view)
+    selCount = chopByChar(varsToSelect,',',NULL,0);
+    if(selCount <= 0)
+        errAbort("mdbObjPrintUpdateLines is missing experiment defining variables.\n");
+    selectVars = needMem(sizeof(char *) * selCount);
+    selCount = chopByChar(varsToSelect,',',selectVars,selCount);
+    }
+// Parse list of vars to update
+int updCount = chopByChar(varsToSet,',',NULL,0);
+if(updCount <= 0)
+    errAbort("mdbObjPrintUpdateLines is missing variables to set.\n");
+char **updateVars = needMem(sizeof(char *) * updCount);
+updCount = chopByChar(varsToSet,',',updateVars,updCount);
+int ix=0;
+
+struct mdbObj *mdbObj = NULL;
+struct dyString *thisSelection = newDyString(256);
+struct dyString *lastSelection = newDyString(256);
+for(mdbObj=*mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+    {
+    if(mdbObj->obj == NULL || mdbObj->deleteThis)
+        continue;
+
+    // Build this selection string
+    dyStringClear(thisSelection);
+    if(sameWord(varsToSelect,"obj"))
+        {
+        dyStringPrintf(thisSelection,"obj=%s",mdbObj->obj);
+        }
+    else
+        {
+        dyStringPrintf(thisSelection,"vars=\"");
+        for(ix = 0;ix < selCount; ix++)
+            {
+            char *val = mdbObjFindValue(mdbObj,selectVars[ix]);
+            if(val != NULL) // TODO what to do for NULLS?
+                {
+                if(strchr(val, ' ') != NULL) // Has blanks
+                    dyStringPrintf(thisSelection,"%s='%s' ",selectVars[ix],val);// FIXME: Need to make single quotes work since already within double quotes!
+                else
+                    dyStringPrintf(thisSelection,"%s=%s ",selectVars[ix],val);
+                }
+            }
+        dyStringPrintf(thisSelection,"\"");
+        }
+
+    // Don't bother making another mdpUpdate line if selection is the same.
+    if(sameString(dyStringContents(lastSelection),dyStringContents(thisSelection)))
+        continue;
+    dyStringClear(lastSelection);
+    dyStringAppend(lastSelection,dyStringContents(thisSelection));
+
+    printf("mdbUpdate %s table=%s %s",dbToUpdate,tableToUpdate,dyStringContents(thisSelection));
+
+    // Now look up the value of each var to update
+    printf(" setVars=\"");
+    for(ix = 0;ix < updCount; ix++)
+        {
+        char *val = mdbObjFindValue(mdbObj,updateVars[ix]);
+        if(val != NULL) // What to do for NULLS? Ignore
+            {
+            printf("%s=",updateVars[ix]);
+            if(strchr(val, ' ') != NULL) // Has blanks
+                printf("'%s' ",val);// FIXME: Need to make single quotes work since already within double quotes!
+            else
+                printf("%s ",val);
+            }
+        }
+    printf("\" -test\n"); // Always test first
+    }
+dyStringFree(&thisSelection);
+dyStringFree(&lastSelection);
+}
+
 // ----------------- Utilities -----------------
 
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
@@ -1570,10 +1657,30 @@ void mdbObjReorderVars(struct mdbObj *mdbObjs, char *vars,boolean back)
 {
 //char *words[48];
 char *cloneLine = cloneString(vars);
+char **words = NULL;
 int count = chopByWhite(cloneLine,NULL,0);
-char **words = needMem(sizeof(char *) * count);
-count = chopByWhite(cloneLine,words,count);
-//int count = chopLine(cloneLine,words);
+if(count)
+    {
+    words = needMem(sizeof(char *) * count);
+    count = chopByWhite(cloneLine,words,count);
+    }
+else
+    {
+    char try = ',';
+    count = chopByChar(cloneLine,try,NULL,0);
+    if(count <= 0)
+        {
+        char try = '\t';
+        count = chopByChar(cloneLine,try,NULL,0);
+        }
+    if(count)
+        {
+        words = needMem(sizeof(char *) * count);
+        count = chopByChar(cloneLine,try,words,count);
+        }
+    }
+if(count == 0)
+    errAbort("mdbObjReorderVars cannot parse vars argument.\n");
 
 struct mdbObj *mdbObj = NULL;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
@@ -1615,6 +1722,41 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     freeMem(varsToReorder);
     }
     freeMem(words);
+}
+
+int mdbObjVarCmp(const void *va, const void *vb)
+/* Compare to sort on full list of vars and vals. */
+{
+const struct mdbObj *a = *((struct mdbObj **)va);
+const struct mdbObj *b = *((struct mdbObj **)vb);
+struct mdbVar* aVar = a->vars;
+struct mdbVar* bVar = b->vars;
+for(;aVar != NULL && bVar != NULL;aVar=aVar->next,bVar=bVar->next)
+    {
+    int ret = strcmp(aVar->var, bVar->var);
+    if(ret != 0)
+        return ret;
+    ret = strcmp(aVar->val, bVar->val);
+    if(ret != 0)
+        return ret;
+    }
+if(aVar != NULL)
+    return -1;
+if(bVar != NULL)
+    return 1;
+return 0;
+}
+
+
+
+void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars)
+// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
+// Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
+{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+if(vars != NULL)
+    mdbObjReorderVars(*mdbObjs,vars,FALSE);
+
+slSort(mdbObjs, mdbObjVarCmp);
 }
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
