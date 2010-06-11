@@ -11897,7 +11897,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalA549Control.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsA549Control.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/None/Input/PCR1x
@@ -11922,7 +11922,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalA549Gr.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/None/Input/PCR1x
@@ -11947,7 +11947,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -11971,7 +11971,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR1x
@@ -11995,7 +11995,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr2xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR2x
@@ -12019,7 +12019,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -12043,7 +12043,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR1x
@@ -12067,7 +12067,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex500pm.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -12091,7 +12091,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex50nm.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex50nm.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -12115,7 +12115,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex5nm.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -12139,7 +12139,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -12164,7 +12164,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -12188,7 +12188,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2Pcr2xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR2x
@@ -12212,7 +12212,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xDexa.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Usf1Pcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -12236,7 +12236,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Usf1Pcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR1x
@@ -12306,7 +12306,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf.tagAlign.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Batf.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12330,7 +12330,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Bcl11a.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12354,7 +12354,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-10
 dateUnrestricted 2010-09-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl3Pcr1xBcl3.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Bcl3Pcr1xBcl3.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12573,7 +12573,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878P300.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12597,7 +12597,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pax5c20.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12621,7 +12621,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pax5n19.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12693,7 +12693,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12765,7 +12765,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12886,7 +12886,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Zbtb33.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -12910,7 +12910,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891ControlPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -12934,7 +12934,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -12958,7 +12958,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -12982,7 +12982,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pou2f2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -13006,7 +13006,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pu1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pu1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -13030,7 +13030,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -13054,7 +13054,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -13078,7 +13078,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -13102,7 +13102,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -13126,7 +13126,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -13150,7 +13150,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescControlPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -13174,7 +13174,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescNrsfPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -13198,7 +13198,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescPol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -13222,7 +13222,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescPol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -13246,7 +13246,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -13293,7 +13293,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HeLa-S3/None/Input/PCR1x
@@ -13340,7 +13340,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Taf1Pcr1xTaf1.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Taf1Pcr1xTaf1.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HeLa-S3/None/Input/PCR1x
@@ -13364,7 +13364,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Bhlhe40Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13388,7 +13388,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13412,7 +13412,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Fosl2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Fosl2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13436,7 +13436,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Gabp.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13460,7 +13460,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Hey1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Hey1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13576,7 +13576,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2RxraPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13646,7 +13646,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13693,7 +13693,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -13717,7 +13717,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType Jurkat/None/Input/PCR2x
@@ -13741,7 +13741,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatPol2Pcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType Jurkat/None/Input/PCR2x
@@ -14056,7 +14056,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 inputType K562/None/Input/PCR1x
@@ -14334,7 +14334,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -14358,7 +14358,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR1x
@@ -14382,7 +14382,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex500pm.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -14406,7 +14406,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex50nm.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex50nm.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -14430,7 +14430,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex5nm.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -14454,7 +14454,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/GR/PCR1x
@@ -14478,7 +14478,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -14502,7 +14502,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR2x
@@ -14526,7 +14526,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xDexa.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Usf1Pcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/DEX_100nM/Input/PCR1x
@@ -14550,7 +14550,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Usf1Pcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 inputType A549/EtOH/Input/PCR1x
@@ -14644,7 +14644,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl11a.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Bcl11a.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -14668,7 +14668,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-10
 dateUnrestricted 2010-09-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl3Pcr1xBcl3.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Bcl3Pcr1xBcl3.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -14815,7 +14815,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Irf4.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -14887,7 +14887,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878P300.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878P300.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -14911,7 +14911,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pax5c20.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -14935,7 +14935,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5n19.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pax5n19.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -15007,7 +15007,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -15079,7 +15079,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sp1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -15152,7 +15152,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tcf12.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Tcf12.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -15200,7 +15200,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Zbtb33.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Zbtb33.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12878/None/Input/PCR1x
@@ -15224,7 +15224,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -15248,7 +15248,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -15272,7 +15272,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pou2f2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -15296,7 +15296,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pu1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pu1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -15320,7 +15320,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12891/None/Input/PCR1x
@@ -15344,7 +15344,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -15368,7 +15368,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -15392,7 +15392,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType GM12892/None/Input/PCR1x
@@ -15416,7 +15416,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescNrsfPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescNrsfPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -15440,7 +15440,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol24h8Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescPol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -15464,7 +15464,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescPol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -15488,7 +15488,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescTaf1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType H1-hESC/None/Input/PCR1x
@@ -15512,7 +15512,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Control.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Control.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HeLa-S3/None/Input/PCR1x
@@ -15536,7 +15536,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Gabp.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HeLa-S3/None/Input/PCR1x
@@ -15583,7 +15583,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Taf1Pcr1xTaf1.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Taf1Pcr1xTaf1.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HeLa-S3/None/Input/PCR1x
@@ -15607,7 +15607,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Bhlhe40Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15631,7 +15631,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15655,7 +15655,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Fosl2Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Fosl2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15679,7 +15679,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Gabp.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15703,7 +15703,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Hey1Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Hey1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15819,7 +15819,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2RxraPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15866,7 +15866,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15913,7 +15913,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType HepG2/None/Input/PCR1x
@@ -15937,7 +15937,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2JurkatControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType Jurkat/None/Input/PCR2x
@@ -15961,7 +15961,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2JurkatPol2Pcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 inputType Jurkat/None/Input/PCR2x
@@ -16276,7 +16276,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqRawSignalRep2K562Taf1.wig.gz
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 inputType K562/None/Input/PCR1x
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -1245899189
+# MAGIC: 454594751
