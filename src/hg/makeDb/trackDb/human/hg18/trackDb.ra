@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.490 2010/05/25 19:14:04 kent Exp $";
+#	"$Id: trackDb.ra,v 1.491 2010/06/11 00:03:54 ann Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.encode.ra
@@ -937,7 +937,8 @@ longLabel Poly(A) Sites, Both Reported and Predicted
 group rna
 priority 79
 visibility hide
-type bed 8 .
+noInherit on
+type bed 3 .
 
     track polyaDb
     parent polyA
@@ -945,6 +946,7 @@ type bed 8 .
     longLabel Reported Poly(A) Sites from PolyA_DB
     color 51,153,51
     priority 1
+    type bed 4 .
 
     track polyaPredict
     parent polyA
@@ -952,6 +954,7 @@ type bed 8 .
     longLabel Predicted Poly(A) Sites Using an SVM
     color 102,0,153
     priority 2
+    type bed 8 .
 
 track fantomCageGraphTop
 compositeTrack on
