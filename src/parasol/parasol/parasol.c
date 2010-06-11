@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.50 2010/06/09 23:09:48 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.51 2010/06/11 01:12:40 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -63,6 +63,8 @@ errAbort(
   "   parasol list batches  - List batches one per line.\n"
   "   parasol list sick  - List nodes considered sick by all running batches, one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
+  "   parasol [options] pstat2  - Get status of jobs queued and running.\n"
+  "         options: -results=file\n"
   "options:\n"
   "   -host=hostname - connect to a paraHub process on a remote host instead\n"
   "                    localhost.\n"
