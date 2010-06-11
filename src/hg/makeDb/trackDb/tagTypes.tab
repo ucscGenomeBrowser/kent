@@ -170,6 +170,7 @@ itemRgb bedGraph bed
 linesAt chromGraph
 longLabel *
 longlabel genePred
+longLabelClip *
 lossColor bed
 macaqueDb bed
 mafDot wigMaf
