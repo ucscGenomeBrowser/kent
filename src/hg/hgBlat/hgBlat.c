@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.127 2009/04/15 19:37:37 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.128 2010/06/11 11:09:18 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -532,8 +532,9 @@ pslxWriteHead(f, qType, tType);
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
     printf(" "); fflush(stdout);  /* prevent apache cgi timeout by outputting something */
-    hgBotDelay();
     oneSize = realSeqSize(seq, !isTx);
+    if ((seqCount&1) == 0)	// Call bot delay every 2nd time starting with first time
+	hgBotDelay();
     if (++seqCount > maxSeqCount)
         {
 	warn("More than 25 input sequences, stopping at %s.",
