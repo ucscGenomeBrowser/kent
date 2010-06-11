@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.6 2010/06/07 23:08:14 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.7 2010/06/11 19:59:00 tdreszer Exp $
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 
@@ -50,7 +50,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Batf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BATF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BATF in GM12878 cells)
         subGroups view=Peaks factor=BATF cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -68,7 +68,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Bcl11a
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BCL11 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BCL11A in GM12878 cells)
         subGroups view=Peaks factor=BCL11A cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -86,7 +86,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Ebf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 EBF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (EBF in GM12878 cells)
         subGroups view=Peaks factor=EBF cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -104,7 +104,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Egr1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Egr-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Egr-1 in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=EGR1 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
@@ -122,8 +122,8 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
-        shortLabel GM128 GABP P1
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12878 GABP P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GABP in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=GABP cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -132,7 +132,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel GM128 GABP P2
+        shortLabel GM12878 GABP P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=GABP cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -140,7 +140,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Irf4
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 IRF4 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (IRF4 in GM12878 cells)
         subGroups view=Peaks factor=IRF4 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -159,7 +159,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewPeaks
-        shortLabel GM128 NRSF P1
+        shortLabel GM12878 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=NRSF cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -168,7 +168,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel GM128 NRSF P2
+        shortLabel GM12878 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=NRSF cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -176,7 +176,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Oct2
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 POU2F P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (POU2F2 in GM12878 cells)
         subGroups view=Peaks factor=POU2F2 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -194,7 +194,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pax5c20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PAX5c P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PAX5-C20 in GM12878 cells)
         subGroups view=Peaks factor=PAX5C20 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -203,7 +203,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pax5c20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PAX5c P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (PAX5-C20 in GM12878 cells)
         subGroups view=Peaks factor=PAX5C20 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
@@ -212,7 +212,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pbx3
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Pbx3 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pbx3 in GM12878 cells)
         subGroups view=Peaks factor=PBX3 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -231,7 +231,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewPeaks
-        shortLabel GM128 Pol2 P1
+        shortLabel GM12878 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=POL2 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -240,7 +240,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel GM128 Pol2 P2
+        shortLabel GM12878 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=POL2 cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -248,7 +248,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pu1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PU.1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PU.1 in GM12878 cells)
         subGroups view=Peaks factor=PU1 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -266,7 +266,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sin3ak20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Sin3A P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Sin3Ak-20, GM12878 cells, PCR2x)
         subGroups view=Peaks factor=SIN3AK20 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
@@ -284,8 +284,8 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
-        shortLabel GM128 SRF P1
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        shortLabel GM12878 SRF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SRF in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=SRF cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -294,7 +294,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel GM128 SRF P2
+        shortLabel GM12878 SRF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SRF in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=SRF cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type narrowPeak
@@ -311,7 +311,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in GM12878 cells)
         subGroups view=Peaks factor=TAF1 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
@@ -320,7 +320,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tcf12
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 TCF12 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TCF12 in GM12878 cells)
         subGroups view=Peaks factor=TCF12 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -338,7 +338,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 USF-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in GM12878 cells, PCR2x)
         subGroups view=Peaks factor=USF1 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
@@ -356,7 +356,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Zbtb33
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 ZBT33 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (ZBTB33 in GM12878 cells)
         subGroups view=Peaks factor=ZBTB33 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -374,7 +374,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Egr1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Egr-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Egr-1 in K562 cells, PCR2x)
         subGroups view=Peaks factor=EGR1 cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -392,7 +392,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 GABP P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GABP in K562 cells, PCR2x)
         subGroups view=Peaks factor=GABP cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -410,7 +410,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Hey1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 HEY1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (HEY1 in K562 cells)
         subGroups view=Peaks factor=HEY1 cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -482,7 +482,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pu1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 PU.1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PU.1 in K562 cells)
         subGroups view=Peaks factor=PU1 cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -500,7 +500,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Sin3ak20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Sin3Ak P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Sin3Ak-20 in K562 cells, PCR2x)
         subGroups view=Peaks factor=SIN3AK20 cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -518,7 +518,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Six5
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 SIX5 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SIX5 in K562 cells)
         subGroups view=Peaks factor=SIX5 cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -536,7 +536,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 SRF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SRF in K562 cells, PCR2x)
         subGroups view=Peaks factor=SRF cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -554,7 +554,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks
+        parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 USF-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in K562 cells, PCR2x)
         subGroups view=Peaks factor=USF1 cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -996,7 +996,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Taf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel K562 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in K562 cells)
         subGroups view=Peaks factor=TAF1 cellType=1K5 prot=PCR1x treat=aNONE rep=rep1
@@ -1048,7 +1048,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescNrsfPcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in H1-hESC cells)
         subGroups view=Peaks factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -1102,7 +1102,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in H1-hESC cells)
         subGroups view=Peaks factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -1174,7 +1174,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescPol2Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in H1-hESC cells)
         subGroups view=Peaks factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -1224,7 +1224,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol24h8Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel GM12878 Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in GM12878 cells)
         subGroups view=Peaks factor=POL24H8 cellType=1GM prot=PCR1x treat=aNONE rep=rep1
@@ -1242,7 +1242,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescPol24h8Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewPeaks off
+        parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in H1-hESC cells)
         subGroups view=Peaks factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -1464,6 +1464,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
     shortLabel Raw Signal
     view zRaw
     parent wgEncodeHudsonalphaChipSeq
+    visibility full
     minLimit 1
     maxLimit 47957.00
     viewLimits 5:35
@@ -1473,7 +1474,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BATF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (BATF in GM12878 cells)
         subGroups view=zRaw factor=BATF cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1491,7 +1492,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BCL11 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (BCL11A in GM12878 cells)
         subGroups view=zRaw factor=BCL11A cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1509,7 +1510,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 EBF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (EBF in GM12878 cells)
         subGroups view=zRaw factor=EBF cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1527,7 +1528,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Egr-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Egr-1 in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=EGR1 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
@@ -1545,8 +1546,8 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
-        shortLabel GM128 GABP R1
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12878 GABP R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GABP in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=GABP cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 6821.00
@@ -1556,7 +1557,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel GM128 GABP R2
+        shortLabel GM12878 GABP R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GABP in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=GABP cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 6113.00
@@ -1584,7 +1585,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewzRaw
-        shortLabel GM128 NRSF R1
+        shortLabel GM12878 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=NRSF cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 19628.00
@@ -1594,7 +1595,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel GM128 NRSF R2
+        shortLabel GM12878 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=NRSF cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 16142.00
@@ -1603,7 +1604,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 POU2F R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (POU2F2 in GM12878 cells)
         subGroups view=zRaw factor=POU2F2 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1621,7 +1622,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PAX5c R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PAX5-C20 in GM12878 cells)
         subGroups view=zRaw factor=PAX5C20 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1630,7 +1631,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PAX5c R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (PAX5-C20 in GM12878 cells)
         subGroups view=zRaw factor=PAX5C20 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
@@ -1639,7 +1640,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Pbx3 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pbx3 in GM12878 cells)
         subGroups view=zRaw factor=PBX3 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1658,7 +1659,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewzRaw
-        shortLabel GM128 Pol2 R1
+        shortLabel GM12878 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=POL2 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 8689.00
@@ -1668,7 +1669,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel GM128 Pol2 R2
+        shortLabel GM12878 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=POL2 cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 9957.00
@@ -1677,7 +1678,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PU.1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PU.1 in GM12878 cells)
         subGroups view=zRaw factor=PU1 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1695,7 +1696,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Sin3A R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep1 (Sin3Ak-20, GM12878 cells, PCR2x)
         subGroups view=zRaw factor=SIN3AK20 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
@@ -1713,8 +1714,8 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
-        shortLabel GM128 SRF R1
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        shortLabel GM12878 SRF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SRF in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=SRF cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 3711.00
@@ -1724,7 +1725,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
         release alpha,beta
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel GM128 SRF R2
+        shortLabel GM12878 SRF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (SRF in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=SRF cellType=1GM rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 3169.00
@@ -1742,7 +1743,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in GM12878 cells)
         subGroups view=zRaw factor=TAF1 cellType=1GM rep=rep2 prot=PCR1x treat=aNONE
@@ -1751,7 +1752,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 TCF12 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TCF12 in GM12878 cells)
         subGroups view=zRaw factor=TCF12 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1769,7 +1770,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 USF-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (USF-1 in GM12878 cells, PCR2x)
         subGroups view=zRaw factor=USF1 cellType=1GM rep=rep1 prot=PCR2x treat=aNONE
@@ -1787,7 +1788,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 ZBT33 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (ZBTB33 in GM12878 cells)
         subGroups view=zRaw factor=ZBTB33 cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1805,7 +1806,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in GM12878 cells)
         subGroups view=zRaw factor=zCTRL cellType=1GM rep=rep1 prot=PCR1x treat=aNONE
@@ -1841,7 +1842,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Egr-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Egr-1 in K562 cells, PCR2x)
         subGroups view=zRaw factor=EGR1 cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -1859,7 +1860,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 GABP R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GABP in K562 cells, PCR2x)
         subGroups view=zRaw factor=GABP cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -1879,7 +1880,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 HEY1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (HEY1 in K562 cells)
         subGroups view=zRaw factor=HEY1 cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -1955,7 +1956,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 PU.1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PU.1 in K562 cells)
         subGroups view=zRaw factor=PU1 cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -1973,7 +1974,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Sin3Ak R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Sin3Ak-20, K562 cells, PCR2x)
         subGroups view=zRaw factor=SIN3AK20 cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -1991,7 +1992,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SIX5 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SIX5 in K562 cells)
         subGroups view=zRaw factor=SIX5 cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -2009,7 +2010,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SRF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SRF in K562 cells, PCR2x)
         subGroups view=zRaw factor=SRF cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -2029,7 +2030,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 USF-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (USF-1 in K562 cells, PCR2x)
         subGroups view=zRaw factor=USF1 cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
@@ -2047,7 +2048,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw
+        parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in K562 cells)
         subGroups view=zRaw factor=zCTRL cellType=1K5 rep=rep1 prot=PCR1x treat=aNONE
@@ -2616,7 +2617,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel K562 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in K562 cells)
         subGroups view=zRaw factor=TAF1 cellType=1K5 prot=PCR1x treat=aNONE rep=rep1
@@ -2677,7 +2678,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in H1-hESC cells)
         subGroups view=zRaw factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -2740,7 +2741,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in H1-hESC cells)
         subGroups view=zRaw factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -2830,7 +2831,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in H1-hESC cells)
         subGroups view=zRaw factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
@@ -2879,7 +2880,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel GM12878 Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in GM12878 cells)
         subGroups view=zRaw factor=POL24H8 cellType=1GM prot=PCR1x treat=aNONE rep=rep1
@@ -2906,7 +2907,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x
         release alpha,beta
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
+        parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in H1-hESC cells)
         subGroups view=zRaw factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
