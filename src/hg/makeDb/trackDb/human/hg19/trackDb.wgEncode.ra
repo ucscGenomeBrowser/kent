@@ -1,5 +1,7 @@
 # Genome-wide ENCODE tracks
 
+include wgEncodeSuper.ra
+
 include trackDb.wgEncodeSuny.ra
 include trackDb.wgEncodeSunyAlbanyTiling.ra
 
