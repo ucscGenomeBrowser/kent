@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#	$Id: ailMel1.txt,v 1.14 2010/04/30 21:17:30 chinhli Exp $
+#	$Id: ailMel1.txt,v 1.15 2010/06/11 17:12:56 chinhli Exp $
 
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
@@ -239,10 +239,10 @@ ailMel1.perChromTables = no
     #	739076250 bases of 2245312831 (32.916%) in intersection
 
 #######################################################################
-# felCatV17e Cat BLASTZ/CHAIN/NET (working  - 2010-03-22 - Chin)
+# felCat4 Cat BLASTZ/CHAIN/NET (working  - 2010-06-07 - Chin)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
-    cd /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+    mkdir /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
+    cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
 
     cat << '_EOF_' > DEF
 # human vs. cat
@@ -256,18 +256,19 @@ SEQ2_CHUNK=10000000
 SEQ2_LAP=10000
 SEQ2_LIMIT=300
 
-# TARGET: Cat (felCatV17e)
-SEQ1_DIR=/scratch/data/felCatV17e/felCatV17e.2bit
-SEQ1_LEN=/scratch/data/felCatV17e/chrom.sizes
+# TARGET: Cat (felCat4)
+SEQ1_DIR=/scratch/data/felCat4/felCat4.2bit
+SEQ1_LEN=/scratch/data/felCat4/chrom.sizes
 SEQ1_LIMIT=50
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 
-BASE=/hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22
+BASE=/hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
+XXXX 06-07
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
         -syntenicNet -noDbNameCheck \
@@ -289,19 +290,19 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         > cat.log 2>&1 &
     # real    346m8.431s
-    cat fb.felCatV17e.chainAilMel1Link.txt
+    cat fb.felCat4.chainAilMel1Link.txt
     # 1503647735 bases of 1990635005 (75.536%) in intersection
     # run rbest 2010-04-30
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        felCatV17e ailMel1 > rbest.log 2>&1 &
+        felCat4 ailMel1 > rbest.log 2>&1 &
     #   real    234m49.556s
 
 
 
-    mkdir /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
-    cd /hive/data/genomes/felCatV17e/bed/blastz.ailMel1.swap
+    mkdir /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
+    cd /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/ailMel1/bed/lastzFelCatV17e.2010-03-22/DEF \
+        /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
@@ -310,10 +311,10 @@ TMPDIR=/scratch/tmp
     # need to change name back due to the seq1 and seq2 switch
     # more TODO  XXXX 03/29
     # so should be able to do
-    #	cat fb.felCatV17e.chainAilMel1Link.txt
+    #	cat fb.felCat4.chainAilMel1Link.txt
     # without 
-    # cd /hive/data/genomes/ailMel1/bed/blastz.felCatV17e.swap
-    cat fb.ailMel1.chainFelCatV17eLink.txt
+    # cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap
+    cat fb.ailMel1.chainFelCat4Link.txt
     # 1507273252 bases of 2245312831 (67.130%) in intersection
 
 #########################################################################

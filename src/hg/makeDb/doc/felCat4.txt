@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-#       $Id: felCat4.txt,v 1.1 2010/06/04 23:32:28 chinhli Exp $
+#       $Id: felCat4.txt,v 1.2 2010/06/11 17:11:00 chinhli Exp $
 
 # Felis Catus (domestic cat) --  NHGRI/GTB 4/felCat4 (2009-05-25)
   
@@ -463,7 +463,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 #######################################################################
-# felCat4 Cat BLASTZ/CHAIN/NET (working  - 2010-06-01 - Chin)
+# felCat4 Cat BLASTZ/CHAIN/NET (DONE  - 2010-06-01 - Chin)
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/canFam2/bed/lastzFelCat4.2010-06-01
     cd /hive/data/genomes/canFam2/bed/lastzFelCat4.2010-06-01
@@ -504,8 +504,8 @@ TMPDIR=/scratch/tmp
     # doBlastzChainNet from step chainRun after para stop, para freeBatch 
     # rm chain and liftedChain in
     #  /hive/data/genomes/canFam2/bed/lastzFelCat4.2010-06-01/axtChain/run
-    #   and use memk this time
-XXXX 06-04 PM screen -d -r 3477
+    #   and use memk and swarm this time
+    
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
          -continue chainRun \
@@ -514,6 +514,11 @@ XXXX 06-04 PM screen -d -r 3477
          -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
          > do_chainRun.log 2>&1 &
  
+    #  real    323m33.250s
+XXXX 06-07 TODO add tracks
+   #  *** All done !  Elapsed time: 323m33s
+   #  *** Make sure that goldenPath/canFam2/vsFelCat4/README.txt is accurate.
+   #  *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
 
 
     cat fb.canFam2.chainFelCat4Link.txt
@@ -526,56 +531,66 @@ XXXX 06-04 PM screen -d -r 3477
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    251m14.341s
-    # *** All done !  Elapsed time: 251m14s
-    # *** Make sure that goldenPath/felCat4/vsCanFam2/README.txt is
-    # accurate.
-    # *** Add {chain,net}CanFam2 tracks to trackDb.ra if necessary.
+    # real    327m42.053s
+XXXX 06-04 TODO add track 
+    #  *** All done !  Elapsed time: 327m42s
+    #  *** Make sure that goldenPath/felCat4/vsCanFam2/README.txt is accurate.
+    #  *** Add {chain,net}CanFam2 tracks to trackDb.ra if necessary.
+
     cat fb.felCat4.chainCanFam2Link.txt
     # 1467506008 bases of 1990635005 (73.720%) in intersection
 
 
 
 #####################################################################
-# LASTZ Mouse Swap (DONE - 2010-06-01 - Chin)
-    cd /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-01
+# LASTZ Mouse Swap (DONE - 2010-06-07 - Chin)
+    cd /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07
     cat fb.mm9.chainFelCat4Link.txt
     #   637007193 bases of 2620346127 (24.310%) in intersection
     # make sure the link exists:
-    # cd /hive/data/genomes/mm9/bed
-    # ln -s /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-01 \
-    #      /lastz.felCat4
+    cd /hive/data/genomes/mm9/bed
+    ln -s /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07 lastz.felCat4
 
     # swap
     mkdir /hive/data/genomes/felCat4/bed/blastz.mm9.swap
     cd /hive/data/genomes/felCat4/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-01/DEF \
+        /hive/data/genomes/mm9/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real   125m37.926s 
+    # real    176m42.490s
+    # *** All done !  Elapsed time: 176m42s
+    # *** Make sure that goldenPath/felCat4/vsMm9/README.txt is accurate.
+    # *** Add {chain,net}Mm9 tracks to trackDb.ra if necessary.
+
     cat fb.felCat4.chainMm9Link.txt
     #   616529959 bases of 1990635005 (30.972%) in intersection
 
 
 #####################################################################
-# LASTZ Human Swap (DONE - 2010-06-01 - Chin)
-    cd /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-01
+# LASTZ Human Swap (DONE - 2010-06-07 - Chin)
+    cd /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-07
     cat fb.hg19.chainFelCat4Link.txt
     #  1266003011 bases of 2897316137 (43.696%) in intersection
 
-    # Swap re-run 04-07
+    # Swap 
     mkdir /hive/data/genomes/felCat4/bed/blastz.hg19.swap
     cd /hive/data/genomes/felCat4/bed/blastz.hg19.swap
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-01/DEF \
+        /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real   200m43.245s 
+    # real    432m36.917s
+    #  *** All done !  Elapsed time: 432m37s
+    #  *** Make sure that goldenPath/felCat4/vsHg19/README.txt is accurate.
+    #  *** Add {chain,net}Hg19 tracks to trackDb.ra if necessary.
+
+
     cat fb.felCat4.chainHg19Link.txt
-#   1211702270 bases of 1990635005 (60.870%) in intersection
+    #   1211702270 bases of 1990635005 (60.870%) in intersection
 
 
 #####################################################################
@@ -627,7 +642,7 @@ XXXX 06-04 PM screen -d -r 3477
 
 
 #####################################################################
-# LASTZ Oppsom  Swap (DONE - 2010-06-01 - Chin)
+# LASTZ Oppsom  Swap (working - 2010-06-11 - 2010-06-01 - Chin)
     cd /hive/data/genomes/monDom5/bed/lastzFelCat4.2010-06-01
     cat fb.monDom5.chainFelCat4Link.txt
     # 178616721 bases of 3501660299 (5.101%) in intersection
