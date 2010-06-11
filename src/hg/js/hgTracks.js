@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.68 2010/05/14 17:33:19 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.69 2010/06/11 18:14:23 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -1196,6 +1196,18 @@ $(document).ready(function()
         if( pos != undefined)
             $( pos ).focus();
     }
+    if($("#tabs")) {
+        var val = $('#currentSearchTab').val();
+        $("#tabs").tabs({
+                            show: function(event, ui) {
+                                $('#currentSearchTab').val(ui.panel.id);
+                            }
+                        });
+        $("#tabs").tabs('option', 'selected', '#' + val);
+        $('#simpleSearch').keydown(searchKeydown);
+        $('#descSearch').keydown(searchKeydown);
+        $('#nameSearch').keydown(searchKeydown);
+    }
 });
 
 function rulerModeToggle (ele)
@@ -1490,7 +1502,7 @@ function loadContextMenu(img)
     var menu = img.contextMenu(
         function() {
             var menu = [];
-            var selectedImg = " <img src='../images/Green_check.png' height='10' width='10' />";
+            var selectedImg = " <img src='../images/greenCheck.png' height='10' width='10' />";
             var done = false;
             if(selectedMenuItem) {
                 var href = selectedMenuItem.href;
@@ -1784,4 +1796,43 @@ function jumpButtonOnClick()
         }
     }
     return true;
+}
+
+function metadataSelectChanged(obj)
+{
+    var newVar = $(obj).val();
+    var a = /metadataName(\d+)/.exec(obj.name)
+    if(newVar != undefined && a && a[1]) {
+        var num = a[1];
+        $.ajax({
+                   type: "GET",
+                   url: "../cgi-bin/hgApi",
+                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
+                   trueSuccess: handleNewMetadataVar,
+                   success: catchErrorOrDispatch,
+                   cache: true,
+                   cmd: "hgt.metadataValue" + num
+               });
+    }
+}
+
+function handleNewMetadataVar(response, status)
+// Handle ajax response (repopulate a metadata select)
+{
+    var list = eval(response);
+    var ele = $('select[name=' + this.cmd + ']'); 
+    ele.empty();
+    ele.append("<option>Any</option>");
+    for (var i = 0; i < list.length; i++) {
+        ele.append("<option>" + list[i] + "</option>");
+    }
+}
+
+function searchKeydown(event)
+{
+    if (event.which == 13) {
+        $('#searchSubmit').click();
+        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
+        // $('#searchTracks').submit();
+    }
 }
