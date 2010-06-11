@@ -47,7 +47,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1650 2010/06/05 19:29:42 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -5533,7 +5533,7 @@ hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("jquery.contextmenu.js", NULL);
 
-hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>");
+hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
 #endif
@@ -5603,7 +5603,6 @@ else if (cartVarExists(cart, configShowEncodeGroups))
 #ifdef TRACK_SEARCH
 else if (cartVarExists(cart, searchTracks))
     {
-    cartRemove(cart, searchTracks);
     doSearchTracks(groupList);
     }
 #endif
