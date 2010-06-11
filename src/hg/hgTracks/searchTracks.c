@@ -15,8 +15,9 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "trix.h"
+#include "jsHelper.h"
 
-static char const rcsid[] = "$Id: searchTracks.c,v 1.10 2010/06/10 20:24:01 larrym Exp $";
+static char const rcsid[] = "$Id: searchTracks.c,v 1.11 2010/06/11 18:21:40 larrym Exp $";
 
 #define ANYLABEL "Any"
 #define METADATA_NAME_PREFIX "hgt.metadataName"
@@ -54,42 +55,43 @@ return str && strlen(str) &&
 }
 
 static boolean isDescriptionMatch(struct track *track, char **words, int wordCount)
-// We parse str and look for every word ANYWHERE in track description (i.e. google style).
-// XXXX currently quite primitive; do stemming, strip html markup ??
-// trackMetaData contains tracks already found via metadata searches.
+// We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
-boolean found = FALSE;
-
 if(words)
     {
+    // We do NOT lookup up parent hierarchy for html descriptions.
     char *html = track->tdb->html;
-    if(isEmpty(html))
-        {
-        // XXXX is there a cleaner way to find parent?
-        struct trackDb *parent = track->tdb->parent;
-        while(parent != NULL && (parent->html == NULL || !strlen(parent->html)))
-            parent = parent->parent;
-        if(parent != NULL)
-            html = parent->html;
-        }
-
     if(!isEmpty(html))
         {
-        int i;
+        /* This probably could be made more efficient by parsing the html into some kind of b-tree, but I am assuming 
+           that the inner html loop while only happen for 1-2 words for vast majority of the tracks. */
+
+        int i, numMatches = 0;
+        html = stripRegEx(html, "<[^>]*>", REG_ICASE);
         for(i = 0; i < wordCount; i++)
             {
-            char *val = words[i];
-            if(strstrNoCase(html, val) == NULL)
+            char *needle = words[i];
+            char *haystack, *tmp = cloneString(html);
+            boolean found = FALSE;
+            while((haystack = nextWord(&tmp)))
                 {
-                found = FALSE;
-                break;
+                char *ptr = strstrNoCase(haystack, needle);
+                if(ptr != NULL && ptr == haystack)
+                    {
+                    found = TRUE;
+                    break;
+                    }
                 }
+            if(found)
+                numMatches++;
             else
-                found = TRUE;
+                break;
             }
+        if(numMatches == wordCount)
+            return TRUE;
         }
     }
-return found;
+return FALSE;
 }
 
 static int getTermArray(struct sqlConnection *conn, char ***terms, char *type)
@@ -238,7 +240,7 @@ hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n
 webStartWrapperDetailedNoArgs(cart, database, "", "Track Search (prototype!)", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
-hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='hgt.currentSearchTab' value='%s'>\n", currentTab);
+hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
 
 hPrintf("<div id='tabs'>\n"
         "<ul>\n"
