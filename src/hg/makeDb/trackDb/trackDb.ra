@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.642 2010/06/08 17:59:56 baertsch Exp $";
+#	"$Id: trackDb.ra,v 1.643 2010/06/11 22:12:18 mary Exp $";
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
@@ -1578,7 +1578,7 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
 priority 100.093
-visibility hide 
+visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene

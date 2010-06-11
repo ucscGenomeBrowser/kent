@@ -1,4 +1,4 @@
-#	"$Id: trackDb.ra,v 1.124 2010/06/07 19:53:26 mary Exp $";
+#	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -1421,6 +1421,7 @@ codingAnnoLabel_snp131CodingDbSnp dbSNP
 
 track snp130 override
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
+visibility hide
 chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
