@@ -63,6 +63,7 @@ endif
 
 # copy liftOver if 32 bit
 if ("$HOST" == "$BOX32") then
+  ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/liftOver"
   scp -p ${DESTDIR}/${BINDIR}/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
 endif
 

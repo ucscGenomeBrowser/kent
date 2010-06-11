@@ -6,6 +6,9 @@ if ( "$HOST" != "hgwdev" ) then
 	exit 1
 endif
 
+# TODO confirmed with mark, this should be in hgdownload sandbox
+# after git-change-over, take care of this.
+
 hgsqldump --all -d -c -h genome-centdb hgcentral \
 sessionDb userDb | sed -e "s/genome-centdb/localhost/" > \
 /tmp/hgcentraltemp.sql
