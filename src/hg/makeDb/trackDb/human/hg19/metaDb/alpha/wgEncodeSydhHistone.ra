@@ -143,7 +143,7 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1.tagAlign.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
-lab UCD(Farnham)
+lab UCD
 parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
@@ -165,7 +165,7 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2.tagAlign.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
-lab UCD(Farnham)
+lab UCD
 parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
@@ -187,7 +187,7 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdPk.narrowPeak.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -209,7 +209,7 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdRawDataRep1.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdRawSignalRep1
 project wgEncode
@@ -232,7 +232,7 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdRawDataRep2.fastq.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdRawSignalRep2
 project wgEncode
@@ -255,7 +255,7 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdSig.bigWig.gz
 grant Snyder
 inputType NT2-D1/None/Input/std
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -596,4 +596,4 @@ tableName wgEncodeSydhHistoneNt2d1InputStdSig
 treatment None
 view Signal
 
-# MAGIC: -274977986
+# MAGIC: 1326502172
