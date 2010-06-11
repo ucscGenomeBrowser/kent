@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.136 2010/06/02 19:05:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.137 2010/06/11 22:34:53 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1861,7 +1861,7 @@ void commonCssStyles()
     printf(".hintRow {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
     //printf(".halfVis {opacity: 0.5; filters.alpha.opacity=50;}\n");   // not ready for prime time because ff and ie can't agree
     printf(".inOutButton {height:24px; width:24px; border-style: outset;}\n");
-    printf(".waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%%; width: 100%%; background-color: #fff; opacity: 0; filter: alpha(opacity = 0);}");
+    printf(".waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%%; width: 100%%; background-color: #fff; opacity: 0;}");
     puts("</style>");
 }
 
