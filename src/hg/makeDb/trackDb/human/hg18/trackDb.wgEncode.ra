@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1010 2010/06/11 10:51:19 kent Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1011 2010/06/11 21:13:51 katrina Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3416,7 +3416,6 @@ wgEncode 1
 include wgEncodeYaleChIPseq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
-include wgEncodeHudsonalphaChipSeq.new.ra
 include wgEncodeHudsonalphaChipSeq.ra
 
 
