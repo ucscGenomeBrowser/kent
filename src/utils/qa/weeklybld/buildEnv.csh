@@ -4,11 +4,10 @@ setenv LASTWEEK 2010-05-25    # v232 final
 setenv REVIEWDAY 2010-06-01      # v233 preview
 setenv LASTREVIEWDAY 2010-05-25  # v232 preview
 
-setenv GWEEKLYBLD /cluster/bin/build/buildrepo/src/utils/qa/weeklybld
-setenv WEEKLYBLD /cluster/bin/build/scripts
+setenv WEEKLYBLD /cluster/bin/build/build-kent/src/utils/qa/weeklybld
 setenv BOX32 titan
 
-setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/scratch/kentrepo.git
+setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 setenv CVSROOT /projects/compbio/cvsroot
 setenv CVS_RSH ssh
 
