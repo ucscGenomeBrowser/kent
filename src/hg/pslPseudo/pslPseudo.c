@@ -500,7 +500,7 @@ else
 axt->symCount = symCount = strlen(t);
 axt->tSym = cloneString(t);
 if (strlen(q) != symCount)
-    warn("Symbol count %d != %d inconsistent at t %s:%d and qName %s\n%s\n%s\n",
+    warn("Symbol count %d != %ld inconsistent at t %s:%d and qName %s\n%s\n%s\n",
     	symCount, strlen(q), psl->tName, psl->tStart, psl->qName, t, q);
 axt->qSym = cloneString(q);
 axt->score = axtScoreFilterRepeats(axt, ss);
@@ -598,7 +598,7 @@ if (qIsNib && psl->strand[0] == '-')
     qOffset = psl->qSize - psl->qEnd;
 else
     qOffset = 0;
-verbose(6,"qString len = %d qOffset = %d\n",strlen(qSeq->dna),qOffset);
+verbose(6,"qString len = %ld qOffset = %d\n",strlen(qSeq->dna),qOffset);
 if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
     {
     freeDnaSeq(&tSeq);
@@ -609,7 +609,7 @@ if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
     }
 if (tIsNib && psl->strand[1] == '-')
     tOffset = psl->tSize - psl->tEnd;
-verbose(6,"tString len = %d tOffset = %d\n",strlen(tSeq->dna),tOffset);
+verbose(6,"tString len = %ld tOffset = %d\n",strlen(tSeq->dna),tOffset);
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
@@ -647,8 +647,8 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     }
 
 if (strlen(q->string) != strlen(t->string))
-    warn("Symbol count(t) %d != %d inconsistent at t %s:%d and qName %s\n%s\n%s\n",
-    	strlen(t->string), strlen(q->string), psl->tName, psl->tStart, name[0], t->string, q->string);
+    warn("Symbol count(t) %ld != %ld inconsistent at t %s:%d and qName %s\n%s\n%s\n",
+    	strlen(t->string), strlen(q->string), psl->tName, psl->tStart, name, t->string, q->string);
 //if (psl->strand[0] == '-')
 //    {
 //    reverseComplement(q->string, q->stringSize);
@@ -896,7 +896,7 @@ if (pg->label == PSEUDO || pg->label == EXPRESSED)
     if (axt != NULL)
         {
         pg->axtScore = axtScoreFilterRepeats(axt, ss);
-        verbose(4,"axt Score %d q len %d t len %d \n",pg->axtScore, strlen(axt->qSym), strlen(axt->tSym));
+        verbose(4,"axt Score %d q len %ld t len %ld \n",pg->axtScore, strlen(axt->qSym), strlen(axt->tSym));
         }
     }
 
@@ -1261,11 +1261,11 @@ verbose(4, "\n");
 for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
-    unsigned qStart = psl->qStarts[iBlk];
+    int qStart = psl->qStarts[iBlk];
     unsigned size = psl->blockSizes[iBlk];
-    unsigned qEnd = psl->qStarts[iBlk]+size;
-    unsigned outQStart = outPsl->qStarts[iExon];
-    unsigned outQEnd = outPsl->qStarts[iExon]+outPsl->blockSizes[iExon];
+    int qEnd = psl->qStarts[iBlk]+size;
+    int outQStart = outPsl->qStarts[iExon];
+    int outQEnd = outPsl->qStarts[iExon]+outPsl->blockSizes[iExon];
     int tdiff = 0;
     int qdiff = 0;
     if (psl->strand[0] == '-')
@@ -1280,9 +1280,9 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
         iExon++;
         verbose(4, " tdiff %d qdiff %d=%d-%d tStart %d out tStarts[%d] %d outPsl->size %d\n",
                 tdiff, qdiff, qStart, outQEnd, tStart, iExon, outPsl->tStarts[iExon], outPsl->blockSizes[iExon]);
-        verbose(4,"  init or Not merge %s[%d] new q %d t %s %d %d size %d to %d \n", 
+        verbose(4,"  init or Not merge %s[%d] new q %d t %s %d %d size %d to %u \n", 
             psl->qName, iExon, qStart,
-            psl->tName, psl->tStarts[iBlk], tStart, outPsl->blockSizes, size);
+            psl->tName, psl->tStarts[iBlk], tStart, outPsl->blockSizes[iExon], size);
         outPsl->tStarts[iExon] = tStart;
         if (psl->strand[0] == '-')
             reverseIntRange(&qStart, &qEnd, psl->qSize);
@@ -1473,10 +1473,10 @@ if(*tStart >= *tEnd)
 assert(*tStart < *tEnd);
 if (isRepeat(psl->tName, *tStart,*tEnd,rmskHash))
     {
-    verbose(3,"    next intron ret isRpt=TRUE  %s:%d-%d %s %d-%d\n",psl->tName,*tStart, *tEnd, psl->qName, *qStart, *qEnd, psl->blockCount);
+    verbose(3,"    next intron ret isRpt=TRUE  %s:%d-%d %s %d-%d\n",psl->tName,*tStart, *tEnd, psl->qName, *qStart, *qEnd);
     return FALSE;
     }
-verbose(3,"    next intron ret isRpt=FALSE %s:%d-%d %s %d-%d\n",psl->tName,*tStart, *tEnd, psl->qName, *qStart, *qEnd, psl->blockCount);
+verbose(3,"    next intron ret isRpt=FALSE %s:%d-%d %s %d-%d\n",psl->tName,*tStart, *tEnd, psl->qName, *qStart, *qEnd);
 return TRUE;
 }
 
@@ -1633,7 +1633,7 @@ for (i = 0 ; i < gene->blockCount ; i++)
             }
         intronG = gte-gts;
         intronP = pte-pts;
-        verbose(4, " g %d-%d p %d-%d | stSlp %d + endSlp %d < slop %d inG %d inP %d",
+        verbose(4, " g %d-%d p %d-%d | stSlp %d + endSlp %d < slop %d inG %f inP %f",
                 gqs,gqe,pqs,pqe, abs(gqs-pqs), abs(gqe-pqe), slop, intronG, intronP) ;
 
         if (abs(gqs-pqs) + abs(gqe-pqe) < slop) 
@@ -2113,7 +2113,7 @@ struct dyString *iString = newDyString(16*1024);
 struct dyString *reason = newDyString(255);
 struct genePred *gp = NULL, *kg = NULL, *mgc = NULL;
 int milliMinPseudo = 1000*minAliPseudo;
-int conservedIntrons = 0;    
+//int conservedIntrons = 0;    
 //int conservedSpliceSites = 0;    
 int geneOverlap = -1;
 int polyAstart = 0;
@@ -2146,7 +2146,7 @@ pg->polyAstart = polyAstart;
 /* count # of alignments that span introns */
 pg->exonCover = pslCountExonSpan(bestPsl, psl, maxBlockGap, rmskHash, &tReps, &qReps) ;
 pg->intronCount = 0;//pslCountIntrons(bestPsl, psl, maxBlockGap, rmskHash, intronSlop, iString, &conservedIntrons, &conservedSpliceSites) ;
-pg->conservedIntrons = conservedIntrons;
+//pg->conservedIntrons = conservedIntrons;
 pg->conservedSpliceSites = countRetainedSpliceSites(bestPsl, psl , spliceDrift);
 pg->trfRatio = calcTrf(psl, trfHash);
 if (bestPsl == NULL)
@@ -2158,7 +2158,7 @@ genePredFree(&gp);
 genePredFree(&mgc); 
 if (bestPsl != NULL)
     {
-    kg = getOverlappingGene(&kgList, "knownGene", bestPsl->tName, bestPsl->tStart, 
+    kg = getOverlappingGene(db, &kgList, "knownGene", bestPsl->tName, bestPsl->tStart, 
                         bestPsl->tEnd , bestPsl->qName, &geneOverlap);
     if (kg != NULL)
         {
@@ -2173,7 +2173,7 @@ if (bestPsl != NULL)
         {
         pg->kgName = cloneString("noKg");
         }
-    gp = getOverlappingGene(&gpList1, "refGene", bestPsl->tName, bestPsl->tStart, 
+    gp = getOverlappingGene(db, &gpList1, "refGene", bestPsl->tName, bestPsl->tStart, 
                         bestPsl->tEnd , bestPsl->qName, &geneOverlap);
     if (gp != NULL)
         {
@@ -2185,7 +2185,7 @@ if (bestPsl != NULL)
         {
         pg->refSeq = cloneString("noRefSeq");
         }
-    mgc = getOverlappingGene(&gpList2, "mgcGenes", bestPsl->tName, bestPsl->tStart, 
+    mgc = getOverlappingGene(db, &gpList2, "mgcGenes", bestPsl->tName, bestPsl->tStart, 
                         bestPsl->tEnd , bestPsl->qName, &geneOverlap);
     if (mgc != NULL)
         {
@@ -2262,7 +2262,7 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
     {
         struct psl *mPsl;
         int exonOverlapCount = -1;
-        //struct genePred *gene = getOverlappingGene(&gpList1, "refGene", psl->tName, psl->tStart, 
+        //struct genePred *gene = getOverlappingGene(db, &gpList1, "refGene", psl->tName, psl->tStart, 
         //                    psl->tEnd , psl->qName, &geneOverlap);
         int maxOverlap = overlapMrna(psl, &exonOverlapCount, &mPsl);
         pg->maxOverlap = maxOverlap;
