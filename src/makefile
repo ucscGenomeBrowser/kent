@@ -7,9 +7,10 @@ alpha: clean utils-alpha cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
 
-# do a cvs update and clean
+# do a git update and clean
 update:
-	cvs update -d -P
+	git pull origin master
+	git checkout master
 	${MAKE} clean
 
 topLibs:
@@ -35,7 +36,7 @@ cgi-beta: check-beta libs
 
 check-beta:
 	# this will fail if we are not in a beta checkout:
-	cvs status makefile | egrep 'v[0-9]+_branch' > /dev/null	
+	git branch | egrep 'v[0-9]+_branch' > /dev/null	
 
 blatSuite: topLibs 
 	cd blat && ${MAKE}

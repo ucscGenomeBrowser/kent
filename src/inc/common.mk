@@ -93,6 +93,7 @@ ifeq (${STRIP},)
    STRIP=strip
 endif
 CVS=cvs
+GIT=git
 
 # portable naming of compiled executables: add ".exe" if compiled on 
 # Windows (with cygwin).

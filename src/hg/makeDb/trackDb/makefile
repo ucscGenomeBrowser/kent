@@ -14,7 +14,7 @@
 # Browser supports multiple trackDb's so that individual developers
 # can change things rapidly without stepping on other people's toes. 
 # Usually when updating it is best to update your own trackDb and
-# test it to make sure it works and that you have cvs updated all
+# test it to make sure it works and that you have git updated all
 # of trackDb/ before doing a make alpha. Note that you
 # must specify which trackDb you are using in your .hg.conf file
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
@@ -116,29 +116,29 @@ update: #clean
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
 
 alpha: clean
-	${CVS} -q up -d -P .
+	${GIT} pull origin master
 	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
 
 beta: clean
-	${CVS} -q up -d -P .
+	${GIT} pull origin master
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
 
 public: clean
-	${CVS} -q up -d -P .
+	${GIT} pull origin master
 	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
-	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
+	${GIT} branch | egrep 'v[0-9]+_branch' > /dev/null
 
 # not sure if anyone actually uses the target below. It used to be "beta".
 buildBeta: checkbeta clean strict
 
 encodeReport:
-	${CVS} -q up -d -P .
+	${GIT} pull origin master
 	./loadTracks trackDb_encodeReport hgFindSpec ${DBS}
 
 listDbs:

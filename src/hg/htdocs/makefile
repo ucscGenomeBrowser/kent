@@ -6,36 +6,36 @@ HTDOCS_USER=${HTDOCS}-${USER}
 #  - all symlinks are built by the doSymLink target
 
 
-CVS = cvs
-CVSUP = ${CVS} -q update -d -P
+GIT = git
+GITUP = ${GIT} pull origin master
 
 user:
-	${CVSUP}
+	${GITUP}
 	${MAKE} doInstall destDir=${HTDOCS_USER} extra=doSymLink
 
 alpha:
-	${CVSUP}
+	${GITUP}
 	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
 
 beta:
-	${CVSUP}
+	${GITUP}
 	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
 
 alphaCancerPublic:
-	${CVSUP} cancerGenomics index.html
+	${GITUP} cancerGenomics index.html
 	${MAKE} doInstallCancerPublic destDir=${HTDOCS} extra=doSymLink
 
 alphaCancerSU2C:
-	${CVSUP} cancerGenomics index.html
+	${GITUP} cancerGenomics index.html
 	${MAKE} doInstallCancerSU2C destDir=${HTDOCS} extra=doSymLink
 
 alphaCancerTCGA:
-	${CVSUP} cancerGenomics index.html
+	${GITUP} cancerGenomics index.html
 	${MAKE} doInstallCancerTCGA destDir=${HTDOCS} extra=doSymLink
 
 # Recursive target to do install to destDir, with extra excludes excl and
 # specific includes in incl.  The variable extra are extra targets to depend
-# on.  This queries CVS to find out the list of files to install, so avoid the
+# on.  This queries git to find out the list of files to install, so avoid the
 # usual crud that collects in directories.
 doInstall: doRsync ${extra}
 
@@ -61,7 +61,7 @@ doInstallCancerTCGA: doRsync ${extra}
 # use care in changing
 rsyncOpts = --times --recursive --executability --omit-dir-times --relative --cvs-exclude --exclude='makefile'
 doRsync:
-	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `cvsFiles` ${destDir}
+	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `gitFiles` ${destDir}
 
 # build symbolic links
 doSymLink: doRsync
