@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-CVSUP = cvs -q update 
+GITUP = git pull origin master
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
@@ -14,11 +14,11 @@ user:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
 
 alpha:
-	${CVSUP} -d -P
+	${GITUP}
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 beta:
-	${CVSUP} -d -P
+	${GITUP} 
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 clean:
