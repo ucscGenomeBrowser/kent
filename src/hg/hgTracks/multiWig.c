@@ -1,4 +1,4 @@
-/* A container for multiple wiggles. */
+/* A container for multiple wiggles with a couple of options for combining them. */
 
 #include "common.h"
 #include "hash.h"
@@ -23,7 +23,7 @@ return differentString(aggregate, WIG_AGGREGATE_NONE);
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw items in container. */
+/* Draw items in multiWig container. */
 {
 struct track *subtrack;
 char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
@@ -52,7 +52,7 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, 
 }
 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
-/* Return total height of container. */
+/* Return total height of multiWigcontainer. */
 {
 char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
 boolean overlay = isOverlayTypeAggregate(aggregate);
@@ -64,6 +64,8 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
+	// Logic is slightly complicated by fact we want to call the totalHeight
+	// method for each subtrack even if in overlay mode.
 	int oneHeight = subtrack->totalHeight(subtrack, vis);
 	if (!overlay)
 	    {
@@ -134,6 +136,7 @@ else
 }
 
 void multiWigLoadItems(struct track *track)
+/* Load multiWig items. */
 {
 containerLoadItems(track);
 struct track *subtrack;

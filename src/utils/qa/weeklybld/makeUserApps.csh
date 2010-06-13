@@ -27,18 +27,18 @@ cd $BUILDDIR/userApps
 
 echo "Checking out kent/src branch $BRANCHNN. [${0}: `date`]"
 
-cvs -d hgwdev:$CVSROOT co -r "v"$BRANCHNN"_branch" kent/src >& /dev/null
+git clone -q $GITSHAREDREPO kent
+cd kent
+git checkout -tb $dir origin/$dir
 set err = $status
 if ( $err ) then
- echo "error running cvs co kent/src in $BUILDDIR/userApps : $err [${0}: `date`]" 
+ echo "error running git clone and checkout of kent in $BUILDDIR/userApps : $err [${0}: `date`]" 
  exit 1
-endif
+endif 
+cd ..
 
 set BINDIR=linux.$MACHTYPE
-set DESTDIR=/usr/local/apache/htdocs/admin/exe/
-if ("$HOST" == "$BOX32") then
-  set DESTDIR=/tmp/
-endif
+set DESTDIR=$BUILDDIR/userApps
 rm -rf $DESTDIR/$BINDIR
 mkdir $DESTDIR/$BINDIR
 
