@@ -6,6 +6,12 @@ if ( "$HOST" != "hgwdev" ) then
 	exit 1
 endif
 
+set currentBranch=`git branch | grep master`
+if ("$currentBranch" != "* master") then
+    echo "Error: must be on master branch"
+    exit 1
+endif
+
 # This should be in hgdownload sandbox
 cd ${BUILDHOME}/build-hgdownload/admin
 git pull origin master
@@ -72,6 +78,9 @@ echo "hgcentral.sql file. To make a table in hgcentral available there"
 echo "right now, ask for it to be pushed from hgnfs1 --> hgdownload. (Or"
 echo "just wait for the automatic weekly rsync.)"
 echo
+
+git pull
+git push
 
 exit 0
 
