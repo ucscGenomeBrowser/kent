@@ -27,7 +27,7 @@ if ( "$1" == "tip" ) then
     set base=$BUILDDIR/tip
     echo "updating tip sandbox on $HOST [${0}: `date`]"
     cd $base/kent
-    cvs up -dP  >& /dev/null
+    git pull -q origin
     echo "done updating tip sandbox"
     cd $WEEKLYBLD
 else

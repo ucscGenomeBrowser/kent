@@ -27,12 +27,15 @@ endif
 mkdir -p $dir
 cd $dir
 echo "Checking out branch $BRANCHNN. [${0}: `date`]"
-cvs -d hgwdev:$CVSROOT co -r "v"$BRANCHNN"_branch"  kent >& /dev/null
+git clone -q $GITSHAREDREPO kent
+cd kent
+git checkout -tb $dir origin/$dir
 set err = $status
 if ( $err ) then
- echo "error running cvs co kent in $BUILDDIR/$dir : $err [${0}: `date`]" 
+ echo "error running git clone and checkout of kent in $BUILDDIR/$dir : $err [${0}: `date`]" 
  exit 1
 endif 
+cd ..
 
 
 # configure settings like SSL and BAM in common.mk

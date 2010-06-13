@@ -32,19 +32,21 @@ endif
 
 echo "Tagging new branch $BRANCHNN [${0}: `date`]"
 
-# rtag the new branch
-set temp = "v$BRANCHNN""_branch"
-cvs -d hgwdev:$CVSROOT rtag -FBb "$temp" kent >& /dev/null
+# tag the branch base
+#  which marks original branch point for git reports
+#  this should not fail typically so -f to force not needed
+git push origin origin:refs/tags/v${BRANCHNN}_base
 if ( $status ) then
- echo "cvs rtag failed for branch-tag $temp with new version# $BRANCHNN on $HOST [${0}: `date`]"
+ echo "git shared-repo tag failed for tag v${BRANCHNN}_base with new version# $BRANCHNN on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "new branch and tag v$BRANCHNN created. [${0}: `date`]"
+echo "new tag branch created. [${0}: `date`]"
+git fetch   # required
 
-# rtag non-branch-tag "branch" which marks original branch point for cvs reports
-cvs -d hgwdev:$CVSROOT rtag -Fa branch kent >& /dev/null
+# create the branch in the shared repo
+git push origin v${BRANCHNN}_base:refs/heads/v${BRANCHNN}_branch
 if ( $status ) then
- echo "cvs rtag failed for non-branch-tag 'branch' with new version# $BRANCHNN on $HOST [${0}: `date`]"
+ echo "git shared-repo branch creation failed for branch-tag v${BRANCHNN}_branch with new version# $BRANCHNN on $HOST [${0}: `date`]"
  exit 1
 endif
 echo "new branch and tag v$BRANCHNN created. [${0}: `date`]"
