@@ -15,13 +15,18 @@ if (! -d $JAVABUILD ) then
     mkdir $JAVABUILD
 endif    
 cd $JAVABUILD
-cvs co -d . kent/java
-if ( $status ) then
- echo "cvs check-out failed for kent/java to ${HOST}\:${JAVABUILD}"
- exit 1
-endif
 
-cd $JAVABUILD
+git clone -q $GITSHAREDREPO kent
+cd kent
+git checkout -tb $dir origin/$dir
+set err = $status
+if ( $err ) then
+ echo "error running git clone and checkout of kent in $BUILDDIR/$dir : $err [${0}: `date`]" 
+ exit 1
+endif 
+cd ..
+
+cd kent/java
 ./build
 
 echo "doJavaUtilBuild done."

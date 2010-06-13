@@ -25,21 +25,8 @@ if ( "$LASTWEEK" == "" ) then
  exit 1
 endif
 
-cd $WEEKLYBLD/hiding
-
-if ( -d cgiVersion ) then
- rm -fr cgiVersion
-endif
-
-cvs -d hgwdev:$CVSROOT co -d cgiVersion kent/src/hg/inc/versionInfo.h
-if ( $status ) then
- echo "cvs check-out failed for versionInfo.h on $HOST [${0}: `date`]"
- exit 1
-endif
-
-
-
-cd cgiVersion
+cd $WEEKLYBLD
+cd ../../../../src/hg/inc/
 
 echo "Current version:"
 cat versionInfo.h
@@ -59,12 +46,14 @@ set temp = "#define CGI_VERSION "'"'"$BRANCHNN"'"'
 echo $temp > versionInfo.h
 cat versionInfo.h
 set temp = '"'"New version number v$BRANCHNN"'"'
-cvs commit -m "$temp" versionInfo.h
+git add versionInfo.h
+git commit -m "$temp" versionInfo.h
+git push origin master
 if ( $status ) then
- echo "cvs commit failed for versionInfo.h with new version# on $HOST [${0}: `date`]"
+ echo "git commit failed for versionInfo.h with new version# on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "cvs commit done for versionInfo.h with new version# on $HOST [${0}: `date`]"
+echo "git commit done for versionInfo.h with new version# on $HOST [${0}: `date`]"
 
 exit 0
 
