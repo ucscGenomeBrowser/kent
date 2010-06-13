@@ -4,7 +4,8 @@ setenv LASTWEEK 2010-05-25    # v232 final
 setenv REVIEWDAY 2010-06-01      # v233 preview
 setenv LASTREVIEWDAY 2010-05-25  # v232 preview
 
-setenv WEEKLYBLD /cluster/bin/build/build-kent/src/utils/qa/weeklybld
+setenv BUILDHOME /cluster/bin/build
+setenv WEEKLYBLD ${BUILDHOME}/build-kent/src/utils/qa/weeklybld
 setenv BOX32 titan
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
