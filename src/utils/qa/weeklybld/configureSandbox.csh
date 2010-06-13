@@ -27,7 +27,7 @@ endif
 
 cd $1
 if (! -e kent/src/inc/common.mk) then
-  cwd
+  pwd
   echo "unexpected error kent/src/inc/common.mk not found!"
   exit 1
 endif
