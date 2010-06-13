@@ -32,19 +32,18 @@ endif
 
 echo "Tagging beta tag to branch $BRANCHNN [${0}: `date`]"
 
-# new way (faster, but does it work? attic files ok?):
-cvs -d hgwdev:$CVSROOT rtag -Fa -rv${BRANCHNN}_branch beta kent >& /dev/null
-# old way (works but slower)
-#cvs -d hgwdev:$CVSROOT rtag -da beta kent >& /dev/null
-#cvs -d hgwdev:$CVSROOT rtag -rv${BRANCHNN}_branch beta kent >& /dev/null
+git tag -d beta   # delete local tag
+git push origin :beta   # delete old beta tag on shared repo
+git push origin origin/v225_branch:refs/tags/beta   # create new tag at current branch tip
 if ( $status ) then
- echo "cvs rtag failed for beta tag with new version# $BRANCHNN on $HOST [${0}: `date`]"
+ echo "git shared-repo tag failed for beta tag with branch $BRANCHNN on $HOST [${0}: `date`]"
  exit 1
 endif
+git fetch
 
 echo "1" > pushedToRR.flag
 
-echo "beta regular tag moved to the new branch v$BRANCHNN. [${0}: `date`]"
+echo "beta tag moved to the new branch v$BRANCHNN. [${0}: `date`]"
 
 exit 0
 
