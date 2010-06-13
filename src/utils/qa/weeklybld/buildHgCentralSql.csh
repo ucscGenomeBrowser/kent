@@ -6,8 +6,9 @@ if ( "$HOST" != "hgwdev" ) then
 	exit 1
 endif
 
-# TODO confirmed with mark, this should be in hgdownload sandbox
-# after git-change-over, take care of this.
+# This should be in hgdownload sandbox
+cd ${BUILDHOME}/build-hgdownload/admin
+git pull origin master
 
 hgsqldump --all -d -c -h genome-centdb hgcentral \
 sessionDb userDb | sed -e "s/genome-centdb/localhost/" > \
@@ -29,7 +30,7 @@ sed -e "s/AUTO_INCREMENT=[0-9]* //" > \
 
 echo
 echo "*** Diffing old new ***"
-diff /usr/local/apache/htdocs/admin/hgcentral.sql /tmp/hgcentral.sql
+diff hgcentral.sql /tmp/hgcentral.sql
 if ( ! $status ) then
 	echo
 	echo "No differences."
@@ -44,15 +45,12 @@ if ( "$1" != "real" ) then
 	exit 0
 endif 
 
-rm /usr/local/apache/htdocs/admin/hgcentral.sql
-cp -p /tmp/hgcentral.sql /usr/local/apache/htdocs/admin/hgcentral.sql
-rm hiding/hgcent/hgcentral.sql
-cp -p /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
-cd hiding/hgcent
+rm hgcentral.sql
+cp -p /tmp/hgcentral.sql hgcentral.sql
 set temp = '"'"v${BRANCHNN}"'"'
-cvs -d hgwdev:/projects/compbio/cvsroot commit -m $temp  hgcentral.sql
+git commit -m $temp hgcentral.sql
 if ( $status ) then
-	echo "error during cvs commit of hgcentral.sql."
+	echo "error during git commit of hgcentral.sql."
 	exit 1
 endif
 
