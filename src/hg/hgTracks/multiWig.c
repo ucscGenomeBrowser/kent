@@ -1,4 +1,4 @@
-/* A container for multiple wiggles. */
+/* A container for multiple wiggles with a couple of options for combining them. */
 
 #include "common.h"
 #include "hash.h"
