@@ -6,3 +6,5 @@ all:
 	cd moresyn && ${MAKE}
 	cd gb2cdi && ${MAKE}
 	cd wabToSt && ${MAKE}
+
+clean::

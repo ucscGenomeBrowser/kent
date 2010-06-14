@@ -10,3 +10,6 @@ install: primeMate.exe
 	chmod a+rx primeMate.exe
 	chmod g-w primeMate.exe
 	mv primeMate.exe ${CGI_BIN}/
+
+clean::
+	rm -f primeMate.exe ${O} ${AOUT}
