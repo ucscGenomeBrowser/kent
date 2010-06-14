@@ -3239,6 +3239,7 @@ orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
 lab Snyder
 targetId GeneCard:GC17M037718
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC17M037718ss
+validation missing
 
 term SUZ12
 tag SUZ12
