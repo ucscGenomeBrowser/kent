@@ -1,7 +1,25 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
-# Cell types
+# Cell types, template below
+#term (human-readable cell type name)
+#tag (machine-readable cell type name, no special characters)
+#type (informs pipeline code of stanza type.  Should always be Cell Line)
+#organism (used by pipeline in ways I don't fully understand.  Should be human)
+#description (human-readable description of cell type, for cell type cellTypes.html)
+#tissue (general tissue type, for categorizing cell types)
+#vendorName (name of vendor or lab that provides these cells)
+#vendorId (the ID of the cell type goes by in the vendor's catalog)
+#orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
+#karyotype (human-readable karyotype, for .html page)
+#lineage (human-readable source of cell lines, e.g. 18 year old male)
+#termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
+#termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
+#color (specifies color code for track data of this cell type, rgb values)
+#sex (M, F, B, or U.  If "F", then the track data shouldn't contain chrY)
+#tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html
+#protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
+
 term GM12878
 tag GM12878
 type Cell Line
@@ -1925,17 +1943,17 @@ term CH12
 tag CH12
 type Cell Line
 organism Mouse
-tissue Unknown
+tissue Blood
 Category L
-description
-vendorName
-vendorId
-orderUrl
-termId
-termUrl
+description B-cell lymphoma
+vendorName Weissman lab
+vendorId 
+orderUrl (Contact Sherman Weissman)
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-protocol (provisional)
+protocol CH12_Weissman_protocol.pdf
 
 term MEL
 tag MEL
