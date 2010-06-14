@@ -3228,6 +3228,18 @@ targetId GeneCard:GC12M055021
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M055021
 validation missing
 
+term STAT3
+tag STAT3
+type Antibody
+targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis. 
+antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin 
+vendorName Santa Cruz Biotech
+vendorId sc-482
+orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
+lab Snyder
+targetId GeneCard:GC17M037718
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC17M037718ss
+
 term SUZ12
 tag SUZ12
 type Antibody
