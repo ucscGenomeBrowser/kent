@@ -16,4 +16,6 @@ cgi: $(O)
 	chmod 755 ameme.exe
 	mv ameme.exe $(HOME)/.html/cgi-bin
 
+clean::
+	rm -f ${O} ${AOUT} ameme.exe
 

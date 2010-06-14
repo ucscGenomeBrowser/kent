@@ -10,3 +10,5 @@ aladdin.exe: $(O)
 push:	
 	mv aladdin.exe ${CGI_BIN}-${USER}
 
+clean::
+	rm -f aladdin.exe
