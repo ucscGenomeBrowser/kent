@@ -14,3 +14,6 @@ dnadust.exe: $(O)
 push:
 	mv dnadust.exe ${CGI_BIN}-${USER}
 
+
+clean::
+	rm -f ${O} dnadust.exe ${AOUT}

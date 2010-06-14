@@ -10,3 +10,6 @@ hitreport: $(O)
 
 push:	
 	mv hitreport.exe ${CGI_BIN}-${USER}
+
+clean::
+	rm -f ${O} ${AOUT} hitreport.exe

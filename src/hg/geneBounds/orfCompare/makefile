@@ -10,7 +10,7 @@ orfCompare: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/orfCompare $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/orfCompare${EXE}
 
-test:
+test:	orfCompare
 	orfCompare inA.orf inB.orf > out.txt
 	diff expected.txt out.txt
 
