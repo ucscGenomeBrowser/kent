@@ -12,3 +12,6 @@ push:
 
 lib: 
 	cd ../lib && ${MAKE}
+
+clean::
+	rm -f ${O} scanIntrons.exe ${AOUT}

@@ -14,3 +14,5 @@ idbQuery.exe: $(O)
 push:
 	mv idbQuery.exe ${CGI_BIN}-${USER}
 
+clean::
+	rm -f ${O} idbQuery.exe ${AOUT}

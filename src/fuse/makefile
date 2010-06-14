@@ -15,3 +15,6 @@ all:
 alpha: all
 
 # clean would be redundant with top-level makefile's (find & rm .o's)
+
+clean::
+	rm -f ${O}
