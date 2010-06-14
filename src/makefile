@@ -9,8 +9,7 @@ beta: check-beta clean cgi-beta
 
 # do a git update and clean
 update:
-	git pull origin master
-	git checkout master
+	git pull -q
 	${MAKE} clean
 
 topLibs:

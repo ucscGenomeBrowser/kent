@@ -4,9 +4,7 @@ include ../../inc/common.mk
 # make SCRIPTS=/cluster/bin/scripts
 
 install:
-
-	${GIT} pull origin master
-	${GIT} checkout master
+	${GIT} pull -q
 	cp -p --remove-destination activeGenbank.csh       ${SCRIPTS}
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
