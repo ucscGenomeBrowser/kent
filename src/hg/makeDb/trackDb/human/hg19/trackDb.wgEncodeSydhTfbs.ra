@@ -94,16 +94,6 @@ wgEncode 1
 	    color 0,119,158
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1177 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Irf3IggrabPk fileName=wgEncodeSydhTfbsHelas3Irf3IggrabPk.narrowPeak.gz
 
-	    track wgEncodeSydhTfbsHepg2Irf3IggrabPk
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HepG2   IRF3  Pk
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF3 in HepG2 cells)
-	    subGroups view=Peaks factor=IRF3 cellType=HepG2 control=IGGrab treatment=aNone
-	    type narrowPeak
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1144 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Irf3IggrabPk fileName=wgEncodeSydhTfbsHepg2Irf3IggrabPk.narrowPeak.gz
-
 	    track wgEncodeSydhTfbsHepg2CjunIggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
@@ -349,16 +339,6 @@ wgEncode 1
 	    color 0,119,158
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=Input treatment=None control=UCDavis setType=input inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1140 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3InputUcdSig fileName=wgEncodeSydhTfbsHelas3InputUcdSig.bigWig.gz
 
-
-	    track wgEncodeSydhTfbsHepg2Irf3IggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   IRF3  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HepG2 cells)
-	    subGroups view=Signal factor=IRF3 cellType=HepG2 control=IGGrab treatment=aNone
-	    type bigWig 1 11152
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1144 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Irf3IggrabSig fileName=wgEncodeSydhTfbsHepg2Irf3IggrabSig.bigWig.gz
 
 	    track wgEncodeSydhTfbsHepg2CjunIggrabSig
 	    release alpha
