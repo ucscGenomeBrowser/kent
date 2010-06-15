@@ -9649,3 +9649,16 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# Add KEGG column to mm8 Gene Sorter (Done, Fan, 6/15/2010)
+
+mkdir -p /hive/data/genomes/mm8/bed/geneSorter
+cd /hive/data/genomes/mm8/bed/geneSorter
+hgsql mm8 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+hgsql mm8 -e 'drop table knownToKeggEntrez'
+
+hgsql mm8 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+hgsql mm8 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
+#############################################################################
