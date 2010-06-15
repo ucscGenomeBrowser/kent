@@ -27,8 +27,8 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     jointalign.o jpegSize.o keys.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o metaWig.o mgCircle.o \
     mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
-    obscure.o oldGff.o oligoTm.o options.o osunix.o \
-    pairHmm.o phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
+    obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o peakCluster.o \
+    phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
     ra.o rbTree.o rangeTree.o repMask.o rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \

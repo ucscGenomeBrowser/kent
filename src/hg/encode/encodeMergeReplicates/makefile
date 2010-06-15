@@ -1,0 +1,29 @@
+include ../../../inc/common.mk
+
+L += -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
+
+A = encodeMergeReplicates
+O = encodeMergeReplicates.o
+
+encodeMergeReplicates: ${O} ${MYLIBS}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O}
+	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
+
+clean::
+	rm -f ${A}${EXE} ${O}
+
+test: rep1Rep2Default	rep1Rep2Agree
+	@echo done tests
+
+rep1Rep2Default:
+	encodeMergeReplicates rep1.narrowPeak rep2.narrowPeak outRep1Rep2Default.narrowPeak
+	diff expRep1Rep2Default.narrowPeak outRep1Rep2Default.narrowPeak
+
+rep1Rep2Agree:
+	encodeMergeReplicates -agree=2 rep1.narrowPeak rep2.narrowPeak outRep1Rep2Agree.narrowPeak
+	diff expRep1Rep2Agree.narrowPeak outRep1Rep2Agree.narrowPeak

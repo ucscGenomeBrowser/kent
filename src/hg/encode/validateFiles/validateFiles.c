@@ -1124,7 +1124,9 @@ struct bamCallbackData
     char *file;
     char *chrom;
     int *errs;
-    int count;
+    int numAligns;
+    int numNeg;
+    int numPos;
     };
 
 boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, unsigned int *cigarPacked, int nCigar)
@@ -1247,14 +1249,19 @@ const bam1_core_t *core = &bam->core;
 unsigned int *cigarPacked = bam1_cigar(bam);
 char *query = bamGetQuerySequence(bam, FALSE);
 char strand = bamIsRc(bam) ? '-' : '+';
+bd->numAligns++;
+
+if (core->flag &  BAM_FUNMAP)
+    // read is unmapped... ignore
+    return 0;
 
 if (bam->core.l_qseq == 0)
     {
-    warn("zero length sequence on line %d\n", bd->count);
+    warn("zero length sequence on line %d\n", bd->numAligns);
     if (++(*errs) >= maxErrors)
         errAbort("Aborting .. found %d errors\n", *errs);
     }
-else if (! checkCigarMismatches(file, bd->count, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
+else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
     warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
@@ -1263,7 +1270,10 @@ else if (! checkCigarMismatches(file, bd->count, chrom, bam->core.pos, strand, q
         errAbort("Aborting .. found %d errors\n", *errs);
     }
     
-bd->count++;
+if (strand == '+')
+    bd->numPos++;
+else
+    bd->numNeg++;
 return 0;
 }
 
@@ -1325,7 +1335,7 @@ AllocVar(bd);
 
 bd->file = file;
 bd->errs = &errs;
-bd->count = 0;
+bd->numPos = bd->numNeg = 0;
 
 for(ii=0; ii < head->n_targets; ii++)
     {
@@ -1338,7 +1348,8 @@ for(ii=0; ii < head->n_targets; ii++)
     ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
 
     }
-    verbose(2,"final count %d\n", bd->count);
+verbose(2,"number of BAM alignments %d pos %d neg %d\n", 
+    bd->numAligns, bd->numPos, bd->numNeg );
 
 return errs;
 }

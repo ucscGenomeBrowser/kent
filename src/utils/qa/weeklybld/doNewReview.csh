@@ -46,31 +46,33 @@ if ( "$1" != "real" ) then
 	exit 0
 endif 
 
+@ NEXTNN = ( $BRANCHNN + 1 )
 echo
-echo "Now beginning to build new branch $BRANCHNN [${0}: `date`]"
+echo "Now beginning to build preview of branch $NEXTNN [${0}: `date`]"
 
 echo
 
 #echo debug: disabled tagging
-./tagReview.csh real
+./tagPreview.csh real
 if ( $status ) then
- echo "tagReview.csh failed on $HOST [${0}: `date`]"
+ echo "tagPreview.csh failed on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "tagReview.csh done on $HOST [${0}: `date`]"
-echo "tag review moved to HEAD."
+echo "tagPreview.csh done on $HOST [${0}: `date`]"
+echo "tag preview moved to HEAD."
 
 #echo debug: disabled buildCvsReports
-ssh -n hgwdev "$WEEKLYBLD/buildCvsReports.csh review real"
+ssh -n hgwdev "$WEEKLYBLD/buildGitReports.csh review real"
 if ( $status ) then
  echo "buildCvsReports.csh  failed on hgwdev [${0}: `date`]"
  exit 1
 endif
 
-@ NEXTNN = ( $BRANCHNN + 1 )
 
 echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
-echo "Ready for pairings, day 2, CVS reports completed for v${NEXTNN} preview http://genecats.cse.ucsc.edu/cvs-reports/ (history at http://genecats.cse.ucsc.edu/cvs-reports-history/)." | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." $USER donnak kuhn pauline ann
+
+echo debug: disabled sending email
+echo "Ready for pairings, day 2, Git reports completed for v${NEXTNN} preview http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." $USER donnak kuhn pauline ann
 
 
 #---------------------
