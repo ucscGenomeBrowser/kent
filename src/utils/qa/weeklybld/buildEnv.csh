@@ -29,7 +29,6 @@ if ( "$HOST" == "hgwbeta" ) then
     setenv BUILDDIR /data/releaseBuild
 endif
 if ( "$HOST" == "hgwdev" ) then
-    setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
     # see also paths in kent/java/build.xml
     setenv JAVABUILD /scratch/javaBuild
     setenv JAVA_HOME /usr/java/default
