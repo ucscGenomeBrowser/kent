@@ -52,13 +52,13 @@ echo "Now beginning to build new branch $BRANCHNN [${0}: `date`]"
 echo
 
 #echo debug: disabled tagging
-./tagReview.csh real
+./tagPreview.csh real
 if ( $status ) then
- echo "tagReview.csh failed on $HOST [${0}: `date`]"
+ echo "tagPreview.csh failed on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "tagReview.csh done on $HOST [${0}: `date`]"
-echo "tag review moved to HEAD."
+echo "tagPreview.csh done on $HOST [${0}: `date`]"
+echo "tag preview moved to HEAD."
 
 #echo debug: disabled buildCvsReports
 ssh -n hgwdev "$WEEKLYBLD/buildCvsReports.csh review real"
