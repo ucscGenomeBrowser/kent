@@ -100,7 +100,7 @@ struct commit* getCommits()
 {
 int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
-"git log origin/%s..origin/%s --name-status > commits.tmp"
+"git log %s..%s --name-status > commits.tmp"
 , startTag, endTag);
 runShell(gitCmd);
 struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);
