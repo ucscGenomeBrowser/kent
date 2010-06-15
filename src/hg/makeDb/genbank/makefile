@@ -16,11 +16,15 @@ clean: ${SUBDIRS:%=%.subclean}
 install-server: all
 	${MAKE} install PREFIX=/cluster/data/genbank
 
+etc-update-server:
+	${MAKE} install-etc PREFIX=/cluster/data/genbank
+etc-update: etc-update-server # old name
+
 install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad all
 	${MAKE} install PREFIX=/genbank
 
-etc-update:
-	${MAKE} install-etc PREFIX=/cluster/data/genbank
+etc-update-rr:
+	${MAKE} install-etc PREFIX=/genbank
 
 # Install built files.  The etc directory is maintained using CVS, so
 # any changes must be committed (and this is checked).
@@ -33,10 +37,11 @@ install-bin: check-prefix all
 
 install-etc: check-prefix
 	@echo checking if etc/ is committed
-	@(cvs stat etc | fgrep Locally) || exit 0 && (echo "Error: etc/ files need committed" && exit 1)
+	@if [[ $$(git diff --name-only -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has files that need committed"; exit 1; fi
+	@if [[ $$(git diff --cached --name-only -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has staged, uncommited files that need committed"; exit 1; fi
+	@if [[ $$(git diff --name-only origin -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has changes that need to be pushed"; exit 1; fi
 	${MKDIR} ${PREFIX}/etc
-	test -e ${PREFIX}/etc/CVS || cp -r etc/CVS ${PREFIX}/etc
-	(cd ${PREFIX}/etc && cvs update -d)
+	umask 002; rsync  --times --recursive --executability --omit-dir-times --relative `gitFiles etc` ${PREFIX}/etc
 
 check-prefix:
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)

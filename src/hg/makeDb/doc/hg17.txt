@@ -24716,3 +24716,16 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# Add KEGG column to hg17 Gene Sorter (Done, Fan, 6/15/2010)
+
+mkdir -p /hive/data/genomes/hg17/bed/geneSorter
+cd /hive/data/genomes/hg17/bed/geneSorter
+hgsql hg17 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+hgsql hg17 -e 'drop table knownToKeggEntrez'
+
+hgsql hg17 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+hgsql hg17 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
+#############################################################################
