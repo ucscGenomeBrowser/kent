@@ -41,7 +41,7 @@ echo
 echo "now building Git reports on $HOST. [${0}: `date`]"
 
 @ NEXTNN=$BRANCHNN + 1
-set branchTag="v${BRANCHNN}_branch"  # !!!!! TODO soon to change it to "v${BRANCHNN}_base"
+set branchTag="origin/v${BRANCHNN}_branch"  # !!!!! TODO soon to change it to "v${BRANCHNN}_base without origin/"
 set reviewTag="v${NEXTNN}_preview"
 
 if ( "$BRANCHNN" == "" ) then
@@ -69,7 +69,7 @@ endif
 
 set GIT_REPORTS_BASE=/hive/groups/qa/cvs-reports-latest
 
-set GIT_REPORTS_ROOT=/hive/groups/qa/
+set GIT_REPORTS_ROOT=/hive/groups/qa
 cd $GIT_REPORTS_ROOT
 
 if ( "$mode" == "review") then
@@ -107,7 +107,7 @@ echo "Using history dir $PWD/$GIT_REPORT_HIST/ and symlink cvs-reports-latest on
 cd $WEEKLYBLD
 
 if ( "$mode" == "review") then
-    set cmd="git-reports $branchTag $reviewTag $TODAY $REVIEWDAY v${NEXTNN} ${BUILDHOME}/build-kent ${GIT_REPORT_HIST} review"
+    set cmd="git-reports $branchTag $reviewTag $TODAY $REVIEWDAY v${NEXTNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review"
     echo "$cmd"
     $cmd
     if ( $status ) then
@@ -115,7 +115,7 @@ if ( "$mode" == "review") then
         exit 1
     endif
 else    
-    set cmd="git-reports $reviewTag $branchTag $REVIEWDAY $TODAY v${BRANCHNN} ${BUILDHOME}/build-kent ${GIT_REPORT_HIST} branch"
+    set cmd="git-reports $reviewTag $branchTag $REVIEWDAY $TODAY v${BRANCHNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} branch"
     echo "$cmd"
     $cmd
     if ( $status ) then
