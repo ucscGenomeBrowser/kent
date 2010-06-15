@@ -24,11 +24,9 @@ setenv USE_BAM 1
 
 if ( "$HOST" == "$BOX32" ) then
     setenv BUILDDIR /scratch/releaseBuild
-    setenv GBUILDDIR /scratch/gReleaseBuild
 endif
 if ( "$HOST" == "hgwbeta" ) then
     setenv BUILDDIR /data/releaseBuild
-    setenv GBUILDDIR /data/gReleaseBuild
 endif
 if ( "$HOST" == "hgwdev" ) then
     setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
