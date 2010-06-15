@@ -66,11 +66,10 @@ for (range = rangeList; range != NULL; range = range->next)
         {
 	struct slRef *ref, *refList=cluster->itemRefList;
 	++clusterIx;
-	struct peakItem *item = refList->val;
 	struct hash *uniqHash = hashNew(0);
 	for (ref = refList; ref != NULL; ref = ref->next)
 	    {
-	    item = ref->val;
+	    struct peakItem *item = ref->val;
 	    hashStore(uniqHash, item->source->dataSource);
 	    fprintf(fCluster, "%d\t%s\t", clusterIx, item->chrom);
 	    fprintf(fCluster, "%d\t%d\t", item->chromStart, item->chromEnd);
