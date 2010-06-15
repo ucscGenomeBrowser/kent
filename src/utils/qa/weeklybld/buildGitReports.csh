@@ -62,12 +62,12 @@ if ( "$2" != "real" ) then
 	exit 0
 endif 
 
-# Keep a history of git-reports by creating a new directory, and setting a symlink (cvs-reports-latest) to it. 
+# Keep a history of git-reports by creating a new directory, and setting a symlink (git-reports-latest) to it. 
 # The webserver has symlinks to the latest one and the history:
-#   /usr/local/apache/htdocs-genecats/cvs-reports -> /hive/groups/qa/cvs-reports-latest
-#   /usr/local/apache/htdocs-genecats/cvs-reports-history -> /hive/groups/qa/cvs-reports-history
+#   /usr/local/apache/htdocs-genecats/git-reports -> /hive/groups/qa/git-reports-latest
+#   /usr/local/apache/htdocs-genecats/git-reports-history -> /hive/groups/qa/git-reports-history
 
-set GIT_REPORTS_BASE=/hive/groups/qa/cvs-reports-latest
+set GIT_REPORTS_BASE=/hive/groups/qa/git-reports-latest
 
 set GIT_REPORTS_ROOT=/hive/groups/qa
 cd $GIT_REPORTS_ROOT
@@ -75,7 +75,7 @@ cd $GIT_REPORTS_ROOT
 if ( "$mode" == "review") then
     # Preview is for BRANCHNN+1
     # Make the history directories and change the 'latest' link
-    set GIT_REPORT_HIST=cvs-reports-history/v${NEXTNN}
+    set GIT_REPORT_HIST=git-reports-history/v${NEXTNN}
     if ( ! -d $GIT_REPORT_HIST ) then
         mkdir $GIT_REPORT_HIST
         if ( $status ) then
@@ -88,7 +88,7 @@ if ( "$mode" == "review") then
     endif
 else
     # For branches, history is BRANCHNN
-    set GIT_REPORT_HIST=cvs-reports-history/v${BRANCHNN}
+    set GIT_REPORT_HIST=git-reports-history/v${BRANCHNN}
 endif
 # check history dir exists
 if ( ! -d $GIT_REPORT_HIST ) then
@@ -96,13 +96,13 @@ if ( ! -d $GIT_REPORT_HIST ) then
     exit 1
 endif
 # check the 'lastest' link points to right place
-rm cvs-reports-latest
-ln -s $GIT_REPORT_HIST cvs-reports-latest
-if ( -L cvs-reports-latest != "${GIT_REPORT_HIST}" ) then
-    echo "Error: [mode=$mode] could not make symlink [cvs-reports-latest -> $GIT_REPORTS_ROOT/$GIT_REPORT_HIST] on $HOST [${0}: `date`]"
+rm git-reports-latest
+ln -s $GIT_REPORT_HIST git-reports-latest
+if ( -L git-reports-latest != "${GIT_REPORT_HIST}" ) then
+    echo "Error: [mode=$mode] could not make symlink [git-reports-latest -> $GIT_REPORTS_ROOT/$GIT_REPORT_HIST] on $HOST [${0}: `date`]"
     exit 1
 endif
-echo "Using history dir $PWD/$GIT_REPORT_HIST/ and symlink cvs-reports-latest on $HOST [${0}: `date`]"
+echo "Using history dir $PWD/$GIT_REPORT_HIST/ and symlink git-reports-latest on $HOST [${0}: `date`]"
 
 cd $WEEKLYBLD
 
@@ -128,18 +128,18 @@ echo "git-reports done on $HOST [${0}: `date`]"
 
 cd $WEEKLYBLD
 
-# fix main report page /cvs-reports/index.html to have dates
-cd /usr/local/apache/htdocs-genecats/cvs-reports/
-echo "<html><head><title>cvs-reports</title></head><body>" > index.html
+# fix main report page /git-reports/index.html to have dates
+cd /usr/local/apache/htdocs-genecats/git-reports/
+echo "<html><head><title>git-reports</title></head><body>" > index.html
 echo "<h1>GIT changes: kent</h1>" >> index.html
 echo "<ul>" >> index.html
 if ( "$mode" == "review") then
     echo "<li><a href="review/index.html">Design/Review - Day 2 - v$NEXTNN</a> ($TODAY to $REVIEWDAY)" >> index.html
-    echo "<li><a href="/cvs-reports-history/">Previous versions</a> " >> index.html
+    echo "<li><a href="/git-reports-history/">Previous versions</a> " >> index.html
 else
     echo "<li><a href="branch/index.html">Biweekly Branch - Day 9 - v$BRANCHNN</a> ($REVIEWDAY to $TODAY)" >> index.html
     echo "<li><a href="review/index.html">Design/Review - Day 2 - v$BRANCHNN</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
-    echo "<li><a href="/cvs-reports-history/">Previous versions</a>" >> index.html
+    echo "<li><a href="/git-reports-history/">Previous versions</a>" >> index.html
 endif    
 echo "</body></html>" >> index.html
 cd $WEEKLYBLD
