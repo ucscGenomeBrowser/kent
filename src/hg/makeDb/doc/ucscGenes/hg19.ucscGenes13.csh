@@ -152,9 +152,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     endif
 end
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 
 # Get list of accessions that are associated with antibodies from database.
 # This will be a good list but not 100% complete.  Cluster these to get
@@ -213,8 +210,9 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 
 # Create an evidence weight file
@@ -255,9 +253,12 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
 end
 
 
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Clean up all but final other.txg
 rm -r est mrna refSeq
+
 
 # Unpack chains and nets, apply synteny filter and split by chromosome
 # Takes 5 minutes.  Make up phony empty nets for ones that are empty after
