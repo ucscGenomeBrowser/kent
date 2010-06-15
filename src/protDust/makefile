@@ -9,3 +9,6 @@ protDust.exe: $(O)
 
 push:	
 	mv protDust.exe ${CGI_BIN}-${USER}
+
+clean::
+	rm -f ${O} protDust.exe ${AOUT}

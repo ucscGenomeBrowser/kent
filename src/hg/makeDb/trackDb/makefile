@@ -116,29 +116,29 @@ update: #clean
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
 
 alpha: clean
-	${GIT} pull origin master
+	${GIT} pull -q
 	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
 
 beta: clean
-	${GIT} pull origin master
+	${GIT} pull -q
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
 
 public: clean
-	${GIT} pull origin master
+	${GIT} pull -q
 	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
-	${GIT} branch | egrep 'v[0-9]+_branch' > /dev/null
+	${GIT} branch | egrep '^[*] v[0-9]+_branch' > /dev/null
 
 # not sure if anyone actually uses the target below. It used to be "beta".
 buildBeta: checkbeta clean strict
 
 encodeReport:
-	${GIT} pull origin master
+	${GIT} pull -q
 	./loadTracks trackDb_encodeReport hgFindSpec ${DBS}
 
 listDbs:
