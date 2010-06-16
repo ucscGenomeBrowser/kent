@@ -3849,11 +3849,10 @@ tag BB2
 type mapAlgorithm
 description bowtie0.10.0 followed by blat v34
 
-
-term TopHat
-tag topHat
+term TH1014
+tag TH1014
 type mapAlgorithm
-description TopHat 
+description TopHat 1.0.14 
 
 ### readType
 # term (human-readable read type name)
