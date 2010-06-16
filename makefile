@@ -19,8 +19,8 @@ O = $(EXE).o
 $(EXE): $O 
 	gcc $O $(MYLIBS) $L -o $(EXE)
 	chmod a+rx $(EXE)
-	#strip $(EXE)
-	#cp $(EXE) $(HOME)/bin/$(MACHTYPE)
+	strip $(EXE)
+	cp $(EXE) $(HOME)/bin/$(MACHTYPE)
 	
 
 test: $(EXE)

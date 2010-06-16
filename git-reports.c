@@ -129,7 +129,19 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     if (!sameString("Author:", w))
 	errAbort("expected keyword Author: parsing commits.tmp\n");
-    commit->author = cloneString(nextWord(&line));
+
+    /* by request, keep just the email account name */
+    char *lc = strchr(line, '<');
+    if (!lc)
+	errAbort("expected '<' char in email address in Author: parsing commits.tmp\n");
+    ++lc;
+    char *rc = strchr(lc, '>');
+    if (!rc)
+	errAbort("expected '>' char in email address in Author: parsing commits.tmp\n");
+    char *ac = strchr(lc, '@');
+    if (ac)
+	rc = ac;
+    commit->author = cloneStringZ(lc, rc-lc);
 
     lineFileNext(lf, &line, &lineSize);
     w = nextWord(&line);
