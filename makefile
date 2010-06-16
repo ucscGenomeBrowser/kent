@@ -1,27 +1,21 @@
+include ../kent/src/inc/common.mk
 
-JKSRCDIR = ../../kent/src
-JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
+L += -lm ${SOCKETLIB}
+MYLIBDIR = ../kent/src/lib/${MACHTYPE}
+MYLIBS = $(MYLIBDIR)/jkweb.a 
 
-EXE = git-reports
+A = git-reports
 
-.c.o:
-	gcc -ggdb -Wimplicit -DDEBUG -Wall -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
+O = $(A).o
 
-L = $(MYSQLLIBS) -lm
-MYLIBS = $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a 
+$(A): ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
+clean::
+	rm -f ${O} *.tmp
 
-all: $(EXE)
-
-
-O = $(EXE).o
-
-$(EXE): $O 
-	gcc $O $(MYLIBS) $L -o $(EXE)
-	chmod a+rx $(EXE)
-	strip $(EXE)
-	cp $(EXE) $(HOME)/bin/$(MACHTYPE)
-	
 
 test: $(EXE)
 	rm -fr ${HOME}/public_html/git-reports
@@ -29,14 +23,5 @@ test: $(EXE)
 	$(EXE) origin/v223_branch origin/v224_branch 2010-01-05 2010-01-19 v224 /cluster/bin/build/buildrepo ${HOME}/public_html/git-reports branch
 	# note can use -verbose=2
 
-backup:
-	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(EXE)%s.zip *\n",$$1);}' > tempX
-	chmod 755 tempX
-	./tempX
-	rm tempX 
-	scp *.zip screech:/scratch/backups/
-	rm *.zip
 
-clean:
-	rm -f *.o $(EXE) *.tmp
 
