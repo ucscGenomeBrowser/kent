@@ -1,4 +1,5 @@
-/* peakCluster - cluster peak calls from different sources. */
+/* peakCluster - cluster peak calls from different sources. Used by regCluster
+ * and encodeMergeReplicates programs. */
 
 #include "common.h"
 #include "hash.h"
