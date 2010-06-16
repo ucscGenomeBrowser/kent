@@ -10,3 +10,6 @@ install: getgene.exe
 	chmod a+rx getgene.exe
 	chmod g-w getgene.exe
 	mv getgene.exe ${CGI_BIN}/
+
+clean::
+	rm -f getgene.exe ${O} ${AOUT}

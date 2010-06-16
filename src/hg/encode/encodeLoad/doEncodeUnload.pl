@@ -57,6 +57,29 @@ sub unloadWig
     }
 }
 
+sub unloadBam
+{
+    my ($assembly, $db, $tableName) = @_;
+    $db->dropTableIfExist($tableName);
+
+    # remove symlink
+    my $file = "/gbdb/$assembly/bbi/$tableName.bam";
+    if(-e $file) {
+        HgAutomate::verbose(3, "removing bam '$file'\n");
+        if(system("rm -f $file")) {
+            die "unexpected error removing symlink $file";
+        }
+    }
+
+    $file = "/gbdb/$assembly/bbi/$tableName.bam.bai";
+    if(-e $file) {
+        HgAutomate::verbose(3, "removing bai '$file'\n");
+        if(system("rm -f $file")) {
+            die "unexpected error removing symlink $file";
+        }
+    }
+}
+
 sub unloadBigWig
 {
     my ($assembly, $db, $tableName) = @_;
@@ -165,9 +188,15 @@ for my $key (keys %ra) {
         genericUnload($assembly, $db, $tablename);
     } elsif ($type eq "wig") {
         unloadWig($assembly, $db, $tablename);
+    } elsif ($type eq "bam") {
+        unloadBam($assembly, $db, $tablename);
+        unlink "$downloadDir/gbdb/$tablename.bam";
+        unlink "$downloadDir/gbdb/$tablename.bam.bai";
+        unlink "$downloadDir/$tablename.bam.gz";
     } elsif ($type eq "bigWig") {
         unloadBigWig($assembly, $db, $tablename);
         unlink "$downloadDir/gbdb/$tablename.bw";
+        unlink "$downloadDir/$tablename.bigWig.gz";
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }

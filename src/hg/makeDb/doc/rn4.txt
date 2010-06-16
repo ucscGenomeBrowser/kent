@@ -5221,3 +5221,17 @@ hgsql rn4 < ~/kent/src/hg/lib/rgdGene2.sql
 hgsql rn4 -e 'load data local infile "rgdGene2.tab.new" into table rgdGene2'
 rm j.*
 
+#############################################################################
+# Add KEGG column to rn4 Gene Sorter (Done, Fan, 6/15/2010)
+
+mkdir -p /hive/data/genomes/rn4/bed/geneSorter
+cd /hive/data/genomes/rn4/bed/geneSorter
+hgsql rn4 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+hgsql rn4 -e 'drop table knownToKeggEntrez'
+
+hgsql rn4 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+hgsql rn4 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
+#############################################################################

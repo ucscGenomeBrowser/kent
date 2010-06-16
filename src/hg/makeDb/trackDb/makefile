@@ -128,7 +128,7 @@ beta: clean
 public: clean
 	${GIT} pull -q
 	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
-	./checkMetaDb public metaDb ${DBS}
+	./checkMetaDb public metaDb_public ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

@@ -1686,12 +1686,23 @@ Zv8_NA5813      742     832     Zv8_NA5813.2    28      +
     #	refGene:cds 1.187%, phastConsElements46way 5.065%,
     #	both 0.884%, cover 74.46%, enrich 14.70x
 
+# add to zebrafish/danRer6/trackDb.ra track phastConsElements6way
+# so that it can use the standard existing html page
+html ../../phastConsElements  
+
+
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/danRer6/bed/multiz6way/cons/all
     mkdir downloads
 
     cat pp/*/*.pp | gzip > downloads/phastCons6way.wigFix.gz
 
+    # make downloads
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer6/phastCons6way/
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer6/phastCons6way/
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/cons/all/downloads/* .
+    md5sum *.gz >> md5sum.txt
+    popd
 
     #	encode those files into wiggle data
     zcat downloads/phastCons6way.wigFix.gz \

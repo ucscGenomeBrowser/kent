@@ -10,7 +10,7 @@ orfEnum: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/orfEnum $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/orfEnum${EXE}
 
-test:
+test:	orfEnum
 	orfEnum in.fa out.orf
 	diff expected.orf out.orf
 	orfEnum -various in.fa outVarious.orf
