@@ -30173,3 +30173,16 @@ hgLoadBed hg18 decipher decipher.bed
 # create knownToDecipher table.
 hgMapToGene -all hg18 decipher knownGene knownToDecipher
 #############################################################################
+# Add KEGG column to hg18 Gene Sorter (Done, Fan, 6/15/2010)
+
+mkdir -p /hive/data/genomes/hg18/bed/geneSorter
+cd /hive/data/genomes/hg18/bed/geneSorter
+hgsql hg18 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+hgsql hg18 -e 'drop table knownToKeggEntrez'
+
+hgsql hg18 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+hgsql hg18 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
+#############################################################################

@@ -12485,3 +12485,17 @@ synBlastp.csh mm7 rn3
 # AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
 update genbank.conf:
 mm7.upstreamGeneTbl = refGene
+#############################################################################
+# Add KEGG column to mm7 Gene Sorter (Done, Fan, 6/15/2010)
+
+mkdir -p /hive/data/genomes/mm7/bed/geneSorter
+cd /hive/data/genomes/mm7/bed/geneSorter
+hgsql mm7 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+hgsql mm7 -e 'drop table knownToKeggEntrez'
+
+hgsql mm7 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+hgsql mm7 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
+#############################################################################
