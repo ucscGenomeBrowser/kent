@@ -17,7 +17,7 @@ compile:: ${O}
 clean::
 	rm -f ${A}${EXE} ${O}
 
-test: rep1Rep2Default	rep1Rep2Agree  rep1Rep2Add
+test: rep1Rep2Default rep1Rep2Agree rep1Rep2Add rep1Rep2Threshold10
 	@echo done tests
 
 rep1Rep2Default:
@@ -32,3 +32,6 @@ rep1Rep2Add:
 	encodeMergeReplicates -add rep1.narrowPeak rep2.narrowPeak outRep1Rep2Add.narrowPeak
 	diff expRep1Rep2Add.narrowPeak outRep1Rep2Add.narrowPeak
 
+rep1Rep2Threshold10:
+	encodeMergeReplicates -threshold=10 rep1.narrowPeak rep2.narrowPeak outRep1Rep2Threshold10.narrowPeak
+	diff expRep1Rep2Threshold10.narrowPeak outRep1Rep2Threshold10.narrowPeak
