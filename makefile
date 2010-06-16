@@ -1,7 +1,7 @@
-include ../kent/src/inc/common.mk
+include ../../inc/common.mk
 
 L += -lm ${SOCKETLIB}
-MYLIBDIR = ../kent/src/lib/${MACHTYPE}
+MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = $(MYLIBDIR)/jkweb.a 
 
 A = git-reports
