@@ -208,7 +208,6 @@ priority 300
 
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
 include wgEncodeBroadChipSeq.ra
-include wgEncodeBroadChipSeq.new.ra
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
 include wgEncodeChromatinMap.ra

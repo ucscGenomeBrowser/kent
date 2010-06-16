@@ -5,6 +5,7 @@ wgEncodeHaibTfbs.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyGeneST.ra \
 wgEncodeSydhHistone.ra \
-wgEncodeSydhTfbs.ra
+wgEncodeSydhTfbs.ra \
+wgEncodeUwHistone.ra 
 
 include ../../../../makefile.metaDb
