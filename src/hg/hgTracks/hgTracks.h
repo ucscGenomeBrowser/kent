@@ -559,7 +559,7 @@ void innerLine(struct hvGfx *hvg, int x, int y, int w, Color color);
  * end.  This pixel is needed for PostScript only, but doesn't
  * hurt elsewhere. */
 
-void grayThreshold(UBYTE *pt, int count);
+void grayThreshold(UBYTE *pt, int count, Color *colors);
 /* Convert from 0-4 representation to gray scale rep. */
 
 /* Some little functional stubs to fill in track group

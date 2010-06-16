@@ -64,9 +64,9 @@ struct vGfx
     void (*unclip)(void *v);
     /* Set clipping rect cover full thing. */
 
-    void (*verticalSmear8)(void *v,
+    void (*verticalSmear)(void *v,
 	    int xOff, int yOff, int width, int height, 
-	    unsigned char *dots, boolean zeroClear);
+	    Color *dots, boolean zeroClear);
     /* Put a series of one 'pixel' width vertical lines. */
 
     void (*fillUnder)(void *v, int x1, int y1, int x2, int y2, 
@@ -160,8 +160,8 @@ void vgClose(struct vGfx **pVg);
  * The only portable way to do this is to strictly pair up
  * the setClip/unclip calls and not to nest them. */
 
-#define vgVerticalSmear8(v,x,y,w,h,dots,zeroClear) \
-	v->verticalSmear8(v->data,x,y,w,h,dots,zeroClear)
+#define vgVerticalSmear(v,x,y,w,h,dots,zeroClear) \
+	v->verticalSmear(v->data,x,y,w,h,dots,zeroClear)
 /* Take array of dots and smear them vertically. */
 
 #define vgFillUnder(v,x1,y1,x2,y2,bottom,color) \
