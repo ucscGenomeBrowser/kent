@@ -432,8 +432,11 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
 	}
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
-grayThreshold(aveCounts, width);
-hvGfxVerticalSmear8(hvg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
+
+Color *colors;
+colors = needMem(width * sizeof(Color));
+grayThreshold(aveCounts, width, colors);
+hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,colors,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }
