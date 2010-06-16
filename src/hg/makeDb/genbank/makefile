@@ -18,7 +18,7 @@ install-server: all
 
 etc-update-server:
 	${MAKE} install-etc PREFIX=/cluster/data/genbank
-etc-update: etc-update-server # old name
+etc-update: etc-update-server # alternative name
 
 install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad all
 	${MAKE} install PREFIX=/genbank
@@ -26,14 +26,17 @@ install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad all
 etc-update-rr:
 	${MAKE} install-etc PREFIX=/genbank
 
+# standard options to use for rsync
+rsyncOpts = --times --recursive --executability --omit-dir-times --relative
+
 # Install built files.  The etc directory is maintained using CVS, so
 # any changes must be committed (and this is checked).
 install: install-bin install-etc
 
 install-bin: check-prefix all
 	${MKDIR} ${PREFIX}
-	rsync -r bin ${PREFIX}
-	rsync -r lib ${PREFIX}
+	rsync ${rsyncOpts} bin ${PREFIX}
+	rsync ${rsyncOpts} lib ${PREFIX}
 
 install-etc: check-prefix
 	@echo checking if etc/ is committed
@@ -41,7 +44,7 @@ install-etc: check-prefix
 	@if [[ $$(git diff --cached --name-only -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has staged, uncommited files that need committed"; exit 1; fi
 	@if [[ $$(git diff --name-only origin -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has changes that need to be pushed"; exit 1; fi
 	${MKDIR} ${PREFIX}/etc
-	umask 002; rsync  --times --recursive --executability --omit-dir-times --relative `gitFiles etc` ${PREFIX}/etc
+	umask 002; rsync ${rsyncOpts} `gitFiles etc` ${PREFIX}
 
 check-prefix:
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)

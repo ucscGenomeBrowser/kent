@@ -1611,31 +1611,21 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-XXXX 06-11 AM rerun with memk and swarm
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
         -syntenicNet -noDbNameCheck \
         -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         > do.log 2>&1 &
-XXXX 06-10 stop here
-    # Continue doBlastzChainNet from step chainRun  
-    # After para stop para freeBatch in 
-    # /hive/data/genomes/monDom5/bed/lastzFelCat4.2010-06-07/axtChain/run] 
-    # rm the run directory,  and use memk/swarm this time
 
-XXXX 06-10
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        `pwd`/DEF \
-         -continue chainRun \
-         -syntenicNet -noDbNameCheck \
-         -chainMinScore=3000 -chainLinearGap=medium \
-         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-         > do_chainRun.log 2>&1 &
+     #  *** All done !  Elapsed time: 2287m6s
+     #  *** Make sure that goldenPath/monDom5/vsFelCat4/README.txt is accurate.
+     # *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
 
     cat fb.monDom5.chainFelCat4Link.txt
     # 178616721 bases of 3501660299 (5.101%) in intersection
 
+XXXX 06-16 (to be copied from felCat4.txt
     mkdir /hive/data/genomes/felCat4/bed/blastz.monDom5.swap
     cd /hive/data/genomes/felCat4/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \

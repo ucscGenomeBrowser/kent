@@ -33,7 +33,7 @@ errAbort(
   "and out.bb is the output indexed big bed file.\n"
   "The in.bed file must be sorted by chromosome,start,\n"
   "  to sort a bed file, use the unix sort command:\n"
-  "     sort -k1,1 -k2,2 unsorted.bed > sorted.bed\n"
+  "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"
   "\n"
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
