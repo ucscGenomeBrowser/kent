@@ -16,6 +16,7 @@ int clAgree = 1;
 boolean clAdd = FALSE;
 double clThreshold = 0.0;
 double clGotThreshold = FALSE;
+boolean clUniqueName = FALSE;
 
 #define SCORE_COL_IX 6
 
@@ -24,7 +25,7 @@ void usage()
 {
 errAbort(
   "encodeMergeReplicates - Merge together replicates for a pooled output.  \n"
-  "Only works on narrowPeak files currently.\n"
+  "Only works on narrowPeak and broadPeak files currently.\n"
   "usage:\n"
   "   encodeMergeReplicates in1 in2 in3 ... output\n"
   "options:\n"
@@ -33,6 +34,7 @@ errAbort(
   "   -threshold=N.N - only output where signal is over threshold\n"
   "   -maxMin - set threshold to be the maximum of the minima of two replicates\n"
   "   -addMin - set threshold to be the sum of the minima of the two replicates\n"
+  "   -uniqueName - make output names unique instead of name of best in cluster\n"
   );
 }
 
@@ -42,6 +44,7 @@ static struct optionSpec options[] = {
    {"threshold", OPTION_DOUBLE},
    {"maxMin", OPTION_BOOLEAN},
    {"addMin", OPTION_BOOLEAN},
+   {"uniqueName", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -74,8 +77,33 @@ slFreeList(&uniqList);
 return count;
 }
 
+static int countNonnumericPrefix(char *s)
+/* Return number of characters until get first digit. */
+{
+int count = 0;
+char c;
+while ((c = *s++) != 0)
+    {
+    if (isdigit(c))
+        break;
+    else
+        ++count;
+    }
+return count;
+}
+
+static void copyNonnumericPrefix(char *source, char *dest, int destSize)
+/* Copy non-numerical prefix if any of source to dest. */
+{
+int size = countNonnumericPrefix(source);
+if (size >= destSize)
+    errAbort("Nonnumerical prefix of %s longer than %d chars.", source, destSize);
+memcpy(dest, source, size);
+dest[size] = 0;
+}
+
 void outputClusterNarrowPeak(struct peakCluster *cluster, FILE *f, boolean add,
-	boolean gotThreshold, double threshold)
+	boolean gotThreshold, double threshold, boolean forceUniqueName)
 /* Output cluster of overlapping narrowPeaks - doing average of items. */
 {
 struct slRef *ref, *refList=cluster->itemRefList;
@@ -126,7 +154,17 @@ if (!gotThreshold || signalValue >= threshold)
     int chromStart = sumStart/itemCount;
     fprintf(f, "%d\t", chromStart);			// chromStart
     fprintf(f, "%d\t", (int)(sumEnd/itemCount));	// chromEnd
-    fprintf(f, "%s\t", bestName);			// name
+    char *name = bestName;
+    char uniqPrefix[64];
+    char uniqName[100];
+    if (forceUniqueName)
+        {
+	static int uniqIx = 0;
+	copyNonnumericPrefix(name, uniqPrefix, sizeof(uniqPrefix));
+	safef(uniqName, sizeof(uniqName), "%s%d", uniqPrefix, ++uniqIx);
+	name = uniqName;
+	}
+    fprintf(f, "%s\t", name);			// name
     int score = sumScore*scaleFactor;
     if (score > 1000) score = 1000;
     fprintf(f, "%d\t", score);			// score 0-1000
@@ -137,13 +175,12 @@ if (!gotThreshold || signalValue >= threshold)
     else
 	fprintf(f, "-1\t");
     if (gotQ)
-	fprintf(f, "%g\t", sumQ*scaleFactor);		// qValue
+	fprintf(f, "%g", sumQ*scaleFactor);		// qValue
     else
-	fprintf(f, "-1\t");
+	fprintf(f, "-1");
     if (wordCount > 9)
-	fprintf(f, "%d\n", (int)(sumPeak/itemCount - chromStart));
-    else
-	fprintf(f, "-1\n");
+	fprintf(f, "\t%d", (int)(sumPeak/itemCount - chromStart));
+    fprintf(f, "\n");
     }
 }
 
@@ -236,7 +273,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	     {
 	     if (clAgree < 2 || peakClusterSourceCount(cluster) >= clAgree)
-		 outputClusterNarrowPeak(cluster, f, clAdd, clGotThreshold, clThreshold);
+		 outputClusterNarrowPeak(cluster, f, clAdd, clGotThreshold, clThreshold,
+		 	clUniqueName);
 	     }
 	 }
     lmCleanup(&lm);
@@ -266,6 +304,7 @@ if (optionExists("addMin"))
    }
 if (clGotThreshold)
    verbose(2, "Threshold %g\n", clThreshold);
+clUniqueName = optionExists("uniqueName");
 encodeMergeReplicates(argc-2, argv+1, argv[argc-1]);
 return 0;
 }
