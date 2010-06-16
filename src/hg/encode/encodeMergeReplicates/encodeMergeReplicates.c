@@ -12,6 +12,9 @@
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 int clAgree = 1;
+boolean clAdd = FALSE;
+double clThreshold = 0.0;
+double clGotThreshold = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +26,15 @@ errAbort(
   "   encodeMergeReplicates in1 in2 in3 ... output\n"
   "options:\n"
   "   -agree=N - only output where have agreement between N replicates, default is 1\n"
+  "   -add - add together signals rather than averaging them\n"
+  "   -threshold=N.N - only output where signal is over threshold\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"agree", OPTION_INT},
+   {"add", OPTION_BOOLEAN},
+   {"threshold", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -60,7 +67,7 @@ slFreeList(&uniqList);
 return count;
 }
 
-void outputClusterNarrowPeak(struct peakCluster *cluster, FILE *f)
+void outputClusterNarrowPeak(struct peakCluster *cluster, FILE *f, boolean add)
 /* Output cluster of overlapping narrowPeaks - doing average of items. */
 {
 struct slRef *ref, *refList=cluster->itemRefList;
@@ -72,6 +79,7 @@ int itemCount = 0;
 char *bestLine = bestItem->asciiLine;
 char *bestName = NULL;
 int wordCount = chopByWhite(bestLine, NULL, 0);
+boolean gotP = FALSE, gotQ = FALSE;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     struct peakItem *item = ref->val;
@@ -84,24 +92,43 @@ for (ref = refList; ref != NULL; ref = ref->next)
         bestName = words[3];
     sumScore += sqlSigned(words[4]);
     sumSignal += sqlDouble(words[6]);
-    sumP += sqlDouble(words[7]);
-    sumQ += sqlDouble(words[8]);
+    if (!sameString(words[7], "-1"))
+        {
+	gotP = TRUE;
+	sumP += sqlDouble(words[7]);
+	}
+    if (!sameString(words[8], "-1"))
+	{
+	gotQ = TRUE;
+	sumQ += sqlDouble(words[8]);
+	}
     int peak = -1;
     if (wordCount > 9)
         peak = sqlSigned(words[9]) + chromStart;
     sumPeak += peak;
     itemCount += 1;
     }
+double scaleFactor = 1.0;
+if (!add)
+    scaleFactor = 1.0/itemCount;
 fprintf(f, "%s\t", cluster->chrom);		// chrom
 int chromStart = sumStart/itemCount;
 fprintf(f, "%d\t", chromStart);			// chromStart
 fprintf(f, "%d\t", (int)(sumEnd/itemCount));	// chromEnd
 fprintf(f, "%s\t", bestName);			// name
-fprintf(f, "%d\t", (int)(sumScore/itemCount));	// score 0-100
+int score = sumScore*scaleFactor;
+if (score > 1000) score = 1000;
+fprintf(f, "%d\t", score);			// score 0-1000
 fprintf(f, ".\t");				// strand
-fprintf(f, "%g\t", sumSignal/itemCount);	// signalValue
-fprintf(f, "%g\t", sumP/itemCount);		// pValue
-fprintf(f, "%g\t", sumQ/itemCount);		// qValue
+fprintf(f, "%g\t", sumSignal*scaleFactor);	// signalValue
+if (gotP)
+    fprintf(f, "%g\t", sumP*scaleFactor);		// pValue
+else
+    fprintf(f, "-1\t");
+if (gotQ)
+    fprintf(f, "%g\t", sumQ*scaleFactor);		// qValue
+else
+    fprintf(f, "-1\t");
 if (wordCount > 9)
     fprintf(f, "%d\n", (int)(sumPeak/itemCount - chromStart));
 else
@@ -148,7 +175,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	     {
 	     if (clAgree < 2 || peakClusterSourceCount(cluster) >= clAgree)
-		 outputClusterNarrowPeak(cluster, f);
+		 outputClusterNarrowPeak(cluster, f, clAdd);
 	     }
 	 }
     lmCleanup(&lm);
@@ -163,6 +190,9 @@ optionInit(&argc, argv, options);
 if (argc < 4)
     usage();
 clAgree = optionInt("agree", clAgree);
+clAdd = optionExists("add");
+clGotThreshold = optionExists("threshold");
+clThreshold = optionDouble("threshold", clThreshold);
 encodeMergeReplicates(argc-2, argv+1, argv[argc-1]);
 return 0;
 }
