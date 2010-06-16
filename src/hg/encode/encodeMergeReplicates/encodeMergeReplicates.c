@@ -1,5 +1,5 @@
 /* encodeMergeReplicates - Merge together replicates for a pooled output.  Only works on 
- * narrowPeak files currently.. */
+ * narrowPeak and broadPeak files currently. */
 
 #include "common.h"
 #include "linefile.h"
@@ -235,7 +235,7 @@ return sum;
 
 void encodeMergeReplicates(int inCount, char *inNames[], char *outName)
 /* encodeMergeReplicates - Merge together replicates for a pooled output.  
- * Only works on narrowPeak files currently. */
+ * Only works on broadPeak and narrowPeak files currently. */
 {
 /* Make list of sources out of input files. */
 struct peakSource *source, *sourceList = NULL;
