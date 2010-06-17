@@ -9,3 +9,6 @@ O = broadNode.o
 broadNode: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/broadNode $O $(MYLIBS) $L
 	${STRIP} ../bin/broadNode${EXE}
+
+clean::
+	rm -f ${O}

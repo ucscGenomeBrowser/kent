@@ -9,3 +9,5 @@ O = fixGdup.o
 fixGdup: $O 
 	${CC} ${COPT} ${CFLAGS} -o fixGdup $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

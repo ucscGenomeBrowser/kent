@@ -14,3 +14,5 @@ compile: $O
 	chmod a+rx $A
 	mv $A ${BINDIR}/alignToPsl
 
+clean::
+	rm -f ${O}

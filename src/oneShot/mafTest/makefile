@@ -10,3 +10,6 @@ O = mafTest.o mafXml.o
 mafTest: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafTest $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/mafTest${EXE}
+
+clean::
+	rm -f ${O}

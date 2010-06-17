@@ -9,3 +9,6 @@ O = emblMatrixToMotif.o
 emblMatrixToMotif: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/emblMatrixToMotif $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/emblMatrixToMotif${EXE}
+
+clean::
+	rm -f ${O}

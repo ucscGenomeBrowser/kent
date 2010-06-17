@@ -9,3 +9,6 @@ O = patchDir.o
 patchDir: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/patchDir $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/patchDir${EXE}
+
+clean::
+	rm -f ${O}

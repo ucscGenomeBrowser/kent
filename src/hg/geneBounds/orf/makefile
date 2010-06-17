@@ -9,3 +9,6 @@ O = orf.o
 orf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/orf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/orf${EXE}
+
+clean::
+	rm -f ${O}

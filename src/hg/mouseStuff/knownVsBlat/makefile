@@ -19,3 +19,6 @@ O2 = kvsSummary.o $S
 kvsSummary: $(O2) $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/kvsSummary $(O2) $(MYLIBS) $L
 	${STRIP} ${BINDIR}/kvsSummary${EXE}
+
+clean::
+	rm -f ${O}

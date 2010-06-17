@@ -12,3 +12,6 @@ axtToMaf: $O $(MYLIBS)
 
 test: $(INSTALLDIR)/$(PROG)
 	cd tests && ${MAKE} test
+
+clean::
+	rm -f ${O}

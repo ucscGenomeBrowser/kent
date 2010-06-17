@@ -8,3 +8,6 @@ chkGlue.exe: $(O)
 	mv ${AOUT} chkGlue.exe
 	chmod a+rx chkGlue.exe
 	mv chkGlue.exe ../../cgi-bin
+
+clean::
+	rm -f ${O}

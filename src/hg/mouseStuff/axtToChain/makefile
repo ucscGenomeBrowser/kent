@@ -15,3 +15,5 @@ compile: ${BINDIR}/${A}
 ${BINDIR}/${A}: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} ${L}
 
+clean::
+	rm -f ${O}

@@ -10,3 +10,5 @@ indexfa: $(O) lib
 lib:
 	cd ../../lib && ${MAKE}
 
+clean::
+	rm -f ${O}

@@ -9,3 +9,5 @@ O = evalEndOverlaps.o ocp.o
 evalEndOverlaps: $O 
 	${CC} ${COPT} ${CFLAGS} -o evalEndOverlaps $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

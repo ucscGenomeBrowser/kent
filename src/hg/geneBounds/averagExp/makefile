@@ -9,3 +9,6 @@ O = averagExp.o
 averagExp: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/averagExp $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/averagExp${EXE}
+
+clean::
+	rm -f ${O}

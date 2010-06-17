@@ -9,3 +9,6 @@ O = getRnaPred.o
 getRnaPred: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/getRnaPred $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/getRnaPred${EXE}
+
+clean::
+	rm -f ${O}

@@ -15,4 +15,4 @@ test:	clusterPsl
 	diff expected.cluster output.cluster
 
 clean:
-	rm -f $O
+	rm -f ${O}

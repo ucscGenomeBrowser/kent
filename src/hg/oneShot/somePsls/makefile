@@ -9,3 +9,6 @@ O = somePsls.o
 somePsls: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/somePsls $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/somePsls${EXE}
+
+clean::
+	rm -f ${O}

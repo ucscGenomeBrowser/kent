@@ -9,3 +9,6 @@ O = weedKnownBlastTab.o
 weedKnownBlastTab: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o weedKnownBlastTab $O $(MYLIBS) $L
 	${STRIP} weedKnownBlastTab${EXE}
+
+clean::
+	rm -f ${O}

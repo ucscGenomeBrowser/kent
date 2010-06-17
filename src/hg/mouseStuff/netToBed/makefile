@@ -9,3 +9,6 @@ O = netToBed.o
 netToBed: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/netToBed $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/netToBed${EXE}
+
+clean::
+	rm -f ${O}
