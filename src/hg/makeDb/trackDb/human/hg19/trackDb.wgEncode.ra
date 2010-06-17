@@ -8,6 +8,7 @@ include trackDb.wgEncodeSunyAlbanyTiling.ra
 include trackDb.wgEncodeHaibTfbs.ra
 include trackDb.wgEncodeSydhTfbs.ra
 include trackDb.wgEncodeSydhHistone.ra
+include wgEncodeUwHistone.ra
 
 
 track wgEncodeMapability

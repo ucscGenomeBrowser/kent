@@ -1,15 +1,16 @@
 include ../../inc/common.mk
 
-L += -lm
+L += -lm -lz
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ${MYLIBDIR}/jkweb.a
 
 A = wigCorrelate
 O = wigCorrelate.o
 
 wigCorrelate: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-#	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L

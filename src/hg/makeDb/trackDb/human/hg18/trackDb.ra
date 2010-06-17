@@ -937,8 +937,7 @@ longLabel Poly(A) Sites, Both Reported and Predicted
 group rna
 priority 79
 visibility hide
-noInherit on
-type bed 3 .
+type bed 8 .
 
     track polyaDb
     parent polyA
@@ -946,7 +945,6 @@ type bed 3 .
     longLabel Reported Poly(A) Sites from PolyA_DB
     color 51,153,51
     priority 1
-    type bed 4 .
 
     track polyaPredict
     parent polyA
@@ -954,7 +952,6 @@ type bed 3 .
     longLabel Predicted Poly(A) Sites Using an SVM
     color 102,0,153
     priority 2
-    type bed 8 .
 
 track fantomCageGraphTop
 compositeTrack on

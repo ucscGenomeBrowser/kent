@@ -214,9 +214,20 @@ static void bigWigClick(struct trackDb *tdb, char *fileName)
 char *chrom = cartString(cart, "c");
 
 /* Open BigWig file and get interval list. */
-struct bbiFile *bbi = bigWigFileOpen(fileName);
+struct bbiFile *bbi = NULL;
 struct lm *lm = lmInit(0);
-struct bbiInterval *bbList = bigWigIntervalQuery(bbi, chrom, winStart, winEnd, lm);
+struct bbiInterval *bbList = NULL;
+char *maxWinToQuery = trackDbSettingClosestToHome(tdb, "maxWindowToQuery");
+
+unsigned maxWTQ = 0;
+if (isNotEmpty(maxWinToQuery))
+    maxWTQ = sqlUnsigned(maxWinToQuery);
+
+if ((maxWinToQuery == NULL) || (maxWTQ > winEnd-winStart))
+    {
+    bbi = bigWigFileOpen(fileName);
+    bbList = bigWigIntervalQuery(bbi, chrom, winStart, winEnd, lm);
+    }
 
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
 sprintLongWithCommas(num1Buf, BASE_1(winStart));
@@ -228,6 +239,11 @@ printf("<B>Total Bases in view: </B> %s <BR>\n", num1Buf);
 if (bbList != NULL)
     {
     bbiIntervalStatsReport(bbList, tdb->table, chrom, winStart, winEnd);
+    }
+else if (maxWTQ <= winEnd-winStart)
+    {
+    sprintLongWithCommas(num1Buf, maxWTQ);
+    printf("<P>Zoom into a view less than %s bases to see data summary.</P>",num1Buf);
     }
 else
     {
