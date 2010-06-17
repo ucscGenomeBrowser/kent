@@ -16401,13 +16401,43 @@ see file: ucscGenes10.txt
       # Get all of the narrowPeak file for wgEncodeYaleChIPseq into tfbs/yale
       # directory and create all.lst by cutting and pasting 
       # the file list from
-      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
+      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPSeq/
       cd /hive/users/kent/regulate/tfbs/yale
       grep narrowPeak all. > peak.lst
       cut -f 2 peak.lst > file.lst
       foreach i (`cat file.lst`)
-          wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/$i
+          wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPSeq/$i
       end
+
+      # Get the narrow and broad peak files into the tfbs/hudsonAlpha dir
+      # For this one I checked that the files in 
+      # /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq
+      # were the same for *Peak.gz as those at
+      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
+      # and then did a symbolic link for easy access
+      mkdir /hive/users/kent/regulate/tfbs/hudsonAlpha
+      cd /hive/users/kent/regulate/tfbs/hudsonAlpha
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq ftpDir
+      ls ftpDir/*Peak.gz > inFiles
+
+      # Make files that merge replicates.  I'll describe what I did rather
+      # than make a script for it because it's likely to change.  I looked
+      # through and noted that there was a single file lacking a replicate:
+      #     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf.broadPeak.gz
+      # and excluded that.  I made a batch file that then called
+      # encodeMergeReplicates on all replicate pairs with the following
+      # options:
+      #      -add -maxMin -uniqueName
+      # which resulted in a "merged" directory full of 70 files in the form
+      #     wgEncodeHudsonalphaChipSeqPeaksHepg2Pol2.*Peak
+
+      # Clean this up a bit to make all a uniform narrowPeak format by doing
+      cd merged
+      foreach i (*.broadPeak)
+         awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' $i > $i:r.narrowPeak
+      end
+      rm *.broadPeak
+
       regClusterBedExpCfg peak.lst -encodeList peak.cfg
       # Then edit peak.cfg to make sure all cell lines have uniq letters
       hgBedsToBedExps peak.cfg peak.bed peak.exps
