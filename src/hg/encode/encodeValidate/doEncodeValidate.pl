@@ -1888,6 +1888,9 @@ foreach my $ddfLine (@ddfLines) {
             }
             $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
+         #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
+	 #        in the table name. The below code was found to be to specific, however if there are any problems
+	 # I have left the code in so that we can easily add it back in.
 	#  if(defined($replicate) && ($daf->{lab} eq "HudsonAlpha" || $daf->{lab} eq "Uw") || $daf->{lab} eq "Gis") {
            if(defined($replicate)) { 
 	    $subGroups .= " rep=rep$replicate"; # UGLY special casing
